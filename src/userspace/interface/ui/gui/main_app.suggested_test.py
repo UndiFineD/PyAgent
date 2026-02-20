@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .main_app.suggested import PyAgentGUI

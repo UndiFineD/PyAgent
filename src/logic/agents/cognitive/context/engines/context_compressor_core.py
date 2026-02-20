@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import re
 import ast
 
@@ -22,23 +24,26 @@ from src.core.base.lifecycle.version import VERSION
 try:
     import rust_core
 
-    HAS_RUST = True
+"""
+HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
+"""
 __version__ = VERSION
 
 
 class DummyCompressor:
     pass
 class ContextCompressorCore:
-    """Pure logic core for code and document compression."""
+"""
+Pure logic core for code and document compression.""
     @staticmethod
     def compress_python(content: str) -> str:
-        """
-        Removes function bodies and keeps only class/function signatures using AST.
-        """
-        try:
+"""
+Removes function bodies and keeps only class/function signatures using AST.
+"""
+try:
             tree = ast.parse(content)
             compressed_lines: list[str] = []
 
@@ -98,10 +103,10 @@ class ContextCompressorCore:
 
     @staticmethod
     def regex_fallback_compress(content: str) -> str:
-        """
-        Simple regex-based signature extraction for Python.
-        """
-        if HAS_RUST:
+"""
+Simple regex-based signature extraction for Python.
+"""
+if HAS_RUST:
             try:
                 return rust_core.regex_compress_python(content)  # type: ignore[attr-defined]
             except (RuntimeError, AttributeError):
@@ -114,17 +119,17 @@ class ContextCompressorCore:
         return "\n".join([s.strip() for s in signatures])
     @staticmethod
     def get_summary_header(filename: str, mode: str) -> str:
-        """
-        Logic for formatting summary headers.
-        """
-        return f"### {filename} ({mode})\n"
+"""
+Logic for formatting summary headers.
+"""
+return f"### {filename} ({mode})\n"
 
     @staticmethod
     def decide_compression_mode(filename: str) -> str:
-        """
-        Determines logic mode based on file extension.
-        """
-        if filename.endswith(".py"):
+"""
+Determines logic mode based on file extension.
+        ""
+if filename.endswith(".py"):
             return "python"
         if filename.endswith(".md"):
             return "markdown"

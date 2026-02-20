@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.dev.scripts.management.repair_packages_v3 import create_inits, fix_content, main

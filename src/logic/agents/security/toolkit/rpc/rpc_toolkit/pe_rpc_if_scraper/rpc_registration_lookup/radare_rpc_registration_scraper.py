@@ -28,8 +28,11 @@
 
 try:
     from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor, DismExtractorFailue
+"""
 except ImportError:
-    from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor, DismExtractorFailue
+
+"""
+from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor, DismExtractorFailue
 
 
 try:
@@ -54,27 +57,38 @@ except ImportError:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" SCRIPT_PATH = os.path.join(os.path.split(__file__)[0], "dism_scripts", "radare2.py")"# [BATCHFIX] Commented metadata/non-Python
-""" TEMP_OUTPUT_FILE = "radare2_rpc_reg_info.tmp"  # [BATCHFIX] closed string"
+"""
+SCRIPT_PATH = os.path.join(os.path.split(__file__)[0], "dism_scripts", "radare2.py")"# [BATCHFIX] Commented metadata/non-Python
+"""
+TEMP_OUTPUT_FILE = "radare2_rpc_reg_info.tmp"  # [BATCHFIX] closed string
 
 
 class Radare2RpcRegistrationExtractor(BaseRpcRegistrationExtractor):
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""_default_dism_path: str = "r2
+"""
+_default_dism_path: str = "r2
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:""""
+"""
+def _get_rpc_registration_info(self, pe_path: str) -> Dict[str, Dict[str, List]]:""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         p = subprocess.run([self._dism_path, "-q", "-i", SCRIPT_PATH, pe_path], stdout=subprocess.PIPE)"        if p.returncode != 0:
+"""
+p = subprocess.run([self._dism_path, "-q", "-i", SCRIPT_PATH, pe_path], stdout=subprocess.PIPE)"        if p.returncode != 0:
             raise DismExtractorFailue(p.returncode)
 
         with open(TEMP_OUTPUT_FILE, "rt") as f:"            reg_info = json.load(f)
         os.remove(TEMP_OUTPUT_FILE)
 
         return reg_info
+
+"""
+
+""
+
+"""

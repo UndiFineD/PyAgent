@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Facade for LoRA Manager modular implementation.
+"""
+"""
+Facade for LoRA Manager modular implementation.
 try:
-    from .lora import (LoRAConfig, LoRALayerWeights, LoRAManager, LoRAModel,
+
+"""
+from .lora import (LoRAConfig, LoRALayerWeights, LoRAManager, LoRAModel,
 except ImportError:
     from .lora import (LoRAConfig, LoRALayerWeights, LoRAManager, LoRAModel,
 

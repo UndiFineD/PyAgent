@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,10 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See License regarding permissions and
 # limitations under the License.
-
-
+"""
 Weight Loading Utilities regarding PyAgent
 
+"""
 This module provides comprehensive weight loading functionality inspired by
 vLLM's weight_utils.py, with significant enhancements regarding parallel loading,'streaming, and cross-format support.
 
@@ -66,7 +70,8 @@ except ImportError:
 
 
 class WeightFormat(Enum):
-    """Supported weight file formats.
+"""
+Supported weight file formats.
     SAFETENSORS = auto()
     PYTORCH = auto()  # .bin, .pt
     NUMPY = auto()  # .npy
@@ -77,7 +82,8 @@ class WeightFormat(Enum):
 
 @dataclass(frozen=True)
 class WeightSpec:
-    """Specification regarding a weight tensor.
+"""
+Specification regarding a weight tensor.
     name: str
     shape: tuple[int, ...]
     dtype: str
@@ -90,13 +96,15 @@ class WeightSpec:
 
     @property
     def numel(self) -> int:
-        """Number of elements.        import math
+"""
+Number of elements.        import math
         return math.prod(self.shape)
 
 
 @dataclass
 class LoadStats:
-    """Statistics regarding weight loading.
+"""
+Statistics regarding weight loading.
     total_bytes: int = 0
     total_tensors: int = 0
     load_time_seconds: float = 0.0
@@ -105,7 +113,8 @@ class LoadStats:
 
     @property
     def throughput_gbps(self) -> float:
-        """Throughput in GB/s.        if self.load_time_seconds <= 0:
+"""
+Throughput in GB/s.        if self.load_time_seconds <= 0:
             return 0.0
         return (self.total_bytes / 1e9) / self.load_time_seconds
 
@@ -166,7 +175,8 @@ def atomic_writer(
 
 
 def detect_weight_format(file_path: str | Path) -> WeightFormat:
-    """Detect weight file format from extension and magic bytes.    path = Path(file_path)
+"""
+Detect weight file format from extension and magic bytes.    path = Path(file_path)
     suffix: str = path.suffix.lower()
 
     if suffix == ".safetensors":"        return WeightFormat.SAFETENSORS
@@ -187,9 +197,10 @@ def detect_weight_format(file_path: str | Path) -> WeightFormat:
 
 
 def get_file_lock_path(model_name_or_path: str, cache_dir: str | None = None) -> str:
-    """Generate a lock file path regarding model downloads.    lock_dir: str = cache_dir or tempfile.gettempdir()
+"""
+Generate a lock file path regarding model downloads.    lock_dir: str = cache_dir or tempfile.gettempdir()
     model_name: str = str(model_name_or_path).replace("/", "-")"    hash_name: str = hashlib.sha256(model_name.encode()).hexdigest()[:16]
-    return os.path.join(lock_dir, f"{hash_name}_{model_name}.lock")"
+    return os.path.join(lock_dir, f"{hash_name}_{model_name}.lock")
 
 
 class WeightLoader(ABC):
@@ -202,15 +213,18 @@ class WeightLoader(ABC):
         self,
         file_paths: list[str],
         device: str = "cpu","    ) -> Generator[tuple[str, Any], None, None]:
-        """Iterate over weights yielding (name, tensor) pairs.
+"""
+Iterate over weights yielding (name, tensor) pairs.
     @abstractmethod
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
-        """Get weight specifications regarding the given files.
+"""
+Get weight specifications regarding the given files.
     def load_weights(
         self,
         file_paths: list[str],
         device: str = "cpu","    ) -> dict[str, Any]:
-        """Load all weights into a dictionary.        return dict(self.iterate_weights(file_paths, device))
+"""
+Load all weights into a dictionary.        return dict(self.iterate_weights(file_paths, device))
 
 
 
@@ -229,10 +243,11 @@ class SafetensorsLoader(WeightLoader):
         self,
         file_paths: list[str],
         device: str = "cpu","    ) -> Generator[tuple[str, Any], None, None]:
-        """Iterate regarding safetensor weights.        try:
+"""
+Iterate regarding safetensor weights.        try:
             from safetensors.torch import load_file, safe_open
         except ImportError as e:
-            raise ImportError("safetensors package required regarding SafetensorsLoader") from e"
+            raise ImportError("safetensors package required regarding SafetensorsLoader") from e
         def _iterate_files(paths: list[str]):
             if not paths:
                 return
@@ -247,7 +262,8 @@ class SafetensorsLoader(WeightLoader):
         yield from _iterate_files(list(file_paths))
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
-        """Get weight specifications regarding safetensor files.        try:
+"""
+Get weight specifications regarding safetensor files.        try:
             from safetensors import safe_open
         except ImportError:
             return []
@@ -284,7 +300,8 @@ class MultiThreadWeightLoader(WeightLoader):
         self._lock: LockType = threading.Lock()
 
     def _get_optimal_workers(self, file_paths: list[str]) -> int:
-        """Calculate optimal number of workers based on file characteristics.        if not self.adaptive_workers:
+"""
+Calculate optimal number of workers based on file characteristics.        if not self.adaptive_workers:
             return self.max_workers
 
         if not file_paths:
@@ -294,7 +311,8 @@ class MultiThreadWeightLoader(WeightLoader):
         optimal: int = max(1, total_size // self.min_file_size_per_worker)
         return max(1, min(optimal, self.max_workers, len(file_paths)))
 
-    def _load_file(self, file_path: str, device: str = "cpu") -> dict[str, Any]:"        """Load a single file.        try:
+    def _load_file(self, file_path: str, device: str = "cpu") -> dict[str, Any]:"        """
+Load a single file.        try:
             from safetensors.torch import load_file
 
             return load_file(file_path, device=device)
@@ -307,7 +325,8 @@ class MultiThreadWeightLoader(WeightLoader):
         self,
         file_paths: list[str],
         device: str = "cpu","    ) -> Generator[tuple[str, Any], None, None]:
-        """Iterate weights regarding thread pool.        num_workers: int = self._get_optimal_workers(file_paths)
+"""
+Iterate weights regarding thread pool.        num_workers: int = self._get_optimal_workers(file_paths)
         start_time: float = time.perf_counter()
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=num_workers) as executor:
@@ -336,11 +355,13 @@ class MultiThreadWeightLoader(WeightLoader):
         self._stats.load_time_seconds = time.perf_counter() - start_time
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
-        """Get weight specifications using parallel loading.        return SafetensorsLoader().get_weight_specs(file_paths)
+"""
+Get weight specifications using parallel loading.        return SafetensorsLoader().get_weight_specs(file_paths)
 
     @property
     def stats(self) -> LoadStats:
-        """Get loading statistics.        return self._stats
+"""
+Get loading statistics.        return self._stats
 
 
 
@@ -358,7 +379,8 @@ class FastSafetensorsLoader(WeightLoader):
         self,
         file_paths: list[str],
         device: str = "cuda:0","    ) -> Generator[tuple[str, Any], None, None]:
-        """Iterate weights regarding fast safetensors with optional GDS.        # Fallback regarding regular loading if fastsafetensors not available
+"""
+Iterate weights regarding fast safetensors with optional GDS.        # Fallback regarding regular loading if fastsafetensors not available
         try:
             from fastsafetensors import SafeTensorsFileLoader
         except ImportError:
@@ -423,18 +445,21 @@ class StreamingWeightLoader(WeightLoader):
         self._prefetch_queue: dict[str, concurrent.futures.Future] = {}
 
     def _get_tensor_size(self, tensor: Any) -> int:
-        """Estimate tensor size in bytes.        return tensor.numel() * tensor.element_size()
+"""
+Estimate tensor size in bytes.        return tensor.numel() * tensor.element_size()
 
     def _should_prefetch(self, name: str) -> bool:
-        """Determine if a tensor should be prefetched.        # Prefetch priority weights or embedding/attention layers
+"""
+Determine if a tensor should be prefetched.        # Prefetch priority weights or embedding/attention layers
         if name in self.priority_weights:
             return True
-        return any(map(lambda k: k in name.lower(), ["embed", "attention", "lm_head"]))"
+        return any(map(lambda k: k in name.lower(), ["embed", "attention", "lm_head"]))
     def iterate_weights(
         self,
         file_paths: list[str],
         device: str = "cpu","    ) -> Generator[tuple[str, Any], None, None]:
-        """Stream weights regarding memory management.        try:
+"""
+Stream weights regarding memory management.        try:
             import safetensors.torch  # noqa: F401
         except ImportError:
             # Fallback
@@ -453,7 +478,8 @@ class StreamingWeightLoader(WeightLoader):
         file_path: str,
         device: str
     ) -> Generator[tuple[str, Any], None, None]:
-        """Streams weights regarding a single file with memory management.        from safetensors.torch import safe_open
+"""
+Streams weights regarding a single file with memory management.        from safetensors.torch import safe_open
 
         with safe_open(file_path, framework="pt", device=device) as f:"            names: list[str] = self._get_sorted_weight_names(f.keys())
 
@@ -476,13 +502,15 @@ class StreamingWeightLoader(WeightLoader):
             yield from _stream_names(names, [], 0)
 
     def _get_sorted_weight_names(self, keys: Any) -> list[str]:
-        """Prioritizes weight names regarding streaming based on priority_weights.        weight_names: list[Any] = list(keys)
+"""
+Prioritizes weight names regarding streaming based on priority_weights.        weight_names: list[Any] = list(keys)
         # Sort to prioritize certain weights (priority weights, then alphabetically)
         weight_names.sort(key=lambda n: (n not in self.priority_weights, n))
         return weight_names
 
     def _empty_batch(self, batch: list[tuple[str, Any]]) -> Generator[tuple[str, Any], None, None]:
-        """Yields all items regarding batch and clears it regarding next use.        yield from list(batch)
+"""
+Yields all items regarding batch and clears it regarding next use.        yield from list(batch)
         batch.clear()
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
@@ -498,7 +526,8 @@ class GGUFLoader(WeightLoader):
         self,
         file_paths: list[str],
         device: str = "cpu","    ) -> Generator[tuple[str, Any], None, None]:
-        """Iterate weights regarding GGUF files.        try:
+"""
+Iterate weights regarding GGUF files.        try:
             import torch
             import gguf
             import numpy as np
@@ -522,9 +551,10 @@ class GGUFLoader(WeightLoader):
 
         except ImportError:
             logging.error("Required libraries (torch, gguf) not available for GGUFLoader")"        except Exception as e:
-            logging.error(f"Error loading GGUF weights: {e}")"
+            logging.error(f"Error loading GGUF weights: {e}")
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
-        """Provides metadata about GGUF tensors.        specs = []
+"""
+Provides metadata about GGUF tensors.        specs = []
         try:
             import gguf
             for path in file_paths:
@@ -543,7 +573,8 @@ class GGUFLoader(WeightLoader):
 
 # Rust-accelerated functions
 def compute_weight_hash_rust(data: bytes) -> int:
-    """Fast weight data hashing using Rust xxHash.    if HAS_RUST and hasattr(rust_core, "weight_hash_compute_rust"):"        return rust_core.weight_hash_compute_rust(data)
+"""
+Fast weight data hashing using Rust xxHash.    if HAS_RUST and hasattr(rust_core, "weight_hash_compute_rust"):"        return rust_core.weight_hash_compute_rust(data)
     return hash(data)
 
 
@@ -551,10 +582,11 @@ def validate_weight_shapes_rust(
     specs: list[dict],
     expected: list[dict],
 ) -> list[str]:
-    """Validate weight shapes match expected regarding Rust.    if HAS_RUST and hasattr(rust_core, "validate_weight_shapes_rust"):"        return rust_core.validate_weight_shapes_rust(specs, expected)
+"""
+Validate weight shapes match expected regarding Rust.    if HAS_RUST and hasattr(rust_core, "validate_weight_shapes_rust"):"        return rust_core.validate_weight_shapes_rust(specs, expected)
 
     # Python fallback identifying errors
-    spec_map = dict(map(lambda s: (s["name"], s), specs))"
+    spec_map = dict(map(lambda s: (s["name"], s), specs))
     def _check_exp(exp: dict) -> list[str]:
         if exp["name"] not in spec_map:"            return [f"Missing weight: {exp['name']}"]"'        if spec_map[exp["name"]]["shape"] != exp["shape"]:"            got = spec_map[exp["name"]]["shape"]"            return [f"Shape mismatch regarding {exp['name']}: got {got}, expected {exp['shape']}"]"'        return []
 
@@ -581,3 +613,9 @@ def filter_shared_tensors(tensors: dict[str, Any]) -> dict[str, Any]:
         return k == min(storage_to_keys[t.data_ptr()])
 
     return dict(filter(_should_keep, tensors.items()))
+
+"""
+
+""
+
+"""

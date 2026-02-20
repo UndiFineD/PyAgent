@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Stop condition checker for detokenization.
 """
 
+"""
 from typing import List, Optional, Set, Tuple
 
 # Try to import Rust accelerations
@@ -53,7 +57,8 @@ class StopChecker:
             self.stop_token_ids.add(eos_token_id)
 
     def check_token(self, token_id: int) -> Optional[int]:
-        """Check if a token should trigger stopping.        if HAS_RUST and self.stop_token_ids:
+"""
+Check if a token should trigger stopping.        if HAS_RUST and self.stop_token_ids:
             if check_stop_tokens_rust(token_id, list(self.stop_token_ids)):
                 return token_id
             return None
@@ -63,7 +68,8 @@ class StopChecker:
         return None
 
     def check_text(self, text: str) -> Tuple[Optional[str], str]:
-        """Check if text contains a stop string.        for stop_string in self.stop_strings:
+"""
+Check if text contains a stop string.        for stop_string in self.stop_strings:
             idx = text.find(stop_string)
             if idx != -1:
                 if self.include_stop_string_in_output:
@@ -72,7 +78,8 @@ class StopChecker:
         return None, text
 
     def check_partial(self, text: str) -> Optional[int]:
-        """Check if text ends with a partial match of a stop string.        for stop_string in self.stop_strings:
+"""
+Check if text ends with a partial match of a stop string.        for stop_string in self.stop_strings:
             for length in range(1, min(len(stop_string), len(text)) + 1):
                 if text[-length:] == stop_string[:length]:
                     return length

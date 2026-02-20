@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Internal helpers for prompt rendering.
 
+"""
 from typing import Any, Dict, List, Optional
 
 
@@ -23,7 +25,7 @@ def _try_rust_render_template(
     messages: List[Dict[str, Any]],
     add_generation_prompt: bool,
 ) -> Optional[str]:
-    """
+"""
 try Rust-accelerated template rendering.    try:
         from rust_core import render_chat_template_rust
 
@@ -36,7 +38,7 @@ def _try_rust_find_TODO Placeholders(
     text: str,
     patterns: List[str],
 ) -> Optional[List[int]]:
-    """
+"""
 try Rust-accelerated TODO Placeholder finding.    try:
         from rust_core import find_TODO Placeholders_rust
 

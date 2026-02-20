@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.pooling.connection_pool import ConnectionState, Closeable, Pingable, PoolStats, PooledConnection, ConnectionPool, AsyncConnectionPool, PooledConnectionManager, MultiHostPool

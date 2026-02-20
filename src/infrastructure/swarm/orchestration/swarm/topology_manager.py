@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
+"""
 Swarm Topology Manager (Phase 70).
 Handles dynamic expert cloning and load-based re-assignment.
 
+"""
 try:
     import asyncio
 except ImportError:
@@ -53,8 +55,9 @@ class TopologyManager:
         self.replicas: Dict[str, List[str]] = {}  # master_id -> [replica_id1, ...]
 
     def record_usage(self, agent_id: str):
-        """Increments usage counter and triggers cloning if threshold met.        self.request_counts[agent_id] = self.request_counts.get(agent_id, 0) + 1
-        logger.debug(f"TopologyManager: Usage for {agent_id} is {self.request_counts[agent_id]}")"
+"""
+Increments usage counter and triggers cloning if threshold met.        self.request_counts[agent_id] = self.request_counts.get(agent_id, 0) + 1
+        logger.debug(f"TopologyManager: Usage for {agent_id} is {self.request_counts[agent_id]}")
         if self.request_counts[agent_id] >= self.clone_threshold:
             logger.info(f"TopologyManager: Triggering clone for {agent_id}")"            asyncio.create_task(self.clone_expert(agent_id))
             self.request_counts[agent_id] = 0  # Reset counter after cloning
@@ -66,8 +69,8 @@ class TopologyManager:
             return
 
         master_profile = self.gatekeeper.experts[agent_id]
-        replica_id = f"{agent_id}_replica_{len(self.replicas.get(agent_id, [])) + 1}""
-        logger.info(f"Cloning expert {agent_id} to {replica_id} due to high demand.")"
+        replica_id = f"{agent_id}_replica_{len(self.replicas.get(agent_id, [])) + 1}"
+        logger.info(f"Cloning expert {agent_id} to {replica_id} due to high demand.")
         # Create replica profile
         replica_profile = ExpertProfile(
             agent_id=replica_id,
@@ -85,5 +88,6 @@ class TopologyManager:
         self.replicas[agent_id].append(replica_id)
 
     def get_topology_stats(self) -> Dict[str, Any]:
-        """Returns the current state of clones and master agents.        return {
+"""
+Returns the current state of clones and master agents.        return {
             "active_masters": len(self.replicas),"            "total_replicas": sum(len(v) for v in self.replicas.values()),"            "clones": self.replicas,"        }

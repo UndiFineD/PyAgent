@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Batch orchestration for GPU-resident inference.
 
+"""
 try:
     from .buffers import InputBuffers  # noqa: F401
 except ImportError:

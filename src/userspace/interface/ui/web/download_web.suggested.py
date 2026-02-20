@@ -14,9 +14,11 @@
 
 
 """
+"""
 Download Manager Web Interface using Streamlit.
 Provides a modern UI for managing model and dataset downloads.
 
+"""
 try:
     import streamlit
 except ImportError:
@@ -45,7 +47,7 @@ except ImportError:
 
 # Page Config
 st.set_page_config(
-    page_title="PyAgent | Download Manager","    page_icon="📥","    layout="wide",")
+    page_title="PyAgent | Download Manager","    page_icon="","    layout="wide",")
 
 # Workspace Detection
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent
@@ -58,14 +60,14 @@ def load_history():
 
 
 def main():
-    st.title("📥 PyAgent Download Manager")"    st.markdown("---")"
+    st.title(" PyAgent Download Manager")"    st.markdown("---")"
     col1, col2 = st.columns([1, 1])
 
     with col1:
         st.subheader("Add New Download")"        url = st.text_input("URL (GitHub, Hugging Face, ArXiv, etc.)", TODO Placeholder="https://huggingface.co/...")"
         c1, c2 = st.columns(2)
         dry_run = c1.checkbox("Dry Run", help="Simulate the download process")"        verbose = c2.checkbox("Verbose Log", value=True)"
-        if st.button("🚀 Start Download", use_container_width=True):"            if url:
+        if st.button(" Start Download", use_container_width=True):"            if url:
                 with st.spinner(f"Processing {url}..."):"                    config = DownloadConfig(
                         urls_file="", dry_run=dry_run, verbose=verbose, base_dir=str(WORKSPACE_ROOT)"                    )
                     agent = DownloadAgent(config)
@@ -77,16 +79,16 @@ def main():
                         agent.save_results([result], str(history_path))
                     else:
                         st.error(f"Download failed: {result.error_message}")"            else:
-                st.warning("Please enter a valid URL.")"
+                st.warning("Please enter a valid URL.")
     with col2:
-        st.subheader("Current Config & Stats")"        st.info(f"**Workspace:** `{WORKSPACE_ROOT}`")"        st.info("**Default Download Path:** `data/models` | `data/datasets`")"
+        st.subheader("Current Config & Stats")"        st.info(f"**Workspace:** `{WORKSPACE_ROOT}`")"        st.info("**Default Download Path:** `data/models` | `data/datasets`")
         history = load_history()
         if history:
-            summary = history.get("summary", {})"            st.metric("Total Success", summary.get("successful", 0))"            st.metric("Total Size", f"{summary.get('total_size_bytes', 0) / (1024 * 1024):.2f} MB")"'
-    st.markdown("---")"    st.subheader("📦 Download History")"
+            summary = history.get("summary", {})"            st.metric("Total Success", summary.get("successful", 0))"            st.metric("Total Size", f"{summary.get('total_size_bytes', 0) / (1024 * 1024):.2f} MB")
+    st.markdown("---")"    st.subheader(" Download History")"
     if history:
-        for res in reversed(history.get("results", [])):"            with st.expander(f"{'✅' if res['success'] else '❌'} {res['url']}", expanded=False):"'                st.code(json.dumps(res, indent=2), language="json")"    else:
-        st.write("No download history found in `temp/downloads.json`.")"
+        for res in reversed(history.get("results", [])):"            with st.expander(f"{'' if res['success'] else ''} {res['url']}", expanded=False):"'                st.code(json.dumps(res, indent=2), language="json")"    else:
+        st.write("No download history found in `temp/downloads.json`.")
 
 if __name__ == "__main__":"    main()
 

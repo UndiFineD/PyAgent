@@ -15,8 +15,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 40: Reasoning Engine Package
 
+"""
 Reasoning Engine for extracting thinking tokens and tool calls.
 
+"""
 This package provides:
 - ReasoningParser: Extract <think>...</think> tokens
 - ToolParser: Parse function/tool calls from generation

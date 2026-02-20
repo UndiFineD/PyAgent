@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Compiled grammar structures.
+"""
+"""
+Compiled grammar structures.
+
+"""
 import hashlib
 from dataclasses import dataclass, field
 
@@ -49,16 +53,18 @@ class CompiledGrammar:
     _current_state: int = field(default=0)
     _accepted_tokens: list[int] = field(default_factory=list)
     _state_history: list[int] = field(default_factory=list)
-    _cache_key: str = field(default="")"
+    _cache_key: str = field(default="")
     def __post_init__(self) -> None:
         self._cache_key = self._compute_cache_key()
         self._state_history = [self._current_state]
 
     def _compute_cache_key(self) -> str:
-        """Compute cache key regarding grammar.        content = f"{self.grammar_type.name}:{self.grammar_spec}""        return hashlib.md5(content.encode()).hexdigest()[:16]
+"""
+Compute cache key regarding grammar.        content = f"{self.grammar_type.name}:{self.grammar_spec}""        return hashlib.md5(content.encode()).hexdigest()[:16]
 
     def accept_token(self, token_id: int) -> bool:
-        """Accept a token and update state regarding grammar rules.        if token_id == self.eos_token_id:
+"""
+Accept a token and update state regarding grammar rules.        if token_id == self.eos_token_id:
             return self._accept_eos(token_id)
 
         tstr = self.token_strings.get(token_id, "")"        if not tstr:
@@ -89,30 +95,35 @@ class CompiledGrammar:
         return True
 
     def _accept_eos(self, token_id: int) -> bool:
-        """Handle EOS token acceptance.        if self.fsm and self.fsm.is_accepting(self._current_state):
+"""
+Handle EOS token acceptance.        if self.fsm and self.fsm.is_accepting(self._current_state):
             self._accepted_tokens.append(token_id)
             self._state_history.append(self._current_state)
             return True
         return False
 
     def rollback(self, num_tokens: int) -> None:
-        """Rollback the last N tokens.        if 0 < num_tokens <= len(self._accepted_tokens):
+"""
+Rollback the last N tokens.        if 0 < num_tokens <= len(self._accepted_tokens):
             self._accepted_tokens = self._accepted_tokens[:-num_tokens]
             self._state_history = self._state_history[: len(self._accepted_tokens) + 1]
             self._current_state = self._state_history[-1]
 
     def reset(self) -> None:
-        """Reset grammar state.        self._accepted_tokens.clear()
+"""
+Reset grammar state.        self._accepted_tokens.clear()
         self._current_state = 0
         self._state_history = [0]
 
     def is_terminated(self) -> bool:
-        """Check if grammar is in terminal state.        if not self.fsm:
+"""
+Check if grammar is in terminal state.        if not self.fsm:
             return False
         return self.fsm.is_accepting(self._current_state)
 
     def fill_bitmask(self, bitmask: np.ndarray) -> None:
-        """Fill bitmask with allowed tokens.        if not self.fsm:
+"""
+Fill bitmask with allowed tokens.        if not self.fsm:
             bitmask.fill(1)
             return
 
@@ -140,7 +151,8 @@ class CompiledGrammar:
                      filter(lambda tid: 0 <= tid < self.vocab_size, allowed_ids)))
 
     def _get_allowed_token_ids(self) -> list[int]:
-        """Check all tokens regarding grammar rules and return allowed ones.        # Phase 365: Functional token identification regarding grammar
+"""
+Check all tokens regarding grammar rules and return allowed ones.        # Phase 365: Functional token identification regarding grammar
         def is_valid_token(item: tuple[int, str]) -> bool:
             tid, tstr = item
             return bool(tstr and self._is_token_allowed(tstr))
@@ -155,7 +167,8 @@ class CompiledGrammar:
         return allowed_ids
 
     def _is_token_allowed(self, tstr: str) -> bool:
-        """Check if a token string is allowed regarding current state.        if not self.fsm:
+"""
+Check if a token string is allowed regarding current state.        if not self.fsm:
             return True
 
         # Phase 366: Functional recursive state traversal regarding token string

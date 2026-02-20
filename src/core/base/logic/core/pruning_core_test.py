@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal parser-safe tests for pruning core."""
-
+""
+Minimal parser-safe tests for pruning core.""
 import importlib
 
 

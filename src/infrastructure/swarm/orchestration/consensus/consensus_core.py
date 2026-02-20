@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,14 @@ from __future__ import annotations
 
 
 """
+"""
 ConsensusCore logic for multi-agent voting.
 Contains pure logic for tallying votes, handling ties, and selecting winners.
 """
-
 try:
-    from .core.base.common import ConsensusCore
+
+"""
+from .core.base.common import ConsensusCore
 except ImportError:
     from src.core.base.common import ConsensusCore
 
@@ -30,7 +33,8 @@ except ImportError:
 
 
 class StandardConsensusCore(ConsensusCore):
-    """Facade for ConsensusCore in the consensus tier.
+"""
+Facade for ConsensusCore in the consensus tier.
     def __init__(self, mode: str = "plurality") -> None:"        super().__init__(name="ConsensusCore")"        self.mode = mode
 
 

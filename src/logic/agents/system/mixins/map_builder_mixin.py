@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +16,15 @@ from __future__ import annotations
 
 
 """
+"""
 Map Builder Mixin - Build and index module/class/function dependency graph
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-Import MapBuilderMixin into TopologicalNavigator, ensure self.root_dir and self.graph exist, then call build_dependency_map("src") to scan and index Python modules, classes, and functions."
+Import MapBuilderMixin into TopologicalNavigator, ensure self.root_dir and self.graph exist, then call build_dependency_map("src") to scan and index Python modules, classes, and functions.
 WHAT IT DOES:
 Scans a target directory for .py files, parses AST to extract module-level imports, class and function definitions, and builds a dependency graph mapping module -> imports and module -> contained entities, exposing _get_entity_id, _parse_file, and build_dependency_map decorated as a tool.
 
@@ -43,10 +47,9 @@ FILE CONTENT SUMMARY:
 
 
 """
-
 Map builder mixin.py module.
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 
 import ast
 import logging
@@ -63,13 +66,16 @@ if TYPE_CHECKING:
 
 
 class MapBuilderMixin:
-""""Mixin for mapping and parsing code entities in TopologicalNavigator.
-    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""""Generates a unique ID for a code entity.        rel_path = file_path.relative_to(self.root_dir)
+""""
+Mixin for mapping and parsing code entities in TopologicalNavigator.
+    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""""
+Generates a unique ID for a code entity.        rel_path = file_path.relative_to(self.root_dir)
         module_path = str(rel_path).replace(os.path.sep, ".").replace(".py", ")"        if entity_name:
 #             return f"{module_path}.{entity_name}"        return module_path
 
     @as_tool
-    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:"""""Scans the specified directory to build a full dependency graph.        target_path = self.root_dir / target_dir
+    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:""""
+Scans the specified directory to build a full dependency graph.        target_path = self.root_dir / target_dir
         if not target_path.exists():
 #             return fError: Path {target_dir} does not exist.
 
@@ -81,7 +87,8 @@ class MapBuilderMixin:
 #         return fDependency map built successfully. Indexed {count} files. Total nodes: {len(self.graph)}
 
     def _parse_file(self: TopologicalNavigator, file_path: Path) -> None:
-""""Extracts imports and class/function definitions from a file.        try:
+""""
+Extracts imports and class/function definitions from a file.        try:
             with open(file_path, encoding="utf-8") as f:"                tree = ast.parse(f.read())
 
             module_id = self._get_entity_id(file_path)
@@ -117,7 +124,7 @@ class MapBuilderMixin:
                     self.graph[module_id].add(func_id)
 
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(fFailed to parse {file_path}: {e}")"# Copyright" 2026 PyAgent Authors"# Licensed under the Apache License, Version 2.0 (the "License");"
+            logging.error(fFailed to parse {file_path}: {e}")"# Copyright" 2026 PyAgent Authors"# Licensed under the Apache License, Version 2.0 (the "License");
 
 import ast
 import logging
@@ -134,12 +141,15 @@ if TYPE_CHECKING:
 
 
 class MapBuilderMixin:
-""""Mixin for mapping and parsing code entities in TopologicalNavigator.
-    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""""Generates a unique ID for a code entity.        rel_path = file_path".relative_to(self.root_dir)"        module_path = str(rel_path).replace(os.path.sep, ".").replace(".py", ")"        if entity_name:
+""""
+Mixin for mapping and parsing code entities in TopologicalNavigator.
+    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = ") -> str:"""""
+Generates a unique ID for a code entity.        rel_path = file_path".relative_to(self.root_dir)"        module_path = str(rel_path).replace(os.path.sep, ".").replace(".py", ")"        if entity_name:
 #             return f"{module_path}.{entity_name}"        return module_path
 
     @as_tool
-    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:"""""Scans the specified directory to build a full dependency graph.        target_path = self.root_dir / target_dir
+    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:""""
+Scans the specified directory to build a full dependency graph.        target_path = self.root_dir / target_dir
         if not target_path.exists():
 #             return fError: Path {target_dir} does not exist.
 
@@ -151,7 +161,8 @@ class MapBuilderMixin:
 #         return fDependency map built successfully. Indexed {count} files. Total nodes: {len(self.graph)}
 
     def _parse_file(self: TopologicalNavigator, file_path: Path) -> None:
-""""Extracts imports and class/function definitions from a file.        try:
+""""
+Extracts imports and class/function definitions from a file.        try:
             with open(file_path, encoding="utf-8") as f:"                tree = ast.parse(f.read())
 
             module_id = self._get_entity_id(file_path)

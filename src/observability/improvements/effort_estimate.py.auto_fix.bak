@@ -1,0 +1,32 @@
+"""EffortEstimate enum - parser-safe stub for repairs.
+
+This module provides a small Fibonacci-like effort enum used for compatibility
+with other modules during test repair. It intentionally keeps implementation
+minimal to avoid importing heavy dependencies while tests are being repaired.
+"""
+
+from __future__ import annotations
+from enum import Enum
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+__version__ = VERSION
+
+
+class EffortEstimate(Enum):
+    TRIVIAL = 1
+    SMALL = 2
+    MEDIUM = 3
+    LARGE = 5
+    EPIC = 8
+
+    def approx_hours(self) -> int:
+        mapping = {1: 0, 2: 2, 3: 8, 5: 24, 8: 80}
+        return mapping.get(self.value, 1)
+
+__all__ = ["EffortEstimate"]

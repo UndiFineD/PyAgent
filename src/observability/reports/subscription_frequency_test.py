@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from observability.reports.subscription_frequency import *

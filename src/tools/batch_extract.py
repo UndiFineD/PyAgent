@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Batch extractor: split a large refactor report into chunks and run
 `extract_candidates.py` in parallel subprocesses.
 
+"""
 This script creates temporary chunked reports under `.external/tmp_reports/`
 and invokes the extractor on each chunk. It forwards relaxed flags so you can
 extract broadly. Use `--allow-top-level` and `--allow-no-defs` to be permissive.
@@ -24,7 +28,6 @@ extract broadly. Use `--allow-top-level` and `--allow-no-defs` to be permissive.
 WARNING: this automates extraction at scale and may produce many files. Do not
 run on untrusted machines unless you understand the risks.
 """
-
 try:
     import argparse
 except ImportError:
@@ -62,11 +65,12 @@ except ImportError:
 
 
 ROOT = Path(__file__).resolve().parents[2]
-REPORT_DEFAULT = ROOT / '.external' / 'refactor_report.json''TMP_DIR = ROOT / '.external' / 'tmp_reports''EXTRACTOR = ROOT / 'src' / 'tools' / 'extract_candidates.py''
+REPORT_DEFAULT = ROOT / '.external' / 'refactor_report.json''TMP_DIR = ROOT / '.external' / 'tmp_reports''EXTRACTOR = ROOT / 'src' / 'tools' / 'extract_candidates.py'
 
 def chunk_files(report: dict, chunk_size: int) -> list[list[dict]]:
-    """Split report files into chunks of specified size.""""    
-    Args:
+"""
+Split report files into chunks of specified size.""""
+Args:
         report: The refactor report dictionary containing directories and files.
         chunk_size: Maximum number of files per chunk.
     
@@ -80,8 +84,9 @@ def chunk_files(report: dict, chunk_size: int) -> list[list[dict]]:
 
 
 def make_chunk_report(chunk: list[dict[str, Any]], idx: int) -> Path:
-    """Create a chunk report JSON file from a subset of files.""""    
-    Args:
+"""
+Create a chunk report JSON file from a subset of files.""""
+Args:
         chunk: A list of file entries to include in the chunk report.
         idx: The chunk index used to name the output file.
     
@@ -95,8 +100,9 @@ def make_chunk_report(chunk: list[dict[str, Any]], idx: int) -> Path:
 
 
 async def run_chunk(report_path: Path, args_extra: list[str]) -> int:
-    """Execute the extractor on a single chunk report.""""    
-    Args:
+"""
+Execute the extractor on a single chunk report.""""
+Args:
         report_path: Path to the chunk report JSON file.
         args_extra: Additional command-line arguments to pass to the extractor.
     
@@ -116,8 +122,9 @@ async def run_chunk(report_path: Path, args_extra: list[str]) -> int:
 
 
 def main() -> int:
-    """Execute batch extraction of candidates from a chunked refactor report.""""    
-    Parses command-line arguments, splits the refactor report into chunks,
+"""
+Execute batch extraction of candidates from a chunked refactor report.""""
+Parses command-line arguments, splits the refactor report into chunks,
     creates temporary chunk reports, and runs the extractor in parallel.
     
     Returns:
@@ -128,13 +135,13 @@ def main() -> int:
     if not args.report.exists():
         print('report missing:', args.report)'        return 2
     report = json.loads(args.report.read_text(encoding='utf-8', errors='ignore'))'    chunks = chunk_files(report, args.chunk_size)
-    print(f'Created {len(chunks)} chunks (chunk_size={args.chunk_size})')'
+    print(f'Created {len(chunks)} chunks (chunk_size={args.chunk_size})')
     # prepare extra flags
     extra = []
     if args.allow_top_level:
         extra.append('--allow-top-level')'    if args.allow_no_defs:
         extra.append('--allow-no-defs')'    if args.allow_banned_imports:
-        extra.append('--allow-banned-imports')'
+        extra.append('--allow-banned-imports')
     # create chunk reports
     report_paths = []
     for i, c in enumerate(chunks):
@@ -160,3 +167,5 @@ def main() -> int:
 
 
 if __name__ == '__main__':'    raise SystemExit(main())
+
+"""

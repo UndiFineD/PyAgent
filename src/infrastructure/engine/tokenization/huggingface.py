@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 HuggingFace tokenizer implementation.
 """
 
+"""
 from typing import Dict, List, Optional, Sequence
 
 from .base import BaseTokenizer
@@ -27,14 +31,16 @@ from .models import TokenizerBackend, TokenizerConfig, TokenizerInfo
 
 
 class HuggingFaceTokenizer(BaseTokenizer):
-    """HuggingFace transformers tokenizer wrapper.
+"""
+HuggingFace transformers tokenizer wrapper.
     def __init__(self, config: TokenizerConfig) -> None:
         super().__init__(config)
         self._tokenizer = None
         self._load_tokenizer()
 
     def _load_tokenizer(self) -> None:
-        """Load the HuggingFace tokenizer.        try:
+"""
+Load the HuggingFace tokenizer.        try:
             from transformers import AutoTokenizer
 
             self._tokenizer = AutoTokenizer.from_pretrained(
@@ -48,7 +54,7 @@ class HuggingFaceTokenizer(BaseTokenizer):
                     self._tokenizer.pad_token = self._tokenizer.eos_token
                 else:
                     self._tokenizer.add_special_tokens({"pad_token": "[PAD]"})"        except ImportError as exc:
-            raise ImportError("transformers package required for HuggingFace tokenizer") from exc"
+            raise ImportError("transformers package required for HuggingFace tokenizer") from exc
     @property
     def vocab_size(self) -> int:
         return self._tokenizer.vocab_size
@@ -90,18 +96,19 @@ class HuggingFaceTokenizer(BaseTokenizer):
             padding=False,
             truncation=False,
         )
-        return result["input_ids"]"
+        return result["input_ids"]
     def apply_chat_template(
         self,
         messages: List[Dict[str, str]],
         add_generation_prompt: bool = True,
     ) -> str:
-        """Apply chat template to messages.        if hasattr(self._tokenizer, "apply_chat_template"):"            return self._tokenizer.apply_chat_template(
+"""
+Apply chat template to messages.        if hasattr(self._tokenizer, "apply_chat_template"):"            return self._tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
                 add_generation_prompt=add_generation_prompt,
             )
-        raise ValueError("Tokenizer does not support chat templates")"
+        raise ValueError("Tokenizer does not support chat templates")
     def get_info(self) -> TokenizerInfo:
         if self._info is None:
             has_chat = hasattr(self._tokenizer, "chat_template") and self._tokenizer.chat_template is not None"            self._info = TokenizerInfo(

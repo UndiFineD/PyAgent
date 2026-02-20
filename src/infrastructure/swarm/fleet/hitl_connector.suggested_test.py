@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.swarm.fleet.hitl_connector.suggested import HITLConnector

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import hashlib
 except ImportError:
@@ -49,8 +49,9 @@ __version__ = VERSION
 
 @dataclass
 class TestSnapshot:
-    """Snapshot for snapshot testing.""""
-    Attributes:
+"""
+Snapshot for snapshot testing.""""
+Attributes:
         name: Snapshot name.
         content: Snapshot content.
         content_hash: Hash of content.
@@ -59,17 +60,19 @@ class TestSnapshot:
     
     name: str
     content: str
-    content_hash: str = """    created_at: float = field(default_factory=time.time)
+    content_hash: str = ""
+created_at: float = field(default_factory=time.time)
     updated_at: float = field(default_factory=time.time)
     __test__ = False
 
     def __post_init__(self) -> None:
-        """Compute content hash if not provided.        # Convert content to string if it's a dict or other type'        if isinstance(self.content, dict):
+        ""
+Compute content hash if not provided.        # Convert content to string if it's a dict or other type'        if isinstance(self.content, dict):
             content_str = json.dumps(self.content)
         else:
             content_str = str(self.content)
         if not self.content_hash:
-            self.content_hash = hashlib.sha256(content_str.encode("utf-8")).hexdigest()"
+            self.content_hash = hashlib.sha256(content_str.encode("utf-8")).hexdigest()
     def __eq__(self, other: object) -> bool:
         # Compatibility: some tests compare a loaded snapshot directly
         # to a raw content object (e.g. dict).

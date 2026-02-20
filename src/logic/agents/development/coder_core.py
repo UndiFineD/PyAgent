@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +21,6 @@ from __future__ import annotations
 # Designed for high-performance rule checking with future Rust integration.
 
 # pylint: disable=too-many-ancestors
-
 import ast
 
 from typing import List, Optional
@@ -44,10 +46,13 @@ from src.logic.agents.development.mixins.coder_style_mixin import \
 from src.logic.agents.development.mixins.coder_validation_mixin import \
     CoderValidationMixin
 
+"""
 __version__ = VERSION
 
+"""
+
 # Logic extracted for future Rust migration (PyO3)
-# Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here."
+# Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here.
 # Default style rules for Python (Re-declared here for Core access)
 DEFAULT_PYTHON_STYLE_RULES: list[StyleRule] = [
     StyleRule(
@@ -99,11 +104,13 @@ class CoderCore(
             self._rust_core = None
 
     def get_dependencies(self, content: str) -> List[str]:
-""""Extract code dependencies using high-speed scanning.        from src.core.rust_bridge import RustBridge
+""""
+Extract code dependencies using high-speed scanning.        from src.core.rust_bridge import RustBridge
         return RustBridge.get_imports(content)
 
     def calculate_metrics(self, content: str) -> CodeMetrics:
-""""Analyze code structure and compute metrics.        from src.core.rust_bridge import RustBridge
+""""
+Analyze code structure and compute metrics.        from src.core.rust_bridge import RustBridge
 
         raw_metrics = RustBridge.calculate_metrics(content)
         if raw_metrics:
@@ -135,10 +142,19 @@ class CoderCore(
         return metrics
 
     def _calculate_cyclomatic_complexity(self, node: ast.AST) -> int:
-""""Calculate cyclomatic complexity for a function node.        cc = 1
+""""
+Calculate cyclomatic complexity for a function node.        cc = 1
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
                 cc += 1
             elif isinstance(child, ast.BoolOp):
                 cc += len(child.values) - 1
         return cc
+
+"""
+
+"""
+
+""
+
+"""

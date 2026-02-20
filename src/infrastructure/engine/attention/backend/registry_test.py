@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.attention.backend.registry import AttentionBackendRegistry, get_attention_registry

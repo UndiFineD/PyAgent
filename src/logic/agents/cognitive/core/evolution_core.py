@@ -14,9 +14,11 @@
 
 
 """
+"""
 Core logic for Evolutionary Hyper-Parameter Tuning (Phase 182).
 # Handles prompt crossover and lineage persistence.
 
+"""
 try:
     import hashlib
 except ImportError:
@@ -31,7 +33,8 @@ except ImportError:
 
 
 class EvolutionCore:
-""""Core logic for evolutionary algorithms in prompt engineering.
+""""
+Core logic for evolutionary algorithms in prompt engineering.
     @staticmethod
     def prompt_crossover(prompt1: str, prompt2: str) -> str:
         Combines two prompts by interweaving their logical blocks.
@@ -42,7 +45,7 @@ class EvolutionCore:
         mid2 = len(lines2) // 2
 
         child_lines = lines1[:mid1] + lines2[mid2:]
-        return "\\n".join(child_lines)"
+        return "\\n".join(child_lines)
     @staticmethod
     def calculate_prompt_sha(prompt: str) -> str:
         Returns a short SHA hash of the prompt for lineage tracking.
@@ -54,3 +57,9 @@ class EvolutionCore:
             "be more precise","            "explain reasoning","            "be concise","            "check for security","        ]
         if random.random() < mutation_rate:
 #             return prompt + f"\\n[Mutation: {random.choice(modifiers)}]"        return prompt
+
+"""
+
+""
+
+"""

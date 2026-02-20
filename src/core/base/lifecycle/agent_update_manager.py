@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Specialized manager for handling agent improvement iterations."""
+"""
+"""
+Specialized manager for handling agent improvement iterations.""
 
+"""
 import logging
 import sys
 from pathlib import Path
@@ -30,10 +34,12 @@ __version__ = VERSION
 
 
 class AgentUpdateManager:
-    """Handles the update logic for code files, including errors, improvements, and tests.
+"""
+Handles the update logic for code files, including errors, improvements, and tests.
+
     Implements Version Gatekeeping to prevent unstable mutations.
-    """
-    def __init__(  # pylint: disable=too-many-arguments, too-many-positional-arguments
+"""
+def __init__(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         repo_root: Path,
         models: dict[str, Any],
@@ -51,8 +57,9 @@ class AgentUpdateManager:
         self.min_gate_phase = 105  # Minimum phase required for autonomous updates
 
     def _check_gate(self) -> bool:
-        """Internal version gate check."""
-        if not is_gate_open(self.min_gate_phase):
+"""
+Internal version gate check.""
+if not is_gate_open(self.min_gate_phase):
             logging.warning(
                 "AgentUpdateManager: Evolution Gate Closed. Required Phase: %s, Current: %s",
                 self.min_gate_phase,
@@ -62,18 +69,20 @@ class AgentUpdateManager:
         return True
 
     def update_errors_improvements(self, code_file: Path) -> bool:
-        """Stub method: returns False unless gate is closed.
+"""
+Stub method: returns False unless gate is closed.
 
         Real implementation runs external agent commands; tests only import and
         call this method in some cases. Keep it minimal and deterministic.
-        """
-        if not self._check_gate():
+"""
+if not self._check_gate():
             return False
         return False
 
     def _get_pending_improvements(self, improvements_file: Path) -> list[str]:
-        """Extract pending improvements using core logic."""
-        if not improvements_file.exists():
+"""
+Extract pending improvements using core logic.""
+if not improvements_file.exists():
             return []
         try:
             content = improvements_file.read_text(encoding="utf-8")
@@ -84,8 +93,9 @@ class AgentUpdateManager:
             return []
 
     def _mark_improvements_fixed(self, improvements_file: Path, fixed_items: list[str]) -> None:
-        """Mark items as fixed in the improvements file."""
-        if not improvements_file.exists() or not fixed_items:
+"""
+Mark items as fixed in the improvements file.""
+if not improvements_file.exists() or not fixed_items:
             return
         try:
             content = improvements_file.read_text(encoding="utf-8")
@@ -95,8 +105,9 @@ class AgentUpdateManager:
             logging.warning("[Robustness] AgentUpdateManager: Failed to update improvements file: %s", e, exc_info=True)
 
     def _log_changes(self, changes_file: Path, fixed_items: list[str]) -> None:
-        """Log fixed improvements to the changes file."""
-        if not changes_file.exists() or not fixed_items:
+"""
+Log fixed improvements to the changes file.""
+if not changes_file.exists() or not fixed_items:
             return
         try:
             content = changes_file.read_text(encoding="utf-8")
@@ -107,8 +118,9 @@ class AgentUpdateManager:
             logging.warning("[Robustness] AgentUpdateManager: Failed to update changes file: %s", e, exc_info=True)
 
     def update_changelog_context_tests(self, code_file: Path) -> bool:
-        """Update changelog, context, and tests for a file."""
-        if not self._check_gate():
+"""
+Update changelog, context, and tests for a file.""
+if not self._check_gate():
             return False
 
         base = code_file.stem
@@ -127,10 +139,11 @@ class AgentUpdateManager:
         return changes_made
 
     def update_code(self, code_file: Path) -> bool:
-        """Update the code file based on improvements.
+"""
+Update the code file based on improvements.
         Returns True if changes were written.
-        """
-        if not self._check_gate():
+"""
+if not self._check_gate():
             return False
 
         prompt = f"Update the code in {code_file.name} to implement pending improvements"

@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Fused package.
 
+"""
 try:
     from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer  # noqa: F401
 except ImportError:

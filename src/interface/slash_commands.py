@@ -17,7 +17,10 @@
 
 
 """
+"""
 SlashCommands - Chat prompt slash command parser and executor
+
+"""
 
 [Brief Summary]
 A lightweight backward-compatibility shim that re-exports the relocated SlashCommands implementation from src/interface/commands so existing imports continue to work without changes. Keeps API surface stable while the real implementation lives elsewhere.

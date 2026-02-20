@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.plugins.example_math_plugin.simple_math_agent import SimpleMathAgent

@@ -15,10 +15,13 @@
 
 
 """
+"""
 Swarm infrastructure components.
 """
 try:
-    from . import fleet, orchestration, worker
+
+"""
+from . import fleet, orchestration, worker
 except ImportError:
     from . import fleet, orchestration, worker
 

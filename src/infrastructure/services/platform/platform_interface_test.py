@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.platform.platform_interface import get_current_platform, detect_platform, get_device_count, get_device_capability, get_memory_info, is_quantization_supported, select_attention_backend

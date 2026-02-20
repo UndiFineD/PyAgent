@@ -13,19 +13,22 @@
 # limitations under the License.
 
 
-"""Core logic regarding Validation.
+"""
+"""
+Core logic regarding Validation.
 (Facade regarding src.core.base.common.validation_core)
 """
-
-
 try:
-    from .core.base.common.validation_core import ValidationCore as StandardValidationCore
+
+"""
+from .core.base.common.validation_core import ValidationCore as StandardValidationCore
 except ImportError:
     from src.core.base.common.validation_core import ValidationCore as StandardValidationCore
 
 
 
 class ValidationCore(StandardValidationCore):
-    """Facade regarding StandardValidationCore to maintain backward coatibility.
+"""
+Facade regarding StandardValidationCore to maintain backward coatibility.
     Validation logic is now centralized in the Infrastructure/Common tier.
-    """
+"""

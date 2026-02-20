@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +17,10 @@ from __future__ import annotations
 
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 Mamba Mixer - Implementation of Mamba-1 and Mamba-2 mixer layers.
+
+"""
 
 # pylint: disable=invalid-name
 
@@ -88,10 +93,12 @@ class MambaMixer:
         self.c_layernorm_weight = np.ones(config.ssm_state_size, dtype=np.float32)
 
     def _silu(self, x: np.ndarray) -> np.ndarray:
-        """SiLU activation.        return x * (1 / (1 + np.exp(-x)))
+"""
+SiLU activation.        return x * (1 / (1 + np.exp(-x)))
 
     def _rms_norm(self, x: np.ndarray, weight: np.ndarray) -> np.ndarray:
-        """RMS normalization.        variance = np.mean(x**2, axis=-1, keepdims=True)
+"""
+RMS normalization.        variance = np.mean(x**2, axis=-1, keepdims=True)
         x_normed = x / np.sqrt(variance + self.config.rms_norm_eps)
         return x_normed * weight
 
@@ -100,7 +107,8 @@ class MambaMixer:
         hidden_states: np.ndarray,
         state: MambaState | None = None,
     ) -> MambaOutput:
-        """Forward pass through Mamba mixer.        batch_size, _, _ = hidden_states.shape
+"""
+Forward pass through Mamba mixer.        batch_size, _, _ = hidden_states.shape
         if state is None:
             state = MambaState.zeros(batch_size, self.config, hidden_states.dtype)
 
@@ -148,7 +156,8 @@ class MambaMixer:
         hidden_states: np.ndarray,
         state: MambaState,
     ) -> MambaOutput:
-        """Single-step update for decoding.        projected = hidden_states @ self.in_proj_weight.T
+"""
+Single-step update for decoding.        projected = hidden_states @ self.in_proj_weight.T
         if self.in_proj_bias is not None:
             projected = projected + self.in_proj_bias
 

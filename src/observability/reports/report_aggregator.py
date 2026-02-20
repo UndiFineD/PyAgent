@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""ReportAggregator - Aggregate and summarize error reports.
 """
-
+"""
+ReportAggregator - Aggregate and summarize error reports.
+"""
 try:
-    from .core.base.lifecycle.version import VERSION
+
+"""
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -27,5 +31,6 @@ __version__ = VERSION
 
 # TODO ReportAggregator class
 class ReportAggregator:
-    """ReportAggregator class."""
-    pass
+    ""
+ReportAggregator class.""
+pass

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 BulkOperationResult - Data container for bulk operation outcomes
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -48,8 +52,8 @@ __version__ = VERSION
 
 @dataclass
 class BulkOperationResult:
-    success_count: """int""""
-
+    success_count: ""
+int""""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -68,3 +72,11 @@ __version__ = VERSION
 @dataclass
 class BulkOperationResult:
     success_count: int
+
+"""
+
+"""
+
+"""
+
+"""

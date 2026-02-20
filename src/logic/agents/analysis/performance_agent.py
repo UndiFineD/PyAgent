@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 PerformanceAgent - Identifies and suggests code optimizations
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -42,7 +46,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:PerformanceAgent identifies and suggests code optimizations.
 """
-
 import logging
 import re
 
@@ -75,7 +78,7 @@ class PerformanceAgent:
 
     Example:
         >>> optimizer=PerformanceAgent()
-#         >>> suggestions=optimizer.analyze("for i in range(len(items)):")"
+#         >>> suggestions=optimizer.analyze("for i in range(len(items)):")
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
         (
             rfor\\\\s+\\w+\\\\s+in\\\\s+range\(len\((\\w+)\)\)","            OptimizationType.ALGORITHMIC,
@@ -89,10 +92,11 @@ class PerformanceAgent:
     ]
 
     def __init__(self) -> None:
-""""Initialize the performance optimizer.        self.suggestions: list[OptimizationSuggestion] = []
+""""
+Initialize the performance optimizer.        self.suggestions: list[OptimizationSuggestion] = []
 
     def analyze(self, content: str) -> list[OptimizationSuggestion]:
-        "Analyze code for optimization" opportunities."
+        "Analyze code for optimization" opportunities.
         Args:
             content: Source code to analyze.
 
@@ -116,7 +120,7 @@ class PerformanceAgent:
                             )
                     return self.suggestions
             except (ImportError, AttributeError, RuntimeError) as e:
-                logger.debug("Rust acceleration failed: %s", e)"
+                logger.debug("Rust acceleration failed: %s", e)
         # Fallback to Python implementation
         lines = content.split("\\n")"        for i, line in enumerate(lines, 1):
             for pattern, opt_type, desc, fix in self.OPTIMIZATION_PATTERNS:
@@ -132,3 +136,11 @@ class PerformanceAgent:
                     )
 
         return self.suggestions
+
+"""
+
+"""
+
+""
+
+"""

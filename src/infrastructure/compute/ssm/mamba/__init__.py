@@ -13,8 +13,10 @@
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 Mamba SSM Package - Implementation of State Space Models.
 
+"""
 try:
     from typing import TYPE_CHECKING, Any
 except ImportError:
@@ -45,7 +47,7 @@ def __getattr__(name: str) -> Any:
         return CausalConv1d
     if name == "SelectiveScan":"        from .ops import SelectiveScan
         return SelectiveScan
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")"
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = [
     "MambaConfig","    "MambaState","    "MambaOutput","    "MambaMixer","    "Mamba2Mixer","    "HybridMambaMixer","    "CausalConv1d","    "SelectiveScan","]

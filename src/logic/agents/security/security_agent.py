@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -21,9 +23,11 @@ from __future__ import annotations
 # [BATCHFIX] Commented metadata/non-Python
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 python security_agent.py <path-to-file-or-directory-to-audit>
 (or: run as module where create_main_function wraps CLI; pass a single file path to audit)
 
+"""
 WHAT IT DOES:
 Provides a lightweight agent class, SecurityAgent, that inherits from BaseAgent and is configured with a system prompt tailored for security auditing: it instructs the agent to scan supplied content for vulnerabilities (hardcoded secrets, SQL injection, XSS, insecure dependencies) and to produce remediation steps. It also supplies a minimal default audit report template returned by _get_default_content. The module exposes a simple CLI entrypoint via create_main_function when executed as __main__.
 
@@ -36,6 +40,49 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 # Agent specializing in Security Auditing and Vulnerability detection.
 """
+try:
+    from .core.base.common.base_utilities import create_main_function
+except ImportError:
+    from src.core.base.common.base_utilities import create_main_function
+
+try:
+    from .core.base.lifecycle.base_agent import BaseAgent
+except ImportError:
+    from src.core.base.lifecycle.base_agent import BaseAgent
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+__version__ = VERSION
+
+
+
+class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+""""
+Agent for security analysis of code and configuration.
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+
+# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis"""
+#         self._system_prompt = (
+# [BATCHFIX] Commented metadata/non-Python
+"""             "You are a Senior Security Auditor."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""             "Scan the provided content for vulnerabilities, hardcoded secrets,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""             "SQL injection risks, cross-site scripting (XSS), and insecure dependencies."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""             "Provide detailed remediation steps for each finding."  # [BATCHFIX] closed string"        )
+
+    def _get_default_content(self) -> str:
+    pass  # [BATCHFIX] inserted for empty block
+"""
+return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
+
+if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string"""
+#     "main()"  # [BATCHFIX] closed string
 
 try:
     from .core.base.common.base_utilities import create_main_function
@@ -58,12 +105,13 @@ __version__ = VERSION
 
 
 class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Agent for security analysis of code and configuration.
+""""
+Agent for security analysis of code and configuration.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
 """             "You are a Senior Security Auditor."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -73,50 +121,11 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def _get_default_content(self) -> str:
     pass  # [BATCHFIX] inserted for empty block
-"""return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
+"""
+return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
 
 if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
-#     "main()"  # [BATCHFIX] closed string"
-
-try:
-    from .core.base.common.base_utilities import create_main_function
-except ImportError:
-    from src.core.base.common.base_utilities import create_main_function
-
-try:
-    from .core.base.lifecycle.base_agent import BaseAgent
-except ImportError:
-    from src.core.base.lifecycle.base_agent import BaseAgent
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
-
-
-class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Agent for security analysis of code and configuration.
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
-#         self._system_prompt = (
-# [BATCHFIX] Commented metadata/non-Python
-"""             "You are a Senior Security Auditor."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""             "Scan the provided content for vulnerabilities, hardcoded secrets,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""             "SQL injection risks, cross-site scripting (XSS), and insecure dependencies."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""             "Provide detailed remediation steps for each finding."  # [BATCHFIX] closed string"        )
-
-    def _get_default_content(self) -> str:
-    pass  # [BATCHFIX] inserted for empty block
-"""return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
-
-if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 #     main()
+
+"""

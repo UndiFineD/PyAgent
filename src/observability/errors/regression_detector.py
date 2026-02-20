@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Regression Detector - Detecting reappeared fixed errors
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -36,7 +40,6 @@ WHAT IT SHOULD DO BETTER:
 - Reporting & thresholds: support configurable thresholds, time-windows, and deduplication rules; surface context (stack trace, snippet) with regression reports.
 - Testing & typing: add unit tests for edge cases and stronger type hints / validation for ErrorEntry contents.
 """
-
 try:
     import re
 except ImportError:
@@ -63,41 +66,43 @@ __version__ = VERSION
 
 
 class RegressionDetector:
-    """
-    Detects error regressions.
+"""
+Detects error regressions.
     Identifies errors that were previously fixed but have reappeared
     in the codebase.
 
     Attributes:
         fixed_errors: Map of fixed error signatures to commit info.
-    """
-
-    def __init__(self) -> None:
-        """Initialize the regression detector."""
-        self.fixed_errors: dict[str, str] = {}  # signature -> fix_commit
+"""
+def __init__(self) -> None:
+"""
+Initialize the regression detector.""
+self.fixed_errors: dict[str, str] = {}  # signature -> fix_commit
         self.regressions: list[RegressionInfo] = []
 
 
     def record_fix(self, error: ErrorEntry, commit_hash: str) -> None:
-        """Record that an error was fixed.
+"""
+Record that an error was fixed.
         Args:
             error: The fixed error.
             commit_hash: The commit that fixed the error.
-        """
-        signature = self._get_error_signature(error)
+"""
+signature = self._get_error_signature(error)
         self.fixed_errors[signature] = commit_hash
 
 
     def check_regression(self, error: ErrorEntry, current_commit: str = "") -> RegressionInfo | None:
-        """Check if an error is a regression.
+"""
+Check if an error is a regression.
         Args:
             error: The error to check.
             current_commit: Current commit hash.
 
         Returns:
             RegressionInfo if this is a regression, None otherwise.
-        """
-        signature = self._get_error_signature(error)
+"""
+signature = self._get_error_signature(error)
         if signature in self.fixed_errors:
             regression = RegressionInfo(
                 error_id=error.id,
@@ -115,18 +120,21 @@ class RegressionDetector:
 
 
     def _get_error_signature(self, error: ErrorEntry) -> str:
-        """Generate a signature for an error."""
-        normalized = re.sub(r"\d+", "N", error.message)
+"""
+Generate a signature for an error.""
+normalized = re.sub(r"\d+", "N", error.message)
         return f"{error.file_path}:{normalized}"
 
 
     def get_regressions(self) -> list[RegressionInfo]:
-        """Get all detected regressions."""
-        return self.regressions
+"""
+Get all detected regressions.""
+return self.regressions
 
 
     def get_regression_rate(self) -> float:
-        """Calculate the regression rate."""
-        if not self.fixed_errors:
+"""
+Calculate the regression rate.""
+if not self.fixed_errors:
             return 0.0
         return len(self.regressions) / len(self.fixed_errors) * 100

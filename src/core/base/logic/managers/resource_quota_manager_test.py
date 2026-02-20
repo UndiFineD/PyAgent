@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Unit tests for DistributedTokenBucket rate limiter."""
+"""
+"""
+Unit tests for DistributedTokenBucket rate limiter.""
+
+""
 import asyncio
 import os
 import pytest
@@ -102,7 +106,7 @@ class TestDistributedTokenBucket:
             refill_rate=1.0,
         )
         await bucket.close()
-        assert await bucket.acquire("agent-1", 5) is True"
+        assert await bucket.acquire("agent-1", 5) is True
 class TestResourceQuotaManager:
     @pytest.mark.asyncio
     async def test_check_and_consume_without_redis(self):

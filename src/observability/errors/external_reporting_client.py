@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ExternalReportingClient - Report errors to external monitoring services
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -49,7 +53,6 @@ WHAT IT SHOULD DO BETTER:
 - Validate input ErrorEntry fields and handle partial failures in batch
   reporting (currently treats all as succeed on logging).
 """
-
 try:
     import logging
 except ImportError:
@@ -82,34 +85,36 @@ __version__ = VERSION
 
 
 class ExternalReportingClient:
-    """Reports errors to external systems.
+"""
+Reports errors to external systems.
     Supports Sentry, Rollbar, Bugsnag, Datadog, and NewRelic integrations.
 
     Attributes:
         system: The external system to report to.
         dsn: Data source name or API key.
-    """
-
-    def __init__(self, system: ExternalReporter, dsn: str = "") -> None:
-        """Initialize the external reporting client.
+"""
+def __init__(self, system: ExternalReporter, dsn: str = "") -> None:
+"""
+Initialize the external reporting client.
         Args:
             system: The external system type.
             dsn: Data source name or API key.
-        """
-        self.system = system
+"""
+self.system = system
         self.dsn = dsn
         self.enabled = bool(dsn)
 
 
     def report(self, error: ErrorEntry) -> bool:
-        """Report an error to the external system.
+"""
+Report an error to the external system.
         Args:
             error: The error to report.
 
         Returns:
             True if reported successfully.
-        """
-        if not self.enabled:
+"""
+if not self.enabled:
             return False
         payload = self._build_payload(error)
         logging.info(f"Reporting error to {self.system.name}: {payload}")
@@ -117,8 +122,9 @@ class ExternalReportingClient:
 
 
     def _build_payload(self, error: ErrorEntry) -> dict[str, Any]:
-        """Build the payload for the external system."""
-        return {
+        ""
+Build the payload for the external system.""
+return {
             "message": error.message,
             "level": error.severity.name.lower(),
             "tags": {

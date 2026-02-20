@@ -22,25 +22,36 @@ import hashlib
 from threading import Thread
 
 # For compatibility with ported Python 2 code
+"""
 urlparse = urllib.parse
 urllib2 = urllib.request
 
-
-
+"""
 class BColors:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""TITLE = "\\033[95m# [BATCHFIX] Commented metadata/non-Python
-"""     OKBLUE = "\\033[94m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     OKGREEN = "\\033[92m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     INFO = "\\033[93m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     OKRED = "\\033[91m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     ENDC = "\\033[0m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     BOLD = "\\033[1m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     BGRED = "\\033[41m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     UNDERLINE = "\\033[4m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     FGWHITE = "\\033[37m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     FAIL = "\\033[95m"  # [BATCHFIX] closed string"
+"""
+TITLE = "\\033[95m# [BATCHFIX] Commented metadata/non-Python
+"""
+OKBLUE = "\\033[94m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+OKGREEN = "\\033[92m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+INFO = "\\033[93m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+OKRED = "\\033[91m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+ENDC = "\\033[0m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+BOLD = "\\033[1m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+BGRED = "\\033[41m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+UNDERLINE = "\\033[4m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+FGWHITE = "\\033[37m"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+FAIL = "\\033[95m"  # [BATCHFIX] closed string
 
 rootDir = os.path.expanduser("~") + "/.APKEnum/"  # ConfigFolder ~/.SourceCodeAnalyzer/"# projectDir =
 # apkFilePath =
@@ -50,42 +61,52 @@ scopeMode = False
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" scopeList = []""""
+"""
+scopeList = []""""
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" authorityList = []""""
+"""
+authorityList = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" inScopeAuthorityList = []""""
+"""
+inScopeAuthorityList = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" publicIpList = []""""
+"""
+publicIpList = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" s3List = []""""
+"""
+s3List = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" s3WebsiteList = []""""
+"""
+s3WebsiteList = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" gmapKeys = []""""
+"""
+gmapKeys = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" vulnerableGmapKeys = []""""
+"""
+vulnerableGmapKeys = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" unrestrictedGmapKeys = []""""gmapURLs = [
+"""
+unrestrictedGmapKeys = []""""
+gmapURLs = [
     "https://maps.googleapis.com/maps/api/staticmap?center=45%2C10&zoom=7&size=400x400&key=","# [BATCHFIX] Commented metadata/non-Python
 """     ("https://maps.googleapis.com/maps/api/streetview?size=400x400&location=40.720032,-73.988354&fov=90&heading="  # [BATCHFIX] closed string"     "235&pitch=10&key="),"    "https://www.google.com/maps/embed/v1/place?q=Seattle&key=","    "https://www.google.com/maps/embed/v1/search?q=record+stores+in+Seattle&key=","# [BATCHFIX] Commented metadata/non-Python
 """     ("https://maps.googleapis.com/maps/api/directions/json?origin=Disneyland&destination=Universal+Studios+"  # [BATCHFIX] closed string"     "Hollywood4&key="),"    "https://maps.googleapis.com/maps/api/geocode/json?latlng=40,30&key=","# [BATCHFIX] Commented metadata/non-Python
@@ -97,34 +118,42 @@ scopeMode = False
 """     ("https://roads.googleapis.com/v1/nearestRoads?points=60.170880,24.942795|"  # [BATCHFIX] closed string"     "60.170879,24.942796|60.170877,24.942796&key="),"]
 
 # [BATCHFIX] Commented metadata/non-Python
-""" apktoolPath = "./Dependencies/apktool.jar"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+"""
+apktoolPath = "./Dependencies/apktool.jar"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis"""
 # urlRegex = (
 # [BATCHFIX] Commented metadata/non-Python
-"""     r"(http|ftp|https)://([\\w_-]+(?:(?:\\.[\\w_-]+)+):?\\\\d*)([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?"  # [BATCHFIX] closed string")  # regex to extract domain
+"""
+r"(http|ftp|https)://([\\w_-]+(?:(?:\\.[\\w_-]+)+):?\\\\d*)([\\w.,@?^=%&:/~+#-]*[\\w@?^=%&/~+#-])?"  # [BATCHFIX] closed string")  # regex to extract domain
 # s3Regex1 = rhttps*://(.+?)\\.s3\\..+?\\.amazonaws\\.com\/.+?
 # s3Regex2 = rhttps*://s3\\..+?\\.amazonaws\\.com\/(.+?)\/.+?
 # s3Regex3 = rS3://(.+?)/
 # s3Website1 = rhttps*://(.+?)\\.s3-website\\..+?\\.amazonaws\\.com
 # s3Website2 = rhttps*://(.+?)\\.s3-website-.+?\\.amazonaws\\.com
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 # publicIp = (
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" #     rhttps*://(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(?<!172\\.(16|17|18|19|20|21|22|23|24""""
+""" #     rhttps*://(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(?<!172\\.(16|17|18|19|20|21|22|23|24"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     r"|25|26|27|28|29|30|31))(?<!127)(?<!^10)(?<!^0)\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     r"[0-5])(?<!192\\.168)(?<!172\\.(16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31))\\.([0-9]|"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     r"[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     r"(?<!\\.255$))"  # [BATCHFIX] closed string")
+"""
+r"|25|26|27|28|29|30|31))(?<!127)(?<!^10)(?<!^0)\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+r"[0-5])(?<!192\\.168)(?<!172\\.(16|17|18|19|20|21|22|23|24|25|26|27|28|29|30|31))\\.([0-9]|"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+r"[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+r"(?<!\\.255$))"  # [BATCHFIX] closed string")
 # [BATCHFIX] Commented metadata/non-Python
-""" gMapsAPI = r"(AIzaSy[\\w-]{33})"  # [BATCHFIX] closed string"
+"""
+gMapsAPI = r"(AIzaSy[\\w-]{33})"  # [BATCHFIX] closed string
 
 def myPrint(text: str, print_type: str) -> None:
     pass  # [BATCHFIX] inserted for empty block
-""""Print text with color based on the print type.#     if print_type == "INFO":"#         print()
+""""
+Print text with color based on the print type.#     if print_type == "INFO":"#         print()
         return
     if print_type == "INFO_WS":"        print()
         return
@@ -177,13 +206,13 @@ def reverseEngineerApplication(apkFileName):
     global projectDir
     myPrint("I: Initiating APK decompilation process", "INFO_WS")"    projectDir = rootDir + apkFileName + "_" + hashlib.md5().hexdigest()"    if os.path.exists(projectDir):
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         myPrint(
             "I: The APK is already decompiled. Skipping decompilation and proceeding with scanning the application.","            "INFO_WS","        )
         return projectDir
     os.mkdir(projectDir)
     myPrint("I: Decompiling the APK file using APKtool.", "INFO_WS")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #     result = os.system(
 # [BATCHFIX] Commented metadata/non-Python
 """         "java -jar"  # [BATCHFIX] closed string"        + apktoolPath
@@ -192,16 +221,17 @@ def reverseEngineerApplication(apkFileName):
 """         + "--output"  # [BATCHFIX] closed string"        + '"'"'        + projectDir
 # [BATCHFIX] Commented metadata/non-Python
 """         + "/apktool/"  # [BATCHFIX] closed string"        + '"'"'        '"""'+ ' "'"'        + apkFilePath
-        + '"'"'#         + ">/'"""'dev/null""""'    )
+        + '"'"'#         + ">/'"""
+dev/null""""'    )
     if result != 0:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         myPrint(
 # [BATCHFIX] Commented metadata/non-Python
 """             "E: Apktool failed with exit status " + str(result) + ". Please try updating the APKTool binary.", "ERROR"  # [BATCHFIX] closed string"        )
         print
         exit(1)
-    myPrint("I: Successfully decompiled the application. Proceeding with scanning code.", "INFO_WS")"
+    myPrint("I: Successfully decompiled the application. Proceeding with scanning code.", "INFO_WS")
 
 def findS3Bucket(line):
     temp = re.findall(s3Regex1, line)
@@ -229,9 +259,9 @@ def findGoogleAPIKeys(line):
 
 # def findUnrestrictedGmapKeys():
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" # 	response=[]""""
+""" # 	response=[]"""
 # 	for key in gmapKeys:
 # 		for url in gmapURLs:
 # 			try:
@@ -261,28 +291,31 @@ def findUrls(line):
     if len(temp) != 0:
         for element in temp:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             authorityList.append(element[0] + "://" + element[1])"            if scopeMode:
+"""
+authorityList.append(element[0] + "://" + element[1])"            if scopeMode:
                 for scope in scopeList:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                     if scope in element[1]:""""
+"""
+if scope in element[1]:""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                         inScopeAuthorityList.append(element[0] + "://" + element[1])"
+"""
+inScopeAuthorityList.append(element[0] + "://" + element[1])
 
 def findPublicIPs(line):
     temp = re.findall(publicIp, line)
     if len(temp) != 0:
         for element in temp:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             publicIpList.append(element[0])""""
-
+"""
+publicIpList.append(element[0])""""
 def performRecon():
     global authorityList, inScopeAuthorityList
 #     filecontent =
@@ -292,7 +325,7 @@ def performRecon():
                 fileobj = open(fullpath, mode="r")"                filecontent = fileobj.read()
                 fileobj.close()
             except Exception:
-                myPrint("E: Exception while reading " + fullpath, "ERROR")"
+                myPrint("E: Exception while reading " + fullpath, "ERROR")
             try:
                 # findUrls(filecontent)
                 # findPublicIPs(filecontent)
@@ -319,7 +352,7 @@ def performRecon():
                 # t6.start()
                 # t6.join()
             except Exception:
-                myPrint("E: Error while spawning threads", "ERROR")"
+                myPrint("E: Error while spawning threads", "ERROR")
 
 def displayResults():
     global inScopeAuthorityList, authorityList, s3List, s3WebsiteList, publicIpList, gmapKeys, unrestrictedGmapKeys
@@ -367,23 +400,23 @@ def displayResults():
 ####################################################################################################
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 # print(
     BColors.OKBLUE
 #     +
 
-:::'###::::'########::'##:::'##:'########:'##::: ##:'##::::'##:'##::::'##:'::'#"""
+:::'###::::'########::'##:::'##:'########:'##::: ##:'##::::'##:'##::::'##:'::'#""
 #::: ##.... ##: ##::'##:: ##.....:: ###:: ##: ##:::: ##: ###::'###:"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"':'##:. ##:: ##:::: ##: ##:'##::: ##::::::: ####: ##: ##:::: ##: ####'####:"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 # '##:::. ##: ########:: #####:::: ######::: #""""""
-#: ##:::: ##: #"""
-#"""
+#: ##:::: ##: #""
+#""
 #:"  # [BATCHFIX] closed string"' #########: ##.....::: ##. ##::: ##...:::: ##. ####: ##:::: ##: ##. #: ##:
  ##.... ##: ##:::::::: ##:. ##:: ##::::::: ##:. ###: ##:::: ##: ##:.:: ##:
  ##:::: ##: ##:::::::: ##::. ##: ########: ##::. ##:. #######:: ##:::: ##:
 ..:::::..::..:::::::::..::::..::........::..::::..:::.......:::..:::::..::
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #     "+ BColors.OKRED"  # [BATCHFIX] closed string"    + BColors.BOLD
 #     +
                   # Developed By Shiv Sahni - @shiv__sahni
@@ -391,38 +424,47 @@ def displayResults():
 )
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" if (len(sys.argv) == 2) and (sys.argv[1] == "-h" or sys.argv[1] == "--help"):"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+"""
+if (len(sys.argv) == 2) and (sys.argv[1] == "-h" or sys.argv[1] == "--help"):"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     myPrint('Usage: python APKEnum.py -p/--path <apkPathName> [ -s/--scope "comma, seperated, list"]', "ERROR")"'    myPrint("\\t-p/--path: Pathname of the APK file", "ERROR")"    myPrint("\\t-s/--scope: List of keywords to filter out domains", "ERROR")"    print()
+"""
+myPrint('Usage: python APKEnum.py -p/--path <apkPathName> [ -s/--scope "comma, seperated, list"]', "ERROR")"'    myPrint("\\t-p/--path: Pathname of the APK file", "ERROR")"    myPrint("\\t-s/--scope: List of keywords to filter out domains", "ERROR")"    print()
     exit(1)
 
 if len(sys.argv) < 3:
     myPrint("E: Please provide the required arguments to initiate", "ERROR")"    print()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     myPrint('E: Usage: python APKEnum.py -p/--path <apkPathName> [ -s/--scope "comma, seperated, list"]', "ERROR")"'    myPrint("E: Please try again!!", "ERROR")"    print()
+"""
+myPrint('E: Usage: python APKEnum.py -p/--path <apkPathName> [ -s/--scope "comma, seperated, list"]', "ERROR")"'    myPrint("E: Please try again!!", "ERROR")"    print()
     exit(1)
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" if (len(sys.argv) > 4) and (sys.argv[3] == "-s" or sys.argv[3] == "--scope"):"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+"""
+if (len(sys.argv) > 4) and (sys.argv[3] == "-s" or sys.argv[3] == "--scope"):"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     scopeString = sys.argv[4].strip()""""    scopeList = scopeString.split(",")"    if len(scopeList) != 0:
+"""
+scopeString = sys.argv[4].strip()""""
+scopeList = scopeString.split(",")"    if len(scopeList) != 0:
         scopeMode = True
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""" if sys.argv[1] == "-p" or sys.argv[1] == "--path":"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+"""
+if sys.argv[1] == "-p" or sys.argv[1] == "--path":"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     apkFilePath = sys.argv[2]""""    try:
+"""
+apkFilePath = sys.argv[2]""""
+try:
         isNewInstallation()
         isValidPath(apkFilePath)
         reverseEngineerApplication(apkFileName)
@@ -430,4 +472,5 @@ if len(sys.argv) < 3:
         displayResults()
     except KeyboardInterrupt:
         myPrint("I: Acknowledging KeyboardInterrupt. Thank you for using APKEnum", "INFO")"        exit(0)
-myPrint("Thank You For Using APKEnum", "OUTPUT")"
+myPrint("Thank You For Using APKEnum", "OUTPUT")
+""

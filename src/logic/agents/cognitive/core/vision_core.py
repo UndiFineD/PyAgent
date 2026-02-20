@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +19,12 @@ from __future__ import annotations
 
 # VisionCore: Core logic for visual processing and perception in PyAgent.
 # Supports image analysis, feature extraction, and multimodal reasoning for cognitive agents.
-
+"""
 Provides logic for image hashing, glitch detection, and visual signature extraction
+
+"""
 from GUI screenshots and other visual data sources.
 """
-
 try:
     import hashlib
 except ImportError:
@@ -42,7 +46,7 @@ class VisionCore:
 #     and glitch detection in GUI screenshots.
 
     def calculate_image_hash(self, image_bytes: bytes) -> str:
-        "Deterministic hash of" image data."
+        "Deterministic hash of" image data.
         Args:
             image_bytes: The raw image bytes.
 
@@ -87,3 +91,5 @@ class VisionCore:
             return True
 
         return False
+
+"""

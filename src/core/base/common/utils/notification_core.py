@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""NotificationCore logic for PyAgent.
+"""
+"""
+NotificationCore logic for PyAgent.
 Pure logic for payload formatting and domain extraction.
 No I/O or side effects.
 """
 
+"""
 import time
 import urllib.parse
 from typing import Any
@@ -30,11 +34,13 @@ __version__ = VERSION
 
 
 class NotificationCore:
-    """Pure logic core for notification management."""
+"""
+Pure logic core for notification management.""
     @staticmethod
     def construct_payload(event_name: str, event_data: dict[str, Any]) -> dict[str, Any]:
-        """Formats the JSON payload for webhook delivery."""
-        return {
+"""
+Formats the JSON payload for webhook delivery.""
+return {
             "event": event_name,
             "timestamp": time.time(),
             "data": event_data,
@@ -43,8 +49,9 @@ class NotificationCore:
 
     @staticmethod
     def get_domain_from_url(url: str) -> str:
-        """Extracts the network location (domain) from a URL for connectivity tracking."""
-        try:
+"""
+Extracts the network location (domain) from a URL for connectivity tracking.""
+try:
             domain = urllib.parse.urlparse(url).netloc
             return domain or url
         except Exception:  # pylint: disable=broad-exception-caught
@@ -52,6 +59,7 @@ class NotificationCore:
 
     @staticmethod
     def validate_event_data(data: dict[str, Any]) -> bool:
-        """Basic validation for event data structures."""
+"""
+Basic validation for event data structures.""
         # Ensure it's a non-empty dictionary
         return isinstance(data, dict) and bool(data)

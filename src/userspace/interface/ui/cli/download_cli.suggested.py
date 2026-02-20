@@ -14,8 +14,10 @@
 
 
 """
+"""
 Dedicated CLI manager for PyAgent Download System.
 
+"""
 try:
     import sys
 except ImportError:
@@ -48,7 +50,7 @@ def main():
     parser = argparse.ArgumentParser(
         description="PyAgent Download Manager CLI", formatter_class=argparse.RawDescriptionHelpFormatter"    )
 
-    parser.add_argument("url", nargs="?", help="URL to download (direct mode)")"    parser.add_argument("--file", "-f", help="File containing URLs to process")"    parser.add_argument("--output", "-o", default="temp/downloads.json", help="Path to save results")"    parser.add_argument("--dry-run", action="store_true", help="Simulate without downloading")"    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose output")"
+    parser.add_argument("url", nargs="?", help="URL to download (direct mode)")"    parser.add_argument("--file", "-f", help="File containing URLs to process")"    parser.add_argument("--output", "-o", default="temp/downloads.json", help="Path to save results")"    parser.add_argument("--dry-run", action="store_true", help="Simulate without downloading")"    parser.add_argument("--verbose", "-v", action="store_true", help="Enable verbose output")
     args = parser.parse_args()
 
     config = DownloadConfig(
@@ -57,10 +59,10 @@ def main():
     agent = DownloadAgent(config)
 
     if args.url:
-        print(f"🚀 Downloading single target: {args.url}")"        result = agent.process_url(args.url)
+        print(f" Downloading single target: {args.url}")"        result = agent.process_url(args.url)
         agent.save_results([result], args.output)
     elif args.file or Path(config.urls_file).exists():
-        print(f"📂 Processing batch file: {config.urls_file}")"        results = agent.process_urls_file()
+        print(f" Processing batch file: {config.urls_file}")"        results = agent.process_urls_file()
         agent.save_results(results, args.output)
     else:
         parser.print_help()

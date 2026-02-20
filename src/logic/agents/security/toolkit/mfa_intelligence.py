@@ -23,15 +23,20 @@ from urllib.parse import quote
 class MFAIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Intelligence module for MFA detection and identity service profiling.#     Ported from MFASweep and other O365/Azure tools.
+"""
+"""
+Intelligence module for MFA detection and identity service profiling.#     Ported from MFASweep and other O365/Azure tools.
 
-    O365_ENDPOINTS = {
+"""
+O365_ENDPOINTS = {
         "GraphAPI": "https://graph.microsoft.com","        "AzureManagement": "https://management.core.windows.net","        "ExchangeServices": "https://outlook.office365.com/EWS/Exchange.asmx","        "ActiveSync": "https://outlook.office365.com/Microsoft-Server-ActiveSync","        "WebPortal": "https://portal.office.com","    }
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""        self.session = session
+"""
+def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
+self.session = session
         self._own_session = False
 
     async def get_session(self) -> aiohttp.ClientSession:
@@ -43,23 +48,24 @@ class MFAIntelligence:
     async def get_user_realm(self, username: str) -> Dict:
 # [BATCHFIX] Commented metadata/non-Python
 """         "Checks the authentication realm for a user (ADFS vs Managed)."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""         url = fhttps://login.microsoftonline.com/getuserrealm.srf?login={quote(username)}&"xml=1"  # [BATCHFIX] closed string"        try:
+"""
+url = fhttps://login.microsoftonline.com/getuserrealm.srf?login={quote(username)}&"xml=1"  # [BATCHFIX] closed string"        try:
             session = await self.get_session()
             async with session.get(url) as response:
                 content = await response.text()
                 root = ET.fromstring(content)
-                name_space = {"ns": "http://schemas.microsoft.com/identity/userrealm/1.0"}"
-                state_node = root.find(".//ns:State", name_space)"                auth_url_node = root.find(".//ns:AuthURL", name_space)"                fed_proto_node = root.find(".//ns:FederationProtocol", name_space)"
+                name_space = {"ns": "http://schemas.microsoft.com/identity/userrealm/1.0"}
+                state_node = root.find(".//ns:State", name_space)"                auth_url_node = root.find(".//ns:AuthURL", name_space)"                fed_proto_node = root.find(".//ns:FederationProtocol", name_space)
                 realm = {
                     "username": username,"                    "state": state_node.text if state_node is not None else "Unknown","                    "auth_url": auth_url_node.text if auth_url_node is not None else None,"                    "federation_protocol": fed_proto_node.text if fed_proto_node is not None else None,"                }
                 return realm
         except Exception as e:
-            return {"username": username, "error": str(e)}"
+            return {"username": username, "error": str(e)}
     async def check_mfa_status(self, username: str, password: str) -> Dict:
         Attempts basic authentication to multiple O365 endpoints to detect MFA.
         WARNING: May trigger lockouts.
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #         "results = {}"  # [BATCHFIX] closed string"        session = await self.get_session()
 
         async def check_endpoint(name, url):
@@ -70,15 +76,23 @@ class MFAIntelligence:
                     # Logic: 401 with specific headers often indicates MFA requirement
                     # whereas 200/302 might mean successful login (MFA bypassed or not enabled)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                     results[name] = {""""                        "status_code": response.status,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+"""
+results[name] = {""""                        "status_code": response.status,"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string"""
 #                         "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", "),"  # [BATCHFIX] closed string"                    }
             except Exception as e:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                 results[name] = {"error": str(e)}"
+"""
+results[name] = {"error": str(e)}
         await asyncio.gather(*(check_endpoint(n, u) for n, u in self.O365_ENDPOINTS.items()))
         return results
+
+"""
+
+""
+
+"""

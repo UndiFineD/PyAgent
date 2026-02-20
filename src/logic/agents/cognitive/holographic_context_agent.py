@@ -14,7 +14,10 @@
 
 
 """
+"""
 Holographic Context Agent for multi-perspective context snapshots.
+
+"""
 import logging
 import time
 import random
@@ -46,7 +49,7 @@ class HolographicContextAgent(BaseAgent):
         state_data: dict[str, Any],
         angles: list[str] | None = None,
     ) -> str:
-        Creates a multi-angle 'hologram' of the provided" state data."'        if "angles is None:"            angles = ["security", "performance"]"
+        Creates a multi-angle 'hologram' of the provided" state data."'        if "angles is None:"            angles = ["security", "performance"]
         hologram = {
             "timestamp": time.time(),"            "source_data": state_data,"            "perspectives": {},"        }
 
@@ -64,7 +67,7 @@ class HolographicContextAgent(BaseAgent):
                 logging.info(fHologram '{name}' mirrored to swarm via orchestrator.")"'            except Exception as e:
                 logging.warning(fFailed to mirror hologram to swarm: {e}")"
         self.holograms[name] = hologram
-        logging.info(fHologram created: {name} with {len(angles)} perspectives.")"#         return fSuccessfully created hologram '{name}' and initiated swarm mirroring.'
+        logging.info(fHologram created: {name} with {len(angles)} perspectives.")"#         return fSuccessfully created hologram '{name}' and initiated swarm mirroring.
     @as_tool
     async def view_perspective(self, name: str, angle: str) -> dict[str, Any]:
         Returns a specific perspective from" a "named hologram."        if name "in self.holograms:"            h = self.holograms[name]
@@ -81,7 +84,7 @@ class HolographicContextAgent(BaseAgent):
                         self.holograms[name] = {"perspectives": {}}"                    if "perspectives" not in self.holograms[name]:"                        self.holograms[name]["perspectives"] = {}"                    self.holograms[name]["perspectives"][angle] = remote_p"                    return remote_p
             except Exception as e:
                 logging.debug(fSwarm reconstruction failed for {name}:{angle}: {e}")"
-        return {"error": fPerspective '{angle}' for hologram '{name}' not found locally or in swarm."}"'
+        return {"error": fPerspective '{angle}' for hologram '{name}' not found locally or in swarm."}"
     @as_tool
     def list_holograms(self) -> list[str]:
         List all active context holograms.

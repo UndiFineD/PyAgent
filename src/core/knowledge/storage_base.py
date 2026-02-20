@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,11 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Storage base.py module.
 """
-
+"""
+Storage base.py module.
+"""
 try:
-    from abc import ABC, abstractmethod
+
+"""
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -48,8 +52,9 @@ __version__ = VERSION
 
 
 class KnowledgeStore(ABC):
-    """Base interface for all knowledge storage types."""
-    def __init__(self, agent_id: str, storage_path: Path) -> None:
+"""
+Base interface for all knowledge storage types.""
+def __init__(self, agent_id: str, storage_path: Path) -> None:
         self.agent_id = agent_id
         self.storage_path = storage_path
         self._memory_core = MemoryCore()
@@ -58,12 +63,18 @@ class KnowledgeStore(ABC):
 
     @abstractmethod
     def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
-        """Store a piece of knowledge."""raise NotImplementedError()
+"""
+Store a piece of knowledge.""
+raise NotImplementedError()
 
     @abstractmethod
     def retrieve(self, query: Any, limit: int = 5) -> list[Any]:
-        """Retrieve knowledge based on a query."""raise NotImplementedError()
+"""
+Retrieve knowledge based on a query.""
+raise NotImplementedError()
 
     @abstractmethod
     def delete(self, key: str) -> bool:
-        """Delete a piece of knowledge by key."""raise NotImplementedError()
+"""
+Delete a piece of knowledge by key.""
+raise NotImplementedError()

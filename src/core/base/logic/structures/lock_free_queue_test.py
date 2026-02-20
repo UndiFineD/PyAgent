@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.structures.lock_free_queue import QueueStats, MPMCQueue, SPSCQueue, PriorityItem, PriorityQueue, WorkStealingDeque, BatchingQueue

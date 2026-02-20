@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
-"""Unified file system core for atomic I/O and shared access."""
+"""
+"""
+Unified file system core for atomic I/O and shared access.""
 
-
+"""
 import fnmatch
 import hashlib
 import logging
@@ -44,10 +46,11 @@ except ImportError:
 
 
 class FileSystemCore:
-    """Centralized handler for file system operations.
+"""
+Centralized handler for file system operations.
     Provides atomic writes, locking, and standardized backup logic.
-    """
-    def __init__(self, lock_manager: Optional[FileLockManager] = None) -> None:
+"""
+def __init__(self, lock_manager: Optional[FileLockManager] = None) -> None:
         self.logger = logging.getLogger("pyagent.fs")
         self.lock_manager = lock_manager or FileLockManager()
         self.storage = StorageCore()
@@ -56,8 +59,9 @@ class FileSystemCore:
     def discover_files(
         self, root: Path, patterns: Optional[List[str]] = None, ignore: Optional[List[str]] = None
     ) -> List[Path]:
-        """Discovers files matching patterns, respecting ignore list."""
-        if patterns is None:
+"""
+Discovers files matching patterns, respecting ignore list.""
+if patterns is None:
             patterns = ["*"]
         if self._can_use_rust_discover():
             files = self._try_rust_discover_files(root, patterns, ignore)
@@ -73,12 +77,12 @@ class FileSystemCore:
     def _try_rust_discover_files(
         self, root: Path, patterns: List[str], ignore: Optional[List[str]]
     ) -> Optional[List[Path]]:
-        """
-        Attempt to use the Rust-backed directory walker.
+"""
+Attempt to use the Rust-backed directory walker.
         Returns None on any failure so callers fall back to the Python implementation.
         KeyboardInterrupt and SystemExit are re-raised to avoid swallowing critical signals.
-        """
-        try:
+"""
+try:
             files = rc.discover_files_rust(str(root), patterns, ignore or [])  # type: ignore
             return [Path(f) for f in files]
         except (RuntimeError, AttributeError) as e:
@@ -90,12 +94,12 @@ class FileSystemCore:
 
 
     def _python_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> List[Path]:
-        """
-        Fallback Python implementation for finding files.
+"""
+Fallback Python implementation for finding files.
         This is deterministic and intentionally simple so behavior is consistent
         across platforms when the Rust walker isn't available.
-        """
-        if not root.exists():
+"""
+if not root.exists():
             return []
 
         found: List[Path] = []
@@ -122,21 +126,21 @@ class FileSystemCore:
     def atomic_write(
         self, path: Union[str, Path], content: str, encoding: str = "utf-8", use_lock: bool = True
     ) -> bool:
-        """
-        Write content to a file atomically by using a temporary file.
+"""
+Write content to a file atomically by using a temporary file.
         Optional advisory locking.
-        """
-        p = Path(path)
+"""
+p = Path(path)
         return self._atomic_write_with_lock(p, content, encoding, use_lock)
 
 
     def _atomic_write_with_lock(self, p: Path, content: str, encoding: str, use_lock: bool) -> bool:
-        """
-        Write to a temporary file and atomically replace the target.
+"""
+Write to a temporary file and atomically replace the target.
         Uses an advisory lock when requested. Exceptions from OS operations are
         handled and logged; critical signals are re-raised.
-        """
-        lock = None
+"""
+lock = None
         try:
             if use_lock:
                 lock = self.lock_manager.acquire_lock(p, LockType.EXCLUSIVE)
@@ -171,11 +175,11 @@ class FileSystemCore:
 
 
     def safe_copy(self, src: Union[str, Path], dst: Union[str, Path]) -> bool:
-        """
-        Copy a file with targeted error handling.
+"""
+Copy a file with targeted error handling.
         Returns True on success, False on recoverable filesystem errors.
-        """
-        try:
+"""
+try:
             shutil.copy2(src, dst)
             return True
         except (OSError, shutil.Error) as e:
@@ -184,8 +188,9 @@ class FileSystemCore:
 
 
     def move(self, src: Union[str, Path], dst: Union[str, Path]) -> bool:
-        """Move a file with targeted error handling."""
-        try:
+"""
+Move a file with targeted error handling.""
+try:
             shutil.move(str(src), str(dst))
             return True
         except (OSError, shutil.Error) as e:
@@ -194,8 +199,9 @@ class FileSystemCore:
 
 
     def delete(self, path: Union[str, Path]) -> bool:
-        """Delete a file or directory with targeted error handling."""
-        p = Path(path)
+"""
+Delete a file or directory with targeted error handling.""
+p = Path(path)
         try:
             if p.is_dir():
                 shutil.rmtree(p)
@@ -208,22 +214,25 @@ class FileSystemCore:
 
 
     def ensure_directory(self, path: Union[str, Path]) -> Path:
-        """Ensure a directory exists and return the Path object."""
-        p = Path(path)
+"""
+Ensure a directory exists and return the Path object.""
+p = Path(path)
         p.mkdir(parents=True, exist_ok=True)
         return p
 
 
     def exists(self, path: Union[str, Path]) -> bool:
-        """Checks if a path exists."""
-        return Path(path).exists()
+"""
+Checks if a path exists.""
+return Path(path).exists()
 
 
     def read_text(self, path: Union[str, Path], encoding: str = "utf-8") -> str:
-        """Read the content of a file.
+"""
+Read the content of a file.
         Logs and re-raises OSError to make failures explicit to callers.
-        """
-        try:
+"""
+try:
             return Path(path).read_text(encoding=encoding)
         except OSError as e:
             self.logger.error("Failed to read %s: %s", path, e)
@@ -231,11 +240,11 @@ class FileSystemCore:
 
 
     def get_file_hash(self, path: Union[str, Path]) -> Optional[str]:
-        """
-        Calculate SHA256 hash of a file.
+"""
+Calculate SHA256 hash of a file.
         Returns None if the file does not exist or a recoverable error occurs.
-        """
-        p = Path(path)
+"""
+p = Path(path)
         if not p.exists():
             return None
 
@@ -261,10 +270,10 @@ class FileSystemCore:
 
 
     def calculate_bulk_hashes(self, paths: List[Path]) -> dict[Path, str]:
-        """
-        Calculates hashes for multiple files, using Rust acceleration if available.
-        """
-        if rc and hasattr(rc, "bulk_hash_files_rust"):
+"""
+Calculates hashes for multiple files, using Rust acceleration if available.
+"""
+if rc and hasattr(rc, "bulk_hash_files_rust"):
             try:
                 str_paths = [str(p) for p in paths if p.exists()]
                 results = rc.bulk_hash_files_rust(str_paths)  # type: ignore

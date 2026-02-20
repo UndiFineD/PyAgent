@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -42,15 +42,19 @@ __version__ = VERSION
 
 @dataclass
 class MockResponse:
-    """Mock AI backend response.""""
-    Attributes:
+"""
+Mock AI backend response.""""
+Attributes:
         content: Response content.
         response_type: Type of response.
         latency_ms: Simulated latency.
         tokens_used: Simulated token count.
         error_message: Error message if applicable.
     
-    content: str = """    response_type: MockResponseType = MockResponseType.SUCCESS
+    content: str = ""
+response_type: MockResponseType = MockResponseType.SUCCESS
     latency_ms: int = 100
     tokens_used: int = 0
     error_message: str | None = None
+
+""

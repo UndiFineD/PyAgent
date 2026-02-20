@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,10 +19,12 @@ from __future__ import annotations
 
 """
 FleetDiscoveryMixin
+"""
 Fleet discovery mixin.py module.
 # Phase 320: Fleet Discovery Mixin
 """
 
+"""
 import os
 from typing import List
 
@@ -33,10 +36,11 @@ logger = StructuredLogger(__name__)
 
 
 class FleetDiscoveryMixin:
-    """Mixin for FleetManager to support LAN-based peer discovery and synchronization."""
-    
-    def init_discovery(self, agent_id: str, service_port: int = 8000):
-        """Initializes the LAN discovery service."""
+"""
+Mixin for FleetManager to support LAN-based peer discovery and synchronization.""
+def init_discovery(self, agent_id: str, service_port: int = 8000):
+"""
+Initializes the LAN discovery service.""
         # Security: Check for discovery secret in environment
         secret = os.environ.get("PYAGENT_DISCOVERY_SECRET")
         metadata = {
@@ -52,28 +56,32 @@ class FleetDiscoveryMixin:
 
 
     def get_lan_peers(self) -> List[PeerInfo]:
-        """Returns the list of active LAN peers discovered."""
-        if hasattr(self, "_discovery"):
+"""
+Returns the list of active LAN peers discovered.""
+if hasattr(self, "_discovery"):
             return self._discovery.get_active_peers()
         return []
 
     def get_peer_urls(self) -> List[str]:
-        """Returns a list of base URLs for discovered peers."""
-        peers = self.get_lan_peers()
+"""
+Returns a list of base URLs for discovered peers.""
+peers = self.get_lan_peers()
         return [f"http://{p.ip}:{p.port}" for p in peers]
 
     def get_fastest_peers(self, limit: int = 5) -> List[PeerInfo]:
-        """Returns the peers with lowest latency."""
-        peers = self.get_lan_peers()
+"""
+Returns the peers with lowest latency.""
+peers = self.get_lan_peers()
         # Filter for peers that actually have a measured latency > 0
         measured = [p for p in peers if p.latency > 0]
         return sorted(measured, key=lambda x: x.latency)[:limit]
 
     async def sync_remote_registries(self):
-        """Fetches peer lists from discovered neighbors and merges them into local registry.
+"""
+Fetches peer lists from discovered neighbors and merges them into local registry.
         This provides a gossip-like propagation of known agents.
-        """
-        import aiohttp
+        ""
+import aiohttp
 
         peers = self.get_lan_peers()
         if not peers:

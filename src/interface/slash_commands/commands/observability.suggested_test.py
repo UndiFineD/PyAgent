@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.slash_commands.commands.observability.suggested import cmd_cache, cmd_counters, cmd_telemetry, cmd_logs

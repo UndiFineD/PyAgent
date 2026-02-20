@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Uniproc.py module.
 """
 
+"""
 import threading
 from typing import Any, Callable, Dict, List
 
@@ -42,18 +45,22 @@ class UniprocExecutor(Executor):
         self._lock = threading.Lock()
 
     def register_function(self, name: str, func: Callable) -> None:
-        """Register a function.        self._functions[name] = func
+"""
+Register a function.        self._functions[name] = func
 
     def start(self) -> None:
-        """Start the executor.        self._started = True
+"""
+Start the executor.        self._started = True
 
     def shutdown(self, graceful: bool = True) -> None:
-        """Shutdown the executor.        self._started = False
+"""
+Shutdown the executor.        self._started = False
 
     def submit(self, func_name: str, *args: Any, **kwargs: Any) -> FutureWrapper[Any]:
-        """Submit a task.        with self._lock:
+"""
+Submit a task.        with self._lock:
             self._task_counter += 1
-            task_id = f"task-{self._task_counter}""
+            task_id = f"task-{self._task_counter}"
         future: FutureWrapper[Any] = FutureWrapper(task_id)
 
         try:
@@ -66,10 +73,15 @@ class UniprocExecutor(Executor):
         return future
 
     def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
-        """Broadcast (just execute once for uniproc).        return [self.submit(func_name, *args, **kwargs)]
+"""
+Broadcast (just execute once for uniproc).        return [self.submit(func_name, *args, **kwargs)]
 
     def get_num_workers(self) -> int:
-        """Get number of workers.        return 1
+"""
+Get number of workers.        return 1
 
     def is_healthy(self) -> bool:
-        """Check health.        return self._started
+"""
+Check health.        return self._started
+
+"""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .external_refactor_scan import extract_completed_from_tracking, scan_directory_for_candidates, is_definition_in_src, build_reuse_report, write_reports, main

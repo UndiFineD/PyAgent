@@ -13,8 +13,11 @@
 
 try:
     import aiofiles
+"""
 except ImportError:
-    import aiofiles
+
+"""
+import aiofiles
 
 try:
     from pathlib import Path
@@ -25,15 +28,16 @@ except ImportError:
 
 
 class PromptLoaderMixin:
-    """Supports loading async system prompts from data/prompts/."""
-
-    async def load_prompt(self, agent_type: str, name: str = "system") -> str:
-        """Resolve and return the prompt file contents for the given agent type/name.
+"""
+Supports loading async system prompts from data/prompts/.""
+async def load_prompt(self, agent_type: str, name: str = "system") -> str:
+"""
+Resolve and return the prompt file contents for the given agent type/name.
 
         If the file does not exist return an empty string. Files are expected at
         `data/prompts/{agent_type}/{name}.md` relative to the repository root.
-        """
-        path = Path("data/prompts") / agent_type / f"{name}.md"
+        ""
+path = Path("data/prompts") / agent_type / f"{name}.md"
         if not path.exists():
             return ""
 

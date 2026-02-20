@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 improvement_exporter.py - Export improvements to JSON/CSV
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -69,9 +73,11 @@ __version__ = VERSION
 
 
 class ImprovementExporter:
-    """Exports improvements to json/csv.
+"""
+Exports improvements to json/csv.
+
     def __init__(self) -> None:
-        self.formats: list[str] = ["json", "csv"]"
+        self.formats: list[str] = ["json", "csv"]
     def export(self, improvements: list[Improvement], output_format: str = "json") -> str:"        fmt = output_format.lower()
         if fmt == "json":"            rows: list[dict[str, Any]] = []
             for imp in improvements:
@@ -81,4 +87,4 @@ class ImprovementExporter:
                 )
             return json.dumps(rows)
         if fmt == "csv":"            lines = ["id,title,description"]"            for imp in improvements:
-                lines.append(f"{imp.id},{imp.title},{imp.description}")"            return "\\n".join(lines)"        raise ValueError("Unsupported format")"
+                lines.append(f"{imp.id},{imp.title},{imp.description}")"            return "\\n".join(lines)"        raise ValueError("Unsupported format")

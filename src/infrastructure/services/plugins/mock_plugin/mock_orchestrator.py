@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,39 +18,30 @@ from __future__ import annotations
 
 
 """
-Mock orchestrator plugin for demonstrating community extension patterns.
+"""
+Minimal parser-safe MockOrchestrator shim used during repository repair.
+
+"""
+Provides a small, dependency-free class used by plugins and tests.
+"""
+from typing import Any, Dict
 
 try:
     import logging
-except ImportError:
-    import logging
-
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
+except Exception:
+    class _Logger:
+        def info(self, *a, **k):
+            pass
+    logging = _Logger()
 
 
 class MockOrchestrator:
-        A mock orchestrator demonstrating how community members can add
-    new coordination logic to the fleet.
-    
-    def __init__(self, fleet: Any) -> None:
+    def __init__(self, fleet: Any | None = None) -> None:
         self.fleet = fleet
-        logging.info("MockOrchestrator online.")"
+
     def coordinate_mock_ritual(self, data: str) -> str:
-        """Example coordination method.        logging.info("MockOrchestrator performing ritual...")"
-        # In a real orchestrator, you'd call multiple agents:'        # self.fleet.agents["Mock"].run("Ritual Step 1")"
-        return f"MockOrchestrator ritual successfully coordinated: {data}""
-    def get_status(self) -> dict[str, str]:
-        """Retrieve the current mock status of the orchestrator.        return {"status": "mocking"}"
+        logging.info("MockOrchestrator performing ritual...")
+        return f"MockOrchestrator ritual successfully coordinated: {data}"
+
+    def get_status(self) -> Dict[str, str]:
+        return {"status": "mocking"}

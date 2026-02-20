@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Tests for security analysis mixin.
+"""
+"""
+Tests for security analysis mixin.
 try:
-    from .logic.agents.swarm.security_analysis_mixin import (
+
+"""
+from .logic.agents.swarm.security_analysis_mixin import (
 except ImportError:
     from src.logic.agents.swarm.security_analysis_mixin import (
 
@@ -28,13 +32,18 @@ except ImportError:
 
 
 class TestWorkflowSecurityAnalyzer:
-    """Test the workflow security analyzer.
+"""
+Test the workflow security analyzer.
     def setup_method(self):
-        """Set up test fixtures.        self.analyzer = WorkflowSecurityAnalyzer()
+"""
+Set up test fixtures.        self.analyzer = WorkflowSecurityAnalyzer()
 
     def test_analyze_secure_workflow(self):
-        """Test analysis of a secure workflow.        code = '''''''def secure_agent_workflow():
-    """A secure agent workflow with proper validation.    # Secure input validation
+"""
+Test analysis of a secure workflow.        code = ''''''
+def secure_agent_workflow():
+"""
+A secure agent workflow with proper validation.    # Secure input validation
     user_input = sanitize_input(get_user_input())
 
     # Authorized tool execution
@@ -42,32 +51,42 @@ class TestWorkflowSecurityAnalyzer:
         result = execute_secure_tool(user_input)
         return result
 
-    return "Access denied""'''''''        analysis = self.analyzer.analyze_workflow_code(code, "secure_workflow")"
+    return "Access denied""''''''
+analysis = self.analyzer.analyze_workflow_code(code, "secure_workflow")
         assert analysis.workflow_name == "secure_workflow""        assert analysis.security_score > 50  # Should have decent score
         assert len(analysis.agents_identified) >= 1
 
     def test_detect_prompt_injection_vulnerability(self):
-        """Test detection of prompt injection vulnerabilities.        code = '''''''def vulnerable_agent():
-    """Vulnerable agent with prompt injection.    prompt = "System: " + system_instructions + "\\nUser: " + user_input"    response = call_llm(prompt)
+"""
+Test detection of prompt injection vulnerabilities.        code = ''''''
+def vulnerable_agent():
+"""
+Vulnerable agent with prompt injection.    prompt = "System: " + system_instructions + "\\nUser: " + user_input"    response = call_llm(prompt)
     return response
-'''''''        analysis = self.analyzer.analyze_workflow_code(code, "vulnerable_workflow")"
+''''''
+analysis = self.analyzer.analyze_workflow_code(code, "vulnerable_workflow")
         vulnerabilities = [
             v for v in analysis.vulnerabilities
             if v.vulnerability_id == "AGENT-001""        ]
         assert len(vulnerabilities) == 1
-        assert vulnerabilities[0].severity == "critical""
+        assert vulnerabilities[0].severity == "critical"
     def test_detect_data_exposure_risk(self):
-        """Test detection of data exposure risks.        code = '''''''def data_handler_agent():
-    """Agent that handles sensitive data.    api_key = get_api_key()
+"""
+Test detection of data exposure risks.        code = ''''''
+def data_handler_agent():
+"""
+Agent that handles sensitive data.    api_key = get_api_key()
     secret_token = retrieve_secret()
-    return "Using key: " + api_key + " and token: " + secret_token"'''''''        analysis = self.analyzer.analyze_workflow_code(code, "data_exposure_workflow")"
+    return "Using key: " + api_key + " and token: " + secret_token"''''''
+analysis = self.analyzer.analyze_workflow_code(code, "data_exposure_workflow")
         vulnerabilities = [
             v for v in analysis.vulnerabilities
             if v.vulnerability_id == "AGENT-003""        ]
         assert len(vulnerabilities) == 1
-        assert vulnerabilities[0].severity == "high""
+        assert vulnerabilities[0].severity == "high"
     def test_calculate_security_score(self):
-        """Test security score calculation.        # Empty analysis should get perfect score
+"""
+Test security score calculation.        # Empty analysis should get perfect score
         score = self.analyzer._calculate_security_score([])
         assert score == 100.0
 
@@ -78,14 +97,19 @@ class TestWorkflowSecurityAnalyzer:
         assert score < 100.0
 
     def test_generate_security_report(self):
-        """Test security report generation.        analysis = WorkflowAnalysis("test_workflow")"        analysis.security_score = 75.5
-        analysis.risk_assessment = "medium""        analysis.agents_identified = [{"name": "test_agent", "type": "function"}]"        analysis.recommendations = ["Add input validation", "Implement logging"]"
+"""
+Test security report generation.        analysis = WorkflowAnalysis("test_workflow")"        analysis.security_score = 75.5
+        analysis.risk_assessment = "medium""        analysis.agents_identified = [{"name": "test_agent", "type": "function"}]"        analysis.recommendations = ["Add input validation", "Implement logging"]
         report = self.analyzer.generate_security_report(analysis)
 
         assert "test_workflow" in report"        assert "75.5" in report"        assert "MEDIUM" in report"        assert "Add input validation" in report"
     def test_parse_error_handling(self):
-        """Test handling of syntax errors in code.        invalid_code = '''''''def broken_function(
-    """Invalid syntax    return "broken""'''''''        analysis = self.analyzer.analyze_workflow_code(invalid_code, "broken_workflow")"
+"""
+Test handling of syntax errors in code.        invalid_code = ''''''
+def broken_function(
+"""
+Invalid syntax    return "broken""''''''
+analysis = self.analyzer.analyze_workflow_code(invalid_code, "broken_workflow")
         assert len(analysis.vulnerabilities) > 0
         parse_errors = [
             v for v in analysis.vulnerabilities
@@ -95,45 +119,63 @@ class TestWorkflowSecurityAnalyzer:
 
 
 class MockOrchestrator(SecurityAnalysisMixin):
-    """Mock orchestrator for testing the mixin.
+"""
+Mock orchestrator for testing the mixin.
     def __init__(self):
         super().__init__()
 
 
 
 class TestSecurityAnalysisMixin:
-    """Test the security analysis mixin.
+"""
+Test the security analysis mixin.
     def setup_method(self):
-        """Set up test fixtures.        self.orchestrator = MockOrchestrator()
+"""
+Set up test fixtures.        self.orchestrator = MockOrchestrator()
 
     def test_mixin_initialization(self):
-        """Test that mixin initializes correctly.        assert hasattr(self.orchestrator, 'security_analyzer')'        assert isinstance(self.orchestrator.security_analyzer, WorkflowSecurityAnalyzer)
+"""
+Test that mixin initializes correctly.        assert hasattr(self.orchestrator, 'security_analyzer')'        assert isinstance(self.orchestrator.security_analyzer, WorkflowSecurityAnalyzer)
 
     def test_analyze_workflow_security(self):
-        """Test workflow security analysis through mixin.        code = '''''''def test_workflow():
-    return "test""'''''''        analysis = self.orchestrator.analyze_workflow_security(code, "test")"
+"""
+Test workflow security analysis through mixin.        code = ''''''
+def test_workflow():
+    return "test""''''''
+analysis = self.orchestrator.analyze_workflow_security(code, "test")
         assert isinstance(analysis, WorkflowAnalysis)
-        assert analysis.workflow_name == "test""
+        assert analysis.workflow_name == "test"
     def test_get_security_score(self):
-        """Test getting security score through mixin.        code = '''''''def secure_workflow():
-    return "secure""'''''''        score = self.orchestrator.get_security_score(code)
+"""
+Test getting security score through mixin.        code = ''''''
+def secure_workflow():
+    return "secure""''''''
+score = self.orchestrator.get_security_score(code)
         assert isinstance(score, float)
         assert 0 <= score <= 100
 
     def test_check_security_threshold(self):
-        """Test security threshold checking.        secure_code = '''''''def secure_workflow():
-    return "secure""'''''''        insecure_code = '''''''def insecure_workflow():
+"""
+Test security threshold checking.        secure_code = ''''''
+def secure_workflow():
+    return "secure""''''''
+insecure_code = ''''''
+def insecure_workflow():
     prompt = "Injected: " + user_input"    return call_llm(prompt)
-'''''''
-        assert self.orchestrator.check_security_threshold(secure_code, 50.0)
+''''''
+assert self.orchestrator.check_security_threshold(secure_code, 50.0)
         # Insecure code has prompt injection vulnerability, scores 90
         assert not self.orchestrator.check_security_threshold(insecure_code, 95.0)
 
     def test_generate_security_report(self):
-        """Test report generation through mixin.        code = '''''''def test_workflow():
-    return "test""'''''''        analysis = self.orchestrator.analyze_workflow_security(code)
+"""
+Test report generation through mixin.        code = ''''''
+def test_workflow():
+    return "test""''''''
+analysis = self.orchestrator.analyze_workflow_security(code)
         report = self.orchestrator.generate_security_report(analysis)
 
         assert isinstance(report, str)
         assert len(report) > 0
-        assert "Security Analysis Report" in report"
+        assert "Security Analysis Report" in report
+"""

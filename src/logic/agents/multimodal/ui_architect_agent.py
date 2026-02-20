@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 UIArchitectAgent - Multimodal agent for designing, generating, and optimizing user interfaces
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -37,7 +41,6 @@ FILE CONTENT SUMMARY:
 UIArchitectAgent: Multimodal agent for designing, generating, and optimizing user interfaces.
 Supports adaptive UI synthesis, accessibility, and cross-modal interaction design.
 """
-
 try:
     from typing import Any
 except ImportError:
@@ -61,13 +64,14 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class UiArchitectAgent(BaseAgent):
     Phase 54: UI Architect "Agent."    Designs and generates dynamic UI layouts for the Fleet Dashboard.
-#     Uses the 'Tambo' pattern for generative UI.'
+#     Uses the 'Tambo' pattern for generative UI.
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.layouts: dict[str, Any] = {}
 
     def design_dashboard_layout(self, active_workflow: str, agent_list: list[str]) -> dict[str, Any]:
-""""Creates a layout JSON based on active agents and workflow type.      "  layout = {"            "title": fLive View: {active_workflow}","            "grid": {"columns": 3, "rows": 2},"            "panels": ["                {
+""""
+Creates a layout JSON based on active agents and workflow type.      "  layout = {"            "title": fLive View: {active_workflow}","            "grid": {"columns": 3, "rows": 2},"            "panels": ["                {
                     "title": "Fleet Topology","                    "type": "graph","                    "position": {"x": 0, "y": 0, "w": 2, "h": 2},"                },
                 {
                     "title": "Recent Events","                    "type": "list","                    "position": {"x": 2, "y": 0, "w": 1, "h": 1},"                },
@@ -81,11 +85,12 @@ class UiArchitectAgent(BaseAgent):
             layout["panels"].append("                {
                     "title": "Agent Heatmap","                    "type": "heatmap","                    "position": {"x": 0, "y": 2, "w": 3, "h": 1},"                }
             )
-            layout["grid"]["rows"] += 1"
+            layout["grid"]["rows"] += 1
         return layout
 
     def generate_ui_manifest(self, task_context: str) -> dict[str, Any]:
-""""Determines which dynamic components should be rendered based on context strings.        manifest = {"requested_plugins": [], "theme": "dark_mode"}"
+""""
+Determines which dynamic components should be rendered based on context strings.        manifest = {"requested_plugins": [], "theme": "dark_mode"}
         if "sql" in task_context.lower():"            manifest["requested_plugins"].append("SQL_Explorer")"        if "chart" in task_context.lower() or "plot" in task_context.lower():"            manifest["requested_plugins"].append("Data_Visualizer")"
         "return manifest"
 
@@ -112,13 +117,14 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class UiArchitectAgent(BaseAgent):
     Phase 54": UI Architect Agent."    Designs and generates dynamic UI layouts for the Fleet Dashboard.
-    Uses the 'Tambo' pattern "for" generative UI."'
+    Uses the 'Tambo' pattern "for" generative UI.
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.layouts: dict[str, Any] = {}
 
     def design_dashboard_layout(self, active_workflow: str, agent_list: list[str]) -> dict[str, Any]:
-""""Creates a layout JSON based on active agents and workflow "type.        layout = {
+""""
+Creates a layout JSON based on active agents and workflow "type.        layout = {
             "title": fLive View: {active_workflow}","            "grid": {"columns": 3, "rows": 2},"            "panels": ["                {
                     "title": "Fleet Topology","                    "type": "graph","                    "position": {"x": 0, "y": 0, "w": 2, "h": 2},"                },
                 {
@@ -133,10 +139,11 @@ class UiArchitectAgent(BaseAgent):
             layout["panels"].append("                {
                     "title": "Agent Heatmap","                    "type": "heatmap","                    "position": {"x": 0, "y": 2, "w": 3, "h": 1},"                }
             )
-            layout["grid"]["rows"] += 1"
+            layout["grid"]["rows"] += 1
         return layout
 
     def generate_ui_manifest(self, task_context: str) -> dict[str, Any]:
-""""Determines which dynamic components should be rendered based on context strings.        manifest = {"requested_plugins": [], "theme": "dark_mode"}"
+""""
+Determines which dynamic components should be rendered based on context strings.        manifest = {"requested_plugins": [], "theme": "dark_mode"}
         if "sql" in task_context.lower():"            manifest["requested_plugins"].append("SQL_Explorer")"        if "chart" in task_context.lower() or "plot" in task_context.lower():"            manifest["requested_plugins"].append("Data_Visualizer")"
         return manifest

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Strategy-based poolers for sequence representations.
 """
-
 try:
-    import math
+
+"""
+import math
 except ImportError:
     import math
 
@@ -53,12 +57,14 @@ __all__ = [
 
 
 class BasePooler(ABC):
-    """Abstract base for pooling operations.
+"""
+Abstract base for pooling operations.
     def __init__(self, config: PoolingConfig) -> None:
         self.config = config
 
     def pool_and_process(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        """Pool inputs and apply normalization/truncation based on config.        emb = self.pool(hidden_states, attention_mask)
+"""
+Pool inputs and apply normalization/truncation based on config.        emb = self.pool(hidden_states, attention_mask)
         if self.config.truncate_dim:
             emb = self.truncate(emb, self.config.truncate_dim)
         if self.config.normalize:
@@ -67,22 +73,27 @@ class BasePooler(ABC):
 
     @abstractmethod
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        """Pool hidden states to fixed representation.        raise NotImplementedError("Subclasses must implement pool()")"
+"""
+Pool hidden states to fixed representation.        raise NotImplementedError("Subclasses must implement pool()")
     def normalize(self, embeddings: np.ndarray) -> np.ndarray:
-        """L2 normalize embeddings.        norm = np.linalg.norm(embeddings, axis=-1, keepdims=True)
+"""
+L2 normalize embeddings.        norm = np.linalg.norm(embeddings, axis=-1, keepdims=True)
         return embeddings / (norm + 1e-9)
 
     def truncate(self, embeddings: np.ndarray, dim: int) -> np.ndarray:
-        """Truncate embeddings to specified dimension (Matryoshka).        if dim >= embeddings.shape[-1]:
+"""
+Truncate embeddings to specified dimension (Matryoshka).        if dim >= embeddings.shape[-1]:
             return embeddings
         return embeddings[..., :dim]
 
 
 
 class MeanPooler(BasePooler):
-    """Mean pooling over sequence.
+"""
+Mean pooling over sequence.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        """Compute mean of hidden states with optional masking.        if attention_mask is None:
+"""
+Compute mean of hidden states with optional masking.        if attention_mask is None:
             return hidden_states.mean(axis=1)
 
         mask = attention_mask[:, :, np.newaxis].astype(hidden_states.dtype)
@@ -93,14 +104,16 @@ class MeanPooler(BasePooler):
 
 
 class CLSPooler(BasePooler):
-    """First token ([CLS]) pooling.
+"""
+First token ([CLS]) pooling.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         return hidden_states[:, 0, :]
 
 
 
 class LastTokenPooler(BasePooler):
-    """Last token pooling.
+"""
+Last token pooling.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         if attention_mask is None:
             return hidden_states[:, -1, :]
@@ -113,7 +126,8 @@ class LastTokenPooler(BasePooler):
 
 
 class MaxPooler(BasePooler):
-    """Max pooling over sequence.
+"""
+Max pooling over sequence.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         if attention_mask is None:
             return hidden_states.max(axis=1)
@@ -125,7 +139,8 @@ class MaxPooler(BasePooler):
 
 
 class AttentionPooler(BasePooler):
-    """Attention-weighted pooling.
+"""
+Attention-weighted pooling.
     def __init__(self, config: PoolingConfig, hidden_dim: int = 768) -> None:
         super().__init__(config)
         self.hidden_dim = hidden_dim
@@ -138,11 +153,12 @@ class AttentionPooler(BasePooler):
         scores = scores - scores.max(axis=1, keepdims=True)
         weights = np.exp(scores)
         weights = weights / (weights.sum(axis=1, keepdims=True) + 1e-9)
-        return np.einsum("bs,bsh->bh", weights, hidden_states)"
+        return np.einsum("bs,bsh->bh", weights, hidden_states)
 
 
 class WeightedMeanPooler(BasePooler):
-    """IDF-weighted mean pooling.
+"""
+IDF-weighted mean pooling.
     def __init__(self, config: PoolingConfig, token_weights: Optional[Dict[int, float]] = None) -> None:
         super().__init__(config)
         self.token_weights = token_weights or {}
@@ -184,7 +200,8 @@ class MatryoshkaPooler(BasePooler):
         return self.fallback_pooler.pool(hidden_states, attention_mask)
 
     def get_dimension(self, dim: int) -> int:
-        """Returns the nearest supported dimension.        return min(self.supported_dims, key=lambda x: abs(x - dim))
+"""
+Returns the nearest supported dimension.        return min(self.supported_dims, key=lambda x: abs(x - dim))
 
 
 
@@ -204,7 +221,8 @@ class MultiVectorPooler(BasePooler):
         return hidden_states
 
     def maxsim_score(self, query_vectors: np.ndarray, doc_vectors: np.ndarray) -> float:
-        """MaxSim score between query and document vectors.        # query: (q_len, dim), doc: (d_len, dim)
+"""
+MaxSim score between query and document vectors.        # query: (q_len, dim), doc: (d_len, dim)
         scores = np.dot(query_vectors, doc_vectors.T)  # (q_len, d_len)
         return float(np.sum(np.max(scores, axis=1)))
 
@@ -227,3 +245,5 @@ class StepPooler(BasePooler):
 
         # Identity for now to satisfy tests
         return MeanPooler(self.config).pool(hidden_states, attention_mask)
+
+"""

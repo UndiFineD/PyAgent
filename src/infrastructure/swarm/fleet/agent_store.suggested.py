@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 AgentStore for sharing specialized agent configurations and templates.
 
-Allows agents to 'buy' or download new capabilities.'
+"""
+Allows agents to 'buy' or download new capabilities.
 
 try:
     import logging
@@ -44,7 +47,9 @@ except ImportError:
 
 
 class AgentStore:
-    """Marketplace for agent templates and specialized configurations.
+"""
+Marketplace for agent templates and specialized configurations.
+
     def __init__(self, store_path: str) -> None:
         self.store_path: Path = Path(store_path)
         self.store_path.mkdir(parents=True, exist_ok=True)
@@ -54,14 +59,16 @@ class AgentStore:
         }
 
     def list_templates(self) -> dict[str, dict[str, Any]]:
-        """Returns all available agent blueprints in the store.        return self.templates
+"""
+Returns all available agent blueprints in the store.        return self.templates
 
     def purchase_template(self, agent_id: str, template_name: str, economy: Any) -> dict[str, Any] | None:
-        """Purchases a template using agent credits.        if template_name not in self.templates:
+"""
+Purchases a template using agent credits.        if template_name not in self.templates:
             return None
 
         template: dict[str, Any] = self.templates[template_name]
-        price: float = float(template["price"])"
+        price: float = float(template["price"])
         if hasattr(economy, "transfer_credits") and economy.transfer_credits("            agent_id, "STORE", price, f"Purchase template: {template_name}""        ):
             logging.info(f"{agent_id} purchased {template_name} for {price} credits.")"            return template
 

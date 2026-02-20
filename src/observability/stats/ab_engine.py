@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 AB Engine - A/B comparison and significance calculationLightweight, synchronous A/B comparison helpers and a fallback significance routine.
 """
 
+"""
 import contextlib
 import hashlib
 import logging
@@ -35,18 +39,20 @@ try:
 except Exception:
     rust_core = None
     _RUST_AVAILABLE = False
-    logger.debug("rust_core not available, using Python fallback for ABEngine")"
+    logger.debug("rust_core not available, using Python fallback for ABEngine")
 
 @dataclass
 class ABComparisonResult:
-    """Result of comparing two metric groups.
+"""
+Result of comparing two metric groups.
     metrics_compared: int
     differences: dict[str, float] = field(default_factory=dict)
 
 
 @dataclass
 class ABSignificanceResult:
-    """Result of A/B statistical significance calculation.
+"""
+Result of A/B statistical significance calculation.
     p_value: float
     is_significant: bool
     effect_size: float = 0.0
@@ -54,18 +60,21 @@ class ABSignificanceResult:
 
 @dataclass
 class ABComparison:
-    """A / B comparison between code versions.
+"""
+A / B comparison between code versions.
     id: str
     version_a: str
     version_b: str
     metrics_a: dict[str, float] = field(default_factory=dict)
     metrics_b: dict[str, float] = field(default_factory=dict)
-    winner: str = """    confidence: float = 0.0
+    winner: str = ""
+confidence: float = 0.0
 
 
 
 class ABComparisonEngine:
-    """Compare stats between different code versions (A / B testing).
+"""
+Compare stats between different code versions (A / B testing).
     def __init__(self) -> None:
         self.comparisons: dict[str, ABComparison] = {}
 
@@ -111,7 +120,8 @@ class ABComparisonEngine:
 
 
 class ABComparator:
-    """Compares A/B test metrics and computes simple significance.
+"""
+Compares A/B test metrics and computes simple significance.
     def compare(self, a_data: dict[str, float], b_data: dict[str, float]) -> ABComparisonResult:
         common = sorted(set(a_data.keys()) & set(b_data.keys()))
         diffs = {
@@ -127,7 +137,8 @@ class ABComparator:
         treatment_values: List[float],
         alpha: float = 0.05,
     ) -> ABSignificanceResult:
-        """Attempt Rust-accelerated test, fallback to a Welch t-test approximation with normal p-value.        if not control_values or not treatment_values:
+        ""
+Attempt Rust-accelerated test, fallback to a Welch t-test approximation with normal p-value.        if not control_values or not treatment_values:
             return ABSignificanceResult(p_value=1.0, is_significant=False, effect_size=0.0)
 
         # Try rust implementation if present
@@ -139,7 +150,7 @@ class ABComparator:
                         return ABSignificanceResult(
                             p_value=float(result.get("p_value", 1.0)),"                            is_significant=bool(result.get("is_significant", False)),"                            effect_size=float(result.get("effect_size", 0.0)),"                        )
                 except Exception:
-                    logger.debug("rust_core.calculate_ttest_rust failed, falling back to Python", exc_info=True)"
+                    logger.debug("rust_core.calculate_ttest_rust failed, falling back to Python", exc_info=True)
         # Welch's t-test (approximate) and normal-approx p-value'        n1 = len(control_values)
         n2 = len(treatment_values)
         mean1 = sum(control_values) / n1

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from logic.agents.security.toolkit.rpc.rpc_toolkit.idl_scraper.idl_scraper import *

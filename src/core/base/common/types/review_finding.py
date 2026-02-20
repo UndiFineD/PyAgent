@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,39 +14,19 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: ReviewFinding dataclass."""
+"""
+"""
+Parser-safe ReviewFinding dataclass.""
 
-from dataclasses import dataclass
-
-try:
-    from src.core.base.common.types.review_category import ReviewCategory
-except Exception:
-    class ReviewCategory:
-        """Fallback placeholder for ReviewCategory."""
-
-try:
-    from src.core.base.lifecycle.version import VERSION
-except Exception:  # pragma: no cover - fallback
-    VERSION = "0.0.0"
-
-__version__ = VERSION
+""
+from dataclasses import dataclass, field
 
 
 @dataclass
 class ReviewFinding:
-    """A finding from automated code review.
-
-    Attributes:
-        category: Category of the finding.
-        message: Description of the issue.
-        line_number: Line where the issue was found.
-        severity: Severity level (1 - 5).
-        suggestion: Suggested fix.
-        auto_fixable: Whether this can be auto-fixed.
-    """
-    category: ReviewCategory
-    message: str
-    line_number: int
-    severity: int
-    suggestion: str
+    category: str = "style"
+    message: str = ""
+    line_number: int = -1
+    severity: int = 3
+    suggestion: str = ""
     auto_fixable: bool = False

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.pooling.pooling_metadata import PoolingStrategy, PoolingCursor, PoolingStates, PoolingMetadata, Pooler, MeanPooler, MaxPooler, LastTokenPooler, AttentionWeightedPooler, PoolerFactory, PoolerOutput, ChunkedPoolingManager, pool_with_rust

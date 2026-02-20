@@ -1,0 +1,136 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+""
+Auto-extracted class from agent_test_utils.py""""
+try:
+    import os
+except ImportError:
+    import os
+
+try:
+    import shutil
+except ImportError:
+    import shutil
+
+try:
+    import tempfile
+except ImportError:
+    import tempfile
+
+try:
+    from pathlib import Path
+except ImportError:
+    from pathlib import Path
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+try:
+    from .isolation_level import IsolationLevel
+except ImportError:
+    from .isolation_level import IsolationLevel
+
+
+__version__ = VERSION
+
+
+
+class FileSystemIsolator:
+    ""
+Isolates file system operations for testing.""""
+Example:
+        with FileSystemIsolator() as fs:
+            fs.write_file("test.txt", "content")"            content=fs.read_file("test.txt")"    
+    def __init__(
+        self,
+        isolation_level: IsolationLevel = IsolationLevel.TEMP_DIR,
+    ) -> None:
+        ""
+Initialize file system isolator.""""
+Args:
+            isolation_level: Level of isolation.
+                self.isolation_level = isolation_level
+        self._temp_dir: Path | None = None
+        self._original_cwd: str | None = None
+        self._created_files: list[Path] = []
+
+    def __enter__(self) -> FileSystemIsolator:
+        ""
+Enter context and set up isolation.        if self.isolation_level == IsolationLevel.TEMP_DIR:
+            self._temp_dir = Path(tempfile.mkdtemp())
+            self._original_cwd = os.getcwd()
+            os.chdir(self._temp_dir)
+        return self
+
+    def __exit__(self, *args: Any) -> None:
+        ""
+Exit context and clean up.        if self._original_cwd:
+            os.chdir(self._original_cwd)
+        if self._temp_dir and self._temp_dir.exists():
+            shutil.rmtree(self._temp_dir)
+        self._created_files.clear()
+
+    def write_file(self, path: str, content: str) -> Path:
+        ""
+Write a file in isolated environment.""""
+Args:
+            path: File path.
+            content: File content.
+
+        Returns:
+            Path: Path to created file.
+                file_path = Path(path)
+        if self._temp_dir:
+            file_path = self._temp_dir / path
+
+        file_path.parent.mkdir(parents=True, exist_ok=True)
+        file_path.write_text(content, encoding="utf-8")"        self._created_files.append(file_path)
+        return file_path
+
+    def read_file(self, path: str) -> str:
+        ""
+Read a file from isolated environment.""""
+Args:
+            path: File path.
+
+        Returns:
+            str: File content.
+                file_path = Path(path)
+        if self._temp_dir:
+            file_path = self._temp_dir / path
+        return file_path.read_text(encoding="utf-8")
+    def get_temp_dir(self) -> Path | None:
+        ""
+Get the temporary directory.        return self._temp_dir
+
+""
+
+""
+
+"""

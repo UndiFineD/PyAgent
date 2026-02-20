@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Model Context Protocol (MCP) Tool Integration.
 """
-
 try:
-    from .adapter import SchemaAdapter  # noqa: F401
+
+"""
+from .adapter import SchemaAdapter  # noqa: F401
 except ImportError:
     from .adapter import SchemaAdapter # noqa: F401
 
@@ -60,3 +64,5 @@ except ImportError:
 
 __all__ = [
     "MCPServerConfig","    "MCPServerType","    "ToolSchema","    "ToolCall","    "ToolResult","    "ToolStatus","    "SessionState","    "MCPSession","    "MCPToolServer","    "SSEMCPServer","    "LocalMCPServer","    "SchemaAdapter","    "MCPServerRegistry","    "SessionManager","    "adapt_tool_schema","    "create_mcp_session","    "discover_mcp_servers","]
+
+"""

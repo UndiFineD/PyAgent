@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 prompt_templates.py - Define persona and workflow tracks for Vibe-Coding 2026
+
+"""
 
 [Brief Summary]
 A small module that centralizes the Vibe-Coding 2026 persona, workflow and
@@ -45,9 +50,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Vibe-Coding 2026persona and track definitions.
 """
-
-
-
 VIBE_CODING_2025_TRACKS = {
     "RESEARCH": {"        "persona": "Creative Explorer. Focus on discoverability, edge cases, and high-level architectural research.","        "workflow": "Explorative search, prototyping, and DCAP research cycles.","        "phase_range": (0, 100),"    },
     "DEFINE": {"        "persona": ("            "Requirement Analyst. Focus on technical specifications, ""            "contract definitions, and interface design.""        ),
@@ -58,3 +60,5 @@ VIBE_CODING_2025_TRACKS = {
         "workflow": "Phase-based roadmap execution, logic core creation, and agentic self-healing.","        "phase_range": (200, 250),"    },
     "VALIDATE": {"        "persona": "Quality Auditor. Focus on security, compliance, stability metrics, and adversarial testing.","        "workflow": "Compliance auditing, Red Queen testing, and Stability score monitoring.","        "phase_range": (250, 999),"    },
 }
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Slash command parser and executor.
 """
 
+"""
 import logging
 import re
 import time
@@ -32,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 
 # Pattern: /command or /command arg1 arg2 (up to newline or next command)
-COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\\s+([^/\\n]+?))?(?=\\s*/[a-zA-Z]|\\s*$|\\n)", re.MULTILINE)"
+COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\\s+([^/\\n]+?))?(?=\\s*/[a-zA-Z]|\\s*$|\\n)", re.MULTILINE)
 
 def parse_commands(prompt: str) -> list[ParsedCommand]:
         Parse slash commands from a prompt.
@@ -46,7 +49,8 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
 
     for match in COMMAND_PATTERN.finditer(prompt):
         cmd_name = match.group(1).lower()
-        args_str = match.group(2) or """        args = args_str.strip().split() if args_str.strip() else []
+        args_str = match.group(2) or ""
+args = args_str.strip().split() if args_str.strip() else []
 
         commands.append(
             ParsedCommand(
@@ -94,7 +98,8 @@ class CommandParser:
             CommandParser._builtins_registered = True
 
     def parse(self, prompt: str) -> list[ParsedCommand]:
-        """Parse commands from prompt without executing.        return parse_commands(prompt)
+"""
+Parse commands from prompt without executing.        return parse_commands(prompt)
 
     def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
                 Execute a single command.
@@ -108,9 +113,9 @@ class CommandParser:
             CommandResult with output
                 defn = self.registry.get(command.lower())
         if not defn:
-            return CommandResult.fail(f"Unknown command: {command}")"
+            return CommandResult.fail(f"Unknown command: {command}")
         if defn.requires_args and not args:
-            return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")"
+            return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")
         ctx = CommandContext(
             command=command,
             args=args or [],
@@ -150,7 +155,7 @@ class CommandParser:
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.exception("Error in command handler for /%s", cmd.command)"                    result = CommandResult.fail(str(e))
             else:
-                result = CommandResult.fail(f"Unknown command: {cmd.command}")"
+                result = CommandResult.fail(f"Unknown command: {cmd.command}")
             results.append((cmd, result))
 
         # Build processed prompt
@@ -165,7 +170,8 @@ class CommandParser:
             # Replace commands with their output
             processed = prompt
             for cmd, result in reversed(results):
-                replacement = result.output if result.inline else """                processed = processed[: cmd.start] + replacement + processed[cmd.end :]
+                replacement = result.output if result.inline else ""
+processed = processed[: cmd.start] + replacement + processed[cmd.end :]
         else:
             processed = prompt
 
@@ -177,18 +183,20 @@ class CommandParser:
         )
 
     def get_help(self, command: str | None = None) -> str:
-        """Get help text for a command or all commands.        if command:
+"""
+Get help text for a command or all commands.        if command:
             defn = self.registry.get(command)
             if not defn:
-                return f"Unknown command: {command}""
+                return f"Unknown command: {command}"
             lines = [f"/{defn.name}"]"            if defn.aliases:
-                lines[0] += f" (aliases: {', '.join('/' + a for a in defn.aliases)})""'            if defn.description:
+                lines[0] += f" (aliases: {', '.join('/' + a for a in defn.aliases)})"
+if defn.description:
                 lines.append(f"  {defn.description}")"            if defn.usage:
                 lines.append(f"  Usage: {defn.usage}")"            return "\\n".join(lines)"
         # List all commands
         commands = self.registry.list_commands()
         lines = ["Available commands:"]"        for cmd in sorted(commands, key=lambda c: c.name):
-            desc = cmd.description or "No description""            lines.append(f"  /{cmd.name} - {desc}")"        return "\\n".join(lines)"
+            desc = cmd.description or "No description""            lines.append(f"  /{cmd.name} - {desc}")"        return "\\n".join(lines)
 
 # Alias for backward compatibility
 SlashCommands = CommandParser

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Async methods.py module.
 """
-
 try:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -37,7 +40,8 @@ if TYPE_CHECKING:
 
 
 class AsyncHTTPMixin:
-    """Mixin providing asynchronous HTTP methods.
+"""
+Mixin providing asynchronous HTTP methods.
     async def async_get_response(
         self: HTTPConnection,
         url: str,
@@ -46,7 +50,8 @@ class AsyncHTTPMixin:
         extra_headers: Mapping[str, str] | None = None,
         allow_redirects: bool = True,
     ) -> Any:
-        """Make an async GET request and return the response object.        self._validate_http_url(url)
+"""
+Make an async GET request and return the response object.        self._validate_http_url(url)
 
         client = await self.get_async_client()
         extra_headers = extra_headers or {}
@@ -65,7 +70,8 @@ class AsyncHTTPMixin:
         timeout: float | None = None,
         allow_redirects: bool = True,
     ) -> bytes:
-        """Async GET request returning response body as bytes.        async with await self.async_get_response(url, timeout=timeout, allow_redirects=allow_redirects) as r:
+"""
+Async GET request returning response body as bytes.        async with await self.async_get_response(url, timeout=timeout, allow_redirects=allow_redirects) as r:
             r.raise_for_status()
             return await r.read()
 
@@ -76,7 +82,8 @@ class AsyncHTTPMixin:
         timeout: float | None = None,
         encoding: str | None = None,
     ) -> str:
-        """Async GET request returning response body as text.        async with await self.async_get_response(url, timeout=timeout) as r:
+"""
+Async GET request returning response body as text.        async with await self.async_get_response(url, timeout=timeout) as r:
             r.raise_for_status()
             return await r.text(encoding=encoding)
 
@@ -86,7 +93,8 @@ class AsyncHTTPMixin:
         *,
         timeout: float | None = None,
     ) -> Any:
-        """Async GET request returning response body as parsed JSON.        async with await self.async_get_response(url, timeout=timeout) as r:
+"""
+Async GET request returning response body as parsed JSON.        async with await self.async_get_response(url, timeout=timeout) as r:
             r.raise_for_status()
             return await r.json()
 
@@ -98,7 +106,8 @@ class AsyncHTTPMixin:
         timeout: float | None = None,
         extra_headers: Mapping[str, str] | None = None,
     ) -> Any:
-        """Async POST JSON data and return parsed JSON response.        self._validate_http_url(url)
+"""
+Async POST JSON data and return parsed JSON response.        self._validate_http_url(url)
 
         client = await self.get_async_client()
         extra_headers = extra_headers or {}
@@ -121,7 +130,8 @@ class AsyncHTTPMixin:
         chunk_size: int = 8192,
         progress_callback: Callable[[int, int | None], None] | None = None,
     ) -> Path:
-        """Async download a file from URL to local path.        save_path = Path(save_path)
+"""
+Async download a file from URL to local path.        save_path = Path(save_path)
         save_path.parent.mkdir(parents=True, exist_ok=True)
 
         async with await self.async_get_response(url, timeout=timeout) as r:
@@ -136,3 +146,5 @@ class AsyncHTTPMixin:
                         progress_callback(downloaded, total_size)
 
         return save_path
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,14 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Task Management Mixin for BaseAgent.
+"""
+"""
+Task Management Mixin for BaseAgent.
 Provides structured task tracking and management.
 
+"""
 This module provides a minimal, well-tested implementation used by the
 test-suite. It implements a small in-memory task list with optional
 file-backed persistence.
 """
-
 import json
 import logging
 import time
@@ -69,9 +72,9 @@ class TaskItem:
 
 
 class TaskManagerMixin:
-    """Mixin providing structured task management capabilities."""
-
-    class _ManagedTaskList(list):
+"""
+Mixin providing structured task management capabilities.""
+class _ManagedTaskList(list):
         def __init__(self, parent, *args):
             super().__init__(*args)
             self._parent = parent
@@ -119,11 +122,12 @@ class TaskManagerMixin:
         items: List[Dict[str, Any]],
         cascade_context: Optional[CascadeContext] = None,
     ) -> Dict[str, Any]:
-        """Update the task list with new items.
+"""
+Update the task list with new items.
 
         Items is a list of dicts with keys: description, completed (opt), priority (opt).
-        """
-        try:
+        ""
+try:
             if not items:
                 self.tasks.clear()
             else:

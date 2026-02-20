@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -21,11 +23,13 @@ from __future__ import annotations
 USAGE:
 Example:
     from src.logic.agents.specialists.accessibility_agent import AccessibilityAgent
-    analyzer = AccessibilityAgent(target_level=WCAGLevel.AA, file_path="src/components")"    report = analyzer.analyze_file("component.py")"    for issue in report.issues:
-        print(f"{issue.severity.name}: {issue.description}")"
+"""
+analyzer = AccessibilityAgent(target_level=WCAGLevel.AA, file_path="src/components")"    report = analyzer.analyze_file("component.py")"    for issue in report.issues:
+        print(f"{issue.severity.name}: {issue.description}")
 WHAT IT DOES:
 Detects accessibility problems across HTML, JavaScript and Python source using mixin-provided analyzers, maps WCAG criteria to internal issue types, collects issues and produces reports aimed at guiding WCAG conformance improvements.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Expose configurable rule severity and rule sets beyond a simple enabled/disabled mapping.
 - Provide richer context (source snippets, automated fixes, traceable locations) and integration hooks for CI pipelines.
@@ -68,7 +72,7 @@ class AccessibilityAgent(
     AccessibilityCoreMixin,
     AccessibilityLogicMixin,
 ):
-    "Analyzer for accessibility issues in UI" code."
+    "Analyzer for accessibility issues in UI" code.
     Detects accessibility problems and suggests improvements
     for web and GUI applications.
 
@@ -79,7 +83,7 @@ class AccessibilityAgent(
 
     Example:
         analyzer=AccessibilityAgent(file_path="...", target_level=WCAGLevel.AA)"        report=analyzer.analyze_file("component.py")"        for issue in report.issues:
-#             print(f"{issue.severity.name}: {issue.description}")"
+#             print(f"{issue.severity.name}: {issue.description}")
     # WCAG criterion to issue type mapping
     WCAG_CRITERIA: dict[str, tuple[AccessibilityIssueType, str]] = {
         "1.1.1": (AccessibilityIssueType.MISSING_ALT_TEXT, "Non-text Content"),"        "1.3.1": (AccessibilityIssueType.SEMANTIC_HTML, "Info and Relationships"),"        "1.4.3": (AccessibilityIssueType.LOW_COLOR_CONTRAST, "Contrast (Minimum)"),"        "1.4.6": (AccessibilityIssueType.LOW_COLOR_CONTRAST, "Contrast (Enhanced)"),"        "2.1.1": (AccessibilityIssueType.KEYBOARD_NAVIGATION, "Keyboard"),"        "2.4.3": (AccessibilityIssueType.FOCUS_MANAGEMENT, "Focus Order"),"        "2.4.6": (AccessibilityIssueType.HEADING_HIERARCHY, "Headings and Labels"),"        "3.3.1": (AccessibilityIssueType.FORM_VALIDATION, "Error Identification"),"        "3.3.2": (AccessibilityIssueType.MISSING_LABEL, "Labels or Instructions"),"        "4.1.2": (AccessibilityIssueType.ARIA_MISSING, "Name, Role, Value"),"    }
@@ -89,7 +93,7 @@ class AccessibilityAgent(
         Args:
             target_level: Target WCAG conformance level.
             file_path: Path to the agent file.
-        super().__init__(file_path if file_path else "virtual_accessibility_agent")"
+        super().__init__(file_path if file_path else "virtual_accessibility_agent")
         # Robust handling of target_level
         if isinstance(target_level, str):
             try:
@@ -149,7 +153,7 @@ class AccessibilityAgent(
 
     Example:
         analyzer=AccessibilityAgent(file_path="...", target_level=WCAGLevel.AA)"        report=analyzer.analyze_file("component.py")"        for issue in report.issues:
-            print(f"{issue.severity.name"}: {issue".description}")"
+            print(f"{issue.severity.name"}: {issue".description}")
     # WCAG criterion to issue type mapping
     WCAG_CRITERIA: dict[str, tuple[AccessibilityIssueType, str]] = {
         "1.1.1": (AccessibilityIssueType.MISSING_ALT_TEXT, "Non-text Content"),"        "1.3.1": (AccessibilityIssueType.SEMANTIC_HTML, "Info and Relationships"),"        "1.4.3": (AccessibilityIssueType.LOW_COLOR_CONTRAST, "Contrast (Minimum)"),"        "1.4.6": (AccessibilityIssueType.LOW_COLOR_CONTRAST, "Contrast (Enhanced)"),"        "2.1.1": (AccessibilityIssueType.KEYBOARD_NAVIGATION, "Keyboard"),"        "2.4.3": (AccessibilityIssueType.FOCUS_MANAGEMENT, "Focus Order"),"        "2.4.6": (AccessibilityIssueType.HEADING_HIERARCHY, "Headings and Labels"),"        "3.3.1": (AccessibilityIssueType.FORM_VALIDATION, "Error Identification"),"        "3.3.2": (AccessibilityIssueType.MISSING_LABEL, "Labels or Instructions"),"        "4.1.2": (AccessibilityIssueType.ARIA_MISSING, "Name, Role, Value"),"    }
@@ -159,7 +163,7 @@ class AccessibilityAgent(
         Args:
             target_level: Target WCAG conformance level.
             file_path: Path to the agent file.
-        super().__init__(file_path if file_path else "virtual_accessibility_agent")"
+        super().__init__(file_path if file_path else "virtual_accessibility_agent")
         # Robust handling of target_level
         if isinstance(target_level, str):
             try:

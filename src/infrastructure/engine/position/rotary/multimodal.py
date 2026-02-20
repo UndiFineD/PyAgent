@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Multimodal.py module.
 
+"""
 try:
     from typing import Any, Tuple
 except ImportError:
@@ -40,8 +42,9 @@ else:
 
 
 class MRotaryEmbedding(RotaryEmbeddingBase):
-    """Multimodal Rotary Position Embedding.""""
-    Applies separate rotary embeddings for different modality sections:
+"""
+Multimodal Rotary Position Embedding.""""
+Applies separate rotary embeddings for different modality sections:
     - Temporal (time/frame index)
     - Height (spatial y)
     - Width (spatial x)
@@ -54,8 +57,9 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
         self.inv_freq = self._compute_inv_freq()
 
     def _compute_inv_freq(self) -> Any:
-        """Compute inverse frequencies for each section.        if not HAS_TORCH:
-            raise RuntimeError("MRotaryEmbedding requires PyTorch")"
+"""
+Compute inverse frequencies for each section.        if not HAS_TORCH:
+            raise RuntimeError("MRotaryEmbedding requires PyTorch")
         inv_freqs = []
         for section_size in self.mrope_sections:
             inv_freq = 1.0 / (
@@ -65,8 +69,9 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
         return inv_freqs
 
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
-        """Compute cos/sin cache for each section.        if not HAS_TORCH:
-            raise RuntimeError("MRotaryEmbedding requires PyTorch")"
+"""
+Compute cos/sin cache for each section.        if not HAS_TORCH:
+            raise RuntimeError("MRotaryEmbedding requires PyTorch")
         t = torch.arange(max_len, dtype=torch.float32)
 
         cos_caches = []
@@ -85,8 +90,9 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
         query: Any,
         key: Any,
     ) -> Tuple[Any, Any]:
-        """Apply multimodal rotary embeddings.        if not HAS_TORCH:
-            raise RuntimeError("MRotaryEmbedding requires PyTorch")"
+"""
+Apply multimodal rotary embeddings.        if not HAS_TORCH:
+            raise RuntimeError("MRotaryEmbedding requires PyTorch")
         if positions.dim() == 1:
             # Fallback to single positions
             positions = positions.unsqueeze(0).expand(3, -1)
@@ -127,7 +133,8 @@ class MRotaryEmbedding(RotaryEmbeddingBase):
 
     def _apply_rotation(
         self,
-        q: "torch.Tensor","        k: "torch.Tensor","        cos: "torch.Tensor","        sin: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        """Apply rotation to a section.
+        q: "torch.Tensor","        k: "torch.Tensor","        cos: "torch.Tensor","        sin: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        """
+Apply rotation to a section.
         def rotate_half(x: "torch.Tensor") -> "torch.Tensor":"            x1 = x[..., : x.shape[-1] // 2]
             x2 = x[..., x.shape[-1] // 2 :]
             return torch.cat((-x2, x1), dim=-1)

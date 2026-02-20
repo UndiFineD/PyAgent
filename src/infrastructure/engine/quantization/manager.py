@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Quantization Manager (Phase 56).
 Enables dynamic quantization switching (FP8, BitNet, AWQ) for high-efficiency inference.
 
+"""
 import logging
 from enum import Enum
 from typing import Any, Dict, List, Optional
@@ -44,11 +46,12 @@ class QuantizationManager:
         self._detect_hardware_support()
 
     def _detect_hardware_support(self) -> None:
-        """Detects available quantization support on current HW.        # Simulation for Phase 56/57
+"""
+Detects available quantization support on current HW.        # Simulation for Phase 56/57
         self.supported_modes.append(QuantizationMode.FP8)
         self.supported_modes.append(QuantizationMode.BITNET_158)
         self.supported_modes.append(QuantizationMode.AWQ)
-        logger.info(f"QuantizationManager: Supported modes: {[m.value for m in self.supported_modes]}")"
+        logger.info(f"QuantizationManager: Supported modes: {[m.value for m in self.supported_modes]}")
     def get_kernel_config(self, mode: Optional[QuantizationMode] = None) -> Dict[str, Any]:
                 Returns parameters for the inference kernel (scales, zero-points, bit-width).
                 target_mode = mode or self.current_mode
@@ -61,14 +64,15 @@ class QuantizationManager:
     def apply_quantization(self, tensor: Any, mode: QuantizationMode) -> Any:
                 Applies quantization to a tensor (simulated wrapper/dispatch).
                 if mode not in self.supported_modes:
-            raise ValueError(f"Quantization mode {mode} not supported on this hardware.")"
-        logger.debug(f"Applying {mode.value} quantization")"
+            raise ValueError(f"Quantization mode {mode} not supported on this hardware.")
+        logger.debug(f"Applying {mode.value} quantization")
         if rc and hasattr(rc, "quantize_tensor_rust"):"            return rc.quantize_tensor_rust(tensor, mode.value)
 
         return tensor  # Fallback: return as is
 
     def switch_mode(self, new_mode: QuantizationMode) -> bool:
-        """Dynamic hot-switching of quantization mode.        if new_mode in self.supported_modes:
+"""
+Dynamic hot-switching of quantization mode.        if new_mode in self.supported_modes:
             logger.info(f"QuantizationManager: Switching from {self.current_mode.value} to {new_mode.value}")"            self.current_mode = new_mode
             return True
         return False

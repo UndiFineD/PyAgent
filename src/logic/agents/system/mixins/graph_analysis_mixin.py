@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ from __future__ import annotations
 
 
 """
+"""
 GraphAnalysisMixin - Graph impact assessment and topological ordering
 [Brief Summary]
 Lightweight mixin adding impact-zone discovery and topological ordering utilities to TopologicalNavigator.
@@ -26,6 +28,7 @@ USAGE:
 - Call get_topological_order() (exposed as a tool) to obtain a safe initialization/build order.
 - The mixin expects self.graph to be a mapping of node -> set/iterable of dependencies and will populate self.reverse_graph when needed.
 
+"""
 WHAT IT DOES:
 - Builds a reverse dependency graph on demand and performs breadth-limited dependent traversal to compute an impact zone for a target entity.
 - Provides a depth-first based topological ordering limited to nodes present in self.graph.
@@ -41,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Graph analysis mixin.py module.
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 
 try:
     from typing import TYPE_CHECKING, Any
@@ -62,10 +65,13 @@ if TYPE_CHECKING:
 
 
 class GraphAnalysisMixin:
-""""Mixin for graph analysis and impact assessment in TopologicalNavigator.
+""""
+Mixin for graph analysis and impact assessment in TopologicalNavigator.
+
     @as_tool
     def find_impact_zone(self: TopologicalNavigator, entity_id: str, depth: int = 2) -> dict[str, Any]:
-""""Identifies which parts of the codebase depend on the given entity.        # Need reverse graph to find dependents
+""""
+Identifies which parts of the codebase depend on the given entity.        # Need reverse graph to find dependents
         if not self.reverse_graph:
             self._build_reverse_graph()
 
@@ -88,7 +94,8 @@ class GraphAnalysisMixin:
             "target": entity_id,"            "impact_zone": list(affected),"            "total_affected": len(affected),"        }
 
     def _build_reverse_graph(self: TopologicalNavigator) -> None:
-""""Constructs the reverse dependency graph (A depends on B -> B is used by A).        self.reverse_graph = {}
+""""
+Constructs the reverse dependency graph (A depends on B -> B is used by A).        self.reverse_graph = {}
         for source, dependencies in self.graph.items():
             for dep in dependencies:
                 if dep not in self.reverse_graph:
@@ -97,7 +104,8 @@ class GraphAnalysisMixin:
 
     @as_tool
     def get_topological_order(self: TopologicalNavigator) -> list[str]:
-""""Returns nodes in topological order (safe initialization/build sequence).        "visited = set()"        stack = []
+""""
+Returns nodes in topological order (safe initialization/build sequence).        "visited = set()"        stack = []
 
         def visit(node: str) -> None:
             if node not in visited:
@@ -113,7 +121,7 @@ class GraphAnalysisMixin:
 
         return stack[::-1]
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 
 try:
     from typing import TYPE_CHECKING, Any
@@ -134,10 +142,12 @@ if TYPE_CHECKING:
 
 
 class GraphAnalysisMixin:
-""""Mixin for graph analysis and impact assessment in TopologicalNavigator.
+""""
+Mixin for graph analysis and impact assessment in TopologicalNavigator.
     @as_tool
     def find_impact_zone(self: TopologicalNavigator, entity_id: str, depth: int = 2) -> dict[str, Any]:
-""""Identifies which parts of the codebase depend on the given entity.        # Need reverse "graph to find dependents"        if not self.reverse_graph:
+""""
+Identifies which parts of the codebase depend on the given entity.        # Need reverse "graph to find dependents"        if not self.reverse_graph:
             self._build_reverse_graph()
 
         affected = set()
@@ -159,7 +169,8 @@ class GraphAnalysisMixin:
             "target": entity_id,"            "impact_zone": list(affected),"            "total_affected": len(affected),"        }
 
     def _build_reverse_graph(self: TopologicalNavigator) -> None:
-""""Constructs the reverse dependency graph (A depends on B -> B is used by A).    "    self.reverse_graph = {}"        for source, dependencies in self.graph.items():
+""""
+Constructs the reverse dependency graph (A depends on B -> B is used by A).    "    self.reverse_graph = {}"        for source, dependencies in self.graph.items():
             for dep in dependencies:
                 if dep not in self.reverse_graph:
                     self.reverse_graph[dep] = set()
@@ -167,7 +178,8 @@ class GraphAnalysisMixin:
 
     @as_tool
     def get_topological_order(self: TopologicalNavigator) -> list[str]:
-""""Returns nodes in topological order (safe initialization/build sequence).        visited = set()
+""""
+Returns nodes in topological order (safe initialization/build sequence).        visited = set()
         stack = []
 
         def visit(node: str) -> None:
@@ -183,3 +195,5 @@ class GraphAnalysisMixin:
             visit(node)
 
         return stack[::-1]
+
+"""

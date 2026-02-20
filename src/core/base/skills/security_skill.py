@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: security_skill
+"""
+"""
+Module: security_skill
 Implements security auditing and firewall enforcement for Universal Agents.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -42,16 +46,23 @@ logger = logging.getLogger(__name__)
 
 
 class SecuritySkill(SkillCore):
-    """Security capability for Universal Agents.
+"""
+Security capability for Universal Agents.
     Integrates Zero-Trust validation and content scanning.
-    """
-    async def initialize(self) -> None:
-        """Initialize security hooks."""logger.info("Security Skill initialized for agent: %s", self.agent.manifest.role)"
+"""
+async def initialize(self) -> None:
+"""
+Initialize security hooks.""
+logger.info("Security Skill initialized for agent: %s", self.agent.manifest.role)
     async def shutdown(self) -> None:
-        """Cleanup."""pass
+"""
+Cleanup.""
+pass
 
     def validate_action(self, action: str, params: dict[str, Any]) -> bool:
-        """Check if an action is permitted by the agent's manifest.'        """permissions = self.agent.manifest.permissions
+"""
+Check if an action is permitted by the agent's manifest.'        ""
+permissions = self.agent.manifest.permissions
 
         if action.startswith("fs_write") and not permissions.get("fs_write", False):"            logger.warning("Security: Permisson denied for fs_write")"            return False
 
@@ -60,8 +71,9 @@ class SecuritySkill(SkillCore):
         return True
 
     async def scan_content(self, content: str) -> bool:
-        """Scan content for insecure patterns (delegates to rust_core if available).
-        """
+"""
+Scan content for insecure patterns (delegates to rust_core if available).
+        ""
 # TODO Placeholder for Rust-accelerated scanning
         if "PRIVATE_KEY" in content:"            logger.danger("Security Alert: Private key leak detected in agent output!")"            return False
         return True

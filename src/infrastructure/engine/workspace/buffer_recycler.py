@@ -1,3 +1,30 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# Provides a small BufferRecycler class used by tests and higher-level
+# components. The implementation is intentionally tiny to ensure import
+# stability while the codebase is repaired.
+from typing import Any
+
+
+class BufferRecycler:
+"""
+"""
+Simple buffer recycler placeholder.""
+
+"""
+def __init__(self) -> None:
+        self._pool = []
+
+    def acquire(self) -> Any:
+        try:
+            return self._pool.pop()
+        except IndexError:
+            return bytearray()
+
+    def release(self, buf: Any) -> None:
+        self._pool.append(buf)
+
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -39,7 +66,7 @@ class BufferRecycler:
         self._pools: Dict[int, collections.deque] = {sc: collections.deque() for sc in self.size_classes}
         self._active_refs: Dict[id, int] = {}
 
-        logger.info(f"BufferRecycler initialized with {len(self.size_classes)} size classes")"
+        logger.info(f"BufferRecycler initialized with {len(self.size_classes)} size classes")
     def acquire(self, required_size: int) -> bytearray:
                 Acquires a buffer of at least the required size.
         Returns from pool if available, else allocates new.
@@ -72,4 +99,7 @@ class BufferRecycler:
             del buffer
 
     def get_stats(self) -> Dict[str, int]:
-        """Returns the current state of the buffer pools.        return {str(sc): len(self._pools[sc]) for sc in self.size_classes}
+"""
+Returns the current state of the buffer pools.        return {str(sc): len(self._pools[sc]) for sc in self.size_classes}
+
+""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 StructuredLogger - JSON-based structured logging for PyAgent swarm observability
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -42,7 +46,6 @@ FILE CONTENT SUMMARY:
 StructuredLogger: JSON-based logging for Phase 144 observability.
 Ensures machine-readable logs with mandatory AgentID and TraceID fields.
 """
-
 import contextlib
 import gzip
 import json
@@ -70,9 +73,10 @@ __version__: str = VERSION
 
 
 class StructuredLogger:
-    """JSON logger for PyAgent swarm observability.
+"""
+JSON logger for PyAgent swarm observability.
     Phase 277: Added log hygiene with automated GZIP compression.
-    """
+"""
     # regex for sensitive data masking (Phase 227)
     SENSITIVE_PATTERNS: list[Pattern[str]] = [
         re.compile(r"sk-[a-zA-Z0-9]{32,}"),  # OpenAI Keys
@@ -87,8 +91,9 @@ class StructuredLogger:
         trace_id: str | None = None,
         log_file: str = "data/logs/structured.json",
     ) -> None:
-        """Initialize the StructuredLogger."""
-        self.agent_id: str = agent_id
+"""
+Initialize the StructuredLogger.""
+self.agent_id: str = agent_id
         self.trace_id: str = trace_id or f"trace_{int(time.time())}"
         self.log_file = Path(log_file)
         self._fs = FileSystemCore()
@@ -96,16 +101,18 @@ class StructuredLogger:
 
 
     def _ensure_log_dir(self) -> None:
-        """Ensures the log directory exists and handles log rotation if needed (Phase 277)."""
-        self._fs.ensure_directory(self.log_file.parent)
+"""
+Ensures the log directory exists and handles log rotation if needed (Phase 277).""
+self._fs.ensure_directory(self.log_file.parent)
         # Phase 277: Compress if > 100MB
         if self.log_file.exists() and self.log_file.stat().st_size > 100 * 1024 * 1024:
             self._compress_logs()
 
 
     def _compress_logs(self) -> None:
-        """Compresses current log file to .json.gz (Phase 277)."""
-        timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")
+"""
+Compresses current log file to .json.gz (Phase 277).""
+timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")
         compressed_file: Path = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
         logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")
         try:
@@ -120,7 +127,8 @@ class StructuredLogger:
 
 
     def _mask_sensitive(self, text: str) -> str:
-        """Automated masking for API keys and tokens (Phase 227)."""
+"""
+Automated masking for API keys and tokens (Phase 227).""
         # Python fallback (Rust acceleration for masking not yet implemented)
         masked: str = text
         for pattern in self.SENSITIVE_PATTERNS:
@@ -129,8 +137,9 @@ class StructuredLogger:
 
 
     def log(self, level: str, message: str, **kwargs: Any) -> None:
-        """Log a structured entry."""
-        timestamp: str = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+"""
+Log a structured entry.""
+timestamp: str = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
         log_func: Any | Callable[..., None] = getattr(std_logger, level.lower(), std_logger.info)
 
@@ -159,25 +168,30 @@ class StructuredLogger:
 
     # Convenience level helpers (kept for backwards compatibility)
     def info(self, message: str, **kwargs: Any) -> None:
-        """Log an info-level message."""
-        self.log("info", message, **kwargs)
+"""
+Log an info-level message.""
+self.log("info", message, **kwargs)
 
 
     def warning(self, message: str, **kwargs: Any) -> None:
-        """Log a warning-level message."""
-        self.log("warning", message, **kwargs)
+"""
+Log a warning-level message.""
+self.log("warning", message, **kwargs)
 
 
     def error(self, message: str, **kwargs: Any) -> None:
-        """Log an error-level message."""
-        self.log("error", message, **kwargs)
+"""
+Log an error-level message.""
+self.log("error", message, **kwargs)
 
 
     def debug(self, message: str, **kwargs: Any) -> None:
-        """Log a debug-level message."""
-        self.log("debug", message, **kwargs)
+"""
+Log a debug-level message.""
+self.log("debug", message, **kwargs)
 
 
     def success(self, message: str, **kwargs: Any) -> None:
-        """Log a success/info-level message."""
-        self.log("info", message, **kwargs)
+"""
+Log a success/info-level message.""
+self.log("info", message, **kwargs)

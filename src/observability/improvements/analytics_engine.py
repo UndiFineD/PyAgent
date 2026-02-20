@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Analytics Engine - Recording completions and computing simple trends
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -53,17 +57,23 @@ __version__ = VERSION
 
 
 class AnalyticsEngine:
-    """Very small analytics engine used by tests.
+"""
+Very small analytics engine used by tests.
+
     def __init__(self) -> None:
-        """Initialize the AnalyticsEngine with an empty list of completed improvements.        self._completed: list[Improvement] = []
+"""
+Initialize the AnalyticsEngine with an empty list of completed improvements.        self._completed: list[Improvement] = []
 
     def record_completion(self, improvement: Improvement) -> None:
-        """Record a completed improvement by appending it to the internal list.        self._completed.append(improvement)
+"""
+Record a completed improvement by appending it to the internal list.        self._completed.append(improvement)
 
     def get_completion_trend(self, period_days: int = 30) -> CompletionTrend:
-        """Return a CompletionTrend object representing the total number of completed improvements.        return CompletionTrend(total_completed=len(self._completed))
+"""
+Return a CompletionTrend object representing the total number of completed improvements.        return CompletionTrend(total_completed=len(self._completed))
 
     def calculate_velocity(self, sprint_days: int = 14) -> float:
-        """Calculate and return the velocity as total story points completed per week.        total_points = 0.0
+"""
+Calculate and return the velocity as total story points completed per week.        total_points = 0.0
         for imp in self._completed:
             total_points += float(getattr(imp, "story_points", 0) or 0)"        return total_points / (float(sprint_days) / 7.0) if sprint_days else 0.0

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Custom logging handler for redirecing output to Tkinter widgets.
+"""
+"""
+Custom logging handler for redirecing output to Tkinter widgets.
 
+"""
 import logging
 import tkinter as tk
 from typing import Any
@@ -27,7 +31,9 @@ __version__ = VERSION
 
 
 class WidgetLogger(logging.Handler):
-    """Logging handler that redirects formatted log records to a Tkinter Text widget.
+"""
+Logging handler that redirects formatted log records to a Tkinter Text widget.
+
     def __init__(self, widget: tk.Text, thread_id: int | None = None) -> None:
         super().__init__()
         self.widget: Any = widget

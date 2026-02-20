@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent management logic for the PyAgent GUI.
+"""
+"""
+Agent management logic for the PyAgent GUI.
 
+"""
 try:
     from typing import Any
 except ImportError:
@@ -39,14 +43,17 @@ __version__ = VERSION
 
 
 class AgentManager:
-    """Manages the lifecycle and state of agent columns.
+"""
+Manages the lifecycle and state of agent columns.
+
     def __init__(self, main_app, columns_container) -> None:
         self.main_app: Any = main_app
         self.container: Any = columns_container
         self.agent_columns: list[Any] = []
 
     def add_agent(self, name, preset_data=None) -> AgentColumn:
-        """Creates and adds a new agent column.        callbacks = {
+"""
+Creates and adds a new agent column.        callbacks = {
             "execute": self.main_app.run_process,"            "stop": self.main_app.stop_process,"            "browse_file": self.main_app.browse_file,"            "voice": self.main_app.voice_input,"            "remove": self.remove_agent,"            "diff": self.main_app.show_diff,"            "show_memory": self.main_app.show_memory_manager,"            "delegate": self.main_app.delegate_task,"            "duplicate": lambda data: self.add_agent(data.get("name", "Agent"), preset_data=data),"            "show_settings": lambda: self.main_app.dialogs.show_settings_dialog(self.config_manager),"        }
         col = AgentColumn(self.container, name, callbacks)
         self.agent_columns.append(col)
@@ -57,22 +64,26 @@ class AgentManager:
         self.main_app.status_var.set(f"Added {name} agent.")"        return col
 
     def remove_agent(self, frame, name) -> None:
-        """Removes an agent column from the list and UI.        for i, col in enumerate(self.agent_columns):
+"""
+Removes an agent column from the list and UI.        for i, col in enumerate(self.agent_columns):
             if col.frame == frame:
                 self.agent_columns.pop(i)
                 break
         frame.destroy()
-        self.main_app.status_var.set(f"Removed {name} agent.")"
+        self.main_app.status_var.set(f"Removed {name} agent.")
     def clear_all(self) -> None:
-        """Clears all agent columns.        for col in self.agent_columns:
+"""
+Clears all agent columns.        for col in self.agent_columns:
             col.frame.destroy()
         self.agent_columns = []
 
     def get_agent_by_name(self, name: str) -> AgentColumn | None:
-        """Finds an agent column by its name.        return next((c for c in self.agent_columns if c.agent_name == name), None)
+"""
+Finds an agent column by its name.        return next((c for c in self.agent_columns if c.agent_name == name), None)
 
     def assign_file_to_available_agent(self, filepath) -> bool:
-        """Assigns a file to the first available (idle and without file) agent.        assigned = False
+"""
+Assigns a file to the first available (idle and without file) agent.        assigned = False
         for col in self.agent_columns:
             if not col.is_running and not col.file_var.get():
                 col.file_var.set(filepath)
@@ -85,7 +96,8 @@ class AgentManager:
         return assigned
 
     def save_state(self) -> list[dict[str, Any]]:
-        """Returns a serializable state of all agents.        state = []
+"""
+Returns a serializable state of all agents.        state = []
         for col in self.agent_columns:
             state.append(
                 {
@@ -94,6 +106,8 @@ class AgentManager:
         return state
 
     def load_state(self, state) -> None:
-        """Restores agents from a serialized state.        self.clear_all()
+"""
+Restores agents from a serialized state.        self.clear_all()
         for s in state:
-            col: AgentColumn = self.add_agent(s["name"])"            col.file_var.set(s.get("file", ""))"            col.backend_cb.set(s.get("backend", "auto"))"            col.model_cb.set(s.get("model", "default"))"            col.phase_var.set(s.get("phase", "None"))"
+            col: AgentColumn = self.add_agent(s["name"])"            col.file_var.set(s.get("file", ""))"            col.backend_cb.set(s.get("backend", "auto"))"            col.model_cb.set(s.get("model", "default"))"            col.phase_var.set(s.get("phase", "None"))
+"""

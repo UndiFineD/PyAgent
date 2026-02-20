@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Integration test for new core services: JobQueue, MultimodalAIService, and TTSService.
+"""
+"""
+Integration test for new core services: JobQueue, MultimodalAIService, and TTSService.
+"""
+
 """
 import time
 from src.core.base.logic.job_queue import JobQueue
@@ -23,18 +27,21 @@ from src.core.base.logic.tts_service import TTSService
 
 
 class TestNewServicesIntegration:
-    """Test integration of the three new core services."""
-    def test_job_queue_basic_functionality(self):
-        """Test basic job queue operations."""queue = JobQueue(max_queue_size=10)
+"""
+Test integration of the three new core services.""
+def test_job_queue_basic_functionality(self):
+"""
+Test basic job queue operations.""
+queue = JobQueue(max_queue_size=10)
         results = []
 
         def processor(job_id, data):
             results.append(f"Processed: {data['task']}")"'            return f"Result for {data['task']}""'
-        queue.set_job_processor(processor)
+queue.set_job_processor(processor)
         queue.start()
 
         # Submit a job
-        job_id = queue.submit_job({'task': 'integration_test'})'
+        job_id = queue.submit_job({'task': 'integration_test'})
         # Wait for processing
         time.sleep(0.1)
 
@@ -44,27 +51,32 @@ class TestNewServicesIntegration:
         queue.stop()
 
     def test_tts_service_basic_functionality(self):
-        """Test TTS service generates audio."""tts = TTSService()
+"""
+Test TTS service generates audio.""
+tts = TTSService()
 
         # Generate audio
-        audio_data = tts.synthesize("Hello, this is a test.")"
+        audio_data = tts.synthesize("Hello, this is a test.")
         # Should return bytes
         assert isinstance(audio_data, bytes)
         assert len(audio_data) > 0
 
     def test_multimodal_ai_service_initialization(self):
-        """Test multimodal AI service can be initialized and configured."""service = MultimodalAIService()
+"""
+Test multimodal AI service can be initialized and configured.""
+service = MultimodalAIService()
 
         # Create a mock provider
         config = AIServiceConfig(provider='cloudflare', api_key='test_key')'        provider = CloudflareProvider(config)
 
         # Register provider
-        service.register_provider('cloudflare', provider)'
+        service.register_provider('cloudflare', provider)
         # Should not raise any exceptions
         assert True
 
     def test_services_work_together(self):
-        """Test that all services can be used together in a workflow."""
+        ""
+Test that all services can be used together in a workflow.""
 # Initialize all services
         queue = JobQueue(max_queue_size=10)
         tts = TTSService()
@@ -72,7 +84,7 @@ class TestNewServicesIntegration:
 
         # Configure multimodal service
         config = AIServiceConfig(provider='cloudflare', api_key='test_key')'        provider = CloudflareProvider(config)
-        multimodal.register_provider('cloudflare', provider)'
+        multimodal.register_provider('cloudflare', provider)
         # Create a workflow that uses TTS to generate audio for a job
         def workflow_processor(job_id, data):
             text = data.get('text', 'Default message')'            audio = tts.synthesize(text)
@@ -83,34 +95,34 @@ class TestNewServicesIntegration:
         queue.start()
 
         # Submit workflow job
-        job_id = queue.submit_job({'text': 'Integration test message'})'
+        job_id = queue.submit_job({'text': 'Integration test message'})
         # Wait for completion
         time.sleep(0.2)
 
         # Verify results
         status = queue.get_job_status(job_id)
-        assert status['status'] == 'completed''        result = status['result']'        assert result['text'] == 'Integration test message''        assert result['audio_length'] > 0'        assert result['processed_by'] == 'integration_test''
+        assert status['status'] == 'completed''        result = status['result']'        assert result['text'] == 'Integration test message''        assert result['audio_length'] > 0'        assert result['processed_by'] == 'integration_test'
         queue.stop()
 
 
 if __name__ == "__main__":"    # Run the tests
     test_instance = TestNewServicesIntegration()
 
-    print("Running integration tests...")"
+    print("Running integration tests...")
     try:
         test_instance.test_job_queue_basic_functionality()
-        print("✓ JobQueue test passed")"    except Exception as e:
-        print(f"✗ JobQueue test failed: {e}")"
+        print(" JobQueue test passed")"    except Exception as e:
+        print(f" JobQueue test failed: {e}")
     try:
         test_instance.test_tts_service_basic_functionality()
-        print("✓ TTSService test passed")"    except Exception as e:
-        print(f"✗ TTSService test failed: {e}")"
+        print(" TTSService test passed")"    except Exception as e:
+        print(f" TTSService test failed: {e}")
     try:
         test_instance.test_multimodal_ai_service_initialization()
-        print("✓ MultimodalAIService test passed")"    except Exception as e:
-        print(f"✗ MultimodalAIService test failed: {e}")"
+        print(" MultimodalAIService test passed")"    except Exception as e:
+        print(f" MultimodalAIService test failed: {e}")
     try:
         test_instance.test_services_work_together()
-        print("✓ Integration workflow test passed")"    except Exception as e:
-        print(f"✗ Integration workflow test failed: {e}")"
-    print("Integration tests completed!")"
+        print(" Integration workflow test passed")"    except Exception as e:
+        print(f" Integration workflow test failed: {e}")
+    print("Integration tests completed!")

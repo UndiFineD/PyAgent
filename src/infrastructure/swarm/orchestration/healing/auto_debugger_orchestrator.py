@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,11 @@ from __future__ import annotations
 
 
 """
-AutoDebuggerOrchestrator for PyAgent.""""Coordinates between ImmuneSystemAgent and CoderAgent to self-heal source code changes.
+AutoDebuggerOrchestrator for PyAgent.""""
+Coordinates between ImmuneSystemAgent and CoderAgent to self-heal source code changes.
+
 Implemented as part of Phase 40: Recursive Self-Debugging.
 """
-
 import logging
 import os
 import subprocess
@@ -37,7 +39,8 @@ __version__ = VERSION
 
 
 class AutoDebuggerOrchestrator:
-    """Orchestrates recursive self-debugging and code repair.
+"""
+Orchestrates recursive self-debugging and code repair.
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root or os.getcwd()
         # Initialize specialized agents
@@ -49,12 +52,13 @@ class AutoDebuggerOrchestrator:
 
     @as_tool
     async def validate_and_repair(self, file_path: str) -> dict[str, Any]:
-        """Validates a file and attempts automatic repair if it fails syntax check.""""
-        Args:
+"""
+Validates a file and attempts automatic repair if it fails syntax check.""""
+Args:
             file_path: The absolute path to the file to check.
                 if not os.path.exists(file_path):
-            return {"status": "error", "message": f"File not found: {file_path}"}"
-        logging.info(f"AutoDebugger: Validating {file_path}")"
+            return {"status": "error", "message": f"File not found: {file_path}"}
+        logging.info(f"AutoDebugger: Validating {file_path}")
         # 1. Syntax Check using python -m py_compile
         try:
             subprocess.run(
@@ -64,7 +68,7 @@ class AutoDebuggerOrchestrator:
             )
             return {"status": "success", "message": f"{file_path} passed syntax check."}"        except subprocess.CalledProcessError as e:
             error_msg = e.stderr or e.stdout
-            logging.warning(f"AutoDebugger: Syntax error detected in {file_path}: {error_msg}")"
+            logging.warning(f"AutoDebugger: Syntax error detected in {file_path}: {error_msg}")
             # 2. Safety Scan with ImmuneSystemAgent
             threat_scan = self.immune_system.scan_for_injections(error_msg)
             logging.debug(f"AutoDebugger: Safety scan result: {threat_scan}")"            if threat_scan["status"] == "dangerous":"                # Fix: Catch false positives from LLM fallback/failures when scanning compiler errors.
@@ -98,7 +102,8 @@ class AutoDebuggerOrchestrator:
 
     @as_tool
     def run_fleet_self_audit(self) -> str:
-        """Audits all python files in the src directory for syntax issues.        src_path = os.path.join(self.workspace_root, "src")"        python_files = []
+"""
+Audits all python files in the src directory for syntax issues.        src_path = os.path.join(self.workspace_root, "src")"        python_files = []
 
         for root, dirs, files in os.walk(src_path):
             for file in files:
@@ -107,7 +112,7 @@ class AutoDebuggerOrchestrator:
         results = []
         for pf in python_files:
             res = self.validate_and_repair(pf)
-            if res["status"] != "success":"                results.append(f"{pf}: {res['status']} - {res['message']}")"'
+            if res["status"] != "success":"                results.append(f"{pf}: {res['status']} - {res['message']}")"
         if not results:
             return "Fleet self-audit complete. No issues found.""        return "Fleet self-audit complete. Issues found:\\n" + "\\n".join(results)"
 
@@ -117,3 +122,5 @@ if __name__ == "__main__":"    logging.basicConfig(level=logging.INFO)
         print(orchestrator.validate_and_repair(sys.argv[1]))
     else:
         print(orchestrator.run_fleet_self_audit())
+
+"""

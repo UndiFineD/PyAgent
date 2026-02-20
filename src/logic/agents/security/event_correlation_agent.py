@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     from typing import Any, Dict, List
@@ -46,16 +51,19 @@ __version__ = VERSION
 
 
 class EventCorrelator:
-    """Core event correlation logic.
+"""
+Core event correlation logic.
     def __init__(self):
         self.events: List[Dict[str, Any]] = []
         self.correlations: List[Dict[str, Any]] = []
 
     def add_event(self, event: Dict[str, Any]) -> None:
-        """Add an event to the correlation engine.        self.events.append(event)
+"""
+Add an event to the correlation engine.        self.events.append(event)
 
     def correlate_events(self, correlation_rules: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Apply correlation rules to find related events.        correlations = []
+"""
+Apply correlation rules to find related events.        correlations = []
         for rule in correlation_rules:
             matches = self._apply_rule(rule)
             if matches:
@@ -64,10 +72,11 @@ class EventCorrelator:
         return correlations
 
     def _apply_rule(self, rule: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Apply a single correlation rule.        matches = []
-        event_type = rule.get("event_type")"        conditions = rule.get("conditions", {})"        time_window = rule.get("time_window", 300)  # 5 minutes default"
+"""
+Apply a single correlation rule.        matches = []
+        event_type = rule.get("event_type")"        conditions = rule.get("conditions", {})"        time_window = rule.get("time_window", 300)  # 5 minutes default
         # Simple correlation: find events matching conditions within time window
-        relevant_events = [e for e in self.events if e.get("type") == event_type]"
+        relevant_events = [e for e in self.events if e.get("type") == event_type]
         for i, event in enumerate(relevant_events):
             correlated = [event]
             for other in relevant_events[i + 1 :]:
@@ -79,7 +88,8 @@ class EventCorrelator:
     def _events_related(
         self, event1: Dict[str, Any], event2: Dict[str, Any], conditions: Dict[str, Any], time_window: int
     ) -> bool:
-        """Check if two events are related based on conditions.        # Check time proximity
+"""
+Check if two events are related based on conditions.        # Check time proximity
         time1 = event1.get("timestamp", 0)"        time2 = event2.get("timestamp", 0)"        if abs(time1 - time2) > time_window:
             return False
 
@@ -104,23 +114,28 @@ class EventCorrelationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def add_event(self, event: Dict[str, Any]) -> None:
-        """Add an event for correlation analysis.        self.correlator.add_event(event)
+"""
+Add an event for correlation analysis.        self.correlator.add_event(event)
 
     @as_tool
     def define_correlation_rule(
         self, name: str, event_type: str, conditions: Dict[str, Any], time_window: int = 300
     ) -> None:
-        """Define a new correlation rule.        rule = {"name": name, "event_type": event_type, "conditions": conditions, "time_window": time_window}"        self.correlation_rules.append(rule)
-        logging.info(f"Defined correlation rule: {name}")"
+"""
+Define a new correlation rule.        rule = {"name": name, "event_type": event_type, "conditions": conditions, "time_window": time_window}"        self.correlation_rules.append(rule)
+        logging.info(f"Defined correlation rule: {name}")
     @as_tool
     def run_correlation(self) -> List[Dict[str, Any]]:
-        """Run correlation analysis on current events.        correlations = self.correlator.correlate_events(self.correlation_rules)
+"""
+Run correlation analysis on current events.        correlations = self.correlator.correlate_events(self.correlation_rules)
         logging.info(f"Found {len(correlations)} correlations")"        return correlations
 
     @as_tool
     def get_correlations(self) -> List[Dict[str, Any]]:
-        """Get all found correlations.        return self.correlator.correlations
+"""
+Get all found correlations.        return self.correlator.correlations
 
     @as_tool
     def list_rules(self) -> List[Dict[str, Any]]:
-        """List all defined correlation rules.        return self.correlation_rules
+"""
+List all defined correlation rules.        return self.correlation_rules

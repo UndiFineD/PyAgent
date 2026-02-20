@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.metrics.caching_metrics import CacheType, EvictionReason, CacheEvent, EvictionEvent, CacheStats, SlidingWindowStats, SlidingWindowMetrics, CachingMetrics, PrefixCacheStats, MultiLevelCacheMetrics, observe_with_rust

@@ -14,8 +14,11 @@
 
 try:
     import uuid
+"""
 except ImportError:
-    import uuid
+
+"""
+import uuid
 
 try:
     from typing import Dict, Any
@@ -26,9 +29,9 @@ except ImportError:
 
 
 class JobManagerCore:
-    """Simple job manager used by tests."""
-
-    def __init__(self) -> None:
+    ""
+Simple job manager used by tests.""
+def __init__(self) -> None:
         self.jobs: Dict[str, Dict[str, Any]] = {}
 
     async def submit_job(self, task_data: Dict[str, Any]) -> str:

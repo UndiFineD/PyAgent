@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,14 @@ from __future__ import annotations
 
 
 """
+"""
 CommunityOrchestrator: A mock community-submitted orchestrator.
 Demonstrates fleet interaction.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -43,12 +46,14 @@ __version__ = VERSION
 
 
 class CommunityOrchestrator:
-    """Mock orchestrator that coordinates between agents.
+"""
+Mock orchestrator that coordinates between agents.
     def __init__(self, fleet: Any = None) -> None:
         self.fleet = fleet
         self.name = "CommunityOrchestrator""        logging.info(f"{self.name} initialized.")"
     def coordinate(self, task: str) -> str:
-        """Main coordination method.        logging.info(f"{self.name} is coordinating task: {task}")"        # Mock coordination: just return a status string
-        return f"CommunityOrchestrator handled '{task}' using fleet agents.""'
-    def get_status(self) -> str:
-        return f"{self.name} is active.""
+"""
+Main coordination method.        logging.info(f"{self.name} is coordinating task: {task}")"        # Mock coordination: just return a status string
+        return f"CommunityOrchestrator handled '{task}' using fleet agents."
+def get_status(self) -> str:
+        return f"{self.name} is active."

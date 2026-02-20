@@ -14,7 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Base class for multimodal caching.
+"""
+"""
+Base class for multimodal caching.
+
+"""
 import threading
 from abc import ABC, abstractmethod
 from typing import Any, Callable, Dict, Optional
@@ -46,23 +50,29 @@ class MultiModalCache(ABC):
 
     @abstractmethod
     def get(self, key: MediaHash) -> Optional[CacheEntry]:
-        """Get entry from cache.        raise NotImplementedError("Subclasses must implement get()")"
+"""
+Get entry from cache.        raise NotImplementedError("Subclasses must implement get()")
     @abstractmethod
     def put(self, key: MediaHash, data: Any, metadata: Optional[Dict] = None) -> CacheEntry:
-        """Put entry into cache.        raise NotImplementedError("Subclasses must implement put()")"
+"""
+Put entry into cache.        raise NotImplementedError("Subclasses must implement put()")
     @abstractmethod
     def evict(self, count: int = 1) -> int:
-        """Evict entries, return number evicted.        raise NotImplementedError("Subclasses must implement evict()")"
+"""
+Evict entries, return number evicted.        raise NotImplementedError("Subclasses must implement evict()")
     @abstractmethod
     def clear(self) -> None:
-        """Clear all entries.        raise NotImplementedError("Subclasses must implement clear()")"
+"""
+Clear all entries.        raise NotImplementedError("Subclasses must implement clear()")
     @abstractmethod
     def contains(self, key: MediaHash) -> bool:
-        """Check if key exists in cache.        raise NotImplementedError("Subclasses must implement contains()")"
+"""
+Check if key exists in cache.        raise NotImplementedError("Subclasses must implement contains()")
     def get_or_compute(
         self, key: MediaHash, compute_fn: Callable[[], Any], metadata: Optional[Dict] = None
     ) -> CacheEntry:
-        """Get from cache or compute and cache.        entry = self.get(key)
+"""
+Get from cache or compute and cache.        entry = self.get(key)
         if entry is not None:
             return entry
 
@@ -72,4 +82,5 @@ class MultiModalCache(ABC):
 
     @property
     def stats(self) -> CacheStats:
-        """Get cache statistics.        return self._stats
+"""
+Get cache statistics.        return self._stats

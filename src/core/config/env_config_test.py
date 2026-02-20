@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.config.env_config import EnvVar, EnvConfigMeta, EnvConfig, NamespacedConfig, LazyEnvVar, TempEnv, get_env, get_env_bool, get_env_int, get_env_float, get_env_list, get_env_json

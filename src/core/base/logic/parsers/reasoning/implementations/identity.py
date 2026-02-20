@@ -13,11 +13,14 @@
 # limitations under the License.
 
 
-"""Identity.py module.
+"""
+"""
+Identity.py module.
 """
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
 try:
     from typing import Any, ClassVar, Sequence
 except ImportError:
@@ -38,9 +41,10 @@ except ImportError:
 
 
 class IdentityReasoningParser(ReasoningParser):
-    """No-op parser that returns the full output as content.
-    """
-    name: ClassVar[str] = "identity""
+"""
+No-op parser that returns the full output as content.
+"""
+name: ClassVar[str] = "identity"
     def is_reasoning_end(self, input_ids: list[int]) -> bool:
         return True
 

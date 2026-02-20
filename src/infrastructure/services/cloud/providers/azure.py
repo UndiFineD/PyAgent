@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Azure AI Foundry cloud provider connector.
 
+"""
 Provides integration with Azure AI Foundry (formerly Azure ML) for inference requests.
 """
-
 import logging
 import os
 import time
@@ -63,7 +66,7 @@ class AzureAIConnector(CloudProviderBase):
 
     @property
     def name(self) -> str:
-        return "AzureAI""
+        return "AzureAI"
     @property
     def available_models(self) -> List[str]:
         return list(self.PRICING.keys())
@@ -74,11 +77,11 @@ class AzureAIConnector(CloudProviderBase):
         start_time: float = time.perf_counter()
 
         if not self._api_key or not self._endpoint:
-            raise AuthenticationError("Azure AI API key and endpoint are required.")"
+            raise AuthenticationError("Azure AI API key and endpoint are required.")
         # Azure endpoints often use /v1/chat/completions for OpenAI compatibility
         url: str = self._endpoint
-        if not url.endswith("/chat/completions"):"            url: str = f"{self._endpoint.rstrip('/')}/v1/chat/completions""'
-        headers: dict[str, str] = {
+        if not url.endswith("/chat/completions"):"            url: str = f"{self._endpoint.rstrip('/')}/v1/chat/completions""
+headers: dict[str, str] = {
             "Content-Type": "application/json","            "Authorization": f"Bearer {self._api_key}" if not self._is_entra_token() else f"Bearer {self._api_key}","            "api-key": self._api_key,  # Azure specific header"        }
 
         payload = {
@@ -88,14 +91,14 @@ class AzureAIConnector(CloudProviderBase):
             try:
                 response: Response = await client.post(url, json=payload, headers=headers)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                raise CloudProviderError(f"Azure AI connection failed: {e}")"
+                raise CloudProviderError(f"Azure AI connection failed: {e}")
             if response.status_code == 429:
                 raise RateLimitError("Azure AI rate limit exceeded.")"            elif response.status_code != 200:
-                raise CloudProviderError(f"Azure AI returned error {response.status_code}: {response.text}")"
+                raise CloudProviderError(f"Azure AI returned error {response.status_code}: {response.text}")
             data = response.json()
-            content = data["choices"][0]["message"]["content"]"
+            content = data["choices"][0]["message"]["content"]
             # Simple token estimation if usage not returned
-            usage = data.get("usage", {})"            input_tokens = usage.get("prompt_tokens", len(str(request.messages)) // 4)"            output_tokens = usage.get("completion_tokens", len(content) // 4)"
+            usage = data.get("usage", {})"            input_tokens = usage.get("prompt_tokens", len(str(request.messages)) // 4)"            output_tokens = usage.get("completion_tokens", len(content) // 4)
             cost: float = self._calculate_cost(request.model, input_tokens, output_tokens)
             latency: float = (time.perf_counter() - start_time) * 1000
 
@@ -116,3 +119,4 @@ class AzureAIConnector(CloudProviderBase):
 
     def _calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
         pricing: dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 1.0})"        return (input_tokens / 1_000_000 * pricing["input"]) + (output_tokens / 1_000_000 * pricing["output"])"
+"""

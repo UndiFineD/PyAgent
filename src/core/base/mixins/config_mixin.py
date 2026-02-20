@@ -13,11 +13,13 @@
 # limitations under the License.
 
 
-"""Mixin for agent configuration access."""
-
-
+"""
+"""
+Mixin for agent configuration access.""
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -34,14 +36,17 @@ except ImportError:
 
 
 class ConfigMixin:
-    """Provides configuration access to agents."""
+"""
+Provides configuration access to agents.""
     
     @property
     def config(self) -> ConfigCore:
-        """Access the global configuration manager."""
-        return config
+"""
+Access the global configuration manager.""
+return config
 
 
     def get_config(self, key: str, default: Any = None) -> Any:
-        """Get a configuration value."""
-        return config.get(key, default)
+"""
+Get a configuration value.""
+return config.get(key, default)

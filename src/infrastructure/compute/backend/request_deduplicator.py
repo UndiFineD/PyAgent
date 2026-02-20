@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     import hashlib
 except ImportError:
@@ -51,8 +51,9 @@ __version__ = VERSION
 
 
 class RequestDeduplicator:
-    """Deduplicates concurrent requests with identical prompts.""""
-    Prevents redundant API calls when multiple threads / processes
+"""
+Deduplicates concurrent requests with identical prompts.""""
+Prevents redundant API calls when multiple threads / processes
     send the same request simultaneously.
 
     Example:
@@ -60,8 +61,9 @@ class RequestDeduplicator:
         if dedup.is_duplicate("prompt"):"            result=dedup.wait_for_result("prompt")"        else:
             result=call_api("prompt")"            dedup.store_result("prompt", result)"    
     def __init__(self, ttl_seconds: float = 60.0, recorder: LocalContextRecorder | None = None) -> None:
-        """Initialize deduplicator.""""
-        Args:
+"""
+Initialize deduplicator.""""
+Args:
             ttl_seconds: Time - to - live for pending requests.
             recorder: Interaction recorder for logic harvesting.
                 self.ttl_seconds = ttl_seconds
@@ -72,11 +74,13 @@ class RequestDeduplicator:
         self._events: dict[str, threading.Event] = {}
 
     def _get_key(self, prompt: str) -> str:
-        """Generate deduplication key for prompt.        return hashlib.sha256(prompt.encode()).hexdigest()[:16]
+"""
+Generate deduplication key for prompt.        return hashlib.sha256(prompt.encode()).hexdigest()[:16]
 
     def is_duplicate(self, prompt: str) -> bool:
-        """Check if request is a duplicate of a pending request.""""
-        Args:
+"""
+Check if request is a duplicate of a pending request.""""
+Args:
             prompt: Request prompt.
 
         Returns:
@@ -102,8 +106,9 @@ class RequestDeduplicator:
             return False
 
     def wait_for_result(self, prompt: str, timeout: float = 60.0) -> str | None:
-        """Wait for result of duplicate request.""""
-        Args:
+"""
+Wait for result of duplicate request.""""
+Args:
             prompt: Request prompt.
             timeout: Maximum wait time.
 
@@ -121,8 +126,9 @@ class RequestDeduplicator:
             return self._results.get(key)
 
     def store_result(self, prompt: str, result: str) -> None:
-        """Store result and notify waiters.""""
-        Args:
+"""
+Store result and notify waiters.""""
+Args:
             prompt: Request prompt.
             result: Request result.
                 key = self._get_key(prompt)
@@ -133,3 +139,5 @@ class RequestDeduplicator:
             event = self._events.get(key)
             if event:
                 event.set()
+
+"""

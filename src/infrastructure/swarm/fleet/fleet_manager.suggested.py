@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Fleet Manager - Primary Swarm Coordinator
 
+"""
 Coordinator for deploying and aggregating results from multiple agents.
 DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -36,7 +39,6 @@ WHAT IT SHOULD DO BETTER:
 - Enhance real-time performance metrics tracking for individual agents.
 - Support dynamic scaling of agent clusters based on workload complexity.
 """
-
 import asyncio
 import contextlib
 import logging
@@ -102,7 +104,8 @@ class FleetManager(
     system-wide stability through various orchestrators.
     
     def _safe_start_task(self, coro) -> None:
-        """Starts a task if an event loop is running, otherwise logs a warning.        try:
+"""
+Starts a task if an event loop is running, otherwise logs a warning.        try:
             asyncio.create_task(coro)
         except RuntimeError:
             with contextlib.suppress(Exception):
@@ -120,7 +123,7 @@ class FleetManager(
 
         # Phase 319-320: Voyager P2P Transport & Discovery
         self.voyager_transport = VoyagerTransport()
-        self.voyager_discovery = DiscoveryNode(node_name=f"Fleet-{self.workspace_root.name}")"
+        self.voyager_discovery = DiscoveryNode(node_name=f"Fleet-{self.workspace_root.name}")
         # Phase 3.0: Swarm Consensus (Decentralized State)
         self.swarm_consensus = SwarmConsensus(
             node_id=f"node-{self.workspace_root.name}", transport=self.voyager_transport"        )
@@ -136,7 +139,7 @@ class FleetManager(
         self.agents = AgentRegistry.get_agent_map(self.workspace_root, fleet_instance=cast(FleetManager, self))
 
         # Phase 320: LAN Discovery
-        self.init_discovery(agent_id=f"fleet-{self.workspace_root.name}")"
+        self.init_discovery(agent_id=f"fleet-{self.workspace_root.name}")
         # Start voyager services (async)
         self._safe_start_task(self.voyager_transport.start_server(self._handle_voyager_message))
         self._safe_start_task(self.voyager_discovery.start_advertising())
@@ -183,35 +186,37 @@ class FleetManager(
         self.evolution_loop = EvolutionLoop(cast(FleetManager, self))
 
     async def handle_user_command(self, command: str) -> Dict[str, Any]:
-        """Entry point for the Universal Agent Shell (Pillar 3).        logger.info(f"FleetManager: Received user command: {command}")"
+"""
+Entry point for the Universal Agent Shell (Pillar 3).        logger.info(f"FleetManager: Received user command: {command}")
         # 1. Record user input in reasoning chain
-        self.interaction_recorder.record_interaction(user_input=command, agent_id="User", role="user")"
+        self.interaction_recorder.record_interaction(user_input=command, agent_id="User", role="user")
         # 2. Utilize the Universal Agent for Pillar 3 execution
         try:
             # Check for UniversalAgent in capability hints
-            if "universal" in self.capability_hints:"                target_agent = self.capability_hints["universal"]"                logger.info(f"FleetManager: Dispatched to {target_agent} (Pillar 3)")"
+            if "universal" in self.capability_hints:"                target_agent = self.capability_hints["universal"]"                logger.info(f"FleetManager: Dispatched to {target_agent} (Pillar 3)")
                 result = await cast(FleetDelegationMixin, self).delegate_to(target_agent, command)
 
                 # Record response
                 self.interaction_recorder.record_interaction(
                     user_input=command, agent_id=target_agent, role="assistant", content=str(result)"                )
-                return {"status": "success", "agent": target_agent, "result": result}"
+                return {"status": "success", "agent": target_agent, "result": result}
             # Fallback to standard delegation
-            target_agent = "ReasoningAgent""            if "code" in command.lower() or "fix" in command.lower():"                target_agent = "CoderAgent""
+            target_agent = "ReasoningAgent""            if "code" in command.lower() or "fix" in command.lower():"                target_agent = "CoderAgent"
             result = await cast(FleetDelegationMixin, self).delegate_to(target_agent, command)
-            return {"status": "success", "agent": target_agent, "result": result}"
+            return {"status": "success", "agent": target_agent, "result": result}
         except (ValueError, TypeError, RuntimeError, asyncio.TimeoutError) as e:
             logger.error(f"FleetManager: Agent delegation failed: {e}")"            # Final fallback to ReasoningAgent
             try:
                 result = await cast(FleetDelegationMixin, self).delegate_to("ReasoningAgent", command)"                return {"status": "success", "agent": "ReasoningAgent", "result": result}"            except (ValueError, TypeError, RuntimeError, asyncio.TimeoutError) as e2:
-                return {"status": "error", "message": str(e2)}"
+                return {"status": "error", "message": str(e2)}
     # Logic delegated to mixins
 
     async def _on_voyager_peer_added(self, peer_data: Dict[str, Any]) -> None:
-        """P2P Handshake & Consensus setup for newly discovered Voyager peers.        peer_id = peer_data["properties"].get("node_id", peer_data["name"])"        addrs = peer_data["addresses"]"        if not addrs:
+"""
+P2P Handshake & Consensus setup for newly discovered Voyager peers.        peer_id = peer_data["properties"].get("node_id", peer_data["name"])"        addrs = peer_data["addresses"]"        if not addrs:
             return
         addr = addrs[0]
-        port = int(peer_data["properties"].get("transport_port", 5555))"
+        port = int(peer_data["properties"].get("transport_port", 5555))
         # 1. E2EE Handshake (Double Ratchet Phase 2.0)
         if peer_id not in self.voyager_transport.sessions:
             logger.info(f"Voyager: Initiating Double Ratchet session with {peer_id}...")"            response = await self.voyager_transport.send_to_peer(
@@ -227,25 +232,26 @@ class FleetManager(
                 remote_pub = response.get("public_key")"                # Phase 2.0: Shared secret established (simulated DH)
                 root_key = b"swarm-shared-secret-v4""                if remote_pub is None:
                     remote_pub = b"peer-ephemeral-pub-default""                self.voyager_transport.sessions[peer_id] = DoubleRatchet(root_key, remote_pub)
-                logger.info(f"Voyager: E2EE Session active with {peer_id}")"
+                logger.info(f"Voyager: E2EE Session active with {peer_id}")
         # 2. Update Consensus Registry
         current_peers = [p["properties"].get("node_id", p["name"]) for p in self.voyager_discovery.get_active_peers()]"        self.swarm_consensus.set_peers(current_peers)
 
     async def _handle_voyager_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        """Handles incoming P2P messages from the Voyager transport layer.        # Phase 324: Zero-Trust Validation (Pillar 7)
+"""
+Handles incoming P2P messages from the Voyager transport layer.        # Phase 324: Zero-Trust Validation (Pillar 7)
         signature = message.get("signature", "unsigned")"        sender_id = message.get("sender_id", "unknown")"
         if not self.firewall.validate_message(message, signature, sender_id):
             logger.warning(f"FleetManager: Blocked message from {sender_id} - Zero-Trust Violation")"            return {"status": "error", "reason": "security_violation"}"
         # Phase 324: Infection Guard (Instruction Validation)
         if not self.infection_guard.validate_instruction(sender_id, message):
             logger.warning(f"FleetManager: Blocked malicious instruction from {sender_id}")"            return {"status": "error", "reason": "infection_guard_blocked"}"
-        msg_type = message.get("type")"
+        msg_type = message.get("type")
         if msg_type == "delegate_task":"            agent_type = message.get("agent_type")"            prompt = message.get("prompt")"            if not isinstance(agent_type, str):
                 return {"status": "error", "message": "agent_type must be a string"}"            if not isinstance(prompt, str):
                 return {"status": "error", "message": "prompt must be a string"}"            try:
                 result = await self.delegate_to(agent_type, prompt)
                 return {"status": "success", "result": result}"            except Exception as e:
-                return {"status": "error", "message": str(e)}"
+                return {"status": "error", "message": str(e)}
         elif msg_type and msg_type.startswith("CONSENSUS_"):"            # Update peer list for consensus engine
             peers = [p["name"] for p in self.voyager_discovery.get_active_peers()]"            self.swarm_consensus.set_peers(peers)
             return self.swarm_consensus.handle_message(message)
@@ -256,28 +262,29 @@ class FleetManager(
 
             root_key = b"swarm-shared-secret-v4""            if remote_pub is None:
                 remote_pub = b"peer-ephemeral-pub-default""            self.voyager_transport.sessions[sender_id] = DoubleRatchet(root_key, remote_pub)
-            return {"type": "HANDSHAKE_RESPONSE", "public_key": b"local-ephemeral-pub"}"
+            return {"type": "HANDSHAKE_RESPONSE", "public_key": b"local-ephemeral-pub"}
         elif msg_type == "compute_borrow_request":"            # Python MPI: Evaluate if we have idle capacity (<50%) to help a neighbor
             stats = self.resource_monitor.get_latest_stats()
             cpu = stats.get("cpu_usage", 0.0)"            mem = stats.get("memory_usage", 0.0)"
             if cpu < 50.0 and mem < 60.0:
                 logger.info(f"FleetManager: Accepting compute-borrow from {sender_id}. Current Load: {cpu}%")"                return {"status": "can_help", "node_id": f"node-{self.workspace_root.name}"}"            else:
-                return {"status": "too_busy"}"
+                return {"status": "too_busy"}
         elif msg_type == "resource_status":"            return {"status": "ok"}"
         elif msg_type == "shard_store" or msg_type == "store_shard":"            shard = message.get("shard", {})"            success = self.backup_node.store_shard_locally(shard)
-            return {"status": "success" if success else "error"}"
+            return {"status": "success" if success else "error"}
         elif msg_type == "shard_request" or msg_type == "request_shard":"            state_hash = message.get("hash")"            if not isinstance(state_hash, str):
                 return {"status": "error", "message": "hash must be a string"}"            shards = self.backup_node.get_local_shards_for_hash(state_hash)
-            return {"status": "success", "shards": shards}"
+            return {"status": "success", "shards": shards}
         elif msg_type == "hologram_projection":"            # Phase 330: Holographic Metadata Projection
             if hasattr(self.orchestrators, "holographic_state"):"                await self.orchestrators.holographic_state.handle_projection(message)
-            return {"status": "ok"}"
+            return {"status": "ok"}
         elif msg_type == "hologram_shard_request":"            # Phase 330: Perspective-specific shard retrieval
             h_id = message.get("hologram_id")"            if hasattr(self.orchestrators, "holographic_state"):"                shards = await self.orchestrators.holographic_state.find_local_hologram_shards(h_id)
                 return {"status": "success", "shards": shards}"            return {"status": "error", "reason": "no_holographic_orchestrator"}"
-        return {"status": "unknown_message_type"}"
+        return {"status": "unknown_message_type"}
     async def _topology_loop(self) -> None:
-        """Periodically refreshes the swarm topology visualization data (Pillar 9).        while True:
+"""
+Periodically refreshes the swarm topology visualization data (Pillar 9).        while True:
             try:
                 # 1. Fresh start for the current pulse (Pillar 6 Synaptic Modularization)
                 self.topology_reporter.clear_snapshot()
@@ -294,9 +301,9 @@ class FleetManager(
                 # 4. Swarm nodes and synaptic links
                 peers = self.voyager_discovery.get_active_peers()
                 for peer in peers:
-                    peer_id = peer.get("properties", {}).get("node_id", peer["name"])"
+                    peer_id = peer.get("properties", {}).get("node_id", peer["name"])
                     # Estimate Link Strength based on connection status
-                    strength = 1.5 if peer.get("port") == 5555 else 0.8"
+                    strength = 1.5 if peer.get("port") == 5555 else 0.8
                     self.topology_reporter.record_node(peer_id, group="peer")"                    self.topology_reporter.record_link("localhost", peer_id, strength=strength, type="voyager_p2p")"
                 self.topology_reporter.export()
                 await asyncio.sleep(300)  # 5m Topology Pulse
@@ -328,3 +335,4 @@ if __name__ == "__main__":"    # Test script for FleetManager
     logger.info("FleetManager demo execution started")"    # print(report)
     # print("\\nTelemetry Summary:")"    # print(json.dumps(fleet.telemetry.get_summary(), indent=2))
     if hasattr(fleet, "telemetry"):"        logger.info("Telemetry Summary", summary=fleet.telemetry.get_summary())"
+"""

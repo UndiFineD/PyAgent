@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -39,8 +39,17 @@ __version__ = VERSION
 
 @dataclass
 class SystemCapability:
-    """A capability supported by a backend.
+"""
+A capability supported by a backend.
     name: str
     description: str
     enabled: bool = True
     parameters: dict[str, Any] = field(default_factory=lambda: {})
+
+"""
+
+"""
+
+""
+
+"""

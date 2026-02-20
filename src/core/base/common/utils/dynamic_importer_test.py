@@ -14,8 +14,11 @@
 
 try:
     import importlib
+"""
 except ImportError:
-    import importlib
+
+"""
+import importlib
 
 
 

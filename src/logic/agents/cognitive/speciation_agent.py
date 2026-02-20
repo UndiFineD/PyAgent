@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,15 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Speciation Agent (minimal shim).
+"""
+"""
+Speciation Agent (minimal shim).
 
+"""
 This file provides a lightweight SpeciationAgent class used by tests
 and other modules as an importable placeholder. The real implementation
 is out of scope for the test harness and should be restored from
 history if full behavior is required.
 """
-
-
 try:
     import logging
 except ImportError:
@@ -52,9 +54,9 @@ except ImportError:
 
 
 class SpeciationAgent(BaseAgent):
-    """Minimal SpeciationAgent shim providing a stable API for imports."""
-
-    def __init__(self, file_path: str) -> None:
+    ""
+Minimal SpeciationAgent shim providing a stable API for imports.""
+def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = "SpeciationAgent (shim)"
 

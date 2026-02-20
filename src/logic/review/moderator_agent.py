@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Moderator Agent - Content moderation and policy compliance
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -34,7 +39,6 @@ WHAT IT DOES:
 FILE CONTENT SUMMARY:
 Agent specializing in moderation, review, and policy compliance.
 """
-
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -56,7 +60,8 @@ __version__ = VERSION
 
 
 class ModeratorAgent(BaseAgent):
-    """Agent for reviewing content for safety, tone, and policy compliance.
+"""
+Agent for reviewing content for safety, tone, and policy compliance.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
@@ -64,8 +69,11 @@ class ModeratorAgent(BaseAgent):
             "You are a Content Moderator and Senior Reviewer. ""            "Your task is to analyze the provided content for toxic language, bias, ""            "safety violations, and adherence to professional tone and style guides. ""            "Flag potential issues and provide objective feedback for improvement.""        )
 
     def _get_default_content(self) -> str:
-        return "# Moderation Review\\n\\n- No content provided for review yet.\\n""
+        return "# Moderation Review\\n\\n- No content provided for review yet.\\n"
     async def _process_task(self, task_data: dict) -> dict:
-        """Process a moderation review task asynchronously.        review_result = self.run(task_data.get("content", self._get_default_content()))"        return {"review": review_result}"
+"""
+Process a moderation review task asynchronously.        review_result = self.run(task_data.get("content", self._get_default_content()))"        return {"review": review_result}"
 
 if __name__ == "__main__":"    main = create_main_function(ModeratorAgent, "Moderator Agent", "File to review for moderation")"    main()
+
+"""

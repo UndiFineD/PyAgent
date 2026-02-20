@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""WCAG conformance levels used in types and tests."""
+"""
+"""
+WCAG conformance levels used in types and tests.""
 
+"""
 from enum import Enum
 
 try:
@@ -28,8 +31,8 @@ __version__ = VERSION
 
 
 class WCAGLevel(Enum):
-    """WCAG conformance levels."""
-
-    A = "A"  # Minimum level
-    AA = "AA"  # Mid-range level (legal requirement in many jurisdictions)
-    AAA = "AAA"  # Highest level
+"""
+Parser-safe WCAGLevel enum.""
+A = "A"
+    AA = "AA"
+    AAA = "AAA"

@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Tests for Multi-Channel Gateway Core."""
+"""
+"""
+Tests for Multi-Channel Gateway Core.""
 try:
-    import json
+
+"""
+import json
 except ImportError:
     import json
 
@@ -54,8 +58,9 @@ except ImportError:
 
 
 class MockChannelProvider(ChannelProvider):
-    """Mock channel provider for testing."""
-    def __init__(self, channel_type: ChannelType):
+"""
+Mock channel provider for testing.""
+def __init__(self, channel_type: ChannelType):
         self._channel_type = channel_type
         self.sent_messages = []
 
@@ -77,9 +82,12 @@ class MockChannelProvider(ChannelProvider):
 
 
 class TestChannelMessage:
-    """Test ChannelMessage dataclass."""
-    def test_channel_message_creation(self):
-        """Test creating a channel message."""message = ChannelMessage(
+"""
+Test ChannelMessage dataclass.""
+def test_channel_message_creation(self):
+"""
+Test creating a channel message.""
+message = ChannelMessage(
             id="test_id","            channel_type=ChannelType.TELEGRAM,
             channel_id="chat_123","            sender_id="user_456","            sender_name="Test User","            content="Hello world","            message_type=MessageType.TEXT,
             metadata={"key": "value"},"            thread_id="thread_789""        )
@@ -91,19 +99,25 @@ class TestChannelMessage:
 
 
 class TestGatewayPresence:
-    """Test GatewayPresence dataclass."""
-    def test_gateway_presence_creation(self):
-        """Test creating gateway presence."""presence = GatewayPresence(
+"""
+Test GatewayPresence dataclass.""
+def test_gateway_presence_creation(self):
+"""
+Test creating gateway presence.""
+presence = GatewayPresence(
             client_id="client_123","            status="online","            metadata={"device": "mobile"}"        )
 
         assert presence.client_id == "client_123""        assert presence.status == "online""        assert presence.last_seen > 0
-        assert presence.metadata == {"device": "mobile"}"
+        assert presence.metadata == {"device": "mobile"}
 
 
 class TestGatewaySession:
-    """Test GatewaySession model."""
-    def test_gateway_session_creation(self):
-        """Test creating a gateway session."""session = GatewaySession(
+"""
+Test GatewaySession model.""
+def test_gateway_session_creation(self):
+"""
+Test creating a gateway session.""
+session = GatewaySession(
             session_id="session_123","            agent_id="agent_456","            channel_type=ChannelType.DISCORD,
             channel_id="channel_789","            activation_mode=SessionActivationMode.ALWAYS,
             metadata={"workspace": "test"}"        )
@@ -112,9 +126,11 @@ class TestGatewaySession:
         assert session.channel_id == "channel_789""        assert session.activation_mode == SessionActivationMode.ALWAYS
         assert session.is_active is True
         assert session.created_at > 0
-        assert session.metadata == {"workspace": "test"}"
+        assert session.metadata == {"workspace": "test"}
     def test_gateway_session_defaults(self):
-        """Test gateway session default values."""session = GatewaySession(
+"""
+Test gateway session default values.""
+session = GatewaySession(
             agent_id="agent_456","            channel_type=ChannelType.SLACK,
             channel_id="channel_789""        )
 
@@ -128,14 +144,19 @@ class TestGatewaySession:
 
 
 class TestGatewayProtocol:
-    """Test GatewayProtocol class."""
+"""
+Test GatewayProtocol class.""
     @pytest.fixture
     def protocol(self):
-        """Create a gateway protocol instance."""return GatewayProtocol()
+"""
+Create a gateway protocol instance.""
+return GatewayProtocol()
 
     @pytest.mark.asyncio
     async def test_handle_presence_update(self, protocol):
-        """Test handling presence updates."""client_id = "client_123""
+"""
+Test handling presence updates.""
+client_id = "client_123"
         # Mock websocket
         websocket = AsyncMock()
 
@@ -154,7 +175,9 @@ class TestGatewayProtocol:
         assert presence.status == "busy""        assert presence.metadata == {"device": "desktop"}"
     @pytest.mark.asyncio
     async def test_handle_session_create(self, protocol):
-        """Test handling session creation."""client_id = "client_123""
+"""
+Test handling session creation.""
+client_id = "client_123"
         # Mock websocket
         websocket = AsyncMock()
 
@@ -172,7 +195,7 @@ class TestGatewayProtocol:
         session = list(protocol.sessions.values())[0]
         assert session.agent_id == "agent_456""        assert session.channel_type == ChannelType.TELEGRAM
         assert session.channel_id == "chat_789""        assert session.activation_mode == SessionActivationMode.ALWAYS
-        assert session.metadata == {"workspace": "test"}"
+        assert session.metadata == {"workspace": "test"}
         # Check confirmation was sent
         websocket.send.assert_called()
         call_args = websocket.send.call_args[0][0]
@@ -181,18 +204,24 @@ class TestGatewayProtocol:
 
 
 class TestMultiChannelGatewayCore:
-    """Test MultiChannelGatewayCore class."""
+"""
+Test MultiChannelGatewayCore class.""
     @pytest.fixture
     def gateway(self):
-        """Create a gateway instance."""return MultiChannelGatewayCore(host="127.0.0.1", port=18789)"
+"""
+Create a gateway instance.""
+return MultiChannelGatewayCore(host="127.0.0.1", port=18789)
     def test_register_channel_provider(self, gateway):
-        """Test registering a channel provider."""provider = MockChannelProvider(ChannelType.TELEGRAM)
+"""
+Test registering a channel provider.""
+provider = MockChannelProvider(ChannelType.TELEGRAM)
         gateway.register_channel_provider(provider)
 
         assert gateway.channel_providers[ChannelType.TELEGRAM] == provider
 
     def test_get_active_sessions(self, gateway):
-        """Test getting active sessions."""
+"""
+Test getting active sessions.""
 # Add some sessions
         session1 = GatewaySession(
             agent_id="agent1","            channel_type=ChannelType.TELEGRAM,
@@ -210,7 +239,8 @@ class TestMultiChannelGatewayCore:
         assert active_sessions[0].session_id == session1.session_id
 
     def test_get_sessions_by_channel(self, gateway):
-        """Test getting sessions by channel."""
+"""
+Test getting sessions by channel.""
 # Add sessions
         session1 = GatewaySession(
             agent_id="agent1","            channel_type=ChannelType.TELEGRAM,
@@ -232,7 +262,8 @@ class TestMultiChannelGatewayCore:
 
     @pytest.mark.asyncio
     async def test_send_channel_message(self, gateway):
-        """Test sending channel message."""
+"""
+Test sending channel message.""
 # Register provider
         provider = MockChannelProvider(ChannelType.TELEGRAM)
         gateway.register_channel_provider(provider)
@@ -244,18 +275,22 @@ class TestMultiChannelGatewayCore:
         gateway.protocol.sessions[session.session_id] = session
 
         # Send message
-        message_id = await gateway.send_channel_message(session.session_id, "Hello world")"
+        message_id = await gateway.send_channel_message(session.session_id, "Hello world")
         # Check message was sent
         assert message_id == "msg_0""        assert len(provider.sent_messages) == 1
         sent = provider.sent_messages[0]
         assert sent["channel_id"] == "chat1""        assert sent["content"] == "Hello world""
     @pytest.mark.asyncio
     async def test_send_channel_message_no_session(self, gateway):
-        """Test sending message with invalid session."""message_id = await gateway.send_channel_message("invalid_session", "Hello")"        assert message_id is None
+"""
+Test sending message with invalid session.""
+message_id = await gateway.send_channel_message("invalid_session", "Hello")"        assert message_id is None
 
     @pytest.mark.asyncio
     async def test_send_channel_message_no_provider(self, gateway):
-        """Test sending message without provider."""session = GatewaySession(
+        ""
+Test sending message without provider.""
+session = GatewaySession(
             agent_id="agent1","            channel_type=ChannelType.WHATSAPP,  # No provider registered
             channel_id="chat1""        )
         gateway.protocol.sessions[session.session_id] = session

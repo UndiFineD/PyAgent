@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Tensor.py module.
 """
-
 try:
-    from typing import TYPE_CHECKING
+
+"""
+from typing import TYPE_CHECKING
 except ImportError:
     from typing import TYPE_CHECKING
 
@@ -41,7 +45,8 @@ if TYPE_CHECKING:
 
 
 class QuantizedTensor:
-    """Quantized tensor representation.
+"""
+Quantized tensor representation.
     def __init__(
         self,
         data: NDArray[np.int8] | NDArray[np.int32],
@@ -50,7 +55,8 @@ class QuantizedTensor:
         shape: tuple[int, ...],
         config: QuantConfig,
     ) -> None:
-        """Initializes a quantized tensor with data and calibration parameters.        self.data: (
+"""
+Initializes a quantized tensor with data and calibration parameters.        self.data: (
             np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]]
             | np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._32Bit]]]
         ) = data
@@ -62,7 +68,8 @@ class QuantizedTensor:
         self.config: QuantConfig = config
 
     def dequantize(self) -> NDArray[np.float32]:
-        """Reconstructs float32 values from the quantized data.        from .utils import unpack_int4
+"""
+Reconstructs float32 values from the quantized data.        from .utils import unpack_int4
 
         if self.config.bits == 4:
             unpacked: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = (
@@ -121,12 +128,14 @@ class QuantizedTensor:
 
     @property
     def memory_bytes(self) -> int:
-        """Calculates total memory footprint of the quantized tensor (bytes).        data_bytes: int = self.data.nbytes
+"""
+Calculates total memory footprint of the quantized tensor (bytes).        data_bytes: int = self.data.nbytes
         scale_bytes: int = self.scale.nbytes
         zp_bytes: int = self.zero_point.nbytes if self.zero_point is not None else 0
         return data_bytes + scale_bytes + zp_bytes
 
     @property
     def compression_ratio(self) -> float:
-        """Returns the ratio between FP32 size and current memory usage.        original_bytes: np.signedinteger[np._64Bit] = np.prod(self.shape) * 4  # FP32
+"""
+Returns the ratio between FP32 size and current memory usage.        original_bytes: np.signedinteger[np._64Bit] = np.prod(self.shape) * 4  # FP32
         return original_bytes / self.memory_bytes

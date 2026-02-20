@@ -19,10 +19,12 @@ from typing import List, Dict, Set
 
 
 class ReconIntelligence:
-        Refactored Reconnaissance logic from Argus.
+"""
+Refactored Reconnaissance logic from Argus.
     Focuses on OSINT and infrastructure detection.
-    
-    FIREWALL_SIGNATURES = {
+
+"""
+FIREWALL_SIGNATURES = {
         'cloudflare': 'Cloudflare Firewall','        'akamai': 'Akamai Firewall','        'sucuri': 'Sucuri Firewall','        'imperva': 'Imperva Firewall','        'incapsula': 'Incapsula Firewall','        'f5 big-ip': 'F5 BIG-IP','        'bunnycdn': 'BunnyCDN''    }
 
     @classmethod
@@ -32,7 +34,7 @@ class ReconIntelligence:
             try:
                 async with session.get(url, timeout=10) as response:
                     headers = response.headers
-                    server = headers.get('Server', '').lower()'
+                    server = headers.get('Server', '').lower()
                     for sig, name in cls.FIREWALL_SIGNATURES.items():
                         if sig in server:
                             results.add(name)

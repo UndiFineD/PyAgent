@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Utility commands for slash commands.
 """
 
+"""
 from typing import TYPE_CHECKING
 
 from ..base import CommandContext, CommandResult
@@ -27,7 +30,8 @@ if TYPE_CHECKING:
 
 
 def register_utility_commands(registry: CommandRegistry) -> None:
-    """Register utility-related built-in commands.
+"""
+Register utility-related built-in commands.
     @registry.command(
         "tokens","        description="Count tokens in text","        usage="/tokens <text>","        aliases=["tok", "tokenize"],"        requires_args=True,
     )
@@ -71,7 +75,7 @@ def register_utility_commands(registry: CommandRegistry) -> None:
             cache_stats["logger_dedup"] = get_dedup_cache_info()"        except ImportError:
             pass
 
-        total_entries = sum(info.get("currsize", 0) if isinstance(info, dict) else 0 for info in cache_stats.values())"
+        total_entries = sum(info.get("currsize", 0) if isinstance(info, dict) else 0 for info in cache_stats.values())
         return CommandResult.ok(
             output=f"[Caches: {len(cache_stats)} active, {total_entries} entries]","            data={
                 "caches": cache_stats,"                "total_entries": total_entries,"            },

@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Enums.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -27,7 +30,8 @@ except ImportError:
 
 
 class InstanceRole(Enum):
-    """Role of a vLLM instance in disaggregated serving.
+"""
+Role of a vLLM instance in disaggregated serving.
     PREFILL = auto()  # Handles prefill phase only
     DECODE = auto()  # Handles decode phase only
     UNIFIED = auto()  # Handles both (traditional mode)
@@ -35,7 +39,8 @@ class InstanceRole(Enum):
 
 
 class SchedulingPolicy(Enum):
-    """Request routing policy for multi-instance deployment.
+"""
+Request routing policy for multi-instance deployment.
     ROUND_ROBIN = auto()  # Simple rotation
     LEAST_LOADED = auto()  # Route to least busy instance
     RANDOM = auto()  # Random selection

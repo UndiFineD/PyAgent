@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.structured.structured_output_orchestrator import StructuredOutputBackendType, ConstraintType, GrammarProtocol, BackendProtocol, ConstraintSpec, OrchestratorConfig, BackendWrapper, CompiledGrammarHandle, StructuredOutputOrchestrator, AsyncStructuredOutputOrchestrator, BatchProcessor

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""InfectionGuard: Provides firewall protection against malware and unauthorized access."""
+"""
+InfectionGuard: Provides firewall protection against malware and unauthorized access.""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -22,16 +23,16 @@ from pathlib import Path
 from typing import Dict, Any, List
 from src.observability.structured_logger import StructuredLogger
 
+"""
 logger = StructuredLogger(__name__)
 
-
-
+"""
 class InfectionGuard:
-    """Prevents malicious command propagation across nodes.
+"""
+Prevents malicious command propagation across nodes.
     Analyzes cross-node instructions for patterns of hijacking or hallucinations.
-    """
-
-    def __init__(self, workspace_root: str):
+"""
+def __init__(self, workspace_root: str):
         self.workspace_root = Path(workspace_root)
         self.log_file = self.workspace_root / "data" / "logs" / "infection_guard.jsonl"
         self.blocked_patterns = [
@@ -54,10 +55,11 @@ class InfectionGuard:
             self.log_file.touch()
 
     def validate_instruction(self, sender_id: str, instruction: Dict[str, Any]) -> bool:
-        """Validates if an incoming instruction is safe to execute.
+"""
+Validates if an incoming instruction is safe to execute.
         Returns True if safe, False if blocked.
-        """
-        command = str(instruction.get("prompt", "")).lower()
+"""
+command = str(instruction.get("prompt", "")).lower()
         if not command:
             return True
 
@@ -77,8 +79,9 @@ class InfectionGuard:
         return True
 
     def _log_block(self, sender_id: str, command: str, reason: str):
-        """Logs a blocked command for real-time visualization."""
-        entry = {
+"""
+Logs a blocked command for real-time visualization.""
+entry = {
             "timestamp": datetime.now().isoformat(),
             "sender_id": sender_id,
             "command": command,
@@ -90,8 +93,9 @@ class InfectionGuard:
             f.write(json.dumps(entry) + "\n")
 
     def get_blocked_events(self, limit: int = 50) -> List[Dict[str, Any]]:
-        """Returns the latest blocked events for the Web UI."""
-        if not self.log_file.exists():
+        ""
+Returns the latest blocked events for the Web UI.""
+if not self.log_file.exists():
             return []
 
         events = []

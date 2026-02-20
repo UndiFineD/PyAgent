@@ -13,10 +13,14 @@
 # limitations under the License.
 
 
-"""Code health auditor.py module.
+"""
+"""
+Code health auditor.py module.
 """
 try:
-    from .core.rust_bridge import RustBridge
+
+"""
+from .core.rust_bridge import RustBridge
 except ImportError:
     from src.core.rust_bridge import RustBridge
 
@@ -33,8 +37,9 @@ except ImportError:
 
 
 class CodeHealthAuditor(WorkspaceAuditorMixin, StubDetectorMixin):
-    """Phase 316: Performs static analysis to detect technical debt and quality issues."""
-
-    def get_code_metrics(self, content: str) -> dict:
-        """Phase 318: Returns Rust-accelerated code metrics."""
-        return RustBridge.calculate_metrics(content)
+"""
+Phase 316: Performs static analysis to detect technical debt and quality issues.""
+def get_code_metrics(self, content: str) -> dict:
+"""
+Phase 318: Returns Rust-accelerated code metrics.""
+return RustBridge.calculate_metrics(content)

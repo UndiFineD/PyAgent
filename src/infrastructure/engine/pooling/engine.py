@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Core Pooling Engine implementation.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -55,7 +59,8 @@ logger = logging.getLogger(__name__)
 
 
 class PoolingEngine:
-    """Manager for various pooling operations.
+"""
+Manager for various pooling operations.
     _STRATEGIES: Dict[PoolingStrategy, Type[BasePooler]] = {
         PoolingStrategy.MEAN: MeanPooler,
         PoolingStrategy.CLS: CLSPooler,
@@ -73,9 +78,10 @@ class PoolingEngine:
         # Phase 125: Handle legacy/test pass-through parameters
         if "strategy" in kwargs:"            self.config.strategy = kwargs["strategy"]"        if "truncate_dim" in kwargs:"            self.config.truncate_dim = kwargs["truncate_dim"]"        if "task" in kwargs:"            self.config.task = kwargs["task"]"
         self._poolers: Dict[PoolingStrategy, BasePooler] = {}
-        logger.debug("Initialized PoolingEngine with strategy: %s", self.config.strategy)"
+        logger.debug("Initialized PoolingEngine with strategy: %s", self.config.strategy)
     def get_pooler(self, strategy: Optional[PoolingStrategy] = None) -> BasePooler:
-        """Get or create singleton pooler instance for strategy.        target_strat = strategy or self.config.strategy
+"""
+Get or create singleton pooler instance for strategy.        target_strat = strategy or self.config.strategy
         if target_strat not in self._poolers:
             pooler_cls = self._STRATEGIES.get(target_strat)
             if not pooler_cls:
@@ -116,7 +122,8 @@ class PoolingEngine:
         return PoolingResult(embeddings=results, strategy=target_strat, normalized=normalize, dim=results.shape[-1])
 
     def _ensure_numpy(self, data: Any) -> np.ndarray:
-        """Helper to ensure data is in numpy format.        if isinstance(data, np.ndarray):
+"""
+Helper to ensure data is in numpy format.        if isinstance(data, np.ndarray):
             return data
         if hasattr(data, "cpu") and hasattr(data, "detach"):  # Torch"            return data.detach().cpu().numpy()
         if hasattr(data, "numpy"):  # TF"            return data.numpy()
@@ -124,4 +131,7 @@ class PoolingEngine:
 
 
 def create_pooling_engine(config: Optional[PoolingConfig] = None, **kwargs) -> PoolingEngine:
-    """Factory function for PoolingEngine.    return PoolingEngine(config, **kwargs)
+"""
+Factory function for PoolingEngine.    return PoolingEngine(config, **kwargs)
+
+"""

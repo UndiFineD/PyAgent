@@ -14,7 +14,10 @@
 
 
 """
+"""
 Curation Core - Resource Curation (Prune & Pycache Cleanup)
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -46,7 +49,8 @@ import time
 
 
 class CurationCore:
-""""Core logic for pruning and managing filesystem resources.
+""""
+Core logic for pruning and managing filesystem resources.
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
         Removes files in a directory that are older than max_age_days.
@@ -99,7 +103,8 @@ import time
 
 
 class CurationCore:
-""""Core logic for pruning and managing filesystem resources.
+""""
+Core logic for pruning and managing filesystem resources.
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
         Removes files in a directory that are older than max_age_days.
@@ -144,3 +149,5 @@ class CurationCore:
         for root, dirs, files in os.walk(root_dir):
             if "__pycache__" in dirs:"                shutil.rmtree(os.path.join(root, "__pycache__"))"                count += 1
                 dirs.remove("__pycache__")"        return count
+
+"""

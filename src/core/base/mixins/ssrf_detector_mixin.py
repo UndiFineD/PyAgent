@@ -24,10 +24,13 @@ import string
 
 
 class SSRFDetectorMixin:
-    """Mixin providing SSRF detection capabilities using callback server pattern.
+"""
+"""
+Mixin providing SSRF detection capabilities using callback server pattern.
 
-    Inspired by aem-hacker's detector server for SSRF vulnerability detection.'    """
-    def __init__(self, *args, **kwargs):
+"""
+Inspired by aem-hacker's detector server for SSRF vulnerability detection.'    ""
+def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._ssrf_token: str = self._generate_token()
         self._ssrf_data: Dict[str, List[str]] = {}
@@ -37,45 +40,51 @@ class SSRFDetectorMixin:
 
 
     def _generate_token(self) -> str:
-        """Generate random token for SSRF detection."""
-        return ''.join(random.choices(string.ascii_letters + string.digits, k=16))
+"""
+Generate random token for SSRF detection.""
+return ''.join(random.choices(string.ascii_letters + string.digits, k=16))
 
 
     class _DetectorHandler(BaseHTTPRequestHandler):
-        """HTTP handler for SSRF detection callbacks."""
-
-
-        def __init__(self, token: str, data_dict: Dict[str, List[str]], *args, **kwargs):
-            """Initialize handler with token and data dictionary."""
-            self.token = token
+"""
+HTTP handler for SSRF detection callbacks.""
+def __init__(self, token: str, data_dict: Dict[str, List[str]], *args, **kwargs):
+"""
+Initialize handler with token and data dictionary.""
+self.token = token
             self.data_dict = data_dict
             super().__init__(*args, **kwargs)
 
 
         def log_message(self, fmt, *args):
-            """Override to suppress default logging."""
+"""
+Override to suppress default logging.""
             # Suppress default logging
             return
 
 
         def do_GET(self):  # pylint: disable=invalid-name
-            """Handle GET requests."""
-            self._handle_request()
+"""
+Handle GET requests.""
+self._handle_request()
 
 
         def do_POST(self):  # pylint: disable=invalid-name
-            """Handle POST requests."""
-            self._handle_request()
+"""
+Handle POST requests.""
+self._handle_request()
 
 
         def do_PUT(self):  # pylint: disable=invalid-name
-            """Handle PUT requests."""
-            self._handle_request()
+"""
+Handle PUT requests.""
+self._handle_request()
 
 
         def _handle_request(self):
-            """Handle incoming HTTP requests."""
-            try:
+"""
+Handle incoming HTTP requests.""
+try:
                 # Parse path: /token/key/value
                 parts = self.path.strip('/').split('/')
                 if len(parts) >= 3:
@@ -95,7 +104,8 @@ class SSRFDetectorMixin:
 
 
     def start_ssrf_detector(self, host: str = '0.0.0.0', port: int = 8080) -> bool:
-        """Start the SSRF detection server.
+"""
+Start the SSRF detection server.
 
         Args:
             host: Host to bind to
@@ -103,15 +113,16 @@ class SSRFDetectorMixin:
 
         Returns:
             True if started successfully
-        """
-        if self._server_running:
+"""
+if self._server_running:
             return True
 
         try:
             # Create handler class with current token and data dict
             def handler_class(*args, **kwargs):
-                """Create a new handler instance with the current token and data dictionary."""
-                return self._DetectorHandler(self._ssrf_token, self._ssrf_data, *args, **kwargs)
+"""
+Create a new handler instance with the current token and data dictionary.""
+return self._DetectorHandler(self._ssrf_token, self._ssrf_data, *args, **kwargs)
 
             self._server = HTTPServer((host, port), handler_class)
             self._server_thread = threading.Thread(target=self._server.serve_forever, daemon=True)
@@ -126,8 +137,9 @@ class SSRFDetectorMixin:
 
 
     def stop_ssrf_detector(self) -> None:
-        """Stop the SSRF detection server."""
-        if self._server_running and self._server:
+"""
+Stop the SSRF detection server.""
+if self._server_running and self._server:
             self._server.shutdown()
             self._server.server_close()
             self._server_running = False
@@ -138,7 +150,8 @@ class SSRFDetectorMixin:
 
 
     def get_ssrf_callback_url(self, host: str, port: int) -> str:
-        """Get the callback URL for SSRF detection.
+"""
+Get the callback URL for SSRF detection.
 
         Args:
             host: External host for callbacks
@@ -146,12 +159,13 @@ class SSRFDetectorMixin:
 
         Returns:
             Callback URL pattern
-        """
-        return f"http://{host}:{port}/{self._ssrf_token}"
+"""
+return f"http://{host}:{port}/{self._ssrf_token}"
 
 
     def check_ssrf_triggered(self, key: str, timeout: int = 10) -> List[str]:
-        """Check if SSRF was triggered for a specific key.
+"""
+Check if SSRF was triggered for a specific key.
 
         Args:
             key: The key to check
@@ -159,8 +173,8 @@ class SSRFDetectorMixin:
 
         Returns:
             List of values received for the key
-        """
-        if not self._server_running:
+"""
+if not self._server_running:
             return []
 
         # Wait for callbacks
@@ -170,8 +184,9 @@ class SSRFDetectorMixin:
 
 
     async def async_check_ssrf_triggered(self, key: str, timeout: int = 10) -> List[str]:
-        """Async version of check_ssrf_triggered."""
-        if not self._server_running:
+"""
+Async version of check_ssrf_triggered.""
+if not self._server_running:
             return []
 
         await asyncio.sleep(timeout)
@@ -180,22 +195,26 @@ class SSRFDetectorMixin:
 
 
     def clear_ssrf_data(self) -> None:
-        """Clear collected SSRF data."""
-        self._ssrf_data.clear()
+"""
+Clear collected SSRF data.""
+self._ssrf_data.clear()
 
 
     def reset_ssrf_token(self) -> str:
-        """Generate new token and clear data."""
-        self._ssrf_token = self._generate_token()
+"""
+Generate new token and clear data.""
+self._ssrf_token = self._generate_token()
         self._ssrf_data.clear()
         return self._ssrf_token
 
 
     def is_detector_running(self) -> bool:
-        """Check if detector server is running."""
-        return self._server_running
+"""
+Check if detector server is running.""
+return self._server_running
 
 
     def get_ssrf_token(self) -> str:
-        """Get current SSRF token."""
-        return self._ssrf_token
+"""
+Get current SSRF token.""
+return self._ssrf_token

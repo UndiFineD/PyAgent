@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +18,12 @@ from __future__ import annotations
 
 # MemoryStorageMixin: Provides hierarchical memory storage and promotion logic for Memory Agents in PyAgent.
 # Handles memory persistence, promotion, and distributed storage strategies.
+"""
 Provides the machinery for persisting memory fragments into tiers and promoting them based on
 importance, recency, and utility metrics.
 """
 
+"""
 import json
 import logging
 import time
@@ -35,7 +39,8 @@ __version__ = VERSION
 
 
 class MemoryStorageMixin:
-""""Mixin for memory storage and promotion in HierarchicalMemoryAgent.
+""""
+Mixin for memory storage and promotion in HierarchicalMemoryAgent.
     @as_tool
     def store_memory(
         self: HierarchicalMemoryAgent,
@@ -85,3 +90,9 @@ class MemoryStorageMixin:
             except (json.JSONDecodeError, OSError) as e:
                 logging.error(fFailed to promote {mem_file}: {e}")"
 #         return fConsolidation complete. Promoted {promoted_count} memory fragments.
+
+"""
+
+""
+
+"""

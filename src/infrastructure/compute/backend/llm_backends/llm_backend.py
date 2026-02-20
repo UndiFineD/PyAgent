@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Llm backend.py module.
 """
 
+"""
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -27,7 +31,8 @@ __version__ = VERSION
 
 
 class LLMBackend(ABC):
-    """Base class for LLM backends.
+"""
+Base class for LLM backends.
     def __init__(self, session: Any, connectivity_manager: Any, recorder: Any = None) -> None:
         self.session = session
         self.connectivity = connectivity_manager
@@ -40,7 +45,8 @@ class LLMBackend(ABC):
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Excecute a chat completion.        raise NotImplementedError()
+"""
+Excecute a chat completion.        raise NotImplementedError()
 
     def _is_working(self, provider_id: str) -> bool:
         return self.connectivity.is_endpoint_available(provider_id)
@@ -65,3 +71,5 @@ class LLMBackend(ABC):
                 self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
+
+"""

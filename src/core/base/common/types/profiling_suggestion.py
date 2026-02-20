@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,37 +14,18 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: ProfilingSuggestion dataclass."""
+"""
+"""
+Parser-safe stub for ProfilingSuggestion.""
 
-from dataclasses import dataclass
-
-try:
-    from src.core.base.common.types.profiling_category import ProfilingCategory
-except Exception:
-    class ProfilingCategory:
-        """Fallback placeholder for ProfilingCategory."""
-
-try:
-    from src.core.base.lifecycle.version import VERSION
-except Exception:  # pragma: no cover - fallback
-    VERSION = "0.0.0"
-
-__version__ = VERSION
+""
+from dataclasses import dataclass, field
 
 
 @dataclass
 class ProfilingSuggestion:
-    """A code profiling suggestion.
-
-    Attributes:
-        category: Category of the profiling suggestion.
-        function_name: Function that could benefit from profiling.
-        reason: Why this function should be profiled.
-        estimated_impact: Estimated performance impact.
-        profiling_approach: Suggested profiling approach.
-    """
-    category: ProfilingCategory
-    function_name: str
-    reason: str
-    estimated_impact: str
-    profiling_approach: str
+    category: str = "cpu_bound"
+    function_name: str = ""
+    reason: str = ""
+    estimated_impact: str = "low"
+    profiling_approach: str = "sampling"

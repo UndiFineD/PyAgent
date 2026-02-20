@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Command registry for slash commands.
 """
 
+"""
 from typing import Callable
 
 from .base import CommandDefinition, CommandHandler
@@ -25,7 +28,8 @@ from .base import CommandDefinition, CommandHandler
 
 
 class CommandRegistry:
-    """Registry for slash commands.
+"""
+Registry for slash commands.
     def __init__(self) -> None:
         self._commands: dict[str, CommandDefinition] = {}
         self._aliases: dict[str, str] = {}
@@ -39,7 +43,8 @@ class CommandRegistry:
         hidden: bool = False,
         requires_args: bool = False,
     ) -> None:
-        """Register a command.        defn = CommandDefinition(
+"""
+Register a command.        defn = CommandDefinition(
             name=name,
             handler=handler,
             description=description,
@@ -55,13 +60,15 @@ class CommandRegistry:
             self._aliases[alias] = name
 
     def get(self, name: str) -> CommandDefinition | None:
-        """Get a command by name or alias.        # Check aliases first
+"""
+Get a command by name or alias.        # Check aliases first
         if name in self._aliases:
             name = self._aliases[name]
         return self._commands.get(name)
 
     def list_commands(self, include_hidden: bool = False) -> list[CommandDefinition]:
-        """List all registered commands.        return [cmd for cmd in self._commands.values() if include_hidden or not cmd.hidden]
+"""
+List all registered commands.        return [cmd for cmd in self._commands.values() if include_hidden or not cmd.hidden]
 
     def command(
         self,
@@ -71,7 +78,8 @@ class CommandRegistry:
         hidden: bool = False,
         requires_args: bool = False,
     ) -> Callable[[CommandHandler], CommandHandler]:
-        """Decorator to register a command.
+"""
+Decorator to register a command.
         def decorator(handler: CommandHandler) -> CommandHandler:
             self.register(
                 name,
@@ -85,3 +93,5 @@ class CommandRegistry:
             return handler
 
         return decorator
+
+"""

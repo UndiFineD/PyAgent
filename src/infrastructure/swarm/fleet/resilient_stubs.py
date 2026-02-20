@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,12 @@ from __future__ import annotations
 
 """
 ResilientStub
+"""
 - Resilient loading stubs for the PyAgent fleet.
 - Provides stub objects when plugins fail to load due to missing dependencies.
 """
 
+"""
 import importlib
 import logging
 from collections.abc import Callable
@@ -31,11 +34,11 @@ __version__ = VERSION
 
 
 def resilient_import(module_name: str, class_name: str | None = None) -> Any:
-    """
-    Decorator/Utility to import a module or class resiliently.
+"""
+Decorator/Utility to import a module or class resiliently.
     Returns a ResilientStub if the import fails.
-    """
-    try:
+"""
+try:
         module = importlib.import_module(module_name)
         if class_name:
             return getattr(module, class_name)
@@ -48,8 +51,9 @@ def resilient_import(module_name: str, class_name: str | None = None) -> Any:
 
 
 class ResilientStub:
-    """A stub object that logs errors instead of crashing when called."""
-    def __init__(self, name: str, error: str) -> None:
+"""
+A stub object that logs errors instead of crashing when called.""
+def __init__(self, name: str, error: str) -> None:
         self._name = name
         self._error = error
         logging.error(f"STUB ACTIVE: Component '{name}' failed to load. Reason: {error}")
@@ -62,23 +66,28 @@ class ResilientStub:
         return _stub_method
 
     def __call__(self, *_args: Any, **_kwargs: Any) -> str:
-        """Fallback for direct invocation."""
-        msg = f"Cannot invoke component '{self._name}': it failed to load. Error: {self._error}"
+"""
+Fallback for direct invocation.""
+msg = f"Cannot invoke component '{self._name}': it failed to load. Error: {self._error}"
         logging.error(msg)
         return f"ERROR: {msg}"
 
     def get_status(self) -> dict[str, Any]:
-        """Returns the failure status of the component."""
-        return {"status": "failed_to_load", "error": self._error, "name": self._name}
+"""
+Returns the failure status of the component.""
+return {"status": "failed_to_load", "error": self._error, "name": self._name}
 
     def execute_task(self, _task: str) -> str:
-        """Stub for task execution."""
-        return f"ERROR: Component '{self._name}' failed to load. {self._error}"
+"""
+Stub for task execution.""
+return f"ERROR: Component '{self._name}' failed to load. {self._error}"
 
     def improve_content(self, _prompt: str) -> str:
-        """Stub for content improvement."""
-        return f"ERROR: Component '{self._name}' failed to load. {self._error}"
+"""
+Stub for content improvement.""
+return f"ERROR: Component '{self._name}' failed to load. {self._error}"
 
     def calculate_metrics(self, *_args: Any, **_kwargs: Any) -> dict[str, Any]:
-        """Stub for metrics calculation."""
-        return {}
+"""
+Stub for metrics calculation.""
+return {}

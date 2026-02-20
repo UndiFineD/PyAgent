@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -35,7 +38,6 @@ from __future__ import annotations
 # - Implement more advanced load balancing for agent task queues.
 # - Enhance real-time performance metrics tracking for individual agents.
 # - Support dynamic scaling of agent clusters based on workload complexity.
-
 import asyncio
 import contextlib
 import logging
@@ -105,18 +107,16 @@ class FleetManager(
     FleetUpdateMixin,
     FleetBackupMixin,
 ):  # pylint: disable=too-many-ancestors
-    """
-    The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
+"""
+The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
     agents to complete complex workflows, manages resource scaling, and ensures
     system-wide stability through various orchestrators.
-    """
-    
-
-            
-    def __init__(self, workspace_root: str) -> None:
-        """Initializes the FleetManager with necessary components and starts background services.
-        """
-        self.workspace_root = Path(workspace_root)
+"""
+def __init__(self, workspace_root: str) -> None:
+"""
+Initializes the FleetManager with necessary components and starts background services.
+"""
+self.workspace_root = Path(workspace_root)
         self.manifest_repo = ManifestRepository()
         self.backup_node = DistributedBackup(node_id=f"node-{self.workspace_root.name}")
         self.evolution_loop: EvolutionLoop | None = None
@@ -335,8 +335,9 @@ class FleetManager(
 
 
     def _safe_start_task(self, coro) -> None:
-        """Starts a task if an event loop is running, otherwise logs a warning."""
-        try:
+"""
+Starts a task if an event loop is running, otherwise logs a warning.""
+try:
             asyncio.create_task(coro)
         except RuntimeError:
             with contextlib.suppress(Exception):
@@ -347,10 +348,10 @@ class FleetManager(
 
     # Logic delegated to mixins
     async def _on_voyager_peer_added(self, peer_data: Dict[str, Any]) -> None:
-        """
-        P2P Handshake & Consensus setup for newly discovered Voyager peers.
-        """
-        peer_id = peer_data["properties"].get("node_id", peer_data["name"])
+"""
+P2P Handshake & Consensus setup for newly discovered Voyager peers.
+"""
+peer_id = peer_data["properties"].get("node_id", peer_data["name"])
         addrs = peer_data["addresses"]
         if not addrs:
             return
@@ -385,7 +386,8 @@ class FleetManager(
 
 
     async def _handle_voyager_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        """Handles incoming P2P messages from the Voyager transport layer."""
+"""
+Handles incoming P2P messages from the Voyager transport layer.""
         # Phase 324: Zero-Trust Validation (Pillar 7)
         signature = message.get("signature", "unsigned")
         sender_id = message.get("sender_id", "unknown")
@@ -462,8 +464,9 @@ class FleetManager(
 
 
     async def _topology_loop(self) -> None:
-        """Periodically refreshes the swarm topology visualization data (Pillar 9)."""
-        while True:
+        ""
+Periodically refreshes the swarm topology visualization data (Pillar 9).""
+while True:
             try:
                 # 1. Fresh start for the current pulse (Pillar 6 Synaptic Modularization)
                 self.topology_reporter.clear_snapshot()

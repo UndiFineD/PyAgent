@@ -22,9 +22,11 @@ from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
 
 class DummySocket:
     def __init__(self, *args, **kwargs):
-        self.sent = []
+"""
+self.sent = []
 
-    def setsockopt(self, *_, **__):
+"""
+def setsockopt(self, *_, **__):
         pass
 
     def settimeout(self, *_, **__):
@@ -44,14 +46,14 @@ class DummySocket:
         pass
 
     def recvfrom(self, *_, **__):
-        raise OSError("no data")"
+        raise OSError("no data")
 
 def test_announce_loop_uses_sleep_and_sends(monkeypatch):
-    sent = {"count": 0}"
+    sent = {"count": 0}
     def fake_socket(*args, **kwargs):
         return DummySocket()
 
-    monkeypatch.setattr(socket, "socket", fake_socket)"
+    monkeypatch.setattr(socket, "socket", fake_socket)
     def sleep_fn(secs: float) -> None:
         # run loop once then stop
         sent["count"] += 1"        # make sure loop progresses
@@ -67,4 +69,4 @@ def test_announce_loop_uses_sleep_and_sends(monkeypatch):
     ld.stop()
 
     # Check that at least one announce was attempted (no exception thrown)
-    assert sent["count"] >= 1"
+    assert sent["count"] >= 1

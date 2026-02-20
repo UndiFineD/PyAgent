@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,10 +21,12 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - As a library: from src.agents.sandbox_agent import SandboxAgent; sa = SandboxAgent(__file__); sa.run_python_sandboxed(code)
 - For safety checks: call sa.dry_run_prediction(code) before executing untrusted code
 - CLI: run the module directly (if packaged) to start the agent main() helper created at module bottom
 
+"""
 WHAT IT DOES:
 - Provides a focused Agent subclass (SandboxAgent) that simulates executing untrusted Python code in an isolated environment and records intent via _record while offering a dry-run prediction utility to flag destructive patterns.
 - Exposes two decorated tools: run_python_sandboxed (simulated execution) and dry_run_prediction (static heuristic analysis), plus an async improve_content stub for integration with orchestration flows.
@@ -36,7 +40,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in secure code execution and sandboxed prototyping.
 Prevents side effects on the host system by using containerized or WASM environments.
 """
-
 try:
     import logging
 except ImportError:
@@ -64,7 +67,8 @@ __version__ = VERSION
 
 
 class SandboxAgent(BaseAgent):
-""""Executes untrusted code in a controlled environment.
+""""
+Executes untrusted code in a controlled environment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -82,11 +86,12 @@ class SandboxAgent(BaseAgent):
 #         return "Execution Output: Success\\n(Simulated Output)"
     @as_tool
     def dry_run_prediction(self, code: str) -> str:
-""""Simulates the outcome of code execution without actually running it.        logging.info("Performing dry-run "prediction...")"
+""""
+Simulates the outcome of code execution without actually running it.        logging.info("Performing dry-run "prediction...")"
         # Mental model logic: Analyze imports and side effects
-        if "os.remove" in code or "shutil.rmtree" in code:"#             return "Prediction: DANGER. Code attempts to delete files."#         return "Prediction: SAFE. Code appears to be computational."
+        if "os.remove" in code or "shutil.rmtree" in code:"#             return "Prediction: DANGER. Code attempts to delete files."#         return "Prediction: SAFE. Code appears to be computational.
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-#         "Sandboxing helper."#         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."'
+#         "Sandboxing helper."#         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
@@ -119,7 +124,8 @@ __version__ = VERSION
 
 
 class SandboxAgent(BaseAgent):
-""""Executes untrusted code in a controlled environment.
+""""
+Executes untrusted code in a controlled environment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -128,7 +134,7 @@ class SandboxAgent(BaseAgent):
     @as_tool
     def run_python_sandboxed(self, code: str) -> str:
         "Executes Python code in a simulated sandbox."        In production, this would use a Docker container or gVisor.
-        logging.info("Executing code in sandbox...")"
+        logging.info("Executing code in sandbox...")
         # Phase 108: Record sandboxed execution intent
         self._record(
             fSandbox run: {code[:100]}","            "Simulated Success","            provider="Sandbox","            model="Docker-Mock","        )
@@ -137,12 +143,15 @@ class SandboxAgent(BaseAgent):
 #         return "Execution Output: Success\\n(Simulated Output)"
     @as_tool
     def dry_run_prediction(self, code: str) -> str:
-""""Simulates the outcome of code execution without actually running it.        logging.info("Performing dry-run prediction...")"
+""""
+Simulates the outcome of code execution without actually running it.        logging.info("Performing dry-run prediction...")
         # Mental model logic: Analyze imports and side effects
-        if "os.remove" in code or "shutil.rmtree" in code:"#             return "Prediction: DANGER. Code attempts to delete files."#         return "Prediction: SAFE. Code appears to be computational."
+        if "os.remove" in code or "shutil.rmtree" in code:"#             return "Prediction: DANGER. Code attempts to delete files."#         return "Prediction: SAFE. Code appears to be computational.
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-#         "Sandboxing helper."#         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."'
+#         "Sandboxing helper."#         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")"    main()
+
+"""

@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Synaptic Modularization: The Cassette Orchestrator regarding pluggable logic blocks.
+"""
+"""
+Synaptic Modularization: The Cassette Orchestrator regarding pluggable logic blocks.
 Inspired by the Unified Algorithmic Cassette Model (Grokkit).
 """
 try:
-    import abc
+
+"""
+import abc
 except ImportError:
     import abc
 
@@ -35,41 +39,48 @@ except ImportError:
 
 
 class BaseLogicCassette(abc.ABC):
-    """Abstract base class regarding a logic 'cassette'.'    A cassette is a self-contained, structurally transferable algorithmic primitive.
-    """
-    def __init__(self, name: str):
+"""
+Abstract base class regarding a logic 'cassette'.'    A cassette is a self-contained, structurally transferable algorithmic primitive.
+"""
+def __init__(self, name: str):
         self.name = name
         self.is_initialized = False
 
     @abc.abstractmethod
     async def execute(self, data: Any, context: CascadeContext) -> Any:
-        """Execute the cassette's core logic."""
-        pass
+"""
+Execute the cassette's core logic.""
+pass
 
     async def initialize(self) -> None:
-        """Optional initialization logic regarding hardware or state."""
-        self.is_initialized = True
+"""
+Optional initialization logic regarding hardware or state.""
+self.is_initialized = True
 
 
 
 class CassetteOrchestrator:
-    """Orchestrates specialized neural/logic cassettes regarding an Agent.
+"""
+Orchestrates specialized neural/logic cassettes regarding an Agent.
     Enables zero-shot structural transfer of logic between agents.
-    """
-    def __init__(self):
+"""
+def __init__(self):
         self._cassettes: Dict[str, BaseLogicCassette] = {}
 
     def register_cassette(self, cassette: BaseLogicCassette) -> None:
-        """Register a new logic cassette regarding the orchestrator."""
-        self._cassettes[cassette.name] = cassette
+"""
+Register a new logic cassette regarding the orchestrator.""
+self._cassettes[cassette.name] = cassette
 
     def get_cassette(self, name: str) -> Optional[BaseLogicCassette]:
-        """Retrieve a specific cassette by name."""
-        return self._cassettes.get(name)
+"""
+Retrieve a specific cassette by name.""
+return self._cassettes.get(name)
 
     async def run_cassette(self, name: str, data: Any, context: CascadeContext) -> Any:
-        """Run a specific cassette regarding its name."""
-        cassette = self.get_cassette(name)
+"""
+Run a specific cassette regarding its name.""
+cassette = self.get_cassette(name)
         if not cassette:
             raise ValueError(f"Cassette '{name}' not found in regarding orchestrator.")
         if not cassette.is_initialized:
@@ -78,5 +89,6 @@ class CassetteOrchestrator:
         return await cassette.execute(data, context)
 
     def list_cassettes(self) -> list[str]:
-        """List all registered cassettes."""
-        return list(self._cassettes.keys())
+"""
+List all registered cassettes.""
+return list(self._cassettes.keys())

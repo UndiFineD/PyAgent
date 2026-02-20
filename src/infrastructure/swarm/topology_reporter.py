@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,10 +16,12 @@ from __future__ import annotations
 
 
 """
+"""
 Swarm Topology Reporter (Phase 320 Integration).
 Represents the current state of the swarm for visualization and analysis.
 """
 
+"""
 import json
 import logging
 from pathlib import Path
@@ -31,11 +34,11 @@ __version__ = VERSION
 
 
 class SwarmTopologyReporter:
-    """Generates D3.js compatible topology data for 3D Swarm Viewer.
+"""
+Generates D3.js compatible topology data for 3D Swarm Viewer.
     Captures node relationships, trust scores, and communication latency.
-    """
-
-    def __init__(self, output_path: str = "data/logs/topology.json") -> None:
+"""
+def __init__(self, output_path: str = "data/logs/topology.json") -> None:
         self.output_path = Path(output_path)
         self.nodes: list[Any] = []
         self.links: list[Any] = []
@@ -43,8 +46,9 @@ class SwarmTopologyReporter:
 
 
     def clear_snapshot(self) -> None:
-        """Clears the current node/link lists for a fresh snapshot pulse."""
-        self.nodes = []
+"""
+Clears the current node/link lists for a fresh snapshot pulse.""
+self.nodes = []
         self.links = []
 
 
@@ -54,7 +58,8 @@ class SwarmTopologyReporter:
         group: str = "general",
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        """Adds or updates a node in the current snapshot."""
+"""
+Adds or updates a node in the current snapshot.""
         # Check if already exists in this snapshot
         existing = next((n for n in self.nodes if n["id"] == node_id), None)
         weight = self.traffic_matrix.get(node_id, 1.0)
@@ -73,9 +78,10 @@ class SwarmTopologyReporter:
 
 
     def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:
-        """Adds or updates a link in the current snapshot pulse.
+"""
+Adds or updates a link in the current snapshot pulse.
         Pillar 9: High-fidelity visualization link strength
-        """
+"""
         # We also look at traffic between these two if we had a link-traffic matrix
         # Avoid redefined built-in 'type'
         link_type = type
@@ -89,8 +95,9 @@ class SwarmTopologyReporter:
 
 
     def update_traffic(self, node_id: str, bytes_count: float) -> None:
-        """Accumulates traffic for synaptic heatmap (Pillar 6)."""
-        current = self.traffic_matrix.get(node_id, 1.0)
+        ""
+Accumulates traffic for synaptic heatmap (Pillar 6).""
+current = self.traffic_matrix.get(node_id, 1.0)
         self.traffic_matrix[node_id] = current + (bytes_count / 1024)  # KB focus
 
 

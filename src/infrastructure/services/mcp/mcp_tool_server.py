@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,12 +19,14 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Facade for MCP Tool Server Integration.
 Delegates to modularized sub-packages in src/infrastructure/mcp_tools/.
 """
-
 try:
-    from typing import Any, Dict, List, Optional
+
+"""
+from typing import Any, Dict, List, Optional
 except ImportError:
     from typing import Any, Dict, List, Optional
 
@@ -65,17 +69,20 @@ ServerType = MCPServerType
 
 
 def adapt_tool_schema(schema: ToolSchema | List[ToolSchema]) -> List[Dict[str, Any]]:
-    """Legacy helper for adaptation.    if isinstance(schema, ToolSchema):
+"""
+Legacy helper for adaptation.    if isinstance(schema, ToolSchema):
         return [schema.to_openai_format()]
     return SchemaAdapter.to_openai(schema)
 
 
 async def create_mcp_session(server_name: str) -> Optional[MCPSession]:
-    """Legacy helper for session creation.    return await SessionManager().create_session(server_name)
+"""
+Legacy helper for session creation.    return await SessionManager().create_session(server_name)
 
 
 def discover_mcp_servers() -> List[str]:
-    """Legacy helper for server discovery.    return list(MCPServerRegistry().servers.keys())
+"""
+Legacy helper for server discovery.    return list(MCPServerRegistry().servers.keys())
 
 
 __all__ = [

@@ -15,9 +15,11 @@
 
 
 """
+"""
 Signal bus for agent-to-agent communication.
 (Facade for src.core.base.common.signal_core)
 
+"""
 import logging
 import queue
 
@@ -26,9 +28,11 @@ from src.core.base.common.signal_core import SignalCore as StandardSignalCore
 
 
 class SignalBusOrchestrator(StandardSignalCore):
-    """Facade for SignalCore.
+"""
+Facade for SignalCore.
     def _process_bus(self) -> None:
-        """Internal loop to process signals asynchronously.        while self._running:
+"""
+Internal loop to process signals asynchronously.        while self._running:
             try:
                 msg = self._queue.get(timeout=1.0)
                 signal_type = msg["type"]"                if signal_type in self._subscribers:
@@ -40,6 +44,7 @@ class SignalBusOrchestrator(StandardSignalCore):
                 continue
 
     def shutdown(self) -> None:
-        """Stops the signal bus.        self._running = False
+"""
+Stops the signal bus.        self._running = False
         self._thread.join()
-        logging.info("SignalBus: Shutdown complete.")"
+        logging.info("SignalBus: Shutdown complete.")

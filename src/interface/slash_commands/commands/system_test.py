@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.slash_commands.commands.system import cmd_stats, cmd_memory, cmd_health, cmd_cpu, cmd_disk, cmd_gpu, cmd_processes

@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""LoRA Adapter sub-package.
+"""
+"""
+LoRA Adapter sub-package.
 try:
-    from .config import LoRAConfig, LoRAModelState, LoRATarget  # noqa: F401
+
+"""
+from .config import LoRAConfig, LoRAModelState, LoRATarget  # noqa: F401
 except ImportError:
     from .config import LoRAConfig, LoRAModelState, LoRATarget # noqa: F401
 

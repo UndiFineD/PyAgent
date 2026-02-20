@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Configuration management module for PyAgent."""
+"""
+"""
+Configuration management module for PyAgent.""
 try:
-    from .config_manager import CoreConfigManager, config  # noqa: F401
+
+""
+from .config_manager import CoreConfigManager, config  # noqa: F401
 except ImportError:
     from .config_manager import CoreConfigManager, config # noqa: F401
 

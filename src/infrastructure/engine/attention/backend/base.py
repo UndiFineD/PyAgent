@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Base classes for attention backends.
 """
-
 try:
-    from abc import ABC, abstractmethod
+
+"""
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -37,7 +41,7 @@ except ImportError:
 
 
 # Type variable for backend implementations
-T = TypeVar("T")"
+T = TypeVar("T")
 
 
 class AttentionBackend(ABC, Generic[T]):
@@ -49,11 +53,13 @@ class AttentionBackend(ABC, Generic[T]):
     @staticmethod
     @abstractmethod
     def get_name() -> str:
-        """Get the backend name.
+"""
+Get the backend name.
     @staticmethod
     @abstractmethod
     def get_capabilities() -> AttentionCapabilities:
-        """Get backend capabilities.
+"""
+Get backend capabilities.
     @abstractmethod
     def forward(
         self,
@@ -78,7 +84,8 @@ class AttentionBackend(ABC, Generic[T]):
             Attention output [batch*seq, num_heads, head_dim]
         
     def supports(self, attn_type: AttentionType) -> bool:
-        """Check if backend supports attention type.        caps = self.get_capabilities()
+"""
+Check if backend supports attention type.        caps = self.get_capabilities()
         mapping = {
             AttentionType.PREFILL: caps.supports_prefill,
             AttentionType.DECODE: caps.supports_decode,

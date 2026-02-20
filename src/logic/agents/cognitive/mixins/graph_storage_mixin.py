@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +17,10 @@ from __future__ import annotations
 
 
 # "Storage logic for GraphMemoryAgent."Handles the persistence and retrieval of graph data (entities, relationships)
-and 'bead' tasks from filesystem storage.'
+"""
+and 'bead' tasks from filesystem storage.
 
+"""
 import json
 import logging
 from typing import Any
@@ -28,9 +32,11 @@ __version__ = VERSION
 
 
 class GraphStorageMixin:
-""""Mixin for graph storage and bead persistence.
+""""
+Mixin for graph storage and bead persistence.
     def _load_graph(self) -> None:
-""""Loads entities and relationships from persistent storage.   "     if ("            not hasattr(self, "graph_store_path")"            or not hasattr(self, "entities")"            or not hasattr(self, "relationships")"        ):
+""""
+Loads entities and relationships from persistent storage.   "     if ("            not hasattr(self, "graph_store_path")"            or not hasattr(self, "entities")"            or not hasattr(self, "relationships")"        ):
             return
 
         if self.graph_store_path.exists():
@@ -48,7 +54,8 @@ class GraphStorageMixin:
             except (json.JSONDecodeError, OSError) as e:
                 logging.error(fGraphMemoryAgent: Failed to load graph: {e}")"
     def _save_graph(self) -> None:
-""""Persists entities and relationships to disk."        if ("            not hasattr(self, "graph_store_path")"            or not hasattr(self, "entities")"            or not hasattr(self, "relationships")"        ):
+""""
+Persists entities and relationships to disk."        if ("            not hasattr(self, "graph_store_path")"            or not hasattr(self, "entities")"            or not hasattr(self, "relationships")"        ):
             return
 
         try:
@@ -60,7 +67,8 @@ class GraphStorageMixin:
         except OSError as e:
             logging.error(fGraphMemoryAgent: Failed to save graph: {e}")"
     def _load_beads(self) -> dict[str, dict[str, Any]]:
-""""Loads tasks from .beads/ directory JSONL files.   "     tasks = {}"        if not hasattr(self, "beads_dir"):"            return tasks
+""""
+Loads tasks from .beads/ directory JSONL files.   "     tasks = {}"        if not hasattr(self, "beads_dir"):"            return tasks
 
 #         task_file = self.beads_dir / "tasks.jsonl"        if task_file.exists():
             with open(task_file, encoding="utf-8") as f:"                for line in f:
@@ -71,6 +79,15 @@ class GraphStorageMixin:
         return tasks
 
     def _save_bead(self, task_id: str, data: dict[str, Any]) -> str:
-""""Persists a single task to the beads JSONL (Append-only).        if not hasattr(self, "beads_dir"):"#             return
+""""
+Persists a single task to the beads JSONL (Append-only).        if not hasattr(self, "beads_dir"):"#             return
 
 #         task_file = self.beads_dir / "tasks.jsonl"        with open(task_file, "a", encoding="utf-8") as f:"            f.write(json.dumps({"id": task_id, "data": data}) + "\\n")"        return task_id
+
+"""
+
+"""
+
+""
+
+"""

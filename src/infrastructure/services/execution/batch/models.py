@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Data models for batch orchestration.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -45,7 +49,8 @@ except ImportError:
 
 
 class MoveDirectionality(Enum):
-    """Direction of request movement in batch.
+"""
+Direction of request movement in batch.
     SWAP = auto()  # Bidirectional swap
     MOVE_TO = auto()  # Unidirectional move
 
@@ -81,7 +86,8 @@ class CachedRequestState:
 
     @property
     def num_tokens(self) -> int:
-        """Total number of tokens (prompt + generated).        prompt_len = len(self.prompt_token_ids) if self.prompt_token_ids else 0
+"""
+Total number of tokens (prompt + generated).        prompt_len = len(self.prompt_token_ids) if self.prompt_token_ids else 0
         return prompt_len + len(self.output_token_ids)
 
 
@@ -94,18 +100,22 @@ class BatchUpdateBuilder:
     removed: List[Tuple[str, int]] = field(default_factory=list)  # (req_id, index)
 
     def reset(self) -> None:
-        """Reset for new step.        self.moved.clear()
+"""
+Reset for new step.        self.moved.clear()
         self.added.clear()
         self.removed.clear()
 
     def record_swap(self, i1: int, i2: int) -> None:
-        """Record a bidirectional swap.        self.moved.append((i1, i2, MoveDirectionality.SWAP))
+"""
+Record a bidirectional swap.        self.moved.append((i1, i2, MoveDirectionality.SWAP))
 
     def record_add(self, req_id: str, index: int) -> None:
-        """Record a request addition.        self.added.append((req_id, index))
+"""
+Record a request addition.        self.added.append((req_id, index))
 
     def record_remove(self, req_id: str, index: int) -> None:
-        """Record a request removal.        self.removed.append((req_id, index))
+"""
+Record a request removal.        self.removed.append((req_id, index))
 
 
 @dataclass
@@ -151,3 +161,5 @@ class InputBatch:
     cu_num_logits: Any  # torch.Tensor
     cu_num_logits_np: np.ndarray
     sampling_metadata: Optional[SamplingMetadata] = None
+
+"""

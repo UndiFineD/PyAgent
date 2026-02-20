@@ -15,8 +15,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 40: Input Processing Package
 
+"""
 Input Processing for unified prompt handling.
 
+"""
 This package provides:
 - Type-safe prompt schemas (text, tokens, embeddings)
 - Encoder-decoder prompt separation

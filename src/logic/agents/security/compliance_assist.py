@@ -11,7 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 Assisting classes for TDD and zero trust security for compliance agents.
+
+"""
 
 - DummyRecorder: Mocks compliance recording for tests and zero trust.
 - ComplianceCheck: Encapsulates a single compliance check for extensibility.
@@ -25,7 +28,8 @@ except ImportError:
 
 
 class DummyRecorder:
-    """A simple recorder mock for capturing agent interactions during compliance audit tests.    def __init__(self):
+"""
+A simple recorder mock for capturing agent interactions during compliance audit tests.    def __init__(self):
         self.interactions = []
 
     def record_interaction(self, provider, model, prompt, result):
@@ -34,9 +38,10 @@ class DummyRecorder:
 
 
 class ComplianceCheck:
-    """Encapsulates a single compliance check for extensibility and testability.    def __init__(self, name: str, check_fn: Callable[[], bool] = None, recommendation: str = ""):"        self.name = name
+"""
+Encapsulates a single compliance check for extensibility and testability.    def __init__(self, name: str, check_fn: Callable[[], bool] = None, recommendation: str = ""):"        self.name = name
         self.check_fn = check_fn or (lambda: True)
-        self.recommendation = recommendation or f"Implement {name} to meet requirements.""
+        self.recommendation = recommendation or f"Implement {name} to meet requirements."
     def run(self) -> Dict[str, Any]:
         passed = self.check_fn()
         return {
@@ -44,7 +49,8 @@ class ComplianceCheck:
 
 
 class ComplianceStandard:
-    """Encapsulates a compliance standard and its checks for modularity and TDD.    def __init__(self, name: str, checks: List[ComplianceCheck]):
+"""
+Encapsulates a compliance standard and its checks for modularity and TDD.    def __init__(self, name: str, checks: List[ComplianceCheck]):
         self.name = name
         self.checks = checks
 
@@ -53,3 +59,5 @@ class ComplianceStandard:
         failed = [r for r in results if r["status"] == "FAIL"]"        score = 100 * (len(results) - len(failed)) / len(results) if results else 0
         return {
             "standard": self.name,"            "score": score,"            "status": "Compliant" if score == 100 else "Non-Compliant","            "failed_checks": failed,"        }
+
+"""

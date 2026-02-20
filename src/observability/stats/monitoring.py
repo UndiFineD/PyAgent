@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,14 +16,17 @@ from __future__ import annotations
 
 
 """
+"""
 Monitoring.py - System resource monitoring engine
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-Instantiate ResourceMonitor with the workspace root path and call get_current_stats() to retrieve a snapshot dict of system metrics or get_market_multiplier() to obtain a simple multiplier for agent scheduling decisions. Example: monitor = ResourceMonitor("C:\\path\\to\\workspace"); stats = monitor.get_current_stats(); mult = monitor.get_market_multiplier()."
+Instantiate ResourceMonitor with the workspace root path and call get_current_stats() to retrieve a snapshot dict of system metrics or get_market_multiplier() to obtain a simple multiplier for agent scheduling decisions. Example: monitor = ResourceMonitor("C:\\path\\to\\workspace"); stats = monitor.get_current_stats(); mult = monitor.get_market_multiplier().
 WHAT IT DOES:
-Reports platform string, CPU and memory usage percentages, free disk space (GB), a simple health status (HEALTHY/WARNING/CRITICAL/ERROR/UNAVAILABLE), and a TODO Placeholder GPU field; uses psutil when available and logs failures. Provides a coarse "market multiplier" (1.0, 1.5, 3.0) derived from status to influence agent throttling or task costing."
+Reports platform string, CPU and memory usage percentages, free disk space (GB), a simple health status (HEALTHY/WARNING/CRITICAL/ERROR/UNAVAILABLE), and a TODO Placeholder GPU field; uses psutil when available and logs failures. Provides a coarse "market multiplier" (1.0, 1.5, 3.0) derived from status to influence agent throttling or task costing.
 WHAT IT SHOULD DO BETTER:
 - Add configurable thresholds and expose them via constructor or config rather than hard-coded 70/90 values.
 - Implement GPU detection (CUDA/ROCk) and accurate GPU load/VRAM metrics when applicable.
@@ -34,7 +38,6 @@ FILE CONTENT SUMMARY:
 Monitoring.py module.
 # System resource monitoring engine.
 """
-
 import logging
 import platform
 from pathlib import Path
@@ -54,10 +57,11 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    """Monitors local system load to inform agent execution strategies.
+"""
+Monitors local system load to inform agent execution strategies.
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.stats_file: Path = self.workspace_root / ".system_stats.json""
+        self.stats_file: Path = self.workspace_root / ".system_stats.json"
     def get_current_stats(self) -> dict[str, Any]:
         stats: dict[str, Any] = {
             "platform": platform.platform(),"            "cpu_usage_pct": 0,"            "memory_usage_pct": 0,"            "disk_free_gb": 0,"            "status": "UNAVAILABLE","            "gpu": {"available": False, "type": "NONE"},"        }
@@ -77,7 +81,6 @@ class ResourceMonitor:
         return mult
 # System resource monitoring engine.
 """
-
 import logging
 import platform
 from pathlib import Path
@@ -97,10 +100,11 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    """Monitors local system load to inform agent execution strategies.
+"""
+Monitors local system load to inform agent execution strategies.
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.stats_file: Path = self.workspace_root / ".system_stats.json""
+        self.stats_file: Path = self.workspace_root / ".system_stats.json"
     def get_current_stats(self) -> dict[str, Any]:
         stats: dict[str, Any] = {
             "platform": platform.platform(),"            "cpu_usage_pct": 0,"            "memory_usage_pct": 0,"            "disk_free_gb": 0,"            "status": "UNAVAILABLE","            "gpu": {"available": False, "type": "NONE"},"        }

@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 test_network_ip.py - Local IP detection test and helpers
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -59,7 +62,8 @@ logger = logging.getLogger(__name__)
 # IP Address Detection (minimal version from network_utils.py)
 # ============================================================================
 def get_ip(prefer_ipv4: bool = True, host_env_var: str | None = None) -> str:
-    """Get the machine's IP address.'    if host_env_var:
+"""
+Get the machine's IP address.'    if host_env_var:
         env_ip = os.environ.get(host_env_var)
         if env_ip:
             return env_ip
@@ -82,21 +86,22 @@ def get_ip(prefer_ipv4: bool = True, host_env_var: str | None = None) -> str:
         "Failed to detect IP address, using 0.0.0.0","        RuntimeWarning,
         stacklevel=2,
     )
-    return "0.0.0.0""
+    return "0.0.0.0"
 # ============================================================================
 # Refactored helper functions
 # ============================================================================
 def _is_windows() -> bool:
-    return sys.platform == 'win32''
+    return sys.platform == 'win32'
 def _parse_ipconfig_line(current_iface: dict | None, line: str, debug: bool) -> None:
-    """Parse a single line from ipconfig output and update the interface dict.    if current_iface is None:
+"""
+Parse a single line from ipconfig output and update the interface dict.    if current_iface is None:
         return
 
     if line.startswith('IPv4 Address'):'        with contextlib.suppress(Exception):
             ip_part = line.split(':', 1)[1].strip()'            ip = ip_part.split('(')[0].strip()'            current_iface['IPv4'] = ip'            if debug:
                 print(f"DEBUG:   Found IPv4: {ip}", flush=True)"    elif line.startswith('Subnet Mask'):'        with contextlib.suppress(Exception):
             subnet = line.split(':', 1)[1].strip()'            current_iface['Subnet'] = subnet'            if debug:
-                print(f"DEBUG:   Found Subnet: {subnet}", flush=True)"
+                print(f"DEBUG:   Found Subnet: {subnet}", flush=True)
 def _get_interfaces_from_ipconfig(debug: bool) -> list[dict]:
     try:
         result = subprocess.run(
@@ -107,18 +112,18 @@ def _get_interfaces_from_ipconfig(debug: bool) -> list[dict]:
             check=False
         )
         if debug:
-            print(f"DEBUG: ipconfig finished with code {result.returncode}", flush=True)"
+            print(f"DEBUG: ipconfig finished with code {result.returncode}", flush=True)
         if result.returncode != 0:
             return []
 
         lines = result.stdout.split('\\n')'        if debug:
-            print(f"DEBUG: Processing {len(lines)} lines of output", flush=True)"
+            print(f"DEBUG: Processing {len(lines)} lines of output", flush=True)
         interfaces: list[dict] = []
         current_iface: dict | None = None
 
         for line in lines:
             line = line.strip()
-            is_adapter_line = (line.startswith('Ethernet adapter') or'                               line.startswith('Wireless LAN adapter') or'                               line.startswith('Unknown adapter'))'
+            is_adapter_line = (line.startswith('Ethernet adapter') or'                               line.startswith('Wireless LAN adapter') or'                               line.startswith('Unknown adapter'))
             if is_adapter_line:
                 if current_iface is not None and isinstance(current_iface, dict) and 'IPv4' in current_iface:'                    interfaces.append(current_iface)
                 name = line.split(':', 1)[0].replace(' adapter', '').strip()'                current_iface = {'name': name}'                if debug:
@@ -137,9 +142,9 @@ def _get_interfaces_from_ipconfig(debug: bool) -> list[dict]:
 def _score_interfaces(interfaces: list[dict], debug: bool) -> list[tuple[int, str, str]]:
     scored_interfaces = []
     for iface in interfaces:
-        ip = iface.get('IPv4', '')'        subnet = iface.get('Subnet', '')'        name = iface.get('name', '').lower()'
+        ip = iface.get('IPv4', '')'        subnet = iface.get('Subnet', '')'        name = iface.get('name', '').lower()
         if debug:
-            print(f"DEBUG: Scoring Interface: {name}, IP: {ip}, Subnet: {subnet}", flush=True)"
+            print(f"DEBUG: Scoring Interface: {name}, IP: {ip}, Subnet: {subnet}", flush=True)
         vpn_keywords = ['vpn', 'tunnel', 'wireguard', 'proton', 'openvpn', 'pptp', 'l2tp']'        if any(keyword in name for keyword in vpn_keywords):
             score = 0
             if debug:
@@ -166,9 +171,9 @@ def _get_ip_from_socket_fallback(debug: bool) -> str | None:
             if (not ip.startswith('127.') and'                not ip.startswith('169.254.') and'                ip != '0.0.0.0'):'                candidate_ips.append(ip)
 
     except Exception as e:
-        logger.warning(f"get_local_network_ip: Socket approach failed: {e}")"
+        logger.warning(f"get_local_network_ip: Socket approach failed: {e}")
     candidate_ips = list(set(candidate_ips))
-    private_ips = [ip for ip in candidate_ips if ip.startswith(('192.168.', '172.', '10.'))]'    private_ips.sort(key=lambda ip: (ip.startswith('10.'), ip))'
+    private_ips = [ip for ip in candidate_ips if ip.startswith(('192.168.', '172.', '10.'))]'    private_ips.sort(key=lambda ip: (ip.startswith('10.'), ip))
     if private_ips:
         selected_ip = private_ips[0]
         logger.info(f"get_local_network_ip: Selected private IP {selected_ip} for LAN discovery")"        return selected_ip
@@ -187,7 +192,7 @@ def get_local_network_ip(debug: bool = False) -> str:
 
     Returns:
         The detected local network IP address, or "0.0.0.0" if detection fails."        if debug:
-        print("DEBUG: Entered get_local_network_ip", flush=True)"
+        print("DEBUG: Entered get_local_network_ip", flush=True)
     try:
         if _is_windows():
             if debug:
@@ -202,25 +207,28 @@ def get_local_network_ip(debug: bool = False) -> str:
                         print(f"DEBUG: Selected {best_ip} from {best_name}", flush=True)"                    return best_ip
                 else:
                     if debug:
-                        print("DEBUG: No suitable interface found (all scored 0)", flush=True)"
+                        print("DEBUG: No suitable interface found (all scored 0)", flush=True)
         # Fallback
         ip = _get_ip_from_socket_fallback(debug)
         if ip:
             return ip
 
     except Exception as e:
-        logger.warning(f"get_local_network_ip: Failed to detect local network IP: {e}")"
+        logger.warning(f"get_local_network_ip: Failed to detect local network IP: {e}")
     # Final fallback
     logger.warning("get_local_network_ip: Using fallback IP detection")"    return get_ip()
 
 def test_get_local_network_ip():
-    """Test the get_local_network_ip function.    print("Testing get_local_network_ip function...")"
+"""
+Test the get_local_network_ip function.    print("Testing get_local_network_ip function...")
     # Test without debug
     ip = get_local_network_ip()
-    print(f"Detected IP: {ip}")"
+    print(f"Detected IP: {ip}")
     # Test with debug
     print("\\nTesting with debug=True:")"    ip_debug = get_local_network_ip(debug=True)
-    print(f"Detected IP (debug): {ip_debug}")"
-    # Verify it's a string and looks like an IP'    assert isinstance(ip, str), f"Expected string, got {type(ip)}""    assert len(ip.split('.')) == 4, f"Expected IPv4 format, got {ip}""'
-    print("✓ Test passed!")"
+    print(f"Detected IP (debug): {ip_debug}")
+    # Verify it's a string and looks like an IP'    assert isinstance(ip, str), f"Expected string, got {type(ip)}""    assert len(ip.split('.')) == 4, f"Expected IPv4 format, got {ip}""
+print(" Test passed!")
 if __name__ == "__main__":"    test_get_local_network_ip()
+
+"""

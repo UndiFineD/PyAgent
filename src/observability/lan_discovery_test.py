@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Test script for LANDiscovery network functionality.
 
+"""
 try:
     from .infrastructure.swarm.network.lan_discovery import LANDiscovery
 except ImportError:

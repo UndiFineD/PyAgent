@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 run_auto_tests - Run generated unit test files
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -49,7 +54,6 @@ FILE CONTENT SUMMARY:Run only generated `test_auto_*.py` tests under `tests/unit
 This script collects matching test files and invokes pytest on them directly to avoid
 collecting unrelated tests.
 """
-
 from pathlib import Path
 import sys
 import argparse
@@ -58,7 +62,7 @@ import subprocess
 import os
 
 ROOT = Path(__file__).resolve().parents[2]
-TESTS_DIR = ROOT / 'tests' / 'unit''
+TESTS_DIR = ROOT / 'tests' / 'unit'
 
 def _run_file(path_str: str) -> tuple[str, int]:
     p = subprocess.run([sys.executable, path_str])
@@ -99,3 +103,5 @@ def main():
         print('All generated tests passed')'    return 0 if failures == 0 else 2
 
 if __name__ == '__main__':'    raise SystemExit(main())
+
+"""

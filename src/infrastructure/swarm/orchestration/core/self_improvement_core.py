@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,12 @@ from __future__ import annotations
 
 
 """
+"""
 SelfImprovementCore: Pure logic for fleet self-improvement analysis.
 Extracted from SelfImprovementOrchestrator for Rust-readiness.
 """
 
+"""
 import re
 from typing import Any, Dict, List, Optional
 
@@ -85,7 +88,8 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         return findings
 
     def _analyze_via_rust(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        """Uses Rust accelerator for high-performance analysis.        try:
+"""
+Uses Rust accelerator for high-performance analysis.        try:
             rust_findings = rc.analyze_code_quality_rust(content, file_path_rel, self.dangerous_patterns)
             findings = []
             for issue_type, message, line_num in rust_findings:
@@ -112,3 +116,5 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         # Simple fix for unsafe YAML
         unsafe_yaml = "yaml." + "load("  # nosec: pattern definition"        if unsafe_yaml in content and "yaml.safe_load(" not in content:"            if "import yaml" in content:"                return content.replace(unsafe_yaml, "yaml.safe_load(")"
         return None
+
+"""

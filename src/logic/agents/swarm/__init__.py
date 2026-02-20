@@ -1,4 +1,7 @@
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -15,11 +18,13 @@ from __future__ import annotations
 # limitations under the License.
 
 # "Swarm agents package."# from __future__ import annotations
-
 try:
     from .core.base.lifecycle.version import VERSION
+"""
 except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+
+"""
+from src.core.base.lifecycle.version import VERSION
 
 
 try:

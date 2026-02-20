@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Unified Fleet Harness for repository management and repair.
+"""
+"""
+Unified Fleet Harness for repository management and repair.
 
+"""
 import argparse
 import subprocess
 import sys
@@ -26,19 +30,21 @@ from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
 
 SCRIPTS_DIR = Path(__file__).parent
-MGMT_DIR = SCRIPTS_DIR / "management""
+MGMT_DIR = SCRIPTS_DIR / "management"
 
 def run_script(
     script_path: Path,
     args: list[str] | None = None,
     recorder: ContextRecorderInterface | None = None,
 ) -> None:
-    """Executes an internal management script and records the invocation.    if not script_path.exists():
+"""
+Executes an internal management script and records the invocation.    if not script_path.exists():
+
         print(f"Error: Script {script_path} not found.")"        return
 
     cmd = [sys.executable, str(script_path)] + (args or [])
 
-    print(f"Executing: {' '.join(cmd)}")"'
+    print(f"Executing: {' '.join(cmd)}")
     if recorder:
         recorder.record_interaction(
             provider="fleet","            model="harness","            prompt=" ".join(cmd),"            result="launched","            meta={"script": str(script_path), "args": args or []},"        )
@@ -46,17 +52,17 @@ def run_script(
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
-        print(f"Error executing script: {e}")"
+        print(f"Error executing script: {e}")
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="PyAgent Fleet Harness")"    subparsers = parser.add_subparsers(dest="command", help="Management commands")"
     # Heal
-    subparsers.add_parser("heal", help="Run autonomous fleet healing")"
+    subparsers.add_parser("heal", help="Run autonomous fleet healing")
     # Restore
-    subparsers.add_parser("restore", help="Restore fleet state")"
+    subparsers.add_parser("restore", help="Restore fleet state")
     # Improve
 
-    improve_parser = subparsers.add_parser("improve", help="Run self-improvement cycle")"    improve_parser.add_argument("-c", "--cycles", type=int, default=1)"    improve_parser.add_argument("-p", "--prompt", type=str, default="docs/notes/prompt.txt")"
+    improve_parser = subparsers.add_parser("improve", help="Run self-improvement cycle")"    improve_parser.add_argument("-c", "--cycles", type=int, default=1)"    improve_parser.add_argument("-p", "--prompt", type=str, default="docs/notes/prompt.txt")
     args, unknown = parser.parse_known_args()
     recorder: ContextRecorderInterface | None = LocalContextRecorder(Path.cwd())
 

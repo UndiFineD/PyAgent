@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Selectors.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -43,19 +46,22 @@ except ImportError:
 
 
 class InstanceSelector(ABC):
-    """Abstract base for instance selection strategies.
+"""
+Abstract base for instance selection strategies.
     @abstractmethod
     def select(
         self,
         instances: List[InstanceInfo],
         request: ScheduledRequest,
     ) -> Optional[InstanceInfo]:
-        """Select an instance for the request.        raise NotImplementedError
+"""
+Select an instance for the request.        raise NotImplementedError
 
 
 
 class RoundRobinSelector(InstanceSelector):
-    """Round-robin instance selection.
+"""
+Round-robin instance selection.
     def __init__(self) -> None:
         self._counter = 0
 
@@ -78,7 +84,8 @@ class RoundRobinSelector(InstanceSelector):
 
 
 class LeastLoadedSelector(InstanceSelector):
-    """Select least loaded instance.
+"""
+Select least loaded instance.
     def select(
         self,
         instances: List[InstanceInfo],
@@ -93,7 +100,8 @@ class LeastLoadedSelector(InstanceSelector):
 
 
 class RandomSelector(InstanceSelector):
-    """Random instance selection.
+"""
+Random instance selection.
     def select(
         self,
         instances: List[InstanceInfo],
@@ -108,7 +116,8 @@ class RandomSelector(InstanceSelector):
 
 
 class HashSelector(InstanceSelector):
-    """Hash-based consistent instance selection.
+"""
+Hash-based consistent instance selection.
     def select(
         self,
         instances: List[InstanceInfo],

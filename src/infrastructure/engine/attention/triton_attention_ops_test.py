@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.attention.triton_attention_ops import AttentionBackend, PrecisionMode, AttentionConfig, AttentionMetadata, AttentionKernel, TritonPagedAttention, NaiveAttention, SlidingWindowAttention, KVSplitConfig, TritonAttentionOps, create_attention_ops

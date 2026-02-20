@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +18,10 @@ from __future__ import annotations
 
 # ArchCore logic for PyAgent.
 # Pure logic for architectural metrics and pattern analysis.
+"""
 No I/O or side effects.
+
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -36,10 +41,12 @@ __version__ = VERSION
 
 
 class ArchCore:
-""""Pure logic core for architectural analysis.
+""""
+Pure logic core for architectural analysis.
     @staticmethod
     def calculate_coupling_metrics(graph: dict[str, list]) -> dict[str, Any]:
-""""Calculates in-degree and out-degree metrics for a dependency graph.        if _RUST_ACCEL:
+""""
+Calculates in-degree and out-degree metrics for a dependency graph.        if _RUST_ACCEL:
             try:
                 graph_list = list(graph.items())
                 out_deg, in_deg = calculate_coupling_rust(graph_list)
@@ -53,7 +60,7 @@ class ArchCore:
             for t in targets:
                 in_degree[t] = in_degree.get(t, 0) + 1
 
-        return {"out_degree": out_degree, "in_degree": in_degree}"
+        return {"out_degree": out_degree, "in_degree": in_degree}
     @staticmethod
     def identify_hotspots(
         metrics: dict[str, Any], limit: int = 5
@@ -66,7 +73,16 @@ class ArchCore:
 
     @staticmethod
     def suggest_patterns(module_name: str, out_degree: int, in_degree: int) -> list[str]:
-""""Suggests architectural patterns based on metrics.        "_ = module_name"        suggestions = []
+""""
+Suggests architectural patterns based on metrics.        "_ = module_name"        suggestions = []
         if out_degree > 10:
             suggestions.append("Consider 'Facade' or 'Strategy' to manage high outgoing dependencies.")"'        if in_degree > 15:
             suggestions.append("Consider 'Interface' or 'Dependency Injection' to decouple this central hub.")"'        return suggestions
+
+"""
+
+"""
+
+""
+
+"""

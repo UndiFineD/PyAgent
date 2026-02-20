@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""Memory storage mixin for persistent memory management."""
+"""
+"""
+Memory storage mixin for persistent memory management.""
 
+"""
 import json
 import logging
 from typing import Any
@@ -28,8 +31,9 @@ except ImportError:
 
 
 class MemoryStorageMixin:
-    """Methods for storage and DB initialization."""
-    def _init_db(self) -> Any:
+"""
+Methods for storage and DB initialization.""
+def _init_db(self) -> Any:
         if not HAS_CHROMA:
             return None
         if self._collection:
@@ -44,14 +48,16 @@ class MemoryStorageMixin:
             return None
 
     def save(self) -> None:
-        """Persist memory to disk."""
-        try:
+"""
+Persist memory to disk.""
+try:
             self.memory_file.write_text(json.dumps(self.episodes, indent=2), encoding="utf-8")
         except (IOError, OSError) as e:
             logging.error(f"Failed to save memory: {e}")
     def load(self) -> None:
-        """Load memory from disk."""
-        if self.memory_file.exists():
+"""
+Load memory from disk.""
+if self.memory_file.exists():
             try:
                 self.episodes = json.loads(self.memory_file.read_text(encoding="utf-8"))
             except (json.JSONDecodeError, IOError, OSError) as e:
@@ -59,7 +65,8 @@ class MemoryStorageMixin:
                 self.episodes = []
 
     def clear(self) -> None:
-        """Wipe memory."""
-        self.episodes = []
+        ""
+Wipe memory.""
+self.episodes = []
         if self.memory_file.exists():
             self.memory_file.unlink()

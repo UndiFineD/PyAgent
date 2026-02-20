@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,10 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Google Gemini cloud provider connector.
 
+"""
 Provides integration with Google's Gemini API for inference requests.'
 
 import os
@@ -35,7 +39,7 @@ class GeminiConnector(CloudProviderBase):
     Supports Gemini Pro, Gemini Ultra, and other Gemini model variants.
 
     Example:
-        connector = GeminiConnector(api_key="your-api-key")"
+        connector = GeminiConnector(api_key="your-api-key")
         request = InferenceRequest(
             messages=[{"role": "user", "content": "Hello!"}],"            model="gemini-pro","        )
 
@@ -58,7 +62,7 @@ class GeminiConnector(CloudProviderBase):
 
     @property
     def name(self) -> str:
-        return "Gemini""
+        return "Gemini"
     @property
     def available_models(self) -> List[str]:
         return list(self.PRICING.keys())
@@ -69,7 +73,7 @@ class GeminiConnector(CloudProviderBase):
         start_time: float = time.perf_counter()
 
         if not self._api_key:
-            raise AuthenticationError("Gemini API key is required.", provider="Gemini")"
+            raise AuthenticationError("Gemini API key is required.", provider="Gemini")
         gemini_contents = []
         for msg in request.messages:
             role: str = "user" if msg["role"] == "user" else "model""            gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})"
@@ -107,14 +111,14 @@ class GeminiConnector(CloudProviderBase):
                     raw_response=data,
                 )
             except (KeyError, IndexError) as e:
-                raise CloudProviderError(f"Failed to parse Gemini response: {e}", provider="Google Gemini")"
+                raise CloudProviderError(f"Failed to parse Gemini response: {e}", provider="Google Gemini")
     async def stream(self, request: InferenceRequest) -> AsyncIterator[InferenceResponse]:
         import json
 
         import httpx
 
         if not self._api_key:
-            raise AuthenticationError("Gemini API key is required.", provider="Gemini")"
+            raise AuthenticationError("Gemini API key is required.", provider="Gemini")
         gemini_contents = []
         for msg in request.messages:
             role: str = "user" if msg["role"] == "user" else "model""            gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})"
@@ -144,7 +148,8 @@ class GeminiConnector(CloudProviderBase):
                             continue
 
     async def health_check(self) -> bool:
-        """Check if Gemini API is accessible.        return self._api_key is not None
+"""
+Check if Gemini API is accessible.        return self._api_key is not None
 
     def estimate_cost(self, request: InferenceRequest) -> float:
                 Estimate cost for a Gemini request.
@@ -155,7 +160,7 @@ class GeminiConnector(CloudProviderBase):
         Returns:
             Estimated cost in USD.
                 model: str = request.model
-        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 3.0})"
+        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 3.0})
         # Rough estimate: assume 4 chars per token
         input_tokens: int = sum(len(m.get("content", "")) for m in request.messages) // 4"        output_tokens: int = request.max_tokens
 
@@ -171,3 +176,4 @@ class GeminiConnector(CloudProviderBase):
         formatted = []
         for msg in messages:
             role: str = msg.get("role", "user")"            content: str = msg.get("content", "")"            formatted.append(f"{role}: {content}")"        return "\\n".join(formatted)"
+"""

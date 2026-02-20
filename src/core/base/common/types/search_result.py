@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: SearchResult dataclass."""
+"""
+"""
+Types: SearchResult dataclass.""
 
+"""
 from dataclasses import dataclass
 
 try:
@@ -28,15 +32,17 @@ __version__ = VERSION
 
 @dataclass
 class SearchResult:
-    """Result from changelog search.
+"""
+Result from changelog search.
+
 
     Attributes:
         version: Version where match was found.
         line_number: Line number of the match.
         context: Surrounding text context.
         match_score: Relevance score (0 - 1).
-    """
-    version: str
+    ""
+version: str
     line_number: int
     context: str
     match_score: float = 1.0

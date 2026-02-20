@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: DiffResult dataclass."""
+"""
+"""
+Types: DiffResult dataclass.""
 
+"""
 from dataclasses import dataclass, field
 
 try:
@@ -28,7 +32,9 @@ __version__ = VERSION
 
 @dataclass
 class DiffResult:
-    """Result of a changelog diff comparison.
+"""
+Result of a changelog diff comparison.
+
 
     Attributes:
         additions: Lines added.
@@ -36,8 +42,8 @@ class DiffResult:
         modifications: Lines changed.
         unchanged: Lines unchanged.
         similarity_score: Percentage of similarity (0 - 100).
-    """
-    additions: list[str] = field(default_factory=list)
+    ""
+additions: list[str] = field(default_factory=list)
     deletions: list[str] = field(default_factory=list)
     modifications: list[tuple[str, str]] = field(default_factory=list)
     unchanged: int = 0

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal smoke test for ErrorMappingCore importability."""
+""
+Minimal smoke test for ErrorMappingCore importability.""
 try:
     from src.core.base.logic.core.error_mapping_core import ErrorMappingCore  # type: ignore
 except Exception:  # pragma: no cover - test shim

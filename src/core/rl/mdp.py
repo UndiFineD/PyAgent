@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Mdp.py module.
 """
+"""
+Mdp.py module.
+"""
+
+"""
+
 # Markov Decision Process (MDP) Implementation - Phase 319 Enhanced
 
 try:
@@ -49,8 +55,9 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class Transition:
-    """Represents a state transition with optional metadata."""
-    state: Any
+"""
+Represents a state transition with optional metadata.""
+state: Any
     action: Any
     next_state: Any
     reward: float
@@ -61,26 +68,30 @@ class Transition:
 
 @dataclass
 class ExperienceReplayBuffer:
-    """Circular buffer for storing and sampling transitions."""
-    capacity: int = 10000
+"""
+Circular buffer for storing and sampling transitions.""
+capacity: int = 10000
     buffer: List[Transition] = field(default_factory=list)
     position: int = 0
 
     def push(self, transition: Transition) -> None:
-        """Adds a transition to the buffer."""
-        if len(self.buffer) < self.capacity:
+"""
+Adds a transition to the buffer.""
+if len(self.buffer) < self.capacity:
             self.buffer.append(transition)
         else:
             self.buffer[self.position] = transition
         self.position = (self.position + 1) % self.capacity
 
     def sample(self, batch_size: int) -> List[Transition]:
-        """Randomly samples a batch of transitions."""
-        return random.sample(self.buffer, min(batch_size, len(self.buffer)))
+"""
+Randomly samples a batch of transitions.""
+return random.sample(self.buffer, min(batch_size, len(self.buffer)))
 
     def prioritized_sample(self, batch_size: int, alpha: float = 0.6) -> List[Transition]:
-        """Samples with priority weighting."""
-        priorities = [t.priority**alpha for t in self.buffer]
+"""
+Samples with priority weighting.""
+priorities = [t.priority**alpha for t in self.buffer]
         total = sum(priorities)
         probs = [p / total for p in priorities]
         indices = random.choices(range(len(self.buffer)), weights=probs, k=min(batch_size, len(self.buffer)))
@@ -89,10 +100,11 @@ class ExperienceReplayBuffer:
 
 
 class MDP:
-    """Models the decision-making process for agents.
+"""
+Models the decision-making process for agents.
     Implements: S (States), A (Actions), P(s'|s,a) (Transition Dynamics), R(s,a) (Rewards)'    Enhanced with value iteration, policy extraction, and model-based planning.
-    """
-    def __init__(self, gamma: float = 0.99) -> None:
+"""
+def __init__(self, gamma: float = 0.99) -> None:
         self.transitions: List[Transition] = []
         self.states: List[Any] = []
         self.actions: List[Any] = []
@@ -106,8 +118,9 @@ class MDP:
     def add_transition(
         self, state: Any, action: Any, next_state: Any, reward: float, done: bool, timestamp: float = 0.0
     ) -> None:
-        """Records a transition and updates internal models."""
-        import time
+"""
+Records a transition and updates internal models.""
+import time
 
         t = Transition(state, action, next_state, reward, done, timestamp or time.time())
         self.transitions.append(t)
@@ -126,21 +139,24 @@ class MDP:
         self.reward_model[(state, action)].append(reward)
 
     def get_transition_probability(self, state: Any, action: Any, next_state: Any) -> float:
-        """Returns P(s'|s,a) based on observed transitions."""
-        transitions = self.transition_model[(state, action)]
+"""
+Returns P(s'|s,a) based on observed transitions.""
+transitions = self.transition_model[(state, action)]
         total = sum(transitions.values())
         if total == 0:
             return 0.0
         return transitions[next_state] / total
 
     def get_expected_reward(self, state: Any, action: Any) -> float:
-        """Returns E[R(s,a)] based on observed rewards."""
-        rewards = self.reward_model[(state, action)]
+"""
+Returns E[R(s,a)] based on observed rewards.""
+rewards = self.reward_model[(state, action)]
         return sum(rewards) / len(rewards) if rewards else 0.0
 
     def value_iteration(self, theta: float = 1e-6, max_iterations: int = 1000) -> int:
-        """Computes optimal value function using dynamic programming."""
-        for iteration in range(max_iterations):
+"""
+Computes optimal value function using dynamic programming.""
+for iteration in range(max_iterations):
             delta = 0.0
             for state in self.states:
                 v = self.value_function[state]
@@ -165,8 +181,9 @@ class MDP:
         return max_iterations
 
     def extract_policy(self) -> Dict[Any, Any]:
-        """Extracts greedy policy from value function."""
-        for state in self.states:
+"""
+Extracts greedy policy from value function.""
+for state in self.states:
             best_action = None
             best_value = -float("inf")
             for action in self.actions:
@@ -182,19 +199,22 @@ class MDP:
         return self.policy
 
     def get_reward_sum(self) -> float:
-        """Returns the sum of all rewards in transitions."""
-        return sum(t.reward for t in self.transitions)
+"""
+Returns the sum of all rewards in transitions.""
+return sum(t.reward for t in self.transitions)
 
     def get_discounted_return(self) -> float:
-        """Computes discounted cumulative return."""
-        total = 0.0
+"""
+Computes discounted cumulative return.""
+total = 0.0
         for i, t in enumerate(self.transitions):
             total += (self.gamma**i) * t.reward
         return total
 
     def to_dict(self) -> Dict[str, Any]:
-        """Returns a dictionary representation of the MDP."""
-        return {
+        ""
+Returns a dictionary representation of the MDP.""
+return {
             "state_count": len(self.states),
             "action_count": len(self.actions),
             "transition_count": len(self.transitions),

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,10 +14,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""AgentRegistry: Central registry for all active agent instances.
+"""
+"""
+AgentRegistry: Central registry for all active agent instances.
 (Re-implemented using RegistryCore)
 """
 
+"""
 import logging
 from typing import Any
 
@@ -28,10 +32,11 @@ __version__: str = VERSION
 
 
 
-class AgentRegistry(RegistryCore["BaseAgent"]):"    """Singleton registry to track all active agents.
+class AgentRegistry(RegistryCore["BaseAgent"]):"    """
+Singleton registry to track all active agents.
     Uses RegistryCore for thread-safe storage and hooks.
-    """
-    _instance: AgentRegistry | None = None
+"""
+_instance: AgentRegistry | None = None
 
     def __new__(cls) -> AgentRegistry:
         if cls._instance is None:
@@ -42,42 +47,58 @@ class AgentRegistry(RegistryCore["BaseAgent"]):"    """Singleton registry to tra
         if not hasattr(self, "_initialized"):"            super().__init__(name="AgentRegistry")"            self._initialized = True
 
     def register_instance(self, agent) -> bool:
-        """Register an agent instance using its internal agent_name.
+"""
+Register an agent instance using its internal agent_name.
         Args:
             agent: The agent instance to register.
         Returns:
             bool: True if registration succeeded, False otherwise.
-        """name: str = getattr(agent, "agent_name", str(id(agent)))"        success: bool = super().register(name, agent)
+"""
+name: str = getattr(agent, "agent_name", str(id(agent)))"        success: bool = super().register(name, agent)
         if success:
             logging.debug("Agent '%s' registered.", name)"'        return success
 
     def unregister_instance(self, name: str) -> bool:
-        """Unregister an agent instance by name.
+"""
+Unregister an agent instance by name.
         Args:
             name (str): The name of the agent to unregister.
         Returns:
             bool: True if the agent was unregistered, False otherwise.
-        """success = super().unregister(name)
+"""
+success = super().unregister(name)
         if success:
             logging.debug("Agent '%s' unregistered.", name)"'        return bool(success)
 
     def get_agent(self, name: str) -> Any | None:
-        """Retrieve an agent by name.
+"""
+Retrieve an agent by name.
         Args:
             name (str): The name of the agent to retrieve.
         Returns:
             BaseAgent | None: The agent instance if found, else None.
-        """return self.get(name)
+"""
+return self.get(name)
 
     def list_agents(self) -> list[str]:
-        """List names of all registered agents.
+"""
+List names of all registered agents.
         Returns:
             list[str]: List of registered agent names.
-        """return self.list_keys()
+"""
+return self.list_keys()
 
     @property
     def active_count(self) -> int:
-        """Return the number of active agents.
+"""
+Return the number of active agents.
         Returns:
             int: Number of active agents.
-        """return len(self._items)
+"""
+return len(self._items)
+
+"""
+
+""
+
+"""

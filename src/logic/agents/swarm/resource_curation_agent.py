@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +21,10 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 Instantiate ResourceCurationAgent and call as_tool methods (e.g., add_resource(url, title, summary?, tags?)), use process_research_queue(urls) for bulk discovery, and await improve_content(prompt, target_file?) for asynchronous summary updates.
 
+"""
 WHAT IT DOES:
 Keeps a simple JSON-backed research library, accepts new resource entries, bulk-processes discovery URLs (simulated), and exposes an async stub to improve content summaries; integrates with fleet agents via its system prompt and as_tool wrappers.
 
@@ -44,7 +48,8 @@ __version__ = VERSION
 
 
 class ResourceCurationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages the 'Good Read Unit' and research link lifecycle.'
+""""
+Manages the 'Good Read Unit' and research link lifecycle.
     def __init__(self, file_path: str = ".") -> None:"        super().__init__(file_path)
 #         self.library_path = "data/memory/knowledge_exports/research_library.json"        self._system_prompt = (
 #             "You are the Resource Curation Agent. Your goal is to keep the fleet's knowledge"'#             "up-to-date by parsing research links, extracting actionable insights, and"#             "categorizing content for the KnowledgeAgent and FeatureStoreAgent."        )
@@ -69,7 +74,8 @@ class ResourceCurationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def process_research_queue(self, urls: list[str]) -> str:
-""""Bulk processes a list of discovery URLs.        # Simulated extraction logic
+""""
+Bulk processes a list of discovery URLs.        # Simulated extraction logic
 #         return fProcessed {len(urls)} research items. Recommendations sent to KnowledgeAgent.
 
     def _load_library(self) -> list[dict[str, Any]]:
@@ -106,7 +112,8 @@ __version__ = VERSION
 
 
 class ResourceCurationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages the 'Good Read Unit' and research link lifecycle.'
+""""
+Manages the 'Good Read Unit' and research link lifecycle.
     def __init__(self, file_path: str = ".") -> None:"        super().__init__(file_path)
 #         self.library_path = "data/memory/knowledge_exports/research_library.json"        self._system_prompt = (
 #             "You are the Resource Curation Agent. Your goal is to keep the fleet's knowledge"'#             "up-to-date by parsing research links, extracting actionable insights, and"#             "categorizing content for the KnowledgeAgent and FeatureStoreAgent."        )
@@ -131,7 +138,8 @@ class ResourceCurationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def process_research_queue(self, urls: list[str]) -> str:
-""""Bulk processes a list of discovery URLs.        #" Simulated extraction logic"#         return fProcessed {len(urls)} research items. Recommendations sent to KnowledgeAgent.
+""""
+Bulk processes a list of discovery URLs.        #" Simulated extraction logic"#         return fProcessed {len(urls)} research items. Recommendations sent to KnowledgeAgent.
 
     def _load_library(self) -> list[dict[str, Any]]:
         import os  # pylint: disable=import-outside-toplevel

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,17 +17,19 @@ from __future__ import annotations
 
 
 # Documentation Agent - Generates technical references and project OVERVIEW documents
+"""
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - As a script: python documentation_agent.py generate
-- From project CLI: invoke the created main entrypoint (Documentation Agent) with a task argument (e.g., "generate")."
+- From project CLI: invoke the created main entrypoint (Documentation Agent) with a task argument (e.g., "generate").
 WHAT IT DOES:
 - Maintains and generates high-level documentation for the codebase by summarizing code structures and producing a TECHNICAL_REFERENCE.md in docs/.
 - Uses KnowledgeAgent to build an index of Python modules, produce compressed briefings for the top modules, and create a Mermaid dependency graph.
 - Exposes a synchronous generate_reference() method and an async improve_content() facade to trigger maintenance operations.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Add robust error handling and logging around file system operations and KnowledgeAgent calls (currently assumes directories and agent calls succeed).
 - Make workspace paths, output filename, and file selection configurable (not hardcoded); support incremental updates and larger codebases (currently limits to top 10 files).
@@ -68,7 +72,8 @@ __version__ = VERSION
 
 
 class DocumentationAgent(BaseAgent):
-""""Generates technical references and project OVERVIEW documents.
+""""
+Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -76,9 +81,11 @@ class DocumentationAgent(BaseAgent):
 #             "You are the Documentation Agent."#             "Your role is to maintain clear, accurate technical documentation."#             "You summarize code structures, explain module relationships, and ensure READMEs are current."        )
 
     def _get_default_content(self) -> str:
-"""return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
+"""
+return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
-""""Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
+""""
+Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
 #         classes_dir = self.workspace_root / "src/classes"
         # Get structural briefs
         py_files = [
@@ -86,19 +93,20 @@ class DocumentationAgent(BaseAgent):
         briefing = self.knowledge.get_compressed_briefing(py_files[:10])  # Top 10 for summary
 
         doc = [
-            "# Technical Reference Guide","            ","            "## 🏗️ Class Hierarchy & Signatures","            "This section provides an overview of the core modular classes.","            ","            briefing,
-            ","            "## 🔗 Dependency Map","            "```mermaid","            self.knowledge.get_graph_mermaid(),
+            "# Technical Reference Guide","            ","            "## ️ Class Hierarchy & Signatures","            "This section provides an overview of the core modular classes.","            ","            briefing,
+            ","            "##  Dependency Map","            "```mermaid","            self.knowledge.get_graph_mermaid(),
             "```","            ","            "---","            f"*Generated autonomously on {logging.time.strftime('%Y-%m-%d')}*",  # type: ignore[attr-defined]"'        ]
 
 #         ref_path = self.workspace_root / "docs/TECHNICAL_REFERENCE.md"        ref_path.parent.mkdir(parents=True, exist_ok=True)
-        ref_path.write_text("\\n".join(doc), encoding="utf-8")"
+        ref_path.write_text("\\n".join(doc), encoding="utf-8")
 #         return fReference documentation updated at: {ref_path}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Perform documentation maintenance."        _ = prompt," target_file"        return self.generate_reference()
 
 
-if __name__ == "__main__":"    main = create_main_function(DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')")"'"    main()"
+if __name__ == "__main__":"    main = create_main_function(DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')")"
+main()
 # pylint: disable=too-many-ancestors
 
 try:
@@ -133,7 +141,8 @@ __version__ = VERSION
 
 
 class DocumentationAgent(BaseAgent):
-""""Generates technical references and project OVERVIEW documents.
+""""
+Generates technical references and project OVERVIEW documents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -141,9 +150,11 @@ class DocumentationAgent(BaseAgent):
 #             "You are the Documentation Agent."#             "Your role is to maintain clear, accurate technical documentation."#             "You summarize code structures, explain module relationships, and ensure READMEs are current."        )
 
     def _get_default_content(self) -> str:
-"""return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
+"""
+return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
-""""Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
+""""
+Generates a technical reference for the src/classes/ directory.        self.knowledge.build_index()
 #         classes_dir = self.workspace_root / "src/classes"
         # Get structural briefs
         py_files = [
@@ -151,12 +162,12 @@ class DocumentationAgent(BaseAgent):
         briefing = self.knowledge.get_compressed_briefing(py_files[:10])  # Top 10 for summary
 
         doc = [
-            "# Technical Reference Guide","            ","            "## 🏗️ Class Hierarchy & Signatures","            "This section provides an overview of the core modular classes.","            ","            briefing,
-            ","            "## 🔗 Dependency Map","            "```mermaid","            self.knowledge.get_graph_mermaid(),
+            "# Technical Reference Guide","            ","            "## ️ Class Hierarchy & Signatures","            "This section provides an overview of the core modular classes.","            ","            briefing,
+            ","            "##  Dependency Map","            "```mermaid","            self.knowledge.get_graph_mermaid(),
             "```","            ","            "---","            f"*Generated autonomously on {logging.time.strftime('%Y-%m-%d')}*",  # type: ignore[attr-defined]"'        ]
 
 #         ref_path = self.workspace_root / "docs/TECHNICAL_REFERENCE.md"        ref_path.parent.mkdir(parents=True, exist_ok=True)
-        ref_path.write_text("\\n".join(doc), encoding="utf-8")"
+        ref_path.write_text("\\n".join(doc), encoding="utf-8")
 #         return fReference documentation updated at: {ref_path}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

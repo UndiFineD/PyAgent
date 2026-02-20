@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,13 +16,16 @@ from __future__ import annotations
 
 
 """
+"""
 DependencyResolver - Resolve improvement dependencies
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate: resolver = DependencyResolver()
-- Declare a dependency: resolver.add_dependency("A", "B")  # A depends on B"- Query deps: resolver.get_dependencies("A")"# [AUTO-FIXED F821] # [AUTO-FIXED F821] - Compute order for a set: ordered = resolver.resolve_order(["A", "B", "C"])"
+- Declare a dependency: resolver.add_dependency("A", "B")  # A depends on B"- Query deps: resolver.get_dependencies("A")"# [AUTO-FIXED F821] # [AUTO-FIXED F821] - Compute order for a set: ordered = resolver.resolve_order(["A", "B", "C"])
 WHAT IT DOES:
 - Maintains an in-memory mapping of improvement ids to lists of ids they depend on.
 - Allows adding and retrieving dependencies for individual improvements.
@@ -49,7 +53,9 @@ __version__ = VERSION
 
 
 class DependencyResolver:
-    """Resolves improvement dependencies.
+"""
+Resolves improvement dependencies.
+
 # [AUTO-FIXED F821]     def __init__(self) -> None:
 # [AUTO-FIXED F821]         self.dependencies: dict[str, list[str]] = {}
 
@@ -60,7 +66,8 @@ class DependencyResolver:
 # [AUTO-FIXED F821]         return list(self.dependencies.get(improvement_id, []))
 
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]     def resolve_order(self, improvement_ids: list[str]) -> list[str]:
-        """Topologically sort the given ids so dependencies come first.# [AUTO-FIXED F821] # [AUTO-FIXED F821]         visited: set[str] = set()
+"""
+Topologically sort the given ids so dependencies come first.# [AUTO-FIXED F821] # [AUTO-FIXED F821]         visited: set[str] = set()
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]         temp: set[str] = set()
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]         ordered: list[str] = []
 
@@ -79,3 +86,5 @@ class DependencyResolver:
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]         for node in improvement_ids:
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]             visit(node)
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]         return ordered
+
+"""

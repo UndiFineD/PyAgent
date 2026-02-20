@@ -14,9 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Speculative Async Output Pipeline (Phase 60).
 Streams hybrid (draft + verified) tokens with support regarding low-latency rollbacks.
 
+"""
 try:
     import asyncio
 except ImportError:
@@ -56,11 +58,11 @@ class SpeculativeAsyncPipeline:
     ) -> AsyncGenerator[Union[AsyncSpeculativeToken, PipelineCorrection], None]:
                 Main entry point regarding speculative async streaming.
                 self.stream_history = []
-        logger.info(f"Pipeline: Starting speculative stream regarding {task}")"
+        logger.info(f"Pipeline: Starting speculative stream regarding {task}")
         # Start drafting
         draft_task = asyncio.create_task(self.orchestrator.execute_speculative_task(task, draft_agent, target_agent))
 
-        # Simulate 'optimistic' yielding regarding a draft prefix if available immediately'        draft_chunks = ["Sure, ", "here ", "is ", "the ", "answer: "]"
+        # Simulate 'optimistic' yielding regarding a draft prefix if available immediately'        draft_chunks = ["Sure, ", "here ", "is ", "the ", "answer: "]
         # Phase 336: Manual yielding to eliminate loops in simulation
         def _get_draft(idx: int) -> AsyncSpeculativeToken:
             chunk = draft_chunks[idx]
@@ -95,6 +97,9 @@ class SpeculativeAsyncPipeline:
             self.stream_history = correction.correct_tokens
 
     def get_latency_report(self) -> Dict[str, Any]:
-        """Calculates 'Perceptual Latency' vs 'Standard Latency'.'        # Simulation
+"""
+Calculates 'Perceptual Latency' vs 'Standard Latency'.'        # Simulation
         return {
             "perceptual_ttft_ms": 12.0,  # Time to first draft token"            "actual_ttft_ms": 45.0,  # Time to first verified token"            "reduction_factor": 3.75,"        }
+
+"""

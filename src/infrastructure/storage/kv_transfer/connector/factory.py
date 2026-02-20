@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,14 @@ from __future__ import annotations
 
 
 """
+"""
 Phase 45: KV Transfer Connector Factory
 Registry and factory for KV transfer connectors.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -59,21 +62,26 @@ def register_kv_connector(
     name: str,
     connector_cls: type[KVConnectorBase],
 ) -> None:
-    """Register a KV connector class.    _CONNECTOR_REGISTRY[name] = connector_cls
-    logger.info("Registered KV connector: %s", name)"
+"""
+Register a KV connector class.    _CONNECTOR_REGISTRY[name] = connector_cls
+    logger.info("Registered KV connector: %s", name)
 
 def get_kv_connector(
     config: KVTransferConfig,
     kv_cache_config: Optional[Any] = None,
 ) -> KVConnectorBase:
-    """Get a KV connector instance by configuration.    connector_name = config.kv_connector
+"""
+Get a KV connector instance by configuration.    connector_name = config.kv_connector
 
     if connector_name not in _CONNECTOR_REGISTRY:
         available = list(_CONNECTOR_REGISTRY.keys())
-        raise ValueError(f"Unknown KV connector: {connector_name}. Available: {available}")"
+        raise ValueError(f"Unknown KV connector: {connector_name}. Available: {available}")
     connector_cls = _CONNECTOR_REGISTRY[connector_name]
     return connector_cls(config, kv_cache_config)
 
 
 def list_kv_connectors() -> List[str]:
-    """List all registered KV connectors.    return list(_CONNECTOR_REGISTRY.keys())
+"""
+List all registered KV connectors.    return list(_CONNECTOR_REGISTRY.keys())
+
+"""

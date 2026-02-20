@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from typing import Any
 except ImportError:
@@ -45,15 +45,17 @@ __version__ = VERSION
 
 
 class TestResultAggregator:
-    """Aggregates test results for reporting.""""
-    Example:
+"""
+Aggregates test results for reporting.""""
+Example:
         agg=TestResultAggregator()
         agg.add_result(TestResult(name="test1", status=TestStatus.PASSED))"        report=agg.get_report()
     
     __test__ = False
 
     def __init__(self) -> None:
-        """Initialize result aggregator.        self._results: list[TestResult] = []
+"""
+Initialize result aggregator.        self._results: list[TestResult] = []
 
     def add_result(
         self,
@@ -61,8 +63,9 @@ class TestResultAggregator:
         test_name: str | None = None,
         status: str | None = None,
     ) -> None:
-        """Add a test result.""""
-        Args:
+"""
+Add a test result.""""
+Args:
             result: Test result object OR suite name (for backwards compatibility).
             test_name: Test name (when result is a string).
             status: Test status (when result is a string).
@@ -76,13 +79,15 @@ class TestResultAggregator:
             )
             self._results.append(test_result)
         else:
-            raise TypeError("Invalid arguments to add_result")"
+            raise TypeError("Invalid arguments to add_result")
     def get_results(self) -> list[TestResult]:
-        """Get all results.        return list(self._results)
+"""
+Get all results.        return list(self._results)
 
     def get_report(self) -> dict[str, Any]:
-        """Get aggregated report.""""
-        Returns:
+"""
+Get aggregated report.""""
+Returns:
             Dict containing test statistics.
                 total = len(self._results)
         passed = sum(1 for r in self._results if r.status == TestStatus.PASSED)
@@ -95,12 +100,14 @@ class TestResultAggregator:
             "total": total,"            "passed": passed,"            "failed": failed,"            "skipped": skipped,"            "errors": errors,"            "pass_rate": passed / total if total > 0 else 0.0,"            "total_duration_ms": sum(durations),"            "avg_duration_ms": sum(durations) / len(durations) if durations else 0,"        }
 
     def get_summary(self) -> dict[str, Any]:
-        """Compatibility alias used by some tests.        report = self.get_report()
+"""
+Compatibility alias used by some tests.        report = self.get_report()
         return {
             "total": report.get("total", 0),"            "passed": report.get("passed", 0),"            "failed": report.get("failed", 0),"            "skipped": report.get("skipped", 0),"            "errors": report.get("errors", 0),"        }
 
     def get_by_suite(self) -> dict[str, dict[str, int]]:
-        """Group results by suite prefix ("suite/test").        by_suite: dict[str, dict[str, int]] = {}
+"""
+Group results by suite prefix ("suite/test").        by_suite: dict[str, dict[str, int]] = {}
         for r in self._results:
             suite = "unknown""            if "/" in r.test_name:"                suite = r.test_name.split("/", 1)[0]"            by_suite.setdefault(suite, {"total": 0, "passed": 0, "failed": 0, "skipped": 0, "errors": 0})"            by_suite[suite]["total"] += 1"            if r.status == TestStatus.PASSED:
                 by_suite[suite]["passed"] += 1"            elif r.status == TestStatus.FAILED:
@@ -109,7 +116,9 @@ class TestResultAggregator:
                 by_suite[suite]["errors"] += 1"        return by_suite
 
     def get_failures(self) -> list[TestResult]:
-        """Get failed tests.        return [r for r in self._results if r.status == TestStatus.FAILED]
+"""
+Get failed tests.        return [r for r in self._results if r.status == TestStatus.FAILED]
 
     def clear(self) -> None:
-        """Clear all results.        self._results.clear()
+"""
+Clear all results.        self._results.clear()

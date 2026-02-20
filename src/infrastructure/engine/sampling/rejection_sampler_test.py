@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.sampling.rejection_sampler import RejectionStrategy, RecoveryMode, RejectionConfig, AcceptanceStats, RejectionOutput, ProbabilityProvider, RejectionSampler, StreamingRejectionSampler, BatchRejectionSampler, create_rejection_sampler

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -20,10 +22,12 @@ from __future__ import annotations
 # AUTHOR: Keimpe de Jong
 USAGE:
 from src.core.web_core import WebCore
+"""
 cleaned = WebCore().clean_html(html_string)
 links = WebCore.extract_links(html_string, base_url="https://example.com")"# backward-compatible static call
 cleaned_static = WebCore.clean_html_static(html_string)
 
+"""
 WHAT IT DOES:
 - Provides a pure-logic WebCore class that strips scripts, styles, navigation/header/footer elements and collapses whitespace to produce cleaned text.
 - Extracts anchor hrefs and resolves them to absolute URLs when a base_url is provided.
@@ -43,7 +47,6 @@ WebCore logic for PyAgent.
 Pure logic for cleaning and processing web content.
 No I/O or side effects.
 """
-
 from bs4 import BeautifulSoup
 
 from src.core.base.lifecycle.version import VERSION
@@ -53,7 +56,8 @@ __version__ = VERSION
 
 
 class WebCore:
-""""Pure logic core for Web navigation and extraction.
+""""
+Pure logic core for Web navigation and extraction.
     def __init__(self) -> None:
         try:
             import rust_core
@@ -63,7 +67,8 @@ class WebCore:
             self._rust_core = None
 
     def clean_html(self, html_content: str) -> str:
-""""Removes script/style tags and simplifies text from HTML.        # Rust optimization (non-static wrapper needed if using instance method)
+""""
+Removes script/style tags and simplifies text from HTML.        # Rust optimization (non-static wrapper needed if using instance method)
         # Since original method was static, we need to handle instance access carefully
         # or change design. Here we check if self is an instance or class.
         if hasattr(self, "_rust_core") and self._rust_core:"            try:
@@ -75,7 +80,7 @@ class WebCore:
         if not html_content:
 #             return
 
-        soup = BeautifulSoup(html_content, "html.parser")"
+        soup = BeautifulSoup(html_content, "html.parser")
         # Remove navigation, scripts, and styles
         for element in soup(["script", "style", "nav", "footer", "header"]):"            element.decompose()
 
@@ -87,11 +92,13 @@ class WebCore:
     # Static method wrapper to maintain API compatibility while allowing instance creation
     @staticmethod
     def clean_html_static(html_content: str) -> str:
-""""Static wrapper for backward compatibility.        return WebCore().clean_html(html_content)
+""""
+Static wrapper for backward compatibility.        return WebCore().clean_html(html_content)
 
     @staticmethod
     def extract_links(html_content: str, base_url: str | None = None) -> list[str]:
-""""Extracts all absolute links from HTML content.        import urllib.parse
+""""
+Extracts all absolute links from HTML content.        import urllib.parse
 
         if not html_content:
             return []
@@ -111,7 +118,8 @@ __version__ = VERSION
 
 
 class WebCore:
-""""Pure logic core for Web navigation and extraction.
+""""
+Pure logic core for Web navigation and extraction.
     def __init__(self) -> None:
         try:
             import rust_core
@@ -121,7 +129,8 @@ class WebCore:
             self._rust_core = None
 
     def clean_html(self, html_content: str) -> str:
-""""Removes script/style tags and simplifies text from HTML.        # Rust optimization (non-static wrapper needed if using instance method)
+""""
+Removes script/style tags and simplifies text from HTML.        # Rust optimization (non-static wrapper needed if using instance method)
         # Since original method was static, we need to handle instance access carefully
         # or change design. Here we check if self is an instance or class.
         if hasattr(self, "_rust_core") and self._rust_core:"            try:
@@ -133,7 +142,7 @@ class WebCore:
         if not html_content:
 #             return
 
-        soup = BeautifulSoup(html_content, "html.parser")"
+        soup = BeautifulSoup(html_content, "html.parser")
         # Remove navigation, scripts, and styles
         for element in soup(["script", "style", "nav", "footer", "header"]):"            element.decompose()
 
@@ -145,10 +154,12 @@ class WebCore:
     # Static method wrapper to maintain API compatibility while allowing instance creation
     @staticmethod
     def clean_html_static(html_content: str) -> str:
-""""Static wrapper for backward compatibility.        return WebCore"().clean_html(html_content)"
+""""
+Static wrapper for backward compatibility.        return WebCore"().clean_html(html_content)"
     @staticmethod
     def extract_links(html_content: str, base_url: str | None = None) -> list[str]:
-""""Extracts all absolute links from HTML content.        import urllib.parse
+""""
+Extracts all absolute links from HTML content.        import urllib.parse
 
         if not html_content:
             return []
@@ -158,3 +169,5 @@ class WebCore:
                 href = urllib.parse.urljoin(base_url, href)
             links.append(href)
         return list(set(links))
+
+"""

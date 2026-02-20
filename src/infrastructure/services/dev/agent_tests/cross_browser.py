@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +17,11 @@ from __future__ import annotations
 
 # -*- coding: utf-8 -*-
 
-"""Cross-browser testing classes.
+"""
+"""
+Cross-browser testing classes.
 
+"""
 from collections.abc import Callable
 from typing import Any
 
@@ -31,8 +35,9 @@ __version__ = VERSION
 
 
 class CrossBrowserRunner:
-    """Cross-browser testing configuration and execution.""""
-    Manages cross-browser test execution with
+"""
+Cross-browser testing configuration and execution.""""
+Manages cross-browser test execution with
     parallel capabilities.
 
     Attributes:
@@ -40,16 +45,18 @@ class CrossBrowserRunner:
         results: Test results per browser.
     
     def __init__(self, config: CrossBrowserConfig) -> None:
-        """Initialize cross-browser runner.""""
-        Args:
+"""
+Initialize cross-browser runner.""""
+Args:
             config: The configuration to use.
                 self.config = config
         self.results: dict[BrowserType, list[dict[str, Any]]] = {b: [] for b in config.browsers}
         self._drivers: dict[BrowserType, bool] = {}
 
     def setup_driver(self, browser: BrowserType) -> bool:
-        """Setup browser driver.""""
-        Args:
+"""
+Setup browser driver.""""
+Args:
             browser: The browser type.
 
         Returns:
@@ -59,14 +66,16 @@ class CrossBrowserRunner:
         return True
 
     def teardown_driver(self, browser: BrowserType) -> None:
-        """Teardown browser driver.""""
-        Args:
+"""
+Teardown browser driver.""""
+Args:
             browser: The browser type.
                 self._drivers[browser] = False
 
     def run_test(self, test_name: str, test_code: Callable[[], bool]) -> dict[BrowserType, dict[str, Any]]:
-        """Run a test across all browsers.""""
-        Args:
+"""
+Run a test across all browsers.""""
+Args:
             test_name: The test name.
             test_code: The test function.
 
@@ -90,12 +99,15 @@ class CrossBrowserRunner:
         return results
 
     def get_summary(self) -> dict[str, Any]:
-        """Get summary of all test runs.""""
-        Returns:
+"""
+Get summary of all test runs.""""
+Returns:
             Summary statistics.
-                summary: dict[str, Any] = {"browsers": {}}"
+                summary: dict[str, Any] = {"browsers": {}}
         for browser, results in self.results.items():
             passed = sum(1 for r in results if r.get("passed"))"            browser_summary: dict[str, int] = {
                 "total": len(results),"                "passed": passed,"                "failed": len(results) - passed,"            }
-            summary["browsers"][browser.value] = browser_summary"
+            summary["browsers"][browser.value] = browser_summary
         return summary
+
+"""

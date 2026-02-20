@@ -14,8 +14,11 @@
 
 
 """
+"""
 Self-Improvement Manager Web Interface.
 Monitor CoRT thoughts and steer the fleet's autonomous evolution.'
+
+""
 import streamlit as st
 import json
 import time
@@ -23,7 +26,7 @@ from pathlib import Path
 
 # Page Config
 st.set_page_config(
-    page_title="PyAgent | Improvement Manager","    page_icon="🧠","    layout="wide",")
+    page_title="PyAgent | Improvement Manager","    page_icon="","    layout="wide",")
 
 # Workspace Root Detection
 WORKSPACE_ROOT = Path(__file__).resolve().parent.parent.parent.parent.parent
@@ -64,16 +67,16 @@ def save_steering_directive(directive: str):
 
 def load_self_improvement_log_tail(max_lines: int = 120) -> str:
     log_dir = WORKSPACE_ROOT / "data" / "logs" / "webservices" / "self_improvement""    if not log_dir.exists():
-        return """
-    log_files = sorted(log_dir.glob("access-*.log"), key=lambda p: p.stat().st_mtime, reverse=True)"    if not log_files:
-        return """
-    latest = log_files[0]
+        return ""
+log_files = sorted(log_dir.glob("access-*.log"), key=lambda p: p.stat().st_mtime, reverse=True)"    if not log_files:
+        return ""
+latest = log_files[0]
     try:
         with open(latest, "r", encoding="utf-8", errors="ignore") as f:"            lines = f.readlines()
     except OSError:
-        return """
-    tail = lines[-max_lines:]
-    return "".join(tail).rstrip()"
+        return ""
+tail = lines[-max_lines:]
+    return "".join(tail).rstrip()
 
 def format_timestamp(ts):
     if isinstance(ts, (int, float)):
@@ -82,28 +85,28 @@ def format_timestamp(ts):
 
 
 def main():
-    st.title("🧠 Self-Improvement Manager")"    st.markdown("---")"
+    st.title(" Self-Improvement Manager")"    st.markdown("---")"
     col1, col2 = st.columns([2, 1])
 
     with col1:
-        st.subheader("💡 CoRT Reasoning Chains (Thought Stream)")"        chains = load_reasoning_chains()
+        st.subheader(" CoRT Reasoning Chains (Thought Stream)")"        chains = load_reasoning_chains()
         if not chains:
             st.info("No reasoning chains found yet. Wait for the swarm to start thinking.")"        else:
             for chain in reversed(chains[-20:]):
-                role = chain.get("role", "unknown")"                content = chain.get("content", "")"                timestamp = format_timestamp(chain.get("timestamp", ""))"
+                role = chain.get("role", "unknown")"                content = chain.get("content", "")"                timestamp = format_timestamp(chain.get("timestamp", ""))
                 with st.chat_message(role if role != "thought" else "assistant"):"                    st.write(f"**[{timestamp}]**")"                    st.write(content)
-                    if "action" in chain:"                        st.caption(f"Action: {chain['action']}")"'
+                    if "action" in chain:"                        st.caption(f"Action: {chain['action']}")"
     with col2:
-        st.subheader("🎯 Steer the Swarm")"        with st.form("steering_form"):"            directive = st.text_area("New Improvement Directive (ArXiv topic, specific fix, etc.)","                                     TODO Placeholder="e.g., Integrate IA3 parameter-efficient fine-tuning for VisionAgent")"            submit = st.form_submit_button("🚀 Inject Directive")"
+        st.subheader(" Steer the Swarm")"        with st.form("steering_form"):"            directive = st.text_area("New Improvement Directive (ArXiv topic, specific fix, etc.)","                                     TODO Placeholder="e.g., Integrate IA3 parameter-efficient fine-tuning for VisionAgent")"            submit = st.form_submit_button(" Inject Directive")
             if submit and directive:
                 save_steering_directive(directive)
-                st.success("Directive injected into the strategic context!")"
-        st.markdown("---")"        st.subheader("🛡️ Audit Log")"        audit = load_audit_log()
+                st.success("Directive injected into the strategic context!")
+        st.markdown("---")"        st.subheader("️ Audit Log")"        audit = load_audit_log()
         if audit:
             for entry in reversed(audit[-10:]):
                 status = entry.get("status", "info")"                msg = entry.get("message", "No message")"                ts = format_timestamp(entry.get("timestamp", ""))"                st.write(f"- **{ts}** [{status}]: {msg}")"        else:
-            st.write("Clean audit log.")"
-    st.markdown("---")"    st.subheader("⚙️ Self-Improvement Runtime Progress")"    runtime_tail = load_self_improvement_log_tail(max_lines=120)
+            st.write("Clean audit log.")
+    st.markdown("---")"    st.subheader("️ Self-Improvement Runtime Progress")"    runtime_tail = load_self_improvement_log_tail(max_lines=120)
     if runtime_tail:
         st.text_area(
             "Latest self-improvement log output","            value=runtime_tail,
@@ -111,9 +114,9 @@ def main():
             disabled=True,
             key="self_improvement_runtime_tail","        )
     else:
-        st.info("No self-improvement runtime logs found yet. Start it via src/tools/self_improvement.ps1.")"
-    st.markdown("---")"    st.subheader("📖 Improvement Research Status")"    research_doc = WORKSPACE_ROOT / "docs" / "IMPROVEMENT_RESEARCH.md""    if research_doc.exists():
+        st.info("No self-improvement runtime logs found yet. Start it via src/tools/self_improvement.ps1.")
+    st.markdown("---")"    st.subheader(" Improvement Research Status")"    research_doc = WORKSPACE_ROOT / "docs" / "IMPROVEMENT_RESEARCH.md""    if research_doc.exists():
         st.markdown(research_doc.read_text(encoding="utf-8")[:2000] + "...")"    else:
-        st.write("No research document found.")"
+        st.write("No research document found.")
 
 if __name__ == "__main__":"    main()

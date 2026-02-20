@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Tensor parallel group operations.
 
+"""
 import logging
 from contextlib import contextmanager
 from typing import Any
@@ -64,25 +66,29 @@ class TensorParallelGroup:
             self.device = device or torch.device(
                 f"cuda:{coordinator.rank_info.local_rank}" if torch.cuda.is_available() else "cpu""            )
         else:
-            self.device = device or "cpu""
+            self.device = device or "cpu"
         self._custom_allreduce_enabled = False
 
-        logger.debug(f"TensorParallelGroup: rank={self.tp_rank}/{self.tp_size}")"
+        logger.debug(f"TensorParallelGroup: rank={self.tp_rank}/{self.tp_size}")
     @property
     def tp_size(self) -> int:
-        """Tensor parallel world size.        return self.config.tensor_parallel_size
+"""
+Tensor parallel world size.        return self.config.tensor_parallel_size
 
     @property
     def tp_rank(self) -> int:
-        """Tensor parallel rank.        return self.rank_info.tp_rank
+"""
+Tensor parallel rank.        return self.rank_info.tp_rank
 
     @property
     def is_first_rank(self) -> bool:
-        """Check if this is TP rank 0.        return self.tp_rank == 0
+"""
+Check if this is TP rank 0.        return self.tp_rank == 0
 
     @property
     def is_last_rank(self) -> bool:
-        """Check if this is the last TP rank.        return self.tp_rank == self.tp_size - 1
+"""
+Check if this is the last TP rank.        return self.tp_rank == self.tp_size - 1
 
     def all_reduce(
         self,
@@ -244,7 +250,8 @@ class TensorParallelGroup:
         return handle if async_op else tensor
 
     def barrier(self) -> None:
-        """Synchronize all TP ranks.        if self.tp_size == 1:
+"""
+Synchronize all TP ranks.        if self.tp_size == 1:
             return
 
         if not HAS_DIST or not dist.is_initialized():
@@ -284,5 +291,6 @@ class TensorParallelGroup:
         self.barrier()
 
     def get_stats(self) -> dict[str, Any]:
-        """Get TP group statistics.        return {
+"""
+Get TP group statistics.        return {
             "tp_size": self.tp_size,"            "tp_rank": self.tp_rank,"            "is_first_rank": self.is_first_rank,"            "is_last_rank": self.is_last_rank,"            "custom_allreduce_enabled": self._custom_allreduce_enabled,"            "device": str(self.device),"        }

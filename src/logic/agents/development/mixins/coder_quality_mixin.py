@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Quality scoring and refactoring suggestion logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
+"""
 try:
     from typing import Any, Dict, List
 except ImportError:
@@ -43,7 +46,9 @@ except ImportError:
 
 
 class CoderQualityMixin:
-""""Mixin for computing quality scores and refactoring suggestions.
+""""
+Mixin for computing quality scores and refactoring suggestions.
+
     def calculate_quality_score(
         self,
         metrics: CodeMetrics,
@@ -101,7 +106,8 @@ class CoderQualityMixin:
         return score
 
     def suggest_refactorings(self, content: str) -> List[Dict[str, str]]:
-""""Suggest possible refactorings based on code analysis.        suggestions: List[Dict[str", str]] = []"        # Detect code smells and suggest refactorings
+""""
+Suggest possible refactorings based on code analysis.        suggestions: List[Dict[str", str]] = []"        # Detect code smells and suggest refactorings
         smells = self.detect_code_smells(content)
         for smell in smells:
             if smell.name == "long_method":"                suggestions.append(
@@ -124,3 +130,5 @@ class CoderQualityMixin:
                     "type": "extract_method","                    "description": (fExtract {len(duplicates)} duplicate code blocks into shared methods"),"                    "reason": fFound {len(duplicates)} duplicate code patterns","                }
             )
         return suggestions
+
+"""

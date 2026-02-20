@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,9 +19,11 @@ from __future__ import annotations
 
 """
 FleetLookupMixin
+"""
 Fleet lookup mixin.py module.
 """
 
+"""
 import logging
 from typing import TYPE_CHECKING, Any, TypeVar
 
@@ -47,14 +50,14 @@ T = TypeVar("T", bound="FleetLookupMixin")
 
 
 class FleetLookupMixin:
-    """
-    Mixin for lazy loading lookups and property accessors in FleetManager.
-    """
-    def __getattr__(self, name: str) -> Any:
-        """
-        Delegate to orchestrators and agents for lazy loading support.
-        """
-        if name.startswith("__"):
+"""
+Mixin for lazy loading lookups and property accessors in FleetManager.
+"""
+def __getattr__(self, name: str) -> Any:
+"""
+Delegate to orchestrators and agents for lazy loading support.
+"""
+if name.startswith("__"):
             raise AttributeError(f"'FleetManager' object has no attribute '{name}'")
         # Optimization: Avoid recursion if we are already looking for an internal attribute
         current_dict = self.__dict__
@@ -114,67 +117,78 @@ class FleetLookupMixin:
 
     @property
     def telemetry(self) -> ObservabilityEngine:
-        """Returns the observability engine for the fleet."""
-        return self.orchestrators.telemetry
+"""
+Returns the observability engine for the fleet.""
+return self.orchestrators.telemetry
 
 
     @property
     def registry(self) -> ToolRegistry:
-        """Returns the tool and agent registry."""
-        return self.orchestrators.registry
+"""
+Returns the tool and agent registry.""
+return self.orchestrators.registry
 
 
     @property
     def signals(self) -> SignalRegistry:
-        """Returns the signal bus for the fleet."""
-        return self.orchestrators.signals
+"""
+Returns the signal bus for the fleet.""
+return self.orchestrators.signals
 
 
     @property
     def recorder(self) -> LocalContextRecorder:
-        """Returns the local context recorder."""
-        return self.orchestrators.recorder
+"""
+Returns the local context recorder.""
+return self.orchestrators.recorder
 
 
     @property
     def sql_metadata(self) -> SqlMetadataHandler:
-        """Returns the SQL metadata handler."""
-        return self.orchestrators.sql_metadata
+"""
+Returns the SQL metadata handler.""
+return self.orchestrators.sql_metadata
 
 
     @property
     def self_healing(self) -> SelfHealingOrchestrator:
-        """Returns the self-healing orchestrator."""
-        return self.orchestrators.self_healing
+"""
+Returns the self-healing orchestrator.""
+return self.orchestrators.self_healing
 
 
     @property
     def self_improvement(self) -> SelfImprovementOrchestrator:
-        """Returns the self-improvement orchestrator."""
-        return self.orchestrators.self_improvement
+"""
+Returns the self-improvement orchestrator.""
+return self.orchestrators.self_improvement
 
 
     @property
     def global_context(self) -> GlobalContextEngine:
-        """Returns the global context engine."""
-        return self.orchestrators.global_context
+"""
+Returns the global context engine.""
+return self.orchestrators.global_context
 
 
     @property
     def fallback(self) -> ModelFallbackEngine:
-        """Returns the model fallback engine."""
-        return self.orchestrators.fallback_engine
+"""
+Returns the model fallback engine.""
+return self.orchestrators.fallback_engine
 
 
     @property
     def core(self) -> Any:
-        """Returns the routing core."""
-        return self.orchestrators.core
+"""
+Returns the routing core.""
+return self.orchestrators.core
 
 
     @property
     def rl_selector(self) -> Any:
-        """Returns the reinforcement learning selector."""
+"""
+Returns the reinforcement learning selector.""
         # Allows an instance override (set during FleetManager initialization)
         # while falling back to the orchestrators' provided selector.
         # Instance override takes precedence
@@ -185,5 +199,6 @@ class FleetLookupMixin:
 
 
     def rl_selector(self, value: Any) -> None:
-        """Allow FleetManager to set a local `rl_selector` instance."""
-        self.__dict__["rl_selector"] = value
+"""
+Allow FleetManager to set a local `rl_selector` instance.""
+self.__dict__["rl_selector"] = value

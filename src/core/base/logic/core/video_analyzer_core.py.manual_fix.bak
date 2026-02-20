@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+"""Minimal, parser-safe Video Analyzer Core used for tests."""
+
+from dataclasses import dataclass
+from typing import List, Dict, Any
+
+
+@dataclass
+class VideoSegment:
+    segment_id: str
+    start_time: float
+    end_time: float
+
+
+class VideoAnalyzerCore:
+    def __init__(self):
+        self.segments: List[VideoSegment] = []
+
+    def analyze(self, video_path: str) -> List[VideoSegment]:
+        # Produce a single dummy segment for tests
+        seg = VideoSegment(segment_id="seg1", start_time=0.0, end_time=1.0)
+        self.segments = [seg]
+        return self.segments

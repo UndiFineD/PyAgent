@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for model selection and routing.
 """
-
-
-
+"""
+Core logic for model selection and routing.
+"""
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -49,8 +51,9 @@ except ImportError:
 
 @dataclass
 class ModelSelectorCore(BaseCore):
-    """Authoritative engine for selecting models based on agent type and task size."""
-    models: Dict[str, ModelConfig] = field(
+"""
+Authoritative engine for selecting models based on agent type and task size.""
+models: Dict[str, ModelConfig] = field(
         default_factory=lambda: {
             "default": ModelConfig(model_id="gpt-3.5-turbo"),
             "coding": ModelConfig(model_id="glm-4.7"),
@@ -64,8 +67,9 @@ class ModelSelectorCore(BaseCore):
             self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")
 
     def select(self, agent_type: str, token_estimate: int = 0) -> ModelConfig:
-        """Selects the best model based on agent type and workload size."""
-        if agent_type == "coding" and token_estimate > 4000:
+"""
+Selects the best model based on agent type and workload size.""
+if agent_type == "coding" and token_estimate > 4000:
             logging.info("Routing high-token task (%d) to GLM-4.7.", token_estimate)
             return self.models.get("coding", self.models["default"])
         return self.models.get(agent_type, self.models["default"])

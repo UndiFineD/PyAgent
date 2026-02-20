@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Data classes.py module.
 
+"""
 try:
     import json
 except ImportError:
@@ -45,7 +47,8 @@ except ImportError:
 
 @dataclass
 class ReasoningToken:
-    """A single token with reasoning metadata.
+"""
+A single token with reasoning metadata.
     token_id: int
     text: str
     is_thinking: bool = False
@@ -56,7 +59,8 @@ class ReasoningToken:
 
 @dataclass
 class ThinkingBlock:
-    """A complete thinking/reasoning block.
+"""
+A complete thinking/reasoning block.
     content: str
     start_position: int
     end_position: int
@@ -68,28 +72,33 @@ class ThinkingBlock:
     def __len__(self) -> int:
         return len(self.content)
 
-    def get_steps(self, delimiter: str = "\\n") -> List[str]:"        """Extract reasoning steps.        steps = [s.strip() for s in self.content.split(delimiter) if s.strip()]
+    def get_steps(self, delimiter: str = "\\n") -> List[str]:"        """
+Extract reasoning steps.        steps = [s.strip() for s in self.content.split(delimiter) if s.strip()]
         return steps
 
 
 @dataclass
 class ToolCall:
-    """A parsed tool/function call.
+"""
+A parsed tool/function call.
     id: str
     name: str
     arguments: Dict[str, Any]
-    raw_text: str = """    format: ToolCallFormat = ToolCallFormat.OPENAI
+    raw_text: str = ""
+format: ToolCallFormat = ToolCallFormat.OPENAI
     position: int = 0
     is_complete: bool = True
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert tool call to dictionary format.        return {
+"""
+Convert tool call to dictionary format.        return {
             "id": self.id,"            "type": "function","            "function": {"name": self.name, "arguments": json.dumps(self.arguments)},"        }
 
 
 @dataclass
 class ToolCallResult:
-    """Result from tool execution.
+"""
+Result from tool execution.
     tool_call_id: str
     content: str
     is_error: bool = False
@@ -98,7 +107,8 @@ class ToolCallResult:
 
 @dataclass
 class ParseResult:
-    """Result of parsing a generation stream.
+"""
+Result of parsing a generation stream.
     content: str  # Final content (without thinking)
     thinking_blocks: List[ThinkingBlock] = field(default_factory=list)
     tool_calls: List[ToolCall] = field(default_factory=list)
@@ -107,12 +117,23 @@ class ParseResult:
 
     @property
     def has_thinking(self) -> bool:
-        """Check if result has thinking blocks.        return bool(self.thinking_blocks)
+"""
+Check if result has thinking blocks.        return bool(self.thinking_blocks)
 
     @property
     def has_tool_calls(self) -> bool:
-        """Check if result has tool calls.        return bool(self.tool_calls)
+"""
+Check if result has tool calls.        return bool(self.tool_calls)
 
     @property
     def total_thinking_length(self) -> int:
-        """Calculate total number of characters in all thinking blocks.        return sum(len(block) for block in self.thinking_blocks)
+"""
+Calculate total number of characters in all thinking blocks.        return sum(len(block) for block in self.thinking_blocks)
+
+"""
+
+"""
+
+"""
+
+"""

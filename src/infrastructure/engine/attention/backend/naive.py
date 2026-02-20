@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Naive reference implementation for testing.
 """
 
+"""
 import logging
 from typing import Any
 
@@ -45,7 +49,7 @@ class NaiveAttentionBackend(AttentionBackend[None]):
     
     @staticmethod
     def get_name() -> str:
-        return "naive""
+        return "naive"
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -76,8 +80,9 @@ class NaiveAttentionBackend(AttentionBackend[None]):
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-        """Naive attention implementation.        if not HAS_TORCH:
-            raise RuntimeError("PyTorch required for NaiveAttentionBackend")"
+"""
+Naive attention implementation.        if not HAS_TORCH:
+            raise RuntimeError("PyTorch required for NaiveAttentionBackend")
         # Get dimensions
         _, num_heads, head_dim = query.shape
         _, num_kv_heads, _ = key.shape

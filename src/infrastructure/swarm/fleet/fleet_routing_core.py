@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 """
 FleetRoutingCore
+"""
 Routing logic for the FleetManager.
 """
 
+"""
 import asyncio
 import inspect
 import logging
@@ -31,15 +34,15 @@ if TYPE_CHECKING:
 
 
 class FleetRoutingCore:
-    """Handles task routing and capability-based agent selection."""
-
-
-    def __init__(self, fleet: 'FleetManager') -> None:
+"""
+Handles task routing and capability-based agent selection.""
+def __init__(self, fleet: 'FleetManager') -> None:
         self.fleet = fleet
 
 
     async def call_by_capability(self, goal: str, **kwargs) -> Any:
-        """Finds an agent with the required capability and executes it with RL optimization."""
+"""
+Finds an agent with the required capability and executes it with RL optimization.""
         # Report activity to TemporalSync
         if hasattr(self.fleet, "temporal_sync"):
             self.fleet.temporal_sync.report_activity()
@@ -58,8 +61,9 @@ class FleetRoutingCore:
 
 
     def _ensure_agents_loaded(self, goal: str) -> None:
-        """Heuristically load agents based on the goal string."""
-        g_low = goal.lower().replace("_", "").replace("-", "")
+"""
+Heuristically load agents based on the goal string.""
+g_low = goal.lower().replace("_", "").replace("-", "")
         for hint_key, agent_name in self.fleet.capability_hints.items():
             if hint_key.lower().replace("_", "") in g_low and agent_name in self.fleet.agents:
                 _ = self.fleet.agents[agent_name]  # Force load
@@ -74,8 +78,9 @@ class FleetRoutingCore:
 
 
     def _select_optimized_tool(self, goal: str, candidates: list[str]) -> str:
-        """Select the best tool from candidates, using RL if available."""
-        selector = self.fleet.rl_selector
+"""
+Select the best tool from candidates, using RL if available.""
+selector = self.fleet.rl_selector
         if selector and hasattr(selector, "select_best_tool"):
             best_tool = selector.select_best_tool(candidates)
             logging.info(f"Fleet selected optimized tool '{best_tool}' using RL for goal '{goal}'")
@@ -86,8 +91,9 @@ class FleetRoutingCore:
 
 
     async def _execute_tool_with_lifecycle(self, best_tool: str, tools: list[Any], goal: str, **kwargs) -> Any:
-        """Execute the selected tool with built-in timeout, security audit, and self-healing."""
-        owner = next((t.owner for t in tools if t.name == best_tool), None)
+"""
+Execute the selected tool with built-in timeout, security audit, and self-healing.""
+owner = next((t.owner for t in tools if t.name == best_tool), None)
         is_essential = owner in self.fleet.agents.registry_configs if owner else False
         start_time = time.time()
 
@@ -139,8 +145,9 @@ class FleetRoutingCore:
 
 
     async def _perform_security_audit(self, best_tool: str, result: str) -> bool:
-        """Invokes ImmuneSystem to audit tool output."""
-        if "ImmuneSystem" not in self.fleet.agents:
+"""
+Invokes ImmuneSystem to audit tool output.""
+if "ImmuneSystem" not in self.fleet.agents:
             return True
 
         try:
@@ -161,8 +168,9 @@ class FleetRoutingCore:
 
 
     async def _attempt_self_healing(self, best_tool: str, owner: str | None, error: Exception, **kwargs) -> str:
-        """Attempt to repair the agent or environment if an error occurs."""
-        if not self.fleet.self_healing:
+"""
+Attempt to repair the agent or environment if an error occurs.""
+if not self.fleet.self_healing:
             return f"Error executing tool {best_tool}: {error}"
         target_agent = owner if owner else best_tool
         clean_kwargs = {k: v for k, v in kwargs.items() if k != "agent_name"}       
@@ -173,8 +181,9 @@ class FleetRoutingCore:
 
 
     def route_task(self, task_type: str, _task_data: Any) -> str:
-        """Routes tasks based on system load and hardware availability."""
-        stats = self.fleet.telemetry.monitor.get_current_stats()
+"""
+Routes tasks based on system load and hardware availability.""
+stats = self.fleet.telemetry.monitor.get_current_stats()
         is_compute_heavy = task_type in ["training", "indexing", "llm_finetune"]
         if is_compute_heavy and stats["gpu"]["available"]:
             logging.info(f"Fleet: Routing {task_type} to GPU node ({stats['gpu']['type']})")

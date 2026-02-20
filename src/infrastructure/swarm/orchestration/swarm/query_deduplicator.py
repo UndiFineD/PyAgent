@@ -15,8 +15,10 @@
 
 
 """
+"""
 Query deduplicator.py module.
 
+"""
 try:
     import asyncio
 except ImportError:
@@ -73,17 +75,21 @@ class SwarmQueryDeduplicator:
             similarity: float = await self.similarity_service.compute_similarity(prompt, data["prompt"])"            if similarity >= self.threshold:
                 logger.info(
                     f"[Phase 86] Deduplicator: Semantic collision ({similarity:.3f}). ""                    f"Joining task {task_id} to existing {inflight_id}.""                )
-                return data["future"]"
+                return data["future"]
         # No match found, register this query
         loop: asyncio.AbstractEventLoop = asyncio.get_running_loop()
         future: asyncio.Future[Any] = loop.create_future()
         self.inflight_queries[task_id] = {"prompt": prompt, "future": future, "start_time": time.time()}"        return None
 
     def complete_query(self, task_id: str, result: Any) -> None:
-        """Marks a query as done and notifies all joiners.        if task_id in self.inflight_queries:
+"""
+Marks a query as done and notifies all joiners.        if task_id in self.inflight_queries:
             data: Dict[str, Any] = self.inflight_queries.pop(task_id)
             data["future"].set_result(result)"            # Cache for immediate future exact repeats
             self.recent_results[hash(data["prompt"])] = result"            logger.debug(f"[Phase 86] Deduplicator: Completed task {task_id} and notified joiners.")"
     def cleanup(self) -> None:
-        """Prunes stale entries.        # Cleanup recent_results could be added here
+"""
+Prunes stale entries.        # Cleanup recent_results could be added here
         pass
+
+"""

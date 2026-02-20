@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Verification.py module.
 """
-
 try:
-    import numpy
+
+"""
+import numpy
 except ImportError:
     import numpy
  as np
@@ -81,7 +85,8 @@ class TreeSpeculator:
         target_token_ids: list[int],
         temperature: float,
     ) -> VerificationResult:
-        """Verify a single proposal.        accepted_tokens: list[int] = []
+"""
+Verify a single proposal.        accepted_tokens: list[int] = []
         rejected_at: int | None = None
         bonus_token: int | None = None
 

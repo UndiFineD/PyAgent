@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Core logic for multimodal stream parsing and modality alignment.
+"""
+"""
+Core logic for multimodal stream parsing and modality alignment.
 Inspired by Stream-Omni (ICTNLP).
 """
 try:
-    from .multimodal_buffer import TemporalModalityBuffer
+
+"""
+from .multimodal_buffer import TemporalModalityBuffer
 except ImportError:
     from .multimodal_buffer import TemporalModalityBuffer
 

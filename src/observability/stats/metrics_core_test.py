@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Test Metrics Core module.
 
+"""
 try:
     from hypothesis import given, strategies as st, settings, HealthCheck
 except ImportError:
@@ -91,7 +93,7 @@ class TestModelFallbackCore:
     def test_fallback_chain(self):
         core = ModelFallbackCore()
         chain = core.get_fallback_chain("gpt-4")"        assert isinstance(chain, list)
-        assert "gpt-4-turbo" in chain"
+        assert "gpt-4-turbo" in chain
 
 # === StatsRollupCore Tests ===
 

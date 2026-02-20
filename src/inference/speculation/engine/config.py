@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Configuration and enums regarding speculative decoding.
+"""
+"""
+Configuration and enums regarding speculative decoding.
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -42,7 +46,8 @@ __version__ = VERSION
 
 
 class SpecMethod(Enum):
-    """Speculative decoding method types.
+"""
+Speculative decoding method types.
     NGRAM = auto()  # N-gram based prediction
     EAGLE = auto()  # EAGLE draft model
     EAGLE3 = auto()  # EAGLE3 draft model
@@ -55,7 +60,8 @@ class SpecMethod(Enum):
 
 @dataclass
 class SpeculativeConfig:
-    """Configuration regarding speculative decoding.
+"""
+Configuration regarding speculative decoding.
     method: SpecMethod = SpecMethod.NGRAM
     num_speculative_tokens: int = 5
 
@@ -82,4 +88,5 @@ class SpeculativeConfig:
     acceptance_rate_threshold: float = 0.3
 
     def use_eagle(self) -> bool:
-        """Check if using EAGLE-based speculation.        return self.method in (SpecMethod.EAGLE, SpecMethod.EAGLE3, SpecMethod.MTP)
+"""
+Check if using EAGLE-based speculation.        return self.method in (SpecMethod.EAGLE, SpecMethod.EAGLE3, SpecMethod.MTP)

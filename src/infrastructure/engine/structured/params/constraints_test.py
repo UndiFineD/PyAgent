@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     import json
@@ -35,8 +38,9 @@ except ImportError:
 
 
 def test_output_constraint_validate():
-    """Test that OutputConstraint.validate() returns True for any input."""
-    constraint = OutputConstraint()
+"""
+Test that OutputConstraint.validate() returns True for any input.""
+constraint = OutputConstraint()
     assert constraint.validate("any text") is True
     d = constraint.to_dict()
     assert d["constraint_type"] == "INCLUDE"
@@ -44,23 +48,26 @@ def test_output_constraint_validate():
 
 
 def test_json_schema_constraint_validate_valid():
-    """Test that JsonSchemaConstraint.validate() returns True for valid JSON that meets the schema."""
-    schema = {"type": "object", "required": ["foo"]}
+"""
+Test that JsonSchemaConstraint.validate() returns True for valid JSON that meets the schema.""
+schema = {"type": "object", "required": ["foo"]}
     constraint = JsonSchemaConstraint(schema=schema, schema_format=SchemaFormat.DRAFT_07)
     valid_json = json.dumps({"foo": 1})
     assert constraint.validate(valid_json) is True
 
 
 def test_json_schema_constraint_validate_invalid():
-    """Test that JsonSchemaConstraint.validate() returns False for valid JSON that does not meet the schema."""
-    schema = {"type": "object", "required": ["foo"]}
+"""
+Test that JsonSchemaConstraint.validate() returns False for valid JSON that does not meet the schema.""
+schema = {"type": "object", "required": ["foo"]}
     constraint = JsonSchemaConstraint(schema=schema, schema_format=SchemaFormat.DRAFT_07)
     invalid_json = json.dumps({"bar": 2})
     assert constraint.validate(invalid_json) is False
 
 
 def test_json_schema_constraint_validate_partial():
-    """Test that JsonSchemaConstraint.validate() returns True for invalid JSON when allow_partial is True."""
-    schema = {"type": "object", "required": ["foo"]}
+"""
+Test that JsonSchemaConstraint.validate() returns True for invalid JSON when allow_partial is True.""
+schema = {"type": "object", "required": ["foo"]}
     constraint = JsonSchemaConstraint(schema=schema, schema_format=SchemaFormat.DRAFT_07, allow_partial=True)
     assert constraint.validate("not a json") is True

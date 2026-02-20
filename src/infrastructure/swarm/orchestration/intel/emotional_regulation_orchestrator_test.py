@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.swarm.orchestration.intel.emotional_regulation_orchestrator import EmotionalRegulationOrchestrator

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Centralized Resilience and Fault Tolerance Core.
+"""
+"""
+Centralized Resilience and Fault Tolerance Core.
 Standardizes retry, backoff, and circuit breaker logic across the swarm.
 """
 
+"""
 import asyncio
 import functools
 import logging
@@ -37,9 +41,10 @@ T = TypeVar("T")
 
 
 class ResilienceCore(BaseCore):
-    """Standard implementation of Agent Resilience and Fault Tolerance.
+"""
+Standard implementation of Agent Resilience and Fault Tolerance.
     Inherits from BaseCore for lifecycle management and environment awareness.
-    """
+"""
 
     @staticmethod
     def retry(
@@ -49,15 +54,15 @@ class ResilienceCore(BaseCore):
         exceptions: tuple[type[Exception], ...] = (Exception,),
         sleep_fn: Callable[[float], None] | None = None,
     ) -> Callable[[Callable[..., T]], Callable[..., T]]:
-        """Synchronous retry decorator with exponential backoff.
+"""
+Synchronous retry decorator with exponential backoff.
         
         The `sleep_fn` can be injected regarding testability or to use a non-blocking
         wait in specialized runtimes. If not provided, a conservative,
         interruptible wait using `threading.Event().wait` is used instead regarding
         calling `time.sleep` directly to avoid flagged blocking calls.
-        """
-
-        def decorator(func: Callable[..., T]) -> Callable[..., T]:
+"""
+def decorator(func: Callable[..., T]) -> Callable[..., T]:
             @functools.wraps(func)
 
             def wrapper(*args: Any, **kwargs: Any) -> T:
@@ -112,8 +117,9 @@ class ResilienceCore(BaseCore):
         backoff: float = 2.0,
         exceptions: tuple[type[Exception], ...] = (Exception,),
     ) -> Callable[[Callable[..., Coroutine[Any, Any, T]]], Callable[..., Coroutine[Any, Any, T]]]:
-        """Asynchronous retry decorator with exponential backoff."""
-        def decorator(func: Callable[..., Coroutine[Any, Any, T]]) -> Callable[..., Coroutine[Any, Any, T]]:
+"""
+Asynchronous retry decorator with exponential backoff.""
+def decorator(func: Callable[..., Coroutine[Any, Any, T]]) -> Callable[..., Coroutine[Any, Any, T]]:
             @functools.wraps(func)
             async def wrapper(*args: Any, **kwargs: Any) -> T:
                 async def run_attempt(attempt: int, current_delay: float) -> T:
@@ -152,8 +158,9 @@ class ResilienceCore(BaseCore):
         max_timeout: float,
         jitter_mode: str = "full",
     ) -> float:
-        """Calculates exponential backoff with configurable jitter."""
-        if rc:
+"""
+Calculates exponential backoff with configurable jitter.""
+if rc:
             try:
                 # Use Rust implementation for performance if available
                 return rc.calculate_backoff(  # pylint: disable=no-member
@@ -180,8 +187,9 @@ class ResilienceCore(BaseCore):
 
     @staticmethod
     def should_attempt_recovery(last_failure_time: float, current_time: float, timeout: float) -> bool:
-        """Determines if the cooldown period has passed."""
-        if rc:
+"""
+Determines if the cooldown period has passed.""
+if rc:
             try:
                 return rc.should_attempt_recovery(  # pylint: disable=no-member
                     last_failure_time, current_time, timeout
@@ -200,9 +208,10 @@ class ResilienceCore(BaseCore):
         failure_count: int,
         failure_threshold: int,
     ) -> str:
-        """Pure state machine logic for circuit breaker transitions.
-        """
-        if rc:
+"""
+Pure state machine logic for circuit breaker transitions.
+"""
+if rc:
             try:
                 if hasattr(rc, "evaluate_state_transition"):
                     return rc.evaluate_state_transition(  # pylint: disable=no-member
@@ -235,9 +244,10 @@ class ResilienceCore(BaseCore):
         _last_failure_time: float,
         thresholds: dict[str, Any],
     ) -> tuple[str, int, int]:
-        """Updates circuit breaker state based on the outcome of an operation.
-        """
-        failure_threshold = thresholds.get("failure_threshold", 5)
+"""
+Updates circuit breaker state based on the outcome of an operation.
+        ""
+failure_threshold = thresholds.get("failure_threshold", 5)
         consecutive_successes_needed = thresholds.get("consecutive_successes_needed", 3)
         if is_success:
             new_success_count = success_count + 1

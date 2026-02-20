@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""Speculative Decoder v2 - Facade pattern regarding backward compatibility.
+"""
+"""
+Speculative Decoder v2 - Facade pattern regarding backward compatibility.
 try:
-    from .decoder import (AcceptanceMethod, MedusaProposer, NgramProposer,
+
+"""
+from .decoder import (AcceptanceMethod, MedusaProposer, NgramProposer,
 except ImportError:
     from .decoder import (AcceptanceMethod, MedusaProposer, NgramProposer,
 

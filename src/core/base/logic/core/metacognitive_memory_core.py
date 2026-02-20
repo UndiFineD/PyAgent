@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
 from typing import List, Dict, Any
 
@@ -16,34 +18,37 @@ class MemoryItem(BaseModel):
 
 
 class MetacognitiveMemoryCore:
-    """Core logic for agents to manage simple in-memory session memories.
+"""
+Core logic for agents to manage simple in-memory session memories.
 
     This implementation is intentionally lightweight and synchronous for tests.
-    """
-
-    def __init__(self, agent_id: str):
+"""
+def __init__(self, agent_id: str):
         self.agent_id = agent_id
         self.memories: Dict[str, MemoryItem] = {}
         self.counter = 0
 
     async def add_memory(self, content: str, importance: float = 0.5) -> str:
-        """Add a new memory fragment and return its id."""
-        self.counter += 1
+"""
+Add a new memory fragment and return its id.""
+self.counter += 1
         m_id = f"mem_{self.counter}_{self.agent_id}"
         item = MemoryItem(id=m_id, content=content, metadata={"importance": importance, "created_at": "now"})
         self.memories[m_id] = item
         return f"Memory stored as {m_id}"
 
     async def update_memory(self, m_id: str, new_content: str) -> str:
-        """Update an existing memory fragment."""
-        if m_id in self.memories:
+"""
+Update an existing memory fragment.""
+if m_id in self.memories:
             self.memories[m_id].content = new_content
             return f"Memory {m_id} updated."
         return f"Memory {m_id} not found."
 
     async def delete_memory(self, m_id: str) -> str:
-        """Delete a specific memory fragment or all if m_id == 'all'."""
-        if isinstance(m_id, str) and m_id.lower() == "all":
+"""
+Delete a specific memory fragment or all if m_id == 'all'.""
+if isinstance(m_id, str) and m_id.lower() == "all":
             self.memories.clear()
             return "All memories cleared."
         if m_id in self.memories:
@@ -52,12 +57,14 @@ class MetacognitiveMemoryCore:
         return f"Memory {m_id} not found."
 
     async def query_memories(self, query: str) -> List[MemoryItem]:
-        """Query memories. This is a placeholder that returns all memories."""
-        return list(self.memories.values())
+"""
+Query memories. This is a placeholder that returns all memories.""
+return list(self.memories.values())
 
     def get_tool_definitions(self) -> List[Dict[str, Any]]:
-        """Return simple tool definitions for agent registration."""
-        return [
+        ""
+Return simple tool definitions for agent registration.""
+return [
             {
                 "name": "add_memory",
                 "description": "Store a key fact or observation for future sessions.",

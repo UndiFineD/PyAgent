@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_backend.py
 """
-
 try:
-    from collections.abc import Callable
+
+"""
+from collections.abc import Callable
 except ImportError:
     from collections.abc import Callable
 
@@ -40,22 +43,24 @@ __version__ = VERSION
 
 @dataclass
 class QueuedRequest:
-    """A request waiting in the queue.
+"""
+A request waiting in the queue.
     Attributes:
         priority: Request priority (higher=more urgent).
         timestamp: When request was queued.
         request_id: Unique request identifier.
         prompt: The prompt to send.
         callback: Optional callback function.
-    """
-    priority: int
+"""
+priority: int
     timestamp: float
     request_id: str
     prompt: str
     callback: Callable[[str], None] | None = None
 
     def __lt__(self, other: 'QueuedRequest') -> bool:
-        """Compare by priority (descending) then timestamp (ascending)."""
-        if self.priority != other.priority:
+        ""
+Compare by priority (descending) then timestamp (ascending).""
+if self.priority != other.priority:
             return self.priority > other.priority  # Higher priority first
         return self.timestamp < other.timestamp  # Earlier first

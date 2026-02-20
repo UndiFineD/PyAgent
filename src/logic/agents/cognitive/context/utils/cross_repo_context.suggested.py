@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "Cross-repository context analysis for Cognitive agents."This module provides data structures to store and manage context information
+"""
 derived from multiple repositories.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -48,3 +52,5 @@ class CrossRepoContext:
     related_files: list[str] = field(default_factory=list)
     similarity_score: float = 0.0
     common_patterns: list[str] = field(default_factory=list)
+
+"""

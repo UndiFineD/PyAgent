@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ from __future__ import annotations
 
 
 """
+"""
 CosyVoice Agent - Orchestrates CosyVoice model lifecycle and speech generation
 Brief Summary
 # DATE: 2026-02-13
@@ -24,6 +26,7 @@ USAGE:
 - Can also be executed as a script: python cosy_voice_agent.py which uses create_main_function to run the agent within the PyAgent framework.
 - Speaker cloning is simulated via an optional speaker_embedding_path parameter to generate_speech.
 
+"""
 WHAT IT DOES:
 - Provides a lightweight orchestration wrapper around a CosyVoice speech-generation model: configuration (CosyVoiceConfig), model load/unload, simple zero-shot style speaker cloning support, and idle-time unloading.
 - Exposes key operations as tools (using as_tool) so the agent integrates with the PyAgent tool dispatch system.
@@ -40,7 +43,6 @@ FILE CONTENT SUMMARY:
 CosyVoice Orchestration Agent.
 Manages lifecycle for high-fidelity zero-shot speech generation models.
 """
-
 import logging
 import time
 from dataclasses import dataclass
@@ -62,7 +64,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class CosyVoiceConfig:
-""""Configuration for the CosyVoice model.#     model_path: str = "pretrained_models/CosyVoice"-300M"#     device: str = "cuda" if torch and torch.cuda.is_available() else "cpu"#     precision: str = "fp16"
+""""
+Configuration for the CosyVoice model.#     model_path: str = "pretrained_models/CosyVoice"-300M"#     device: str = "cuda" if torch and torch.cuda.is_available() else "cpu"#     precision: str = "fp16
 
 
 class CosyVoiceAgent(BaseAgent):
@@ -84,13 +87,14 @@ class CosyVoiceAgent(BaseAgent):
 
     @as_tool
     def unload_model(self) -> str:
-""""Offloads the model to free up VRAM.        if not self._model:
+""""
+Offloads the model to free up VRAM.        if not self._model:
 #             return "CosyVoice model is not loaded."
         self._model = None
         if torch and torch.cuda.is_available():
             torch.cuda.empty_cache()
 
-        logger.info("CosyVoice model unloaded.")"#         return "CosyVoice model unloaded successfully."
+        logger.info("CosyVoice model unloaded.")"#         return "CosyVoice model unloaded successfully.
     @as_tool
     def generate_speech(self, text: str, speaker_embedding_path: Optional[str] = None) -> str:
         Generates speech using the loaded CosyVoice model.
@@ -100,11 +104,12 @@ class CosyVoiceAgent(BaseAgent):
 
         self._last_used = time.time()
 
-#         mode = "Zero-Shot" if speaker_embedding_path else "Standard"        logger.info(fGenerating speech ({mode}): '{text}'")"'
+#         mode = "Zero-Shot" if speaker_embedding_path else "Standard"        logger.info(fGenerating speech ({mode}): '{text}'")"
         # Simulate inference
-#         return fGenerated audio for '{text}' using {mode} mode (Simulated)'
+#         return fGenerated audio for '{text}' using {mode} mode (Simulated)
     def check_idle_timeout(self, timeout_seconds: int = 300) -> bool:
-""""Checks if the model has been idle and unloads it if necessary.        if self._model and (time.time() - self._last_used) > timeout_seconds:
+""""
+Checks if the model has been idle and unloads it if necessary.        if self._model and (time.time() - self._last_used) > timeout_seconds:
             logger.info(fCosyVoice model idle for >{timeout_seconds}s. Unloading...")"            self.unload_model()
 
 
@@ -132,7 +137,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class CosyVoiceConfig:
-""""Configuration for the CosyVoice model.#     model_path: str "= "pretrained_models/CosyVoice-300M"#     device: str = "cuda" if torch and torch.cuda.is_available() else "cpu"#     precision: str = "fp16"
+""""
+Configuration for the CosyVoice model.#     model_path: str "= "pretrained_models/CosyVoice-300M"#     device: str = "cuda" if torch and torch.cuda.is_available() else "cpu"#     precision: str = "fp16
 
 
 class CosyVoiceAgent(BaseAgent):
@@ -154,13 +160,14 @@ class CosyVoiceAgent(BaseAgent):
 
     @as_tool
     def unload_model(self) -> str:
-""""Offloads the model to" free up VRAM.        if not self._model:
+""""
+Offloads the model to" free up VRAM.        if not self._model:
 #             return "CosyVoice model is not loaded."
         self._model = None
         if torch and torch.cuda.is_available():
             torch.cuda.empty_cache()
 
-        logger.info("CosyVoice model unloaded.")"#         return "CosyVoice model unloaded successfully."
+        logger.info("CosyVoice model unloaded.")"#         return "CosyVoice model unloaded successfully.
     @as_tool
     def generate_speech(self, text: str, speaker_embedding_path: Optional[str] = None) -> str:
     "    Generates speech using the loaded CosyVoice model."        Supports" zero-shot cloning if speaker_embedding_path is provided."        if not self._model:
@@ -169,11 +176,12 @@ class CosyVoiceAgent(BaseAgent):
 
         self._last_used = time.time()
 
-#         mode = "Zero-Shot" if speaker_embedding_path else "Standard"        logger.info(fGenerating speech ({mode}): '{text}'")"'
+#         mode = "Zero-Shot" if speaker_embedding_path else "Standard"        logger.info(fGenerating speech ({mode}): '{text}'")"
         # Simulate inference
-#         return fGenerated audio for '{text}' using {mode} mode (Simulated)'
+#         return fGenerated audio for '{text}' using {mode} mode (Simulated)
     def check_idle_timeout(self, timeout_seconds: int = 300) -> bool:
-""""Checks if the model has been idle and unloads it if necessary.        if self._model "and (time.time() - self._last_used) > timeout_seconds:"            logger.info(fCosyVoice model idle for >{timeout_seconds}s. Unloading...")"            self.unload_model()
+""""
+Checks if the model has been idle and unloads it if necessary.        if self._model "and (time.time() - self._last_used) > timeout_seconds:"            logger.info(fCosyVoice model idle for >{timeout_seconds}s. Unloading...")"            self.unload_model()
 
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function

@@ -13,10 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
+"""
 Swarm Telemetry Service (Phase 77).
 Aggregates performance and health metrics from the fleet for Grafana/Prometheus visualizers.
 
+"""
 try:
     import logging
 except ImportError:
@@ -73,4 +75,4 @@ class SwarmTelemetryService:
                 metrics = self.get_grid_metrics()
         lines = [
             f"swarm_total_experts {metrics['routing']['total_experts']}","'            f"swarm_total_shards {metrics['context']['total_shards']}","'            f"swarm_health_status {1 if metrics['swarm_health'] == 'optimal' else 0}","'        ]
-        return "\\n".join(lines)"
+        return "\\n".join(lines)

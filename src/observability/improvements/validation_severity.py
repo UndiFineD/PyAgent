@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,10 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 validation_severity.py - ValidationSeverity enum# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
 try:
-    from .core.base.validation_severity import ValidationSeverity
+
+"""
+from .core.base.validation_severity import ValidationSeverity
 except ImportError:
     from src.core.base.validation_severity import ValidationSeverity
 
@@ -34,7 +38,6 @@ Defines a small Enum describing validation issue severities (ERROR, WARNING, INF
 WHAT IT SHOULD DO BETTER:
 Add richer documentation, canonical serialization/deserialization helpers, mapping to HTTP/log levels, and unit tests; consider attaching numeric priorities and ordering methods for comparisons.
 """
-
 try:
     from enum import Enum
 except ImportError:
@@ -52,7 +55,8 @@ __version__ = VERSION
 
 
 class ValidationSeverity(Enum):
-    """Severity of validation issues.
-    ERROR = "error""    WARNING = "warning""    INFO = "info""
+"""
+Severity of validation issues.
+    ERROR = "error""    WARNING = "warning""    INFO = "info"
 
 """

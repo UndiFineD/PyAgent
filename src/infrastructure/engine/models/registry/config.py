@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +17,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Model configuration and metadata registry.
+"""
+"""
+Model configuration and metadata registry.
 
+"""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -37,7 +41,9 @@ except ImportError:
 
 
 class ModelCapability(Flag):
-    """Model capability flags.
+"""
+Model capability flags.
+
     TEXT = auto()
     VISION = auto()
     AUDIO = auto()
@@ -52,7 +58,8 @@ class ModelCapability(Flag):
 
 
 class ModelArchitecture(Enum):
-    """Known model architectures.
+"""
+Known model architectures.
     LLAMA = auto()
     MISTRAL = auto()
     QWEN = auto()
@@ -103,7 +110,8 @@ class ModelArchitecture(Enum):
 
 
 class QuantizationType(Enum):
-    """Quantization types.
+"""
+Quantization types.
     NONE = auto()
     INT8 = auto()
     INT4 = auto()
@@ -118,7 +126,8 @@ class QuantizationType(Enum):
 
 
 class ModelFormat(Enum):
-    """Model file formats.
+"""
+Model file formats.
     HUGGINGFACE = auto()
     SAFETENSORS = auto()
     PYTORCH = auto()
@@ -129,7 +138,8 @@ class ModelFormat(Enum):
 
 @dataclass
 class ModelConfig:  # pylint: disable=too-many-instance-attributes
-    """Model configuration.
+"""
+Model configuration.
     model_name: str
     architecture: Optional[ModelArchitecture] = None
     quantization: QuantizationType = QuantizationType.NONE
@@ -146,7 +156,8 @@ class ModelConfig:  # pylint: disable=too-many-instance-attributes
 
 @dataclass
 class ArchitectureSpec:  # pylint: disable=too-many-instance-attributes
-    """Architecture specification.
+"""
+Architecture specification.
     name: str
     architecture: ModelArchitecture
     capabilities: ModelCapability
@@ -162,7 +173,8 @@ class ArchitectureSpec:  # pylint: disable=too-many-instance-attributes
 
 @dataclass
 class ModelInfo:  # pylint: disable=too-many-instance-attributes
-    """Information about a model.
+"""
+Information about a model.
     name: str
     architecture: ModelArchitecture
     capabilities: ModelCapability
@@ -181,20 +193,24 @@ class ModelInfo:  # pylint: disable=too-many-instance-attributes
 
     @property
     def is_multimodal(self) -> bool:
-        """Check if the model has multimodal capabilities.        return bool(self.capabilities & ModelCapability.MULTIMODAL)
+"""
+Check if the model has multimodal capabilities.        return bool(self.capabilities & ModelCapability.MULTIMODAL)
 
     @property
     def has_gqa(self) -> bool:
-        """Check if the model uses Grouped-Query Attention.        return self.num_kv_heads is not None and self.num_kv_heads < self.num_attention_heads
+"""
+Check if the model uses Grouped-Query Attention.        return self.num_kv_heads is not None and self.num_kv_heads < self.num_attention_heads
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert model info to a serializable dictionary.        return {
+"""
+Convert model info to a serializable dictionary.        return {
             "name": self.name,"            "architecture": self.architecture.name,"            "num_params": self.num_params,"            "num_layers": self.num_layers,"            "hidden_size": self.hidden_size,"            "vocab_size": self.vocab_size,"            "max_seq_len": self.max_seq_len,"            "is_multimodal": self.is_multimodal,"        }
 
 
 @dataclass
 class VRAMEstimate:
-    """VRAM requirement estimation.
+"""
+VRAM requirement estimation.
     model_weights_gb: float
     kv_cache_per_token_mb: float
     activation_memory_gb: float
@@ -203,8 +219,11 @@ class VRAMEstimate:
     can_fit_on: List[str] = field(default_factory=list)
 
     def estimate_max_context(self, gpu_memory_gb: float) -> int:
-        """Estimate max tokens that can fit in remaining VRAM.        overhead = self.model_weights_gb + self.activation_memory_gb
+"""
+Estimate max tokens that can fit in remaining VRAM.        overhead = self.model_weights_gb + self.activation_memory_gb
         remaining_gb = gpu_memory_gb - overhead
         if remaining_gb <= 0:
             return 0
         return int((remaining_gb * 1024) / max(1e-6, self.kv_cache_per_token_mb))
+
+"""

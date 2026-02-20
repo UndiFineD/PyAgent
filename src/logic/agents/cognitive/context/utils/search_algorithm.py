@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +17,10 @@ from __future__ import annotations
 
 
 # "Search algorithms for Cognitive agents."This module defines the available algorithms for semantic and keyword-based
+"""
 search within the agent's context and memory.'
 
+"""
 try:
     from enum import Enum
 except ImportError:
@@ -34,5 +38,13 @@ __version__ = VERSION
 
 
 class SearchAlgorithm(Enum):
-""""Algorithms for semantic search.
+""""
+Algorithms for semantic search.
 #     KEYWORD = "keyword"#     FUZZY = "fuzzy"#     SEMANTIC = "semantic"#     HYBRID = "hybrid"
+"""
+
+"""
+
+""
+
+"""

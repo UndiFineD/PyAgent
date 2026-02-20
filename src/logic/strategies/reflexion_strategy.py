@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,7 +15,8 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Reflexion Strategy - Draft -> Critique -> Revise.""""
+"""
+Reflexion Strategy - Draft -> Critique -> Revise.""""
 [Brief Summary]
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -49,7 +51,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Reflexion strategy.py module.
 """
-
 try:
     import logging
 except ImportError:
@@ -83,7 +84,8 @@ __version__ = VERSION
 
 
 class ReflexionStrategy(AgentStrategy):
-    """Reflexion strategy: Draft -> Critique -> Revise.
+"""
+Reflexion strategy: Draft -> Critique -> Revise.
     async def execute(
         self,
         prompt: str,
@@ -93,7 +95,7 @@ class ReflexionStrategy(AgentStrategy):
         history: Optional[List[Dict[str, str]]] = None,
     ) -> str:
         # Step 1: Draft
-        draft = await backend_call(f"{prompt}\\n\\nContext:\\n{context}", system_prompt, history)"
+        draft = await backend_call(f"{prompt}\\n\\nContext:\\n{context}", system_prompt, history)
         # Step 2: Critique
         critique_prompt = (
             f"Original Request: {prompt}\\n\\n""            f"Draft Implementation:\\n{draft}\\n\\n""            "Critique this implementation. Identify any bugs, missing requirements, ""            "or style issues. Be harsh but constructive.""        )
@@ -102,3 +104,9 @@ class ReflexionStrategy(AgentStrategy):
         revision_prompt = (
             f"Original Request: {prompt}\\n\\n""            f"Draft Implementation:\\n{draft}\\n\\n""            f"Critique:\\n{critique}\\n\\n""            "Please rewrite the implementation to address the critique. ""            "Output ONLY the final code/content.""        )
         return await backend_call(revision_prompt, system_prompt, history)
+
+"""
+
+""
+
+"""

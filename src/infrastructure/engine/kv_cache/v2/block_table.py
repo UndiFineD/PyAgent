@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Advanced BlockTable implementation (V2) for Phase 53.
 Supports hybrid block sizes, context parallel mapping, and PCP/DCP awareness.
 
+"""
 import logging
 from collections import deque
 from typing import Any, Dict, List, Optional
@@ -45,7 +47,7 @@ class BlockTableV2:
         # Phase 53: Hybrid support
         self.block_size_map: Dict[int, int] = {i: block_size for i in range(num_blocks)}
 
-        logger.info(f"BlockTableV2 initialized with {num_blocks} blocks (base size: {block_size})")"
+        logger.info(f"BlockTableV2 initialized with {num_blocks} blocks (base size: {block_size})")
     def allocate(self, seq_id: int, num_required_blocks: int) -> List[int]:
                 Allocates physical blocks for a sequence.
                 if len(self.free_blocks) < num_required_blocks:
@@ -61,21 +63,24 @@ class BlockTableV2:
         return blocks
 
     def get_block_table(self, seq_id: int) -> Optional[List[int]]:
-        """Returns the list of physical blocks for a sequence.        return self.mapping.get(seq_id)
+"""
+Returns the list of physical blocks for a sequence.        return self.mapping.get(seq_id)
 
     def get_utilization(self) -> float:
-        """Returns the current block utilization percentage.        if self.num_blocks == 0:
+"""
+Returns the current block utilization percentage.        if self.num_blocks == 0:
             return 0.0
         return ((self.num_blocks - len(self.free_blocks)) / self.num_blocks) * 100.0
 
     def free(self, seq_id: int) -> None:
-        """Releases blocks associated with a sequence.        if seq_id in self.mapping:
+"""
+Releases blocks associated with a sequence.        if seq_id in self.mapping:
             blocks = self.mapping.pop(seq_id)
             for block in blocks:
                 self.ref_counts[block] -= 1
                 if self.ref_counts[block] == 0:
                     self.free_blocks.append(block)
-            logger.debug(f"Freed blocks for sequence {seq_id}")"
+            logger.debug(f"Freed blocks for sequence {seq_id}")
     def update_hybrid_mapping(self, block_id: int, new_size: int) -> None:
                 Updates the size of a specific block for hybrid configurations.
         Used for adaptive granularity in Phase 53.
@@ -98,5 +103,6 @@ class BlockTableV2:
         return blocks[start:end]
 
     def get_stats(self) -> Dict[str, Any]:
-        """Returns block table utilization statistics.        return {
+"""
+Returns block table utilization statistics.        return {
             "total_blocks": self.num_blocks,"            "free_blocks": len(self.free_blocks),"            "utilized_pct": ((self.num_blocks - len(self.free_blocks)) / self.num_blocks) * 100,"            "active_sequences": len(self.mapping),"        }

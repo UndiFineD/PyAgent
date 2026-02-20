@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +16,14 @@ from __future__ import annotations
 
 
 """
+"""
 Module: scam_detector
 Implements swarm-wide scam and hallucination detection via Byzantine Consensus.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -39,11 +42,11 @@ logger = logging.getLogger(__name__)
 
 
 class ScamDetector:
-    """Detects malicious intent, phishing, and hallucinations by cross-referencing agent outputs.
+"""
+Detects malicious intent, phishing, and hallucinations by cross-referencing agent outputs.
     Follows Pillar 6: Scam & Hallucination Defense.
-    """
-
-    def __init__(self, confidence_threshold: float = 0.85):
+"""
+def __init__(self, confidence_threshold: float = 0.85):
         self.confidence_threshold = confidence_threshold
         # Neural Integrity Filter Patterns (Phase 325)
         self.scam_patterns = [
@@ -56,10 +59,11 @@ class ScamDetector:
 
 
     async def audit_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        """Pillar 7 (Neural Scam & Phishing Detection):
+"""
+Pillar 7 (Neural Scam & Phishing Detection):
         Analyzes incoming peer messages and Global Wisdom for social engineering patterns.
-        """
-        content = message.get("content", "")
+"""
+content = message.get("content", "")
         sender = message.get("sender", "unknown")
         context = message.get("context", "")
         # 1. Pattern-based Integrity Filter
@@ -75,7 +79,8 @@ class ScamDetector:
 
 
     async def audit_response(self, original_prompt: str, response: str, peers: List[Any] = None) -> bool:
-        """Hallucination Defense: Asks independent peers to vote on quality."""
+"""
+Hallucination Defense: Asks independent peers to vote on quality.""
         # Integrity filter check first
         audit_res = await self.audit_message({"content": response})
         if not audit_res["safe"]:
@@ -95,6 +100,7 @@ class ScamDetector:
 
 
     async def _get_peer_opinion(self, _peer: Any, _prompt: str, _resp: str) -> float:
-        """Internal helper to simulate peer validation."""
+"""
+Internal helper to simulate peer validation.""
         # In a real swarm, this would be a P2P request TODO  for now
         return 0.9

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .generate_ast_refactor_patches import SubprocessTransformer, load_bandit_results, top_files_from_bandit, create_patch_for_file, main

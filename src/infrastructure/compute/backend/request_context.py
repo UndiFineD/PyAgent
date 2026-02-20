@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_backend.py
 """
-
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -56,15 +59,16 @@ __version__ = VERSION
 
 @dataclass
 class RequestContext:
-    """Context for a backend request.
+"""
+Context for a backend request.
     Attributes:
         request_id: Unique identifier for tracking.
         correlation_id: ID for tracing across services.
         priority: Request priority level.
         created_at: Timestamp when request was created.
         metadata: Additional request metadata.
-    """
-    request_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+"""
+request_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     correlation_id: str | None = None
     priority: RequestPriority = RequestPriority.NORMAL
     created_at: float = field(default_factory=time.time)

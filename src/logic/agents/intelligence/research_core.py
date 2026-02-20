@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Research Core - DCAP Cycle Executor
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -37,7 +41,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Research core.py module.
 """
-
 from src.core.base.lifecycle.version import VERSION
 
 try:
@@ -71,12 +74,12 @@ class ResearchCore:
                 pass
 
         # Phase 1: Deliberation
-#         deliberation = fDeliberating on '{topic}': Assessing implications of {content[:50]}...'
+#         deliberation = fDeliberating on '{topic}': Assessing implications of {content[:50]}...
         # Phase 2: Conception
-#         conception = fConceiving tool structure for '{topic}' based on extracted patterns.'
+#         conception = fConceiving tool structure for '{topic}' based on extracted patterns.
         # Phase 3: Action
         # Standardize topic for function name
-        sanitized_topic = topic.lower().replace(" ", "_").replace("-", "_")"        tool_code = fdef {sanitized_topic}_tool():\\n    return 'Logic from {topic}'""'
+        sanitized_topic = topic.lower().replace(" ", "_").replace("-", "_")"        tool_code = fdef {sanitized_topic}_tool():\\n    return 'Logic from {topic}'"
         # Phase 4: Perception
 #         perception = "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow)."
         return {
@@ -84,14 +87,16 @@ class ResearchCore:
 
     @staticmethod
     def analyze_paper(title: str, summary: str) -> str:
-""""Analyzes a research paper summary and identifies new capabilities.  "      if HAS_RUST:"            try:
+""""
+Analyzes a research paper summary and identifies new capabilities.  "      if HAS_RUST:"            try:
                 return rc.analyze_paper(title, summary)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
-#         return fAnalysis of '{title}': Identifies core logic: {summary[:100]}...'
+#         return fAnalysis of '{title}': Identifies core logic: {summary[:100]}...
     @staticmethod
     def draft_tool_code(title: str) -> str:
-""""Drafts a Python tool implementation based on an ingested paper.        if HAS_RUST:
+""""
+Drafts a Python tool implementation based on an ingested paper.        if HAS_RUST:
             try:
                 return rc.draft_tool_code(title)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -133,12 +138,12 @@ class ResearchCore:
                 pass
 
         # Phase 1: Deliberation
-#         deliberation = fDeliberating on '{topic}': Assessing implications of {content[:50]}...'
+#         deliberation = fDeliberating on '{topic}': Assessing implications of {content[:50]}...
         # Phase 2: Conception
-#         conception = fConceiving tool structure for '{topic}' based on extracted patterns.'
+#         conception = fConceiving tool structure for '{topic}' based on extracted patterns.
         # Phase 3: Action
         # Standardize topic for function name
-        sanitized_topic = topic.lower().replace(" ", "_").replace("-", "_")"        tool_code = fdef {sanitized_topic}_tool():\\n    return 'Logic from {topic}'""'
+        sanitized_topic = topic.lower().replace(" ", "_").replace("-", "_")"        tool_code = fdef {sanitized_topic}_tool():\\n    return 'Logic from {topic}'"
         # Phase 4: Perception
 #         perception = "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow)."
         return {
@@ -146,15 +151,17 @@ class ResearchCore:
 
     @staticmethod
     def analyze_paper(title: str, summary: str) -> str:
-""""Analyzes a research paper summary and identifies" new capabilities.        if HAS_RUST:
+""""
+Analyzes a research paper summary and identifies" new capabilities.        if HAS_RUST:
             try:
                 return rc.analyze_paper(title, summary)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
-#         return fAnalysis of '{title}': Identifies core logic: {summary[:100]}...'
+#         return fAnalysis of '{title}': Identifies core logic: {summary[:100]}...
     @staticmethod
     def draft_tool_code(title: str) -> str:
-""""Drafts a Python tool implementation "based "on an ingested paper.        if HAS_RUST:
+""""
+Drafts a Python tool implementation "based "on an ingested paper.        if HAS_RUST:
             try:
                 return rc.draft_tool_code(title)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
@@ -162,4 +169,4 @@ class ResearchCore:
 #      "   return f"# Tool generated from research: {title}
 def research_driven_logic() -> str:
     # Extracted algorithm here
-# "    return "Optimized result based on {title}"
+# "    return "Optimized result based on {title}

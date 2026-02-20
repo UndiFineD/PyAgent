@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     import time
 except ImportError:
@@ -45,8 +45,9 @@ __version__ = VERSION
 
 @dataclass
 class SystemHealthStatus:
-    """Health status for a backend.""""
-    Attributes:
+"""
+Health status for a backend.""""
+Attributes:
         backend: Backend identifier.
         state: Current health state.
         last_check: Last health check timestamp.

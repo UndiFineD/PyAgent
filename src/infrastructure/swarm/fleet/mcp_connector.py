@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 """
 MCPConnector
+"""
 Low-level connector for Model Context Protocol (MCP) servers using stdio transport.
 """
 
+"""
 import json
 import logging
 import subprocess
@@ -32,7 +35,8 @@ __version__ = VERSION
 
 
 class MCPConnector:
-    """Manages the lifecycle and JSON-RPC communication with an MCP server.
+"""
+Manages the lifecycle and JSON-RPC communication with an MCP server.
     def __init__(
         self,
         name: str,
@@ -51,10 +55,12 @@ class MCPConnector:
         self.is_running = False
 
     def _record(self, action: str, result: str) -> None:
-        """Record MCP operations.        if self.recorder:
-            self.recorder.record_interaction("MCP", self.name, action, result)"
+"""
+Record MCP operations.        if self.recorder:
+            self.recorder.record_interaction("MCP", self.name, action, result)
     def start(self) -> None:
-        """Launches the MCP server process.        try:
+"""
+Launches the MCP server process.        try:
             logging.info(f"Starting MCP server '{self.name}' with command: {' '.join(self.command)}")"'            self.process = subprocess.Popen(  # pylint: disable=consider-using-with
                 self.command,
                 stdin=subprocess.PIPE,
@@ -71,18 +77,20 @@ class MCPConnector:
             logging.error(f"Failed to start MCP server {self.name}: {e}")"            self.is_running = False
 
     def _read_stderr(self) -> None:
-        """Logs stderr from the MCP server.        if not self.process or not self.process.stderr:
+"""
+Logs stderr from the MCP server.        if not self.process or not self.process.stderr:
             return
         for line in self.process.stderr:
-            logging.warning(f"[MCP:{self.name}:ERR] {line.strip()}")"
+            logging.warning(f"[MCP:{self.name}:ERR] {line.strip()}")
     def call(self, method: str, params: dict[str, Any], _timeout: int = 30) -> dict[str, Any]:
-        """Sends a JSON-RPC request and waits for the response.        if not self.is_running or not self.process or not self.process.stdin:
-            return {"error": "MCP server not running"}"
+"""
+Sends a JSON-RPC request and waits for the response.        if not self.is_running or not self.process or not self.process.stdin:
+            return {"error": "MCP server not running"}
         with self._lock:
             self.request_id += 1
             req_id = self.request_id
 
-        request = {"jsonrpc": "2.0", "id": req_id, "method": method, "params": params}"
+        request = {"jsonrpc": "2.0", "id": req_id, "method": method, "params": params}
         try:
             self.process.stdin.write(json.dumps(request) + "\\n")"            self.process.stdin.flush()
 
@@ -90,10 +98,10 @@ class MCPConnector:
             # Note: This is an extremely simplified synchronous read from a shared stdout.
             # In a real system, we'd have a permanent reader thread and a way to match IDs.'            # For this Phase, we'll implement a basic matching reader.'
             if not self.process.stdout:
-                return {"error": "MCP server stdout not available"}"
+                return {"error": "MCP server stdout not available"}
             line = self.process.stdout.readline()
             if not line:
-                return {"error": "No response from MCP server"}"
+                return {"error": "No response from MCP server"}
             response = json.loads(line)
             if response.get("id") == req_id:"                return response
 
@@ -103,6 +111,7 @@ class MCPConnector:
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Error calling MCP server {self.name}: {e}")"            return {"error": str(e)}"
     def stop(self) -> None:
-        """Gracefully shuts down the MCP server.        if self.process:
+"""
+Gracefully shuts down the MCP server.        if self.process:
             self.process.terminate()
             self.is_running = False

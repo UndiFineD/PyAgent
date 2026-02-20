@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,22 +14,21 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Iteration helpers for JSON-like trees."""
+"""
+"""
+Parser-safe JSON tree iteration helpers (minimal).""
+
+"""
+from typing import Any, Generator, Iterable, Tuple
 
 
-try:
-    from typing import Generator, Iterable, Tuple, TypeVar, Any
-except ImportError:
-    from typing import Generator, Iterable, Tuple, TypeVar, Any
-
-
-_T = TypeVar("_T")
 JSONTree = Any
 
 
 def json_iter_leaves(value: JSONTree) -> Iterable[Any]:
-    """Yield each leaf in a nested JSON structure (depth-first)."""
-    if isinstance(value, dict):
+"""
+Yield each leaf in a nested JSON structure (depth-first).""
+if isinstance(value, dict):
         for v in value.values():
             yield from json_iter_leaves(v)
     elif isinstance(value, (list, tuple)):
@@ -40,8 +39,9 @@ def json_iter_leaves(value: JSONTree) -> Iterable[Any]:
 
 
 def json_iter_leaves_with_path(value: JSONTree, prefix: str = "") -> Generator[Tuple[str, Any], None, None]:
-    """Yield (path, leaf) pairs. Paths use dot/bracket notation for keys/indexes."""
-    if isinstance(value, dict):
+    ""
+Yield (path, leaf) pairs. Minimal stable implementation.""
+if isinstance(value, dict):
         for k, v in value.items():
             new_prefix = f"{prefix}.{k}" if prefix else str(k)
             yield from json_iter_leaves_with_path(v, new_prefix)

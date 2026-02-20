@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.dev.agent_tests.testing_utils import VisualRegressionTester, ContractTestRunner, ResultAggregator, TestMetricsCollector

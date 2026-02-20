@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.slash_commands.commands.environment import cmd_version, cmd_env, cmd_python, cmd_cwd, cmd_hostname, cmd_user, cmd_venv

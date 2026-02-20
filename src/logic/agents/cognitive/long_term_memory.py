@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Lightweight LongTermMemory shim for tests.
+"""
+"""
+Lightweight LongTermMemory shim for tests.
 
+"""
 Provides a minimal API so cognitive agents can import and use a
 placeholder long-term memory during unit tests.
 """
-
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -32,12 +35,12 @@ __version__ = VERSION
 
 
 class LongTermMemory:
-    """Minimal long-term memory placeholder.
+"""
+Minimal long-term memory placeholder.
 
     Stores simple dictionary records in memory for testing purposes.
-    """
-
-    def __init__(self) -> None:
+"""
+def __init__(self) -> None:
         self.version = VERSION
         self._store: List[Dict[str, Any]] = []
         logging.getLogger(__name__).info("LongTermMemory initialized (shim)")

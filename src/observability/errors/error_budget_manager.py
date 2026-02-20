@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Error Budget Manager - Manage SLO error budgets
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -35,7 +39,6 @@ add concurrency protection and validation, expose asynchronous APIs for integrat
 with asyncio-based agents, emit metrics/events on consumption and breaches, 
 and add tests for edge cases (zero budgets, negative consumes, missing budgets).
 """
-
 try:
     from datetime import datetime, timedelta
 except ImportError:
@@ -59,19 +62,22 @@ __version__ = VERSION
 
 
 class ErrorBudgetManager:
-    """Manages error budgets for SLO tracking.""""
-    Tracks error budget consumption over time periods
+"""
+Manages error budgets for SLO tracking.""""
+Tracks error budget consumption over time periods
     to support SLO management.
 
     Attributes:
         budgets: Map of budget names to ErrorBudget objects.
     
     def __init__(self) -> None:
-        """Initialize the error budget manager.        self.budgets: dict[str, ErrorBudget] = {}
+"""
+Initialize the error budget manager.        self.budgets: dict[str, ErrorBudget] = {}
 
     def create_budget(self, name: str, total: float, period_days: int = 30) -> ErrorBudget:
-        """Create an error budget.""""
-        Args:
+"""
+Create an error budget.""""
+Args:
             name: Budget name.
             total: Total budget amount.
             period_days: Budget period in days.
@@ -90,8 +96,9 @@ class ErrorBudgetManager:
         return budget
 
     def consume(self, name: str, amount: float) -> bool:
-        """Consume error budget.""""
-        Args:
+"""
+Consume error budget.""""
+Args:
             name: Budget name.
             amount: Amount to consume.
 
@@ -106,8 +113,9 @@ class ErrorBudgetManager:
         return True
 
     def get_remaining(self, name: str) -> float:
-        """Get remaining budget.""""
-        Args:
+"""
+Get remaining budget.""""
+Args:
             name: Budget name.
 
         Returns:
@@ -118,7 +126,8 @@ class ErrorBudgetManager:
         return budget.total_budget - budget.consumed
 
     def get_consumption_rate(self, name: str) -> float:
-        """Get budget consumption rate as percentage.        if name not in self.budgets:
+"""
+Get budget consumption rate as percentage.        if name not in self.budgets:
             return 0.0
         budget = self.budgets[name]
         if budget.total_budget == 0:
@@ -126,7 +135,10 @@ class ErrorBudgetManager:
         return (budget.consumed / budget.total_budget) * 100
 
     def is_exceeded(self, name: str) -> bool:
-        """Check if budget is exceeded.        if name not in self.budgets:
+"""
+Check if budget is exceeded.        if name not in self.budgets:
             return True
         budget = self.budgets[name]
         return budget.consumed >= budget.total_budget
+
+"""

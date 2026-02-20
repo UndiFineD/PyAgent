@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.execution.async_output_handler import AsyncState, CudaEvent, CudaStream, AsyncOutput, AsyncBarrier, AsyncOutputHandler, DoubleBuffer, async_copy_to_np, async_copy_batch, async_barrier

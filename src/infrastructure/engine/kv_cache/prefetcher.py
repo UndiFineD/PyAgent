@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Predictive Context Prefetching (Phase 67).
 Warms up upcoming KV shards before they are requested by experts.
 
+"""
 try:
     import logging
 except ImportError:

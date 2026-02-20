@@ -13,10 +13,13 @@
 # limitations under the License.
 
 
-"""Core package."""
-
+"""
+"""
+Core package.""
 try:
-    from .events import EventCore  # noqa: F401
+
+""
+from .events import EventCore  # noqa: F401
 except ImportError:
     from .events import EventCore # noqa: F401
 

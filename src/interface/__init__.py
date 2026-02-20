@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,12 +17,13 @@ from __future__ import annotations
 
 
 """
+"""
 Interface package - User Space Components
 
+"""
 This package provides backward compatibility imports for user space components
 that have been moved to src/userspace/ for better architectural separation.
 """
-
 try:
     from .core.base.lifecycle.version import VERSION as VERSION
 except ImportError:
@@ -38,4 +40,4 @@ except ImportError:
 
 
 # Re-export for backward compatibility
-__all__ = ["interface", "agents", "dashboard", "mobile"]"
+__all__ = ["interface", "agents", "dashboard", "mobile"]

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.structured.lm_format_enforcer_backend import DFAStateType, DFAState, DFATransition, CompiledDFA, TokenVocabulary, RegexMatchState, CompiledEnforcer, LMFormatEnforcerBackend, AsyncLMFormatEnforcerBackend, FormatEnforcerGrammar, CompositeEnforcer

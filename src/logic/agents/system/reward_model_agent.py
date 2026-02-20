@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +17,14 @@ from __future__ import annotations
 
 
 # RewardModelAgent - Evaluates and ranks multiple agent outputs to produce scalar reward signals
+"""
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate RewardModelAgent with a file path representing agent state/configuration and call await rank_proposals(task, proposals) where proposals is a dict[str, str] mapping agent names to outputs.
 
+"""
 WHAT IT DOES:
 Provides a simple LLM-driven (via BaseAgent.improve_content) ranking of candidate outputs, attempts to parse a JSON-formatted ranking and scores, records a lesson for telemetry, and falls back to a heuristic scorer when parsing or model output fails.
 
@@ -32,7 +36,6 @@ RewardModelAgent for PyAgent.
 Specializes in ranking multiple agent outputs to facilitate Reinforcement Learning from AI Feedback (RLAIF).
 Used in Phase 42 for model distillation and fine-tuning loops.
 """
-
 import logging
 from typing import Any
 
@@ -45,7 +48,8 @@ __version__ = VERSION
 
 
 class RewardModelAgent(BaseAgent):
-""""Evaluates and ranks multiple proposals to provide a scalar reward signal.
+""""
+Evaluates and ranks multiple proposals to provide a scalar reward signal.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -92,7 +96,7 @@ class RewardModelAgent(BaseAgent):
             scores[name] = score
 
         ranking = sorted(scores, key=scores.get, reverse=True)
-        return {"ranking": ranking, "scores": scores}"
+        return {"ranking": ranking, "scores": scores}
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Standard AI-powered evaluation."        return await super().improve_content(prompt, target_file)
 
@@ -113,7 +117,8 @@ __version__ = VERSION
 
 
 class RewardModelAgent(BaseAgent):
-""""Evaluates and ranks multiple proposals to provide a scalar reward signal.
+""""
+Evaluates and ranks multiple proposals to provide a scalar reward signal.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -121,7 +126,7 @@ class RewardModelAgent(BaseAgent):
 
     @as_tool
     async def rank_proposals(self, task: str, proposals: dict[str, str]) -> dict[str, Any]:
-        "Ranks a set of proposals from best to worst and" provides reward scores."
+        "Ranks a set of proposals from best to worst and" provides reward scores.
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
@@ -160,7 +165,7 @@ class RewardModelAgent(BaseAgent):
             scores[name] = score
 
         ranking = sorted(scores, key=scores.get, reverse=True)
-        return {"ranking": ranking, "scores": scores}"
+        return {"ranking": ranking, "scores": scores}
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Standard AI-powered evaluation."        return await super().improve_content(prompt, target_file)
 
@@ -168,3 +173,5 @@ class RewardModelAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")"    main()
+
+"""

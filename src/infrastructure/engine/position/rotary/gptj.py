@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Gptj.py module.
 
+"""
 try:
     from typing import Any, Tuple
 except ImportError:
@@ -40,8 +42,9 @@ if HAS_NUMPY:
 
 
 class GptJRotaryEmbedding(RotaryEmbeddingBase):
-    """GPT-J style rotary position embedding.""""
-    Interleaved rotation pattern where pairs of dimensions
+"""
+GPT-J style rotary position embedding.""""
+Interleaved rotation pattern where pairs of dimensions
     are rotated together.
     
     def __init__(self, config: RoPEConfig) -> None:
@@ -50,13 +53,15 @@ class GptJRotaryEmbedding(RotaryEmbeddingBase):
         self.inv_freq = self._compute_inv_freq()
 
     def _compute_inv_freq(self) -> Any:
-        """Compute inverse frequencies.        if HAS_TORCH:
+"""
+Compute inverse frequencies.        if HAS_TORCH:
             return 1.0 / (self.base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
         if HAS_NUMPY:
             return 1.0 / (self.base ** (np.arange(0, self.rotary_dim, 2, dtype=np.float32) / self.rotary_dim))
-        raise RuntimeError("No numerical backend available")"
+        raise RuntimeError("No numerical backend available")
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
-        """Compute cos/sin cache.        if HAS_TORCH:
+"""
+Compute cos/sin cache.        if HAS_TORCH:
             t = torch.arange(max_len, dtype=torch.float32)
             freqs = torch.outer(t, self.inv_freq)
             # Interleaved pattern: [cos0, cos0, cos1, cos1, ...]
@@ -69,14 +74,15 @@ class GptJRotaryEmbedding(RotaryEmbeddingBase):
             cos_cache = np.repeat(np.cos(freqs), 2, axis=-1)
             sin_cache = np.repeat(np.sin(freqs), 2, axis=-1)
             return cos_cache, sin_cache
-        raise RuntimeError("No numerical backend available")"
+        raise RuntimeError("No numerical backend available")
     def forward_native(
         self,
         positions: Any,
         query: Any,
         key: Any,
     ) -> Tuple[Any, Any]:
-        """Apply GPT-J style rotary embeddings.        seq_len = int(positions.max()) + 1 if HAS_NUMPY else positions.max().item() + 1
+"""
+Apply GPT-J style rotary embeddings.        seq_len = int(positions.max()) + 1 if HAS_NUMPY else positions.max().item() + 1
 
         if self._cache_seq_len < seq_len:
             self._cos_cache, self._sin_cache = self._compute_cos_sin_cache(max(seq_len, 2048))
@@ -95,4 +101,11 @@ class GptJRotaryEmbedding(RotaryEmbeddingBase):
             k_rotated = key * cos + rotate_interleaved(key) * sin
             return q_rotated, k_rotated
 
-        raise RuntimeError("GPT-J RoPE requires PyTorch")"
+        raise RuntimeError("GPT-J RoPE requires PyTorch")
+"""
+
+"""
+
+""
+
+"""

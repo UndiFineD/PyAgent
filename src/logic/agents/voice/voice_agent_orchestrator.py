@@ -14,9 +14,11 @@
 
 
 """
+"""
 Voice Agent Orchestrator - Multi-modal agent coordination
 # ========================================================
 
+"""
 Inspired by big-3-super-agent's sophisticated orchestration system.'Provides voice-controlled coordination of multiple specialized agents.
 
 Key Features:
@@ -50,7 +52,7 @@ class VoiceAgentOrchestrator(BaseAgent):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.logger = logging.getLogger("VoiceAgentOrchestrator")"
+        self.logger = logging.getLogger("VoiceAgentOrchestrator")
         # Audio configuration
         self.chunk_size = 1024
         self.format = pyaudio.paInt16
@@ -79,10 +81,12 @@ class VoiceAgentOrchestrator(BaseAgent):
         # Validate OpenAI API key
         if not os.environ.get("OPENAI_API_KEY"):"            raise ValueError("OPENAI_API_KEY environment variable required")"
     def register_agent(self, name: str, agent: BaseAgent):
-""""Register a specialized agent for orchestration.        self.registered_agents[name] = agent
+""""
+Register a specialized agent for orchestration.        self.registered_agents[name] = agent
         self.logger.info(fRegistered agent: {name}")"
     def _build_tool_specs(self) -> List[Dict[str, Any]]:
-""""Build tool specifications for available agents.   "     tools = []"
+""""
+Build tool specifications for available agents.   "     tools = []"
         # Code generation tool
         tools.append({
             "name": "generate_code","            "description": "Generate or modify code using AI assistance","            "parameters": {"                "type": "object","                "properties": {"                    "task": {"type": "string", "description": "Coding task description"},"                    "language": {"type": "string", "description": "Programming language"},"                    "context": {"type": "string", "description": "Additional context"}"                },
@@ -104,7 +108,8 @@ class VoiceAgentOrchestrator(BaseAgent):
         return tools
 
     def setup_audio(self):
-""""Initialize PyAudio for voice input/output.        self.logger.info("Setting up audio interface...")"        try:
+""""
+Initialize PyAudio for voice input/output.        self.logger.info("Setting up audio interface...")"        try:
             self.audio_interface = pyaudio.PyAudio()
             self.audio_stream = self.audio_interface.open(
                 format=self.format,
@@ -118,15 +123,18 @@ class VoiceAgentOrchestrator(BaseAgent):
             self.logger.error(fFailed to setup audio: {e}")"            raise
 
     def cleanup_audio(self):
-""""Clean up audio resources.        "if self.audio_stream:"            self.audio_stream.stop_stream()
+""""
+Clean up audio resources.        "if self.audio_stream:"            self.audio_stream.stop_stream()
             self.audio_stream.close()
         if self.audio_interface:
             self.audio_interface.terminate()
-        self.logger.info("Audio interface cleaned up")"
+        self.logger.info("Audio interface cleaned up")
     def base64_encode_audio(self, audio_bytes):
-""""Encode audio bytes to base64.        return base64.b64encode(audio_bytes).decode("ascii")"
+""""
+Encode audio bytes to base64.        return base64.b64encode(audio_bytes).decode("ascii")
     def base64_decode_audio(self, base64_str):
-""""Decode base64 audio to bytes.        return base64.b64decode(base64_str)
+""""
+Decode base64 audio to bytes.        return base64.b64decode(base64_str)
 
     async def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
 #         "Execute a tool call by delegating to appropriate agent."        self.logger.info(fExecuting tool: {tool_name} with args: {arguments}")"
@@ -134,20 +142,21 @@ class VoiceAgentOrchestrator(BaseAgent):
             if tool_name == "generate_code":"                # Delegate to coding agent
                 if "coding_agent" in self.registered_agents:"                    agent = self.registered_agents["coding_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
                     return {"result": result, "success": True}"                else:
-                    return {"error": "No coding agent registered", "success": False}"
+                    return {"error": "No coding agent registered", "success": False}
             elif tool_name == "browse_web":"                # Delegate to browser agent
                 if "browser_agent" in self.registered_agents:"                    agent = self.registered_agents["browser_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
                     return {"result": result, "success": True}"                else:
-                    return {"error": "No browser agent registered", "success": False}"
+                    return {"error": "No browser agent registered", "success": False}
             elif tool_name == "analyze_data":"                # Delegate to analysis agent
                 if "analysis_agent" in self.registered_agents:"                    agent = self.registered_agents["analysis_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
                     return {"result": result, "success": True}"                else:
-                    return {"error": "No analysis agent registered", "success": False}"
+                    return {"error": "No analysis agent registered", "success": False}
             else:
                 return {"error": fUnknown tool: {tool_name}", "success": False}"
         except Exception as e:
-            self.logger.error(fTool execution failed: {e}")"            return {"error": str(e), "success": False}"
-    def _log_panel(self, message: str, title: str = "Voice Agent", style: str = "cyan"):"""""Log message in a rich panel.        self.console.print(Panel(message, "title=title, border_style=style))"
+            self.logger.error(fTool execution failed: {e}")"            return {"error": str(e), "success": False}
+    def _log_panel(self, message: str, title: str = "Voice Agent", style: str = "cyan"):""""
+Log message in a rich panel.        self.console.print(Panel(message, "title=title, border_style=style))"
     async def process_voice_command(self, audio_data: bytes) -> str:
         Process voice command using OpenAI Realtime API.
         This is a simplified version - full implementation would require WebSocket handling.
@@ -156,7 +165,7 @@ class VoiceAgentOrchestrator(BaseAgent):
         # 2. Handle tool calls
         # 3. Return synthesized response
 
-        self._log_panel("Voice command received - processing...", "Voice Input", "blue")"
+        self._log_panel("Voice command received - processing...", "Voice Input", "blue")
         # TODO Placeholder: convert speech to text (would use OpenAI Whisper or similar)
 #         text_command = "Generate a hello world function in Python"
         # Process the command
@@ -190,12 +199,15 @@ class VoiceAgentOrchestrator(BaseAgent):
 
         else:
             # Interactive mode
-            self._log_panel("Starting voice agent orchestrator", "Initialization", "green")"
+            self._log_panel("Starting voice agent orchestrator", "Initialization", "green")
             # Display registered agents
             if self.registered_agents:
-                agent_list = "\\n".join(f"- {name}" for name in self.registered_agents.keys())"                self._log_panel(fRegistered agents:\\n{agent_list}", "Agent Roster", "cyan")"
+                agent_list = "\\n".join(f"- {name}" for name in self.registered_agents.keys())"                self._log_panel(fRegistered agents:\\n{agent_list}", "Agent Roster", "cyan")
 #             return "Voice agent orchestrator ready"
     def get_status(self) -> Dict[str, Any]:
-""""Get orchestrator status and metrics.        return {
+""""
+Get orchestrator status and metrics.        return {
             "status": "active" if self.running else "inactive","            "registered_agents": list(self.registered_agents.keys()),"            "response_count": self.response_count,"            "total_tokens": self.cumulative_tokens["total"],"            "total_cost_usd": self.cumulative_cost_usd,"            "audio_active": self.audio_stream is not None"        }
 
+
+"""

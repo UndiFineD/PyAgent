@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@ from __future__ import annotations
 
 
 """
-ExperimentOrchestrator for PyAgent.""""Automates multi-agent benchmarks, training simulations, and MLOps experimentation.
-"""
+ExperimentOrchestrator for PyAgent.""""
+Automates multi-agent benchmarks, training simulations, and MLOps experimentation.
 
+"""
 try:
     import logging
 except ImportError:
@@ -72,7 +74,8 @@ class ExperimentOrchestrator(BaseAgent):
 
     @as_tool
     def run_benchmark_experiment(self, suite_name: str, agents_to_test: list[str]) -> dict[str, Any]:
-        """Runs a suite of benchmarks across specified agents.        experiment_id: str = str(uuid.uuid4())[:8]
+"""
+Runs a suite of benchmarks across specified agents.        experiment_id: str = str(uuid.uuid4())[:8]
         start_time: float = time.time()
 
         # Simulate benchmark logic - in real usage, this would call BenchmarkAgent
@@ -85,10 +88,12 @@ class ExperimentOrchestrator(BaseAgent):
         return results
 
     def log_experiment(self, data: dict[str, Any]) -> None:
-        """Persists experiment data to the registry.        eid: str = data.get("experiment_id", "unknown")"        logging.info(f"Experiment Logged: {eid}")"
+"""
+Persists experiment data to the registry.        eid: str = data.get("experiment_id", "unknown")"        logging.info(f"Experiment Logged: {eid}")"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Experimentation content optimization (stub).        _ = prompt, target_file
-        return "Experimentation is the bridge to AGI efficiency.""
+"""
+Experimentation content optimization (stub).        _ = prompt, target_file
+        return "Experimentation is the bridge to AGI efficiency."
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
@@ -96,3 +101,9 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
         ExperimentOrchestrator,
         "Experiment Orchestrator","        "Automated experiment management","    )
     main()
+
+"""
+
+""
+
+"""

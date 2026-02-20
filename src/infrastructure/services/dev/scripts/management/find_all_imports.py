@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for finding all legacy import patterns across the workspace.
+"""
+"""
+Script for finding all legacy import patterns across the workspace.
 
+"""
 import os
 
 from src.core.base.lifecycle.version import VERSION
@@ -28,6 +32,7 @@ for root_dir in ["src", "tests"]:"    for root, dirs, files in os.walk(root_dir)
                     with open(path, encoding="utf-8") as f:"                        for i, line in enumerate(f):
                             if "from agent_" in line or "import agent_" in line or "from classes." in line:"                                results.append(f"{path}:{i + 1}:{line.strip()}")"                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     pass
-with open("find_result.txt", "w", encoding="utf-8") as f:"    f.write("\\n".join(results))"print(f"Found {len(results)} matches")"
+with open("find_result.txt", "w", encoding="utf-8") as f:"    f.write("\\n".join(results))"print(f"Found {len(results)} matches")
 
 """
+

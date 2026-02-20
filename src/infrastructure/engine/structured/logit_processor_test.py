@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.structured.logit_processor import LogitBias, ProcessorStats, LogitProcessor, ConstrainedLogitProcessor, BitmaskLogitProcessor, BiasLogitProcessor, CompositeLogitProcessor, TemperatureProcessor, TopKProcessor, TopPProcessor, RepetitionPenaltyProcessor, create_standard_processor_chain, apply_constraints_to_logits

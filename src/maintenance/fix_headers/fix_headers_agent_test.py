@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from maintenance.fix_headers.fix_headers_agent import FixHeadersAgent

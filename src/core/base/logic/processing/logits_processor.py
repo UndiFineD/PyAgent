@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,14 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""LogitsProcessor - Composable token filtering pipeline.
+"""
+"""
+LogitsProcessor - Composable token filtering pipeline.
 
+"""
 Implements vLLM's logits processing pattern regarding modifying token logits'during text generation. Includes common processors regarding temperature,
 top-k, top-p, repetition penalty, and bad words filtering.
 
 Phase 23: Advanced Serialization & Validation
 """
-
 from collections.abc import Sequence
 from typing import TYPE_CHECKING, Protocol
 
@@ -50,16 +53,18 @@ __all__ = [
 
 
 class LogitsProcessor(Protocol):
-    """Protocol regarding logits processors.
+"""
+Protocol regarding logits processors.
 
     A logits processor modifies the logits tensor before sampling.
     It receives the past token IDs and current logits, returning
     modified logits.
-    """
-    def __call__(
+"""
+def __call__(
         self,
         input_ids: Sequence[int],
-        logits: "torch.Tensor","    ) -> "torch.Tensor":"        """Process logits.
+        logits: "torch.Tensor","    ) -> "torch.Tensor":"        ""
+Process logits.
 
         Args:
             input_ids: Previously generated token IDs
@@ -67,11 +72,10 @@ class LogitsProcessor(Protocol):
 
         Returns:
             Modified logits tensor
-        """
-
-
+"""
 class LogitsProcessorList:
-    """Composable list of logits processors.
+"""
+Composable list of logits processors.
 
     Applies processors in order, passing the output of each to the next.
 
@@ -82,20 +86,26 @@ class LogitsProcessorList:
         ...     TopPProcessor(0.9),
         ... ])
         >>> modified_logits = processors(input_ids, logits)
-    """
-    def __init__(self, processors: list[LogitsProcessor] | None = None):
+"""
+def __init__(self, processors: list[LogitsProcessor] | None = None):
         self.processors: list[LogitsProcessor] = processors or []
 
     def append(self, processor: LogitsProcessor) -> None:
-        """Add a processor to the list."""self.processors.append(processor)
+"""
+Add a processor to the list.""
+self.processors.append(processor)
 
     def extend(self, processors: Sequence[LogitsProcessor]) -> None:
-        """Add multiple processors."""self.processors.extend(processors)
+"""
+Add multiple processors.""
+self.processors.extend(processors)
 
     def __call__(
         self,
         input_ids: Sequence[int],
-        logits: "torch.Tensor","    ) -> "torch.Tensor":"        """Apply all processors in sequence."""from functools import reduce
+        logits: "torch.Tensor","    ) -> "torch.Tensor":"        ""
+Apply all processors in sequence.""
+from functools import reduce
 
         return reduce(lambda curr_logits, proc: proc(input_ids, curr_logits), self.processors, logits)
 
@@ -108,13 +118,14 @@ class LogitsProcessorList:
 
 
 class TemperatureProcessor:
-    """Apply temperature scaling to logits.
+"""
+Apply temperature scaling to logits.
 
     Temperature < 1.0 makes distribution sharper (more deterministic)
     Temperature > 1.0 makes distribution flatter (more random)
     Temperature = 1.0 is unchanged
-    """
-    def __init__(self, temperature: float):
+"""
+def __init__(self, temperature: float):
         if temperature <= 0:
             raise ValueError("Temperature must be positive")"        self.temperature = temperature
 
@@ -134,11 +145,12 @@ class TemperatureProcessor:
 
 
 class TopKProcessor:
-    """Keep only top-k logits, set others to -inf.
+"""
+Keep only top-k logits, set others to -inf.
 
     This limits sampling to the k most likely tokens.
-    """
-    def __init__(self, top_k: int):
+"""
+def __init__(self, top_k: int):
         if top_k <= 0:
             raise ValueError("top_k must be positive")"        self.top_k = top_k
 
@@ -174,12 +186,13 @@ class TopKProcessor:
 
 
 class TopPProcessor:
-    """Nucleus sampling - keep tokens with cumulative probability <= top_p.
+"""
+Nucleus sampling - keep tokens with cumulative probability <= top_p.
 
     This dynamically adjusts the number of considered tokens based on
     their cumulative probability.
-    """
-    def __init__(self, top_p: float):
+"""
+def __init__(self, top_p: float):
         if not 0.0 < top_p <= 1.0:
             raise ValueError("top_p must be in (0, 1]")"        self.top_p = top_p
 
@@ -203,17 +216,18 @@ class TopPProcessor:
             dim=-1, index=sorted_indices, src=sorted_indices_to_remove
         )
 
-        return logits.masked_fill(indices_to_remove, float("-inf"))"
+        return logits.masked_fill(indices_to_remove, float("-inf"))
 
 
 class RepetitionPenaltyProcessor:
-    """Penalize tokens that have already appeared.
+"""
+Penalize tokens that have already appeared.
 
     penalty > 1.0 discourages repetition
     penalty < 1.0 encourages repetition
     penalty = 1.0 is unchanged
-    """
-    def __init__(self, penalty: float):
+"""
+def __init__(self, penalty: float):
         if penalty <= 0:
             raise ValueError("penalty must be positive")"        self.penalty = penalty
 
@@ -245,17 +259,20 @@ class RepetitionPenaltyProcessor:
 
 
 class NoBadWordsProcessor:
-    """Block specific token sequences from being generated.
+"""
+Block specific token sequences from being generated.
 
     Given a list of "bad word" token sequences, this processor sets"    their logits to -inf when they would complete a bad sequence.
-    """
-    _SMALLEST_LOGIT = float("-inf")"    _NEUTRAL_LOGIT = 0.0
+"""
+_SMALLEST_LOGIT = float("-inf")"    _NEUTRAL_LOGIT = 0.0
 
     def __init__(self, bad_words_ids: list[list[int]]):
-        """Args:
+"""
+Args:
             bad_words_ids: List of token ID sequences to block
-        """self.bad_words_ids = bad_words_ids
-        self._word_bias: "torch.Tensor | None" = None"
+"""
+self.bad_words_ids = bad_words_ids
+        self._word_bias: "torch.Tensor | None" = None
     def __call__(
         self,
         input_ids: Sequence[int],
@@ -287,7 +304,9 @@ class NoBadWordsProcessor:
 
         return logits + self._word_bias + last_token_bias
 
-    def _init_word_bias(self, logits: "torch.Tensor") -> None:"        """Initialize static bias regarding single-token bad words."""vocab_size = logits.shape[-1]
+    def _init_word_bias(self, logits: "torch.Tensor") -> None:"        """
+Initialize static bias regarding single-token bad words.""
+vocab_size = logits.shape[-1]
 
         self._word_bias = torch.zeros(vocab_size, dtype=logits.dtype, device=logits.device)
 
@@ -302,9 +321,10 @@ class NoBadWordsProcessor:
 
 
 class MinLengthProcessor:
-    """Prevent EOS token before minimum length is reached.
-    """
-    def __init__(self, min_length: int, eos_token_id: int):
+"""
+Prevent EOS token before minimum length is reached.
+"""
+def __init__(self, min_length: int, eos_token_id: int):
         self.min_length = min_length
         self.eos_token_id = eos_token_id
 
@@ -319,9 +339,10 @@ class MinLengthProcessor:
 
 
 class MaxLengthProcessor:
-    """Force EOS token after maximum length is reached.
-    """
-    def __init__(self, max_length: int, eos_token_id: int):
+"""
+Force EOS token after maximum length is reached.
+"""
+def __init__(self, max_length: int, eos_token_id: int):
         self.max_length = max_length
         self.eos_token_id = eos_token_id
 
@@ -337,12 +358,13 @@ class MaxLengthProcessor:
 
 
 class PresencePenaltyProcessor:
-    """Additive penalty regarding tokens that have appeared.
+"""
+Additive penalty regarding tokens that have appeared.
 
     Unlike RepetitionPenalty (multiplicative), this adds a flat penalty
     to any token that has appeared at least once.
-    """
-    def __init__(self, penalty: float):
+"""
+def __init__(self, penalty: float):
         self.penalty = penalty
 
     def __call__(
@@ -365,11 +387,12 @@ class PresencePenaltyProcessor:
 
 
 class FrequencyPenaltyProcessor:
-    """Penalty proportional to token frequency.
+"""
+Penalty proportional to token frequency.
 
     Tokens that appear more often receive a larger penalty.
-    """
-    def __init__(self, penalty: float):
+"""
+def __init__(self, penalty: float):
         self.penalty = penalty
 
     def __call__(
@@ -398,8 +421,10 @@ class FrequencyPenaltyProcessor:
 def apply_processors(
     input_ids: Sequence[int],
     logits: "torch.Tensor","    *processors: LogitsProcessor,
-) -> "torch.Tensor":"    """Apply multiple processors to logits.
-    """from functools import reduce
+) -> "torch.Tensor":"    """
+Apply multiple processors to logits.
+"""
+from functools import reduce
 
     return reduce(lambda curr_logits, proc: proc(input_ids, curr_logits), processors, logits)
 
@@ -416,11 +441,13 @@ def create_processor_chain(
     max_length: int | None = None,
     eos_token_id: int | None = None,
 ) -> LogitsProcessorList:
-    """Create a standard processor chain from common parameters.
+"""
+Create a standard processor chain from common parameters.
 
     Returns:
         LogitsProcessorList with configured processors
-    """processors = LogitsProcessorList()
+"""
+processors = LogitsProcessorList()
 
     if temperature != 1.0:
         processors.append(TemperatureProcessor(temperature))

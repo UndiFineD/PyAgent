@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from typing import Any
 except ImportError:
@@ -36,12 +36,20 @@ __version__ = VERSION
 
 
 class EnvironmentDetector:
-    """Detects and reports test environment information.
+"""
+Detects and reports test environment information.
     def detect(self) -> dict[str, Any]:
-        """Detect environment information.        import os
+"""
+Detect environment information.        import os
         import platform
 
         is_ci = any(env in os.environ for env in ["CI", "CONTINUOUS_INTEGRATION", "BUILD_ID", "GITHUB_ACTIONS"])"        system = platform.system().lower()
         if system == "windows":"            os_name = "windows""        elif system == "darwin":"            os_name = "darwin""        elif system == "linux":"            os_name = "linux""        else:
             os_name = "unknown""        return {
             "is_ci": is_ci,"            "os": os_name,"            "python_version": platform.python_version(),"            "platform": system,"        }
+
+"""
+
+""
+
+"""

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,12 +20,13 @@ from __future__ import annotations
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Base Classes
-
+"""
 Base classes and data structures for tool parsing.
 """
-
 try:
-    import json
+
+"""
+import json
 except ImportError:
     import json
 
@@ -54,7 +58,8 @@ except ImportError:
 
 
 class ToolParserType(Enum):
-    """Supported tool parser types.
+"""
+Supported tool parser types.
     GENERIC_JSON = auto()  # Generic JSON parsing
     HERMES = auto()  # Hermes/NousResearch format
     LLAMA3 = auto()  # Llama 3 function calling
@@ -69,7 +74,8 @@ class ToolParserType(Enum):
 
 
 class ToolCallStatus(Enum):
-    """Tool call parsing status.
+"""
+Tool call parsing status.
     PENDING = auto()  # Still parsing
     COMPLETE = auto()  # Successfully parsed
     INVALID = auto()  # Parse error
@@ -83,16 +89,19 @@ class ToolCallStatus(Enum):
 
 @dataclass
 class ToolParameter:
-    """Tool parameter definition.
+"""
+Tool parameter definition.
     name: str
-    param_type: str = "string""    description: str = """    required: bool = True
+    param_type: str = "string""    description: str = """
+required: bool = True
     default: Optional[Any] = None
     enum: Optional[List[str]] = None
 
 
 @dataclass
 class ToolCall:
-    """Parsed tool/function call.
+"""
+Parsed tool/function call.
     id: str  # Unique call ID
     name: str  # Function/tool name
     arguments: Dict[str, Any]  # Parsed arguments
@@ -105,14 +114,16 @@ class ToolCall:
         }
 
     def to_openai_format(self) -> Dict[str, Any]:
-        """Convert to OpenAI API format.        return {
+"""
+Convert to OpenAI API format.        return {
             "id": self.id,"            "type": "function","            "function": {"                "name": self.name,"                "arguments": self.raw_arguments or json.dumps(self.arguments),"            },
         }
 
 
 @dataclass
 class ToolParseResult:
-    """Result of tool call parsing.
+"""
+Result of tool call parsing.
     tool_calls: List[ToolCall] = field(default_factory=list)
     content: str = ""  # Non-tool content"    raw_output: str = ""  # Full raw output"    complete: bool = True
     errors: List[str] = field(default_factory=list)
@@ -128,8 +139,10 @@ class ToolParseResult:
 
 @dataclass
 class StreamingToolState:
-    """State for streaming tool parsing.
-    buffer: str = """    in_tool_call: bool = False
+"""
+State for streaming tool parsing.
+    buffer: str = ""
+in_tool_call: bool = False
     current_tool: Optional[ToolCall] = None
     completed_tools: List[ToolCall] = field(default_factory=list)
     tool_call_index: int = 0
@@ -144,11 +157,13 @@ class StreamingToolState:
 
 
 class ToolParser(ABC):
-    """Base class for tool parsers.
+"""
+Base class for tool parsers.
     @property
     @abstractmethod
     def parser_type(self) -> ToolParserType:
-        """Return parser type.        ...
+"""
+Return parser type.        ...
 
     @abstractmethod
     def parse(self, text: str) -> ToolParseResult:
@@ -178,9 +193,10 @@ class ToolParser(ABC):
                 ...
 
     def _generate_call_id(self, index: int = 0) -> str:
-        """Generate a unique call ID.        import uuid
+"""
+Generate a unique call ID.        import uuid
 
-        return f"call_{uuid.uuid4().hex[:24]}""
+        return f"call_{uuid.uuid4().hex[:24]}"
 
 # =============================================================================
 # Utility Functions
@@ -199,7 +215,8 @@ def extract_json_from_text(text: str) -> List[str]:
     in_string = False
 
     for i, char in enumerate(text):
-        if char == '"' and (i == 0 or text[i - 1] != "\\"):"'            in_string = not in_string
+        if char == '"'
+and (i == 0 or text[i - 1] != "\\"):"'            in_string = not in_string
         elif not in_string:
             if char == "{":"                if brace_depth == 0:
                     start_idx = i
@@ -210,3 +227,11 @@ def extract_json_from_text(text: str) -> List[str]:
                     start_idx = -1
 
     return results
+
+"""
+
+"""
+
+"""
+
+"""

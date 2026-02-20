@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Local context recorder module."""
+"""
+"""
+Local context recorder module.""
 
+"""
 import json
 import logging
 from datetime import datetime
@@ -28,24 +32,26 @@ __version__ = VERSION
 
 
 class LocalContextRecorder(ContextRecorderInterface):
-    """Records LLM prompts and results for future training/fine-tuning.
+"""
+Records LLM prompts and results for future training/fine-tuning.
+
     Stores data in JSONL format with monthly and hash-based sharding.
     Optimized for trillion-parameter data harvesting (Phase 105).
-    """
-    
-    def __init__(
+"""
+def __init__(
         self,
         workspace_root: Path | None = None,
         user_context: str = "System",
         fleet: Any = None,
     ) -> None:
-        """Initialize the local context recorder.
+"""
+Initialize the local context recorder.
         Args:
             workspace_root: Optional path to the workspace root.
             user_context: Context identifier for the user.
             fleet: Optional fleet object containing workspace information.
-        """
-        if fleet and hasattr(fleet, "workspace_root"):
+"""
+if fleet and hasattr(fleet, "workspace_root"):
             self.workspace_root = Path(fleet.workspace_root)
         elif workspace_root:
             self.workspace_root = Path(workspace_root)
@@ -122,8 +128,9 @@ class LocalContextRecorder(ContextRecorderInterface):
 
 
     def record_lesson(self, tag: str, data: dict[str, Any]) -> None:
-        """Alias for general logic harvesting to satisfy intelligence scanners."""        
-        self.record_interaction(
+"""
+Alias for general logic harvesting to satisfy intelligence scanners.""
+self.record_interaction(
             provider="Internal",
             model=tag,
             prompt=json.dumps(data),
@@ -133,8 +140,9 @@ class LocalContextRecorder(ContextRecorderInterface):
 
 
     def _update_index(self, prompt_hash: str, filename: str) -> None:
-        """Simple index updates to avoid scanning all shards for a specific query."""
-        index_file = self.log_dir / "shards_lookup.index"
+        ""
+Simple index updates to avoid scanning all shards for a specific query.""
+index_file = self.log_dir / "shards_lookup.index"
         try:
             # Atomic append for the index
             with open(index_file, "a", encoding="utf-8") as f:

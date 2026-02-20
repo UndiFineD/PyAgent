@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
-"""Minimal APT simulation core for tests."""
 from __future__ import annotations
+"""
+Parser-safe stub: APT simulation core (conservative).
 
+Provides minimal classes used by imports/tests.
+"""
 
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import List, Dict, Any
-except ImportError:
-    from typing import List, Dict, Any
-
+from dataclasses import dataclass, field
+from typing import List, Dict, Any
 
 
 @dataclass
@@ -28,19 +22,9 @@ class C2Profile:
     endpoint: str
 
 
-@dataclass
-class APTSimulationResult:
-    group: APTGroup
-    success: bool = False
-    details: Dict[str, Any] = field(default_factory=dict)
-
-
 class APTSimulationCore:
-    def __init__(self) -> None:
-        pass
-
-    def run(self, group: APTGroup, c2: C2Profile) -> APTSimulationResult:
-        return APTSimulationResult(group=group, success=False)
+    def run(self, group: APTGroup, c2: C2Profile):
+        return None
 
 
-__all__ = ["APTGroup", "C2Profile", "APTSimulationResult", "APTSimulationCore"]
+__all__ = ["APTGroup", "C2Profile", "APTSimulationCore"]

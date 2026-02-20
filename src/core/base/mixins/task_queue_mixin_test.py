@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Tests for TaskQueueMixin."""
+"""
+"""
+Tests for TaskQueueMixin.""
 try:
-    import asyncio
+
+"""
+import asyncio
 except ImportError:
     import asyncio
 
@@ -33,27 +37,33 @@ except ImportError:
 
 
 class MockTaskQueueAgent(TaskQueueMixin):
-    """Mock agent for testing TaskQueueMixin."""
-    def __init__(self, **kwargs):
+"""
+Mock agent for testing TaskQueueMixin.""
+def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     async def _process_task(self, task_data):
-        """Mock task processing."""await asyncio.sleep(0.1)  # Simulate processing time
-        return f"processed_{task_data['job_id']}""'
-
-
+"""
+Mock task processing.""
+await asyncio.sleep(0.1)  # Simulate processing time
+        return f"processed_{task_data['job_id']}"
 class TestTaskQueueMixin:
-    """Test TaskQueueMixin functionality."""
+"""
+Test TaskQueueMixin functionality.""
     @pytest.mark.asyncio
     async def test_mixin_initialization(self):
-        """Test mixin initializes correctly."""agent = MockTaskQueueAgent(max_queue_size=5, task_ttl=300)
+"""
+Test mixin initializes correctly.""
+agent = MockTaskQueueAgent(max_queue_size=5, task_ttl=300)
         assert agent.max_queue_size == 5
         assert agent.task_ttl == 300
         assert isinstance(agent.task_results, dict)
 
     @pytest.mark.asyncio
     async def test_submit_task(self):
-        """Test submitting a task."""agent = MockTaskQueueAgent()
+"""
+Test submitting a task.""
+agent = MockTaskQueueAgent()
         await agent.start_task_processing()
 
         job_id = await agent.submit_task({'test': 'data'})'        assert job_id in agent.task_results
@@ -62,38 +72,44 @@ class TestTaskQueueMixin:
 
     @pytest.mark.asyncio
     async def test_task_processing(self):
-        """Test task processing workflow."""agent = MockTaskQueueAgent()
+"""
+Test task processing workflow.""
+agent = MockTaskQueueAgent()
         await agent.start_task_processing()
 
-        job_id = await agent.submit_task({'test': 'data'})'
+        job_id = await agent.submit_task({'test': 'data'})
         # Wait for processing
         await asyncio.sleep(0.2)
 
         status = await agent.get_task_status(job_id)
         assert status['status'] == 'completed''        assert status['result'] == f"processed_{job_id}""'
-        await agent.stop_task_processing()
+await agent.stop_task_processing()
 
     @pytest.mark.asyncio
     async def test_queue_full_error(self):
-        """Test error when queue is full."""agent = MockTaskQueueAgent(max_queue_size=1)
+"""
+Test error when queue is full.""
+agent = MockTaskQueueAgent(max_queue_size=1)
         await agent.start_task_processing()
 
         # Fill the queue
-        await agent.submit_task({'test': 'data1'})'
+        await agent.submit_task({'test': 'data1'})
         # This should fail
-        with pytest.raises(ValueError, match="Task queue is full"):"            await agent.submit_task({'test': 'data2'})'
+        with pytest.raises(ValueError, match="Task queue is full"):"            await agent.submit_task({'test': 'data2'})
         await agent.stop_task_processing()
 
     @pytest.mark.asyncio
     async def test_cleanup_worker(self):
-        """Test cleanup of old tasks."""agent = MockTaskQueueAgent(task_ttl=1, cleanup_interval=1)
+        ""
+Test cleanup of old tasks.""
+agent = MockTaskQueueAgent(task_ttl=1, cleanup_interval=1)
         await agent.start_task_processing()
 
-        job_id = await agent.submit_task({'test': 'data'})'
+        job_id = await agent.submit_task({'test': 'data'})
         # Wait for processing
         await asyncio.sleep(0.2)
         status = await agent.get_task_status(job_id)
-        assert status['status'] == 'completed''
+        assert status['status'] == 'completed'
         # Wait for cleanup
         await asyncio.sleep(2)
 

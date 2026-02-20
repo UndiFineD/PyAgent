@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.structured.guidance_backend import GuidanceTemplateType, GuidanceVariable, GuidanceTemplate, GuidanceState, CompiledGuidanceProgram, GuidanceGrammar, GuidanceBackend, AsyncGuidanceBackend

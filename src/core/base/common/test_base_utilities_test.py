@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.common.test_base_utilities import DummyRecorder, DummyAgent, test_record_tool_execution_truncation_and_metadata, test_record_tool_execution_raises_keyboardinterrupt

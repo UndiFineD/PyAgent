@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Performance Profiling Suite for PyAgent.
 Validates Rust-accelerated logic and monitors tokenization throughput.
 
+"""
 import sys
 import asyncio
 from pathlib import Path
@@ -32,27 +34,28 @@ if project_root.name == 'src':'    project_root = project_root.parent
 CURRENT_WORKING_DIR = str(Path.cwd())
 print(f"DEBUG: Before cleaning sys.path: {sys.path[:3]}")"while CURRENT_WORKING_DIR in sys.path:
     sys.path.remove(CURRENT_WORKING_DIR)
-while "" in sys.path:"    sys.path.remove("")"print(f"DEBUG: After cleaning sys.path: {sys.path[:3]}")"
+while "" in sys.path:"    sys.path.remove("")"print(f"DEBUG: After cleaning sys.path: {sys.path[:3]}")
 try:
     # Force profile rust_core BEFORE other imports
     import rust_core
-    print(f"DEBUG: rust_core file: {getattr(rust_core, '__file__', 'None')}")"'
+    print(f"DEBUG: rust_core file: {getattr(rust_core, '__file__', 'None')}")
     # Now we can add project_root for other imports
     sys.path.insert(0, str(project_root))
 
     # pylint: disable=wrong-import-position
     from src.observability.profiling.rust_profiler import RustProfiler, create_profiled_rust_core
-    print(f"DEBUG: rust_core dir count: {len(dir(rust_core))}")"
+    print(f"DEBUG: rust_core dir count: {len(dir(rust_core))}")
     profiled_rc = create_profiled_rust_core()
     if profiled_rc:
         sys.modules['rust_core'] = profiled_rc'        print("DEBUG: sys.modules['rust_core'] patched")"'except ImportError as e:
-    print(f"DEBUG: Initial import error: {e}")"
+    print(f"DEBUG: Initial import error: {e}")
 # pylint: disable=wrong-import-position
 from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite  # noqa: E402
 
 
 async def main():
-    """Main execution point for the profiling suite.    profiler = RustProfiler.get_instance()
+"""
+Main execution point for the profiling suite.    profiler = RustProfiler.get_instance()
     profiler.enable()
 
     # Verify that calling it manually works
@@ -60,9 +63,9 @@ async def main():
     import rust_core as rc  # pylint: disable=no-member
     print("DEBUG: Calling estimate_tokens_rust...")"    try:
         rc.estimate_tokens_rust("test")"    except (AttributeError, RuntimeError) as e:
-        print(f"DEBUG: Manual call failed: {e}")"
+        print(f"DEBUG: Manual call failed: {e}")
     stats = profiler.get_stats()
-    print(f"DEBUG: Profiler calls for estimate_tokens_rust: {stats.get('estimate_tokens_rust')}")"'
+    print(f"DEBUG: Profiler calls for estimate_tokens_rust: {stats.get('estimate_tokens_rust')}")
     suite = BenchmarkSuite()
 
     # 1. Tokenization Benchmarks
@@ -78,10 +81,10 @@ async def main():
     return -1
     }
 
-    print("\\n🚀 Running Profiled Benchmarks...")"    suite.benchmark_tokenization(test_texts, iterations=1000)
+    print("\\n Running Profiled Benchmarks...")"    suite.benchmark_tokenization(test_texts, iterations=1000)
 
     # 2. Sustained Throughput
-    print("\\n🚀 Running Sustained Throughput Test (5s)...")"    texts_list = list(test_texts.values())
+    print("\\n Running Sustained Throughput Test (5s)...")"    texts_list = list(test_texts.values())
     suite.run_sustained_throughput(texts_list, duration_seconds=5)
 
     # Print summaries
@@ -90,5 +93,7 @@ async def main():
 
     # Save report
     report_path = project_root / "temp" / "profiling_report.json""    profiler.save_report(report_path)
-    print(f"\\n✅ Dynamic profiling report saved to {report_path}")"
+    print(f"\\n Dynamic profiling report saved to {report_path}")
 if __name__ == "__main__":"    asyncio.run(main())
+
+"""

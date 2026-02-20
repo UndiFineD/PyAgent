@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .lazy import get_eagle_proposer, get_arc_offload_manager, get_tool_parser_registry, get_reasoning_engine, get_paged_attention_engine, get_mooncake_connector, get_nixl_connector, get_prefill_worker, get_decode_worker, get_pp_transfer, get_tp_transfer

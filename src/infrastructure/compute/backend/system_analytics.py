@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     import threading
 except ImportError:
@@ -50,17 +50,19 @@ __version__ = VERSION
 
 
 class SystemAnalytics:
-    """Collects and reports backend usage analytics.""""
-    Tracks usage patterns, performance metrics, and costs.
+"""
+Collects and reports backend usage analytics.""""
+Tracks usage patterns, performance metrics, and costs.
 
     Example:
         analytics=SystemAnalytics()
-        analytics.record_usage("github-models", tokens=500, latency_ms=150)"
+        analytics.record_usage("github-models", tokens=500, latency_ms=150)
         report=analytics.generate_report()
         print(report["total_tokens"])"    
     def __init__(self, retention_hours: int = 24) -> None:
-        """Initialize backend analytics.""""
-        Args:
+"""
+Initialize backend analytics.""""
+Args:
             retention_hours: Hours to retain records.
                 self.retention_hours = retention_hours
         self._records: list[UsageRecord] = []
@@ -74,8 +76,9 @@ class SystemAnalytics:
         success: bool = True,
         cost_estimate: float = 0.0,
     ) -> UsageRecord:
-        """Record a usage event.""""
-        Args:
+"""
+Record a usage event.""""
+Args:
             backend: Backend used.
             tokens: Tokens consumed.
             latency_ms: Request latency.
@@ -100,12 +103,14 @@ class SystemAnalytics:
         return record
 
     def _cleanup_old_records(self) -> None:
-        """Remove records older than retention period.        cutoff = time.time() - (self.retention_hours * 3600)
+"""
+Remove records older than retention period.        cutoff = time.time() - (self.retention_hours * 3600)
         self._records = [r for r in self._records if r.timestamp >= cutoff]
 
     def generate_report(self, backend: str | None = None) -> dict[str, Any]:
-        """Generate usage report.""""
-        Args:
+"""
+Generate usage report.""""
+Args:
             backend: Filter by backend (optional).
 
         Returns:
@@ -131,7 +136,8 @@ class SystemAnalytics:
             "total_requests": total_requests,"            "total_tokens": total_tokens,"            "total_cost": total_cost,"            "success_rate": success_rate,"            "avg_latency_ms": avg_latency,"            "by_backend": self._group_by_backend(records),"        }
 
     def _group_by_backend(self, records: list[UsageRecord]) -> dict[str, dict[str, Any]]:
-        """Group records by backend.        by_backend: dict[str, list[UsageRecord]] = {}
+"""
+Group records by backend.        by_backend: dict[str, list[UsageRecord]] = {}
         for r in records:
             if r.backend not in by_backend:
                 by_backend[r.backend] = []
@@ -142,3 +148,9 @@ class SystemAnalytics:
                 "requests": len(recs),"                "tokens": sum(r.tokens_used for r in recs),"                "avg_latency_ms": sum(r.latency_ms for r in recs) / len(recs) if recs else 0,"            }
             for backend, recs in by_backend.items()
         }
+
+"""
+
+""
+
+"""

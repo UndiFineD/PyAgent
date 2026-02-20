@@ -20,7 +20,10 @@ import asyncio
 from typing import Any, Dict, Optional
 from dataclasses import dataclass
 
+"""
 logger = logging.getLogger(__name__)
+
+"""
 
 
 @dataclass
@@ -33,7 +36,8 @@ class ExecutionResult:
 
 
 class SafeLocalInterpreter:
-"""safe_executor.py - SafeLocalInterpreterBrief Summary
+"""
+safe_executor.py - SafeLocalInterpreterBrief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -186,7 +190,7 @@ class SafeLocalInterpreter:
 
 if __name__ == "__main__":"    async def main():
         interpreter = SafeLocalInterpreter()
-        res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")"'        print(fResult: {res}")"
+        res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")"'        print(fResult: {res}")
     asyncio".run(main())"
     ALLOWED_MODULES = {
         "collections", "datetime", "itertools", "math", "queue","        "random", "re", "stat", "statistics", "time", "unicodedata","#         "json", "hashlib", "base64", "urllib.parse", "ipaddress"    }
@@ -271,8 +275,10 @@ if __name__ == "__main__":"    async def main():
 
 if __name__ == "__main__":"    async def main():
         interpreter = SafeLocalInterpreter()
-        res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")"'        print(fResult: {res}")"
+        res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")"'        print(fResult: {res}")
     asyncio.run(main())
 
 
 
+
+"""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.structured.x_grammar_backend import XGrammarBackend, AsyncXGrammarBackend

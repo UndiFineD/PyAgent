@@ -14,8 +14,11 @@
 
 try:
     import unittest
+"""
 except ImportError:
-    import unittest
+
+"""
+import unittest
 
 try:
     from unittest.mock import MagicMock, patch
@@ -48,13 +51,14 @@ class TestRdmaCheckpoint(unittest.TestCase):
             self.connector.rust_bridge = mock_bridge.return_value
 
     def test_create_checkpoint(self):
-        """Test creating an RDMA-based checkpoint (Phase 93).        mock_tensor = MagicMock()
+"""
+Test creating an RDMA-based checkpoint (Phase 93).        mock_tensor = MagicMock()
         mock_tensor.data_ptr.return_value = 0x12345678
         mock_tensor.numel.return_value = 1024
         mock_tensor.element_size.return_value = 4
 
-        self.connector.rust_bridge.execute.return_value = {"lkey": 1, "rkey": 2}"
-        success = self.connector.create_rdma_checkpoint("cp_test_01", mock_tensor)"
+        self.connector.rust_bridge.execute.return_value = {"lkey": 1, "rkey": 2}
+        success = self.connector.create_rdma_checkpoint("cp_test_01", mock_tensor)
         self.assertTrue(success)
         # Verify RustBridge was called with the checkpoint function
         self.connector.rust_bridge.execute.assert_any_call(
@@ -64,3 +68,5 @@ class TestRdmaCheckpoint(unittest.TestCase):
 
 
 if __name__ == "__main__":"    unittest.main()
+
+"""

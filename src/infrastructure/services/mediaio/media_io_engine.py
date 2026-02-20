@@ -15,8 +15,10 @@
 
 
 """
+"""
 Media IO Engine bridge.
 
+"""
 try:
     from .__init__ import (
 except ImportError:

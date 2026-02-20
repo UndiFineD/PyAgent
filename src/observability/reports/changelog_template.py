@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     from dataclasses import dataclass, field
+"""
 except ImportError:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 
 try:
     from .core.base.lifecycle.version import VERSION
@@ -30,7 +35,8 @@ __version__ = VERSION
 
 @dataclass
 class ChangelogTemplate:
-    """Template for changelog entries.    name: str    project_type: str
+"""
+Template for changelog entries.    name: str    project_type: str
     sections: list[str] = field(
         default_factory=lambda: [
             "Added","            "Changed","            "Deprecated","            "Removed","            "Fixed","            "Security","        ]

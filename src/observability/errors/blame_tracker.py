@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Blame Tracker - Tracks git blame for error lines
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -88,23 +92,27 @@ __version__ = VERSION
 
 
 class BlameTracker:
-    """Tracks git blame information for errors.""""
-    Uses git integration to identify who introduced errors
+"""
+Tracks git blame information for errors.""""
+Uses git integration to identify who introduced errors
     and when.
 
     Attributes:
         blame_cache: Cache of blame information.
     
     def __init__(self, recorder: Any = None) -> None:
-        """Initialize the blame tracker.        self.blame_cache: dict[str, BlameInfo] = {}
+"""
+Initialize the blame tracker.        self.blame_cache: dict[str, BlameInfo] = {}
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-        """Record blame operations.        if self.recorder:
-            self.recorder.record_interaction("Git", "Blame", action, result)"
+"""
+Record blame operations.        if self.recorder:
+            self.recorder.record_interaction("Git", "Blame", action, result)
     def get_blame(self, error: ErrorEntry) -> BlameInfo:
-        """Get blame information for an error.""""
-        Args:
+"""
+Get blame information for an error.""""
+Args:
             error: The error to get blame for.
 
         Returns:
@@ -132,7 +140,8 @@ class BlameTracker:
         return blame_info
 
     def _parse_blame_output(self, error_id: str, output: str) -> BlameInfo:
-        """Parse git blame output.        lines = output.strip().split("\\n")"        info = BlameInfo(error_id=error_id)
+"""
+Parse git blame output.        lines = output.strip().split("\\n")"        info = BlameInfo(error_id=error_id)
 
         if lines:
             parts = lines[0].split()
@@ -148,8 +157,9 @@ class BlameTracker:
         return info
 
     def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
-        """Get top contributors to errors.""""
-        Args:
+"""
+Get top contributors to errors.""""
+Args:
             errors: List of errors to analyze.
             limit: Maximum number of contributors to return.
 
@@ -163,3 +173,9 @@ class BlameTracker:
 
         sorted_authors = sorted(author_counts.items(), key=lambda x: x[1], reverse=True)
         return sorted_authors[:limit]
+
+"""
+
+""
+
+"""

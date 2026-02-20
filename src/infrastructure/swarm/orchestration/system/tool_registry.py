@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Minimal ToolRegistry shim for tests and importability.
+"""
+"""
+Minimal ToolRegistry shim for tests and importability.
 
+"""
 This provides a small registry to register and call tool functions.
 """
-
 import asyncio
 import inspect
 import logging
@@ -34,12 +37,12 @@ if TYPE_CHECKING:
 
 
 class ToolRegistry:
-    """A simple in-process tool registry used by tests.
+"""
+A simple in-process tool registry used by tests.
 
     Tools are stored by name with a list of implementations and metadata.
-    """
-
-    def __init__(self, fleet: Optional["FleetManager"] = None) -> None:
+"""
+def __init__(self, fleet: Optional["FleetManager"] = None) -> None:
         self.fleet = fleet
         # tools[name] -> list of dicts with metadata and function
         self.tools: Dict[str, List[Dict[str, Any]]] = defaultdict(list)

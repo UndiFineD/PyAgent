@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 """
 SecretManager
 
+"""
 Secret logic handler.
 (Facade for src.core.base.common.secret_core)
 
+"""
 import json
 import logging
 import os
@@ -51,18 +54,21 @@ class SecretManager(StandardSecretCore):
         self._load_file_vault()
 
     def _load_file_vault(self) -> None:
-        """Loads secrets from a local JSON file if it exists.        if os.path.exists(self.vault_path):
+"""
+Loads secrets from a local JSON file if it exists.        if os.path.exists(self.vault_path):
+
             try:
                 with open(self.vault_path, encoding="utf-8") as f:"                    self._cache.update(json.load(f))
                 logging.info(f"Loaded {len(self._cache)} secrets from {self.vault_path}")"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error(f"Failed to load vault file: {e}")"
+                logging.error(f"Failed to load vault file: {e}")
     def _save_file_vault(self) -> None:
-        """Saves current cache to the vault file.        try:
+"""
+Saves current cache to the vault file.        try:
             # Ensure directory exists
             os.makedirs(os.path.dirname(self.vault_path), exist_ok=True)
             with open(self.vault_path, "w", encoding="utf-8") as f:"                json.dump(self._cache, f, indent=4)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Failed to save vault file: {e}")"
+            logging.error(f"Failed to save vault file: {e}")
     def _fetch_local(self, key: str) -> str | None:
         return os.getenv(key)
 
@@ -76,7 +82,8 @@ class SecretManager(StandardSecretCore):
         logging.info(f"{self.core.get_provider_prefix('vault')} Fetching {key}")"'        return self._cache.get(key) or os.getenv(key)
 
     def get_secret(self, key: str, default: str | None = None) -> str | None:
-        """Retrieves a secret from the configured provider.        if key in self._cache:
+"""
+Retrieves a secret from the configured provider.        if key in self._cache:
             return self._cache[key]
 
         fetch_func = self.providers.get(self.provider, self._fetch_local)
@@ -89,6 +96,8 @@ class SecretManager(StandardSecretCore):
         return default
 
     def set_secret(self, key: str, value: str, persist: bool = False) -> None:
-        """Sets a secret and optionally persists it to the file vault.        self._cache[key] = value
+"""
+Sets a secret and optionally persists it to the file vault.        self._cache[key] = value
         if persist or self.provider == "file":"            self._save_file_vault()
-        logging.info(f"Secret {key} stored in {self.provider} (persisted={persist}).")"
+        logging.info(f"Secret {key} stored in {self.provider} (persisted={persist}).")
+"""

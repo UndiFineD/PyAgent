@@ -12,21 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Stub for tokenization utilities to unblock test collection."""
+"""
+"""
+Stub for tokenization utilities to unblock test collection.""
 
+"""
 def estimate_token_count(text: str) -> int:
-    """Stub: Estimate token count for a string."""
-    return len(text.split())
+"""
+Stub: Estimate token count for a string.""
+return len(text.split())
 
 
 def some_other_token_util(*args, **kwargs):
-    """Stub utility."""
-    return 0
+"""
+Stub utility.""
+return 0
 
 
 def get_tokenizer(*args, **kwargs):
-    """Stub: Return a dummy tokenizer object."""
-    class DummyTokenizer:
+"""
+Stub: Return a dummy tokenizer object.""
+class DummyTokenizer:
         def encode(self, text):
             return text.split()
         def decode(self, tokens):

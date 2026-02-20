@@ -14,9 +14,11 @@
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 LatentLink: Cross-model KV alignment for latent communication.
 Implemented based on arXiv:2601.06123 (Latent space communication for multi-agent systems).
 
+"""
 try:
     from typing import Dict, Tuple
 except ImportError:
@@ -56,14 +58,16 @@ class LatentLinkManager:
         self.adapters: Dict[Tuple[str, str], SynapticAdapter] = {}
 
     def register_connection(self, source_id: str, target_id: str, source_dim: int, target_dim: int):
-        """Register a synaptic adapter between two agents.        key = (source_id, target_id)
+"""
+Register a synaptic adapter between two agents.        key = (source_id, target_id)
         if key not in self.adapters:
             self.adapters[key] = SynapticAdapter(source_dim, target_dim)
 
     def transfer_latent(self, source_id: str, target_id: str, source_kv: torch.Tensor) -> torch.Tensor:
-        """transfer KV cache across agents via latent projection.        adapter = self.adapters.get((source_id, target_id))
+"""
+transfer KV cache across agents via latent projection.        adapter = self.adapters.get((source_id, target_id))
         if adapter is None:
-            raise ValueError(f"No LatentLink registered from {source_id} to {target_id}")"
+            raise ValueError(f"No LatentLink registered from {source_id} to {target_id}")
         with torch.no_grad():
             return adapter(source_kv)
 
@@ -77,4 +81,7 @@ class SynapticLink:
         self.agent_id = agent_id
 
     def transmit(self, target_agent_id: str, context_kv: torch.Tensor):
-        """Transmit context to another agent via the synaptic link.        return self.manager.transfer_latent(self.agent_id, target_agent_id, context_kv)
+"""
+Transmit context to another agent via the synaptic link.        return self.manager.transfer_latent(self.agent_id, target_agent_id, context_kv)
+
+"""

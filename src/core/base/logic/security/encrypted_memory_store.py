@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,13 +16,15 @@ from __future__ import annotations
 
 
  
-"""Encrypted Memory Store shim for tests.
+"""
+"""
+Encrypted Memory Store shim for tests.
 
+"""
 Provides a thin wrapper delegating to the backend store without
 performing real encryption. This keeps imports and API compatibility
 for unit tests while avoiding dependency on the full crypto stack.
 """
-
 try:
     from typing import Any, Dict, List, Optional, Tuple
 except ImportError:

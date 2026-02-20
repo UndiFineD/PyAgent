@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +16,14 @@ from __future__ import annotations
 
 
 """
+"""
 Attribution Engine for PyAgent.
 Tracks the lineage and provenance of every generated piece of content or code.
 """
-
 try:
-    import hashlib
+
+"""
+import hashlib
 except ImportError:
     import hashlib
 
@@ -72,7 +75,8 @@ __version__ = VERSION
 
 
 class AttributionEngine:
-    """Records the 'who, when, and how' for all system outputs (Phase 185).'
+"""
+Records the 'who, when, and how' for all system outputs (Phase 185).
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.log_file = self.workspace_root / "data/fleet/attribution_log.json""        self.core = AttributionCore()
@@ -85,7 +89,8 @@ class AttributionEngine:
         return []
 
     def apply_licensing(self, file_path: str) -> None:
-        """Ensures the file has the correct license header (Phase 185).        path = Path(file_path)
+"""
+Ensures the file has the correct license header (Phase 185).        path = Path(file_path)
         if not path.exists():
             return
 
@@ -95,9 +100,10 @@ class AttributionEngine:
 
         if new_content != content:
             with open(path, "w", encoding="utf-8") as f:"                f.write(new_content)
-            logging.info(f"AttributionEngine: Applied license header to {file_path}")"
+            logging.info(f"AttributionEngine: Applied license header to {file_path}")
     def record_attribution(self, agent_id: str, content: str, task_context: str) -> None:
-        """Creates a record of content generation.        content_hash = hashlib.sha256(content.encode()).hexdigest()
+"""
+Creates a record of content generation.        content_hash = hashlib.sha256(content.encode()).hexdigest()
         record = {
             "timestamp": time.time(),"            "agent": agent_id,"            "hash": content_hash,"            "task": task_context,"            "metadata": {"chars": len(content), "words": len(content.split())},"        }
         self.records.append(record)
@@ -107,9 +113,13 @@ class AttributionEngine:
         with open(self.log_file, 'w', encoding='utf-8') as f:'            json.dump(self.records, f, indent=2)
 
     def get_lineage(self, content_hash: str) -> list[dict[str, Any]]:
-        """Retrieves the history of a specific piece of content based on its hash.        return [r for r in self.records if r["hash"] == content_hash]"
+"""
+Retrieves the history of a specific piece of content based on its hash.        return [r for r in self.records if r["hash"] == content_hash]
     def get_summary(self) -> dict[str, Any]:
-        """Provides a summary of total attributions.        summary: dict[Any, Any] = {}
+"""
+Provides a summary of total attributions.        summary: dict[Any, Any] = {}
         for r in self.records:
             agent = r["agent"]"            summary[agent] = summary.get(agent, 0) + 1
         return summary
+
+"""

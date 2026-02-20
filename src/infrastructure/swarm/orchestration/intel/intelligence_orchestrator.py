@@ -1,4 +1,7 @@
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -13,7 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import logging
 import time
 from typing import TYPE_CHECKING, Any
@@ -22,8 +24,11 @@ from src.core.base.lifecycle.version import VERSION
 
 from src.infrastructure.swarm.orchestration.intel.intelligence_core import IntelligenceCore
 
+"""
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+"""
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
@@ -47,18 +52,20 @@ class IntelligenceOrchestrator:
         self.ai = LLMClient(requests, workspace_root=self.workspace_root)
 
     def contribute_insight(self, agent_name: str, insight: str, confidence: float) -> None:
-        """Contributes a single agent's insight to the swarm pool.'        self.insight_pool.append(
+"""
+Contributes a single agent's insight to the swarm pool.'        self.insight_pool.append(
             {
                 "agent": agent_name,"                "insight": insight,"                "confidence": confidence,"                "timestamp": time.time(),"            }
         )
 
     def synthesize_collective_intelligence(self) -> list[dict[str, Any]]:
-        """Analyzes the pool and recent SQL lessons using local AI to find shared patterns.        # Delegate filtering to Core
+"""
+Analyzes the pool and recent SQL lessons using local AI to find shared patterns.        # Delegate filtering to Core
         sql_lessons = []
         if self.fleet_manager is not None and hasattr(self.fleet_manager, "sql_metadata"):"            try:
                 sql_lessons = self.fleet_manager.sql_metadata.get_intelligence_summary()[:5]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.debug(f"Intelligence: Failed to fetch SQL lessons: {e}")"
+                logging.debug(f"Intelligence: Failed to fetch SQL lessons: {e}")
         insights = self.core.filter_relevant_insights(self.insight_pool, limit=20)
         if not insights and not sql_lessons:
             return []
@@ -104,7 +111,8 @@ class IntelligenceOrchestrator:
         return []
 
     def get_intelligence_report(self) -> dict[str, Any]:
-        """Summarizes the current state of collective knowledge.        return {
+"""
+Summarizes the current state of collective knowledge.        return {
             "insights_collected": len(self.insight_pool),"            "patterns_identified": len(self.patterns),"            "top_patterns": self.patterns[:3],"        }
 
     def get_actionable_improvement_tasks(self) -> list[dict[str, Any]]:
@@ -125,3 +133,5 @@ class IntelligenceOrchestrator:
                             "id": f"TASK_{int(time.time())}_{len(tasks)}","                            "description": task_desc,"                            "origin_pattern": pattern,"                            "file": pattern_dict.get("file", "unknown"),"                            "line": pattern_dict.get("line", "1"),"                            "severity": "High" if "error" in pattern.lower() else "Medium","                        }
                     )
         return tasks
+
+"""

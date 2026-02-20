@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Quality and robustness analysis logic for SelfImprovementCore.
 """
 
+"""
 import ast
 import re
 from typing import Any, Dict, List
@@ -27,9 +30,11 @@ from typing import Any, Dict, List
 
 
 class SelfImprovementQualityMixin:
-    """Mixin for quality, complexity, and robustness analysis.
+"""
+Mixin for quality, complexity, and robustness analysis.
     def _analyze_complexity(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        """Checks for high cyclomatic complexity.        rust_accel = getattr(self, "_RUST_ACCEL", False)"        rc = getattr(self, "rc", None)"
+"""
+Checks for high cyclomatic complexity.        rust_accel = getattr(self, "_RUST_ACCEL", False)"        rc = getattr(self, "rc", None)"
         if rust_accel and rc is not None:
             try:
                 complexity = rc.calculate_cyclomatic_complexity(content)
@@ -44,16 +49,20 @@ class SelfImprovementQualityMixin:
         return []
 
     def _analyze_documentation(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        """Checks for missing or insufficient docstrings.        findings = []
+"""
+Checks for missing or insufficient docstrings.        findings = []
         # Phase 337: Increased search window to 3000 to accommodate long license headers
-        if not re.search(r'"""[\\s\\S]*?"""|\'\'\'[\\s\\S]*?\'\'\'', content[:3000]):""""'            findings.append(
+        if not re.search(r'""
+[\\s\\S]*?"""|\'\'\'[\\s\\S]*?\'\'\'', content[:3000]):""""'
+findings.append(
                 {
                     "type": "Missing Docstring","                    "message": "Module-level docstring is missing. Documentation is required for Phase 315 parity.","                    "file": file_path_rel,"                }
             )
         return findings
 
     def _analyze_typing(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        """Checks for missing type hints to ensure Rust FFI readiness.        findings = []
+"""
+Checks for missing type hints to ensure Rust FFI readiness.        findings = []
         try:
             tree = ast.parse(content)
             untyped_nodes = [
@@ -82,7 +91,8 @@ class SelfImprovementQualityMixin:
         file_path_rel: str,
         allow_triton_check: bool = True,
     ) -> List[Dict[str, Any]]:
-        """General quality and performance checks.        findings = []
+        ""
+General quality and performance checks.        findings = []
         # Robustness: Bare except
         exc_pattern = r"^\\s*except Exception as e:  # pylint: disable=broad-exception-caught\\s*(#.*)?$""        for match in re.finditer(exc_pattern, content, re.MULTILINE):
             line_no = content.count("\\n", 0, match.start()) + 1"            findings.append(

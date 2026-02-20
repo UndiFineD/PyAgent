@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import time
 except ImportError:
@@ -34,19 +34,24 @@ __version__ = VERSION
 
 
 class TestTimer:
-    """Timer utility for tracking test execution duration.
+"""
+Timer utility for tracking test execution duration.
     __test__ = False
-    """Timer for measuring test execution time.
+"""
+Timer for measuring test execution time.
     def __init__(self) -> None:
-        """Initialize timer.        self.start_time: float | None = None
+"""
+Initialize timer.        self.start_time: float | None = None
         self.end_time: float | None = None
 
     def start(self) -> None:
-        """Start the timer.        self.start_time = time.time()
+"""
+Start the timer.        self.start_time = time.time()
 
     def stop(self) -> float:
-        """Stop the timer and return elapsed time in seconds.""""
-        Returns:
+"""
+Stop the timer and return elapsed time in seconds.""""
+Returns:
             Elapsed time in seconds.
                 self.end_time = time.time()
         if self.start_time is None:
@@ -55,6 +60,9 @@ class TestTimer:
 
     @property
     def elapsed_ms(self) -> float:
-        """Get elapsed time in milliseconds.        if self.start_time is None or self.end_time is None:
+"""
+Get elapsed time in milliseconds.        if self.start_time is None or self.end_time is None:
             return 0.0
         return (self.end_time - self.start_time) * 1000
+
+"""

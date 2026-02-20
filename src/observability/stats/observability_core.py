@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Observability Core - Telemetry facade and metric models
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -77,11 +80,13 @@ except ImportError:
 
 
 class MetricType(Enum):
-    """Types of metrics for observability.    COUNTER = "counter""    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary""
+"""
+Types of metrics for observability.    COUNTER = "counter""    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary""
 
 
 class AlertSeverity(Enum):
-    """Severity levels for observability alerts.    CRITICAL = 5
+"""
+Severity levels for observability alerts.    CRITICAL = 5
     HIGH = 4
     MEDIUM = 3
     LOW = 2
@@ -90,7 +95,8 @@ class AlertSeverity(Enum):
 
 @dataclass
 class Alert:
-    """Represents an observability alert.    id: str
+"""
+Represents an observability alert.    id: str
     metric_name: str
     current_value: float
     threshold_value: float
@@ -101,20 +107,24 @@ class Alert:
 
 @dataclass
 class Threshold:
-    """Defines a threshold for a metric.    metric_name: str
+"""
+Defines a threshold for a metric.    metric_name: str
     min_value: float | None = None
     max_value: float | None = None
     severity: AlertSeverity | None = None
-    message: str = """    operator: str | None = None
+    message: str = ""
+operator: str | None = None
     value: float | None = None
 
 
 @dataclass
 class RetentionPolicy:
-    """Policy for data retention.
+"""
+Policy for data retention.
     name: str = ""  # Changed from metric_name to name for constructor"    retention_days: int = 0
     resolution: str = "1m""    metric_name: str | None = None
-    namespace: str = """    max_age_days: int = 0
+    namespace: str = ""
+max_age_days: int = 0
 
     max_points: int = 0
     compression_after_days: int = 7
@@ -122,7 +132,8 @@ class RetentionPolicy:
 
 @dataclass
 class MetricSnapshot:
-    """A snapshot of metrics at a point in time.
+"""
+A snapshot of metrics at a point in time.
     name: str
     id: str
     timestamp: str
@@ -132,30 +143,36 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-    """Types of metric aggregation for rollups.
-    SUM = "sum""    AVG = "average""    MIN = "minimum""    MAX = "maximum""    COUNT = "count""
-    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99""
+"""
+Types of metric aggregation for rollups.
+    SUM = "sum""    AVG = "average""    MIN = "minimum""    MAX = "maximum""    COUNT = "count"
+    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99"
 
 @dataclass
 class MetricNamespace:
-    """Namespace for organizing metrics.
+"""
+Namespace for organizing metrics.
     name: str
-    description: str = """    parent: str | None = None
+    description: str = ""
+parent: str | None = None
     tags: dict[str, str] = field(default_factory=lambda: {})
     retention_days: int = 30
 
 
 @dataclass
 class MetricAnnotation:
-    """Annotation or comment on a metric.
+"""
+Annotation or comment on a metric.
     metric_name: str
     timestamp: str
     text: str
-    author: str = """    annotation_type: str = "info"  # info, warning, milestone"
+    author: str = ""
+annotation_type: str = "info"  # info, warning, milestone
 
 @dataclass
 class MetricCorrelation:
-    """Correlation between two metrics.
+"""
+Correlation between two metrics.
     metric_a: str
     metric_b: str
     correlation_coefficient: float
@@ -166,37 +183,44 @@ class MetricCorrelation:
 
 @dataclass
 class MetricSubscription:
-    """Subscription for metric change notifications.
+"""
+Subscription for metric change notifications.
     id: str
-    metric_pattern: str  # glob pattern like "cpu.*""
-    callback_url: str = """    notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])"    min_interval_seconds: int = 60
+    metric_pattern: str  # glob pattern like "cpu.*"
+    callback_url: str = ""
+notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])"    min_interval_seconds: int = 60
 
 
 
 class ExportDestination(Enum):
-    """Cloud monitoring export destinations.
-    DATADOG = "datadog""    PROMETHEUS = "prometheus""    GRAFANA = "grafana""    CLOUDWATCH = "cloudwatch""    STACKDRIVER = "stackdriver""
+"""
+Cloud monitoring export destinations.
+    DATADOG = "datadog""    PROMETHEUS = "prometheus""    GRAFANA = "grafana""    CLOUDWATCH = "cloudwatch""    STACKDRIVER = "stackdriver"
 
 @dataclass
 class FederatedSource:
-    """A source repository for stats federation.
+"""
+A source repository for stats federation.
     repo_url: str
     api_endpoint: str
-    auth_token: str = """
-    poll_interval_seconds: int = 300
+    auth_token: str = ""
+poll_interval_seconds: int = 300
     enabled: bool = True
     metrics: dict[str, float] = field(default_factory=dict)
 
 
 
 class FederationMode(Enum):
-    """Federation modes for multi-repo aggregation.
-    PULL = "pull""
-    PUSH = "push""    HYBRI"""D = "hybrid""
+"""
+Federation modes for multi-repo aggregation.
+    PULL = "pull"
+    PUSH = "push""    HYBRI"""
+D = "hybrid"
 
 @dataclass
 class RollupConfig:
-    """Configuration for metric rollups.
+"""
+Configuration for metric rollups.
     name: str
     source_metrics: list[str]
     aggregation: AggregationType
@@ -206,12 +230,14 @@ class RollupConfig:
 
 
 class StreamingProtocol(Enum):
-    """Protocols for real-time stats streaming.
+"""
+Protocols for real-time stats streaming.
     WEBSOCKET = "websocket""    SSE = "server_sent_events""    GRPC = "grpc""    MQTT = "mqtt""
 
 @dataclass
 class StreamingConfig:
-    """Configuration for real-time stats streaming.
+"""
+Configuration for real-time stats streaming.
     protocol: StreamingProtocol
     endpoint: str
     port: int = 8080
@@ -220,7 +246,8 @@ class StreamingConfig:
 
 @dataclass
 class AgentMetric:
-    """Represents a metric captured from an agent operation.    agent_name: str
+"""
+Represents a metric captured from an agent operation.    agent_name: str
     operation: str
     duration_ms: float
     timestamp: str = field(default_factory=lambda: datetime.now().isoformat())
@@ -229,19 +256,26 @@ class AgentMetric:
     output_tokens: int = 0
     estimated_cost: float = 0.0
 
-    model: str = "unknown""    metadata: dict[str, A"""ny] = field(default_factory=dict)""""
-
-
-class ObservabilityC"""ore""":""""    """Pure logic for processing agent telemetry data.
+    model: str = "unknown""    metadata: dict[str, A"""
+ny] = field(default_factory=dict)""""
+class ObservabilityC""
+ore""":""""    """
+Pure logic for processing agent telemetry data.
     def __init__(self) -> None:
         self.metrics_history: list[AgentMetric] = []
 
     def process_metric(self, metric: AgentMetric) -> None:
-        """Standardi"""zes""" a metric entry.        self.metrics_history.append(metric)
+"""
+Standardi""
+zes""
+a metric entry.        self.metrics_history.append(metric)
 
     def summarize_performance(self) -> dict[str, Any]:
-        """Calculates """agg"""regate stats from history.        if not self.metrics_history:
-            return {"count": 0, "avg_duration": 0, "total_cost": 0}"
+"""
+Calculates ""
+agg""
+regate stats from history.        if not self.metrics_history:
+            return {"count": 0, "avg_duration": 0, "total_cost": 0}
         total_duration: float | int = sum(m.duration_ms for m in self.metrics_history)
         total_cost: float | int = sum(m.estimated_cost for m in self.metrics_history)
         count: int = len(self.metrics_history)
@@ -252,7 +286,10 @@ class ObservabilityC"""ore""":""""    """Pure logic for processing agent telemet
             "total_count": count,"            "avg_duration_ms": total_duration / count,"            "total_cost_usd": round(total_cost, 6),"            "agents": by_agent,"        }
 
     def _breakdown_by_agent(self) -> dict[str, dict[str, float]]:
-        """Helper to break down""" me"""trics by agent.        by_agent: dict[str, dict[str, float]] = {}
+"""
+Helper to break down""
+me""
+trics by agent.        by_agent: dict[str, dict[str, float]] = {}
         for m in self.metrics_history:
             if m.agent_name not in by_agent:
                 by_agent[m.agent_name] = {
@@ -260,14 +297,23 @@ class ObservabilityC"""ore""":""""    """Pure logic for processing agent telemet
             stats = by_agent[m.agent_name]
             stats["count"] += 1"            stats["total_cost"] += m.estimated_cost"        return by_agent
 
-    def filter_by_time(self, start_iso: str, end_iso: str) -> list[AgentMetri"""c]:        """Filters metrics within a time range.        results = []
+    def filter_by_time(self, start_iso: str, end_iso: str) -> list[AgentMetri""
+c]:        ""
+Filters metrics within a time range.        results = []
         for m in self.metrics_history:
             if start_iso <= m.timestamp <= end_iso:
                 results.append(m)
         return results
 
     def calculate_reliability_scores(self, agent_names: list[str]) -> list[float]:
-             """   """Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.""""        Reliability = """success_count / total_attempts.""""        If""" no hi"""story, defaults to 0.5 (neutral).""""                scores: list[float] = []
+             """   """
+Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.""""
+Reliability = ""
+success_count / total_attempts.""""
+If""
+no hi""
+story, defaults to 0.5 (neutral).""""
+scores: list[float] = []
 
         # Aggregate history per agent
         stats: dict[str, dict[str, int]] = {}
@@ -284,10 +330,13 @@ class ObservabilityC"""ore""":""""    """Pure logic for processing agent telemet
 
 
 
-class Stat"""sCore:    """Core logic for statistics processing, separated from the Agent shell.
+class Stat""
+sCore:    ""
+Core logic for statistics processing, separated from the Agent shell.
     @staticmethod
     def detect_anomaly(history: list[Metric], value: float, threshold_std: float = 2.0) -> tuple[bool, float]:
-        Dete"""ct if a value is anomalous using standard deviation.        if len(history) < 2:
+        Dete""
+ct if a value is anomalous using standard deviation.        if len(history) < 2:
             return False, 0.0
 
         values: list[float] = [m.value for m in history]
@@ -297,7 +346,10 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
         z_score: float = abs((value - mean) / std)
         return z_score > threshold_std, z_score
     @staticmethod
-    def forecast(history: list[Metric], periods: int = 5) ->""" list[flo"""at]:""""        """Simple linear forecasting for a metric.        if len(history) < 3:
+    def forecast(history: list[Metric], periods: int = 5) ->""
+list[flo""
+at]:""""        ""
+Simple linear forecasting for a metric.        if len(history) < 3:
             return []
         values: list[float] = [m.value for m in history]
         # Rust-accelerated linear regression
@@ -314,12 +366,21 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
             return [y_mean] * periods
         slope: float = numerator / denominator
         intercept: float = y_mean - slope * x_mean
-        return [slope * (n + i) + intercept fo"""r i in range(periods)]""""
+        return [slope * (n + i) + intercept fo""
+r i in range(periods)]""""
     @staticmethod
-    def compress_m"""etrics(metri"""cs: list[Metric]) -> bytes:""""        """Compress metric history.        if not metrics:
-            return b"""        data: str = json.dumps([{"value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in metrics])"        return zlib."""compress(data.encode("utf-8"))"
+    def compress_m""
+etrics(metri""
+cs: list[Metric]) -> bytes:""""        ""
+Compress metric history.        if not metrics:
+            return b""
+data: str = json.dumps([{"value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in metrics])"        return zlib."""
+compress(data.encode("utf-8"))
     @staticmethod
-    def visualize_s"""tats(stats: dic"""t[str, Any]) -> None:""""        """Generate CLI graphs for stats visualization.        try:
+    def visualize_s""
+tats(stats: dic""
+t[str, Any]) -> None:""""        ""
+Generate CLI graphs for stats visualization.        try:
             import matplotlib.pyplot as plt
         except ImportError:
             logging.warning("matplotlib not available for visualization")"            return
@@ -331,7 +392,12 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
 
         plt.show()
 
-    @stati"""cmethod""""    def compare_snapshots(s1: MetricSnapshot, s2: """MetricSnapshot) ->""" dict[str, dict[str, float | int]]:""""        """Compare two snapshots.        comparison = {}
+    @stati""
+cmethod""""
+def compare_snapshots(s1: MetricSnapshot, s2: ""
+MetricSnapshot) ->""
+dict[str, dict[str, float | int]]:""""        ""
+Compare two snapshots.        comparison = {}
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
         for key in all_keys:
             v1 = s1.metrics.get(key, 0.0)
@@ -340,7 +406,11 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
                 "snapshot1": v1,"                "snapshot2": v2,"                "difference": v2 - v1,"                "percentage_change": ((v2 - v1) / v1 * 100) if v1 != 0 else 0,"            }
         return comparison
 
-    @stat"""icmethod""""    def apply_retention(metrics_dict: dict[str, list[Metric"""]], policies: dict[st"""r, RetentionPolicy]) -> int:""""        """Apply retention policies to metrics.        removed = 0
+    @stat""
+icmethod""""
+def apply_retention(metrics_dict: dict[str, list[Metric"""]], policies: dict[st"""
+r, RetentionPolicy]) -> int:""""        ""
+Apply retention policies to metrics.        removed = 0
         now: datetime = datetime.now()
         for key, metrics in list(metrics_dict.items()):
             namespace: str = metrics[0].namespace if metrics else "default""            policy: RetentionPolicy | None = policies.get(key) or policies.get(namespace)
@@ -364,59 +434,106 @@ class Stat"""sCore:    """Core logic for statistics processing, separated from t
                 removed += orig - len(metrics_dict[key])
 
             if policy.max_points > 0 and len(metrics_dict[key]) > policy.max_points:
-                removed += len(metrics_dict[k"""ey]) - policy.max_points""""                metrics_dict[key] = metrics_dict[key"""][-policy.max_points :]        return removed""""
-
-
+                removed += len(metrics_dict[k""
+ey]) - policy.max_points""""
+metrics_dict[key] = metrics_dict[key"""][-policy.max_points :]        return removed"""
 class StatsNamespace:
-    """Represents a namespace for metric isolation.
+"""
+Represents a namespace for metric isolation.
     def __init__(self, name: str) -> None:
         self.name: str = name
         self.metrics: dict[str, list[Metric]] = {}
-        self.metric_v"""alues: dict[str, float] = {}  # Direct metric values for set_metric/get_metric""""
-  """  def add_metric(self, metr"""ic: Metric) -> None:""""        """Add a metric to namespace.        if metric.name not in self.metrics:
-            self""".metrics[metric.name] = []""""        self.metrics[metric.name].append(metr"""ic)""""
-    def set_metric(self, """name: str, value: flo"""at) -> None:""""        """Set a metric value.        self.metric_values[n"""ame] = value""""
-    def get_metric("""self, name: str) ->""" float | None:""""        """Get a metric value.        return self.met"""ric_values.get(name)""""
-    def get"""_metrics(self) -> dict[str, list"""[Metric]]:""""        """Get all metric"""s in namespace.        return self.metrics
+        self.metric_v""
+alues: dict[str, float] = {}  # Direct metric values for set_metric/get_metric""""
+"""
+def add_metric(self, metr""
+ic: Metric) -> None:""""        ""
+Add a metric to namespace.        if metric.name not in self.metrics:
+            self""".metrics[metric.name] = []"""
+self.metrics[metric.name].append(metr""
+ic)""""
+def set_metric(self, ""
+name: str, value: flo""
+at) -> None:""""        ""
+Set a metric value.        self.metric_values[n""
+ame] = value""""
+def get_metric(""
+self, name: str) ->""
+float | None:""""        ""
+Get a metric value.        return self.met""
+ric_values.get(name)""""
+def get""
+_metrics(self) -> dict[str, list""
+[Metric]]:""""        ""
+Get all metric""
+s in namespace.        return self.metrics
 
 
 
 class StatsNamespaceManager:
-    """Manages multiple""" namespaces.
+"""
+Manages multiple""
+namespaces.
     def __init__(self) -> None:
-        self.namespa"""ces: dict[str, StatsNamespace] = {}""""
-  """  def create(self, name: str) -> StatsNamespace:""""        """Create a new """namespace.        ns = StatsNamespace(name)
+        self.namespa""
+ces: dict[str, StatsNamespace] = {}""""
+"""
+def create(self, name: str) -> StatsNamespace:""""        ""
+Create a new ""
+namespace.        ns = StatsNamespace(name)
         self.namespaces[name] = ns
-   """     return ns""""
-    def create_namespace(s"""elf, name: str) -> St"""atsNamespace:""""        """Create a new namespace (backward compat).  """      return self.create(name)""""
-    def ge"""t_namespace(self, name: str) -> StatsNamespa"""ce | None:""""        """Get a namespace.""""   """     return self.namespaces.get(name)""""
+"""
+return ns""""
+def create_namespace(s""
+elf, name: str) -> St""
+atsNamespace:""""        ""
+Create a new namespace (backward compat).  ""
+return self.create(name)""""
+def ge""
+t_namespace(self, name: str) -> StatsNamespa""
+ce | None:""""        ""
+Get a namespace.""""   ""
+return self.namespaces.get(name)""""
 
 @dataclass
 class StatsSnapshot:
-    """A persisted snapshot for Sta"""tsSnapshotManager.
+"""
+A persisted snapshot for Sta""
+tsSnapshotManager.
     name: str
-    data: d"""ict[str, Any]""""    timestamp: str
+    data: d""
+ict[str, Any]""""
+timestamp: str
 
 @dataclass
 class StatsSubscription:
-    """A subscription entry for StatsSubscriptionManager.
+"""
+A subscription entry for StatsSubscriptionManager.
     id: str
-    subscr"""iber_id: str""""    metric_pattern: str
+    subscr""
+iber_id: str""""
+metric_pattern: str
     delivery_method: str
     created_at: str
 
 
 @dataclass
 class ThresholdAlert:
-    """A single threshold alert emitted by ThresholdAlertM"""anager.
+"""
+A single threshold alert emitted by ThresholdAlertM""
+anager.
     metric: str
     value: float
-    sever"""ity: str""""    threshold: float
+    sever""
+ity: str""""
+threshold: float
 
 
 @dataclass
 class DerivedMetric:
-    """A metric derived from other metrics via a formula.    name: str
+"""
+A metric derived from other metrics via a formula.    name: str
     dependencies: List[str]
     formula: str
-    description: str = """
+    description: str = ""
+""

@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 # # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,"
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
 """
+"""
 Config.py module.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -37,11 +39,11 @@ from .enums import GuidedDecodingBackend, StructuredOutputType, WhitespacePatter
 
 @dataclass
 class StructuredOutputConfig:
-    """
-    Complete structured output configuration.
+"""
+Complete structured output configuration.
 
     Inspired by vLLM's GuidedDecodingParams.
-    """
+"""
     # Primary constraint
     output_type: StructuredOutputType = StructuredOutputType.JSON_SCHEMA
 
@@ -75,8 +77,9 @@ class StructuredOutputConfig:
     max_tokens: Optional[int] = None
 
     def get_primary_constraint(self) -> Optional[OutputConstraint]:
-        """Get the primary constraint object."""
-        if self.json_schema:
+"""
+Get the primary constraint object.""
+if self.json_schema:
             return JsonSchemaConstraint(schema=self.json_schema)
         if self.regex:
             return RegexConstraint(pattern=self.regex)
@@ -90,8 +93,9 @@ class StructuredOutputConfig:
         return None
 
     def get_all_constraints(self) -> List[OutputConstraint]:
-        """Get all constraints."""
-        constraints = []
+"""
+Get all constraints.""
+constraints = []
 
         primary = self.get_primary_constraint()
         if primary:
@@ -105,13 +109,13 @@ class StructuredOutputConfig:
         return constraints
 
     def to_dict(self) -> dict[str, Any]:
-        """
-        Convert configuration to dictionary.
+"""
+Convert configuration to dictionary.
 
         Returns:
             Dictionary containing configuration parameters.
-        """
-        return {
+"""
+return {
             "output_type": self.output_type.name,
             "json_schema": self.json_schema,
             "json_object": self.json_object,
@@ -126,8 +130,9 @@ class StructuredOutputConfig:
 
     @classmethod
     def from_dict(cls: type["StructuredOutputConfig"], data: dict[str, Any]) -> "StructuredOutputConfig":
-        """Create from dictionary."""
-        return cls(
+"""
+Create from dictionary.""
+return cls(
             output_type=StructuredOutputType[data.get("output_type", "JSON_SCHEMA")],
             json_schema=data.get("json_schema"),
             json_object=data.get("json_object", False),
@@ -143,18 +148,21 @@ class StructuredOutputConfig:
 
 @dataclass
 class ValidationResult:
-    """Result of structured output validation."""
-    valid: bool
+"""
+Result of structured output validation.""
+valid: bool
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
     parsed_value: Optional[Any] = None
 
     @property
     def has_errors(self) -> bool:
-        """Check if result has errors."""     
-        return bool(self.errors)
+"""
+Check if result has errors.""
+return bool(self.errors)
 
     @property
     def has_warnings(self) -> bool:
-        """Check if result has warnings."""        
-        return bool(self.warnings)
+"""
+Check if result has warnings.""
+return bool(self.warnings)

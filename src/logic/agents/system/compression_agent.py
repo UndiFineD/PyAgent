@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,9 +21,11 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Instantiate as a PyAgent sub-agent to compress multi-turn conversation histories and extract concise "gists"."- Call as async tools: compress_history(history: list[dict], target_tokens: int=500) and extract_gist(complex_report: str).
 - Can be launched standalone via the provided create_main_function entry-point for manual invocation or debugging.
 
+"""
 WHAT IT DOES:
 - Provides methods to convert long multi-turn dialogues into dense, token-efficient summaries focused on decisions, tool outputs, and unresolved state.
 - Exposes extract_gist to produce a single-paragraph bottom-line from technical reports.
@@ -37,7 +41,6 @@ CompressionAgent for PyAgent.
 Specializes in context window optimization, recursive summarization,
 and minimizing token usage for long-running sub-swarm dialogues.
 """
-
 try:
     import logging
 except ImportError:
@@ -65,7 +68,8 @@ __version__ = VERSION
 
 
 class CompressionAgent(BaseAgent):
-""""Agent that compresses multi-turn histories into essential state representations.
+""""
+Agent that compresses multi-turn histories into essential state representations.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -73,9 +77,9 @@ class CompressionAgent(BaseAgent):
 
     @as_tool
     async def compress_history(self, history: list[dict[str, str]], target_tokens: int = 500) -> str:
-#         "Compresses a conversation history into a dense summary block."        logging.info(fCompressionAgent: Summarizing {len(history)} messages into ~{target_tokens} "tokens.")"
+#         "Compresses a conversation history into a dense summary block."        logging.info(fCompressionAgent: Summarizing {len(history)} messages into ~{target_tokens} "tokens.")
         # Serialize history for prompting
-        history_text = "\\n".join([f"{m.get('role', 'user')}: {m.get('content', ")}" for m in history])"'
+        history_text = "\\n".join([f"{m.get('role', 'user')}: {m.get('content', ")}" for m in history])"
         prompt = (
 #             fPlease compress the following conversation history into a dense summary.
 #             fFocus on key decisions, tool outputs, and unresolved state.
@@ -130,7 +134,8 @@ __version__ = VERSION
 
 
 class CompressionAgent(BaseAgent):
-""""Agent that compresses multi-turn histories into essential state representations.
+""""
+Agent that compresses multi-turn histories into essential state representations.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -140,7 +145,7 @@ class CompressionAgent(BaseAgent):
     async def compress_history(self, history: list[dict[str, str]], target_tokens: int = 500) -> str:
 #         "Compresses a conversation history into a dense summary block."        logging.info(fCompressionAgent: Summarizing {len(history)} messages into ~{target_tokens} tokens.")"
         # Serialize history for prompting
-        history_text = "\\n".join([f"{m.get('role', 'user')}: {m.get('content', ")}" for m in history])"'
+        history_text = "\\n".join([f"{m.get('role', 'user')}: {m.get('content', ")}" for m in history])"
         prompt = (
 #             fPlease compress the following conversation history into a dense summary.
 #             fFocus on key decisions, tool outputs, and unresolved state.
@@ -168,3 +173,5 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
         CompressionAgent,
         "Compression Agent","        "Token efficiency and summarization optimizer","    )
     main()
+
+"""

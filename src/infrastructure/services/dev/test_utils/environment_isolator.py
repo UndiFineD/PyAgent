@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import os
 except ImportError:
@@ -41,7 +41,8 @@ __version__ = VERSION
 
 
 class EnvironmentIsolator:
-    """Context manager that restores environment variables on exit.
+"""
+Context manager that restores environment variables on exit.
     def __init__(self) -> None:
         self._original: dict[str, str] = {}
 
@@ -55,3 +56,11 @@ class EnvironmentIsolator:
 
     def set_env(self, key: str, value: str) -> None:
         os.environ[str(key)] = str(value)
+
+"""
+
+"""
+
+""
+
+"""

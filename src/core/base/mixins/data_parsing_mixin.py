@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: data_parsing_mixin
+"""
+"""
+Module: data_parsing_mixin
 Data parsing mixin for BaseAgent, implementing XML and HTML parsing patterns.
 Inspired by ADSyncDump-BOF XML parsing techniques.
 """
-
 try:
-    from typing import Any, Optional
+
+"""
+from typing import Any, Optional
 except ImportError:
     from typing import Any, Optional
 
@@ -34,18 +38,22 @@ except ImportError:
 
 
 class DataParsingMixin:
-    """Mixin providing data parsing features for structured data."""
-    def __init__(self, **kwargs: Any) -> None:
+"""
+Mixin providing data parsing features for structured data.""
+def __init__(self, **kwargs: Any) -> None:
         self.parsing_core = DataParsingCore()
 
     def html_unescape(self, text: str) -> str:
-        """Unescape HTML entities in text."""
-        return self.parsing_core.html_unescape(text)
+"""
+Unescape HTML entities in text.""
+return self.parsing_core.html_unescape(text)
 
     def extract_xml_value(self, xml: str, tag_pattern: str) -> Optional[str]:
-        """Extract value from XML using tag pattern."""
-        return self.parsing_core.extract_xml_value(xml, tag_pattern)
+"""
+Extract value from XML using tag pattern.""
+return self.parsing_core.extract_xml_value(xml, tag_pattern)
 
     def find_pattern(self, haystack: str, needle: str) -> Optional[str]:
-        """Find pattern in text using simple string scanning."""
-        return self.parsing_core.find_pattern(haystack, needle)
+"""
+Find pattern in text using simple string scanning.""
+return self.parsing_core.find_pattern(haystack, needle)

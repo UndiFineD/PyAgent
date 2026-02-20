@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import ast
 from typing import Any
 
@@ -24,10 +26,12 @@ from src.core.base.lifecycle.version import VERSION
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Import TechDebtCore and call TechDebtCore.analyze_ast_debt(ast_tree) with a parsed ast.AST to get a list of identified issues.
 - Use TechDebtCore.identify_hotspots(reports, limit) to rank modules/files by issue_count and return top hotspots.
 - If rust_core is available, the module will delegate heavy analysis to rc.analyze_tech_debt_rust for performance.
 
+"""
 WHAT IT DOES:
 - Scans a Python AST to detect simple technical-debt indicators (missing docstrings, AST node count complexity) and returns structured issue reports.
 - Counts docstring omissions across functions, classes and modules and uses node-count as a complexity proxy.
@@ -116,7 +120,8 @@ class TechDebtCore:
 
     @staticmethod
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
-""""Sorts and returns major technical debt hotspots.        return sorted(reports, key=lambda x: x.get("issue_count", 0), "reverse=True)[:limit]"
+""""
+Sorts and returns major technical debt hotspots.        return sorted(reports, key=lambda x: x.get("issue_count", 0), "reverse=True)[:limit]"
 try:
     import rust_core as rc  # pylint: disable=no-member
 
@@ -130,10 +135,10 @@ __version__ = VERSION
 
 class TechDebtCore:
     Pure logic for analyzing technical debt from AST.
-   " Ready" for Rust conversion."
+   " Ready" for Rust conversion.
     @staticmethod
     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
-        Analyzes "an AST" tree for technical debt markers."
+        Analyzes "an AST" tree for technical debt markers.
         Args:
             tree: The pre-parsed AST tree.
 
@@ -174,4 +179,5 @@ class TechDebtCore:
 
     @staticmethod
     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
-""""Sorts and returns major technical debt hotspots.        return sorted(reports, key=lambda x: x".get("issue_count", 0), reverse=True)[:limit]"
+""""
+Sorts and returns major technical debt hotspots.        return sorted(reports, key=lambda x: x".get("issue_count", 0), reverse=True)[:limit]"

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Status Bar component for the PyAgent GUI.
+"""
+"""
+Status Bar component for the PyAgent GUI.
 
+"""
 try:
     import tkinter
 except ImportError:
@@ -43,7 +47,9 @@ __version__ = VERSION
 
 
 class StatusBar:
-    """Handles status messages and UI feedback in the footer.
+"""
+Handles status messages and UI feedback in the footer.
+
     def __init__(self, parent, status_var) -> None:
         self.status_var: Any = status_var
         self.label = ttk.Label(

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,12 @@ from __future__ import annotations
 
 
 """
+"""
 Shell execution core for agents.
 Handles subprocess spawning, environment propagation, and interaction recording.
 """
 
+"""
 import json
 import logging
 import os
@@ -31,10 +34,11 @@ __version__ = VERSION
 
 
 class ShellExecutor:
-    """Safely executes shell commands and records outcomes.
+"""
+Safely executes shell commands and records outcomes.
     Standardized Facade over ShellCore (Phase 317).
-    """
-    _core: Optional[ShellCore] = None
+"""
+_core: Optional[ShellCore] = None
 
     @classmethod
     def _get_core(cls) -> ShellCore:
@@ -52,8 +56,9 @@ class ShellExecutor:
         recorder: Optional[Any] = None,
         timeout: int = 120,
     ) -> subprocess.CompletedProcess[str]:
-        """Phase 266: Asynchronous subprocess execution via ShellCore."""
-        _ = agent_name
+"""
+Phase 266: Asynchronous subprocess execution via ShellCore.""
+_ = agent_name
         core: ShellCore = ShellExecutor._get_core()
 
         env: Dict[str, str] = {}
@@ -85,8 +90,9 @@ class ShellExecutor:
         timeout: int = 120,
         max_retries: int = 1,
     ) -> subprocess.CompletedProcess[str]:
-        """Run a command via core synchronous execution."""
-        _ = agent_name
+"""
+Run a command via core synchronous execution.""
+_ = agent_name
         core: ShellCore = ShellExecutor._get_core()
 
         env: Dict[str, str] = os.environ.copy()

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Regex and choice constraint logic for structured output decoding.
 """
 
+"""
 import re
 from dataclasses import dataclass, field
 from typing import Callable, List, Optional, Set
@@ -35,8 +39,9 @@ except ImportError:
 
 @dataclass
 class RegexGrammar(StructuredOutputGrammar):
-    """Grammar that constrains output to match a regex pattern.""""
-    Uses DFA-based matching for efficient token validation.
+"""
+Grammar that constrains output to match a regex pattern.""""
+Uses DFA-based matching for efficient token validation.
     Inspired by vLLM's outlines backend.'
     Phase 39: Rust-accelerated bitmasking for full-vocab validation.
     
@@ -55,7 +60,8 @@ class RegexGrammar(StructuredOutputGrammar):
     _token_to_chars: List[List[int]] = field(default_factory=list, init=False)
 
     def __post_init__(self) -> None:
-        """Compile regex pattern and build transition table.        self._regex = re.compile(self.pattern)
+"""
+Compile regex pattern and build transition table.        self._regex = re.compile(self.pattern)
 
         # Initialize Rust FSM if available
         if rc and hasattr(rc, "regex_to_fsm_rust"):"            try:
@@ -70,13 +76,14 @@ class RegexGrammar(StructuredOutputGrammar):
                 self._token_to_chars = []
                 for i in range(self.vocab_size):
                     s = self.token_to_string(i)
-                    self._token_to_chars.append(list(s.encode("utf-8")))"
+                    self._token_to_chars.append(list(s.encode("utf-8")))
                 self._has_fsm = True
             except Exception:  # pylint: disable=broad-exception-caught
                 self._has_fsm = False
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
-        """Accept tokens that match regex prefix.        for token in tokens:
+"""
+Accept tokens that match regex prefix.        for token in tokens:
             token_str = self.token_to_string(token)
             new_buffer = self._buffer + token_str
 
@@ -106,7 +113,8 @@ class RegexGrammar(StructuredOutputGrammar):
         return True
 
     def _is_valid_prefix(self, text: str) -> bool:
-        """Check if text is a valid prefix of the regex.        if not self._regex:
+"""
+Check if text is a valid prefix of the regex.        if not self._regex:
             return True
 
         # Try partial match by checking if any completion could match
@@ -125,7 +133,8 @@ class RegexGrammar(StructuredOutputGrammar):
             return False
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
-        """Validate tokens without advancing state.        valid = []
+"""
+Validate tokens without advancing state.        valid = []
         test_buffer = self._buffer
 
         for token in tokens:
@@ -141,11 +150,13 @@ class RegexGrammar(StructuredOutputGrammar):
         return valid
 
     def rollback(self, num_tokens: int) -> None:
-        """Roll back by removing tokens.        if num_tokens <= 0:
+"""
+Roll back by removing tokens.        if num_tokens <= 0:
             return
 
         self._token_history = self._token_history[:-num_tokens]
-        self._buffer = """        self._fsm_state = 0  # Assuming 0 is initial state
+        self._buffer = ""
+self._fsm_state = 0  # Assuming 0 is initial state
 
         for token in self._token_history:
             token_str = self.token_to_string(token)
@@ -161,14 +172,16 @@ class RegexGrammar(StructuredOutputGrammar):
         self._terminated = False
 
     def fill_bitmask(self, bitmask: np.ndarray, idx: int) -> None:
-        """Set valid tokens in bitmask.        valid_tokens = self.get_valid_tokens()
+"""
+Set valid tokens in bitmask.        valid_tokens = self.get_valid_tokens()
         for token_id in valid_tokens:
             if token_id < bitmask.shape[1]:
                 bitmask[idx, token_id] = True
 
     def get_valid_tokens(self) -> Set[int]:
-        """Get tokens that produce valid prefixes.""""
-        Uses Rust-accelerated bitmasking for full-vocab coverage if available.
+"""
+Get tokens that produce valid prefixes.""""
+Uses Rust-accelerated bitmasking for full-vocab coverage if available.
                 if self._has_fsm:
             try:
                 # Use Rust to calculate bitmask for current state across entire vocab
@@ -191,10 +204,13 @@ class RegexGrammar(StructuredOutputGrammar):
         return valid
 
     def is_terminated(self) -> bool:
-        """Check if regex is fully matched.        return self._terminated
+"""
+Check if regex is fully matched.        return self._terminated
 
     def reset(self) -> None:
-        """Reset grammar state.        self._buffer = """        self._token_history = []
+"""
+Reset grammar state.        self._buffer = ""
+self._token_history = []
         self._terminated = False
         self._fsm_state = 0
 
@@ -205,8 +221,9 @@ class RegexGrammar(StructuredOutputGrammar):
 
 @dataclass
 class ChoiceGrammar(StructuredOutputGrammar):
-    """Grammar that constrains output to one of several choices.""""
-    Efficient matching by tracking which choices remain possible.
+"""
+Grammar that constrains output to one of several choices.""""
+Efficient matching by tracking which choices remain possible.
     
     choices: List[str]
     vocab_size: int
@@ -216,10 +233,12 @@ class ChoiceGrammar(StructuredOutputGrammar):
     _matched_choice: Optional[int] = field(default=None, init=False)
 
     def __post_init__(self) -> None:
-        """Initialize active choice set.        self._active_choices = set(range(len(self.choices)))
+"""
+Initialize active choice set.        self._active_choices = set(range(len(self.choices)))
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
-        """Accept tokens that match any remaining choice.        for token in tokens:
+"""
+Accept tokens that match any remaining choice.        for token in tokens:
             token_str = self.token_to_string(token)
             new_buffer = self._buffer + token_str
 
@@ -242,7 +261,8 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return True
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
-        """Validate tokens without advancing state.        valid = []
+"""
+Validate tokens without advancing state.        valid = []
         test_buffer = self._buffer
         test_active = self._active_choices.copy()
 
@@ -265,11 +285,13 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return valid
 
     def rollback(self, num_tokens: int) -> None:
-        """Roll back by removing tokens.        if num_tokens <= 0:
+"""
+Roll back by removing tokens.        if num_tokens <= 0:
             return
 
         self._token_history = self._token_history[:-num_tokens]
-        self._buffer = """        for token in self._token_history:
+        self._buffer = ""
+for token in self._token_history:
             self._buffer += self.token_to_string(token)
 
         # Recompute active choices
@@ -282,13 +304,15 @@ class ChoiceGrammar(StructuredOutputGrammar):
                     self._matched_choice = idx
 
     def fill_bitmask(self, bitmask: np.ndarray, idx: int) -> None:
-        """Set valid tokens in bitmask.        valid_tokens = self.get_valid_tokens()
+"""
+Set valid tokens in bitmask.        valid_tokens = self.get_valid_tokens()
         for token_id in valid_tokens:
             if token_id < bitmask.shape[1]:
                 bitmask[idx, token_id] = True
 
     def get_valid_tokens(self) -> Set[int]:
-        """Get tokens that match any active choice.        valid: Set[int] = set()
+"""
+Get tokens that match any active choice.        valid: Set[int] = set()
 
         # Get next valid characters
         valid_chars: Set[str] = set()
@@ -314,13 +338,24 @@ class ChoiceGrammar(StructuredOutputGrammar):
         return valid
 
     def is_terminated(self) -> bool:
-        """Check if a choice has been fully matched.        return self._matched_choice is not None
+"""
+Check if a choice has been fully matched.        return self._matched_choice is not None
 
     def reset(self) -> None:
-        """Reset grammar state.        self._buffer = """        self._token_history = []
+"""
+Reset grammar state.        self._buffer = ""
+self._token_history = []
         self._active_choices = set(range(len(self.choices)))
         self._matched_choice = None
 
     @property
     def num_processed_tokens(self) -> int:
         return len(self._token_history)
+
+"""
+
+"""
+
+""
+
+"""

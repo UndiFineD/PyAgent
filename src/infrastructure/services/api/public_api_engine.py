@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@ from __future__ import annotations
 
 
 """
-Public API Engine for PyAgent.""""Generates OpenAPI/Swagger specs and handles external tool integration.
-"""
+Public API Engine for PyAgent.""""
+Generates OpenAPI/Swagger specs and handles external tool integration.
 
+"""
 try:
     import logging
 except ImportError:
@@ -56,15 +58,24 @@ class PublicAPIEngine:
         self.core = APICore()
 
     def generate_openapi_spec(self) -> str:
-        """Generates a dynamic OpenAPI 3.0 specification based on registered tools.        # Standardize tool data for core
+"""
+Generates a dynamic OpenAPI 3.0 specification based on registered tools.        # Standardize tool data for core
         raw_tools = []
         if hasattr(self.fleet, "registry"):"            # This depends on how tools are stored, assuming a list of objects with .name
             tools = self.fleet.registry.list_tools()
             for t in tools:
-                raw_tools.append({"name": t.name, "parameters": getattr(t, "parameters", None)})"
+                raw_tools.append({"name": t.name, "parameters": getattr(t, "parameters", None)})
         return self.core.build_openapi_json(raw_tools)
 
     def register_external_tool(self, tool_spec: dict[str, Any]) -> str:
-        """Registers a tool from an external OpenAPI definition.        if not self.core.validate_tool_contract(tool_spec):
-            return "Error: Invalid tool specification.""
+"""
+Registers a tool from an external OpenAPI definition.        if not self.core.validate_tool_contract(tool_spec):
+            return "Error: Invalid tool specification."
         name = tool_spec.get("name")"        logging.info(f"API-ENGINE: Importing external tool '{name}'")"'        return f"Successfully registered external tool '{name}' into fleet registry.""'
+"""
+
+"""
+
+""
+
+"""

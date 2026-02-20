@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,12 @@ from __future__ import annotations
 
 
 """
+"""
 Core classes for SlashCommands system.
 
+"""
 Contains the fundamental types and parsing logic.
 """
-
 import re
 from dataclasses import dataclass, field
 from typing import Any, Callable, TypeAlias
@@ -28,73 +30,102 @@ from typing import Any, Callable, TypeAlias
 # Types
 # ============================================================================
 
-CommandHandler: TypeAlias = Callable[["CommandContext"], "CommandResult"]"
+CommandHandler: TypeAlias = Callable[["CommandContext"], "CommandResult"]
 
 @dataclass
 class CommandContext:
-    """Context passed to command handlers.
+"""
+Context passed to command handlers.
     command: str
-    """The command name (without slash).
+"""
+The command name (without slash).
     args: list[str] = field(default_factory=list)
-    """Arguments passed to the command.
-    raw_match: str = """    """The raw matched string from the prompt.
-    prompt: str = """    """The full original prompt.
+"""
+Arguments passed to the command.
+    raw_match: str = """    """
+The raw matched string from the prompt.
+    prompt: str = """    """
+The full original prompt.
     user_id: str | None = None
-    """Optional user identifier.
+"""
+Optional user identifier.
     session_id: str | None = None
-    """Optional session identifier.
+"""
+Optional session identifier.
     metadata: dict[str, Any] = field(default_factory=dict)
-    """Additional metadata.
+"""
+Additional metadata.
     @property
     def arg_string(self) -> str:
-        """Get arguments as a single string.        return " ".join(self.args)"
+"""
+Get arguments as a single string.        return " ".join(self.args)
     @property
     def first_arg(self) -> str | None:
-        """Get first argument or None.        return self.args[0] if self.args else None
+"""
+Get first argument or None.        return self.args[0] if self.args else None
 
     @property
     def rest_args(self) -> list[str]:
-        """Get all arguments except the first.        return self.args[1:]
+"""
+Get all arguments except the first.        return self.args[1:]
 
 
 @dataclass
 class CommandResult:
-    """Result from a command execution.
+"""
+Result from a command execution.
     success: bool = True
-    """Whether the command executed successfully.
-    output: str = """    """The output text to insert/display.
+"""
+Whether the command executed successfully.
+    output: str = """    """
+The output text to insert/display.
     data: dict[str, Any] = field(default_factory=dict)
-    """Structured data from the command.
+"""
+Structured data from the command.
     error: str | None = None
-    """Error message if success is False.
+"""
+Error message if success is False.
     inline: bool = True
-    """Whether output should be inserted inline.
+"""
+Whether output should be inserted inline.
     @classmethod
     def ok(cls, output: str, data: dict[str, Any] | None = None, inline: bool = True) -> CommandResult:
-        """Create a successful result.        return cls(success=True, output=output, data=data or {}, inline=inline)
+"""
+Create a successful result.        return cls(success=True, output=output, data=data or {}, inline=inline)
 
     @classmethod
     def fail(cls, error: str) -> CommandResult:
-        """Create a failed result.        return cls(success=False, error=error, output=f"[Error: {error}]")"
+"""
+Create a failed result.        return cls(success=False, error=error, output=f"[Error: {error}]")
 
 @dataclass
 class CommandDefinition:
-    """Definition of a slash command.
+"""
+Definition of a slash command.
     name: str
-    """Primary command name.
+"""
+Primary command name.
     handler: CommandHandler
-    """The handler function.
-    description: str = """    """Short description for help.
-    usage: str = """    """Usage example.
+"""
+The handler function.
+    description: str = """    """
+Short description for help.
+    usage: str = """    """
+Usage example.
     aliases: list[str] = field(default_factory=list)
-    """Alternative names for the command.
+"""
+Alternative names for the command.
     hidden: bool = False
-    """Whether to hide from help listing.
+"""
+Whether to hide from help listing.
     requires_args: bool = False
-    """Whether arguments are required.
-    category: str = "general""    """Command category for grouping.
+"""
+Whether arguments are required.
+    category: str = "general""    """
+Command category for grouping.
     enabled: bool = True
-    """Whether the command is enabled.
+"""
+Whether the command is enabled.
 
 # ============================================================================
 # Command Registry
@@ -103,7 +134,8 @@ class CommandDefinition:
 
 
 class CommandRegistry:
-    """Registry for slash commands.
+"""
+Registry for slash commands.
     def __init__(self) -> None:
         self._commands: dict[str, CommandDefinition] = {}
         self._aliases: dict[str, str] = {}
@@ -119,7 +151,8 @@ class CommandRegistry:
         requires_args: bool = False,
         category: str = "general","        enabled: bool = True,
     ) -> CommandDefinition:
-        """Register a command.        defn = CommandDefinition(
+"""
+Register a command.        defn = CommandDefinition(
             name=name,
             handler=handler,
             description=description,
@@ -139,7 +172,8 @@ class CommandRegistry:
         return defn
 
     def unregister(self, name: str) -> bool:
-        """Unregister a command by name.        if name not in self._commands:
+"""
+Unregister a command by name.        if name not in self._commands:
             return False
 
         defn = self._commands.pop(name)
@@ -151,7 +185,8 @@ class CommandRegistry:
         return True
 
     def get(self, name: str) -> CommandDefinition | None:
-        """Get a command by name or alias.        # Check aliases first
+"""
+Get a command by name or alias.        # Check aliases first
         if name in self._aliases:
             name = self._aliases[name]
 
@@ -161,25 +196,29 @@ class CommandRegistry:
         return None
 
     def get_all(self, name: str) -> CommandDefinition | None:
-        """Get a command even if disabled.        if name in self._aliases:
+"""
+Get a command even if disabled.        if name in self._aliases:
             name = self._aliases[name]
         return self._commands.get(name)
 
     def enable(self, name: str) -> bool:
-        """Enable a command.        self._disabled.discard(name)
+"""
+Enable a command.        self._disabled.discard(name)
         if name in self._commands:
             self._commands[name].enabled = True
             return True
         return False
 
     def disable(self, name: str) -> bool:
-        """Disable a command.        if name in self._commands:
+"""
+Disable a command.        if name in self._commands:
             self._disabled.add(name)
             return True
         return False
 
     def is_enabled(self, name: str) -> bool:
-        """Check if a command is enabled.        return name in self._commands and name not in self._disabled
+"""
+Check if a command is enabled.        return name in self._commands and name not in self._disabled
 
     def list_commands(
         self,
@@ -187,7 +226,8 @@ class CommandRegistry:
         include_disabled: bool = False,
         category: str | None = None,
     ) -> list[CommandDefinition]:
-        """List registered commands.        result = []
+"""
+List registered commands.        result = []
         for cmd in self._commands.values():
             if not include_hidden and cmd.hidden:
                 continue
@@ -199,7 +239,8 @@ class CommandRegistry:
         return result
 
     def list_categories(self) -> list[str]:
-        """List all command categories.        return sorted(set(cmd.category for cmd in self._commands.values()))
+"""
+List all command categories.        return sorted(set(cmd.category for cmd in self._commands.values()))
 
     def command(
         self,
@@ -209,7 +250,8 @@ class CommandRegistry:
         hidden: bool = False,
         requires_args: bool = False,
         category: str = "general","    ) -> Callable[[CommandHandler], CommandHandler]:
-        """Decorator to register a command.
+"""
+Decorator to register a command.
         def decorator(handler: CommandHandler) -> CommandHandler:
             self.register(
                 name,
@@ -226,7 +268,8 @@ class CommandRegistry:
         return decorator
 
     def clear(self) -> None:
-        """Clear all registered commands.        self._commands.clear()
+"""
+Clear all registered commands.        self._commands.clear()
         self._aliases.clear()
         self._disabled.clear()
 
@@ -236,21 +279,27 @@ class CommandRegistry:
 # ============================================================================
 
 # Pattern: /command or /command arg1 arg2 (up to newline or next command)
-COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\\s+([^/\\n]+?))?(?=\\s*/[a-zA-Z]|\\s*$|\\n)", re.MULTILINE)"
+COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\\s+([^/\\n]+?))?(?=\\s*/[a-zA-Z]|\\s*$|\\n)", re.MULTILINE)
 
 @dataclass
 class ParsedCommand:
-    """A parsed command from the prompt.
+"""
+A parsed command from the prompt.
     command: str
-    """Command name.
+"""
+Command name.
     args: list[str]
-    """Command arguments.
+"""
+Command arguments.
     start: int
-    """Start position in prompt.
+"""
+Start position in prompt.
     end: int
-    """End position in prompt.
+"""
+End position in prompt.
     raw: str
-    """Raw matched text.
+"""
+Raw matched text.
 
 def parse_commands(prompt: str) -> list[ParsedCommand]:
         Parse slash commands from a prompt.
@@ -264,7 +313,8 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
 
     for match in COMMAND_PATTERN.finditer(prompt):
         cmd_name = match.group(1).lower()
-        args_str = match.group(2) or """        args = args_str.strip().split() if args_str.strip() else []
+        args_str = match.group(2) or ""
+args = args_str.strip().split() if args_str.strip() else []
 
         commands.append(
             ParsedCommand(
@@ -286,30 +336,39 @@ def parse_commands(prompt: str) -> list[ParsedCommand]:
 
 @dataclass
 class ProcessedPrompt:
-    """Result of processing a prompt.
+"""
+Result of processing a prompt.
     original: str
-    """Original prompt text.
+"""
+Original prompt text.
     processed: str
-    """Processed prompt with command results.
+"""
+Processed prompt with command results.
     commands: list[ParsedCommand]
-    """Parsed commands found.
+"""
+Parsed commands found.
     results: list[tuple[ParsedCommand, CommandResult]]
-    """Execution results for each command.
+"""
+Execution results for each command.
     @property
     def has_commands(self) -> bool:
-        """Whether any commands were found.        return bool(self.commands)
+"""
+Whether any commands were found.        return bool(self.commands)
 
     @property
     def all_succeeded(self) -> bool:
-        """Whether all commands succeeded.        return all(r.success for _, r in self.results)
+"""
+Whether all commands succeeded.        return all(r.success for _, r in self.results)
 
     @property
     def command_outputs(self) -> dict[str, str]:
-        """Map of command names to outputs.        return {cmd.command: result.output for cmd, result in self.results}
+"""
+Map of command names to outputs.        return {cmd.command: result.output for cmd, result in self.results}
 
     @property
     def command_data(self) -> dict[str, dict[str, Any]]:
-        """Map of command names to structured data.        return {cmd.command: result.data for cmd, result in self.results}
+"""
+Map of command names to structured data.        return {cmd.command: result.data for cmd, result in self.results}
 
 
 
@@ -342,7 +401,8 @@ class SlashCommands:
             load_commands(self.registry)
 
     def parse(self, prompt: str) -> list[ParsedCommand]:
-        """Parse commands from prompt without executing.        return parse_commands(prompt)
+"""
+Parse commands from prompt without executing.        return parse_commands(prompt)
 
     def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
                 Execute a single command.
@@ -356,9 +416,9 @@ class SlashCommands:
             CommandResult with output
                 defn = self.registry.get(command.lower())
         if not defn:
-            return CommandResult.fail(f"Unknown command: {command}")"
+            return CommandResult.fail(f"Unknown command: {command}")
         if defn.requires_args and not args:
-            return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")"
+            return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")
         ctx = CommandContext(
             command=command,
             args=args or [],
@@ -409,7 +469,7 @@ class SlashCommands:
                     import traceback
                     print(f"Unexpected error in command handler: {e}\\n{traceback.format_exc()}")"                    result = CommandResult.fail(str(e))
             else:
-                result = CommandResult.fail(f"Unknown command: {cmd.command}")"
+                result = CommandResult.fail(f"Unknown command: {cmd.command}")
             results.append((cmd, result))
 
         # Build processed prompt
@@ -424,7 +484,8 @@ class SlashCommands:
             # Replace commands with their output
             processed = prompt
             for cmd, result in reversed(results):
-                replacement = result.output if result.inline else """                processed = processed[: cmd.start] + replacement + processed[cmd.end :]
+                replacement = result.output if result.inline else ""
+processed = processed[: cmd.start] + replacement + processed[cmd.end :]
         else:
             processed = prompt
 
@@ -436,20 +497,29 @@ class SlashCommands:
         )
 
     def get_help(self, command: str | None = None) -> str:
-        """Get help text for a command or all commands.        if command:
+"""
+Get help text for a command or all commands.        if command:
             defn = self.registry.get(command)
             if not defn:
-                return f"Unknown command: {command}""
+                return f"Unknown command: {command}"
             lines = [f"/{defn.name}"]"            if defn.aliases:
-                lines[0] += f" (aliases: {', '.join('/' + a for a in defn.aliases)})""'            if defn.description:
+                lines[0] += f" (aliases: {', '.join('/' + a for a in defn.aliases)})"
+if defn.description:
                 lines.append(f"  {defn.description}")"            if defn.usage:
                 lines.append(f"  Usage: {defn.usage}")"            return "\\n".join(lines)"
         # List all commands by category
         categories = self.registry.list_categories()
-        lines = ["Available commands:"]"
+        lines = ["Available commands:"]
         for cat in categories:
             commands = self.registry.list_commands(category=cat)
             if commands:
                 lines.append(f"\\n[{cat.title()}]")"                for cmd in sorted(commands, key=lambda c: c.name):
                     desc = cmd.description or "No description""                    lines.append(f"  /{cmd.name} - {desc}")"
-        return "\\n".join(lines)"
+        return "\\n".join(lines)
+"""
+
+"""
+
+""
+
+"""

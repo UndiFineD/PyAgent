@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Utilities for LoRA adapter management.
 
+"""
 import json
 import logging
 from pathlib import Path
@@ -36,7 +38,8 @@ def create_lora_request(
     adapter_id: int,
     path: str,
 ) -> Optional[Any]:
-    """Create a LoRARequest directly.    if not HAS_LORA:
+"""
+Create a LoRARequest directly.    if not HAS_LORA:
         return None
 
     return LoRARequest(
@@ -62,5 +65,7 @@ def discover_adapters(
                     "name": config_path.parent.name,"                    "path": str(config_path.parent),"                    "base_model": config.get("base_model_name_or_path"),"                    "rank": config.get("r"),"                    "alpha": config.get("lora_alpha"),"                    "target_modules": config.get("target_modules", []),"                }
             )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.debug(f"Failed to parse adapter config {config_path}: {e}")"
+            logger.debug(f"Failed to parse adapter config {config_path}: {e}")
     return adapters
+
+"""

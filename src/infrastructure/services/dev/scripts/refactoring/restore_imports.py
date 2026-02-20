@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for restoring imports that were incorrectly commented out as unused.
+"""
+"""
+Script for restoring imports that were incorrectly commented out as unused.
 
+"""
 import os
 import re
 
@@ -39,7 +43,7 @@ for root, _, files in os.walk(src_path):
 
                     # Pattern for lines that were commented out with the suffix
                     # Capture the leading indentation
-                    pattern = r"^(\\s*)#+\\s*(.*?)\\s*# Auto-removed unused.*$""
+                    pattern = r"^(\\s*)#+\\s*(.*?)\\s*# Auto-removed unused.*$"
                     lines = new_content.splitlines()
                     for i, line in enumerate(lines):
                         if "# Auto-removed unused" in line:"                            match = re.match(pattern, line)
@@ -55,7 +59,7 @@ for root, _, files in os.walk(src_path):
                                         restored = inner_match.group(1)
                                     else:
                                         # If it has the suffix but not the leading hash, just strip suffix
-                                        restored = re.sub(r"\\s*# Auto-removed unused.*$", "", restored)"
+                                        restored = re.sub(r"\\s*# Auto-removed unused.*$", "", restored)
                                 print(f"    Restoring line {i + 1}: {indent}{restored.strip()}")"                                lines[i] = f"{indent}{restored}""                                changes_in_file += 1
                             else:
                                 # If it doesn't have the leading hash but has the suffix'                                if "# Auto-removed unused" in line:"                                    restored = re.sub(r"\\s*# Auto-removed unused.*$", "", line)"                                    print(f"    Restoring line {i + 1} (suffix only): {restored.strip()}")"                                    lines[i] = restored
@@ -65,7 +69,8 @@ for root, _, files in os.walk(src_path):
                         new_content = "\\n".join(lines) + ("\\n" if content.endswith("\\n") else "")"                        with open(path, "w", encoding="utf-8") as f:"                            f.write(new_content)
                         print(f"  Modified: {path} ({changes_in_file} lines restored)")"                        files_modified += 1
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                print(f"  Error processing {path}: {e}")"
-print(f"\\nFinished. Processed {files_processed} files, modified {files_modified} files.")"
+                print(f"  Error processing {path}: {e}")
+print(f"\\nFinished. Processed {files_processed} files, modified {files_modified} files.")
 
 """
+

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 """
 FleetLifecycleManager
+"""
 Fleet lifecycle manager.py module.
 """
 
+"""
 import logging
 import time
 from typing import TYPE_CHECKING
@@ -33,7 +36,8 @@ if TYPE_CHECKING:
 
 
 class FleetLifecycleManager:
-    """Handles agent lifecycle operations (mitosis, differentiation, apoptosis) for the Fleet."""
+"""
+Handles agent lifecycle operations (mitosis, differentiation, apoptosis) for the Fleet.""
 
     # Import BaseAgent only inside methods that require it to avoid circular import
 
@@ -43,8 +47,9 @@ class FleetLifecycleManager:
 
     async def cell_divide(self, agent_name: str) -> str:
         from src.core.base.lifecycle.base_agent import BaseAgent
-        """Simulates biological mitosis by creating a clone of an existing agent."""
-        if agent_name not in self.fleet.agents:
+"""
+Simulates biological mitosis by creating a clone of an existing agent.""
+if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for division."
         base_agent = self.fleet.agents[agent_name]
         clone_name = f"{agent_name}_clone_{int(time.time())}"
@@ -62,8 +67,9 @@ class FleetLifecycleManager:
 
     async def cell_differentiate(self, agent_name: str, specialization: str) -> str:
         from src.core.base.lifecycle.base_agent import BaseAgent
-        """Changes an agent's characteristics or 'role' based on environmental signals."""
-        if agent_name not in self.fleet.agents:
+"""
+Changes an agent's characteristics or 'role' based on environmental signals.""
+if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for differentiation."
         logging.info(f"Differentiation: {agent_name} specialized into {specialization}")
         if hasattr(self.fleet, "signals") and hasattr(self.fleet.signals, "emit"):
@@ -77,8 +83,9 @@ class FleetLifecycleManager:
 
     async def cell_apoptosis(self, agent_name: str) -> str:
         from src.core.base.lifecycle.base_agent import BaseAgent
-        """Cleanly shuts down and removes an agent from the fleet (programmed cell death)."""
-        if agent_name not in self.fleet.agents:
+"""
+Cleanly shuts down and removes an agent from the fleet (programmed cell death).""
+if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for apoptosis."
         del self.fleet.agents[agent_name]
         logging.info(f"Apoptosis: {agent_name} has been recycled.")
@@ -88,8 +95,9 @@ class FleetLifecycleManager:
 
 
     def register_agent(self, name: str, agent_class: type[BaseAgent], file_path: str | None = None) -> str:
-        """Adds an agent to the fleet."""
-        path = file_path or str(self.fleet.workspace_root / f"agent_{name.lower()}.py")
+        ""
+Adds an agent to the fleet.""
+path = file_path or str(self.fleet.workspace_root / f"agent_{name.lower()}.py")
         agent = agent_class(path)
         # Inject fleet reference (Phase 123)
         if hasattr(agent, "fleet"):

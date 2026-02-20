@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,13 @@ from __future__ import annotations
 
 
 """
+"""
 Simple math agent.py module.
 """
-
 try:
-    from .core.base.lifecycle.base_agent import BaseAgent
+
+"""
+from .core.base.lifecycle.base_agent import BaseAgent
 except ImportError:
     from src.core.base.lifecycle.base_agent import BaseAgent
 
@@ -45,14 +48,18 @@ class SimpleMathAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._language = "python""
+        self._language = "python"
     @as_tool
     def quick_add(self, a: float, b: float) -> float:
-        """Adds two numbers instantly.        return a + b
+"""
+Adds two numbers instantly.        return a + b
 
     @as_tool
     def quick_mult(self, a: float, b: float) -> float:
-        """Multiplies two numbers instantly.        return a * b
+"""
+Multiplies two numbers instantly.        return a * b
 
     def improve_content(self, prompt: str) -> str:
-        """Default execution logic.        return "SimpleMathAgent: I am ready to calculate. Use my tools 'quick_add' or 'quick_mult'.""'
+"""
+Default execution logic.        return "SimpleMathAgent: I am ready to calculate. Use my tools 'quick_add' or 'quick_mult'."
+"""

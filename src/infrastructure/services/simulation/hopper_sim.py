@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,14 @@ from __future__ import annotations
 
 
 """
+"""
 Hopper Architecture Matrix Multiplication Simulator for H100 performance estimation.
 Part of the Phase 130 performance optimization suite.
 """
-
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -51,11 +54,12 @@ except ImportError:
 
 __version__ = VERSION
 
-logger = StructuredLogger("HopperSim")"
+logger = StructuredLogger("HopperSim")
 
 
 class Precision(Enum):
-    """Floating point precision modes for simulation.
+"""
+Floating point precision modes for simulation.
     FP8 = auto()
     FP16 = auto()
     TF32 = auto()
@@ -64,7 +68,8 @@ class Precision(Enum):
 
 @dataclass
 class HopperConfig:
-    """NVIDIA H100 SXM5 specifications.
+"""
+NVIDIA H100 SXM5 specifications.
     sm_count: int = 132
     tensor_core_per_sm: int = 4
     clock_ghz: float = 1.83
@@ -74,7 +79,8 @@ class HopperConfig:
 
 
 class HopperSim:
-    """Simulates Hopper architecture performance for GEMM operations.
+"""
+Simulates Hopper architecture performance for GEMM operations.
     def __init__(self, config: HopperConfig = HopperConfig()):
         self.config = config
 
@@ -126,8 +132,9 @@ class HopperSim:
             "qkv_latency_ms": latency_qkv,"            "m_params": (d_model * d_model * 12) / 1e6,  # Parameter count estimate"            "est_step_ms": total_ms,"            "tflops_utilization": 0.45 * 100,  # Typical real-world efficiency"        }
 
     def run_swarm_stress_test(self, agent_count: int, steps: int = 10) -> None:
-        """Runs a swarm stress test with stochastic failures (Phase 181).
-        logger.info(f"=== SWARM STRESS TEST: {agent_count} AGENTS ===")"
+"""
+Runs a swarm stress test with stochastic failures (Phase 181).
+        logger.info(f"=== SWARM STRESS TEST: {agent_count} AGENTS ===")
         core = SimulationCore()
         active_agents = agent_count
 
@@ -137,9 +144,9 @@ class HopperSim:
             active_agents -= len(failures)
 
             bar = core.format_progress_bar(step, steps)
-            logger.info(f"Step {step:02d}: {bar} | Failed: {len(failures)} | Alive: {active_agents}")"
-        logger.info(f"=== TEST COMPLETE. Final Resilience: {active_agents / agent_count * 100:.1f}% ===")"
+            logger.info(f"Step {step:02d}: {bar} | Failed: {len(failures)} | Alive: {active_agents}")
+        logger.info(f"=== TEST COMPLETE. Final Resilience: {active_agents / agent_count * 100:.1f}% ===")
 
 if __name__ == "__main__":"    sim = HopperSim()
     result = sim.simulate_distributed_training(32, 2048, 4096, 8)
-    print(f"Hopper Simulation Result: {result}")"
+    print(f"Hopper Simulation Result: {result}")

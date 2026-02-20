@@ -14,9 +14,12 @@
 
 
 """
+"""
 Intention Prediction Agent for predicting peer actions and goals.
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -88,10 +91,10 @@ class IntentionPredictionAgent:
         Predicts the intent of an agent based on recent behavior.
         history = self.agent_histories.get(agent_id, [])
         if not history:
-            return {"prediction": "idle", "confidence": 0.1}"
-        last_action = history[-1]["action"]"
+            return {"prediction": "idle", "confidence": 0.1}
+        last_action = history[-1]["action"]
         # Simple Markov-like simulation
-        if last_action == "read_file":"            return {"prediction": "edit_file", "confidence": 0.65}"        if last_action == "create_file":"            return {"prediction": "run_tests", "confidence": 0.8}"        return {"prediction": "wait_for_instruction", "confidence": 0.4}"
+        if last_action == "read_file":"            return {"prediction": "edit_file", "confidence": 0.65}"        if last_action == "create_file":"            return {"prediction": "run_tests", "confidence": 0.8}"        return {"prediction": "wait_for_instruction", "confidence": 0.4}
     def share_thought_signal(
         self, sender_id: str, receivers: list[str], thought_payload: Any
     ) -> dict[str, Any]:

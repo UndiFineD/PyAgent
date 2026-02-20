@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Types and configuration for data parallel coordination.
 """
-
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -44,7 +48,8 @@ except ImportError:
 
 
 class DPRole(Enum):
-    """Data parallel role.
+"""
+Data parallel role.
     MASTER = auto()  # Coordinates workers
     WORKER = auto()  # Executes work
     HYBRID = auto()  # Both roles
@@ -52,7 +57,8 @@ class DPRole(Enum):
 
 
 class WorkerHealth(Enum):
-    """Worker health status.
+"""
+Worker health status.
     HEALTHY = auto()
     DEGRADED = auto()
     RECOVERING = auto()
@@ -61,7 +67,8 @@ class WorkerHealth(Enum):
 
 
 class LoadBalanceStrategy(Enum):
-    """Load balancing strategy.
+"""
+Load balancing strategy.
     ROUND_ROBIN = auto()
     LEAST_LOADED = auto()
     P2C = auto()  # Power of Two Choices
@@ -70,7 +77,8 @@ class LoadBalanceStrategy(Enum):
 
 @dataclass
 class DPConfig:
-    """Configuration for data parallel coordinator.
+"""
+Configuration for data parallel coordinator.
     num_workers: int = 1
     dp_rank: int = 0
     dp_size: int = 1
@@ -85,7 +93,8 @@ class DPConfig:
 
 @dataclass
 class WorkerState:
-    """State of a DP worker.
+"""
+State of a DP worker.
     worker_id: int
     dp_rank: int
     health: WorkerHealth = WorkerHealth.HEALTHY
@@ -98,12 +107,14 @@ class WorkerState:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def update_latency(self, latency_ms: float) -> None:
-        """Update average latency with EMA.        self.avg_latency_ms = 0.9 * self.avg_latency_ms + 0.1 * latency_ms
+"""
+Update average latency with EMA.        self.avg_latency_ms = 0.9 * self.avg_latency_ms + 0.1 * latency_ms
 
 
 @dataclass
 class StepState:
-    """State for a single step.
+"""
+State for a single step.
     step_id: int
     wave_id: int
     request_count: int = 0
@@ -123,7 +134,8 @@ class StepState:
 
 @dataclass
 class WaveState:
-    """State for an execution wave.
+"""
+State for an execution wave.
     wave_id: int
     num_steps: int = 0
     completed_steps: int = 0
@@ -133,3 +145,5 @@ class WaveState:
     @property
     def is_complete(self) -> bool:
         return self.completed_steps >= self.num_steps
+
+"""

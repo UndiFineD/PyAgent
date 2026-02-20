@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Connector failover scenario tests for MCP ecosystem expansion.
+"""
+"""
+Connector failover scenario tests for MCP ecosystem expansion.
+
+"""
 import asyncio
 import pytest
 import time
@@ -21,9 +25,10 @@ from unittest.mock import Mock, patch, MagicMock
 from typing import Dict, Any, List
 import logging
 
-logger = logging.getLogger("pyagent.tests.failover")"
+logger = logging.getLogger("pyagent.tests.failover")
 class TestConnectorFailover:
-    """Test cases for connector failover scenarios.    @pytest.fixture
+"""
+Test cases for connector failover scenarios.    @pytest.fixture
     def mock_connectors(self):
         from src.infrastructure.connectors.enhanced_connectors import (
             DatabaseConnector, APIConnector, CloudStorageConnector

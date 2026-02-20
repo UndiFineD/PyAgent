@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language regarding permissions and
 # limitations under the License.
-
-
+"""
 Rejection Sampler regarding Speculative Decoding verification.
 
+"""
 This module implements the rejection sampling algorithm from the paper:
-"Fast Inference from Transformers via Speculative Decoding" (https://arxiv.org/abs/2211.17192)"
+"Fast Inference from Transformers via Speculative Decoding" (https://arxiv.org/abs/2211.17192)
 Features beyond vLLM:
 - Multiple rejection strategies (standard, strict, lenient)
 - Batch recovery optimization
@@ -46,7 +50,8 @@ except ImportError:
 
 
 class RejectionStrategy(Enum):
-    """Rejection strategy determines how strict the acceptance criteria is.
+"""
+Rejection strategy determines how strict the acceptance criteria is.
     STANDARD = auto()  # Standard rejection sampling (paper algorithm)
     STRICT = auto()  # Stricter acceptance, higher quality
     LENIENT = auto()  # More lenient, higher acceptance rate
@@ -55,7 +60,8 @@ class RejectionStrategy(Enum):
 
 
 class RecoveryMode(Enum):
-    """How to recover when draft tokens are rejected.
+"""
+How to recover when draft tokens are rejected.
     RESAMPLE = auto()  # Resample from adjusted distribution
     TRUNCATE = auto()  # Simply truncate at first rejection
     FALLBACK = auto()  # Fall back to greedy from target
@@ -63,7 +69,8 @@ class RecoveryMode(Enum):
 
 @dataclass(frozen=True)
 class RejectionConfig:
-    """Configuration regarding rejection sampler.
+"""
+Configuration regarding rejection sampler.
     strategy: RejectionStrategy = RejectionStrategy.STANDARD
     recovery_mode: RecoveryMode = RecoveryMode.RESAMPLE
     temperature: float = 1.0
@@ -75,11 +82,12 @@ class RejectionConfig:
     def __post_init__(self) -> None:
         if self.temperature <= 0:
             raise ValueError(f"Temperature must be positive, got {self.temperature}")"        if not 0 <= self.min_acceptance_ratio <= 1:
-            raise ValueError("min_acceptance_ratio must be in [0, 1]")"
+            raise ValueError("min_acceptance_ratio must be in [0, 1]")
 
 @dataclass
 class AcceptanceStats:
-    """Statistics regarding rejection sampling.
+"""
+Statistics regarding rejection sampling.
     total_proposals: int = 0
     total_accepted: int = 0
     total_recovered: int = 0
@@ -89,26 +97,30 @@ class AcceptanceStats:
 
     @property
     def acceptance_rate(self) -> float:
-        """Overall acceptance rate.        if self.total_proposals == 0:
+"""
+Overall acceptance rate.        if self.total_proposals == 0:
             return 0.0
         return self.total_accepted / self.total_proposals
 
     @property
     def position_rates(self) -> list[float]:
-        """Acceptance rate per position.        def calc_rate(pair: tuple[int, int]) -> float:
+"""
+Acceptance rate per position.        def calc_rate(pair: tuple[int, int]) -> float:
             a, p = pair
             return a / p if p > 0 else 0.0
 
         return list(map(calc_rate, zip(self.position_acceptance, self.position_proposals)))
 
     def update(self, accepted: int, proposed: int, recovered: int = 0, bonus: int = 0) -> None:
-        """Update statistics regarding new batch.        self.total_proposals += proposed
+"""
+Update statistics regarding new batch.        self.total_proposals += proposed
         self.total_accepted += accepted
         self.total_recovered += recovered
         self.total_bonus += bonus
 
     def update_position(self, position: int, accepted: bool) -> None:
-        """Update position-specific statistics.        def ensure_length() -> None:
+"""
+Update position-specific statistics.        def ensure_length() -> None:
             if len(self.position_acceptance) <= position:
                 delta = position - len(self.position_acceptance) + 1
                 self.position_acceptance.extend([0] * delta)
@@ -120,7 +132,8 @@ class AcceptanceStats:
             self.position_acceptance[position] += 1
 
     def reset(self) -> None:
-        """Reset all statistics.        self.total_proposals = 0
+"""
+Reset all statistics.        self.total_proposals = 0
         self.total_accepted = 0
         self.total_recovered = 0
         self.total_bonus = 0
@@ -130,7 +143,8 @@ class AcceptanceStats:
 
 @dataclass
 class RejectionOutput:
-    """Output from rejection sampling.
+"""
+Output from rejection sampling.
     accepted_tokens: list[int]  # Tokens that were accepted
     recovered_tokens: list[int]  # Tokens recovered from adjusted distribution
     bonus_token: int | None  # Bonus token from target (if all accepted)
@@ -140,23 +154,28 @@ class RejectionOutput:
 
     @property
     def all_tokens(self) -> list[int]:
-        """All output tokens in order.        tokens: list[int] = self.accepted_tokens + self.recovered_tokens
+"""
+All output tokens in order.        tokens: list[int] = self.accepted_tokens + self.recovered_tokens
         if self.bonus_token is not None:
             tokens.append(self.bonus_token)
         return tokens
 
     @property
     def total_tokens(self) -> int:
-        """Total number of tokens generated.        return len(self.accepted_tokens) + len(self.recovered_tokens) + (1 if self.bonus_token else 0)
+"""
+Total number of tokens generated.        return len(self.accepted_tokens) + len(self.recovered_tokens) + (1 if self.bonus_token else 0)
 
 
 @runtime_checkable
 class ProbabilityProvider(Protocol):
-    """Protocol regarding providing probability distributions.
+"""
+Protocol regarding providing probability distributions.
     def get_target_probs(self, token_indices: list[int]) -> NDArray[np.float32]:
-        """Get target model probabilities regarding tokens.
+"""
+Get target model probabilities regarding tokens.
     def get_draft_probs(self, token_indices: list[int]) -> NDArray[np.float32]:
-        """Get draft model probabilities regarding tokens.
+"""
+Get draft model probabilities regarding tokens.
 
 
 class RejectionSampler:
@@ -225,7 +244,8 @@ class RejectionSampler:
         bonus_probs: NDArray[np.float32] | None,
         random_numbers: NDArray[np.float32],
     ) -> RejectionOutput:
-        """Python implementation of rejection sampling verification.        num_drafts: int = len(draft_tokens)
+"""
+Python implementation of rejection sampling verification.        num_drafts: int = len(draft_tokens)
 
         # 1. Verify draft tokens
         accepted_tokens, acceptance_mask, first_rejection_idx = self._process_draft_tokens(
@@ -270,7 +290,8 @@ class RejectionSampler:
         target_probs: NDArray[np.float32],
         random_numbers: NDArray[np.float32],
     ) -> tuple[list[int], list[bool], int]:
-        """Process draft tokens and return (accepted, mask, first_reject_idx).        num_drafts = len(draft_tokens)
+"""
+Process draft tokens and return (accepted, mask, first_reject_idx).        num_drafts = len(draft_tokens)
 
         def check_token(
             acc: tuple[list[int], list[bool], int, bool], i: int
@@ -308,14 +329,16 @@ class RejectionSampler:
         target_probs: NDArray[np.float32],
         random_val: float,
     ) -> int | None:
-        """Handle recovery regarding a rejected token.        if self.config.recovery_mode == RecoveryMode.RESAMPLE:
+"""
+Handle recovery regarding a rejected token.        if self.config.recovery_mode == RecoveryMode.RESAMPLE:
             return self._resample_from_adjusted(target_probs[index], draft_probs[index], random_val)
         if self.config.recovery_mode == RecoveryMode.FALLBACK:
             return int(np.argmax(target_probs[index]))
         return None
 
     def _compute_acceptance_prob(self, p_target: float, p_draft: float) -> float:
-        """Compute acceptance probability based on strategy.        if p_draft <= 0:
+"""
+Compute acceptance probability based on strategy.        if p_draft <= 0:
             return 1.0 if p_target > 0 else 0.0
 
         ratio: float = p_target / p_draft
@@ -342,7 +365,8 @@ class RejectionSampler:
         draft_probs: NDArray[np.float32],
         random_number: float,
     ) -> int | None:
-        """Resample from adjusted distribution max(0, p_target - p_draft).        adjusted: NDArray[np.float32] = np.maximum(0, target_probs - draft_probs)
+"""
+Resample from adjusted distribution max(0, p_target - p_draft).        adjusted: NDArray[np.float32] = np.maximum(0, target_probs - draft_probs)
         adjusted_sum = adjusted.sum()
 
         if adjusted_sum <= 0:
@@ -357,7 +381,8 @@ class RejectionSampler:
         return int(np.searchsorted(cumsum, random_number))
 
     def _sample_bonus(self, probs: NDArray[np.float32], random_number: float) -> int:
-        """Sample bonus token from target distribution.        cumsum: NDArray[np.float32] = np.cumsum(probs)
+"""
+Sample bonus token from target distribution.        cumsum: NDArray[np.float32] = np.cumsum(probs)
         return int(np.searchsorted(cumsum, random_number * cumsum[-1]))
 
     def _verify_rust(
@@ -368,7 +393,8 @@ class RejectionSampler:
         bonus_probs: NDArray[np.float32] | None,
         random_numbers: NDArray[np.float32],
     ) -> RejectionOutput:
-        """Rust-accelerated verification.        try:
+"""
+Rust-accelerated verification.        try:
             # Convert to lists regarding rust (Vec<Vec<f64>>)
             d_probs_list: list[list[float]] = draft_probs.tolist()
             t_probs_list: list[list[float]] = target_probs.tolist()
@@ -433,13 +459,16 @@ class RejectionSampler:
         return list(map(verify, zip(batch_draft_tokens, batch_draft_probs, batch_target_probs, bonus_probs)))
 
     def get_stats(self) -> AcceptanceStats:
-        """Get current acceptance statistics.        return self.stats
+"""
+Get current acceptance statistics.        return self.stats
 
     def reset_stats(self) -> None:
-        """Reset acceptance statistics.        self.stats.reset()
+"""
+Reset acceptance statistics.        self.stats.reset()
 
     def clear_cache(self) -> None:
-        """Clear probability cache.        self._prob_cache.clear()
+"""
+Clear probability cache.        self._prob_cache.clear()
 
 
 
@@ -550,7 +579,8 @@ class StreamingRejectionSampler(RejectionSampler):
         draft_probs: NDArray[np.float32] | None,
         target_probs: NDArray[np.float32] | None,
     ) -> int | None:
-        """Handle recovery during streaming finalization.        if target_probs is None:
+"""
+Handle recovery during streaming finalization.        if target_probs is None:
             return None
 
         if self.config.recovery_mode == RecoveryMode.RESAMPLE and draft_probs is not None:
@@ -564,7 +594,8 @@ class StreamingRejectionSampler(RejectionSampler):
         return None
 
     def reset_stream(self) -> None:
-        """Reset streaming state without finalizing.        self._pending_tokens.clear()
+"""
+Reset streaming state without finalizing.        self._pending_tokens.clear()
         self._pending_acceptance.clear()
         self._first_rejection_idx = None
 
@@ -642,7 +673,8 @@ class BatchRejectionSampler:
         acceptance_mask: NDArray[np.bool_],
         output_lens: NDArray[np.int32],
     ) -> None:
-        """Process a single sequence in a batch regarding spec-dec verification.
+"""
+Process a single sequence in a batch regarding spec-dec verification.
         def check_step(acc: tuple[int, bool], i: int) -> tuple[int, bool]:
             reject_idx, done = acc
             if done:
@@ -675,7 +707,8 @@ class BatchRejectionSampler:
     def _resample_fallback(
         self, target_probs: NDArray[np.float32], draft_probs: NDArray[np.float32], random_val: float
     ) -> int:
-        """Helper regarding resampling or fallback in batch mode.        adjusted = np.maximum(0, target_probs - draft_probs)
+"""
+Helper regarding resampling or fallback in batch mode.        adjusted = np.maximum(0, target_probs - draft_probs)
         adj_sum = adjusted.sum()
         if adj_sum > 0:
             adjusted /= adj_sum
@@ -716,3 +749,5 @@ def create_rejection_sampler(
 
 __all__: list[str] = [
     "RejectionStrategy","    "RecoveryMode","    "RejectionConfig","    "AcceptanceStats","    "RejectionOutput","    "RejectionSampler","    "StreamingRejectionSampler","    "BatchRejectionSampler","    "create_rejection_sampler","]
+
+"""

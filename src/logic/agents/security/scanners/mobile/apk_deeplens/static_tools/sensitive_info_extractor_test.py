@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from logic.agents.security.scanners.mobile.apk_deeplens.static_tools.sensitive_info_extractor import *

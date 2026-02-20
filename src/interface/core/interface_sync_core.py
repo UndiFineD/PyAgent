@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Interface sync core.py module.
 """
-
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -34,10 +37,11 @@ class InterfaceSyncCore:
             "dark": {"                "background": "#1e1e1e","                "foreground": "#d4d4d4","                "accent": "#007acc","            },
             "light": {"                "background": "#ffffff","                "foreground": "#000000","                "accent": "#005fb8","            },
         }
-        self.current_theme = "dark""
+        self.current_theme = "dark"
     def get_theme_payload(self, theme_name: str | None = None) -> dict[str, str]:
-        """Returns the color palette for a given theme.        name = theme_name or self.current_theme
-        return self.themes.get(name, self.themes["dark"])"
+"""
+Returns the color palette for a given theme.        name = theme_name or self.current_theme
+        return self.themes.get(name, self.themes["dark"])
     def broadcast_action(self, action_type: str, payload: Any) -> dict[str, Any]:
                 Formats an action for broadcast to all interface targets.
                 import datetime
@@ -48,3 +52,5 @@ class InterfaceSyncCore:
                 Prepares a unified topology state for the Web viewer and GUI.
                 return {
             "nodes": agents,"            "edges": [{"from": c[0], "to": c[1]} for c in connections],"            "sync_version": "v2.0","        }
+
+"""

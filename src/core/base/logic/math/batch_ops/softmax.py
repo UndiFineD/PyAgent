@@ -12,7 +12,11 @@
 # limitations under the License.
 
 
-"""Softmax activation operations regarding batch processing.
+"""
+"""
+Softmax activation operations regarding batch processing.
+"""
+
 """
 from typing import Any
 
@@ -29,12 +33,19 @@ def softmax_batch_invariant(
     dim: int = -1,
     dtype: Any = None,
 ) -> Any:
-    """Numerically stable softmax that is deterministic across batch orderings.
-    """if not HAS_TORCH:
-        input_max = np.max(tensor, axis=dim, keepdims=True)
-        exp_x = np.exp(tensor - input_max)
+"""
+Numerically stable softmax that is deterministic across batch orderings.
+"""
+if not HAS_TORCH:
+        arr = np.asarray(tensor)
+        input_max = np.max(arr, axis=dim, keepdims=True)
+        exp_x = np.exp(arr - input_max)
         sum_exp_x = np.sum(exp_x, axis=dim, keepdims=True)
-        return exp_x / sum_exp_x
+        result = exp_x / sum_exp_x
+        if dtype is not None:
+            result = result.astype(dtype)
+        return result
+
     input_max = torch.amax(tensor, dim=dim, keepdim=True)
     input_shifted = tensor - input_max
     exp_x = torch.exp(input_shifted)

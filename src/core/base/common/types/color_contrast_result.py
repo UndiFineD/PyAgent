@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_coder.py
 """
 
+"""
 from dataclasses import dataclass
 
 try:
@@ -33,7 +36,8 @@ __version__ = VERSION
 
 @dataclass
 class ColorContrastResult:
-    """Result of color contrast analysis.
+"""
+Result of color contrast analysis.
     Attributes:
         foreground: Foreground color (hex).
         background: Background color (hex).
@@ -42,8 +46,8 @@ class ColorContrastResult:
         passes_aaa: Whether it passes WCAG AAA.
         min_ratio_aa: Minimum required ratio for AA.
         min_ratio_aaa: Minimum required ratio for AAA.
-    """
-    foreground: str
+"""
+foreground: str
     background: str
     contrast_ratio: float
     passes_aa: bool = False

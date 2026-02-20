@@ -15,8 +15,10 @@
 
 
 """
+"""
 Serialization infrastructure.
 
+"""
 Phase 19: Beyond vLLM - Fast serialization patterns.
 Phase 21: MsgSpec high-performance serialization.
 

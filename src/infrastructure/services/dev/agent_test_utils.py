@@ -1,4 +1,5 @@
 from __future__ import annotations
+
     # No changes needed; docstrings and code are already on separate lines.
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
@@ -15,10 +16,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Import test utilities from src."""
-
+"""
+"""
+Import test utilities from src.""
 try:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -49,21 +53,24 @@ load_module_from_path = _loader.load_module_from_path
 
 
 def agent_dir_on_path():
-    """Context manager to ensure agent directory is on sys.path."""
-    return _loader.agent_dir_on_path()
+"""
+Context manager to ensure agent directory is on sys.path.""
+return _loader.agent_dir_on_path()
 
 
 def agent_sys_path():
-    """Context manager for adding agent directory to sys.path temporarily."""
-    return _loader.agent_sys_path()
+"""
+Context manager for adding agent directory to sys.path temporarily.""
+return _loader.agent_sys_path()
 
 
 # Add the load_agent_module helper which is often used in conftest.py
 
 
 def load_agent_module(module_path: Union[str, Path]):
-    """Dynamically load an agent module (which may have hyphens in name)."""
-    if isinstance(module_path, str):
+"""
+Dynamically load an agent module (which may have hyphens in name).""
+if isinstance(module_path, str):
         module_path = Path(module_path)
 
     # If path is relative, try to find it in AGENT_DIR

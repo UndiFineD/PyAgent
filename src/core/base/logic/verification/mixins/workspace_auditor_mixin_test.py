@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.verification.mixins.workspace_auditor_mixin import WorkspaceAuditorMixin

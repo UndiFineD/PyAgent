@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,13 @@ from __future__ import annotations
 
 """
 DeploymentManager
+"""
 Manager for automated deployment, containerization, and fleet-as-a-service scaling.
 """
-
 try:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -36,12 +39,16 @@ __version__ = VERSION
 
 
 class DeploymentManager:
-    """Automates the generation of infrastructure-as-code and container manifests for the fleet.
+"""
+Automates the generation of infrastructure-as-code and container manifests for the fleet.
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.deployment_dir = self.workspace_root / "deploy""        self.deployment_dir.mkdir(exist_ok=True)
 
-    def generate_docker_manifest(self, component: str = "fleet") -> str:"        """Generates a Dockerfile for the fleet or a specific agent.        dockerfile_content = f"""FROM python:3.13-slim""""WORKDIR /app
+    def generate_docker_manifest(self, component: str = "fleet") -> str:"        """
+Generates a Dockerfile for the fleet or a specific agent.        dockerfile_content = f""
+FROM python:3.13-slim""""
+WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
@@ -50,7 +57,10 @@ CMD ["python", "src\\agent_remote.py"]"        file_path = self.deployment_dir /
         return str(file_path)
 
     def generate_compose_orchestration(self, num_replicas: int = 3) -> str:
-        """Generates a docker-compose.yaml for multi-node fleet scaling.        compose_content = """version: '3.8'""""'services:
+"""
+Generates a docker-compose.yaml for multi-node fleet scaling.        compose_content = ""
+version: '3.8'""""
+services:
   fleet_master:
     build:
       context: ..
@@ -73,4 +83,10 @@ CMD ["python", "src\\agent_remote.py"]"        file_path = self.deployment_dir /
         return str(file_path)
 
     def get_deployment_status(self) -> str:
-        """Returns status of generated assets.        manifests = list(self.deployment_dir.glob("*"))"        return f"Deployment Manager: Generated {len(manifests)} orchestration assets in {self.deployment_dir}""
+"""
+Returns status of generated assets.        manifests = list(self.deployment_dir.glob("*"))"        return f"Deployment Manager: Generated {len(manifests)} orchestration assets in {self.deployment_dir}""
+"""
+
+""
+
+"""

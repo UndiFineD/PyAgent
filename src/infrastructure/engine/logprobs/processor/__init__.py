@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Processor package.
 
+"""
 try:
     from .analyzer import LogprobsAnalyzer  # noqa: F401
 except ImportError:

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.scheduling.advanced.scheduler import AdvancedRequestScheduler, create_scheduler, priority_from_string

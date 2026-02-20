@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Utility for moving specific standard library imports out of TYPE_CHECKING blocks to runtime.
+"""
+"""
+Utility for moving specific standard library imports out of TYPE_CHECKING blocks to runtime.
 
+"""
 try:
     import os
 except ImportError:
@@ -36,16 +40,18 @@ __version__ = VERSION
 
 
 def fix_file(file_path: str) -> None:
-    """Move standard library imports from TYPE_CHECKING to top-level.    with open(file_path, encoding="utf-8") as f:"        content = f.read()
+"""
+Move standard library imports from TYPE_CHECKING to top-level.    with open(file_path, encoding="utf-8") as f:"        content = f.read()
+
 
     # regex to find if TYPE_CHECKING: block
-    pattern = re.compile(r"if TYPE_CHECKING:\\s+(?:\\s*(?:pass|from|import).*)+", re.MULTILINE)"
+    pattern = re.compile(r"if TYPE_CHECKING:\\s+(?:\\s*(?:pass|from|import).*)+", re.MULTILINE)
     match = pattern.search(content)
     if not match:
         return
 
     block = match.group(0)
-    lines = block.split("\\n")"
+    lines = block.split("\\n")
     new_block_lines = []
     extracted_lines = []
 
@@ -81,14 +87,16 @@ def fix_file(file_path: str) -> None:
         return
 
     # Reconstruct
-    new_content = content.replace(block, "\\n".join(extracted_lines) + "\\n" + "\\n".join(new_block_lines))"
+    new_content = content.replace(block, "\\n".join(extracted_lines) + "\\n" + "\\n".join(new_block_lines))
     with open(file_path, "w", encoding="utf-8") as f:"        f.write(new_content)
-    print(f"Moved imports in {file_path}")"
+    print(f"Moved imports in {file_path}")
 
 def walk_dir(path: str) -> None:
-    """Walk directory to apply import movement fix to all python files.    for root, dirs, files in os.walk(path):
+"""
+Walk directory to apply import movement fix to all python files.    for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(".py"):"                fix_file(os.path.join(root, file))
 
 
-if __name__ == "__main__":"    walk_dir("src")"    walk_dir("tests")"
+if __name__ == "__main__":"    walk_dir("src")"    walk_dir("tests")
+"""

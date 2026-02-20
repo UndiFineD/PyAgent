@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -16,16 +19,16 @@ from __future__ import annotations
 # limitations under the License.
 
 # Recovered and standardized for Phase 317
-
+"""
 The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
 
+"""
 For more information, visit:
 - Copilot CLI: https://github.com/github/copilot-cli
 - Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
 
 No commands will be executed.
 """
-
 import logging
 
 from src.core.base.lifecycle.version import VERSION
@@ -40,4 +43,5 @@ class McpToolRegistry:
     
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info("McpToolRegistry initialized (TODO Placeholder).")"
+        logging.info("McpToolRegistry initialized (TODO Placeholder).")
+"""

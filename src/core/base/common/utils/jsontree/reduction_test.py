@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.common.utils.jsontree.reduction import json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves, json_reduce_leaves

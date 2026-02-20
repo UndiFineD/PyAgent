@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.resilience.circuit_breaker import CircuitState, CircuitStats, CircuitBreakerError, CircuitBreaker, CircuitBreakerRegistry, circuit_breaker, get_circuit_stats, get_all_circuit_stats

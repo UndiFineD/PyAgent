@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@ from __future__ import annotations
 """
 Privacy Guard Agent - Monitor and redact PII
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
+
 # [BATCHFIX] Commented metadata/non-Python
-""" [Brief Summary]""""
+""" [Brief Summary]"""
 # DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
 # AUTHOR: Keimpe de Jong
@@ -38,7 +40,6 @@ Add configurable redaction strategies, retention policy, and secure persistent l
 
 # FILE CONTENT SUMMARY:Privacy guard agent for monitoring and enforcing privacy controls and data protection.
 """
-
 import re
 from typing import Any
 
@@ -51,7 +52,7 @@ __version__ = VERSION
 
 class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #     Privacy Guard Agent: Monitors fleet communications for PII (Personally
 #     Identifiable Information), performs redaction, and tracks compliance.
 
@@ -60,76 +61,82 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.workspace_path = workspace_path
         self.pii_patterns = {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "Email": r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "Phone": r"\\b(?:\\\\d{3}[-.]?)?\\\\d{3}[-.]?\\\\d{4}\\b","            "SSN": r"\\b\\\\d{3}-\\\\d{2}-\\\\d{4}\\b","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "CreditCard": r"\\b(?:\\\\d[ -]*?){13,16}\\b","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "AWS_KEY": r"(?i)AKIA[0-9A-Z]{16}","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "AWS_SECRET": r"(?i)SECRET.*['\"]?[a-zA-Z0-9/+=]{40}['\"]?","'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #             "GENERIC_TOKEN": r"(?i)(token|auth|key|secret)[ \\t]*[:=][ \\t]*['\"]?[a-zA-Z0-9_\-\\.]{16,}","  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #             "GITHUB_TOKEN": rghp_[a-zA-Z0-9]{36}","  # [BATCHFIX] closed string"        }
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.redaction_logs: list[Any] = []""""
+"""
+self.redaction_logs: list[Any] = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def scan_and_redact(self, text: str) -> dict[str, Any]:"Scans text for PII patterns and returns redacted version.        original_text = text
+"""
+def scan_and_redact(self, text: str) -> dict[str, Any]:"Scans text for PII patterns and returns redacted version.        original_text = text
         redacted_text = text
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         findings = []""""
-        try:
+"""
+findings = []""""
+try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             from rust_core import scan_pii_rust  # type: ignore[attr-defined]""""
-            rust_findings = scan_pii_rust(text)
+"""
+from rust_core import scan_pii_rust  # type: ignore[attr-defined]""""
+rust_findings = scan_pii_rust(text)
             for pii_type, match in rust_findings:
                 findings.append({"type": pii_type, "value": match})"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                 redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")"        except (ImportError, AttributeError):
+"""
+redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")"        except (ImportError, AttributeError):
             for pii_type, pattern in self.pii_patterns.items():
                 matches = re.findall(pattern, text)
                 if matches:
                     for match in matches:
                         findings.append({"type": pii_type, "value": match})"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                         redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")"
+"""
+redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
         if findings:
             import datetime
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             self.redaction_logs.append(
                 {
                     "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),"                    "findings_count": len(findings),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """                     "pii_types": list(set(f["type"] for f in findings)),"                }
             )
             # Phase 108: Intelligence Recording (disabled - no recorder available)
             # self._record(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             #     text[:500],""""
+"""             #     text[:500],"""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             #     redacted_text[:500],""""            #     provider="PrivacyGuard","            #     model="PIIScanner","            #     meta={"findings_count": len(findings)},"            # )
 
@@ -137,42 +144,49 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "original": original_text,"            "redacted": redacted_text,"            "pii_detected": bool(findings),"            "findings": findings,"        }
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def bulk_scan_workspace(self) -> list[dict[str, str]]:""""        Performs a high-speed recursive scan of the workspace for secrets.
+"""
+def bulk_scan_workspace(self) -> list[dict[str, str]]:""""
+Performs a high-speed recursive scan of the workspace for secrets.
         Offloads the heavy filesystem traversal and regex matching to Rust.
         try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""""
-            return scan_secrets_rust(self.workspace_path)
+"""
+from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""""
+return scan_secrets_rust(self.workspace_path)
         except (ImportError, AttributeError):
             # Fallback to a basic (slower) implementation if needed
             # In a real scenario, this would loop using os.walk in Python
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             return []""""
+"""
+return []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def verify_message_safety(self, message: str) -> dict[str, Any]:"Returns safety report; 'safe': True if no PII is detected.'        result = self.scan_and_redact(message)
+"""
+def verify_message_safety(self, message: str) -> dict[str, Any]:"Returns safety report; 'safe': True if no PII is detected.'        result = self.scan_and_redact(message)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         if result["pii_detected"]:"            return {
+"""
+if result["pii_detected"]:"            return {
                 "safe": False,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #                 "reason": fPII Detected: {', '.join(set(f['type'] for f in result['findings']))}","  # [BATCHFIX] closed string"'            }
-        return {"safe": True}"
+        return {"safe": True}
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def get_privacy_metrics(self) -> dict[str, Any]:"Returns summary metrics for privacy protection efforts.        return {
+"""
+def get_privacy_metrics(self) -> dict[str, Any]:"Returns summary metrics for privacy protection efforts.        return {
             "total_redactions": len(self.redaction_logs),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
-#             "pii_types_captured": list"(set(t for log in self"  # [BATCHFIX] closed string"
+""" [BATCHFIX] Commented unterminated string"""
+#             "pii_types_captured": list"(set(t for log in self"  # [BATCHFIX] closed string
 
 import re
 from typing import Any
@@ -186,84 +200,90 @@ __version__ = VERSION
 
 class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #     Privacy Guard Agent: Monitors fleet communications for PII (Personally
-    Identifiable Information), performs "redaction", and tracks compliance."
+    Identifiable Information), performs "redaction", and tracks compliance.
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
         self.pii_patterns = {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "Email": r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "Phone": r"\\b(?:\\\\d{3}[-.]?)?\\\\d{3}[-.]?\\\\d{4}\\b","            "SSN": r"\\b\\\\d{3}-\\\\d{2}-\\\\d{4}\\b","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "CreditCard": r"\\b(?:\\\\d[ -]*?){13,16}\\b","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "AWS_KEY": r"(?i)AKIA[0-9A-Z]{16}","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "AWS_SECRET": r"(?i)SECRET.*['\"]?[a-zA-Z0-9/+=]{40}['\"]?","'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #             "GENERIC_TOKEN": r"(?i)(token|auth|key|secret)[ \\t]*[:=][ \\t]*['\"]?[a-zA-Z0-9_\-\\.]{16,}","  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #             "GITHUB_TOKEN": rghp_[a-zA-Z0-9]{36}","  # [BATCHFIX] closed string"        }
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.redaction_logs: list[Any] = []""""
+"""
+self.redaction_logs: list[Any] = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def scan_and_redact(self, text: str) -> dict[str, Any]:"Scans text for PII patterns and returns redacted version.        original_text = text
+"""
+def scan_and_redact(self, text: str) -> dict[str, Any]:"Scans text for PII patterns and returns redacted version.        original_text = text
         redacted_text = text
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         findings = []""""
-        try:
+"""
+findings = []""""
+try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             from rust_core import scan_pii_rust  # type: ignore[attr-defined]""""
-            rust_findings = scan_pii_rust(text)
+"""
+from rust_core import scan_pii_rust  # type: ignore[attr-defined]""""
+rust_findings = scan_pii_rust(text)
             for pii_type, match in rust_findings:
                 findings.append({"type": pii_type, "value": match})"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                 redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")"        except (ImportError, AttributeError):
+"""
+redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")"        except (ImportError, AttributeError):
             for pii_type, pattern in self.pii_patterns.items():
                 matches = re.findall(pattern, text)
                 if matches:
                     for match in matches:
                         findings.append({"type": pii_type, "value": match})"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                         redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")"
+"""
+redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
         if findings:
             import datetime
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             self.redaction_logs.append(
                 {
                     "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),"                    "findings_count": len(findings),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """                     "pii_types": list(set(f["type"] for f in findings)),"                }
             )
             # Phase 108: Intelligence Recording (disabled - no recorder available)
             # self._record(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             #     text[:500],""""
+"""             #     text[:500],"""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             #     redacted_text[:500],""""            #     provider="PrivacyGuard","            #     model="PIIScanner","            #     meta={"findings_count": len(findings)},"            # )
 
@@ -271,40 +291,55 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "original": original_text,"            "redacted": redacted_text,"            "pii_detected": bool(findings),"            "findings": findings,"        }
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def bulk_scan_workspace(self) -> list[dict[str, str]]:""""        Performs a high-speed recursive scan of the workspace for secrets.
+"""
+def bulk_scan_workspace(self) -> list[dict[str, str]]:""""
+Performs a high-speed recursive scan of the workspace for secrets.
         Offloads the heavy filesystem traversal and "regex "matching to Rust."        try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""""
-            return scan_secrets_rust(self.workspace_path)
+"""
+from rust_core import scan_secrets_rust  # type: ignore[attr-defined]""""
+return scan_secrets_rust(self.workspace_path)
         except (ImportError, AttributeError):
             # Fallback to a basic (slower) implementation if needed
             # In a real scenario, this would loop using os.walk in Python
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""             return []""""
+"""
+return []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def verify_message_safety(self, message: str) -> dict[str, Any]:"Returns safety report; 'safe': True if no PII is detected".'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+"""
+def verify_message_safety(self, message: str) -> dict[str, Any]:"Returns safety report; 'safe': True if no PII is detected".'# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unterminated string"""
 #  "       result = self.scan_and_redact(message)"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         if result["pii_detected"]:"            return {
+"""
+if result["pii_detected"]:"            return {
                 "safe": False,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #                 "reason": fPII Detected: {', '.join(set(f['type'] for f in result['findings']))}","  # [BATCHFIX] closed string"'            }
-        return {"safe": True}"
+        return {"safe": True}
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def get_privacy_metrics(self) -> dict[str, Any]:"Returns summary metrics for" privacy protection efforts.        return {
+"""
+def get_privacy_metrics(self) -> dict[str, Any]:"Returns summary metrics for" privacy protection efforts.        return {
             "total_redactions": len(self.redaction_logs),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "pii_types_captured": list(set(t for log in self.redaction_logs for t in log["pii_types"])),"            "safety_rating": "High" if len(self.redaction_logs) < 100 else "Critical Levels of PII Exposure","        }
+
+"""
+
+"""
+
+""
+
+"""

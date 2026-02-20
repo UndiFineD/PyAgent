@@ -18,9 +18,11 @@
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Instantiate GraphMemoryAgent with a workspace path: GraphMemoryAgent("path/to/workspace")"- Use as a CLI via the provided create_main_function entry point (runs persistent graph and beads storage)
 - Call improve_content for a brief graph reasoning summary or use mixin methods to read/write the graph store
 
+"""
 WHAT IT DOES:
 - Implements a MIRIX 6-component memory architecture (Core, Episodic, Semantic, Procedural, Resource, Knowledge).
 - Maintains a persistent FalkorDB-style triple store and a Beads directory for dependency-aware task tracking.
@@ -108,7 +110,7 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(
 #         GraphMemoryAgent, "Graph Memory Agent", "Memory storage path"    )
- "  " main()"
+ "  " main()
 try:
     from pathlib import Path
 except ImportError:

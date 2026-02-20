@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Rotary package.
 
+"""
 try:
     from .base import RotaryEmbeddingBase  # noqa: F401
 except ImportError:

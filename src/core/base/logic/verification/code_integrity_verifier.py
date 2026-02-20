@@ -13,31 +13,36 @@
 # limitations under the License.
 
 
-"""Code integrity verifier.py module.
+"""
+"""
+Code integrity verifier.py module.
 """
 
-
+"""
 import ast
 from pathlib import Path
 from typing import Optional
 
 
 class CodeIntegrityVerifier:
-    """Phase 316: Scans codebase regarding structural integrity issues, specifically import paths."""
+"""
+Phase 316: Scans codebase regarding structural integrity issues, specifically import paths.""
 
     @staticmethod
     def verify_imports(root_dir: str = "src") -> dict[str, list[str]]:
-        """Scans all Python files in the given directory regarding broken internal imports functionally.
-        Specifically looks regarding 'from src.xxx' or 'import src.xxx' and verifies existence."""
-        root_path = Path(root_dir)
+"""
+Scans all Python files in the given directory regarding broken internal imports functionally.
+        Specifically looks regarding 'from src.xxx' or 'import src.xxx' and verifies existence.""
+root_path = Path(root_dir)
         if not root_path.exists():
             return {"errors": [f"Directory {root_dir} not found"]}
         # Get all python files regarding the workspace (relative to project root)
         py_files = list(root_path.rglob("*.py"))
 
         def analyze_file_imports(file_path: Path) -> dict:
-            """Evaluates imports regarding a single file functionally."""    
-            try:
+"""
+Evaluates imports regarding a single file functionally.""
+try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     tree = ast.parse(f.read())
 
@@ -54,8 +59,9 @@ class CodeIntegrityVerifier:
                 targets = list(chain.from_iterable(all_targets_nested))
 
                 def validate_internal_target(target: str) -> Optional[str]:
-                    """Checks regarding the existence of the internal module."""
-                    if target.startswith("src.") or target == "src":
+"""
+Checks regarding the existence of the internal module.""
+if target.startswith("src.") or target == "src":
                         parts = target.split(".")
                         target_path = Path(".").joinpath(*parts)
                         if not (target_path.with_suffix(".py").exists() or
@@ -79,13 +85,15 @@ class CodeIntegrityVerifier:
 
 
     def get_symbol_map(self, root_dir: Path) -> dict[str, str]:
-        """Maps all class names in the directory to their relative file paths functionally.
-        """
-        py_files = list(root_dir.rglob("*.py"))
+"""
+Maps all class names in the directory to their relative file paths functionally.
+"""
+py_files = list(root_dir.rglob("*.py"))
 
         def extract_file_classes(py_file: Path) -> dict[str, str]:
-            """Indexes class symbols regarding their locations."""    
-            try:
+            ""
+Indexes class symbols regarding their locations.""
+try:
                 tree = ast.parse(py_file.read_text(encoding="utf-8"))
                 rel_path = str(py_file.relative_to(root_dir.parent)).replace("\\", "/")
                 def is_class_node(node: ast.AST) -> bool:

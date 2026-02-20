@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_backend.py
 """
-
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -41,7 +44,8 @@ __version__ = VERSION
 
 @dataclass
 class SystemConfig:
-    """Configuration for a single backend.
+"""
+Configuration for a single backend.
     Attributes:
         name: Backend identifier.
         backend_type: Type of backend.
@@ -50,8 +54,8 @@ class SystemConfig:
         timeout_s: Request timeout in seconds.
         max_retries: Maximum retry attempts.
         rate_limit_rpm: Requests per minute limit.
-    """
-    name: str
+"""
+name: str
     backend_type: ProviderType
     enabled: bool = True
     weight: int = 1

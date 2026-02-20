@@ -14,8 +14,11 @@
 
 try:
     import asyncio
+"""
 except ImportError:
-    import asyncio
+
+"""
+import asyncio
 
 try:
     import math
@@ -44,7 +47,8 @@ class SwarmNode:
 
 
 class FleetBalancer:
-    """Implements a Weighted Round-Robin (WRR) balancer for agent node orchestration.
+"""
+Implements a Weighted Round-Robin (WRR) balancer for agent node orchestration.
     def __init__(self):
         self.nodes: Dict[str, SwarmNode] = {}
         self._current_index = -1
@@ -54,16 +58,19 @@ class FleetBalancer:
         self._lock = asyncio.Lock()
 
     def add_node(self, node_id: str, capacity: int):
-        """Adds or updates a node in the fleet.        self.nodes[node_id] = SwarmNode(node_id=node_id, capacity=capacity)
+"""
+Adds or updates a node in the fleet.        self.nodes[node_id] = SwarmNode(node_id=node_id, capacity=capacity)
         self._update_balancer_params()
 
     def remove_node(self, node_id: str):
-        """Removes a node from the fleet.        if node_id in self.nodes:
+"""
+Removes a node from the fleet.        if node_id in self.nodes:
             del self.nodes[node_id]
             self._update_balancer_params()
 
     def _update_balancer_params(self):
-        """Recalculates GCD and max weight for the WRR algorithm.        if not self.nodes:
+"""
+Recalculates GCD and max weight for the WRR algorithm.        if not self.nodes:
             self._max_weight = 0
             self._gcd_weight = 1
             return
@@ -77,7 +84,8 @@ class FleetBalancer:
         self._gcd_weight = gcd
 
     async def get_next_node(self) -> Optional[str]:
-        """Provides the next node ID according to Weighted Round-Robin.        async with self._lock:
+"""
+Provides the next node ID according to Weighted Round-Robin.        async with self._lock:
             node_list = list(self.nodes.values())
             if not node_list:
                 return None
@@ -96,5 +104,6 @@ class FleetBalancer:
                     return node_list[self._current_index].node_id
 
     async def report_load(self, node_id: str, load: int):
-        """Updates the current load of a node to adjust balancing dynamically.        if node_id in self.nodes:
+"""
+Updates the current load of a node to adjust balancing dynamically.        if node_id in self.nodes:
             self.nodes[node_id].current_load = load

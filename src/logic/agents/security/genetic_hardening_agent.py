@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@ from __future__ import annotations
 """
 Genetic Hardening Agent - Evolve code to resilient form
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
+
 # [BATCHFIX] Commented metadata/non-Python
-""" [Brief Summary]""""
+""" [Brief Summary]"""
 # DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
 # AUTHOR: Keimpe de Jong
@@ -32,7 +34,6 @@ Improve static analysis beyond naive string checks (use AST-based detection), ad
 FILE CONTENT SUMMARY:
 Genetic hardening agent.py module.
 """
-
 import logging
 from typing import Any
 
@@ -51,7 +52,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
 """             "You are the Genetic Hardening Agent."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -62,22 +63,26 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""        Analyzes a code snippet for structural fragility.
-        logging.info("GeneticHardeningAgent: Analyzing code for fragility.")"
+"""
+def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""
+Analyzes a code snippet for structural fragility.
+        logging.info("GeneticHardeningAgent: Analyzing code for fragility.")
         # simulated analysis
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         vulnerabilities = []""""        if "try:" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+"""
+vulnerabilities = []""""
+if "try:" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             vulnerabilities.append(
                 {
                     "type": "missing_error_handling","                    "impact": "high","                    "fix": "Wrap core logic in try-except blocks.","                }
             )
         if "-> None" not in code_snippet and "->" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             vulnerabilities.append(
                 {
                     "type": "missing_type_hints","                    "impact": "medium","                    "fix": "Add explicit return type annotations.","                }
@@ -87,13 +92,14 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""""
+"""
+async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""""
 # [BATCHFIX] Commented metadata/non-Python
 #         Applies hardening rules to the code to 'evolve' it into a more "resilient version."  # [BATCHFIX] closed string"'        logging.info(fGeneticHardeningAgent: Applying {len(hardening_rules")} hardening rules.")"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         prompt = (
 #             fCode:\\n{code}\\n\\n
 #             fHardening Rules: {hardening_rules}\\n
@@ -104,12 +110,12 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         evolved_code = await self.think(prompt)
         # Phase 108: Intelligence Recording
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         self._record(
             prompt,
             evolved_code,
             provider="GeneticHardening","            model="EvolutionaryRefactor","        )
-      "  "return evolved_code"
+      "  "return evolved_code
 
 import logging
 from typing import Any
@@ -125,11 +131,11 @@ __version__ = VERSION
 class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 #     Implements Genetic" Code Hardening (Phase 32)."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-#     Automatically evolves the codebase structure to be more" resilient to errors."  # [BATCHFIX] closed string"
+#     Automatically evolves the codebase structure to be more" resilient to errors."  # [BATCHFIX] closed string
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
 # [BATCHFIX] Commented metadata/non-Python
 """             "You are the Genetic Hardening Agent."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -140,23 +146,26 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""
+"""
+def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:""""
 # [BATCHFIX] Commented metadata/non-Python
 #         Analyzes a code "snippet for structural fragility."  # [BATCHFIX] closed string"        logging.info("GeneticHardeningAgent: Analyzing code for fragility.")"
         # simulated analysis
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         vulnerabilities = []""""        if "try:" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+"""
+vulnerabilities = []""""
+if "try:" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             vulnerabilities.append(
                 {
                     "type": "missing_error_handling","                    "impact": "high","                    "fix": "Wrap core logic in try-except blocks.","                }
             )
         if "-> None" not in code_snippet and "->" not in code_snippet:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             vulnerabilities.append(
                 {
                     "type": "missing_type_hints","                    "impact": "medium","                    "fix": "Add explicit return type annotations.","                }
@@ -166,13 +175,14 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""""
+"""
+async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:""""
 # [BATCHFIX] Commented metadata/non-Python
 #         Applies hardening rules to the code to "'evolve' it into a more resilient version."  # [BATCHFIX] closed string"'        logging.info(fGeneticHardeningAgent: Applying" {len(hardening_rules)} hardening rules.")"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         prompt = (
 #             fCode:\\n{code}\\n\\n
 #             fHardening Rules: {hardening_rules}\\n
@@ -183,7 +193,7 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         evolved_code = await self.think(prompt)
         # Phase 108: Intelligence Recording
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #         self._record(
             prompt,
             evolved_code,

@@ -14,7 +14,10 @@
 
 
 """
+"""
 Memory episode mixin for recording agent experiences.
+
+"""
 import logging
 from datetime import datetime
 from typing import Any
@@ -22,7 +25,8 @@ from typing import Any
 
 
 class MemoryEpisodeMixin:
-""""Methods for recording and updating episodes.
+""""
+Methods for recording and updating episodes.
     def record_episode(  # pylint: disable=too-many-positional-arguments
         self,
         agent_name: str,
@@ -50,7 +54,8 @@ class MemoryEpisodeMixin:
         self.save()
 
     def update_utility(self, memory_id: str, increment: float) -> None:
-""""Updates the utility score of a specific memory episode.        collection = self._init_db()
+""""
+Updates the utility score of a specific memory episode.        collection = self._init_db()
         if not collection:
             return
 
@@ -58,7 +63,7 @@ class MemoryEpisodeMixin:
             # Fetch existing metadata
             result = collection.get(ids=[memory_id])
             if result and result["metadatas"]:"                meta = result["metadatas"][0]"                old_score = float(meta.get("utility_score", 0.5))"                new_score = self.core.calculate_new_utility(old_score, increment)
-                meta["utility_score"] = new_score"
+                meta["utility_score"] = new_score
                 collection.update(ids=[memory_id], metadatas=[meta])
 
                 # Update local list too
@@ -67,3 +72,4 @@ class MemoryEpisodeMixin:
                     pass
         except (RuntimeError, ValueError, AttributeError) as e:
             logging.error(fFailed to update utility for {memory_id}: {e}")"
+"""

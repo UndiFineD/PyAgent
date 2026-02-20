@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Orchestrator Plugin Mixin - Plugin management for
 # OrchestratorAgent
 
+"""
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -63,7 +66,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Orchestrator plugin mixin module.
 """
-
 import importlib.util
 import logging
 from concurrent.futures import ThreadPoolExecutor
@@ -77,15 +79,18 @@ from src.core.base.logic.agent_plugin_base import AgentPluginBase
 
 
 class OrchestratorPluginMixin:
-""""Plugin system methods for OrchestratorAgent.
+""""
+Plugin system methods for OrchestratorAgent.
     def register_plugin(self, plugin: AgentPluginBase) -> None:
-""""Register a custom agent plugin.        if not hasattr(self, "plugins"):"            self.plugins: dict[str, AgentPluginBase] = {}
+""""
+Register a custom agent plugin.        if not hasattr(self, "plugins"):"            self.plugins: dict[str, AgentPluginBase] = {}
 
         plugin.setup()
         self.plugins[plugin.name] = plugin
         logging.info(fRegistered plugin: {plugin.name} (priority: {plugin.priority.name})")"
     def unregister_plugin(self, plugin_name: str) -> bool:
-""""Unregister a plugin by name.        if not hasattr(self, "plugins") or plugin_name not in self.plugins:"            return False
+""""
+Unregister a plugin by name.        if not hasattr(self, "plugins") or plugin_name not in self.plugins:"            return False
 
         plugin = self.plugins[plugin_name]
         plugin.teardown()
@@ -93,11 +98,13 @@ class OrchestratorPluginMixin:
         logging.info(fUnregistered plugin: {plugin_name}")"        return True
 
     def get_plugin(self, plugin_name: str) -> AgentPluginBase | None:
-""""Get a registered plugin by name.        if not hasattr(self, "plugins"):"            return None
+""""
+Get a registered plugin by name.        if not hasattr(self, "plugins"):"            return None
         return self.plugins.get(plugin_name)
 
     def run_plugins(self, file_path: Path) -> dict[str, bool]:
-""""Run all registered plugins on a file.        if not hasattr(self, "plugins") or" not self.plugins:"            return {}
+""""
+Run all registered plugins on a file.        if not hasattr(self, "plugins") or" not self.plugins:"            return {}
 
         results: dict[str, bool] = {}
         context: dict[str, Any] = {
@@ -127,7 +134,8 @@ class OrchestratorPluginMixin:
         return results
 
     def load_plugins_from_config(self, plugin_configs: list[AgentPluginConfig]) -> None:
-""""Load plugins from configuration.        for config in plugin_configs:
+""""
+Load plugins from configuration.        for config in plugin_configs:
             if not config.enabled:
                 continue
 

@@ -19,8 +19,11 @@
 
 try:
     from typing import Any
+"""
 except ImportError:
-    from typing import Any
+
+"""
+from typing import Any
 
 
 try:

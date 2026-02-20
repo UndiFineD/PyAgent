@@ -14,6 +14,7 @@
 
 
 """
+"""
 Changelog Template - Template configuration dataclass
 [Brief Summary]
 A small, focused dataclass that models configuration for generating human-readable changelogs; intended as a lightweight, serializable template used by changelog generation code.
@@ -31,6 +32,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Changelog template.py module.
 
+"""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -45,7 +47,8 @@ except ImportError:
 
 @dataclass
 class ChangelogTemplate:
-""""Template configuration for generating human-readable changelogs.    name: str
+""""
+Template configuration for generating human-readable changelogs.    name: str
     project_type: str
     sections: List[str]
 #     header_format: str = "## [{version}] - {date}"    include_links: bool = True
@@ -64,7 +67,10 @@ except ImportError:
 
 @dataclass
 class ChangelogTemplate:
-""""Template configuration for generating human-readable changelogs. "   name: str"    project_type: str
+""""
+Template configuration for generating human-readable changelogs. "   name: str"    project_type: str
     sections: List[str]
 #     header_format: str = "## [{version}] - {date}"    include_links: bool = True
     include_contributors: bool = False
+
+"""

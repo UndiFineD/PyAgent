@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -30,7 +30,8 @@ __version__ = VERSION
 
 
 class CoverageTracker:
-    """Lightweight coverage hit tracker used by tests.
+"""
+Lightweight coverage hit tracker used by tests.
     def __init__(self) -> None:
         self._hits: dict[str, int] = {}
         self._targets: set[str] = set()
@@ -49,3 +50,11 @@ class CoverageTracker:
             return 0.0
         covered = sum(1 for t in self._targets if self._hits.get(t, 0) > 0)
         return (covered / len(self._targets)) * 100.0
+
+"""
+
+"""
+
+""
+
+"""

@@ -1,19 +1,13 @@
 #!/usr/bin/env python3
-"""Minimal AI content editor core for tests."""
 from __future__ import annotations
+"""
+Parser-safe stub: AI content editor core (conservative).
 
+Minimal stub to keep public symbols available for imports and tests.
+"""
 
-
-try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-try:
-    from typing import List, Optional
-except ImportError:
-    from typing import List, Optional
-
+from dataclasses import dataclass
+from typing import List, Optional
 
 
 @dataclass
@@ -25,22 +19,12 @@ class ContentEditRequest:
 @dataclass
 class ContentEditResult:
     text: str
-    edits: List[str] = None
-
-
-@dataclass
-class ContentTemplate:
-    id: str
-    description: str = ""
+    edits: List[str]
 
 
 class AIContentEditorCore:
-    def __init__(self) -> None:
-        pass
-
     def edit(self, request: ContentEditRequest) -> ContentEditResult:
-        # Nop edit: return text unchanged
         return ContentEditResult(text=request.text, edits=[])
 
 
-__all__ = ["ContentEditRequest", "ContentEditResult", "ContentTemplate", "AIContentEditorCore"]
+__all__ = ["ContentEditRequest", "ContentEditResult", "AIContentEditorCore"]

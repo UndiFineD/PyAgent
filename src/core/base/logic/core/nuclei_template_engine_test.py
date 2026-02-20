@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.nuclei_template_engine import TemplateInfo, TemplateRequest, MatcherCondition, TemplateHTTP, NucleiTemplate, ScanResult, NucleiTemplateEngine

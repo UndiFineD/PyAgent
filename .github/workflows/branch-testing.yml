@@ -53,6 +53,9 @@ jobs:
 
     - name: Build Rust extensions
       run: |
+        python -m venv .venv
+        . .venv/bin/activate
+        python -m pip install --upgrade pip
         pip install maturin
         maturin develop
 
@@ -118,7 +121,7 @@ jobs:
         safety check --json > safety-report.json || true
 
     - name: Upload security reports
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: security-reports
         path: |
@@ -144,5 +147,14 @@ jobs:
         cache-to: type=gha,mode=max
 
     - name: Test Docker image
+      uses: docker/build-push-action@v5
+      with:
+        context: src/logic/agents/security/scanners/mobile/apk_deeplens
+        file: src/logic/agents/security/scanners/mobile/apk_deeplens/Dockerfile
+        push: false
+        tags: pyagent:test
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+    - name: Run Docker image (local)
       run: |
         docker run --rm pyagent:test python -c "import sys; print(f'Python version: {sys.version}')"

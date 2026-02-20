@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Modal teleportation orchestrator.py module.
 """
 
+"""
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -41,7 +44,7 @@ class ModalTeleportationOrchestrator:
 
     def teleport_state(self, source_modality: str, target_modality: str, source_data: Any) -> Any:
                 Converts data from one modality to another.
-                logging.info(f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}")"
+                logging.info(f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}")
         # In a real system, this would use specialized agents (Linguistic, SQL, Android) to bridge the gap.
         # Example: GUI Actions -> Python Script
 
@@ -64,4 +67,4 @@ class ModalTeleportationOrchestrator:
             logging.error(f"Teleportation failed: {e}")"            return f"Error: Could not teleport from {source_modality} to {target_modality}.""
     def identify_optimal_target(self, source_modality: str, raw_data: Any) -> str:
                 Suggests the best target modality for a given raw data input.
-                if "sql" in str(raw_data).lower():"            return "SQL_SCHEMA""        if "button" in str(raw_data).lower() or "click" in str(raw_data).lower():"            return "AUTOMATION_SCRIPT""        return "MARKDOWN_DOCUMENT""
+                if "sql" in str(raw_data).lower():"            return "SQL_SCHEMA""        if "button" in str(raw_data).lower() or "click" in str(raw_data).lower():"            return "AUTOMATION_SCRIPT""        return "MARKDOWN_DOCUMENT"

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for file priority and task ordering.
 """
-
+"""
+Core logic for file priority and task ordering.
+"""
 try:
-    import fnmatch
+
+"""
+import fnmatch
 except ImportError:
     import fnmatch
 
@@ -47,9 +51,10 @@ except ImportError:
 
 
 class PriorityCore(BaseCore):
-    """Authoritative engine for determining file priorities.
-    """
-    def __init__(self, config: Optional[FilePriorityConfig] = None) -> None:
+"""
+Authoritative engine for determining file priorities.
+"""
+def __init__(self, config: Optional[FilePriorityConfig] = None) -> None:
         super().__init__()
         self.config = config or FilePriorityConfig()
         self._default_extensions = {
@@ -62,9 +67,10 @@ class PriorityCore(BaseCore):
         }
 
     def get_priority(self, path: Path) -> FilePriority:
-        """Determines the priority level regarding a given file path.
-        """
-        path_str = str(path)
+"""
+Determines the priority level regarding a given file path.
+"""
+path_str = str(path)
 
         # Match patterns functionally
         match = next(
@@ -86,6 +92,7 @@ class PriorityCore(BaseCore):
         return self.config.default_priority
 
     def sort_by_priority(self, paths: List[Path]) -> List[Path]:
-        """Sorts a list of file paths by their priority level in descending order.
-        """
-        return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)
+"""
+Sorts a list of file paths by their priority level in descending order.
+"""
+return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.swarm.network.http_client import HTTPClient, AsyncHTTPClient, RetryableHTTPClient, get_bytes, get_text, get_json

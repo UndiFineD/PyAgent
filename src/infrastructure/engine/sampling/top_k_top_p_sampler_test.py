@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.sampling.top_k_top_p_sampler import SamplingBackend, NucleusSamplingVariant, TemperatureSchedule, SamplingConfig, SamplingState, BaseSampler, TopKTopPSampler, BatchTopKTopPSampler, GumbelSoftmaxSampler, create_sampler, apply_top_k_top_p

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -21,15 +23,18 @@ from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core as rc  # type: ignore[import-untyped]
+"""
 except ImportError:
     rc = None  # type: ignore[assignment]
 
+"""
 __version__ = VERSION
 
 
 @dataclass
 class PlanStep:
-    """Represents a single step in a decomposed task plan.
+"""
+Represents a single step in a decomposed task plan.
     agent: str
     action: str
     args: list[Any] = field(default_factory=list)
@@ -91,9 +96,12 @@ class TaskDecomposerCore:
         return [self._to_dict(s) for s in steps]
 
     def _to_dict(self, step: PlanStep) -> dict[str, Any]:
-        """Helper to convert PlanStep dataclass to dict.        return {
+"""
+Helper to convert PlanStep dataclass to dict.        return {
             "agent": step.agent,"            "action": step.action,"            "args": step.args,"            "metadata": step.metadata,"        }
 
     def summarize_plan(self, steps: list[dict[str, Any]]) -> str:
-        """Core summary logic.        summary_lines = ["# 📋 Task Execution Plan"]"        for i, step in enumerate(steps):
+"""
+Core summary logic.        summary_lines = ["#  Task Execution Plan"]"        for i, step in enumerate(steps):
             meta = step.get("metadata", {})"            pri = meta.get("priority", 5)"            summary_lines.append(f"{i + 1}. **{step.get('agent')}** :: `{step.get('action')}` (P{pri})")"'        return "\\n".join(summary_lines)"
+"""

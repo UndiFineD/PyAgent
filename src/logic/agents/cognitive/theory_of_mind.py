@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +19,11 @@ from __future__ import annotations
 # "Models the mental states and knowledge domains of other agents."# 
 try:
     from typing import Any
+"""
 except ImportError:
-    from typing import Any
+
+"""
+from typing import Any
 
 
 try:
@@ -45,7 +50,8 @@ class TheoryOfMind:
         self.core = TheoryOfMindCore()
 
     def update_model(self, agent_name: str, observations: dict[str, Any]) -> None:
-""""Updates the internal model via Core.        current_profile = self.agent_profiles.get(
+""""
+Updates the internal model via Core.        current_profile = self.agent_profiles.get(
             agent_name,
             {
                 "knowledge_domains": [],"                "strengths": [],"                "limitations": [],"                "last_active": 0.0,"            },
@@ -55,7 +61,8 @@ class TheoryOfMind:
         self.agent_profiles[agent_name] = updated
 
     def estimate_knowledge(self, agent_name: str, topic: str) -> float:
-""""Estimates knowledge probability via Core.        if agent_name not in self.agent_profiles:
+""""
+Estimates knowledge probability via Core.        if agent_name not in self.agent_profiles:
             return 0.5
 
         return self.core.estimate_knowledge_score(
@@ -63,7 +70,9 @@ class TheoryOfMind:
         )
 
     def suggest_collaborator(self, task: str) -> list[str]:
-""""Suggests collaborators via Core.        return self.core.rank_collaborators(self.agent_profiles, task)
+""""
+Suggests collaborators via Core.        return self.core.rank_collaborators(self.agent_profiles, task)
 
     def get_mental_map(self) -> dict[str, Any]:
-""""Returns the collective mental map.        # The core already returns "serializable lists"        return self.agent_profiles
+""""
+Returns the collective mental map.        # The core already returns "serializable lists"        return self.agent_profiles

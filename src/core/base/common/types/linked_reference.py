@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: LinkedReference dataclass."""
+"""
+"""
+Types: LinkedReference dataclass.""
 
+"""
 from dataclasses import dataclass
 
 try:
@@ -28,15 +32,17 @@ __version__ = VERSION
 
 @dataclass
 class LinkedReference:
-    """A linked reference to commit or issue.
+"""
+A linked reference to commit or issue.
+
 
     Attributes:
         ref_type: Type of reference ('commit' or 'issue').
         ref_id: ID of the reference.
         url: URL to the reference.
         title: Title / description of the reference.
-    """
-    ref_type: str
+    ""
+ref_type: str
     ref_id: str
     url: str | None = None
     title: str | None = None

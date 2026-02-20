@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Unified platform and hardware detection core."""
+"""
+"""
+Unified platform and hardware detection core.""
+
+"""
 import logging
 import os
 import platform
@@ -24,8 +28,9 @@ logger = logging.getLogger("pyagent.platform")
 
 
 class PlatformCore:
-    """Standardized detector for environment, OS, and hardware capabilities."""
-    _instance: Optional["PlatformCore"] = None
+"""
+Standardized detector for environment, OS, and hardware capabilities.""
+_instance: Optional["PlatformCore"] = None
 
     def __new__(cls) -> "PlatformCore":
         if cls._instance is None:
@@ -44,8 +49,9 @@ class PlatformCore:
         self._is_darwin: bool = False
 
     def _initialize(self) -> None:
-        """Initializes platform attributes."""
-        self.system = platform.system()
+"""
+Initializes platform attributes.""
+self.system = platform.system()
         self.release = platform.release()
         self.machine = platform.machine()
         self.python_version = sys.version.split()[0]
@@ -55,22 +61,26 @@ class PlatformCore:
 
     @property
     def is_windows(self) -> bool:
-        """Returns True if the current OS is Windows."""
-        return self._is_windows
+"""
+Returns True if the current OS is Windows.""
+return self._is_windows
 
     @property
     def is_linux(self) -> bool:
-        """Returns True if the current OS is Linux."""
-        return self._is_linux
+"""
+Returns True if the current OS is Linux.""
+return self._is_linux
 
     @property
     def is_macos(self) -> bool:
-        """Returns True if the current OS is macOS."""
-        return self._is_darwin
+"""
+Returns True if the current OS is macOS.""
+return self._is_darwin
 
     def get_info(self) -> dict[str, Any]:
-        """Get comprehensive platform information."""
-        return {
+"""
+Get comprehensive platform information.""
+return {
             "os": self.system,
             "release": self.release,
             "machine": self.machine,
@@ -82,8 +92,9 @@ class PlatformCore:
         }
 
     def get_resource_usage(self) -> dict[str, Any]:
-        """Basic resource usage without full psutil dependency requirement."""
-        try:
+"""
+Basic resource usage without full psutil dependency requirement.""
+try:
             import psutil  # pylint: disable=import-outside-toplevel
 
             cpu = psutil.cpu_percent(interval=None)
@@ -93,7 +104,8 @@ class PlatformCore:
             return {"error": "psutil not installed"}
 
     def is_gpu_available(self) -> bool:
-        """Heuristic for GPU availability."""
+        ""
+Heuristic for GPU availability.""
         # Check for CUDA explicitly disabled
         if os.environ.get("CUDA_VISIBLE_DEVICES") == "-1":
             return False

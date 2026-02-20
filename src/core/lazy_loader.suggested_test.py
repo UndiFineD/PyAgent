@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .lazy_loader.suggested import LazyLoader, ModuleLazyLoader, lazy_import

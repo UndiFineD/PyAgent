@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,10 +16,12 @@ from __future__ import annotations
 
 
 """
+"""
 Swarm Topology Reporter (Phase 320 Integration).
 Represents the current state of the swarm for visualization and analysis.
 """
 
+"""
 import json
 import logging
 from pathlib import Path
@@ -40,7 +43,8 @@ class SwarmTopologyReporter:
         self.traffic_matrix: dict[str, float] = {}  # Pillar 6: Synaptic Weights
 
     def clear_snapshot(self) -> None:
-        """Clears the current node/link lists for a fresh snapshot pulse.        self.nodes = []
+"""
+Clears the current node/link lists for a fresh snapshot pulse.        self.nodes = []
         self.links = []
 
     def record_node(
@@ -48,8 +52,9 @@ class SwarmTopologyReporter:
         node_id: str,
         group: str = "general","        metadata: dict[str, Any] | None = None,
     ) -> None:
-        """Adds or updates a node in the current snapshot.        # Check if already exists in this snapshot
-        existing = next((n for n in self.nodes if n["id"] == node_id), None)"
+"""
+Adds or updates a node in the current snapshot.        # Check if already exists in this snapshot
+        existing = next((n for n in self.nodes if n["id"] == node_id), None)
         weight = self.traffic_matrix.get(node_id, 1.0)
 
         if existing:
@@ -59,7 +64,8 @@ class SwarmTopologyReporter:
                     "id": node_id,"                    "group": group,"                    "meta": metadata or {},"                    "val": weight,  # D3 size scaling"                }
             )
 
-    def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:"        """Adds or updates a link in the current snapshot pulse.        # Pillar 9: High-fidelity visualization link strength
+    def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:"        """
+Adds or updates a link in the current snapshot pulse.        # Pillar 9: High-fidelity visualization link strength
         # We also look at traffic between these two if we had a link-traffic matrix
         existing = next(
             (
@@ -72,9 +78,10 @@ class SwarmTopologyReporter:
         if not existing:
             self.links.append({"source": source, "target": target, "value": strength, "type": type})"        else:
             # Update strength if the new one is higher
-            existing["value"] = max(existing["value"], strength)"
+            existing["value"] = max(existing["value"], strength)
     def update_traffic(self, node_id: str, bytes_count: float) -> None:
-        """Accumulates traffic for synaptic heatmap (Pillar 6).        current = self.traffic_matrix.get(node_id, 1.0)
+"""
+Accumulates traffic for synaptic heatmap (Pillar 6).        current = self.traffic_matrix.get(node_id, 1.0)
         self.traffic_matrix[node_id] = current + (bytes_count / 1024)  # KB focus
 
     def export(self) -> None:
@@ -86,4 +93,9 @@ class SwarmTopologyReporter:
         try:
             with open(self.output_path, "w", encoding="utf-8") as f:"                json.dump(data, f, indent=2)
             logging.info(f"Topology exported to {self.output_path}")"        except Exception as e:
-            logging.error(f"Failed to export topology: {e}")"
+            logging.error(f"Failed to export topology: {e}")
+"""
+
+""
+
+"""

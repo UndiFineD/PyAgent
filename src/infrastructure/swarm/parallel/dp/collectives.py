@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Async collective operations for data parallel coordination.
 """
 
+"""
 import asyncio
 import logging
 
@@ -62,3 +66,5 @@ async def dp_collective_all_reduce(
         return tensor.tolist()
     except Exception as e:
         logger.error(f"DP all-reduce failed: {e}")"        return values
+
+"""

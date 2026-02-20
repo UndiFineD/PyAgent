@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Reading the repository for the prediction_engine.py file so its exact contents can be included in the FILE CONTENT SUMMARY.Reading prediction_engine.py to include its exact contents in the FILE CONTENT SUMMARY.
 
+"""
 Prediction Engine - Forecasting & Change Detection
 
 [Brief Summary]
@@ -50,7 +53,6 @@ FILE CONTENT SUMMARY:
 Prediction engine.py module.
 # Forecasting and change detection engine.
 """
-
 try:
     import contextlib
 except ImportError:
@@ -77,7 +79,8 @@ logger = logging.getLogger(__name__)
 
 
 class StatsChangeDetector:
-    """Detects changes in metric values.
+"""
+Detects changes in metric values.
     def __init__(self, threshold: float = 0.1, threshold_percent: float | None = None) -> None:
         if threshold_percent is not None:
             threshold = float(threshold_percent) / 100.0
@@ -126,7 +129,8 @@ class StatsChangeDetector:
 
 
 class StatsForecaster:
-    """Forecasts future metric values.
+"""
+Forecasts future metric values.
     def __init__(self, window_size: int = 10) -> None:
         self.window_size = window_size
         self.history: list[float] = []
@@ -179,7 +183,6 @@ class StatsForecaster:
             "predictions": preds,"            "confidence_lower": [p - margin for p in preds],"            "confidence_upper": [p + margin for p in preds],"        }
 # Forecasting and change detection engine.
 """
-
 try:
     import contextlib
 except ImportError:
@@ -206,7 +209,8 @@ logger = logging.getLogger(__name__)
 
 
 class StatsChangeDetector:
-    """Detects changes in metric values.
+"""
+Detects changes in metric values.
     def __init__(self, threshold: float = 0.1, threshold_percent: float | None = None) -> None:
         if threshold_percent is not None:
             threshold = float(threshold_percent) / 100.0
@@ -255,7 +259,8 @@ class StatsChangeDetector:
 
 
 class StatsForecaster:
-    """Forecasts future metric values.
+"""
+Forecasts future metric values.
     def __init__(self, window_size: int = 10) -> None:
         self.window_size = window_size
         self.history: list[float] = []
@@ -306,3 +311,5 @@ class StatsForecaster:
             margin = max(std, abs(mean) * 0.05)
         return {
             "predictions": preds,"            "confidence_lower": [p - margin for p in preds],"            "confidence_upper": [p + margin for p in preds],"        }
+
+"""

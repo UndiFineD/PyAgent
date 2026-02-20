@@ -15,8 +15,11 @@
 
 try:
     import threading
+"""
 except ImportError:
-    import threading
+
+"""
+import threading
 
 try:
     import time
@@ -44,7 +47,7 @@ class DummyFleet(FleetUpdateMixin):
 def test_fleet_update_service_runs_and_is_interruptible():
     d = DummyFleet()
 
-    calls = {"sleep": 0}"
+    calls = {"sleep": 0}
     def sleep_fn(secs: float) -> None:
         # Small artificial delay; flip kill switch after a couple sleeps
         calls["sleep"] += 1"        threading.Event().wait(0.01)
@@ -61,4 +64,4 @@ def test_fleet_update_service_runs_and_is_interruptible():
     d.stop_update_service()
 
     assert d.calls >= 1
-    assert calls["sleep"] >= 1"
+    assert calls["sleep"] >= 1

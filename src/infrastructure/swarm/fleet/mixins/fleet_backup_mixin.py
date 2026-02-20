@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,12 @@ from __future__ import annotations
 
 """
 FleetBackupMixin
+"""
 Mixin: fleet_backup_mixin
 Implements Pillar 8/9 hardening: Shard RAID-10 Distributed Backup.
 """
 
+"""
 import asyncio
 import json
 import logging
@@ -29,22 +32,23 @@ logger = logging.getLogger(__name__)
 
 
 class FleetBackupMixin:
-    """
-    Handles distribution and retrieval of state shards across the swarm.
-    """
-    backup_node: Any = None
+"""
+Handles distribution and retrieval of state shards across the swarm.
+"""
+backup_node: Any = None
     voyager_discovery: Any = None
     voyager_transport: Any = None
 
     async def harden_agent_state(
         self, agent_id: str, state_data: Dict[str, Any]
     ) -> bool:
-        """Takes agent state, shards it, and distributes parts to the fleet
+"""
+Takes agent state, shards it, and distributes parts to the fleet
         nodes.
 
         # 1. Create RAID-10 Shards
-        """
-        shards = self.backup_node.create_shards(state_data)
+"""
+shards = self.backup_node.create_shards(state_data)
 
         # 2. Identify available peer nodes
         peers = self.voyager_discovery.get_active_peers()
@@ -86,8 +90,9 @@ class FleetBackupMixin:
     async def recover_agent_state(
         self, state_hash: str
     ) -> Optional[Dict[str, Any]]:
-        """Polls the swarm for shards and reconstructs agent state."""
-        peers = self.voyager_discovery.get_active_peers()
+"""
+Polls the swarm for shards and reconstructs agent state.""
+peers = self.voyager_discovery.get_active_peers()
         shard_pool = self.backup_node.get_local_shards_for_hash(state_hash)
 
         if peers:
@@ -110,8 +115,9 @@ class FleetBackupMixin:
 
 
     async def run_resilience_audit(self):
-        """BG Loop: Verifies that all local state has sufficient replicas in the swarm."""
-        logger.info("FleetResilience: Starting Shard RAID-10 Audit...")
+"""
+BG Loop: Verifies that all local state has sufficient replicas in the swarm.""
+logger.info("FleetResilience: Starting Shard RAID-10 Audit...")
         # 1. Gather all unique local agent IDs
         agent_ids = [a for a in getattr(self, "agents", {}).keys()]
         workspace_root = getattr(self, "workspace_root", None)

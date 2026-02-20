@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.ad_monitoring_core import ChangeType, AttributeChangeType, SecurityEventType, ADObjectChange, AttributeChange, MonitoringSession, MonitoringConfig, ADConnectionProvider, AlertProvider, ADMonitoringCore

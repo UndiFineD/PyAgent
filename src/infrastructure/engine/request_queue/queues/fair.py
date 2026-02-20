@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Fair.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -24,7 +27,7 @@ from typing import Dict, Iterator, TypeVar
 from src.infrastructure.engine.request_queue.base import RequestQueue
 from src.infrastructure.engine.request_queue.models import QueuedRequest
 
-T = TypeVar("T", bound=QueuedRequest)"
+T = TypeVar("T", bound=QueuedRequest)
 
 
 class FairQueue(RequestQueue):
@@ -38,7 +41,8 @@ class FairQueue(RequestQueue):
         self._total_requests = 0
 
     def add(self, request: T) -> None:
-        """Add request to appropriate client queue.        client_id = request.client_id or "default""
+"""
+Add request to appropriate client queue.        client_id = request.client_id or "default"
         if client_id not in self._client_queues:
             self._client_queues[client_id] = deque()
             self._client_weights[client_id] = self._default_weight
@@ -48,23 +52,24 @@ class FairQueue(RequestQueue):
         self._total_requests += 1
 
     def pop(self) -> T:
-        """Pop using weighted fair sharing.        if self._total_requests == 0:
-            raise IndexError("pop from empty fair queue")"
+"""
+Pop using weighted fair sharing.        if self._total_requests == 0:
+            raise IndexError("pop from empty fair queue")
         best_client = None
-        best_ratio = float("inf")"
+        best_ratio = float("inf")
         for client_id, queue in self._client_queues.items():
             if not queue:
                 continue
 
             weight = self._client_weights.get(client_id, self._default_weight)
             served = self._client_served.get(client_id, 0)
-            ratio = served / weight if weight > 0 else float("inf")"
+            ratio = served / weight if weight > 0 else float("inf")
             if ratio < best_ratio:
                 best_ratio = ratio
                 best_client = client_id
 
         if best_client is None:
-            raise IndexError("no requests available")"
+            raise IndexError("no requests available")
         request = self._client_queues[best_client].popleft()
         self._client_served[best_client] += 1
         self._total_requests -= 1
@@ -72,14 +77,16 @@ class FairQueue(RequestQueue):
         return request
 
     def peek(self) -> T:
-        """Peek at next fair request.        for client_id in sorted(
+"""
+Peek at next fair request.        for client_id in sorted(
             self._client_queues.keys(), key=lambda c: self._client_served.get(c, 0) / self._client_weights.get(c, 1.0)
         ):
             if self._client_queues[client_id]:
                 return self._client_queues[client_id][0]
-        raise IndexError("peek from empty fair queue")"
+        raise IndexError("peek from empty fair queue")
     def prepend(self, request: T) -> None:
-        """Prepend to client queue.        client_id = request.client_id or "default""
+"""
+Prepend to client queue.        client_id = request.client_id or "default"
         if client_id not in self._client_queues:
             self._client_queues[client_id] = deque()
             self._client_weights[client_id] = self._default_weight
@@ -89,7 +96,8 @@ class FairQueue(RequestQueue):
         self._total_requests += 1
 
     def remove(self, value: T) -> bool:
-        """Remove specific request.        client_id = value.client_id or "default""
+"""
+Remove specific request.        client_id = value.client_id or "default"
         if client_id in self._client_queues:
             try:
                 self._client_queues[client_id].remove(value)
@@ -100,7 +108,8 @@ class FairQueue(RequestQueue):
         return False
 
     def set_client_weight(self, client_id: str, weight: float) -> None:
-        """Set weight for a client.        self._client_weights[client_id] = max(0.1, weight)
+"""
+Set weight for a client.        self._client_weights[client_id] = max(0.1, weight)
 
     def __len__(self) -> int:
         return self._total_requests

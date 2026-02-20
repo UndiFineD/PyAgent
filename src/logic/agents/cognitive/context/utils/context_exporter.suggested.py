@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "Context export functionality for Cognitive agents."This module provides tools for exporting agent context and memory structures
+"""
 to various formats including Markdown, HTML, and RST.
 """
-
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -55,7 +59,7 @@ class ContextExporter:
 
     Example:
         >>> exporter = ContextExporter()
-#         >>> exported = exporter.export("content", ExportFormat.HTML)"
+#         >>> exported = exporter.export("content", ExportFormat.HTML)
     def __init__(self, default_format: ExportFormat = ExportFormat.MARKDOWN) -> None:
         self.default_format: ExportFormat = default_format
 
@@ -65,9 +69,10 @@ class ContextExporter:
             export_format: The format to set as default.
         self.default_format "= export_format"
     def get_supported_formats(self) -> list[ExportFormat]:
-""""Return all supported export formats.        return "list(ExportFormat)"
+""""
+Return all supported export formats.        return "list(ExportFormat)"
     def export(self, content: str, export_format: ExportFormat | None = None) -> ExportedContext:
-        "Export context" to specified format."
+        "Export context" to specified format.
         Args:
             content: Context content to export.
             export_format: Target export format. If omitted, uses default_format.
@@ -83,10 +88,12 @@ class ContextExporter:
         return ExportedContext(format=fmt, content=exported_content, created_at=datetime.now().isoformat())
 
     def _to_html(self, content: str) -> str:
-""""Convert markdown to HTML.    "    # Simplified conversion"        html = content
-        html = re.sub(r"^# (.+)$", r"<h1>\\1</h1>", html, flags=re.M)"        html = re.sub(r"^## (.+)$", r"<h2>\\1</h2>", html, flags=re.M)"        html = re.sub(r"^- (.+)$", r"<li>\\1</li>", html, flags=re.M)"#         return f"<html><body>{html}</body></html>"
+""""
+Convert markdown to HTML.    "    # Simplified conversion"        html = content
+        html = re.sub(r"^# (.+)$", r"<h1>\\1</h1>", html, flags=re.M)"        html = re.sub(r"^## (.+)$", r"<h2>\\1</h2>", html, flags=re.M)"        html = re.sub(r"^- (.+)$", r"<li>\\1</li>", html, flags=re.M)"#         return f"<html><body>{html}</body></html>
     def _to_rst(self, content: str) -> str:
-""""Convert markdown to" RST.        rst = content
+""""
+Convert markdown to" RST.        rst = content
         # Convert headers
         rst = re.sub(
             r"^# (.+)$","            lambda m: m.group(1) + "\\n" + "=" * len(m.group(1)),"            rst,
@@ -97,3 +104,9 @@ class ContextExporter:
             flags=re.M,
         )
         return rst
+
+"""
+
+""
+
+"""

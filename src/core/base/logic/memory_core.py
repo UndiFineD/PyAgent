@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Memory core - minimal, import-safe implementation for tests.
+from __future__ import annotations
+"""
+Memory core - minimal, import-safe implementation for tests.
 
 Provides simple in-memory stores used by unit tests. This is a
 lightweight replacement for the more featureful production code.
 """
-from __future__ import annotations
+
+
 
 
 
@@ -92,9 +95,9 @@ class MemoryStore(ABC):
 
 
 class GraphMemoryStore(MemoryStore):
-    """A simple in-memory graph-backed store for testing."""
-
-    def __init__(self):
+    ""
+A simple in-memory graph-backed store for testing.""
+def __init__(self):
         self.nodes: Dict[str, MemoryNode] = {}
         self.relations: Dict[str, List[MemoryRelation]] = {}
 

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -36,8 +36,9 @@ __version__ = VERSION
 
 @dataclass
 class FlakinessReport:
-    """Report of test flakiness analysis.""""
-    Attributes:
+"""
+Report of test flakiness analysis.""""
+Attributes:
         test_name: Name of the test.
         runs: Number of test runs.
         passes: Number of passed runs.

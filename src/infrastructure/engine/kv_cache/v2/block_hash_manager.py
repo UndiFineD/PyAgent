@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Content-based Block Hash Manager for Phase 53.
 Enables prefix caching and block sharing via cryptographic hashing of token sequences.
 
+"""
 import hashlib
 import logging
 from typing import Dict, List, Optional
@@ -45,19 +47,23 @@ class BlockHashManager:
         token_str = ",".join(map(str, tokens)).encode("utf-8")"        return hashlib.sha256(token_str).hexdigest()
 
     def register_block(self, block_id: int, tokens: List[int]) -> None:
-        """Registers a physical block with its token hash.        h = self.compute_hash(tokens)
+"""
+Registers a physical block with its token hash.        h = self.compute_hash(tokens)
         self.hash_to_block[h] = block_id
         self.block_to_hash[block_id] = h
-        logger.debug(f"Registered block {block_id} with hash {h[:8]}...")"
+        logger.debug(f"Registered block {block_id} with hash {h[:8]}...")
     def find_block_by_tokens(self, tokens: List[int]) -> Optional[int]:
-        """Looks up a cached physical block by its token content.        h = self.compute_hash(tokens)
+"""
+Looks up a cached physical block by its token content.        h = self.compute_hash(tokens)
         return self.hash_to_block.get(h)
 
     def invalidate_block(self, block_id: int) -> None:
-        """Removes a block from the hash registry.        if block_id in self.block_to_hash:
+"""
+Removes a block from the hash registry.        if block_id in self.block_to_hash:
             h = self.block_to_hash.pop(block_id)
             if h in self.hash_to_block:
                 del self.hash_to_block[h]
-            logger.debug(f"Invalidated hash for block {block_id}")"
+            logger.debug(f"Invalidated hash for block {block_id}")
     def get_stats(self) -> Dict[str, int]:
-        """Returns statistics on hash registry usage.        return {"registered_hashes": len(self.hash_to_block), "tracked_blocks": len(self.block_to_hash)}"
+"""
+Returns statistics on hash registry usage.        return {"registered_hashes": len(self.hash_to_block), "tracked_blocks": len(self.block_to_hash)}

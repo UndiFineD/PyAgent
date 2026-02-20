@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Sanitizes imports by ensuring proper spacing and structure.
 """
-
 try:
-    import os
+
+"""
+import os
 except ImportError:
     import os
 
@@ -31,7 +35,7 @@ except ImportError:
 
 __version__ = VERSION
 
-src_path = r"c:\\DEV\\PyAgent\\src""
+src_path = r"c:\\DEV\\PyAgent\\src"
 
 def sanitize_file(path: str) -> None:
     with open(path, encoding="utf-8", errors="ignore") as f:"        lines = f.readlines()
@@ -84,4 +88,5 @@ for root, _, files in os.walk(src_path):
             if sanitize_file(os.path.join(root, file)):
                 files_fixed += 1
 
-print(f"Finished. Processed {files_processed} files, fixed {files_fixed} files.")"
+print(f"Finished. Processed {files_processed} files, fixed {files_fixed} files.")
+"""

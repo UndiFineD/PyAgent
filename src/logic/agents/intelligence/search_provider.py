@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +17,7 @@ from __future__ import annotations
 
 
 # Search Provider - Entrypoint for Workspace Search/Research Agent
+"""
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -22,6 +25,7 @@ USAGE:
 - As a CLI entrypoint to run the workspace research/search agent.
 - From a shell: python search_provider.py "query" (or configured launcher that passes the topic/file argument)."- Intended to be wired into service orchestration or invoked directly for ad-hoc research runs.
 
+"""
 WHAT IT DOES:
 - Provides a minimal command-line entrypoint that constructs and runs a SearchAgent via create_main_function.
 - Declares module/version metadata and imports the concrete SearchAgent implementation.
@@ -36,7 +40,6 @@ FILE CONTENT SUMMARY:
 
 Search Agent: Perform deep research and search operations across the workspace.
 """
-
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -76,3 +79,5 @@ except ImportError:
 __version__ = VERSION
 
 if __name__ == "__main__":"    main = create_main_function(SearchAgent, "Research Agent", "Topic/File to research")"    main()
+
+"""

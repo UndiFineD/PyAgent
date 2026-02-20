@@ -12,7 +12,11 @@
 # limitations under the License.
 
 
-"""Batch matrix multiplication operations using available backends.
+"""
+"""
+Batch matrix multiplication operations using available backends.
+"""
+
 """
 from typing import Any
 
@@ -30,8 +34,10 @@ def mm_batch_invariant(
     *,
     out: Any | None = None,
 ) -> Any:
-    """Deterministic matrix multiplication (2D x 2D).
-    """if not HAS_TORCH:
+"""
+Deterministic matrix multiplication (2D x 2D).
+"""
+if not HAS_TORCH:
         result = np.matmul(a, b)
         if out is not None:
             out[:] = result
@@ -48,8 +54,10 @@ def bmm_batch_invariant(
     *,
     out: Any | None = None,
 ) -> Any:
-    """Deterministic batched matrix multiplication (3D x 3D).
-    """if not HAS_TORCH:
+"""
+Deterministic batched matrix multiplication (3D x 3D).
+"""
+if not HAS_TORCH:
         result = np.matmul(a, b)
         if out is not None:
             out[:] = result

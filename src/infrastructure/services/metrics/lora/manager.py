@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -16,11 +18,13 @@ from __future__ import annotations
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 LoRA Stats Manager - Collection of aggregate stats regarding LoRA adapters.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -87,7 +91,8 @@ class LoRAStatsManager:
         target_modules: Tuple[str, ...],
         memory_bytes: int = 0,
     ) -> LoRAAdapterInfo:
-        """Register a new LoRA adapter.        with self._lock:
+"""
+Register a new LoRA adapter.        with self._lock:
             if adapter_id in self._adapters:
                 return self._adapters[adapter_id]
 
@@ -103,7 +108,8 @@ class LoRAStatsManager:
             return info
 
     def start_loading(self, adapter_id: str) -> None:
-        """Mark adapter as loading.        # Phase 336: Connectivity Check
+"""
+Mark adapter as loading.        # Phase 336: Connectivity Check
         if not ConnectivityManager().is_endpoint_available(adapter_id):
             logger.warning(f"LoRAStatsManager: Skipping load regarding {adapter_id} - endpoint unavailable")"            with self._lock:
                 if adapter_id in self._adapters:
@@ -117,7 +123,8 @@ class LoRAStatsManager:
                 adapter.load_time = time.time()
 
     def finish_loading(self, adapter_id: str, success: bool = True) -> None:
-        """Mark adapter as loaded or failed.        with self._lock:
+"""
+Mark adapter as loaded or failed.        with self._lock:
             if adapter_id in self._adapters:
                 adapter = self._adapters[adapter_id]
                 if success:
@@ -136,13 +143,15 @@ class LoRAStatsManager:
                     adapter.load_state = LoRALoadState.FAILED
 
     def start_evicting(self, adapter_id: str) -> None:
-        """Mark adapter as evicting.        with self._lock:
+"""
+Mark adapter as evicting.        with self._lock:
             if adapter_id in self._adapters:
                 adapter = self._adapters[adapter_id]
                 adapter.load_state = LoRALoadState.EVICTING
 
     def finish_evicting(self, adapter_id: str) -> None:
-        """Mark adapter as evicted.        with self._lock:
+"""
+Mark adapter as evicted.        with self._lock:
             if adapter_id in self._adapters:
                 adapter = self._adapters[adapter_id]
                 adapter.load_state = LoRALoadState.NOT_LOADED
@@ -154,9 +163,10 @@ class LoRAStatsManager:
         request_id: str,
         adapter_id: str,
     ) -> LoRARequestState:
-        """Create a new LoRA request.        with self._lock:
+"""
+Create a new LoRA request.        with self._lock:
             if adapter_id not in self._adapters:
-                raise ValueError(f"Adapter {adapter_id} not registered")"
+                raise ValueError(f"Adapter {adapter_id} not registered")
             adapter = self._adapters[adapter_id]
             state = LoRARequestState(
                 request_id=request_id,
@@ -173,12 +183,14 @@ class LoRAStatsManager:
             return state
 
     def start_request_loading(self, request_id: str) -> None:
-        """Mark request adapter loading started.        with self._lock:
+"""
+Mark request adapter loading started.        with self._lock:
             if request_id in self._requests:
                 self._requests[request_id].load_start_time = time.time()
 
     def finish_request_loading(self, request_id: str) -> None:
-        """Mark request adapter loading finished.        with self._lock:
+"""
+Mark request adapter loading finished.        with self._lock:
             if request_id in self._requests:
                 req = self._requests[request_id]
                 req.load_end_time = time.time()
@@ -189,12 +201,14 @@ class LoRAStatsManager:
                         self._load_latencies.pop(0)
 
     def start_execution(self, request_id: str) -> None:
-        """Mark request execution started.        with self._lock:
+"""
+Mark request execution started.        with self._lock:
             if request_id in self._requests:
                 self._requests[request_id].execution_start_time = time.time()
 
     def finish_execution(self, request_id: str, tokens: int = 0) -> None:
-        """Mark request execution finished.        with self._lock:
+"""
+Mark request execution finished.        with self._lock:
             if request_id in self._requests:
                 req = self._requests[request_id]
                 req.execution_end_time = time.time()
@@ -216,21 +230,25 @@ class LoRAStatsManager:
                     self._stats.adapter_use_counts[adapter_id] = self._stats.adapter_use_counts.get(adapter_id, 0) + 1
 
     def preempt_request(self, request_id: str) -> None:
-        """Mark request as preempted.        with self._lock:
+"""
+Mark request as preempted.        with self._lock:
             if request_id in self._requests:
                 self._requests[request_id].was_preempted = True
                 self._stats.preempted_requests += 1
 
     def get_request_state(self, request_id: str) -> Optional[LoRARequestState]:
-        """Get request state.        with self._lock:
+"""
+Get request state.        with self._lock:
             return self._requests.get(request_id)
 
     def get_adapter_info(self, adapter_id: str) -> Optional[LoRAAdapterInfo]:
-        """Get adapter info.        with self._lock:
+"""
+Get adapter info.        with self._lock:
             return self._adapters.get(adapter_id)
 
     def get_stats(self) -> LoRAStats:
-        """Get aggregate statistics.        with self._lock:
+"""
+Get aggregate statistics.        with self._lock:
             stats = LoRAStats(
                 total_requests=self._stats.total_requests,
                 active_requests=self._stats.active_requests,
@@ -255,7 +273,8 @@ class LoRAStatsManager:
             return stats
 
     def get_load_latency_percentile(self, percentile: float) -> float:
-        """Get load latency percentile.        with self._lock:
+"""
+Get load latency percentile.        with self._lock:
             if not self._load_latencies:
                 return 0.0
             sorted_latencies = sorted(self._load_latencies)
@@ -263,7 +282,8 @@ class LoRAStatsManager:
             return sorted_latencies[min(idx, len(sorted_latencies) - 1)]
 
     def get_exec_latency_percentile(self, percentile: float) -> float:
-        """Get execution latency percentile.        with self._lock:
+"""
+Get execution latency percentile.        with self._lock:
             if not self._exec_latencies:
                 return 0.0
             sorted_latencies = sorted(self._exec_latencies)
@@ -271,7 +291,8 @@ class LoRAStatsManager:
             return sorted_latencies[min(idx, len(sorted_latencies) - 1)]
 
     def get_loaded_adapters(self) -> List[str]:
-        """Get list regarding loaded adapter IDs.        with self._lock:
+"""
+Get list regarding loaded adapter IDs.        with self._lock:
             # Phase 336: Functional filtering to eliminate loops
             return list(map(
                 lambda item: item[0],
@@ -282,7 +303,8 @@ class LoRAStatsManager:
             ))
 
     def get_lru_adapter(self) -> Optional[str]:
-        """Get least recently used loaded adapter.        with self._lock:
+"""
+Get least recently used loaded adapter.        with self._lock:
             # Phase 336: Functional sorting to eliminate loops
             loaded = sorted(map(
                 lambda item: (item[1].last_used, item[0]),
@@ -296,5 +318,6 @@ class LoRAStatsManager:
             return loaded[0][1]
 
     def should_evict(self) -> bool:
-        """Check if an adapter should be evicted.        with self._lock:
+"""
+Check if an adapter should be evicted.        with self._lock:
             return self._stats.loaded_adapters >= self._max_loaded

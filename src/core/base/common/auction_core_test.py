@@ -11,10 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Test Auction Core module.
+"""
+"""
+Test Auction Core module.
 """
 try:
-    from hypothesis import given, strategies as st, settings, HealthCheck
+
+"""
+from hypothesis import given, strategies as st, settings, HealthCheck
 except ImportError:
     from hypothesis import given, strategies as st, settings, HealthCheck
 

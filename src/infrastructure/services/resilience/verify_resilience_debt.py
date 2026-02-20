@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Verify resilience service imports and instantiation.
+"""
+"""
+Verify resilience service imports and instantiation.
+
+"""
 import sys
 from pathlib import Path
 

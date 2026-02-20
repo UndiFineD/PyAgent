@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 AgentRegistryCore logic for version compatibility and manifest validation.
 Pure logic component to be potentially rustified.
 
+"""
 Phase 15 Rust Optimizations:
 - topological_sort_rust: O(V+E) topological ordering for agent load order
 - to_snake_case_rust: Fast CamelCase to snake_case conversion
@@ -53,7 +56,9 @@ __version__ = VERSION
 
 
 class AgentRegistryCore:
-    """Pure logic core for Agent Registry.
+"""
+Pure logic core for Agent Registry.
+
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
@@ -67,7 +72,7 @@ class AgentRegistryCore:
             if not file.endswith(".py") or file.startswith("__"):"                continue
 
             agent_name = file[:-3]
-            module_path = rel_path.replace(os.path.sep, ".").replace("/", ".").replace(".py", "")"
+            module_path = rel_path.replace(os.path.sep, ".").replace("/", ".").replace(".py", "")
             # Register multiple variants for the same module
             self._register_agent_variants(discovered, agent_name, module_path)
         return discovered
@@ -75,7 +80,8 @@ class AgentRegistryCore:
     def _register_agent_variants(
         self, discovered: dict[str, tuple[str, str, str | None]], agent_name: str, module_path: str
     ) -> None:
-        """Helper to register an agent under its primary, snake_case, and short names.        pascal_name = self._to_pascal_case(agent_name)
+"""
+Helper to register an agent under its primary, snake_case, and short names.        pascal_name = self._to_pascal_case(agent_name)
 
         # 1. Primary name
         discovered[agent_name] = (module_path, pascal_name, None)
@@ -90,7 +96,8 @@ class AgentRegistryCore:
             discovered[short_name] = (module_path, pascal_name, None)
 
     def _get_short_name(self, name: str) -> str | None:
-        """Strips the 'Agent' or 'Orchestrator' suffix from a name.'        n_low = name.lower()
+"""
+Strips the 'Agent' or 'Orchestrator' suffix from a name.'        n_low = name.lower()
         if n_low.endswith("agent"):"            return name[:-5].rstrip("_")"        if n_low.endswith("orchestrator"):"            return name[:-12].rstrip("_")"        return None
 
     def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, str | None]]:
@@ -100,7 +107,7 @@ class AgentRegistryCore:
         for key, cfg in raw_manifest.items():
             # Expecting: "AgentName": ["module.path", "ClassName", "arg_path", "min_sdk_version"]"            if isinstance(cfg, list) and len(cfg) >= 2:
                 # Extract potential version gate
-                min_sdk: str = cfg[3] if len(cfg) > 3 else "1.0.0""
+                min_sdk: str = cfg[3] if len(cfg) > 3 else "1.0.0"
                 if self.is_compatible(min_sdk):
                     config_path: str | None = cfg[2] if len(cfg) > 2 else None
                     valid_configs[key] = (cfg[0], cfg[1], config_path)
@@ -154,7 +161,8 @@ class AgentRegistryCore:
 
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\\1_\\2", name)"        return re.sub("([a-z0-9])([A-Z])", r"\\1_\\2", s1).lower()"
     def _to_pascal_case(self, name: str) -> str:
-        """Converts snake_case to PascalCase.        return "".join(word.capitalize() for word in name.split("_"))"
+"""
+Converts snake_case to PascalCase.        return "".join(word.capitalize() for word in name.split("_"))
     def validate_agent_structure(self, agent_instance: Any, required_methods: list[str] | None = None) -> list[str]:
                 Checks if an agent instance has the required methods.
         Returns a list of missing methods.
@@ -171,7 +179,8 @@ class AgentRegistryCore:
         return self._topological_sort_py(dep_graph)
 
     def _topological_sort_py(self, dep_graph: dict[str, list[str]]) -> list[str]:
-        """Python implementation of topological sort (Kahn's Algorithm).'        # Calculate in-degrees
+"""
+Python implementation of topological sort (Kahn's Algorithm).'        # Calculate in-degrees
         in_degree = {u: 0 for u in dep_graph}
         for u in dep_graph:
             for v in dep_graph[u]:

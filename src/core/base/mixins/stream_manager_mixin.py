@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Stream manager mixin - minimal shim for tests.
+from __future__ import annotations
+"""
+Stream manager mixin - minimal shim for tests.
 
 Provides a no-Redis implementation that tracks streams in-memory
 to keep unit tests importable and deterministic.
 """
-from __future__ import annotations
+
+
 
 
 import asyncio

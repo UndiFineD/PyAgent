@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.cuda_stream_pool import StreamPriority, StreamState, StreamStats, PooledStream, PooledEvent, EventPool, CudaStreamPool, get_global_stream_pool, reset_global_pool, compute_stream, comm_stream, high_priority_stream

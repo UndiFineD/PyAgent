@@ -15,8 +15,10 @@
 
 
 """
+"""
 Trace synthesis.py module.
 
+"""
 try:
     import logging
 except ImportError:
@@ -61,7 +63,7 @@ class SwarmTraceSynthesizer:
             # We look for tasks where we have both a routing decision and a fusion result
             routing_data = None
             fusion_data = None
-            domain = "unknown""
+            domain = "unknown"
             for step in trail_steps:
                 if step.step == "routing":"                    routing_data = step.raw_data
                     domain = routing_data.get("domain", "general")"                if step.step == "fusion":"                    fusion_data = step.raw_data
@@ -86,10 +88,11 @@ class SwarmTraceSynthesizer:
         for ex1, peers in expert_affinities.items():
             if expert_counts[ex1] > 0:
                 normalized_peers = {ex2: val / expert_counts[ex1] for ex2, val in peers.items()}
-                final_wisdom["expert_synergies"][ex1] = normalized_peers"
+                final_wisdom["expert_synergies"][ex1] = normalized_peers
         self.wisdom_cache = final_wisdom
         logger.info(f"[Phase 82] Wisdom Synthesis Complete. Domain Baselines: {len(final_wisdom['domain_baselines'])}")"'        return final_wisdom
 
     def get_recommendation(self, _domain: str) -> List[str]:
-        """Returns recommended experts based on synthesized wisdom.        # Simple logic: pick experts with highest domain success or synergetic pairs
-        return [expert for expert, _ in self.wisdom_cache.get("top_experts", [])]"
+"""
+Returns recommended experts based on synthesized wisdom.        # Simple logic: pick experts with highest domain success or synergetic pairs
+        return [expert for expert, _ in self.wisdom_cache.get("top_experts", [])]

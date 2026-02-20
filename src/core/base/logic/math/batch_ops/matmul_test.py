@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.math.batch_ops.matmul import mm_batch_invariant, bmm_batch_invariant

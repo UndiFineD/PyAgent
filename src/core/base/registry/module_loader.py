@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""ModuleLoader: lightweight dynamic module loader used by tests.
+"""
+"""
+ModuleLoader: lightweight dynamic module loader used by tests.
 
+"""
 This implementation provides a safe, minimal API for discovering and
 importing agent classes. It intentionally uses conservative heuristics
 and returns clear ImportError when classes cannot be found.
 """
-
 import importlib
 import logging
 from pathlib import Path
@@ -30,7 +33,8 @@ __all__ = ["ModuleLoader"]
 
 
 class ModuleLoader:
-    """Minimal module loader for test-time discovery."""
+    ""
+Minimal module loader for test-time discovery.""
 
     @classmethod
     def find_agent_module_path(cls, agent_type: str, start_dirs: Optional[list[str]] = None) -> Optional[str]:

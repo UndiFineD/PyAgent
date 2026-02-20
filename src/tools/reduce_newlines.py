@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Reduces consecutive newlines in Python files within a directory.
 
+"""
 try:
     import re
 except ImportError:
@@ -33,10 +35,13 @@ except ImportError:
 
 
 def reduce_newlines(directory: Path):
-    """Reduces consecutive newlines in Python files within the specified directory.    for p in directory.rglob("*.py"):"        if not p.is_file():
+"""
+Reduces consecutive newlines in Python files within the specified directory.    for p in directory.rglob("*.py"):"        if not p.is_file():
             continue
         content = p.read_text(encoding="utf-8", errors="ignore")"        # Replace 3 or more newlines with 2
         new_content = re.sub(r"\\n\\s*\\n\\s*\\n+", "\\n\\n", content)"        if new_content != content:
             p.write_text(new_content, encoding="utf-8")"            print(f"Reduced newlines in {p}")"
 
 if __name__ == "__main__":"    target = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("src/external_candidates/auto")"    reduce_newlines(target)
+
+"""

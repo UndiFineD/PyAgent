@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Guided decoding engine for structured output generation.
 """
 
+"""
 import gc
 import json
 import logging
@@ -63,7 +67,7 @@ logger = logging.getLogger(__name__)
 class GuidedDecoder:
         Guided decoding engine for structured output generation.
     
-    _instance: Optional["GuidedDecoder"] = None"
+    _instance: Optional["GuidedDecoder"] = None
     def __init__(
         self,
         model: str = "meta-llama/Llama-3-8B-Instruct","        gpu_memory_utilization: float = 0.85,
@@ -80,16 +84,19 @@ class GuidedDecoder:
             "json_generations": 0,"            "regex_generations": 0,"            "choice_generations": 0,"            "grammar_generations": 0,"            "validation_failures": 0,"        }
 
     @classmethod
-    def get_instance(cls, **kwargs) -> "GuidedDecoder":"        """Get singleton instance.        if cls._instance is None:
+    def get_instance(cls, **kwargs) -> "GuidedDecoder":"        """
+Get singleton instance.        if cls._instance is None:
             cls._instance = GuidedDecoder(**kwargs)
         return cls._instance
 
     @property
     def is_available(self) -> bool:
-        """Check if guided decoding is available.        return HAS_VLLM
+"""
+Check if guided decoding is available.        return HAS_VLLM
 
     def _ensure_initialized(self) -> bool:
-        """Lazily initialize the LLM.        if not HAS_VLLM:
+"""
+Lazily initialize the LLM.        if not HAS_VLLM:
             logger.warning("vLLM not available for guided decoding")"            return False
 
         if self._initialized and self._llm:
@@ -98,14 +105,14 @@ class GuidedDecoder:
         try:
             if "VLLM_TARGET_DEVICE" not in os.environ:"                if HAS_TORCH and torch.cuda.is_available():
                     os.environ["VLLM_TARGET_DEVICE"] = "cuda""                else:
-                    os.environ["VLLM_TARGET_DEVICE"] = "cpu""
-            logger.info("Initializing GuidedDecoder with model: %s", self.model)"
+                    os.environ["VLLM_TARGET_DEVICE"] = "cpu"
+            logger.info("Initializing GuidedDecoder with model: %s", self.model)
             kwargs = {
                 "model": self.model,"                "trust_remote_code": False,"                **self._llm_kwargs,
             }
 
             if os.environ.get("VLLM_TARGET_DEVICE") != "cpu":"                kwargs["gpu_memory_utilization"] = self.gpu_memory_utilization"            else:
-                kwargs["device"] = "cpu""
+                kwargs["device"] = "cpu"
             self._llm = LLM(**kwargs)
             self._initialized = True
 
@@ -123,11 +130,12 @@ class GuidedDecoder:
         system_prompt: Optional[str] = None,
         **kwargs: Any,
     ) -> str:
-        """Generate with guided decoding configuration.        if not self._ensure_initialized():
-            return """
-        full_prompt = prompt
+"""
+Generate with guided decoding configuration.        if not self._ensure_initialized():
+            return ""
+full_prompt = prompt
         if system_prompt:
-            full_prompt = f"{system_prompt}\\n\\nUser: {prompt}\\n\\nAssistant:""
+            full_prompt = f"{system_prompt}\\n\\nUser: {prompt}\\n\\nAssistant:"
         try:
             guided_kwargs = config.to_sampling_params_kwargs()
 
@@ -147,15 +155,17 @@ class GuidedDecoder:
             if outputs and outputs[0].outputs:
                 return outputs[0].outputs[0].text
 
-            return """
-        except (RuntimeError, ValueError) as e:
+            return ""
+except (RuntimeError, ValueError) as e:
             logger.error("Guided generation failed: %s", e)"            return """
-    def _prepare_json_system_prompt(self, system_prompt: Optional[str]) -> str:
-        """Prepare system prompt for JSON generation.        json_instruction = "You must respond with valid JSON only. No explanations.""        if system_prompt:
+def _prepare_json_system_prompt(self, system_prompt: Optional[str]) -> str:
+"""
+Prepare system prompt for JSON generation.        json_instruction = "You must respond with valid JSON only. No explanations.""        if system_prompt:
             return f"{system_prompt}\\n\\n{json_instruction}""        return json_instruction
 
     def _parse_json_result(self, result: str) -> Union[Dict[str, Any], str]:
-        """Parse JSON result if possible.        if not result:
+"""
+Parse JSON result if possible.        if not result:
             return result
 
         try:
@@ -173,7 +183,8 @@ class GuidedDecoder:
         parse: bool = True,
         **kwargs,
     ) -> Union[Dict[str, Any], str]:
-        """Generate JSON output constrained by schema.        if isinstance(schema, JsonSchema):
+"""
+Generate JSON output constrained by schema.        if isinstance(schema, JsonSchema):
             schema = schema.build()
 
         config = GuidedConfig(
@@ -193,7 +204,7 @@ class GuidedDecoder:
             **kwargs,
         )
 
-        self._stats["json_generations"] += 1"
+        self._stats["json_generations"] += 1
         if parse:
             return self._parse_json_result(result)
 
@@ -209,7 +220,8 @@ class GuidedDecoder:
         validate: bool = True,
         **kwargs,
     ) -> str:
-        """Generate output matching a regex pattern.        if isinstance(pattern, RegexPattern):
+"""
+Generate output matching a regex pattern.        if isinstance(pattern, RegexPattern):
             pattern_str = pattern.pattern
         else:
             pattern_str = pattern
@@ -228,7 +240,7 @@ class GuidedDecoder:
             **kwargs,
         )
 
-        self._stats["regex_generations"] += 1"
+        self._stats["regex_generations"] += 1
         if validate and result:
             if not re.match(pattern_str, result):
                 self._stats["validation_failures"] += 1"                logger.warning("Output doesn't match pattern: %s", pattern_str)"'
@@ -242,7 +254,8 @@ class GuidedDecoder:
         system_prompt: Optional[str] = None,
         **kwargs,
     ) -> str:
-        """Generate output constrained to specific choices.        if isinstance(choices, ChoiceConstraint):
+"""
+Generate output constrained to specific choices.        if isinstance(choices, ChoiceConstraint):
             choice_list = choices.choices
         else:
             choice_list = choices
@@ -253,8 +266,8 @@ class GuidedDecoder:
         )
 
         # Add choice instruction
-        choice_prompt = f"{prompt}\\n\\nRespond with exactly one of: {', '.join(choice_list)}""'
-        result = self.generate(
+        choice_prompt = f"{prompt}\\n\\nRespond with exactly one of: {', '.join(choice_list)}"
+result = self.generate(
             choice_prompt,
             config=config,
             temperature=temperature,
@@ -263,7 +276,7 @@ class GuidedDecoder:
             **kwargs,
         )
 
-        self._stats["choice_generations"] += 1"
+        self._stats["choice_generations"] += 1
         return result.strip()
 
     def generate_grammar(
@@ -275,7 +288,8 @@ class GuidedDecoder:
         system_prompt: Optional[str] = None,
         **kwargs,
     ) -> str:
-        """Generate output following a grammar specification.        config = GuidedConfig(
+"""
+Generate output following a grammar specification.        config = GuidedConfig(
             mode=GuidedMode.GRAMMAR,
             grammar=grammar,
         )
@@ -289,16 +303,18 @@ class GuidedDecoder:
             **kwargs,
         )
 
-        self._stats["grammar_generations"] += 1"
+        self._stats["grammar_generations"] += 1
         return result
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get decoder statistics.        return {
+"""
+Get decoder statistics.        return {
             **self._stats,
             "is_initialized": self._initialized,"            "has_outlines": HAS_OUTLINES,"        }
 
     def shutdown(self) -> None:
-        """Shutdown and free resources.        if self._llm:
+"""
+Shutdown and free resources.        if self._llm:
             del self._llm
             self._llm = None
             gc.collect()
@@ -307,14 +323,15 @@ class GuidedDecoder:
                 torch.cuda.empty_cache()
 
             self._initialized = False
-            logger.info("GuidedDecoder shut down")"
+            logger.info("GuidedDecoder shut down")
 
 def generate_json(
     prompt: str,
     schema: Union[Dict[str, Any], JsonSchema],
     model: str = "meta-llama/Llama-3-8B-Instruct","    **kwargs,
 ) -> Dict[str, Any]:
-    """Convenience function for JSON generation.    decoder = GuidedDecoder.get_instance(model=model)
+"""
+Convenience function for JSON generation.    decoder = GuidedDecoder.get_instance(model=model)
     return decoder.generate_json(prompt, schema, **kwargs)
 
 
@@ -323,5 +340,6 @@ def generate_choice(
     choices: List[str],
     model: str = "meta-llama/Llama-3-8B-Instruct","    **kwargs,
 ) -> str:
-    """Convenience function for choice generation.    decoder = GuidedDecoder.get_instance(model=model)
+"""
+Convenience function for choice generation.    decoder = GuidedDecoder.get_instance(model=model)
     return decoder.generate_choice(prompt, choices, **kwargs)

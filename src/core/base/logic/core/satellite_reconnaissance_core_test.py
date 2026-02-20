@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.satellite_reconnaissance_core import SatelliteAsset, SatelliteReconResult, SatelliteReconConfig, SatelliteReconnaissanceCore

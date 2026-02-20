@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,10 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Apply safe, automated fixes over extracted candidate files.
 
+"""
 Currently implements:
 - Replace `yaml.load(` -> `yaml.safe_load(`
 - Replace `from yaml import load` -> `from yaml import safe_load as load`
@@ -23,7 +27,6 @@ Currently implements:
 Writes unified diff patches to `.external/patches/` and optionally applies changes when
 `--apply` is passed. Re-runs static checks and generated tests after applying fixes.
 """
-
 import argparse
 from pathlib import Path
 import difflib
@@ -44,7 +47,7 @@ def find_py_files(target: Path):
         A list of Path objects for all .py files found.
         if not target.exists():
         return []
-    return list(target.rglob('*.py'))'
+    return list(target.rglob('*.py'))
 
 def transform_text(text: str) -> str:
         Transform the given text by applying safe fixes such as replacing yaml.load with yaml.safe_load,
@@ -161,7 +164,8 @@ def apply_fixes(apply: bool = False, target_dir: Path | None = None, patch_dir: 
 
 
 def main(argv=None) -> int:
-    """main entry point for apply_safe_fixes.py    parser = argparse.ArgumentParser()
+"""
+main entry point for apply_safe_fixes.py    parser = argparse.ArgumentParser()
     parser.add_argument('--apply', action='store_true', help='Apply fixes to files')'    parser.add_argument('--target', type=str, default=None,'                        help='Target directory to scan (defaults to internal target)')'    parser.add_argument('--patch-dir', type=str, default=None, help='Directory to write patch files')'    args = parser.parse_args(argv)
     target_path = Path(args.target) if args.target else None
     patch_path = Path(args.patch_dir) if args.patch_dir else None

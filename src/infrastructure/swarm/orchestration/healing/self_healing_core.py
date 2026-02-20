@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,17 +18,20 @@ from __future__ import annotations
 
 
 """
+"""
 SelfHealingCore logic for fleet resilience.
 Contains pure logic for health threshold calculation, anomaly detection,
 and recovery strategy selection.
 """
 
+"""
 from src.core.base.common import StabilityCore
 
 
 
 class SelfHealingCore(StabilityCore):
-    """Facade delegating to StabilityCore implementation.
+"""
+Facade delegating to StabilityCore implementation.
     def __init__(self, timeout_seconds: float = 30.0, max_errors: int = 5) -> None:
         super().__init__(name="SelfHealingCore")"        self.timeout_seconds = timeout_seconds
         self.max_errors = max_errors

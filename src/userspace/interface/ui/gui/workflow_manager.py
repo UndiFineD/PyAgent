@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Workflow management for step-by-step BMAD project execution.
+"""
+"""
+Workflow management for step-by-step BMAD project execution.
 
+"""
 try:
     from tkinter import messagebox
 except ImportError:
@@ -38,7 +42,9 @@ __version__ = VERSION
 
 
 class WorkflowManager:
-    """Manages the lifecycle of a complex development workflow.
+"""
+Manages the lifecycle of a complex development workflow.
+
     def __init__(self, callbacks: dict[str, Any]) -> None:
         self.callbacks: Any = callbacks
         self.current_step_index = 0
@@ -47,7 +53,8 @@ class WorkflowManager:
         self.targets: list[str] = []
 
     def start_workflow(self, track_name: str, targets: list[str]) -> None:
-        """Starts a predefined workflow based on the track.        from .constants import BMAD_TRACKS
+"""
+Starts a predefined workflow based on the track.        from .constants import BMAD_TRACKS
 
         track = BMAD_TRACKS.get(track_name)
         if not track:
@@ -62,12 +69,13 @@ class WorkflowManager:
         self.execute_current_phase()
 
     def execute_current_phase(self) -> None:
-        """Executes the current phase of the workflow.        if self.current_step_index >= len(self.phases):
+"""
+Executes the current phase of the workflow.        if self.current_step_index >= len(self.phases):
             self.finish_workflow()
             return
 
         phase = self.phases[self.current_step_index]
-        self.callbacks["set_status"](f"Workflow: {phase} Phase starting...")"
+        self.callbacks["set_status"](f"Workflow: {phase} Phase starting...")
         # Decide which agents to deploy based on phase
         agents: list[str] = self.get_agents_for_phase(phase)
 
@@ -79,15 +87,19 @@ class WorkflowManager:
                     "1.0","                    f"--- BMAD {phase.upper()} PHASE ---\\nExecute {phase} tasks for {target}.","                )
 
     def get_agents_for_phase(self, phase: str) -> list[str]:
-        """Returns a list of agent names needed for a specific phase.        mapping: dict[str, list[str]] = {
+"""
+Returns a list of agent names needed for a specific phase.        mapping: dict[str, list[str]] = {
             "Analysis": ["Analyst", "PM"],"            "Planning": ["PM", "Architect"],"            "Solutioning": ["Architect", "UX Designer"],"            "Implementation": ["Developer"],"            "Quality": ["Test Architect"],"            "Validation": ["Test Architect", "BMad Master"],"            "Governance": ["Scrum Master", "Security Auditor"],"        }
-        return mapping.get(phase, ["Developer"])"
+        return mapping.get(phase, ["Developer"])
     def next_phase(self) -> None:
-        """Moves to the next phase in the workflow.        if not self.workflow_active:
+"""
+Moves to the next phase in the workflow.        if not self.workflow_active:
             return
         self.current_step_index += 1
         self.execute_current_phase()
 
     def finish_workflow(self) -> None:
-        """Clean up after workflow completion.        self.workflow_active = False
+"""
+Clean up after workflow completion.        self.workflow_active = False
         self.callbacks["set_status"]("Workflow completed successfully.")"        messagebox.showinfo("Success", "The BMAD workflow has reached its final phase.")"
+"""

@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""ModuleLoader: lightweight dynamic module loader used by tests.
+
+This implementation provides a safe, minimal API for discovering and
+importing agent classes. It intentionally uses conservative heuristics
+and returns clear ImportError when classes cannot be found.
+"""
+
+import importlib
+import logging
+from pathlib import Path
+from typing import Any, Optional, Type
+
+__all__ = ["ModuleLoader"]
+
+
+class ModuleLoader:
+    """Minimal module loader for test-time discovery."""
+
+    @classmethod
+    def find_agent_module_path(cls, agent_type: str, start_dirs: Optional[list[str]] = None) -> Optional[str]:
+        workspace_root = Path.cwd()
+        if start_dirs is None:
+            start_dirs = ["src/logic/agents", "src/agents", "plugins"]
+
+        target_file = f"{agent_type}.py"
+        for start in start_dirs:
+            search_root = workspace_root / start
+            if not search_root.exists():
+                continue
+            for p in search_root.rglob(target_file):
+                try:
+                    rel = p.relative_to(workspace_root)
+                    return str(rel).replace(str(Path("")), "").lstrip("/\\").replace(Path("").anchor, "").replace("\\", ".").replace("/", ".").rsplit(".py", 1)[0]
+                except Exception:
+                    continue
+        return None
+
+    @classmethod
+    def load_agent_class(cls, agent_type: str) -> Type[Any]:
+        module_path = cls.find_agent_module_path(agent_type)
+        if not module_path:
+            # Try a reasonable fallback
+            type_clean = agent_type.replace("Agent", "").lower()
+            if type_clean == "coder":
+                module_path = f"src.logic.agents.development.{agent_type}"
+            else:
+                module_path = f"src.{type_clean}.{agent_type}"
+
+        try:
+            module = importlib.import_module(module_path)
+            return getattr(module, agent_type)
+        except Exception as e:  # pragma: no cover - import failure
+            logging.error("ModuleLoader: Failed to load %s from %s: %s", agent_type, module_path, e)
+            raise ImportError(f"Could not load agent class {agent_type}") from e

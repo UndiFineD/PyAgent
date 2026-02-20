@@ -13,10 +13,12 @@
 # limitations under the License.
 
 
+"""
 Context Shard Service (Phase 63).
 Orchestrates long-context (1M+ tokens) by sharding the KV cache across the agent swarm.
 Allows multiple experts to share access to the same sharded context.
 
+"""
 import logging
 import time
 from dataclasses import dataclass, field
@@ -27,7 +29,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ContextShard:
-    """Metadata for a sharded slice of a long context.
+"""
+Metadata for a sharded slice of a long context.
     shard_id: str
     tenant_id: str  # Phase 71: Multi-tenant isolation
     start_token: int
@@ -37,7 +40,7 @@ class ContextShard:
     overlap_size: int = 0  # Phase 78: Context overlap for sliding windows
     is_cached: bool = True
     last_access: float = field(default_factory=time.time)
-    precision: str = "float16"  # float16, fp8, int4, etc."
+    precision: str = "float16"  # float16, fp8, int4, etc.
 
 
 class ContextShardManager:
@@ -51,8 +54,9 @@ class ContextShardManager:
         self.dead_ranks: set[int] = set()
 
     def mark_rank_dead(self, rank_id: int) -> None:
-        """Phase 75: Simulates hardware failure.        self.dead_ranks.add(rank_id)
-        logger.warning(f"Rank {rank_id} marked as DEAD. Triggering failover lookup.")"
+"""
+Phase 75: Simulates hardware failure.        self.dead_ranks.add(rank_id)
+        logger.warning(f"Rank {rank_id} marked as DEAD. Triggering failover lookup.")
     def shard_context(
         self,
         context_id: str,
@@ -64,7 +68,7 @@ class ContextShardManager:
         Ensures shards are tagged with tenant_id for isolation.
         Includes overlap buffer for attention continuity (Phase 78).
                 if not available_ranks:
-            raise ValueError("No available ranks for context sharding.")"
+            raise ValueError("No available ranks for context sharding.")
         num_shards = (total_tokens + self.block_size - 1) // self.block_size
         shards = []
 
@@ -122,8 +126,11 @@ class ContextShardManager:
         return None
 
     def delete_context(self, context_id: str) -> bool:
-        """Phase 80: Explicitly removes a context and its shards from the registry.        if context_id in self.context_registry:
+"""
+Phase 80: Explicitly removes a context and its shards from the registry.        if context_id in self.context_registry:
             num_shards = len(self.context_registry[context_id])
             del self.context_registry[context_id]
             logger.info(f"FleetCleanup: Decommissioned context {context_id} ({num_shards} shards freed).")"            return True
         return False
+
+"""

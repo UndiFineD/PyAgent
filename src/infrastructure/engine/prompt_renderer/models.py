@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Models for Prompt Rendering.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -38,22 +42,26 @@ except ImportError:
 
 
 class TruncationStrategy(Enum):
-    """Prompt truncation strategies.
+"""
+Prompt truncation strategies.
     NONE = "none""    AUTO = "auto""    LEFT = "left""    RIGHT = "right""    MIDDLE = "middle""    SMART = "smart""
 
 
 class InputType(Enum):
-    """Input types for prompt rendering.
+"""
+Input types for prompt rendering.
     TEXT = "text""    TOKENS = "tokens""    EMBEDDING = "embedding""    MULTIMODAL = "multimodal""
 
 
 class RenderMode(Enum):
-    """Rendering modes.
+"""
+Rendering modes.
     COMPLETION = "completion""    CHAT = "chat""    EMBEDDING = "embedding""    INSTRUCT = "instruct""
 
 @dataclass
 class PromptConfig:
-    """Configuration for prompt rendering.
+"""
+Configuration for prompt rendering.
     prompt: Optional[str] = None
     messages: Optional[List[Dict[str, Any]]] = None
     token_ids: Optional[List[int]] = None
@@ -72,13 +80,15 @@ class PromptConfig:
     normalize_unicode: bool = True
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert config to dictionary.        return {
+"""
+Convert config to dictionary.        return {
             "prompt": self.prompt,"            "messages": self.messages,"            "max_tokens": self.max_tokens,"            "truncation": self.truncation.value,"            "cache_salt": self.cache_salt,"        }
 
 
 @dataclass
 class TruncationResult:
-    """Result of prompt truncation.
+"""
+Result of prompt truncation.
     original_tokens: int
     truncated_tokens: int
     removed_tokens: int
@@ -88,14 +98,16 @@ class TruncationResult:
 
     @property
     def truncation_ratio(self) -> float:
-        """Calculate ratio of removed tokens to original tokens.        if self.original_tokens == 0:
+"""
+Calculate ratio of removed tokens to original tokens.        if self.original_tokens == 0:
             return 0.0
         return self.removed_tokens / self.original_tokens
 
 
 @dataclass
 class RenderResult:
-    """Result of prompt rendering.
+"""
+Result of prompt rendering.
     text: Optional[str] = None
     token_ids: Optional[List[int]] = None
     embeddings: Optional[List[List[float]]] = None
@@ -110,22 +122,28 @@ class RenderResult:
 
     @property
     def is_multimodal(self) -> bool:
-        """Check if result contains multimodal data.        return bool(self.image_positions or self.audio_positions)
+"""
+Check if result contains multimodal data.        return bool(self.image_positions or self.audio_positions)
 
 
 @dataclass
 class EmbeddingInput:
-    """Embedding input for direct embedding injection.
+"""
+Embedding input for direct embedding injection.
     embeddings: List[List[float]]
     positions: Optional[List[int]] = None
-    encoding: str = "float32""
+    encoding: str = "float32"
 
 @dataclass
 class MultimodalInput:
-    """Multimodal input container.
+"""
+Multimodal input container.
     images: List[Dict[str, Any]] = field(default_factory=list)
     audio: List[Dict[str, Any]] = field(default_factory=list)
     video: List[Dict[str, Any]] = field(default_factory=list)
 
     def is_empty(self) -> bool:
-        """Check if input is empty.        return not (self.images or self.audio or self.video)
+"""
+Check if input is empty.        return not (self.images or self.audio or self.video)
+
+"""

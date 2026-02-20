@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Models and configuration for NCCL communication.
 
+"""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -31,7 +33,8 @@ except ImportError:
 
 
 class ReduceOp(Enum):
-    """NCCL reduction operations.
+"""
+NCCL reduction operations.
     SUM = auto()
     PROD = auto()
     MAX = auto()
@@ -66,7 +69,8 @@ class NCCLConfig:
 
 @dataclass
 class NCCLStats:
-    """Statistics for NCCL operations.
+"""
+Statistics for NCCL operations.
     all_reduce_count: int = 0
     all_gather_count: int = 0
     reduce_scatter_count: int = 0

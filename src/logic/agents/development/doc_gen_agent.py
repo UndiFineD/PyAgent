@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 DocGenAgent - Documentation Extraction and Site Generation
 Autonomous agent that extracts Python docstrings and emits Markdown suitable for Sphinx/Jekyll consumption.
 # DATE: 2026-02-13
@@ -23,6 +26,7 @@ USAGE:
 WHAT IT DOES:
 - Parses .py files with ast, extracts module/class/function docstrings, formats them as simple Markdown headings and paragraphs, stores results in doc_registry, and writes one .md file per registered module.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Recursively discover and process modules automatically (current API expects external iteration), preserve and render function signatures and type hints, include private members optionally, support reStructuredText/Sphinx directives and cross-references, perform atomic writes via StateTransaction, run asynchronously for large codebases, and add robust logging/error reporting and template-driven rendering.
 
@@ -68,7 +72,8 @@ class DocGenAgent(BaseAgent):
         self.doc_registry: dict[Any, Any] = {}  # module_path -> extracted_docs
 
     def extract_docs(self, file_path: str) -> str:
-""""Extracts docstrings from a Python file and returns Markdown content.        if not file_path.endswith(".py"):"#             return
+""""
+Extracts docstrings from a Python file and returns Markdown content.        if not file_path.endswith(".py"):"#             return
 
         try:
             with open(file_path, encoding="utf-8") as f:"                tree = ast.parse(f.read())
@@ -91,7 +96,8 @@ class DocGenAgent(BaseAgent):
 #             return fError extracting docs: {str(e)}
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:
-""""Helper to format documentation for a class.#         md_content = f"## Class": `{node.name}`\\n"        class_doc = ast.get_docstring(node)
+""""
+Helper to format documentation for a class.#         md_content = f"## Class": `{node.name}`\\n"        class_doc = ast.get_docstring(node)
         if class_doc:
 #             md_content += f"{class_doc}\\n\\n"
         for item in node.body:
@@ -101,18 +107,20 @@ class DocGenAgent(BaseAgent):
 
     @staticmethod
     def _format_function_docs(node: ast.FunctionDef, level: int = 2) -> str:
-""""Helper to format documentation for a function or method.    "   " prefix = "#" * level"#         header = "Method" if level == 3 else "Function"#         md_content = f"{prefix} {header}: `{node.name}`\\n"        func_doc = ast.get_docstring(node)
+""""
+Helper to format documentation for a function or method.    "   " prefix = "#" * level"#         header = "Method" if level == 3 else "Function"#         md_content = f"{prefix} {header}: `{node.name}`\\n"        func_doc = ast.get_docstring(node)
         if func_doc:
 #             md_content += f"{func_doc}\\n\\n"        return md_content
 
     def generate_documentation_site(self, output_dir: str) -> int:
-""""Generates documentation files for all modules in the registry.        if not "os."path.exists(output_dir):"            os.makedirs(output_dir)
+""""
+Generates documentation files for all modules in the registry.        if not "os."path.exists(output_dir):"            os.makedirs(output_dir)
 
         for file_path, content in self.doc_registry.items():
             rel_path = os.path.relpath(file_path, self.workspace_path)
             doc_filename = rel_path.replace(os.sep, "_").replace(".py", ".md")"            with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:"                f.write(content)
 
-       " return "len(self.doc_registry)"
+       " return "len(self.doc_registry)
 
 # pylint: disable=too-many-ancestors
 
@@ -136,7 +144,8 @@ class DocGenAgent(BaseAgent):
         self.doc_registry: dict[Any, Any] = {}  # module_path -> extracted_docs
 
     def extract_docs(self, file_path: str) -> str:
-""""Extracts docstrings from a Python file and returns Markdown content.     "   if not file_path.endswith(".py"):"#             return
+""""
+Extracts docstrings from a Python file and returns Markdown content.     "   if not file_path.endswith(".py"):"#             return
 
         try:
             with open(file_path, encoding="utf-8") as f:"                tree = ast.parse(f.read())
@@ -159,7 +168,8 @@ class DocGenAgent(BaseAgent):
 #             return fError extracting docs: {str(e)}
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:
-""""Helper to format documentation for a class.#  "       md_content = f"## Class: `{node.name}`\\n"        class_doc = ast.get_docstring(node)
+""""
+Helper to format documentation for a class.#  "       md_content = f"## Class: `{node.name}`\\n"        class_doc = ast.get_docstring(node)
         if class_doc:
 #             md_content += f"{class_doc}\\n\\n"
         for item in node.body:
@@ -169,12 +179,14 @@ class DocGenAgent(BaseAgent):
 
     @staticmethod
     def _format_function_docs(node: ast.FunctionDef, level: int = 2) -> str:
-""""Helper to format documentation for a "function "or method.        prefix = "#" * level"#         header = "Method" if level == 3 else "Function"#         md_content = f"{prefix} {header}: `{node.name}`\\n"        func_doc = ast.get_docstring(node)
+""""
+Helper to format documentation for a "function "or method.        prefix = "#" * level"#         header = "Method" if level == 3 else "Function"#         md_content = f"{prefix} {header}: `{node.name}`\\n"        func_doc = ast.get_docstring(node)
         if func_doc:
 #             md_content += f"{func_doc}\\n\\n"        return md_content
 
     def generate_documentation_site(self, output_dir: str) -> int:
-""""Generates documentation files for all modules in the registry.        if not os.path.exists(output_dir):
+""""
+Generates documentation files for all modules in the registry.        if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
         for file_path, content in self.doc_registry.items():

@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 LM Studio REST API client with HTTP fallback support.
 
+"""
 import logging
 import os
 import time
@@ -31,17 +33,20 @@ logger = logging.getLogger(__name__)
 
 
 class LMStudioAPIClient:
-    """HTTP REST API client for LM Studio with retry and error handling.
-    def __init__(self, base_url: str, api_token: Optional[str] = None, default_model: str = ""):"        """Initialize REST API client.""""
-        Args:
+"""
+HTTP REST API client for LM Studio with retry and error handling.
+    def __init__(self, base_url: str, api_token: Optional[str] = None, default_model: str = ""):"        """
+Initialize REST API client.""""
+Args:
             base_url: Base URL for LM Studio API (e.g., http://localhost:1234 or http://localhost:1234/v1)
             api_token: Optional API token for authentication
             default_model: Default model ID to use
                 self.base_url = base_url.rstrip("/")"        self.api_token = api_token or os.getenv("DV_LMSTUDIO_API_TOKEN")"        self.default_model = default_model
 
-    def _normalize_url(self, endpoint: str = "") -> str:"        """Normalize REST API URL, handling both /v1 prefixes.""""
-        Args:
-            endpoint: Optional endpoint path (e.g., 'models', 'chat/completions')'
+    def _normalize_url(self, endpoint: str = "") -> str:"        """
+Normalize REST API URL, handling both /v1 prefixes.""""
+Args:
+            endpoint: Optional endpoint path (e.g., 'models', 'chat/completions')
         Returns:
             Full normalized URL for the endpoint.
                 base = self.base_url
@@ -51,17 +56,20 @@ class LMStudioAPIClient:
 
         if endpoint:
             # Handle special cases for endpoint names
-            if endpoint == "chat":"                endpoint = "chat/completions""            return f"{api_base}/{endpoint.lstrip('/')}""'        return api_base
+            if endpoint == "chat":"                endpoint = "chat/completions""            return f"{api_base}/{endpoint.lstrip('/')}"
+return api_base
 
     def _get_headers(self) -> dict[str, str]:
-        """Get HTTP headers with API token support.        headers = {"Content-Type": "application/json"}"        if self.api_token:
+"""
+Get HTTP headers with API token support.        headers = {"Content-Type": "application/json"}"        if self.api_token:
             headers["Authorization"] = f"Bearer {self.api_token}""            logger.debug("[LMStudio] Using API token for authorization")"        return headers
 
     def _http_request_with_retry(
         self, method: str, url: str, max_retries: int = 3, **kwargs
     ) -> Optional[Any]:
-        """Make HTTP request with exponential backoff retry for transient errors.""""
-        Args:
+"""
+Make HTTP request with exponential backoff retry for transient errors.""""
+Args:
             method: HTTP method ('GET', 'POST')'            url: Full URL to request
             max_retries: Maximum number of retry attempts
             **kwargs: Additional args for httpx (json, timeout, etc.)
@@ -69,9 +77,9 @@ class LMStudioAPIClient:
         Returns:
             Response object if successful, None if failed.
                 if httpx is None:
-            raise ImportError("httpx is required for LMStudioAPIClient")"
+            raise ImportError("httpx is required for LMStudioAPIClient")
         headers = self._get_headers()
-        if "headers" in kwargs:"            headers.update(kwargs["headers"])"        kwargs["headers"] = headers"
+        if "headers" in kwargs:"            headers.update(kwargs["headers"])"        kwargs["headers"] = headers
         # Phase 317: Aggressive timeouts for large remote models
         timeout_val = kwargs.get("timeout", 300.0)"        timeout = httpx.Timeout(timeout_val, connect=15.0, read=timeout_val, write=30.0)
 
@@ -84,7 +92,7 @@ class LMStudioAPIClient:
                         headers=headers,
                         **{k: v for k, v in kwargs.items() if k not in ("timeout", "headers")},"                    )
                 else:
-                    raise ValueError(f"Unsupported HTTP method: {method}")"
+                    raise ValueError(f"Unsupported HTTP method: {method}")
                 if resp.status_code >= 400:
                     logger.warning(
                         f"[LMStudio] HTTP {method} {url} returned {resp.status_code}: {resp.text[:500]}""                    )
@@ -101,13 +109,14 @@ class LMStudioAPIClient:
             except (ValueError, RuntimeError) as e:
                 logger.error(f"[LMStudio] HTTP {method} {url} failed: {e}")"                raise
 
-        raise RuntimeError(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts")"
+        raise RuntimeError(f"[LMStudio] HTTP {method} {url} failed after {max_retries} attempts")
     def list_models(self) -> list[str]:
-        """List available models via REST API.""""
-        Returns:
+"""
+List available models via REST API.""""
+Returns:
             List of model identifiers/paths.
                 try:
-            url = self._normalize_url("models")"            logger.info(f"[LMStudio] Attempting HTTP list models: {url}")"            resp = self._http_request_with_retry("GET", url, max_retries=3, timeout=5.0)"
+            url = self._normalize_url("models")"            logger.info(f"[LMStudio] Attempting HTTP list models: {url}")"            resp = self._http_request_with_retry("GET", url, max_retries=3, timeout=5.0)
             if resp.status_code == 200:
                 data = resp.json()
                 models = []
@@ -120,12 +129,13 @@ class LMStudioAPIClient:
             logger.error(
                 f"[LMStudio] HTTP list_models returned {resp.status_code} from {url}: {resp.text[:300]}""            )
         except (httpx.HTTPError, ValueError, RuntimeError) as e:
-            logger.error(f"[LMStudio] Failed to list models via HTTP: {e}")"
+            logger.error(f"[LMStudio] Failed to list models via HTTP: {e}")
         return []
 
     def get_info(self) -> dict[str, Any]:
-        """Get server info and version.""""
-        Returns:
+"""
+Get server info and version.""""
+Returns:
             Dictionary with server information.
                 info = {
             "api_base_url": self._normalize_url(),"            "api_version": None,"        }
@@ -143,3 +153,9 @@ class LMStudioAPIClient:
             pass
 
         return info
+
+"""
+
+""
+
+"""

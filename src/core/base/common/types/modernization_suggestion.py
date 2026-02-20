@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_coder.py"""
+"""
+"""
+Auto-extracted class from agent_coder.py""
 
+"""
 from dataclasses import dataclass
 
 try:
@@ -30,7 +33,8 @@ __version__ = VERSION
 
 @dataclass
 class ModernizationSuggestion:
-    """Suggestion to modernize deprecated API usage.
+"""
+Suggestion to modernize deprecated API usage.
 
     Attributes:
         old_api: The deprecated API being used.
@@ -38,8 +42,8 @@ class ModernizationSuggestion:
         deprecation_version: Version where the old API was deprecated.
         removal_version: Version where it will be removed.
         migration_guide: URL or text explaining migration.
-    """
-    old_api: str
+    ""
+old_api: str
     new_api: str
     deprecation_version: str
     removal_version: str | None = None

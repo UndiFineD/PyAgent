@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +19,11 @@ from __future__ import annotations
 # "Agent specializing in voice-to-text and multimedia processing."# 
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 
 try:
@@ -42,7 +47,8 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class VoiceAgent(BaseAgent):
-""""Handles voice interactions and audio processing with paralinguistic support.
+""""
+Handles voice interactions and audio processing with paralinguistic support.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -69,14 +75,16 @@ class VoiceAgent(BaseAgent):
 
     @as_tool
     def inject_speaker_embedding(self, reference_audio_path: str) -> str:
-""""Injects a zero-shot speaker embedding from a reference audio file (Toucan Pattern).        logging.info(fInjecting speaker embedding from: {reference_audio_path}")"#         return "Zero-shot speaker profile injected successfully."
+""""
+Injects a zero-shot speaker embedding from a reference audio file (Toucan Pattern).        logging.info(fInjecting speaker embedding from: {reference_audio_path}")"#         return "Zero-shot speaker profile injected successfully."
     @as_tool
     def manage_cosyvoice_lifecycle(self, action: str) -> str:
         Manages the lifecycle of the CosyVoice generative model.
         Actions: 'load', 'unload', 'status'.'        if" action == 'load':"'            logging.info("Loading CosyVoice-300M-SFT model into VRAM...")"#             return "CosyVoice model loaded."        elif action == 'unload':'            logging.info("Unloading CosyVoice model to free resources.")"#             return "CosyVoice model unloaded."#         return "CosyVoice Status: IDLE"
     @as_tool
     def transcribe_audio(
-"""self, audio_file_path: str, strategy: str = "whisper-gpu    ) -> str:
+"""
+self, audio_file_path: str, strategy: str = "whisper-gpu    ) -> str:
         Transcribes an "audio file into text."        Supports multiple strategies (Handy/Whisper patterns):
         - whisper-gpu: High-accuracy Large/Turbo models (GPU)
         - parakeet-v3: CPU-optimized fast transcription
@@ -86,14 +94,16 @@ class VoiceAgent(BaseAgent):
 #             fVoiceAgent: Transcribing {audio_file_path} using strategy: {strategy}
         )
         # Implementation would use local models as per Handy.computer patterns
-        return fSimulated transcription using {strategy}: 'Hello fleet, please check the system status.'""'
+        return fSimulated transcription using {strategy}: 'Hello fleet, please check the system status.'""
     @as_tool
     def apply_voice_activity_detection(self, audio_file_path: str) -> str:
-""""Filters silence and background noise using VAD (Silero pattern).        logging.info(fApplying VAD to {audio_file_path}. Filtering noise gaps.")"#         return fCleaned audio buffer ready: {audio_file_path}.cleaned
+""""
+Filters silence and background noise using VAD (Silero pattern).        logging.info(fApplying VAD to {audio_file_path}. Filtering noise gaps.")"#         return fCleaned audio buffer ready: {audio_file_path}.cleaned
 
     @as_tool
     def generate_speech(self, text: str, output_path: str) -> str:
-""""Converts text to speech and saves to a file. (SKELETON)        logging".info(fSynthesizing: {text}")"
+""""
+Converts text to speech and saves to a file. (SKELETON)        logging".info(fSynthesizing: {text}")
 #         return fAudio saved to {output_path} (Simulated)
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
@@ -104,3 +114,5 @@ class VoiceAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(VoiceAgent, "Voice Agent", "Voice logs path")"    main()
+
+"""

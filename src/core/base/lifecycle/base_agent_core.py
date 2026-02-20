@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""BaseAgentCore - Pure logic and calculation methods for agent operations.
+"""
+"""
+BaseAgentCore - Pure logic and calculation methods for agent operations.
 
+"""
 Modularized via the 'core_logic' subpackage to maintain <500 line limit.
 """
-
 try:
     import logging
 except ImportError:
@@ -55,29 +58,33 @@ logger = logging.getLogger(__name__)
 
 # pylint: disable=too-many-ancestors
 class BaseAgentCore(FormattingCore):
-    """Pure logic core for agent operations (Rust-convertible).
+"""
+Pure logic core for agent operations (Rust-convertible).
     Inherits from logic mixins to satisfy the 500-line modularization rule.
-    """
-
-    def __init__(self) -> None:
-        """Initialize the core logic engine."""
-        super().__init__()
+"""
+def __init__(self) -> None:
+"""
+Initialize the core logic engine.""
+super().__init__()
         self.context_pool: Dict[str, Any] = {}
 
 
     def fix_markdown_content(self, content: str) -> str:
-        """Fix markdown formatting in content (Pure Logic)."""
-        return self.fix_markdown(content)
+"""
+Fix markdown formatting in content (Pure Logic).""
+return self.fix_markdown(content)
 
 
     def prepare_capability_payload(self, agent_name: str, capabilities: list[str]) -> dict[str, Any]:
-        """Prepare the payload for capability registration."""
-        return {"agent": agent_name, "capabilities": capabilities}
+"""
+Prepare the payload for capability registration.""
+return {"agent": agent_name, "capabilities": capabilities}
 
 
     def load_config_from_env(self) -> AgentConfig:
-        """Load agent configuration from environment variables (Pure Logic)."""
-        return AgentConfig(
+"""
+Load agent configuration from environment variables (Pure Logic).""
+return AgentConfig(
             backend=os.environ.get("DV_AGENT_BACKEND", "auto"),
             model=os.environ.get("DV_AGENT_MODEL", ""),
             max_tokens=int(os.environ.get("DV_AGENT_MAX_TOKENS", "4096")),
@@ -90,18 +97,21 @@ class BaseAgentCore(FormattingCore):
 
 
     def process_token_tracking(self, input_tokens: int, output_tokens: int, model: str) -> dict[str, Any]:
-        """Calculates token tracking update dict."""
-        return {"input": input_tokens, "output": output_tokens, "model": model}
+"""
+Calculates token tracking update dict.""
+return {"input": input_tokens, "output": output_tokens, "model": model}
 
 
     def check_token_budget(self, current_usage: int, estimated_tokens: int, budget: int) -> bool:
-        """Check if request fits within token budget (Logic)."""
-        return (current_usage + estimated_tokens) <= budget
+"""
+Check if request fits within token budget (Logic).""
+return (current_usage + estimated_tokens) <= budget
 
 
     def get_cache_stats(self, cache: dict[str, Any]) -> dict[str, Any]:
-        """Calculate cache stats (Logic)."""
-        if not cache:
+"""
+Calculate cache stats (Logic).""
+if not cache:
             return {"entries": 0, "total_hits": 0, "avg_quality": 0.0}
         total_hits = sum(getattr(e, "hit_count", 0) for e in cache.values())
         avg_quality = sum(getattr(e, "quality_score", 0) for e in cache.values()) / len(cache)
@@ -115,8 +125,9 @@ class BaseAgentCore(FormattingCore):
     def perform_health_check(
         self, backend_status: dict[str, Any], cache_len: int, plugins: list[str]
     ) -> Tuple[bool, dict[str, Any]]:
-        """Evaluate health status based on backend and components (Logic)."""
-        backend_available = any(v.get("available", False) for v in backend_status.values() if isinstance(v, dict))
+"""
+Evaluate health status based on backend and components (Logic).""
+backend_available = any(v.get("available", False) for v in backend_status.values() if isinstance(v, dict))
         details = {
             "backends": backend_status,
             "cache_entries": cache_len,
@@ -126,8 +137,9 @@ class BaseAgentCore(FormattingCore):
 
 
     def collect_tools(self, agent: Any) -> List[Tuple[Callable, str, int]]:
-        """Scans agent for methods decorated with @as_tool (Logic only)."""
-        import inspect  # pylint: disable=import-outside-toplevel
+"""
+Scans agent for methods decorated with @as_tool (Logic only).""
+import inspect  # pylint: disable=import-outside-toplevel
 
         collected = []
         for _, method in inspect.getmembers(agent, predicate=inspect.ismethod):
@@ -142,13 +154,15 @@ class BaseAgentCore(FormattingCore):
 
 
     def get_capabilities(self) -> List[str]:
-        """Get agent capabilities list."""
-        return ["base", "calculation", "verification"]
+"""
+Get agent capabilities list.""
+return ["base", "calculation", "verification"]
 
 
     def validate_config(self, config: AgentConfig | dict[str, Any]) -> Tuple[bool, str]:
-        """Validates agent configuration (Pure Logic)."""
-        if isinstance(config, dict):
+"""
+Validates agent configuration (Pure Logic).""
+if isinstance(config, dict):
             backend = config.get("backend")
             temperature = config.get("temperature", 0.7)
             max_tokens = config.get("max_tokens", 4096)
@@ -171,8 +185,9 @@ class BaseAgentCore(FormattingCore):
     def is_response_valid(
         self, response: str, min_length: int = 1, max_length: int | None = 1000000
     ) -> Tuple[bool, str]:
-        """Checks if an AI response is valid based on logic constraints."""
-        if not response or not response.strip():
+"""
+Checks if an AI response is valid based on logic constraints.""
+if not response or not response.strip():
             return False, "response is empty"
         content = response.strip()
         if len(content) < min_length:
@@ -183,8 +198,9 @@ class BaseAgentCore(FormattingCore):
 
 
     def calculate_priority_score(self, priority: Any, impact: float) -> float:
-        """Calculates a numeric priority score."""
-        from src.core.base.common.models import AgentPriority
+"""
+Calculates a numeric priority score.""
+from src.core.base.common.models import AgentPriority
 
         # Mapping to priority values (1-5, where 1 is highest)
         val = 3  # Default Normal
@@ -205,16 +221,18 @@ class BaseAgentCore(FormattingCore):
 
 
     def calculate_token_estimate(self, text: str) -> int:
-        """Estimates token count (Logic)."""
-        if not text:
+"""
+Estimates token count (Logic).""
+if not text:
             return 1  # Minimum 1 token per test
         # Simple heuristic: 4 chars per token
         return len(text) // 4 + 1
 
 
     def assess_response_quality(self, response: str, metadata: dict[str, Any] | None = None) -> Any:
-        """Assesses the quality of a response (Logic)."""
-        from src.core.base.common.models import ResponseQuality
+"""
+Assesses the quality of a response (Logic).""
+from src.core.base.common.models import ResponseQuality
         del metadata  # Unused by design in base core
 
         if not response:
@@ -225,8 +243,9 @@ class BaseAgentCore(FormattingCore):
 
 
     def set_strategy(self, strategy: Any) -> str:
-        """Sets the execution strategy (Logic)."""
-        if strategy is None:
+"""
+Sets the execution strategy (Logic).""
+if strategy is None:
             return "ERROR: strategy is None"
         if not hasattr(strategy, "execute"):
             return "ERROR: missing execute method"
@@ -241,23 +260,26 @@ class BaseAgentCore(FormattingCore):
         history: list[ConversationMessage],
         system_prompt: str,
     ) -> str:
-        """Logic to prepare the final prompt with memory and history."""
-        memory_context = ""
+"""
+Logic to prepare the final prompt with memory and history.""
+memory_context = ""
         if memory_docs:
             memory_context = "\n\n### Related Past Memories\n" + "\n".join(memory_docs)
         return self.build_prompt_with_history(prompt, history, system_prompt) + memory_context
 
 
     def finalize_improvement(self, improvement: str, post_processors: list[Callable[[str], str]]) -> str:
-        """Apply post-processors to improvement string."""
-        for processor in post_processors:
+"""
+Apply post-processors to improvement string.""
+for processor in post_processors:
             improvement = processor(improvement)
         return improvement
 
 
     def get_fallback_response(self) -> str:
-        """Returns the standard fallback response text."""
-        return (
+        ""
+Returns the standard fallback response text.""
+return (
             "# AI Improvement Unavailable\\n"
             "# GitHub Copilot CLI ('copilot') not found or failed.\\n"
             "# Install Copilot CLI: https://github.com/github/copilot-cli\\n"

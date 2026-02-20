@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: environment_mixin
+"""
+"""
+Module: environment_mixin
 Provides environment management capabilities to agents.
 """
 
+"""
 import logging
 import os
 from contextlib import asynccontextmanager
@@ -34,20 +38,22 @@ logger = logging.getLogger(__name__)
 
 
 class EnvironmentMixin:
-    """Mixin providing environment management capabilities to agents.
+"""
+Mixin providing environment management capabilities to agents.
     Allows agents to create and manage isolated execution environments.
-    """
-
-    def __init__(self, *args, **kwargs):
-        """Initialize environment mixin."""
-        super().__init__(*args, **kwargs)
+"""
+def __init__(self, *args, **kwargs):
+"""
+Initialize environment mixin.""
+super().__init__(*args, **kwargs)
         self._env_manager = None
         self._active_environments: Dict[str, EnvironmentInstance] = {}
 
 
     async def _get_env_manager(self):
-        """Get the environment manager instance."""
-        if self._env_manager is None:
+"""
+Get the environment manager instance.""
+if self._env_manager is None:
             self._env_manager = await get_environment_manager()
         return self._env_manager
 
@@ -64,8 +70,9 @@ class EnvironmentMixin:
         ttl_seconds: int = 1800,
         **kwargs
     ) -> EnvironmentConfig:
-        """Create a new environment configuration."""
-        config = EnvironmentConfig(
+"""
+Create a new environment configuration.""
+config = EnvironmentConfig(
             name=name,
             version=version,
             description=description,
@@ -91,8 +98,9 @@ class EnvironmentMixin:
         env_version: str = "1.0.0",
         custom_config: Optional[Dict[str, Any]] = None
     ):
-        """Context manager for using an environment instance."""
-        manager = await self._get_env_manager()
+"""
+Context manager for using an environment instance.""
+manager = await self._get_env_manager()
 
         async with manager.create_instance(env_name, env_version, custom_config) as instance:
             self._active_environments[instance.id] = instance
@@ -103,20 +111,23 @@ class EnvironmentMixin:
 
 
     async def list_available_environments(self) -> list[EnvironmentConfig]:
-        """List all available environment configurations."""
-        manager = await self._get_env_manager()
+"""
+List all available environment configurations.""
+manager = await self._get_env_manager()
         return await manager.list_environments()
 
 
     async def get_environment_status(self, instance_id: str) -> Optional[EnvironmentInstance]:
-        """Get the status of an environment instance."""
-        manager = await self._get_env_manager()
+"""
+Get the status of an environment instance.""
+manager = await self._get_env_manager()
         return await manager.get_instance(instance_id)
 
 
     async def cleanup_environments(self) -> None:
-        """Clean up all active environments for this agent."""
-        for instance_id in list(self._active_environments.keys()):
+"""
+Clean up all active environments for this agent.""
+for instance_id in list(self._active_environments.keys()):
             try:
                 manager = await self._get_env_manager()
                 await manager._terminate_instance(instance_id)
@@ -130,8 +141,9 @@ class EnvironmentMixin:
         instance_id: str,
         operation: callable
     ) -> Any:
-        """Switch to a specific environment context for an operation."""
-        instance = self._active_environments.get(instance_id)
+"""
+Switch to a specific environment context for an operation.""
+instance = self._active_environments.get(instance_id)
         if not instance:
             raise ValueError(f"Environment instance {instance_id} not active")
         # TODO: Implement context switching logic

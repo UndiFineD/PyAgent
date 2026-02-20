@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.parsers.tool_parser import ToolCall, ExtractedToolCalls, StreamingToolCallDelta, ToolParser, JSONToolParser, XMLToolParser, ToolParserManager, tool_parser, extract_tool_calls

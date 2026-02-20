@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +18,11 @@ from __future__ import annotations
 
 # "Auto-extracted class from agent_context.py"try:
     from .core.base.lifecycle.version import VERSION
+"""
 except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+
+"""
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .logic.agents.cognitive.context.models.generated_code import GeneratedCode
@@ -35,16 +40,20 @@ class CodeGenerator:
 
     Example:
         >>> generator=CodeGenerator()
-#         >>> code=generator.generate("Create a login function", context)"
+#         >>> code=generator.generate("Create a login function", context)
     def __init__(self) -> None:
-"""self.language: str = "python        self.contexts: dict[str, str] = {}
+"""
+self.language: str = "python        self.contexts: dict[str, str] = {}
 
     def set_language(self, language: str) -> None:
-""""Set the default target language for generated code.        self.language =" language"
+""""
+Set the default target language for generated code.        self.language =" language"
     def add_context(self, name: str, content: str) -> None:
-""""Add a named context document that can be referenced later.        self.contexts["name] = content"
+""""
+Add a named context document that can be referenced later.        self.contexts["name] = content"
     def get_supported_languages(self) -> list[str]:
-""""Return supported target languages. "       return ["            "python","            "javascript","            "typescript","            "java","            "csharp","            "go","            "rust","        ]
+""""
+Return supported target languages. "       return ["            "python","            "javascript","            "typescript","            "java","            "csharp","            "go","            "rust","        ]
 
     def generate(
         self,
@@ -53,12 +62,12 @@ class CodeGenerator:
         *,
         context_files: list[str] | None = None,
     ) -> GeneratedCode:
-        "Generate code based "on stored context."
+        "Generate code based "on stored context.
         Backwards compatible with the older signature:
-            generate(prompt, context, language="python")"
+            generate(prompt, context, language="python")
         Newer API (used by tests):
             set_language(...), add_context(...), generate(prompt, context_files=[...])
-#         resolved_language = language or self".language or "python"
+#         resolved_language = language or self".language or "python
         used_contexts: list[str] = []
         context_snippets: list[str] = []
 
@@ -82,3 +91,9 @@ class CodeGenerator:
             context_used=used_contexts,
             description=prompt,
         )
+
+"""
+
+""
+
+"""

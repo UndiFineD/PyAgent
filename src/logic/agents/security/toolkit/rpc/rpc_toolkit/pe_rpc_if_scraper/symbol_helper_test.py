@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from logic.agents.security.toolkit.rpc.rpc_toolkit.pe_rpc_if_scraper.symbol_helper import *

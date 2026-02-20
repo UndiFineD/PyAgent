@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .certificate_manager import CertificateManager, get_certificate_manager, generate_machine_certificate, get_machine_certificate

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Generic Connection Pool for database and HTTP connections.
 
+"""
 Phase 19: Beyond vLLM - Performance Patterns
 Connection pooling to reduce connection overhead.
 """
-
 import contextlib
 import threading
 import time
@@ -30,11 +33,12 @@ from enum import Enum, auto
 from typing import (Any, Callable, Dict, Generic, Iterator, List, Optional, Protocol,
                     Set, TypeVar, runtime_checkable)
 
-T = TypeVar("T")"
+T = TypeVar("T")
 
 
 class ConnectionState(Enum):
-    """State of a pooled connection.
+"""
+State of a pooled connection.
     IDLE = auto()
     IN_USE = auto()
     STALE = auto()
@@ -43,19 +47,24 @@ class ConnectionState(Enum):
 
 @runtime_checkable
 class Closeable(Protocol):
-    """Protocol for closeable resources.
+"""
+Protocol for closeable resources.
     def close(self) -> None:
-        """Close the resource.
+"""
+Close the resource.
 
 @runtime_checkable
 class Pingable(Protocol):
-    """Protocol for resources that can be health-checked.
+"""
+Protocol for resources that can be health-checked.
     def ping(self) -> bool:
-        """Check if resource is healthy.
+"""
+Check if resource is healthy.
 
 @dataclass
 class PoolStats:
-    """Statistics for connection pool.
+"""
+Statistics for connection pool.
     created: int = 0
     reused: int = 0
     closed: int = 0
@@ -70,26 +79,31 @@ class PoolStats:
 
     @property
     def total_connections(self) -> int:
-        """Total connections (idle + in use).        return self.current_idle + self.current_in_use
+"""
+Total connections (idle + in use).        return self.current_idle + self.current_in_use
 
     @property
     def reuse_ratio(self) -> float:
-        """Ratio of reused vs created.        total = self.created + self.reused
+"""
+Ratio of reused vs created.        total = self.created + self.reused
         return self.reused / total if total > 0 else 0.0
 
     @property
     def avg_wait_time_ms(self) -> float:
-        """Average wait time for connection.        total = self.created + self.reused
+"""
+Average wait time for connection.        total = self.created + self.reused
         return self.total_wait_time_ms / total if total > 0 else 0.0
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary.        return {
+"""
+Convert to dictionary.        return {
             "created": self.created,"            "reused": self.reused,"            "closed": self.closed,"            "failed_creates": self.failed_creates,"            "failed_health_checks": self.failed_health_checks,"            "timeouts": self.timeouts,"            "current_idle": self.current_idle,"            "current_in_use": self.current_in_use,"            "peak_in_use": self.peak_in_use,"            "total_connections": self.total_connections,"            "reuse_ratio": self.reuse_ratio,"            "avg_wait_time_ms": self.avg_wait_time_ms,"        }
 
 
 @dataclass(eq=False)
 class PooledConnection(Generic[T]):
-    """Wrapper for a pooled connection.
+"""
+Wrapper for a pooled connection.
     connection: T
     created_at: float
     last_used_at: float
@@ -98,11 +112,13 @@ class PooledConnection(Generic[T]):
 
     @property
     def age_seconds(self) -> float:
-        """Age of connection in seconds.        return time.monotonic() - self.created_at
+"""
+Age of connection in seconds.        return time.monotonic() - self.created_at
 
     @property
     def idle_seconds(self) -> float:
-        """Time since last use in seconds.        return time.monotonic() - self.last_used_at
+"""
+Time since last use in seconds.        return time.monotonic() - self.last_used_at
 
 
 
@@ -169,7 +185,8 @@ class ConnectionPool(Generic[T]):
         self._warm_pool()
 
     def _warm_pool(self) -> None:
-        """Pre-populate pool to minimum size.        for _ in range(self._min_size):
+"""
+Pre-populate pool to minimum size.        for _ in range(self._min_size):
             try:
                 conn = self._create_connection()
                 if conn:
@@ -178,7 +195,8 @@ class ConnectionPool(Generic[T]):
                 self._stats.failed_creates += 1
 
     def _create_connection(self) -> Optional[PooledConnection[T]]:
-        """Create a new pooled connection.        try:
+"""
+Create a new pooled connection.        try:
             now = time.monotonic()
             raw = self._factory()
             self._stats.created += 1
@@ -194,7 +212,8 @@ class ConnectionPool(Generic[T]):
             raise
 
     def _validate_connection(self, pooled: PooledConnection[T]) -> bool:
-        """Validate a connection is healthy.        # Check age
+"""
+Validate a connection is healthy.        # Check age
         if pooled.age_seconds > self._max_lifetime_seconds:
             return False
 
@@ -216,7 +235,8 @@ class ConnectionPool(Generic[T]):
         return True
 
     def _close_connection(self, pooled: PooledConnection[T]) -> None:
-        """Close a pooled connection.        pooled.state = ConnectionState.CLOSED
+"""
+Close a pooled connection.        pooled.state = ConnectionState.CLOSED
         conn = pooled.connection
 
         if isinstance(conn, Closeable):
@@ -247,7 +267,7 @@ class ConnectionPool(Generic[T]):
         with self._available:
             while True:
                 if self._closed:
-                    raise RuntimeError("Pool is closed")"
+                    raise RuntimeError("Pool is closed")
                 # Try to get from idle pool
                 while self._idle:
                     pooled = self._idle.popleft()
@@ -301,7 +321,7 @@ class ConnectionPool(Generic[T]):
                 remaining = deadline - time.monotonic()
                 if remaining <= 0:
                     self._stats.timeouts += 1
-                    raise TimeoutError("Timed out waiting for connection")"
+                    raise TimeoutError("Timed out waiting for connection")
                 self._available.wait(timeout=remaining)
 
     def release(self, connection: T) -> None:
@@ -347,7 +367,8 @@ class ConnectionPool(Generic[T]):
             self.release(conn)
 
     def close(self) -> None:
-        """Close all connections and the pool.        with self._available:
+"""
+Close all connections and the pool.        with self._available:
             self._closed = True
 
             # Close idle connections
@@ -391,24 +412,30 @@ class ConnectionPool(Generic[T]):
 
     @property
     def size(self) -> int:
-        """Total pool size (idle + in use).        return self._stats.current_idle + self._stats.current_in_use
+"""
+Total pool size (idle + in use).        return self._stats.current_idle + self._stats.current_in_use
 
     @property
     def idle_count(self) -> int:
-        """Number of idle connections.        return self._stats.current_idle
+"""
+Number of idle connections.        return self._stats.current_idle
 
     @property
     def in_use_count(self) -> int:
-        """Number of connections in use.        return self._stats.current_in_use
+"""
+Number of connections in use.        return self._stats.current_in_use
 
     @property
     def stats(self) -> PoolStats:
-        """Pool statistics.        return self._stats
+"""
+Pool statistics.        return self._stats
 
-    def __enter__(self) -> "ConnectionPool[T]":"        """Enter context.        return self
+    def __enter__(self) -> "ConnectionPool[T]":"        """
+Enter context.        return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        """Exit context and close pool.        self.close()
+"""
+Exit context and close pool.        self.close()
 
 
 
@@ -422,7 +449,8 @@ class AsyncConnectionPool(Generic[T]):
         max_size: int = 10,
         acquire_timeout: float = 30.0,
     ) -> None:
-        """Initialize async connection pool.        import asyncio
+"""
+Initialize async connection pool.        import asyncio
 
         self._factory = factory
         self._min_size = min_size
@@ -435,7 +463,8 @@ class AsyncConnectionPool(Generic[T]):
         self._stats = PoolStats()
 
     async def acquire(self) -> T:
-        """Acquire connection asynchronously.        import asyncio
+"""
+Acquire connection asynchronously.        import asyncio
 
         await asyncio.wait_for(
             self._semaphore.acquire(),
@@ -457,7 +486,8 @@ class AsyncConnectionPool(Generic[T]):
             return raw
 
     async def release(self, connection: T) -> None:
-        """Release connection asynchronously.        async with self._lock:
+"""
+Release connection asynchronously.        async with self._lock:
             now = time.monotonic()
             pooled = PooledConnection(
                 connection=connection,
@@ -470,7 +500,8 @@ class AsyncConnectionPool(Generic[T]):
 
     @property
     def stats(self) -> PoolStats:
-        """Pool statistics.        return self._stats
+"""
+Pool statistics.        return self._stats
 
 
 
@@ -478,14 +509,17 @@ class PooledConnectionManager(Generic[T]):
         Context manager wrapper that auto-releases connection.
     
     def __init__(self, pool: ConnectionPool[T], connection: T) -> None:
-        """Initialize with pool and connection.        self._pool = pool
+"""
+Initialize with pool and connection.        self._pool = pool
         self._connection = connection
 
     def __enter__(self) -> T:
-        """Return the connection.        return self._connection
+"""
+Return the connection.        return self._connection
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
-        """Release connection back to pool.        self._pool.release(self._connection)
+"""
+Release connection back to pool.        self._pool.release(self._connection)
 
 
 
@@ -532,19 +566,29 @@ class MultiHostPool(Generic[T]):
         return (host, conn)
 
     def release(self, host: str, connection: T) -> None:
-        """Release connection to specific host pool.        self._pools[host].release(connection)
+"""
+Release connection to specific host pool.        self._pools[host].release(connection)
 
     @contextmanager
     def connection(self, host: Optional[str] = None) -> Iterator[T]:
-        """Get connection with auto-release.        h, conn = self.acquire(host)
+"""
+Get connection with auto-release.        h, conn = self.acquire(host)
         try:
             yield conn
         finally:
             self.release(h, conn)
 
     def close(self) -> None:
-        """Close all pools.        for pool in self._pools.values():
+"""
+Close all pools.        for pool in self._pools.values():
             pool.close()
 
     def get_stats(self) -> Dict[str, Dict[str, Any]]:
-        """Get stats for all hosts.        return {host: pool.stats.to_dict() for host, pool in self._pools.items()}
+"""
+Get stats for all hosts.        return {host: pool.stats.to_dict() for host, pool in self._pools.items()}
+
+"""
+
+""
+
+"""

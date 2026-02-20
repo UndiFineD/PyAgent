@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Google TPU platform implementation.
 """
 
+"""
 import contextlib
 from typing import List, Set
 
@@ -30,7 +34,8 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 
 
 class TpuPlatform(Platform):
-    """Google TPU platform implementation.
+"""
+Google TPU platform implementation.
     @classmethod
     def get_platform_type(cls) -> PlatformType:
         return PlatformType.TPU
@@ -56,7 +61,7 @@ class TpuPlatform(Platform):
         return DeviceCapability(major=4, minor=0)
 
     def get_device_name(self, device_id: int = 0) -> str:
-        return f"TPU-v4-{device_id}""
+        return f"TPU-v4-{device_id}"
     def get_memory_info(self, device_id: int = 0) -> MemoryInfo:
         total = 32 * (1024**3)
         return MemoryInfo(total_bytes=total, free_bytes=total, used_bytes=0, reserved_bytes=0)
@@ -84,4 +89,4 @@ class TpuPlatform(Platform):
         return AttentionBackend.TPU
 
     def is_quantization_supported(self, quant_type: str) -> bool:
-        return quant_type == "none" or quant_type == "int8""
+        return quant_type == "none" or quant_type == "int8"

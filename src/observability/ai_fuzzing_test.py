@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Test suite for Brainstorm AI Fuzzing (Phase 324)
 Tests AI-powered fuzzing engine and learning-based path discovery.
 
+"""
 try:
     import pytest
 except ImportError:
@@ -34,10 +36,12 @@ except ImportError:
 
 
 class TestAIFuzzing:
-    """Test cases for AI fuzzing implementation.
+"""
+Test cases for AI fuzzing implementation.
     @pytest.fixture
     def fuzzing_engine(self):
-        """Mock fuzzing engine for testing.        mock_engine = Mock()
+"""
+Mock fuzzing engine for testing.        mock_engine = Mock()
         mock_engine.discover_paths.return_value = ["path1", "path2"]"        def fuzz_target_side_effect(target, **kwargs):
             if not target:
                 raise ValueError("Invalid target")"            return {"vulnerabilities": [], "timed_out": kwargs.get("timeout", 0.001) == 0.001}"        mock_engine.fuzz_target.side_effect = fuzz_target_side_effect

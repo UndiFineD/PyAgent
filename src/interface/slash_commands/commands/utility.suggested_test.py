@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.slash_commands.commands.utility.suggested import cmd_tokens, cmd_uuid, cmd_random, cmd_choice, cmd_hash, cmd_base64, cmd_length, cmd_help, cmd_echo, cmd_upper, cmd_lower

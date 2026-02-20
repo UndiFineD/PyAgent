@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Multimodal caching sub-package.
+"""
+"""
+Multimodal caching sub-package.
 try:
-    from .base import MultiModalCache  # noqa: F401
+
+"""
+from .base import MultiModalCache  # noqa: F401
 except ImportError:
     from .base import MultiModalCache # noqa: F401
 

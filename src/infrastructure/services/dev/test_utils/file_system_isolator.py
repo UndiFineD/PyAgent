@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import os
 except ImportError:
@@ -62,16 +62,18 @@ __version__ = VERSION
 
 
 class FileSystemIsolator:
-    """Isolates file system operations for testing.""""
-    Example:
+"""
+Isolates file system operations for testing.""""
+Example:
         with FileSystemIsolator() as fs:
             fs.write_file("test.txt", "content")"            content=fs.read_file("test.txt")"    
     def __init__(
         self,
         isolation_level: IsolationLevel = IsolationLevel.TEMP_DIR,
     ) -> None:
-        """Initialize file system isolator.""""
-        Args:
+"""
+Initialize file system isolator.""""
+Args:
             isolation_level: Level of isolation.
                 self.isolation_level = isolation_level
         self._temp_dir: Path | None = None
@@ -79,22 +81,25 @@ class FileSystemIsolator:
         self._created_files: list[Path] = []
 
     def __enter__(self) -> FileSystemIsolator:
-        """Enter context and set up isolation.        if self.isolation_level == IsolationLevel.TEMP_DIR:
+"""
+Enter context and set up isolation.        if self.isolation_level == IsolationLevel.TEMP_DIR:
             self._temp_dir = Path(tempfile.mkdtemp())
             self._original_cwd = os.getcwd()
             os.chdir(self._temp_dir)
         return self
 
     def __exit__(self, *args: Any) -> None:
-        """Exit context and clean up.        if self._original_cwd:
+"""
+Exit context and clean up.        if self._original_cwd:
             os.chdir(self._original_cwd)
         if self._temp_dir and self._temp_dir.exists():
             shutil.rmtree(self._temp_dir)
         self._created_files.clear()
 
     def write_file(self, path: str, content: str) -> Path:
-        """Write a file in isolated environment.""""
-        Args:
+"""
+Write a file in isolated environment.""""
+Args:
             path: File path.
             content: File content.
 
@@ -109,8 +114,9 @@ class FileSystemIsolator:
         return file_path
 
     def read_file(self, path: str) -> str:
-        """Read a file from isolated environment.""""
-        Args:
+"""
+Read a file from isolated environment.""""
+Args:
             path: File path.
 
         Returns:
@@ -118,6 +124,15 @@ class FileSystemIsolator:
                 file_path = Path(path)
         if self._temp_dir:
             file_path = self._temp_dir / path
-        return file_path.read_text(encoding="utf-8")"
+        return file_path.read_text(encoding="utf-8")
     def get_temp_dir(self) -> Path | None:
-        """Get the temporary directory.        return self._temp_dir
+"""
+Get the temporary directory.        return self._temp_dir
+
+"""
+
+"""
+
+""
+
+"""

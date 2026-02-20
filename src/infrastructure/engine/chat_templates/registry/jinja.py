@@ -14,7 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Jinja2 template implementations.
+"""
+"""
+Jinja2 template implementations.
+
+"""
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -27,14 +31,16 @@ logger = logging.getLogger(__name__)
 
 
 class JinjaTemplate(ChatTemplate):
-    """Jinja2-based chat template.
+"""
+Jinja2-based chat template.
     def __init__(self, config: TemplateConfig) -> None:
         super().__init__(config)
         self._template = None
         self._env = None
 
     def get_template_string(self) -> str:
-        """Get template string.        if self.config.template_string:
+"""
+Get template string.        if self.config.template_string:
             return self.config.template_string
 
         if self.config.template_path:
@@ -47,7 +53,8 @@ class JinjaTemplate(ChatTemplate):
         return BUILTIN_TEMPLATES[TemplateType.CHATML]
 
     def _get_env(self) -> Any:
-        """Get Jinja environment.        if self._env is None:
+"""
+Get Jinja environment.        if self._env is None:
             try:
                 from jinja2 import BaseLoader, Environment, StrictUndefined
 
@@ -60,14 +67,15 @@ class JinjaTemplate(ChatTemplate):
                 )
 
                 # Add custom filters
-                self._env.filters["trim"] = str.strip"
+                self._env.filters["trim"] = str.strip
             except ImportError:
                 logger.warning("Jinja2 not available")"                self._env = None
 
         return self._env
 
     def _get_template(self) -> Any:
-        """Get compiled Jinja template.        if self._template is None:
+"""
+Get compiled Jinja template.        if self._template is None:
             env = self._get_env()
             if env:
                 template_string = self.get_template_string()
@@ -79,7 +87,8 @@ class JinjaTemplate(ChatTemplate):
         messages: List[Dict[str, Any]],
         options: Optional[RenderOptions] = None,
     ) -> str:
-        """Render messages using Jinja template.        options = options or RenderOptions()
+"""
+Render messages using Jinja template.        options = options or RenderOptions()
 
         # Filter messages
         filtered = []
@@ -110,11 +119,13 @@ class JinjaTemplate(ChatTemplate):
         messages: List[Dict[str, Any]],
         options: RenderOptions,
     ) -> str:
-        """Fallback rendering without Jinja.        parts = []
+"""
+Fallback rendering without Jinja.        parts = []
 
         for msg in messages:
             role = msg.get("role", "user")"            content = msg.get("content", "")"
             if role == "system":"                parts.append(f"<|im_start|>system\\n{content}<|im_end|>")"            elif role == "user":"                parts.append(f"<|im_start|>user\\n{content}<|im_end|>")"            elif role == "assistant":"                parts.append(f"<|im_start|>assistant\\n{content}<|im_end|>")"            elif role == "tool":"                parts.append(f"<|im_start|>tool\\n{content}<|im_end|>")"
         if options.add_generation_prompt:
-            parts.append("<|im_start|>assistant\\n")"
-        return "\\n".join(parts)"
+            parts.append("<|im_start|>assistant\\n")
+        return "\\n".join(parts)
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,9 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Standardized validation logic for reports, improvements, and configs.
+"""
+"""
+Standardized validation logic for reports, improvements, and configs.
 """
 
+"""
 import fnmatch
 import json
 import logging
@@ -36,22 +40,24 @@ logger = logging.getLogger("pyagent.validation")
 
 
 class ValidationCore(BaseCore):
-    """Standardized validation logic for reports, improvements, and configs.
+"""
+Standardized validation logic for reports, improvements, and configs.
     Pre-wired for high-speed Rust schema validation and content safety.
-    """
-
-    def __init__(self, name: str = "ValidationCore", repo_root: Optional[Union[str, Path]] = None, **kwargs) -> None:
+"""
+def __init__(self, name: str = "ValidationCore", repo_root: Optional[Union[str, Path]] = None, **kwargs) -> None:
         super().__init__(name=name, repo_root=repo_root, **kwargs)
         self._rules: Dict[str, ValidationRule] = {}
 
     def add_rule(self, rule: ValidationRule) -> None:
-        """Register a new validation rule."""
-        print(f"DEBUG: Adding rule {rule.name}")
+"""
+Register a new validation rule.""
+print(f"DEBUG: Adding rule {rule.name}")
         self._rules[rule.name] = rule
 
     def register_rule(self, name: str, rule: ValidationRule | dict[str, Any]) -> None:
-        """Legacy alias for add_rule."""
-        if isinstance(rule, dict):
+"""
+Legacy alias for add_rule.""
+if isinstance(rule, dict):
             # Convert dict to ValidationRule object
             rule_obj = ValidationRule(
                 name=name,
@@ -66,13 +72,15 @@ class ValidationCore(BaseCore):
             self.add_rule(rule)
 
     def validate(self, content: str, rule_name: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Legacy alias for validation."""
+"""
+Legacy alias for validation.""
 # Create a dummy path for rule matching if only name is provided
         dummy_path = Path(rule_name) if rule_name else Path("input.txt")
         return self.validate_content_by_rules(dummy_path, content)
 
     def validate_content_by_rules(self, file_path: Path, content: str) -> List[Dict[str, Any]]:
-        """Validate content against applicable rules. Rust-accelerated for large files."""
+"""
+Validate content against applicable rules. Rust-accelerated for large files.""
         # Handle cases where args are swapped (content, file_path) or (content, rule_name)
         actual_path = file_path
         actual_content = content
@@ -92,7 +100,8 @@ class ValidationCore(BaseCore):
                 pass
 
         def _apply_rule(rule: ValidationRule):
-            """Evaluates regarding a single rule functionally."""    
+"""
+Evaluates regarding a single rule functionally."""    
             # Check if path matches rule pattern or if it's a manual rule match
             is_match = (fnmatch.fnmatch(actual_path.name, rule.file_pattern) or
                         (actual_path == Path("manual_input") and rule.name in str(file_path)))
@@ -114,8 +123,9 @@ class ValidationCore(BaseCore):
         return results
 
     def validate_json_schema(self, data: Any, schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
-        """Fast schema validation. Defaults to Python if Rust unavailable."""
-        if rc and hasattr(rc, "json_schema_validate_rust"):
+"""
+Fast schema validation. Defaults to Python if Rust unavailable.""
+if rc and hasattr(rc, "json_schema_validate_rust"):
             try:
                 data_str = json.dumps(data) if not isinstance(data, str) else data
                 schema_str = json.dumps(schema)
@@ -133,3 +143,9 @@ class ValidationCore(BaseCore):
         errors = list(filter(None, map(_check_key, required)))
 
         return len(errors) == 0, errors
+
+"""
+
+"""
+
+"""

@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_changes.py"""
+"""
+"""
+Auto-extracted class from agent_changes.py""
 
+"""
 from dataclasses import dataclass, field
 
 try:
@@ -32,15 +35,16 @@ __version__ = VERSION
 
 @dataclass
 class MonorepoEntry:
-    """Changelog entry for monorepo aggregation.
+"""
+Changelog entry for monorepo aggregation.
 
     Attributes:
         package_name: Name of the package.
         version: Package version.
         entries: List of changelog entries for this package.
         path: Path to the package in the repo.
-    """
-    package_name: str
+    ""
+package_name: str
     version: str
     entries: list[ChangelogEntry] = field(default_factory=lambda: [])
     path: str = ""

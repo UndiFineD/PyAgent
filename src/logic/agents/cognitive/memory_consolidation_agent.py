@@ -16,8 +16,11 @@
 
 try:
     from .core.base.lifecycle.version import VERSION
+"""
 except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+
+"""
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .core.base.lifecycle.base_agent import BaseAgent
@@ -47,7 +50,8 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class MemoryConsolidationAgent(BaseAgent):
-""""Refines project knowledge by analyzing past interactions and outcomes from federated shards.
+""""
+Refines project knowledge by analyzing past interactions and outcomes from federated shards.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -57,10 +61,12 @@ class MemoryConsolidationAgent(BaseAgent):
 #             "You are the Memory Consolidation Agent."#             "Your task is to review federated DiskCache memory shards and extract long-term value."#             "1. Merge duplicate interactions into high-level factual summaries."#             "2. Identify successful patterns and turn them into best practices."#             "3. Prune redundant episodic data from local shards."        )
 
     def _get_default_content(self) -> str:
-"""return "# Memory Consolidation Log\\n\\n## Status\\nReady for federated consolidation.\\n
+"""
+return "# Memory Consolidation Log\\n\\n## Status\\nReady for federated consolidation.\\n
     @as_tool
     def consolidate_all(self) -> str:
-""""Performs a full review of all federated memory shards.        # Querying for common themes across federation
+""""
+Performs a full review of all federated memory shards.        # Querying for common themes across federation
         recent_memories = self.ltm.federated_query(
             ", n_results=100"        )  # Empty query to get general recent ones
         if not recent_memories:
@@ -84,7 +90,7 @@ class MemoryConsolidationAgent(BaseAgent):
 
             # Extraction logic (Enhanced for Phase 151)
             if "version" in task:"                version_val = content.split()[-1]
-                self.context_engine.add_fact("project_version_recorded", version_val)"
+                self.context_engine.add_fact("project_version_recorded", version_val)
                 new_facts += 1
 
             if "error" in task or "failed" in task:"                if "import" in task:"                    self.context_engine.add_constraint(
@@ -96,7 +102,7 @@ class MemoryConsolidationAgent(BaseAgent):
 
         self.context_engine.save()
         report = (
-#             f"✅ Consolidation complete. Shards scanned."#             fExtracted {new_facts} facts, {new_insights} insights.
+#             f" Consolidation complete. Shards scanned."#             fExtracted {new_facts} facts, {new_insights} insights.
 #             fDeduplicated {deduplicated} items.
         )
         logging.info(report)
@@ -109,3 +115,5 @@ class MemoryConsolidationAgent(BaseAgent):
 if __name__ == "__main__":"    main = create_main_function(
 #         MemoryConsolidationAgent, "MemoryConsolidation Agent", "Consolidation Task"    )
     main()
+
+"""

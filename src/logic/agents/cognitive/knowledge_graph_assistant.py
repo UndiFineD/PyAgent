@@ -13,25 +13,32 @@
 # limitations under the License.
 
 
-"""Assistant for managing the knowledge graph and impact radius."""
+"""
+"""
+Assistant for managing the knowledge graph and impact radius.""
 try:
-    from typing import Set
+
+"""
+from typing import Set
 except ImportError:
     from typing import Set
 
 class KnowledgeGraphAssistant:
-    """Handles backlinks, dependency tracking, and graph visualization."""
-    def __init__(self, workspace_root: str) -> None:
+"""
+Handles backlinks, dependency tracking, and graph visualization.""
+def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
 
     def get_impact_radius(self, query: str) -> Set[str]:
-        """Calculates which modules might be impacted by a change."""
-        _ = query
+"""
+Calculates which modules might be impacted by a change.""
+_ = query
         return set()
 
     def find_backlinks(self, target_file: str, index: dict[str, list[str]]) -> list[str]:
-        """Finds all files in the index that reference the target_file."""
-        backlinks = []
+"""
+Finds all files in the index that reference the target_file.""
+backlinks = []
         target_name = target_file.split(".")[0]  # Support WikiStyle [[Note]] matches [[Note.md]]
         for source_file, symbols in index.items():
             for symbol in symbols:
@@ -40,8 +47,9 @@ class KnowledgeGraphAssistant:
         return backlinks
 
     def generate_mermaid(self, index: dict[str, list[str]]) -> str:
-        """Exports the current knowledge graph as a Mermaid string."""
-        from pathlib import Path
+"""
+Exports the current knowledge graph as a Mermaid string.""
+from pathlib import Path
         lines = ["graph TD"]
         # Track edge combinations to prevent duplicates
         edges = set()
@@ -56,5 +64,6 @@ class KnowledgeGraphAssistant:
         return "\n".join(lines)
 
     def generate_mermaid_graph(self) -> str:
-        """Compatibility wrapper returning an empty graph."""
-        return self.generate_mermaid({})
+"""
+Compatibility wrapper returning an empty graph.""
+return self.generate_mermaid({})

@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
-"""Governance Mixin for BaseAgent."""
+"""
+"""
+Governance Mixin for BaseAgent.""
 
-
+"""
 import asyncio
 import logging
 from typing import Any
@@ -27,11 +29,12 @@ from src.core.base.logic.managers.resource_quota_manager import (
 
 
 class GovernanceMixin:
-    """Handles resource quotas, preemption, and security clearance."""
-
-    def __init__(self, config: Any, **_kwargs: Any) -> None:
-        """Initialize governance mixin with resource quotas."""
-        self.quotas = ResourceQuotaManager(
+"""
+Handles resource quotas, preemption, and security clearance.""
+def __init__(self, config: Any, **_kwargs: Any) -> None:
+"""
+Initialize governance mixin with resource quotas.""
+self.quotas = ResourceQuotaManager(
             config=QuotaConfig(
                 max_tokens=getattr(config, "max_tokens_per_session", None),
                 max_time_seconds=getattr(config, "max_time_per_session", None),
@@ -42,23 +45,27 @@ class GovernanceMixin:
 
 
     async def check_preemption(self) -> None:
-        """Wait if the agent is suspended."""
-        while self._suspended:
+"""
+Wait if the agent is suspended.""
+while self._suspended:
             await asyncio.sleep(0.5)
 
 
     def suspend(self) -> None:
-        """Suspend agent execution."""
-        self._suspended = True
+"""
+Suspend agent execution.""
+self._suspended = True
 
 
     def resume(self) -> None:
-        """Resume agent execution."""
-        self._suspended = False
+"""
+Resume agent execution.""
+self._suspended = False
 
 
     async def request_firewall_clearance(self, thought: str) -> bool:
-        """Inform fleet of thought and wait for FirewallAgent clearance."""
+        ""
+Inform fleet of thought and wait for FirewallAgent clearance.""
         # Check for clearance (avoid recursion for FirewallAgent)
         if self.__class__.__name__ == "FirewallAgent":
             return True

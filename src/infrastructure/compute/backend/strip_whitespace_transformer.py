@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -34,9 +34,19 @@ __version__ = VERSION
 
 
 class StripWhitespaceTransformer(ResponseTransformerBase):
-    """Transformer that strips whitespace.
+"""
+Transformer that strips whitespace.
     def transform(self, response: str) -> str:
-        """Strip leading and trailing whitespace.        return response.strip()
+"""
+Strip leading and trailing whitespace.        return response.strip()
 
     def get_name(self) -> str:
-        """Get transformer name.        return "strip_whitespace""
+"""
+Get transformer name.        return "strip_whitespace"
+"""
+
+"""
+
+""
+
+"""

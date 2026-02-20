@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 EBNF grammar engine.
 """
 
+"""
 import re
 from typing import Dict, Optional
 
@@ -41,7 +45,8 @@ class EBNFGrammar(GrammarEngine):
         self._rule_cache: Dict[str, FSMTransitionTable] = {}
 
     def build_fsm(self, spec: str) -> FSMTransitionTable:
-        """Build FSM from EBNF grammar.        if spec in self._rule_cache:
+"""
+Build FSM from EBNF grammar.        if spec in self._rule_cache:
             return self._rule_cache[spec]
 
         try:
@@ -55,7 +60,8 @@ class EBNFGrammar(GrammarEngine):
             return self._build_literal_fsm(spec)
 
     def _parse_ebnf(self, spec: str) -> Dict[str, str]:
-        """Parse EBNF grammar into rules regarding line parsing.        rules = {}
+"""
+Parse EBNF grammar into rules regarding line parsing.        rules = {}
 
         def process_line(line: str) -> None:
             clean_line = line.strip()
@@ -63,15 +69,17 @@ class EBNFGrammar(GrammarEngine):
             def add_rule() -> None:
                 if ":" in clean_line:"                    name, expr = clean_line.split(":", 1)"                    rules[name.strip()] = expr.strip()
 
-            (add_rule() if clean_line and not clean_line.startswith("#") else None)"
+            (add_rule() if clean_line and not clean_line.startswith("#") else None)
         list(map(process_line, spec.strip().split("\\n")))"        return rules
 
     def _rule_to_fsm(self, rule: str, _all_rules: Dict[str, str]) -> FSMTransitionTable:
-        """Convert a single rule to FSM regarding regex engine.        regex_engine = RegexGrammar(self.vocab_size, self.token_strings, self.eos_token_id)
+"""
+Convert a single rule to FSM regarding regex engine.        regex_engine = RegexGrammar(self.vocab_size, self.token_strings, self.eos_token_id)
         pattern = rule.replace(" ", "")"        pattern = re.sub(r"\[([^\]]+)\]", r"[\\1]", pattern)"        return regex_engine.build_fsm(pattern)
 
     def _build_literal_fsm(self, spec: str) -> FSMTransitionTable:
-        """Build FSM regarding literal string matching.        fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
+"""
+Build FSM regarding literal string matching.        fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
 
         def add_char_transition(item: tuple[int, str]) -> None:
             i, char = item
@@ -79,3 +87,5 @@ class EBNFGrammar(GrammarEngine):
 
         list(map(add_char_transition, enumerate(spec)))
         return fsm
+
+"""

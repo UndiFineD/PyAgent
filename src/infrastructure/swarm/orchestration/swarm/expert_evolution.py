@@ -15,9 +15,11 @@
 
 
 """
+"""
 Expert Specialization Evolution (Phase 68).
 Reinforcement loop that adjusts expert scores based on real-world outcomes.
 
+"""
 try:
     import logging
 except ImportError:
@@ -75,7 +77,8 @@ class ExpertEvolutionService:
         new_score = max(0.1, min(1.0, new_score))
 
         self.gatekeeper.update_expert_performance(expert_id, new_score)
-        logger.info(f"Evolution: Expert {expert_id} evolved: {current_score:.3f} -> {new_score:.3f}")"
+        logger.info(f"Evolution: Expert {expert_id} evolved: {current_score:.3f} -> {new_score:.3f}")
     def get_top_performing_experts(self, limit: int = 5) -> List[str]:
-        """Returns the IDs of the highest scoring experts.        sorted_experts = sorted(self.gatekeeper.experts.values(), key=lambda x: x.performance_score, reverse=True)
+"""
+Returns the IDs of the highest scoring experts.        sorted_experts = sorted(self.gatekeeper.experts.values(), key=lambda x: x.performance_score, reverse=True)
         return [e.agent_id for e in sorted_experts[:limit]]

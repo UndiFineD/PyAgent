@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,12 @@ from __future__ import annotations
 
 
 """
+"""
 Phase 164: Zero-Latency Agent Communication Bus.
 Uses ZeroMQ for high-performance inter-process messaging.
 """
 
+"""
 import asyncio
 import inspect
 import logging
@@ -33,7 +36,8 @@ import zmq.asyncio
 
 
 class AgentCommunicationBus:
-    """Zero-latency messaging bus for swarm orchestration.
+"""
+Zero-latency messaging bus for swarm orchestration.
     def __init__(self, pub_port: int = 5555, sub_port: int = 5556) -> None:
         self.context = zmq.asyncio.Context()
         self.pub_port = pub_port
@@ -42,25 +46,28 @@ class AgentCommunicationBus:
         # PUB socket for broadcasting
         self.publisher = self.context.socket(zmq.PUB)
         self.publisher.setsockopt(zmq.LINGER, 0)
-        self.publisher.bind(f"tcp://*:{self.pub_port}")"
+        self.publisher.bind(f"tcp://*:{self.pub_port}")
         # SUB socket for receiving
         self.subscriber = self.context.socket(zmq.SUB)
         self.subscriber.setsockopt(zmq.LINGER, 0)
-        self.subscriber.connect(f"tcp://localhost:{self.pub_port}")"
+        self.subscriber.connect(f"tcp://localhost:{self.pub_port}")
         self.handlers: dict[str, list[Callable]] = {}
         self._running = False
 
     async def broadcast(self, topic: str, message: dict[str, Any]) -> None:
-        """Broadcasts a message to all agents subscribed to a topic.        payload = orjson.dumps({"topic": topic, "data": message})"        await self.publisher.send_multipart([topic.encode(), payload])
+"""
+Broadcasts a message to all agents subscribed to a topic.        payload = orjson.dumps({"topic": topic, "data": message})"        await self.publisher.send_multipart([topic.encode(), payload])
 
     def subscribe(self, topic: str, handler: Callable[[dict[str, Any]], None]) -> None:
-        """Subscribes a handler to a specific topic.        if topic not in self.handlers:
+"""
+Subscribes a handler to a specific topic.        if topic not in self.handlers:
             self.handlers[topic] = []
             self.subscriber.setsockopt_string(zmq.SUBSCRIBE, topic)
         self.handlers[topic].append(handler)
 
     async def start(self) -> None:
-        """Starts the listening loop.        self._running = True
+"""
+Starts the listening loop.        self._running = True
         try:
             while self._running:
                 try:
@@ -70,7 +77,7 @@ class AgentCommunicationBus:
 
                     topic_bytes, payload_bytes = result
                     topic = topic_bytes.decode()
-                    data = orjson.loads(payload_bytes)["data"]"
+                    data = orjson.loads(payload_bytes)["data"]
                     if topic in self.handlers:
                         for handler in self.handlers[topic]:
                             if inspect.iscoroutinefunction(handler):
@@ -88,7 +95,8 @@ class AgentCommunicationBus:
             self.stop()
 
     def stop(self) -> None:
-        """Stops the bus and cleans up sockets.
+"""
+Stops the bus and cleans up sockets.
         self._running = False
         if hasattr(self, "publisher") and not self.publisher.closed:"            self.publisher.close(linger=0)
         if hasattr(self, "subscriber") and not self.subscriber.closed:"            self.subscriber.close(linger=0)
@@ -105,8 +113,8 @@ if __name__ == "__main__":"    import signal
         bus = AgentCommunicationBus()
 
         def on_msg(data: dict[str, Any]) -> None:
-            print(f"Received: {data}")"
-        bus.subscribe("telemetry", on_msg)"
+            print(f"Received: {data}")
+        bus.subscribe("telemetry", on_msg)
         # Setup graceful shutdown via signals (non-Windows)
         loop = asyncio.get_running_loop()
         stop_event = asyncio.Event()
@@ -121,7 +129,7 @@ if __name__ == "__main__":"    import signal
         except NotImplementedError:
             pass
 
-        print("AgentBus running. Press Ctrl+C to stop.")"
+        print("AgentBus running. Press Ctrl+C to stop.")
         try:
             listener = asyncio.create_task(bus.start())
             await bus.broadcast("telemetry", {"status": "online"})"            await asyncio.wait([listener, stop_event.wait()], return_when=asyncio.FIRST_COMPLETED)
@@ -129,8 +137,10 @@ if __name__ == "__main__":"    import signal
             handle_stop()
         finally:
             bus.stop()
-            print("AgentBus stopped.")"
+            print("AgentBus stopped.")
     try:
         asyncio.run(run_example())
     except KeyboardInterrupt:
         pass
+
+"""

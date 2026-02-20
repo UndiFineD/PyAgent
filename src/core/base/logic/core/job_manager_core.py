@@ -14,8 +14,11 @@
 
 try:
     import uuid
+"""
 except ImportError:
-    import uuid
+
+"""
+import uuid
 
 try:
     from enum import Enum
@@ -53,11 +56,11 @@ class AgentJob:
 
 
 class JobManagerCore:
-    """Manages the lifecycle of persistent agent jobs (sessions).
+"""
+Manages the lifecycle of persistent agent jobs (sessions).
     Harvested from LiveKit Agents patterns.
-    """
-
-    def __init__(self):
+"""
+def __init__(self):
         self._jobs: Dict[str, AgentJob] = {}
 
     async def create_job(self, payload: Dict[str, Any]) -> str:

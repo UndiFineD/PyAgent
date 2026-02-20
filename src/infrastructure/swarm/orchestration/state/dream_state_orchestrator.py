@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Dream state orchestrator.py module.
 """
-
 try:
-    import asyncio
+
+"""
+import asyncio
 except ImportError:
     import asyncio
 
@@ -70,9 +73,9 @@ class DreamStateOrchestrator:
 
     async def initiate_dream_cycle(self, focus_area: str) -> dict[str, Any]:
                 Starts an async simulation cycle to evolve skills in a specific area.
-                logging.info(f"DreamStateOrchestrator: Initiating dream cycle focal point: {focus_area}")"
+                logging.info(f"DreamStateOrchestrator: Initiating dream cycle focal point: {focus_area}")
         # 1. Generate Synthetic Scenarios
-        scenarios = await self.fleet.call_by_capability("generate_training_data", context=focus_area)"
+        scenarios = await self.fleet.call_by_capability("generate_training_data", context=focus_area)
         # 2. Simulate outcomes across variations
         tasks = [
             self.fleet.call_by_capability(

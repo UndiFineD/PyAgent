@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .bridge import MCPServerInfo, MCPServerType, MCPCategory, MCPServerConfig, MCPTool, MCPServerRegistry, MCPServerInstance, MCPBridge, MCPToolOrchestrator

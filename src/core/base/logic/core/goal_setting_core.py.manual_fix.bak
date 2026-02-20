@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+""
+Parser-safe stub: Goal Setting Core (conservative).
+
+Provides minimal goal types to allow imports during repair.
+""
+
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import List, Dict, Any, Optional, Callable
+from enum import Enum
+
+
+class GoalStatus(str, Enum):
+    PENDING = "pending"
+
+
+class GoalPriority(str, Enum):
+    MEDIUM = "medium"
+
+
+@dataclass
+class Goal:
+    id: str
+    description: str
+    criteria: List[str]
+    priority: GoalPriority = GoalPriority.MEDIUM
+    created_at: datetime = field(default_factory=datetime.now)
+
+
+class GoalSettingCore:
+    def __init__(self) -> None:
+        self.active_goals: Dict[str, Goal] = {}
+
+
+__all__ = ["Goal", "GoalSettingCore"]

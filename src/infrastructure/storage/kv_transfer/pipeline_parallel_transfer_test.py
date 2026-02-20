@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.kv_transfer.pipeline_parallel_transfer import PipelineParallelTransfer

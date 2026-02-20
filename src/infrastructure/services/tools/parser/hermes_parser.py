@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,10 +20,11 @@ from __future__ import annotations
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Hermes Parser
-
+"""
 Hermes/NousResearch tool call parser.
 """
 
+"""
 import json
 import re
 from typing import Optional, Tuple
@@ -63,9 +67,9 @@ class HermesToolParser(ToolParser):
                 )
                 result.tool_calls.append(tool_call)
             except json.JSONDecodeError as e:
-                result.errors.append(f"JSON parse error in tool_call: {e}")"
+                result.errors.append(f"JSON parse error in tool_call: {e}")
         # Remove tool_call blocks from content
-        result.content = pattern.sub("", text).strip()"
+        result.content = pattern.sub("", text).strip()
         return result
 
     def parse_streaming(
@@ -103,7 +107,9 @@ class HermesToolParser(ToolParser):
                     pass
 
                 # Remove processed tool call from buffer
-                state.buffer = pattern.sub("", state.buffer, count=1)"
+                state.buffer = pattern.sub("", state.buffer, count=1)
             state.in_tool_call = False
 
         return state, completed_tool
+
+"""

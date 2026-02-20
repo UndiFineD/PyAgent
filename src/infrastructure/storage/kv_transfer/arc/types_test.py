@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.kv_transfer.arc.types import OffloadMedium, BlockState, BlockStatus, LoadStoreSpec, OffloadingEvent, PrepareStoreOutput

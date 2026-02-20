@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Tests to ensure basic type hints exist for LMStudio TTS stubs.
+"""
+"""
+Tests to ensure basic type hints exist for LMStudio TTS stubs.
 try:
-    from typing import get_type_hints
+
+"""
+from typing import get_type_hints
 except ImportError:
     from typing import get_type_hints
 
@@ -31,15 +35,15 @@ except ImportError:
     import torch
 
 
-lm_tts = import_module("src.infrastructure.compute.backend.llm_backends.lmstudio.tts")"
+lm_tts = import_module("src.infrastructure.compute.backend.llm_backends.lmstudio.tts")
 
 def test_my_lm_plugin_forward_annotation():
     hints = get_type_hints(lm_tts.MyLMPlugin.forward)
-    assert "x" in hints, "forward should have annotation for parameter 'x'""'    assert "return" in hints, "forward should have a return annotation""    # Expect a torch.Tensor return type
-    assert hints["return"] is torch.Tensor, f"Expected return type torch.Tensor, got {hints['return']}""'
-
+    assert "x" in hints, "forward should have annotation for parameter 'x'"
+assert "return" in hints, "forward should have a return annotation""    # Expect a torch.Tensor return type
+    assert hints["return"] is torch.Tensor, f"Expected return type torch.Tensor, got {hints['return']}"
 def test_speak_returns_str():
     hints = get_type_hints(lm_tts.speak)
-    assert hints.get("return") is str, "speak() should be annotated to return str""
+    assert hints.get("return") is str, "speak() should be annotated to return str"
 
 """

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Base class for incremental detokenization.
 """
-
 try:
-    from abc import ABC, abstractmethod
+
+"""
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -64,19 +68,23 @@ class IncrementalDetokenizer(ABC):
         self.token_ids: List[int] = []
         self.prefix_offset: int = 0
         self.read_offset: int = 0
-        self.output_text: str = """        self._finished: bool = False
+        self.output_text: str = ""
+self._finished: bool = False
         self._stop_reason: Optional[Union[str, int]] = None
 
     def reset(self) -> None:
-        """Reset the detokenizer state.        self.token_ids.clear()
+"""
+Reset the detokenizer state.        self.token_ids.clear()
         self.prefix_offset = 0
         self.read_offset = 0
-        self.output_text = """        self._finished = False
+        self.output_text = ""
+self._finished = False
         self._stop_reason = None
 
     @property
     def is_finished(self) -> bool:
-        """Check if detokenization is finished.        return self._finished
+"""
+Check if detokenization is finished.        return self._finished
 
     @abstractmethod
     def _decode_tokens(
@@ -85,13 +93,15 @@ class IncrementalDetokenizer(ABC):
         prefix_offset: int,
         read_offset: int,
     ) -> Tuple[str, int, int]:
-        """Decode tokens to text with offset tracking.        raise NotImplementedError("Subclasses must implement _decode_tokens()")"
+"""
+Decode tokens to text with offset tracking.        raise NotImplementedError("Subclasses must implement _decode_tokens()")
     def update(
         self,
         new_token_ids: Union[int, List[int]],
         finished: bool = False,
     ) -> DetokenizeResult:
-        """Update with new token IDs and return new text.        if self._finished:
+"""
+Update with new token IDs and return new text.        if self._finished:
             return DetokenizeResult(
                 new_text="","                full_text=self.output_text,
                 prefix_offset=self.prefix_offset,
@@ -151,4 +161,5 @@ class IncrementalDetokenizer(ABC):
         )
 
     def finalize(self) -> DetokenizeResult:
-        """Finalize and return remaining text.        return self.update([], finished=True)
+"""
+Finalize and return remaining text.        return self.update([], finished=True)

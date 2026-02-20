@@ -13,10 +13,14 @@
 # limitations under the License.
 
 
-"""Tests for the Reflection Loop System.
+"""
+"""
+Tests for the Reflection Loop System.
 """
 try:
-    import asyncio
+
+"""
+import asyncio
 except ImportError:
     import asyncio
 
@@ -54,14 +58,19 @@ except ImportError:
 
 
 class TestReflectionLoopConfig:
-    """Test ReflectionLoopConfig functionality."""
-    def test_default_config(self):
-        """Test default configuration values."""config = ReflectionLoopConfig()
+"""
+Test ReflectionLoopConfig functionality.""
+def test_default_config(self):
+"""
+Test default configuration values.""
+config = ReflectionLoopConfig()
         assert config.max_iterations == 3
         assert config.critique_prompt.startswith("You are a senior software engineer")"        assert config.early_stopping is True
 
     def test_custom_config(self):
-        """Test custom configuration."""config = ReflectionLoopConfig(
+"""
+Test custom configuration.""
+config = ReflectionLoopConfig(
             max_iterations=5,
             early_stopping=False,
             timeout_seconds=10.0
@@ -73,17 +82,22 @@ class TestReflectionLoopConfig:
 
 
 class TestLLMReflectionAgent:
-    """Test LLMReflectionAgent functionality."""
-    def test_initial_generation(self):
-        """Test initial content generation."""mock_llm = Mock(return_value="Generated content")"        agent = LLMReflectionAgent(mock_llm)
+"""
+Test LLMReflectionAgent functionality.""
+def test_initial_generation(self):
+"""
+Test initial content generation.""
+mock_llm = Mock(return_value="Generated content")"        agent = LLMReflectionAgent(mock_llm)
 
-        context = ReflectionContext(task_description="Test task")"
+        context = ReflectionContext(task_description="Test task")
         # Test initial generation (no current content)
         result = asyncio.run(agent.generate(context))
         assert result == "Generated content""        mock_llm.assert_called_once()
 
     def test_refinement_generation(self):
-        """Test content refinement."""mock_llm = Mock(return_value="Refined content")"        agent = LLMReflectionAgent(mock_llm)
+"""
+Test content refinement.""
+mock_llm = Mock(return_value="Refined content")"        agent = LLMReflectionAgent(mock_llm)
 
         context = ReflectionContext(
             task_description="Test task","            current_content="Initial content""        )
@@ -92,63 +106,80 @@ class TestLLMReflectionAgent:
         assert result == "Refined content""        mock_llm.assert_called_once()
 
     def test_critique_generation(self):
-        """Test critique generation."""mock_llm = Mock(return_value="This content needs improvement.")"        agent = LLMReflectionAgent(mock_llm)
+"""
+Test critique generation.""
+mock_llm = Mock(return_value="This content needs improvement.")"        agent = LLMReflectionAgent(mock_llm)
 
-        context = ReflectionContext(task_description="Test task")"
+        context = ReflectionContext(task_description="Test task")
         result = asyncio.run(agent.critique(context, "Test content"))"        assert result == "This content needs improvement.""        mock_llm.assert_called_once()
 
 
 
 class TestCodeReflectionAgent:
-    """Test CodeReflectionAgent functionality."""
-    def test_code_generation(self):
-        """Test code generation and cleaning."""mock_llm = Mock(return_value="```python\\nprint('hello')\\n```")"'        agent = CodeReflectionAgent(mock_llm)
+"""
+Test CodeReflectionAgent functionality.""
+def test_code_generation(self):
+"""
+Test code generation and cleaning.""
+mock_llm = Mock(return_value="```python\\nprint('hello')\\n```")"'        agent = CodeReflectionAgent(mock_llm)
 
-        context = ReflectionContext(task_description="Write hello world")"
+        context = ReflectionContext(task_description="Write hello world")
         result = asyncio.run(agent.generate(context))
-        assert result == "print('hello')""'        mock_llm.assert_called_once()
+        assert result == "print('hello')"
+mock_llm.assert_called_once()
 
     def test_code_critique(self):
-        """Test code-specific critique."""mock_llm = Mock(return_value="CODE_IS_PERFECT")"        agent = CodeReflectionAgent(mock_llm)
+"""
+Test code-specific critique.""
+mock_llm = Mock(return_value="CODE_IS_PERFECT")"        agent = CodeReflectionAgent(mock_llm)
 
-        context = ReflectionContext(task_description="Write factorial function")"
+        context = ReflectionContext(task_description="Write factorial function")
         result = asyncio.run(agent.critique(context, "def factorial(n): return n * factorial(n-1) if n > 0 else 1"))"        assert result == "CODE_IS_PERFECT""
 
 
 class TestReflectionLoopOrchestrator:
-    """Test ReflectionLoopOrchestrator functionality."""
+"""
+Test ReflectionLoopOrchestrator functionality.""
     @pytest.fixture
     def mock_agents(self):
-        """Create mock agents for testing."""generator = Mock(spec=LLMReflectionAgent)
-        generator.generate = AsyncMock(return_value="Generated content")"        generator.critique = AsyncMock(return_value="Good content")"        generator.name = "Generator Agent""
+"""
+Create mock agents for testing.""
+generator = Mock(spec=LLMReflectionAgent)
+        generator.generate = AsyncMock(return_value="Generated content")"        generator.critique = AsyncMock(return_value="Good content")"        generator.name = "Generator Agent"
         critic = Mock(spec=LLMReflectionAgent)
         critic.critique = AsyncMock(return_value="Good content")"        critic.name = "Critic Agent""
         return generator, critic
 
     def test_perfect_content_early_stopping(self, mock_agents):
-        """Test early stopping when content is perfect."""generator, critic = mock_agents
+"""
+Test early stopping when content is perfect.""
+generator, critic = mock_agents
 
         # Setup perfect critique
-        critic.critique.return_value = "CODE_IS_PERFECT""
+        critic.critique.return_value = "CODE_IS_PERFECT"
         orchestrator = ReflectionLoopOrchestrator(generator, critic)
 
-        context = asyncio.run(orchestrator.execute_reflection_loop("Test task"))"
+        context = asyncio.run(orchestrator.execute_reflection_loop("Test task"))
         assert len(context.history) == 1  # Only one iteration
         assert context.history[0].is_satisfactory is True
 
     def test_max_iterations_reached(self, mock_agents):
-        """Test reaching maximum iterations."""generator, critic = mock_agents
+"""
+Test reaching maximum iterations.""
+generator, critic = mock_agents
 
         # Setup non-perfect critiques
-        generator.critique.return_value = "Needs improvement""
+        generator.critique.return_value = "Needs improvement"
         orchestrator = ReflectionLoopOrchestrator(generator, critic)
         config = ReflectionLoopConfig(max_iterations=2, early_stopping=False)
 
-        context = asyncio.run(orchestrator.execute_reflection_loop("Test task", config))"
+        context = asyncio.run(orchestrator.execute_reflection_loop("Test task", config))
         assert len(context.history) == 2
 
     def test_get_final_result(self, mock_agents):
-        """Test getting final result."""generator, critic = mock_agents
+"""
+Test getting final result.""
+generator, critic = mock_agents
 
         orchestrator = ReflectionLoopOrchestrator(generator, critic)
 
@@ -157,9 +188,11 @@ class TestReflectionLoopOrchestrator:
             ReflectionResult(iteration=1, content="Content 1", critique="Good", is_satisfactory=True),"            ReflectionResult(iteration=2, content="Content 2", critique="Better", is_satisfactory=False)"        ]
 
         final_result = orchestrator.get_final_result(context)
-        assert final_result.content == "Content 1"  # Returns first satisfactory"
+        assert final_result.content == "Content 1"  # Returns first satisfactory
     def test_get_reflection_summary(self, mock_agents):
-        """Test getting reflection summary."""generator, critic = mock_agents
+"""
+Test getting reflection summary.""
+generator, critic = mock_agents
 
         orchestrator = ReflectionLoopOrchestrator(generator, critic)
 
@@ -172,9 +205,12 @@ class TestReflectionLoopOrchestrator:
 
 
 class TestConvenienceFunctions:
-    """Test convenience functions."""
-    def test_reflect_on_code(self):
-        """Test reflect_on_code convenience function."""mock_val = "def factorial(n):\\n    if n <= 1:\\n        return 1\\n    return n * factorial(n-1)""        mock_llm = Mock(return_value=mock_val)
+"""
+Test convenience functions.""
+def test_reflect_on_code(self):
+"""
+Test reflect_on_code convenience function.""
+mock_val = "def factorial(n):\\n    if n <= 1:\\n        return 1\\n    return n * factorial(n-1)""        mock_llm = Mock(return_value=mock_val)
 
         # Mock the internal critique to be perfect
         original_llm = mock_llm
@@ -191,9 +227,11 @@ class TestConvenienceFunctions:
             max_iterations=1
         ))
 
-        assert result["total_iterations"] == 1"        assert result["is_satisfactory"] is True"        assert "factorial" in result["final_content"]"
+        assert result["total_iterations"] == 1"        assert result["is_satisfactory"] is True"        assert "factorial" in result["final_content"]
     def test_reflect_on_content(self):
-        """Test reflect_on_content convenience function."""mock_llm = Mock(return_value="This is a well-written summary.")"
+"""
+Test reflect_on_content convenience function.""
+mock_llm = Mock(return_value="This is a well-written summary.")
         result = asyncio.run(reflect_on_content(
             "Summarize AI trends","            mock_llm,
             max_iterations=1
@@ -203,9 +241,12 @@ class TestConvenienceFunctions:
 
 
 class TestReflectionResult:
-    """Test ReflectionResult model."""
-    def test_result_creation(self):
-        """Test creating a reflection result."""result = ReflectionResult(
+"""
+Test ReflectionResult model.""
+def test_result_creation(self):
+"""
+Test creating a reflection result.""
+result = ReflectionResult(
             iteration=1,
             content="Test content","            critique="Good work","            is_satisfactory=True
         )
@@ -217,9 +258,12 @@ class TestReflectionResult:
 
 
 class TestReflectionContext:
-    """Test ReflectionContext functionality."""
-    def test_context_creation(self):
-        """Test creating a reflection context."""context = ReflectionContext(task_description="Test task")"
+"""
+Test ReflectionContext functionality.""
+def test_context_creation(self):
+        ""
+Test creating a reflection context.""
+context = ReflectionContext(task_description="Test task")
         assert context.task_description == "Test task""        assert context.current_content is None
         assert len(context.history) == 0
         assert isinstance(context.config, ReflectionLoopConfig)

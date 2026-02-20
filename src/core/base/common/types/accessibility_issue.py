@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""AccessibilityIssue dataclass for test imports and type coverage.
+"""
+"""
+AccessibilityIssue dataclass for test imports and type coverage.
 
+"""
 This file was partially corrupted; provide a minimal, well-typed
 dataclass so tests and imports succeed. The production implementation
 may include richer validation and helpers.
 """
-
 from dataclasses import dataclass
 from typing import Optional
 
@@ -41,9 +44,9 @@ except Exception:
 
 @dataclass
 class AccessibilityIssue:
-    """A concise representation of an accessibility issue in source/UI code."""
-
-    issue_type: AccessibilityIssueType
+    ""
+A concise representation of an accessibility issue in source/UI code.""
+issue_type: AccessibilityIssueType
     severity: AccessibilitySeverity
     wcag_level: WCAGLevel
     wcag_criterion: str

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Core renderers for prompt rendering.
 """
 
+"""
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -30,9 +34,11 @@ logger = logging.getLogger(__name__)
 
 
 class CompletionRenderer(PromptRenderer):
-    """Renderer for completion-style prompts.
+"""
+Renderer for completion-style prompts.
     def render(self, config: PromptConfig) -> RenderResult:
-        """Render completion prompt.        # Direct token input
+"""
+Render completion prompt.        # Direct token input
         if config.token_ids is not None:
             tokens = config.token_ids
             tokens, trunc_result = self._apply_truncation(tokens, config)
@@ -56,14 +62,14 @@ class CompletionRenderer(PromptRenderer):
             )
 
         # Text input
-        text = config.prompt or """
-        if config.strip_whitespace:
+        text = config.prompt or ""
+if config.strip_whitespace:
             text = text.strip()
 
         if config.normalize_unicode:
             import unicodedata
 
-            text = unicodedata.normalize("NFC", text)"
+            text = unicodedata.normalize("NFC", text)
         tokens = self._tokenize(text, config.add_special_tokens)
         tokens, trunc_result = self._apply_truncation(tokens, config)
 
@@ -84,12 +90,15 @@ class CompletionRenderer(PromptRenderer):
 
 
 class ChatRenderer(PromptRenderer):
-    """Renderer for chat-style prompts.
+"""
+Renderer for chat-style prompts.
     # Default chat template (ChatML-like)
-    DEFAULT_TEMPLATE = """{% for message in messages %}{% if message['role'] == 'system' %}<|im_start|>system""""'{{ message['content'] }}<|im_end|>'{% elif message['role'] == 'user' %}<|im_start|>user'{{ message['content'] }}<|im_end|>'{% elif message['role'] == 'assistant' %}<|im_start|>assistant'{{ message['content'] }}<|im_end|>'{% endif %}{% endfor %}{% if add_generation_prompt %}<|im_start|>assistant
+    DEFAULT_TEMPLATE = ""
+{% for message in messages %}{% if message['role'] == 'system' %}<|im_start|>system""""'{{ message['content'] }}<|im_end|>'{% elif message['role'] == 'user' %}<|im_start|>user'{{ message['content'] }}<|im_end|>'{% elif message['role'] == 'assistant' %}<|im_start|>assistant'{{ message['content'] }}<|im_end|>'{% endif %}{% endfor %}{% if add_generation_prompt %}<|im_start|>assistant
 {% endif %}
     def render(self, config: PromptConfig) -> RenderResult:
-        """Render chat prompt.        if config.messages is None:
+"""
+Render chat prompt.        if config.messages is None:
             # Fallback to completion rendering
             return CompletionRenderer(self.tokenizer, self.max_model_tokens).render(config)
 
@@ -129,7 +138,8 @@ class ChatRenderer(PromptRenderer):
         template: str,
         add_generation_prompt: bool = True,
     ) -> str:
-        """Apply Jinja2 chat template.        # Try Rust acceleration first
+"""
+Apply Jinja2 chat template.        # Try Rust acceleration first
         from .helpers import _try_rust_render_template
 
         rust_rendered = _try_rust_render_template(template, messages, add_generation_prompt)
@@ -154,18 +164,20 @@ class ChatRenderer(PromptRenderer):
         messages: List[Dict[str, Any]],
         add_generation_prompt: bool,
     ) -> str:
-        """Simple template without Jinja2.        parts = []
+"""
+Simple template without Jinja2.        parts = []
         for msg in messages:
-            role = msg.get("role", "user")"            content = msg.get("content", "")"            parts.append(f"<|im_start|>{role}\\n{content}<|im_end|>")"
+            role = msg.get("role", "user")"            content = msg.get("content", "")"            parts.append(f"<|im_start|>{role}\\n{content}<|im_end|>")
         if add_generation_prompt:
-            parts.append("<|im_start|>assistant\\n")"
-        return "\\n".join(parts)"
+            parts.append("<|im_start|>assistant\\n")
+        return "\\n".join(parts)
     def _find_image_positions(
         self,
         text: str,
         _images: List[Dict[str, Any]],
     ) -> Optional[List[int]]:
-        """Find image TODO Placeholder positions in text.        patterns = ["<image>", "[IMAGE]", "<|image|>", "{{IMAGE}}"]"
+"""
+Find image TODO Placeholder positions in text.        patterns = ["<image>", "[IMAGE]", "<|image|>", "{{IMAGE}}"]
         # Try Rust acceleration
         from .helpers import _try_rust_find_TODO Placeholders
 
@@ -184,3 +196,11 @@ class ChatRenderer(PromptRenderer):
                 start = pos + len(pattern)
 
         return positions if positions else None
+
+"""
+
+"""
+
+""
+
+"""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.swarm.orchestration.core.distributed.sync import DistributedSyncProvider, NixlSyncProvider, TCPSyncProvider

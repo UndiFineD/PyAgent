@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Smoke test for FederationServicesCore importability."""
+""
+Smoke test for FederationServicesCore importability.""
 try:
     from src.core.base.logic.core.federation_services_core import FederationServicesCore  # type: ignore
 except Exception:  # pragma: no cover - test shim

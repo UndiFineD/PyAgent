@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 LM Studio chat completion handler.
 
+"""
 import logging
 
 from typing import TYPE_CHECKING, Any, Optional
@@ -30,16 +32,19 @@ logger = logging.getLogger(__name__)
 
 
 class ChatHandler:
-    """Handler for chat operations with SDK-first and HTTP fallback support.
+"""
+Handler for chat operations with SDK-first and HTTP fallback support.
     def __init__(self, api_client: LMStudioAPIClient):
-        """Initialize chat handler.""""
-        Args:
+"""
+Initialize chat handler.""""
+Args:
             api_client: LMStudioAPIClient instance for HTTP fallback.
                 self.api_client = api_client
 
     def _build_prediction_config(self, sdk_available: bool, **kwargs) -> Optional[Any]:
-        """Build prediction config from kwargs.""""
-        Args:
+"""
+Build prediction config from kwargs.""""
+Args:
             sdk_available: Whether LM Studio SDK is available.
             **kwargs: Configuration parameters.
 
@@ -53,8 +58,9 @@ class ChatHandler:
         return lmstudio.LlmPredictionConfig(
             temperature=kwargs.get("temperature", 0.7),"            max_tokens=kwargs.get("max_tokens", 2048),"            top_p=kwargs.get("top_p", 1.0),"            stop_strings=kwargs.get("stop", []),"        )
 
-    def _extract_chat_from_lmstudio(self, system_prompt: str) -> "lmstudio.Chat":"        """Create an LM Studio Chat object.""""
-        Args:
+    def _extract_chat_from_lmstudio(self, system_prompt: str) -> "lmstudio.Chat":"        """
+Create an LM Studio Chat object.""""
+Args:
             system_prompt: System prompt/context.
 
         Returns:
@@ -69,8 +75,9 @@ class ChatHandler:
         system_prompt: str,
         **kwargs,
     ) -> str:
-        """Execute chat via LM Studio SDK.""""
-        Args:
+"""
+Execute chat via LM Studio SDK.""""
+Args:
             llm: LM Studio LLM model handle.
             prompt: User prompt/message.
             system_prompt: System prompt/context.
@@ -91,8 +98,9 @@ class ChatHandler:
         system_prompt: str,
         **kwargs,
     ) -> str:
-        """Execute chat via HTTP REST API fallback.""""
-        Args:
+"""
+Execute chat via HTTP REST API fallback.""""
+Args:
             prompt: User prompt/message.
             model: Model identifier.
             system_prompt: System prompt/context.
@@ -124,14 +132,14 @@ class ChatHandler:
                         item.get("content")"                        for item in output
                         if item.get("type") == "message" and item.get("content")"                    ]
                     text = "\\n".join(messages)"                else:
-                    text = str(output) if output else """
-            if text:
+                    text = str(output) if output else ""
+if text:
                 logger.info(f"[LMStudio] HTTP fallback chat succeeded: {len(text)} chars")"                return text
 
             logger.warning("[LMStudio] HTTP fallback chat: no message content found in response choices or output")"        except Exception as e:
-            logger.error(f"[LMStudio] HTTP fallback chat failed: {e}")"
-        return """
-    def chat(
+            logger.error(f"[LMStudio] HTTP fallback chat failed: {e}")
+        return ""
+def chat(
         self,
         llm: Optional[Any],
         prompt: str,
@@ -140,8 +148,9 @@ class ChatHandler:
         sdk_available: bool,
         **kwargs,
     ) -> str:
-        """Execute chat completion with SDK-first and HTTP fallback.""""
-        Args:
+"""
+Execute chat completion with SDK-first and HTTP fallback.""""
+Args:
             llm: LM Studio LLM model handle (from SDK).
             prompt: User prompt/message.
             model: Model identifier.
@@ -156,6 +165,14 @@ class ChatHandler:
             try:
                 return self._sdk_chat(llm, prompt, system_prompt, **kwargs)
             except Exception as e:
-                logger.warning(f"LM Studio SDK chat failed: {e}; will try HTTP fallback.")"
+                logger.warning(f"LM Studio SDK chat failed: {e}; will try HTTP fallback.")
         # HTTP fallback
         return self._http_fallback_chat(prompt, model, system_prompt, **kwargs)
+
+"""
+
+"""
+
+""
+
+"""

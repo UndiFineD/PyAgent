@@ -1,0 +1,37 @@
+"""ImprovementTemplate - minimal, parser-safe shim."""
+
+from __future__ import annotations
+from dataclasses import dataclass
+from typing import Any, Dict
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+from .improvement_category import ImprovementCategory
+from .improvement_priority import ImprovementPriority
+from .effort_estimate import EffortEstimate
+
+__version__ = VERSION
+
+
+@dataclass
+class ImprovementTemplate:
+    id: str
+    name: str
+    category: ImprovementCategory
+    title_pattern: str
+    description_template: str
+    default_priority: ImprovementPriority = ImprovementPriority.MEDIUM
+    default_effort: EffortEstimate = EffortEstimate.MEDIUM
+
+    def instantiate(self, variables: Dict[str, str]) -> Dict[str, str]:
+        title = self.title_pattern.format(**variables) if self.title_pattern else ""
+        description = self.description_template.format(**variables) if self.description_template else ""
+        return {"title": title, "description": description}
+
+__all__ = ["ImprovementTemplate"]

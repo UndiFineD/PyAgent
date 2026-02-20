@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 
 """
+"""
 FastAPI-based API gateway for the PyAgent fleet.
 """
 
+"""
 import sys
 import asyncio
 import json
@@ -36,11 +39,11 @@ from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
-app = FastAPI(title="PyAgent Unified API")"
+app = FastAPI(title="PyAgent Unified API")
 # Global instances
 # Prefer the repository root (4 levels up from this file) so all web
 # components use the same `data/` location instead of `src/data/`.
-workspace_root = str(Path(__file__).resolve().parents[4]) + """
+workspace_root = str(Path(__file__).resolve().parents[4]) + ""
 # On Windows prefer the selector event loop for compatibility with pyzmq
 if sys.platform == "win32":"    try:
         from asyncio import WindowsSelectorEventLoopPolicy
@@ -56,17 +59,19 @@ load_balancer = FleetLoadBalancer(fleet)
 
 
 class TaskRequest(BaseModel):
-    """Schema for incoming task requests via the REST API.
+"""
+Schema for incoming task requests via the REST API.
     agent_id: str
 
     task: str
 
     context: dict[str, Any] = {}
-    interface: str | None = "Web"  # Default to web if not specified"
+    interface: str | None = "Web"  # Default to web if not specified
 
 
 class TelemetryManager:
-    """Manages WebSocket connections for real-time fleet telemetry.
+"""
+Manages WebSocket connections for real-time fleet telemetry.
     def __init__(self) -> None:
         self.active_connections: list[WebSocket] = []
 
@@ -95,13 +100,15 @@ telemetry = TelemetryManager()
 
 @app.get("/agents")"async def list_agents() -> dict[str, Any]:
     metadata = fleet.agents.get_all_metadata()
-    return {"agents": [{"id": k, "type": v["type"]} for k, v in metadata.items()]}"
+    return {"agents": [{"id": k, "type": v["type"]} for k, v in metadata.items()]}
 
 @app.get("/discovery/peers")"async def list_discovery_peers() -> dict[str, Any]:
-    """Returns the list of peers discovered on the LAN.    return {"peers": [p.to_dict() for p in fleet.get_lan_peers()]}"
+"""
+Returns the list of peers discovered on the LAN.    return {"peers": [p.to_dict() for p in fleet.get_lan_peers()]}
 
 @app.get("/discovery/peers/fastest")"async def list_fastest_peers() -> dict[str, Any]:
-    """Returns the top 5 lowest-latency peers discovered.    return {"peers": [p.to_dict() for p in fleet.get_fastest_peers()]}"
+"""
+Returns the top 5 lowest-latency peers discovered.    return {"peers": [p.to_dict() for p in fleet.get_fastest_peers()]}
 
 @app.post("/task")"async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
     # Route through Load Balancer
@@ -118,15 +125,15 @@ telemetry = TelemetryManager()
     # Simulate routing to agent
     # In a real scenario, we'd use fleet.get_agent(request.agent_id).run(...)'    try:
         # Mock result for now
-        result = f"Task '{request.task}' received by {request.agent_id}""'
-        await telemetry.broadcast(
+        result = f"Task '{request.task}' received by {request.agent_id}"
+await telemetry.broadcast(
             json.dumps(
                 {
                     "type": "task_completed","                    "agent": request.agent_id,"                    "status": "success","                    "timestamp": time.time(),"                }
             )
         )
         return {"status": "success", "result": result}"    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        return {"status": "error", "message": str(e)}"
+        return {"status": "error", "message": str(e)}
 
 @app.websocket("/ws/telemetry")"async def websocket_endpoint(websocket: WebSocket) -> None:
     await telemetry.connect(websocket)
@@ -141,4 +148,5 @@ telemetry = TelemetryManager()
 
 if __name__ == "__main__":"    import uvicorn
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)"
+    uvicorn.run(app, host="0.0.0.0", port=8000)
+""

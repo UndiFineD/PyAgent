@@ -14,7 +14,10 @@
 
 
 """
+"""
 Idiom Extractor Agent for project-specific coding patterns.
+
+"""
 import os
 import json
 import logging
@@ -37,7 +40,7 @@ class IdiomExtractorAgent(BaseAgent):
         super().__init__(file_path)
 #         self.idioms_file = ".pyagent_idioms.json"
     @as_tool
-    def extract_idioms(self, directory: str = "src") -> str:"        Scans the specified directory for coding patterns and updates the idioms" library."        logging.info(fIdiomExtractor: Scanning {directory} "for" idioms...")"
+    def extract_idioms(self, directory: str = "src") -> str:"        Scans the specified directory for coding patterns and updates the idioms" library."        logging.info(fIdiomExtractor: Scanning {directory} "for" idioms...")
         idioms = {
             "naming_conventions": {"                "classes": "PascalCase","                "functions": "snake_case","                "variables": "snake_case","            },
             "common_decorators": [],"            "frequent_imports": [],"            "error_handling_patterns": [],"            "docstring_style": "Google","        }
@@ -51,12 +54,13 @@ class IdiomExtractorAgent(BaseAgent):
 
                             # Extract decorators
                             found_decorators = decorator_pattern.findall(content)
-                            idioms["common_decorators"].extend(found_decorators)"
+                            idioms["common_decorators"].extend(found_decorators)
                             # Extract common imports
                             found_imports = import_pattern.findall(content)
-                            idioms["frequent_imports"].extend(found_imports)"
+                            idioms["frequent_imports"].extend(found_imports)
                             # Check for docstring styles
-                            if '"' in content and '":" in content:"'                                if "Args:" in content or "Returns:" in content:"#                                     idioms["docstring_style"] = "Google"                                elif ":param" in content:"#                                     idioms["docstring_style"] = "reStructuredText"
+                            if '"'
+in content and '":" in content:"'                                if "Args:" in content or "Returns:" in content:"#                                     idioms["docstring_style"] = "Google"                                elif ":param" in content:"#                                     idioms["docstring_style"] = "reStructuredText
                     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                         logging.warning(fError reading {file}: {e}")"
         # Deduplicate and sort
@@ -76,6 +80,6 @@ class IdiomExtractorAgent(BaseAgent):
         Returns the currently stored project idioms.
         if os.path.exists(self.idioms_file):
             with open(self.idioms_file, encoding="utf-8") as f:"                return json.load(f)
-        return {"error": "Idioms file not found. Run extract_idioms first."}"
+        return {"error": "Idioms file not found. Run extract_idioms first."}
 
 """

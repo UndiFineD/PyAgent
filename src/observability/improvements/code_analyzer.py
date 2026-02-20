@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Code Analyzer - Suggests analysis tools based on improvement content
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -52,7 +56,9 @@ __version__ = VERSION
 
 
 class CodeAnalyzer:
-    """Suggests analysis tools based on improvement content.
+"""
+Suggests analysis tools based on improvement content.
+
     def __init__(self) -> None:
         self.tools: list[str] = [
             "security scan","            "linter","            "type checker","            "coverage","        ]

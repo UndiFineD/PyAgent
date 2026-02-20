@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Project Explorer component for the PyAgent GUI.
+"""
+"""
+Project Explorer component for the PyAgent GUI.
 
+"""
 import logging
 import os
 import tkinter as tk
@@ -28,7 +32,9 @@ __version__ = VERSION
 
 
 class ProjectExplorer:
-    """A tree-view based file explorer for the PyAgent workspace.
+"""
+A tree-view based file explorer for the PyAgent workspace.
+
     def __init__(self, parent, project_root_var, on_double_click_callback) -> None:
         self.parent = parent
         self.project_root_var = project_root_var
@@ -40,24 +46,24 @@ class ProjectExplorer:
     def setup_ui(self) -> None:
         header_frame = ttk.Frame(self.frame)
         header_frame.pack(fill=tk.X, padx=5, pady=2)
-        ttk.Label(header_frame, text="Project Explorer").pack(side=tk.LEFT)"
+        ttk.Label(header_frame, text="Project Explorer").pack(side=tk.LEFT)
         # Search Bar
         search_frame = ttk.Frame(self.frame)
         search_frame.pack(fill=tk.X, padx=5, pady=2)
         self.search_var = tk.StringVar()
         self.search_var.trace_add("write", lambda *args: self.filter_tree())"        search_entry = ttk.Entry(search_frame, textvariable=self.search_var)
         search_entry.pack(fill=tk.X, side=tk.LEFT, expand=True)
-        ttk.Label(search_frame, text="🔍").pack(side=tk.RIGHT)"
+        ttk.Label(search_frame, text="").pack(side=tk.RIGHT)
         self.tree = ttk.Treeview(self.frame, selectmode="browse")"        self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         tree_scroll = ttk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.tree.yview)
         tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         self.tree.configure(yscrollcommand=tree_scroll.set)
 
-        self.tree.bind("<Double-1>", self.on_double_click)"        self.tree.bind("<<TreeviewOpen>>", self.on_tree_open)"        self.tree.bind("<Button-3>", self.show_context_menu)"
+        self.tree.bind("<Double-1>", self.on_double_click)"        self.tree.bind("<<TreeviewOpen>>", self.on_tree_open)"        self.tree.bind("<Button-3>", self.show_context_menu)
         btn_frame = ttk.Frame(self.frame)
         btn_frame.pack(fill=tk.X)
-        ttk.Button(btn_frame, text="Refresh", command=self.refresh_tree).pack(fill=tk.X)"
+        ttk.Button(btn_frame, text="Refresh", command=self.refresh_tree).pack(fill=tk.X)
         self.refresh_tree()
 
     def show_context_menu(self, event: tk.Event) -> None:
@@ -84,7 +90,7 @@ class ProjectExplorer:
             self.tree.delete(i)
         root_path = self.project_root_var.get()
         if os.path.exists(root_path):
-            self.populate_tree("", root_path)"
+            self.populate_tree("", root_path)
     def populate_tree(self, parent: str, path: str) -> None:
         try:
             items = sorted(
@@ -101,7 +107,7 @@ class ProjectExplorer:
 
                 node = self.tree.insert(parent, "end", text=item, values=[abspath], open=False)"                if is_dir:
                     self.tree.insert(node, "end")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Error populating tree: {e}")"
+            logging.error(f"Error populating tree: {e}")
     def on_tree_open(self, event: tk.Event) -> None:
         item_id = self.tree.focus()
         abspath = self.tree.item(item_id, "values")[0]"        if os.path.isdir(abspath):
@@ -117,10 +123,11 @@ class ProjectExplorer:
         abspath = self.tree.item(item_id, "values")[0]"        self.on_double_click_callback(abspath)
 
     def get_selected_path(self) -> str | None:
-        """Returns the absolute path of the currently selected item in the tree.        selected = self.tree.selection()
+"""
+Returns the absolute path of the currently selected item in the tree.        selected = self.tree.selection()
         if not selected:
             return None
-        return self.tree.item(selected[0], "values")[0]"
+        return self.tree.item(selected[0], "values")[0]
     def filter_tree(self) -> None:
         query = self.search_var.get().lower()
         if not query:
@@ -155,3 +162,5 @@ class ProjectExplorer:
                     break
             if count > 100:
                 break
+
+"""

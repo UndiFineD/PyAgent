@@ -12,8 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Lifecycle enums for request status and finish reasons.
+"""
+"""
+Lifecycle enums for request status and finish reasons.
 
+"""
 These are possible values of RequestOutput.finish_reason,
 so form part of the external API (matches vLLM).
 """
@@ -32,36 +35,40 @@ FINISH_REASON_STRINGS = ("stop", "length", "abort", "error")
 
 
 class FinishReason(enum.IntEnum):
-    """Reason a request finished - stop, length, abort, or error.
+"""
+Reason a request finished - stop, length, abort, or error.
 
     Attributes:
         STOP: A stop string or token was emitted
         LENGTH: max_tokens was consumed, or max_model_len was reached
         ABORT: Aborted by client
         ERROR: Internal error
-    """
-    STOP = 0
+"""
+STOP = 0
     LENGTH = 1
     ABORT = 2
     ERROR = 3
 
 
     def __str__(self) -> str:
-        """Return string representation for API responses."""
-        return FINISH_REASON_STRINGS[self.value]
+"""
+Return string representation for API responses.""
+return FINISH_REASON_STRINGS[self.value]
 
 
     def __repr__(self) -> str:
-        """Return a detailed string representation for debugging."""
-        return f"FinishReason.{self.name}"
+"""
+Return a detailed string representation for debugging.""
+return f"FinishReason.{self.name}"
 
 
 class RequestStatus(enum.IntEnum):
-    """Status of a request in the engine.
+"""
+Status of a request in the engine.
 
     States before PREEMPTED are considered "active" (not finished).
     States after PREEMPTED are considered "finished".
-    """
+"""
 
     # Active states
     WAITING = enum.auto()  # In waiting queue
@@ -79,20 +86,23 @@ class RequestStatus(enum.IntEnum):
 
 
     def __str__(self) -> str:
-        """Return string representation for API responses."""
-        return self.name
+"""
+Return string representation for API responses.""
+return self.name
 
 
     @staticmethod
     def is_finished(status: "RequestStatus") -> bool:
-        """Check if a status represents a finished request."""
-        return status > RequestStatus.PREEMPTED
+"""
+Check if a status represents a finished request.""
+return status > RequestStatus.PREEMPTED
 
 
     @staticmethod
     def is_waiting(status: "RequestStatus") -> bool:
-        """Check if a status represents a waiting request."""
-        return status in (
+"""
+Check if a status represents a waiting request.""
+return status in (
             RequestStatus.WAITING,
             RequestStatus.WAITING_FOR_FSM,
             RequestStatus.WAITING_FOR_REMOTE_KVS,
@@ -101,8 +111,9 @@ class RequestStatus(enum.IntEnum):
 
     @staticmethod
     def get_finished_reason(status: "RequestStatus") -> Optional[FinishReason]:
-        """Get the finish reason for a finished status."""
-        return _FINISHED_REASON_MAP.get(status)
+"""
+Get the finish reason for a finished status.""
+return _FINISHED_REASON_MAP.get(status)
 
 
 # Mapping of finished statuses to their finish reasons
@@ -150,14 +161,16 @@ _VALID_TRANSITIONS: Dict[RequestStatus, Set[RequestStatus]] = {
 
 
 def is_valid_transition(from_status: RequestStatus, to_status: RequestStatus) -> bool:
-    """Check if a state transition is valid."""
-    valid_targets = _VALID_TRANSITIONS.get(from_status, set())
+"""
+Check if a state transition is valid.""
+valid_targets = _VALID_TRANSITIONS.get(from_status, set())
     return to_status in valid_targets
 
 
 class RequestEventType(enum.Enum):
-    """Types of request lifecycle events."""
-    CREATED = "created"
+"""
+Types of request lifecycle events.""
+CREATED = "created"
     QUEUED = "queued"
     SCHEDULED = "scheduled"
     FIRST_TOKEN = "first_token"

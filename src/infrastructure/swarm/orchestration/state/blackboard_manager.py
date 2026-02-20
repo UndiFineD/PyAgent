@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +18,10 @@ from __future__ import annotations
 
 
 """
+"""
 Shared central memory for opportunistic agent collaboration (Blackboard Pattern).
 
+"""
 try:
     import logging
 except ImportError:
@@ -54,10 +57,14 @@ class BlackboardManager:
         self.core = BlackboardCore()
 
     def post(self, key: str, value: Any, agent_name: str) -> None:
-        """Post data to the blackboard.        logging.info(f"Blackboard: Agent {agent_name} posted to {key}")"        self.core.process_post(key, value, agent_name)
+"""
+Post data to the blackboard.        logging.info(f"Blackboard: Agent {agent_name} posted to {key}")"        self.core.process_post(key, value, agent_name)
+
 
     def get(self, key: str) -> Any:
-        """Retrieve data from the blackboard.        return self.core.get_value(key)
+"""
+Retrieve data from the blackboard.        return self.core.get_value(key)
 
     def list_keys(self) -> list[str]:
-        """List all available keys on the blackboard.        return self.core.get_all_keys()
+"""
+List all available keys on the blackboard.        return self.core.get_all_keys()

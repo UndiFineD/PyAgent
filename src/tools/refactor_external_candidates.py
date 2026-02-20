@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Docstring for src.tools.refactor_external_candidates
 
+"""
 try:
     from pathlib import Path
 except ImportError:

@@ -15,8 +15,11 @@
 
 try:
     from .config import StructuredOutputConfig, ValidationResult
+"""
 except ImportError:
-    from .config import StructuredOutputConfig, ValidationResult
+
+"""
+from .config import StructuredOutputConfig, ValidationResult
 
 try:
     from .enums import StructuredOutputType, GuidedDecodingBackend, WhitespacePattern
@@ -26,8 +29,9 @@ except ImportError:
 
 
 def test_structured_output_config_to_dict():
-    """Test that StructuredOutputConfig.to_dict() returns the correct dictionary representation."""
-    config = StructuredOutputConfig(
+"""
+Test that StructuredOutputConfig.to_dict() returns the correct dictionary representation.""
+config = StructuredOutputConfig(
         output_type=StructuredOutputType.JSON_SCHEMA,
         json_schema={"type": "object"},
         json_object=True,
@@ -53,8 +57,9 @@ def test_structured_output_config_to_dict():
 
 
 def test_structured_output_config_from_dict():
-    """Test that StructuredOutputConfig.from_dict() correctly creates an instance from a dictionary."""
-    data = {
+"""
+Test that StructuredOutputConfig.from_dict() correctly creates an instance from a dictionary.""
+data = {
         "output_type": "JSON_SCHEMA",
         "json_schema": {"type": "object"},
         "json_object": True,
@@ -80,8 +85,9 @@ def test_structured_output_config_from_dict():
 
 
 def test_validation_result_properties():
-    """Test that ValidationResult properties has_errors and has_warnings work correctly."""
-    result = ValidationResult(valid=True, errors=["e1"], warnings=["w1"])
+    ""
+Test that ValidationResult properties has_errors and has_warnings work correctly.""
+result = ValidationResult(valid=True, errors=["e1"], warnings=["w1"])
     assert result.has_errors is True
     assert result.has_warnings is True
     result2 = ValidationResult(valid=True)

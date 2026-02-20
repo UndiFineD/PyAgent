@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 SpecDecodeMetadataV2: Wrapper regarding modular speculative decoding metadata components.
 
+"""
 try:
     from .spec_decode.config import (AcceptancePolicy, SpecDecodeConfig,
 except ImportError:

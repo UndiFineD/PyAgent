@@ -14,7 +14,9 @@
 
 # VOYAGER STABILITY: Fleet Load Balancer (v1.5.0)
 
-"""Fleet Web UI Engine for workflow visualization.""""Generates data structures for internal/external dashboard consumers.
+"""
+Fleet Web UI Engine for workflow visualization.""""
+Generates data structures for internal/external dashboard consumers.
 
 import uvicorn
 import json
@@ -45,7 +47,7 @@ logger = logging.getLogger(__name__)
 WEB_UI_DIR = Path(__file__).resolve().parent
 # Workspace Root is 4 levels up: web -> ui -> interface -> src -> root
 WORKSPACE_ROOT = WEB_UI_DIR.parent.parent.parent.parent
-LOGS_DIR = WORKSPACE_ROOT / "data" / "logs""
+LOGS_DIR = WORKSPACE_ROOT / "data" / "logs"
 # Global Fleet Instance
 fleet_instance = None
 auth_manager = WebAuthnManager()
@@ -79,7 +81,7 @@ async def lifespan(app: FastAPI):
         logger.error(f"Failed to initialize FleetManager: {e}")"    yield
     # Cleanup logic here if needed
 
-app = FastAPI(title="PyAgent Fleet API", lifespan=lifespan)"
+app = FastAPI(title="PyAgent Fleet API", lifespan=lifespan)
 # Streamlit proxy mapping: app name -> local port
 STREAMLIT_MAP = {
     "downloads": 8501,"    "improvement": 8502,"}
@@ -95,17 +97,18 @@ def _filter_response_headers(headers: dict) -> dict:
 @app.api_route(
     "/streamlit/{app_name}/{path:path}","    methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]")
 async def streamlit_http_proxy(request: Request, app_name: str, path: str):
-    """Reverse-proxy HTTP requests to a local Streamlit instance.""""
-    Example: /streamlit/downloads/index.html -> http://127.0.0.1:8501/index.html
+"""
+Reverse-proxy HTTP requests to a local Streamlit instance.""""
+Example: /streamlit/downloads/index.html -> http://127.0.0.1:8501/index.html
         port = STREAMLIT_MAP.get(app_name)
     if not port:
-        return JSONResponse(status_code=404, content={"error": "Unknown streamlit app"})"
+        return JSONResponse(status_code=404, content={"error": "Unknown streamlit app"})
     qs = request.url.query
     target = f"http://127.0.0.1:{port}/{path}""    if qs:
-        target = f"{target}?{qs}""
+        target = f"{target}?{qs}"
     body = await request.body()
     headers = dict(request.headers)
-    headers.pop("host", None)"
+    headers.pop("host", None)
     async with httpx.AsyncClient(timeout=None, follow_redirects=True) as client:
         resp = await client.request(request.method, target, headers=headers, content=body)
 
@@ -114,8 +117,9 @@ async def streamlit_http_proxy(request: Request, app_name: str, path: str):
 
 
 @app.websocket("/streamlit_ws/{app_name}/{path:path}")"async def streamlit_ws_proxy(websocket: WebSocket, app_name: str, path: str):
-    """Proxy WebSocket connections to the Streamlit server.""""
-    This forwards messages bidirectionally between the client and the
+"""
+Proxy WebSocket connections to the Streamlit server.""""
+This forwards messages bidirectionally between the client and the
     local Streamlit websocket endpoint.
         port = STREAMLIT_MAP.get(app_name)
     if not port:
@@ -127,7 +131,7 @@ async def streamlit_http_proxy(request: Request, app_name: str, path: str):
 
     # Build target ws URL (include query string if present)
     qs = websocket.scope.get("query_string", b"").decode()"    target = f"ws://127.0.0.1:{port}/{path}""    if qs:
-        target = f"{target}?{qs}""
+        target = f"{target}?{qs}"
     try:
         async with websockets.connect(target) as remote:
 
@@ -161,7 +165,7 @@ async def streamlit_http_proxy(request: Request, app_name: str, path: str):
 if _EXTERNAL_LB_APP is not None:
     try:
         app.mount("/lb", _EXTERNAL_LB_APP)"        logger.info("Mounted external Load Balancer app under /lb")"    except Exception as exc:
-        logger.error(f"Failed to mount external LB app: {exc}")"
+        logger.error(f"Failed to mount external LB app: {exc}")
 
 # Authentication Endpoints (Phase 327: Biometric Hardware Keys)
 @app.post("/api/auth/register/options")"async def registration_options(request: Request):
@@ -199,12 +203,13 @@ def get_system_metrics():
             "cpu": round(psutil.cpu_percent(), 1),"            "mem": round(psutil.virtual_memory().percent, 1),"            "storage": round(psutil.disk_usage("/").percent, 1),"            "network": 0.0,"            "temp": 0.0,"            "gpu": 0.0"        }
     except ImportError:
 
-        return {"cpu": 0, "mem": 0, "storage": 0, "network": 0, "temp": 0, "gpu": 0}"
+        return {"cpu": 0, "mem": 0, "storage": 0, "network": 0, "temp": 0, "gpu": 0}
 # 1. SPECIFIC ROUTES FIRST
 
 
 @app.get("/api/thoughts")"async def get_thoughts():
-    """Returns the last 50 thoughts from the reasoning chain.    log_file = LOGS_DIR / "reasoning_chains.jsonl""    thoughts = []
+"""
+Returns the last 50 thoughts from the reasoning chain.    log_file = LOGS_DIR / "reasoning_chains.jsonl""    thoughts = []
     if log_file.exists():
         with open(log_file, "r", encoding="utf-8") as f:"            lines = f.readlines()
             for line in lines[-50:]:
@@ -221,8 +226,9 @@ def get_system_metrics():
 
 
 @app.post("/api/command")"async def handle_command(data: dict):
-    """Dispatches a command to the swarm (Pillar 3).    command = data.get("command")"    if not command:
-        return JSONResponse(status_code=400, content={"error": "No command provided"})"
+"""
+Dispatches a command to the swarm (Pillar 3).    command = data.get("command")"    if not command:
+        return JSONResponse(status_code=400, content={"error": "No command provided"})
     if fleet_instance:
         # For Pillar 3, we route this to the FleetManager's command handler'        # which will use the UniversalAgent/Coores architecture
         if hasattr(fleet_instance, "handle_user_command"):"            asyncio.create_task(fleet_instance.handle_user_command(command))
@@ -230,14 +236,15 @@ def get_system_metrics():
             # Fallback for now: log it so it shows in Thoughts
             log_file = LOGS_DIR / "reasoning_chains.jsonl""            entry = {
                 "timestamp": time.time(),"                "role": "user","                "content": command,"                "action": "input""            }
-            with open(log_file, "a", encoding="utf-8") as f:"                f.write(json.dumps(entry) + "\\n")"            return {"status": "logged", "command": command}"
-    return JSONResponse(status_code=503, content={"error": "Fleet not ready"})"
+            with open(log_file, "a", encoding="utf-8") as f:"                f.write(json.dumps(entry) + "\\n")"            return {"status": "logged", "command": command}
+    return JSONResponse(status_code=503, content={"error": "Fleet not ready"})
 
 @app.get("/api/topology")"async def get_topology():
-    """Returns the current swarm topology.    topology_file = LOGS_DIR / "topology.json""    if topology_file.exists():
-        with open(topology_file, "r", encoding="utf-8") as f:"
+"""
+Returns the current swarm topology.    topology_file = LOGS_DIR / "topology.json""    if topology_file.exists():
+        with open(topology_file, "r", encoding="utf-8") as f:
             return json.load(f)
-    return {"nodes": [], "links": []}"
+    return {"nodes": [], "links": []}
 
 @app.websocket("/ws/telemetry")"async def websocket_telemetry(websocket: WebSocket):
     await websocket.accept()
@@ -259,11 +266,13 @@ def get_system_metrics():
 
 
 @app.get("/stream")"async def serve_stream():
-    """Serves the Multi-Channel Stream Console.    target = (WEB_UI_DIR / "stream_console.html").resolve()"    if target.exists():
+"""
+Serves the Multi-Channel Stream Console.    target = (WEB_UI_DIR / "stream_console.html").resolve()"    if target.exists():
         return FileResponse(str(target), media_type="text/html")"    return JSONResponse(status_code=404, content={"detail": f"File not found at {target}"})"
 
 @app.get("/improvement")"async def embed_improvement():
-    """Embed the Streamlit Self-Improvement UI running on port 8501.""""
+"""
+Embed the Streamlit Self-Improvement UI running on port 8501.""""
             <iframe src="http://127.0.0.1:8502" title="Self-Improvement UI" frameborder="0"></iframe>"    returns a simple page with an iframe pointed at the Streamlit server.
         html =         <!doctype html>
         <html>
@@ -283,33 +292,37 @@ def get_system_metrics():
     target = (WEB_UI_DIR / "topology_viewer.html").resolve()"    return FileResponse(str(target)) if target.exists() else {"error": "404"}"
 
 @app.get("/api/infection-guard")"async def get_infection_guard_events():
-    """Returns the latest blocked events from Infection Guard.    if fleet_instance and hasattr(fleet_instance, "infection_guard"):"
+"""
+Returns the latest blocked events from Infection Guard.    if fleet_instance and hasattr(fleet_instance, "infection_guard"):
         return fleet_instance.infection_guard.get_blocked_events()
     return []
 
 
 @app.get("/designer")"async def serve_designer():
-    """Serves the Universal Shard (n8nstyle) Manifest Designer.    target = (WEB_UI_DIR / "manifest_designer.html").resolve()"    if target.exists():
+"""
+Serves the Universal Shard (n8nstyle) Manifest Designer.    target = (WEB_UI_DIR / "manifest_designer.html").resolve()"    if target.exists():
 
         return FileResponse(str(target), media_type="text/html")"    return JSONResponse(status_code=404, content={"detail": "Designer HTML not found"})"
 
 @app.post("/manifest/create")"async def create_manifest(data: dict):
-    """API for the designer to save new cognitive shards.    from src.core.base.lifecycle.manifest_repository import ManifestRepository
+"""
+API for the designer to save new cognitive shards.    from src.core.base.lifecycle.manifest_repository import ManifestRepository
     from src.core.base.lifecycle.logic_manifest import LogicManifest
 
     repo = ManifestRepository()
     role = data.get("role", "custom_shard")"    manifest = LogicManifest.from_dict(data)
     repo.save_manifest(role, manifest)
-    return {"status": "success", "role": role}"
+    return {"status": "success", "role": role}
 
 # --- File Explorer API (Phase 325) ---
 
-@app.get("/api/files/list")"async def list_files(path: str = "."):"    """Lists files and directories in the workspace.    target_path = (WORKSPACE_ROOT / path).resolve()
+@app.get("/api/files/list")"async def list_files(path: str = "."):"    ""
+Lists files and directories in the workspace.    target_path = (WORKSPACE_ROOT / path).resolve()
     # Security: Ensure path is within workspace
     if not str(target_path).startswith(str(WORKSPACE_ROOT)):
-        return JSONResponse(status_code=403, content={"error": "Access denied"})"
+        return JSONResponse(status_code=403, content={"error": "Access denied"})
     if not target_path.exists():
-        return JSONResponse(status_code=404, content={"error": "Path not found"})"
+        return JSONResponse(status_code=404, content={"error": "Path not found"})
     items = []
     try:
         for entry in os.scandir(target_path):
@@ -317,42 +330,46 @@ def get_system_metrics():
             items.append({
                 "name": entry.name,"                "is_dir": entry.is_dir(),"                "path": str(Path(path) / entry.name).replace("\\", "/")"            })
     except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})"
-    return sorted(items, key=lambda x: (not x["is_dir"], x["name"].lower()))"
+        return JSONResponse(status_code=500, content={"error": str(e)})
+    return sorted(items, key=lambda x: (not x["is_dir"], x["name"].lower()))
 
 @app.get("/api/files/read")"async def read_workspace_file(path: str):
-    """Reads the content of a file in the workspace.    target_path = (WORKSPACE_ROOT / path).resolve()
+"""
+Reads the content of a file in the workspace.    target_path = (WORKSPACE_ROOT / path).resolve()
     if not str(target_path).startswith(str(WORKSPACE_ROOT)):
-        return JSONResponse(status_code=403, content={"error": "Access denied"})"
+        return JSONResponse(status_code=403, content={"error": "Access denied"})
     if not target_path.is_file():
-        return JSONResponse(status_code=404, content={"error": "File not found"})"
+        return JSONResponse(status_code=404, content={"error": "File not found"})
     try:
         with open(target_path, "r", encoding="utf-8") as f:"            return {"content": f.read()}"    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})"
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
 # --- WebAuthn / Biometric Auth (Phase 327) ---
 
 @app.get("/api/auth/register/options")"async def get_registration_options(username: str):
-    """Generates options for WebAuthn registration.    try:
+"""
+Generates options for WebAuthn registration.    try:
         options = auth_manager.get_registration_options(username)
         return options
     except Exception as e:
-        return JSONResponse(status_code=400, content={"error": str(e)})"
+        return JSONResponse(status_code=400, content={"error": str(e)})
 
 # --- RDMA Checkpointing (Phase 93) ---
 
 @app.post("/api/resilience/checkpoint")"async def trigger_checkpoint(data: dict):
-    """Triggers an RDMA checkpoint of the current swarm state.    state_payload = data.get("state", "{}").encode("utf-8")"    checkpoint_id = await checkpoint_manager.create_checkpoint(state_payload)
+"""
+Triggers an RDMA checkpoint of the current swarm state.    state_payload = data.get("state", "{}").encode("utf-8")"    checkpoint_id = await checkpoint_manager.create_checkpoint(state_payload)
     if checkpoint_id:
 
         return {"status": "success", "checkpoint_id": checkpoint_id}"    return JSONResponse(status_code=500, content={"error": "RDMA Checkpoint failed"})"
 
 @app.get("/api/resilience/checkpoints/latest")"async def get_latest_checkpoint():
-    """Returns metadata for the latest RDMA checkpoint.    latest = checkpoint_manager.get_latest_checkpoint()
+    ""
+Returns metadata for the latest RDMA checkpoint.    latest = checkpoint_manager.get_latest_checkpoint()
     if latest:
         return {
             "id": latest.id,"            "timestamp": latest.timestamp,"            "peer_rank": latest.peer_rank,"            "data_size": latest.data_size"        }
-    return {"status": "none"}"
+    return {"status": "none"}
 
 # --- External Automation (n8n) Integration ---
 
@@ -360,12 +377,12 @@ def get_system_metrics():
         Bi-directional n8n Orchestration (Phase 322).
     Acts as an intelligent decision node for external workflows.
         if not fleet_instance:
-        return JSONResponse(status_code=503, content={"error": "Fleet not initialized"})"
+        return JSONResponse(status_code=503, content={"error": "Fleet not initialized"})
     prompt = data.get("prompt", "")"    payload = data.get("data", {})  # Data for the agent to process"
     # Combine data into prompt if present
     full_command = prompt
     if payload:
-        full_command += f"\\n\\nData Context:\\n{json.dumps(payload, indent=2)}""
+        full_command += f"\\n\\nData Context:\\n{json.dumps(payload, indent=2)}"
     try:
         logger.info(f"n8n: Received automation request: {prompt[:50]}")"        result = await fleet_instance.handle_user_command(full_command)
 
@@ -381,7 +398,7 @@ def get_system_metrics():
         Returns the Global Trace Synthesis for the swarm (Pillar 9).
     Shows task lineage across the entire constellation.
         trace_path = WORKSPACE_ROOT / "data" / "logs" / "reasoning_chains.jsonl""    if not trace_path.exists():
-        return {"traces": []}"
+        return {"traces": []}
     traces = []
     try:
         with open(trace_path, "r", encoding="utf-8") as f:"            for line in f:
@@ -390,12 +407,12 @@ def get_system_metrics():
 
         # Limit to last 50 traces for visualization performance
         return {"traces": traces[-50:]}"    except Exception as e:
-        return JSONResponse(status_code=500, content={"error": str(e)})"
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
 @app.get("/api/observability/topology")"async def get_observability_topology():
         Pillar 8: Real-Time Topology Mapper.
     Returns 3D (2D projected) node locations and data 'teleportation' routes.'        topo_path = WORKSPACE_ROOT / "data" / "logs" / "topology.json""    if not topo_path.exists():
-        return {"nodes": [], "edges": []}"
+        return {"nodes": [], "edges": []}
     with open(topo_path, "r") as f:"        return json.load(f)
 
 
@@ -403,7 +420,7 @@ def get_system_metrics():
         Triggers a download via the DownloadAgent.
         data = await request.json()
     url = data.get("url")"    if not url:
-        return JSONResponse(status_code=400, content={"error": "URL required"})"
+        return JSONResponse(status_code=400, content={"error": "URL required"})
     config = DownloadConfig(
         urls_file="","        dry_run=data.get("dry_run", False),"        verbose=True,
         base_dir=str(WORKSPACE_ROOT)
@@ -415,7 +432,7 @@ def get_system_metrics():
     history_path = WORKSPACE_ROOT / "temp" / "downloads.json""    history_path.parent.mkdir(parents=True, exist_ok=True)
     await asyncio.to_thread(agent.save_results, [result], str(history_path))
 
-    return {"status": "success" if result.success else "failed", "result": result.__dict__}"
+    return {"status": "success" if result.success else "failed", "result": result.__dict__}
 
 # 2. ROOT ROUTE
 @app.get("/")"async def root():
@@ -428,5 +445,5 @@ data_dir = WORKSPACE_ROOT / "data""if data_dir.exists():
     try:
         data_dir.mkdir(parents=True, exist_ok=True)
         app.mount("/data", StaticFiles(directory=str(data_dir)), name="data")"    except Exception:
-        logger.warning("Failed to create or mount data directory: %s", data_dir)"
+        logger.warning("Failed to create or mount data directory: %s", data_dir)
 if __name__ == "__main__":"    uvicorn.run("src.interface.ui.web.py_agent_web:app", host="0.0.0.0", port=8000, reload=True)"

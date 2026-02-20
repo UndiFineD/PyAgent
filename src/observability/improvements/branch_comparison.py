@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Branch Comparison - Result of comparing improvements across branches
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -71,8 +75,9 @@ __version__ = VERSION
 
 @dataclass
 class BranchComparison:
-    """Result of comparing improvements across branches.""""
-    Attributes:
+"""
+Result of comparing improvements across branches.""""
+Attributes:
         source_branch: Source branch name.
         target_branch: Target branch name.
         file_path: Path to improvements file.
@@ -91,8 +96,8 @@ class BranchComparison:
     added_count: int = 0
     removed_count: int = 0
     modified_count: int = 0
-    compared_at: float = field(default_factory=t"""ime.time)""""
-
+    compared_at: float = field(default_factory=t""
+ime.time)""""
 try:
     import time
 except ImportError:
@@ -126,8 +131,9 @@ __version__ = VERSION
 
 @dataclass
 class BranchComparison:
-    """Result of comparing improvements across branches.""""
-    Attributes:
+"""
+Result of comparing improvements across branches.""""
+Attributes:
         source_branch: Source branch name.
         target_branch: Target branch name.
         file_path: Path to improvements file.
@@ -136,8 +142,11 @@ class BranchComparison:
         added_count: Number of improvements added.
         removed_count: Number of improvements removed.
         modified_count: Number of improvements modified.
-        compared_at: Com"""pariso"""n t"""imestamp.""""    
-    source_branch: str
+        compared_at: Com""
+pariso""
+n t""
+imestamp.""""
+source_branch: str
     target_branch: str
     file_path: str
     status: BranchComparisonStatus = BranchComparisonStatus.PENDING
@@ -146,3 +155,5 @@ class BranchComparison:
     removed_count: int = 0
     modified_count: int = 0
     compared_at: float = field(default_factory=time.time)
+
+"""

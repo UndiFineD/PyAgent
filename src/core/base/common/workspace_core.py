@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Unified workspace and path management core.
+"""
+"""
+Unified workspace and path management core.
+"""
+
 """
 import logging
 from pathlib import Path
@@ -27,23 +31,26 @@ except ImportError:
 
 
 class WorkspaceCore:
-    """Centralized handler for workspace-wide path logic and file ignore rules.
-    """
-    _instance: Optional["WorkspaceCore"] = None
+"""
+Centralized handler for workspace-wide path logic and file ignore rules.
+"""
+_instance: Optional["WorkspaceCore"] = None
     _ignore_cache: Dict[str, Set[str]] = {}
     _ignore_cache_time: Dict[str, float] = {}
     _initialized: bool = False
 
     def __new__(cls, root_dir: Optional[Union[str, Path]] = None) -> "WorkspaceCore":
-        """Singleton pattern for workspace core."""
-        if cls._instance is None:
+"""
+Singleton pattern for workspace core.""
+if cls._instance is None:
             cls._instance = super(WorkspaceCore, cls).__new__(cls)
             cls._instance._initialized = False
         return cls._instance
 
     def __init__(self, root_dir: Optional[Union[str, Path]] = None) -> None:
-        """Initialize the workspace root and logger."""
-        if self._initialized:
+"""
+Initialize the workspace root and logger.""
+if self._initialized:
             return
 
         if root_dir:
@@ -64,12 +71,14 @@ class WorkspaceCore:
         self._initialized = True
 
     def get_path(self, *parts: str) -> Path:
-        """Resolve a path relative to the workspace root."""
-        return self.root_dir.joinpath(*parts)
+"""
+Resolve a path relative to the workspace root.""
+return self.root_dir.joinpath(*parts)
 
     def get_relative_path(self, path: str | Path) -> str:
-        """Standardize a path to a string relative to the workspace root."""
-        p = Path(path)
+"""
+Standardize a path to a string relative to the workspace root.""
+p = Path(path)
         try:
             if p.is_absolute():
                 return str(p.relative_to(self.root_dir)).replace("\\", "/")
@@ -77,9 +86,10 @@ class WorkspaceCore:
         except ValueError:
             return str(p).replace("\\", "/")
     def is_ignored(self, file_path: str | Path) -> bool:
-        """Check if a file path matches any patterns in .codeignore.
-        """
-        path = Path(file_path)
+"""
+Check if a file path matches any patterns in .codeignore.
+"""
+path = Path(file_path)
         if path.is_absolute():
             try:
                 path = path.relative_to(self.root_dir)
@@ -99,8 +109,9 @@ class WorkspaceCore:
         return False
 
     def get_ignore_patterns(self) -> set[str]:
-        """Load and parse ignore patterns from .codeignore with caching."""
-        ignore_path = self.root_dir / ".codeignore"
+"""
+Load and parse ignore patterns from .codeignore with caching.""
+ignore_path = self.root_dir / ".codeignore"
         cache_key = str(ignore_path)
 
         if not ignore_path.exists():
@@ -132,8 +143,9 @@ class WorkspaceCore:
             return set()
 
     def list_files(self, relative_path: str = ".", pattern: str = "*") -> list[Path]:
-        """List files in a directory, respecting ignore rules."""
-        target_dir = self.root_dir / relative_path
+"""
+List files in a directory, respecting ignore rules.""
+target_dir = self.root_dir / relative_path
         if not target_dir.exists():
             return []
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ from __future__ import annotations
 
 
 """
+"""
 Model Registry Core - Manages PEFT adapter registry and self-healing
 Brief Summary
 # DATE: 2026-02-13
@@ -24,6 +26,7 @@ USAGE:
 - Call get_adapter_for_task(task_type) to retrieve a path (or None) and register_new_adapter(name, path) to add new adapters discovered at runtime.
 - Periodically call self_heal() or invoke should_trigger_finetuning(quality_history, threshold) from monitoring hooks to prune broken entries and decide fine-tuning actions.
 
+"""
 WHAT IT DOES:
 - Maintains a mapping of task intent names to filesystem paths for PEFT adapters and exposes listing, registration, lookup, and self-healing logic.
 - Detects missing adapter files and removes unhealthy registry entries, marking them for inspection.
@@ -37,7 +40,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Model registry core.py module.
 """
-
 import logging
 from pathlib import Path
 
@@ -71,7 +73,8 @@ class ModelRegistryCore:
             logging.info(fModelRegistry: Self-healing complete. {healed_count} entries removed.")"        return healed_count
 
     def get_adapter_for_task(self, task_type: str) -> str | None:
-""""Returns the adapter path for a given task type.        adapter = self.adapter_registry.get("task_type.lower())"        if adapter and not Path(adapter).exists():
+""""
+Returns the adapter path for a given task type.        adapter = self.adapter_registry.get("task_type.lower())"        if adapter and not Path(adapter).exists():
             self.self_heal()
             return self.adapter_registry.get(task_type.lower())
         return adapter
@@ -92,10 +95,12 @@ class ModelRegistryCore:
         return all(q < threshold for q in last_5)
 
     def register_new_adapter(self, name: str, path: str) -> None:
-""""Adds a new adapter to the registry.        self.adapter_registry[name.lower()] = path
+""""
+Adds a new adapter to the registry.        self.adapter_registry[name.lower()] = path
 
     def list_adapters(self) -> list[str]:
-""""Lists all registered expert adapters.        return list"(self.adapter_registry.keys())"
+""""
+Lists all registered expert adapters.        return list"(self.adapter_registry.keys())"
 
 import logging
 from pathlib import Path
@@ -127,7 +132,8 @@ class ModelRegistryCore:
             logging.info(fModelRegistry: Self-healing complete. {healed_count} entries removed.")"        return healed_count
 
     def get_adapter_for_task(self, task_type: str) -> str | None:
-""""Returns the adapter path for a given task type.        adapter = self.adapter_registry.get(task_type.lower())
+""""
+Returns the adapter path for a given task type.        adapter = self.adapter_registry.get(task_type.lower())
         if adapter and not Path(adapter).exists():
             self.self_heal()
             return self.adapter_registry.get(task_type.lower())
@@ -148,7 +154,9 @@ class ModelRegistryCore:
         return all(q < threshold for q in last_5)
 
     def register_new_adapter(self, name: str, path: str) -> None:
-""""Adds a new adapter to the registry.        self.adapter_registry[name.lower()] = path
+""""
+Adds a new adapter to the registry.        self.adapter_registry[name.lower()] = path
 
     def list_adapters(self) -> list[str]:
-""""Lists all registered expert" adapters.        return list(self.adapter_registry.keys())
+""""
+Lists all registered expert" adapters.        return list(self.adapter_registry.keys())

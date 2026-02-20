@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""BMAD Template Manager for providing structured document templates.
+"""
+"""
+BMAD Template Manager for providing structured document templates.
 
+"""
 try:
     import tkinter
 except ImportError:
@@ -31,7 +35,8 @@ except ImportError:
 __version__ = VERSION
 
 BMAD_TEMPLATES: dict[str, str] = {
-    "Select Template...": "","    "Quick Spec (⚡)": """
+    "Select Template...": "","    "Quick Spec ()": """
+
 # QUICK SPEC: [Feature/Bug Name]""""
 ## Problem Description
 [Describe what is happening vs what should happen]
@@ -42,7 +47,7 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Acceptance Criteria
 - [ ] Criterion 1
 - [ ] Criterion 2
-""",""""    "PRD (📋)": """
+""",""""    "PRD ()": """
 # PRODUCT REQUIREMENTS DOCUMENT: [Project Name]""""
 ## Executive Summary
 [High-level goal]
@@ -57,7 +62,7 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Non-Functional Requirements
 - Performance: ...
 - Security: ...
-""",""""    "Technical Spec (🏗️)": """
+""",""""    "Technical Spec (️)": """
 # TECHNICAL SPECIFICATION: [Project Name]""""
 ## Architecture Overview
 [High-level design]
@@ -71,7 +76,7 @@ BMAD_TEMPLATES: dict[str, str] = {
 ## Implementation Plan
 1. [Step 1]
 2. [Step 2]
-""",""""    "Test Plan (🧪)": """
+""",""""    "Test Plan ()": """
 # TEST PLAN: [Feature Name]""""
 ## Test Strategy
 [Manual vs Automated, Unit vs E2E]
@@ -88,7 +93,8 @@ BMAD_TEMPLATES: dict[str, str] = {
 
 
 class TemplateManager:
-    """Manages insertion of BMAD-standard templates into text widgets.
+"""
+Manages insertion of BMAD-standard templates into text widgets.
     @staticmethod
     def get_template_names() -> list[str]:
         return list(BMAD_TEMPLATES.keys())

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Syntax Fixer Mixin - Fix Python syntax patterns and common type-hint errors
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -49,7 +53,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Mixin for fixing Python syntax patterns and common type hint errors.
 """
-
 import logging
 import re
 from pathlib import Path
@@ -59,7 +62,8 @@ logger = logging.getLogger(__name__)
 
 
 class SyntaxFixerMixin:
-    """Provides automated fixes for specific Python syntax patterns.
+"""
+Provides automated fixes for specific Python syntax patterns.
     def fix_invalid_for_loop_type_hints(self, file_path: Path) -> bool:
         r        Fixes 'for x: Type in' -> 'for x in' which is invalid Python syntax.'        Regex pattern: r'for\\s+(\\w+):\\s*[^i]*?\\s+in\\s+''                try:
             content = file_path.read_text(encoding='utf-8')'            # Pattern matches: for var: type in, for var: dict[str, Any] in, etc.
@@ -77,7 +81,8 @@ class SyntaxFixerMixin:
             content = file_path.read_text(encoding='utf-8')'            indices = []
             i = 0
             while True:
-                idx = content.find('"""', i)""""'                if idx == -1:
+                idx = content.find('"""', i)"""
+if idx == -1:
                     break
                 indices.append(idx)
                 i = idx + 3
@@ -87,3 +92,5 @@ class SyntaxFixerMixin:
             return []
         except Exception as e:
             logger.error(f"Failed to check triple quotes in {file_path}: {e}")"            return []
+
+"""

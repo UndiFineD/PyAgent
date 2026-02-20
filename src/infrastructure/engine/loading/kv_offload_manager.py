@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Facade for KV offloading management.
 
+"""
 try:
     from .kv_offload import (ARCOffloadingManager, BlockHash, BlockStatus,
 except ImportError:

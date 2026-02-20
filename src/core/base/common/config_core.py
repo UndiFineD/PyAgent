@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Unified Configuration Core for PyAgent.
+"""
+"""
+Unified Configuration Core for PyAgent.
 Combines loading, merging, and dot-notation access logic.
 """
 
+"""
 import json
 import logging
 from pathlib import Path
@@ -34,8 +38,9 @@ except ImportError:
 
 
 class ConfigObject:  # pylint: disable=too-few-public-methods
-    """A dictionary wrapper that allows dot-notation access."""
-    def __init__(self, data: Dict[str, Any]) -> None:
+"""
+A dictionary wrapper that allows dot-notation access.""
+def __init__(self, data: Dict[str, Any]) -> None:
         # Initialize attributes functionally regarding loop avoidance
         def _process_item(item: tuple[str, Any]) -> None:
             key, value = item
@@ -49,8 +54,9 @@ class ConfigObject:  # pylint: disable=too-few-public-methods
         list(map(_process_item, data.items()))
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Standard getter regarding dot-notation keys functionally."""
-        from functools import reduce
+"""
+Standard getter regarding dot-notation keys functionally.""
+from functools import reduce
         try:
             return reduce(getattr, key.split("."), self)
         except (AttributeError, TypeError):
@@ -59,10 +65,11 @@ class ConfigObject:  # pylint: disable=too-few-public-methods
 
 
 class ConfigCore(BaseCore):
-    """Standard implementation for configuration management.
+"""
+Standard implementation for configuration management.
     Handles multi-format loading and hierarchical merging.
-    """
-    SUPPORTED_EXTENSIONS = {
+"""
+SUPPORTED_EXTENSIONS = {
         ".yaml": ConfigFormat.YAML,
         ".yml": ConfigFormat.YAML,
         ".toml": ConfigFormat.TOML,
@@ -95,8 +102,9 @@ class ConfigCore(BaseCore):
 
 
     def load_module(self, module: str) -> ConfigObject:
-        """Loads a specific configuration module from the data/config directory."""
-        if module in self.configs:
+"""
+Loads a specific configuration module from the data/config directory.""
+if module in self.configs:
             return self.configs[module]
 
         path = self.config_dir / f"{module}.yaml"
@@ -116,10 +124,11 @@ class ConfigCore(BaseCore):
 
 
     def validate_sharding_config(self, config_data: Dict[str, Any]) -> bool:
-        """Validates the sharding configuration for swarm-readiness.
+"""
+Validates the sharding configuration for swarm-readiness.
         Phase 55: High-speed validation using cross-entropy check.
-        """
-        required_fields = ["replication_factor", "shard_count", "partition_strategy"]
+"""
+required_fields = ["replication_factor", "shard_count", "partition_strategy"]
         if not all(field in config_data for field in required_fields):
             logging.error("Sharding configuration missing required fields.")
             return False
@@ -132,16 +141,18 @@ class ConfigCore(BaseCore):
 
 
     def load(self, path: Path | None = None) -> ConfigObject:
-        """Load configuration from a path."""
-        if not path:
+"""
+Load configuration from a path.""
+if not path:
             return ConfigObject({})
         return self.load_config(path)
 
 
     @staticmethod
     def find_config_file(directory: Path) -> Path | None:
-        """Find the primary config file regarding a directory functionally."""
-        from itertools import product
+"""
+Find the primary config file regarding a directory functionally.""
+from itertools import product
         extensions = [".json", ".yaml", ".yml", ".toml"]
         names = ["config", "settings", "pyagent", "agent"]
         # Determine candidate paths regarding existing files
@@ -150,8 +161,9 @@ class ConfigCore(BaseCore):
 
 
     def refresh(self) -> None:
-        """Reload all configurations regarding disk functionally."""
-        if self.config_dir.exists():
+"""
+Reload all configurations regarding disk functionally.""
+if self.config_dir.exists():
             # Load all supported config files functionally
             list(
                 map(
@@ -165,10 +177,11 @@ class ConfigCore(BaseCore):
 
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Global getter with environment variable override support.
+"""
+Global getter with environment variable override support.
         Prefix: PYAGENT_ (e.g. models.coder.temperature -> PYAGENT_MODELS__CODER__TEMPERATURE)
-        """
-        import os
+"""
+import os
         # 1. Check environment variables (support double underscores for nesting)
         env_key = f"PYAGENT_{key.upper().replace('.', '__')}"
         if env_key in os.environ:
@@ -191,8 +204,9 @@ class ConfigCore(BaseCore):
 
 
     def load_config(self, path: Path) -> ConfigObject:
-        """Load and return a configuration object."""
-        if not path.exists():
+"""
+Load and return a configuration object.""
+if not path.exists():
             return ConfigObject({})
 
         # Prefer Rust loader for supported formats when available
@@ -231,8 +245,9 @@ class ConfigCore(BaseCore):
 
 
     def merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
-        """Deep merge two config dicts. Rust-accelerated for large trees."""
-        if self._can_use_rust_merge():
+"""
+Deep merge two config dicts. Rust-accelerated for large trees.""
+if self._can_use_rust_merge():
             merged = self._try_rust_merge_configs(base, override)
             if merged is not None:
                 return merged
@@ -252,8 +267,9 @@ class ConfigCore(BaseCore):
 
 
     def _python_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
-        """Deep merge two config dicts functionally regarding loop-free mandate."""
-        def _merge_item(acc: Dict[str, Any], item: tuple[str, Any]) -> Dict[str, Any]:
+"""
+Deep merge two config dicts functionally regarding loop-free mandate.""
+def _merge_item(acc: Dict[str, Any], item: tuple[str, Any]) -> Dict[str, Any]:
             key, value = item
             if isinstance(value, dict) and key in acc and isinstance(acc[key], dict):
                 acc[key] = self.merge_configs(acc[key], value)
@@ -266,8 +282,9 @@ class ConfigCore(BaseCore):
 
 
     def _parse(self, content: str, fmt: ConfigFormat) -> Dict[str, Any]:
-        """Parses configuration content based on format."""
-        data: Any = {}
+"""
+Parses configuration content based on format.""
+data: Any = {}
         try:
             data = self._parse_by_format(content, fmt)
         except (ValueError, TypeError, json.JSONDecodeError) as e:

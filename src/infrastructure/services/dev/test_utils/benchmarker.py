@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from collections.abc import Callable
 except ImportError:
@@ -42,13 +42,16 @@ __version__ = VERSION
 
 
 class Benchmarker:
-    """Runs benchmarks and collects statistics.
+"""
+Runs benchmarks and collects statistics.
     def __init__(self) -> None:
-        """Initialize benchmarker.        self.timings: list[float] = []
+"""
+Initialize benchmarker.        self.timings: list[float] = []
 
     def run(self, fn: Callable[[], None], iterations: int = 5) -> dict[str, float]:
-        """Run a function multiple times and collect timing statistics.""""
-        Args:
+"""
+Run a function multiple times and collect timing statistics.""""
+Args:
             fn: Function to benchmark.
             iterations: Number of iterations.
 

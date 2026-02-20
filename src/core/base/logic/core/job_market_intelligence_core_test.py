@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.job_market_intelligence_core import JobPosting, JobMarketStats, JobMarketIntelligenceCore

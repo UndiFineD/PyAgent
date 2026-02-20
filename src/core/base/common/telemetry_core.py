@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Centralized Telemetry and Metrics Core.
+"""
+"""
+Centralized Telemetry and Metrics Core.
 Provides high-performance aggregation, alerting, and cross-tier observability.
 """
 
+"""
 import logging
 import time
 from dataclasses import dataclass, field
@@ -36,8 +40,9 @@ logger = logging.getLogger("pyagent.telemetry")
 
 
 class MetricType(Enum):
-    """Enumeration of supported metric types."""
-    COUNTER = "counter"
+"""
+Enumeration of supported metric types.""
+COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
@@ -45,8 +50,9 @@ class MetricType(Enum):
 
 @dataclass
 class Metric:
-    """Representation of a single metric data point."""
-    name: str
+"""
+Representation of a single metric data point.""
+name: str
     value: float
     metric_type: MetricType = MetricType.GAUGE
     timestamp: float = field(default_factory=time.time)
@@ -65,11 +71,11 @@ class Metric:
 
 
 class TelemetryCore(BaseCore):
-    """Authoritative engine for system metrics and event tracking.
+"""
+Authoritative engine for system metrics and event tracking.
     Standardizes how agents and infrastructure report health and performance.
-    """
-
-    def __init__(self) -> None:
+"""
+def __init__(self) -> None:
         super().__init__()
         self._metrics_buffer: List[Metric] = []
         self._alerts: List[Dict[str, Any]] = []
@@ -78,8 +84,9 @@ class TelemetryCore(BaseCore):
     def record_metric(
         self, name: str, value: float, mtype: MetricType = MetricType.GAUGE, tags: Optional[Dict[str, str]] = None
     ) -> None:
-        """Records a single metric point."""
-        metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
+"""
+Records a single metric point.""
+metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
         self._metrics_buffer.append(metric)
 
         # Trim buffer if too large (10k points)
@@ -88,10 +95,11 @@ class TelemetryCore(BaseCore):
 
 
     def get_rollups(self, metric_name: str, window_seconds: int = 3600) -> Dict[str, float]:
-        """Calculates basic stats for a metric.
+"""
+Calculates basic stats for a metric.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
-        """
-        if rc and hasattr(rc, "calculate_rollups"):
+"""
+if rc and hasattr(rc, "calculate_rollups"):
             try:
                 # Optimized Rust rollup calculation
                 return rc.calculate_rollups(  # pylint: disable=no-member
@@ -113,8 +121,9 @@ class TelemetryCore(BaseCore):
 
 
     def get_cluster_health_score(self) -> float:
-        """Calculates a unified health score (0.0 - 1.0) for the local machine or cluster."""
-        cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)
+"""
+Calculates a unified health score (0.0 - 1.0) for the local machine or cluster.""
+cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)
         mem_avg = self.get_rollups("swarm.node.memory_percent", window_seconds=60).get("avg", 0.0)
         # Invert the load to get a 'health' score
         # (e.g. 20% CPU + 30% MEM -> 0.75 health)
@@ -123,6 +132,7 @@ class TelemetryCore(BaseCore):
 
 
     def clear(self) -> None:
-        """Clears all buffered metrics and alerts."""
-        self._metrics_buffer.clear()
+        ""
+Clears all buffered metrics and alerts.""
+self._metrics_buffer.clear()
         self._alerts.clear()

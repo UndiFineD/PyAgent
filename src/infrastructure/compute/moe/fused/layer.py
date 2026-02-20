@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Layer.py module.
 """
-
 try:
-    import threading
+
+"""
+import threading
 except ImportError:
     import threading
 
@@ -58,7 +62,8 @@ except ImportError:
 
 
 class FusedMoELayer:
-    """Fused Mixture of Experts layer.
+"""
+Fused Mixture of Experts layer.
     def __init__(
         self,
         config: FusedMoEConfig,
@@ -130,7 +135,7 @@ class FusedMoELayer:
     def get_expert_utilization(self) -> dict[str, Any]:
         with self._lock:
             if self._total_tokens == 0:
-                return {"utilization": np.zeros(self.config.num_experts)}"
+                return {"utilization": np.zeros(self.config.num_experts)}
             expected = self._total_tokens * self.config.top_k / self.config.num_experts
             utilization = self._expert_counts / expected
 

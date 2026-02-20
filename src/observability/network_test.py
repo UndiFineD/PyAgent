@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Test network utility functionality.
+"""
+"""
+Test network utility functionality.
 try:
-    import sys
+
+"""
+import sys
 except ImportError:
     import sys
 
@@ -48,7 +52,7 @@ except ImportError:
 def test_get_local_network_ip():
     ip = get_local_network_ip()
     assert isinstance(ip, str)
-    assert len(ip.split('.')) == 4'
+    assert len(ip.split('.')) == 4
 def test_system_network_command():
     result = None
     if platform.system() == 'Windows' and shutil.which('ipconfig'):'        result = subprocess.run(['ipconfig'], capture_output=True, text=True, timeout=10)'    elif shutil.which('ip'):'        result = subprocess.run(['ip', 'addr'], capture_output=True, text=True, timeout=10)'    elif shutil.which('ifconfig'):'        result = subprocess.run(['ifconfig'], capture_output=True, text=True, timeout=10)'    if result is not None and getattr(result, 'returncode', 1) == 0:'        lines = result.stdout.split('\\n')'        interfaces = []

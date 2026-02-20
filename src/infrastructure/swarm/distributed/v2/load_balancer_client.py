@@ -15,10 +15,12 @@
 
 
 """
+"""
 Load Balancer Client for Phase 55.
 Implements P2C (Power of Two Choices) selection and weighted round-robin for distributing
 requests across DP ranks.
 
+"""
 import logging
 import random
 from typing import Dict, List
@@ -38,7 +40,7 @@ class LoadBalancerClient:
     
     def __init__(self, endpoint_ranks: List[int]):
         self.ranks = endpoint_ranks
-        self.stats: Dict[int, Dict[str, float]] = {r: {"load": 0.0, "latency": 0.05} for r in endpoint_ranks}"
+        self.stats: Dict[int, Dict[str, float]] = {r: {"load": 0.0, "latency": 0.05} for r in endpoint_ranks}
     def select_rank_p2c(self) -> int:
                 Selects a rank using the 'Power of Two Choices' algorithm.'        Reduces maximum load compared to simple round-robin.
                 if rc and hasattr(rc, "load_balance_select_rust"):"            return rc.load_balance_select_rust(self.ranks, [s["load"] for s in self.stats.values()])"
@@ -48,10 +50,14 @@ class LoadBalancerClient:
         return c1 if load1 < load2 else c2
 
     def update_rank_stats(self, rank_id: int, load: float, latency: float):
-        """Updates internal statistics for a specific rank.        if rank_id in self.stats:
+"""
+Updates internal statistics for a specific rank.        if rank_id in self.stats:
             self.stats[rank_id]["load"] = load"            self.stats[rank_id]["latency"] = (self.stats[rank_id]["latency"] * 0.9) + (latency * 0.1)"
     def get_health_map(self) -> Dict[int, str]:
-        """Returns the health status of all ranks.        health = {}
+"""
+Returns the health status of all ranks.        health = {}
         for r, s in self.stats.items():
             if s["load"] > 0.95:"                health[r] = "CONGESTED""            elif s["latency"] > 1.0:"                health[r] = "LAGGING""            else:
                 health[r] = "OK""        return health
+
+"""

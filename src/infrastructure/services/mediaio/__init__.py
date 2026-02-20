@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Media IO package for unified media loading and processing.
 
+"""
 try:
     from .audio import AudioLoader  # noqa: F401
 except ImportError:

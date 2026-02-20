@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+
+
+
+from __future__ import annotations
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+AgentChainStep - Represents a single step in an agent execution chain.
+
+"""
+
+[Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+USAGE:
+try:
+    from .logic.orchestration.agent_chain_step import AgentChainStep
+except ImportError:
+    from src.logic.orchestration.agent_chain_step import AgentChainStep
+
+
+# Simple step that wraps and unwraps data for a downstream agent
+step = AgentChainStep(
+    agent_name="ExampleAgent","    input_transform=lambda data: {"payload": data},"    output_transform=lambda out: out.get("result"),"    enabled=True,
+    condition=lambda ctx: ctx is not None and ctx.get("run_step", True),")
+
+# Execution pattern: check step.enabled and step.condition(context) before calling
+# transformed_input = step.input_transform(raw_input) if step.input_transform else raw_input
+# agent_result = run_agent(step.agent_name, transformed_input)
+# final = step.output_transform(agent_result) if step.output_transform else agent_result
+
+WHAT IT DOES:
+- Encapsulates metadata and optional transformation/guard functions for a single link in a chain of agents.
+- Holds agent identity (agent_name), optional input/output transformers, an enabled flag,
+  and an optional condition predicate.
+- Designed as a lightweight dataclass for easy construction, serialization, and immutability-friendly behavior.
+
+WHAT IT SHOULD DO BETTER:
+- Validate callable signatures and provide clearer runtime errors when transforms/conditions
+  have unexpected parameters.
+- Offer built-in async support and standard execution helper methods (e.g.,
+  execute(context, runner)) so chains have a canonical runtime behavior.
+- Add thorough unit tests, richer docstrings, and optional logging/hooks for observability
+  and debugging.
+- Support optional metadata, priority, retry policy, and deterministic ordering for complex
+  orchestration needs.
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent.py
+
+try:
+    from collections.abc import Callable
+except ImportError:
+    from collections.abc import Callable
+
+try:
+    from dataclasses import dataclass
+except ImportError:
+    from dataclasses import dataclass
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+__version__ = VERSION
+
+
+@dataclass
+class AgentChainStep:
+    ""
+A step in an agent chain.""""
+Attributes:
+        agent_name: Name of the agent to execute.
+        input_transform: Optional function to transform input.
+        output_transform: Optional function to transform output.
+        enabled: Whether this step is enabled.
+        condition: Optional condition function to check before execution.
+    
+    agent_name: str
+    input_transform: Callable[[Any], Any] | None = None
+    output_transform: Callable[[Any], Any] | None = None
+    enabled: bool = True
+    condition: Callable[[Any], bool] | None = None
+
+""
+
+"""

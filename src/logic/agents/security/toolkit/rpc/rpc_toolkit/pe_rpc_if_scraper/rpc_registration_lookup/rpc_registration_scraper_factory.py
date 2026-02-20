@@ -28,8 +28,11 @@
 
 try:
     from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor
+"""
 except ImportError:
-    from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor
+
+"""
+from rpc_registration_lookup.base_rpc_registration_scraper import BaseRpcRegistrationExtractor
 
 try:
     from rpc_registration_lookup.ida_rpc_registration_scraper import IdaProRpcRegistrationExtractor
@@ -43,8 +46,10 @@ except ImportError:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" IDA = "idapro"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" RADARE = "radare"  # [BATCHFIX] closed string"
+"""
+IDA = "idapro"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+"""
+RADARE = "radare"  # [BATCHFIX] closed string
 _factory = {IDA: IdaProRpcRegistrationExtractor, RADARE: Radare2RpcRegistrationExtractor}
 disassemblers = list(_factory.keys())
 
@@ -53,12 +58,18 @@ disassemblers = list(_factory.keys())
 class UnsupportedDisassemblerTypeException(Exception):
     def __init__(self, dism_name: str) -> None:
 # [BATCHFIX] Commented metadata/non-Python
-#         super().__init__(fDisassembler {dism_name} is not currently supported")"  # [BATCHFIX] closed string"
+#         super().__init__(fDisassembler {dism_name} is not currently supported")"  # [BATCHFIX] closed string
 
 def rpc_registration_scraper_factory(disassembler: str) -> BaseRpcRegistrationExtractor:
     if disassembler not in _factory:
         raise UnsupportedDisassemblerTypeException(disassembler)
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     return _factory[disassembler]""""
+"""
+return _factory[disassembler]""""
+"""
+
+""
+
+"""

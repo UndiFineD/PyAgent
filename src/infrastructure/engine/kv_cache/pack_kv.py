@@ -13,9 +13,11 @@
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 PackKV: LLM-Aware Lossy Compression for KV Cache.
 Ref: arXiv:2512.24449
 
+"""
 try:
     from typing import Any, Dict, List, Optional
 except ImportError:
@@ -57,9 +59,11 @@ class PackKVManager(SingleTypeKVCacheManager):
         return ceil(num_tokens / self.spec.block_size)
 
     def set_compression_metadata(self, block_id: int, scale: float, min_val: float, permutation: List[int]) -> None:
-        """Store metadata required for register-level decompression.        self.compression_metadata[block_id] = {"scale": scale, "min": min_val, "permutation": permutation}"
+"""
+Store metadata required for register-level decompression.        self.compression_metadata[block_id] = {"scale": scale, "min": min_val, "permutation": permutation}
     def get_compression_metadata(self, block_id: int) -> Optional[Dict[str, Any]]:
-        """Retrieve compression metadata for a specific block.        return self.compression_metadata.get(block_id)
+"""
+Retrieve compression metadata for a specific block.        return self.compression_metadata.get(block_id)
 
     def free(self, request_id: str) -> None:
         blocks = self.request_blocks.get(request_id, [])

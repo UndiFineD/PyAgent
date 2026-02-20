@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "Advanced Long-Term Memory (LTM) for agents."# Consolidates episodic memories into semantic knowledge and persistent preferences.
+"""
 Inspired by mem0 and BabyAGI patterns.
 """
-
 try:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -77,9 +81,11 @@ class GlobalContextEngine(
         elif workspace_root:
             self.workspace_root = Path(workspace_root)
         else:
-            self.workspace_root = Path(".")"
+            self.workspace_root = Path(".")
 #         self.context_file = self.workspace_root / ".agent_global_context.json"#         self.shard_dir = self.workspace_root / ".agent_shards"        self.core = GlobalContextCore()
         self.memory: dict[str, Any] = {
             "facts": {},"            "preferences": {},"            "constraints": [],"            "insights": [],"            "entities": {},"            "lessons_learned": [],"        }
         self._loaded_shards: set[Any] = set()
         self.load()
+
+"""

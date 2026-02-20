@@ -13,28 +13,17 @@
 # limitations under the License.
 
 
-Workspace package.
+"""
+"""
+Workspace utilities for the engine (parser-safe stub).
 
-try:
-    from .buffer_recycler import BufferRecycler  # noqa: F401
-except ImportError:
-    from .buffer_recycler import BufferRecycler # noqa: F401
+"""
+This package provides minimal stubs for workspace components used by
+tests and higher-level modules while the repository is being repaired.
+"""
+from .buffer_recycler import BufferRecycler
+from .memory_profiler import MemoryProfiler
+from .predictive_workspace import PredictiveWorkspace
+from .ubatching_utils import ubatch
 
-try:
-    from .memory_profiler import MemoryProfiler  # noqa: F401
-except ImportError:
-    from .memory_profiler import MemoryProfiler # noqa: F401
-
-try:
-    from .ubatching_utils import UBatchingUtils  # noqa: F401
-except ImportError:
-    from .ubatching_utils import UBatchingUtils # noqa: F401
-
-try:
-    from .workspace_manager import WorkspaceManager  # noqa: F401
-except ImportError:
-    from .workspace_manager import WorkspaceManager # noqa: F401
-
-
-__all__ = [
-    "WorkspaceManager","    "UBatchingUtils","    "MemoryProfiler","    "BufferRecycler","]
+__all__ = ["BufferRecycler", "MemoryProfiler", "PredictiveWorkspace", "ubatch"]

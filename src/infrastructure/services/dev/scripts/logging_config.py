@@ -15,8 +15,10 @@
 
 
 """
+"""
 Logging config.py module.
 
+"""
 try:
     import logging
 except ImportError:
@@ -39,7 +41,7 @@ except ImportError:
 def setup_fleet_logging(log_dir: str = "data/logs", health_score: float = 1.0) -> None:"        Sets up the fleet logging with rotation and dynamic levels.
         os.makedirs(log_dir, exist_ok=True)
 
-    log_file = os.path.join(log_dir, "fleet.log")"
+    log_file = os.path.join(log_dir, "fleet.log")
     core = LogRotationCore(log_dir)
 
     # Check for rotation
@@ -54,7 +56,7 @@ def setup_fleet_logging(log_dir: str = "data/logs", health_score: float = 1.0) -
         format="%(asctime)s [%(levelname)s] %(name)s: %(message)s","        handlers=[logging.FileHandler(log_file), logging.StreamHandler()],
         force=True,
     )
-    logging.info(f"Fleet logging initialized at level: {log_level_str}")"
+    logging.info(f"Fleet logging initialized at level: {log_level_str}")
 
 if __name__ == "__main__":"    setup_fleet_logging(health_score=0.5)
 

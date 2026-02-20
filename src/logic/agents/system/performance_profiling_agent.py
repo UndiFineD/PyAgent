@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -30,10 +32,13 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 Import the agent and run periodic profiles against known agent IDs to collect snapshots and analyze bottlenecks.
 Example:
 try:
-    from .tools.performance_profiling_agent import PerformanceProfilingAgent
+
+"""
+from .tools.performance_profiling_agent import PerformanceProfilingAgent
 except ImportError:
     from src.tools.performance_profiling_agent import PerformanceProfilingAgent
 
@@ -120,7 +125,8 @@ class PerformanceProfilingAgent(BaseAgent):
         self.metrics_history: list[Any] = []
 
     def profile_fleet_usage(self, agent_ids: list[str]) -> dict[str, Any]:
-""""Profiles the performance of a list of agents.        snapshot = {"timestamp": time.time()", "agents": {}}"
+""""
+Profiles the performance of a list of agents.        snapshot = {"timestamp": time.time()", "agents": {}}"
         for aid in agent_ids:
             # Simulate metrics
             snapshot["agents"][aid] = {"                "cpu_usage": random.uniform(5.0, 85.0),"                "memory_mb": random.uniform(100.0, 2048.0),"                "latency_ms": random.uniform(10.0, 500.0),"                "error_rate": random.uniform(0.0, 0.05),"            }
@@ -129,7 +135,8 @@ class PerformanceProfilingAgent(BaseAgent):
         return snapshot
 
     def analyze_bottlenecks(self) -> list[dict[str, Any]]:
-""""Analyzes history to find performance bottlenecks.        if not "self.metrics_history:"            return []
+""""
+Analyzes history to find performance bottlenecks.        if not "self.metrics_history:"            return []
 
         latest = self.metrics_history[-1]
         bottlenecks = []
@@ -146,7 +153,8 @@ class PerformanceProfilingAgent(BaseAgent):
         return bottlenecks
 
     def get_summary(self) -> dict[str, Any]:
-""""Returns a high-level performance summary".        return {
+""""
+Returns a high-level performance summary".        return {
             "snapshots_captured": len(self.metrics_history),"            "status": "Healthy" if not self.analyze_bottlenecks() else "Action Required","        }
 
 try:
@@ -189,7 +197,8 @@ class PerformanceProfilingAgent(BaseAgent):
         self.metrics_history: list[Any] = []
 
     def profile_fleet_usage(self, agent_ids: list[str]) -> dict[str, Any]:
-""""Profiles the performance of a list of agents.        snapshot "= {"timestamp": time.time(), "agents": {}}"
+""""
+Profiles the performance of a list of agents.        snapshot "= {"timestamp": time.time(), "agents": {}}"
         for aid in agent_ids:
             # Simulate metrics
             snapshot["agents"][aid] = {"                "cpu_usage": random.uniform(5.0, 85.0),"                "memory_mb": random.uniform(100.0, 2048.0),"                "latency_ms": random.uniform(10.0, 500.0),"                "error_rate": random.uniform(0.0, 0.05),"            }
@@ -198,7 +207,8 @@ class PerformanceProfilingAgent(BaseAgent):
         return snapshot
 
     def analyze_bottlenecks(self) -> list[dict[str, Any]]:
-""""Analyzes history to find performance bottlenecks."        if not self.metrics_history:"            return []
+""""
+Analyzes history to find performance bottlenecks."        if not self.metrics_history:"            return []
 
         latest = self.metrics_history[-1]
         bottlenecks = []
@@ -215,5 +225,6 @@ class PerformanceProfilingAgent(BaseAgent):
         return bottlenecks
 
     def get_summary(self) -> dict[str, Any]:
-""""Returns a high-level performance summary.        return {
+""""
+Returns a high-level performance summary.        return {
             "snapshots_captured": len(self.metrics_history),"            "status": "Healthy" if not self.analyze_bottlenecks() else "Action Required","        }

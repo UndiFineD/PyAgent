@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Minimal SignalRegistry shim used for tests and importability.
+"""
+"""
+Minimal SignalRegistry shim used for tests and importability.
 
+"""
 This file was replaced with a small, safe implementation that provides
 an API used by other modules. It is intentionally simple and thread-safe
 for the test environment.
 """
-
 import logging
 from collections import defaultdict
 from typing import Any, Callable, DefaultDict, List
@@ -31,23 +34,24 @@ __version__ = VERSION
 
 
 class SignalRegistry:
-    """A minimal in-process signal registry.
+"""
+A minimal in-process signal registry.
 
     Methods are lightweight stubs suitable for unit tests.
-    """
-
-    def __init__(self) -> None:
+"""
+def __init__(self) -> None:
         self.version = VERSION
         self._subscribers: DefaultDict[str, List[Callable[[str, dict], Any]]] = defaultdict(list)
         logging.info("SignalRegistry initialized (shim)")
 
     async def emit(self, signal_name: str, payload: dict[str, Any], sender: str = "unknown") -> None:
-        """Emit a signal to all subscribers (synchronously calls callbacks).
+"""
+Emit a signal to all subscribers (synchronously calls callbacks).
 
         This is intentionally simple: subscribers are invoked and any
         exceptions are logged but not re-raised.
-        """
-        logging.debug("Signal emit: %s from %s", signal_name, sender)
+"""
+logging.debug("Signal emit: %s from %s", signal_name, sender)
         for cb in list(self._subscribers.get(signal_name, [])):
             try:
                 cb(sender, payload)
@@ -55,9 +59,10 @@ class SignalRegistry:
                 logging.exception("Error in signal subscriber for %s", signal_name)
 
     def subscribe(self, signal_name: str, callback: Callable[[str, dict], Any]) -> None:
-        """Subscribe a callback to a named signal.
+"""
+Subscribe a callback to a named signal.
 
         The callback receives (sender, payload).
-        """
-        self._subscribers[signal_name].append(callback)
+"""
+self._subscribers[signal_name].append(callback)
 

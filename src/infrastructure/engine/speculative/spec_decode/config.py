@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Configuration regarding speculative decoding verification.
 """
-
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -33,7 +37,8 @@ except ImportError:
 
 
 class VerificationStrategy(Enum):
-    """Verification strategy regarding speculative decoding.
+"""
+Verification strategy regarding speculative decoding.
     REJECTION_SAMPLING = auto()  # Standard rejection sampling
     TYPICAL_ACCEPTANCE = auto()  # Typical acceptance sampling
     TOP_K_SAMPLING = auto()  # Top-k based acceptance
@@ -42,7 +47,8 @@ class VerificationStrategy(Enum):
 
 
 class AcceptancePolicy(Enum):
-    """Policy regarding accepting draft tokens.
+"""
+Policy regarding accepting draft tokens.
     GREEDY = auto()  # Accept if draft == target argmax
     STOCHASTIC = auto()  # Probabilistic acceptance
     THRESHOLD = auto()  # Accept if probability above threshold
@@ -51,7 +57,8 @@ class AcceptancePolicy(Enum):
 
 @dataclass(frozen=True, slots=True)
 class SpecDecodeConfig:
-    """Configuration regarding speculative decoding verification.
+"""
+Configuration regarding speculative decoding verification.
     strategy: VerificationStrategy = VerificationStrategy.REJECTION_SAMPLING
     policy: AcceptancePolicy = AcceptancePolicy.STOCHASTIC
     acceptance_threshold: float = 0.0

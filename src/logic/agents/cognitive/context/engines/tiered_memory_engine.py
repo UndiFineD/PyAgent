@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,14 +16,14 @@ from __future__ import annotations
 
 
 """
+"""
 TieredMemoryEngine: lightweight, import-safe stub for the tiered memory engine.
 
+"""
 This module provides a minimal implementation sufficient for tests and
 imports. The full production implementation may use ChromaDB or other
 vector stores; here we keep behavior deterministic and side-effect free.
 """
-
-
 try:
     import logging
 except ImportError:
@@ -36,31 +37,35 @@ except ImportError:
 
 
 class TieredMemoryEngine:
-    """Simplified tiered memory engine used for tests and imports."""
-
-    def __init__(self, db_path: str | None = None) -> None:
+"""
+Simplified tiered memory engine used for tests and imports.""
+def __init__(self, db_path: str | None = None) -> None:
         self.db_path = db_path or "memory://local"
         self._store: Dict[str, List[Dict[str, Any]]] = {}
 
     def record_memory(self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> None:
-        """Persist a memory fragment into the specified tier (in-memory)."""
-        logging.info("TieredMemoryEngine.record_memory: %s", tier)
+"""
+Persist a memory fragment into the specified tier (in-memory).""
+logging.info("TieredMemoryEngine.record_memory: %s", tier)
         self._store.setdefault(tier, []).append({"content": content, "metadata": metadata or {}})
 
     def query_tier(self, tier: str, query: str, limit: int = 3) -> List[Dict[str, Any]]:
-        """Return at most `limit` items from a tier that contain `query` as substring."""
-        items = self._store.get(tier, [])
+"""
+Return at most `limit` items from a tier that contain `query` as substring.""
+items = self._store.get(tier, [])
         matches = [i for i in items if query in i.get("content", "")]
         return matches[:limit]
 
     def upsert_documents(self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]) -> None:
-        """Bulk upsert into a default tier (no-op storage semantics)."""
-        for doc, meta, _id in zip(documents, metadatas, ids):
+"""
+Bulk upsert into a default tier (no-op storage semantics).""
+for doc, meta, _id in zip(documents, metadatas, ids):
             self.record_memory("default", doc, {**meta, "id": _id})
 
     def search_workspace(self, query: str, n_results: int = 3) -> List[Dict[str, Any]]:
-        """Search across all tiers for entries containing `query`."""
-        found: List[Dict[str, Any]] = []
+        ""
+Search across all tiers for entries containing `query`.""
+found: List[Dict[str, Any]] = []
         for tier_items in self._store.values():
             for item in tier_items:
                 if query in item.get("content", ""):

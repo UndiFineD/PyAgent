@@ -15,8 +15,10 @@
 
 # KnowledgeCore logic for specialized workspace analysis.
 # Contains pure regex and indexing logic for fast symbol discovery.
+"""
 This file is optimized for Rust migration (Phase 114).
 
+"""
 try:
     from typing import Any
 except ImportError:

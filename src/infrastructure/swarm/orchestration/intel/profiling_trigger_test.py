@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Test profiling trigger logic.
+"""
+"""
+Test profiling trigger logic.
 try:
-    from .infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
+
+"""
+from .infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
 except ImportError:
     from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import SelfImprovementAnalysis
 
@@ -47,7 +51,7 @@ def check_file(path):
     if findings:
         loop_count = content.count("for ") + content.count("while ")"        print(f"File: {path}")"        print(f"Loops: {loop_count}")"        for f in findings:
             print(f"  - {f['message']}")"'    else:
-        print(f"File: {path} - OK")"
+        print(f"File: {path} - OK")
 files_to_check = [
     r'src/infrastructure/engine/loading/expert_load_balancer.py','    r'src/infrastructure/storage/cache/kv_cache_manager.py','    r'src/infrastructure/engine/loading/sharded_state_loader.py','    r'src/infrastructure/engine/loading/weight_loader.py','    r'src/core/base/common/multimodal_logic.py'']
 

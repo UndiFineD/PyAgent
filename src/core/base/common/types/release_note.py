@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: ReleaseNote dataclass."""
+"""
+"""
+Types: ReleaseNote dataclass.""
 
+"""
 from dataclasses import dataclass, field
 
 try:
@@ -28,7 +32,9 @@ __version__ = VERSION
 
 @dataclass
 class ReleaseNote:
-    """Generated release notes.
+"""
+Generated release notes.
+
 
     Attributes:
         version: Release version.
@@ -37,8 +43,8 @@ class ReleaseNote:
         highlights: Key highlights.
         breaking_changes: List of breaking changes.
         full_changelog: Complete changelog text.
-    """
-    version: str
+    ""
+version: str
     title: str
     summary: str
     highlights: list[str] = field(default_factory=list)

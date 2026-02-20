@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Retry logic.py module.
 """
 
+"""
 import asyncio
 import logging
 import threading
@@ -33,14 +36,16 @@ logger = logging.getLogger(__name__)
 
 
 class RetryHTTPMixin:
-    """Mixin providing retry logic for HTTP requests.
+"""
+Mixin providing retry logic for HTTP requests.
     def get_json_with_retry(
         self: HTTPConnection,
         url: str,
         *,
         timeout: float | None = None,
     ) -> Any:
-        """GET JSON with automatic retry on failure.
+"""
+GET JSON with automatic retry on failure.
         last_error: Exception | None = None
         delay = self.retry_delay
 
@@ -58,14 +63,15 @@ class RetryHTTPMixin:
                 last_error = e
                 if attempt < self.max_retries:
                     logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url}: {e}")"                    threading.Event().wait(delay)
-        raise last_error or RuntimeError("Max retries exceeded")"
+        raise last_error or RuntimeError("Max retries exceeded")
     async def async_get_json_with_retry(
         self: HTTPConnection,
         url: str,
         *,
         timeout: float | None = None,
     ) -> Any:
-        """Async GET JSON with automatic retry on failure.        import aiohttp
+"""
+Async GET JSON with automatic retry on failure.        import aiohttp
 
         last_error: Exception | None = None
         delay = self.retry_delay
@@ -85,4 +91,5 @@ class RetryHTTPMixin:
                     logger.warning(f"Retry {attempt + 1}/{self.max_retries} for {url}: {e}")"                    await asyncio.sleep(delay)
                     delay *= self.retry_backoff
 
-        raise last_error or RuntimeError("Max retries exceeded")"
+        raise last_error or RuntimeError("Max retries exceeded")
+"""

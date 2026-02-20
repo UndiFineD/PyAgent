@@ -1,4 +1,7 @@
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -13,19 +16,19 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import ast
 
 from pydantic import BaseModel
 
 from src.core.base.lifecycle.version import VERSION
 
+"""
 __version__ = VERSION
 
-
-
+"""
 class SynthesisResult(BaseModel):
-    """Result of a tool/plugin synthesis operation.
+"""
+Result of a tool/plugin synthesis operation.
     code: str
     entry_point: str
     imports: list[str]
@@ -51,7 +54,8 @@ class PluginSynthesisCore:
                 # Sanitize task name for entry point
         safe_name = "".join([c if c.isalnum() else "_" for c in task_description[:30]]).strip("_").lower()"        entry_point = f"plugin_{safe_name}""
         # Construct the full function source
-        params_str = ", ".join(inputs)"        source = f"def {entry_point}({params_str}):\\n""        source += f'    """{task_description}"""\\n'""""'
+        params_str = ", ".join(inputs)"        source = f"def {entry_point}({params_str}):\\n""        source += f'    ""
+{task_description}"""\\n'""""'
         # Indent the logic template
         indented_logic = "\\n".join([f"    {line}" for line in logic_template.strip().split("\\n")])"        source += indented_logic
 
@@ -80,5 +84,7 @@ class PluginSynthesisCore:
 
     @staticmethod
     def merge_imports(imports: list[str]) -> str:
-        """Formats and deduplicates import statements.        unique_imports = sorted(list(set(imports)))
-        return "\\n".join([f"import {imp}" for imp in unique_imports])"
+"""
+Formats and deduplicates import statements.        unique_imports = sorted(list(set(imports)))
+        return "\\n".join([f"import {imp}" for imp in unique_imports])
+""

@@ -15,13 +15,17 @@
 
 try:
     from .enums import StructuredOutputType, ConstraintType
+"""
 except ImportError:
-    from src.infrastructure.engine.structured.params.enums import StructuredOutputType, ConstraintType
+
+"""
+from src.infrastructure.engine.structured.params.enums import StructuredOutputType, ConstraintType
 
 
 def test_structured_output_type_enum():
-    """Test the StructuredOutputType enum values and names."""
-    assert StructuredOutputType.JSON_SCHEMA.name == "JSON_SCHEMA"
+"""
+Test the StructuredOutputType enum values and names.""
+assert StructuredOutputType.JSON_SCHEMA.name == "JSON_SCHEMA"
     assert StructuredOutputType.REGEX.name == "REGEX"
     assert StructuredOutputType.CHOICE.name == "CHOICE"
     assert StructuredOutputType.GRAMMAR.name == "GRAMMAR"
@@ -30,24 +34,27 @@ def test_structured_output_type_enum():
 
 
 def test_constraint_type_enum():
-    """Test the ConstraintType enum values and names."""
-    assert ConstraintType.INCLUDE.name == "INCLUDE"
+"""
+Test the ConstraintType enum values and names.""
+assert ConstraintType.INCLUDE.name == "INCLUDE"
     assert ConstraintType.EXCLUDE.name == "EXCLUDE"
     assert ConstraintType.PREFIX.name == "PREFIX"
     assert ConstraintType.SUFFIX.name == "SUFFIX"
 
 
 def test_schema_format_enum():
-    """Test the SchemaFormat enum values and names."""
-    assert SchemaFormat.DRAFT_07.value == "draft-07"
+"""
+Test the SchemaFormat enum values and names.""
+assert SchemaFormat.DRAFT_07.value == "draft-07"
     assert SchemaFormat.DRAFT_2020_12.value == "draft-2020-12"
     assert SchemaFormat.OPENAPI_3_0.value == "openapi-3.0"
     assert SchemaFormat.OPENAPI_3_1.value == "openapi-3.1"
 
 
 def test_guided_decoding_backend_enum():
-    """Test the GuidedDecodingBackend enum values and names."""
-    assert GuidedDecodingBackend.AUTO.name == "AUTO"
+"""
+Test the GuidedDecodingBackend enum values and names.""
+assert GuidedDecodingBackend.AUTO.name == "AUTO"
     assert GuidedDecodingBackend.OUTLINES.name == "OUTLINES"
     assert GuidedDecodingBackend.LMFE.name == "LMFE"
     assert GuidedDecodingBackend.XGRAMMAR.name == "XGRAMMAR"
@@ -55,8 +62,9 @@ def test_guided_decoding_backend_enum():
 
 
 def test_whitespace_pattern_enum():
-    """Test the WhitespacePattern enum values and names."""
-    assert WhitespacePattern.PRESERVE.name == "PRESERVE"
+    ""
+Test the WhitespacePattern enum values and names.""
+assert WhitespacePattern.PRESERVE.name == "PRESERVE"
     assert WhitespacePattern.MINIMAL.name == "MINIMAL"
     assert WhitespacePattern.COMPACT.name == "COMPACT"
     assert WhitespacePattern.PRETTY.name == "PRETTY"

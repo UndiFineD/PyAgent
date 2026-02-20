@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 AutoFixSuggester - Generate automated fix suggestions for runtime errors
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -70,28 +74,32 @@ __version__ = VERSION
 
 
 class AutoFixSuggester:
-    """Generates automated fix suggestions for errors.""""
-    Uses pattern matching and common fixes to suggest
+"""
+Generates automated fix suggestions for errors.""""
+Uses pattern matching and common fixes to suggest
     resolutions for errors.
 
     Attributes:
         fix_patterns: Map of error patterns to fix templates.
     
     def __init__(self) -> None:
-        """Initialize the auto-fix suggester.        self.fix_patterns: dict[str, str] = {
+"""
+Initialize the auto-fix suggester.        self.fix_patterns: dict[str, str] = {
             r"NameError: name '(\\w+)' is not defined": "Define variable '{0}' before use or import it","'            r"ImportError: No module named '(\\w+)'": "Install module with: pip install {0}","'            r"TypeError: unsupported operand type": "Check operand types and convert if necessary","            r"AttributeError: '(\\w+)' object has no attribute '(\\w+)'": ("'                "Check if '{1}' exists on {0} object or use hasattr()""'            ),
             r"IndexError: list index out of range": "Check list bounds before accessing index","            r"KeyError: '(\\w+)'": "Use .get('{0}', default) or check key existence","'        }
 
     def add_pattern(self, pattern: str, fix_template: str) -> None:
-        """Add a fix pattern.""""
-        Args:
+"""
+Add a fix pattern.""""
+Args:
             pattern: Regex pattern to match errors.
             fix_template: Template for the fix suggestion.
                 self.fix_patterns[pattern] = fix_template
 
     def suggest(self, error: ErrorEntry) -> FixSuggestion | None:
-        """Generate a fix suggestion for an error.""""
-        Args:
+"""
+Generate a fix suggestion for an error.""""
+Args:
             error: The error to fix.
 
         Returns:
@@ -109,9 +117,18 @@ class AutoFixSuggester:
         return None
 
     def suggest_all(self, errors: list[ErrorEntry]) -> list[FixSuggestion]:
-        """Generate suggestions for multiple errors.        suggestions: list[FixSuggestion] = []
+"""
+Generate suggestions for multiple errors.        suggestions: list[FixSuggestion] = []
         for error in errors:
             sugg = self.suggest(error)
             if sugg:
                 suggestions.append(sugg)
         return suggestions
+
+"""
+
+"""
+
+""
+
+"""

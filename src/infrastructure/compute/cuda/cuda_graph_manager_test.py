@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.compute.cuda.cuda_graph_manager import CUDAGraphMode, BatchDescriptor, CUDAGraphEntry, CUDAGraphOptions, CUDAGraphStats, MockCUDAGraph, CUDAGraphWrapper, AdaptiveCUDAGraphWrapper, cudagraph_context, get_cudagraph_sizes

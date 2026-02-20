@@ -14,13 +14,16 @@
 
 
 """
+"""
 Changelog Entry - Dataclass representing a single fleet changelog item
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate to represent changelog lines across the fleet:
-  from changelog_entry import ChangelogEntry
+
+"""
+from changelog_entry import ChangelogEntry
   entry = ChangelogEntry(
       category="fix","      description="Resolve agent deadlock on Windows","      version="1.4.2","      date="2026-02-13","      priority=1,
       severity="high","      tags=["windows","concurrency"],"      linked_issues=["GH-1234"]"  )
@@ -47,7 +50,8 @@ from typing import List
 
 @dataclass
 class ChangelogEntry:
-""""Represents a single entry in the fleet-wide changelog.    category: str
+""""
+Represents a single entry in the fleet-wide changelog.    category: str
     description: str
     version: str
     date: str
@@ -61,7 +65,8 @@ from typing import List
 
 @dataclass
 class ChangelogEntry:
-""""Represents a single entry in the fleet-wide changelog.    category: str
+""""
+Represents a single entry in the fleet-wide changelog.    category: str
     description: str
     version: str
     date: str
@@ -69,3 +74,5 @@ class ChangelogEntry:
     severity: str
     tags: List[str] = field(default_factory=list)
     linked_issues: List[str] = field(default_factory=list)
+
+"""

@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Test platform module.
+"""
+"""
+Test platform module.
 try:
-    import platform
+
+"""
+import platform
 except ImportError:
     import platform
 
@@ -28,6 +32,6 @@ except ImportError:
 def test_platform_module():
     s = platform.system()
     assert isinstance(s, str)
-    assert s in ["Windows", "Linux", "Darwin"]"
+    assert s in ["Windows", "Linux", "Darwin"]
 
 """

@@ -14,9 +14,12 @@
 
 
 """
+"""
 Built-in command modules.
 try:
-    from .system_commands import register_system_commands  # noqa: F401
+
+"""
+from .system_commands import register_system_commands  # noqa: F401
 except ImportError:
     from .system_commands import register_system_commands # noqa: F401
 
@@ -26,6 +29,6 @@ except ImportError:
     from .utility_commands import register_utility_commands # noqa: F401
 
 
-__all__ = ["register_system_commands", "register_utility_commands"]"
+__all__ = ["register_system_commands", "register_utility_commands"]
 
 """

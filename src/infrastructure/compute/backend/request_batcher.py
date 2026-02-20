@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_backend.py"""
-
+"""
+"""
+Auto-extracted class from agent_backend.py""
 try:
-    import threading
+
+"""
+import threading
 except ImportError:
     import threading
 
@@ -49,7 +53,9 @@ __version__ = VERSION
 
 
 class RequestBatcher:
-    """Batches multiple requests for efficient processing.
+"""
+Batches multiple requests for efficient processing.
+
     Collects requests and processes them together when batch
     size or timeout is reached.
 
@@ -58,22 +64,22 @@ class RequestBatcher:
         batcher.add("prompt1")
         batcher.add("prompt2")
         batch = batcher.get_batch()  # Returns when ready
-    """
-
-    def __init__(
+"""
+def __init__(
         self,
         batch_size: int = 10,
         timeout_s: float = 5.0,
         recorder: LocalContextRecorder | None = None,
     ) -> None:
-        """Initialize request batcher.
+"""
+Initialize request batcher.
 
         Args:
             batch_size: Requests per batch.
             timeout_s: Max wait time before processing partial batch.
             recorder: Infrastructure recorder for intelligence harvesting.
-        """
-        self.batch_size = batch_size
+"""
+self.batch_size = batch_size
         self.timeout_s = timeout_s
         self.recorder = recorder
         self._buffer: list[str] = []
@@ -82,15 +88,16 @@ class RequestBatcher:
 
 
     def add(self, prompt: str) -> bool:
-        """Add request to current batch.
+"""
+Add request to current batch.
 
         Args:
             prompt: Request prompt.
 
         Returns:
             bool: True if batch is now ready.
-        """
-        with self._lock:
+"""
+with self._lock:
             if not self._buffer:
                 self._batch_start = time.time()
             self._buffer.append(prompt)
@@ -98,8 +105,9 @@ class RequestBatcher:
 
 
     def is_ready(self) -> bool:
-        """Check if batch is ready for processing."""
-        with self._lock:
+"""
+Check if batch is ready for processing.""
+with self._lock:
             if len(self._buffer) >= self.batch_size:
                 return True
             if self._batch_start and (time.time() - self._batch_start) >= self.timeout_s:
@@ -108,12 +116,13 @@ class RequestBatcher:
 
 
     def get_batch(self) -> BatchRequest | None:
-        """Get current batch and reset buffer.
+"""
+Get current batch and reset buffer.
 
         Returns:
             Optional[BatchRequest]: Current batch or None if empty.
-        """
-        with self._lock:
+"""
+with self._lock:
             if not self._buffer:
                 return None
 
@@ -125,6 +134,7 @@ class RequestBatcher:
             return batch
 
     def pending_count(self) -> int:
-        """Get number of pending requests."""
-        with self._lock:
+        ""
+Get number of pending requests.""
+with self._lock:
             return len(self._buffer)

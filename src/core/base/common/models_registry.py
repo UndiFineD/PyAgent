@@ -13,8 +13,12 @@
 # limitations under the License.
 
 
-"""Unified Model Provider Registry.
+"""
+"""
+Unified Model Provider Registry.
 Simple, minimal provider registry used for tests and bootstrapping.
+"""
+
 """
 from typing import Dict, List, TypedDict
 
@@ -29,8 +33,9 @@ class ModelSpec(TypedDict):
 
 
 class ProviderRegistry:
-    """Central repository for model provider identifiers and simple catalog."""
-    OPENAI = "openai"
+"""
+Central repository for model provider identifiers and simple catalog.""
+OPENAI = "openai"
     ANTHROPIC = "anthropic"
     GOOGLE = "google"
     META = "meta"
@@ -45,8 +50,9 @@ class ProviderRegistry:
 
     @staticmethod
     def get_all_models() -> Dict[str, ModelSpec]:
-        """Return a small sample catalog of models for tests."""
-        return {
+"""
+Return a small sample catalog of models for tests.""
+return {
             "gpt-4-turbo": {
                 "id": "gpt-4-turbo-2024-04-09",
                 "context_window": 128000,
@@ -67,8 +73,9 @@ class ProviderRegistry:
 
     @staticmethod
     def get_provider_list() -> List[str]:
-        """Return the list of known providers."""
-        return [
+        ""
+Return the list of known providers.""
+return [
             ProviderRegistry.OPENAI,
             ProviderRegistry.ANTHROPIC,
             ProviderRegistry.GOOGLE,

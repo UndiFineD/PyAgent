@@ -14,8 +14,11 @@
 
 try:
     from pathlib import Path
+"""
 except ImportError:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 
 
 try:
@@ -33,7 +36,7 @@ class DummyAgent(PersistenceMixin):
 
 def test_update_file_runs_tests_and_rolls_back(monkeypatch, tmp_path):
     agent = DummyAgent()
-    agent.file_path = tmp_path / "example.py""    agent.file_path.write_text("print(1)\\n")"    agent.current_content = "print(2)\\n""
+    agent.file_path = tmp_path / "example.py""    agent.file_path.write_text("print(1)\\n")"    agent.current_content = "print(2)\\n"
     # Simulate test runner returning failure
     # ...existing code...
     pass

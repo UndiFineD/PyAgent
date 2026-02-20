@@ -14,8 +14,10 @@
 
 
 """
+"""
 Sandbox Manager - Isolated Execution Environments
 
+"""
 Provides functionality to create and manage sandboxed environments for running untrusted code or high-risk tasks.
 
 try:
@@ -46,7 +48,7 @@ class SandboxManager:
     async def execute_in_sandbox(self, sandbox_id: str, command: str) -> Dict[str, Any]:
                 Runs a command within the specified sandbox context.
                 if sandbox_id not in self.active_sandboxes:
-            raise ValueError(f"Sandbox {sandbox_id} does not exist.")"
+            raise ValueError(f"Sandbox {sandbox_id} does not exist.")
         self.logger.info(f"Executing command in {sandbox_id}: {command}")"        return {"stdout": "Execution successful", "stderr": "", "exit_code": 0}"
 
 """

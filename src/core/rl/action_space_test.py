@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.rl.action_space import ActionMetadata, ActionSpace, DiscreteActionSpace, BoxActionSpace, MultiDiscreteActionSpace, DictActionSpace

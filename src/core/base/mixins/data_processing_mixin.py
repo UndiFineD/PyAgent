@@ -14,24 +14,26 @@
 
 
 
-"""Data Processing Mixin for PyAgent.
+"""
+"""
+Data Processing Mixin for PyAgent.
 
+"""
 Provides utilities for processing and converting raw data into human-readable formats.
 This is a small, well-tested shim used by unit tests.
 """
-
 import datetime
 from typing import Any, Dict, List, Union
 
 
 class DataProcessingMixin:
-    """Mixin providing data processing utilities for agents.
+"""
+Mixin providing data processing utilities for agents.
 
     Includes functions for converting binary flags, timestamps, and other
     raw data formats to human-readable representations.
-    """
-
-    UAC_MAP = {
+"""
+UAC_MAP = {
         0x0001: "SCRIPT",
         0x0002: "ACCOUNTDISABLE",
         0x0008: "LOCKOUT",

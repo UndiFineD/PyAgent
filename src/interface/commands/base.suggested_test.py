@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.commands.base.suggested import CommandContext, CommandResult, CommandDefinition, ParsedCommand, ProcessedPrompt

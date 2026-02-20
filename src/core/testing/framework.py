@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Minimal testing framework helpers for agent scenarios.""""
+"""
+Minimal testing framework helpers for agent scenarios.""""
 This module provides small utilities used by higher-level scenario
 testing engines. It is intentionally lightweight and dependency-free.
-"""from dataclasses import dataclass
+"""
+from dataclasses import dataclass
 from typing import Any, Dict
 
 
@@ -29,14 +32,14 @@ class ScenarioResult:
 
 
 def assert_equal(a, b, message: str = ""):"    if a != b:
-        raise AssertionError(message or f"Expected {a} == {b}")"
+        raise AssertionError(message or f"Expected {a} == {b}")
 
 def run_scenario(name: str, func) -> ScenarioResult:
     try:
         func()
         return ScenarioResult(name=name, success=True, details={})
     except Exception as e:
-        return ScenarioResult(name=name, success=False, details={"error": str(e)})"
+        return ScenarioResult(name=name, success=False, details={"error": str(e)})
 
 __all__ = ["ScenarioResult", "assert_equal", "run_scenario"]PyAgent Better-Agents Testing Framework.
 
@@ -55,19 +58,25 @@ import pytest
 import yaml
 
 
-logger = logging.getLogger("pyagent.testing.framework")"
+logger = logging.getLogger("pyagent.testing.framework")
 
 
 class TestType(Enum):
-    """Types of tests in the testing pyramid."""UNIT = "unit""    INTEGRATION = "integration""    E2E = "e2e""    PERFORMANCE = "performance""    SECURITY = "security""
+"""
+Types of tests in the testing pyramid.""
+UNIT = "unit""    INTEGRATION = "integration""    E2E = "e2e""    PERFORMANCE = "performance""    SECURITY = "security"
 
 
 class TestStatus(Enum):
-    """Test execution status."""PASSED = "passed""    FAILED = "failed""    SKIPPED = "skipped""    ERROR = "error""    TIMEOUT = "timeout""
+"""
+Test execution status.""
+PASSED = "passed""    FAILED = "failed""    SKIPPED = "skipped""    ERROR = "error""    TIMEOUT = "timeout"
 
 @dataclass
 class TestResult:
-    """Result of a test execution."""test_id: str
+"""
+Result of a test execution.""
+test_id: str
     test_type: TestType
     status: TestStatus
     duration: float
@@ -80,7 +89,9 @@ class TestResult:
 
 @dataclass
 class TestScenario:
-    """Test scenario configuration."""name: str
+"""
+Test scenario configuration.""
+name: str
     description: str
     test_type: TestType
     agent_class: str
@@ -94,7 +105,9 @@ class TestScenario:
 
 @dataclass
 class TestSuite:
-    """Collection of test scenarios."""name: str
+"""
+Collection of test scenarios.""
+name: str
     description: str
     scenarios: List[TestScenario]
     setup_steps: List[Dict[str, Any]] = field(default_factory=list)
@@ -104,28 +117,31 @@ class TestSuite:
 
 
 class AgentTestingPyramidCore:
-    """Testing Pyramid Core.
+"""
+Testing Pyramid Core.
 
     Implements unit, integration, and E2E testing infrastructure.
-    """
-    def __init__(self, project_root: Path):
+"""
+def __init__(self, project_root: Path):
         self.project_root = project_root
         self.test_results: List[TestResult] = []
-        self.logger = logging.getLogger("pyagent.testing.pyramid")"
+        self.logger = logging.getLogger("pyagent.testing.pyramid")
         # Test directories
         self.unit_tests = project_root / "tests" / "unit""        self.integration_tests = project_root / "tests" / "integration""        self.e2e_tests = project_root / "tests" / "e2e""        self.scenarios_dir = project_root / "tests" / "scenarios""
         # Create directories if they don't exist'        for dir_path in [self.unit_tests, self.integration_tests, self.e2e_tests, self.scenarios_dir]:
             dir_path.mkdir(parents=True, exist_ok=True)
 
     async def run_test_pyramid(self, test_filter: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        """Run the complete testing pyramid.
+"""
+Run the complete testing pyramid.
 
         Args:
             test_filter: Optional filter for test selection
 
         Returns:
             Test execution summary
-        """self.logger.info("Starting Agent Testing Pyramid execution")"
+"""
+self.logger.info("Starting Agent Testing Pyramid execution")
         start_time = time.time()
 
         # Run tests in order: unit -> integration -> e2e
@@ -140,11 +156,13 @@ class AgentTestingPyramidCore:
         self.logger.info(f"Testing Pyramid complete in {total_time:.2f}s")"        return summary
 
     async def _run_unit_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run unit tests."""self.logger.info("Running unit tests")"
+"""
+Run unit tests.""
+self.logger.info("Running unit tests")
         results = []
 
         # Discover and run unit tests
-        test_files = list(self.unit_tests.glob("test_*.py"))"
+        test_files = list(self.unit_tests.glob("test_*.py"))
         for test_file in test_files:
             if self._matches_filter(test_file, test_filter):
                 result = await self._run_pytest_file(test_file, TestType.UNIT)
@@ -153,11 +171,13 @@ class AgentTestingPyramidCore:
         return results
 
     async def _run_integration_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run integration tests."""self.logger.info("Running integration tests")"
+"""
+Run integration tests.""
+self.logger.info("Running integration tests")
         results = []
 
         # Discover and run integration tests
-        test_files = list(self.integration_tests.glob("test_*.py"))"
+        test_files = list(self.integration_tests.glob("test_*.py"))
         for test_file in test_files:
             if self._matches_filter(test_file, test_filter):
                 result = await self._run_pytest_file(test_file, TestType.INTEGRATION)
@@ -166,11 +186,13 @@ class AgentTestingPyramidCore:
         return results
 
     async def _run_e2e_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run end-to-end tests."""self.logger.info("Running E2E tests")"
+"""
+Run end-to-end tests.""
+self.logger.info("Running E2E tests")
         results = []
 
         # Load and run scenario-based E2E tests
-        scenario_files = list(self.scenarios_dir.glob("*.yaml"))"
+        scenario_files = list(self.scenarios_dir.glob("*.yaml"))
         for scenario_file in scenario_files:
             if self._matches_filter(scenario_file, test_filter):
                 scenario_results = await self._run_scenario_tests(scenario_file)
@@ -179,17 +201,21 @@ class AgentTestingPyramidCore:
         return results
 
     async def _run_performance_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run performance tests."""
+"""
+Run performance tests.""
 # TODO Placeholder for performance testing
         return []
 
     async def _run_security_tests(self, test_filter: Optional[Dict[str, Any]] = None) -> List[TestResult]:
-        """Run security tests."""
+"""
+Run security tests.""
 # TODO Placeholder for security testing
         return []
 
     def _matches_filter(self, test_path: Path, test_filter: Optional[Dict[str, Any]]) -> bool:
-        """Check if test matches the filter criteria."""if not test_filter:
+"""
+Check if test matches the filter criteria.""
+if not test_filter:
             return True
 
         # Check tags
@@ -205,7 +231,9 @@ class AgentTestingPyramidCore:
         return True
 
     async def _run_pytest_file(self, test_file: Path, test_type: TestType) -> TestResult:
-        """Run a pytest file and return results."""start_time = time.time()
+"""
+Run a pytest file and return results.""
+start_time = time.time()
 
         try:
             # Run pytest programmatically
@@ -235,7 +263,9 @@ class AgentTestingPyramidCore:
             )
 
     async def _run_scenario_tests(self, scenario_file: Path) -> List[TestResult]:
-        """Run scenario-based E2E tests."""results = []
+"""
+Run scenario-based E2E tests.""
+results = []
 
         try:
             # Load scenario configuration
@@ -248,11 +278,13 @@ class AgentTestingPyramidCore:
                 results.append(result)
 
         except Exception as e:
-            self.logger.error(f"Failed to run scenario {scenario_file}: {e}")"
+            self.logger.error(f"Failed to run scenario {scenario_file}: {e}")
         return results
 
     async def _run_single_scenario(self, scenario: TestScenario) -> TestResult:
-        """Run a single test scenario."""start_time = time.time()
+"""
+Run a single test scenario.""
+start_time = time.time()
 
         try:
             # Import the agent class dynamically
@@ -291,7 +323,8 @@ class AgentTestingPyramidCore:
             )
 
     def _validate_scenario_result(self, actual: Any, expected: Dict[str, Any]) -> bool:
-        """Validate scenario result against expected output."""
+"""
+Validate scenario result against expected output.""
 try:
             # Simple validation - check if expected keys are present
             if isinstance(expected, dict) and isinstance(actual, dict):
@@ -310,7 +343,9 @@ try:
             return False
 
     def _generate_test_summary(self, results: Dict[str, List[TestResult]], total_time: float) -> Dict[str, Any]:
-        """Generate comprehensive test summary."""summary = {
+"""
+Generate comprehensive test summary.""
+summary = {
             'total_time': total_time,'            'timestamp': time.time(),'            'results': {}'        }
 
         total_tests = 0
@@ -322,7 +357,7 @@ try:
             type_summary = {
                 'count': len(test_results),'                'passed': len([r for r in test_results if r.status == TestStatus.PASSED]),'                'failed': len([r for r in test_results if r.status == TestStatus.FAILED]),'                'errors': len([r for r in test_results if r.status == TestStatus.ERROR]),'                'skipped': len([r for r in test_results if r.status == TestStatus.SKIPPED]),'                'average_duration': sum(r.duration for r in test_results) / len(test_results) if test_results else 0'            }
 
-            summary['results'][test_type] = type_summary'
+            summary['results'][test_type] = type_summary
             total_tests += type_summary['count']'            total_passed += type_summary['passed']'            total_failed += type_summary['failed']'            total_errors += type_summary['errors']'
         summary.update({
             'total_tests': total_tests,'            'total_passed': total_passed,'            'total_failed': total_failed,'            'total_errors': total_errors,'            'success_rate': total_passed / total_tests if total_tests > 0 else 0'        })
@@ -332,15 +367,19 @@ try:
 
 
 class ScenarioTestingEngine:
-    """YAML-driven scenario testing engine.
+"""
+YAML-driven scenario testing engine.
 
     Enables complex agent behavior testing through declarative scenarios.
-    """
-    def __init__(self, testing_core: AgentTestingPyramidCore):
+"""
+def __init__(self, testing_core: AgentTestingPyramidCore):
         self.testing_core = testing_core
-        self.logger = logging.getLogger("pyagent.testing.scenarios")"
+        self.logger = logging.getLogger("pyagent.testing.scenarios")
     def create_scenario_template(self, name: str, description: str) -> str:
-        """Create a YAML template for a test scenario."""template = f"""name: {name}
+"""
+Create a YAML template for a test scenario.""
+template = f""
+name: {name}
 description: {description}
 scenarios:
   - name: example_scenario
@@ -361,13 +400,18 @@ scenarios:
 teardown_steps: []
 tags:
   - {name}
-"""return template
+"""
+return template
 
     async def run_scenario_file(self, scenario_path: Path) -> List[TestResult]:
-        """Run all scenarios in a YAML file."""return await self.testing_core._run_scenario_tests(scenario_path)
+"""
+Run all scenarios in a YAML file.""
+return await self.testing_core._run_scenario_tests(scenario_path)
 
     async def run_scenario_by_name(self, suite_name: str, scenario_name: str) -> Optional[TestResult]:
-        """Run a specific scenario by name."""scenario_file = self.testing_core.scenarios_dir / f"{suite_name}.yaml""
+"""
+Run a specific scenario by name.""
+scenario_file = self.testing_core.scenarios_dir / f"{suite_name}.yaml"
         if not scenario_file.exists():
             return None
 
@@ -382,38 +426,45 @@ tags:
 
 
 class PromptVersioningSystem:
-    """Version control and A/B testing for prompt optimization.
+"""
+Version control and A/B testing for prompt optimization.
 
     Tracks prompt versions and enables comparative testing.
-    """
-    def __init__(self, prompts_dir: Path):
+"""
+def __init__(self, prompts_dir: Path):
         self.prompts_dir = prompts_dir
         self.prompts_dir.mkdir(exist_ok=True)
-        self.logger = logging.getLogger("pyagent.testing.prompts")"
+        self.logger = logging.getLogger("pyagent.testing.prompts")
     def save_prompt_version(
         self,
         prompt_name: str,
         prompt_content: str,
         metadata: Optional[Dict[str, Any]] = None
     ) -> str:
-        """Save a new version of a prompt."""version_id = f"{int(time.time())}_{hash(prompt_content) % 10000:04d}""
+"""
+Save a new version of a prompt.""
+version_id = f"{int(time.time())}_{hash(prompt_content) % 10000:04d}"
         prompt_data = {
             'version_id': version_id,'            'name': prompt_name,'            'content': prompt_content,'            'timestamp': time.time(),'            'metadata': metadata or {}'        }
 
-        version_file = self.prompts_dir / f"{prompt_name}_{version_id}.json""
+        version_file = self.prompts_dir / f"{prompt_name}_{version_id}.json"
         with open(version_file, 'w') as f:'            json.dump(prompt_data, f, indent=2)
 
         self.logger.info(f"Saved prompt version: {version_id}")"        return version_id
 
     def load_prompt_version(self, prompt_name: str, version_id: str) -> Optional[Dict[str, Any]]:
-        """Load a specific prompt version."""version_file = self.prompts_dir / f"{prompt_name}_{version_id}.json""
+"""
+Load a specific prompt version.""
+version_file = self.prompts_dir / f"{prompt_name}_{version_id}.json"
         if version_file.exists():
             with open(version_file, 'r') as f:'                return json.load(f)
 
         return None
 
     def list_prompt_versions(self, prompt_name: str) -> List[Dict[str, Any]]:
-        """List all versions of a prompt."""versions = []
+"""
+List all versions of a prompt.""
+versions = []
 
         for version_file in self.prompts_dir.glob(f"{prompt_name}_*.json"):"            with open(version_file, 'r') as f:'                versions.append(json.load(f))
 
@@ -428,10 +479,12 @@ class PromptVersioningSystem:
         test_input: str,
         num_runs: int = 10
     ) -> Dict[str, Any]:
-        """Run A/B test between two prompt versions.
+"""
+Run A/B test between two prompt versions.
 
         Returns comparative results.
-        """results_a = []
+"""
+results_a = []
         results_b = []
 
         for i in range(num_runs):
@@ -453,20 +506,22 @@ class PromptVersioningSystem:
 
 
 class EvaluationNotebookSystem:
-    """Jupyter-based evaluation and performance analysis.
+"""
+Jupyter-based evaluation and performance analysis.
 
     Enables interactive analysis of test results and agent performance.
-    """
-    def __init__(self, notebooks_dir: Path):
+"""
+def __init__(self, notebooks_dir: Path):
         self.notebooks_dir = notebooks_dir
         self.notebooks_dir.mkdir(exist_ok=True)
-        self.logger = logging.getLogger("pyagent.testing.notebooks")"
+        self.logger = logging.getLogger("pyagent.testing.notebooks")
     def create_evaluation_notebook(
         self,
         test_results: List[TestResult],
         notebook_name: str
     ) -> str:
-        """Create a Jupyter notebook for test result analysis."""
+"""
+Create a Jupyter notebook for test result analysis.""
 # Convert results to a serializable format for the notebook
         results_list = []
         for r in test_results:
@@ -492,7 +547,13 @@ class EvaluationNotebookSystem:
             },
             "nbformat": 4,"            "nbformat_minor": 4"        }
 
-        notebook_path = self.notebooks_dir / f"{notebook_name}.ipynb""
+        notebook_path = self.notebooks_dir / f"{notebook_name}.ipynb"
         with open(notebook_path, 'w') as f:'            json.dump(notebook_content, f, indent=2)
 
         self.logger.info(f"Created evaluation notebook: {notebook_path}")"        return str(notebook_path)
+
+"""
+
+""
+
+"""

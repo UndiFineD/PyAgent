@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -23,8 +25,11 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.orchestration.core.self_improvement_core import \
     SelfImprovementCore
 
+"""
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+"""
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 from src.infrastructure.compute.backend.llm_client import LLMClient
 

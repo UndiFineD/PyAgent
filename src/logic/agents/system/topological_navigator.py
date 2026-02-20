@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,9 +21,11 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Instantiate with a path representing the entry point or file context: navigator = TopologicalNavigator(file_path="path/to/entry.py")"- Use mixin-provided operations to construct and query the semantic map (e.g., navigator.build_map(), navigator.analyze_graph(), navigator.find_impact(<symbol>)) — actual method names are delegated to MapBuilderMixin and GraphAnalysisMixin.
 - Integrate into larger agent workflows via FederationMixin for distributed coordination and cross-repo federation.
 
+"""
 WHAT IT DOES:
 - Creates and holds an in-memory directed graph (graph) and reverse graph (reverse_graph) mapping code entity relationships for dependency and impact analysis.
 - Sets a root working directory and initializes a system prompt describing its role as the Topological Context Navigator.
@@ -37,7 +41,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in Topological Context Navigation.
 Builds a semantic map of the codebase for graph-based dependency exploration.
 """
-
 try:
     import os
 except ImportError:
@@ -92,7 +95,7 @@ class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, Feder
         self._system_prompt = (
 #             "You are the Topological Context Navigator."#             "You map relationships between code entities (classes, functions, modules)"#             "to determine the impact of changes across the codebase."        )
 
-    # Logic delegated "to" mixins"
+    # Logic delegated "to" mixins
 
 try:
     import os
@@ -148,3 +151,5 @@ class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, Feder
 #             "You are the Topological Context Navigator."#             "You map relationships between code entities (classes, functions, modules)"#             "to determine the impact of changes across the codebase."        )
 
     # Logic delegated to mixins
+
+"""

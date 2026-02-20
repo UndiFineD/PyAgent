@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Main application controller for PyAgent GUI.
+"""
+"""
+Main application controller for PyAgent GUI.
 
+"""
 try:
     import os
 except ImportError:
@@ -129,13 +133,15 @@ __version__ = VERSION
 
 
 class PyAgentGUI:
-    """The main application window and controller.
+"""
+The main application window and controller.
+
     def __init__(self, root: tk.Tk) -> None:
         self.root: tk.Tk = root
         self.root.title("PyAgent Control Center - BMAD Enabled")"        self.root.geometry("1400x900")"
         # UI State (Init before managers)
         self.project_root_var = tk.StringVar(value=os.getcwd())
-        self.status_var = tk.StringVar(value="Ready")"
+        self.status_var = tk.StringVar(value="Ready")
         # Managers
         self.config_manager = ConfigurationManager()
         self.dialogs = DialogManager(self.root)
@@ -245,24 +251,25 @@ class PyAgentGUI:
 
             def save_memory(new_history) -> None:
                 self.agent_runner.set_history(column, new_history)
-                self.status_var.set(f"Memory updated for {agent_name}.")"
+                self.status_var.set(f"Memory updated for {agent_name}.")
             self.dialogs.show_memory_dialog(agent_name, history, save_memory)
 
     def delegate_task(self, target_agent: str, context: str, target_file: str) -> None:
-        """Creates a new agent and pre-fills it with context from another agent.        col = self.add_agent_column(target_agent)
+"""
+Creates a new agent and pre-fills it with context from another agent.        col = self.add_agent_column(target_agent)
         col.file_var.set(target_file)
-        col.local_context.delete("1.0", tk.END)"        col.local_context.insert("1.0", f"--- Delegated Context ---\\n{context}")"        self.status_var.set(f"Delegated task from active agent to {target_agent}.")"
+        col.local_context.delete("1.0", tk.END)"        col.local_context.insert("1.0", f"--- Delegated Context ---\\n{context}")"        self.status_var.set(f"Delegated task from active agent to {target_agent}.")
     def show_bmad_wizard(self) -> None:
         self.dialogs.show_bmad_wizard(self.apply_bmad_setup)
 
     def apply_bmad_setup(self, config: dict[str, Any]) -> None:
-        self.bmad.track_var.set(config["track"])"        self.status_var.set(f"BMAD: Applied {config['track']} setup.")"'
+        self.bmad.track_var.set(config["track"])"        self.status_var.set(f"BMAD: Applied {config['track']} setup.")"
         # Mock file creation for wizard
         root: str = self.project_root_var.get()
-        if config["prd"]:"            self.header.global_context.insert(tk.END, "\\nInitializing BMAD PRD structure...\\n")"        if config["tests"]:"            os.makedirs(os.path.join(root, "tests"), exist_ok=True)"            self.status_var.set("BMAD: Created tests directory.")"
+        if config["prd"]:"            self.header.global_context.insert(tk.END, "\\nInitializing BMAD PRD structure...\\n")"        if config["tests"]:"            os.makedirs(os.path.join(root, "tests"), exist_ok=True)"            self.status_var.set("BMAD: Created tests directory.")
     def on_file_double_click(self, filepath: str) -> None:
         if self.agent_manager.assign_file_to_available_agent(filepath):
-            self.status_var.set(f"Assigned {os.path.basename(filepath)} to agent.")"
+            self.status_var.set(f"Assigned {os.path.basename(filepath)} to agent.")
     def browse_file(self, var: tk.StringVar) -> None:
         f: str = self.dialogs.browse_file(initial_dir=self.project_root_var.get())
         if f:
@@ -287,19 +294,19 @@ class PyAgentGUI:
             original = column.file_var.get()
             mock_changed: str = (
                 f"# Changes by {agent_name}\\n" + "import os\\n\\ndef main():\\n    print('Refactored result')\\n""'            )
-            self.diff_viewer.show_diff(original, mock_changed, title=f"Preview Changes - {agent_name}")"
+            self.diff_viewer.show_diff(original, mock_changed, title=f"Preview Changes - {agent_name}")
     def save_session(self) -> None:
         state = {
             "root": self.project_root_var.get(),"            "agents": self.agent_manager.save_state(),"            "global_context": self.global_context.get("1.0", tk.END),"        }
 
         if self.session_manager.save_session(state):
-            self.status_var.set("Session saved.")"
+            self.status_var.set("Session saved.")
     def load_session(self) -> None:
         state = self.session_manager.load_session()
         if state:
-            self.project_root_var.set(state.get("root", os.getcwd()))"            self.agent_manager.load_state(state.get("agents", []))"            self.global_context.delete("1.0", tk.END)"
+            self.project_root_var.set(state.get("root", os.getcwd()))"            self.agent_manager.load_state(state.get("agents", []))"            self.global_context.delete("1.0", tk.END)
             self.global_context.insert("1.0", state.get("global_context", ""))"            self.explorer.refresh_tree()
-            self.status_var.set("Session loaded.")"
+            self.status_var.set("Session loaded.")
     def new_session(self) -> None:
         if self.dialogs.confirm_action("Confirm", "Discard current session?"):"            self.agent_manager.clear_all()
             self.global_context.delete("1.0", tk.END)"            self.status_var.set("New session started.")"
@@ -307,3 +314,5 @@ class PyAgentGUI:
 if __name__ == "__main__":"    root = tk.Tk()
     app = PyAgentGUI(root)
     root.mainloop()
+
+"""

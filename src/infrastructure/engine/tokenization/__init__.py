@@ -15,8 +15,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tokenizer Registry Package
 
+"""
 Tokenizer management with multi-backend support.
 
+"""
 This package provides:
 - Protocol-based tokenizer abstraction
 - Multi-backend support (HuggingFace, Mistral, Tiktoken)

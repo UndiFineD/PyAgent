@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.registry.extension_registry import ExtensionManager, ExtensionInfo, TypedExtensionManager, MultiExtensionManager, LazyExtensionManager, GlobalRegistry, get_global_registry, create_registry, create_typed_registry, create_lazy_registry, create_multi_registry

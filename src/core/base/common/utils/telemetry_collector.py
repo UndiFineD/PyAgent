@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Simple telemetry collector used by tests.
+"""
+"""
+Simple telemetry collector used by tests.
 
+"""
 This module provides a minimal in-process span collector. Tests only require the
 class to exist and basic methods, so this is intentionally lightweight.
 """
-
 import json
 import time
 import uuid
@@ -53,9 +56,9 @@ class SpanContext:
 
 
 class TelemetryCollector:
-    """Collect telemetry data for observability (minimal)."""
-
-    def __init__(self, service_name: str = "agent") -> None:
+    ""
+Collect telemetry data for observability (minimal).""
+def __init__(self, service_name: str = "agent") -> None:
         self.service_name = service_name
         self._spans: list[TelemetrySpan] = []
         self._current_span: TelemetrySpan | None = None

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_test_utils.py
 """
 
+"""
 import json
 import re
 
@@ -32,21 +35,23 @@ __version__ = VERSION
 
 
 class AgentAssertions:
-    """Custom assertion helpers for agent testing.
+"""
+Custom assertion helpers for agent testing.
 
     Example:
         assertions=AgentAssertions()
         assertions.assert_valid_python("print('hello')")
         assertions.assert_markdown_structure(content, headers=True)
-    """
-
-    def __init__(self) -> None:
-        """Initialize assertion helpers."""
-        self._assertions: list[TestAssertion] = []
+"""
+def __init__(self) -> None:
+"""
+Initialize assertion helpers.""
+self._assertions: list[TestAssertion] = []
 
 
     def assert_valid_python(self, code: str) -> bool:
-        """Assert code is valid Python.
+"""
+Assert code is valid Python.
 
         Args:
             code: Python code to validate.
@@ -56,8 +61,8 @@ class AgentAssertions:
 
         Raises:
             AssertionError: If invalid Python.
-        """
-        try:
+"""
+try:
             compile(code, "<string>", "exec")
             assertion = TestAssertion(
                 name="valid_python",
@@ -79,15 +84,18 @@ class AgentAssertions:
 
 
     def assert_contains_docstring(self, code: str) -> bool:
-        """Assert code contains docstrings.
+"""
+Assert code contains docstrings.
 
         Args:
             code: Python code to check.
 
         Returns:
             bool: True if contains docstrings.
-        """
-        has_docstring = '"""' in code or "'''" in code
+"""
+has_docstring = '"""'
+in code or "'''"
+in code
         assertion = TestAssertion(
             name="contains_docstring",
             expected=True,
@@ -106,7 +114,8 @@ class AgentAssertions:
         headers: bool = True,
         code_blocks: bool = False,
     ) -> bool:
-        """Assert markdown has expected structure.
+"""
+Assert markdown has expected structure.
 
         Args:
             content: Markdown content.
@@ -115,8 +124,8 @@ class AgentAssertions:
 
         Returns:
             bool: True if structure matches.
-        """
-        issues: list[str] = []
+"""
+issues: list[str] = []
         if headers and not re.search(r"^#+\s", content, re.MULTILINE):
             issues.append("missing headers")
         if code_blocks and "```" not in content:
@@ -134,15 +143,16 @@ class AgentAssertions:
         return True
 
     def assert_json_valid(self, content: str) -> bool:
-        """Assert content is valid JSON.
+"""
+Assert content is valid JSON.
 
         Args:
             content: JSON content.
 
         Returns:
             bool: True if valid JSON.
-        """
-        try:
+"""
+try:
             json.loads(content)
             assertion = TestAssertion(
                 name="json_valid",
@@ -164,5 +174,22 @@ class AgentAssertions:
 
 
     def get_assertions(self) -> list[TestAssertion]:
-        """Get all recorded assertions."""
-        return list(self._assertions)
+"""
+Get all recorded assertions.""
+return list(self._assertions)
+
+"""
+
+''
+
+"""
+
+''
+
+""
+
+''
+
+"""
+
+'''

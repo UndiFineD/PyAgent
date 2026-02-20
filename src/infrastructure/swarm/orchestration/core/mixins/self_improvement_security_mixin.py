@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,21 +18,25 @@ from __future__ import annotations
 
 
 """
+"""
 Security analysis logic for SelfImprovementCore.
 """
 
+"""
 import re
 from typing import Any, Dict, List
 
 
 
 class SelfImprovementSecurityMixin:
-    """Mixin for security-related analysis.
+"""
+Mixin for security-related analysis.
     def _analyze_security(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        """Scans for dangerous patterns and security risks.        findings = []
+"""
+Scans for dangerous patterns and security risks.        findings = []
 
         # Access class-level attributes
-        dangerous_patterns = getattr(self, "dangerous_patterns", [])"        rust_accel = getattr(self, "rust_accel", False)"        rc = getattr(self, "rc", None)"
+        dangerous_patterns = getattr(self, "dangerous_patterns", [])"        rust_accel = getattr(self, "rust_accel", False)"        rc = getattr(self, "rc", None)
         if rust_accel and rc is not None:
             try:
                 rust_findings = rc.analyze_security_patterns_rust(content, dangerous_patterns)

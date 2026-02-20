@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import json
 import logging
 import threading
@@ -24,25 +26,27 @@ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 
+"""
 __version__ = VERSION
 
-
+"""
 class AuditLogger:
-    """Logs backend requests for audit and compliance.
+"""
+Logs backend requests for audit and compliance.
     Records request metadata, responses, and timing for
     audit trail and compliance requirements.
 
     Example:
         audit = AuditLogger()
         audit.log_request("github-models", "prompt", "response", 150)
-    """
-
-    def __init__(self, log_file: Path | None = None) -> None:
-        """Initialize audit logger.
+"""
+def __init__(self, log_file: Path | None = None) -> None:
+"""
+Initialize audit logger.
         Args:
             log_file: Path to audit log file.
-        """
-        self.log_file = log_file
+"""
+self.log_file = log_file
         self._lock = threading.Lock()
 
 
@@ -56,7 +60,8 @@ class AuditLogger:
         request_id: str | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        """Log a request for audit.
+"""
+Log a request for audit.
         Args:
             backend: Backend used.
             prompt: Request prompt (may be truncated for privacy).
@@ -65,8 +70,8 @@ class AuditLogger:
             success: Whether request succeeded.
             request_id: Optional request ID.
             metadata: Additional metadata.
-        """
-        entry: dict[str, Any] = {
+"""
+entry: dict[str, Any] = {
             "timestamp": datetime.now(UTC).isoformat(),
             "request_id": request_id or str(uuid.uuid4()),
             "backend": backend,
@@ -88,15 +93,16 @@ class AuditLogger:
 
 
     def get_recent_entries(self, count: int = 100) -> list[dict[str, Any]]:
-        """Get recent audit log entries.
+"""
+Get recent audit log entries.
         
         Args:
             count: Number of entries to return.
 
         Returns:
             List[Dict]: Recent audit entries.
-        """
-        if not self.log_file or not self.log_file.exists():
+"""
+if not self.log_file or not self.log_file.exists():
             return []
 
         entries: list[dict[str, Any]] = []

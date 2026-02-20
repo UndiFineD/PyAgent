@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.slash_commands.commands.datetime_cmds import cmd_datetime, cmd_date, cmd_time, cmd_uptime, cmd_timestamp

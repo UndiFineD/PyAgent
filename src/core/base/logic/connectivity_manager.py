@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Centralized connectivity management with TTL-based status caching."""
+"""
+"""
+Centralized connectivity management with TTL-based status caching.""
 
+"""
 import json
 import logging
 import os
@@ -30,8 +34,9 @@ __version__ = VERSION
 
 
 class ConnectivityManager:
-    """Manages connection status regarding external APIs with persistent 15-minute TTL caching."""
-    _instance = None
+"""
+Manages connection status regarding external APIs with persistent 15-minute TTL caching.""
+_instance = None
     _initialized = False
 
     def __new__(cls, *args: Any, **kwargs: Any) -> ConnectivityManager:
@@ -54,8 +59,9 @@ class ConnectivityManager:
         self._initialized = True
 
     def _load_status(self) -> dict[str, Any]:
-        """Loads the connection status from disk."""
-        if self._conn_status_file and self._conn_status_file.exists():
+"""
+Loads the connection status from disk.""
+if self._conn_status_file and self._conn_status_file.exists():
             try:
                 # pylint: disable=unspecified-encoding
                 with open(self._conn_status_file, 'r', encoding='utf-8') as f:
@@ -65,8 +71,9 @@ class ConnectivityManager:
         return {}
 
     def _save_status(self) -> None:
-        """Saves the connection status to disk."""
-        if self._conn_status_file:
+"""
+Saves the connection status to disk.""
+if self._conn_status_file:
             try:
                 os.makedirs(self._conn_status_file.parent, exist_ok=True)
                 self._cache["__preferred__"] = self._preferred_cache
@@ -76,21 +83,24 @@ class ConnectivityManager:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error("ConnectivityManager: Failed to save status: %s", e)
     def get_preferred_endpoint(self, group: str) -> str | None:
-        """Returns the last known working endpoint regarding a group if within TTL."""
-        preferred = self._preferred_cache.get(group)
+"""
+Returns the last known working endpoint regarding a group if within TTL.""
+preferred = self._preferred_cache.get(group)
         if preferred and self.is_endpoint_available(preferred):
             return preferred
         return None
 
     def set_preferred_endpoint(self, group: str, endpoint_id: str) -> None:
-        """Sets the preferred endpoint regarding a group."""
-        if self._preferred_cache.get(group) != endpoint_id:
+"""
+Sets the preferred endpoint regarding a group.""
+if self._preferred_cache.get(group) != endpoint_id:
             self._preferred_cache[group] = endpoint_id
             self._save_status()
 
     def is_endpoint_available(self, endpoint_id: str) -> bool:
-        """Checks if an endpoint is known to be available with differentiated TTLs (Phase 141)."""
-        status = self._cache.get(endpoint_id)
+"""
+Checks if an endpoint is known to be available with differentiated TTLs (Phase 141).""
+status = self._cache.get(endpoint_id)
         if status:
             elapsed = time.time() - status.get("timestamp", 0)
             is_working = status.get("working", False)
@@ -106,15 +116,17 @@ class ConnectivityManager:
         return True  # Default to True or if TTL expired
 
     def update_status(self, endpoint_id: str, working: bool) -> None:
-        """Updates and persists the status regarding an endpoint."""
-        status = self._cache.get(endpoint_id, {})
+"""
+Updates and persists the status regarding an endpoint.""
+status = self._cache.get(endpoint_id, {})
         status.update({"working": working, "timestamp": time.time()})
         self._cache[endpoint_id] = status
         self._save_status()
 
     def track_tps(self, endpoint_id: str, token_count: int, duration: float) -> None:
-        """Tracks tokens per second regarding an endpoint (Phase 144)."""
-        if duration <= 0:
+"""
+Tracks tokens per second regarding an endpoint (Phase 144).""
+if duration <= 0:
             return
 
         tps = token_count / duration
@@ -137,8 +149,9 @@ class ConnectivityManager:
         self._save_status()
 
     def get_tps_stats(self, endpoint_id: str) -> dict[str, Any]:
-        """Returns TPS statistics regarding an endpoint."""
-        status = self._cache.get(endpoint_id, {})
+"""
+Returns TPS statistics regarding an endpoint.""
+status = self._cache.get(endpoint_id, {})
         return {
             "avg_tps": status.get("avg_tps", 0),
             "last_tps": status.get("last_tps", 0),
@@ -146,16 +159,19 @@ class ConnectivityManager:
         }
 
     def is_online(self, endpoint: str) -> bool:
-        """Compatibility alias regarding is_endpoint_available."""
-        return self.is_endpoint_available(endpoint)
+"""
+Compatibility alias regarding is_endpoint_available.""
+return self.is_endpoint_available(endpoint)
 
     def set_status(self, endpoint: str, online: bool) -> None:
-        """Compatibility alias regarding update_status."""
-        self.update_status(endpoint, online)
+"""
+Compatibility alias regarding update_status.""
+self.update_status(endpoint, online)
 
     def check_and_execute(self, endpoint_id: str, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
-        """Executes a function only if endpoint is available, updating status on failure."""
-        if not self.is_endpoint_available(endpoint_id):
+        ""
+Executes a function only if endpoint is available, updating status on failure.""
+if not self.is_endpoint_available(endpoint_id):
             return None
 
         try:

@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Enums for multimodal caching.
+"""
+"""
+Enums for multimodal caching.
 try:
-    from enum import Enum, auto
+
+"""
+from enum import Enum, auto
 except ImportError:
     from enum import Enum, auto
 
@@ -24,7 +28,8 @@ except ImportError:
 
 
 class MediaType(Enum):
-    """Types of media content.
+"""
+Types of media content.
     IMAGE = auto()
     VIDEO = auto()
     AUDIO = auto()
@@ -35,7 +40,8 @@ class MediaType(Enum):
 
 
 class CacheBackend(Enum):
-    """Cache storage backend types.
+"""
+Cache storage backend types.
     MEMORY = auto()  # In-memory dictionary
     MMAP = auto()  # Memory-mapped file
     SHARED = auto()  # Shared memory (IPC)
@@ -45,7 +51,8 @@ class CacheBackend(Enum):
 
 
 class HashAlgorithm(Enum):
-    """Hash algorithms for content addressing.
+"""
+Hash algorithms for content addressing.
     BLAKE3 = auto()  # Fast cryptographic hash
     SHA256 = auto()  # Standard SHA-256
     XXHASH = auto()  # Fast non-cryptographic

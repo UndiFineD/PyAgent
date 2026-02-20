@@ -14,8 +14,10 @@
 
 
 """
+"""
 PyAgent Fix Headers Tool
 
+"""
 A maintenance tool for ensuring all Python files have proper Apache 2.0 license headers.
 
 try:

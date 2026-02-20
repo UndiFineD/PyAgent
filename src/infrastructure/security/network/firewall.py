@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,15 +16,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Reverse Proxy Application Firewall.
 
+"""
 Serves as the centralized gateway for all incoming and outgoing network traffic.
 Enforces security rules, manages connection resilience, and logs traffic patterns.
 Replaces direct usage of HTTP clients (requests, httpx) throughout the swarm.
 """
-
 import json
 import logging
 import ipaddress
@@ -74,17 +77,19 @@ class ReverseProxyFirewall:
         self.session.mount("https://", adapter)"        self.session.mount("http://", adapter)"
         # Firewall Policy Configuration from dynamic config
         self.blocked_domains = config.get("firewall.blocked_domains", ["            "telemetry.spyware.net","            "adservice.google.com""        ])
-        self.allowed_networks = config.get("voyager.allowed_networks", ["127.0.0.1/32"])"        self.local_only = config.get("firewall.local_only", False)"        self.allowed_schemes = ["http", "https"]"
+        self.allowed_networks = config.get("voyager.allowed_networks", ["127.0.0.1/32"])"        self.local_only = config.get("firewall.local_only", False)"        self.allowed_schemes = ["http", "https"]
         self.violation_log = config.workspace_root / "data" / "logs" / "firewall_violations.jsonl""        self.violation_log.parent.mkdir(parents=True, exist_ok=True)
 
         self._initialized = True
 
     def _log_violation(self, url: str, reason: str) -> None:
-        """Logs a security violation for audit trail.        entry = {
+"""
+Logs a security violation for audit trail.        entry = {
             "timestamp": time.time(),"            "url": url,"            "reason": reason,"            "version": VERSION"        }
         with open(self.violation_log, "a", encoding="utf-8") as f:"            f.write(json.dumps(entry) + "\\n")"
     def _is_ip_allowed(self, hostname: str) -> bool:
-        """Checks if a hostname (if it's an IP) is within allowed CIDR ranges.'        try:
+"""
+Checks if a hostname (if it's an IP) is within allowed CIDR ranges.'        try:
             ip = ipaddress.ip_address(hostname)
             for network in self.allowed_networks:
                 if ip in ipaddress.ip_network(network):
@@ -109,8 +114,8 @@ class ReverseProxyFirewall:
         # 2. Extract domain and check IP restrictions
         try:
             parsed = urlparse(url)
-            domain = parsed.hostname or """
-            if self.local_only and domain not in ["localhost", "127.0.0.1"]:"                self.logger.warning("Firewall Blocked: Non-local request in local_only mode: %s", domain)"                self._log_violation(url, "local_only_violation")"                return False
+            domain = parsed.hostname or ""
+if self.local_only and domain not in ["localhost", "127.0.0.1"]:"                self.logger.warning("Firewall Blocked: Non-local request in local_only mode: %s", domain)"                self._log_violation(url, "local_only_violation")"                return False
 
             if not self._is_ip_allowed(domain):
                 self.logger.warning("Firewall Blocked: IP %s not in allowed networks", domain)"                self._log_violation(url, "forbidden_ip_network")"                return False
@@ -147,12 +152,12 @@ class ReverseProxyFirewall:
         Raises:
             ConnectionError: If firewall blocks the request or connectivity fails.
                 if not self.validate_request(url, method):
-            raise ConnectionError(f"Firewall blocked or pre-empted request to {url}")"
+            raise ConnectionError(f"Firewall blocked or pre-empted request to {url}")
         try:
-            self.logger.debug("FW-OUT: %s %s", method, url)"
+            self.logger.debug("FW-OUT: %s %s", method, url)
             # Execute request
-            response = self.session.request(method, url, timeout=kwargs.pop('timeout', 30), **kwargs)'
-            self.logger.debug("FW-IN: %s from %s", response.status_code, url)"
+            response = self.session.request(method, url, timeout=kwargs.pop('timeout', 30), **kwargs)
+            self.logger.debug("FW-IN: %s from %s", response.status_code, url)
             # Update Health
             try:
                 parsed = urlparse(url)
@@ -173,10 +178,14 @@ class ReverseProxyFirewall:
 
     # Convenience wrappers mimicking requests API
     def get(self, url: str, **kwargs: Any) -> requests.Response:
-        """Wrapper for GET requests.        return self.request("GET", url, **kwargs)"
+"""
+Wrapper for GET requests.        return self.request("GET", url, **kwargs)
     def post(self, url: str, **kwargs: Any) -> requests.Response:
-        """Wrapper for POST requests.        return self.request("POST", url, **kwargs)"
+"""
+Wrapper for POST requests.        return self.request("POST", url, **kwargs)
     def put(self, url: str, **kwargs: Any) -> requests.Response:
-        """Wrapper for PUT requests.        return self.request("PUT", url, **kwargs)"
+"""
+Wrapper for PUT requests.        return self.request("PUT", url, **kwargs)
     def delete(self, url: str, **kwargs: Any) -> requests.Response:
-        """Wrapper for DELETE requests.        return self.request("DELETE", url, **kwargs)"
+        ""
+Wrapper for DELETE requests.        return self.request("DELETE", url, **kwargs)

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.loading.expert_load_balancer import ExpertType, EplbMetrics, ExpertMapping, AbstractEplbPolicy, DefaultEplbPolicy, LocalityAwarePolicy, ExpertLoadBalancer, AsyncExpertRebalancer, compute_balanced_packing_rust, compute_expert_replication_rust, compute_load_imbalance_rust

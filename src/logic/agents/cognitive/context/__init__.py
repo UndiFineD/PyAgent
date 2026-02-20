@@ -1,4 +1,4 @@
-from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -15,13 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Context package for cognitive agents."""
-
+"""
+"""
+Context package for cognitive agents.""
 try:
-    from src.core.base.lifecycle.version import VERSION
+
+""
+from src.core.base.lifecycle.version import VERSION
 except Exception:
     VERSION = "0.0.0"
 
 __version__ = VERSION
 
-__all__ = ["VERSION", "__version__"]
+__all__ = ["VERSION", "__version__"]from __future__ import annotations

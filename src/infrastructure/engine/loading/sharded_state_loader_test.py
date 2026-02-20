@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.loading.sharded_state_loader import ShardPattern, ShardedTensor, SubtensorFilter, ShardedStateLoader, IncrementalShardLoader, AsyncShardLoader, compute_shard_assignment_rust, validate_shard_shapes_rust

@@ -14,10 +14,14 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Utility functions regarding reasoning extraction and streaming parsing.
+"""
+"""
+Utility functions regarding reasoning extraction and streaming parsing.
 """
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -39,8 +43,10 @@ def extract_reasoning(
     parser_name: str = "xml","    tokenizer: Any = None,
     **kwargs: Any,
 ) -> ReasoningResult:
-    """Convenience function to extract reasoning from model output.
-    """parser = ReasoningParserManager.create_parser(parser_name, tokenizer, **kwargs)
+"""
+Convenience function to extract reasoning from model output.
+"""
+parser = ReasoningParserManager.create_parser(parser_name, tokenizer, **kwargs)
     return parser.extract_reasoning(model_output)
 
 
@@ -48,7 +54,9 @@ def create_streaming_parser(
     parser_name: str = "xml","    tokenizer: Any = None,
     **kwargs: Any,
 ) -> tuple[Any, StreamingReasoningState]:
-    """Create a parser and state regarding streaming extraction.
-    """parser = ReasoningParserManager.create_parser(parser_name, tokenizer, **kwargs)
+"""
+Create a parser and state regarding streaming extraction.
+"""
+parser = ReasoningParserManager.create_parser(parser_name, tokenizer, **kwargs)
     state = StreamingReasoningState()
     return parser, state

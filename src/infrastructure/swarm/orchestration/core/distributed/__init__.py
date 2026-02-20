@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Distributed coordination package.
 
+"""
 try:
     from .client import MPClient  # noqa: F401
 except ImportError:

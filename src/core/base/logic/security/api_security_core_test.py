@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Module: api_security_core_test
+"""
+"""
+Module: api_security_core_test
 Comprehensive tests for API security patterns implemented from 31-days-of-API-Security-Tips.
 """
 try:
-    import hmac
+
+"""
+import hmac
 except ImportError:
     import hmac
 
@@ -48,7 +52,8 @@ except ImportError:
 
 class TestInputValidator:
     def test_sanitize_string_removes_injection(self):
-        dangerous_input = "<script>alert('xss')</script> UNION SELECT * FROM users""'        sanitized = InputValidator.sanitize_input(dangerous_input)
+        dangerous_input = "<script>alert('xss')</script> UNION SELECT * FROM users"
+sanitized = InputValidator.sanitize_input(dangerous_input)
         assert "<script>" not in sanitized"        assert "UNION" not in sanitized"        assert "SELECT" not in sanitized"    def test_sanitize_dict_recursively(self):
         data = {
             "name": "<script>evil</script>","            "nested": {"                "query": "SELECT * FROM users","                "safe": "hello""            }
@@ -60,7 +65,7 @@ class TestInputValidator:
     def test_validate_resource_access(self):
         creds = AgentCredentials(
             agent_id="agent-1","            secret_key="secret","            tenant_id="tenant-1""        )
-        assert InputValidator.validate_resource_access("agent-1", "tenant-1_resource", creds)"        assert not InputValidator.validate_resource_access("agent-2", "tenant-1_resource", creds)"        assert not InputValidator.validate_resource_access("agent-1", "tenant-2_resource", creds)"
+        assert InputValidator.validate_resource_access("agent-1", "tenant-1_resource", creds)"        assert not InputValidator.validate_resource_access("agent-2", "tenant-1_resource", creds)"        assert not InputValidator.validate_resource_access("agent-1", "tenant-2_resource", creds)
 class TestRateLimiter:
     def test_rate_limit_within_bounds(self):
         limiter = RateLimiter(RateLimitConfig(requests_per_minute=5, burst_limit=10))
@@ -147,4 +152,4 @@ class TestAPISecurityCore:
             assert mock_log.call_args[0][0].event_type == "BOLA_ATTEMPT""    @pytest.mark.asyncio
     async def test_authorization_failure(self, security_core):
         token = self.generate_token("agent-1", "secret")"        message = {"action": "forbidden_action"}"        with patch.object(security_core.error_handler, 'log_security_event') as mock_log:'            with pytest.raises(ValueError, match="Access denied: ValueError"):"                await security_core.secure_communication("agent-1", "agent-2", message, token)"            mock_log.assert_called_once()
-            assert mock_log.call_args[0][0].event_type == "AUTHORIZATION_FAILED""
+            assert mock_log.call_args[0][0].event_type == "AUTHORIZATION_FAILED"

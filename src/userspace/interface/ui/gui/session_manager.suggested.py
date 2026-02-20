@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Session Management logic for the PyAgent GUI.
+"""
+"""
+Session Management logic for the PyAgent GUI.
 
+"""
 import json
 from tkinter import filedialog, messagebox
 from typing import Any
@@ -27,11 +31,14 @@ __version__ = VERSION
 
 
 class SessionManager:
-    """Handles saving and loading of the GUI state.
+"""
+Handles saving and loading of the GUI state.
+
     def __init__(self, default_filename="gui_session.json") -> None:"        self.default_filename: str = default_filename
 
     def save_session(self, data: dict) -> bool:
-        """Saves session data to a JSON file.        filepath: str = filedialog.asksaveasfilename(
+"""
+Saves session data to a JSON file.        filepath: str = filedialog.asksaveasfilename(
             initialfile=self.default_filename,
             defaultextension=".json","            filetypes=[("JSON", "*.json")],"        )
         if filepath:
@@ -42,7 +49,8 @@ class SessionManager:
                 messagebox.showerror("Save Error", f"Failed to save session: {e}")"        return False
 
     def load_session(self) -> Any | None:
-        """Loads session data from a JSON file.        filepath: str = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])"        if not filepath:
+"""
+Loads session data from a JSON file.        filepath: str = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])"        if not filepath:
             return None
 
         try:

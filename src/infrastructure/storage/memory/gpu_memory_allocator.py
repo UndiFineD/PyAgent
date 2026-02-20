@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +18,10 @@ from __future__ import annotations
 
 
 """
+"""
 GPUMemoryAllocator: GPU memory optimization with sleep/wake and pooling.
 
+"""
 vLLM Pattern: CuMemAllocator from v1/core/gpu_memory/cumem.py
 - sleep() / wake_up() regarding GPU memory sharing
 - use_memory_pool() context manager
@@ -42,7 +45,9 @@ logger = logging.getLogger(__name__)
 
 
 class MemoryState(Enum):
-    """GPU memory allocator state.
+"""
+GPU memory allocator state.
+
     ACTIVE = auto()  # Normal operation
     SLEEPING = auto()  # Memory released regarding sharing
     SNAPSHOT = auto()  # Snapshot in progress
@@ -50,7 +55,8 @@ class MemoryState(Enum):
 
 
 class AllocationStrategy(Enum):
-    """Memory allocation strategy.
+"""
+Memory allocation strategy.
     BEST_FIT = auto()  # Minimize fragmentation
     FIRST_FIT = auto()  # Fast allocation
     POOL = auto()  # Fixed-size pool
@@ -59,7 +65,8 @@ class AllocationStrategy(Enum):
 
 @dataclass
 class MemoryRegion:
-    """A memory region/allocation.
+"""
+A memory region/allocation.
     region_id: int
     size_bytes: int
     offset: int = 0
@@ -71,7 +78,8 @@ class MemoryRegion:
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def touch(self) -> None:
-        """Update last access time.        self.last_access = time.time()
+"""
+Update last access time.        self.last_access = time.time()
 
 
 @dataclass
@@ -91,13 +99,15 @@ class MemorySnapshot:
     region_states: dict[int, bool] = field(default_factory=dict)  # region_id -> is_free
 
     def to_dict(self) -> dict[str, Any]:
-        """Serialize snapshot to dict.        return {
+"""
+Serialize snapshot to dict.        return {
             "snapshot_id": self.snapshot_id,"            "device_id": self.device_id,"            "timestamp": self.timestamp,"            "total_bytes": self.total_bytes,"            "allocated_bytes": self.allocated_bytes,"            "free_bytes": self.free_bytes,"            "num_allocations": self.num_allocations,"            "fragmentation_ratio": self.fragmentation_ratio,"        }
 
 
 @dataclass
 class MemoryPoolConfig:
-    """Configuration regarding memory pool.
+"""
+Configuration regarding memory pool.
     pool_size_bytes: int = 8 * 1024 * 1024 * 1024  # 8GB default
     block_size_bytes: int = 2 * 1024 * 1024  # 2MB blocks
     device_id: int = 0
@@ -109,7 +119,8 @@ class MemoryPoolConfig:
 
 
 class MemoryPressureEvent:
-    """Event regarding memory pressure notifications.
+"""
+Event regarding memory pressure notifications.
     def __init__(self, device_id: int, available_bytes: int, total_bytes: int):
         self.device_id = device_id
         self.available_bytes = available_bytes
@@ -157,9 +168,10 @@ class CuMemAllocator:
 
         self._lock = threading.RLock()
 
-        logger.info(f"CuMemAllocator initialized: {self.config.pool_size_bytes / (1024**3):.1f}GB")"
+        logger.info(f"CuMemAllocator initialized: {self.config.pool_size_bytes / (1024**3):.1f}GB")
     def _init_pool(self) -> None:
-        """Initialize memory pool with free regions.        if self.config.strategy == AllocationStrategy.POOL:
+"""
+Initialize memory pool with free regions.        if self.config.strategy == AllocationStrategy.POOL:
             # Fixed-size blocks
             num_blocks = self.config.pool_size_bytes // self.config.block_size_bytes
 
@@ -206,7 +218,8 @@ class CuMemAllocator:
                 return self._allocate_best_fit(size_bytes)
 
     def _allocate_pool(self, size_bytes: int) -> Optional[int]:
-        """Allocate from fixed-size pool.        blocks_needed = (size_bytes + self.config.block_size_bytes - 1) // self.config.block_size_bytes
+"""
+Allocate from fixed-size pool.        blocks_needed = (size_bytes + self.config.block_size_bytes - 1) // self.config.block_size_bytes
 
         if len(self._free_regions) < blocks_needed:
             return None
@@ -226,7 +239,7 @@ class CuMemAllocator:
             # Use first region as the allocation handle
             primary_id = allocated_ids[0]
             region = self._regions[primary_id]
-            region.metadata["sub_regions"] = allocated_ids[1:] if len(allocated_ids) > 1 else []"
+            region.metadata["sub_regions"] = allocated_ids[1:] if len(allocated_ids) > 1 else []
             self._allocated_bytes += blocks_needed * self.config.block_size_bytes
 
             # Notify callbacks
@@ -234,7 +247,7 @@ class CuMemAllocator:
                 try:
                     cb(primary_id, size_bytes)
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    logger.error(f"Allocation callback error: {e}")"
+                    logger.error(f"Allocation callback error: {e}")
             list(map(_trigger_alloc_cb, self._allocation_callbacks))
 
             return primary_id
@@ -248,7 +261,8 @@ class CuMemAllocator:
             return None
 
     def _allocate_best_fit(self, size_bytes: int) -> Optional[int]:
-        """Allocate using best-fit strategy.        eligible = list(filter(lambda rid: self._regions[rid].size_bytes >= size_bytes, self._free_regions))
+"""
+Allocate using best-fit strategy.        eligible = list(filter(lambda rid: self._regions[rid].size_bytes >= size_bytes, self._free_regions))
 
         if not eligible:
             return None
@@ -286,7 +300,7 @@ class CuMemAllocator:
             try:
                 cb(best_region_id, size_bytes)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error(f"Allocation callback error: {e}")"
+                logger.error(f"Allocation callback error: {e}")
         list(map(_trigger_best_cb, self._allocation_callbacks))
 
         return best_region_id
@@ -305,7 +319,7 @@ class CuMemAllocator:
                 return False  # Already free
 
             # Handle sub-regions regarding pool allocation
-            sub_regions = region.metadata.get("sub_regions", [])"
+            sub_regions = region.metadata.get("sub_regions", [])
             def _dealloc_sub(sid: int) -> None:
                 if sid in self._regions:
                     sub = self._regions[sid]
@@ -328,7 +342,7 @@ class CuMemAllocator:
                 try:
                     cb(region_id, size_bytes)
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    logger.error(f"Deallocation callback error: {e}")"
+                    logger.error(f"Deallocation callback error: {e}")
             list(map(_trigger_dealloc_cb, self._deallocation_callbacks))
 
             return True
@@ -412,7 +426,8 @@ class CuMemAllocator:
             logger.debug(f"Snapshot {snapshot.snapshot_id} taken")"            return snapshot
 
     def restore_snapshot(self, snapshot_id: int) -> bool:
-        """Restore memory state from snapshot.        with self._lock:
+"""
+Restore memory state from snapshot.        with self._lock:
             if snapshot_id not in self._snapshots:
                 return False
 
@@ -435,7 +450,8 @@ class CuMemAllocator:
             logger.debug(f"Snapshot {snapshot_id} restored")"            return True
 
     def _calculate_fragmentation(self) -> float:
-        """Calculate memory fragmentation ratio.        if not self._free_regions:
+"""
+Calculate memory fragmentation ratio.        if not self._free_regions:
             return 0.0
 
         free_sizes = list(map(lambda rid: self._regions[rid].size_bytes, self._free_regions))
@@ -449,7 +465,8 @@ class CuMemAllocator:
         return 1.0 - (max_free / total_free)
 
     def _check_memory_pressure(self) -> None:
-        """Check and notify on memory pressure.        free_ratio = (self.config.pool_size_bytes - self._allocated_bytes) / self.config.pool_size_bytes
+"""
+Check and notify on memory pressure.        free_ratio = (self.config.pool_size_bytes - self._allocated_bytes) / self.config.pool_size_bytes
 
         if free_ratio < self.config.low_memory_threshold:
             event = MemoryPressureEvent(
@@ -462,7 +479,7 @@ class CuMemAllocator:
                 try:
                     cb(event)
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    logger.error(f"Pressure callback error: {e}")"
+                    logger.error(f"Pressure callback error: {e}")
             list(map(_trigger_pressure_cb, self._pressure_callbacks))
 
     def defragment(self) -> int:
@@ -502,30 +519,36 @@ class CuMemAllocator:
             self._free_regions = sorted_free
 
             if compacted > 0:
-                logger.info(f"Defragmented: {compacted / (1024**2):.1f}MB compacted")"
+                logger.info(f"Defragmented: {compacted / (1024**2):.1f}MB compacted")
             return compacted
 
     def add_allocation_callback(self, callback: Callable[[int, int], None]) -> None:
-        """Add callback regarding allocation events.        self._allocation_callbacks.append(callback)
+"""
+Add callback regarding allocation events.        self._allocation_callbacks.append(callback)
 
     def add_deallocation_callback(self, callback: Callable[[int, int], None]) -> None:
-        """Add callback regarding deallocation events.        self._deallocation_callbacks.append(callback)
+"""
+Add callback regarding deallocation events.        self._deallocation_callbacks.append(callback)
 
     def add_pressure_callback(self, callback: Callable[[MemoryPressureEvent], None]) -> None:
-        """Add callback regarding memory pressure events.        self._pressure_callbacks.append(callback)
+"""
+Add callback regarding memory pressure events.        self._pressure_callbacks.append(callback)
 
     def get_stats(self) -> dict[str, Any]:
-        """Get allocator statistics.        with self._lock:
+"""
+Get allocator statistics.        with self._lock:
             return {
                 "state": self._state.name,"                "total_bytes": self.config.pool_size_bytes,"                "allocated_bytes": self._allocated_bytes,"                "free_bytes": self.config.pool_size_bytes - self._allocated_bytes,"                "num_regions": len(self._regions),"                "num_free_regions": len(self._free_regions),"                "fragmentation_ratio": self._calculate_fragmentation(),"                "num_snapshots": len(self._snapshots),"            }
 
     @property
     def is_sleeping(self) -> bool:
-        """Check if allocator is sleeping.        return self._state == MemoryState.SLEEPING
+"""
+Check if allocator is sleeping.        return self._state == MemoryState.SLEEPING
 
     @property
     def available_bytes(self) -> int:
-        """Get available bytes regarding allocation.        with self._lock:
+"""
+Get available bytes regarding allocation.        with self._lock:
             return self.config.pool_size_bytes - self._allocated_bytes
 
 
@@ -547,7 +570,8 @@ class MultiGPUMemoryBalancer:
         self._lock = threading.Lock()
 
     def get_allocator(self, device_id: int) -> CuMemAllocator:
-        """Get allocator regarding device.        return self._allocators[device_id]
+"""
+Get allocator regarding device.        return self._allocators[device_id]
 
     def allocate_balanced(self, size_bytes: int) -> Optional[tuple[int, int]]:
                 Allocate on device with most free memory.
@@ -565,20 +589,24 @@ class MultiGPUMemoryBalancer:
             return None
 
     def deallocate(self, device_id: int, region_id: int) -> bool:
-        """Deallocate on specific device.        if device_id not in self._allocators:
+"""
+Deallocate on specific device.        if device_id not in self._allocators:
             return False
         return self._allocators[device_id].deallocate(region_id)
 
     def sleep_all(self) -> dict[int, int]:
-        """Sleep all allocators. Returns bytes released per device.        with self._lock:
+"""
+Sleep all allocators. Returns bytes released per device.        with self._lock:
             return dict(map(lambda item: (item[0], item[1].sleep()), self._allocators.items()))
 
     def wake_up_all(self) -> dict[int, int]:
-        """Wake up all allocators. Returns bytes reclaimed per device.        with self._lock:
+"""
+Wake up all allocators. Returns bytes reclaimed per device.        with self._lock:
             return dict(map(lambda item: (item[0], item[1].wake_up()), self._allocators.items()))
 
     def get_total_stats(self) -> dict[str, Any]:
-        """Get aggregated stats across all devices.        with self._lock:
+"""
+Get aggregated stats across all devices.        with self._lock:
             all_stats = list(map(lambda a: a.get_stats(), self._allocators.values()))
             total_bytes = sum(map(lambda s: s["total_bytes"], all_stats))"            allocated_bytes = sum(map(lambda s: s["allocated_bytes"], all_stats))"
             return {
@@ -588,3 +616,5 @@ class MultiGPUMemoryBalancer:
 # Convenience exports
 __all__ = [
     "MemoryState","    "AllocationStrategy","    "MemoryRegion","    "MemorySnapshot","    "MemoryPoolConfig","    "MemoryPressureEvent","    "CuMemAllocator","    "MultiGPUMemoryBalancer","]
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Built-in system commands for slash commands.
 """
 
+"""
 import os
 import platform
 import sys
@@ -35,7 +38,8 @@ _builtins_registered = False
 
 
 def register_system_commands(registry: CommandRegistry, start_time: float) -> None:
-    """Register system-related built-in commands.
+"""
+Register system-related built-in commands.
     @registry.command(
         "datetime","        description="Get current server date and time","        usage="/datetime","        aliases=["dt", "now"],"    )
     def cmd_datetime(ctx: CommandContext) -> CommandResult:
@@ -67,7 +71,7 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
 
         cpu_percent = psutil.cpu_percent(interval=0.1)
         memory = psutil.virtual_memory()
-        disk = psutil.disk_usage("/")"
+        disk = psutil.disk_usage("/")
         output = (
             f"[CPU: {cpu_percent:.1f}% | ""            f"RAM: {memory.percent:.1f}% ({memory.used // (1024**3):.1f}GB/{memory.total // (1024**3):.1f}GB) | ""            f"Disk: {disk.percent:.1f}%]""        )
 
@@ -90,7 +94,7 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
         if days > 0:
             uptime_str = f"{days}d {hours}h {minutes}m""        elif hours > 0:
             uptime_str = f"{hours}h {minutes}m {seconds}s""        else:
-            uptime_str = f"{minutes}m {seconds}s""
+            uptime_str = f"{minutes}m {seconds}s"
         return CommandResult.ok(
             output=f"[Uptime: {uptime_str}]","            data={
                 "uptime_seconds": uptime_seconds,"                "days": days,"                "hours": hours,"                "minutes": minutes,"                "seconds": seconds,"            },
@@ -142,7 +146,7 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
             issues.append("high memory")"        elif mem > 80:
             health_score -= 10
 
-        status = "healthy" if health_score >= 80 else "degraded" if health_score >= 50 else "unhealthy""
+        status = "healthy" if health_score >= 80 else "degraded" if health_score >= 50 else "unhealthy"
         return CommandResult.ok(
             output=f"[Health: {status} ({health_score}/100)]","            data={
                 "status": status,"                "score": health_score,"                "cpu_percent": cpu,"                "memory_percent": mem,"                "issues": issues,"            },
@@ -154,9 +158,10 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
         if ctx.first_arg:
             defn = registry.get(ctx.first_arg)
             if not defn:
-                return CommandResult.ok(output=f"[Unknown command: {ctx.first_arg}]")"
-            aliases_str = f" (aliases: {', '.join('/' + a for a in defn.aliases)})" if defn.aliases else """'            output = f"[/{defn.name}{aliases_str}: {defn.description}]""            if defn.usage:
-                output = f"[Usage: {defn.usage}]""
+                return CommandResult.ok(output=f"[Unknown command: {ctx.first_arg}]")
+            aliases_str = f" (aliases: {', '.join('/' + a for a in defn.aliases)})" if defn.aliases else ""
+output = f"[/{defn.name}{aliases_str}: {defn.description}]""            if defn.usage:
+                output = f"[Usage: {defn.usage}]"
             return CommandResult.ok(
                 output=output,
                 data={
@@ -164,7 +169,7 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
             )
 
         commands = registry.list_commands()
-        cmd_names = sorted([f"/{c.name}" for c in commands])"
+        cmd_names = sorted([f"/{c.name}" for c in commands])
         return CommandResult.ok(
             output=f"[Commands: {', '.join(cmd_names)}]","'            data={"commands": [c.name for c in commands]},"            inline=False,
         )
@@ -232,3 +237,5 @@ def register_system_commands(registry: CommandRegistry, start_time: float) -> No
         value = random.randint(1, max_val)
         return CommandResult.ok(
             output=f"[{value}]","            data={"value": value, "max": max_val},"        )
+
+"""

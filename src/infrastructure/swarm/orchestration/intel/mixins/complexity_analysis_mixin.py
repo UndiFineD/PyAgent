@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Complexity analysis mixin.py module.
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
 import logging
 import os
 from typing import TYPE_CHECKING, Any
@@ -31,7 +34,9 @@ if TYPE_CHECKING:
 
 
 class ComplexityAnalysisMixin:
-    """Mixin for workspace-wide complexity scanning in SelfImprovementAnalysis.
+"""
+Mixin for workspace-wide complexity scanning in SelfImprovementAnalysis.
+
     def scan_workspace_complexity(self: SelfImprovementAnalysis, target_dir: str = "src") -> list[dict[str, Any]]:"                Scans the workspace for high-complexity files using the Rust bridge.
         Returns a sorted list of complexity targets.
                 try:
@@ -52,6 +57,6 @@ class ComplexityAnalysisMixin:
                         comp = rc.calculate_cyclomatic_complexity(content)
                         if comp > 25:
                             targets.append({"file": rel_path, "complexity": comp, "type": "Complexity Issue"})"                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                        logging.debug(f"Complexity scan failed for {rel_path}: {e}")"
+                        logging.debug(f"Complexity scan failed for {rel_path}: {e}")
         # Sort by complexity descending
         targets.sort(key=lambda x: x["complexity"], reverse=True)"        return targets

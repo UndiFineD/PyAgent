@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
-"""Unified shell execution core for all PyAgent services."""
+"""
+"""
+Unified shell execution core for all PyAgent services.""
 
-
+"""
 import asyncio
 import logging
 import os
@@ -34,8 +36,9 @@ except ImportError:
 
 @dataclass(frozen=True)
 class ShellResult:
-    """The result of a shell command execution."""
-    command: List[str]
+"""
+The result of a shell command execution.""
+command: List[str]
     returncode: int
     stdout: str
     stderr: str
@@ -53,11 +56,11 @@ class ShellResult:
 
 
 class ShellCore:
-    """Centralized handler for shell and subprocess operations.
+"""
+Centralized handler for shell and subprocess operations.
     Provides consistent logging, error handling, and environmental setup.
-    """
-
-    def __init__(self, repo_root: Optional[Union[str, Path]] = None) -> None:
+"""
+def __init__(self, repo_root: Optional[Union[str, Path]] = None) -> None:
         if repo_root:
             self.repo_root = Path(repo_root)
         else:
@@ -76,12 +79,13 @@ class ShellCore:
 
 
     def sanitize_env(self, env: Dict[str, str]) -> Dict[str, str]:
-        """Filters environment variables to prevent secret leakage.
+"""
+Filters environment variables to prevent secret leakage.
 
         This is intentionally conservative; prefer allowing well-known environment
         variables and the `PYAGENT_` / `DV_` prefixes.
-        """
-        allow_list = {
+"""
+allow_list = {
             "PATH",
             "PYTHONPATH",
             "LANG",
@@ -110,21 +114,23 @@ class ShellCore:
 
 
     def strip_ansi(self, text: str) -> str:
-        """Removes ANSI escape sequences from a string.
+"""
+Removes ANSI escape sequences from a string.
 
         Safe for None/empty input.
-        """
-        if not text:
+"""
+if not text:
             return ""
         return self._ansi_escape.sub("", text)
 
 
     def _record_shell_interaction(self, provider: str, prompt: str, result_text: str, meta: Dict[str, object]) -> None:
-        """Helper to record shell interactions to the fleet recorder safely.
+"""
+Helper to record shell interactions to the fleet recorder safely.
 
         Truncates large results and re-raises critical exceptions (KeyboardInterrupt/SystemExit).
-        """
-        if not (hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder")):
+"""
+if not (hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder")):
             return
         try:
             if len(result_text) > 2000:
@@ -151,8 +157,9 @@ class ShellCore:
         capture_output: bool = True,
         sanitize: bool = True,
     ) -> ShellResult:
-        """Execute a command asynchronously."""
-        start_time = time.perf_counter()
+"""
+Execute a command asynchronously.""
+start_time = time.perf_counter()
         current_env = os.environ.copy()
         if env:
             current_env.update(env)
@@ -230,8 +237,9 @@ class ShellCore:
         cwd: Optional[Union[str, Path]] = None,
         check: bool = False,
     ) -> ShellResult:
-        """Execute a command synchronously."""
-        start_time = time.perf_counter()
+"""
+Execute a command synchronously.""
+start_time = time.perf_counter()
 
         # Use Rust-accelerated directory walking if available
         if (
@@ -325,8 +333,9 @@ class ShellCore:
             )
             return ShellResult(cmd, -2, "", str(e), time.perf_counter() - start_time)
     def redact_command(self, cmd: List[str], sensitive_patterns: List[str]) -> List[str]:
-        """Redact sensitive information from a command list for logging."""
-        redacted = []
+        ""
+Redact sensitive information from a command list for logging.""
+redacted = []
         for part in cmd:
             for pattern in sensitive_patterns:
                 part = part.replace(pattern, "********")

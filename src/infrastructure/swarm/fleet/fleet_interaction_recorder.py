@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 """
 FleetInteractionRecorder
+"""
 Logic for recording fleet interactions and justifying actions.
 """
 
+"""
 import contextlib
 import time
 from typing import TYPE_CHECKING, Any
@@ -29,13 +32,15 @@ if TYPE_CHECKING:
 
 
 class FleetInteractionRecorder:
-    """Handles recording of agent successes and explainability traces."""
-    def __init__(self, fleet: 'FleetManager') -> None:
+"""
+Handles recording of agent successes and explainability traces.""
+def __init__(self, fleet: 'FleetManager') -> None:
         self.fleet = fleet
 
     def record_interaction(self, user_input: str, agent_id: str, role: str, content: str | None = None) -> None:
-        """Directly records an interaction for the Web UI reasoning stream."""
-        import json
+"""
+Directly records an interaction for the Web UI reasoning stream.""
+import json
         import datetime
         log_file = self.fleet.workspace_root / "data" / "logs" / "reasoning_chains.jsonl"
         entry = {
@@ -55,7 +60,8 @@ class FleetInteractionRecorder:
             logger = StructuredLogger(__name__)
             logger.error(f"Failed to record interaction: {e}")
     async def record_success(self, res_or_prompt: Any, *args: Any, **_kwargs: Any) -> None:
-        """Records the success of a workflow step including Explainability and Telemetry."""
+"""
+Records the success of a workflow step including Explainability and Telemetry.""
         # Detect calling convention (New: 8 parameters total, Legacy: 3)
         if len(args) == 7:
             res = res_or_prompt
@@ -111,8 +117,9 @@ class FleetInteractionRecorder:
                 )
 
     async def record_failure(self, prompt: str, error: str, model: str) -> None:
-        """Records errors, failures, and mistakes for collective intelligence (Phase 108)."""
-        with contextlib.suppress(AttributeError, ValueError, TypeError):
+"""
+Records errors, failures, and mistakes for collective intelligence (Phase 108).""
+with contextlib.suppress(AttributeError, ValueError, TypeError):
             self.fleet.recorder.record_interaction(
                 provider="fleet_internal",
                 model=model,

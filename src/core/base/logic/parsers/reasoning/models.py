@@ -13,11 +13,14 @@
 # limitations under the License.
 
 
-"""Models.py module.
+"""
+"""
+Models.py module.
 """
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -27,7 +30,8 @@ except ImportError:
 
 @dataclass
 class ReasoningResult:
-    """Result of reasoning extraction.
+"""
+Result of reasoning extraction.
 
     Attributes:
         reasoning: The extracted reasoning/thinking content.
@@ -35,8 +39,8 @@ class ReasoningResult:
         reasoning_tokens: Token IDs regarding reasoning (if available).
         content_tokens: Token IDs regarding content (if available).
         is_complete: Whether reasoning extraction is complete.
-    """
-    reasoning: str | None = None
+"""
+reasoning: str | None = None
     content: str | None = None
     reasoning_tokens: list[int] | None = None
     content_tokens: list[int] | None = None
@@ -45,10 +49,16 @@ class ReasoningResult:
 
 @dataclass
 class StreamingReasoningState:
-    """State regarding streaming reasoning extraction.
+"""
+State regarding streaming reasoning extraction.
 
     Tracks the current state of reasoning extraction during streaming.
-    """
-    accumulated_text: str = """    accumulated_tokens: list[int] = field(default_factory=list)
+"""
+accumulated_text: str = ""
+accumulated_tokens: list[int] = field(default_factory=list)
     in_reasoning: bool = False
-    reasoning_buffer: str = """    content_buffer: str = """    reasoning_complete: bool = False
+    reasoning_buffer: str = ""
+content_buffer: str = ""
+reasoning_complete: bool = False
+
+""

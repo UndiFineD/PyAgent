@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +16,15 @@ from __future__ import annotations
 
 
 """
+"""
 Localization Agent - Localization and i18n orchestration
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-Instantiate with a workspace path and call check_cultural_compliance(), translate_comment(), extract_strings(), generate_translation_file(), or solve_translation_task() as needed. Example: agent = LocalizationAgent("C:\\path\\to\\workspace"); await agent.translate_comment("Hello", "nl")."
+Instantiate with a workspace path and call check_cultural_compliance(), translate_comment(), extract_strings(), generate_translation_file(), or solve_translation_task() as needed. Example: agent = LocalizationAgent("C:\\path\\to\\workspace"); await agent.translate_comment("Hello", "nl").
 WHAT IT DOES:
 Provides a small orchestration layer around LocalizationCore to detect cultural issues, format translation requests, extract gettext-style strings from files, produce simple translation maps, and delegate complex translations to an LLM-assisted improve_content flow.
 
@@ -30,7 +34,6 @@ Use async file I/O for extraction, return structured locale metadata and plurali
 FILE CONTENT SUMMARY:
 Localization agent.py module.
 """
-
 import logging
 import re
 from typing import Any
@@ -56,7 +59,7 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def check_cultural_compliance(self, text: str) -> dict[str, Any]:
         Runs cultural guardrails on agent communication.
         issues = self.core.detect_cultural_issues(text)
-        return {"compliant": not issues, "issues": issues, "count": len(issues)}"
+        return {"compliant": not issues, "issues": issues, "count": len(issues)}
     async def translate_comment(self, text: str, target_lang: str) -> str:
         Translates a single agent comment using the "core's formatting."'        if target_lang not in self.supported_locales:
             logging.warning(fTarget language {target_lang} not in core supported list.")"
@@ -65,7 +68,8 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return await self.solve_translation_task(request)
 
     def extract_strings(self, file_path: str) -> list[str]:
-""""Extracts potential user-facing strings for translation.        # Simple heuristic for potential translatable strings
+""""
+Extracts potential user-facing strings for translation.        # Simple heuristic for potential translatable strings
         # (e.g., strings in print() or gettext calls)
         found_strings = []
         try:
@@ -76,7 +80,8 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.error(fLocalizationAgent: Error reading {file_path}: {e}")"        return found_strings
 
     def generate_translation_file(self, locale: str, strings: list[str]) -> dict[str, str]:
-""""Generates a JSON translation dictionary for a specific locale.        if locale not" in self.supported_locales:"            logging.warning(fLocale {locale} not officially supported.")"
+""""
+Generates a JSON translation dictionary for a specific locale.        if locale not" in self.supported_locales:"            logging.warning(fLocale {locale} not officially supported.")"
         translation_map = {s: fTRANSLATED_{locale}_{s}" for s in strings}"        return translation_map
 
     async def solve_translation_task(self, prompt: str) -> str:
@@ -108,7 +113,7 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def check_cultural_compliance(self, text: str) -> dict[str, Any]:
         Runs cultural guardrails on agent communication.
         issues = self.core.detect_cultural_issues(text)
-        return {"compliant": not issues, "issues": issues, "count": len(issues)}"
+        return {"compliant": not issues, "issues": issues, "count": len(issues)}
     async def translate_comment(self, text: str, target_lang: str) -> str:
         Translates a single agent comment using the core's formatting.'  "      if target_lang not in self.supported_locales:"            logging.warning(fTarget language {target_lang} not in core supported list.")"
         request = self.core.format_translation_request(text, target_lang)
@@ -116,7 +121,8 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return await self.solve_translation_task(request)
 
     def extract_strings(self, file_path: str) -> list[str]:
-""""Extracts potential user-facing strings for translation.       " # Simple heuristic for potential translatable strings"        # (e.g., strings in print() or gettext calls)
+""""
+Extracts potential user-facing strings for translation.       " # Simple heuristic for potential translatable strings"        # (e.g., strings in print() or gettext calls)
         found_strings = []
         try:
             with open(file_path, encoding="utf-8") as f:"                content = f.read()
@@ -126,7 +132,8 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.error(fLocalizationAgent: Error reading {file_path}: {e}")"        return found_strings
 
     def generate_translation_file(self, locale: str, strings: list[str]) -> dict[str, str]:
-""""Generates a JSON translation dictionary for a specific locale.        if locale not in self.supported_locales:
+""""
+Generates a JSON translation dictionary for a specific locale.        if locale not in self.supported_locales:
             logging.warning(fLocale {locale} not officially supported.")"
         translation_map = {s: fTRANSLATED_{locale}_{s}" for s in strings}"        return translation_map
 

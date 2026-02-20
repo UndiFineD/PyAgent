@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.dev.scripts.analysis.batch_docstring_formatter import DocstringStandards, DocstringAnalyzer, DocstringFixer, main

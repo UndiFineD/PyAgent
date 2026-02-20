@@ -17,8 +17,11 @@
 
 try:
     from .audio import AudioProcessor  # noqa: F401
+"""
 except ImportError:
-    from .audio import AudioProcessor # noqa: F401
+
+"""
+from .audio import AudioProcessor # noqa: F401
 
 try:
     from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig, MultiModalData, MultiModalInputs, PlaceholderInfo  # noqa: F401

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for restoring codebase state by fixing common automated editing errors.
+"""
+"""
+Script for restoring codebase state by fixing common automated editing errors.
 
+"""
 import os
 import re
 
@@ -24,7 +28,9 @@ __version__ = VERSION
 
 
 def restoration() -> None:
-    """Recover from common import and string formatting breakages.    for root, _, files in os.walk("src"):"        for file in files:
+"""
+Recover from common import and string formatting breakages.    for root, _, files in os.walk("src"):"        for file in files:
+
             if file.endswith(".py"):"                path = os.path.join(root, file)
                 try:
                     with open(path, encoding="utf-8") as f:"                        content = f.read()
@@ -36,7 +42,7 @@ def restoration() -> None:
                         "from __future__ import lru_cache","                        "from functools import lru_cache","                    )
 
                     # 2. Fix empty blocks caused by masking
-                    content = re.sub(r"(if TYPE_CHECKING:)\\n(\\s*)#", r"\\1\\n\\2pass\\n\\2#", content)"
+                    content = re.sub(r"(if TYPE_CHECKING:)\\n(\\s*)#", r"\\1\\n\\2pass\\n\\2#", content)
                     content = re.sub(r"(try:)\\n(\\s*)#", r"\\1\\n\\2pass\\n\\2#", content)"                    content = re.sub(r"(except [\\w.]+ as \\w+:)\\n(\\s*)#", r"\\1\\n\\2pass\\n\\2#", content)"                    content = re.sub(r"(except Exception as e:  # pylint: disable=broad-exception-caught""                                     r"\\s*)\\n(\\s*)#", r"\\1\\n\\2pass\\n\\2#", content)"
                     # 3. Fix f-string break in CodeGenerator.py
                     if "CodeGenerator.py" in path:"                        content = content.replace(
@@ -49,9 +55,9 @@ def restoration() -> None:
                         )
 
                     if content != original:
-                        print(f"Restored {path}")"
+                        print(f"Restored {path}")
                         with open(path, "w", encoding="utf-8") as f:"                            f.write(content)
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    print(f"Error: {e} in {path}")"
+                    print(f"Error: {e} in {path}")
 
 if __name__ == "__main__":"    restoration()

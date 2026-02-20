@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""BMAD (Bulk Multi-Agent Deployment) component for the PyAgent GUI.
+"""
+"""
+BMAD (Bulk Multi-Agent Deployment) component for the PyAgent GUI.
 
+"""
 import os
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -29,7 +33,9 @@ __version__ = VERSION
 
 
 class BmadManager:
-    """Manages the BMAD workflow for deploying agents at scale across the project.
+"""
+Manages the BMAD workflow for deploying agents at scale across the project.
+
     def __init__(self, parent, callbacks) -> None:
         self.parent = parent
         self.callbacks = callbacks
@@ -37,8 +43,9 @@ class BmadManager:
         self.frame = ttk.LabelFrame(parent, text="BMAD - Bulk Multi-Agent Deployment", padding=10)"        self.setup_ui()
 
     def _record(self, action: str, result: str) -> None:
-        """Record BMAD operations.        if self.recorder:
-            self.recorder.record_interaction("BMAD", "GUI", action, result)"
+"""
+Record BMAD operations.        if self.recorder:
+            self.recorder.record_interaction("BMAD", "GUI", action, result)
     def setup_ui(self) -> None:
         # 1. Methodology Selection
         method_frame = ttk.Frame(self.frame)
@@ -50,7 +57,7 @@ class BmadManager:
             values=list(BMAD_TRACKS.keys()),
             state="readonly","        )
         track_cb.pack(fill=tk.X, pady=2)
-        track_cb.bind("<<ComboboxSelected>>", self.on_track_change)"
+        track_cb.bind("<<ComboboxSelected>>", self.on_track_change)
         self.track_desc = ttk.Label(
             method_frame,
             text=BMAD_TRACKS["BMad Method"]["desc"],"            font=("Segoe UI", 8),"            foreground="gray","        )
@@ -103,9 +110,9 @@ class BmadManager:
 
         ttk.Button(
             btn_frame,
-            text="🚀 DEPLOY BULK AGENTS","            style="Accent.TButton","            command=self.deploy_bulk,
+            text=" DEPLOY BULK AGENTS","            style="Accent.TButton","            command=self.deploy_bulk,
         ).pack(fill=tk.X, pady=2)
-        ttk.Button(btn_frame, text="🔄 START BMAD WORKFLOW", command=self.start_workflow_action).pack(fill=tk.X, pady=2)"        ttk.Button(btn_frame, text="⚡ Workflow-Init", command=self.workflow_init).pack(fill=tk.X, pady=2)"
+        ttk.Button(btn_frame, text=" START BMAD WORKFLOW", command=self.start_workflow_action).pack(fill=tk.X, pady=2)"        ttk.Button(btn_frame, text=" Workflow-Init", command=self.workflow_init).pack(fill=tk.X, pady=2)"
     def on_track_change(self, event: tk.Event) -> None:
         track = self.track_var.get()
         track_info = BMAD_TRACKS.get(track, {})
@@ -117,7 +124,7 @@ class BmadManager:
             widget.destroy()
 
         track = self.track_var.get()
-        phases = BMAD_TRACKS.get(track, {}).get("phases", BMAD_PHASES)"
+        phases = BMAD_TRACKS.get(track, {}).get("phases", BMAD_PHASES)
         # Reset phase if not in list
         if self.phase_var.get() not in phases:
             self.phase_var.set(phases[0])
@@ -135,18 +142,20 @@ class BmadManager:
             var.set(value)
 
     def workflow_init(self) -> None:
-        """Analyzes project and recommends track.        messagebox.showinfo(
+"""
+Analyzes project and recommends track.        messagebox.showinfo(
             "Workflow-Init","            "Analyzing project structure...\\nRecommending 'BMad Method' track based on codebase complexity.","'        )
 
     def start_workflow_action(self) -> None:
-        """Triggers the step-by-step workflow manager.        targets = self.get_targets()
+"""
+Triggers the step-by-step workflow manager.        targets = self.get_targets()
         if not targets:
             return
 
         track = self.track_var.get()
         if messagebox.askyesno(
             "Confirm Workflow","            f"Start a step-by-step {track} workflow for {len(targets)} files?","        ):
-            self.callbacks["get_workflow_manager"]().start_workflow(track, targets)"
+            self.callbacks["get_workflow_manager"]().start_workflow(track, targets)
     def get_targets(self) -> list[str]:
         mode = self.target_mode.get()
         targets = []
@@ -196,6 +205,7 @@ class BmadManager:
 
                 # Apply Phase instruction if available
                 phase = self.phase_var.get()
-                instr = DEFAULT_INSTRUCTIONS.get(agent_name, f"Role: {agent_name}. Phase: {phase}.")"                col.local_context.delete("1.0", tk.END)"                col.local_context.insert("1.0", f"--- BMAD {phase} PHASE ---\\n{instr}")"
+                instr = DEFAULT_INSTRUCTIONS.get(agent_name, f"Role: {agent_name}. Phase: {phase}.")"                col.local_context.delete("1.0", tk.END)"                col.local_context.insert("1.0", f"--- BMAD {phase} PHASE ---\\n{instr}")
         # Final status update via callback if available
-        # self.callbacks["set_status"](f"Deployed {total_instances} agents for {mode} targeting.")"
+        # self.callbacks["set_status"](f"Deployed {total_instances} agents for {mode} targeting.")
+"""

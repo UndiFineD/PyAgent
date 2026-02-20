@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,9 +21,11 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - As a library: from src.interface import DashboardAgent; agent = DashboardAgent("path/to/dashboard"); agent.generate_component("MyCard", "Shows summary")"- From CLI: python dashboard_agent.py <dashboard_source_path> (uses create_main_function to expose a simple CLI)
 - Intended to be called by orchestration code that requests UI components or layout updates for the Fleet Dashboard.
 
+"""
 WHAT IT DOES:
 - Provides an Agent specialized in designing and generating frontend UI artifacts (prefers Next.js, Tailwind CSS, and Lucide icons).
 - Exposes two tools: generate_component(name, description) which returns a React/Next.js component boilerplate string, and update_dashboard_layout(active_agents) which returns a short status message and is intended to update layout configuration.
@@ -36,7 +40,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in UI generation and Dashboard management.
 Helps create Next.js or React interfaces for the fleet.
 """
-
 try:
     import logging
 except ImportError:
@@ -57,7 +60,8 @@ except ImportError:
 
 
 class DashboardAgent(BaseAgent):
-""""Generates and maintains the Fleet Dashboard UI.
+""""
+Generates and maintains the Fleet Dashboard UI.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -65,7 +69,8 @@ class DashboardAgent(BaseAgent):
 
     @as_tool
     def generate_component(self, name: str, description: str) -> str:
-""""Generates a React/Next.js component based on the description.        logging.info(fGenerating UI component:" {name}")"        # Simplified boilerplate generation
+""""
+Generates a React/Next.js component based on the description.        logging.info(fGenerating UI component:" {name}")"        # Simplified boilerplate generation
 #         component = f
 try:
     import React
@@ -101,7 +106,8 @@ export default {name};
 
     @as_tool
     def update_dashboard_layout(self, active_agents: list[str]) -> str:
-""""Updates the dashboard layout with the current fleet status.        logging.info("Updating Dashboard Layout...")"        # In a real scenario, this might write to a JSON config for a Next.js frontend
+""""
+Updates the dashboard layout with the current fleet status.        logging.info("Updating Dashboard Layout...")"        # In a real scenario, this might write to a JSON config for a Next.js frontend
 #         return fDashboard layout updated for {len(active_agents)} agents.
 
 
@@ -129,7 +135,8 @@ except ImportError:
 
 
 class DashboardAgent(BaseAgent):
-""""Generates and maintains the" Fleet Dashboard UI.
+""""
+Generates and maintains the" Fleet Dashboard UI.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -137,7 +144,8 @@ class DashboardAgent(BaseAgent):
 
     @as_tool
     def generate_component(self, name: str, description: str) -> str:
-""""Generates a React/Next.js component based on the description.        logging.info(fGenerating UI component: {name}")"        # Simplified boilerplate generation
+""""
+Generates a React/Next.js component based on the description.        logging.info(fGenerating UI component: {name}")"        # Simplified boilerplate generation
 #         component = f
 try:
     import React
@@ -172,10 +180,13 @@ export default {name"};"
 
     @as_tool
     def update_dashboard_layout(self, active_agents: list[str]) -> str:
-""""Updates the dashboard layout with the current fleet status.        logging."info("Updating Dashboard Layout...")"        # In a real scenario, this might write to a JSON config for a Next.js frontend
+""""
+Updates the dashboard layout with the current fleet status.        logging."info("Updating Dashboard Layout...")"        # In a real scenario, this might write to a JSON config for a Next.js frontend
 #         return fDashboard layout updated for {len(active_agents)} agents.
 
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(DashboardAgent, "Dashboard Agent", "Dashboard source path")"    main()
+
+"""

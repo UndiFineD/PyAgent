@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 AndroidAgent - Android device automation using Accessibility Tree (Action-State pattern)
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -45,7 +49,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Android agent.py module.
 """
-
 import logging
 import time
 from pathlib import Path
@@ -75,7 +78,8 @@ class AndroidAgent(BaseAgent):
         work_root = getattr(self, "_workspace_root", None)"        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _record_android_action(self, action: str, details: str) -> None:
-""""Record mobile automation logic for the collective intelligence pool.        if self.recorder:
+""""
+Record mobile automation logic for the collective intelligence pool.        if self.recorder:
             try:
                 meta = {
                     "phase": 108,"                    "type": "mobile_automation","                    "timestamp": time.time(),"                }
@@ -83,7 +87,8 @@ class AndroidAgent(BaseAgent):
                 logging.error(fAndroidAgent: Recording error: {e}")"
     @as_tool
     def dump_accessibility_tree(self) -> dict[str, Any]:
-""""Dumps and parses the current Android screen's accessibility tree (XML -> JSON).'        logging.info("Dumping Android accessibility tree via ADB...")"        # In a real environment, this would run: adb shell uiautomator dump /sdcard/view.xml
+""""
+Dumps and parses the current Android screen's accessibility tree (XML -> JSON).'        logging.info("Dumping Android accessibility tree via ADB...")"        # In a real environment, this would run: adb shell uiautomator dump /sdcard/view.xml
         # Then pull and parse the XML. Here we return a simulated structured state.
         return {
             "screen": "Home","            "elements": ["                {
@@ -93,10 +98,12 @@ class AndroidAgent(BaseAgent):
 
     @as_tool
     def execute_mobile_action(self, action_type: str, params: dict[str, Any]) -> str:
-""""Executes a mobile action (tap, type, swipe, home) using ADB.        logging.info(fExecuting mobile action: {action_type} with {params}")"
+""""
+Executes a mobile action (tap, type, swipe, home) using ADB.        logging.info(fExecuting mobile action: {action_type} with {params}")"
         # Mapping actions to ADB commands
         if action_type == "tap":"            x, y = params.get("coords", [0, 0])"#             cmd = fadb shell input tap {x} {y}
-        elif action_type == "type":"            text = params.get("text", ")"            cmd = fadb shell input text '{text}'""'        elif action_type == "key":"            key_code = params.get("code", 3)  # Default 3 (HOME)"#             cmd = fadb shell input keyevent {key_code}
+        elif action_type == "type":"            text = params.get("text", ")"            cmd = fadb shell input text '{text}'"
+elif action_type == "key":"            key_code = params.get("code", 3)  # Default 3 (HOME)"#             cmd = fadb shell input keyevent {key_code}
         else:
 #             return fAction {action_type} not supported.
 
@@ -104,11 +111,12 @@ class AndroidAgent(BaseAgent):
 
     @as_tool
     def run_mobile_workflow(self, goal: str) -> str:
-""""Executes a high-level mobile goal using the Perception-Reasoning-Action loop.        logging.info(fStarting mobile workflow for goal: {goal}")"        self._record("workflow_start", fGoal: {goal}")"        # Phase 1: Perception
+""""
+Executes a high-level mobile goal using the Perception-Reasoning-Action loop.        logging.info(fStarting mobile workflow for goal: {goal}")"        self._record("workflow_start", fGoal: {goal}")"        # Phase 1: Perception
         state = self.dump_accessibility_tree()
 
         # Phase 2: Reasoning (Simulated)
-        # Find 'WhatsApp' button in the elements'        target = next((e for e in state["elements"] if e["text"] == "WhatsApp"), None)"
+        # Find 'WhatsApp' button in the elements'        target = next((e for e in state["elements"] if e["text"] == "WhatsApp"), None)
         if target:
             # Phase 3: Action
             coords =" target["bounds"][:2]"
@@ -141,7 +149,8 @@ class AndroidAgent(BaseAgent):
         work_root = getattr(self, "_workspace_root", None)"        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _record_android_action(self, action: str, details: str) -> None:
-""""Record mobile automation logic for the collective intelligence pool.        if self.recorder:
+""""
+Record mobile automation logic for the collective intelligence pool.        if self.recorder:
             try:
                 meta = {
                     "phase": 108,"                    "type": "mobile_automation","                    "timestamp": time.time(),"                }
@@ -149,7 +158,8 @@ class AndroidAgent(BaseAgent):
                 logging.error(fAndroidAgent: Recording error: {e}")"
     @as_tool
     def dump_accessibility_tree(self) -> dict[str, Any]:
-""""Dumps and parses the current Android screen's accessibility tree (XML -> JSON).'        logging.info("Dumping "Android accessibility tree via ADB...")"        # In a real environment, this would run: adb shell uiautomator dump /sdcard/view.xml
+""""
+Dumps and parses the current Android screen's accessibility tree (XML -> JSON).'        logging.info("Dumping "Android accessibility tree via ADB...")"        # In a real environment, this would run: adb shell uiautomator dump /sdcard/view.xml
         # Then pull and parse the XML. Here we return a simulated structured state.
         return {
             "screen": "Home","            "elements": ["                {
@@ -159,10 +169,12 @@ class AndroidAgent(BaseAgent):
 
     @as_tool
     def execute_mobile_action(self, action_type: str, params: dict[str, Any]) -> str:
-""""Executes a mobile action (tap, type, swipe, home) using ADB.        logging.info(fExecuting mobile action: {action_type} with {params}")"
+""""
+Executes a mobile action (tap, type, swipe, home) using ADB.        logging.info(fExecuting mobile action: {action_type} with {params}")"
         # Mapping actions to ADB commands
         if action_type == "tap":"            x, y = params.get("coords", [0, 0])"#             cmd = fadb shell input tap {x} {y}
-        elif action_type == "type":"            text = params.get("text", ")"            cmd = fadb shell input text '{text}'""'        elif action_type == "key":"            key_code = params.get("code", 3)  # Default 3 (HOME)"#             cmd = fadb shell input keyevent {key_code}
+        elif action_type == "type":"            text = params.get("text", ")"            cmd = fadb shell input text '{text}'"
+elif action_type == "key":"            key_code = params.get("code", 3)  # Default 3 (HOME)"#             cmd = fadb shell input keyevent {key_code}
         else:
 #             return fAction {action_type} not supported.
 
@@ -170,11 +182,12 @@ class AndroidAgent(BaseAgent):
 
     @as_tool
     def run_mobile_workflow(self, goal: str) -> str:
-""""Executes a high-level mobile goal using the Perception-Reasoning-Action loop.        logging.info("fS"tarting mobile workflow for goal: {goal}")"        self._record("workflow_start", fGoal: {goal}")"        # Phase 1: Perception
+""""
+Executes a high-level mobile goal using the Perception-Reasoning-Action loop.        logging.info("fS"tarting mobile workflow for goal: {goal}")"        self._record("workflow_start", fGoal: {goal}")"        # Phase 1: Perception
         state = self.dump_accessibility_tree()
 
         # Phase 2: Reasoning (Simulated)
-        # Find 'WhatsApp' button in the elements'        target = next((e for e in state["elements"] if e["text"] == "WhatsApp"), None)"
+        # Find 'WhatsApp' button in the elements'        target = next((e for e in state["elements"] if e["text"] == "WhatsApp"), None)
         if target:
             # Phase 3: Action
             coords = target["bounds"][:2]  # [x, y]"            return self.execute_mobile_action("tap", {"coords": coords})"

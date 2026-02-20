@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-"""Minimal Artifact Cleanup core for tests."""
 from __future__ import annotations
+"""
+Parser-safe stub: Artifact cleanup core (conservative).
 
+Minimal implementation to restore imports.
+"""
 
-
-try:
-    from typing import List
-except ImportError:
-    from typing import List
-
+from typing import List
 
 
 class ArtifactCleanupCore:

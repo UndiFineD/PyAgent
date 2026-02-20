@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,18 +16,19 @@ from __future__ import annotations
 
 
 """
+"""
 Schedule Store - In-memory wrapper for ScheduledImprovement# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
-Use as a lightweight in-memory mapping of ScheduledImprovement objects keyed by string IDs; it behaves like a dict when non-empty and compares equal to {} or [] when empty. Example: store = _ScheduleStore(); store["id"] = ScheduledImprovement(...); item = store.get("id")."
+Use as a lightweight in-memory mapping of ScheduledImprovement objects keyed by string IDs; it behaves like a dict when non-empty and compares equal to {} or [] when empty. Example: store = _ScheduleStore(); store["id"] = ScheduledImprovement(...); item = store.get("id").
 WHAT IT DOES:
 Provides a minimal mapping wrapper around dict[str, ScheduledImprovement] with custom equality semantics (equals {} or [] when empty), containment, item access, a typed get, and values() returning a list.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Implement full Mapping/MutableMapping ABC for predictable dict-like behaviour (iteration, len, keys, items). 
 - Add thread-safety or document single-threaded assumption. 
 - Provide richer docstrings, type narrowing for get default, serialization helpers, and unit tests for equality edge cases.
 """
-
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -43,7 +45,8 @@ __version__ = VERSION
 
 
 class _ScheduleStore:
-    """Mapping wrapper that compares equal to {} and [] when empty.
+"""
+Mapping wrapper that compares equal to {} and [] when empty.
     def __init__(self) -> None:
         self._data: dict[str, ScheduledImprovement] = {}
 

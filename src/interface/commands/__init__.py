@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Slash commands package.
 """
-
 try:
-    from typing import Any, Callable
+
+"""
+from typing import Any, Callable
 except ImportError:
     from typing import Any, Callable
 
@@ -54,7 +57,8 @@ _default_parser: CommandParser | None = None
 
 
 def get_slash_commands() -> CommandParser:
-    """Get the default CommandParser instance.    global _default_parser
+"""
+Get the default CommandParser instance.    global _default_parser
     if _default_parser is None:
         _default_parser = CommandParser()
     return _default_parser
@@ -88,3 +92,5 @@ __all__ = [
     # Classes
     "CommandParser","    "SlashCommands","    "CommandContext","    "CommandResult","    "CommandDefinition","    "CommandRegistry","    "ParsedCommand","    "ProcessedPrompt","    # Functions
     "parse_commands","    "get_slash_commands","    "process_prompt","    "execute_command","    "register_command","    "command","]
+
+"""

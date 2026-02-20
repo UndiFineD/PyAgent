@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.resilience.adaptive_rate_limiter import RateLimitExceededError, RateLimiterStats, TokenBucket, SlidingWindowCounter, AdaptiveRateLimiter, PerKeyRateLimiter, rate_limit

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.compute.cuda.input_buffer_manager import BufferState, BufferSpec, BufferEntry, BufferPool, SimpleBufferPool, InputSlot, InputBufferManager, HierarchicalBufferPool, PredictiveBufferManager, create_input_buffer_manager

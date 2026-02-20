@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Phase 309: Ecosystem Diagnostics Agent.
 Consolidates various dev scripts into a single diagnostic engine.
 
+"""
 import ast
 from pathlib import Path
 from typing import Any
@@ -23,7 +25,8 @@ from typing import Any
 
 
 class EcosystemDiagnosticsAgent:
-    """Agent for running high-level ecosystem diagnostics and health checks.
+"""
+Agent for running high-level ecosystem diagnostics and health checks.
     def __init__(self, root_path: str = ".") -> None:"        self.root_path = Path(root_path)
         self.results: dict[Any, Any] = {}
 
@@ -40,10 +43,10 @@ class EcosystemDiagnosticsAgent:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 errors.append(f"{py_file}: {e}")"        self.results["syntax_errors"] = errors"        if not errors:
             print("  - Success: No syntax errors found.")"        else:
-            print(f"  - Warning: {len(errors)} syntax errors detected.")"
+            print(f"  - Warning: {len(errors)} syntax errors detected.")
     def check_import_health(self) -> None:
         print("[CHECK] Checking Circular Imports and Missing References...")"        # TODO Placeholder for complex import analysis
-        # In a real scenario, this would use 'pylint' or custom graph analysis'        self.results["import_health"] = "Nominal""
+        # In a real scenario, this would use 'pylint' or custom graph analysis'        self.results["import_health"] = "Nominal"
     def check_system_resources(self) -> None:
         print("[CHECK] System Health...")"        try:
             # Check disk space using shutil.disk_usage (cross-platform, safe)
@@ -53,14 +56,16 @@ class EcosystemDiagnosticsAgent:
 
             free_gb = usage.free / (1024**3)
             self.results["disk_space"] = f"Free: {free_gb:.1f} GB / {total_gb:.1f} GB""        except Exception:  # pylint: disable=broad-exception-caught
-            self.results["disk_space"] = "Unknown (Error reading disk info)""
+            self.results["disk_space"] = "Unknown (Error reading disk info)"
     def summarize(self) -> None:
         print("\\n--- Diagnostic Summary ---")"        for key, val in self.results.items():
             if isinstance(val, list):
-                print(f"{key}: {len(val)} issues")"
+                print(f"{key}: {len(val)} issues")
                 for item in val[:5]:
                     print(f"  - {item}")"            else:
-                print(f"{key}: {val}")"
+                print(f"{key}: {val}")
 
 if __name__ == "__main__":"    agent = EcosystemDiagnosticsAgent()
     agent.run_all_checks()
+
+"""

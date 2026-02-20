@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: agent_state_manager
+"""
+"""
+Module: agent_state_manager
 Provides transactional file-system state management for PyAgent agents.
 """
 
+"""
 import collections
 import json
 import logging
@@ -34,11 +38,12 @@ __version__: str = VERSION
 
 
 class EmergencyEventLog:
-    """Phase 278: Ring buffer recording the last 10 filesystem actions for recovery."""
-
-    def __init__(self, log_path: Path | None = None) -> None:
-        """Initialize the emergency event log."""
-        if log_path is None:
+"""
+Phase 278: Ring buffer recording the last 10 filesystem actions for recovery.""
+def __init__(self, log_path: Path | None = None) -> None:
+"""
+Initialize the emergency event log.""
+if log_path is None:
             # Detect workspace root safely
             from src.core.base.lifecycle.agent_core import BaseCore
             root = Path(BaseCore.detect_workspace_root(Path.cwd()))
@@ -51,8 +56,9 @@ class EmergencyEventLog:
 
 
     def _load_buffer(self) -> None:
-        """Load the emergency event log buffer from the log file."""
-        if self.log_path.exists():
+"""
+Load the emergency event log buffer from the log file.""
+if self.log_path.exists():
             try:
                 content: str = self.log_path.read_text(encoding="utf-8")
                 self.buffer.extend(content.splitlines())
@@ -62,8 +68,9 @@ class EmergencyEventLog:
 
 
     def record_action(self, action: str, details: str) -> None:
-        """Record an action to the emergency log."""
-        event: str = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {action}: {details}"
+"""
+Record an action to the emergency log.""
+event: str = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {action}: {details}"
         self.buffer.append(event)
         try:
             self._fs.atomic_write(self.log_path, "\n".join(self.buffer))
@@ -76,11 +83,11 @@ EMERGENCY_LOG = EmergencyEventLog()
 
 
 class AgentCircuitBreaker:
-    """Phase 336: Circuit breaker for autonomous agents to prevent cascading failures.
+"""
+Phase 336: Circuit breaker for autonomous agents to prevent cascading failures.
     Tracks failure rates and halts operations if threshold is exceeded.
-    """
-
-    def __init__(self, agent_id: str, failure_threshold: float = 0.5, window_size: int = 10) -> None:
+"""
+def __init__(self, agent_id: str, failure_threshold: float = 0.5, window_size: int = 10) -> None:
         self.agent_id: str = agent_id
         self.threshold: float = failure_threshold
         self.window = collections.deque(maxlen=window_size)
@@ -89,8 +96,9 @@ class AgentCircuitBreaker:
 
 
     def _load(self) -> None:
-        """Load circuit breaker state."""
-        if self._state_file.exists():
+"""
+Load circuit breaker state.""
+if self._state_file.exists():
             try:
                 data = json.loads(self._state_file.read_text(encoding="utf-8"))
                 self.window.extend(data.get("history", []))
@@ -99,8 +107,9 @@ class AgentCircuitBreaker:
 
 
     def _save(self) -> None:
-        """Persist circuit breaker state."""
-        try:
+"""
+Persist circuit breaker state.""
+try:
             self._state_file.parent.mkdir(parents=True, exist_ok=True)
             FileSystemCore().atomic_write(
                 self._state_file,
@@ -111,22 +120,25 @@ class AgentCircuitBreaker:
 
 
     def record_result(self, success: bool) -> None:
-        """Record a success (True) or failure (False)."""
-        self.window.append(1 if success else 0)
+"""
+Record a success (True) or failure (False).""
+self.window.append(1 if success else 0)
         self._save()
 
 
     @property
     def failure_rate(self) -> float:
-        """Calculate current failure rate."""
-        if not self.window:
+"""
+Calculate current failure rate.""
+if not self.window:
             return 0.0
         failures: int = self.window.count(0)
         return failures / len(self.window)
 
 
     def is_open(self) -> bool:
-        """Check if circuit breaker is open (halt operations)."""
+"""
+Check if circuit breaker is open (halt operations).""
         # Only check if we have enough data (at least 5 samples)
         if len(self.window) < 5:
             return False
@@ -134,17 +146,18 @@ class AgentCircuitBreaker:
 
 
     def reset(self) -> None:
-        """Reset the circuit breaker."""
-        self.window.clear()
+"""
+Reset the circuit breaker.""
+self.window.clear()
         self._save()
 
 
 class AgentCheckpointManager:
-    """Phase 336: Manages agent state snapshots and restoration.
+"""
+Phase 336: Manages agent state snapshots and restoration.
     Provides logic to rollback agent memory layer and file system changes atomically.
-    """
-
-    def __init__(self, agent_id: str, workspace_root: Path) -> None:
+"""
+def __init__(self, agent_id: str, workspace_root: Path) -> None:
         self.agent_id: str = agent_id
         self.checkpoint_dir: Path = workspace_root / "data" / "checkpoints" / agent_id
         self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
@@ -152,10 +165,11 @@ class AgentCheckpointManager:
 
 
     def create_checkpoint(self, state_data: dict[str, Any], associated_files: list[Path] | None = None) -> str:
-        """Creates a snapshot of agent state and optionally backups associated files.
+"""
+Creates a snapshot of agent state and optionally backups associated files.
         Returns: Checkpoint ID
-        """
-        checkpoint_id: str = f"cp_{int(time.time())}_{self.agent_id}" 
+"""
+checkpoint_id: str = f"cp_{int(time.time())}_{self.agent_id}" 
         cp_path: Path = self.checkpoint_dir / checkpoint_id
         cp_path.mkdir(exist_ok=True)
 
@@ -175,8 +189,9 @@ class AgentCheckpointManager:
 
 
     def restore_checkpoint(self, checkpoint_id: str) -> dict[str, Any]:
-        """Restores agent state and files from a checkpoint."""
-        cp_path: Path = self.checkpoint_dir / checkpoint_id
+"""
+Restores agent state and files from a checkpoint.""
+cp_path: Path = self.checkpoint_dir / checkpoint_id
         if not cp_path.exists():
             raise FileNotFoundError(f"Checkpoint {checkpoint_id} not found")
         # Restore Files
@@ -197,21 +212,23 @@ class AgentCheckpointManager:
 
 
 class StateDriftDetector:
-    """Phase 336: Validates pre/post execution state to detect corruption."""
-
-    def __init__(self, target_files: list[Path]) -> None:
+"""
+Phase 336: Validates pre/post execution state to detect corruption.""
+def __init__(self, target_files: list[Path]) -> None:
         self.snapshots: dict[Path, str] = {}
         self.target_files: list[Path] = target_files
         self._fs = FileSystemCore()
 
 
     def snapshot(self) -> None:
-        """Capture hash of current files."""
-        self.snapshots = self._fs.calculate_bulk_hashes(self.target_files)
+"""
+Capture hash of current files.""
+self.snapshots = self._fs.calculate_bulk_hashes(self.target_files)
 
 
     def detect_drift(self) -> list[str]:
-        """Check if files changed unexpectedly (if used for monitoring invalid changes)."""
+"""
+Check if files changed unexpectedly (if used for monitoring invalid changes).""
         # Logic depends on usage. For StateTransaction, we expect changes.
         # But this can be used to verify that *only* the intended files changed,
         # or that the changes match some criteria.
@@ -224,10 +241,10 @@ class StateDriftDetector:
 
 
 class StructuredErrorValidator:
-    """
-    Phase 336: Validates and classifies errors to prevent 'Unknown failure' states.
+"""
+Phase 336: Validates and classifies errors to prevent 'Unknown failure' states.
     Captures diagnostic metadata for swarm intelligence.
-    """
+"""
     # Phase 336: Mapping of exception types to failure classifications
     FAILURE_TAXONOMY: dict[type[BaseException], str] = {
         RecursionError: FailureClassification.RECURSION_LIMIT.value,
@@ -238,8 +255,9 @@ class StructuredErrorValidator:
     }
 
     def __init__(self) -> None:
-        """Initialize the structured error validator."""
-        self.logger: logging.Logger = logging.getLogger("StructuredErrorValidator")
+"""
+Initialize the structured error validator.""
+self.logger: logging.Logger = logging.getLogger("StructuredErrorValidator")
 
 
     def capture_failure(
@@ -248,8 +266,9 @@ class StructuredErrorValidator:
         error: BaseException,
         traceback_obj: Any
     ) -> dict[str, Any]:
-        """Classify error and return structured metadata."""
-        import traceback
+"""
+Classify error and return structured metadata.""
+import traceback
 
         error_type: str = type(error).__name__
         stack_trace: str = "".join(traceback.format_tb(traceback_obj)) if traceback_obj else str(error)
@@ -270,7 +289,8 @@ class StructuredErrorValidator:
 
 
     def _classify_error(self, error: BaseException) -> str:
-        """Internal helper to classify errors based on type and content."""
+"""
+Internal helper to classify errors based on type and content.""
         # Check explicit taxonomy
         for exc_type, classification in self.FAILURE_TAXONOMY.items():
             if isinstance(error, exc_type):
@@ -286,8 +306,9 @@ class StructuredErrorValidator:
 
 
 class StateTransaction:
-    """Phase 267: Transactional context manager for agent file operations."""
-    target_files: list[Path]
+"""
+Phase 267: Transactional context manager for agent file operations.""
+target_files: list[Path]
     run_tests: bool
     backups: dict[Path, Path]
     temp_dir: Path
@@ -318,8 +339,9 @@ class StateTransaction:
 
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
-        """Exit context with validation and commit/rollback logic."""
-        validator = StructuredErrorValidator()
+"""
+Exit context with validation and commit/rollback logic.""
+validator = StructuredErrorValidator()
 
         if exc_type is not None:
             validator.capture_failure(self.id, exc_val, exc_tb)
@@ -337,8 +359,9 @@ class StateTransaction:
 
 
     def validate(self) -> None:
-        """Phase 280: Validate Python files before commit (AST Check, Immutable Test Check, Drift)."""
-        import ast
+"""
+Phase 280: Validate Python files before commit (AST Check, Immutable Test Check, Drift).""
+import ast
 
         # Drift/Corruption Check
         warnings: list[str] = self.drift_detector.detect_drift()
@@ -403,8 +426,9 @@ class StateTransaction:
 
 
     def _run_associated_tests(self) -> None:
-        """Run associated tests for modified files."""
-        for file in self.target_files:
+"""
+Run associated tests for modified files.""
+for file in self.target_files:
             if not file.exists() or file.suffix != ".py":
                 continue
 
@@ -416,7 +440,8 @@ class StateTransaction:
 
 
     def _identify_test_targets(self, file: Path) -> list[Path]:
-        """Heuristic to find tests associated with a given file."""
+"""
+Heuristic to find tests associated with a given file.""
         # Simple heuristic: run the file if it is a test, or try to find a test
         if file.name.startswith("test_") or "tests" in file.parts:
             return [file]
@@ -426,8 +451,9 @@ class StateTransaction:
 
 
     def _execute_test_file(self, test_path: Path, source_name: str) -> None:
-        """Run pytest on a specific test file in a subprocess."""
-        import subprocess
+"""
+Run pytest on a specific test file in a subprocess.""
+import subprocess
         try:
             # Run pytest on the target
             subprocess.run(
@@ -446,16 +472,18 @@ class StateTransaction:
 
 
     def commit(self) -> None:
-        """Discard backups after successful transaction."""
-        for backup in self.backups.values():
+"""
+Discard backups after successful transaction.""
+for backup in self.backups.values():
             if backup.exists():
                 backup.unlink()
         logging.info(f"Transaction {self.id} committed successfully.")
 
 
     def rollback(self) -> None:
-        """Restore files from backups after failure."""
-        for original, backup in self.backups.items():
+"""
+Restore files from backups after failure.""
+for original, backup in self.backups.items():
             if backup.exists():
                 self._fs.safe_copy(backup, original)
                 backup.unlink()
@@ -463,7 +491,8 @@ class StateTransaction:
 
 
 class AgentStateManager:
-    """Manages saving and loading agent state to/from disk."""
+"""
+Manages saving and loading agent state to/from disk.""
     @staticmethod
     # pylint: disable=too-many-positional-arguments
 
@@ -475,8 +504,9 @@ class AgentStateManager:
         history_len: int,
         path: Path | None = None,
     ) -> None:
-        """Save agent state to disk."""
-        state_path: Path = path or file_path.with_suffix(".state.json")
+"""
+Save agent state to disk.""
+state_path: Path = path or file_path.with_suffix(".state.json")
         state: dict[str, Any] = {
             "file_path": str(file_path),
             "state": current_state,
@@ -490,8 +520,9 @@ class AgentStateManager:
 
     @staticmethod
     def load_state(file_path: Path, path: Path | None = None) -> dict[str, Any] | None:
-        """Load agent state from disk."""
-        state_path: Path = path or file_path.with_suffix(".state.json")
+"""
+Load agent state from disk.""
+state_path: Path = path or file_path.with_suffix(".state.json")
         if not state_path.exists():
             return None
 

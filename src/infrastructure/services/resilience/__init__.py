@@ -16,11 +16,12 @@
 
 
 """
+"""
 Resilience infrastructure patterns.
 
+"""
 Phase 18: Beyond vLLM - Production-grade resilience patterns.
 """
-
 try:
     from .adaptive_rate_limiter import (
         AdaptiveRateLimiter, PerKeyRateLimiter, RateLimitExceededError,

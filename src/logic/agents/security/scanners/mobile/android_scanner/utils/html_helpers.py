@@ -14,8 +14,11 @@
 
 try:
     import os
+"""
 except ImportError:
-    import os
+
+"""
+import os
 
 try:
     from colorama import init, Fore, Style
@@ -29,12 +32,13 @@ init(autoreset=True)
 
 def generate_index_html(output_dir):
     pass  # [BATCHFIX] inserted for empty block
-"""Generates an index.html file that links to all the HTML reports in the output directory#     with a table structure to display the folder and file hierarchy.
+"""
+Generates an index.html file that links to all the HTML reports in the output directory#     with a table structure to display the folder and file hierarchy.
     # Create an index.html file
     index_file_path = os.path.join(output_dir, "index.html")"    with open(index_file_path, "w", encoding="utf-8") as index_file:"        # Start the HTML structure
 #         index_file.write(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #         "<html>"  # [BATCHFIX] closed string"        <head>
             <title>Code Scan Reports</title>
             <style>
@@ -64,7 +68,7 @@ def generate_index_html(output_dir):
                     <th>File</th>
                     <th>Link</th>
                 </tr>
-   "     ")"
+   "     ")
         # Walk through the output directory and create a table row for each HTML file
         for root, _, files in os.walk(output_dir):
             # Skip the root directory itself
@@ -82,19 +86,20 @@ def generate_index_html(output_dir):
                     # Write the row to the index file
 #                     index_file.write(f
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #             "        <tr>"  # [BATCHFIX] closed string"                        <td>{folder}</td>
                         <td>{file_name}</td>
                         <td><a href="{file_link}">{file_name}</a></td>"                    </tr>
-         "           ")"
+         "           ")
         # Close the table and HTML structure
 #         index_file.write(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #   "          </table>"  # [BATCHFIX] closed string"        </body>
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #        " </html>"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
-#         ")"  # [BATCHFIX] closed string"
-    print(f"{Fore.GREEN}Index file created at {index_file_path}{Style.RESET_ALL}")"
+""" [BATCHFIX] Commented unterminated string"""
+#         ")"  # [BATCHFIX] closed string
+    print(f"{Fore.GREEN}Index file created at {index_file_path}{Style.RESET_ALL}")
+"""

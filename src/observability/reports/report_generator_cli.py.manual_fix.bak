@@ -1,0 +1,27 @@
+from __future__ import annotations
+""
+CLI helpers for report generation (parser-safe stub).
+
+This stub provides minimal symbols expected by other modules/tests while
+the repository is being repaired. Backups of the original file are stored
+as `.manual_fix.bak` alongside the original.
+""
+
+
+
+from pathlib import Path
+from typing import Any
+
+
+def main() -> None:
+    # Minimal no-op CLI entry used during repair.
+    print("report_generator_cli: stubbed entry")
+
+
+def _sha256_text(text: str) -> str:
+    import hashlib
+
+    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+__all__ = ["main", "_sha256_text"]

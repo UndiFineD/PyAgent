@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.active_directory_attack_defense_core import KillChainPhase, AttackTechnique, DefenseControl, AttackVector, DefenseAssessment, KillChainAnalysis, SecurityPosture, ActiveDirectoryAttackDefenseCore

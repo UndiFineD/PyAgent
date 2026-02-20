@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 TimelineEvent - Simple dataclass for error timeline entries
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -25,14 +29,13 @@ try:
 except ImportError:
     from src.core.base.lifecycle.timeline_event import TimelineEvent
 
-event = TimelineEvent(timestamp="2026-02-12T21:00:00Z", event_type="created", error_id="err-1234", details="Initial occurrence")"
+event = TimelineEvent(timestamp="2026-02-12T21:00:00Z", event_type="created", error_id="err-1234", details="Initial occurrence")
 WHAT IT DOES:
 Defines a minimal dataclass representing a point in an error timeline with fields timestamp, event_type, error_id, and optional details and exposes module __version__ from the package VERSION
 
 WHAT IT SHOULD DO BETTER:
 Use timezone-aware datetime objects instead of plain strings, validate and normalize timestamps, replace event_type strings with an Enum, add serialization/deserialization helpers, add unit tests and richer docstrings
 """
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -50,16 +53,16 @@ __version__ = VERSION
 
 @dataclass
 class TimelineEvent:
-    """
-    Event in error timeline.
+"""
+Event in error timeline.
 
     Attributes:
         timestamp: When the event occurred.
         event_type: Type of event (created, resolved, recurred).
         error_id: Associated error ID.
         details: Additional event details.
-    """
-    timestamp: str
+"""
+timestamp: str
     event_type: str
     error_id: str
     details: str = ""

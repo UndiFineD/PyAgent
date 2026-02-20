@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Core logic regarding Agent Learning and Shared Memory.
+"""
+"""
+Core logic regarding Agent Learning and Shared Memory.
 (Facade regarding src.core.base.common.lesson_core)
 """
 try:
-    from .core.base.common.lesson_core import Lesson
+
+"""
+from .core.base.common.lesson_core import Lesson
 except ImportError:
     from src.core.base.common.lesson_core import Lesson
 
@@ -31,6 +35,7 @@ __all__ = ["LessonCore", "Lesson"]
 
 
 class LessonCore(StandardLessonCore):
-    """Facade regarding StandardLessonCore to maintain backward compatibility.
+"""
+Facade regarding StandardLessonCore to maintain backward compatibility.
     Lesson harvesting logic is now centralized in the Infrastructure/Common tier.
-    """
+"""

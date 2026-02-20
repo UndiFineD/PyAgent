@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Small collection of function utilities used by tests.
+from __future__ import annotations
+"""
+Small collection of function utilities used by tests.
 
 This module implements a compact subset of decorators and helpers so tests
 can import stable behavior without depending on the original project's
 complex and possibly-corrupted implementations.
 """
-from __future__ import annotations
+
+
 
 
 import functools
@@ -64,7 +67,8 @@ def run_once_with_result(fn: Callable[..., T]) -> Callable[..., T]:
 
 
 def deprecate_kwargs(*kws: str, additional_message: str | None = None):
-    """Decorator to mark specific keyword arguments as deprecated.
+"""
+Decorator to mark specific keyword arguments as deprecated.
 
     Args:
         *kws: Names of keyword arguments to mark as deprecated.
@@ -72,8 +76,8 @@ def deprecate_kwargs(*kws: str, additional_message: str | None = None):
 
     Returns:
         A decorator function that wraps the target function and warns when deprecated kwargs are used.
-    """
-    deprecated = set(kws)
+"""
+deprecated = set(kws)
 
     def deco(fn: Callable[..., Any]) -> Callable[..., Any]:
         @functools.wraps(fn)
@@ -171,8 +175,9 @@ def memoize_method(fn: Callable[..., T]) -> Callable[..., T]:
 
 
 def debounce(wait: float):
-    """Return a decorator that debounces calls to the function by `wait` seconds."""
-    def deco(fn: Callable[..., Any]) -> Callable[..., Any]:
+    ""
+Return a decorator that debounces calls to the function by `wait` seconds.""
+def deco(fn: Callable[..., Any]) -> Callable[..., Any]:
         timer = None
 
         @functools.wraps(fn)

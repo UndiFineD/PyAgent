@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,11 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Blackboard module.py module.
 """
-
+"""
+Blackboard module.py module.
+"""
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -31,21 +35,26 @@ except ImportError:
 
 
 class BlackboardModule(BaseModule):
-    """Consolidated core module for Blackboard operations.
+"""
+Consolidated core module for Blackboard operations.
     Migrated from BlackboardCore.
-    """
-    def __init__(self, config: dict[str, Any] | None = None) -> None:
+"""
+def __init__(self, config: dict[str, Any] | None = None) -> None:
         super().__init__(config)
         self.data: dict[str, Any] = {}
         self.history: list[dict[str, Any]] = []
 
     def initialize(self) -> bool:
-        """Initialize blackboard state."""return super().initialize()
+"""
+Initialize blackboard state.""
+return super().initialize()
 
     def execute(self, action: str, **kwargs) -> Any:
-        """Executes blackboard operations.
+"""
+Executes blackboard operations.
         Supported actions: post, get, keys
-        """if not self.initialized:
+"""
+if not self.initialized:
             self.initialize()
 
         if action == "post":"            return self.process_post(
@@ -54,7 +63,9 @@ class BlackboardModule(BaseModule):
         return None
 
     def process_post(self, key: str, value: Any, agent_name: str) -> dict[str, Any]:
-        """Core logic for posting data."""self.data[key] = value
+"""
+Core logic for posting data.""
+self.data[key] = value
         entry = {"agent": agent_name, "key": key, "value": value}"        self.history.append(entry)
         return entry
 
@@ -65,4 +76,6 @@ class BlackboardModule(BaseModule):
         return list(self.data.keys())
 
     def shutdown(self) -> bool:
-        """Cleanup blackboard."""return super().shutdown()
+        ""
+Cleanup blackboard.""
+return super().shutdown()

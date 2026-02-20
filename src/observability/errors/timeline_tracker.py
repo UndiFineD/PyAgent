@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 TimelineTracker - Error timeline tracking and aggregation
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -41,7 +45,6 @@ and support configurable timezones/ISO parsing, add validation and typed enums f
 make operations concurrency-safe (async or thread-safe), provide richer aggregation (rolling windows, rates), 
 and include unit tests and error handling for malformed timestamps.
 """
-
 try:
     from datetime import datetime
 except ImportError:
@@ -69,22 +72,23 @@ __version__ = VERSION
 
 
 class TimelineTracker:
-    """
-    Tracks error events over time.
+"""
+Tracks error events over time.
     Maintains a timeline of error creation, resolution, 
     and recurrence events for visualization and analysis.
 
     Attributes:
         events: List of timeline events.
-    """
-
-    def __init__(self) -> None:
-        """Initialize the timeline tracker."""
-        self.events: list[TimelineEvent] = []
+"""
+def __init__(self) -> None:
+"""
+Initialize the timeline tracker.""
+self.events: list[TimelineEvent] = []
 
 
     def record_event(self, error_id: str, event_type: str, details: str = "") -> TimelineEvent:
-        """Record a timeline event.
+"""
+Record a timeline event.
         Args:
             error_id: ID of the associated error.
             event_type: Type of event (created, resolved, recurred).
@@ -92,8 +96,8 @@ class TimelineTracker:
 
         Returns:
             The recorded TimelineEvent.
-        """
-        event = TimelineEvent(
+"""
+event = TimelineEvent(
             timestamp=datetime.now().isoformat(),
             event_type=event_type,
             error_id=error_id,
@@ -104,18 +108,21 @@ class TimelineTracker:
 
 
     def get_events_for_error(self, error_id: str) -> list[TimelineEvent]:
-        """Get all events for a specific error."""        
-        return [e for e in self.events if e.error_id == error_id]
+"""
+Get all events for a specific error.""
+return [e for e in self.events if e.error_id == error_id]
 
 
     def get_events_in_range(self, start: str, end: str) -> list[TimelineEvent]:
-        """Get events within a time range."""
-        return [e for e in self.events if start <= e.timestamp <= end]
+"""
+Get events within a time range.""
+return [e for e in self.events if start <= e.timestamp <= end]
 
 
     def generate_timeline_data(self) -> dict[str, Any]:
-        """Generate timeline data for visualization."""
-        by_date: dict[str, int] = {}
+"""
+Generate timeline data for visualization.""
+by_date: dict[str, int] = {}
         for event in self.events:
             date = event.timestamp[:10]  # YYYY-MM-DD
             by_date[date] = by_date.get(date, 0) + 1
@@ -128,5 +135,6 @@ class TimelineTracker:
 
 
     def clear(self) -> None:
-        """Clear all timeline events."""
-        self.events = []
+        ""
+Clear all timeline events.""
+self.events = []

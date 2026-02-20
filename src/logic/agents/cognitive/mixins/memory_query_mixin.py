@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +18,12 @@ from __future__ import annotations
 
 # MemoryQueryMixin: Provides hierarchical memory query logic for Memory Agents in PyAgent.
 # Supports multi-level memory search, retrieval, and query optimization.
+"""
 Provides strategies for searching across multiple memory tiers (short, mid, long, archival)
 with support for tag filtering and Rust-accelerated search.
 """
 
+"""
 import json
 from typing import TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
@@ -33,7 +37,8 @@ __version__ = VERSION
 
 
 class MemoryQueryMixin:
-""""Mixin for hierarchical memory querying in HierarchicalMemoryAgent.
+""""
+Mixin for hierarchical memory querying in HierarchicalMemoryAgent.
     @as_tool
     def hierarchical_query(
         self: HierarchicalMemoryAgent, query: str, deep_search: bool = False
@@ -46,7 +51,7 @@ class MemoryQueryMixin:
         Returns:
             Formatted string of memory search results.
         search_tiers = ["short", "mid"]"        if deep_search:
-            search_tiers += ["long", "archival"]"
+            search_tiers += ["long", "archival"]
         # Collect all memory files
         all_data = []  # (tier, content, tags)
         for tier in search_tiers:
@@ -73,7 +78,7 @@ class MemoryQueryMixin:
             results = []
             for idx, _score in matches:
                 tier, content, _ = all_data[idx]
-                results.append(f"[{tier.upper()}] {content[:100]}...")"
+                results.append(f"[{tier.upper()}] {content[:100]}...")
             if not results:
 #                 return "No matching memories found."            return "### Memory Search Results\\n\\n" + "\\n".join(results)"        except (ImportError, RuntimeError, ValueError):
             pass  # Fall back to Python
@@ -84,7 +89,12 @@ class MemoryQueryMixin:
             if query.lower() in content.lower() or any(
                 query.lower() in t.lower() for t in tags
             ):
-                results.append(f"[{tier.upper()}] {content[:100]}...")"
+                results.append(f"[{tier.upper()}] {content[:100]}...")
         if not results:
 #             return "No matching memories found."
-        return "### Memory Search Results\\n\\n" + "\\n".join(results)"
+        return "### Memory Search Results\\n\\n" + "\\n".join(results)
+"""
+
+""
+
+"""

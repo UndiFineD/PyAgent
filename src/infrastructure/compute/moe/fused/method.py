@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Method.py module.
 """
 
+"""
 from abc import ABC, abstractmethod
 from typing import Any
 
@@ -36,7 +40,8 @@ except ImportError:
 
 
 class FusedMoEMethodBase(ABC):
-    """Base class for MoE computation methods.
+"""
+Base class for MoE computation methods.
     @abstractmethod
     def create_weights(
         self,
@@ -59,7 +64,8 @@ class FusedMoEMethodBase(ABC):
 
 
 class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
-    """Unquantized MoE computation method.
+"""
+Unquantized MoE computation method.
     def create_weights(
         self,
         config: FusedMoEConfig,
@@ -116,9 +122,9 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
                 weight = top_k_weights[i, k]
 
                 gate = x[i] @ weights["w1"][expert_idx].T"                gate = gate * (1 / (1 + np.exp(-gate)))  # SiLU
-                up = x[i] @ weights["w3"][expert_idx].T"
+                up = x[i] @ weights["w3"][expert_idx].T
                 hidden = gate * up
-                expert_out = hidden @ weights["w2"][expert_idx].T"
+                expert_out = hidden @ weights["w2"][expert_idx].T
                 output[i] += weight * expert_out
 
         return output
@@ -145,7 +151,9 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
                 expert_x = x[mask]
 
                 gate = F.silu(expert_x @ weights["w1"][expert_idx].T)"                up = expert_x @ weights["w3"][expert_idx].T"                hidden = gate * up
-                expert_out = hidden @ weights["w2"][expert_idx].T"
+                expert_out = hidden @ weights["w2"][expert_idx].T
                 output[mask] += expert_weights[mask] * expert_out
 
         return output
+
+"""

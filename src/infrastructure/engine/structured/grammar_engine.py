@@ -14,9 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Facade for Grammar Engine.
 Delegates to modularized sub-packages in src.infrastructure.engine.structured/.
 
+"""
 try:
     from .base import GrammarEngine
 except ImportError:

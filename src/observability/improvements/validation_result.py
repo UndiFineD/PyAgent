@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 validation_result.py - ValidationResult dataclass for improvement validation
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -62,8 +66,9 @@ __version__ = VERSION
 
 @dataclass
 class ValidationResult:
-    """Result from improvement validation.""""
-    Attributes:
+"""
+Result from improvement validation.""""
+Attributes:
         improvement_id: ID of the validated improvement.
         is_valid: Whether the improvement passed validation.
         issues: List of validation issues.
@@ -78,8 +83,10 @@ class ValidationResult:
 
     @property
     def errors(self) -> list[str]:
-        """Compatibility accessor used by tests.        return [msg for sev, msg in self.issues if sev == ValidationSev"""er"""ity.ERROR]""""
-
+"""
+Compatibility accessor used by tests.        return [msg for sev, msg in self.issues if sev == ValidationSev""
+er""
+ity.ERROR]""""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -103,13 +110,15 @@ __version__ = VERSION
 
 @dataclass
 class ValidationResult:
-    """Result from improvement validation.""""
-    Attributes:
+"""
+Result from improvement validation.""""
+Attributes:
         improvement_id: ID of the validated improvement.
         is_valid: Whether the improvement passed validation.
         issues: List of validation issues.
-        test_results: Results fro"""m automated tests.""""    
-    improvement_id: str
+        test_results: Results fro""
+m automated tests.""""
+improvement_id: str
     is_valid: bool = True
     issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
     test_results: dict[str, bool] = field(
@@ -118,4 +127,5 @@ class ValidationResult:
 
     @property
     def errors(self) -> list[str]:
-        """Compatibility accessor used by tests.        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]
+        ""
+Compatibility accessor used by tests.        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]

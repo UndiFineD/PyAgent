@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Centralized LLM client for various backends.
+"""
+"""
+Centralized LLM client for various backends.
 
+"""
 import logging
 import os
 import time
@@ -37,7 +41,10 @@ from .local_context_recorder import LocalContextRecorder
 
 
 class LLMClient:
-    """Handles direct HTTP calls to LLM providers.""""    Enhanced with PoolingCore for prompt compression and connection optimization.
+"""
+Handles direct HTTP calls to LLM providers.""""
+Enhanced with PoolingCore for prompt compression and connection optimization.
+
     
     def __init__(self, requests_lib: Any, workspace_root: str | None = None) -> None:
         self.requests = requests_lib
@@ -75,18 +82,20 @@ class LLMClient:
             "lmstudio": LMStudioBackend(self.session, self.connectivity, self.recorder),"        }
 
     def _is_backend_disabled(self, backend_name: str) -> bool:
-        """Check if a backend is disabled via environment variables.        disabled_backends = os.environ.get("DV_DISABLED_BACKENDS", "").strip()"        if not disabled_backends:
+"""
+Check if a backend is disabled via environment variables.        disabled_backends = os.environ.get("DV_DISABLED_BACKENDS", "").strip()"        if not disabled_backends:
             return False
 
         # Split by comma and strip whitespace
         disabled_list = [b.strip().lower() for b in disabled_backends.split(",")]"        return backend_name.lower() in disabled_list
 
-    def chat(self, _provider: str, _model: str, prompt: str, system_prompt: str = "") -> str:"        """Central entry point for chat completion. Compresses prompt before sending.        # 1. Compress system prompt via Core
+    def chat(self, _provider: str, _model: str, prompt: str, system_prompt: str = "") -> str:"        """
+Central entry point for chat completion. Compresses prompt before sending.        # 1. Compress system prompt via Core
         self.pooling_core.compress_prompt(system_prompt)
 
         # 2. Logic to invoke backends (simplified for this edit)
         # In actual code, this would delegate to backends[provider].chat(...)
-        return f"Simulated response for: {prompt[:20]}""
+        return f"Simulated response for: {prompt[:20]}"
     def _get_cache_key(self, provider: str, model: str, prompt: str, system_prompt: str) -> str:
         import hashlib
 
@@ -101,10 +110,12 @@ class LLMClient:
         pass
 
     def _is_connection_working(self, provider_id: str) -> bool:
-        """Checks if the connection is known to be working via central ConnectivityManager.        return self.connectivity.is_endpoint_available(provider_id)
+"""
+Checks if the connection is known to be working via central ConnectivityManager.        return self.connectivity.is_endpoint_available(provider_id)
 
     def _update_connection_status(self, provider_id: str, working: bool) -> None:
-        """Updates the connection status via central ConnectivityManager.        self.connectivity.update_status(provider_id, working)
+"""
+Updates the connection status via central ConnectivityManager.        self.connectivity.update_status(provider_id, working)
 
     def _record(
         self,
@@ -122,40 +133,45 @@ class LLMClient:
                     "system_prompt": system_prompt,"                    "phase": 108,"                    "timestamp_unix": time.time(),"                }
                 self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                # Silently fail logging so we don't block the actual logic'                logging.error(f"Failed to record interaction: {e}")"
+                # Silently fail logging so we don't block the actual logic'                logging.error(f"Failed to record interaction: {e}")
     def llm_chat_via_github_models(
         self,
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Call a GitHub Models OpenAI-compatible chat endpoint.        return self.backends["github_models"].chat(prompt, model, system_prompt, **kwargs)"
+"""
+Call a GitHub Models OpenAI-compatible chat endpoint.        return self.backends["github_models"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_ollama(
         self,
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Call a local Ollama instance.        return self.backends["ollama"].chat(prompt, model, system_prompt, **kwargs)"
+"""
+Call a local Ollama instance.        return self.backends["ollama"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_vllm(
         self,
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        """Call a local vLLM instance (OpenAI-compatible).        return self.backends["vllm"].chat(prompt, model, system_prompt, **kwargs)"
+"""
+Call a local vLLM instance (OpenAI-compatible).        return self.backends["vllm"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_vllm_native(
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.","        model: str = "vllm-native","        **kwargs,
     ) -> str:
-        """Uses the locally installed vLLM library (Native Engine) for maximum performance.        return self.backends["vllm_native"].chat(prompt, model, system_prompt, **kwargs)"
+"""
+Uses the locally installed vLLM library (Native Engine) for maximum performance.        return self.backends["vllm_native"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_copilot_cli(
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.","        model: str = "copilot-cli","        **kwargs,
     ) -> str:
-        """Calls the GitHub Copilot CLI (copilot).        return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)"
+"""
+Calls the GitHub Copilot CLI (copilot).        return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_lmstudio(
         self,
         prompt: str,
@@ -174,7 +190,7 @@ class LLMClient:
 
         Returns:
             Generated response text
-                return self.backends["lmstudio"].chat(prompt, model, system_prompt, **kwargs)"
+                return self.backends["lmstudio"].chat(prompt, model, system_prompt, **kwargs)
     def smart_chat(
         self,
         prompt: str,
@@ -191,7 +207,7 @@ class LLMClient:
             logging.debug("LLMClient: Cache hit for smart_chat.")"            return self._result_cache[cache_key]
 
         # Phase 108: Check for Preferred working endpoint first (15m TTL)
-        preferred = self.connectivity.get_preferred_endpoint("llm_backends")"
+        preferred = self.connectivity.get_preferred_endpoint("llm_backends")
         # Phase 317 robustness: If preferred is copilot_cli, we only use it if no other
         # local backends are available, as it's low-quality for code fixes.'        if preferred == "copilot_cli" and ("            (not self._is_backend_disabled("ollama") and self.connectivity.is_endpoint_available("ollama"))"            or (not self._is_backend_disabled("vllm") and self.connectivity.is_endpoint_available("vllm"))"            or (not self._is_backend_disabled("vllm_native") and self.connectivity.is_endpoint_available("vllm_native"))"        ):
             logging.debug("LLMClient: Skipping 'copilot_cli' preferred in favor of better local options.")"'            preferred = None
@@ -221,31 +237,32 @@ class LLMClient:
         if all(not self.connectivity.is_endpoint_available(b) for b in available_backends):
             logging.info("LLMClient: All available backends cached as offline. Forcing cache bypass for robustness.")"            force_retry = True
 
-        result = """        used_provider = "none""
+        result = ""
+used_provider = "none"
         if preference == "local":"            # 0. Try LM Studio (Highest Priority Local, Phase 21)
             if (not self._is_backend_disabled("lmstudio") and"                    (force_retry or self.connectivity.is_endpoint_available("lmstudio"))):"                result = self.llm_chat_via_lmstudio(prompt, model=local_model, system_prompt=system_prompt)
                 if result:
-                    used_provider = "lmstudio""
+                    used_provider = "lmstudio"
             # 1. Try Native vLLM Library (High Performance Local, Phase 108)
             if (not result and not self._is_backend_disabled("vllm_native") and"                    (force_retry or self.connectivity.is_endpoint_available("vllm_native"))):"                result = self.llm_chat_via_vllm_native(prompt, system_prompt=system_prompt, model=local_model)
                 if result:
-                    used_provider = "vllm_native""
+                    used_provider = "vllm_native"
             # 2. Try vLLM Server (Remote/Docker)
             if (not result and not self._is_backend_disabled("vllm") and"                    (force_retry or self.connectivity.is_endpoint_available("vllm"))):"                result = self.llm_chat_via_vllm(prompt, model=local_model, system_prompt=system_prompt)
                 if result:
-                    used_provider = "vllm""
+                    used_provider = "vllm"
             # 3. Try Ollama if vLLM failed
             if (not result and not self._is_backend_disabled("ollama") and"                    (force_retry or self.connectivity.is_endpoint_available("ollama"))):"                result = self.llm_chat_via_ollama(prompt, model=local_model, system_prompt=system_prompt)
                 if result:
-                    used_provider = "ollama""
+                    used_provider = "ollama"
             # 3. Try Copilot CLI if local servers failed
             if (not result and not self._is_backend_disabled("copilot_cli") and"                    (force_retry or self.connectivity.is_endpoint_available("copilot_cli"))):"                result = self.llm_chat_via_copilot_cli(prompt, system_prompt=system_prompt)
                 if result:
-                    used_provider = "copilot_cli""
+                    used_provider = "copilot_cli"
         # 4. Fallback to GitHub Models (External)
         if not result and (force_retry or self.connectivity.is_endpoint_available("github_models")):"            logging.info(f"Checking external fallback ({external_model})...")"            result = self.llm_chat_via_github_models(prompt, model=external_model, system_prompt=system_prompt)
             if result:
-                used_provider = "github_models""
+                used_provider = "github_models"
         if not result:
             logging.warning("All AI backends failed or were unreachable.")"            return """
         # Phase 108: Update Preferred Endpoint Cache
@@ -259,3 +276,9 @@ class LLMClient:
 
 
 __version__ = VERSION
+
+"""
+
+"""
+
+"""

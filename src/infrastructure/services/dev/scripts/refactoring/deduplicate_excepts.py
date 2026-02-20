@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 Deduplicate Excepts module.
 
+"""
 from pathlib import Path
 
 
@@ -29,7 +31,8 @@ def deduplicate_excepts(root_dir):
             lines = content.splitlines()
             new_lines = []
             modified = False
-            last_line = """            for line in lines:
+            last_line = ""
+for line in lines:
                 if target in line and target in last_line:
                     # Duplicate!
                     modified = True
@@ -39,7 +42,7 @@ def deduplicate_excepts(root_dir):
 
             if modified:
                 p.write_text("\\n".join(new_lines) + "\\n", encoding="utf-8")"                print(f"Deduplicated excepts in {p}")"        except (IOError, OSError, UnicodeDecodeError) as e:
-            print(f"Error deduplicating {p}: {e}")"
+            print(f"Error deduplicating {p}: {e}")
 
 if __name__ == "__main__":"    # Robustly find the repository root
     current_path = Path(__file__).resolve()
@@ -48,3 +51,4 @@ if __name__ == "__main__":"    # Robustly find the repository root
     if project_root.name == 'src':'        project_root = project_root.parent
 
     deduplicate_excepts(project_root / "src")"    deduplicate_excepts(project_root / "tests")"
+""

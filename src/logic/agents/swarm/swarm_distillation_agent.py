@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Swarm Distillation Agent - Distills fleet-wide agent knowledge into a compact representation
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -35,7 +39,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Swarm distillation agent module.
 """
-
 try:
     import logging
 except ImportError:
@@ -68,12 +71,13 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.version = VERSION
-        logging.info("SwarmDistillationAgent initialized (TODO Placeholder).")"
+        logging.info("SwarmDistillationAgent initialized (TODO Placeholder).")
     async def distill_agent_knowledge(self, agent_id: str, knowledge_shard: dict[str, Any]) -> dict[str, Any]:
 #         "Distills knowledge from an agent into a compressed format (Phase 76)."        _ = knowledge_shard
-        logging.info(fDistilling knowledge for {agent_id}")"        return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}"
+        logging.info(fDistilling knowledge for {agent_id}")"        return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}
     def get_unified_context(self) -> dict[str, Any]:
-""""Returns the unified distilled context of the swarm (Phase 76).        return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}"
+""""
+Returns the unified distilled context of the swarm (Phase 76).        return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}
 
 try:
     import logging
@@ -107,8 +111,9 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
         self.version = VERSION
-        logging.info("SwarmDistillationAgent initialized (TODO Placeholder).")"
+        logging.info("SwarmDistillationAgent initialized (TODO Placeholder).")
     async def distill_agent_knowledge(self, agent_id: str, knowledge_shard: dict[str, Any]) -> dict[str, Any]:
-#         "Distills knowledge from an agent into a compressed format (Phase 76).""        _ = knowledge_shard"        logging.info(fDistilling knowledge for {agent_id}")"        return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}"
+#         "Distills knowledge from an agent into a compressed format (Phase 76).""        _ = knowledge_shard"        logging.info(fDistilling knowledge for {agent_id}")"        return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}
     def get_unified_context(self) -> dict[str, Any]:
-""""Returns the unified distilled context of the swarm (Phase 76).        return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}"
+""""
+Returns the unified distilled context of the swarm (Phase 76).        return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}

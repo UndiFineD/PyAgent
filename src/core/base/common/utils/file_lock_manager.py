@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,17 +16,20 @@ from __future__ import annotations
 
 
 """
+"""
 Manager for file locking.
 (Facade for src.core.base.common.lock_core)
 """
 
+"""
 from typing import Any, Dict, Optional
 
 
 
 class LockProxy:
-    """A proxy object for a held lock."""
-    def __init__(self, lock_id: str, lock_type: Any) -> None:
+"""
+A proxy object for a held lock.""
+def __init__(self, lock_id: str, lock_type: Any) -> None:
         self.lock_id = lock_id
         self.lock_type = lock_type
 
@@ -33,11 +37,11 @@ class LockProxy:
 
 
 class FileLockManager:
-    """Manager for coordinating file-system level locks.
+"""
+Manager for coordinating file-system level locks.
     Delegates to LockCore for the underlying synchronization logic.
-    """
-
-    def __init__(self, core: Optional[Any] = None) -> None:
+"""
+def __init__(self, core: Optional[Any] = None) -> None:
         try:
             from .lock_core import LockCore
         except ImportError:
@@ -48,13 +52,15 @@ class FileLockManager:
 
 
     def acquire(self, lock_id: str, timeout: float = 10.0, lock_type: Any = None) -> bool:
-        """Acquire a file lock."""
-        return self._core.acquire_lock(str(lock_id), timeout, lock_type)
+"""
+Acquire a file lock.""
+return self._core.acquire_lock(str(lock_id), timeout, lock_type)
 
 
     def acquire_lock(self, lock_id: str, lock_type: Any = None, timeout: float = None) -> Optional[LockProxy]:
-        """Alias for acquire to match expectations of some core modules."""
-        t = timeout if timeout is not None else self.lock_timeout
+"""
+Alias for acquire to match expectations of some core modules.""
+t = timeout if timeout is not None else self.lock_timeout
 
         # Default lock_type to EXCLUSIVE if not provided (mocking behavior for tests)
         if lock_type is None:
@@ -75,18 +81,21 @@ class FileLockManager:
 
 
     def release(self, lock_id: str) -> bool:
-        """Release a file lock."""
-        self._core.release_lock(str(lock_id))
+"""
+Release a file lock.""
+self._core.release_lock(str(lock_id))
         if str(lock_id) in self.locks:
             del self.locks[str(lock_id)]
         return True
 
 
     def release_lock(self, lock_id: str) -> bool:
-        """Alias for release to match expectations of some core modules."""
-        return self.release(lock_id)
+"""
+Alias for release to match expectations of some core modules.""
+return self.release(lock_id)
 
 
     def is_locked(self, lock_id: str) -> bool:
-        """Check if a file is locked."""
-        return self._core.is_locked(lock_id)
+"""
+Check if a file is locked.""
+return self._core.is_locked(lock_id)

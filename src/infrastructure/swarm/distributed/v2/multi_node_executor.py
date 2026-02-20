@@ -15,10 +15,12 @@
 
 
 """
+"""
 Multi-Node Executor for Phase 55.
 Handles cross-node communication and execution management for Tensor Parallel (TP)
 across physical machine boundaries.
 
+"""
 import logging
 import socket
 from typing import Any, Dict
@@ -42,7 +44,7 @@ class MultiNodeExecutor:
         self.hostname = socket.gethostname()
         self.ip = socket.gethostbyname(self.hostname)
 
-        logger.info(f"MultiNodeExecutor initialized on Node {node_id}/{total_nodes} ({self.ip})")"
+        logger.info(f"MultiNodeExecutor initialized on Node {node_id}/{total_nodes} ({self.ip})")
     def coordinate_tp_split(self, tensor_shape: tuple) -> Dict[int, tuple]:
                 Calculates how tensors should be split across multiple nodes.
         Uses Rust for topology-aware optimization.

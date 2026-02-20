@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,12 +14,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for migrating hardcoded version strings to use the central VERSION import.
+"""
+"""
+Script for migrating hardcoded version strings to use the central VERSION import.
 
+"""
 import os
 
-src_path = r"c:\\DEV\\PyAgent\\src""version_import = "from src.core.base.lifecycle.version import VERSION""target_version = 'VERSION = "2.1.2-stable"'"'
-print(f"Starting version migration in: {src_path}")"
+src_path = r"c:\\DEV\\PyAgent\\src""version_import = "from src.core.base.lifecycle.version import VERSION""target_version = 'VERSION = "2.1.2-stable"'
+print(f"Starting version migration in: {src_path}")
 files_processed = 0
 files_modified = 0
 
@@ -46,7 +50,8 @@ for root, _, files in os.walk(src_path):
                         new_content = "\\n".join(new_lines) + ("\\n" if content.endswith("\\n") else "")"                        with open(path, "w", encoding="utf-8") as f:"                            f.write(new_content)
                         print(f"  Migrated: {path}")"                        files_modified += 1
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                print(f"  Error processing {path}: {e}")"
-print(f"\\nFinished. Processed {files_processed} files, modified {files_modified} files.")"
+                print(f"  Error processing {path}: {e}")
+print(f"\\nFinished. Processed {files_processed} files, modified {files_modified} files.")
 
 """
+

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.active_directory_threat_hunting_core import ThreatLevel, ADObjectType, ADObject, ThreatFinding, HuntingResult, ActiveDirectoryThreatHuntingCore

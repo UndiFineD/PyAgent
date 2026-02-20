@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 AWS Bedrock cloud provider connector.
 
+"""
 Provides integration with AWS Bedrock for inference requests,
 supporting Claude, Titan, and other Bedrock-hosted models.
 """
-
 import json
 import logging
 import os
@@ -86,10 +89,12 @@ class AWSBedrockConnector(CloudProviderBase):
 
     @property
     def name(self) -> str:
-        """Return provider name.        return "AWSBedrock""
+"""
+Return provider name.        return "AWSBedrock"
     @property
     def available_models(self) -> List[str]:
-        """Return list of available Bedrock models.        return [
+"""
+Return list of available Bedrock models.        return [
             # Claude models
             "anthropic.claude-3-opus-20240229-v1:0","            "anthropic.claude-3-sonnet-20240229-v1:0","            "anthropic.claude-3-haiku-20240307-v1:0","            "anthropic.claude-v2:1","            "anthropic.claude-instant-v1","            # Titan models
             "amazon.titan-text-express-v1","            "amazon.titan-text-lite-v1","            "amazon.titan-text-premier-v1:0","            # Llama models
@@ -138,7 +143,7 @@ class AWSBedrockConnector(CloudProviderBase):
             error_code = e.response.get("Error", {}).get("Code")"            if error_code == "ThrottlingException":"                raise RateLimitError(str(e), provider=self.name)
             elif error_code == "AccessDeniedException":"                raise AuthenticationError(str(e), provider=self.name)
             raise CloudProviderError(f"Bedrock error: {str(e)}", provider=self.name)"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            raise CloudProviderError(f"Unexpected error: {str(e)}", provider=self.name)"
+            raise CloudProviderError(f"Unexpected error: {str(e)}", provider=self.name)
     async def stream(self, request: InferenceRequest) -> AsyncIterator[str]:
                 Stream a completion from AWS Bedrock.
 
@@ -161,12 +166,15 @@ class AWSBedrockConnector(CloudProviderBase):
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Bedrock streaming error: {str(e)}")"            raise CloudProviderError(f"Streaming failed: {str(e)}", provider=self.name)"
     def _parse_response(self, response_body: Dict[str, Any], model: str) -> str:
-        """Extract text content from various Bedrock response formats.        if model.startswith("anthropic.claude-3"):"            return response_body.get("content", [{}])[0].get("text", "")"        elif model.startswith("anthropic."):"            return response_body.get("completion", "")"        elif model.startswith("amazon.titan"):"            return response_body.get("results", [{}])[0].get("outputText", "")"        elif model.startswith("meta.llama"):"            return response_body.get("generation", "")"        elif model.startswith("mistral."):"            return response_body.get("outputs", [{}])[0].get("text", "")"        return """
-    def _extract_text_from_chunk(self, chunk: Dict[str, Any], model: str) -> str:
-        """Extract text from a streaming chunk based on model provider.        if model.startswith("anthropic."):"            # Claude 3 uses message_start, content_block_delta, etc.
-            if chunk.get("type") == "content_block_delta":"                return chunk.get("delta", {}).get("text", "")"            # Older Claude might use "completion""            return chunk.get("completion", "")"        elif model.startswith("amazon.titan"):"            return chunk.get("outputText", "")"        elif model.startswith("meta.llama"):"            return chunk.get("generation", "")"        elif model.startswith("mistral."):"            return chunk.get("outputs", [{}])[0].get("text", "")"        return """
-    def _estimate_tokens(self, messages: List[Dict[str, str]]) -> int:
-        """Rough token estimation (4 chars/token).        total_chars: int = sum(len(m.get("content", "")) for m in messages)"        return max(1, total_chars // 4)
+"""
+Extract text content from various Bedrock response formats.        if model.startswith("anthropic.claude-3"):"            return response_body.get("content", [{}])[0].get("text", "")"        elif model.startswith("anthropic."):"            return response_body.get("completion", "")"        elif model.startswith("amazon.titan"):"            return response_body.get("results", [{}])[0].get("outputText", "")"        elif model.startswith("meta.llama"):"            return response_body.get("generation", "")"        elif model.startswith("mistral."):"            return response_body.get("outputs", [{}])[0].get("text", "")"        return ""
+def _extract_text_from_chunk(self, chunk: Dict[str, Any], model: str) -> str:
+"""
+Extract text from a streaming chunk based on model provider.        if model.startswith("anthropic."):"            # Claude 3 uses message_start, content_block_delta, etc.
+            if chunk.get("type") == "content_block_delta":"                return chunk.get("delta", {}).get("text", "")"            # Older Claude might use "completion""            return chunk.get("completion", "")"        elif model.startswith("amazon.titan"):"            return chunk.get("outputText", "")"        elif model.startswith("meta.llama"):"            return chunk.get("generation", "")"        elif model.startswith("mistral."):"            return chunk.get("outputs", [{}])[0].get("text", "")"        return ""
+def _estimate_tokens(self, messages: List[Dict[str, str]]) -> int:
+"""
+Rough token estimation (4 chars/token).        total_chars: int = sum(len(m.get("content", "")) for m in messages)"        return max(1, total_chars // 4)
 
     async def health_check(self) -> bool:
                 Check if AWS Bedrock is accessible by listing models.
@@ -191,7 +199,7 @@ class AWSBedrockConnector(CloudProviderBase):
         Returns:
             Estimated cost in USD.
                 model: str = request.model
-        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 3.0})"
+        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 3.0})
         # Rough estimate: assume 4 chars per token
         input_tokens: int = sum(len(m.get("content", "")) for m in request.messages) // 4"        output_tokens: int = request.max_tokens
 
@@ -205,7 +213,8 @@ class AWSBedrockConnector(CloudProviderBase):
                 model: str = request.model
 
         if model.startswith("anthropic.claude-3"):"            # Claude 3 format (Messages API)
-            system_prompt: str = """            filtered_messages = []
+            system_prompt: str = ""
+filtered_messages = []
             for m in request.messages:
                 if m["role"] == "system":"                    system_prompt: str = m["content"]"                else:
                     filtered_messages.append(m)
@@ -248,17 +257,22 @@ class AWSBedrockConnector(CloudProviderBase):
                 "prompt": prompt,"                "max_tokens": request.max_tokens,"                "temperature": request.temperature,"            }
 
     def _messages_to_claude_prompt(self, messages: List[Dict[str, str]]) -> str:
-        """Convert messages to legacy Claude \\n\\nHuman:/\\n\\nAssistant: format.        prompt: str = """        for msg in messages:
-            role: str = msg.get("role", "user")"            content: str = msg.get("content", "")"            if role == "user":"                prompt += f"\\n\\nHuman: {content}""            elif role == "assistant":"                prompt += f"\\n\\nAssistant: {content}""            elif role == "system":"                prompt: str = f"{content}{prompt}""        return f"{prompt}\\n\\nAssistant:""
+"""
+Convert messages to legacy Claude \\n\\nHuman:/\\n\\nAssistant: format.        prompt: str = ""
+for msg in messages:
+            role: str = msg.get("role", "user")"            content: str = msg.get("content", "")"            if role == "user":"                prompt += f"\\n\\nHuman: {content}""            elif role == "assistant":"                prompt += f"\\n\\nAssistant: {content}""            elif role == "system":"                prompt: str = f"{content}{prompt}""        return f"{prompt}\\n\\nAssistant:"
     def _messages_to_llama3_prompt(self, messages: List[Dict[str, str]]) -> str:
-        """Convert messages to Llama 3 chat format.        prompt = "<|begin_of_text|>""        for msg in messages:
+"""
+Convert messages to Llama 3 chat format.        prompt = "<|begin_of_text|>""        for msg in messages:
             role: str = msg.get("role", "user")"            content: str = msg.get("content", "")"            prompt += f"<|start_header_id|>{role}<|end_header_id|>\\n\\n{content}<|eot_id|>""        prompt += "<|start_header_id|>assistant<|end_header_id|>\\n\\n""        return prompt
 
     def _messages_to_prompt(self, messages: List[Dict[str, str]]) -> str:
-        """Convert messages to a simple prompt string.        parts = []
+"""
+Convert messages to a simple prompt string.        parts = []
         for msg in messages:
             role: str = msg.get("role", "user")"            content: str = msg.get("content", "")"            parts.append(f"{role.capitalize()}: {content}")"        return "\\n\\n".join(parts) + "\\n\\nAssistant:""
     def _messages_to_llama_prompt(self, messages: List[Dict[str, str]]) -> str:
-        """Convert messages to Llama 2 chat format.        parts = []
+"""
+Convert messages to Llama 2 chat format.        parts = []
         for msg in messages:
-            role: str = msg.get("role", "user")"            content: str = msg.get("content", "")"            if role == "system":"                parts.append(f"<<SYS>>\\n{content}\\n<</SYS>>")"            elif role == "user":"                parts.append(f"[INST] {content} [/INST]")"            elif role == "assistant":"                parts.append(f"{content}")"        return "\\n".join(parts)"
+            role: str = msg.get("role", "user")"            content: str = msg.get("content", "")"            if role == "system":"                parts.append(f"<<SYS>>\\n{content}\\n<</SYS>>")"            elif role == "user":"                parts.append(f"[INST] {content} [/INST]")"            elif role == "assistant":"                parts.append(f"{content}")"        return "\\n".join(parts)

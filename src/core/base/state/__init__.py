@@ -13,12 +13,16 @@
 # limitations under the License.
 
 
-"""State management for PyAgent agents.
+"""
+"""
+State management for PyAgent agents.
 """
 try:
-    from .agent_state_manager import StateTransaction
+
+"""
+from .agent_state_manager import StateTransaction
 except ImportError:
     from .agent_state_manager import StateTransaction
 
 
-__all__ = ["StateTransaction"]"
+__all__ = ["StateTransaction"]

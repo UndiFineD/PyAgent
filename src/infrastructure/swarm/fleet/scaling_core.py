@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 """
 ScalingCore
 
+"""
 Core logic for scaling.
 (Facade for src.core.base.common.scaling_core)
 
+"""
 import time
 
 from src.core.base.common.scaling_core import \
@@ -54,7 +57,9 @@ class ScalingCore(StandardScalingCore):
         self.load_metrics: dict[str, dict[str, list[float]]] = {}
         self.last_scale_event: dict[str, float] = {}
 
-    def add_metric(self, key: str, value: float, metric_type: str = "latency") -> None:"        """Adds a metric value to the sliding window buffer.        if key not in self.load_metrics:
+    def add_metric(self, key: str, value: float, metric_type: str = "latency") -> None:"        """
+Adds a metric value to the sliding window buffer.        if key not in self.load_metrics:
+
             self.load_metrics[key] = {}
         if metric_type not in self.load_metrics[key]:
             self.load_metrics[key][metric_type] = []
@@ -79,7 +84,7 @@ class ScalingCore(StandardScalingCore):
                 pass
 
         # Weights: Latency 60%, CPU 30%, MEM 10%
-        latency_avg = self.get_avg(key, "latency")"        cpu_avg = self.get_avg(key, "cpu") or 0.0"        mem_avg = self.get_avg(key, "mem") or 0.0"
+        latency_avg = self.get_avg(key, "latency")"        cpu_avg = self.get_avg(key, "cpu") or 0.0"        mem_avg = self.get_avg(key, "mem") or 0.0
         load = (latency_avg * 0.6) + (cpu_avg * 0.3) + (mem_avg * 0.1)
         return load
 
@@ -101,8 +106,10 @@ class ScalingCore(StandardScalingCore):
 
         return False
 
-    def get_avg(self, key: str, metric_type: str = "latency") -> float:"        """Returns the average for a specific metric type.        recent = self.load_metrics.get(key, {}).get(metric_type, [])
+    def get_avg(self, key: str, metric_type: str = "latency") -> float:"        """
+Returns the average for a specific metric type.        recent = self.load_metrics.get(key, {}).get(metric_type, [])
         return sum(recent) / len(recent) if recent else 0.0
 
     def get_avg_latency(self, key: str) -> float:
-        """Helper to get average latency for a specific workflow.        return self.get_avg(key, "latency")"
+"""
+Helper to get average latency for a specific workflow.        return self.get_avg(key, "latency")

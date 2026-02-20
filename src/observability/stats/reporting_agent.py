@@ -15,8 +15,11 @@
 
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     import os
@@ -63,7 +66,8 @@ class ReportingAgent(BaseAgent):
         self.workspace_root = self._workspace_root
 
     async def generate_dashboard(self) -> str:
-        """Runs a workflow to gather data and build a markdown dashboard.        logging.info("ReportingAgent: Initiating dashboard generation workflow...")"
+"""
+Runs a workflow to gather data and build a markdown dashboard.        logging.info("ReportingAgent: Initiating dashboard generation workflow...")
         # Load required agents if not present
         from src.logic.agents.analysis.test_agent import TestAgent
         from src.logic.agents.cognitive.memory_consolidation_agent import \
@@ -121,7 +125,7 @@ class ReportingAgent(BaseAgent):
             start_time = datetime.fromtimestamp(m.get("timestamp", time.time())).strftime("%H:%M:%S")"            duration_sec = m.get("duration", 0)"            gantt_lines.append(
                 f"    {m.get('agent', 'unknown')} : {m.get('action', 'none')}, {start_time}, {duration_sec}s""'            )
 
-        mermaid_gantt = "```mermaid\\n" + "\\n".join(gantt_lines) + "\\n```""
+        mermaid_gantt = "```mermaid\\n" + "\\n".join(gantt_lines) + "\\n```"
         workflow = [
             {"agent": "Consolidator", "action": "consolidate_all", "args": []},"            {"agent": "Config", "action": "validate_env", "args": []},"            {"agent": "Kernel", "action": "get_system_info", "args": []},"            {"agent": "Transparency", "action": "generate_audit_trail", "args": []},"            {
                 "agent": "Visualizer","                "action": "generate_call_graph","                "args": ["src/core"],"            },
@@ -130,14 +134,15 @@ class ReportingAgent(BaseAgent):
         raw_report = await self.fleet.execute_workflow("Dashboard Update", workflow)"        summary = self.fleet.telemetry.get_summary()
 
         dashboard = [
-            "# 🚀 PyAgent Active Progress Dashboard","            f"*Last Updated: {time.strftime('%Y-%m-%d %H:%M:%S')}*","'            "","            "## 📊 Fleet Performance Gantt","            mermaid_gantt,
-            "","            "## 🛡️ Executive Summary","            summary,
-            "","            "## 📝 Detailed Workflow Report","            raw_report,
+            "#  PyAgent Active Progress Dashboard","            f"*Last Updated: {time.strftime('%Y-%m-%d %H:%M:%S')}*","'            "","            "##  Fleet Performance Gantt","            mermaid_gantt,
+            "","            "## ️ Executive Summary","            summary,
+            "","            "##  Detailed Workflow Report","            raw_report,
         ]
 
-        return "\\n".join(dashboard)"
+        return "\\n".join(dashboard)
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Alias for dashboard generation or refinement.        return await self.generate_dashboard()
+"""
+Alias for dashboard generation or refinement.        return await self.generate_dashboard()
 
 
 if __name__ == "__main__":"    # Local test

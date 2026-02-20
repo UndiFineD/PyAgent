@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.cache.block_pool_manager import BlockState, Block, BlockPoolConfig, EvictionEvent, CacheMetrics, KVCacheMetricsCollector, ARCPolicy, BlockPool, compute_block_hash

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,10 @@ from __future__ import annotations
 
 
 """
+"""
 Sample Task Module - Automated GUI Click/Type Task
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -49,7 +53,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 A sample automated GUI task.
 """
-
 try:
     import pyautogui
 except ImportError:
@@ -72,7 +75,8 @@ __version__ = VERSION
 
 @as_tool(priority=5)
 def sample_automated_task() -> None:
-    """Automated task from sample recording.    pyautogui.click(100, 200)
+"""
+Automated task from sample recording.    pyautogui.click(100, 200)
     pyautogui.press("a")"    pyautogui.press("enter")"    pyautogui.click(150, 250)
 
 

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,9 +14,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Btree store.py module.
+"""
+"""
+Btree store.py module.
 """
 
+"""
 import hashlib
 import json
 import logging
@@ -32,18 +36,20 @@ __version__ = VERSION
 
 
 class BTreeKnowledgeStore(KnowledgeStore):
-    """Sharded B-Tree style storage for structured key-value data.
+"""
+Sharded B-Tree style storage for structured key-value data.
     Designed to scale to trillions of parameters by sharding across filesystem.
     Phase 141: Hierarchical Persistence via SQLite per-bucket aggregation.
     Phase 144: Telemetry-Ready Access Patterns.
-    """
-    def __init__(self, *args, **kwargs) -> None:
+"""
+def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
-        self.logger = StructuredLogger(agent_id="BTreeStore")"
+        self.logger = StructuredLogger(agent_id="BTreeStore")
     def _hash_key(self, key: str) -> str:
-        """Fast hashing for shard lookup.
+"""
+Fast hashing for shard lookup.
         PHASE 131: Uses PyO3 Rust extension for sub-millisecond page access.
-        """
+"""
 try:
             from rust_core import fast_hash  # type: ignore[attr-defined]
 
@@ -62,7 +68,7 @@ try:
         shard_dir = self.storage_path / tier1 / tier2
         # pylint: disable=protected-access
         self._memory_core._fs.ensure_directory(shard_dir)
-        db_path = shard_dir / "shard.db""
+        db_path = shard_dir / "shard.db"
         conn = sqlite3.connect(db_path)
         conn.execute("CREATE TABLE IF NOT EXISTS data (key TEXT PRIMARY KEY, value TEXT, metadata TEXT)")"        conn.commit()
         return conn
@@ -82,12 +88,12 @@ try:
         conn.close()
 
         latency = (time.time() - start_time) * 1000
-        self.logger.log("INFO", f"Stored key {key}", latency_ms=latency, shard_bucket=key[:4])"
+        self.logger.log("INFO", f"Stored key {key}", latency_ms=latency, shard_bucket=key[:4])
         self._sync_multimodal(key, value, clean_metadata)
         return True
 
     def _sync_multimodal(self, key: str, _value: Any, _metadata: dict[str, Any]) -> None:
-        logging.debug(f"BTreeStore: Synced {key} to Multi-Modal Trinity.")"
+        logging.debug(f"BTreeStore: Synced {key} to Multi-Modal Trinity.")
     def _apply_privacy_filter(self, metadata: dict[str, Any]) -> dict[str, Any]:
         sensitive_keys = ["user_id", "email", "ip_address", "token", "password"]"        return {k: v for k, v in metadata.items() if k.lower() not in sensitive_keys}
 
@@ -98,7 +104,7 @@ try:
         conn.close()
 
         latency = (time.time() - start_time) * 1000
-        self.logger.log("INFO", f"Retrieved key {query}", latency_ms=latency, found=bool(row))"
+        self.logger.log("INFO", f"Retrieved key {query}", latency_ms=latency, found=bool(row))
         if row:
             return [json.loads(row[0])]
         return []

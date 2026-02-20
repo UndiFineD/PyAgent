@@ -1,0 +1,124 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+"""Conversation turn tracker (minimal, parser-safe).
+
+Provides a lightweight TurnTracker with the public methods used by
+other modules/tests. The implementation is intentionally simple to
+ensure parser-safety while the repository is repaired.
+"""
+
+from __future__ import annotations
+from typing import Any, Dict, List, Optional
+import uuid
+
+try:
+    from .models import ContextConfig, ConversationTurn, TokenMetrics, TurnType
+except Exception:  # pragma: no cover - fallback for tests
+    class ContextConfig:
+        def __init__(self) -> None:
+            self.max_turns = 100
+
+    class TokenMetrics:
+        def __init__(self) -> None:
+            self.total = 0
+
+        def add(self, other: "TokenMetrics") -> "TokenMetrics":
+            self.total += getattr(other, "total", 0)
+            return self
+
+    class ConversationTurn:
+        def __init__(self, id: str, type: Any, content: Any, tokens: Optional[TokenMetrics] = None, parent_id: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None) -> None:
+            self.id = id
+            self.type = type
+            self.content = content
+            self.tokens = tokens
+            self.parent_id = parent_id
+            self.metadata = metadata or {}
+            self.child_ids: List[str] = []
+
+    class TurnType:
+        SYSTEM = "system"
+        USER = "user"
+        REASONING = "reasoning"
+
+
+class TurnTracker:
+    def __init__(self, config: Optional[ContextConfig] = None) -> None:
+        self.config = config or ContextConfig()
+        self._turns: List[ConversationTurn] = []
+        self._total_tokens = TokenMetrics()
+        self._turn_index: Dict[str, ConversationTurn] = {}
+
+    @property
+    def turns(self) -> List[ConversationTurn]:
+        return self._turns
+
+    @property
+    def turn_count(self) -> int:
+        return len(self._turns)
+
+    @property
+    def total_tokens(self) -> TokenMetrics:
+        return self._total_tokens
+
+    def add_turn(self, turn_type: TurnType, content: Any, tokens: Optional[TokenMetrics] = None, parent_id: Optional[str] = None, metadata: Optional[Dict[str, Any]] = None) -> ConversationTurn:
+        turn_id = f"turn_{uuid.uuid4().hex[:12]}"
+        turn = ConversationTurn(id=turn_id, type=turn_type, content=content, tokens=tokens, parent_id=parent_id, metadata=metadata or {})
+        self.append_turn(turn)
+        return turn
+
+    def append_turn(self, turn: ConversationTurn) -> None:
+        self._turns.append(turn)
+        self._turn_index[turn.id] = turn
+        if turn.tokens:
+            self._total_tokens = self._total_tokens.add(turn.tokens)
+        if turn.parent_id and turn.parent_id in self._turn_index:
+            self._turn_index[turn.parent_id].child_ids.append(turn.id)
+
+    def get_turn(self, turn_id: str) -> Optional[ConversationTurn]:
+        return self._turn_index.get(turn_id)
+
+    def get_messages(self, include_system: bool = True, include_reasoning: bool = False) -> List[Dict[str, Any]]:
+        messages: List[Dict[str, Any]] = []
+        for turn in self._turns:
+            if turn.type == TurnType.SYSTEM and not include_system:
+                continue
+            if turn.type == TurnType.REASONING and not include_reasoning:
+                continue
+            # Provide a simple message representation
+            messages.append({"id": turn.id, "type": turn.type, "content": turn.content})
+        return messages
+
+    def get_recent(self, n: int) -> List[ConversationTurn]:
+        return self._turns[-n:]
+
+    def clear(self) -> None:
+        self._turns.clear()
+        self._turn_index.clear()
+        self._total_tokens = TokenMetrics()
+
+    def truncate(self, max_turns: Optional[int] = None) -> int:
+        limit = max_turns or getattr(self.config, "max_turns", 100)
+        if len(self._turns) <= limit:
+            return 0
+        removed = len(self._turns) - limit
+        old_turns = self._turns[:removed]
+        self._turns = self._turns[removed:]
+        for turn in old_turns:
+            self._turn_index.pop(turn.id, None)
+        return removed
+
+        removed = len(self._turns) - limit
+        old_turns = self._turns[:removed]
+        self._turns = self._turns[removed:]
+
+        # Update index
+        for turn in old_turns:
+            self._turn_index.pop(turn.id, None)
+
+        return removed

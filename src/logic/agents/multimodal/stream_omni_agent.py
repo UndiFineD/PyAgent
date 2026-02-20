@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 StreamOmniAgent - Real-time multimodal pipeline orchestration
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -24,7 +28,7 @@ USAGE:
   Example (async context):
     agent = StreamOmniAgent(rC:\\\\path\\to\\agent_state.json")"#     async def mic_chunks(): yield b"..."    async for out_chunk in agent.process_stream(mic_chunks()): play(out_chunk)
 - As a CLI: run the module directly (it registers a main via src.core.base.common.base_utilities.create_main_function) to start the agent loop and log multimodal activity.
-- For task-based use: call await agent.execute_task({"type": "audio_pipeline", ...}) to run the pipeline-style task handler."
+- For task-based use: call await agent.execute_task({"type": "audio_pipeline", ...}) to run the pipeline-style task handler.
 WHAT IT DOES:
 - Provides a focused orchestrator class (StreamOmniAgent) built on BaseAgent that models a real-time "See-While-Hear" pipeline: ingest audio, perform STT, stream tokens into an LLM, stream LLM tokens into a TTS engine, and emit audio output."- Exposes an async full-duplex process_stream(audio_generator) method which demonstrates the intended per-chunk flow (stt -> llm -> tts) as an AsyncGenerator.
 - Includes lightweight stubs for the core transforms (_stt_decode, _llm_infer, _tts_encode) and a simple execute_task hook for task-based invocation; records a system prompt and a TODO Placeholder for latency_metrics.
@@ -36,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Stream-Omni Pipeline Agent.
-Orchestrates speech-to-token -> LLM -> token-to-speech flow ("See-While-Hear")."
+Orchestrates speech-to-token -> LLM -> token-to-speech flow ("See-While-Hear").
 
 try:
     import asyncio
@@ -81,9 +85,9 @@ class StreamOmniAgent(BaseAgent):
 
     async def execute_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
         Execute a multimodal pipeline task.
-        request_type = task.get("type", "unknown")"
+        request_type = task.get("type", "unknown")
         if request_type == "audio_pipeline":"            # Simulate pipeline for now
-            return {"status": "simulated", "latency_ms": 150}"
+            return {"status": "simulated", "latency_ms": 150}
         return await super().execute_task(task)
 
     async def process_stream(self, audio_generator: AsyncGenerator[bytes, None]) -> AsyncGenerator[bytes, None]:
@@ -108,7 +112,7 @@ class StreamOmniAgent(BaseAgent):
 #         "Stub for LLM inference."  "      # Streaming inference"#         return text + "World"
     async def _tts_encode(self, text: str) -> bytes:
 #         "Stub for Text-to-Speech encoding"."        # Using CosyVoice
-        return b"\\x00\\x00" * 10"
+        return b"\\x00\\x00" * 10
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(StreamOmniAgent, "Stream-Omni" Pipeline", "Multimodal logs")"    main()
@@ -148,19 +152,20 @@ logger = logging.getLogger(__name__)
 # pylint: disable=too-many-ancestors
 class StreamOmniAgent(BaseAgent):
     "Real-time multimodal pipeline agent."
-    Orchestrates the 'Stream-Omni' flow:'    Audio Input -> STT -> Token Streaming -> LLM -> "Token "Streaming -> TTS -> Audio Output."
+    Orchestrates the 'Stream-Omni' flow:'    Audio Input -> STT -> Token Streaming -> LLM -> "Token "Streaming -> TTS -> Audio Output.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the Stream-Omni Orchestrator. You manage real-time audio/text pipelines."        self.latency_metrics: Dict[str, float] = {}
 
     async def execute_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
- "       Execute a multimodal pipeline task."  "   "   request_type = task.get("type", "unknown")"
+ "       Execute a multimodal pipeline task."  "   "   request_type = task.get("type", "unknown")
         if request_type == "audio_pipeline":"            # Simulate pipeline for now
-            return {"status": "simulated", "latency_ms": 150}"
+            return {"status": "simulated", "latency_ms": 150}
         return await super().execute_task(task)
 
     async def process_stream(self, audio_generator: AsyncGenerator[bytes, None]) -> AsyncGenerator[bytes, None"]:"        Full duplex processing loop.
 """  ""        async for chunk in audio_generator:
+
             # 1. Speech to Text (STT)
             text_tokens = await self._stt_decode(chunk)
 
@@ -181,7 +186,13 @@ class StreamOmniAgent(BaseAgent):
 #         return text + "World"
     async def _tts_encode(self, text: str) -> bytes:
 #         "Stub for Text-to-Speech encoding."        # Using CosyVoice
-        return b"\\x00\\x00" * 10"
+        return b"\\x00\\x00" * 10
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(StreamOmniAgent, "Stream-Omni Pipeline", "Multimodal logs")"    main()
+
+"""
+
+""
+
+"""

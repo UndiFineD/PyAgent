@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.ad_connect_security_core import ADConnectServiceAccount, ADConnectDatabase, ADConnectConfiguration, ADConnectSecurityAssessment, ADConnectSecurityCore

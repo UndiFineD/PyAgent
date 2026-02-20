@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Gateway core.py module.
 """
 
+"""
 from typing import Any
 
 
@@ -34,12 +38,16 @@ class GatewayCore:
             "web_ui": "glm-4-flash","            "cli": "gpt-4.1","            "gui": "claude-3-haiku","            "background": "llama-3-70b","        }
 
     def get_service_endpoint(self, service_name: str) -> str | None:
-        """Returns the base URL for a registered SaaS service.        return self.saas_registry.get(service_name.lower())
+"""
+Returns the base URL for a registered SaaS service.        return self.saas_registry.get(service_name.lower())
 
     def resolve_model_by_affinity(self, interface_type: str) -> str:
                 Resolves the preferred LLM model based on the calling interface.
         Prioritizes speed for UI/Frontend.
-                return self.interface_affinity.get(interface_type.lower(), "gpt-4.1")"
+                return self.interface_affinity.get(interface_type.lower(), "gpt-4.1")
     def format_saas_request(self, service: str, action: str, params: dict[str, Any]) -> dict[str, Any]:
-        """Constructs a standardized internal request for external SaaS consumption.        return {
+"""
+Constructs a standardized internal request for external SaaS consumption.        return {
             "service": service,"            "action": action,"            "params": params,"            "method": "POST" if action in ["create", "update"] else "GET","        }
+
+"""

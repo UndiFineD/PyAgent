@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Byzantine core for handling byzantine faults and consensus in distributed deployments.
 """
 
+"""
 from typing import Any
 
 try:
@@ -85,7 +88,7 @@ class ByzantineCore:
             except (AttributeError, RuntimeError, TypeError):
                 pass
         if change_type in ["infrastructure", "security", "core"]:"            return 0.8
-        return 0.5 if change_type in ["documentation", "examples", "comments"] else 0.67"
+        return 0.5 if change_type in ["documentation", "examples", "comments"] else 0.67
     def run_multi_surgeon_audit(self, proposals: dict[str, str]) -> dict[str, Any]:
                 [Phase 3.0: Multi-surgeon BFT]
         Performs a second-layer audit of proposals using specialized 'surgeon' agents.'        Returns a map of proposal hashes to their 'health' score.'                audit_results = {}
@@ -102,4 +105,6 @@ class ByzantineCore:
         return audit_results
 
     def detect_deviating_hashes(self, votes: list[dict[str, Any]], consensus_hash: str) -> list[str]:
-        """Returns IDs of agents whose votes deviated from consensus.        return [v["id"] for v in votes if v["hash"] != consensus_hash]"
+"""
+Returns IDs of agents whose votes deviated from consensus.        return [v["id"] for v in votes if v["hash"] != consensus_hash]
+"""

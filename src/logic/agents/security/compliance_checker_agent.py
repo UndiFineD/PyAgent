@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Compliance Checker Agent - Validate changelog entries for security and legal compliance
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -26,7 +30,7 @@ USAGE:
 WHAT IT DOES:
 - Scans changelog entries for predefined security and legal keywords.
 - Produces ComplianceResult objects for SECURITY and LEGAL categories indicating pass/fail, a list of issues, and remediation recommendations.
-- Flags security-related descriptions not categorized under "Security" and marks entries mentioning licenses/copyright/trademarks for legal review."
+- Flags security-related descriptions not categorized under "Security" and marks entries mentioning licenses/copyright/trademarks for legal review.
 WHAT IT SHOULD DO BETTER:
 - Make keyword lists configurable (per-repo or per-release) and allow rule overrides.
 - Add more categories (privacy, export-control, data-retention), severity levels, and richer findings (line references, matched tokens).
@@ -66,8 +70,9 @@ __version__ = VERSION
 
 
 class ComplianceChecker:
-    """Checks changelog compliance with various requirements.""""
-    Verifies changelog entries meet security, legal, and
+"""
+Checks changelog compliance with various requirements.""""
+Verifies changelog entries meet security, legal, and
     other compliance requirements.
 
     Example:
@@ -100,8 +105,9 @@ class ComplianceChecker:
         return not self._legal_issues
 
     def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
-        """Check security compliance.""""
-        Args:
+"""
+Check security compliance.""""
+Args:
             entries: Changelog entries to check.
 
         Returns:
@@ -118,8 +124,9 @@ class ComplianceChecker:
         )
 
     def check_legal_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
-        """Check legal compliance.""""
-        Args:
+"""
+Check legal compliance.""""
+Args:
             entries: Changelog entries to check.
 
         Returns:
@@ -135,8 +142,9 @@ class ComplianceChecker:
         )
 
     def check_all(self, entries: list[ChangelogEntry]) -> list[ComplianceResult]:
-        """Run all compliance checks.""""
-        Args:
+"""
+Run all compliance checks.""""
+Args:
             entries: Changelog entries to check.
 
         Returns:
@@ -145,3 +153,5 @@ class ComplianceChecker:
             self.check_security_compliance(entries),
             self.check_legal_compliance(entries),
         ]
+
+"""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.tools.parser.base import ToolParserType, ToolCallStatus, ToolParameter, ToolCall, ToolParseResult, StreamingToolState, ToolParser, extract_json_from_text

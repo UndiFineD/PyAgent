@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Incremental detokenization for streaming text generation.
 
+"""
 Refactored to modular package structure for Phase 317.
 
 try:

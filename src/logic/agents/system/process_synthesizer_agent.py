@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -30,6 +32,7 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Instantiate with the workspace path: agent = ProcessSynthesizerAgent(rC:\\\\path\\to\\workspace")"- Create workflows: result = agent.synthesize_workflow("implement feature X", requirements)"- Optimize a step: agent.optimize_step(result["workflow_id"], 1)"- Inspect telemetry: agent.get_workflow_telemetry(result["workflow_id"])"- Synthesize final outputs from multiple agents: agent.synthesize_responses(["outA", "outB"])"
 WHAT IT DOES:
 - Provides a lightweight orchestrator for assembling multi-step workflows (DAG-like) keyed by goals and tracked in active_workflows.
@@ -37,6 +40,7 @@ WHAT IT DOES:
 - Exposes runtime operations to adjust/optimize individual steps and to retrieve telemetry/state for active workflows.
 - Merges multiple agent outputs into a single synthesized response with a simple merger protocol and timestamp.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Persist workflows to durable storage (StateTransaction) and support recovery across restarts instead of only in-memory tracking.
 - Replace hash-based ephemeral workflow IDs with UUIDs and include stronger uniqueness/namespace guarantees.
@@ -95,14 +99,14 @@ class ProcessSynthesizerAgent:
             {"step": 1, "agent": "ReasoningAgent", "action": "analyze_requirements"},"            {"step": 2, "agent": "CoderAgent", "action": "implement_base"},"            {"step": 3, "agent": "ReviewAgent", "action": "validate_logic"},"        ]
         self.active_workflows[workflow_id] = {
             "goal": goal,"            "steps": steps,"            "status": "active","        }
-        return {"workflow_id": workflow_id, "estimated_steps": len(steps)}"
+        return {"workflow_id": workflow_id, "estimated_steps": len(steps)}
     def optimize_step(self, workflow_id: str, step_index: int) -> dict[str, Any]:
         Adjusts a workflow "step based on telemetry."        if workflow_id not in self.active_workflows:
-            return {"error": "Workflow not found"}"
+            return {"error": "Workflow not found"}
         # Simulate optimization
         self.active_workflows[workflow_id]["steps"][step_index]["optimized"] = True"        return {"workflow_id": workflow_id, "step": step_index, "status": "optimized"}"
     def get_workflow_telemetry(self, workflow_id: str) -> dict[str, Any]:
-        return self.active_workflows.get(workflow_id, {"status": "unknown"})"
+        return self.active_workflows.get(workflow_id, {"status": "unknown"})
     def synthesize_responses(self, agent_outputs: list[str]) -> dict[str, Any]:
         Merges multiple agent outputs into "a single cohesive response."#         merged = "Combined Intelligence Output:\\n"        for i, output in enumerate(agent_outputs):
 #             merged += f"[{i + 1}] {output}\\n"
@@ -130,13 +134,13 @@ class ProcessSynthesizerAgent:
             {"step": 1, "agent": "ReasoningAgent", "action": "analyze_requirements"},"            {"step": 2, "agent": "CoderAgent", "action": "implement_base"},"            {"step": 3, "agent": "ReviewAgent", "action": "validate_logic"},"        ]
         self.active_workflows[workflow_id] = {
             "goal": goal,"            "steps": steps,"            "status": "active","        }
-        return {"workflow_id": workflow_id, "estimated_steps": len(steps)}"
+        return {"workflow_id": workflow_id, "estimated_steps": len(steps)}
     def optimize_step(self, workflow_id: str, step_index: int) -> dict[str, Any]:
-""   "     Adjusts a workflow step based on telemetry." "       if workflow_id not in self.active_workflows:"            return {"error": "Workflow not found"}"
+""   "     Adjusts a workflow step based on telemetry." "       if workflow_id not in self.active_workflows:"            return {"error": "Workflow not found"}
         # Simulate optimization
         self.active_workflows[workflow_id]["steps"][step_index]["optimized"] = True"        return {"workflow_id": workflow_id, "step": step_index, "status": "optimized"}"
     def get_workflow_telemetry(self, workflow_id: str) -> dict[str, Any]:
-        return self.active_workflows.get(workflow_id, {"status": "unknown"})"
+        return self.active_workflows.get(workflow_id, {"status": "unknown"})
     def synthesize_responses(self, agent_outputs: list[str]) -> dict[str, Any]:
        " Merges multiple agent outputs into a single cohesive response."#         merged = "Combined Intelligence Output:\\n"        for i, output in enumerate(agent_outputs):
 #             merged += f"[{i + 1}] {output}\\n"

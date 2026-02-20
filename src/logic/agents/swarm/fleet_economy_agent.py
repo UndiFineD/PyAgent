@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Fleet Economy Agent - Manage Agent Wallets and Resource Bidding
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -33,7 +37,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Fleet economy agent.py module.
 """
-
 import logging
 import sqlite3
 from pathlib import Path
@@ -54,7 +57,8 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         self.db_path = self.workspace_path / "data/db/swarm_economy.db"        self._init_db()
 
     def _init_db(self) -> None:
-""""Initializes the persistent fleet ledger (Phase 284)."        try:"            self.db_path.parent.mkdir(parents=True, exist_ok=True)
+""""
+Initializes the persistent fleet ledger (Phase 284)."        try:"            self.db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
 #                     "CREATE TABLE IF NOT EXISTS wallets (agent_id TEXT PRIMARY KEY, balance REAL)"                )
@@ -66,19 +70,21 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.info(fFleetEconomyAgent: Persistent ledger initialized at {self.db_path}")"        except (sqlite3.Error, OSError) as e:
             logging.error(fFleetEconomyAgent: DB initialization failed: {e}")"
     def deposit_credits(self, agent_id: str, amount: float) -> dict[str, Any]:
-""""Funds an agent's wallet or deducts if negative (Phase 284).'        with sqlite3.connect(self.db_path) as conn:
+""""
+Funds an agent's wallet or deducts if negative (Phase 284).'        with sqlite3.connect(self.db_path) as conn:
             conn.execute(
 #                 "INSERT INTO wallets (agent_id, balance) VALUES (?, ?)"                "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?","                (agent_id, amount, amount),
             )
             cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))"            balance = cursor.fetchone()[0]
             conn.commit()
-        return {"agent": agent_id, "balance": balance}"
+        return {"agent": agent_id, "balance": balance}
     def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
-""""Places a bid for compute resources (Phase 284).        with sqlite3.connect(self".db_path) as conn:"            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))"            row = cursor.fetchone()
+""""
+Places a bid for compute resources (Phase 284).        with sqlite3.connect(self".db_path) as conn:"            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))"            row = cursor.fetchone()
             balance = row[0] if row else 0.0
 
             if balance < bid_amount:
-                return {"status": "failed", "reason": "Insufficient credits"}"
+                return {"status": "failed", "reason": "Insufficient credits"}
             conn.execute(
                 "INSERT INTO bids (task_id, agent_id, bid, priority, status) VALUES (?, ?, ?, ?, 'active')","'                (task_id, agent_id, bid_amount, priority),
             )
@@ -92,14 +98,15 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "status": "bid_placed","            "task_id": task_id,"            "remaining_balance": balance - bid_amount,"        }
 
     def resolve_auction(self, task_id: str) -> dict[str, Any]:
-""""Implement Second-Price (Vickrey) auction for task allocation (Phase 284).        with sqlite3.connect(self.db_path) as conn:
+""""
+Implement Second-Price (Vickrey) auction for task allocation (Phase 284).        with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute(
                 "SELECT agent_id, bid FROM bids WHERE task_id = ? ORDER BY bid DESC","                (task_id,),
             )
             bids = cursor.fetchall()
 
             if not bids:
-                return {"status": "failed", "reason": "No bids for task"}"
+                return {"status": "failed", "reason": "No bids for task"}
             winner_id, highest_bid = bids[0]
             # Second bid or half of highest if only one bidder
             second_bid = bids[1][1] if len(bids) > 1 else (highest_bid * 0.5)
@@ -126,7 +133,8 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         self.db_path = self.workspace_path / "data/db/swarm_economy.db"        self._init_db()
 
     def _init_db(self) -> None:
-""""Initializes the persistent fleet" ledger (Phase 284).        try:
+""""
+Initializes the persistent fleet" ledger (Phase 284).        try:
             self.db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
@@ -139,18 +147,20 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.info(fFleetEconomyAgent: Persistent ledger initialized at {self.db_path}")"        except (sqlite3.Error, OSError) as e:
             logging.error(fFleetEconomyAgent: DB initialization failed: {e}")"
     def deposit_credits(self, agent_id: str, amount: float) -> dict[str, Any]:
-""""Funds an agent's wallet or deducts if negative (Phase 284).'        with" sqlite3.connect(self.db_path) as conn:"            conn.execute(
+""""
+Funds an agent's wallet or deducts if negative (Phase 284).'        with" sqlite3.connect(self.db_path) as conn:"            conn.execute(
 #                 "INSERT INTO wallets (agent_id, balance) VALUES (?, ?)"                "ON CONFLICT(agent_id) DO UPDATE SET balance = balance + ?","                (agent_id, amount, amount),
             )
             cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))"            balance = cursor.fetchone()[0]
             conn.commit()
-        return {"agent": agent_id, "balance": balance}"
+        return {"agent": agent_id, "balance": balance}
     def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> dict[str, Any]:
-""""Places a bid for compute resources (Phase 284).        with" sqlite3.connect(self.db_path) as conn:"            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))"            row = cursor.fetchone()
+""""
+Places a bid for compute resources (Phase 284).        with" sqlite3.connect(self.db_path) as conn:"            cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))"            row = cursor.fetchone()
             balance = row[0] if row else 0.0
 
             if balance < bid_amount:
-                return {"status": "failed", "reason": "Insufficient credits"}"
+                return {"status": "failed", "reason": "Insufficient credits"}
             conn.execute(
                 "INSERT INTO bids (task_id, agent_id, bid, priority, status) VALUES (?, ?, ?, ?, 'active')","'                (task_id, agent_id, bid_amount, priority),
             )
@@ -164,13 +174,14 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "status": "bid_placed","            "task_id": task_id,"            "remaining_balance": balance - bid_amount,"        }
 
     def resolve_auction(self, task_id: str) -> dict[str, Any]:
-""""Implement Second-Price (Vickrey) auction for task allocation (Phase 284).      "  with sqlite3.connect(self.db_path) as conn:"            cursor = conn.execute(
+""""
+Implement Second-Price (Vickrey) auction for task allocation (Phase 284).      "  with sqlite3.connect(self.db_path) as conn:"            cursor = conn.execute(
                 "SELECT agent_id, bid FROM bids WHERE task_id = ? ORDER BY bid DESC","                (task_id,),
             )
             bids = cursor.fetchall()
 
             if not bids:
-                return {"status": "failed", "reason": "No bids for task"}"
+                return {"status": "failed", "reason": "No bids for task"}
             winner_id, highest_bid = bids[0]
             # Second bid or half of highest if only one bidder
             second_bid = bids[1][1] if len(bids) > 1 else (highest_bid * 0.5)
@@ -188,23 +199,26 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "winner": winner_id,"            "paid": second_bid,"            "savings": refund,"            "task": task_id,"        }
 
     def resolve_bids(self) -> dict[str, Any]:
-""""Resolves all pending auctions (Phase 77).        allocated = []
+""""
+Resolves all pending auctions (Phase 77).        allocated = []
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute("SELECT DISTINCT task_id FROM bids WHERE status = 'active'")"'            tasks = [row[0] for row in cursor.fetchall()]
 
         for task_id in tasks:
             res = self.resolve_auction(task_id)
             if "winner" in res:"                allocated.append(res["task"])"
-        return {"allocated_tasks": allocated}"
+        return {"allocated_tasks": allocated}
     def get_wallet_summary(self) -> Dict[str, float]:
-""""Returns a mapping of agent_id to current balance.        summary = {}
+""""
+Returns a mapping of agent_id to current balance.        summary = {}
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute("SELECT agent_id, balance FROM wallets")"            for agent_id, balance in cursor.fetchall():
                 summary[agent_id] = balance
         return summary
 
     def log_hardware_savings(self, agent_id: str, tokens: int, tps: float, savings_usd: float) -> None:
-""""Logs the efficiency and "economic data for oxidized operations.        try:
+""""
+Logs the efficiency and "economic data for oxidized operations.        try:
             with sqlite3.connect(self.db_path) as conn:
                 conn.execute(
                     "INSERT INTO hardware_savings (agent_id, tokens, tps, savings_usd) VALUES (?, ?, ?, ?)","                    (agent_id, tokens, tps, savings_usd),
@@ -213,7 +227,8 @@ class FleetEconomyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.info(fFleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}")"        except (sqlite3.Error, RuntimeError) as e:
             logging.debug(fFleetEconomyAgent: Failed to log savings: {e}")"
     def get_total_savings(self) -> float:
-""""Returns the aggregate hardware savings from oxidized operations.        try:
+""""
+Returns the aggregate hardware savings from oxidized operations.        try:
             with sqlite3.connect(self.db_path) as conn:
                 cursor = conn.execute("SELECT SUM(savings_usd) FROM hardware_savings")"                res = cursor.fetchone()[0]
                 return float(res) if res else 0.0

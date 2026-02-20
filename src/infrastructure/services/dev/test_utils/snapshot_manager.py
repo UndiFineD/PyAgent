@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 import json
 from pathlib import Path
 from typing import Any
@@ -31,22 +31,26 @@ __version__ = VERSION
 
 
 class SnapshotManager:
-    """Manages snapshots for snapshot testing.""""
-    Example:
+"""
+Manages snapshots for snapshot testing.""""
+Example:
         mgr=SnapshotManager(Path("snapshots"))"        mgr.assert_match("test1", actual_output)"    
     def __init__(self, snapshot_dir: Path) -> None:
-        """Initialize snapshot manager.""""
-        Args:
+"""
+Initialize snapshot manager.""""
+Args:
             snapshot_dir: Directory to store snapshots.
                 self.snapshot_dir = snapshot_dir
         self.snapshot_dir.mkdir(parents=True, exist_ok=True)
         self._snapshots: dict[str, TestSnapshot] = {}
 
     def _get_snapshot_path(self, name: str) -> Path:
-        """Get path for a snapshot.        return self.snapshot_dir / f"{name}.snap""
+"""
+Get path for a snapshot.        return self.snapshot_dir / f"{name}.snap"
     def save_snapshot(self, name: str, content: Any) -> TestSnapshot:
-        """Save a new snapshot.""""
-        Args:
+"""
+Save a new snapshot.""""
+Args:
             name: Snapshot name.
             content: Snapshot content (str or dict/list).
 
@@ -66,8 +70,9 @@ class SnapshotManager:
         return snapshot
 
     def load_snapshot(self, name: str) -> TestSnapshot | None:
-        """Load an existing snapshot.""""
-        Args:
+"""
+Load an existing snapshot.""""
+Args:
             name: Snapshot name.
 
         Returns:
@@ -88,8 +93,9 @@ class SnapshotManager:
         return snapshot
 
     def compare_snapshot(self, name: str, actual: Any) -> SnapshotComparisonResult:
-        """Compare actual content with a saved snapshot.""""
-        Args:
+"""
+Compare actual content with a saved snapshot.""""
+Args:
             name: Snapshot name.
             actual: Actual content to compare.
 
@@ -115,8 +121,9 @@ class SnapshotManager:
         actual: str,
         update: bool = False,
     ) -> bool:
-        """Assert that actual matches snapshot.""""
-        Args:
+"""
+Assert that actual matches snapshot.""""
+Args:
             name: Snapshot name.
             actual: Actual content.
             update: Update snapshot if mismatch.
@@ -140,8 +147,9 @@ class SnapshotManager:
         return False
 
     def get_diff(self, name: str, actual: str) -> list[str]:
-        """Get diff between snapshot and actual.""""
-        Args:
+"""
+Get diff between snapshot and actual.""""
+Args:
             name: Snapshot name.
             actual: Actual content.
 
@@ -157,3 +165,5 @@ class SnapshotManager:
                 actual.splitlines(),
                 fromfile=f"snapshot/{name}","                tofile="actual","                lineterm="","            )
         )
+
+"""

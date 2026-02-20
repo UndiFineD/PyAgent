@@ -19,10 +19,13 @@
 
 
 from .multi_modal_processor import (
-    MULTIMODAL_REGISTRY, AudioProcessor, BaseMultiModalProcessor, ImageProcessor,
+"""
+MULTIMODAL_REGISTRY, AudioProcessor, BaseMultiModalProcessor, ImageProcessor,
     ModalityType, MultiModalConfig, MultiModalData, MultiModalInputs,
     MultiModalRegistry, TextEmbedProcessor, VideoProcessor, process_multimodal_inputs
 )
+
+"""
 from .muxer import ChannelType, Muxer  # noqa: F401
 from .quantized_engine import QuantizedMultimediaEngine  # noqa: F401
 

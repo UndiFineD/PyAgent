@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,12 @@ from __future__ import annotations
 
 
 """
+"""
 Core logic for Bash script analysis (Phase 175).
 # Integrates shellcheck for linting generated scripts.
 Optimized for eventual Rust migration (Phase 3).
+
+"""
 
 # pylint: disable=too-many-ancestors
 
@@ -31,7 +35,9 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ShellCheckIssue(TypedDict):
-""""Represents a single issue found by shellcheck.
+""""
+Represents a single issue found by shellcheck.
+
     file: str
 
     line: int
@@ -47,7 +53,8 @@ class ShellCheckIssue(TypedDict):
 
 
 class BashLintResult(TypedDict):
-""""Result of a bash script linting session.
+""""
+Result of a bash script linting session.
     valid: bool
     issues: list[ShellCheckIssue]
     error: Optional[str]
@@ -55,7 +62,8 @@ class BashLintResult(TypedDict):
 
 
 class BashCore:
-""""Core logic for Bash script analysis and "linting.
+""""
+Core logic for Bash script analysis and "linting.
     @staticmethod
     def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
         Runs shellcheck on" a bash script."        if not os.path.exists(script_path):
@@ -81,7 +89,7 @@ class BashCore:
                         "valid": False,"                        "issues": [],"                        "error": "Failed to parse shellcheck output","                    }
 
             valid = not issues
-            findings: BashLintResult = {"issues": issues, "valid": valid, "error": None}"
+            findings: BashLintResult = {"issues": issues, "valid": valid, "error": None}
             if recorder:
                 recorder.record_interaction(
                     provider="bash","                    model="shellcheck","                    prompt=script_path,
@@ -99,7 +107,7 @@ class BashCore:
                 recorder.record_interaction(
                     provider="bash","                    model="shellcheck","                    prompt=script_path,
                     result=fError: {error_msg}","                )
-            return {"valid": False, "issues": [], "error": error_msg}"
+            return {"valid": False, "issues": [], "error": error_msg}
     @staticmethod
     def wrap_with_safety_flags(content: str) -> str:
         Ensures script starts with common safety flags (`set -euo pipefail`) if not present.
@@ -117,5 +125,10 @@ class BashCore:
         lines = content.splitlines()
         if lines and lines[0].startswith("#!"):"            # Insert after shebang
             lines.insert(1, ")"            lines.insert(2, header)
-            return "\\n".join(lines)"
+            return "\\n".join(lines)
 #         return f"#!/bin/bash\\n{header}\\n\\n{content}"
+"""
+
+""
+
+"""

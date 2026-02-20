@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Base class regarding grammar engines.
 """
-
 try:
-    from abc import ABC, abstractmethod
+
+"""
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -68,9 +72,11 @@ class GrammarEngine(ABC):
 
     @abstractmethod
     def build_fsm(self, spec: str) -> FSMTransitionTable:
-        """Build FSM from specification string.
+"""
+Build FSM from specification string.
     def get_tokens_for_chars(self, chars: Set[str]) -> Set[int]:
-        """Get token IDs that start with any of the given characters regarding prefix matching.        # Phase 345: Functional token retrieval regarding start characters
+"""
+Get token IDs that start with any of the given characters regarding prefix matching.        # Phase 345: Functional token retrieval regarding start characters
         def token_matches(item: tuple[int, str]) -> bool:
             tid, tstr = item
             return bool(tstr and tstr[0] in chars)
@@ -82,7 +88,8 @@ class GrammarEngine(ABC):
         fsm: FSMTransitionTable,
         state: int,
     ) -> TokenMask:
-        """Get token mask regarding current FSM state.        mask = TokenMask(self.vocab_size)
+"""
+Get token mask regarding current FSM state.        mask = TokenMask(self.vocab_size)
 
         if state < 0 or state >= fsm.num_states:
             # Invalid state - disallow all

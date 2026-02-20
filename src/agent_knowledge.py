@@ -14,8 +14,10 @@
 
 
 """
+"""
 agent_knowledge.py - Knowledge Agent CLI wrapper
 
+"""
 A minimal CLI entrypoint that ensures repository root is importable 
 and invokes the Knowledge Agent's main() function.
 # DATE: 2026-02-12
@@ -36,9 +38,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Wrapper for Knowledge Agent CLI.
 """
-
-
-
 try:
     from .logic.agents.cognitive.context.knowledge_main import main
 except ImportError:

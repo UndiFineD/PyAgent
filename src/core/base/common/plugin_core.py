@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,9 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for plugin discovery, loading, and registration.
+"""
+"""
+Core logic for plugin discovery, loading, and registration.
 """
 
+"""
 import importlib
 import json
 import logging
@@ -41,8 +45,9 @@ if TYPE_CHECKING:
 @dataclass
 # pylint: disable=too-many-instance-attributes
 class PluginMetadata:
-    """Strictly typed metadata for a plugin."""
-    module_path: str
+"""
+Strictly typed metadata for a plugin.""
+module_path: str
     class_name: str
     needs_fleet: bool = True
     min_sdk_version: str = "1.0.0"
@@ -53,21 +58,22 @@ class PluginMetadata:
     restricted_mode: bool = False
 
     def get(self, key: str, default: Any = None) -> Any:
-        """
-        Retrieves an attribute value.
-        """
-        return getattr(self, key, default)
+"""
+Retrieves an attribute value.
+"""
+return getattr(self, key, default)
 
 
 # pylint: disable=too-many-instance-attributes
 class PluginCore(BaseCore):
-    """Authoritative engine for discovering and managing plugins.
-    """
-
-    def __init__(self, workspace_root: Optional[Path] = None) -> None:
-        """Initializes the PluginCore with optional workspace root for plugin discovery.
-        """
-        super().__init__()
+"""
+Authoritative engine for discovering and managing plugins.
+"""
+def __init__(self, workspace_root: Optional[Path] = None) -> None:
+"""
+Initializes the PluginCore with optional workspace root for plugin discovery.
+"""
+super().__init__()
         self.workspace_root = workspace_root or Path.cwd()
         self.plugins_dir = self.workspace_root / "plugins"
         self.registry_path = self.plugins_dir / "manifest.json"
@@ -82,20 +88,20 @@ class PluginCore(BaseCore):
 
 
     def discover(self) -> List[str]:
-        """
-        Scans manifest and directory for compatible plugins.
-        """
-        discovered = []
+"""
+Scans manifest and directory for compatible plugins.
+"""
+discovered = []
         discovered += self._load_manifest_plugins()
         discovered += self._scan_plugin_directories()
         return list(set(discovered))
 
 
     def _load_manifest_plugins(self) -> List[str]:
-        """
-        Load plugins from the central manifest file.
-        """
-        discovered = []
+"""
+Load plugins from the central manifest file.
+"""
+discovered = []
         if self.registry_path.exists():
             try:
                 with open(self.registry_path, encoding="utf-8") as f:
@@ -110,10 +116,10 @@ class PluginCore(BaseCore):
 
 
     def _scan_plugin_directories(self) -> List[str]:
-        """
-        Scan plugin directories for auto-discovery and heuristics.
-        """
-        discovered = []
+"""
+Scan plugin directories for auto-discovery and heuristics.
+"""
+discovered = []
         for item in self.plugins_dir.iterdir():
             if not item.is_dir() or item.name.startswith(("_", ".")):
                 continue
@@ -131,10 +137,10 @@ class PluginCore(BaseCore):
 
 
     def _register_plugin_from_metadata_file(self, item: Path, meta_path: Path, plugin_json: Path) -> List[str]:
-        """
-        Register plugin from manifest.json or plugin.json in the plugin directory.
-        """
-        discovered = []
+"""
+Register plugin from manifest.json or plugin.json in the plugin directory.
+"""
+discovered = []
         target = meta_path if meta_path.exists() else plugin_json
         try:
             with open(target, encoding="utf-8") as f:
@@ -147,10 +153,10 @@ class PluginCore(BaseCore):
 
 
     def _register_heuristic_plugin(self, item: Path) -> str:
-        """
-        Register a plugin using heuristic discovery.
-        """
-        class_name = item.name.replace("_", " ").title().replace(" ", "")
+"""
+Register a plugin using heuristic discovery.
+"""
+class_name = item.name.replace("_", " ").title().replace(" ", "")
         perms = []
         perms_file = item / "permissions.json"
         if perms_file.exists():
@@ -169,8 +175,9 @@ class PluginCore(BaseCore):
 
 
     def _register_plugin_meta(self, key: str, raw_meta: Any) -> None:
-        """Helper to register plugin metadata from raw dict or list."""
-        try:
+"""
+Helper to register plugin metadata from raw dict or list.""
+try:
             if isinstance(raw_meta, list):
                 meta = PluginMetadata(
                     module_path=raw_meta[0],
@@ -186,7 +193,8 @@ class PluginCore(BaseCore):
 
 
     def validate_version(self, required_version: str, current_version: str) -> bool:
-        """Centralized semantic version gatekeeper."""
+"""
+Centralized semantic version gatekeeper.""
         # Simple version check if VersionGate is not available
         try:
             from src.infrastructure.swarm.fleet.version_gate import VersionGate
@@ -197,8 +205,9 @@ class PluginCore(BaseCore):
 
 
     def load_plugin(self, plugin_name: str) -> Optional[Any]:
-        """Loads and initializes a plugin instance."""
-        if plugin_name not in self.loaded_meta:
+"""
+Loads and initializes a plugin instance.""
+if plugin_name not in self.loaded_meta:
             return None
 
         meta = self.loaded_meta[plugin_name]
@@ -228,8 +237,9 @@ class PluginCore(BaseCore):
 
 
     def _load_sandboxed_plugin(self, name: str, meta: PluginMetadata) -> Optional[Any]:
-        """Phase 288: Implement Docker-based or native sandboxing for untrusted plugins."""
-        try:
+"""
+Phase 288: Implement Docker-based or native sandboxing for untrusted plugins.""
+try:
             if docker is None:
                 raise ImportError("Docker SDK not installed")
             client = docker.from_env()
@@ -242,8 +252,9 @@ class PluginCore(BaseCore):
 
 
     def _setup_permission_proxy(self, name: str, meta: PluginMetadata) -> Any:
-        """Enforces permissions via a runtime wrapper."""
-        module = importlib.import_module(meta.module_path)
+"""
+Enforces permissions via a runtime wrapper.""
+module = importlib.import_module(meta.module_path)
         plugin_class = getattr(module, meta.class_name)
         instance = plugin_class()
 
@@ -266,14 +277,16 @@ class PluginCore(BaseCore):
 
 
     def activate_all(self) -> None:
-        """Activates all discovered plugins."""
-        for name in self.loaded_meta:
+"""
+Activates all discovered plugins.""
+for name in self.loaded_meta:
             self.load_plugin(name)
 
 
     def deactivate(self, name: str) -> None:
-        """Deactivates a specific plugin by name."""
-        if name in self.active_plugins:
+"""
+Deactivates a specific plugin by name.""
+if name in self.active_plugins:
             plugin = self.active_plugins[name]
             if hasattr(plugin, "shutdown"):
                 plugin.shutdown()
@@ -281,19 +294,22 @@ class PluginCore(BaseCore):
 
 
     def register_plugin(self, name: str, plugin: Any) -> None:
-        """Manually registers a plugin instance."""
-        self.active_plugins[name] = plugin
+"""
+Manually registers a plugin instance.""
+self.active_plugins[name] = plugin
         self.logger.info("Plugin registered: %s", name)
 
 
     def get_plugin(self, name: str) -> Optional[Any]:
-        """Retrieves a registered plugin by name."""
-        return self.active_plugins.get(name)
+"""
+Retrieves a registered plugin by name.""
+return self.active_plugins.get(name)
 
 
     def shutdown_all(self) -> None:
-        """Gracefully shuts down all active plugins."""
-        for name, plugin in self.active_plugins.items():
+        ""
+Gracefully shuts down all active plugins.""
+for name, plugin in self.active_plugins.items():
             if hasattr(plugin, "shutdown"):
                 try:
                     plugin.shutdown()

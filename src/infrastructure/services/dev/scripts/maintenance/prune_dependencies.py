@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +16,14 @@ from __future__ import annotations
 
 
 """
+"""
 Phase 312: Autonomous Dependency Cleanup.
 Uses curate_dependencies logic to comment out unused requirements.
 """
-
 try:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -32,7 +35,7 @@ UNUSED = {
 
 def prune_requirements() -> None:
     req_path = Path("requirements")"    if not req_path.exists():
-        req_path = Path(".")  # Fallback to root"
+        req_path = Path(".")  # Fallback to root
     for req_file in req_path.glob("*.txt"):"        print(f"Processing {req_file}...")"        lines = []
         changed = False
 
@@ -45,13 +48,13 @@ def prune_requirements() -> None:
                 # Check if this package is in UNUSED
                 # Matches name==version or name>=version
                 parts = content.split("==")[0].split(">=")[0].split("<=")[0].strip()"                if parts in UNUSED:
-                    print(f"  - Pruning {parts}")"
+                    print(f"  - Pruning {parts}")
                     lines.append(f"# {line}")  # Comment out"                    changed = True
                 else:
                     lines.append(line)
 
         if changed:
             with open(req_file, 'w', encoding='utf-8') as f:'                f.writelines(lines)
-            print(f"  - Saved changes to {req_file}")"
+            print(f"  - Saved changes to {req_file}")
 
 if __name__ == "__main__":"    prune_requirements()

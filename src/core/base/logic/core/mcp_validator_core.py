@@ -14,8 +14,11 @@
 
 try:
     import re
+"""
 except ImportError:
-    import re
+
+"""
+import re
 
 try:
     from typing import List, Dict, Any
@@ -26,13 +29,14 @@ except ImportError:
 
 
 class McpValidatorCore:
-    """Validates MCP (Model Context Protocol) servers and tools for security.
+"""
+Validates MCP (Model Context Protocol) servers and tools for security.
 
     Harvested from .external/mcp-security:
     - Checks for prompt injection in descriptions.
     - Identifies high-risk tools.
     - Validates cleanup and lifecycle hooks.
-    """
+"""
     # Indicators of potential prompt injection or malicious instructions
     INJECTION_KEYWORDS = [
         r"ignore previous",
@@ -58,11 +62,12 @@ class McpValidatorCore:
     ]
 
     def validate_tool_definition(self, tool_def: Dict[str, Any]) -> List[str]:
-        """Runs multiple security checks on a tool definition.
+"""
+Runs multiple security checks on a tool definition.
 
         Returns a list of warning messages.
-        """
-        warnings: List[str] = []
+"""
+warnings: List[str] = []
         name = tool_def.get("name", "unknown")
         description = tool_def.get("description", "")
 
@@ -79,9 +84,9 @@ class McpValidatorCore:
         return warnings
 
     def check_metadata_isolation(self, mcp_server_config: Dict[str, Any]) -> bool:
-        """Ensures metadata (like API keys) is not exposed in the server schema."""
-
-        def find_secrets(obj: Any) -> bool:
+"""
+Ensures metadata (like API keys) is not exposed in the server schema.""
+def find_secrets(obj: Any) -> bool:
             if isinstance(obj, str):
                 if any(x in obj.lower() for x in ["key", "secret", "token"]):
                     return True
@@ -94,8 +99,9 @@ class McpValidatorCore:
         return not find_secrets(mcp_server_config)
 
     def validate_environment_variables(self, env_vars: Dict[str, str]) -> List[str]:
-        """Checks if environment variables passed to MCP servers are safe."""
-        risky_vars = ["PATH", "LD_PRELOAD", "PYTHONPATH"]
+"""
+Checks if environment variables passed to MCP servers are safe.""
+risky_vars = ["PATH", "LD_PRELOAD", "PYTHONPATH"]
         warnings: List[str] = []
         for var in risky_vars:
             if var in env_vars:

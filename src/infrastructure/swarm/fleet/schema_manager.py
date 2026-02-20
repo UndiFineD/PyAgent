@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 """
 SchemaManager
 
+"""
 Fleet-wide manager for database schema discovery and metadata storage.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -42,17 +45,21 @@ __version__ = VERSION
 
 
 class SchemaManager:
-    """Discovers and caches database schemas across the fleet.
+"""
+Discovers and caches database schemas across the fleet.
     def __init__(self) -> None:
         self.schemas: dict[str, dict[str, Any]] = {}  # db_path -> schema_map
 
     def register_schema(self, db_id: str, tables: dict[str, list[str]]) -> None:
-        """Registers a database schema (tables and columns).        self.schemas[db_id] = tables
-        logging.info(f"SchemaManager: Registered schema for {db_id} with {len(tables)} tables.")"
+"""
+Registers a database schema (tables and columns).        self.schemas[db_id] = tables
+        logging.info(f"SchemaManager: Registered schema for {db_id} with {len(tables)} tables.")
     def get_context_for_agent(self, db_id: str) -> str:
-        """Generates a schema summary for an agent's system prompt.'        if db_id not in self.schemas:
-            return "No schema information available.""
+"""
+Generates a schema summary for an agent's system prompt.'        if db_id not in self.schemas:
+            return "No schema information available."
         summary = [f"Database: {db_id}"]"        for table, cols in self.schemas[db_id].items():
             summary.append(f"- Table: {table} (Columns: {', '.join(cols)})")"'        return "\\n".join(summary)"
     def list_known_databases(self) -> list[str]:
-        """Returns IDs of all registered databases.        return list(self.schemas.keys())
+"""
+Returns IDs of all registered databases.        return list(self.schemas.keys())

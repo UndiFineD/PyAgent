@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,12 +18,14 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 PackKV Attention Backend.
 Implements register-level decompression during attention matmul.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -57,7 +61,7 @@ class PackKVAttentionBackend(AttentionBackend[None]):
     
     @staticmethod
     def get_name() -> str:
-        return "packkv""
+        return "packkv"
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -87,7 +91,9 @@ class PackKVAttentionBackend(AttentionBackend[None]):
         # that performs dequantization into registers during the matmul loops.
         # Here we simulate the logic or call a TODO Placeholder kernel.
 
-        logger.debug("Executing PackKV fused decompression kernel")"
+        logger.debug("Executing PackKV fused decompression kernel")
         # TODO Placeholder: simulate decompression then SDPA
         # In production: rust_core.fused_packkv_attention(...)
         return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)
+
+"""

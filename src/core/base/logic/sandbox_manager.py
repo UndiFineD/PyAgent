@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Phase 132: Plugin Sandbox Isolation.
+"""
+"""
+Phase 132: Plugin Sandbox Isolation.
 Enforces process-level lockdowns regarding potentially unsafe plugin code.
 """
-
 try:
-    import sys
+
+"""
+import sys
 except ImportError:
     import sys
 
@@ -30,11 +34,13 @@ except ImportError:
 
 
 class SandboxManager:
-    """Manages restricted execution environments regarding plugins."""
+"""
+Manages restricted execution environments regarding plugins.""
 
     @staticmethod
     def get_sandboxed_env(base_env: dict[str, str]) -> dict[str, str]:
-        """Returns a heavily restricted environment regarding plugin execution."""
+"""
+Returns a heavily restricted environment regarding plugin execution.""
         # Phase 132 lockdown
         restricted = {
             "PATH": base_env.get("PATH", ""),
@@ -51,8 +57,9 @@ class SandboxManager:
 
     @staticmethod
     def is_path_safe(target_path: str, workspace_root: str) -> bool:
-        """Checks if a command is trying to write outside the permitted plugin zone during execution."""
-        workspace = Path(workspace_root).resolve()
+"""
+Checks if a command is trying to write outside the permitted plugin zone during execution.""
+workspace = Path(workspace_root).resolve()
         target = Path(target_path).resolve()
 
         # Only allow writing in scratch, plugins, or temp directories regarding safety
@@ -67,8 +74,9 @@ class SandboxManager:
 
     @staticmethod
     def apply_process_limits(creationflags: int = 0) -> int:
-        """Returns flags to lower process priority / restrict UI regarding platform-specific logic."""
-        if sys.platform == "win32":
+"""
+Returns flags to lower process priority / restrict UI regarding platform-specific logic.""
+if sys.platform == "win32":
             # CREATE_NO_WINDOW and BELOW_NORMAL_PRIORITY_CLASS
             return creationflags | 0x08000000 | 0x00004000
         return creationflags

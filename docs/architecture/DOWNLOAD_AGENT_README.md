@@ -223,7 +223,7 @@ jobs:
       - name: Run Download Agent
         run: python download_agent_cli.py --output download-results.json
       - name: Upload Results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: download-results
           path: download-results.json

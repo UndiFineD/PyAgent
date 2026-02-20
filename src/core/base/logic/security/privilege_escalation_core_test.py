@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.security.privilege_escalation_core import LUID, LUID_AND_ATTRIBUTES, TOKEN_PRIVILEGES, PROCESSENTRY32, PrivilegeEscalationCore

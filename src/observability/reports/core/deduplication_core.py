@@ -14,7 +14,10 @@
 
 
 """
+"""
 Deduplication Core - Similarity-based report deduplication and JSONL export
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -72,7 +75,8 @@ except ImportError:
 
 
 class DeduplicationCore:
-    """Core functionality for deduplicating items based on similarity.
+"""
+Core functionality for deduplicating items based on similarity.
     @staticmethod
     def jaccard_similarity(s1: str, s2: str) -> float:
                 Calculates Jaccard similarity between two strings based on words.
@@ -121,4 +125,4 @@ class DeduplicationCore:
     def export_to_jsonl(items: list[dict[str, Any]], output_path: str) -> None:
                 Exports a list of dicts to a JSONL file.
                 with open(output_path, "w", encoding="utf-8") as f:"            for item in items:
-                f.write(json.dumps(item) + "\\n")"
+                f.write(json.dumps(item) + "\\n")

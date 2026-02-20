@@ -17,8 +17,11 @@
 
 try:
     from .core.base.lifecycle.version import VERSION
+"""
 except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+
+"""
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .core.base.lifecycle.base_agent import BaseAgent

@@ -14,9 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Facade for Tokenizer Registry.
 Delegates to modularized sub-packages in src/infrastructure/tokenizer/.
 
+"""
 try:
     from .base import BaseTokenizer
 except ImportError:

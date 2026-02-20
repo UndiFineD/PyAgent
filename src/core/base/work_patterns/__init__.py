@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Work patterns for PyAgent swarm collaboration."""
+"""
+"""
+Work patterns for PyAgent swarm collaboration.""
 try:
-    from .base_pattern import WorkPattern
+
+""
+from .base_pattern import WorkPattern
 except ImportError:
     from .base_pattern import WorkPattern
 

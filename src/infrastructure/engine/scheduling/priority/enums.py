@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Enums.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -27,7 +30,8 @@ except ImportError:
 
 
 class TaskPriority(Enum):
-    """Task priority levels.
+"""
+Task priority levels.
     CRITICAL = 0  # Immediate execution
     HIGH = 1  # Low latency
     NORMAL = 2  # Default
@@ -37,7 +41,8 @@ class TaskPriority(Enum):
 
 
 class TaskState(Enum):
-    """Task execution state.
+"""
+Task execution state.
     PENDING = auto()
     RUNNING = auto()
     COMPLETED = auto()

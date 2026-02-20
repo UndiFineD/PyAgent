@@ -16,8 +16,11 @@
 
 try:
     from typing import Any, Dict, Optional, Tuple
+"""
 except ImportError:
-    from typing import Any, Dict, Optional, Tuple
+
+"""
+from typing import Any, Dict, Optional, Tuple
 
 try:
     import numpy
@@ -37,11 +40,12 @@ except ImportError:
 
 
 class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]]):
-    """Processor for video inputs.  
+"""
+Processor for video inputs.  
     Processes a video as a sequence of frames, applies image processing to each frame, 
     and returns a tensor of shape (num_frames, channels, height, width) 
-    along with metadata."""  
-    modality = ModalityType.VIDEO
+    along with metadata.""
+modality = ModalityType.VIDEO
 
     def __init__(
         self,
@@ -66,10 +70,11 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        """Process raw video data into a tensor of frame features. 
+"""
+Process raw video data into a tensor of frame features. 
         Expects a tuple of (frames, metadata), where frames is a numpy array of shape 
-        (total_frames, height, width, channels) and metadata is a dict containing video info like fps."""
-        frames, meta = data
+        (total_frames, height, width, channels) and metadata is a dict containing video info like fps.""
+frames, meta = data
         num_frames = kwargs.get("num_frames", self.num_frames)
         total_frames = len(frames)
         if total_frames > num_frames:
@@ -109,8 +114,9 @@ class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]])
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,
     ) -> int:
-        """Calculate the number of placeholder tokens needed for a video input based on the number of frames and patching."""
-        num_frames = kwargs.get("num_frames", self.num_frames)
+        ""
+Calculate the number of placeholder tokens needed for a video input based on the number of frames and patching.""
+num_frames = kwargs.get("num_frames", self.num_frames)
         h, w = self.target_size
         tokens_per_frame = (h // self.patch_size) * (w // self.patch_size)
         return num_frames * tokens_per_frame

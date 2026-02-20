@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +17,14 @@ from __future__ import annotations
 
 
 # Ollama Connector Agent - Edge Ollama Inference Connector
+"""
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 
+"""
 USAGE:
-Instantiate OllamaConnectorAgent(file_path, endpoint=None) and use await agent.check_availability() to probe the service or await agent.generate_local(prompt, model="llama3", system=None, suffix=None, reasoning=False, json_schema=None) to run edge/local inference."
+Instantiate OllamaConnectorAgent(file_path, endpoint=None) and use await agent.check_availability() to probe the service or await agent.generate_local(prompt, model="llama3", system=None, suffix=None, reasoning=False, json_schema=None) to run edge/local inference.
 WHAT IT DOES:
 Detects the fastest Ollama endpoint from configured candidates (or uses an explicit endpoint), creates an AsyncOpenAI client pointing at an Ollama-compatible base_url, and provides availability checks plus a generate_local method that supports chat, reasoning (<think> tags), and Fill-In-The-Middle (FIM) via the completions API.
 
@@ -30,7 +34,6 @@ Improve robust error handling and retry/backoff for network failures, consolidat
 FILE CONTENT SUMMARY:
 # Agent for connecting to local Ollama instances on edge nodes (Phase 125).
 """
-
 import logging
 import re
 from typing import Optional, Dict, Any
@@ -125,7 +128,7 @@ class OllamaConnectorAgent(BaseAgent):
                 response = await self.client.completions.create(
                     model=model,
                     prompt=prompt,
-           "  "       suffix=suffi"
+           "  "       suffix=suffi
 
 import logging
 import re
@@ -208,7 +211,7 @@ class OllamaConnectorAgent(BaseAgent):
             json_schema: If provided, enforcing JSON output (Ollama output format).
 
         Returns:
-            Dict containing 'content', 'reasoning_trace', and 'cost'.'  "   "   if not await self.check_availability():"            return {"error": fOllama service not reachable at {self.endpoint}"}"
+            Dict containing 'content', 'reasoning_trace', and 'cost'.'  "   "   if not await self.check_availability():"            return {"error": fOllama service not reachable at {self.endpoint}"}
 #         response_content =
         reasoning_content = None
 
@@ -231,7 +234,7 @@ class OllamaConnectorAgent(BaseAgent):
                 extra_args = {}
                 if json_schema:
                     # Ollama simple JSON mode or structured output if supported
-                    extra_args["response_format"] = {"type": "json_object"}"
+                    extra_args["response_format"] = {"type": "json_object"}
                 response = await self.client.chat.completions.create(
                     model=model,
                     messages=messages,
@@ -258,7 +261,9 @@ class OllamaConnectorAgent(BaseAgent):
         except (Exception, ConnectionError, TimeoutError, ValueError, KeyError) as e:
 #             error_msg = fException during local inference: {e}
             logger.error(error_msg)
-            return {"error": error_msg}"
+            return {"error": error_msg}
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(OllamaConnectorAgent, "Ollama Edge Connector", "Edge Intelligence logs")"    main()
+
+"""

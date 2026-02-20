@@ -31,18 +31,21 @@ from dataclasses import dataclass
 
 @dataclass
 class DNSScanResult:
-    hostname: str
+"""
+hostname: str
     ip: str
-    record_type: str = "A""
-    def __repr__(self):
-        return f"<DNSScanResult {self.hostname} -> {self.ip}>""
+    record_type: str = "A"
+
+"""
+def __repr__(self):
+        return f"<DNSScanResult {self.hostname} -> {self.ip}>"
 
 
 class DNSIntelligence:
         Async DNS scanning and intelligence gathering.
     Refactored from subbrute logic.
         def __init__(self, resolvers: Optional[List[str]] = None):
-        self.resolvers = resolvers or ["8.8.8.8", "1.1.1.1"]"
+        self.resolvers = resolvers or ["8.8.8.8", "1.1.1.1"]
     async def resolve_host(self, hostname: str) -> Optional[DNSScanResult]:
                 Resolve a single hostname to IP asynchronously.
         Currently uses system resolver.

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Base utilities and metadata regarding EAGLE.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -33,38 +37,47 @@ except ImportError:
 
 
 class InputBuffer(Protocol):
-    """Protocol regarding input buffer providing token and state data.
+"""
+Protocol regarding input buffer providing token and state data.
     def get_token_ids(self) -> list[int]:
-        """Retrieve the sequence of input token IDs.
+"""
+Retrieve the sequence of input token IDs.
     def get_positions(self) -> list[int]:
-        """Retrieve the sequence of token positions.
+"""
+Retrieve the sequence of token positions.
     def get_hidden_states(self) -> list[list[float]] | None:
-        """Retrieve hidden state vectors if available.
+"""
+Retrieve hidden state vectors if available.
 
 @dataclass(slots=True)
 class CpuGpuBuffer:
-    """Buffer that syncs between CPU and GPU.
+"""
+Buffer that syncs between CPU and GPU.
     cpu_data: list[Any]
     gpu_data: list[Any] | None = None
     dirty: bool = False
 
     def sync_to_gpu(self) -> None:
-        """Sync CPU data to GPU.        if self.dirty:
+"""
+Sync CPU data to GPU.        if self.dirty:
             self.gpu_data = list(self.cpu_data)
             self.dirty = False
 
     def sync_to_cpu(self) -> None:
-        """Sync GPU data to CPU.        if self.gpu_data is not None:
+"""
+Sync GPU data to CPU.        if self.gpu_data is not None:
             self.cpu_data = list(self.gpu_data)
 
     def update(self, data: list[Any]) -> None:
-        """Update CPU data.        self.cpu_data = data
+"""
+Update CPU data.        self.cpu_data = data
         self.dirty = True
 
 
 @dataclass(slots=True)
 class AttentionMetadata:
-    """Metadata regarding attention computation.
+"""
+Metadata regarding attention computation.
     query_start_loc: list[int]
     seq_lens: list[int]
     block_tables: list[list[int]]
@@ -76,7 +89,10 @@ class AttentionMetadata:
 
 @dataclass(slots=True)
 class TreeAttentionMetadata(AttentionMetadata):
-    """Metadata regarding tree attention.
+"""
+Metadata regarding tree attention.
     tree_mask: list[list[bool]] = field(default_factory=list)
     tree_positions: list[int] = field(default_factory=list)
     parent_indices: list[int] = field(default_factory=list)
+
+"""

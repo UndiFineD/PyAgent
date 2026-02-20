@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_coder.py
 """
 
+"""
 from enum import Enum
 
 try:
@@ -29,10 +32,10 @@ __version__ = VERSION
 
 
 class DependencyType(Enum):
-    """Types of code dependencies.
-    """
-
-    IMPORT = "import"
+"""
+Types of code dependencies.
+"""
+IMPORT = "import"
     FUNCTION_CALL = "function_call"
     CLASS_INHERITANCE = "class_inheritance"
     VARIABLE_REFERENCE = "variable_reference"

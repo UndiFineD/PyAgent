@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Multimodal Mixin for BaseAgent.
+"""
+"""
+Multimodal Mixin for BaseAgent.
 Provides support for interleaved modality tags and streaming sessions.
 """
-
 try:
-    from typing import Any, Dict, List
+
+"""
+from typing import Any, Dict, List
 except ImportError:
     from typing import Any, Dict, List
 
@@ -31,17 +35,19 @@ except ImportError:
 
 
 class MultimodalMixin:
-    """Mixin to provide multimodal capabilities to agents.
+"""
+Mixin to provide multimodal capabilities to agents.
     Enables handling of interleaved channel tracks and feedback loops.
-    """
-    def __init__(self, **_kwargs: Any) -> None:
+"""
+def __init__(self, **_kwargs: Any) -> None:
         self.multimodal_core = MultimodalCore()
         # Initialize a default stream session for the agent
         self.multimodal_session = MultimodalStreamSession(self.multimodal_core)
 
     def get_multimodal_instructions(self) -> str:
-        """Returns the system instructions for the multimodal tag system."""
-        channels: str = ", ".join(self.multimodal_core.active_channels.keys())
+"""
+Returns the system instructions for the multimodal tag system.""
+channels: str = ", ".join(self.multimodal_core.active_channels.keys())
         return (
             "MODALITY PROTOCOL ENABLED.\n"
             "You can interleave modality tags in your output using the format <Type:Channel_ID>.\n"
@@ -52,9 +58,11 @@ class MultimodalMixin:
         )
 
     def process_multimodal_output(self, raw_output: str) -> List[Dict[str, Any]]:
-        """Processes agent output through the multimodal feedback loop and filter."""
-        return self.multimodal_session.filter_response(raw_output)
+"""
+Processes agent output through the multimodal feedback loop and filter.""
+return self.multimodal_session.filter_response(raw_output)
 
     def set_output_track(self, modality: str, channel: str) -> None:
-        """Switch the active output track for a modality."""
-        self.multimodal_session.set_output_channel(modality, channel)
+        ""
+Switch the active output track for a modality.""
+self.multimodal_session.set_output_channel(modality, channel)

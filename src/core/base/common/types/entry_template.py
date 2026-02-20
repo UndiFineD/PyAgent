@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_changes.py"""
+"""
+"""
+Auto-extracted class from agent_changes.py""
 
+"""
 from dataclasses import dataclass, field
 
 try:
@@ -30,15 +33,16 @@ __version__ = VERSION
 
 @dataclass
 class EntryTemplate:
-    """Template for changelog entries with TODO: Placeholders.
+"""
+Template for changelog entries with TODO: Placeholders.
 
     Attributes:
         name: Template name.
         template_text: Template with TODO: Placeholders.
         TODO: Placeholders: List of TODO: Placeholder names.
         description: Description of the template.
-    """
-    name: str
+    ""
+name: str
     template_text: str
     todo_placeholders: list[str] = field(default_factory=lambda: [])
     description: str = ""

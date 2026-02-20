@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Utils.py module.
 """
-
 try:
-    from typing import TYPE_CHECKING
+
+"""
+from typing import TYPE_CHECKING
 except ImportError:
     from typing import TYPE_CHECKING
 
@@ -37,7 +41,8 @@ if TYPE_CHECKING:
 
 
 def pack_int4(data: NDArray[np.int8]) -> NDArray[np.int8]:
-    """Packs 8-bit integers into 4-bit representation (two per byte).    flat = data.flatten()
+"""
+Packs 8-bit integers into 4-bit representation (two per byte).    flat = data.flatten()
     if len(flat) % 2 != 0:
         flat = np.pad(flat, (0, 1), constant_values=0)
 
@@ -49,7 +54,8 @@ def pack_int4(data: NDArray[np.int8]) -> NDArray[np.int8]:
 
 
 def unpack_int4(packed: NDArray[np.int8]) -> NDArray[np.int8]:
-    """Unpacks 4-bit integers from packed 8-bit bytes.    flat = packed.flatten()
+"""
+Unpacks 4-bit integers from packed 8-bit bytes.    flat = packed.flatten()
     lower = flat & 0x0F
     upper = (flat >> 4) & 0x0F
 
@@ -68,7 +74,8 @@ def compute_scales_minmax(
     bits: int = 8,
     symmetric: bool = True,
 ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
-    """Computes quantization scales and zero-points using min-max range.    qmax = (1 << (bits - 1)) - 1 if symmetric else (1 << bits) - 1
+"""
+Computes quantization scales and zero-points using min-max range.    qmax = (1 << (bits - 1)) - 1 if symmetric else (1 << bits) - 1
     qmin = -(1 << (bits - 1)) if symmetric else 0
 
     if symmetric:
@@ -89,7 +96,8 @@ def get_quantization_error(
     original: NDArray[np.float32],
     qtensor: QuantizedTensor,
 ) -> dict[str, float]:
-    """Calculates error metrics between original and dequantized tensors.    dequant = qtensor.dequantize()
+"""
+Calculates error metrics between original and dequantized tensors.    dequant = qtensor.dequantize()
 
     mse = np.mean((original - dequant) ** 2)
     mae = np.mean(np.abs(original - dequant))
@@ -101,3 +109,5 @@ def get_quantization_error(
 
     return {
         "mse": float(mse),"        "mae": float(mae),"        "max_error": float(max_error),"        "snr_db": float(snr),"        "compression_ratio": float(qtensor.compression_ratio),"    }
+
+"""

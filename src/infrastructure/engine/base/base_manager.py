@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Base manager.py module.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -39,9 +43,12 @@ __version__ = VERSION
 
 
 class BaseManager(ABC):
-    """Base class for all infrastructure manager services.
+"""
+Base class for all infrastructure manager services.
     def __init__(self, workspace_root: str = None) -> None:
         self.workspace_root = workspace_root
-        logging.debug(f"{self.__class__.__name__} initialized.")"
+        logging.debug(f"{self.__class__.__name__} initialized.")
     def shutdown(self) -> None:
-        """Gracefully shutdown the manager.        logging.debug(f"{self.__class__.__name__} shutting down.")"
+"""
+Gracefully shutdown the manager.        logging.debug(f"{self.__class__.__name__} shutting down.")
+"""

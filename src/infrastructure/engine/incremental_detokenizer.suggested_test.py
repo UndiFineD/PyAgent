@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.incremental_detokenizer.suggested import StopMatch, IncrementalDetokenizer, NoOpDetokenizer, BaseIncrementalDetokenizer, FastIncrementalDetokenizer, SlowIncrementalDetokenizer, check_stop_strings, check_stop_strings_rust, validate_utf8, validate_utf8_rust

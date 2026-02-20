@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+""
+Parser-safe stub: Browser outline helpers (conservative).
+
+Minimal, side-effect free implementation to restore importability.
+""
+
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional
+
+
+@dataclass
+class BrowserElement:
+    id: str
+    tag: str
+    text: str
+    attributes: Dict[str, str]
+
+
+class BrowserOutlineCore:
+    def __init__(self) -> None:
+        self.elements: Dict[str, BrowserElement] = {}
+        self._id_counter = 0
+
+    def generate_outline(self, raw_elements: List[Dict[str, Any]]) -> str:
+        self.elements.clear()
+        self._id_counter = 0
+        lines: List[str] = []
+        for el in raw_elements:
+            self._id_counter += 1
+            el_id = f"e{self._id_counter}"
+            text = (el.get("text") or "").strip()
+            lines.append(f"[{el_id}] {el.get('tag','element')} \"{text}\"")
+        return "\n".join(lines)
+
+
+__all__ = ["BrowserElement", "BrowserOutlineCore"]

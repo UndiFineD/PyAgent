@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Minimal Agent Pool Manager used by tests."""
+"""
+"""
+Minimal Agent Pool Manager used by tests.""
 
+"""
 import json
 import logging
 import time
@@ -81,8 +85,9 @@ class AgentPoolManager:
             logger.exception("Failed to save manifest")
 
     def get_pool_stats(self) -> Dict[str, Any]:
-        """Get statistics about the agent pool"""
-        success_rates = [m.success_rate for m in self.agent_pool.values()]
+"""
+Get statistics about the agent pool""
+success_rates = [m.success_rate for m in self.agent_pool.values()]
         avg_success = sum(success_rates) / len(success_rates) if success_rates else 0.0
         return {
             "total_agents": len(self.agent_pool),

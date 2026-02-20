@@ -13,7 +13,8 @@
 # limitations under the License.
 
 
-"""Cognitive processing module for advanced reasoning and decision-making.""""
+"""
+Cognitive processing module for advanced reasoning and decision-making.""""
 Provides cognitive frameworks for agent reasoning, planning, and knowledge
 representation across the PyAgent ecosystem.
 
@@ -24,3 +25,9 @@ except ImportError:
 
     VIBE_CODING_2025_TRACKS as VIBE_CODING_2025_TRACKS
 )
+
+"""
+
+""
+
+"""

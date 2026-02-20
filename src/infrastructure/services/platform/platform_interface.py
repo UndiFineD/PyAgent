@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,12 +19,14 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Facade for Platform Abstraction.
 Delegates to modularized sub-packages in src/infrastructure/platform/.
 """
-
 try:
-    from typing import Optional
+
+"""
+from typing import Optional
 except ImportError:
     from typing import Optional
 
@@ -113,3 +117,5 @@ def select_attention_backend(capability: Optional[DeviceCapability] = None) -> A
     if capability is None:
         capability = get_device_capability()
     return get_current_platform().select_attention_backend(capability)
+
+"""

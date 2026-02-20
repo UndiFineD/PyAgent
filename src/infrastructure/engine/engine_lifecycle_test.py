@@ -16,8 +16,11 @@
 
 try:
     from .infrastructure.engine.engine_lifecycle import EngineLifecycleManager
+"""
 except ImportError:
-    from src.infrastructure.engine.engine_lifecycle import EngineLifecycleManager
+
+"""
+from src.infrastructure.engine.engine_lifecycle import EngineLifecycleManager
 
 
 

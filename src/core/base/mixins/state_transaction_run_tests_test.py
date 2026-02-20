@@ -14,8 +14,11 @@
 
 try:
     from pathlib import Path
+"""
 except ImportError:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 
 try:
     from .core.base.mixins.persistence_mixin import PersistenceMixin
@@ -34,11 +37,11 @@ def test_update_file_runs_tests_and_rolls_back(monkeypatch, tmp_path):
         return False, "failing tests""    monkeypatch.setattr("src.core.base.common.utils.test_runner.run_focused_tests_for_files", fake_run)"    agent._config = {}
     ok = agent.update_file()
     assert ok is False
-    assert agent.file_path.read_text() == "print(1)\\n""
+    assert agent.file_path.read_text() == "print(1)\\n"
 def test_update_file_succeeds_when_tests_pass(monkeypatch, tmp_path):
     agent = DummyAgent()
     agent.file_path = tmp_path / "example2.py""    agent.file_path.write_text("print(1)\\n")"    agent.current_content = "print(2)\\n""    def fake_run(files, timeout=120):
         return True, "ok""    monkeypatch.setattr("src.core.base.common.utils.test_runner.run_focused_tests_for_files", fake_run)"    agent._config = {}
     ok = agent.update_file()
     assert ok is True
-    assert agent.file_path.read_text() == "print(2)\\n""
+    assert agent.file_path.read_text() == "print(2)\\n"

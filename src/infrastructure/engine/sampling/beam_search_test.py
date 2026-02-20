@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.sampling.beam_search import BeamSearchConfig, BeamHypothesis, BeamSearchSampler

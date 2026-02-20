@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Sandbox core.py module.
 """
-
 try:
-    import typing
+
+"""
+import typing
 except ImportError:
     import typing
 
@@ -34,7 +37,8 @@ except ImportError:
 
 @dataclass(frozen=True)
 class SandboxConfig:
-    """Immutable configuration for agent sandboxing.
+"""
+Immutable configuration for agent sandboxing.
     cpu_limit: float = 0.5
 
     memory_mb: int = 512
@@ -45,10 +49,13 @@ class SandboxConfig:
 
 
 class SandboxCore:
-    """Pure logic for containerized agent runtimes and resource isolation.""""    Handles enforcement logic, quota calculations, and security constraints.
+"""
+Pure logic for containerized agent runtimes and resource isolation.""""
+Handles enforcement logic, quota calculations, and security constraints.
     
     def validate_code_execution(self, code: str, config: SandboxConfig) -> dict[str, typing.Any]:
-        """Validates if code execution fits within sandbox constraints.        issues = []
+"""
+Validates if code execution fits within sandbox constraints.        issues = []
         if "os.system" in code or "subprocess" in code:"            issues.append("External process execution forbidden.")"
         if not config.network_enabled and ("requests" in code or "socket" in code):"            issues.append("Network access disabled for this sandbox.")"
         return {
@@ -56,10 +63,18 @@ class SandboxCore:
         }
 
     def calculate_resource_usage(self, start_cpu: float, end_cpu: float, duration: float) -> float:
-        """Calculates normalized resource usage score.        if duration <= 0:
+"""
+Calculates normalized resource usage score.        if duration <= 0:
             return 0.0
         return (end_cpu - start_cpu) / duration
 
     def get_security_profile(self, risk_level: str) -> SandboxConfig:
-        """Returns sandbox config based on risk assessment.        if risk_level == "high":"            return SandboxConfig(cpu_limit=0.1, memory_mb=128, network_enabled=False)
+"""
+Returns sandbox config based on risk assessment.        if risk_level == "high":"            return SandboxConfig(cpu_limit=0.1, memory_mb=128, network_enabled=False)
         return SandboxConfig()
+
+"""
+
+""
+
+"""

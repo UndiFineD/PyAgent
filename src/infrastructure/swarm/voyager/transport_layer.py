@@ -15,10 +15,12 @@
 
 
 """
+"""
 Transport layer.py module.
 # Phase 319: Multi-Cloud Teleportation (ZMQ Transport Layer)
 """
 
+"""
 import asyncio
 import os
 import sys
@@ -42,11 +44,11 @@ logger = StructuredLogger(__name__)
 
 
 class VoyagerTransport:
-    """VoyagerTransport: High-performance P2P message bus using ZeroMQ.
+"""
+VoyagerTransport: High-performance P2P message bus using ZeroMQ.
     Uses DEALER/ROUTER pattern for asynchronous bi-directional communication.
-    """
-
-    def __init__(self, host: str = "0.0.0.0", port: int = 5555, encryption_key: Optional[bytes] = None) -> None:
+"""
+def __init__(self, host: str = "0.0.0.0", port: int = 5555, encryption_key: Optional[bytes] = None) -> None:
         
         self.host: str = host
         self.port: int = port
@@ -92,8 +94,9 @@ class VoyagerTransport:
 
 
     async def start_server(self, handler: Callable[[Dict[str, Any]], Awaitable[Dict[str, Any]]]) -> None:
-        """Starts the ROUTER socket to listen for incoming peer requests."""
-        self.router = self.ctx.socket(zmq.ROUTER)
+"""
+Starts the ROUTER socket to listen for incoming peer requests.""
+self.router = self.ctx.socket(zmq.ROUTER)
         self.router.setsockopt(zmq.LINGER, 0)
         try:
             self.router.bind(f"tcp://{self.host}:{self.port}")
@@ -150,8 +153,9 @@ class VoyagerTransport:
         timeout: int = 5000,
         peer_id: Optional[str] = None
     ) -> Optional[Dict[str, Any]]:
-        """Sends a message to a specific peer using a DEALER socket."""
-        dealer: zmq.asyncio.Socket = self.ctx.socket(zmq.DEALER)
+"""
+Sends a message to a specific peer using a DEALER socket.""
+dealer: zmq.asyncio.Socket = self.ctx.socket(zmq.DEALER)
         dealer.setsockopt(zmq.LINGER, 0)
         target: str = f"tcp://{peer_address}:{peer_port}"
         try:
@@ -179,8 +183,9 @@ class VoyagerTransport:
 
 
     def stop(self) -> None:
-        """Stops the transport layer."""
-        self.running = False
+        ""
+Stops the transport layer.""
+self.running = False
         if self.router and not self.router.closed:
             self.router.close(linger=0)
         if self.ctx:

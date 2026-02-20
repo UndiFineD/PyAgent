@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Mistral tokenizer implementation.
 """
 
+"""
 from typing import List, Optional, Sequence
 
 from .base import BaseTokenizer
@@ -27,14 +31,16 @@ from .models import TokenizerConfig
 
 
 class MistralTokenizer(BaseTokenizer):
-    """Mistral tokenizer wrapper.
+"""
+Mistral tokenizer wrapper.
     def __init__(self, config: TokenizerConfig) -> None:
         super().__init__(config)
         self._tokenizer = None
         self._load_tokenizer()
 
     def _load_tokenizer(self) -> None:
-        """Load Mistral tokenizer.        try:
+"""
+Load Mistral tokenizer.        try:
             # pylint: disable=import-outside-toplevel
             from mistral_common.tokens.tokenizers.mistral import \
                 MistralTokenizer as MT
@@ -67,7 +73,7 @@ class MistralTokenizer(BaseTokenizer):
     @property
     def pad_token_id(self) -> Optional[int]:
         if hasattr(self._tokenizer, "pad_id"):"            return self._tokenizer.pad_id
-        return getattr(self._tokenizer, "pad_token_id", None)"
+        return getattr(self._tokenizer, "pad_token_id", None)
     def encode(
         self,
         text: str,
@@ -84,3 +90,5 @@ class MistralTokenizer(BaseTokenizer):
         skip_special_tokens: bool = True,
     ) -> str:
         return self._tokenizer.decode(list(token_ids))
+
+"""

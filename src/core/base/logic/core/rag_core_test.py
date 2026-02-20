@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal parser-safe tests for RAGCore."""
-
+""
+Minimal parser-safe tests for RAGCore.""
 import importlib
 
 

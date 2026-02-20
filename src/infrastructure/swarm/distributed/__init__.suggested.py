@@ -15,8 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 
+"""
 Distributed infrastructure for parallel inference.
 
+"""
 Phase 33 modules:
 - TensorParallelGroup: Tensor parallel coordination
 - NCCLCommunicator: NCCL collective operations

@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Deadline.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -28,7 +31,7 @@ from typing import Callable, List, Optional, Tuple, TypeVar
 from .enums import TaskPriority, TaskState
 from .models import ScheduledTask, TaskStats
 
-R = TypeVar("R")"
+R = TypeVar("R")
 
 
 class DeadlineScheduler:
@@ -37,7 +40,8 @@ class DeadlineScheduler:
     Always executes the task with the nearest deadline first.
     
     def __init__(self, workers: int = 4) -> None:
-        """Initialize EDF scheduler.        self._workers: int = workers
+"""
+Initialize EDF scheduler.        self._workers: int = workers
         self._queue: List[Tuple[float, int, ScheduledTask]] = []
         self._lock: LockType = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
@@ -92,7 +96,8 @@ class DeadlineScheduler:
         return future
 
     def _worker_loop(self) -> None:
-        """Worker thread loop.        while self._running:
+"""
+Worker thread loop.        while self._running:
             with self._not_empty:
                 while self._running and not self._queue:
                     self._not_empty.wait(timeout=0.1)
@@ -121,11 +126,13 @@ class DeadlineScheduler:
                     self._stats.failed += 1
 
     def shutdown(self, wait: bool = True) -> None:
-        """Shutdown scheduler.        self._running = False
+"""
+Shutdown scheduler.        self._running = False
         with self._not_empty:
             self._not_empty.notify_all()
         self._executor.shutdown(wait=wait)
 
     @property
     def stats(self) -> TaskStats:
-        """Scheduler statistics.        return self._stats
+"""
+Scheduler statistics.        return self._stats

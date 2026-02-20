@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     from dataclasses import dataclass, field
+"""
 except ImportError:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 
 try:
     from typing import Dict, FrozenSet, List, Optional, Set, Tuple
@@ -34,15 +39,17 @@ except ImportError:
 
 @dataclass(frozen=True)
 class FSMState:
-    """Immutable representation of FSM state."""
-    state_id: int
+"""
+Immutable representation of FSM state.""
+state_id: int
     is_accepting: bool = False
     is_initial: bool = False
     transitions: Tuple[Tuple[str, int], ...] = field(default_factory=tuple)  # (char, next_state)
 
 
     def get_transition(self, char: str) -> Optional[int]:
-        """Get next state regarding a character transition."""
+"""
+Get next state regarding a character transition.""
         # Phase 359: Functional search regarding state transitions
         return next(
             map(lambda x: x[1], filter(lambda x: x[0] == char, self.transitions)),
@@ -51,14 +58,16 @@ class FSMState:
 
 
     def get_all_transitions(self) -> Dict[str, int]:
-        """Get all transitions as a dict."""
-        return dict(self.transitions)
+"""
+Get all transitions as a dict.""
+return dict(self.transitions)
 
 
 @dataclass
 class FSMTransitionTable:
-    """Transition table regarding efficient FSM execution."""
-    num_states: int
+"""
+Transition table regarding efficient FSM execution.""
+num_states: int
     initial_state: int
     accepting_states: FrozenSet[int]
 
@@ -76,8 +85,9 @@ class FSMTransitionTable:
 
 
     def add_transition(self, from_state: int, char: str, to_state: int) -> None:
-        """Add a transition."""
-        char_code = ord(char) if len(char) == 1 else ord(char[0])
+"""
+Add a transition.""
+char_code = ord(char) if len(char) == 1 else ord(char[0])
         if 0 <= char_code < 256:
             self.transition_table[from_state, char_code] = to_state
 
@@ -87,27 +97,31 @@ class FSMTransitionTable:
 
 
     def get_next_state(self, current_state: int, char: str) -> int:
-        """Get next state regarding a character. Returns -1 if invalid."""
-        char_code = ord(char) if len(char) == 1 else ord(char[0])
+"""
+Get next state regarding a character. Returns -1 if invalid.""
+char_code = ord(char) if len(char) == 1 else ord(char[0])
         if 0 <= char_code < 256:
             return int(self.transition_table[current_state, char_code])
         return -1
 
 
     def is_accepting(self, state: int) -> bool:
-        """Check if state is accepting."""
-        return state in self.accepting_states
+"""
+Check if state is accepting.""
+return state in self.accepting_states
 
 
     def get_allowed_chars(self, state: int) -> Set[str]:
-        """Get allowed characters at a state."""
-        return self.allowed_chars.get(state, set())
+"""
+Get allowed characters at a state.""
+return self.allowed_chars.get(state, set())
 
 
 @dataclass
 class TokenMask:
-    """Token-level constraint mask."""
-    vocab_size: int
+"""
+Token-level constraint mask.""
+vocab_size: int
     mask: np.ndarray = field(default=None)
 
 
@@ -117,46 +131,53 @@ class TokenMask:
 
 
     def allow_only(self, token_ids: Set[int]) -> None:
-        """Set mask regarding allowed tokens."""
-        self.mask.fill(False)
+"""
+Set mask regarding allowed tokens.""
+self.mask.fill(False)
         for tid in token_ids:
             if 0 <= tid < self.vocab_size:
                 self.mask[tid] = True
 
 
     def disallow(self, token_ids: Set[int]) -> None:
-        """Disallow regarding specific tokens."""
-        for tid in token_ids:
+"""
+Disallow regarding specific tokens.""
+for tid in token_ids:
             if 0 <= tid < self.vocab_size:
                 self.mask[tid] = False
 
 
     def apply_to_logits(self, logits: np.ndarray) -> np.ndarray:
-        """Apply mask to logits (set disallowed to -inf)."""
-        result = logits.copy()
+"""
+Apply mask to logits (set disallowed to -inf).""
+result = logits.copy()
         result[~self.mask] = float("-inf")
         return result
 
 
     def get_allowed_count(self) -> int:
-        """Get number of allowed tokens."""
-        return int(np.sum(self.mask))
+"""
+Get number of allowed tokens.""
+return int(np.sum(self.mask))
 
 
     def get_allowed_tokens(self) -> List[int]:
-        """Get list of allowed token IDs."""
-        return list(np.where(self.mask)[0])
+"""
+Get list of allowed token IDs.""
+return list(np.where(self.mask)[0])
 
 
     def combine_and(self, other: "TokenMask") -> "TokenMask":
-        """Combine masks with AND."""
-        result = TokenMask(self.vocab_size)
+"""
+Combine masks with AND.""
+result = TokenMask(self.vocab_size)
         result.mask = self.mask & other.mask
         return result
 
 
     def combine_or(self, other: "TokenMask") -> "TokenMask":
-        """Combine masks with OR."""
-        result = TokenMask(self.vocab_size)
+"""
+Combine masks with OR.""
+result = TokenMask(self.vocab_size)
         result.mask = self.mask | other.mask
         return result

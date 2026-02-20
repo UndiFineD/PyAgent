@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.ai_agent_orchestration_core import MessagePart, UIMessage, ConversationThread, ToolDefinition, AgentConfig, StreamingContext, MemoryProvider, ToolProvider, StreamingProvider, CodeExecutionProvider, AIAgentOrchestrationCore

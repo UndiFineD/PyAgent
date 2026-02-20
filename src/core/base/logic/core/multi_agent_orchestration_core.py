@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Multi-Agent Orchestration Core
+"""
+"""
+Multi-Agent Orchestration Core
 Implements structured multi-agent coordination patterns inspired by CrewAI and OpenAI Agents SDK.
 Provides deterministic agent interactions with Pydantic-based structured outputs.
 """
 
+"""
 import asyncio
 import logging
 from typing import Any, AsyncGenerator, Dict, List, Optional, TypeVar
@@ -31,39 +35,51 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 logger = logging.getLogger(__name__)
 
-T = TypeVar('T', bound=BaseModel)'
+T = TypeVar('T', bound=BaseModel)
 
 
 class AgentTask(BaseModel):
-    """Represents a task to be executed by an agent."""description: str = Field(..., description="Human-readable task description")"    priority: int = Field(default=1, ge=1, le=10, description="Task priority (1-10)")"    context: Dict[str, Any] = Field(default_factory=dict, description="Additional context data")"    dependencies: List[str] = Field(default_factory=list, description="Task IDs this task depends on")"
+"""
+Represents a task to be executed by an agent.""
+description: str = Field(..., description="Human-readable task description")"    priority: int = Field(default=1, ge=1, le=10, description="Task priority (1-10)")"    context: Dict[str, Any] = Field(default_factory=dict, description="Additional context data")"    dependencies: List[str] = Field(default_factory=list, description="Task IDs this task depends on")"
 
 
 class AgentResult(BaseModel):
-    """Standardized result format from agent execution."""task_id: str = Field(..., description="ID of the completed task")"    success: bool = Field(..., description="Whether the task completed successfully")"    output: Any = Field(..., description="The agent's output/result")"'    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")"    error_message: Optional[str] = Field(default=None, description="Error message if task failed")"
+"""
+Standardized result format from agent execution.""
+task_id: str = Field(..., description="ID of the completed task")"    success: bool = Field(..., description="Whether the task completed successfully")"    output: Any = Field(..., description="The agent's output/result")"'    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")"    error_message: Optional[str] = Field(default=None, description="Error message if task failed")
 
 
 class OrchestrationPlan(BaseModel):
-    """Plan for multi-agent task execution."""tasks: List[AgentTask] = Field(..., description="List of tasks to execute")"    execution_order: List[str] = Field(..., description="Order of task execution by task ID")"    parallel_groups: List[List[str]] = Field(default_factory=list,
-                                             description="Groups of tasks that can run in parallel")"
+"""
+Plan for multi-agent task execution.""
+tasks: List[AgentTask] = Field(..., description="List of tasks to execute")"    execution_order: List[str] = Field(..., description="Order of task execution by task ID")"    parallel_groups: List[List[str]] = Field(default_factory=list,
+                                             description="Groups of tasks that can run in parallel")
 
 
 class AgentCoordinator(ABC):
-    """Abstract base class for agent coordinators."""
+"""
+Abstract base class for agent coordinators.""
     @abstractmethod
     async def execute_task(self, task: AgentTask, context: CascadeContext) -> AgentResult:
-        """Execute a single task using appropriate agents."""pass
+"""
+Execute a single task using appropriate agents.""
+pass
 
     @abstractmethod
     async def plan_orchestration(self, objective: str, context: CascadeContext) -> OrchestrationPlan:
-        """Create an orchestration plan for achieving an objective."""pass
+"""
+Create an orchestration plan for achieving an objective.""
+pass
 
 
 
 class MultiAgentOrchestrationCore(BaseCore):
-    """Core for coordinating multiple agents in structured workflows.
+"""
+Core for coordinating multiple agents in structured workflows.
     Inspired by CrewAI patterns and OpenAI Agents SDK structured outputs.
-    """
-    def __init__(self, coordinator: AgentCoordinator):
+"""
+def __init__(self, coordinator: AgentCoordinator):
         super().__init__()
         self.coordinator = coordinator
         self.active_tasks: Dict[str, asyncio.Task] = {}
@@ -75,7 +91,8 @@ class MultiAgentOrchestrationCore(BaseCore):
         context: CascadeContext,
         max_parallel: int = 3
     ) -> AsyncGenerator[str, None]:
-        """Execute a multi-agent workflow to achieve an objective.
+"""
+Execute a multi-agent workflow to achieve an objective.
 
         Args:
             objective: The objective to achieve
@@ -84,14 +101,15 @@ class MultiAgentOrchestrationCore(BaseCore):
 
         Yields:
             Status updates during execution
-        """logger.info(f"Starting orchestration for objective: {objective}")"
+"""
+logger.info(f"Starting orchestration for objective: {objective}")
         # Plan the orchestration
         yield "Planning orchestration...""        plan = await self.coordinator.plan_orchestration(objective, context)
 
         if not plan.tasks:
             yield "No tasks planned for this objective""            return
 
-        logger.info(f"Planned {len(plan.tasks)} tasks in {len(plan.parallel_groups)} parallel groups")"
+        logger.info(f"Planned {len(plan.tasks)} tasks in {len(plan.parallel_groups)} parallel groups")
         # Execute tasks according to the plan
         semaphore = asyncio.Semaphore(max_parallel)
 
@@ -100,7 +118,7 @@ class MultiAgentOrchestrationCore(BaseCore):
                 # Single task
                 task_ids = [task_ids]
 
-            yield f"Executing task group {group_idx + 1}/{len(plan.execution_order)} ({len(task_ids)} tasks)""
+            yield f"Executing task group {group_idx + 1}/{len(plan.execution_order)} ({len(task_ids)} tasks)"
             # Execute tasks in this group (potentially in parallel)
             tasks = []
             for task_id in task_ids:
@@ -111,21 +129,23 @@ class MultiAgentOrchestrationCore(BaseCore):
             if tasks:
                 await asyncio.gather(*tasks, return_exceptions=True)
 
-        yield "Orchestration complete""
+        yield "Orchestration complete"
     async def _execute_single_task(
         self,
         task: AgentTask,
         context: CascadeContext,
         semaphore: asyncio.Semaphore
     ) -> None:
-        """Execute a single task with semaphore control."""async with semaphore:
+"""
+Execute a single task with semaphore control.""
+async with semaphore:
             try:
                 logger.info(f"Executing task: {task.description}")"                result = await self.coordinator.execute_task(task, context)
                 self.task_results[task.description] = result
 
                 if result.success:
                     logger.info(f"Task completed successfully: {task.description}")"                else:
-                    logger.error(f"Task failed: {task.description} - {result.error_message}")"
+                    logger.error(f"Task failed: {task.description} - {result.error_message}")
             except Exception as e:
                 logger.error(f"Task execution error for {task.description}: {e}")"                error_result = AgentResult(
                     task_id=task.description,
@@ -136,23 +156,27 @@ class MultiAgentOrchestrationCore(BaseCore):
                 self.task_results[task.description] = error_result
 
     def get_task_results(self) -> Dict[str, AgentResult]:
-        """Get results of all executed tasks."""return self.task_results.copy()
+"""
+Get results of all executed tasks.""
+return self.task_results.copy()
 
     async def validate_orchestration_plan(self, plan: OrchestrationPlan) -> List[str]:
-        """Validate an orchestration plan for consistency and feasibility.
+"""
+Validate an orchestration plan for consistency and feasibility.
 
         Returns:
             List of validation error messages (empty if valid)
-        """errors = []
+"""
+errors = []
 
         # Check that all task IDs in execution order exist
         task_ids = {str(i) for i in range(len(plan.tasks))}
         for task_id in plan.execution_order:
             if task_id not in task_ids:
-                errors.append(f"Task ID {task_id} in execution order not found in tasks")"
+                errors.append(f"Task ID {task_id} in execution order not found in tasks")
         # Check dependency resolution
         for i, task in enumerate(plan.tasks):
             for dep in task.dependencies:
                 if dep not in task_ids:
-                    errors.append(f"Task {i} depends on unknown task {dep}")"
+                    errors.append(f"Task {i} depends on unknown task {dep}")
         return errors

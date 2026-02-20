@@ -14,9 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 
+"""
 STEM: Dynamic Embedding Expansion for long-context handling.
 Implemented based on arXiv:2601.10639 (STEM Scaling, Jan 2026).
 
+"""
 try:
     import torch
 except ImportError:
@@ -70,4 +72,7 @@ class STEMManager:
         self.layer = STEMScalingLayer(hidden_dim)
 
     def process_hidden_states(self, hidden_states: torch.Tensor, current_context_len: int) -> torch.Tensor:
-        """Apply STEM processing to hidden states.        return self.layer(hidden_states, current_context_len)
+"""
+Apply STEM processing to hidden states.        return self.layer(hidden_states, current_context_len)
+
+"""

@@ -18,8 +18,11 @@
 
 try:
     from typing import Any, Dict, Tuple
+"""
 except ImportError:
-    from typing import Any, Dict, Tuple
+
+"""
+from typing import Any, Dict, Tuple
 
 try:
     import numpy
@@ -34,16 +37,18 @@ except ImportError:
 
 
 class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
-    """Processor for pre-computed text embeddings."""
-    modality = ModalityType.EMBEDS
+"""
+Processor for pre-computed text embeddings.""
+modality = ModalityType.EMBEDS
 
     def process(
         self,
         data: np.ndarray,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        """Process pre-computed text embeddings. Expects a 1D or 2D numpy array where rows correspond to token embeddings."""
-        if data.ndim == 1:
+"""
+Process pre-computed text embeddings. Expects a 1D or 2D numpy array where rows correspond to token embeddings.""
+if data.ndim == 1:
             data = data.reshape(1, -1)
 
         metadata = {
@@ -55,7 +60,8 @@ class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
 
 
     def get_token_count(self, data: np.ndarray, **kwargs: Any) -> int:
-        """Estimate the number of "tokens" based on the shape of the embedding array."""
-        if data.ndim == 1:
+        ""
+Estimate the number of "tokens" based on the shape of the embedding array.""
+if data.ndim == 1:
             return 1
         return data.shape[0]

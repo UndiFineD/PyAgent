@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Storage backends for KV block offloading.
 """
-
 try:
-    import threading
+
+"""
+import threading
 except ImportError:
     import threading
 
@@ -77,7 +81,7 @@ class MemoryBackend(OffloadingBackend):
         with self._lock:
             for _ in block_hashes:
                 if len(self._allocated) >= self._capacity:
-                    raise RuntimeError("Backend out of capacity")"
+                    raise RuntimeError("Backend out of capacity")
                 address = self._next_address
                 self._next_address += self._block_size
                 self._allocated[address] = bytes(self._block_size)
@@ -108,3 +112,5 @@ class MemoryBackend(OffloadingBackend):
             addresses=[b.address for b in blocks],
             sizes=[b.size for b in blocks],
         )
+
+"""

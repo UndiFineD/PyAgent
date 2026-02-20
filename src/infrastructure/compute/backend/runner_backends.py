@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Backend implementation handlers for SubagentRunner.
+"""
+"""
+Backend implementation handlers for SubagentRunner.
 
+"""
 import json
 import logging
 import os
@@ -31,7 +35,9 @@ __version__: str = VERSION
 
 
 class BackendHandlers:
-    """Namespace for backend execution logic.
+"""
+Namespace for backend execution logic.
+
     @staticmethod
     def _parse_content(text: str) -> Any:
         if "[IMAGE_DATA:" not in text:"            return text
@@ -44,19 +50,20 @@ class BackendHandlers:
         for match in re.finditer(pattern, text):
             pre_text: str = text[last_idx : match.start()].strip()
             if pre_text:
-                parts.append({"type": "text", "text": pre_text})"
+                parts.append({"type": "text", "text": pre_text})
             image_data: str | Any = match.group(1)
             if not image_data.startswith("data:image"):"                image_data: str = f"data:image/png;base64,{image_data}""
             parts.append({"type": "image_url", "image_url": {"url": image_data}})"            last_idx: int = match.end()
 
         remaining: str = text[last_idx:].strip()
         if remaining:
-            parts.append({"type": "text", "text": remaining})"
+            parts.append({"type": "text", "text": remaining})
         return parts if parts else text
 
     @staticmethod
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
-        """Build full prompt with task description, prompt, and context.        try:
+"""
+Build full prompt with task description, prompt, and context.        try:
             max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))"        except ValueError:
             max_context_chars = 12_000
         trimmed_original: str = (original_content or "")[:max_context_chars]"        return (
@@ -64,7 +71,7 @@ class BackendHandlers:
 
     @staticmethod
     def try_codex_cli(full_prompt: str, repo_root: Path, recorder: Any | None = None) -> str | None:
-        """
+"""
 try to use Codex CLI backend for code generation.        try:
             logging.debug("Attempting to use Codex CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
                 [
@@ -77,7 +84,7 @@ try to use Codex CLI backend for code generation.        try:
                 cwd=str(repo_root),
                 check=False,
             )
-            stdout: str = (result.stdout or "").strip()"
+            stdout: str = (result.stdout or "").strip()
             # Phase 108: Recording
             if recorder:
                 recorder.record_interaction(
@@ -93,7 +100,7 @@ try to use Codex CLI backend for code generation.        try:
 
     @staticmethod
     def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
-        """
+"""
 try to use Copilot CLI backend for code generation.        try:
             logging.debug("Attempting to use local Copilot CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
                 ["copilot", "explain", full_prompt],"                capture_output=True,
@@ -109,7 +116,7 @@ try to use Copilot CLI backend for code generation.        try:
 
     @staticmethod
     def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
-        """
+"""
 try to use GitHub Copilot CLI backend for code generation.        # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
             # Basic heuristic: if it doesn't look like a command, skip gh copilot explain'            # (This logic was partially in SubagentRunner, but we can pass a flag)
@@ -132,7 +139,8 @@ try to use GitHub Copilot CLI backend for code generation.        # Optimization
 
     @staticmethod
     def _get_github_token() -> str | None:
-        """Get GitHub token from environment or file.        # Try environment variable first
+"""
+Get GitHub token from environment or file.        # Try environment variable first
         token: str | None = os.environ.get("GITHUB_TOKEN")"        if token:
             return token
 
@@ -155,7 +163,8 @@ try to use GitHub Copilot CLI backend for code generation.        # Optimization
 
     @staticmethod
     def _prepare_github_request(full_prompt: str, model: str, _base_url: str) -> tuple[dict[str, str], dict[str, Any]]:
-        """Prepare headers and payload for GitHub Models API request.        content = BackendHandlers._parse_content(full_prompt)
+"""
+Prepare headers and payload for GitHub Models API request.        content = BackendHandlers._parse_content(full_prompt)
         headers: dict[str, str] = {
             "Authorization": f"Bearer {BackendHandlers._get_github_token()}","            "Content-Type": "application/json","        }
         payload = {
@@ -167,7 +176,8 @@ try to use GitHub Copilot CLI backend for code generation.        # Optimization
 
     @staticmethod
     def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
-        """Attempt to invoke GitHub Models API for code generation.        if not requests_lib:
+"""
+Attempt to invoke GitHub Models API for code generation.        if not requests_lib:
             return None
 
         base_url: str = (
@@ -190,11 +200,11 @@ try to use GitHub Copilot CLI backend for code generation.        # Optimization
 
     @staticmethod
     def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
-        """
+"""
 try to use OpenAI API backend for code generation.        if not requests_lib:
             return None
 
-        api_key: str | None = os.environ.get("OPENAI_API_KEY")"        base_url: str = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1""        model: str = os.environ.get("OPENAI_MODEL") or "gpt-4.1-mini""
+        api_key: str | None = os.environ.get("OPENAI_API_KEY")"        base_url: str = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1""        model: str = os.environ.get("OPENAI_MODEL") or "gpt-4.1-mini"
         if not api_key:
             logging.debug("OpenAI API skipped: No API key")"            return None
 

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-# "Beads task logic for GraphMemoryAgent."Provides hierarchical task management and dependency tracking using the 'Beads' pattern.'
-
+# "Beads task logic for GraphMemoryAgent."Provides hierarchical task management and dependency tracking using the 'Beads' pattern.
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     from .core.base.lifecycle.version import VERSION
@@ -37,12 +42,13 @@ __version__ = VERSION
 
 
 class GraphBeadsMixin:
-""""Mixin for Beads task graph logic.
+""""
+Mixin for Beads task graph logic.
     @as_tool
     def create_task(
         self, title: str, parent_id: str | None = None, priority: int = 2
     ) -> str:
-        "Creates a new task with optional parent for hierarchy (Beads "pattern)."
+        "Creates a new task with optional parent for hierarchy (Beads "pattern).
         Args:
             title: The title of the task.
             parent_id: Optional ID of the parent task.
@@ -50,7 +56,7 @@ class GraphBeadsMixin:
 
         Returns:
             Success message with the new task ID.
-        if not hasattr(self, "tasks"):"#             return "Error: Tasks not initialized."
+        if not hasattr(self, "tasks"):"#             return "Error: Tasks not initialized.
         task_count = len(
             [t for t in self.tasks if not parent_id or t.startswith(f"{parent_id}.")]"        )
         task_id = (
@@ -71,14 +77,14 @@ class GraphBeadsMixin:
 
     @as_tool
     def add_dependency(self, blocker_id: str, blocked_id: str) -> str:
-        "Links tasks where one "blocks another."
+        "Links tasks where one "blocks another.
         Args:
             blocker_id: ID of the blocking task.
             blocked_id: ID of the task being blocked.
 
         Returns:
             Success or error message.
-        if not hasattr(self, "tasks"):"#             return "Error: Tasks not initialized."
+        if not hasattr(self, "tasks"):"#             return "Error: Tasks not initialized.
         if blocker_id in self.tasks and blocked_id in self.tasks:
             self.tasks[blocked_id]["blocked_by"].append(blocker_id)"#             self.tasks[blocked_id]["status"] = "blocked"            if hasattr(self, "_save_bead"):"                self._save_bead(blocked_id, self.tasks[blocked_id])
 #             return fTask {blocked_id} is now blocked by {blocker_id}.
@@ -91,7 +97,7 @@ class GraphBeadsMixin:
 
         Returns:
             Summary of the compaction process.
-        _ = threshold_days  # Logic to be" implemented in Phase 15"        if not hasattr(self, "tasks"):"#             return "Error: Tasks not initialized."
+        _ = threshold_days  # Logic to be" implemented in Phase 15"        if not hasattr(self, "tasks"):"#             return "Error: Tasks not initialized.
         closed_tasks = [
 #             tid for tid, t in self.tasks.items() if t["status"] == "completed"        ]
         if not closed_tasks:
@@ -101,3 +107,11 @@ class GraphBeadsMixin:
             del self.tasks[tid]
 
         return summary
+
+"""
+
+"""
+
+""
+
+"""

@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Extension Registry Package
+from __future__ import annotations
+"""
+Extension Registry Package
 
 Plugin system for managing extensible component registries.
 """
-from __future__ import annotations
+
+
 
 
 try:

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,12 +18,14 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Facade for Multimodal Cache.
 Delegates to modularized sub-packages in src/infrastructure/multimodal/cache/.
 """
-
 try:
-    from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
+
+"""
+from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
 except ImportError:
     from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
 
@@ -32,3 +36,5 @@ except ImportError:
 
 __all__ = [
     "MediaType","    "CacheBackend","    "HashAlgorithm","    "MediaHash","    "CacheEntry","    "CacheStats","    "TODO PlaceholderRange","    "MultiModalHasher","    "MultiModalCache","    "MemoryMultiModalCache","    "PerceptualCache","    "PrefetchMultiModalCache","    "IPCMultiModalCache","    "compute_media_hash","    "create_cache","]
+
+"""

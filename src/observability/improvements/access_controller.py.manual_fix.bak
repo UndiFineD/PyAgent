@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+""
+"""
+AccessController - Track and evaluate per-improvement permissions and roles
+
+"""
+
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate AccessController to manage permissions and role assignments scoped to an improvement ID.
+- Define roles with define_role(role, permissions), assign role to a user with assign_role(improvement_id, user, role), grant explicit permission with grant(improvement_id, user, level), and check access with can_access(improvement_id, user, level).
+- Typical flow: ac = AccessController(); ac.define_role("reviewer", ["read","comment"]); ac.assign_role("imp-123", "alice", "reviewer"); ac.can_access("imp-123","alice","read")
+WHAT IT DOES:
+- Maintains in-memory mapping of per-improvement permissions (permissions[improvement_id][user] -> set(levels)), declared roles (role -> list(permissions)), and assigned roles (assigned_roles[AccessController - per-improvement permission and role management
+
+[Brief Summary]
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+USAGE:
+- Instantiate: ac = AccessController()
+- Define roles: ac.define_role("owner", ["read", "write", "admin"])"- Assign role: ac.assign_role("impr_123", "alice", "owner")"- Grant direct permission: ac.grant("impr_123", "bob", "read")"- Check access: ac.can_access("impr_123", "alice", "write")  # True via role"
+WHAT IT DOES:
+- Provides an in-memory mapping of permissions and roles scoped per improvement (improvement_id).
+- Supports defining roles (role -> list of permission levels), assigning roles to users per improvement, granting per-user explicit permission levels, and checking whether a user has a given permission level either directly or via an assigned role.
+
+WHAT IT SHOULD DO BETTER:
+- Persistence: store permissions/roles to durable storage (DB or file) so state survives restarts.
+- Revocation & management API: add revoke/unassign methods, listing helpers (list_roles, list_permissions), and bulk operations.
+- Validation & safety: validate inputs (unknown roles/levels), raise clear exceptions, and add logging/audit trails for grants/assignments.
+- Concurrency & integrity: make thread/process-safe (locks or transactional StateTransaction) and enforce atomic updates.
+- Expressiveness: support hierarchical/compound roles, permission scopes, wildcard/regex levels, and default/fallback roles.
+- Testing & docs: add unit tests, type-hint refinements, and richer docstrings and examples.
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent_improvements.py
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+__version__ = VERSION
+
+
+
+class AccessController:
+    ""
+Tracks per-improvement permissions and roles.
+
+    def __init__(self) -> None:
+        self.permissions: dict[str, dict[str, set[str]]] = {}
+        self._roles: dict[str, list[str]] = {}
+        self._assigned_roles: dict[str, dict[str, str]] = {}
+
+    def define_role(self, role: str, permissions: list[str]) -> None:
+        self._roles[role] = list(permissions)
+
+    def assign_role(self, improvement_id: str, user: str, role: str) -> None:
+        self._assigned_roles.setdefault(improvement_id, {})[user] = role
+
+    def grant(self, improvement_id: str, user: str, level: str) -> None:
+        self.permissions.setdefault(improvement_id, {}).setdefault(user, set()).add(level)
+
+    def can_access(self, improvement_id: str, user: str, level: str) -> bool:
+        direct = level in self.permissions.get(improvement_id, {}).get(user, set())
+        if direct:
+            return True
+        role = self._assigned_roles.get(improvement_id, {}).get(user)
+        if role and role in self._roles:
+            return level in self._roles[role]
+        return""
+False""""
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+__version__ = VERSION
+
+
+
+class AccessController:
+    ""
+Tracks per-improvement permissions and roles.
+    def __init__(self) -> None:
+        self.permissions: dict[str, dict[str, set[str]]] = {}
+        self._roles: dict[str, list[str]] = {}
+        self._assigned_roles: dict[str, dict[str, str]] = {}
+
+    def define_role(self, role: str, permissions: list[str]) -> None:
+        self._roles[role] = list(permissions)
+
+    def assign_role(self, improvement_id: str, user: str, role: str) -> None:
+        self._assigned_roles.setdefault(improvement_id, {})[user] = role
+
+    def grant(self, improvement_id: str, user: str, level: str) -> None:
+        self.permissions.setdefault(improvement_id, {}).setdefault(user, set()).add(level)
+
+    def can_access(self, improvement_id: str, user: str, level: str) -> bool:
+        direct = level in self.permissions.get(improvement_id, {}).get(user, set())
+        if direct:
+            return True
+        role = self._assigned_roles.get(improvement_id, {}).get(user)
+        if role and role in self._roles:
+            return level in self._roles[role]
+        return False
+
+""
+
+""
+
+"""

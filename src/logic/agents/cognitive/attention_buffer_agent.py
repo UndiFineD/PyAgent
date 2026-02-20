@@ -14,7 +14,10 @@
 
 
 """
+"""
 Attention Buffer Agent - Manage shared attention context
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -111,7 +114,7 @@ class AttentionBufferAgent(BaseAgent):
                 self.buffer = [self.buffer[i] for i in valid_indices]
             except RuntimeError:
                 self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]"        else:
-            self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]"
+            self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
         removed = initial_count - len(self.buffer)
 #         return fCleared {removed}" stale attention points."
 import logging
@@ -186,7 +189,7 @@ class AttentionBufferAgent(BaseAgent):
                 self.buffer = [self.buffer[i] for i in valid_indices]
             except RuntimeError:
                 self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]"        else:
-            self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]"
+            self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
         removed = initial_count - len(self.buffer)
 #         return fCleared {removed} stale attention points.
 

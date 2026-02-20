@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Manager for entry templates.
+"""
+"""
+Manager for entry templates.
 (Facade for src.core.base.common.template_core)
 """
 try:
-    from .core.base.common.template_core import TemplateCore as TemplateManager
+
+"""
+from .core.base.common.template_core import TemplateCore as TemplateManager
 except ImportError:
     from src.core.base.common.template_core import TemplateCore as TemplateManager
 

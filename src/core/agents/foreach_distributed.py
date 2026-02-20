@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ from __future__ import annotations
 
 
 """
+"""
 Distributed Foreach coordinator and worker helpers.
 This module contains a lightweight Worker implementation used by the Foreach
 Coordinator to claim shards, acquire per-file locks, and report status to the
@@ -22,6 +24,7 @@ scratch area (or recorder). The implementation is intentionally small and
 synchronous to make dry-run and staged runs deterministic and easy to test.
 """
 
+"""
 import json
 import logging
 import time
@@ -37,16 +40,14 @@ logger = logging.getLogger("pyagent.foreach")
 
 
 class WorkerClaimError(Exception):
-    """Raised when a worker fails to claim a shard."""
-
-
-
+"""
+Raised when a worker fails to claim a shard.""
 class Worker:
-    """A simple worker that claims a shard, acquires locks, and reports status.
+"""
+A simple worker that claims a shard, acquires locks, and reports status.
     This is a synchronous helper designed for staged runs and unit tests.
-    """
-
-    def __init__(
+"""
+def __init__(
         self,
         worker_id: str,
         scratch_dir: str | Path = "scratch/foreach_shards",
@@ -56,8 +57,9 @@ class Worker:
         conflict_strategy: str = "requeue",
         sleep_fn: Optional[callable] = None,
     ) -> None:
-        """Initialize the worker with configuration."""
-        self.worker_id = worker_id
+"""
+Initialize the worker with configuration.""
+self.worker_id = worker_id
         self.scratch_dir = Path(scratch_dir)
         self._fs = FileSystemCore()
         self._fs.ensure_directory(self.scratch_dir)
@@ -70,17 +72,17 @@ class Worker:
 
 
     def _status_path(self) -> Path:
-        """
-        Return the path to the status file for this worker.
-        """
-        return self.scratch_dir / f"{self.worker_id}.status.json"
+"""
+Return the path to the status file for this worker.
+"""
+return self.scratch_dir / f"{self.worker_id}.status.json"
 
 
     def _write_status(self, status: str, detail: Dict[str, Any] | None = None) -> None:
-        """
-        Write the current status of the worker to a JSON file.
-        """
-        payload = {
+"""
+Write the current status of the worker to a JSON file.
+"""
+payload = {
             "worker": self.worker_id,
             "status": status,
             "timestamp": time.time(),
@@ -93,30 +95,30 @@ class Worker:
 
 
     def load_manifest(self, manifest_path: str | Path) -> Dict[str, Any]:
-        """
-        Load a JSON manifest from file.
-        """
-        p = Path(manifest_path)
+"""
+Load a JSON manifest from file.
+"""
+p = Path(manifest_path)
         content = p.read_text(encoding="utf-8")
         return json.loads(content)
 
 
     def _lock_id_for_file(self, file_path: str) -> str:
-        """
-        Generate a deterministic lock ID for a given file path.
-        """
+"""
+Generate a deterministic lock ID for a given file path.
+"""
         # deterministic lock id composed of prefix and normalized path
         return f"{self.shard_lock_prefix}:{file_path}"
 
 
     def claim_shard(self, manifest_path: str | Path) -> bool:
-        """
-        Claim the shard assigned to this worker and attempt to acquire file locks.
+"""
+Claim the shard assigned to this worker and attempt to acquire file locks.
 
         Returns True if all locks were acquired and the shard is claimed. On
         failure it sets a status file describing the reason.
-        """
-        manifest = self.load_manifest(manifest_path)
+"""
+manifest = self.load_manifest(manifest_path)
         shards = manifest.get("shards", [])
         shard = None
         for s in shards:
@@ -162,13 +164,13 @@ class Worker:
         backoff: float = 2.0,
         sleep_fn: Optional[callable] = None,
     ) -> bool:
-        """
-        Attempt to claim shard with retries and exponential backoff.
+"""
+Attempt to claim shard with retries and exponential backoff.
 
         `sleep_fn` may be injected for testability; it should accept seconds to
         sleep. If omitted, falls back to the instance's sleep_fn or `time.sleep`.
-        """
-        sleep_fn = sleep_fn or self.sleep_fn
+"""
+sleep_fn = sleep_fn or self.sleep_fn
         attempt = 0
         cur_delay = float(delay)
         while attempt <= int(retries):
@@ -183,14 +185,16 @@ class Worker:
 
 
     async def claim_shard_async(self, manifest_path: str | Path, retries: int = 3, delay: float = 0.1) -> bool:
-        """Async wrapper that runs claim_shard_with_retries in a thread pool."""
-        loop = asyncio.get_running_loop()
+"""
+Async wrapper that runs claim_shard_with_retries in a thread pool.""
+loop = asyncio.get_running_loop()
         return await loop.run_in_executor(None, self.claim_shard_with_retries, manifest_path, retries, delay)
 
 
     def release_locks(self) -> None:
-        """Release any locks this worker holds."""
-        for lock_id in list(self.acquired_locks):
+"""
+Release any locks this worker holds.""
+for lock_id in list(self.acquired_locks):
             try:
                 self.locker.release_lock(lock_id)
             except (OSError, RuntimeError):  # pragma: no cover
@@ -203,14 +207,15 @@ class Worker:
 
 
     def report_progress(self, message: str, meta: Optional[Dict[str, Any]] = None) -> None:
-        """Append a short progress update to the worker status."""
-        self._write_status("progress", {"msg": message, "meta": meta or {}})
+"""
+Append a short progress update to the worker status.""
+self._write_status("progress", {"msg": message, "meta": meta or {}})
 
 
 
 class Coordinator:
-    """
-    A lightweight coordinator for staged Foreach runs.
+"""
+A lightweight coordinator for staged Foreach runs.
 
     The Coordinator reads a manifest describing shards and monitors worker
     status files in a scratch area. It will detect stalled workers and emit
@@ -220,8 +225,8 @@ class Coordinator:
     should be run for staged changes by setting `enforce_tests` to True by
     default. Agents and Workers may consult this flag when choosing whether
     to run focused tests before staging edits.
-    """
-    def __init__(
+"""
+def __init__(
         self,
         manifest_path: str | Path,
         scratch_dir: str | Path = "scratch/foreach_shards",
@@ -229,8 +234,9 @@ class Coordinator:
         worker_timeout: float = 600.0,
         leader_ttl: float | None = None,
     ) -> None:
-        """Initialize the coordinator with configuration."""
-        self.manifest_path = Path(manifest_path)
+"""
+Initialize the coordinator with configuration.""
+self.manifest_path = Path(manifest_path)
         self.scratch_dir = Path(scratch_dir)
         self.poll_interval = float(poll_interval)
         self.worker_timeout = float(worker_timeout)
@@ -243,13 +249,13 @@ class Coordinator:
 
 
     def assign_shards(self) -> Dict[str, Any]:
-        """
-        Read and return the manifest, ensuring `enforce_tests` is set.
+"""
+Read and return the manifest, ensuring `enforce_tests` is set.
 
         This method is intentionally idempotent and does not modify worker
         assignments unless necessary.
-        """
-        content = self.manifest_path.read_text(encoding="utf-8")
+"""
+content = self.manifest_path.read_text(encoding="utf-8")
         manifest = json.loads(content)
         # Ensure enforce_tests flag is present and True by default
         if "enforce_tests" not in manifest:
@@ -258,14 +264,14 @@ class Coordinator:
 
 
     def monitor_workers_and_merge(self, wait_for_completion: float = 30.0) -> Dict[str, Any]:
-        """
-        Poll worker status files and return an aggregated report.
+"""
+Poll worker status files and return an aggregated report.
 
         wait_for_completion sets the maximum wall-clock time to wait for all
         shards to reach a terminal state. The report includes a map
         `shard_status` keyed by shard id describing outcomes.
-        """
-        manifest = self.assign_shards()
+"""
+manifest = self.assign_shards()
         shards = {s.get("id"): s for s in manifest.get("shards", [])}
         shard_status: Dict[int, Dict[str, Any]] = {}
 
@@ -313,13 +319,13 @@ class Coordinator:
 
 
     def elect_leader(self, leader_name: str) -> bool:
-        """
-        Attempt to acquire leadership for the given `leader_name`.
+"""
+Attempt to acquire leadership for the given `leader_name`.
 
         Returns True if leadership was acquired, False otherwise. Leadership is
         represented by a simple file in the scratch area with an expiry time.
-        """
-        now = time.time()
+"""
+now = time.time()
         # If leader file exists and not expired, fail
         if self._leader_file.exists():
             try:

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Resilience Agent - Autonomous compute resource management
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -39,7 +43,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Resilience agent.py module.
 """
-
 import logging
 import time
 from pathlib import Path
@@ -70,7 +73,8 @@ class ResilienceAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _archive_resilience_event(self, event_type: str, details: Any) -> None:
-""""Archiving resilience events for fleet learning.        if self.recorder:
+""""
+Archiving resilience events for fleet learning.        if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}"                self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(fResilienceManager: Recording failed: {e}")"
@@ -116,7 +120,8 @@ class ResilienceAgent(BaseAgent):
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     def _archive_resilience_event(self, event_type: str, details: Any) -> None:
-""""Archiving resilience events for fleet" learning.        if self.recorder:
+""""
+Archiving resilience events for fleet" learning.        if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}"                self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(fResilienceManager: Recording failed: {e}")"

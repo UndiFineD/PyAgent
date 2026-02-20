@@ -14,9 +14,11 @@
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 TableCache: Trie-based metadata precomputation for Text-to-SQL.
 Implemented based on arXiv:2601.08743 (Jan 2026).
 
+"""
 try:
     import dataclasses
 except ImportError:
@@ -53,7 +55,8 @@ class TableCacheManager:
         self.table_count = 0
 
     def insert(self, table_name: str, columns: List[str]):
-        """Insert schema metadata into the trie.        node = self.root
+"""
+Insert schema metadata into the trie.        node = self.root
         # Index table name and column names for fast lookup
         for char in table_name.lower():
             if char not in node.children:
@@ -64,7 +67,8 @@ class TableCacheManager:
         self.table_count += 1
 
     def search_prefix(self, prefix: str) -> List[TableMetadata]:
-        """Search for tables matching a prefix.        node = self.root
+"""
+Search for tables matching a prefix.        node = self.root
         for char in prefix.lower():
             if char not in node.children:
                 return []

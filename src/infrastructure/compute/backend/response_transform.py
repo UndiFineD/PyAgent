@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     from enum import Enum
 except ImportError:
@@ -34,5 +34,13 @@ __version__ = VERSION
 
 
 class ResponseTransform(Enum):
-    """Types of response transformations.
-    NONE = "none""    STRIP_WHITESPACE = "strip""    EXTRACT_CODE = "extract_code""    EXTRACT_JSON = "extract_json""    MARKDOWN_TO_TEXT = "markdown_to_text""
+"""
+Types of response transformations.
+    NONE = "none""    STRIP_WHITESPACE = "strip""    EXTRACT_CODE = "extract_code""    EXTRACT_JSON = "extract_json""    MARKDOWN_TO_TEXT = "markdown_to_text"
+"""
+
+"""
+
+""
+
+"""

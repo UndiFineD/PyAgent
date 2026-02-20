@@ -15,8 +15,11 @@
 
 try:
     import asyncio
+"""
 except ImportError:
-    import asyncio
+
+"""
+import asyncio
 
 try:
     import os
@@ -63,15 +66,18 @@ except ImportError:
 
 
 class TestArtifactCleanupCore:
-    """Test cases for ArtifactCleanupCore.
+"""
+Test cases for ArtifactCleanupCore.
     @pytest.fixture
     def temp_dir(self):
-        """Create a temporary directory for testing.        with tempfile.TemporaryDirectory() as tmpdir:
+"""
+Create a temporary directory for testing.        with tempfile.TemporaryDirectory() as tmpdir:
             yield tmpdir
 
     @pytest.fixture
     def cleanup_core(self, temp_dir):
-        """Create a cleanup core instance with test configuration.        return ArtifactCleanupCore(
+"""
+Create a cleanup core instance with test configuration.        return ArtifactCleanupCore(
             cleanup_interval=1,  # Fast for testing
             default_ttl=2,  # 2 seconds
             cleanup_dirs=[temp_dir],
@@ -79,7 +85,8 @@ class TestArtifactCleanupCore:
         )
 
     def test_initialization(self, temp_dir):
-        """Test core initialization with default and custom parameters.        # Default initialization
+"""
+Test core initialization with default and custom parameters.        # Default initialization
         core = ArtifactCleanupCore()
         assert core.cleanup_interval == 300
         assert core.default_ttl == 3600
@@ -102,7 +109,8 @@ class TestArtifactCleanupCore:
         assert core.dry_run
 
     def test_get_ttl_for_file(self, cleanup_core):
-        """Test TTL determination for different file types.        cleanup_core.max_age_overrides = {".log": 1800, ".tmp": 300}"
+"""
+Test TTL determination for different file types.        cleanup_core.max_age_overrides = {".log": 1800, ".tmp": 300}
         # Test default TTL
         file_path = Path("test.txt")"        assert cleanup_core._get_ttl_for_file(file_path) == cleanup_core.default_ttl
 
@@ -112,7 +120,8 @@ class TestArtifactCleanupCore:
         tmp_path = Path("test.tmp")"        assert cleanup_core._get_ttl_for_file(tmp_path) == 300
 
     def test_should_cleanup_file(self, cleanup_core, temp_dir):
-        """Test file cleanup decision logic.        # Create a test file
+"""
+Test file cleanup decision logic.        # Create a test file
         test_file = Path(temp_dir) / "test.txt""        test_file.write_text("test content")"
         # File is new, should not be cleaned
         current_time = time.time()
@@ -125,11 +134,12 @@ class TestArtifactCleanupCore:
 
     @pytest.mark.asyncio
     async def test_cleanup_directory(self, cleanup_core, temp_dir):
-        """Test directory cleanup functionality.        # Create test files
+"""
+Test directory cleanup functionality.        # Create test files
         old_file = Path(temp_dir) / "old.txt""        new_file = Path(temp_dir) / "new.txt""        sub_dir = Path(temp_dir) / "subdir""        sub_dir.mkdir()
-        sub_old_file = sub_dir / "sub_old.txt""
+        sub_old_file = sub_dir / "sub_old.txt"
         # Write files
-        old_file.write_text("old")"        new_file.write_text("new")"        sub_old_file.write_text("sub old")"
+        old_file.write_text("old")"        new_file.write_text("new")"        sub_old_file.write_text("sub old")
         # Set modification times
         current_time = time.time()
         old_time = current_time - cleanup_core.default_ttl - 1
@@ -148,7 +158,8 @@ class TestArtifactCleanupCore:
 
     @pytest.mark.asyncio
     async def test_force_cleanup_now(self, cleanup_core, temp_dir):
-        """Test force cleanup functionality.        # Create old test file
+"""
+Test force cleanup functionality.        # Create old test file
         old_file = Path(temp_dir) / "old.txt""        old_file.write_text("old")"        old_time = time.time() - cleanup_core.default_ttl - 1
         os.utime(old_file, (old_time, old_time))
 
@@ -160,7 +171,8 @@ class TestArtifactCleanupCore:
 
     @pytest.mark.asyncio
     async def test_cleanup_worker_lifecycle(self, cleanup_core):
-        """Test starting and stopping the cleanup worker.        # Start worker
+"""
+Test starting and stopping the cleanup worker.        # Start worker
         await cleanup_core.start_cleanup_worker()
         assert cleanup_core._running
         assert cleanup_core._task is not None
@@ -175,12 +187,14 @@ class TestArtifactCleanupCore:
         await cleanup_core.stop_cleanup_worker()
 
     def test_get_stats(self, cleanup_core):
-        """Test statistics retrieval.        stats = cleanup_core.get_stats()
+"""
+Test statistics retrieval.        stats = cleanup_core.get_stats()
         expected_keys = ["running", "cleanup_interval", "default_ttl", "cleanup_dirs", "total_cleaned", "dry_run"]"        for key in expected_keys:
             assert key in stats
 
     def test_dry_run_mode(self, temp_dir):
-        """Test dry run mode doesn't actually delete files.'        core = ArtifactCleanupCore(
+"""
+Test dry run mode doesn't actually delete files.'        core = ArtifactCleanupCore(
             cleanup_dirs=[temp_dir],
             dry_run=True,
             default_ttl=1
@@ -199,13 +213,15 @@ class TestArtifactCleanupCore:
         asyncio.run(run_test())
 
     def test_global_instance(self):
-        """Test global instance management.        core1 = get_artifact_cleanup_core()
+"""
+Test global instance management.        core1 = get_artifact_cleanup_core()
         core2 = get_artifact_cleanup_core()
         assert core1 is core2  # Same instance
 
     @pytest.mark.asyncio
     async def test_fleet_cleanup_functions(self):
-        """Test fleet-wide cleanup functions.        # Start fleet cleanup
+"""
+Test fleet-wide cleanup functions.        # Start fleet cleanup
         await start_fleet_cleanup()
         core = get_artifact_cleanup_core()
         assert core._running
@@ -213,3 +229,5 @@ class TestArtifactCleanupCore:
         # Stop fleet cleanup
         await stop_fleet_cleanup()
         assert not core._running
+
+"""

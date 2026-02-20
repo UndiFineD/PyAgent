@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +16,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
+"""
 Pruning Orchestrator - Synaptic Decay & Knowledge Pruning
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -57,7 +62,6 @@ Module: pruning_orchestrator
 Implements Pillar 6: Synaptic Decay & Knowledge Pruning for context
 lifecycle management.
 """
-
 try:
     import logging
 except ImportError:
@@ -97,7 +101,7 @@ class PruningOrchestrator:
     async def run_pruning_cycle(self, threshold: float = 0.2):
                 Executes a swarm-wide pruning cycle.
         Identifies stale LSH buckets and low-utility landmarks.
-                logger.info("PruningOrchestrator: Starting Synaptic Decay cycle (Phase 92)...")"
+                logger.info("PruningOrchestrator: Starting Synaptic Decay cycle (Phase 92)...")
         # 1. Prune Global Knowledge Cache
         knowledge_keys = list(self.fleet.memory_core.get_active_indices()) if hasattr(self.fleet, "memory_core") else []"        dead_keys = self.decay_engine.process_decay(knowledge_keys)
 
@@ -109,9 +113,10 @@ class PruningOrchestrator:
         # Distributed pruning: Each node prunes its own context landmarks
         await self._trigger_distributed_pruning()
 
-        logger.info("PruningOrchestrator: Synaptic cycle complete.")"
+        logger.info("PruningOrchestrator: Synaptic cycle complete.")
     async def _trigger_distributed_pruning(self):
-        """Broadcasts a pruning signal to all neighbor nodes.        if not hasattr(self.fleet, "voyager_transport"):"            return
+"""
+Broadcasts a pruning signal to all neighbor nodes.        if not hasattr(self.fleet, "voyager_transport"):"            return
 
         # Phase 91: Localized Semantic Invalidation signal
         pruning_msg = {
@@ -122,10 +127,13 @@ class PruningOrchestrator:
                 await self.fleet.voyager_transport.send_message(node_id, pruning_msg)
 
     async def start_background_loop(self):
-        """Background daemon for continuous context maintenance.        while True:
+"""
+Background daemon for continuous context maintenance.        while True:
             await self.run_pruning_cycle()
             await asyncio.sleep(self.pruning_interval)
 
 
 if __name__ == "__main__":"    # Mock for testing
     pass
+
+"""

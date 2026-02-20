@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Profiling analysis mixin.py module.
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -30,7 +33,9 @@ if TYPE_CHECKING:
 
 
 class ProfilingAnalysisMixin:
-    """Mixin for performance profiling in SelfImprovementAnalysis.
+"""
+Mixin for performance profiling in SelfImprovementAnalysis.
+
     def add_profiling_findings(
         self: SelfImprovementAnalysis,
         findings: list[dict[str, Any]],
@@ -47,7 +52,7 @@ class ProfilingAnalysisMixin:
         loop_count = content.count("for ") + content.count("while ")"        if loop_count < 3:
             return
 
-        logging.info(f"Self-Improvement: Triggering profiling for potential bottleneck: {rel_path}")"
+        logging.info(f"Self-Improvement: Triggering profiling for potential bottleneck: {rel_path}")
         # Access fleet through the orchestrator
         if not hasattr(self, "profiling_agent") or self.profiling_agent is None:"            # Add a TODO Placeholder finding so IntelligenceOrchestrator can suggest profiling
             findings.append({
@@ -58,15 +63,16 @@ class ProfilingAnalysisMixin:
             # Phase 336: Use ProfilingAgent's static analysis during the scan'            performance_stats = []
             if hasattr(self.profiling_agent, "static_profile"):"                logging.info(f"Self-Improvement: Calling static_profile for {file_path}")"                performance_stats = self.profiling_agent.static_profile(file_path)
             else:
-                logging.info(f"Self-Improvement: profiling_agent missing static_profile: {type(self.profiling_agent)}")"
+                logging.info(f"Self-Improvement: profiling_agent missing static_profile: {type(self.profiling_agent)}")
             if performance_stats:
                 for stat in performance_stats:
                     findings.append({
-                        "file": rel_path,"                        "line": str(stat.line_number),"                        "type": "Profiling","                        "message": ("                            f"Static analysis suggests bottleneck in '{stat.function_name}'. ""'                            f"High loop density detected. Recommend Rust port.""                        ),
+                        "file": rel_path,"                        "line": str(stat.line_number),"                        "type": "Profiling","                        "message": ("                            f"Static analysis suggests bottleneck in '{stat.function_name}'. "
+f"High loop density detected. Recommend Rust port.""                        ),
                         "fixed": False"                    })
             else:
                 findings.append({
                     "file": rel_path,"                    "line": "0","                    "type": "Profiling","                    "message": ("                        f"Detected compute-intensive patterns in {rel_path} ({loop_count} loops). ""                        f"Recommend Rust port.""                    ),
                     "fixed": False"                })
         except Exception as e:
-            logging.debug(f"Profiling analysis failed for {rel_path}: {e}")"
+            logging.debug(f"Profiling analysis failed for {rel_path}: {e}")

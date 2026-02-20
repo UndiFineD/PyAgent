@@ -16,9 +16,11 @@
 
 """
 EconomyCore
+"""
 Core logic for Swarm Economy (Phase 179).
 Handles bidding and GPU priority allocation logic.
 
+"""
 try:
     from typing import Any
 except ImportError:
@@ -28,7 +30,8 @@ except ImportError:
 
 
 class EconomyCore:
-    """Handles economic logic for swarm resource bidding and priority.
+"""
+Handles economic logic for swarm resource bidding and priority.
     @staticmethod
     def calculate_bid_priority(credits: float, importance: float, urgency: float) -> float:
                 Calculates a priority score for a bid.

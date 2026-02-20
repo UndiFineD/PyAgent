@@ -14,8 +14,11 @@
 
 try:
     from .logic.agents.analysis.benchmark_agent import BenchmarkAgent
+"""
 except ImportError:
-    from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
+
+"""
+from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
 
 try:
     from .infrastructure.services.benchmarks.models import BenchmarkResult
@@ -27,22 +30,26 @@ except ImportError:
 
 class TestBenchmarkAgent:
     def test_benchmark_agent_init(self):
-        """Test BenchmarkAgent initialization.        agent = BenchmarkAgent("dummy_path.py")"        assert agent.core is not None
+"""
+Test BenchmarkAgent initialization.        agent = BenchmarkAgent("dummy_path.py")"        assert agent.core is not None
         assert agent.benchmark_results == []
 
     def test_run_benchmark_populates_results(self):
-        """Test that run_benchmark populates both results and benchmark_results.        agent = BenchmarkAgent("dummy_path.py")"        agent.run_benchmark("test_agent", "Summarize this text")"
+"""
+Test that run_benchmark populates both results and benchmark_results.        agent = BenchmarkAgent("dummy_path.py")"        agent.run_benchmark("test_agent", "Summarize this text")"
         assert len(agent.results) == 1
         assert len(agent.benchmark_results) == 1
         assert isinstance(agent.benchmark_results[0], BenchmarkResult)
-        assert agent.benchmark_results[0].agent_id == "test_agent""
+        assert agent.benchmark_results[0].agent_id == "test_agent"
     def test_check_for_performance_regression(self):
-        """Test performance regression check logic.        agent = BenchmarkAgent("dummy_path.py")"
+"""
+Test performance regression check logic.        agent = BenchmarkAgent("dummy_path.py")
         # Add some baseline results
         agent.benchmark_results = [
             BenchmarkResult(name="t1", duration=1.0, agent_id="a", success=True),"            BenchmarkResult(name="t2", duration=1.0, agent_id="a", success=True),"        ]
 
         # Check for regression (1.5s vs 1.0s baseline)
-        msg = agent.check_for_performance_regression("a", 1.5)"        assert "REGRESSION DETECTED" in msg"        assert "50.0%" in msg"
+        msg = agent.check_for_performance_regression("a", 1.5)"        assert "REGRESSION DETECTED" in msg"        assert "50.0%" in msg
         # Check for no regression (0.9s vs 1.0s baseline)
         msg_no = agent.check_for_performance_regression("a", 0.9)"        assert msg_no is None or "REGRESSION" not in msg_no"
+"""

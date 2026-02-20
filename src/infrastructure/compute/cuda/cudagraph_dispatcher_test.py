@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.compute.cuda.cudagraph_dispatcher import DispatchMode, DispatchKey, DispatchStats, DispatchPolicy, DefaultDispatchPolicy, AdaptiveDispatchPolicy, GraphEntry, CudagraphDispatcher, CompositeDispatcher, StreamDispatcher, create_dispatch_key, get_padded_key

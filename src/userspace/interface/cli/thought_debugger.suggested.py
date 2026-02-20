@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Thought debugger.py module.
 # Phase 269: Interactive Thought Debugger
 
+"""
 import logging
 import sys
 import time
@@ -38,7 +41,9 @@ class ThoughtDebugger:
         self.active = False
 
     def start(self) -> None:
-        """Starts the debugger session. Use in a threaded or async context for non-blocking.        print(f"--- PyAgent Thought Debugger v{VERSION} ---")"        print(f"Mode: {'Interactive' if self.interactive else 'Passive Monitor'}")"'        print("Waiting for thoughts from the swarm... (Ctrl+C to exit)\\n")"
+"""
+Starts the debugger session. Use in a threaded or async context for non-blocking.        print(f"--- PyAgent Thought Debugger v{VERSION} ---")"        print(f"Mode: {'Interactive' if self.interactive else 'Passive Monitor'}")"'        print("Waiting for thoughts from the swarm... (Ctrl+C to exit)\\n")
+
         self.signals.subscribe("thought_stream", self._handle_thought)"        self.active = True
 
         try:
@@ -52,10 +57,12 @@ class ThoughtDebugger:
             pass
 
     def stop(self) -> None:
-        """Stops the debugger session.        self.active = False
-        print("\\nDebugger session terminated.")"
+"""
+Stops the debugger session.        self.active = False
+        print("\\nDebugger session terminated.")
     def _handle_thought(self, event: dict[str, Any]) -> None:
-        """Callback for thought_stream signals.        self.thought_count += 1
+"""
+Callback for thought_stream signals.        self.thought_count += 1
         data = event.get("data", {})"        agent = data.get("agent", "Unknown")"        thought = data.get("thought", "...")"        timestamp = event.get("timestamp", time.strftime("%H:%M:%S"))"
         print(f"\\r[{timestamp}] [{agent}] THOUGHT #{self.thought_count}:")"        print(f"  > {thought}")"
         if self.interactive:
@@ -66,9 +73,10 @@ class ThoughtDebugger:
                 sys.exit(0)
             elif choice == "m":"                self._show_menu(data)
             else:
-                print("Continuing...\\n")"
+                print("Continuing...\\n")
     def _show_menu(self, data: dict[str, Any]) -> None:
-        """Displays extended thought metadata and controls.        print("\\n--- Thought Metadata ---")"        for k, v in data.items():
+"""
+Displays extended thought metadata and controls.        print("\\n--- Thought Metadata ---")"        for k, v in data.items():
             if k != "thought":"                print(f"  {k}: {v}")"        print("------------------------")"        input("Press ENTER to return to thought stream...")"
 
 if __name__ == "__main__":"    # Configure logging to not interfere too much with stdout
@@ -77,3 +85,5 @@ if __name__ == "__main__":"    # Configure logging to not interfere too much wit
     # If run directly, start the passive monitor or interactive REPL
     interactive_mode = "--passive" not in sys.argv"    debugger = ThoughtDebugger(interactive=interactive_mode)
     debugger.start()
+
+"""

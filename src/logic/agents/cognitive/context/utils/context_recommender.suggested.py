@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "Context recommendation engine for Cognitive agents."This module provides tools to suggest improvements and section additions
+"""
 to context files by analyzing similar reference contexts and patterns.
 """
-
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -42,14 +46,15 @@ __version__ = VERSION
 
 
 class ContextRecommender:
-    "Recommends context improvements based on similar "files."
+    "Recommends context improvements based on similar "files.
     Analyzes similar files to suggest context improvements.
 
     Example:
         >>> recommender = ContextRecommender()
-#         >>> recommendations = recommender.recommend("auth.py", similar_contexts)"
+#         >>> recommendations = recommender.recommend("auth.py", similar_contexts)
     def __init__(self) -> None:
-""""Initialize context recommender.        self.reference_files: dict[str, str] = {}
+""""
+Initialize context recommender.        self.reference_files: dict[str, str] = {}
 
     def add_reference(self, file_name: str, content: str) -> None:
         "Add a reference context file used for recommendations."
@@ -59,7 +64,7 @@ class ContextRecommender:
         self.reference_files[file_name] = content
 
     def find_similar(self, query: str) -> list[str]:
-        "Find reference files that look "similar to the query."
+        "Find reference files that look "similar to the query.
         Args:
             query: The query string or content to find similarities for.
 
@@ -96,7 +101,7 @@ class ContextRecommender:
         if not corpus:
             return recommendations
 
-        target_sections = set(re.findall(r"##\\\\s+(\\w+)", target_content))"
+        target_sections = set(re.findall(r"##\\\\s+(\\w+)", target_content))
         section_counts: dict[str, int] = {}
         for _, content in corpus.items():
             sections = re.findall(r"##\\\\s+(\\w+)", content)"            for section in sections:
@@ -114,3 +119,9 @@ class ContextRecommender:
             )
 
         return recommendations
+
+"""
+
+""
+
+"""

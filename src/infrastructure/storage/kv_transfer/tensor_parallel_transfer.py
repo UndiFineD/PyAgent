@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -16,13 +18,14 @@ from __future__ import annotations
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 Tensor-Parallel Aware KV Transfer.
 
+"""
 In Tensor Parallelism (TP), KV heads (and thus KV cache blocks) are partitioned
 across multiple GPUs within a single node or across nodes. This module ensures
 that KV transfer logic correctly handles partitioned blocks.
 """
-
 try:
     import logging
 except ImportError:
@@ -65,11 +68,12 @@ class TensorParallelTransfer:
         self.tp_size = tp_size
         self.local_connector = local_connector
 
-        logger.info("TensorParallelTransfer initialized for rank %d/%d", tp_rank, tp_size)"
+        logger.info("TensorParallelTransfer initialized for rank %d/%d", tp_rank, tp_size)
     def _aggregate_tp_metadata_rust(self, metadata_shards: List[bytes]) -> bytes:
-        """Rust-accelerated aggregation of TP rank metadata.        # return RustBridge.aggregate_tp_metadata_rust(metadata_shards)
-        return metadata_shards[0] if metadata_shards else b"""
-    def shard_aware_push(self, layer_name: str, kv_shard: Any, attn_metadata: Any):
+"""
+Rust-accelerated aggregation of TP rank metadata.        # return RustBridge.aggregate_tp_metadata_rust(metadata_shards)
+        return metadata_shards[0] if metadata_shards else b""
+def shard_aware_push(self, layer_name: str, kv_shard: Any, attn_metadata: Any):
                 Push a shard of the KV cache.
 
         Each TP rank calls this for its portion of the KV heads.
@@ -82,9 +86,10 @@ class TensorParallelTransfer:
         self.local_connector.wait_for_layer_load(layer_name)
 
     def verify_tp_consistency(self, request_id: str) -> bool:
-        """Verify that all TP ranks have consistent KV transfer state.        # Typically involves an All-Reduce or All-Gather on checksums
+        ""
+Verify that all TP ranks have consistent KV transfer state.        # Typically involves an All-Reduce or All-Gather on checksums
         return True
 
 
 # Lazy loading registration
-_orchestrator = LazyLoader("src.infrastructure.storage.kv_transfer.tensor_parallel_transfer", "TensorParallelTransfer")"
+_orchestrator = LazyLoader("src.infrastructure.storage.kv_transfer.tensor_parallel_transfer", "TensorParallelTransfer")

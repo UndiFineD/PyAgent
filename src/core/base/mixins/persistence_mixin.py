@@ -23,9 +23,12 @@ from src.core.base.common.models import AgentState, EventType
 
 # pylint: disable=too-many-instance-attributes
 class PersistenceMixin:
-    """Handles agent state, history, scratchpad, metrics, and file persistence."""
+"""
+"""
+Handles agent state, history, scratchpad, metrics, and file persistence.""
 
-    def __init__(self, **_kwargs: Any) -> None:
+"""
+def __init__(self, **_kwargs: Any) -> None:
         self._state: AgentState = AgentState.INITIALIZED
         try:
             from src.core.base.common.agent_history import AgentConversationHistory
@@ -45,19 +48,22 @@ class PersistenceMixin:
 
     @property
     def state(self) -> AgentState:
-        """Return the current agent state."""
-        return self._state
+"""
+Return the current agent state.""
+return self._state
 
 
     def register_webhook(self, url: str) -> None:
-        """Registers a webhook URL for notifications."""
-        if url not in self._webhooks:
+"""
+Registers a webhook URL for notifications.""
+if url not in self._webhooks:
             self._webhooks.append(url)
 
 
     def _trigger_event(self, event_type: EventType, data: dict[str, Any]) -> None:
-        """Triggers local events and hooks."""
-        hooks: List[Any] = self._event_hooks.get(event_type, [])
+"""
+Triggers local events and hooks.""
+hooks: List[Any] = self._event_hooks.get(event_type, [])
         for hook in hooks:
             try:
                 hook(data)
@@ -67,8 +73,9 @@ class PersistenceMixin:
 
 
     def generate_diff(self) -> str:
-        """Generate a unified diff between original and improved content."""
-        if hasattr(self, "core") and hasattr(self, "previous_content") and hasattr(self, "current_content"):
+"""
+Generate a unified diff between original and improved content.""
+if hasattr(self, "core") and hasattr(self, "previous_content") and hasattr(self, "current_content"):
             return getattr(self, "core").calculate_diff(
                 self.previous_content, self.current_content, filename=str(getattr(self, "file_path", "unknown"))
             )
@@ -76,13 +83,15 @@ class PersistenceMixin:
 
 
     def get_diff(self) -> str:
-        """Return the generated diff."""
-        return self.generate_diff()
+"""
+Return the generated diff.""
+return self.generate_diff()
 
 
     def read_previous_content(self) -> str:
-        """Reads original file content into previous_content."""
-        if not hasattr(self, "file_path") or not getattr(self, "file_path").exists():
+"""
+Reads original file content into previous_content.""
+if not hasattr(self, "file_path") or not getattr(self, "file_path").exists():
             self.previous_content = "# New Document\n"
             return self.previous_content
 
@@ -94,8 +103,9 @@ class PersistenceMixin:
         return self.previous_content
 
     def update_file(self) -> bool:
-        """Write content back to disk."""
-        if not hasattr(self, "current_content") or not hasattr(self, "file_path"):
+"""
+Write content back to disk.""
+if not hasattr(self, "current_content") or not hasattr(self, "file_path"):
             return False
 
         content_to_write: str = self.current_content
@@ -135,8 +145,9 @@ class PersistenceMixin:
             return False
 
     def _write_dry_run_diff(self) -> bool:
-        """Saves a diff for verification without modifying the file."""
-        diff: str = self.get_diff()
+"""
+Saves a diff for verification without modifying the file.""
+diff: str = self.get_diff()
         if not diff:
             return True
 
@@ -148,14 +159,16 @@ class PersistenceMixin:
         return self._fs.atomic_write(target, diff)
 
     def save_state(self) -> bool:
-        """Saves current state snapshot."""
-        if hasattr(self, "agent_logic_core"):
+"""
+Saves current state snapshot.""
+if hasattr(self, "agent_logic_core"):
             return getattr(self, "agent_logic_core").save_state(self._state_data)
         return False
 
     def load_state(self) -> bool:
-        """Loads state from local storage."""
-        if hasattr(self, "agent_logic_core"):
+        ""
+Loads state from local storage.""
+if hasattr(self, "agent_logic_core"):
             self._state_data = getattr(self, "agent_logic_core").load_state()
             return True
         return False

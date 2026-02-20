@@ -15,8 +15,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .logic.agents.interpreter.safe_executor import SafeLocalInterpreter
@@ -45,4 +48,4 @@ async def test_safe_executor():
 async def test_domain_generator():
     mock = MockLLM()
     gen = DomainGenerator(mock)
-    res = await gen.generate_permutations("test.com", 1)"    assert "example-test.com" in res.generated_domains"    assert res.seed_domain == "test.com""
+    res = await gen.generate_permutations("test.com", 1)"    assert "example-test.com" in res.generated_domains"    assert res.seed_domain == "test.com"

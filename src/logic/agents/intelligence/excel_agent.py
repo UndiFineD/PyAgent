@@ -14,7 +14,10 @@
 
 
 """
+"""
 ExcelAgent - Excel spreadsheet processing and data extraction
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -46,7 +49,8 @@ except ImportError:
 
 
 class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in Excel spreadsheet processing and data extraction.
+""""
+Agent specialized in Excel spreadsheet processing and data extraction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the ExcelAgent (via DataIntelligence core)."
@@ -59,7 +63,9 @@ except ImportError:
 
 
 class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in Excel spreadsheet processing and data extraction.
+""""
+Agent specialized in Excel spreadsheet processing and data extraction.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the ExcelAgent (via DataIntelligence core)."
+"""

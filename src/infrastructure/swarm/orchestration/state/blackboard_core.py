@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,13 @@ from __future__ import annotations
 
 
 """
+"""
 Blackboard core.py module.
 """
-
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -44,7 +47,8 @@ class BlackboardCore:
         self.history: list[dict[str, Any]] = []
 
     def process_post(self, key: str, value: Any, agent_name: str) -> dict[str, Any]:
-        """Core logic for posting data.        self.data[key] = value
+"""
+Core logic for posting data.        self.data[key] = value
         entry = {"agent": agent_name, "key": key, "value": value}"        self.history.append(entry)
         return entry
 
@@ -53,3 +57,5 @@ class BlackboardCore:
 
     def get_all_keys(self) -> list[str]:
         return list(self.data.keys())
+
+"""

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Models and configurations for KV offloading.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -41,7 +45,8 @@ BlockHash = Union[str, int, bytes]
 
 
 class OffloadMedium(Enum):
-    """Storage medium types for offloading.
+"""
+Storage medium types for offloading.
     GPU = auto()
     CPU = auto()
     NVME = auto()
@@ -50,7 +55,8 @@ class OffloadMedium(Enum):
 
 @dataclass
 class LoadStoreSpec:
-    """Specification for load/store operations.
+"""
+Specification for load/store operations.
     block_hashes: List[BlockHash]
     medium: OffloadMedium
     addresses: List[int] = field(default_factory=list)
@@ -58,12 +64,14 @@ class LoadStoreSpec:
 
     @property
     def num_blocks(self) -> int:
-        """Get number of blocks in specification.        return len(self.block_hashes)
+"""
+Get number of blocks in specification.        return len(self.block_hashes)
 
 
 @dataclass
 class BlockStatus:
-    """Status of an offloaded block.
+"""
+Status of an offloaded block.
     address: int = 0
     size: int = 0
     ref_cnt: int = 0
@@ -71,12 +79,14 @@ class BlockStatus:
 
     @property
     def is_pinned(self) -> bool:
-        """Block is pinned if it has references.        return self.ref_cnt > 0
+"""
+Block is pinned if it has references.        return self.ref_cnt > 0
 
 
 @dataclass
 class OffloadingEvent:
-    """Event for block offloading operations.
+"""
+Event for block offloading operations.
     block_hashes: List[BlockHash]
     block_size: int
     medium: str
@@ -85,7 +95,8 @@ class OffloadingEvent:
 
 @dataclass
 class PrepareStoreOutput:
-    """Output from prepare_store operation.
+"""
+Output from prepare_store operation.
     block_hashes_to_store: List[BlockHash]
     store_spec: LoadStoreSpec
     block_hashes_evicted: List[BlockHash]

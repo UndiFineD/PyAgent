@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,14 +16,17 @@ from __future__ import annotations
 
 
 """
+"""
 AccessController - Track and evaluate per-improvement permissions and roles
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate AccessController to manage permissions and role assignments scoped to an improvement ID.
 - Define roles with define_role(role, permissions), assign role to a user with assign_role(improvement_id, user, role), grant explicit permission with grant(improvement_id, user, level), and check access with can_access(improvement_id, user, level).
-- Typical flow: ac = AccessController(); ac.define_role("reviewer", ["read","comment"]); ac.assign_role("imp-123", "alice", "reviewer"); ac.can_access("imp-123","alice","read")"
+- Typical flow: ac = AccessController(); ac.define_role("reviewer", ["read","comment"]); ac.assign_role("imp-123", "alice", "reviewer"); ac.can_access("imp-123","alice","read")
 WHAT IT DOES:
 - Maintains in-memory mapping of per-improvement permissions (permissions[improvement_id][user] -> set(levels)), declared roles (role -> list(permissions)), and assigned roles (assigned_roles[AccessController - per-improvement permission and role management
 
@@ -58,7 +62,9 @@ __version__ = VERSION
 
 
 class AccessController:
-    """Tracks per-improvement permissions and roles.
+"""
+Tracks per-improvement permissions and roles.
+
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}
         self._roles: dict[str, list[str]] = {}
@@ -80,8 +86,8 @@ class AccessController:
         role = self._assigned_roles.get(improvement_id, {}).get(user)
         if role and role in self._roles:
             return level in self._roles[role]
-        return""" False""""
-
+        return""
+False""""
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -93,7 +99,8 @@ __version__ = VERSION
 
 
 class AccessController:
-    """Tracks per-improvement permissions and roles.
+"""
+Tracks per-improvement permissions and roles.
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}
         self._roles: dict[str, list[str]] = {}
@@ -116,3 +123,11 @@ class AccessController:
         if role and role in self._roles:
             return level in self._roles[role]
         return False
+
+"""
+
+"""
+
+"""
+
+"""

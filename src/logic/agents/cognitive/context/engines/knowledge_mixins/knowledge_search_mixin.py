@@ -15,7 +15,10 @@
 
 
 """
+"""
 Knowledge search mixin for workspace-wide queries.
+"""
+
 """
 from pathlib import Path
 
@@ -23,10 +26,12 @@ from pathlib import Path
 
 
 class KnowledgeSearchMixin:
-    """Methods for workspace search and snippet extraction."""
-    def search_index(self, query: str, index: dict, root: Path) -> list[str]:
-        """Extracts code snippets based on index hits."""
-        snippets = []
+"""
+Methods for workspace search and snippet extraction.""
+def search_index(self, query: str, index: dict, root: Path) -> list[str]:
+"""
+Extracts code snippets based on index hits.""
+snippets = []
         hits = index.get(query, [])
         for hit in hits:
             rel_path = hit["path"] if isinstance(hit, dict) else hit
@@ -47,8 +52,9 @@ class KnowledgeSearchMixin:
         return snippets
 
     def perform_fallback_scan(self, query: str, root: Path, indexed_paths: list) -> list[str]:
-        """Performs a deep grep fallback search across the workspace."""
-        snippets = []
+        ""
+Performs a deep grep fallback search across the workspace.""
+snippets = []
         for p in root.rglob("*.py"):
             rel_path = str(p.relative_to(root))
             if any(part in rel_path for part in ["__pycache__", "venv", ".git"]) or rel_path in indexed_paths:

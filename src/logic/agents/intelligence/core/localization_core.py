@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,10 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Localization core module.
 
+"""
 import re
 from typing import Any
 
@@ -58,6 +62,8 @@ class LocalizationCore:
         return issues
 
     def get_supported_locales(self) -> list[str]:
-""""Returns the 12 major languages currently prioritized for translation.        return ["en", "zh", "es", "hi", "ar", "bn", "pt", "ru", "ja"," "de", "fr", "ko"]"
+""""
+Returns the 12 major languages currently prioritized for translation.        return ["en", "zh", "es", "hi", "ar", "bn", "pt", "ru", "ja"," "de", "fr", "ko"]"
     def format_translation_request(self, text: str, target_lang: str) -> str:
-""""Constructs a prompt or request for an external translation service (DeepL/LLM).#         return fTranslate the following technical agent comment to {target_lang}:\\n\\n{text}
+""""
+Constructs a prompt or request for an external translation service (DeepL/LLM).#         return fTranslate the following technical agent comment to {target_lang}:\\n\\n{text}

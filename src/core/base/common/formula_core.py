@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Core logic for safe mathematical formula evaluation."""
+"""
+"""
+Core logic for safe mathematical formula evaluation.""
+
+"""
 import ast
 import logging
 import math
@@ -29,9 +33,10 @@ logger = logging.getLogger("pyagent.formula")
 
 
 class FormulaCore:
-    """Safely evaluates mathematical expressions using AST.
+"""
+Safely evaluates mathematical expressions using AST.
     Standardized math primitives with Rust acceleration.
-    """
+"""
     # Supported operators for safe evaluation
     OPERATORS: Dict[Any, Callable] = {
         ast.Add: operator.add,
@@ -59,8 +64,9 @@ class FormulaCore:
 
     @classmethod
     def compute_perplexity(cls, logprobs: Sequence[float]) -> float:
-        """Compute perplexity from logprobs with Rust acceleration."""
-        result = cls._try_rust_perplexity(logprobs)
+"""
+Compute perplexity from logprobs with Rust acceleration.""
+result = cls._try_rust_perplexity(logprobs)
         if result is not None:
             return result
         if not logprobs:
@@ -81,8 +87,9 @@ class FormulaCore:
 
     @classmethod
     def compute_entropy(cls, logprobs: Sequence[float]) -> float:
-        """Compute entropy from logprobs (assuming they're top-k)."""
-        result = cls._try_rust_entropy(logprobs)
+"""
+Compute entropy from logprobs (assuming they're top-k).""
+result = cls._try_rust_entropy(logprobs)
         if result is not None:
             return result
         if not logprobs:
@@ -108,15 +115,16 @@ class FormulaCore:
 
     @classmethod
     def evaluate(cls, expression: str, variables: dict[str, float]) -> float:
-        """Evaluate a mathematical expression with variable substitution.
+"""
+Evaluate a mathematical expression with variable substitution.
 
         Args:
             expression: String formula (e.g., "a + b * 2")
             variables: Context variables (e.g., {"a": 10, "b": 5})
         Returns:
             Computed float result.
-        """
-        result = cls._try_rust_evaluate(expression, variables)
+"""
+result = cls._try_rust_evaluate(expression, variables)
         if result is not None:
             return result
         try:
@@ -143,8 +151,9 @@ class FormulaCore:
 
     @classmethod
     def _eval_node(cls, node: ast.AST, variables: dict[str, float]) -> float:
-        """Recursively evaluate AST nodes using small specialized helpers."""
-        if isinstance(node, ast.Constant):
+"""
+Recursively evaluate AST nodes using small specialized helpers.""
+if isinstance(node, ast.Constant):
             return cls._eval_constant(node)
 
         if isinstance(node, ast.Name):

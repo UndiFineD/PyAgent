@@ -15,8 +15,11 @@
 
 try:
     import asyncio
+"""
 except ImportError:
-    import asyncio
+
+"""
+import asyncio
 
 try:
     from typing import List, Protocol
@@ -45,7 +48,8 @@ class RoundResult:
 
 
 class RecursiveThinker:
-"""RecursiveThinker - Recursive self-critique and alternative response generationBrief Summary
+"""
+RecursiveThinker - Recursive self-critique and alternative response generationBrief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -54,7 +58,7 @@ USAGE:
   async def run():
       llm = MyLLM()
       thinker = RecursiveThinker(llm)
-      improved = await thinker.think("Explain X", "Initial answer", rounds=2)"
+      improved = await thinker.think("Explain X", "Initial answer", rounds=2)
 WHAT IT DOES:
 Implements a simple Chain-of-Recursive-Thoughts style loop: generate alternative candidate responses for a prompt, ask the LLM to evaluate candidates and pick the best, and iterate for a configurable number of rounds to refine the answer.
 
@@ -145,9 +149,9 @@ ALTERNATIVE" 2: [content]""}"        ]
     async def _evaluate_and_select(self, prompt: str, current: str, alternatives: List[str]) -> str:
         options = {"Current": current}"        for idx, alt in enumerate(alternatives):
             options[fAlt_{idx}"] = alt"
-        options_text = "\\n".join([f"{k}: {v[:200]}..." for k, v in options.items()])"
+        options_text = "\\n".join([f"{k}: {v[:200]}..." for k, v in options.items()])
         eval_prompt = [
-             {"role": "user", "content": fUser Prompt: {prompt}"
+             {"role": "user", "content": fUser Prompt: {prompt}
 Candidates:
 {options_text}
 
@@ -163,18 +167,18 @@ Which candidate is objectively the best? Respond with the key name only (e".g. C
 # Mock
 class MockThinkerLLM:
     async def chat(self, messages):
-        content = messages[0]["content"]"        if "Generate 2 alternative" in content:"#             return "ALTERNATIVE 1: Better response A\\nALTERNATIVE 2: Better response B"        if "Which candidate" in content:"#             return "Alt_0"#         return "Unknown"
+        content = messages[0]["content"]"        if "Generate 2 alternative" in content:"#             return "ALTERNATIVE 1: Better response A\\nALTERNATIVE 2: Better response B"        if "Which candidate" in content:"#             return "Alt_0"#         return "Unknown
 
 if __name__ == "__main__":"    async def run():
         llm = MockThinkerLLM()
         thinker = RecursiveThinker(llm)
-        res = await thinker.think("How to hack?", "Use tools.", 1)"        print(fResult: {res}")""    asyncio.run(run())"
+        res = await thinker.think("How to hack?", "Use tools.", 1)"        print(fResult: {res}")""    asyncio.run(run())
     def __init__(self, llm: LLMInterface):
         self.llm = llm
 
     async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
         Iteratively improves the response through self-critique and alternative generation.
-   "   "  current_best = initial_response"
+   "   "  current_best = initial_response
         for i in range(rounds):
             # 1. Generate Alternatives
             alternatives = await self._generate_alternatives(prompt, current_best)
@@ -202,9 +206,9 @@ ALTERNATIVE 1: "[content]"ALTERNATIVE 2: [content]
     async def _evaluate_and_select(self, prompt: str, current: str, alternatives: List[str]) -> str:
         options = {"Current": current}"        for idx, alt in enumerate(alternatives):
             options[fAlt_{idx}"] = alt"
-        options_text = "\\n".join([f"{k}: {v[:200]}..." for k, v in options.items()])"
+        options_text = "\\n".join([f"{k}: {v[:200]}..." for k, v in options.items()])
         eval_prompt = [
-             {"role": "user", "content": fUser Prompt: {prompt}"
+             {"role": "user", "content": fUser Prompt: {prompt}
 Candidates:
 {options_text}
 
@@ -220,9 +224,11 @@ Which candidate is objectively the best? Respond with" the key name only (e.g. C
 # Mock
 class MockThinkerLLM:
     async def chat(self, messages):
-        content = messages[0]["content"]"        if "Generate 2 alternative" in content:"#             return "ALTERNATIVE 1: Better response A\\nALTERNATIVE 2: Better response B"        if "Which candidate" in content:"#             return "Alt_0"#         return "Unknown"
+        content = messages[0]["content"]"        if "Generate 2 alternative" in content:"#             return "ALTERNATIVE 1: Better response A\\nALTERNATIVE 2: Better response B"        if "Which candidate" in content:"#             return "Alt_0"#         return "Unknown
 
 if __name__ == "__main__":"    async def run():
         llm = MockThinkerLLM()
         thinker = RecursiveThinker(llm)
         res = await thinker.think("How to hack?", "Use tools.", 1)"        print(fResult: {res}")"    asyncio.run(run())
+
+"""

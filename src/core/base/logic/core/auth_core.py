@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Core logic regarding Authentication.
+"""
+"""
+Core logic regarding Authentication.
 (Facade regarding src.core.base.common.auth_core)
 """
 try:
-    from .core.base.common.auth_core import AuthCore as StandardAuthCore
+
+"""
+from .core.base.common.auth_core import AuthCore as StandardAuthCore
 except ImportError:
     from src.core.base.common.auth_core import AuthCore as StandardAuthCore
 
@@ -25,7 +29,8 @@ except ImportError:
 
 
 class AuthCore(StandardAuthCore):
-    """TODO FIXME DO THIS RIGHT:
+"""
+TODO FIXME DO THIS RIGHT:
     Facade regarding StandardAuthCore to maintain backward compatibility.
     Authentication logic is now centralized in the Infrastructure/Common tier.
-    """
+"""

@@ -14,14 +14,14 @@
 
 
 """
+"""
 Utilities used across base modules.
 
+"""
 Small, well-typed helper functions and decorators used by agents and tools.
 Focus on low-risk, testable behaviors: replacement helpers, logging setup,
 and tool wrappers that record interactions to the fleet recorder when present.
 """
-
-
 import os
 
 from pathlib import Path
@@ -68,11 +68,12 @@ def bulk_replace_files(
     new_string: str,
     use_regex: bool = False,
 ) -> dict[str, bool]:
-    """Performs a bulk string or regex replacement across multiple files.
+"""
+Performs a bulk string or regex replacement across multiple files.
     Returns a mapping of file path to boolean (True if file was modified).
     Phase 318: Rust-Native Parallel Engine.
-    """
-    try:
+"""
+try:
         # pylint: disable=import-outside-toplevel
         from src.core.rust_bridge import RustBridge
     except (ImportError, ValueError):
@@ -85,8 +86,9 @@ def bulk_replace_files(
 
 
 def setup_logging(verbosity_arg: int = 0) -> None:
-    """Configure logging based on verbosity level."""
-    if verbosity_arg >= 2:
+"""
+Configure logging based on verbosity level.""
+if verbosity_arg >= 2:
         level = logging.DEBUG
     elif verbosity_arg == 1:
         level = logging.INFO
@@ -100,12 +102,12 @@ def setup_logging(verbosity_arg: int = 0) -> None:
 
 
 def _record_tool_execution(self: Any, func_name: str, args: tuple, kwargs: dict, result: Any) -> None:
-    """
-    Record a tool execution to the fleet recorder if available.
+"""
+Record a tool execution to the fleet recorder if available.
     Separated into a helper to keep the decorator logic small and testable.
     Critical exceptions (KeyboardInterrupt, SystemExit) are re-raised.
-    """
-    if not hasattr(self, "fleet") or not self.fleet or not hasattr(self.fleet, "recorder"):
+"""
+if not hasattr(self, "fleet") or not self.fleet or not hasattr(self.fleet, "recorder"):
         return
     try:
         shard_result = str(result)
@@ -131,11 +133,11 @@ def _record_tool_execution(self: Any, func_name: str, args: tuple, kwargs: dict,
 
 
 def as_tool(priority: int = 0, category: str | None = None) -> Callable:
-    """
-    Decorator to mark a method as a tool for the ToolRegistry.
+"""
+Decorator to mark a method as a tool for the ToolRegistry.
     Automatically records tool interactions to the fleet context shards for autonomous learning.
     Can be used as @as_tool or @as_tool(priority=10).
-    """
+"""
     # pylint: disable=import-outside-toplevel
     from functools import wraps
 
@@ -196,11 +198,10 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
 
 
 def create_main_function(agent_class: type[BaseAgent], description: str, context_help: str) -> Callable[[], None]:
-    """
-    Create a main function for an agent class.
-    """
-    
-    def main() -> None:
+"""
+Create a main function for an agent class.
+    ""
+def main() -> None:
         parser = argparse.ArgumentParser(description=description)
         parser.add_argument(
             "--describe-backends",

@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Models and configuration for tensor parallelism.
 
+"""
 try:
     import logging
 except ImportError:
@@ -51,7 +53,8 @@ logger = logging.getLogger(__name__)
 
 
 class ParallelMode(Enum):
-    """Parallelism modes.
+"""
+Parallelism modes.
     DATA = auto()  # Data parallel
     TENSOR = auto()  # Tensor parallel
     PIPELINE = auto()  # Pipeline parallel
@@ -81,9 +84,10 @@ class ParallelConfig:
         if self.world_size == 1 and expected_world > 1:
             self.world_size = expected_world
         elif self.world_size != expected_world and expected_world > 1:
-            logger.warning(f"World size {self.world_size} != TP*PP*DP = {expected_world}")"
+            logger.warning(f"World size {self.world_size} != TP*PP*DP = {expected_world}")
     @classmethod
-    def from_env(cls) -> "ParallelConfig":"        """Create configuration from environment variables.        return cls(
+    def from_env(cls) -> "ParallelConfig":"        """
+Create configuration from environment variables.        return cls(
             world_size=int(os.environ.get("WORLD_SIZE", 1)),"            tensor_parallel_size=int(os.environ.get("TENSOR_PARALLEL_SIZE", 1)),"            pipeline_parallel_size=int(os.environ.get("PIPELINE_PARALLEL_SIZE", 1)),"            data_parallel_size=int(os.environ.get("DATA_PARALLEL_SIZE", 1)),"            backend=os.environ.get("DISTRIBUTED_BACKEND", "nccl"),"        )
 
 
@@ -102,7 +106,8 @@ class RankInfo:
         cls,
         global_rank: int,
         config: ParallelConfig,
-    ) -> "RankInfo":"        """Compute rank information from global rank and config.        tp_size = config.tensor_parallel_size
+    ) -> "RankInfo":"        """
+Compute rank information from global rank and config.        tp_size = config.tensor_parallel_size
         pp_size = config.pipeline_parallel_size
 
         # Compute DP, PP, TP ranks from global rank
@@ -122,3 +127,5 @@ class RankInfo:
             dp_rank=dp_rank,
             node_rank=node_rank,
         )
+
+"""

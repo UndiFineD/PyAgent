@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ByzantineConsensusAgent - Fault-tolerant committee-based consensus
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -33,7 +37,6 @@ ByzantineConsensusAgent for PyAgent.
 Ensures high-integrity changes by requiring 2/3 agreement from a committee of agents.
 Used for critical infrastructure or security logic changes.
 """
-
 import asyncio
 import hashlib
 import logging
@@ -50,7 +53,8 @@ __version__ = VERSION
 
 
 class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-    """Orchestrates 'Fault-Tolerant' decision making across multiple specialized agents.'
+"""
+Orchestrates 'Fault-Tolerant' decision making across multiple specialized agents.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._core = ByzantineCore()
@@ -60,7 +64,8 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def select_committee(self, task: str, available_agents: list[str]) -> list[str]:
-        """Selects a subset of agents best suited for a task based on reliability. Enforces privacy.        if not self._privacy_enforced:
+"""
+Selects a subset of agents best suited for a task based on reliability. Enforces privacy.        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for committee selection.")"        # Ensure registry is populated
         for agent in available_agents:
             if agent not in self._reliability_scores:
@@ -85,7 +90,7 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             timeout,
             audit_results,
         )
-        # Implements 'Wait-for-Majority' logic with timeout.'        logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")"
+        # Implements 'Wait-for-Majority' logic with timeout.'        logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
         required_quorum = self.core.get_required_quorum(change_type)
 
         # 1. Proposal Hashing & Grouping
@@ -94,7 +99,7 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         for agent, content in proposals.items():
             # Calculate SHA-256 hash of the content to find exact matches
-            content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()"
+            content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
             # Update reliability score if missing
             if agent not in self.reliability_scores:
                 self.reliability_scores[agent] = 0.9
@@ -125,12 +130,13 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             return {
                 "decision": "ACCEPTED","                "reason": "Byzantine Quorum Reached","                "agreement_score": agreement_score,"                "confidence": confidence,"                "content": proposal_map[winning_hash],"                "winning_hash": winning_hash,"            }
 
-        logging.warning("ByzantineConsensus: No consensus reached on content. Falling back to AI Quality Eval.")"
+        logging.warning("ByzantineConsensus: No consensus reached on content. Falling back to AI Quality Eval.")
         scores: dict[str, float] = {}
 
         async def _evaluate_proposal(agent_name: str, content: str) -> tuple[str, float]:
             evaluation_prompt = (
-                f"Identify the technical quality and correctness of the proposal ""                f"for the task: '{task}'\\n\\n""'                f"Agent Proposal ({agent_name}):\\n{content}\\n\\n""                "Output ONLY a single numeric score between 0.0 and 1.0 (e.g. 0.85). ""                "Higher is better.""            )
+                f"Identify the technical quality and correctness of the proposal ""                f"for the task: '{task}'\\n\\n""
+f"Agent Proposal ({agent_name}):\\n{content}\\n\\n""                "Output ONLY a single numeric score between 0.0 and 1.0 (e.g. 0.85). ""                "Higher is better.""            )
             try:
                 # Use subagent logic to get a score
                 score_response = (await self.think(evaluation_prompt)).strip()
@@ -191,15 +197,18 @@ class ByzantineConsensusAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Acts as a high-level evaluator for a single piece of content.        _ = (prompt, target_file)
-        return "Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment.""
+"""
+Acts as a high-level evaluator for a single piece of content.        _ = (prompt, target_file)
+        return "Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment."
     async def _process_task(self, task_data: dict[str, Any]) -> Any:
                 Implementation of TaskQueueMixin abstract method.
         Routes incoming tasks to appropriate internal logic.
                 task_name = task_data.get("task", "")"        if "vote" in task_name.lower() or "consensus" in task_name.lower():"            proposals = task_data.get("proposals", {})"            return await self.run_committee_vote(task_name, proposals)
 
-        return {"status": "ignored", "reason": "Unknown task type for ByzantineConsensusAgent"}"
+        return {"status": "ignored", "reason": "Unknown task type for ByzantineConsensusAgent"}
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(ByzantineConsensusAgent, "Byzantine Consensus Agent", "Path to evaluator log")"    main()
+
+"""

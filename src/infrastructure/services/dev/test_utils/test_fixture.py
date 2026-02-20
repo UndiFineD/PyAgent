@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from collections.abc import Callable
 except ImportError:
@@ -44,8 +44,9 @@ __version__ = VERSION
 
 @dataclass
 class TestFixture:
-    """A test fixture with setup and teardown.""""
-    Attributes:
+"""
+A test fixture with setup and teardown.""""
+Attributes:
         name: Fixture name.
         setup_fn: Setup function.
         teardown_fn: Teardown function.

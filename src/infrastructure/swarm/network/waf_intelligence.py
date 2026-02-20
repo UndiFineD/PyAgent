@@ -15,8 +15,11 @@
 
 try:
     import re
+"""
 except ImportError:
-    import re
+
+"""
+import re
 
 try:
     from typing import Dict, List

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Weights.py module.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -40,7 +44,8 @@ if TYPE_CHECKING:
 
 @dataclass
 class LoRAWeights:
-    """LoRA weight matrices.
+"""
+LoRA weight matrices.
     lora_a: Dict[str, np.ndarray] = field(default_factory=dict)
     lora_b: Dict[str, np.ndarray] = field(default_factory=dict)
     scales: Dict[str, float] = field(default_factory=dict)
@@ -65,7 +70,7 @@ def merge_adapters(adapters: List["LoRAAdapter"], weights: Optional[List[float]]
         raise ValueError("No adapters to merge")"    if weights is None:
         weights = [1.0 / len(adapters)] * len(adapters)
     if len(weights) != len(adapters):
-        raise ValueError("Number of weights must match adapters")"
+        raise ValueError("Number of weights must match adapters")
     merged = LoRAWeights()
     all_modules: Set[str] = set()
     for adapter in adapters:

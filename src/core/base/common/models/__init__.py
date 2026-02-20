@@ -14,11 +14,15 @@
 # limitations under the License.
 
 
-"""Data models for PyAgent.
+"""
+"""
+Data models for PyAgent.
 Unified entry point for re-exporting all sub-modules via lazy loading.
 """
 try:
-    from typing import TYPE_CHECKING, Any
+
+"""
+from typing import TYPE_CHECKING, Any
 except ImportError:
     from typing import TYPE_CHECKING, Any
 
@@ -121,13 +125,15 @@ _loader = ModuleLazyLoader(_LAZY_REGISTRY)
 
 
 def __getattr__(name: str) -> Any:
-    """Lazy load attributes."""
-    return _loader.load(name)
+"""
+Lazy load attributes.""
+return _loader.load(name)
 
 
 def __dir__() -> list[str]:
-    """Return available names."""
-    return list(globals().keys()) + _loader.available_names()
+"""
+Return available names.""
+return list(globals().keys()) + _loader.available_names()
 
 
 __all__ = list(_LAZY_REGISTRY.keys())

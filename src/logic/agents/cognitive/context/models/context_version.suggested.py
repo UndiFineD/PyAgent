@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,16 +18,28 @@ from __future__ import annotations
 
 # "Auto-extracted class from agent_context.py"try:
     from dataclasses import dataclass, field
+"""
 except ImportError:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 
 
 
 @dataclass
 class ContextVersion:
-""""Version information for context.
+""""
+Version information for context.
     version: str
     timestamp: str
     content_hash: str
     changes: list[str] = field(default_factory=lambda: [])
 #     author: str =
+
+"""
+
+"""
+
+""
+
+"""

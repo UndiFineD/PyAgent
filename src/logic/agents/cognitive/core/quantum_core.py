@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,23 +17,24 @@ from __future__ import annotations
 
 # "QuantumCore logic for Quantum-Ready Reasoning (Phase 177)."Mathematical models for "Superposition Prompting" and probability modeling"for high-dimensional intent spaces.
 """
-
 import math
 
 from src.core.base.lifecycle.version import VERSION
 
+"""
 __version__ = VERSION
 
-
-
+"""
 class QuantumCore:
-""""Logic for quantum-inspired probability modeling.
+""""
+Logic for quantum-inspired probability modeling.
+
     @staticmethod
     def calculate_superposition_weights(
         prompts: list[str], constraints: dict[str, float] | None = None
     ) -> list[float]:
 #         r
-        Calculates weights for multiple prompts being processed in "superposition"."
+        Calculates weights for multiple prompts being processed in "superposition".
         $W_i = \\frac{e^{C_i}}{\\\\sum e^{C_j}}$ where $C$ is the constraint score.
 
         Args:
@@ -85,3 +87,9 @@ class QuantumCore:
                 return 0.0
         # Shannon Entropy
         return -sum(w * math.log2(w) for w in weights if w > 0)
+
+"""
+
+""
+
+"""

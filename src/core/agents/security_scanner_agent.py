@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Module: security_scanner_agent
 Agent for comprehensive security scanning using patterns from aem-hacker.
 Implements vulnerability scanning, payload generation, SSRF detection, and reconnaissance.
 """
 
+"""
 from typing import Any, Dict, List
 
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -37,16 +40,16 @@ class SecurityScannerAgent(
         SSRFDetectorMixin,
         ReconnaissanceMixin
     ):
-    """Comprehensive security scanner agent inspired by aem-hacker patterns.
+"""
+Comprehensive security scanner agent inspired by aem-hacker patterns.
 
     Features:
     - Modular vulnerability scanning with extensible checks
     - Payload generation for various exploit types
     - SSRF detection using callback server pattern
     - Target reconnaissance and service fingerprinting
-    """
-
-    def __init__(self, **kwargs: Any) -> None:
+"""
+def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         VulnerabilityScannerMixin.__init__(self, **kwargs)
         PayloadGeneratorMixin.__init__(self, **kwargs)
@@ -61,7 +64,8 @@ class SecurityScannerAgent(
         detector_port: int = 8080,
         workers: int = 4,
     ) -> Dict[str, Any]:
-        """Perform comprehensive security scan on targets.
+"""
+Perform comprehensive security scan on targets.
 
         Args:
             targets: List of target URLs
@@ -71,8 +75,8 @@ class SecurityScannerAgent(
 
         Returns:
             Scan results dictionary
-        """
-        results = {
+"""
+results = {
             'reconnaissance': {},
             'vulnerabilities': {},
             'ssrf_findings': [],
@@ -118,8 +122,9 @@ class SecurityScannerAgent(
 
 
     def _generate_scan_summary(self, results: Dict[str, Any]) -> Dict[str, Any]:
-        """Generate summary of scan results."""
-        summary = {
+"""
+Generate summary of scan results.""
+summary = {
             'targets_scanned': len(results.get('reconnaissance', {})),
             'endpoints_discovered': sum(len(endpoints) for endpoints in results.get('reconnaissance', {}).values()),
             'vulnerabilities_found': sum(len(findings) for findings in results.get('vulnerabilities', {}).values()),
@@ -135,7 +140,8 @@ class SecurityScannerAgent(
 
 
     async def generate_exploit_payload(self, exploit_type: str, **kwargs) -> str:
-        """Generate exploit payload for specific vulnerability type.
+"""
+Generate exploit payload for specific vulnerability type.
 
         Args:
             exploit_type: Type of exploit ('ssrf_rce', 'xss', 'deserialization', 'groovy_rce')
@@ -143,8 +149,8 @@ class SecurityScannerAgent(
 
         Returns:
             Generated payload
-        """
-        if exploit_type == 'ssrf_rce':
+"""
+if exploit_type == 'ssrf_rce':
             fake_aem = kwargs.get('fake_aem_host', 'localhost')
             return self.generate_ssrf_rce_payload(fake_aem)
         elif exploit_type == 'xss':
@@ -162,10 +168,11 @@ class SecurityScannerAgent(
 
 
     async def add_custom_vulnerability_check(self, name: str, check_func) -> None:
-        """Add custom vulnerability check.
+"""
+Add custom vulnerability check.
 
         Args:
             name: Check name
             check_func: Check function
-        """
-        self.register_vulnerability_check(name, check_func)
+        ""
+self.register_vulnerability_check(name, check_func)

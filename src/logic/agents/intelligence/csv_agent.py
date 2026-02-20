@@ -14,6 +14,7 @@
 
 
 """
+"""
 CsvAgent - CSV data analysis and manipulation
 Brief Summary
 # DATE: 2026-02-13
@@ -21,7 +22,9 @@ Brief Summary
 USAGE:
 Instantiate with the path to a CSV and use the DataIntelligenceAgent API to load, inspect, analyze and transform CSV datasets:
 try:
-    from .agents.csv_agent import CsvAgent
+
+"""
+from .agents.csv_agent import CsvAgent
 except ImportError:
     from src.agents.csv_agent import CsvAgent
 
@@ -47,7 +50,8 @@ except ImportError:
 
 
 class CsvAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in CSV data analysis and manipulation.
+""""
+Agent specialized in CSV data analysis and manipulation.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the CsvAgent (via DataIntelligence core)."
@@ -60,7 +64,9 @@ except ImportError:
 
 
 class CsvAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in CSV data analysis and manipulation.
+""""
+Agent specialized in CSV data analysis and manipulation.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the CsvAgent (via DataIntelligence core)."
+"""

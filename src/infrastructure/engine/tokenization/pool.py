@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Tokenizer pool for parallel processing.
 """
-
 try:
-    import threading
+
+"""
+import threading
 except ImportError:
     import threading
 
@@ -54,7 +58,8 @@ except ImportError:
 
 
 class TokenizerPool:
-    """Thread-safe pool of tokenizers.
+"""
+Thread-safe pool of tokenizers.
     def __init__(self, config: TokenizerConfig, pool_size: int = 4) -> None:
         self.config = config
         self.pool_size = pool_size
@@ -66,14 +71,16 @@ class TokenizerPool:
         self._init_pool()
 
     def _init_pool(self) -> None:
-        """Initialize the tokenizer pool.        registry = TokenizerRegistry()
+"""
+Initialize the tokenizer pool.        registry = TokenizerRegistry()
         for _ in range(self.pool_size):
             tokenizer = registry.get_tokenizer(self.config)
             self._pool.append(tokenizer)
             self._available.append(True)
 
     def acquire(self, timeout: Optional[float] = None) -> Optional[BaseTokenizer]:
-        """Acquire a tokenizer from the pool.        with self._condition:
+"""
+Acquire a tokenizer from the pool.        with self._condition:
             start = time.monotonic()
             while True:
                 for i, available in enumerate(self._available):
@@ -89,7 +96,8 @@ class TokenizerPool:
                     self._condition.wait()
 
     def release(self, tokenizer: BaseTokenizer) -> None:
-        """Release a tokenizer back into the pool.        with self._condition:
+"""
+Release a tokenizer back into the pool.        with self._condition:
             for i, t in enumerate(self._pool):
                 if t is tokenizer:
                     self._available[i] = True
@@ -104,3 +112,5 @@ class TokenizerPool:
 
     def __exit__(self, *args) -> None:
         self.release(self._current)
+
+"""

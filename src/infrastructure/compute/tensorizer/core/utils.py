@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Utility functions for tensorizer.
+"""
+"""
+Utility functions for tensorizer.
 try:
-    import os
+
+"""
+import os
 except ImportError:
     import os
 
@@ -91,7 +95,8 @@ def load_model(
 
 
 def get_model_info(path: Union[str, Path]) -> Dict[str, Any]:
-    """Get information about a tensorizer file without loading tensors.    config = TensorizerConfig(use_mmap=True)
+"""
+Get information about a tensorizer file without loading tensors.    config = TensorizerConfig(use_mmap=True)
 
     with TensorizerReader(path, config) as reader:
         total_size = sum(m.size_bytes for m in reader._metadata.values())

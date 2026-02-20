@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Download agent data models: DownloadConfig and DownloadResult.
 """
-
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -31,8 +35,9 @@ except ImportError:
 
 @dataclass
 class DownloadResult:
-    """Outcome of a single download operation.""""
-    Fields:
+"""
+Outcome of a single download operation.""""
+Fields:
     - url: original URL
     - success: True if download succeeded
     - destination: local path to saved file/dir
@@ -45,12 +50,14 @@ class DownloadResult:
     destination: str
     file_type: str
     size_bytes: int = 0
-    error_message: str = """    metadata: Optional[Dict[str, Any]] = None
+    error_message: str = ""
+metadata: Optional[Dict[str, Any]] = None
 
 
 @dataclass
 class DownloadConfig:
-    """Runtime configuration for DownloadAgent operations.    urls_file: str = "docs/download/urls.txt""    base_dir: str = ".""    max_retries: int = 3
+"""
+Runtime configuration for DownloadAgent operations.    urls_file: str = "docs/download/urls.txt""    base_dir: str = ".""    max_retries: int = 3
     timeout_seconds: int = 30
     delay_between_downloads: float = 1.0
     skip_existing: bool = True
@@ -60,19 +67,28 @@ class DownloadConfig:
 
 @dataclass
 class DownloadResult:
-    """Result of a download operation.    url: str
+"""
+Result of a download operation.    url: str
     success: bool
     destination: str
     file_type: str
     size_bytes: int = 0
-    error_message: str = """    metadata: dict[str, Any] | None = None
+    error_message: str = ""
+metadata: dict[str, Any] | None = None
 
 
 @dataclass
 class DownloadConfig:
-    """Configuration for download operations.    urls_file: str = "docs/download/urls.txt""    base_dir: str = ".""    max_retries: int = 3
+"""
+Configuration for download operations.    urls_file: str = "docs/download/urls.txt""    base_dir: str = ".""    max_retries: int = 3
     timeout_seconds: int = 30
     delay_between_downloads: float = 1.0
     skip_existing: bool = True
     dry_run: bool = False
     verbose: bool = False
+
+"""
+
+""
+
+"""

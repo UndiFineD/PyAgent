@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.compute.cuda.u_batch_processor import UBatchState, UBatchSlice, UBatchContext, UbatchMetadata, UBatchConfig, UBatchBarrier, UBatchWrapper, DynamicUBatchWrapper, make_ubatch_contexts

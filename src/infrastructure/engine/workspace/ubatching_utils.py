@@ -1,3 +1,17 @@
+"""
+U-batching utilities (parser-safe stub).
+
+Small helper to group items into batches; the real implementation is
+more involved but this suffices for imports and simple tests.
+"""
+from typing import Iterable, List, TypeVar
+
+T = TypeVar("T")
+
+
+def ubatch(items: Iterable[T], size: int) -> List[List[T]]:
+    it = list(items)
+    return [it[i : i + size] for i in range(0, len(it), size)]
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -13,9 +27,11 @@
 # limitations under the License.
 
 
+"""
 Micro-batching (UBatching) utilities for Phase 52.
 Optimizes execution by slicing larger batches into hardware-aligned segments.
 
+"""
 import logging
 from typing import Any, Dict, List
 
@@ -33,7 +49,7 @@ class UBatchingUtils:
     Essential for 120fps synchronized multimodal pipelines.
     
     def __init__(self) -> None:
-        self._stats: Dict[str, Any] = {"total_slices": 0, "avg_slice_size": 0.0, "sync_count": 0}"
+        self._stats: Dict[str, Any] = {"total_slices": 0, "avg_slice_size": 0.0, "sync_count": 0}
     @staticmethod
     def slice_batch(batch: List[Any], min_slice: int = 4) -> List[List[Any]]:
                 Slices a batch into micro-batches for concurrent processing.
@@ -58,5 +74,8 @@ class UBatchingUtils:
             threading.Event().wait(0.001 * (thread_id / total_threads))
 
     def get_ubatch_metrics(self) -> Dict[str, Any]:
-        """Returns micro-batching performance metrics.        if rc and hasattr(rc, "ubatch_get_stats_rust"):"            return rc.ubatch_get_stats_rust()
+"""
+Returns micro-batching performance metrics.        if rc and hasattr(rc, "ubatch_get_stats_rust"):"            return rc.ubatch_get_stats_rust()
         return self._stats
+
+"""

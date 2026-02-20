@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.multimodal.processor.base import ModalityType, MultiModalConfig, TODO PlaceholderInfo, MultiModalData, MultiModalInputs, BaseMultiModalProcessor

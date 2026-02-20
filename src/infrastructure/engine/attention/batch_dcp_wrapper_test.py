@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.attention.batch_dcp_wrapper import BatchPhase, AllReduceStrategy, BatchRequest, BatchMetadata, DCPPlanConfig, ExecutionPlan, BatchExecutor, BatchDCPPrefillWrapper, BatchDCPDecodeWrapper, UnifiedBatchWrapper, create_prefill_wrapper, create_decode_wrapper, create_unified_wrapper

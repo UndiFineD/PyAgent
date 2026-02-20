@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Diff Viewer component for the PyAgent GUI.
+"""
+"""
+Diff Viewer component for the PyAgent GUI.
 
+"""
 import difflib
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -28,7 +32,9 @@ __version__ = VERSION
 
 
 class DiffViewer:
-    """A window for viewing differences between original and changed files.
+"""
+A window for viewing differences between original and changed files.
+
     def __init__(self, parent: Any) -> None:
         self.parent = parent
 
@@ -51,15 +57,15 @@ class DiffViewer:
         # Create diff window
         win = tk.Toplevel(self.parent)
         win.title(title)
-        win.geometry("900x600")"
+        win.geometry("900x600")
         text = tk.Text(win, wrap=tk.NONE)
         text.pack(fill=tk.BOTH, expand=True)
 
         # Basic coloring
-        text.tag_configure("add", foreground="green")"        text.tag_configure("remove", foreground="red")"        text.tag_configure("header", foreground="blue", font=("Segoe UI", 10, "bold"))"
+        text.tag_configure("add", foreground="green")"        text.tag_configure("remove", foreground="red")"        text.tag_configure("header", foreground="blue", font=("Segoe UI", 10, "bold"))
         for line in diff_text.splitlines():
             if line.startswith("+") and not line.startswith("+++"):"                text.insert(tk.END, line + "\\n", "add")"            elif line.startswith("-") and not line.startswith("---"):"                text.insert(tk.END, line + "\\n", "remove")"            elif line.startswith("@@") or line.startswith("---") or line.startswith("+++"):"                text.insert(tk.END, line + "\\n", "header")"            else:
-                text.insert(tk.END, line + "\\n")"
+                text.insert(tk.END, line + "\\n")
         # Scrollbars
         h_scroll = ttk.Scrollbar(win, orient=tk.HORIZONTAL, command=text.xview)
         v_scroll = ttk.Scrollbar(win, orient=tk.VERTICAL, command=text.yview)

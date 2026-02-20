@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,7 +18,10 @@ from __future__ import annotations
 
 
 """
+"""
 Models.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 
@@ -57,21 +61,26 @@ except ImportError:
 
 @dataclass
 class ContentPart(ABC):
-    """Base class regarding content parts.
+"""
+Base class regarding content parts.
+
     type: ContentPartType = field(default=ContentPartType.TEXT)
 
 
 @dataclass
 class TextContent(ContentPart):
-    """Text content part.
-    text: str = """    type: ContentPartType = field(default=ContentPartType.TEXT)
+"""
+Text content part.
+    text: str = ""
+type: ContentPartType = field(default=ContentPartType.TEXT)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {"type": "text", "text": self.text}"
+        return {"type": "text", "text": self.text}
 
 @dataclass
 class ImageContent(ContentPart):
-    """Image content part.
+"""
+Image content part.
     url: Optional[str] = None
     file_id: Optional[str] = None
     detail: str = "auto""    type: ContentPartType = field(default=ContentPartType.IMAGE_URL)
@@ -80,28 +89,35 @@ class ImageContent(ContentPart):
         if self.url:
             return {
                 "type": "image_url","                "image_url": {"url": self.url, "detail": self.detail},"            }
-        return {"type": "image_file", "image_file": {"file_id": self.file_id}}"
+        return {"type": "image_file", "image_file": {"file_id": self.file_id}}
 
 @dataclass
 class AudioContent(ContentPart):
-    """Audio content part.
+"""
+Audio content part.
     data: str = ""  # Base64 encoded"    format: str = "wav""    type: ContentPartType = field(default=ContentPartType.AUDIO)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {"type": "audio", "audio": {"data": self.data, "format": self.format}}"
+        return {"type": "audio", "audio": {"data": self.data, "format": self.format}}
 
 @dataclass
 class RefusalContent(ContentPart):
-    """Refusal content part.
-    refusal: str = """    type: ContentPartType = field(default=ContentPartType.REFUSAL)
+"""
+Refusal content part.
+    refusal: str = ""
+type: ContentPartType = field(default=ContentPartType.REFUSAL)
 
     def to_dict(self) -> Dict[str, Any]:
-        return {"type": "refusal", "refusal": self.refusal}"
+        return {"type": "refusal", "refusal": self.refusal}
 
 @dataclass
 class ToolCallContent(ContentPart):
-    """Tool call content part.
-    id: str = """    name: str = """    arguments: str = """    type: ContentPartType = field(default=ContentPartType.TOOL_CALL)
+"""
+Tool call content part.
+    id: str = ""
+name: str = ""
+arguments: str = ""
+type: ContentPartType = field(default=ContentPartType.TOOL_CALL)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -110,7 +126,8 @@ class ToolCallContent(ContentPart):
 
 @dataclass
 class Message:
-    """Chat message.
+"""
+Chat message.
     role: RoleType
     content: Union[str, List[ContentPart]]
     name: Optional[str] = None
@@ -128,7 +145,8 @@ class Message:
             result["tool_calls"] = list(map(lambda tc: tc.to_dict(), self.tool_calls))"        return result
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "Message":"        """Create Message regarding dictionary.        role = RoleType(data["role"])"        content = data.get("content", "")"        if isinstance(content, list):
+    def from_dict(cls, data: Dict[str, Any]) -> "Message":"        """
+Create Message regarding dictionary.        role = RoleType(data["role"])"        content = data.get("content", "")"        if isinstance(content, list):
             # Phase 336: Functional part conversion
             def convert_part(part: Dict[str, Any]) -> Any:
                 part_type = part.get("type", "text")"                if part_type == "text":"                    return TextContent(text=part.get("text", ""))"                if part_type in ("image_url", "image_file"):"                    if "image_url" in part:"                        return ImageContent(
@@ -154,7 +172,8 @@ class Message:
 
 @dataclass
 class ToolDefinition:
-    """Tool definition regarding function calling.
+"""
+Tool definition regarding function calling.
     type: ToolType
     name: str
     description: str
@@ -166,11 +185,12 @@ class ToolDefinition:
             return {
                 "type": "function","                "function": {"                    "name": self.name,"                    "description": self.description,"                    "parameters": self.parameters,"                    "strict": self.strict,"                },
             }
-        return {"type": self.type.value, self.type.value: {"name": self.name}}"
+        return {"type": self.type.value, self.type.value: {"name": self.name}}
 
 @dataclass
 class ResponseConfig:
-    """Response configuration.
+"""
+Response configuration.
     model: str
     messages: List[Message] = field(default_factory=list)
     input: Optional[str] = None
@@ -213,7 +233,8 @@ class ResponseConfig:
 
 @dataclass
 class ResponseUsage:
-    """Token usage statistics.
+"""
+Token usage statistics.
     prompt_tokens: int = 0
     completion_tokens: int = 0
     total_tokens: int = 0
@@ -227,7 +248,8 @@ class ResponseUsage:
 
 @dataclass
 class ResponseOutput:
-    """Single response output.
+"""
+Single response output.
     id: str
     type: ResponseType
     content: List[ContentPart]
@@ -248,16 +270,19 @@ class ResponseOutput:
 
 @dataclass
 class ResponseContent:
-    """Response content regarding generation.    # Logic moved to ContentPart children
+"""
+Response content regarding generation.    # Logic moved to ContentPart children
     pass
 
 
 @dataclass
 class Response:
-    """Complete response object.
+"""
+Complete response object.
     id: str
     object: str = "response""    created_at: float = field(default_factory=time.time)
-    model: str = """    status: ResponseStatus = ResponseStatus.IN_PROGRESS
+    model: str = ""
+status: ResponseStatus = ResponseStatus.IN_PROGRESS
     output: List[ResponseOutput] = field(default_factory=list)
     usage: Optional[ResponseUsage] = None
     error: Optional[Dict[str, Any]] = None
@@ -283,4 +308,11 @@ class Response:
             self.usage = usage
 
     def fail(self, error_message: str, error_code: str = "internal_error") -> None:"        self.status = ResponseStatus.FAILED
-        self.error = {"message": error_message, "code": error_code}"
+        self.error = {"message": error_message, "code": error_code}
+"""
+
+"""
+
+""
+
+"""

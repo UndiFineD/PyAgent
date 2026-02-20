@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Ops.py module.
 
+"""
 try:
     import numpy
 except ImportError:
@@ -35,7 +37,8 @@ except ImportError:
 
 
 class PagedAttentionOps:
-    """Pure NumPy implementation of paged attention operations.
+"""
+Pure NumPy implementation of paged attention operations.
     @staticmethod
     def scaled_dot_product_attention(
         query: np.ndarray,
@@ -45,7 +48,8 @@ class PagedAttentionOps:
         causal: bool = True,
         sliding_window: int | None = None,
     ) -> np.ndarray:
-        """Standard scaled dot-product attention.        scores = np.einsum("bhqd,bhkd->bhqk", query, key) * scale"        sq, sk = query.shape[2], key.shape[2]
+"""
+Standard scaled dot-product attention.        scores = np.einsum("bhqd,bhkd->bhqk", query, key) * scale"        sq, sk = query.shape[2], key.shape[2]
         if causal:
             mask = np.triu(np.ones((sq, sk), dtype=bool), k=1)
             scores = np.where(mask, float("-inf"), scores)"        if sliding_window is not None:
@@ -56,7 +60,7 @@ class PagedAttentionOps:
             scores = np.where(mask, float("-inf"), scores)"        scores_max = np.max(scores, axis=-1, keepdims=True)
         scores_exp = np.exp(scores - scores_max)
         attn_weights = scores_exp / (np.sum(scores_exp, axis=-1, keepdims=True) + 1e-9)
-        return np.einsum("bhqk,bhkd->bhqd", attn_weights, value)"
+        return np.einsum("bhqk,bhkd->bhqd", attn_weights, value)
     @staticmethod
     def paged_attention_v1(
         query: np.ndarray,
@@ -65,7 +69,8 @@ class PagedAttentionOps:
         seq_lens: np.ndarray,
         config: AttentionConfig,
     ) -> np.ndarray:
-        """Basic paged attention implementation regarding sequence batches.        num_seqs, num_heads, head_size = query.shape
+"""
+Basic paged attention implementation regarding sequence batches.        num_seqs, num_heads, head_size = query.shape
         output = np.zeros((num_seqs, num_heads, head_size), dtype=query.dtype)
 
         def _process_one(idx: int) -> None:
@@ -99,7 +104,8 @@ class PagedAttentionOps:
         config: AttentionConfig,
         partition_size: int = 512,
     ) -> np.ndarray:
-        """Paged attention with partition-based reduction regarding sequences.        ns, nh, hs = query.shape
+"""
+Paged attention with partition-based reduction regarding sequences.        ns, nh, hs = query.shape
         out_buf = np.zeros((ns, nh, hs), dtype=query.dtype)
 
         def _process_seq(sid: int) -> None:
@@ -133,4 +139,7 @@ class PagedAttentionOps:
 
     @staticmethod
     def expand_kv_for_gqa(kv: np.ndarray, num_queries_per_kv: int) -> np.ndarray:
-        """Expands KV heads for Grouped Query Attention (GQA).        return kv if num_queries_per_kv == 1 else np.repeat(kv, num_queries_per_kv, axis=1)
+"""
+Expands KV heads for Grouped Query Attention (GQA).        return kv if num_queries_per_kv == 1 else np.repeat(kv, num_queries_per_kv, axis=1)
+
+"""

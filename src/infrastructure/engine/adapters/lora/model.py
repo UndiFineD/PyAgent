@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +17,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""LoRA model container.
+"""
+"""
+LoRA model container.
 
+"""
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -34,17 +38,21 @@ except ImportError:
 
 @dataclass
 class LoRAModel:
-    """Complete LoRA model with all adapter weights.
+"""
+Complete LoRA model with all adapter weights.
+
     model_id: str
     config: LoRAConfig
     layers: dict[str, LoRALayerWeights] = field(default_factory=dict)
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def add_layer(self, layer: LoRALayerWeights) -> None:
-        """Add a layer to the model.        self.layers[layer.module_name] = layer
+"""
+Add a layer to the model.        self.layers[layer.module_name] = layer
 
     def get_layer(self, module_name: str) -> LoRALayerWeights | None:
-        """Get layer weights by module name.        return self.layers.get(module_name)
+"""
+Get layer weights by module name.        return self.layers.get(module_name)
 
     def forward(
         self,
@@ -52,14 +60,19 @@ class LoRAModel:
         x: NDArray[np.float32],
         apply_dropout: bool = False,
     ) -> NDArray[np.float32] | None:
-        """Compute LoRA output for a module.        layer = self.layers.get(module_name)
+"""
+Compute LoRA output for a module.        layer = self.layers.get(module_name)
         if layer is None:
             return None
         return layer.forward(x, apply_dropout)
 
     def get_memory_bytes(self) -> int:
-        """Total memory usage in bytes.        return sum(layer.get_memory_bytes() for layer in self.layers.values())
+"""
+Total memory usage in bytes.        return sum(layer.get_memory_bytes() for layer in self.layers.values())
 
     @property
     def num_parameters(self) -> int:
-        """Total number of LoRA parameters.        return sum(layer.lora_a.size + layer.lora_b.size for layer in self.layers.values())
+"""
+Total number of LoRA parameters.        return sum(layer.lora_a.size + layer.lora_b.size for layer in self.layers.values())
+
+"""

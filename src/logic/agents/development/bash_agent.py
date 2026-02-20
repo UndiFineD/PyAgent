@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +17,8 @@ from __future__ import annotations
 # limitations under the License.
 
 
-# "Agent specializing in Bash and shell scripting."""" pylint: disable=too-many-ancestors""""
-
+# "Agent specializing in Bash and shell scripting."""
+pylint: disable=too-many-ancestors""""
 try:
     from .core.base.common.base_utilities import as_tool, create_main_function
 except ImportError:
@@ -42,7 +45,8 @@ __version__ = VERSION
 
 
 class BashAgent(CoderAgent):
-""""Agent for shell scripts (Phase 175 enhanced).
+""""
+Agent for shell scripts (Phase 175 enhanced).
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.capabilities.extend(["bash", "shell-scripting", "posix-compliance"])  # Phase 241"#         self._language = "bash"        self.core = BashCore()
@@ -51,13 +55,17 @@ class BashAgent(CoderAgent):
 
     @as_tool
     def lint_generated_script(self, script_path: str) -> str:
-""""Lints a bash script using shellcheck and returns high-level report.        print(f"[BASH] Linting script: {script_path"}...")"
+""""
+Lints a bash script using shellcheck and returns high-level report.        print(f"[BASH] Linting script: {script_path"}...")"
         results = self.core.lint_script(script_path)
         if "error" in results:"#             return fLINT ERROR: {results['error']}'        if results["valid"]:"#             return "SUCCESS: No issues found by shellcheck."
         issues = results["issues"]"        report = [fFound {len(issues)} issues:"]"        for issue in issues[:5]:  # Top 5
-            report.append(f" - Line {issue.get('line')}: {issue.get('message')} ({issue.get('code')})")"'
-        return "\\n".join(report)"
+            report.append(f" - Line {issue.get('line')}: {issue.get('message')} ({issue.get('code')})")
+        return "\\n".join(report)
     def _get_default_content(self) -> str:
-"""return "#!/bin/bash\\nset -euo pipefail\\necho 'Hello World'\\n'
+"""
+return "#!/bin/bash\\nset -euo pipefail\\necho 'Hello World'\\n
 
 if __name__ == "__main__":"    main = create_main_function(BashAgent, "Bash Agent", "Path to shell script")"    main()
+
+"""

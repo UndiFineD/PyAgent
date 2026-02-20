@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Connectivity utilities used in tests."""
-
-
+"""
+"""
+Connectivity utilities used in tests.""
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -32,9 +35,9 @@ logger = logging.getLogger(__name__)
 
 
 class ConnectivityCore:
-    """Minimal facade for connectivity logic used in tests."""
-
-    def __init__(self) -> None:
+"""
+Minimal facade for connectivity logic used in tests.""
+def __init__(self) -> None:
         self.status = "ok"
 
     def check(self) -> bool:
@@ -42,7 +45,8 @@ class ConnectivityCore:
 
 
 class BinaryTransport:
-    """Utility for packing/unpacking simple binary payloads using msgpack."""
+    ""
+Utility for packing/unpacking simple binary payloads using msgpack.""
 
     @staticmethod
     def pack(data: Any, compress: bool = False) -> bytes:

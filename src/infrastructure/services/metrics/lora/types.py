@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -16,11 +18,13 @@ from __future__ import annotations
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 LoRA Stats Types - Enums and DataClasses for LoRA adapter tracking.
 """
-
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -43,7 +47,8 @@ except ImportError:
 
 
 class LoRALoadState(Enum):
-    """State of a LoRA adapter.
+"""
+State of a LoRA adapter.
     NOT_LOADED = auto()
     LOADING = auto()
     LOADED = auto()
@@ -53,7 +58,8 @@ class LoRALoadState(Enum):
 
 
 class RequestStatus(Enum):
-    """Status of a request in the system.
+"""
+Status of a request in the system.
     WAITING = auto()
     RUNNING = auto()
     PREEMPTED = auto()
@@ -64,7 +70,8 @@ class RequestStatus(Enum):
 
 @dataclass
 class LoRAAdapterInfo:
-    """Information about a LoRA adapter.
+"""
+Information about a LoRA adapter.
     adapter_id: str
     rank: int
     alpha: float
@@ -76,7 +83,8 @@ class LoRAAdapterInfo:
     use_count: int = 0
 
     def mark_used(self) -> None:
-        """Mark adapter as used.        self.last_used = time.time()
+"""
+Mark adapter as used.        self.last_used = time.time()
         self.use_count += 1
 
 
@@ -99,25 +107,29 @@ class LoRARequestState:
 
     @property
     def load_latency(self) -> Optional[float]:
-        """Time spent loading the adapter.        if self.load_start_time and self.load_end_time:
+"""
+Time spent loading the adapter.        if self.load_start_time and self.load_end_time:
             return self.load_end_time - self.load_start_time
         return None
 
     @property
     def queue_latency(self) -> Optional[float]:
-        """Time spent waiting in queue.        if self.execution_start_time:
+"""
+Time spent waiting in queue.        if self.execution_start_time:
             return self.execution_start_time - self.queued_time
         return None
 
     @property
     def execution_latency(self) -> Optional[float]:
-        """Time spent executing.        if self.execution_start_time and self.execution_end_time:
+"""
+Time spent executing.        if self.execution_start_time and self.execution_end_time:
             return self.execution_end_time - self.execution_start_time
         return None
 
     @property
     def total_latency(self) -> Optional[float]:
-        """Total request latency.        if self.execution_end_time:
+"""
+Total request latency.        if self.execution_end_time:
             return self.execution_end_time - self.queued_time
         return None
 
@@ -150,3 +162,5 @@ class LoRAStats:
     # Per-adapter stats
     adapter_use_counts: Dict[str, int] = field(default_factory=dict)
     adapter_request_counts: Dict[str, int] = field(default_factory=dict)
+
+"""

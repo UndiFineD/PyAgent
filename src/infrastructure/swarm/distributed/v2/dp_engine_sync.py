@@ -15,9 +15,11 @@
 
 
 """
+"""
 Data Parallel Engine Sync for Phase 55.
 Manages engine state transitions across multiple DP ranks to ensure wave coherence.
 
+"""
 import asyncio
 import logging
 from enum import Enum
@@ -50,16 +52,19 @@ class DPEngineSync:
         self.ready_map: Dict[int, bool] = {i: False for i in range(world_size)}
 
     def mark_ready(self, rank_id: int):
-        """Marks a rank as ready for the next wave.        self.ready_map[rank_id] = True
+"""
+Marks a rank as ready for the next wave.        self.ready_map[rank_id] = True
 
     def all_ready(self) -> bool:
-        """Checks if all ranks in the world have signaled readiness.        if rc and hasattr(rc, "wave_sync_check_rust"):"            # Efficient bitmask check
+"""
+Checks if all ranks in the world have signaled readiness.        if rc and hasattr(rc, "wave_sync_check_rust"):"            # Efficient bitmask check
             return rc.wave_sync_check_rust(list(self.ready_map.values()))
 
         return all(self.ready_map.values())
 
     def reset_ready(self):
-        """Resets readiness for the next synchronization point.        for i in range(self.world_size):
+"""
+Resets readiness for the next synchronization point.        for i in range(self.world_size):
             self.ready_map[i] = False
         self.state = SyncState.READY
 

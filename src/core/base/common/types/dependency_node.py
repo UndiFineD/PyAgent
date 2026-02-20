@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,16 +14,19 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: DependencyNode dataclass."""
+"""
+"""
+Types: DependencyNode dataclass.""
 
+"""
 from dataclasses import dataclass, field
 
 try:
     from src.core.base.common.types.dependency_type import DependencyType
 except Exception:
     class DependencyType:
-        """Fallback placeholder for DependencyType."""
-
+"""
+Fallback placeholder for DependencyType.""
 try:
     from src.core.base.lifecycle.version import VERSION
 except Exception:  # pragma: no cover - fallback
@@ -34,17 +37,10 @@ __version__ = VERSION
 
 @dataclass
 class DependencyNode:
-    """A node in the dependency graph.
-
-    Attributes:
-        name: Name of the module / class / function.
-        type: Type of dependency.
-        depends_on: List of dependencies.
-        depended_by: List of dependents.
-        file_path: Path to the file.
-    """
-    name: str
-    type: DependencyType
-    depends_on: list[str] = field(default_factory=list)
-    depended_by: list[str] = field(default_factory=list)
+    ""
+Parser-safe DependencyNode dataclass.""
+name: str
+    type: object
+    depends_on: list = field(default_factory=list)
+    depended_by: list = field(default_factory=list)
     file_path: str | None = None

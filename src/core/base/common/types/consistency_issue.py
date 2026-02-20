@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: ConsistencyIssue dataclass."""
+"""
+"""
+Types: ConsistencyIssue dataclass.""
 
+"""
 from dataclasses import dataclass
 
 try:
@@ -28,15 +32,17 @@ __version__ = VERSION
 
 @dataclass
 class ConsistencyIssue:
-    """A code consistency issue across the codebase.
+"""
+A code consistency issue across the codebase.
+
 
     Attributes:
         issue_type: Type of inconsistency.
         description: Description of the issue.
         occurrences: List of file:line locations.
         recommended_style: The recommended consistent style.
-    """
-    issue_type: str
+    ""
+issue_type: str
     description: str
     occurrences: list[str]
     recommended_style: str

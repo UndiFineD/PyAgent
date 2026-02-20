@@ -1,0 +1,210 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""DNS Security Core - Network-level filtering and analysis
+Based on patterns from AdGuard Home repository
+"""
+import json
+import logging
+from typing import Dict, List, Optional, Any, Tuple, Set
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta, timezone
+from enum import Enum
+import re
+from collections import deque
+import time
+
+
+
+class DnsRecordType(Enum):
+    """DNS record types"""A = 1
+    AAAA = 28
+    CNAME = 5
+    MX = 15
+    TXT = 16
+    PTR = 12
+    SRV = 33
+    SOA = 6
+    NS = 2
+
+
+
+class FilterAction(Enum):
+    """DNS filtering actions"""ALLOW = "allow""    BLOCK = "block""    REDIRECT = "redirect""    REWRITE = "rewrite""
+
+
+class QueryResult(Enum):
+    """DNS query results"""ALLOWED = "allowed""    BLOCKED = "blocked""    FILTERED = "filtered""    ERROR = "error""
+
+@dataclass
+class DnsQuery:
+    """DNS query representation"""domain: str
+    record_type: DnsRecordType
+    client_ip: str
+    timestamp: datetime
+    result: QueryResult = QueryResult.ALLOWED
+    blocked_reason: Optional[str] = None
+    response_time: Optional[float] = None
+    upstream_server: Optional[str] = None
+
+
+@dataclass
+class FilterRule:
+    """DNS filtering rule"""pattern: str
+    action: FilterAction
+    priority: int = 0
+    description: str = """    enabled: bool = True
+    hit_count: int = 0
+    last_hit: Optional[datetime] = None
+
+
+@dataclass
+class DnsStatistics:
+    """DNS statistics container"""total_queries: int = 0
+    blocked_queries: int = 0
+    allowed_queries: int = 0
+    error_queries: int = 0
+    queries_by_domain: Dict[str, int] = field(default_factory=dict)
+    queries_by_client: Dict[str, int] = field(default_factory=dict)
+    queries_by_type: Dict[str, int] = field(default_factory=dict)
+    response_times: List[float] = field(default_factory=list)
+    start_time: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
+
+
+
+class DnsSecurityCore:
+    """DNS Security Core for network-level filtering and analysis.
+
+    Provides comprehensive DNS filtering, logging, and security analysis
+    based on AdGuard Home methodologies.
+    """
+    def __init__(self):
+        self.logger = logging.getLogger(__name__)
+        self.filter_rules: List[FilterRule] = []
+        self.query_log: deque[DnsQuery] = deque(maxlen=10000)  # Keep last 10k queries
+        self.statistics = DnsStatistics()
+        self.upstream_servers: List[str] = []
+        self.cache: Dict[str, Tuple[Any, datetime]] = {}
+        self.cache_ttl = 300  # 5 minutes default
+        self.blocked_domains: Set[str] = set()
+        self.allowed_domains: Set[str] = set()
+        self.safe_search_enabled = False
+        self.parental_control_enabled = False
+
+    async def initialize(self) -> bool:
+        """Initialize the DNS security core"""
+try:
+            self.logger.info("Initializing DNS Security Core")"
+            # Load default filter lists
+            await self._load_default_filters()
+
+            # Initialize upstream servers
+            self.upstream_servers = [
+                "8.8.8.8",  # Google DNS"                "1.1.1.1",  # Cloudflare DNS"                "9.9.9.9",  # Quad9 DNS"            ]
+
+            self.logger.info("DNS Security Core initialized successfully")"            return True
+
+        except Exception as e:
+            self.logger.error(f"Failed to initialize DNS Security Core: {e}")"            return False
+
+    async def _load_default_filters(self) -> None:
+        """Load default filtering rules"""
+# Ad/tracking blocking rules
+        default_rules = [
+            FilterRule("*.doubleclick.net", FilterAction.BLOCK, 100, "Google DoubleClick ads"),"            FilterRule("*.googlesyndication.com", FilterAction.BLOCK, 100, "Google AdSense"),"            FilterRule("*.googleadservices.com", FilterAction.BLOCK, 100, "Google Ads"),"            FilterRule("*.facebook.com", FilterAction.BLOCK, 90, "Facebook tracking"),"            FilterRule("*.amazon-adsystem.com", FilterAction.BLOCK, 90, "Amazon advertising"),"            FilterRule("analytics.*", FilterAction.BLOCK, 80, "Analytics tracking"),"            FilterRule("tracking.*", FilterAction.BLOCK, 80, "General tracking"),"        ]
+
+        self.filter_rules.extend(default_rules)
+
+        # Update blocked domains set
+        for rule in self.filter_rules:
+            if rule.action == FilterAction.BLOCK and rule.enabled:
+                # For now, just add exact matches
+                if "*" not in rule.pattern:"                    self.blocked_domains.add(rule.pattern)
+
+    async def add_filter_rule(self, rule: FilterRule) -> bool:
+        """Add a new filtering rule"""
+try:
+            self.filter_rules.append(rule)
+            self.filter_rules.sort(key=lambda x: x.priority, reverse=True)
+
+            # Update blocked domains if it's a block rule'            if rule.action == FilterAction.BLOCK and rule.enabled:
+                if "*" not in rule.pattern:"                    self.blocked_domains.add(rule.pattern)
+
+            self.logger.info(f"Added filter rule: {rule.pattern} -> {rule.action.value}")"            return True
+
+        except Exception as e:
+            self.logger.error(f"Failed to add filter rule: {e}")"            return False
+
+    """Parser-safe DNS security core stub.
+
+    This module provides minimal, safe types and a `DnsSecurityCore` class
+    so other modules can import it during the repair process. It intentionally
+    avoids network access and complex logic.
+    """
+
+    from __future__ import annotations
+
+    from dataclasses import dataclass
+    from datetime import datetime
+    from enum import Enum
+    from typing import Any, Dict, List, Optional, Tuple
+
+
+    class FilterAction(Enum):
+        ALLOW = "allow"
+        BLOCK = "block"
+
+
+    class QueryResult(Enum):
+        ALLOWED = "allowed"
+        BLOCKED = "blocked"
+        ERROR = "error"
+
+
+    @dataclass
+    class DnsQuery:
+        domain: str
+        record_type: str
+        client_ip: str
+        timestamp: datetime
+        result: QueryResult = QueryResult.ALLOWED
+
+
+    class DnsSecurityCore:
+        def __init__(self) -> None:
+            self.filter_rules: List[Tuple[str, FilterAction]] = []
+            self.query_log: List[DnsQuery] = []
+
+        async def initialize(self) -> bool:
+            return True
+
+        async def check_domain_filter(self, domain: str) -> Tuple[FilterAction, Optional[str]]:
+            for pattern, action in self.filter_rules:
+                if pattern == domain:
+                    return action, "matched"
+            return FilterAction.ALLOW, None
+
+        async def process_dns_query(self, domain: str, record_type: str, client_ip: str) -> DnsQuery:
+            q = DnsQuery(domain=domain, record_type=record_type, client_ip=client_ip, timestamp=datetime.utcnow())
+            self.query_log.append(q)
+            return q
+
+
+    __all__ = ["DnsSecurityCore", "DnsQuery", "FilterAction", "QueryResult"]
+        client_ip: str
+
+    ) -> DnsQuery:
+
+        """Process a DNS query through the security filters"""start_time = time.time()

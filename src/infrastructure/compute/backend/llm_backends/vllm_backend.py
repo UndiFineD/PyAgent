@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Vllm backend.py module.
 """
 
+"""
 import logging
 
 from src.core.base.lifecycle.version import VERSION
@@ -28,15 +32,16 @@ __version__ = VERSION
 
 
 class VllmBackend(LLMBackend):
-    """vLLM (OpenAI-compatible) LLM Backend.
+"""
+vLLM (OpenAI-compatible) LLM Backend.
     def chat(
         self,
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        if not self._is_working("vllm"):"            logging.debug("vLLM skipped due to connection cache.")"            return """
-        import os
+        if not self._is_working("vllm"):"            logging.debug("vLLM skipped due to connection cache.")"            return ""
+import os
 
         base_url = kwargs.get("base_url") or os.environ.get("DV_VLLM_BASE_URL") or "http://localhost:8000""        url = base_url.rstrip("/") + "/v1/chat/completions""        payload = {
             "model": model,"            "messages": ["                {"role": "system", "content": system_prompt},"                {"role": "user", "content": prompt},"            ],
@@ -63,4 +68,4 @@ class VllmBackend(LLMBackend):
                 f"ERROR: {str(e)}","                system_prompt=system_prompt,
                 latency_s=time.time() - start_t,
             )
-            return """
+            return ""

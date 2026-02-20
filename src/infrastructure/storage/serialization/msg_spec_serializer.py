@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 MsgSpec Serializers
 ====================
 
+"""
 Phase 21: High-performance serialization using msgspec.
 Provides fast JSON/MessagePack encoding/decoding with schema validation.
 
@@ -61,12 +64,15 @@ T = TypeVar("T")"StructT = TypeVar("StructT", bound="Struct" if MSGSPEC_AVAILABL
 
 
 def is_msgspec_available() -> bool:
-    """Check if msgspec is available.    return MSGSPEC_AVAILABLE
+"""
+Check if msgspec is available.    return MSGSPEC_AVAILABLE
+
 
 
 def require_msgspec() -> None:
-    """Raise ImportError if msgspec is not available.    if not MSGSPEC_AVAILABLE:
-        raise ImportError("msgspec is required for high-performance serialization. Install with: pip install msgspec")"
+"""
+Raise ImportError if msgspec is not available.    if not MSGSPEC_AVAILABLE:
+        raise ImportError("msgspec is required for high-performance serialization. Install with: pip install msgspec")
 
 # =============================================================================
 # Chat Message Schemas (LM Studio Compatible)
@@ -75,26 +81,31 @@ def require_msgspec() -> None:
 if MSGSPEC_AVAILABLE:
 
     class Role(str, Enum):
-        """Chat message roles.
+"""
+Chat message roles.
         SYSTEM = "system""        USER = "user""        ASSISTANT = "assistant""        TOOL = "tool""
     class ChatMessage(Struct, frozen=True, gc=False):
-        """Chat message structure for LLM APIs.
+"""
+Chat message structure for LLM APIs.
         role: Role
         content: str
         name: str | None = None
         tool_call_id: str | None = None
 
     class ToolCall(Struct, frozen=True):
-        """Tool/function call from assistant.
+"""
+Tool/function call from assistant.
         id: str
         type: str  # "function""        function: "FunctionCall""
     class FunctionCall(Struct, frozen=True):
-        """Function call details.
+"""
+Function call details.
         name: str
         arguments: str  # JSON string
 
     class ChatCompletionRequest(Struct):
-        """OpenAI-compatible chat completion request.
+"""
+OpenAI-compatible chat completion request.
         model: str
         messages: list[ChatMessage]
         temperature: float = 0.7
@@ -102,29 +113,35 @@ if MSGSPEC_AVAILABLE:
         top_p: float = 1.0
         stream: bool = False
         stop: list[str] | None = None
-        tools: list["ToolDefinition"] | None = None"
+        tools: list["ToolDefinition"] | None = None
     class ToolDefinition(Struct):
-        """Tool definition for function calling.
+"""
+Tool definition for function calling.
         type: str  # "function""        function: "FunctionDefinition""
     class FunctionDefinition(Struct):
-        """Function definition.
+"""
+Function definition.
         name: str
-        description: str = """        parameters: dict[str, Any] | None = None
+        description: str = ""
+parameters: dict[str, Any] | None = None
 
     class ChatChoice(Struct):
-        """Single completion choice.
+"""
+Single completion choice.
         index: int
         message: ChatMessage
         finish_reason: str | None = None
 
     class Usage(Struct):
-        """Token usage statistics.
+"""
+Token usage statistics.
         prompt_tokens: int
         completion_tokens: int
         total_tokens: int
 
     class ChatCompletionResponse(Struct):
-        """OpenAI-compatible chat completion response.
+"""
+OpenAI-compatible chat completion response.
         id: str
         object: str  # "chat.completion""        created: int
         model: str
@@ -132,18 +149,21 @@ if MSGSPEC_AVAILABLE:
         usage: Usage | None = None
 
     class StreamDelta(Struct):
-        """Streaming delta content.
+"""
+Streaming delta content.
         role: Role | None = None
         content: str | None = None
 
     class StreamChoice(Struct):
-        """Streaming choice.
+"""
+Streaming choice.
         index: int
         delta: StreamDelta
         finish_reason: str | None = None
 
     class ChatCompletionChunk(Struct):
-        """Streaming chat completion chunk.
+"""
+Streaming chat completion chunk.
         id: str
         object: str  # "chat.completion.chunk""        created: int
         model: str
@@ -151,17 +171,20 @@ if MSGSPEC_AVAILABLE:
 
     # Embedding structures
     class EmbeddingData(Struct):
-        """Single embedding result.
+"""
+Single embedding result.
         object: str  # "embedding""        embedding: list[float]
         index: int
 
     class EmbeddingRequest(Struct):
-        """Embedding request.
+"""
+Embedding request.
         model: str
         input: str | list[str]
 
     class EmbeddingResponse(Struct):
-        """Embedding response.
+"""
+Embedding response.
         object: str  # "list""        data: list[EmbeddingData]
         model: str
         usage: Usage
@@ -199,18 +222,21 @@ class JSONEncoder:
 
     @staticmethod
     def _default_enc_hook(obj: Any) -> Any:
-        """Default encoding hook for common types.        if isinstance(obj, datetime):
+"""
+Default encoding hook for common types.        if isinstance(obj, datetime):
             return obj.isoformat()
         if isinstance(obj, bytes):
             import base64
 
             return base64.b64encode(obj).decode("ascii")"        if hasattr(obj, "__dict__"):"            return obj.__dict__
-        raise TypeError(f"Cannot encode {type(obj)}")"
+        raise TypeError(f"Cannot encode {type(obj)}")
     def encode(self, obj: Any) -> bytes:
-        """Encode object to JSON bytes.        return self._encoder.encode(obj)
+"""
+Encode object to JSON bytes.        return self._encoder.encode(obj)
 
     def encode_str(self, obj: Any) -> str:
-        """Encode object to JSON string.        return self._encoder.encode(obj).decode("utf-8")"
+"""
+Encode object to JSON string.        return self._encoder.encode(obj).decode("utf-8")
     def decode(self, data: bytes | str, type_: Type[T] | None = None) -> T:
                 Decode JSON to object.
 
@@ -221,7 +247,7 @@ class JSONEncoder:
         Returns:
             Decoded object
                 if isinstance(data, str):
-            data = data.encode("utf-8")"
+            data = data.encode("utf-8")
         if type_ is not None:
             decoder = msgspec_json.Decoder(type_)
             return decoder.decode(data)
@@ -229,8 +255,9 @@ class JSONEncoder:
         return self._decoder.decode(data)
 
     def decode_lines(self, data: bytes | str) -> Iterator[Any]:
-        """Decode newline-delimited JSON.        if isinstance(data, str):
-            data = data.encode("utf-8")"
+"""
+Decode newline-delimited JSON.        if isinstance(data, str):
+            data = data.encode("utf-8")
         for line in data.split(b"\\n"):"            line = line.strip()
             if line:
                 yield self._decoder.decode(line)
@@ -250,7 +277,8 @@ class MsgPackEncoder:
         *,
         enc_hook: Callable[[Any], Any] | None = None,
     ):
-        """Initialize MessagePack encoder.        require_msgspec()
+"""
+Initialize MessagePack encoder.        require_msgspec()
 
         self._enc_hook = enc_hook or self._default_enc_hook
         self._encoder = msgspec_msgpack.Encoder(enc_hook=self._enc_hook)
@@ -258,11 +286,13 @@ class MsgPackEncoder:
 
     @staticmethod
     def _default_enc_hook(obj: Any) -> Any:
-        """Default encoding hook.        if isinstance(obj, datetime):
+"""
+Default encoding hook.        if isinstance(obj, datetime):
             return {"__datetime__": obj.isoformat()}"        if hasattr(obj, "__dict__"):"            return obj.__dict__
-        raise TypeError(f"Cannot encode {type(obj)}")"
+        raise TypeError(f"Cannot encode {type(obj)}")
     def encode(self, obj: Any) -> bytes:
-        """Encode object to MessagePack bytes.        return self._encoder.encode(obj)
+"""
+Encode object to MessagePack bytes.        return self._encoder.encode(obj)
 
     def decode(self, data: bytes, type_: Type[T] | None = None) -> T:
                 Decode MessagePack to object.
@@ -317,20 +347,24 @@ class TypedSerializer(Generic[T]):
         elif serialization_format == "msgpack":"            self._encoder = msgspec_msgpack.Encoder()
             self._decoder = msgspec_msgpack.Decoder(type_)
         else:
-            raise ValueError(f"Unknown format: {serialization_format}")"
+            raise ValueError(f"Unknown format: {serialization_format}")
     def encode(self, obj: T) -> bytes:
-        """Encode typed object.        return self._encoder.encode(obj)
+"""
+Encode typed object.        return self._encoder.encode(obj)
 
     def decode(self, data: bytes | str) -> T:
-        """Decode to typed object with validation.        if isinstance(data, str):
+"""
+Decode to typed object with validation.        if isinstance(data, str):
             data = data.encode("utf-8")"        return self._decoder.decode(data)
 
     def encode_many(self, objects: Sequence[T]) -> bytes:
-        """Encode multiple objects as array.        return self._encoder.encode(list(objects))
+"""
+Encode multiple objects as array.        return self._encoder.encode(list(objects))
 
     def decode_many(self, data: bytes | str) -> list[T]:
-        """Decode array to typed objects.        if isinstance(data, str):
-            data = data.encode("utf-8")"
+"""
+Decode array to typed objects.        if isinstance(data, str):
+            data = data.encode("utf-8")
         # Create list decoder
         if self._format == "json":"            decoder = msgspec_json.Decoder(list[self._type])  # type: ignore
         else:
@@ -385,7 +419,7 @@ def decode_chat_response(data: bytes | str) -> ChatCompletionResponse:
         require_msgspec()
 
     if isinstance(data, str):
-        data = data.encode("utf-8")"
+        data = data.encode("utf-8")
     decoder = msgspec_json.Decoder(ChatCompletionResponse)
     return decoder.decode(data)
 
@@ -394,7 +428,7 @@ def decode_stream_chunk(data: bytes | str) -> ChatCompletionChunk:
         Decode streaming chat chunk.
 
     Args:
-        data: JSON bytes or string (without "data: " prefix)"
+        data: JSON bytes or string (without "data: " prefix)
     Returns:
         ChatCompletionChunk struct
         require_msgspec()
@@ -402,7 +436,7 @@ def decode_stream_chunk(data: bytes | str) -> ChatCompletionChunk:
     if isinstance(data, str):
         # Handle SSE format
         if data.startswith("data: "):"            data = data[6:]
-        data = data.encode("utf-8")"
+        data = data.encode("utf-8")
     decoder = msgspec_json.Decoder(ChatCompletionChunk)
     return decoder.decode(data)
 
@@ -414,7 +448,8 @@ def decode_stream_chunk(data: bytes | str) -> ChatCompletionChunk:
 
 @dataclass
 class BenchmarkResult:
-    """Serialization benchmark result.
+"""
+Serialization benchmark result.
     format: str
     encode_time: float
     decode_time: float
@@ -423,11 +458,13 @@ class BenchmarkResult:
 
     @property
     def encode_throughput(self) -> float:
-        """Encodes per second.        return self.iterations / self.encode_time if self.encode_time > 0 else 0
+"""
+Encodes per second.        return self.iterations / self.encode_time if self.encode_time > 0 else 0
 
     @property
     def decode_throughput(self) -> float:
-        """Decodes per second.        return self.iterations / self.decode_time if self.decode_time > 0 else 0
+        ""
+Decodes per second.        return self.iterations / self.decode_time if self.decode_time > 0 else 0
 
 
 def benchmark_serialization(

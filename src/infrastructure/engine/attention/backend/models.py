@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     from dataclasses import dataclass, field
+"""
 except ImportError:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 
 try:
     from enum import Enum, auto
@@ -31,8 +36,9 @@ except ImportError:
 
 
 class AttentionBackendEnum(Enum):
-    """Enumeration of available attention backends."""
-    FLASH_ATTN = "flash_attn"
+"""
+Enumeration of available attention backends.""
+FLASH_ATTN = "flash_attn"
     FLASH_ATTN_2 = "flash_attn_2"
     FLASHINFER = "flashinfer"
     TRITON = "triton"  # Triton-based attention
@@ -43,8 +49,9 @@ class AttentionBackendEnum(Enum):
     PACKKV = "packkv"  # PackKV compressed (arXiv:2512.24449)
 
 class AttentionType(Enum):
-    """Types of attention computation."""
-    PREFILL = auto()  # Full attention during prefill
+"""
+Types of attention computation.""
+PREFILL = auto()  # Full attention during prefill
     DECODE = auto()  # Incremental attention during decode
     ENCODER = auto()  # Encoder-side attention
     CROSS = auto()  # Cross-attention (decoder to encoder)
@@ -52,7 +59,8 @@ class AttentionType(Enum):
 
 @dataclass
 class AttentionCapabilities:
-    """Capabilities of an attention backend."""
+"""
+Capabilities of an attention backend.""
     # Supported attention types
     supports_prefill: bool = True
     supports_decode: bool = True
@@ -81,7 +89,8 @@ class AttentionCapabilities:
 
 @dataclass
 class AttentionMetadata:
-    """Metadata for attention computation."""
+"""
+Metadata for attention computation.""
     # Sequence lengths
     seq_lens: list[int] = field(default_factory=list)
     max_seq_len: int = 0

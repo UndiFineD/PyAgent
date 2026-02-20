@@ -5,20 +5,21 @@ import base64
 
 @dataclass
 class MultimodalChunk:
-    """Represents a piece of interleaved data (text, audio, image)."""
-    type: str  # "text", "audio_token", "image_patch"
+"""
+Represents a piece of interleaved data (text, audio, image).""
+type: str  # "text", "audio_token", "image_patch"
     content: Union[str, bytes]
     metadata: Dict[str, Any] = field(default_factory=dict)
 
 
 class MultimodalCore:
-    """Lightweight multimodal core used in tests.
+"""
+Lightweight multimodal core used in tests.
 
     Provides methods to append text/audio/image chunks and to generate a
     simple interleaved prompt representation for model input.
-    """
-
-    def __init__(self):
+"""
+def __init__(self):
         self.context_sequence: List[MultimodalChunk] = []
 
     def add_text(self, text: str) -> None:
@@ -46,7 +47,8 @@ class MultimodalCore:
         self.context_sequence = []
 
     async def sync_streams(self, audio_receiver: Any, video_receiver: Any) -> None:
-        """Skeleton for synchronizing audio/video streams in tests."""
+"""
+Skeleton for synchronizing audio/video streams in tests.""
         # No-op for tests
         return None
 

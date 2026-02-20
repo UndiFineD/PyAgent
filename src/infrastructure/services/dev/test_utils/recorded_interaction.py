@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import time
 except ImportError:
@@ -44,8 +44,9 @@ __version__ = VERSION
 
 @dataclass
 class RecordedInteraction:
-    """A recorded test interaction.""""
-    Attributes:
+"""
+A recorded test interaction.""""
+Attributes:
         call_type: Type of call (e.g., "api", "file", "db")."        call_name: Name of the call.
         args: Call arguments.
         kwargs: Call keyword arguments.

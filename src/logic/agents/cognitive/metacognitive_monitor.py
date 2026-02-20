@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +19,11 @@ from __future__ import annotations
 # "Metacognitive Monitor for handling logging and alerting."# 
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     from typing import Any
@@ -75,7 +80,7 @@ class MetacognitiveMonitor(BaseAgent):
     ) -> dict[str, Any]:
 #         "Analyzes a reasoning chain via core and handles alerts."        evaluation_base = self.core.calculate_confidence(reasoning_chain)
 
-        evaluation = {"agent": agent_name, "task": task, **evaluation_base}"
+        evaluation = {"agent": agent_name, "task": task, **evaluation_base}
         self.uncertainty_log.append(evaluation)
 
         # Shell-specific side effect: Logging/Alerting
@@ -85,4 +90,13 @@ class MetacognitiveMonitor(BaseAgent):
         return evaluation
 
     def get_summary(self) -> dict[str, Any]:
-""""Aggregates log via Core.        return self.core.aggregate_summary(self.uncertainty_log)
+""""
+Aggregates log via Core.        return self.core.aggregate_summary(self.uncertainty_log)
+
+"""
+
+"""
+
+""
+
+"""

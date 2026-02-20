@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Minimal AEM hacker core for tests.
+from __future__ import annotations
+"""
+Minimal AEM hacker core for tests.
 
 Provides lightweight dataclasses and a simple core
 implementation sufficient for unit tests to import.
 """
-from __future__ import annotations
+
+
 
 
 

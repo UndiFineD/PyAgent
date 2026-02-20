@@ -1,0 +1,23 @@
+"""ImprovementPriority enum - minimal stub."""
+
+from __future__ import annotations
+from enum import Enum
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+__version__ = VERSION
+
+
+class ImprovementPriority(Enum):
+    CRITICAL = 5
+    HIGH = 4
+    MEDIUM = 3
+    LOW = 2
+    TRIVIAL = 1
+
+__all__ = ["ImprovementPriority"]

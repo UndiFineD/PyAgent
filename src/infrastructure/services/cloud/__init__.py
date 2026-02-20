@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Cloud Infrastructure Module - Multi-cloud integration for PyAgent.
 
+"""
 Provides unified interface for cloud AI providers with intelligent routing,
 budget management, and health-aware failover.
 """
-
 try:
     from typing import TYPE_CHECKING, Any
 except ImportError:
@@ -35,7 +37,8 @@ __all__: list[str] = [
 
 
 def __getattr__(name: str) -> Any:
-    """Lazy load cloud components on first access.    if name in ("CloudProviderBase", "InferenceRequest", "InferenceResponse"):"        from .base import (CloudProviderBase, InferenceRequest,
+"""
+Lazy load cloud components on first access.    if name in ("CloudProviderBase", "InferenceRequest", "InferenceResponse"):"        from .base import (CloudProviderBase, InferenceRequest,
                            InferenceResponse)
 
         return {
@@ -61,7 +64,7 @@ def __getattr__(name: str) -> Any:
 
         return GroqConnector
 
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")"
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 if TYPE_CHECKING:
     from .base import CloudProviderBase, InferenceRequest, InferenceResponse
@@ -70,3 +73,5 @@ if TYPE_CHECKING:
     from .providers.gemini import GeminiConnector
     from .providers.groq import GroqConnector
     from .routing import IntelligentRouter
+
+"""

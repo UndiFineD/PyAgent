@@ -15,15 +15,22 @@
 
 try:
     from typing import Dict, Any, Optional
+"""
 except ImportError:
-    from typing import Dict, Any, Optional
+
+"""
+from typing import Dict, Any, Optional
 
 
 
 
 class ResearchCore:
-    """Core domain logic for research, search, and technical synthesis tasks."""def __init__(self, config: Optional[Dict[str, Any]] = None):
+"""
+Core domain logic for research, search, and technical synthesis tasks.""
+def __init__(self, config: Optional[Dict[str, Any]] = None):
         self.config = config or {}
 
     async def conduct_research(self, query: str, breadth: int = 3) -> Dict[str, Any]:
-        """Performs structured research on a given topic."""return {"query": query, "findings": [], "depth": breadth}"
+"""
+Performs structured research on a given topic.""
+return {"query": query, "findings": [], "depth": breadth}

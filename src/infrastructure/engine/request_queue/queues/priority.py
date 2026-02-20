@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Priority.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -25,7 +28,7 @@ from typing import Iterator, List, Set, TypeVar
 from src.infrastructure.engine.request_queue.base import RequestQueue
 from src.infrastructure.engine.request_queue.models import QueuedRequest
 
-T = TypeVar("T", bound=QueuedRequest)"
+T = TypeVar("T", bound=QueuedRequest)
 
 
 class PriorityQueue(RequestQueue):
@@ -36,21 +39,26 @@ class PriorityQueue(RequestQueue):
         self._counter = 0
 
     def add(self, request: T) -> None:
-        """Add request to heap.        heapq.heappush(self._heap, request)
+"""
+Add request to heap.        heapq.heappush(self._heap, request)
 
     def pop(self) -> T:
-        """Pop highest priority request.        if not self._heap:
+"""
+Pop highest priority request.        if not self._heap:
             raise IndexError("pop from empty priority queue")"        return heapq.heappop(self._heap)
 
     def peek(self) -> T:
-        """Peek at highest priority request.        if not self._heap:
+"""
+Peek at highest priority request.        if not self._heap:
             raise IndexError("peek from empty priority queue")"        return self._heap[0]
 
     def prepend(self, request: T) -> None:
-        """Add request (same as add for priority queue).        self.add(request)
+"""
+Add request (same as add for priority queue).        self.add(request)
 
     def remove(self, value: T) -> bool:
-        """Remove a specific request.        try:
+"""
+Remove a specific request.        try:
             self._heap.remove(value)
             heapq.heapify(self._heap)
             return True
@@ -58,7 +66,8 @@ class PriorityQueue(RequestQueue):
             return False
 
     def remove_batch(self, requests: Set[T]) -> int:
-        """Remove multiple requests efficiently.        if not requests:
+"""
+Remove multiple requests efficiently.        if not requests:
             return 0
 
         original_len = len(self._heap)
@@ -84,12 +93,14 @@ class DeadlineQueue(PriorityQueue):
         Deadline-aware priority queue.
     
     def add(self, request: T) -> None:
-        """Add with deadline consideration.        if request.is_deadline_critical:
+"""
+Add with deadline consideration.        if request.is_deadline_critical:
             request.priority.boost_factor = 2.0
         super().add(request)
 
     def update_priorities(self) -> int:
-        """Update priorities based on deadline proximity.        updated = 0
+"""
+Update priorities based on deadline proximity.        updated = 0
         current_time = time.time()
 
         for request in self._heap:

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -23,7 +25,10 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent
 
+"""
 __version__ = VERSION
+
+"""
 
 
 # pylint: disable=too-many-ancestors
@@ -44,9 +49,10 @@ class ProactiveAgent(BaseAgent):
             monitor = ResourceMonitor(self._workspace_root)
             return monitor.get_current_stats()
         except (ImportError, AttributeError):
-            return {"status": "UNAVAILABLE", "cpu_usage_pct": 0, "disk_free_gb": 100}"
+            return {"status": "UNAVAILABLE", "cpu_usage_pct": 0, "disk_free_gb": 100}
     def schedule_task(self, task: str, cron_or_delay: str) -> str:
-""""Schedules a task for future execution.       " task_entry = {"            "id": ftask_{int(time.time())}","            "task": task,"            "trigger": cron_or_delay,"            "status": "scheduled","        }
+""""
+Schedules a task for future execution.       " task_entry = {"            "id": ftask_{int(time.time())}","            "task": task,"            "trigger": cron_or_delay,"            "status": "scheduled","        }
         self.scheduled_tasks.append(task_entry)
         logging.info(
             fProactiveAgent: Scheduled task '{task}' with trigger '{cron_or_delay}'""'        )
@@ -89,3 +95,11 @@ class ProactiveAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(ProactiveAgent, "ProactiveAgent: Specialist Agent", "Context for analysis")"    main()
+
+"""
+
+"""
+
+""
+
+"""

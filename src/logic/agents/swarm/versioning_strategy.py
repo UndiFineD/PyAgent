@@ -14,7 +14,10 @@
 
 
 """
+"""
 versioning_strategy.py - Define supported versioning schemes
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -49,7 +52,8 @@ except ImportError:
 
 
 class VersioningStrategy(Enum):
-""""Supported versioning schemes for the fleet.#     SEMVER = "semver"#     CALVER = "calver"
+""""
+Supported versioning schemes for the fleet.#     SEMVER = "semver"#     CALVER = "calver"
 try:
     from enum import Enum
 except ImportError:
@@ -59,4 +63,6 @@ except ImportError:
 
 
 class VersioningStrategy(Enum):
-""""Supported versioning schemes for the fleet.#     SEMVER = "semver"#     CALVER = "calver"
+""""
+Supported versioning schemes for the fleet.#     SEMVER = "semver"#     CALVER = "calver"
+"""

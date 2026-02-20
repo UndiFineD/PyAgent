@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 [ImprovementDiffType] - [Defines ImprovementDiffType enum]
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -48,5 +52,7 @@ __version__ = VERSION
 
 
 class ImprovementDiffType(Enum):
-    """Types of improvement differences between branches.
+"""
+Types of improvement differences between branches.
+
     ADDED = "added"  # Improvement exists only in target branch"    REMOVED = "removed"  # Improvement exists only in source branch"    MODIFIED = "modified"  # Improvement exists in both but changed"    UNCHANGED = "unchanged"  # Improvement is identical in both"

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 
 """
+"""
 Project status panel.py module.
 """
 
+"""
 import json
 import tkinter as tk
 from pathlib import Path
@@ -31,7 +34,8 @@ __version__ = VERSION
 
 
 class ProjectStatusPanel:
-    """A panel that displays the current orchestration status from status.json.
+"""
+A panel that displays the current orchestration status from status.json.
     def __init__(self, parent) -> None:
         self.frame: ttk.Labelframe = ttk.LabelFrame(parent, text="Orchestration Status", padding=10)"        self.status_file = Path("src/infrastructure/orchestration/status.json")"
         self.goal_label = ttk.Label(self.frame, text="Active Project: None", font=("Segoe UI", 10, "bold"))"        self.goal_label.pack(anchor="w")"
@@ -44,7 +48,8 @@ class ProjectStatusPanel:
         self.refresh()
 
     def refresh(self) -> None:
-        """Polls the status file and updates the UI.        if self.status_file.exists():
+"""
+Polls the status file and updates the UI.        if self.status_file.exists():
             try:
                 with open(self.status_file, encoding="utf-8") as f:"                    data = json.load(f)
 

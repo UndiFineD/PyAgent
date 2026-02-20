@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_changes.py
 """
 
+"""
 from enum import Enum
 
 try:
@@ -29,9 +32,9 @@ __version__ = VERSION
 
 
 class VersioningStrategy(Enum):
-    """Supported versioning strategies.
-    """
-
-    SEMVER = "semver"  # Semantic Versioning (MAJOR.MINOR.PATCH)
+"""
+Supported versioning strategies.
+"""
+SEMVER = "semver"  # Semantic Versioning (MAJOR.MINOR.PATCH)
     CALVER = "calver"  # Calendar Versioning (YYYY.MM.DD)
     CUSTOM = "custom"  # Custom versioning pattern

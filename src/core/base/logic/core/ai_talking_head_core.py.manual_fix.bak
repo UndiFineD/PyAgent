@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+""
+Parser-safe stub: AITalkingHead core (conservative).
+
+Minimal stub preserving types for tests.
+""
+
+from dataclasses import dataclass
+from typing import Optional, Dict, Any
+
+
+@dataclass
+class TalkingHeadRequest:
+    text: str
+    voice: Optional[str] = None
+
+
+@dataclass
+class TalkingHeadResult:
+    video_url: str
+    duration: float
+
+
+class AITalkingHeadCore:
+    def synthesize(self, request: TalkingHeadRequest) -> TalkingHeadResult:
+        return TalkingHeadResult(video_url="", duration=0.0)
+
+
+__all__ = ["TalkingHeadRequest", "TalkingHeadResult", "AITalkingHeadCore"]

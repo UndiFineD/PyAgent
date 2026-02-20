@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.swarm_orchestrator_core import DelegationMode, SwarmMember, SwarmOrchestratorCore

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal, parser-safe Response Modifier Core used for tests."""
-
+""
+Minimal, parser-safe Response Modifier Core used for tests.""
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Tuple
 import asyncio

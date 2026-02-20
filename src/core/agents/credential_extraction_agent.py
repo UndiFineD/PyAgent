@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Module: credential_extraction_agent
 Agent for extracting credentials from Windows systems.
 Implements patterns from ADSyncDump-BOF for Azure AD Connect credential extraction.
 """
 
+"""
 import platform
 from typing import Any, Dict
 from uuid import UUID
@@ -39,9 +42,9 @@ class CredentialExtractionAgent(
     CryptoMixin,
     DataParsingMixin
 ):
-    """Agent for extracting credentials using Windows-specific techniques."""
-
-    def __init__(self, **kwargs: Any) -> None:
+"""
+Agent for extracting credentials using Windows-specific techniques.""
+def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("CredentialExtractionAgent is only supported on Windows")
         super().__init__(**kwargs)
@@ -52,8 +55,9 @@ class CredentialExtractionAgent(
 
 
     async def extract_adsync_credentials(self) -> Dict[str, Any]:
-        """Extract Azure AD Connect sync credentials."""
-        result = {
+"""
+Extract Azure AD Connect sync credentials.""
+result = {
             "success": False,
             "username": None,
             "password": None,

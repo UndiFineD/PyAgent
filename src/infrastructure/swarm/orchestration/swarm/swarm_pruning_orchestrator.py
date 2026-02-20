@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 SwarmPruningOrchestrator for PyAgent.
 Manages swarm-wide neural pruning based on agent performance and token costs.
 Implemented as part of Phase 40: Swarm-Wide Neural Pruning.
 """
 
+"""
 import logging
 from typing import Any
 
@@ -41,8 +44,9 @@ __version__ = VERSION
 
 
 class SwarmPruningOrchestrator:
-    """Orchestrates periodic pruning of underperforming agent nodes across the fleet."""
-    def __init__(self, fleet_manager: Any) -> None:
+"""
+Orchestrates periodic pruning of underperforming agent nodes across the fleet.""
+def __init__(self, fleet_manager: Any) -> None:
         self.fleet = fleet_manager
         # Use the engine already attached to the fleet if it exists
         if hasattr(fleet_manager, "neural_pruning"):
@@ -53,8 +57,9 @@ class SwarmPruningOrchestrator:
         self.pruned_history: list[list[str]] = []
 
     def run_pruning_cycle(self, threshold: float = 0.25) -> dict[str, Any]:
-        """Runs a periodic pruning cycle and returns results."""
-        logging.info("SwarmPruningOrchestrator: Initiating swarm-wide neural pruning cycle.")
+"""
+Runs a periodic pruning cycle and returns results.""
+logging.info("SwarmPruningOrchestrator: Initiating swarm-wide neural pruning cycle.")
         # 1. Prune underutilized synapses/paths
         pruned_nodes = self.pruning_engine.prune_underutilized(threshold=threshold)
 
@@ -78,12 +83,14 @@ class SwarmPruningOrchestrator:
         }
 
     def record_node_performance(self, node_id: str, success: bool, tokens: int) -> None:
-        """Proxy to record performance in the underlying engine."""
-        self.pruning_engine.record_performance(node_id, success, float(tokens))
+"""
+Proxy to record performance in the underlying engine.""
+self.pruning_engine.record_performance(node_id, success, float(tokens))
 
     def get_audit_summary(self) -> dict[str, Any]:
-        """Returns statistics on fleet pruning history."""
-        return {
+"""
+Returns statistics on fleet pruning history.""
+return {
             "total_cycles": len(self.pruned_history),
             "total_pruned_nodes": sum(len(p) for p in self.pruned_history),
             "active_synapses": len(self.pruning_engine.active_synapses),
@@ -96,8 +103,9 @@ if __name__ == "__main__":
     # Mock fleet manager for demonstration
 
     class MockFleet:
-        """Mock fleet manager for standalone testing."""
-        def __init__(self) -> None:
+        ""
+Mock fleet manager for standalone testing.""
+def __init__(self) -> None:
             self.neural_pruning = NeuralPruningEngine(self)
 
     mock_fleet = MockFleet()

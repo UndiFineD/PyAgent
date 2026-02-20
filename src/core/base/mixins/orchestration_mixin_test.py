@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .core.base.mixins.orchestration_mixin import OrchestrationMixin
@@ -27,7 +30,7 @@ except ImportError:
 def test_prepare_delegation_context_handles_exceptions(monkeypatch):
     class Ctx:
         def next_level(self, name: str):
-            raise ValueError("boom")"
+            raise ValueError("boom")
     mixin = OrchestrationMixin.__new__(OrchestrationMixin)
     mixin.context = Ctx()
 

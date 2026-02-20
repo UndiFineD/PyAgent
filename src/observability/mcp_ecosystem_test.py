@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Test suite for MCP Server Ecosystem Expansion (Phase 322)
 Tests MCP protocol core, connectors, and tool capabilities.
 
+"""
 try:
     import pytest
 except ImportError:
@@ -34,7 +36,8 @@ except ImportError:
 
 
 class TestMCPEcosystem:
-    """Test cases for MCP server ecosystem implementation.    @pytest.fixture
+"""
+Test cases for MCP server ecosystem implementation.    @pytest.fixture
     def mcp_core(self):
         from src.tools.mcp.core import MCPCore
         return MCPCore()
@@ -47,3 +50,5 @@ class TestMCPEcosystem:
             if category == "database":"                result = connector.query("SELECT * FROM test")"                assert result is not None
             elif category == "api":"                result = connector.call_endpoint("/test")"                assert result is not None
             elif category == "cloud":"                result = connector.upload_file("test.txt")"                assert result is not None
+
+"""

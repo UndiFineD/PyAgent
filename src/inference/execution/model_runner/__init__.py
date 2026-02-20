@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Model runner execution sub-package."""
+"""
+"""
+Model runner execution sub-package.""
 try:
-    from .batching import BatchedAsyncRunner  # noqa: F401
+
+""
+from .batching import BatchedAsyncRunner  # noqa: F401
 except ImportError:
     from .batching import BatchedAsyncRunner # noqa: F401
 

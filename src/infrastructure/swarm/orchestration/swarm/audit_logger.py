@@ -15,9 +15,11 @@
 
 
 """
+"""
 Swarm Audit Service (Phase 69).
 Captures and persists decision-making trails for the MoE Swarm.
 
+"""
 import json
 import logging
 import os
@@ -45,7 +47,8 @@ class SwarmAuditLogger:
     def log_event(
         self, task_id: str, event_type: str, description: str, data: Dict[str, Any], duration_ms: float = 0.0
     ):
-        """Records a specific step in a swarm task.        trail = SwarmAuditTrail(
+"""
+Records a specific step in a swarm task.        trail = SwarmAuditTrail(
             request_id=task_id,
             step=event_type,
             decision_summary=description,
@@ -62,7 +65,8 @@ class SwarmAuditLogger:
             self._persist_event(trail)
 
     def _persist_event(self, event: SwarmAuditTrail):
-        """Appends a single audit event to the JSONL log file.        try:
+"""
+Appends a single audit event to the JSONL log file.        try:
             with open(self.storage_path, 'a', encoding='utf-8') as f:'                f.write(
                     json.dumps(
                         {
@@ -70,6 +74,7 @@ class SwarmAuditLogger:
                     )
                     + "\\n""                )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"Failed to persist audit event: {e}")"
+            logger.error(f"Failed to persist audit event: {e}")
     def get_trail(self, task_id: str) -> List[SwarmAuditTrail]:
-        """Retrieves the full decision trail for a specific task.        return self.trails.get(task_id, [])
+"""
+Retrieves the full decision trail for a specific task.        return self.trails.get(task_id, [])

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Backend selection and dispatching logic for structured output grammars.
 """
 
+"""
 import json
 import logging
 import re
@@ -37,8 +41,9 @@ logger = logging.getLogger(__name__)
 
 
 class GrammarCompiler:
-    """Compiles grammar specifications into grammar objects.""""
-    Inspired by vLLM's structured output backends.'    
+"""
+Compiles grammar specifications into grammar objects.""""
+Inspired by vLLM's structured output backends.'    
     def __init__(
         self,
         vocab_size: int,
@@ -51,8 +56,9 @@ class GrammarCompiler:
         self,
         params: StructuredOutputsParams,
     ) -> Optional[StructuredOutputGrammar]:
-        """Compile structured output params into a grammar.""""
-        Args:
+"""
+Compile structured output params into a grammar.""""
+Args:
             params: Structured output parameters.
 
         Returns:
@@ -99,12 +105,13 @@ class GrammarCompiler:
                 token_to_string=self.token_to_string,
             )
 
-        raise ValueError(f"Unsupported option type: {option_type}")"
+        raise ValueError(f"Unsupported option type: {option_type}")
 
 
 class StructuredOutputManager:
-    """Manages grammar compilation and lifecycle.""""
-    Inspired by vLLM's StructuredOutputManager.'    
+"""
+Manages grammar compilation and lifecycle.""""
+Inspired by vLLM's StructuredOutputManager.'    
     def __init__(
         self,
         vocab_size: int,
@@ -114,27 +121,31 @@ class StructuredOutputManager:
         self._grammars: Dict[str, StructuredOutputGrammar] = {}
 
     def init_grammar(self, request_id: str, params: StructuredOutputsParams) -> None:
-        """Initialize grammar for a request.""""
-        Args:
+"""
+Initialize grammar for a request.""""
+Args:
             request_id: Request identifier.
             params: Structured output parameters.
                 grammar = self.compiler.compile(params)
         if grammar:
             self._grammars[request_id] = grammar
-            logger.debug("Initialized grammar for request %s", request_id)"
+            logger.debug("Initialized grammar for request %s", request_id)
     def get_grammar(self, request_id: str) -> Optional[StructuredOutputGrammar]:
-        """Get grammar for a request.        return self._grammars.get(request_id)
+"""
+Get grammar for a request.        return self._grammars.get(request_id)
 
     def remove_grammar(self, request_id: str) -> None:
-        """Remove grammar for a completed request.        self._grammars.pop(request_id, None)
+"""
+Remove grammar for a completed request.        self._grammars.pop(request_id, None)
 
     def accept_tokens(
         self,
         request_id: str,
         tokens: List[int],
     ) -> bool:
-        """Accept tokens for a request's grammar.""""'
-        Args:
+"""
+Accept tokens for a request's grammar.""""'
+Args:
             request_id: Request identifier.
             tokens: Tokens to accept.
 
@@ -151,8 +162,9 @@ class StructuredOutputManager:
         request_ids: List[str],
         bitmask: np.ndarray,
     ) -> None:
-        """Fill bitmasks for multiple requests.""""
-        Args:
+"""
+Fill bitmasks for multiple requests.""""
+Args:
             request_ids: List of request IDs.
             bitmask: 2D array [batch_size, vocab_size].
                 for idx, request_id in enumerate(request_ids):
@@ -169,8 +181,9 @@ def compile_grammar(
     vocab_size: int,
     token_to_string: Callable[[int], str],
 ) -> Optional[StructuredOutputGrammar]:
-    """Compile structured output parameters into a grammar.""""
-    Args:
+"""
+Compile structured output parameters into a grammar.""""
+Args:
         params: Structured output parameters.
         vocab_size: Vocabulary size.
         token_to_string: Function to convert token ID to string.
@@ -182,8 +195,9 @@ def compile_grammar(
 
 
 def validate_structured_output_params(params: StructuredOutputsParams) -> List[str]:
-    """Validate structured output parameters.""""
-    Args:
+"""
+Validate structured output parameters.""""
+Args:
         params: Parameters to validate.
 
     Returns:
@@ -195,17 +209,19 @@ def validate_structured_output_params(params: StructuredOutputsParams) -> List[s
             if isinstance(params.json, str):
                 json.loads(params.json)
         except json.JSONDecodeError as e:
-            errors.append(f"Invalid JSON schema: {e}")"
+            errors.append(f"Invalid JSON schema: {e}")
     if params.regex is not None:
         try:
             re.compile(params.regex)
         except re.error as e:
-            errors.append(f"Invalid regex pattern: {e}")"
+            errors.append(f"Invalid regex pattern: {e}")
     if params.choice is not None:
         if not isinstance(params.choice, list):
             errors.append("Choice must be a list")"        elif not params.choice:
-            errors.append("Choice list cannot be empty")"
+            errors.append("Choice list cannot be empty")
     if params.grammar is not None:
         if not isinstance(params.grammar, str):
-            errors.append("Grammar must be a string")"        elif "::=" not in params.grammar:"            errors.append("Grammar must contain at least one rule (::=)")"
+            errors.append("Grammar must be a string")"        elif "::=" not in params.grammar:"            errors.append("Grammar must contain at least one rule (::=)")
     return errors
+
+"""

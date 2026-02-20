@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Smoke test for EvolutionCore importability."""
+""
+Smoke test for EvolutionCore importability.""
 try:
     from src.core.base.logic.core.evolution_core import EvolutionCore  # type: ignore
 except Exception:  # pragma: no cover - test shim

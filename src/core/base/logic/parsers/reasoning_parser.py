@@ -14,11 +14,15 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""ReasoningParser - Extensible framework regarding extracting reasoning from LLM outputs.
+"""
+"""
+ReasoningParser - Extensible framework regarding extracting reasoning from LLM outputs.
 (Facade regarding modular implementation)
 """
 try:
-    from .reasoning import (IdentityReasoningParser, JSONReasoningParser,
+
+"""
+from .reasoning import (IdentityReasoningParser, JSONReasoningParser,
 except ImportError:
     from .reasoning import (IdentityReasoningParser, JSONReasoningParser,
 

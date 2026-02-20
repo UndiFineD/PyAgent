@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Guided decoding for structured output generation.
 
+"""
 try:
     from .decoder import GuidedDecoder, generate_choice, generate_json  # noqa: F401
 except ImportError:

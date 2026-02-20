@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Bulk Manager - Applies bulk operations to improvement IDs
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -55,7 +59,9 @@ __version__ = VERSION
 
 
 class BulkManager:
-    """Applies bulk operations to improvement IDs.
+"""
+Applies bulk operations to improvement IDs.
+
     def bulk_update_status(self, improvement_ids: list[str], new_status: str) -> BulkOperationResult:
         return BulkOperationResult(success_count=len(improvement_ids))
 

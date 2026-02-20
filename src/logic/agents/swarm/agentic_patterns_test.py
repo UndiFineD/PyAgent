@@ -25,9 +25,11 @@ from src.logic.agents.swarm.agentic_patterns import (
 # ParallelAgentPattern is implemented in src.logic.agents.swarm.agentic_patterns
 class ParallelAgentPattern:
         def __init__(self, orchestrator):
-            self.orchestrator = orchestrator
+"""
+self.orchestrator = orchestrator
 
-        async def execute_parallel(self, context, agent_configs, input_data):
+"""
+async def execute_parallel(self, context, agent_configs, input_data):
             results = []
             for cfg in agent_configs:
                 name = cfg.get("name")"                try:
@@ -52,25 +54,30 @@ from src.core.base.common.models.communication_models import CascadeContext
 
 
 class MockOrchestrator:
-    """Mock orchestrator for testing.
+"""
+Mock orchestrator for testing.
     def __init__(self):
         self.execute_with_pattern = AsyncMock()
 
 
 
 class TestSequentialAgentPattern:
-    """Test sequential agent execution pattern.
+"""
+Test sequential agent execution pattern.
     @pytest.fixture
     def mock_orchestrator(self):
-        """Create mock orchestrator.        return MockOrchestrator()
+"""
+Create mock orchestrator.        return MockOrchestrator()
 
     @pytest.fixture
     def sequential_pattern(self, mock_orchestrator):
-        """Create sequential agent pattern.        return SequentialAgentPattern(mock_orchestrator)
+"""
+Create sequential agent pattern.        return SequentialAgentPattern(mock_orchestrator)
 
     @pytest.fixture
     def sample_context(self):
-        """Create sample cascade context.        context = CascadeContext(
+"""
+Create sample cascade context.        context = CascadeContext(
             task_id="test_sequential","            cascade_depth=0,
             depth_limit=10,
             tenant_id="test","            security_scope=[],
@@ -80,7 +87,8 @@ class TestSequentialAgentPattern:
 
     @pytest.fixture
     def sample_config(self):
-        """Create sample sequential agent config.        return SequentialAgentConfig(
+"""
+Create sample sequential agent config.        return SequentialAgentConfig(
             name="test_sequence","            description="Test sequential execution","            sub_agents=[
                 {
                     "name": "agent_1","                    "type": "pattern","                    "pattern": "peer","                    "output_key": "step1_output""                },
@@ -93,7 +101,8 @@ class TestSequentialAgentPattern:
     async def test_sequential_execution_success(
         self, sequential_pattern, sample_context, sample_config, mock_orchestrator
     ):
-        """Test successful sequential execution.        # Mock successful execution results
+"""
+Test successful sequential execution.        # Mock successful execution results
         mock_orchestrator.execute_with_pattern.side_effect = [
             {"result": "step1_success", "completed": True},"            {"result": "step2_success", "completed": True}"        ]
 
@@ -116,7 +125,8 @@ class TestSequentialAgentPattern:
     async def test_sequential_execution_with_failure_continue(
         self, sequential_pattern, sample_context, mock_orchestrator
     ):
-        """Test sequential execution with failure but continue_on_failure=True.        config = SequentialAgentConfig(
+"""
+Test sequential execution with failure but continue_on_failure=True.        config = SequentialAgentConfig(
             name="test_continue","            continue_on_failure=True,
             sub_agents=[
                 {"name": "agent_1", "type": "pattern", "pattern": "peer"},"                {"name": "agent_2", "type": "pattern", "pattern": "debate"}"            ]
@@ -136,7 +146,8 @@ class TestSequentialAgentPattern:
 
     @pytest.mark.asyncio
     async def test_sequential_execution_with_failure_stop(self, sequential_pattern, sample_context, mock_orchestrator):
-        """Test sequential execution with failure and continue_on_failure=False.        config = SequentialAgentConfig(
+"""
+Test sequential execution with failure and continue_on_failure=False.        config = SequentialAgentConfig(
             name="test_stop","            continue_on_failure=False,
             sub_agents=[
                 {"name": "agent_1", "type": "pattern", "pattern": "peer"},"                {"name": "agent_2", "type": "pattern", "pattern": "debate"}"            ]
@@ -158,26 +169,31 @@ class TestSequentialAgentPattern:
         assert mock_orchestrator.execute_with_pattern.call_count == 1
 
     def test_prepare_next_input(self, sequential_pattern):
-        """Test input preparation for next agent.        current_input = {"original": "data"}"        agent_result = {"processed": "result", "final_state": {"key": "value"}}"        agent_config = {"output_key": "step_output"}"
+"""
+Test input preparation for next agent.        current_input = {"original": "data"}"        agent_result = {"processed": "result", "final_state": {"key": "value"}}"        agent_config = {"output_key": "step_output"}
         next_input = sequential_pattern._prepare_next_input(
             current_input, agent_result, agent_config
         )
 
-        assert next_input["original"] == "data""        assert next_input["processed"] == "result""        assert next_input["final_state"]["key"] == "value""
+        assert next_input["original"] == "data""        assert next_input["processed"] == "result""        assert next_input["final_state"]["key"] == "value"
 
 @pytest.mark.skip(reason="ParallelAgentPattern not yet implemented")"class TestParallelAgentPattern:
-    """Test parallel agent execution pattern.
+"""
+Test parallel agent execution pattern.
     @pytest.fixture
     def mock_orchestrator(self):
-        """Create mock orchestrator.        return MockOrchestrator()
+"""
+Create mock orchestrator.        return MockOrchestrator()
 
     @pytest.fixture
     def parallel_pattern(self, mock_orchestrator):
-        """Create parallel agent pattern.        return ParallelAgentPattern(mock_orchestrator)
+"""
+Create parallel agent pattern.        return ParallelAgentPattern(mock_orchestrator)
 
     @pytest.fixture
     def sample_context(self):
-        """Create sample cascade context.        context = CascadeContext(
+"""
+Create sample cascade context.        context = CascadeContext(
             task_id="test_parallel","            cascade_depth=0,
             depth_limit=10,
             tenant_id="test","            security_scope=[],
@@ -187,7 +203,8 @@ class TestSequentialAgentPattern:
 
     @pytest.fixture
     def sample_agent_configs(self):
-        """Create sample agent configurations.        return [
+"""
+Create sample agent configurations.        return [
             {
                 "name": "weather_agent","                "type": "pattern","                "pattern": "peer","                "output_key": "weather_data""            },
             {
@@ -196,7 +213,8 @@ class TestSequentialAgentPattern:
 
     @pytest.mark.asyncio
     async def test_parallel_execution_success(self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
-        """Test successful parallel execution.        # Mock successful execution results
+"""
+Test successful parallel execution.        # Mock successful execution results
         mock_orchestrator.execute_with_pattern.side_effect = [
             {"weather": "sunny", "completed": True},"            {"news": "tech_update", "completed": True}"        ]
 
@@ -205,13 +223,14 @@ class TestSequentialAgentPattern:
         )
 
         # Verify execution
-        assert result["pattern"] == "parallel""        assert result["execution"]["total_agents"] == 2"        assert result["execution"]["successful"] == 2"        assert result["execution"]["failed"] == 0"        assert len(result["results"]) == 2"
+        assert result["pattern"] == "parallel""        assert result["execution"]["total_agents"] == 2"        assert result["execution"]["successful"] == 2"        assert result["execution"]["failed"] == 0"        assert len(result["results"]) == 2
         # Verify combined output
         combined = result["combined_output"]"        assert "weather_agent" in combined"        assert "news_agent" in combined"        assert combined["_summary"]["successful_agents"] == 2"
     @pytest.mark.asyncio
     async def test_parallel_execution_with_partial_failure(
             self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
-        """Test parallel execution with one agent failing.        # Mock one success, one failure
+"""
+Test parallel execution with one agent failing.        # Mock one success, one failure
         mock_orchestrator.execute_with_pattern.side_effect = [
             {"weather": "sunny", "completed": True},"            Exception("News API unavailable")"        ]
 
@@ -226,11 +245,12 @@ class TestSequentialAgentPattern:
         assert len(successful_results) == 1
         assert len(failed_results) == 1
 
-        assert failed_results[0]["error"] == "News API unavailable""
+        assert failed_results[0]["error"] == "News API unavailable"
     @pytest.mark.asyncio
     async def test_parallel_execution_all_failure(
             self, parallel_pattern, sample_context, sample_agent_configs, mock_orchestrator):
-        """Test parallel execution with all agents failing.        # Mock all failures
+"""
+Test parallel execution with all agents failing.        # Mock all failures
         mock_orchestrator.execute_with_pattern.side_effect = [
             Exception("Weather API down"),"            Exception("News API down")"        ]
 
@@ -239,11 +259,12 @@ class TestSequentialAgentPattern:
         )
 
         # Verify execution
-        assert result["execution"]["total_agents"] == 2"        assert result["execution"]["successful"] == 0"        assert result["execution"]["failed"] == 2"
+        assert result["execution"]["total_agents"] == 2"        assert result["execution"]["successful"] == 0"        assert result["execution"]["failed"] == 2
         # Verify combined output indicates no successful results
-        combined = result["combined_output"]"        assert "error" in combined"        assert "No successful results" in combined["error"]"
+        combined = result["combined_output"]"        assert "error" in combined"        assert "No successful results" in combined["error"]
     def test_combine_parallel_results(self, parallel_pattern):
-        """Test combining parallel execution results.        results = [
+"""
+Test combining parallel execution results.        results = [
             {
                 "agent": "agent_1","                "success": True,"                "result": {"output": "result1"}"            },
             {
@@ -254,5 +275,6 @@ class TestSequentialAgentPattern:
 
         combined = parallel_pattern._combine_parallel_results(results)
 
-        assert combined["agent_1"]["output"] == "result1""        assert combined["agent_2"]["output"] == "result2""        assert "agent_3" not in combined"
+        assert combined["agent_1"]["output"] == "result1""        assert combined["agent_2"]["output"] == "result2""        assert "agent_3" not in combined
         assert combined["_summary"]["total_agents"] == 3"        assert combined["_summary"]["successful_agents"] == 2"        assert "agent_1" in combined["_summary"]["agent_names"]"        assert "agent_2" in combined["_summary"]["agent_names"]"
+"""

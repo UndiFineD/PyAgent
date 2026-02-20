@@ -14,7 +14,10 @@
 
 
 """
+"""
 Core partition mixin for shard management.
+
+"""
 from typing import Any
 import json
 import zlib
@@ -29,7 +32,8 @@ except ImportError:
 
 
 class CorePartitionMixin:
-""""Methods for partitioning and bloat detection.
+""""
+Methods for partitioning and bloat detection.
     def partition_memory(self, memory: dict[str, Any], max_entries_per_shard: int = 1000) -> dict[str, dict[str, Any]]:
         Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability.
@@ -43,7 +47,8 @@ class CorePartitionMixin:
                 shards["default"][category] = data"        return shards
 
     def _shard_category(self, category: str, data: dict, shards: dict, max_entries: int) -> None:
-""""Helper to shard a large category.        # Use Rust for sharding "if available"        if _RUST_ACCEL:
+""""
+Helper to shard a large category.        # Use Rust for sharding "if available"        if _RUST_ACCEL:
             try:
                 items = [(k, json.dumps(v)) for k, v in data.items()]
                 rust_shards = partition_to_shards_rust(category, items, max_entries)
@@ -67,9 +72,16 @@ class CorePartitionMixin:
             shards[shard_name][key] = val
 
     def detect_shard_bloat(self, shards: dict[str, dict[str, Any]], size_threshold_bytes: int = 5_000_000) -> list[str]:
-""""Identifies shards that are exceeding the recommended size.  "   "   bloated = []"        for name, data in shards.items():
+""""
+Identifies shards that are exceeding the recommended size.  "   "   bloated = []"        for name, data in shards.items():
             # Estimate size via JSON serialization
             size = len(json.dumps(data))
             if size > size_threshold_bytes:
                 bloated.append(name)
         return bloated
+
+"""
+
+""
+
+"""

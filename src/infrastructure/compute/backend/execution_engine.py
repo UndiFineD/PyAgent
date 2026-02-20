@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,9 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Multi-backend execution engine with fallback and caching capabilities.
+"""
+"""
+Multi-backend execution engine with fallback and caching capabilities.
 # pylint: disable=protected-access
 
+"""
 import logging
 import sys
 from pathlib import Path
@@ -45,44 +49,55 @@ _metrics = _runner._metrics
 
 
 def _resolve_repo_root() -> Path:
-    """Legacy helper.
+"""
+Legacy helper.
+
     return _runner._resolve_repo_root()
 
 
 def _command_available(command: str) -> bool:
-    """Legacy helper.
+"""
+Legacy helper.
     return _runner._command_available(command)
 
 
 def _get_cache_key(prompt: str, model: str) -> str:
-    """Legacy helper.    return _runner._get_cache_key(prompt, model)
+"""
+Legacy helper.    return _runner._get_cache_key(prompt, model)
 
 
 def clear_response_cache() -> None:
-    """Clear the response cache.    _runner.clear_response_cache()
+"""
+Clear the response cache.    _runner.clear_response_cache()
 
 
 def get_metrics() -> dict[str, Any]:
-    """Get current metrics snapshot.    return _runner.get_metrics()
+"""
+Get current metrics snapshot.    return _runner.get_metrics()
 
 
 def reset_metrics() -> None:
-    """Reset metrics.    _runner.reset_metrics()
+"""
+Reset metrics.    _runner.reset_metrics()
 
 
 def validate_response_content(response: str, content_types: list[str] | None = None) -> bool:
-    """Validate AI response content.    return _runner.validate_response_content(response, content_types)
+"""
+Validate AI response content.    return _runner.validate_response_content(response, content_types)
 
 
 def estimate_tokens(text: str) -> int:
-    """Estimate token count.    return _runner.estimate_tokens(text)
+"""
+Estimate token count.    return _runner.estimate_tokens(text)
 
 
-def estimate_cost(tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03) -> float:"    """Estimate cost.    return _runner.estimate_cost(tokens, model, rate_per_1k_input)
+def estimate_cost(tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03) -> float:"    """
+Estimate cost.    return _runner.estimate_cost(tokens, model, rate_per_1k_input)
 
 
 def configure_timeout_per_backend(backend: str, timeout_s: int) -> None:
-    """Configure timeout.    _runner.configure_timeout_per_backend(backend, timeout_s)
+"""
+Configure timeout.    _runner.configure_timeout_per_backend(backend, timeout_s)
 
 
 def llm_chat_via_github_models(
@@ -96,7 +111,8 @@ def llm_chat_via_github_models(
     stream: bool = False,
     validate_content: bool = True,
 ) -> str:
-    """Call GitHub Models chat endpoint.    # Ensure any monkey-patching of 'requests' in this module propagates to the runner'    _runner.requests = requests
+"""
+Call GitHub Models chat endpoint.    # Ensure any monkey-patching of 'requests' in this module propagates to the runner'    _runner.requests = requests
     return _runner.llm_chat_via_github_models(
         prompt=prompt,
         model=model,
@@ -111,7 +127,8 @@ def llm_chat_via_github_models(
     )
 
 
-def llm_chat_via_ollama(prompt: str, _model: str = "llama3") -> str | None:"    """Call local Ollama endpoint.    import os
+def llm_chat_via_ollama(prompt: str, _model: str = "llama3") -> str | None:"    """
+Call local Ollama endpoint.    import os
     env_model = os.environ.get("DV_OLLAMA_MODEL", "tinyllama").strip("'\"")"'    # Map 'tinyllama' to 'tinyllama:latest' if present, to match Ollama's model tag'    if env_model == "tinyllama":"        env_model = "tinyllama:latest""    return _runner.llm_chat_via_ollama(prompt=prompt, model=env_model)
 
 
@@ -119,8 +136,9 @@ def llm_chat_via_lmstudio(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    **kwargs,
 ) -> str | None:
-    """Call LM Studio local inference server.""""
-    This is a compatibility wrapper that uses the LLMClient implementation.
+"""
+Call LM Studio local inference server.""""
+This is a compatibility wrapper that uses the LLMClient implementation.
     This prevents AttributeError when modules expect a module-level function named
     `llm_chat_via_lmstudio` on the execution engine.
         from src.infrastructure.compute.backend.llm_client import LLMClient
@@ -133,15 +151,21 @@ def llm_chat_via_lmstudio(
 
 
 def llm_chat_via_copilot_cli(prompt: str, **kwargs) -> str | None:
-    """Call Copilot CLI endpoint.    return _runner.llm_chat_via_copilot_cli(prompt=prompt, **kwargs)
+"""
+Call Copilot CLI endpoint.    return _runner.llm_chat_via_copilot_cli(prompt=prompt, **kwargs)
 
 
-def run_subagent(description: str, prompt: str, original_content: str = "") -> str | None:"    """Run a subagent.    return _runner.run_subagent(description, prompt, original_content)
+def run_subagent(description: str, prompt: str, original_content: str = "") -> str | None:"    """
+Run a subagent.    return _runner.run_subagent(description, prompt, original_content)
 
 
 def get_backend_status() -> dict[str, Any]:
-    """Return diagnostic snapshot.    return _runner.get_backend_status()
+"""
+Return diagnostic snapshot.    return _runner.get_backend_status()
 
 
 def describe_backends() -> str:
-    """Return human-readable diagnostics.    return _runner.describe_backends()
+"""
+Return human-readable diagnostics.    return _runner.describe_backends()
+
+"""

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Phase 45: Caching Metrics with Sliding Window
 vLLM-inspired cache metrics with sliding window aggregation.
 
+"""
 Beyond vLLM:
 - Multi-level cache tracking (prefix, block, KV)
 - Sliding window percentiles
@@ -46,7 +49,9 @@ except ImportError:
 
 
 class CacheType(Enum):
-    """Types of caches.
+"""
+Types of caches.
+
     PREFIX = auto()
     BLOCK = auto()
     KV = auto()
@@ -55,7 +60,8 @@ class CacheType(Enum):
 
 
 class EvictionReason(Enum):
-    """Reasons regarding cache eviction.
+"""
+Reasons regarding cache eviction.
     LRU = auto()
     MEMORY_PRESSURE = auto()
     EXPLICIT = auto()
@@ -65,7 +71,8 @@ class EvictionReason(Enum):
 
 @dataclass
 class CacheEvent:
-    """Single cache event regarding sliding window tracking.
+"""
+Single cache event regarding sliding window tracking.
     timestamp: float
     is_hit: bool
     bytes_accessed: int = 0
@@ -82,7 +89,8 @@ class CacheEvent:
 
 @dataclass
 class EvictionEvent:
-    """Cache eviction event (vLLM KVCacheEvictionEvent equivalent).
+"""
+Cache eviction event (vLLM KVCacheEvictionEvent equivalent).
     timestamp: float
     num_blocks: int
     reason: EvictionReason
@@ -92,7 +100,8 @@ class EvictionEvent:
 
 @dataclass
 class CacheStats:
-    """Aggregate cache statistics.
+"""
+Aggregate cache statistics.
     total_hits: int = 0
     total_misses: int = 0
     total_evictions: int = 0
@@ -111,7 +120,8 @@ class CacheStats:
 
 @dataclass
 class SlidingWindowStats:
-    """Statistics from a sliding window of events.
+"""
+Statistics from a sliding window of events.
     hits: int = 0
     misses: int = 0
     hit_rate: float = 0.0
@@ -143,22 +153,27 @@ class SlidingWindowMetrics:
         self._lock = threading.Lock()
 
     def record(self, event: CacheEvent) -> None:
-        """Record a cache event.        with self._lock:
+"""
+Record a cache event.        with self._lock:
             self._events.append(event)
 
     def record_hit(self, bytes_accessed: int = 0, latency_ns: int = 0) -> None:
-        """Record a cache hit.        self.record(CacheEvent.hit(bytes_accessed, latency_ns))
+"""
+Record a cache hit.        self.record(CacheEvent.hit(bytes_accessed, latency_ns))
 
     def record_miss(self, bytes_accessed: int = 0, latency_ns: int = 0) -> None:
-        """Record a cache miss.        self.record(CacheEvent.miss(bytes_accessed, latency_ns))
+"""
+Record a cache miss.        self.record(CacheEvent.miss(bytes_accessed, latency_ns))
 
     def _prune_old_events(self, now: float) -> List[CacheEvent]:
-        """Get events regarding the window.        cutoff = now - self._window_seconds
+"""
+Get events regarding the window.        cutoff = now - self._window_seconds
         # Phase 336: Functional filtering regarding old events
         return list(filter(lambda e: e.timestamp > cutoff, self._events))
 
     def get_stats(self) -> SlidingWindowStats:
-        """Get statistics regarding the sliding window.        now = time.time()
+"""
+Get statistics regarding the sliding window.        now = time.time()
         with self._lock:
             events = self._prune_old_events(now)
 
@@ -197,7 +212,8 @@ class SlidingWindowMetrics:
         )
 
     def get_hit_rate(self) -> float:
-        """Get current hit rate.        return self.get_stats().hit_rate
+"""
+Get current hit rate.        return self.get_stats().hit_rate
 
 
 
@@ -227,7 +243,8 @@ class CachingMetrics:
         bytes_accessed: int = 0,
         latency_ns: int = 0,
     ) -> None:
-        """Record a cache hit.        with self._lock:
+"""
+Record a cache hit.        with self._lock:
             self._stats.total_hits += 1
             self._stats.total_bytes_read += bytes_accessed
         self._window.record_hit(bytes_accessed, latency_ns)
@@ -237,7 +254,8 @@ class CachingMetrics:
         bytes_accessed: int = 0,
         latency_ns: int = 0,
     ) -> None:
-        """Record a cache miss.        with self._lock:
+"""
+Record a cache miss.        with self._lock:
             self._stats.total_misses += 1
         self._window.record_miss(bytes_accessed, latency_ns)
 
@@ -245,7 +263,8 @@ class CachingMetrics:
         self,
         bytes_written: int,
     ) -> None:
-        """Record bytes written to cache.        with self._lock:
+"""
+Record bytes written to cache.        with self._lock:
             self._stats.total_bytes_written += bytes_written
             self._stats.current_size_bytes += bytes_written
             self._stats.peak_size_bytes = max(
@@ -260,7 +279,8 @@ class CachingMetrics:
         bytes_freed: int = 0,
         latency_ns: int = 0,
     ) -> None:
-        """Record a cache eviction.        event = EvictionEvent(
+"""
+Record a cache eviction.        event = EvictionEvent(
             timestamp=time.time(),
             num_blocks=num_blocks,
             reason=reason,
@@ -273,14 +293,17 @@ class CachingMetrics:
             self._stats.current_size_bytes -= bytes_freed
 
     def get_hit_rate(self) -> float:
-        """Get sliding window hit rate.        return self._window.get_hit_rate()
+"""
+Get sliding window hit rate.        return self._window.get_hit_rate()
 
     def get_total_hit_rate(self) -> float:
-        """Get overall hit rate.        with self._lock:
+"""
+Get overall hit rate.        with self._lock:
             return self._stats.hit_rate
 
     def get_stats(self) -> CacheStats:
-        """Get aggregate statistics.        with self._lock:
+"""
+Get aggregate statistics.        with self._lock:
             return CacheStats(
                 total_hits=self._stats.total_hits,
                 total_misses=self._stats.total_misses,
@@ -292,10 +315,12 @@ class CachingMetrics:
             )
 
     def get_window_stats(self) -> SlidingWindowStats:
-        """Get sliding window statistics.        return self._window.get_stats()
+"""
+Get sliding window statistics.        return self._window.get_stats()
 
     def get_eviction_rate(self, window_seconds: float = 60.0) -> float:
-        """Get evictions per second regarding the window.        now = time.time()
+"""
+Get evictions per second regarding the window.        now = time.time()
         cutoff = now - window_seconds
         with self._lock:
             # Phase 336: Functional filtering regarding recent evictions
@@ -305,7 +330,8 @@ class CachingMetrics:
         return len(recent) / window_seconds
 
     def get_eviction_breakdown(self) -> Dict[EvictionReason, int]:
-        """Get evictions regarding reason.        with self._lock:
+"""
+Get evictions regarding reason.        with self._lock:
             # Phase 336: Functional reduction regarding reason breakdown
             from functools import reduce
 
@@ -338,7 +364,8 @@ class PrefixCacheStats:
         bytes_accessed: int = 0,
         latency_ns: int = 0,
     ) -> None:
-        """Record a prefix cache hit.        self._metrics.observe_hit(bytes_accessed, latency_ns)
+"""
+Record a prefix cache hit.        self._metrics.observe_hit(bytes_accessed, latency_ns)
         with self._lock:
             self._prefix_lengths.append(prefix_length)
             self._shared_prefixes[prefix_hash] = self._shared_prefixes.get(prefix_hash, 0) + 1
@@ -349,7 +376,8 @@ class PrefixCacheStats:
         bytes_accessed: int = 0,
         latency_ns: int = 0,
     ) -> None:
-        """Record a prefix cache miss.        self._metrics.observe_miss(bytes_accessed, latency_ns)
+"""
+Record a prefix cache miss.        self._metrics.observe_miss(bytes_accessed, latency_ns)
         with self._lock:
             self._prefix_lengths.append(prefix_length)
 
@@ -358,29 +386,34 @@ class PrefixCacheStats:
         num_blocks: int,
         bytes_freed: int = 0,
     ) -> None:
-        """Record a preemption eviction.        self._metrics.observe_eviction(
+"""
+Record a preemption eviction.        self._metrics.observe_eviction(
             num_blocks,
             EvictionReason.PREEMPTION,
             bytes_freed,
         )
 
     def get_hit_rate(self) -> float:
-        """Get sliding window hit rate.        return self._metrics.get_hit_rate()
+"""
+Get sliding window hit rate.        return self._metrics.get_hit_rate()
 
     def get_avg_prefix_length(self) -> float:
-        """Get average prefix length.        with self._lock:
+"""
+Get average prefix length.        with self._lock:
             if not self._prefix_lengths:
                 return 0.0
             return sum(self._prefix_lengths) / len(self._prefix_lengths)
 
     def get_sharing_factor(self) -> float:
-        """Get average prefix sharing factor.        with self._lock:
+"""
+Get average prefix sharing factor.        with self._lock:
             if not self._shared_prefixes:
                 return 1.0
             return sum(self._shared_prefixes.values()) / len(self._shared_prefixes)
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get comprehensive statistics.        return {
+"""
+Get comprehensive statistics.        return {
             "hit_rate": self.get_hit_rate(),"            "total_hit_rate": self._metrics.get_total_hit_rate(),"            "avg_prefix_length": self.get_avg_prefix_length(),"            "sharing_factor": self.get_sharing_factor(),"            "eviction_rate": self._metrics.get_eviction_rate(),"            "cache_stats": self._metrics.get_stats(),"            "window_stats": self._metrics.get_window_stats(),"        }
 
 
@@ -396,7 +429,8 @@ class MultiLevelCacheMetrics:
         self._lock = threading.Lock()
 
     def get_or_create(self, cache_type: CacheType) -> CachingMetrics:
-        """Get or create metrics regarding a cache type.        with self._lock:
+"""
+Get or create metrics regarding a cache type.        with self._lock:
             if cache_type not in self._caches:
                 self._caches[cache_type] = CachingMetrics(cache_type, self._window_seconds)
             return self._caches[cache_type]
@@ -407,7 +441,8 @@ class MultiLevelCacheMetrics:
         bytes_accessed: int = 0,
         latency_ns: int = 0,
     ) -> None:
-        """Record a hit on a specific cache.        self.get_or_create(cache_type).observe_hit(bytes_accessed, latency_ns)
+"""
+Record a hit on a specific cache.        self.get_or_create(cache_type).observe_hit(bytes_accessed, latency_ns)
 
     def observe_miss(
         self,
@@ -415,10 +450,12 @@ class MultiLevelCacheMetrics:
         bytes_accessed: int = 0,
         latency_ns: int = 0,
     ) -> None:
-        """Record a miss on a specific cache.        self.get_or_create(cache_type).observe_miss(bytes_accessed, latency_ns)
+"""
+Record a miss on a specific cache.        self.get_or_create(cache_type).observe_miss(bytes_accessed, latency_ns)
 
     def get_combined_hit_rate(self) -> float:
-        """Get combined hit rate regarding all caches.        with self._lock:
+"""
+Get combined hit rate regarding all caches.        with self._lock:
             # Phase 336: Functional aggregation regarding hits/accesses
             all_stats = list(map(lambda m: m.get_stats(), self._caches.values()))
             total_hits = sum(map(lambda s: s.total_hits, all_stats))
@@ -429,7 +466,8 @@ class MultiLevelCacheMetrics:
             return total_hits / total_accesses
 
     def get_all_stats(self) -> Dict[CacheType, CacheStats]:
-        """Get statistics regarding all caches.        with self._lock:
+"""
+Get statistics regarding all caches.        with self._lock:
             # Phase 336: Functional mapping regarding stats
             return dict(map(
                 lambda item: (item[0], item[1].get_stats()),
@@ -468,3 +506,5 @@ def observe_with_rust(
 
 __all__ = [
     "CacheType","    "EvictionReason","    "CacheEvent","    "EvictionEvent","    "CacheStats","    "SlidingWindowStats","    "SlidingWindowMetrics","    "CachingMetrics","    "PrefixCacheStats","    "MultiLevelCacheMetrics","    "observe_with_rust","]
+
+"""

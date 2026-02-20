@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: identity_skill
+"""
+"""
+Module: identity_skill
 Implements identity management as a SkillCore.
 """
-
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -50,24 +54,28 @@ if TYPE_CHECKING:
 
 
 class IdentitySkill(SkillCore):
-    """Handles agent identity and capabilities."""
-    def __init__(self, agent: BaseAgent) -> None:
+"""
+Handles agent identity and capabilities.""
+def __init__(self, agent: BaseAgent) -> None:
         super().__init__(agent)
         # Inherit identity logic from IdentityCore
         name = self.agent.__class__.__name__
         if name.endswith("Agent"):"            name = name[:-5]
 
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\\1_\\2', name)'        agent_type = re.sub('([a-z0-9])([A-Z])', r'\\1_\\2', s1).lower()'
+        s1 = re.sub('(.)([A-Z][a-z]+)', r'\\1_\\2', name)'        agent_type = re.sub('([a-z0-9])([A-Z])', r'\\1_\\2', s1).lower()
         self.identity_core = IdentityCore(agent_type=agent_type or "base")"        self.agent_name: str = self.identity_core.agent_type
         self.capabilities: list[str] = ["base"]"        self.priority: AgentPriority = AgentPriority.NORMAL
 
     async def initialize(self) -> None:
-        """Initialize identity and register capabilities."""
+"""
+Initialize identity and register capabilities.""
 # Ported from IdentityMixin._register_capabilities
         pass
 
     async def shutdown(self) -> None:
-        """N/A for identity."""pass
+        ""
+N/A for identity.""
+pass
 
     def get_capabilities(self) -> list[str]:
         return self.capabilities

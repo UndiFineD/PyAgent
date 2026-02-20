@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +18,10 @@ from __future__ import annotations
 
 
 """
+"""
 AsyncOutputHandler.py - Async copy streams and CUDA event synchronization.
 
+"""
 Inspired by vLLM's v1/worker/gpu/async_utils.py. Provides async output'handling for overlapping compute and data transfer.
 
 Phase 29: Execution Context, Batching & Async Streaming
@@ -35,7 +38,7 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-T = TypeVar("T")"
+T = TypeVar("T")
 
 # ============================================================================
 # Async State
@@ -44,7 +47,9 @@ T = TypeVar("T")"
 
 
 class AsyncState(Enum):
-    """State of an async operation.
+"""
+State of an async operation.
+
     PENDING = "pending""    IN_PROGRESS = "in_progress""    COMPLETED = "completed""    FAILED = "failed""
 
 # ============================================================================
@@ -58,20 +63,25 @@ class CudaEvent:
 
     In real implementation, wraps torch.cuda.Event.
     
-    name: str = """    recorded_at: Optional[float] = None
+    name: str = ""
+recorded_at: Optional[float] = None
     synchronized: bool = False
 
     def record(self) -> None:
-        """Record the event.        self.recorded_at = time.perf_counter()
+"""
+Record the event.        self.recorded_at = time.perf_counter()
         self.synchronized = False
 
     def synchronize(self) -> None:
-        """Wait for the event.        self.synchronized = True
+"""
+Wait for the event.        self.synchronized = True
 
     def query(self) -> bool:
-        """Check if event is complete.        return self.synchronized or (self.recorded_at is not None)
+"""
+Check if event is complete.        return self.synchronized or (self.recorded_at is not None)
 
-    def elapsed_time(self, other: "CudaEvent") -> float:"        """Get elapsed time between events in milliseconds.        if self.recorded_at is None or other.recorded_at is None:
+    def elapsed_time(self, other: "CudaEvent") -> float:"        """
+Get elapsed time between events in milliseconds.        if self.recorded_at is None or other.recorded_at is None:
             return 0.0
         return (other.recorded_at - self.recorded_at) * 1000.0
 
@@ -91,16 +101,19 @@ class CudaStream:
     _events: List[CudaEvent] = field(default_factory=list)
 
     def wait_event(self, event: CudaEvent) -> None:
-        """Make stream wait for an event.        event.synchronize()
+"""
+Make stream wait for an event.        event.synchronize()
 
     def record_event(self, event: Optional[CudaEvent] = None) -> CudaEvent:
-        """Record an event on the stream.        if event is None:
+"""
+Record an event on the stream.        if event is None:
             event = CudaEvent(name=f"{self.name}_event_{len(self._events)}")"        event.record()
         self._events.append(event)
         return event
 
     def synchronize(self) -> None:
-        """Wait for all operations on stream.        for event in self._events:
+"""
+Wait for all operations on stream.        for event in self._events:
             event.synchronize()
 
 
@@ -133,31 +146,37 @@ class AsyncOutput:
     end_time: Optional[float] = None
 
     def mark_started(self) -> None:
-        """Mark output as started.        self.state = AsyncState.IN_PROGRESS
+"""
+Mark output as started.        self.state = AsyncState.IN_PROGRESS
         self.start_time = time.perf_counter()
 
     def mark_completed(self) -> None:
-        """Mark output as completed.        self.state = AsyncState.COMPLETED
+"""
+Mark output as completed.        self.state = AsyncState.COMPLETED
         self.end_time = time.perf_counter()
 
     def mark_failed(self, error: Exception) -> None:
-        """Mark output as failed.        self.state = AsyncState.FAILED
+"""
+Mark output as failed.        self.state = AsyncState.FAILED
         self.error = error
         self.end_time = time.perf_counter()
 
     def wait(self) -> None:
-        """Wait for async operations to complete.        if self.copy_event:
+"""
+Wait for async operations to complete.        if self.copy_event:
             self.copy_event.synchronize()
         if self.compute_event:
             self.compute_event.synchronize()
 
     @property
     def is_ready(self) -> bool:
-        """Check if output is ready.        return self.state == AsyncState.COMPLETED
+"""
+Check if output is ready.        return self.state == AsyncState.COMPLETED
 
     @property
     def elapsed_ms(self) -> float:
-        """Get elapsed time in milliseconds.        if self.start_time is None:
+"""
+Get elapsed time in milliseconds.        if self.start_time is None:
             return 0.0
         end = self.end_time or time.perf_counter()
         return (end - self.start_time) * 1000.0
@@ -198,7 +217,8 @@ def async_copy_batch(
     sources: List[np.ndarray],
     stream: Optional[CudaStream] = None,
 ) -> List[AsyncOutput]:
-    """Async copy multiple arrays.    outputs = []
+"""
+Async copy multiple arrays.    outputs = []
     for src in sources:
         output = async_copy_to_np(src, stream)
         outputs.append(output)
@@ -234,7 +254,8 @@ class AsyncBarrier:
             return False
 
     def wait(self, timeout: Optional[float] = None) -> List[AsyncOutput]:
-        """Wait for all outputs.        self._event.wait(timeout)
+"""
+Wait for all outputs.        self._event.wait(timeout)
 
         # Wait for all async operations
         for output in self._outputs:
@@ -243,7 +264,8 @@ class AsyncBarrier:
         return self._outputs
 
     def reset(self) -> None:
-        """Reset the barrier.        with self._lock:
+"""
+Reset the barrier.        with self._lock:
             self._outputs.clear()
             self._event.clear()
 
@@ -309,7 +331,8 @@ class AsyncOutputHandler:
         return newly_completed
 
     def wait_one(self, timeout: Optional[float] = None) -> Optional[AsyncOutput]:
-        """Wait for one output to complete.        try:
+"""
+Wait for one output to complete.        try:
             output = self._pending.get(timeout=timeout)
             output.wait()
 
@@ -321,7 +344,8 @@ class AsyncOutputHandler:
             return None
 
     def wait_all(self) -> List[AsyncOutput]:
-        """Wait for all pending outputs.        outputs = []
+"""
+Wait for all pending outputs.        outputs = []
 
         while not self._pending.empty():
             try:
@@ -338,22 +362,26 @@ class AsyncOutputHandler:
         return outputs
 
     def clear_completed(self) -> List[AsyncOutput]:
-        """Clear and return completed outputs.        with self._lock:
+"""
+Clear and return completed outputs.        with self._lock:
             completed = self._completed[:]
             self._completed.clear()
             return completed
 
     @property
     def num_pending(self) -> int:
-        """Number of pending outputs.        return self._pending.qsize()
+"""
+Number of pending outputs.        return self._pending.qsize()
 
     @property
     def num_completed(self) -> int:
-        """Number of completed outputs.        with self._lock:
+"""
+Number of completed outputs.        with self._lock:
             return len(self._completed)
 
     def stats(self) -> Dict[str, Any]:
-        """Get handler statistics.        with self._lock:
+"""
+Get handler statistics.        with self._lock:
             return {
                 "pending": self._pending.qsize(),"                "completed": len(self._completed),"                "total_processed": self._total_processed,"                "max_pending": self.max_pending,"            }
 
@@ -381,16 +409,28 @@ class DoubleBuffer:
 
     @property
     def current(self) -> np.ndarray:
-        """Get current compute buffer.        return self._buffers[self._current_idx]
+"""
+Get current compute buffer.        return self._buffers[self._current_idx]
 
     @property
     def transfer(self) -> np.ndarray:
-        """Get transfer buffer.        return self._buffers[1 - self._current_idx]
+"""
+Get transfer buffer.        return self._buffers[1 - self._current_idx]
 
     def swap(self) -> None:
-        """Swap current and transfer buffers.        with self._lock:
+"""
+Swap current and transfer buffers.        with self._lock:
             self._current_idx = 1 - self._current_idx
 
     def reset(self) -> None:
-        """Reset both buffers.        self._buffers[0].fill(0)
+"""
+Reset both buffers.        self._buffers[0].fill(0)
         self._buffers[1].fill(0)
+
+"""
+
+"""
+
+"""
+
+"""

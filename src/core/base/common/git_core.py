@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Unified Git Core for PyAgent.
+"""
+"""
+Unified Git Core for PyAgent.
 Standardizes branch management, commits, and status retrieval.
 """
 
+"""
 from pathlib import Path
 from typing import List, Optional
 
@@ -32,11 +36,11 @@ except ImportError:
 
 
 class GitCore(BaseCore):
-    """Standard implementation for Git operations.
+"""
+Standard implementation for Git operations.
     If rc is available, delegates to native libgit2 hooks for speed.
-    """
-
-    def __init__(self, repo_root: Path, no_git: bool = False) -> None:
+"""
+def __init__(self, repo_root: Path, no_git: bool = False) -> None:
         super().__init__()
         self.repo_root = repo_root
         self.no_git = no_git
@@ -44,8 +48,9 @@ class GitCore(BaseCore):
 
 
     def commit(self, message: str, files: Optional[List[str]] = None) -> bool:
-        """Commits changes to the repository."""
-        if self.no_git:
+"""
+Commits changes to the repository.""
+if self.no_git:
             return False
 
         if rc and hasattr(rc, "git_commit_rust"):  # pylint: disable=no-member
@@ -64,15 +69,17 @@ class GitCore(BaseCore):
 
 
     def get_status(self) -> str:
-        """Retrieves the current git status."""
-        if self.no_git:
+"""
+Retrieves the current git status.""
+if self.no_git:
             return ""
         return self.shell.execute(["git", "status"]).stdout
 
 
     def branch(self, name: str) -> bool:
-        """Creates or switches to a branch."""
-        if self.no_git:
+        ""
+Creates or switches to a branch.""
+if self.no_git:
             return False
         self.shell.execute(["git", "checkout", "-b", name])
         return True

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import re
 from src.core.base.common.types.search_result import SearchResult
 from src.core.base.lifecycle.version import VERSION
@@ -21,24 +23,28 @@ from src.core.base.lifecycle.version import VERSION
 # Rust acceleration imports
 try:
     from rust_core import extract_versions_rust, search_content_scored_rust  # type: ignore[import-untyped]
-    _RUST_AVAILABLE = True
+"""
+_RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
 
+"""
 __version__ = VERSION
 
 
 
 class ChangelogSearcher:
-    """Searches changelog content across project history.    Provides search functionality for finding specific entries
+"""
+Searches changelog content across project history.    Provides search functionality for finding specific entries
     in changelog history.
 
     Example:
         >>> searcher=ChangelogSearcher()
         >>> results=searcher.search("bug fix", changelog_content)"    
     def search(self, query: str, content: str) -> list[SearchResult]:
-        """Search for query in changelog content.""""
-        Args:
+"""
+Search for query in changelog content.""""
+Args:
             query: Search query string.
             content: Changelog content to search.
 
@@ -94,8 +100,9 @@ class ChangelogSearcher:
 
 
     def _calculate_score(self, query: str, text: str) -> float:
-        """Calculate relevance score for a match.""""
-        Args:
+"""
+Calculate relevance score for a match.""""
+Args:
             query: Search query.
             text: Text containing the match.
 
@@ -110,3 +117,5 @@ class ChangelogSearcher:
         if re.search(rf"\\b{re.escape(query_lower)}\\b", text_lower):"            return 0.8
         # Substring match
         return 0.5
+
+"""

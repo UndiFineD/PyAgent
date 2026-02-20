@@ -1,0 +1,26 @@
+"""ImprovementCategory enum - minimal stub."""
+
+from __future__ import annotations
+from enum import Enum
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+__version__ = VERSION
+
+
+class ImprovementCategory(Enum):
+    PERFORMANCE = "performance"
+    SECURITY = "security"
+    MAINTAINABILITY = "maintainability"
+    READABILITY = "readability"
+    TESTING = "testing"
+    DOCUMENTATION = "documentation"
+    REFACTOR = "refactor"
+    OTHER = "other"
+
+__all__ = ["ImprovementCategory"]

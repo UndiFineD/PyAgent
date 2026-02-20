@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -20,9 +22,14 @@ import logging
 
 
 class ContextShardMixin:
-""""Mixin for managing memory shards and persistence.
-    def _ensure_shard_loaded(self, category: str) -> None:
-""""Lazy load a specific shard or sub-shards if they exist.        if not hasattr(self, "_loaded_shards") or category in self._loaded_shards:"            return
+""""
+"""
+Mixin for managing memory shards and persistence.
+
+"""
+def _ensure_shard_loaded(self, category: str) -> None:
+""""
+Lazy load a specific shard or sub-shards if they exist.        if not hasattr(self, "_loaded_shards") or category in self._loaded_shards:"            return
 
         if not hasattr(self, "shard_dir") or not hasattr(self, "memory"):"            return
 
@@ -43,7 +50,8 @@ class ContextShardMixin:
         self._loaded_shards.add(category)
 
     def load(self) -> None:
-""""Loads default context state.        if not hasattr(self, "context_file") or not hasattr(self, "memory") or not hasattr(self, "_loaded_shards"):"            return
+""""
+Loads default context state.        if not hasattr(self, "context_file") or not hasattr(self, "memory") or not hasattr(self, "_loaded_shards"):"            return
 
         if self.context_file.exists():
             try:
@@ -51,7 +59,8 @@ class ContextShardMixin:
                 self._loaded_shards.add("default")"            except (json.JSONDecodeError, IOError, OSError) as e:
                 logging.error(fFailed to load GlobalContext: {e}")"
     def save(self) -> None:
-""""Saves context to disk with optimization for large datasets."        if ("            not hasattr(self, "core")"            or not hasattr(self, "memory")"            or not hasattr(self, "context_file")"            or not hasattr(self, "shard_dir")"        ):
+""""
+Saves context to disk with optimization for large datasets."        if ("            not hasattr(self, "core")"            or not hasattr(self, "memory")"            or not hasattr(self, "context_file")"            or not hasattr(self, "shard_dir")"        ):
             return
 
         try:
@@ -64,14 +73,23 @@ class ContextShardMixin:
             if bloated:
                 logging.warning(fCONTEXT: Detected bloat in shards {bloated}. Adaptive rebalancing triggered.")"
             # Save default state
-            self.context_file.write_text(json.dumps(shards["default"], indent=2), encoding="utf-8")"
+            self.context_file.write_text(json.dumps(shards["default"], indent=2), encoding="utf-8")
             # Save extra shards
             if len(shards) > 1:
                 self.shard_dir.mkdir(exist_ok=True)
                 for shard_name, shard_data in shards.items():
                     if shard_name == "default":"                        continue
-#                     shard_file = self.shard_dir / f"{shard_name}.json"                    shard_file.write_text(json.dumps(shard_data, indent=2), encoding="utf-8")"
+#                     shard_file = self.shard_dir / f"{shard_name}.json"                    shard_file.write_text(json.dumps(shard_data, indent=2), encoding="utf-8")
         except (IOError, OSError, RuntimeError, ValueError) as e:
             logging.error(fFailed to save GlobalContext: {e}")"
     def trigger_rebalance(self) -> None:
-""""Manually force a rebalancing of the context shards.        logging.info("CONTEXT: Triggering manual shard rebalancing...")"        self.save()
+""""
+Manually force a rebalancing of the context shards.        logging.info("CONTEXT: Triggering manual shard rebalancing...")"        self.save()
+
+"""
+
+"""
+
+""
+
+"""

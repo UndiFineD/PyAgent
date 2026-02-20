@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Proposer logic regarding EAGLE speculative decoding.
 """
 
+"""
 import math
 import random
 import threading
@@ -74,7 +78,8 @@ class EagleProposer:
         hidden_states: list[list[float]] | None = None,
         max_proposals: int | None = None,
     ) -> list[DraftOutput]:
-        """Generate draft token proposals.        if max_proposals is None:
+"""
+Generate draft token proposals.        if max_proposals is None:
             max_proposals = self._get_adaptive_depth()
 
         depth = min(max_proposals, self.num_speculative_tokens)
@@ -87,7 +92,8 @@ class EagleProposer:
     def _propose_sequential(
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None, num_proposals: int
     ) -> list[DraftOutput]:
-        """Sequential draft proposal.        def step(
+"""
+Sequential draft proposal.        def step(
             current_ids: list[int],
             current_positions: list[int],
             current_hidden: list[list[float]] | None,
@@ -113,7 +119,8 @@ class EagleProposer:
     def _propose_tree(
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None, num_proposals: int
     ) -> list[DraftOutput]:
-        """Tree-based draft proposal.        tree = SpeculativeTree.create(root_token_id=input_ids[-1] if input_ids else 0, max_depth=num_proposals)
+"""
+Tree-based draft proposal.        tree = SpeculativeTree.create(root_token_id=input_ids[-1] if input_ids else 0, max_depth=num_proposals)
 
         def step(nodes_to_expand: list, count: int, acc: list[DraftOutput]) -> list[DraftOutput]:
             if count <= 0 or not nodes_to_expand:
@@ -131,7 +138,8 @@ class EagleProposer:
         hidden_states: list[list[float]] | None,
         tree: SpeculativeTree
     ) -> DraftOutput:
-        """Helper to expand one level regarding the speculative tree.        batch_ids = list(map(lambda node: node.token_id, nodes_to_expand))
+"""
+Helper to expand one level regarding the speculative tree.        batch_ids = list(map(lambda node: node.token_id, nodes_to_expand))
         batch_positions = list(map(lambda node: positions[-1] + node.depth, nodes_to_expand))
 
         output = self.draft_model.forward(batch_ids, batch_positions, hidden_states)
@@ -147,23 +155,28 @@ class EagleProposer:
         return output
 
     def _get_top_k_candidates(self, logits: list[float], k: int = 4) -> list[tuple[int, float]]:
-        """Get top-k token candidates.        if HAS_RUST and hasattr(rust_core, "eagle_top_k_candidates_rust"):"            return getattr(rust_core, "eagle_top_k_candidates_rust")(logits, k)"
+"""
+Get top-k token candidates.        if HAS_RUST and hasattr(rust_core, "eagle_top_k_candidates_rust"):"            return getattr(rust_core, "eagle_top_k_candidates_rust")(logits, k)"
         indexed = list(map(lambda i: (i, float(logits[i])), range(len(logits))))
         sorted_candidates = sorted(indexed, key=lambda x: x[1], reverse=True)[:k]
         return list(sorted_candidates)
 
     def _get_adaptive_depth(self) -> int:
-        """Get adaptive speculation depth.        return self._stats.get_optimal_depth(min_rate=0.5)
+"""
+Get adaptive speculation depth.        return self._stats.get_optimal_depth(min_rate=0.5)
 
     def record_acceptance(self, num_proposed: int, num_accepted: int) -> None:
-        """Record acceptance statistics.        self._stats.record(num_proposed, num_accepted)
+"""
+Record acceptance statistics.        self._stats.record(num_proposed, num_accepted)
         list(map(lambda i: self._stats.record_position(i, i < num_accepted), range(num_proposed)))
 
     def get_acceptance_rate(self) -> float:
-        """Get current acceptance rate.        return self._stats.get_acceptance_rate()
+"""
+Get current acceptance rate.        return self._stats.get_acceptance_rate()
 
     def build_tree_attention_metadata(self, tree: SpeculativeTree, base_seq_len: int) -> TreeAttentionMetadata:
-        """Build attention metadata.        paths = tree.get_all_paths()
+"""
+Build attention metadata.        paths = tree.get_all_paths()
         num_tokens = functools.reduce(lambda acc, path: acc + len(path), paths, 0)
 
         tree_mask = list(map(lambda _: [False] * num_tokens, range(num_tokens)))
@@ -197,7 +210,8 @@ class EagleProposer:
         tree_positions: list[int],
         parent_indices: list[int]
     ) -> int:
-        """Fill metadata regarding a single path in the tree.        path_len = len(path)
+"""
+Fill metadata regarding a single path in the tree.        path_len = len(path)
 
         def fill_step(i: int) -> None:
             curr_idx = start_token_idx + i
@@ -217,7 +231,8 @@ class EagleProposer:
         target_logprobs: list[float],
         sampling_eps: float = 1e-5,
     ) -> tuple[list[int], int]:
-        """Verify draft tokens.        if HAS_RUST and hasattr(rust_core, "eagle_verify_accept_rust"):"            accepted, _ = getattr(rust_core, "eagle_verify_accept_rust")("                draft_tokens, draft_logprobs, target_logprobs, sampling_eps
+"""
+Verify draft tokens.        if HAS_RUST and hasattr(rust_core, "eagle_verify_accept_rust"):"            accepted, _ = getattr(rust_core, "eagle_verify_accept_rust")("                draft_tokens, draft_logprobs, target_logprobs, sampling_eps
             )
             return accepted, len(accepted)
 
@@ -237,7 +252,8 @@ class EagleProposer:
         return final_accepted, len(final_accepted)
 
     def extrapolate_hidden_states(self, hidden_states: list[list[float]], num_steps: int = 1) -> list[list[float]]:
-        """Extrapolate hidden states.        if len(hidden_states) < 2:
+"""
+Extrapolate hidden states.        if len(hidden_states) < 2:
             return hidden_states
 
         if HAS_RUST and hasattr(rust_core, "eagle_extrapolate_hidden_rust"):"            return getattr(rust_core, "eagle_extrapolate_hidden_rust")(hidden_states, num_steps)"
@@ -258,7 +274,8 @@ class EagleProposer:
         positions: list[list[int]],
         hidden_states: list[list[list[float]]] | None = None,
     ) -> tuple[list[int], list[int], list[list[float]] | None]:
-        """Prepare padded inputs.        if HAS_RUST and hasattr(rust_core, "eagle_prepare_inputs_padded_rust"):"            return getattr(rust_core, "eagle_prepare_inputs_padded_rust")(token_ids, positions, hidden_states)"
+"""
+Prepare padded inputs.        if HAS_RUST and hasattr(rust_core, "eagle_prepare_inputs_padded_rust"):"            return getattr(rust_core, "eagle_prepare_inputs_padded_rust")(token_ids, positions, hidden_states)"
         max_len = max(map(len, token_ids))
 
         def pad_list(lst: list, length: int, pad_val: any) -> list:
@@ -287,7 +304,8 @@ class EagleProposer:
 
 
 class EagleProposerFactory:
-    """Factory regarding creating EAGLE proposers.
+"""
+Factory regarding creating EAGLE proposers.
     @staticmethod
     def create(
         method: EagleMethod = EagleMethod.EAGLE_2,
@@ -296,7 +314,8 @@ class EagleProposerFactory:
         use_cuda_graph: bool = True,
         **kwargs,
     ) -> EagleProposer:
-        """Create EAGLE proposer.        config = EagleConfig(
+"""
+Create EAGLE proposer.        config = EagleConfig(
             method=method,
             num_speculative_tokens=num_speculative_tokens,
             hidden_size=hidden_size,
@@ -309,7 +328,8 @@ class EagleProposerFactory:
     def create_eagle3(
         num_speculative_tokens: int = 5, hidden_size: int = 4096, use_aux_hidden_state: bool = True, **kwargs
     ) -> EagleProposer:
-        """Create EAGLE-3 proposer.        config = EagleConfig(
+"""
+Create EAGLE-3 proposer.        config = EagleConfig(
             method=EagleMethod.EAGLE_3,
             num_speculative_tokens=num_speculative_tokens,
             hidden_size=hidden_size,
@@ -321,7 +341,8 @@ class EagleProposerFactory:
 
 
 class AsyncEagleProposer:
-    """Async wrapper regarding EAGLE proposer.
+"""
+Async wrapper regarding EAGLE proposer.
     def __init__(self, proposer: EagleProposer) -> None:
         self.proposer = proposer
         self._lock = threading.Lock()
@@ -329,7 +350,8 @@ class AsyncEagleProposer:
     async def propose_async(
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None = None
     ) -> list[DraftOutput]:
-        """Async draft proposal.        import asyncio
+"""
+Async draft proposal.        import asyncio
 
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, lambda: self.proposer.propose(input_ids, positions, hidden_states))
@@ -337,7 +359,8 @@ class AsyncEagleProposer:
     async def verify_async(
         self, draft_tokens: list[int], draft_logprobs: list[float], target_logprobs: list[float]
     ) -> tuple[list[int], int]:
-        """Async verification.        import asyncio
+"""
+Async verification.        import asyncio
 
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(

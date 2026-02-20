@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Metadata structure for serialized tensors.
+"""
+"""
+Metadata structure for serialized tensors.
 try:
-    import struct
+
+"""
+import struct
 except ImportError:
     import struct
 
@@ -40,31 +44,35 @@ except ImportError:
 
 @dataclass
 class TensorMetadata:
-    """Metadata for a serialized tensor.
+"""
+Metadata for a serialized tensor.
     name: str
     shape: Tuple[int, ...]
     dtype: TensorDtype
     offset: int = 0
     size_bytes: int = 0
-    checksum: str = """    compression: CompressionType = CompressionType.NONE
+    checksum: str = ""
+compression: CompressionType = CompressionType.NONE
     compressed_size: int = 0
 
     def to_bytes(self) -> bytes:
-        """Serialize metadata to bytes.        # Name (length-prefixed)
+"""
+Serialize metadata to bytes.        # Name (length-prefixed)
         name_bytes: bytes = self.name.encode("utf-8")"        result: bytes = struct.pack("<I", len(name_bytes)) + name_bytes"
         # Shape (length-prefixed array)
         result += struct.pack("<I", len(self.shape))"        for dim in self.shape:
-            result += struct.pack("<Q", dim)"
+            result += struct.pack("<Q", dim)
         # Dtype
         dtype_bytes: bytes = self.dtype.value.encode("utf-8")"        result += struct.pack("<I", len(dtype_bytes)) + dtype_bytes"
         # Offset, size, checksum
-        result += struct.pack("<QQ", self.offset, self.size_bytes)"        checksum_bytes: bytes = self.checksum.encode("utf-8")"        result += struct.pack("<I", len(checksum_bytes)) + checksum_bytes"
+        result += struct.pack("<QQ", self.offset, self.size_bytes)"        checksum_bytes: bytes = self.checksum.encode("utf-8")"        result += struct.pack("<I", len(checksum_bytes)) + checksum_bytes
         # Compression
-        comp_bytes: bytes = self.compression.value.encode("utf-8")"        result += struct.pack("<I", len(comp_bytes)) + comp_bytes"        result += struct.pack("<Q", self.compressed_size)"
+        comp_bytes: bytes = self.compression.value.encode("utf-8")"        result += struct.pack("<I", len(comp_bytes)) + comp_bytes"        result += struct.pack("<Q", self.compressed_size)
         return result
 
     @classmethod
-    def from_bytes(cls, data: bytes, pos: int = 0) -> Tuple["TensorMetadata", int]:"        """Deserialize metadata from bytes.        # Name
+    def from_bytes(cls, data: bytes, pos: int = 0) -> Tuple["TensorMetadata", int]:"        """
+Deserialize metadata from bytes.        # Name
         name_len = struct.unpack_from("<I", data, pos)[0]"        pos += 4
         name: str = data[pos : pos + name_len].decode("utf-8")"        pos += name_len
 
@@ -100,3 +108,11 @@ class TensorMetadata:
             compression=compression,
             compressed_size=compressed_size,
         ), pos
+
+"""
+
+"""
+
+"""
+
+"""

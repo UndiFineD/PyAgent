@@ -11,10 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Test Pruning Core module.
+"""
+"""
+Test Pruning Core module.
 """
 try:
-    import unittest
+
+"""
+import unittest
 except ImportError:
     import unittest
 

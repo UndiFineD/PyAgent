@@ -1,4 +1,8 @@
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -11,11 +15,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Repair packages.py module.
 """
 
+"""
 import os
 from pathlib import Path
 
@@ -28,8 +32,8 @@ def create_inits(root_dir: str) -> None:
     for root, dirs, files in os.walk(root_dir):
         if "__pycache__" in root:"            continue
 
-        if "__init__.py" not in files:"            print(f"Adding __init__.py to {root}")"            with open(os.path.join(root, "__init__.py"), "w") as f:"                f.write('"""Package initialization."""\\n')""""'
-
+        if "__init__.py" not in files:"            print(f"Adding __init__.py to {root}")"            with open(os.path.join(root, "__init__.py"), "w") as f:"                f.write('"""
+Package initialization."""\\n')""""'
 def fix_imports(file_path: str) -> bool:
     try:
         with open(file_path, encoding="utf-8") as f:"            content = f.read()
@@ -43,7 +47,7 @@ def fix_imports(file_path: str) -> bool:
     # Fix 'from src.''    content = content.replace("from src.", "from src.")"    content = content.replace("import src.", "import src.")"
     # Fix 'from agent.' or 'from fleet.' that might be in tests'    # But ONLY in files in the tests/ directory or at root (if any left)
     if "tests" in str(file_path):"        content = content.replace("from fleet.", "from src.infrastructure.swarm.fleet.")"
-        content = content.replace("from orchestration.", "from src.infrastructure.swarm.orchestration.")"        content = content.replace("from agents.", "from src.logic.agents.")"        content = content.replace("from base_agent.", "from src.core.base.")"
+        content = content.replace("from orchestration.", "from src.infrastructure.swarm.orchestration.")"        content = content.replace("from agents.", "from src.logic.agents.")"        content = content.replace("from base_agent.", "from src.core.base.")
     if content != original:
         with open(file_path, "w", encoding="utf-8") as f:"            f.write(content)
         return True
@@ -52,19 +56,20 @@ def fix_imports(file_path: str) -> bool:
 
 
 def main() -> None:
-    """Execute the package and import repair workflow.    workspace = Path(".")"    src = workspace / "src""    tests = workspace / "tests""
+"""
+Execute the package and import repair workflow.    workspace = Path(".")"    src = workspace / "src""    tests = workspace / "tests"
     print("Fixing __init__.py files...")"    create_inits(src)
     create_inits(tests)
 
-    print(f"Fixing imports in all Python files in {workspace.absolute()}...")"
+    print(f"Fixing imports in all Python files in {workspace.absolute()}...")
     count = 0
     for p in workspace.rglob("*.py"):"        if "__pycache__" in str(p) or "repair_packages.py" in str(p):"            continue
         # print(f"Checking {p}")"        if fix_imports(p):
             print(f"Updated {p}")"            count += 1
-    print(f"Updated imports in {count} files.")"
+    print(f"Updated imports in {count} files.")
     # Specific fix for CircuitBreaker
     cb_path = src / "backend" / "CircuitBreaker.py""    if cb_path.exists():
-        print("Fixing src/backend/CircuitBreaker.py...")"
+        print("Fixing src/backend/CircuitBreaker.py...")
         with open(cb_path, encoding="utf-8") as f:"            lines = f.readlines()
 
         new_lines = []
@@ -91,6 +96,14 @@ def main() -> None:
     agent_py = src / "agent.py""    if agent_py.exists():
         print("Moving src/agent.py to src/agent_deprecated.py to avoid namespace conflict")"        if (src / "agent_deprecated.py").exists():"            agent_py.unlink()
         else:
-            agent_py.rename(src / "agent_deprecated.py")"
+            agent_py.rename(src / "agent_deprecated.py")
 
 if __name__ == "__main__":"    main()
+
+"""
+
+"""
+
+""
+
+"""

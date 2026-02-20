@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Distributed.py module.
 """
-
 try:
-    from typing import Any, Callable, Dict, List, Optional
+
+"""
+from typing import Any, Callable, Dict, List, Optional
 except ImportError:
     from typing import Any, Callable, Dict, List, Optional
 
@@ -67,7 +70,8 @@ class DistributedExecutor(Executor):
         self._local_executor: Optional[MultiprocExecutor] = None
 
     def start(self) -> None:
-        """Start the distributed executor.        # Start local executor
+"""
+Start the distributed executor.        # Start local executor
         self._local_executor = MultiprocExecutor(
             num_workers=self._local_size,
             functions=self._functions,
@@ -76,26 +80,34 @@ class DistributedExecutor(Executor):
         self._started = True
 
     def shutdown(self, graceful: bool = True) -> None:
-        """Shutdown the executor.        if self._local_executor:
+"""
+Shutdown the executor.        if self._local_executor:
             self._local_executor.shutdown(graceful)
         self._started = False
 
     def submit(self, func_name: str, *args: Any, **kwargs: Any) -> FutureWrapper[Any]:
-        """Submit a task (local only in this basic implementation).        if not self._local_executor:
+"""
+Submit a task (local only in this basic implementation).        if not self._local_executor:
             raise RuntimeError("Executor not started")"        return self._local_executor.submit(func_name, *args, **kwargs)
 
     def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
-        """Broadcast to all local workers.        if not self._local_executor:
+"""
+Broadcast to all local workers.        if not self._local_executor:
             raise RuntimeError("Executor not started")"        return self._local_executor.broadcast(func_name, *args, **kwargs)
 
     def get_num_workers(self) -> int:
-        """Get total workers across all nodes.        return self._world_size * self._local_size
+"""
+Get total workers across all nodes.        return self._world_size * self._local_size
 
     def is_healthy(self) -> bool:
-        """Check health.        if not self._local_executor:
+"""
+Check health.        if not self._local_executor:
             return False
         return self._local_executor.is_healthy()
 
     @property
     def is_leader(self) -> bool:
-        """Check if this is the leader node.        return self._rank == 0
+"""
+Check if this is the leader node.        return self._rank == 0
+
+"""

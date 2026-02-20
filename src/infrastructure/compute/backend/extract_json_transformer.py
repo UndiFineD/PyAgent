@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 import json
 import re
 
@@ -29,10 +29,12 @@ __version__ = VERSION
 
 
 class ExtractJsonTransformer(ResponseTransformerBase):
-    """Transformer that extracts JSON from response.
+"""
+Transformer that extracts JSON from response.
     def transform(self, response: str) -> str:
-        """Extract JSON from response.""""
-        Args:
+"""
+Extract JSON from response.""""
+Args:
             response: Response possibly containing JSON.
 
         Returns:
@@ -48,4 +50,5 @@ class ExtractJsonTransformer(ResponseTransformerBase):
         return response.strip()
 
     def get_name(self) -> str:
-        """Get transformer name.        return "extract_json""
+"""
+Get transformer name.        return "extract_json"

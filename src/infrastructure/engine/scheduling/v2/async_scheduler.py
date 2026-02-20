@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Asynchronous Scheduler (V2) for Phase 54.
 Implements non-blocking scheduling updates, speculative token handling, and structured output integration.
 
+"""
 import logging
 import time
 from typing import Any, Dict, List
@@ -69,7 +71,7 @@ class AsyncSchedulerV2:
                 # Optimized metadata update
                 rc.async_schedule_update_rust(output.get_seq_ids())
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.debug(f"Rust schedule update fallback: {e}")"
+                logger.debug(f"Rust schedule update fallback: {e}")
         # 4. Cleanup old outputs
         now: float = time.time()
         self.active_outputs = {k: v for k, v in self.active_outputs.items() if now - k < 60.0}
@@ -83,9 +85,11 @@ class AsyncSchedulerV2:
         return output
 
     def add_request(self, request: Any) -> None:
-        """Pass-through to the priority queue.        self.request_queue.add_request(request)
+"""
+Pass-through to the priority queue.        self.request_queue.add_request(request)
 
     def get_avg_latency(self) -> float:
-        """Returns average scheduling latency in ms.        if not self.schedule_latency_ms:
+"""
+Returns average scheduling latency in ms.        if not self.schedule_latency_ms:
             return 0.0
         return sum(self.schedule_latency_ms) / len(self.schedule_latency_ms)

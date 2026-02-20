@@ -15,9 +15,11 @@
 
 
 """
+"""
 Routing engine for task distribution.
 (Facade for src.core.base.common.routing_core)
 
+"""
 try:
     import os
 except ImportError:
@@ -46,11 +48,13 @@ except ImportError:
 
 
 class RoutingEngine(StandardRoutingCore):
-    """Facade for RoutingCore.
-    def select_provider(self, task_type="general", priority="balanced", federated=False):"        """Legacy compatibility wrapper.        if federated:
-            return "federated_cluster""
+"""
+Facade for RoutingCore.
+    def select_provider(self, task_type="general", priority="balanced", federated=False):"        """
+Legacy compatibility wrapper.        if federated:
+            return "federated_cluster"
         report = BackendHandlers.get_performance_report()
-        preferred: str = os.environ.get("DV_AGENT_BACKEND", "github_models")"
+        preferred: str = os.environ.get("DV_AGENT_BACKEND", "github_models")
         if priority == "latency":"            # Select provider with lowest TTFT or highest TPS
             best_provider: str = preferred
             min_ttft = float("inf")"            for p, metrics in report.items():
@@ -61,10 +65,17 @@ class RoutingEngine(StandardRoutingCore):
             if "openai" in report and report["openai"]["ttft"] < 1.0:"                return "openai""
         if task_type == "reasoning":"            # Reasoning usually requires frontier models, 
             # prefer GitHub Models (defaulting to gpt-4.1)
-            return "github_models""
+            return "github_models"
         return preferred
 
     @staticmethod
     def get_routing_stats() -> dict[str, Any]:
-        """Returns statistics on routing decisions and provider health.        return {
+"""
+Returns statistics on routing decisions and provider health.        return {
             "active_metrics": BackendHandlers.get_performance_report(),"            "default_backend": os.environ.get("DV_AGENT_BACKEND", "github_models"),"        }
+
+"""
+
+""
+
+"""

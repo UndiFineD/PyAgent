@@ -14,7 +14,10 @@
 
 
 """
+"""
 SelfSearchAgent - Introspection and knowledge-base search
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -46,7 +49,8 @@ except ImportError:
 
 
 class SelfSearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in searching and reflecting on its own knowledge base and logs.
+""""
+Agent specialized in searching and reflecting on its own knowledge base and logs.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the SelfSearchAgent (via WebIntelligence core)."
@@ -59,7 +63,9 @@ except ImportError:
 
 
 class SelfSearchAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in searching and reflecting on its own knowledge base and logs.
+""""
+Agent specialized in searching and reflecting on its own knowledge base and logs.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the SelfSearchAgent (via WebIntelligence core)."
+"""

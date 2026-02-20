@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.dev.scripts.management.debug_phase_20_21 import test_visualization_and_memory, test_observability, test_gui_backend

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,11 +21,13 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - As a module: instantiate PowershellAgent with the path to a .ps1 file and call its orchestration methods via the CoderAgent interface.
 - From CLI: python powershell_agent.py "path\\to\\\\script.ps1" (the module provides a create_main_function entrypoint for simple invocation)."- Intended for integration into the PyAgent swarm where agents are orchestrated by higher-level controllers.
 
+"""
 WHAT IT DOES:
-Provides a minimal, focused CoderAgent subclass specialized for authoring and manipulating PowerShell scripts. It sets language-specific metadata (_language = "powershell") and a tailored system prompt that instructs the underlying LLM to prefer idiomatic PowerShell patterns (Verb-Noun naming, Try/Catch error handling, pipeline usage). It also supplies a sensible default script template when a new file is created."
+Provides a minimal, focused CoderAgent subclass specialized for authoring and manipulating PowerShell scripts. It sets language-specific metadata (_language = "powershell") and a tailored system prompt that instructs the underlying LLM to prefer idiomatic PowerShell patterns (Verb-Noun naming, Try/Catch error handling, pipeline usage). It also supplies a sensible default script template when a new file is created.
 WHAT IT SHOULD DO BETTER:
 - Expand argument parsing and CLI feedback (validate file path, allow creating new scripts, expose verbosity and dry-run flags).
 - Implement richer PowerShell-specific linting and formatting hooks (invoke PSScriptAnalyzer or similar) before writing changes.
@@ -56,7 +60,8 @@ __version__ = VERSION
 
 
 class PowershellAgent(CoderAgent):
-""""Agent for PowerShell scripts.
+""""
+Agent for PowerShell scripts.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
@@ -64,7 +69,8 @@ class PowershellAgent(CoderAgent):
 #             "You are an Expert PowerShell Scripter."#             "Focus on idiomatic PowerShell, proper naming conventions (Verb-Noun),"#             "error handling (Try/Catch), and pipeline efficiency."        )
 
     def _get_default_content(self) -> str:
-"""return "# PowerShell Script\\nWrite-Host 'Hello World'\\n'
+"""
+return "# PowerShell Script\\nWrite-Host 'Hello World'\\n
 
 if __name__ == "__main__":"    main = create_main_function(PowershellAgent, "PowerShell Agent", "Path to .ps1 file")"    "main()"
 # pylint: disable=too-many-ancestors
@@ -90,7 +96,8 @@ __version__ = VERSION
 
 
 class PowershellAgent(CoderAgent):
-""""Agent for PowerShell "scripts.
+""""
+Agent for PowerShell "scripts.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
@@ -98,6 +105,7 @@ class PowershellAgent(CoderAgent):
 #             "You are an Expert PowerShell Scripter."#             "Focus on idiomatic PowerShell, proper naming conventions (Verb-Noun),"#             "error handling (Try/Catch), and pipeline efficiency."        )
 
     def _get_default_content(self) -> str:
-"""return "# PowerShell Script\\nWrite-Host 'Hello World'\\n'
+"""
+return "# PowerShell Script\\nWrite-Host 'Hello World'\\n
 
 if __name__ == "__main__":"    main = create_main_function(PowershellAgent, "PowerShell Agent", "Path to .ps1 file")"    main()

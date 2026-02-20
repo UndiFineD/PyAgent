@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Module: filesystem_skill
+"""
+"""
+Module: filesystem_skill
 Alias for environment_skill to maintain manifest compatibility.
 """
 try:
-    from .environment_skill import EnvironmentSkill
+
+"""
+from .environment_skill import EnvironmentSkill
 except ImportError:
     from .environment_skill import EnvironmentSkill
 
@@ -25,4 +29,6 @@ except ImportError:
 
 
 class FilesystemSkill(EnvironmentSkill):
-    """Alias for EnvironmentSkill."""pass
+    ""
+Alias for EnvironmentSkill.""
+pass

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,10 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 VotingSystem - Manage voting on improvements and prioritization# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
 try:
-    from voting_system import VotingSystem
+
+"""
+from voting_system import VotingSystem
 except ImportError:
     from voting_system import VotingSystem
 
@@ -35,7 +39,6 @@ WHAT IT SHOULD DO BETTER:
 - API & observability: add methods to list voters, get raw vote maps, export/import (JSON), and emit events for changes; include unit tests and docstrings for public methods.  
 - Integration: expose adapter interface to plug in different backends and add optional dependency injection for better testability.
 """
-
 try:
     from typing import Any
 except ImportError:
@@ -53,7 +56,8 @@ __version__ = VERSION
 
 
 class VotingSystem:
-    """Manages voting on improvements.
+"""
+Manages voting on improvements.
     def __init__(self) -> None:
         self.votes: dict[str, dict[str, int]] = {}
 

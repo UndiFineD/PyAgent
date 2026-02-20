@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Video loader implementation.
 """
 
+"""
 from typing import BinaryIO, Tuple, Union
 
 import numpy as np
@@ -37,7 +41,8 @@ from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
 
 
 class VideoLoader(MediaLoader):
-    """Load and process videos.
+"""
+Load and process videos.
     def __init__(self):
         self._cv2_available = False
         try:
@@ -56,8 +61,9 @@ class VideoLoader(MediaLoader):
         source: Union[str, bytes, BinaryIO],
         config: MediaLoadConfig,
     ) -> VideoData:
-        """Load video from source.        if not self._cv2_available:
-            raise RuntimeError("OpenCV required for video loading")"
+"""
+Load video from source.        if not self._cv2_available:
+            raise RuntimeError("OpenCV required for video loading")
         if isinstance(source, bytes):
             import tempfile
 
@@ -76,7 +82,8 @@ class VideoLoader(MediaLoader):
         )
 
     async def _load_frames(self, path: str, config: MediaLoadConfig) -> Tuple[np.ndarray, np.ndarray, MediaMetadata]:
-        """Load frames from video file.        if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):"            # TensorRT path for 120fps optimization
+"""
+Load frames from video file.        if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):"            # TensorRT path for 120fps optimization
             # This is a stub for real TensorRT/CUDA acceleration
             rc.initialize_tensorrt_rust()
             # ... process with TensorRT ...

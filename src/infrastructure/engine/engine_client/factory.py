@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +16,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Phase 45: Engine Client Factory
 Factory functions for creating engine clients.
 """
-
 try:
-    from typing import TYPE_CHECKING, Callable, Optional
+
+"""
+from typing import TYPE_CHECKING, Callable, Optional
 except ImportError:
     from typing import TYPE_CHECKING, Callable, Optional
 
@@ -97,5 +101,7 @@ def create_engine_client(
         config.num_workers = num_gpus
         client = DPAsyncMPClient(config)
     else:
-        raise ValueError(f"Unknown client mode: {config.mode}")"
+        raise ValueError(f"Unknown client mode: {config.mode}")
     return client
+
+"""

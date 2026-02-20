@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -13,7 +15,8 @@ except ImportError:
 
 
 
-"""Minimal Lesson model to satisfy imports during tests.
+"""
+Minimal Lesson model to satisfy imports during tests.
 
 This provides small, well-typed placeholders used by mixins and
 other components during test collection.
@@ -28,9 +31,9 @@ class Lesson:
 
 
 class LessonCore:
-    """Lightweight facade for lesson operations used in tests."""
-
-    def create_lesson(self, title: str, content: str) -> Lesson:
+    ""
+Lightweight facade for lesson operations used in tests.""
+def create_lesson(self, title: str, content: str) -> Lesson:
         return Lesson(id="generated", title=title, content=content)
 
     def get_lesson(self, lesson_id: str) -> Any:

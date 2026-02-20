@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import json
 except ImportError:
@@ -44,16 +44,18 @@ __version__ = VERSION
 
 
 class TestDataGenerator:
-    """Generates realistic test data for agent testing.""""
-    Example:
+"""
+Generates realistic test data for agent testing.""""
+Example:
         gen=TestDataGenerator()
         code=gen.generate_python_code(with_errors=False)
     
     __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
-        """Initialize data generator.""""
-        Args:
+"""
+Initialize data generator.""""
+Args:
             seed: Random seed for reproducibility.
                 self.seed = seed
         if seed:
@@ -67,29 +69,34 @@ class TestDataGenerator:
         with_docstrings: bool = True,
         num_functions: int = 3,
     ) -> str:
-        """Generate sample Python code.""""
-        Args:
+"""
+Generate sample Python code.""""
+Args:
             with_errors: Include syntax errors.
             with_docstrings: Include docstrings.
             num_functions: Number of functions to generate.
 
         Returns:
             str: Generated Python code.
-                lines = ['"""Generated test module."""', "", "import os", ""]"'
+                lines = ['""
+Generated test module."""', "", "import os", ""]"'
         for i in range(num_functions):
             lines.append(f"def function_{i}(arg1, arg2):")"            if with_docstrings:
-                lines.append(f'    """Function {i} docstring."""')""""'            if with_errors and i == 0:
+                lines.append(f'    ""
+Function {i} docstring."""')""""'
+if with_errors and i == 0:
                 lines.append("    return arg1 +")  # Syntax error"            else:
                 lines.append(f"    return arg1 + arg2 + {i}")"            lines.append("")"
-        return "\\n".join(lines)"
+        return "\\n".join(lines)
     def generate_markdown(
         self,
         with_headers: bool = True,
         with_code_blocks: bool = True,
         num_sections: int = 3,
     ) -> str:
-        """Generate sample markdown content.""""
-        Args:
+"""
+Generate sample markdown content.""""
+Args:
             with_headers: Include headers.
             with_code_blocks: Include code blocks.
             num_sections: Number of sections.
@@ -101,14 +108,15 @@ class TestDataGenerator:
             lines.append("# Test Document")"            lines.append("")"        for i in range(num_sections):
             if with_headers:
                 lines.append(f"## Section {i}")"            lines.append("")"            lines.append(f"This is section {i} content.")"            lines.append("")"            if with_code_blocks:
-                lines.append("```python")"                lines.append(f"print('Section {i}')")"'                lines.append("```")"                lines.append("")"        return "\\n".join(lines)"
+                lines.append("```python")"                lines.append(f"print('Section {i}')")"'                lines.append("```")"                lines.append("")"        return "\\n".join(lines)
     def generate_json(
         self,
         num_items: int = 5,
         nested: bool = True,
     ) -> str:
-        """Generate sample JSON content.""""
-        Args:
+"""
+Generate sample JSON content.""""
+Args:
             num_items: Number of items.
             nested: Include nested structures.
 
@@ -125,3 +133,11 @@ class TestDataGenerator:
             data["metadata"] = {"                "generated": datetime.now().isoformat(),"                "count": num_items,"            }
 
         return json.dumps(data, indent=2)
+
+"""
+
+"""
+
+""
+
+"""

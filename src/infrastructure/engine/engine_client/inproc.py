@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +16,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Phase 45: In-process Engine Client
 Single-GPU in-process execution.
 """
-
 try:
-    import asyncio
+
+"""
+import asyncio
 except ImportError:
     import asyncio
 
@@ -67,10 +71,12 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"     
         self._loop: Optional[asyncio.AbstractEventLoop] = None
 
     def set_engine_core(self, engine_core: Callable[[SchedulerOutput], EngineOutput]) -> None:
-        """Set the engine core callable.        self._engine_core = engine_core
+"""
+Set the engine core callable.        self._engine_core = engine_core
 
     def send_request(self, request: SchedulerOutput) -> str:
-        """Execute request directly in-process.        request_id = self._generate_request_id()
+"""
+Execute request directly in-process.        request_id = self._generate_request_id()
 
         if self._engine_core is None:
             # Mock execution for testing
@@ -84,16 +90,21 @@ class InprocClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"     
         return request_id
 
     def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        """Get output synchronously.        return self._results.pop(request_id, None)
+"""
+Get output synchronously.        return self._results.pop(request_id, None)
 
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        """Get output asynchronously.        # For in-proc, results are immediately available
+"""
+Get output asynchronously.        # For in-proc, results are immediately available
         return self._results.pop(request_id, None)
 
     def start(self) -> None:
-        """Start client.        self._running = True
-        logger.info("InprocClient started")"
+"""
+Start client.        self._running = True
+        logger.info("InprocClient started")
     def shutdown(self) -> None:
-        """Shutdown client.        self._running = False
+"""
+Shutdown client.        self._running = False
         self._results.clear()
-        logger.info("InprocClient shutdown")"
+        logger.info("InprocClient shutdown")
+"""

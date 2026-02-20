@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 
 """
+"""
 Self healing orchestrator.py module.
 """
 
+"""
 import logging
 import time
 from pathlib import Path
@@ -63,10 +66,11 @@ class SelfHealingOrchestrator:
                 content = context_file.read_text(encoding="utf-8")"                # Look for "Phase" markers to increase sensitivity"                if "Evolution Phase 50" in content:"                    self.core.timeout_seconds = 10.0  # More aggressive during heavy dev
                     self.core.max_errors = 2
                     logging.info("Self-Healing: Strategic overrides applied for Phase 50 TALON.")"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.warning(f"Self-Healing: Failed to load overrides: {e}")"
+                logging.warning(f"Self-Healing: Failed to load overrides: {e}")
     @property
     def health_registry(self) -> dict[str, Any]:
-        """Provides access to the core health registry for testing and monitoring.        return self.core.health_registry
+"""
+Provides access to the core health registry for testing and monitoring.        return self.core.health_registry
 
     def register_heartbeat(
         self,
@@ -75,12 +79,14 @@ class SelfHealingOrchestrator:
         latency: float = 0.0,
         error: bool = False,
     ) -> None:
-        """Signals that an agent is alive and optionally backs up its state.        self.core.update_health(agent_name, latency=latency, error=error)
+"""
+Signals that an agent is alive and optionally backs up its state.        self.core.update_health(agent_name, latency=latency, error=error)
         if state:
             self.state_backups[agent_name] = state
 
     def check_fleet_health(self) -> None:
-        """Scans the fleet for agents that have stopped responding.        failed_agents = self.core.detect_failures()
+"""
+Scans the fleet for agents that have stopped responding.        failed_agents = self.core.detect_failures()
 
         for agent_name in failed_agents:
             self.attempt_recovery(agent_name)
@@ -92,7 +98,7 @@ class SelfHealingOrchestrator:
         broken = report.get("broken_imports", [])"        if broken:
             for issue in broken:
                 logging.error(f"Integrity Error: {issue}")"        else:
-            logging.info("Self-Healing: Project integrity scan passed.")"
+            logging.info("Self-Healing: Project integrity scan passed.")
         return report
 
     def run_health_audit(self) -> dict[str, Any]:
@@ -100,12 +106,13 @@ class SelfHealingOrchestrator:
                 logging.info("Self-Healing: Running codebase health audit...")"        audit_results = CodeHealthAuditor.audit_workspace("src")"
         # Log summary statistics
         counts = {k: len(v) for k, v in audit_results.items()}
-        logging.info(f"Health Audit: {counts}")"
+        logging.info(f"Health Audit: {counts}")
         return audit_results
 
     def attempt_recovery(self, agent_name: str) -> bool:
-        """Attempts to restart a failed agent and restore its last known state.        action = self.core.get_recovery_action(agent_name)
-        logging.info(f"Self-Healing: Recovery action '{action}' triggered for {agent_name}")"'
+"""
+Attempts to restart a failed agent and restore its last known state.        action = self.core.get_recovery_action(agent_name)
+        logging.info(f"Self-Healing: Recovery action '{action}' triggered for {agent_name}")
         success = False
 
         # Action implementation using FleetManager/Registry
@@ -132,10 +139,12 @@ class SelfHealingOrchestrator:
         return False
 
     def attempt_repair(self, agent_name: str, error: Exception | None = None, **kwargs) -> Any:
-        """Alias for attempt_recovery (Legacy Phase 35 compatibility).        logging.info(f"Self-Healing: Attempting repair for {agent_name}...")"        self.attempt_recovery(agent_name)
-        return f"Self-healing complete for {agent_name}.""
+"""
+Alias for attempt_recovery (Legacy Phase 35 compatibility).        logging.info(f"Self-Healing: Attempting repair for {agent_name}...")"        self.attempt_recovery(agent_name)
+        return f"Self-healing complete for {agent_name}."
     def get_recovery_status(self) -> dict[str, Any]:
-        """Returns statistics on health and recovery actions.        return {
+"""
+Returns statistics on health and recovery actions.        return {
             "monitored_agents": len(self.core.health_registry),"            "total_recoveries": len(self.recovery_logs),"            "recent_actions": self.recovery_logs[-5:],"        }
 
     def review_recovery_lessons(self) -> None:

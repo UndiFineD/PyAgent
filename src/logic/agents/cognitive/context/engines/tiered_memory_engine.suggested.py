@@ -15,9 +15,11 @@
 
 # TieredMemoryEngine: Implements a MIRIX 6-tier memory engine utilizing ChromaDB for scalable,
 # multi-level memory management in PyAgent.
+"""
 Supports hierarchical storage, retrieval, and promotion of agent memory fragments across
 short, mid, long, and archival tiers.
 
+"""
 try:
     import logging
 except ImportError:

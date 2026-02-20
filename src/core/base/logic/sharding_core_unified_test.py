@@ -15,8 +15,11 @@
 
 try:
     from .core.base.common.sharding_core import ShardingCore
+"""
 except ImportError:
-    from src.core.base.common.sharding_core import ShardingCore
+
+"""
+from src.core.base.common.sharding_core import ShardingCore
 
 
 

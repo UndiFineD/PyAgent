@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Facade for AuthCore to maintain backward compatibility with AuthManager."""
+"""
+"""
+Facade for AuthCore to maintain backward compatibility with AuthManager.""
 try:
-    from .auth_core import AuthCore as AuthManager
+
+""
+from .auth_core import AuthCore as AuthManager
 except ImportError:
     from .auth_core import AuthCore as AuthManager
 

@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Chat template registry package for Jinja2 and custom template management.
 
+"""
 try:
     from .base import ChatTemplate  # noqa: F401
 except ImportError:

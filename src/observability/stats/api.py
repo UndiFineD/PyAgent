@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 api.py - Stats API server engine
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -50,7 +55,6 @@ FILE CONTENT SUMMARY:
 Api.py module.
 # Stats API server engine.
 """
-
 import json
 import logging
 from dataclasses import dataclass
@@ -61,7 +65,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class APIEndpoint:
-    """Stats API endpoint configuration.
+"""
+Stats API endpoint configuration.
     path: str
 
     method: str = "GET""    auth_required: bool = True
@@ -71,7 +76,8 @@ class APIEndpoint:
 
 
 class StatsAPIServer:
-    """Stats API endpoint for programmatic access.
+"""
+Stats API endpoint for programmatic access.
     def __init__(self, stats_agent: Any = None) -> None:
         self.stats_agent = stats_agent
         self.endpoints: dict[str, APIEndpoint] = {}
@@ -90,8 +96,9 @@ class StatsAPIServer:
         rate_limit: int = 100,
         cache_ttl: int = 60,
     ) -> APIEndpoint:
-        """Register a new API endpoint.""""
-        Args:
+"""
+Register a new API endpoint.""""
+Args:
             path: The URL path for the endpoint.
             method: HTTP method (e.g. "GET", "POST")."            auth_required: Whether the endpoint requires authentication.
             rate_limit: Requests per minute allowed for the endpoint.
@@ -110,8 +117,9 @@ class StatsAPIServer:
         )
         return ep
 
-    def handle_request(self, path: str, method: str = "GET", params: dict[str, Any] | None = None) -> dict[str, Any]:"        """Handle an incoming API request and return a response dictionary.""""
-        Args:
+    def handle_request(self, path: str, method: str = "GET", params: dict[str, Any] | None = None) -> dict[str, Any]:"        """
+Handle an incoming API request and return a response dictionary.""""
+Args:
             path: The request path.
             method: The HTTP method used for the request.
             params: Optional request parameters (query/body).
@@ -124,12 +132,19 @@ class StatsAPIServer:
             logger.debug("handle_request received params: %s", params)"        if not endpoint or endpoint.method != method:
             return {"error": "Not Found", "status": 404}"        if path == "/api/stats" and self.stats_agent:"            try:
                 return {"data": self.stats_agent.calculate_stats(), "status": 200}"            except Exception as e:
-                logger.exception("Error calculating stats")"                return {"error": str(e), "status": 500}"        return {"data": {}, "status": 200}"
+                logger.exception("Error calculating stats")"                return {"error": str(e), "status": 500}"        return {"data": {}, "status": 200}
     def get_api_docs(self) -> str:
-        """Return a minimal OpenAPI-style JSON string describing registered endpoints.        docs: dict[str, Any] = {
+"""
+Return a minimal OpenAPI-style JSON string describing registered endpoints.        docs: dict[str, Any] = {
             "openapi": "3.0.0","            "info": {"title": "Stats API", "version": "1.0.0"},"            "paths": {},"        }
         for path, ep in self.endpoints.items():
             docs["paths"][path] = {"                ep.method.lower(): {
                     "summary": f"Access {path}","                    "responses": {"200": {"description": "Success"}},"                }
             }
         return json.dumps(docs)
+
+"""
+
+""
+
+"""

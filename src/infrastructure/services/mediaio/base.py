@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Base loader class for all media types.
 """
-
 try:
-    import hashlib
+
+"""
+import hashlib
 except ImportError:
     import hashlib
 
@@ -45,18 +49,24 @@ except ImportError:
 
 
 class MediaLoader(ABC):
-    """Abstract base class for media loaders.
+"""
+Abstract base class for media loaders.
     @abstractmethod
     async def load(
         self,
         source: Union[str, bytes, BinaryIO],
         config: MediaLoadConfig,
     ) -> Union[ImageData, VideoData, AudioData]:
-        """Load media from source.        pass
+"""
+Load media from source.        pass
 
     @abstractmethod
     def supports(self, media_type: MediaType) -> bool:
-        """Check if loader supports media type.        pass
+"""
+Check if loader supports media type.        pass
 
     def compute_hash(self, data: bytes) -> str:
-        """Compute hash for caching.        return hashlib.blake2b(data, digest_size=16).hexdigest()
+"""
+Compute hash for caching.        return hashlib.blake2b(data, digest_size=16).hexdigest()
+
+"""

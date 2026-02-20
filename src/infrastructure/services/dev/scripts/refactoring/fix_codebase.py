@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Utility to repair corrupted source files by uncommenting essential system imports.
 Part of the Fleet Healer autonomous recovery pattern.
 """
 
+"""
 import os
 import re
 
@@ -45,6 +49,7 @@ def uncomment_lines(root_dir: str) -> None:
                     if new_content != content:
                         with open(filepath, "w", encoding="utf-8") as f:"                            f.write(new_content)
                         print(f"Fixed: {filepath}")"                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    print(f"Error fixing {filepath}: {e}")"
+                    print(f"Error fixing {filepath}: {e}")
 
 if __name__ == "__main__":"    uncomment_lines("src/classes")"
+"""

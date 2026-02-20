@@ -14,8 +14,11 @@
 
 try:
     from .core.base.common.shell_core import ShellCore
+"""
 except ImportError:
-    from src.core.base.common.shell_core import ShellCore
+
+"""
+from src.core.base.common.shell_core import ShellCore
 
 
 

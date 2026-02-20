@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ErrorImpact - Impact analysis dataclass
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -25,7 +29,7 @@ try:
 except ImportError:
     from src.core.base.agent_errors.error_impact import ErrorImpact
 
-impact = ErrorImpact(error_id="E-123", affected_files=["src/foo.py"], impact_score=42.5)"
+impact = ErrorImpact(error_id="E-123", affected_files=["src/foo.py"], impact_score=42.5)
 WHAT IT DOES:
 Defines a lightweight dataclass (ErrorImpact) that captures a simple impact analysis for a reported error: identifiers, lists of affected files/functions/downstream components, and an overall numeric impact score.
 
@@ -34,7 +38,6 @@ WHAT IT SHOULD DO BETTER:
 - Add serialization (to_dict/from_dict), merging utilities, human-readable repr, and convenience methods to aggregate multiple ErrorImpact instances.
 - Document intended semantics of impact_score and downstream_effects, add unit tests, and consider richer scoring (weighted by file criticality) and provenance metadata (timestamps, analyzer id).
 """
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -52,7 +55,8 @@ __version__ = VERSION
 
 @dataclass
 class ErrorImpact:
-    """Impact analysis for an error.
+"""
+Impact analysis for an error.
     
     Attributes:
         error_id: ID of the analyzed error.
@@ -60,8 +64,8 @@ class ErrorImpact:
         affected_functions: Functions impacted by the error.
         downstream_effects: Downstream components affected.
         impact_score: Overall impact score (0 - 100).
-    """
-    error_id: str
+"""
+error_id: str
     affected_files: list[str] = field(default_factory=lambda: [])
     affected_functions: list[str] = field(default_factory=lambda: [])
     downstream_effects: list[str] = field(default_factory=lambda: [])

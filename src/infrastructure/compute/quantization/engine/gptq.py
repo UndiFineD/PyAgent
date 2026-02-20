@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Gptq.py module.
 """
 
+"""
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -32,7 +36,8 @@ if TYPE_CHECKING:
 
 
 class GPTQQuantizer(Quantizer):
-    """GPTQ Quantization using Hessian-based optimal rounding.
+"""
+GPTQ Quantization using Hessian-based optimal rounding.
     def __init__(
         self,
         config: QuantConfig,
@@ -48,7 +53,8 @@ class GPTQQuantizer(Quantizer):
         weight: NDArray[np.float32],
         hessian: NDArray[np.float32] | None = None,
     ) -> QuantizedTensor:
-        """Quantizes weights using the GPTQ Hessian-based algorithm.        from .utils import pack_int4
+"""
+Quantizes weights using the GPTQ Hessian-based algorithm.        from .utils import pack_int4
 
         _, in_features = weight.shape
 
@@ -89,14 +95,16 @@ class GPTQQuantizer(Quantizer):
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
-        """Dequantizes a GPTQ-compressed tensor.        return qtensor.dequantize()
+"""
+Dequantizes a GPTQ-compressed tensor.        return qtensor.dequantize()
 
     def _gptq_quantize(
         self,
         weight: NDArray[np.float32],
         hessian_inv: NDArray[np.float32],
     ) -> NDArray[np.int8]:
-        """Internal implementation of GPTQ weight update loop.        _, in_features = weight.shape
+"""
+Internal implementation of GPTQ weight update loop.        _, in_features = weight.shape
         qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = (
             np.zeros_like(weight, dtype=np.int8)
         )
@@ -138,3 +146,5 @@ class GPTQQuantizer(Quantizer):
                     w[:, j] += error * h_ratio
 
         return qweight
+
+"""

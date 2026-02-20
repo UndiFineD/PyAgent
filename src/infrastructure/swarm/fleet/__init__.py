@@ -1,5 +1,5 @@
 # Put future import at module top
-from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -16,10 +16,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Fleet package."""
-
+"""
+"""
+Fleet package.""
 try:
-    from .core.base.lifecycle.version import VERSION
+
+""
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -42,4 +45,4 @@ except ImportError:
 
 
 __version__ = VERSION
-__all__ = ["VERSION", "FleetManager", "AsyncFleetManager", "WorkflowState"]
+__all__ = ["VERSION", "FleetManager", "AsyncFleetManager", "WorkflowState"]from __future__ import annotations

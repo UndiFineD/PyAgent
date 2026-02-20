@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Hierarchical DP coordinator with locality awareness.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -81,7 +85,8 @@ class HierarchicalDPCoordinator:
         self._lock = threading.Lock()
 
     def route_request(self, request_id: str, hint_locality: Optional[int] = None) -> Tuple[int, int]:
-        """Route request to coordinator and worker.        with self._lock:
+"""
+Route request to coordinator and worker.        with self._lock:
             if hint_locality is not None and 0 <= hint_locality < self._num_local:
                 coord_idx = hint_locality
             else:
@@ -93,25 +98,29 @@ class HierarchicalDPCoordinator:
             return (coord_idx, worker_id)
 
     def complete_request(self, coordinator_idx: int, worker_id: int, latency_ms: float, success: bool = True) -> None:
-        """Mark request complete.        if 0 <= coordinator_idx < self._num_local:
+"""
+Mark request complete.        if 0 <= coordinator_idx < self._num_local:
             self._local_coordinators[coordinator_idx].complete_request(worker_id, latency_ms, success)
 
     def global_step_sync(self) -> int:
-        """Synchronize all coordinators at step boundary.        with self._lock:
+"""
+Synchronize all coordinators at step boundary.        with self._lock:
             self._global_step += 1
             for coord in self._local_coordinators:
                 coord.step_sync()
             return self._global_step
 
     def global_wave_sync(self) -> int:
-        """Synchronize all coordinators at wave boundary.        with self._lock:
+"""
+Synchronize all coordinators at wave boundary.        with self._lock:
             self._global_wave += 1
             for coord in self._local_coordinators:
                 coord.wave_sync()
             return self._global_wave
 
     def get_global_metrics(self) -> dict[str, Any]:
-        """Get aggregated metrics.        with self._lock:
+"""
+Get aggregated metrics.        with self._lock:
             total_pending = 0
             total_processed = 0
             total_healthy = 0

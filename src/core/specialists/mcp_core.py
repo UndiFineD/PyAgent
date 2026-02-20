@@ -15,18 +15,27 @@
 
 try:
     from typing import Dict, Any, List
+"""
 except ImportError:
-    from typing import Dict, Any, List
+
+"""
+from typing import Dict, Any, List
 
 
 
 
 class MCPCore:
-    """Core domain logic for Model Context Protocol (MCP) tool orchestration."""def __init__(self, config: Dict[str, Any] = None):
+"""
+Core domain logic for Model Context Protocol (MCP) tool orchestration.""
+def __init__(self, config: Dict[str, Any] = None):
         self.config = config or {}
 
     async def list_available_tools(self) -> List[Dict[str, Any]]:
-        """Lists all TOOLS discovered via MCP servers."""return []
+"""
+Lists all TOOLS discovered via MCP servers.""
+return []
 
     async def execute_mcp_call(self, tool_name: str, arguments: Dict[str, Any]) -> Any:
-        """Dispatches a call to an MCP-integrated tool."""return None
+        ""
+Dispatches a call to an MCP-integrated tool.""
+return None

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ from __future__ import annotations
 
 
 """
+"""
 Neural Anchor Agent - Anchoring reasoning to verified external sources
 [Brief Summary]
 A lightweight agent that registers verified "anchor" documents and uses simple keyword/regex overlap to validate agent claims and reasoning steps against those sources. Intended as a stubbed grounding layer to reduce hallucination by checking statements against known documentation or logs."# DATE: 2026-02-13
@@ -27,6 +29,7 @@ WHAT IT DOES:
 - Iteratively validates a chain of reasoning steps by calling the single-claim validator for each step.
 - Exposes methods as tools via as_tool decorator for integration in the agent toolset.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Replace token-overlap with semantic search / embeddings and dense retrieval for robust grounding over large documents.
 - Add provenance, source snippet highlights, and granular confidence calibration instead of coarse "High"/"Low"."- Support indexed anchors (e.g., vector DB), asynchronous loading/validation, and chunking for large sources.
@@ -35,7 +38,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Neural anchor agent.py module.
 """
-
 try:
     import re
 except ImportError:
@@ -80,7 +82,7 @@ class NeuralAnchorAgent(BaseAgent):
     def load_anchor_source(self, source_name: str, content: str, source_type: str = "doc") -> str:"        Registers a verified source of truth to be used for anchoring.
         self.anchors[source_name] = {
             "content": content,"            "type": source_type,"            "verified": True,"        }
-#         return fSource '{source_name}' loaded as an anchor.'
+#         return fSource '{source_name}' loaded as an anchor.
     @as_tool
     def validate_claim(self, claim: str, context_sources: list[str]) -> dict[str, Any]:
         Validates a specific claim against the loaded anchor sources.
@@ -146,7 +148,7 @@ class NeuralAnchorAgent(BaseAgent):
     def load_anchor_source(self, source_name: str, content: str, source_type: str = "doc") -> str:"        Registers a verified source of truth to be used for anchoring.
         self.anchors[source_name] = {
             "content": content,"            "type": source_type,"            "verified": True,"        }
-#         return fSource '{source_name}' loaded as an anchor.'
+#         return fSource '{source_name}' loaded as an anchor.
     @as_tool
     def validate_claim(self, claim: str, context_sources: list[str]) -> dict[str, Any]:
         Validates a specific claim against the loaded "anchor sources."        results = []

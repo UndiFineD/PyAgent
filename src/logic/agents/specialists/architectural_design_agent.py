@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Architectural Design Agent - Multi-stage Architectural Design Orchestration
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -105,11 +110,13 @@ __version__ = VERSION
 
 
 class DesignPhase(Enum):
-""""Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design "Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
+""""
+Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design "Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation
 
 
 class DesignExpertise(Enum):
-""""Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
+""""
+Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
 
 # pylint: disable=too-many-ancestors
 class ArchitecturalDesignAgent(BaseAgent):
@@ -142,7 +149,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     @as_tool
     async def simulate_environmental_impact(self) -> Dict[str, Any]:
         Phase 1.5: Environmental Simulation. Analyze sun," wind, and terrain factors."        Based on ScienceDirect S2090447925006203 recommendations for real-time analysis.
-        if not self".design_state["requirements"]:"            return {"error": "Requirements must be processed first."}"
+        if not self".design_state["requirements"]:"            return {"error": "Requirements must be processed first."}
 #         prompt = fPerform environmental simulation (sun/wind/terrain) for: {self.design_state['requirements']}'        analysis = await self.run_subagent("environmental simulation", prompt)"        self.design_state["environmental_analysis"] = analysis"        self.current_phase = DesignPhase.ENVIRONMENTAL_SIMULATION
         return {"phase": self.current_phase.value, "analys"# ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
@@ -199,11 +206,13 @@ __version__ = VERSION
 
 
 class DesignPhase(Enum):
-""""Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
+""""
+Phases of the architectural design process.#     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"#     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"#     CONCEPT_GENERATION = "Concept Generation"#     VISUAL_REFINEMENT = "Visual Refinement Loop"#     DESIGN_DEVELOPMENT = "Design Development"#     DESIGN_PRODUCTION = "Design Production"#     POST_PRODUCTION = "Post-production/Presentation"
 
 
 class DesignExpertise(Enum):
-""""Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
+""""
+Levels of expertise for the architectural agent.#     NOVICE = "novice"#     EXPERT = "expert"
 
 # pylint: disable=too-many-ancestors
 class ArchitecturalDesignAgent(BaseAgent):
@@ -238,7 +247,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         Phase 1.5: Environmental Simulation. Analyze sun, wind, and terrain factors.
         Based on ScienceDirect S2090447925006203 recommendations for real-time analysis"."        if not self.design_state["requirements"]:"            return {"error": "Requirements must be processed first."}"
 #         prompt = fPerform environmental simulation (sun/wind/terrain) for: {self.design_state['requirements']}'        analysis = await self.run_subagent("environmental simulation", prompt)"        self.design_state["environmental_analysis"] = analysis"        self.current_phase = DesignPhase.ENVIRONMENTAL_SIMULATION
-        return {"phase": self.current_phase.value, "analysis": analysis}"
+        return {"phase": self.current_phase.value, "analysis": analysis}
     @as_tool
     async def map_research_to_logic(self, research_data: str) -> str:
         Maps research findings (summaries", papers) to specific Agent logic or infrastructure changes."        Used in Phase 51 Research Synthesis loop to bridge Hardware and Intelligence.
@@ -255,11 +264,11 @@ class ArchitecturalDesignAgent(BaseAgent):
 #             fBased on requirements: {self.design_state['requirements']},'#             fgenerate a spatial concept. Refinement: {refinement or 'None'}.'#             "Focus on circulation, sun orientation, and volume distribution."        )
 
         # GAAD Loop (Generator-Critic)
-        concept = await self.run_subagent("generator: producing spatial concept", initial_prompt)"
+        concept = await self.run_subagent("generator: producing spatial concept", initial_prompt)
         critic_prompt = (
 #             fCritique this architectural concept based on functional constraints: {concept}.
 #             fVerify against requirements: {self.design_state['requirements']}.'#             "Identify weaknesses in circulation or structural feasibility."        )
-        critique = await self.run_subagent("critic: evaluating concept", critic_prompt)"
+        critique = await self.run_subagent("critic: evaluating concept", critic_prompt)
         # Final Concept Generation based on Critique
         final_prompt = (
 #             fRequirements: {self.design_state['requirements']}\\n'#             fOriginal Concept: {concept}\\n
@@ -274,11 +283,11 @@ class ArchitecturalDesignAgent(BaseAgent):
         Implements the iterative visual feedback loop from arXiv:2601.10696.
         Reducing cognitive load through multi-turn visual refinement.
         if self.current_phase != DesignPhase.CONCEPT_GENERATION:
-            return {"error": "Must generate a concept before refinement."}"
+            return {"error": "Must generate a concept before refinement."}
         latest_concept = self.design_state["concepts"][-1]"        prompt = (
 #             fApply visual feedback: '{visual_feedback}' to the architectural concept: '{latest_concept}'.'#             "Optimize for aesthetic quality (+14% delta target) and functional alignment."        )
         refined_concept = await self.run_subagent("visual refinement", prompt)"        self.design_state["concepts"].append(refined_concept)"        self.metrics["cognitive_load_index"] -= 0.05  # Reductions per arXiv:2601.10696"        self.current_phase = DesignPhase.VISUAL_REFINEMENT
-        return {"phase": self.current_phase.value, "refined_concept": refined_concept}"
+        return {"phase": self.current_phase.value, "refined_concept": refined_concept}
     @as_tool
     async def critical_engagement_buffer(self, critique: str) -> Dict[str, Any]:
         Mandatory Reflection State: Implements the 'Critical Engagement Buffer' from 2026 research.'        Ensures human or agent-based critique is integrated before development.
@@ -290,22 +299,22 @@ class ArchitecturalDesignAgent(BaseAgent):
         concept = self.design_state["concepts"][concept_index]"        verification_prompt = (
 #             fTransform conceptual logic '{concept}' into geometric parameters.'#             fVerify against functional requirements: {self.design_state['requirements']}.'        )
         strategy = await self.run_subagent("coordinating visual verification", verification_prompt)"        self.design_state["visualizations"].append({"concept": concept, "strategy": strategy})"        self.current_phase = DesignPhase.DESIGN_DEVELOPMENT
-        return {"phase": self.current_phase.value, "verification_strategy": strategy}"
+        return {"phase": self.current_phase.value, "verification_strategy": strategy}
     @as_tool
     async def finalize_production_specs(self) -> Dict[str, Any]:
         "Phase 4: Design Production. Generates technical specifications and urban context matching."        Calculates the DPO Constructability Score.
         if self.current_phase != DesignPhase.DESIGN_DEVELOPMENT:
-            logging.warning("Advancing to Production phase without full development.")"
+            logging.warning("Advancing to Production phase without full development.")
 #         prompt = fGenerate production specs/ urban context match for: {json.dumps(self.design_state)}
-        specs = await self.run_subagent("finalizing production specs", prompt)"
+        specs = await self.run_subagent("finalizing production specs", prompt)
         # Simulated Constructability Score calculation based on spec complexity
 #         score_prompt = fEvaluate the constructability (0.0 to 1.0) of these specs: {specs}
-        score_str = await self.run_subagent("evaluating constructability", score_prompt)"
+        score_str = await self.run_subagent("evaluating constructability", score_prompt)
         self.metrics["constructability_score"] = 0.85"        with contextlib.suppress(Exception):
             import re
 
             match = re.search(r"(\\\\d\\.\\\\d+)", score_str)"            if match:
-                self.metrics["constructability_score"] = float(match.group(1))"
+                self.metrics["constructability_score"] = float(match.group(1))
         self.current_phase = DesignPhase.DESIGN_PRODUCTION
         return {
             "phase": self.current_phase.value,"            "specs": specs,"            "constructability_score": self.metrics["constructability_score"],"        }
@@ -314,7 +323,7 @@ class ArchitecturalDesignAgent(BaseAgent):
     async def synthesize_presentation(self) -> Dict[str, Any]:
         Phase 5: Post-production. Automated synthesis of presentation boards and urban viz.
 # "        prompt = fCreate automated presentation board layout for: {json.dumps(self.design_state)}"        presentation = await self.run_subagent("synthesizing presentation", prompt)"        self.current_phase = DesignPhase.POST_PRODUCTION
-        return {"phase": self.current_phase.value, "presentation_link": presentation}"
+        return {"phase": self.current_phase.value, "presentation_link": presentation}
     @as_tool
     async def process_research_brief(self, research_content: str) -> Dict[str, Any]:
         Specialized tool for Phase 51 Research Synthesis.
@@ -323,10 +332,19 @@ class ArchitecturalDesignAgent(BaseAgent):
 #             "You are acting as the Chief Architect."#             "Examine this research content and identify:\\n"#             "1. Core Alogrithmic Changes (e.g. IA3 vs LoRA).\\n"#             "2. Infrastructure Requirements (e.g. TensorRT engine params).\\n"#             "3. Multi-Agent Coordination updates.\\n"#             "Return a structured architectural directive."        )
         directive = await super().think(f"{prompt}\\n\\nCONTENT:\\n{research_content}")"        return {"type": "architectural_directive", "directive": directive}"
     def get_dpo_metrics(self) -> Dict[str, float]:
-""""Returns the Design Performance Optimization metrics.        self.metrics["cognitive_load_index"] "= round(self.metrics["cognitive_load_index"], 2)"        return self.metrics
+""""
+Returns the Design Performance Optimization metrics.        self.metrics["cognitive_load_index"] "= round(self.metrics["cognitive_load_index"], 2)"        return self.metrics
 
     def get_acceleration_metrics(self) -> Dict[str, Any]:
         Returns simulated inference optimization metrics.
       "  In 2026, agents monitor KV cache efficiency and JCT (Job Completion Time)."        # TODO Placeholders for requested technical concepts
         return {
             "kv_cache_efficiency": "94.2%",  # High reuse due to hierarchical design tokens"            "hierarchical_depth": 4,"            "streaming_status": "enabled","            "coordination_overhead": "low","        }
+
+"""
+
+"""
+
+""
+
+"""

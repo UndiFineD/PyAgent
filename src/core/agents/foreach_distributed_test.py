@@ -15,8 +15,11 @@
 
 try:
     import json
+"""
 except ImportError:
-    import json
+
+"""
+import json
 
 try:
     from .core.agents.foreach_distributed import Worker
@@ -31,7 +34,8 @@ except ImportError:
 
 
 def test_worker_claim_and_release(tmp_path):
-    """Test worker claiming and releasing locks for a shard."""
+"""
+Test worker claiming and releasing locks for a shard.""
     # Create a simple manifest with one shard assigned to worker-1
     manifest = {
         "shards": [
@@ -56,8 +60,9 @@ def test_worker_claim_and_release(tmp_path):
 
 
 def test_worker_claim_conflict(tmp_path):
-    """Test worker handling lock conflicts when claiming shards."""
-    manifest = {
+"""
+Test worker handling lock conflicts when claiming shards.""
+manifest = {
         "shards": [
             {"id": 1, "worker": "worker-1", "files": ["x.py"]}
         ]

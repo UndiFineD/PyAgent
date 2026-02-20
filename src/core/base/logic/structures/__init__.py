@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""Base data structures.
+"""
+"""
+Base data structures.
 
+"""
 Phase 18-19: Beyond vLLM - Advanced data structures and performance patterns.
 """
 try:

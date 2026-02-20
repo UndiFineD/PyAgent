@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # ContextCompressorCore logic for PyAgent.
 # Pure logic for reducing the size of source files while preserving structural context.
+"""
 No I/O or side effects.
 """
 
+"""
 import re
 import ast
 
@@ -36,10 +40,12 @@ __version__ = VERSION
 
 
 class ContextCompressorCore:
-""""Pure logic core for code and document compression.
+""""
+Pure logic core for code and document compression.
     @staticmethod
     def compress_python(content: str) -> str:
-""""Removes function bodies and keeps only class/function signatures using AST.   "     try:"            tree = ast.parse(content)
+""""
+Removes function bodies and keeps only class/function signatures using AST.   "     try:"            tree = ast.parse(content)
             compressed_lines: list[str] = []
 
             # Use a visitor pattern for cleaner separation if needed,
@@ -59,17 +65,18 @@ class ContextCompressorCore:
                     except (AttributeError, ValueError, TypeError):
 #                         args_str = "..."
 #                     prefix = "async " if isinstance(node, ast.AsyncFunctionDef) else"                    # Note: Detecting indentation level in a walk is hard.
-                    # We'll just list them as signatures for now.'                    compressed_lines.append(f"{prefix}def {node.name}({args_str}): ...")"
+                    # We'll just list them as signatures for now.'                    compressed_lines.append(f"{prefix}def {node.name}({args_str}): ...")
             # Deduplicate and sort to provide a stable signature
             unique_signatures = sorted(list(set(compressed_lines)))
-            return "\\n".join(unique_signatures)"
+            return "\\n".join(unique_signatures)
         except (SyntaxError, ValueError, AttributeError):
             # Fallback to simple regex if AST fails (e.g. invalid syntax)
             return ContextCompressorCore.regex_fallback_compress(content)
 
     @staticmethod
     def regex_fallback_compress(content: str) -> str:
-""""Simple regex-based signature extraction for Python.        "if HAS_RUST:"            try:
+""""
+Simple regex-based signature extraction for Python.        "if HAS_RUST:"            try:
                 return rust_core.regex_compress_python(content)  # type: ignore[attr-defined]
             except (RuntimeError, AttributeError):
                 pass
@@ -77,17 +84,21 @@ class ContextCompressorCore:
             r"^\\\\s*(?:async\\\\s+)?(?:def|class)\\\\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:","            content,
             re.MULTILINE,
         )
-        return "\\n".join([s.strip() for s in signatures])"
+        return "\\n".join([s.strip() for s in signatures])
     @staticmethod
     def summarize_markdown(content: str) -> str:
-""""Keeps only headers from markdown files.     "   if HAS_RUST:"            try:
+""""
+Keeps only headers from markdown files.     "   if HAS_RUST:"            try:
                 return rust_core.summarize_markdown(content)  # type: ignore[attr-defined]
             except (RuntimeError, AttributeError):
                 pass
         headers = re.findall(r"^(#+ .*)$", content, re.MULTILINE)"        return "\\n".join(headers)"
     @staticmethod
     def get_summary_header(filename: str, mode: str) -> str:
-""""Logic for formatting summary headers.#         return f"### {filename} ({mode})\\n"
+""""
+Logic for formatting summary headers.#         return f"### {filename} ({mode})\\n"
     @staticmethod
     def decide_compression_mode(filename: str) -> str:
-""""Determines logic mode based on file extension.        if filename.endswith(".py"):"#             return "python"        if filename.endswith(".md"):"#             return "markdown"#         return "head"
+""""
+Determines logic mode based on file extension.        if filename.endswith(".py"):"#             return "python"        if filename.endswith(".md"):"#             return "markdown"#         return "head"
+"""

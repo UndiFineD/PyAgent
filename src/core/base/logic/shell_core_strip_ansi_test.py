@@ -12,14 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 try:
     from .core.base.common.shell_core import ShellCore
+"""
 except ImportError:
-    from src.core.base.common.shell_core import ShellCore
+
+"""
+from src.core.base.common.shell_core import ShellCore
 
 
 
 def test_strip_ansi_handles_none_and_empty():
     sc = ShellCore()
-    assert sc.strip_ansi(None) == """    assert sc.strip_ansi("") == """    assert sc.strip_ansi("\\x1b[31mred\\x1b[0m") == "red""
+    assert sc.strip_ansi(None) == ""
+assert sc.strip_ansi("") == ""
+assert sc.strip_ansi("\\x1b[31mred\\x1b[0m") == "red"

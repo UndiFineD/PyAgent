@@ -14,7 +14,10 @@
 
 
 """
+"""
 Fix Headers CLI - Command-line entry point for fixing Apache 2.0 license headers
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -58,7 +61,8 @@ except ImportError:
 
 
 def main():
-    """CLI entry point for the Fix Headers Tool.    parser = argparse.ArgumentParser(
+"""
+CLI entry point for the Fix Headers Tool.    parser = argparse.ArgumentParser(
         description="Fix Apache 2.0 headers in Python files","        formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=Examples:
   python -m src.maintenance.fix_headers.cli src/logic/agents/
@@ -84,7 +88,7 @@ with PyAgent copyright notices.
     args = parser.parse_args()
 
     exclude_patterns = set(args.exclude or [])
-    exclude_patterns.update({'__pycache__', '.git', '.venv', 'node_modules', '.pytest_cache'})'
+    exclude_patterns.update({'__pycache__', '.git', '.venv', 'node_modules', '.pytest_cache'})
     agent = FixHeadersAgent(dry_run=args.dry_run, verbose=args.verbose)
     agent.run(args.target, exclude_patterns)
 

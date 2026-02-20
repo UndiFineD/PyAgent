@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal smoke tests for A2A communication components used by the suite."""
+""
+Minimal smoke tests for A2A communication components used by the suite.""
 try:
     from src.core.base.logic.a2a_communication import MessageRouter, A2ACommunicationMixin, AgentCard
 except Exception:  # pragma: no cover - import shim

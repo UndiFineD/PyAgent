@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.compute.moe.expert_router import RoutingMethod, RouterConfig, RouterOutput, RouterBase, TopKRouter, GroupedTopKRouter, ExpertChoiceRouter, SoftMoERouter, AdaptiveRouter, RoutingSimulator

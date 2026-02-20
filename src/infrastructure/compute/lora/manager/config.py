@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +17,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Configuration and data structures for LoRA adapter management.
+"""
+"""
+Configuration and data structures for LoRA adapter management.
 
+"""
 try:
     import time
 except ImportError:
@@ -42,7 +46,9 @@ except ImportError:
 
 
 class LoRAMethod(Enum):
-    """LoRA method variants.
+"""
+LoRA method variants.
+
     LORA = auto()  # Standard LoRA
     QLORA = auto()  # Quantized LoRA
     DORA = auto()  # Weight-Decomposed LoRA
@@ -54,7 +60,8 @@ class LoRAMethod(Enum):
 
 
 class AdapterStatus(Enum):
-    """Adapter lifecycle status.
+"""
+Adapter lifecycle status.
     LOADING = auto()  # Being loaded
     READY = auto()  # Ready to serve
     ACTIVE = auto()  # Currently in use
@@ -65,12 +72,14 @@ class AdapterStatus(Enum):
 
 
 class TargetModule(Enum):
-    """Common LoRA target modules.
-    Q_PROJ = "q_proj""    K_PROJ = "k_proj""    V_PROJ = "v_proj""    O_PROJ = "o_proj""    GATE_PROJ = "gate_proj""    UP_PROJ = "up_proj""    DOWN_PROJ = "down_proj""    LM_HEAD = "lm_head""    EMBED_TOKENS = "embed_tokens""
+"""
+Common LoRA target modules.
+    Q_PROJ = "q_proj""    K_PROJ = "k_proj""    V_PROJ = "v_proj""    O_PROJ = "o_proj""    GATE_PROJ = "gate_proj""    UP_PROJ = "up_proj""    DOWN_PROJ = "down_proj""    LM_HEAD = "lm_head""    EMBED_TOKENS = "embed_tokens"
 
 @dataclass
 class LoRAConfig:  # pylint: disable=too-many-instance-attributes
-    """LoRA adapter configuration.
+"""
+LoRA adapter configuration.
     adapter_name: str
     adapter_path: str
     rank: int = 8
@@ -85,7 +94,8 @@ class LoRAConfig:  # pylint: disable=too-many-instance-attributes
 
     @property
     def computed_scaling(self) -> float:
-        """Calculate the LoRA scaling factor.        if self.scaling is not None:
+"""
+Calculate the LoRA scaling factor.        if self.scaling is not None:
             return self.scaling
         if self.use_rslora:
             return self.alpha / (self.rank**0.5)
@@ -97,7 +107,8 @@ class LoRAConfig:  # pylint: disable=too-many-instance-attributes
 
 @dataclass
 class LoRARequest:
-    """Request to serve with a LoRA adapter.
+"""
+Request to serve with a LoRA adapter.
     request_id: str
     adapter_name: str
     adapter_config: Optional[LoRAConfig] = None
@@ -109,7 +120,8 @@ class LoRARequest:
 
 @dataclass
 class LoRAInfo:  # pylint: disable=too-many-instance-attributes
-    """Information about a loaded adapter.
+"""
+Information about a loaded adapter.
     adapter_name: str
     rank: int
     alpha: float
@@ -122,13 +134,15 @@ class LoRAInfo:  # pylint: disable=too-many-instance-attributes
     last_used: float = field(default_factory=time.time)
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert info to a serializable dictionary.        return {
+"""
+Convert info to a serializable dictionary.        return {
             "adapter_name": self.adapter_name,"            "rank": self.rank,"            "alpha": self.alpha,"            "method": self.method.name,"            "target_modules": self.target_modules,"            "num_parameters": self.num_parameters,"            "memory_mb": self.memory_bytes / (1024 * 1024),"            "status": self.status.name,"        }
 
 
 @dataclass
 class AdapterSlot:
-    """GPU slot for a LoRA adapter.
+"""
+GPU slot for a LoRA adapter.
     slot_id: int
     adapter_name: Optional[str] = None
     is_active: bool = False
@@ -137,4 +151,7 @@ class AdapterSlot:
 
     @property
     def is_free(self) -> bool:
-        """Check if the slot is currently free.        return self.adapter_name is None
+"""
+Check if the slot is currently free.        return self.adapter_name is None
+
+"""

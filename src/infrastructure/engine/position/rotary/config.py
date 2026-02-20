@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Config.py module.
 
+"""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -34,7 +36,8 @@ except ImportError:
 
 
 class RoPEVariant(Enum):
-    """Supported RoPE variants.
+"""
+Supported RoPE variants.
     NEOX = auto()  # Llama, Mistral, most modern LLMs
     GPTJ = auto()  # GPT-J, GPT-Neo styles
     MROPE = auto()  # Multimodal (vision-language)
@@ -44,7 +47,8 @@ class RoPEVariant(Enum):
 
 
 class RoPEScalingType(Enum):
-    """Supported position scaling types.
+"""
+Supported position scaling types.
     NONE = auto()
     LINEAR = auto()
     DYNAMIC = auto()
@@ -53,7 +57,8 @@ class RoPEScalingType(Enum):
 
 @dataclass
 class RoPEConfig:
-    """Configuration for Rotary Position Embeddings.
+"""
+Configuration for Rotary Position Embeddings.
     head_dim: int = 64
     rotary_dim: Optional[int] = None
     max_position_embeddings: int = 2048
@@ -83,3 +88,5 @@ class RoPEConfig:
         # Automatic variant detection
         if self.mrope_sections and self.variant == RoPEVariant.NEOX:
             self.variant = RoPEVariant.MROPE
+
+"""

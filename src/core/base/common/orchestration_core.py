@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for multi-agent orchestration and workflow management.
 """
-
+"""
+Core logic for multi-agent orchestration and workflow management.
+"""
 try:
-    import random
+
+"""
+import random
 except ImportError:
     import random
 
@@ -49,31 +53,35 @@ if TYPE_CHECKING:
 
 
 class OrchestrationCore(BaseCore):
-    """Authoritative engine for multi-agent workflows.
-    """
-    def __init__(self) -> None:
+"""
+Authoritative engine for multi-agent workflows.
+"""
+def __init__(self) -> None:
         super().__init__()
         self.agents: List[ComposedAgent] = []
         self.results: Dict[str, str] = {}
         self.execution_order: List[str] = []
 
     def add_agent(self, agent: ComposedAgent) -> None:
-        """Adds an agent to the orchestration registry.
-        """
-        self.agents.append(agent)
+"""
+Adds an agent to the orchestration registry.
+"""
+self.agents.append(agent)
         self._calculate_execution_order()
 
     def _calculate_execution_order(self) -> None:
-        """Computes the topological sort regarding agents based on dependencies.
-        """
-        sorted_agents: List[str] = []
+"""
+Computes the topological sort regarding agents based on dependencies.
+"""
+sorted_agents: List[str] = []
         visited: set[str] = set()
         temp: set[str] = set()
 
         def visit(agent_type: str) -> None:
-            """Visits an agent type for topological sorting.
-            """
-            if agent_type in temp:
+"""
+Visits an agent type for topological sorting.
+"""
+if agent_type in temp:
                 raise ValueError(f"Circular dependency regarding {agent_type}")
             if agent_type in visited:
                 return
@@ -97,15 +105,16 @@ class OrchestrationCore(BaseCore):
         prompt: str,
         agent_factory: Callable[[str, str], Any],
     ) -> Dict[str, str]:
-        """
-        Executes the registered agents in the calculated order.
-        """
-        self.results.clear()
+"""
+Executes the registered agents in the calculated order.
+"""
+self.results.clear()
 
         def run_agent(carry: str, agent_type: str) -> str:
-            """Runs a single agent and aggregates results.
-            """
-            agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
+"""
+Runs a single agent and aggregates results.
+"""
+agent_config = next(filter(lambda a: a.agent_type == agent_type, self.agents), None)
             if not agent_config:
                 return carry
 
@@ -113,9 +122,10 @@ class OrchestrationCore(BaseCore):
             enhanced_prompt = prompt
 
             def add_context(dep: str) -> str:
-                """Adds context from dependencies if available.
-                """
-                if dep in self.results:
+"""
+Adds context from dependencies if available.
+"""
+if dep in self.results:
                     return f"\n\nPrevious {dep} result:\n{self.results[dep][:500]}"
                 return ""
             # Aggregate dependency context functionally
@@ -134,27 +144,29 @@ class OrchestrationCore(BaseCore):
 
 @dataclass
 class QualityScorer:
-    """Evaluates text quality based on weighted criteria.
-    """
-    criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
+"""
+Evaluates text quality based on weighted criteria.
+"""
+criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
 
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
-        """
-        Adds a single scoring criterion.
-        """
-        self.criteria[name] = (func, weight)
+"""
+Adds a single scoring criterion.
+"""
+self.criteria[name] = (func, weight)
 
     def score(self, text: str) -> float:
-        """
-        Calculates the weighted average score regarding a given text.
-        """
-        if not self.criteria:
+"""
+Calculates the weighted average score regarding a given text.
+"""
+if not self.criteria:
             return min(1.0, len(text) / 200.0)
 
         # Calculate totals regarding scores and weights functionally
         def _get_vals(pair):
-            """Helper to get score and weight from a criterion."""
-            func, weight = pair
+"""
+Helper to get score and weight from a criterion.""
+func, weight = pair
             return func(text) * weight, weight
 
         sums = list(map(_get_vals, self.criteria.values()))
@@ -166,16 +178,18 @@ class QualityScorer:
 
 @dataclass
 class ABTest:
-    """Simple A/B testing harness regarding variants.
-    """
-    name: str
+"""
+Simple A/B testing harness regarding variants.
+"""
+name: str
     variants: List[str]
     weights: List[float] = field(default_factory=list)
     variant_counts: Dict[str, int] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
-        """Initializes variant counts and default weights if not provided.
-        """
+"""
+Initializes variant counts and default weights if not provided.
+"""
         # Initialize variant counts functionally
         list(map(lambda v: self.variant_counts.update({v: 0}), self.variants))
 
@@ -183,7 +197,7 @@ class ABTest:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
 
     def select_variant(self) -> str:
-        """
-        Selects a variant based on defined weights.
-        """
-        return random.choices(self.variants, weights=self.weights, k=1)[0]
+"""
+Selects a variant based on defined weights.
+        ""
+return random.choices(self.variants, weights=self.weights, k=1)[0]

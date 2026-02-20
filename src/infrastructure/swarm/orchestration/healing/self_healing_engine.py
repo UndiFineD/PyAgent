@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@ from __future__ import annotations
 
 
 """
-Engine for automated self-repair of agent tools and modules.""""Detects runtime errors and orchestrates CoderAgents to apply fixes.
-"""
+Engine for automated self-repair of agent tools and modules.""""
+Detects runtime errors and orchestrates CoderAgents to apply fixes.
 
+"""
 try:
     import logging
 except ImportError:
@@ -73,13 +75,23 @@ class SelfHealingEngine:
         error: Exception,
         context: dict[str, Any],
     ) -> str:
-        """Analyzes a failure and attempts to generate a fix.        tb = traceback.format_exc()
+"""
+Analyzes a failure and attempts to generate a fix.        tb = traceback.format_exc()
         agent_name = agent.__class__.__name__
-        logging.error(f"SELF-HEAL: Failure in {agent_name}.{tool_name}: {error}\\n{tb}")"
+        logging.error(f"SELF-HEAL: Failure in {agent_name}.{tool_name}: {error}\\n{tb}")
         analysis = self.core.analyze_failure(agent_name, tool_name, str(error), tb)
         analysis["context"] = context"        self.failure_history.append(analysis)
 
         # Fixed logic: communicate strategy
-        return f"Self-Healing initiated: Strategy '{analysis['strategy']}' assigned to {tool_name}.""'
-    def get_healing_stats(self) -> str:
-        """Returns a summary of healing attempts.        return self.core.format_healing_report(self.failure_history)
+        return f"Self-Healing initiated: Strategy '{analysis['strategy']}' assigned to {tool_name}."
+def get_healing_stats(self) -> str:
+"""
+Returns a summary of healing attempts.        return self.core.format_healing_report(self.failure_history)
+
+"""
+
+"""
+
+""
+
+"""

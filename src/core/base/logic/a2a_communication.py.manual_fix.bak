@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+
+
+""
+"""
+Minimal A2A communication primitives used in tests.""
+
+"""
+import asyncio
+import logging
+import uuid
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+from enum import Enum
+
+logger = logging.getLogger(__name__)
+
+
+class MessageType(Enum):
+    REQUEST = "request"
+    RESPONSE = "response"
+    NOTIFICATION = "notification"
+    BROADCAST = "broadcast"
+
+
+@dataclass
+class AgentCard:
+    name: str
+    description: str = ""
+    url: str = ""
+
+
+@dataclass
+class A2AMessage:
+    id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    type: MessageType = MessageType.REQUEST
+    from_agent: str = ""
+    to_agent: Optional[str] = None
+    payload: Dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class A2AResponse:
+    message_id: str = ""
+    status: str = "success"
+    result: Any = None
+    error: Optional[str] = None
+
+
+class MessageRouter:
+    ""
+Simple in-memory router for testing.""
+def __init__(self) -> None:
+        self.agents: Dict[str, Any] = {}
+
+    async def register_agent(self, agent: Any) -> None:
+        self.agents[agent.agent_card.name] = agent
+
+    async def unregister_agent(self, agent_id: str) -> None:
+        self.agents.pop(agent_id, None)
+
+    async def route_message(self, message: A2AMessage) -> Optional[A2AResponse]:
+        if message.to_agent is None:
+            # Broadcast
+            responses = []
+            for aid, agent in self.agents.items():
+                if aid != message.from_agent and hasattr(agent, "handle_message"):
+                    try:
+                        res = await agent.handle_message(message)
+                        responses.append(res)
+                    except Exception:
+                        continue
+            return A2AResponse(message_id=message.id, status="success", result={"broadcast_responses": responses})
+
+        target = self.agents.get(message.to_agent)
+        if not target or not hasattr(target, "handle_message"):
+            return A2AResponse(message_id=message.id, status="error", error=f"Agent not found: {message.to_agent}")
+
+        try:
+            return await target.handle_message(message)
+        except Exception as e:
+            return A2AResponse(message_id=message.id, status="error", error=str(e))
+
+
+class A2ACommunicationMixin:
+    def __init__(self, agent_card: AgentCard, router: Optional[MessageRouter] = None):
+        self._agent_card = agent_card
+        self._router = router
+
+    @property
+    def agent_card(self) -> AgentCard:
+        return self._agent_card
+
+    async def register_with_router(self, router: MessageRouter) -> None:
+        self._router = router
+        await router.register_agent(self)
+
+    async def send_request(self, to_agent: str, payload: Dict[str, Any]) -> A2AResponse:
+        if not self._router:
+            raise RuntimeError("Agent not registered with a router")
+        msg = A2AMessage(type=MessageType.REQUEST, from_agent=self._agent_card.name, to_agent=to_agent, payload=payload)
+        return await self._router.route_message(msg)
+
+
+# Minimal example agent
+class SimpleA2AAgent(A2ACommunicationMixin):
+    def __init__(self, name: str, description: str = "") -> None:
+        super().__init__(AgentCard(name=name, description=description))
+
+    async def handle_message(self, message: A2AMessage) -> A2AResponse:
+        # Echo-style handler for tests
+        try:
+            if message.type == MessageType.REQUEST:
+                action = message.payload.get("action")
+                if action == "greet":
+                    name = message.payload.get("name", "World")
+                    return A2AResponse(message_id=message.id, status="success", result=f"Hello, {name} from {self._agent_card.name}")
+                if action == "compute":
+                    a = message.payload.get("a", 0)
+                    b = message.payload.get("b", 0)
+                    op = message.payload.get("operation", "add")
+                    if op == "add":
+                        return A2AResponse(message_id=message.id, status="success", result=a + b)
+                    if op == "multiply":
+                        return A2AResponse(message_id=message.id, status="success", result=a * b)
+                return A2AResponse(message_id=message.id, status="error", error="Unknown action")
+            return A2AResponse(message_id=message.id, status="success", result=None)
+        except Exception as e:
+            return A2AResponse(message_id=message.id, status="error", error=str(e))
+
+
+async def create_a2a_network(agents: List[A2ACommunicationMixin]) -> MessageRouter:
+    router = MessageRouter()
+    for agent in agents:
+        await agent.register_with_router(router)
+    return router
+
+
+def create_agent_card_from_dict(data: Dict[str, Any]) -> AgentCard:
+    return AgentCard(**data)

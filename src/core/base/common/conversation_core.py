@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for conversation history and message management.
 """
-
+"""
+Core logic for conversation history and message management.
+"""
 try:
-    from typing import List
+
+"""
+from typing import List
 except ImportError:
     from typing import List
 
@@ -37,24 +41,28 @@ except ImportError:
 
 
 class ConversationCore(BaseCore):
-    """Authoritative engine for conversation state.
-    """
-    def __init__(self, max_messages: int = 100) -> None:
+"""
+Authoritative engine for conversation state.
+"""
+def __init__(self, max_messages: int = 100) -> None:
         super().__init__()
         self.messages: List[ConversationMessage] = []
         self.max_messages = max_messages
 
     def add_message(self, role: MessageRole, content: str) -> None:
-        """Add a new message to the conversation history."""
-        msg = ConversationMessage(role=role, content=content)
+"""
+Add a new message to the conversation history.""
+msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
             self.messages = self.messages[-self.max_messages :]
 
     def get_history(self) -> List[ConversationMessage]:
-        """Return a copy of the conversation history."""
-        return self.messages.copy()
+"""
+Return a copy of the conversation history.""
+return self.messages.copy()
 
     def clear(self) -> None:
-        """Clear the conversation history."""
-        self.messages.clear()
+        ""
+Clear the conversation history.""
+self.messages.clear()

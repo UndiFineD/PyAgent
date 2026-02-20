@@ -14,9 +14,12 @@
 
 
 """
+"""
 Inference Engine - Unified LLM Backend Interface.
 Inference engine implementation for PyAgent.
 Handles communication with various LLM backends.
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -46,7 +49,6 @@ WHAT IT SHOULD DO BETTER:
   calls to non-blocking async-friendly usage or dedicated threadpool usage with
   clear cancellation semantics.
 """
-
 import os
 import logging
 import asyncio
@@ -89,14 +91,14 @@ logger = logging.getLogger("pyagent.inference.engine")
 
 
 class InferenceEngine:
-    """
-    Unified interface for different inference backends.
+"""
+Unified interface for different inference backends.
     Supports OpenAI, Anthropic, Ollama, and local AsyncModelRunner.
-    """
-
-    def __init__(self, model_name: str = "gemini-3-flash", **kwargs):
-        """Initialize the inference engine with optional model name and configuration."""
-        self.model_name = model_name
+"""
+def __init__(self, model_name: str = "gemini-3-flash", **kwargs):
+"""
+Initialize the inference engine with optional model name and configuration.""
+self.model_name = model_name
         self.config = kwargs
         self.api_key = kwargs.get("api_key") or os.environ.get("LLM_API_KEY")
         self.base_url = kwargs.get("base_url") or os.environ.get("LLM_BASE_URL")
@@ -108,8 +110,9 @@ class InferenceEngine:
 
 
     def _get_openai_client(self) -> Any:
-        """Lazily initialize and return the OpenAI-compatible client."""
-        if not HAS_OPENAI:
+"""
+Lazily initialize and return the OpenAI-compatible client.""
+if not HAS_OPENAI:
             raise ImportError("openai package not installed. run 'pip install openai'")
         if self._openai_client is None:
             from openai import AsyncOpenAI
@@ -120,11 +123,11 @@ class InferenceEngine:
 
 
     async def generate(self, prompt: str, **kwargs) -> str:
-        """
-        Generate a response from the model based on the prompt and optional parameters.
+"""
+Generate a response from the model based on the prompt and optional parameters.
         Generate a response from the model.
-        """
-        model = kwargs.get("model", self.model_name)
+"""
+model = kwargs.get("model", self.model_name)
         temperature = kwargs.get("temperature", self.config.get("temperature", 0.7))
         max_tokens = kwargs.get("max_tokens", self.config.get("max_tokens", 4096))
         # 1. Try local runner first if available
@@ -158,8 +161,9 @@ class InferenceEngine:
 
 
     async def _generate_llama_cpp(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
-        """Generate using local llama.cpp GGUF model."""
-        if not HAS_LLAMA_CPP:
+"""
+Generate using local llama.cpp GGUF model.""
+if not HAS_LLAMA_CPP:
             raise ImportError("llama-cpp-python package not installed. run 'pip install llama-cpp-python'")
         try:
             # Check if model is a path, if not try to find it in data/models
@@ -191,8 +195,9 @@ class InferenceEngine:
 
 
     async def _generate_openai(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
-        """Generate using OpenAI-compatible API."""
-        client = self._get_openai_client()
+"""
+Generate using OpenAI-compatible API.""
+client = self._get_openai_client()
         try:
             response = await client.chat.completions.create(
                 model=model,
@@ -218,8 +223,9 @@ class InferenceEngine:
 
 
     async def _generate_anthropic(self, prompt: str, model: str, temperature: float, max_tokens: int) -> str:
-        """Generate using Anthropic API."""
-        if not HAS_ANTHROPIC:
+"""
+Generate using Anthropic API.""
+if not HAS_ANTHROPIC:
             return await self._generate_openai(prompt, model, temperature, max_tokens)
         try:
             import anthropic
@@ -246,8 +252,9 @@ class InferenceEngine:
 
 
     async def _generate_ollama(self, prompt: str, model: str, temperature: float, max_tokens: int = 4096) -> str:
-        """Generate using Ollama local LLMs."""
-        if not HAS_OLLAMA or ollama is None:
+"""
+Generate using Ollama local LLMs.""
+if not HAS_OLLAMA or ollama is None:
             raise ImportError("ollama package not installed. run 'pip install ollama'")
         try:
             response = await asyncio.to_thread(

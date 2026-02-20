@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 RegressionInfo - Error regression metadata dataclass
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -40,7 +44,6 @@ WHAT IT SHOULD DO BETTER:
 - Provide serialization helpers (to/from dict or JSON) and comparison helpers to ease persistence, diffs and deduplication.
 - Consider timestamps for first/last regression, immutability (frozen dataclass) or methods to increment occurrences safely, plus unit tests and richer docstrings.
 """
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -58,15 +61,16 @@ __version__ = VERSION
 
 @dataclass
 class RegressionInfo:
-    """Information about error regression.
+"""
+Information about error regression.
     
     Attributes:
         error_id: ID of the regressed error.
         original_fix_commit: Commit that originally fixed the error.
         regression_commit: Commit that reintroduced the error.
         occurrences: Number of times this error has regressed.
-    """
-    error_id: str
+"""
+error_id: str
     original_fix_commit: str = ""
     regression_commit: str = ""
     occurrences: int = 1

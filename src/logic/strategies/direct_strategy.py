@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Direct Strategy - Standard Zero-Shot: Prompt -> Response
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -58,7 +63,8 @@ __version__ = VERSION
 
 
 class DirectStrategy(AgentStrategy):
-    """Standard Zero-Shot strategy: Prompt -> Response.
+"""
+Standard Zero-Shot strategy: Prompt -> Response.
     async def execute(
         self,
         prompt: str,
@@ -68,3 +74,5 @@ class DirectStrategy(AgentStrategy):
         history: list[dict[str, str]] | None = None,
     ) -> str:
         full_prompt = f"{prompt}\\n\\nContext:\\n{context}""        return await backend_call(full_prompt, system_prompt, history)
+
+"""

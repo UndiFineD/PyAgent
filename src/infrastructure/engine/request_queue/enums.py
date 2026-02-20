@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Enums.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -27,12 +30,14 @@ except ImportError:
 
 
 class SchedulingPolicy(Enum):
-    """Request scheduling policy.
-    FCFS = "fcfs"  # First come first served"    PRIORITY = "priority"  # Priority-based"    DEADLINE = "deadline"  # Deadline-aware"    FAIR = "fair"  # Fair share scheduling"    MLFQ = "mlfq"  # Multi-level feedback queue"
+"""
+Request scheduling policy.
+    FCFS = "fcfs"  # First come first served"    PRIORITY = "priority"  # Priority-based"    DEADLINE = "deadline"  # Deadline-aware"    FAIR = "fair"  # Fair share scheduling"    MLFQ = "mlfq"  # Multi-level feedback queue
 
 
 class RequestStatus(Enum):
-    """Status of a request in the queue.
+"""
+Status of a request in the queue.
     WAITING = auto()
     SCHEDULED = auto()
     RUNNING = auto()

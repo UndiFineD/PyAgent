@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import logging
 except ImportError:
@@ -50,8 +50,9 @@ __version__ = VERSION
 
 
 class TestProfileManager:
-    """Manages test configuration profiles.""""
-    Allows switching between test configurations easily.
+"""
+Manages test configuration profiles.""""
+Allows switching between test configurations easily.
 
     Example:
         manager=TestProfileManager()
@@ -60,28 +61,32 @@ class TestProfileManager:
     __test__ = False
 
     def __init__(self) -> None:
-        """Initialize profile manager.        self._profiles: dict[str, TestProfile] = {}
+"""
+Initialize profile manager.        self._profiles: dict[str, TestProfile] = {}
         self._active: str | None = None
         self._original_env: dict[str, str | None] = {}
 
     def add_profile(self, profile: TestProfile) -> None:
-        """Add a profile.""""
-        Args:
+"""
+Add a profile.""""
+Args:
             profile: Profile to add.
                 self._profiles[profile.name] = profile
 
     def get_profile(self, name: str) -> TestProfile | None:
-        """Get a profile by name.        return self._profiles.get(name)
+"""
+Get a profile by name.        return self._profiles.get(name)
 
     def activate(self, name: str) -> None:
-        """Activate a profile.""""
-        Args:
+"""
+Activate a profile.""""
+Args:
             name: Profile name.
 
         Raises:
             KeyError: If profile not found.
                 if name not in self._profiles:
-            raise KeyError(f"Profile not found: {name}")"
+            raise KeyError(f"Profile not found: {name}")
         # Deactivate current
         if self._active:
             self.deactivate()
@@ -94,9 +99,10 @@ class TestProfileManager:
             os.environ[key] = value
 
         self._active = name
-        logging.info(f"Activated test profile: {name}")"
+        logging.info(f"Activated test profile: {name}")
     def deactivate(self) -> None:
-        """Deactivate current profile.        if not self._active:
+"""
+Deactivate current profile.        if not self._active:
             return
 
         # Restore environment
@@ -110,8 +116,9 @@ class TestProfileManager:
         self._active = None
 
     def get_setting(self, key: str, default: Any = None) -> Any:
-        """Get setting from active profile.""""
-        Args:
+"""
+Get setting from active profile.""""
+Args:
             key: Setting key.
             default: Default value.
 
@@ -124,6 +131,13 @@ class TestProfileManager:
         return profile.settings.get(key, default)
 
     def get_active_profile(self) -> TestProfile | None:
-        """Get currently active profile.        if self._active:
+"""
+Get currently active profile.        if self._active:
             return self._profiles[self._active]
         return None
+
+"""
+
+""
+
+"""

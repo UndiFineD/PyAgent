@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Minimal C2 framework core used by tests.
+from __future__ import annotations
+"""
+Minimal C2 framework core used by tests.
 
 Provides lightweight enums and dataclasses matching test imports.
 """
-from __future__ import annotations
+
+
 
 
 from dataclasses import dataclass, field
@@ -133,9 +136,9 @@ class C2Framework:
 
 
 class C2FrameworkCore:
-    """Minimal core with basic async lifecycle methods."""
-
-    def __init__(self) -> None:
+    ""
+Minimal core with basic async lifecycle methods.""
+def __init__(self) -> None:
         self.framework: Optional[C2Framework] = None
         self.running = False
 

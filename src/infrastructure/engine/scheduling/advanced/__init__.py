@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Advanced request scheduling sub-package.
+"""
+"""
+Advanced request scheduling sub-package.
 try:
-    from .config import (PreemptionReason, RequestPriority, RequestState,  # noqa: F401
+
+"""
+from .config import (PreemptionReason, RequestPriority, RequestState,  # noqa: F401
 except ImportError:
     from .config import (PreemptionReason, RequestPriority, RequestState, # noqa: F401
 

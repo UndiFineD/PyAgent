@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,11 +21,13 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Instantiate ExternalAIRecorderAgent with the repository workspace root (pass a path used as agent file_path).
 - Call record_external_interaction(external_ai_name, prompt, context, response) to append external session records to the local archive and any configured recorder shard.
 - Use synthesize_local_knowledge() to run simple pattern extraction/synthesis over stored records; call improve_content(...) to apply knowledge-derived improvements (TODO Placeholder implementation).
 - The archive is written to data\\\\logs\\external_ai_learning\\external_knowledge.jsonl and a recorder shard is optionally used if configured.
 
+"""
 WHAT IT DOES:
 - Captures prompts, supplemental context, and responses from external AI systems and persists them as JSONL entries for later reuse.
 - Optionally forwards interactions to an internal recorder (self.recorder.record_interaction) to integrate with the agent's shard-based recording system.'- Provides lightweight synthesis and improvement entry points (currently stubs) to analyze and apply insights from recorded external sessions.
@@ -38,7 +42,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in recording and consolidating knowledge from external AI sessions.
 Captures prompts, contexts, and responses provided to/from external systems like ChatGPT, Claude, etc.
 """
-
 import json
 import time
 
@@ -51,7 +54,8 @@ __version__ = VERSION
 
 
 class ExternalAIRecorderAgent(BaseAgent):
-""""Records interactions with external AI models to build a rich local knowledge repository.
+""""
+Records interactions with external AI models to build a rich local knowledge repository.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.logs_dir = self._workspace_root / "data" / "logs" / "external_ai_learning"        self.logs_dir.mkdir(parents=True, exist_ok=True)
@@ -83,7 +87,8 @@ class ExternalAIRecorderAgent(BaseAgent):
 
     @as_tool
     def synthesize_local_knowledge(self) -> str:
-""""Analyzes recorded interactions to identify recurring patterns or high-value insights.
+""""
+Analyzes recorded interactions to identify recurring patterns or high-value insights.
 #         return "Local knowledge synthesis: Identification of 5 high-value patterns from external records completed."
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         return "Local knowledge base is thriving with data from external AI sessions."
@@ -94,3 +99,5 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
         ExternalAIRecorderAgent,
         "External AI Recorder Agent","        "Cross-model knowledge harvester","    )
     main()
+
+"""

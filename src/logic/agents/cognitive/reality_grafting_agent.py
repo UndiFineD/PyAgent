@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +19,11 @@ from __future__ import annotations
 # "Agent for integrating simulated logic paths into production codebases."# 
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 
 try:
@@ -57,7 +62,7 @@ class RealityGraftingAgent(BaseAgent):
 #             fRealityGrafting: Attempting to graft skill for '{focus_area}' into reality.'        )
 
         # In a production system, this would call SpecToolAgent to generate code.
-        # For this implementation, we formalize the 'grafting' into a persistent log.'
+        # For this implementation, we formalize the 'grafting' into a persistent log.
         report = (
 #             f"### Reality Grafting Report\\n"#             f"- **Focus Area**: {focus_area}\\n"#             f"- **Source**: DreamState Synthesis\\n"#             f"- **Logic Grafted**: {dream_output[:100]}...\\n"#             f"- **Result**: New capability identified and prepared for deployment."        )
 
@@ -65,4 +70,4 @@ class RealityGraftingAgent(BaseAgent):
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         # Standard implementation for base agent compatibility
-        return self.graft_skill("manual_graft", prompt)"
+        return self.graft_skill("manual_graft", prompt)

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.structures.staged_batch_writer import WritePolicy, CoalesceStrategy, StagedWrite, WriteStats, StagedBatchWriter, StagedWriteTensor, create_staged_tensor, coalesce_write_indices

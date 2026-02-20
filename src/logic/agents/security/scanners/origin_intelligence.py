@@ -21,70 +21,84 @@ from typing import List, Dict, Any
 class OriginRecon:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Attempts to find the origin IP of a website behind a CDN.#     Ported from Origin_Recon.
+"""
+"""
+Attempts to find the origin IP of a website behind a CDN.#     Ported from Origin_Recon.
 
-    def __init__(self):
+"""
+def __init__(self):
         self.resolver = dns.asyncresolver.Resolver()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.resolver.nameservers = ["1.1.1.1", "8.8.8.8"]"
+"""
+self.resolver.nameservers = ["1.1.1.1", "8.8.8.8"]
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     async def get_subdomains_from_crt(self, domain: str, session: aiohttp.ClientSession) -> List[str]:""""
+"""
+async def get_subdomains_from_crt(self, domain: str, session: aiohttp.ClientSession) -> List[str]:""""
 #         url = fhttps://crt.sh/?q=%.{domain}&output=json
         try:
             async with session.get(url, timeout=20) as resp:
                 if resp.status == 200:
                     data = await resp.json()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                     return list({entry["name_value"].lower().strip() for entry in data})"        except Exception:
+"""
+return list({entry["name_value"].lower().strip() for entry in data})"        except Exception:
             pass
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         return []""""
+"""
+return []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     async def check_ip_origin(self, domain: str, ip: str, session: aiohttp.ClientSession) -> Dict[str, Any]:""""        Compares the Target Domain (CDN) with the direct IP response.
+"""
+async def check_ip_origin(self, domain: str, ip: str, session: aiohttp.ClientSession) -> Dict[str, Any]:""""
+Compares the Target Domain (CDN) with the direct IP response.
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         results: Dict[str, Any] = {"ip": ip, "reasons": [], "is_origin": False}"
+"""
+results: Dict[str, Any] = {"ip": ip, "reasons": [], "is_origin": False}
         try:
             # Check for high TTL on the domain itself (CDN check)
             answers = await self.resolver.resolve(domain, "A")"            if answers.rrset and answers.rrset.ttl > 300:
 # [BATCHFIX] Commented metadata/non-Python
-#                 results["reasons"].append(fHigh TTL ({answers.rrset.ttl}s)")"  # [BATCHFIX] closed string"
+#                 results["reasons"].append(fHigh TTL ({answers.rrset.ttl}s)")"  # [BATCHFIX] closed string
             # Direct IP request
             headers = {"Host": domain}"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             async with session.get(
 # [BATCHFIX] Commented metadata/non-Python
 #                 fhttp://{ip}", headers=headers, timeout=5, ssl=False, allow_redirects=False"  # [BATCHFIX] closed string"            ) as resp:
 # [BATCHFIX] Commented metadata/non-Python
-#                 server_header = resp.headers.get("Server", ").lower()"  # [BATCHFIX] closed string"
+#                 server_header = resp.headers.get("Server", ").lower()"  # [BATCHFIX] closed string
                 # If the domain is behind Cloudflare but the IP shows Nginx/Apache/IIS directly
                 if "cloudflare" not in server_header and server_header:"# [BATCHFIX] Commented metadata/non-Python
 #                     results["reasons"].append(fDirect Server Banner: {server_header}")"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                     results["is_origin"] = True"
+"""
+results["is_origin"] = True
                 # Check for sensitive headers usually stripped by CDNs
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                 if any(h in resp.headers for h in ["X-Powered-By", "X-AspNet-Version", "X-Runtime"]):"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+"""
+if any(h in resp.headers for h in ["X-Powered-By", "X-AspNet-Version", "X-Runtime"]):"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                     results["reasons"].append("Leaked Backend Technology Headers")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+"""
+results["reasons"].append("Leaked Backend Technology Headers")"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                     results["is_origin"] = True"
+"""
+results["is_origin"] = True
         except Exception:
             pass
 
@@ -97,3 +111,9 @@ async def find_origin(domain: str):
         await recon.get_subdomains_from_crt(domain, session)
         # Further logic for scanning these subdomains and their IPs...
         pass
+
+"""
+
+""
+
+"""

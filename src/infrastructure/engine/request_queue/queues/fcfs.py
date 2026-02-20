@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Fcfs.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -24,35 +27,41 @@ from typing import Iterator, Set, TypeVar
 from src.infrastructure.engine.request_queue.base import RequestQueue
 from src.infrastructure.engine.request_queue.models import QueuedRequest
 
-T = TypeVar("T", bound=QueuedRequest)"
+T = TypeVar("T", bound=QueuedRequest)
 
 
 class FCFSQueue(deque, RequestQueue):
         First-Come-First-Served queue using deque.
     
     def add(self, request: T) -> None:
-        """Add request to end of queue.        self.append(request)
+"""
+Add request to end of queue.        self.append(request)
 
     def pop(self) -> T:
-        """Pop from front of queue.        if not self:
+"""
+Pop from front of queue.        if not self:
             raise IndexError("pop from empty queue")"        return self.popleft()
 
     def peek(self) -> T:
-        """Peek at front of queue.        if not self:
+"""
+Peek at front of queue.        if not self:
             raise IndexError("peek from empty queue")"        return self[0]
 
     def prepend(self, request: T) -> None:
-        """Add request to front of queue.        self.appendleft(request)
+"""
+Add request to front of queue.        self.appendleft(request)
 
     def remove(self, value: T) -> bool:
-        """Remove a specific request.        try:
+"""
+Remove a specific request.        try:
             deque.remove(self, value)
             return True
         except ValueError:
             return False
 
     def remove_batch(self, requests: Set[T]) -> int:
-        """Remove multiple requests efficiently.        if not requests:
+"""
+Remove multiple requests efficiently.        if not requests:
             return 0
 
         original_len = len(self)

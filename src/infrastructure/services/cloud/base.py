@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Base classes for cloud provider integration.
 
+"""
 Defines the abstract interface that all cloud providers must implement,
 along with standardized request/response dataclasses.
 """
-
 try:
     from abc import ABC, abstractmethod
 except ImportError:
@@ -42,49 +44,69 @@ except ImportError:
 
 @dataclass
 class InferenceRequest:
-    """Standardized inference request across all cloud providers.
+"""
+Standardized inference request across all cloud providers.
     messages: List[Dict[str, str]]
-    """List of message dicts with 'role' and 'content' keys.'
+"""
+List of message dicts with 'role' and 'content' keys.
     model: str
-    """Model identifier (provider-specific or canonical name).
+"""
+Model identifier (provider-specific or canonical name).
     max_tokens: int = 4096
-    """Maximum tokens to generate in the response.
+"""
+Maximum tokens to generate in the response.
     temperature: float = 0.7
-    """Sampling temperature (0.0 = deterministic, 1.0 = creative).
+"""
+Sampling temperature (0.0 = deterministic, 1.0 = creative).
     stream: bool = False
-    """Whether to stream the response token by token.
+"""
+Whether to stream the response token by token.
     # Optional parameters
     top_p: Optional[float] = None
-    """Nucleus sampling parameter.
+"""
+Nucleus sampling parameter.
     stop_sequences: Optional[List[str]] = None
-    """Sequences that will stop generation.
+"""
+Sequences that will stop generation.
     metadata: Dict[str, Any] = field(default_factory=dict)
-    """Additional provider-specific parameters.
+"""
+Additional provider-specific parameters.
 
 @dataclass
 class InferenceResponse:
-    """Standardized inference response from cloud providers.
+"""
+Standardized inference response from cloud providers.
     content: str
-    """The generated text content.
+"""
+The generated text content.
     tokens_used: int
-    """Total tokens consumed (prompt + completion).
+"""
+Total tokens consumed (prompt + completion).
     cost_estimate: float
-    """Estimated cost in USD for this request.
+"""
+Estimated cost in USD for this request.
     latency_ms: float
-    """End-to-end latency in milliseconds.
+"""
+End-to-end latency in milliseconds.
     provider: str
-    """Name of the provider that handled the request.
+"""
+Name of the provider that handled the request.
     # Optional metadata
     model: Optional[str] = None
-    """Actual model used (may differ from requested).
+"""
+Actual model used (may differ from requested).
     prompt_tokens: Optional[int] = None
-    """Number of tokens in the prompt.
+"""
+Number of tokens in the prompt.
     completion_tokens: Optional[int] = None
-    """Number of tokens in the completion.
+"""
+Number of tokens in the completion.
     finish_reason: Optional[str] = None
-    """Reason generation stopped (e.g., 'stop', 'length', 'content_filter').'
+"""
+Reason generation stopped (e.g., 'stop', 'length', 'content_filter').
     raw_response: Optional[Dict[str, Any]] = None
-    """Raw response from the provider for debugging.
+"""
+Raw response from the provider for debugging.
 
 
 class CloudProviderBase(ABC):
@@ -112,11 +134,13 @@ class CloudProviderBase(ABC):
 
     @property
     def name(self) -> str:
-        """Return the provider name (defaults to class name).        return self.__class__.__name__
+"""
+Return the provider name (defaults to class name).        return self.__class__.__name__
 
     @property
     def is_healthy(self) -> bool:
-        """Return current health status.        return self._is_healthy
+"""
+Return current health status.        return self._is_healthy
 
     @property
     @abstractmethod
@@ -175,18 +199,22 @@ class CloudProviderBase(ABC):
                 ...
 
     def supports_model(self, model: str) -> bool:
-        """Check if this provider supports the given model.        return model in self.available_models
+"""
+Check if this provider supports the given model.        return model in self.available_models
 
     async def __aenter__(self) -> Self:
-        """Async context manager entry.        return self
+"""
+Async context manager entry.        return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb) -> None:
-        """Async context manager exit - cleanup resources.        pass
+"""
+Async context manager exit - cleanup resources.        pass
 
 
 
 class CloudProviderError(Exception):
-    """Base exception for cloud provider errors.
+"""
+Base exception for cloud provider errors.
     def __init__(self, message: str, provider: str, retriable: bool = False) -> None:
         super().__init__(message)
         self.provider: str = provider
@@ -195,7 +223,8 @@ class CloudProviderError(Exception):
 
 
 class RateLimitError(CloudProviderError):
-    """Raised when rate limits are exceeded.
+"""
+Raised when rate limits are exceeded.
     def __init__(self, message: str, provider: str, retry_after: Optional[float] = None) -> None:
         super().__init__(message, provider, retriable=True)
         self.retry_after: float | None = retry_after
@@ -203,6 +232,7 @@ class RateLimitError(CloudProviderError):
 
 
 class AuthenticationError(CloudProviderError):
-    """Raised when authentication fails.
+"""
+Raised when authentication fails.
     def __init__(self, message: str, provider: str) -> None:
         super().__init__(message, provider, retriable=False)

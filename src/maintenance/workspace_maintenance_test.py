@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Test Workspace Maintenance module.
 
+"""
 try:
     import unittest
 except ImportError:
@@ -51,21 +53,21 @@ class TestWorkspaceMaintenance(unittest.TestCase):
         file_path = self.root / "long_lines.py""        with open(file_path, "w", encoding="utf-8") as f:"            f.write("print('ok')\\n")"'            f.write("print('" + "A" * 150 + "')\\n")"'
         results = self.maintenance.find_long_lines(max_len=120)
         self.assertEqual(len(results), 1)
-        self.assertIn("long_lines.py:2:159", results[0])"
+        self.assertIn("long_lines.py:2:159", results[0])
     def test_fix_whitespace(self):
         file_path = self.root / "whitespace.py""        with open(file_path, "w", encoding="utf-8") as f:"            f.write("print('ok')    \\n")"'            f.write("print('no')\\t\\n")"'
         self.maintenance.fix_whitespace()
 
         with open(file_path, "r", encoding="utf-8") as f:"            content = f.read()
 
-        self.assertEqual(content, "print('ok')\\nprint('no')\\n")"'
+        self.assertEqual(content, "print('ok')\\nprint('no')\\n")
     def test_header_compliance(self):
-        file_path = self.root / "no_header.py""        with open(file_path, "w", encoding="utf-8") as f:"            f.write("print('ok')\\n")"'
+        file_path = self.root / "no_header.py""        with open(file_path, "w", encoding="utf-8") as f:"            f.write("print('ok')\\n")
         self.assertTrue(len(self.maintenance.audit_headers()) > 0)
         self.maintenance.apply_header_compliance()
         self.assertEqual(len(self.maintenance.audit_headers()), 0)
 
         with open(file_path, "r", encoding="utf-8") as f:"            content = f.read()
-        self.assertIn("Copyright 2026 PyAgent Authors", content)"
+        self.assertIn("Copyright 2026 PyAgent Authors", content)
 
 if __name__ == "__main__":"    unittest.main()

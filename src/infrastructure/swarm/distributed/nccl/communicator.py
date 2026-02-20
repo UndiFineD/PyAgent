@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 NCCL communicator and custom operations.
 
+"""
 import logging
 import time
 from contextlib import contextmanager
@@ -85,17 +87,20 @@ class NCCLCommunicator:
             self._world_size = 1
             self._rank = 0
 
-        logger.debug(f"NCCLCommunicator initialized: rank={self._rank}/{self._world_size}")"
+        logger.debug(f"NCCLCommunicator initialized: rank={self._rank}/{self._world_size}")
     @property
     def world_size(self) -> int:
-        """Get world size for this group.        return self._world_size
+"""
+Get world size for this group.        return self._world_size
 
     @property
     def rank(self) -> int:
-        """Get rank in this group.        return self._rank
+"""
+Get rank in this group.        return self._rank
 
     def _map_reduce_op(self, op: ReduceOp | str) -> Any:
-        """Map our ReduceOp to dist.ReduceOp.        if not HAS_DIST:
+"""
+Map our ReduceOp to dist.ReduceOp.        if not HAS_DIST:
             return None
 
         if isinstance(op, str):
@@ -111,7 +116,8 @@ class NCCLCommunicator:
         return mapping.get(op, dist.ReduceOp.SUM)
 
     def _with_retry(self, op_name: str, fn: Callable) -> Any:
-        """Execute operation with retry on failure.        last_error = None
+"""
+Execute operation with retry on failure.        last_error = None
         delay = self.config.retry_delay_seconds
 
         for attempt in range(self.config.max_retries + 1):
@@ -126,12 +132,13 @@ class NCCLCommunicator:
                     logger.warning(f"NCCL {op_name} failed (attempt {attempt + 1}), retrying in {delay:.1f}s: {e}")"                    time.sleep(delay)  # nosec
                     delay *= self.config.retry_backoff_factor
                 else:
-                    logger.error(f"NCCL {op_name} failed after {attempt + 1} attempts: {e}")"
+                    logger.error(f"NCCL {op_name} failed after {attempt + 1} attempts: {e}")
         raise last_error
 
     @contextmanager
     def _timed_op(self, op_name: str, tensor: Any = None):
-        """Context manager for timing operations.        start = time.perf_counter()
+"""
+Context manager for timing operations.        start = time.perf_counter()
         yield
         elapsed = (time.perf_counter() - start) * 1000  # ms
         self._stats.total_time_ms += elapsed
@@ -140,7 +147,7 @@ class NCCLCommunicator:
             self._stats.total_bytes += tensor.numel() * tensor.element_size()
 
         if self.config.log_all_ops:
-            logger.debug(f"NCCL {op_name}: {elapsed:.2f}ms")"
+            logger.debug(f"NCCL {op_name}: {elapsed:.2f}ms")
     def all_reduce(
         self,
         tensor: Any,
@@ -157,7 +164,7 @@ class NCCLCommunicator:
             return None
 
         reduce_op = self._map_reduce_op(op)
-        is_avg = op in (ReduceOp.AVG, "avg")"
+        is_avg = op in (ReduceOp.AVG, "avg")
         def do_reduce():
             with self._timed_op("all_reduce", tensor):"                handle = dist.all_reduce(
                     tensor,
@@ -169,7 +176,7 @@ class NCCLCommunicator:
                     tensor.div_(self._world_size)
                 return handle
 
-        return self._with_retry("all_reduce", do_reduce)"
+        return self._with_retry("all_reduce", do_reduce)
     def all_gather(
         self,
         tensor: Any,
@@ -200,7 +207,7 @@ class NCCLCommunicator:
                     return handle, tensor_list
                 return torch.cat(tensor_list, dim=dim)
 
-        return self._with_retry("all_gather", do_gather)"
+        return self._with_retry("all_gather", do_gather)
     def reduce_scatter(
         self,
         tensor: Any,
@@ -237,7 +244,7 @@ class NCCLCommunicator:
                 )
                 return handle if async_op else output
 
-        return self._with_retry("reduce_scatter", do_reduce_scatter)"
+        return self._with_retry("reduce_scatter", do_reduce_scatter)
     def reduce_scatterv(
         self,
         tensor: Any,
@@ -270,7 +277,7 @@ class NCCLCommunicator:
                 )
                 return output
 
-        return self._with_retry("reduce_scatterv", do_reduce_scatterv)"
+        return self._with_retry("reduce_scatterv", do_reduce_scatterv)
     def broadcast(
         self,
         tensor: Any,
@@ -292,7 +299,7 @@ class NCCLCommunicator:
                     async_op=async_op,
                 )
 
-        return self._with_retry("broadcast", do_broadcast)"
+        return self._with_retry("broadcast", do_broadcast)
     def send(
         self,
         tensor: Any,
@@ -308,7 +315,7 @@ class NCCLCommunicator:
         def do_send():
             with self._timed_op("send", tensor):"                dist.send(tensor, dst=dst, group=self.group, tag=tag)
 
-        self._with_retry("send", do_send)"
+        self._with_retry("send", do_send)
     def recv(
         self,
         tensor: Any,
@@ -324,9 +331,10 @@ class NCCLCommunicator:
         def do_recv():
             with self._timed_op("recv", tensor):"                dist.recv(tensor, src=src, group=self.group, tag=tag)
 
-        self._with_retry("recv", do_recv)"
+        self._with_retry("recv", do_recv)
     def barrier(self) -> None:
-        """Synchronize all ranks in the group.        self._stats.barrier_count += 1
+"""
+Synchronize all ranks in the group.        self._stats.barrier_count += 1
 
         if self._world_size == 1:
             return
@@ -337,7 +345,7 @@ class NCCLCommunicator:
         def do_barrier():
             with self._timed_op("barrier"):"                dist.barrier(group=self.group)
 
-        self._with_retry("barrier", do_barrier)"
+        self._with_retry("barrier", do_barrier)
     @contextmanager
     def stream_context(self):
                 Execute operations on the communication stream.
@@ -348,15 +356,18 @@ class NCCLCommunicator:
             yield
 
     def synchronize(self) -> None:
-        """Synchronize the communication stream.        if self._stream is not None and HAS_TORCH:
+"""
+Synchronize the communication stream.        if self._stream is not None and HAS_TORCH:
             self._stream.synchronize()
 
     def get_stats(self) -> dict[str, Any]:
-        """Get communicator statistics.        return {
+"""
+Get communicator statistics.        return {
             "world_size": self._world_size,"            "rank": self._rank,"            "all_reduce_count": self._stats.all_reduce_count,"            "all_gather_count": self._stats.all_gather_count,"            "reduce_scatter_count": self._stats.reduce_scatter_count,"            "send_count": self._stats.send_count,"            "recv_count": self._stats.recv_count,"            "barrier_count": self._stats.barrier_count,"            "retry_count": self._stats.retry_count,"            "total_bytes": self._stats.total_bytes,"            "total_time_ms": self._stats.total_time_ms,"            "errors": self._stats.errors,"        }
 
     def reset_stats(self) -> None:
-        """Reset statistics.        self._stats = NCCLStats()
+"""
+Reset statistics.        self._stats = NCCLStats()
 
 
 
@@ -406,7 +417,7 @@ class CustomAllReduce:
     ) -> None:
                 Custom all-reduce implementation using high-performance primitives.
         Uses torch.cuda.comm.all_reduce for intra-node optimization if possible.
-                # Ensure we are on the communicator's stream'        stream = getattr(self.comm, "_stream", None)"
+                # Ensure we are on the communicator's stream'        stream = getattr(self.comm, "_stream", None)
         with torch.cuda.stream(stream):
             # For a single process managing multiple GPUs (DataParallel style),
             # torch.cuda.comm.all_reduce is highly efficient.
@@ -432,5 +443,6 @@ class CustomAllReduce:
             if op in (ReduceOp.AVG, "avg"):"                tensor.div_(self.comm.world_size)
 
     def get_stats(self) -> dict[str, Any]:
-        """Get custom all-reduce statistics.        return {
+"""
+Get custom all-reduce statistics.        return {
             "use_custom": self._use_custom,"            "threshold": self.threshold,"            "fallback_count": self._fallback_count,"        }

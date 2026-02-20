@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# Licensed under the Apache License, Version 2.0 (the "License");"
+
+# Context Validation Mixin - Content validation for ContextAgent
+
+# DATE: 2026-02-13
+# AUTHOR: Keimpe de Jong
+USAGE:
+- Mix ContextValidationMixin into a ContextAgent or similar agent class that manages markdown-like context content.
+- Call add_validation_rule(rule: ValidationRule) to extend rules, validate_content(content: str|None) to get a list of issues, and is_valid(content: str|None) as a quick boolean check.
+- Defaults work without configuration; pass explicit content to validate other strings.
+
+WHAT IT DOES:
+- Provides a set of default ValidationRule objects and three methods: add_validation_rule (append new rules), validate_content (run regex-based rules against content and return structured issues), and is_valid (returns False if any error-severity issues are found).
+- Uses simple regex matching to enforce presence of required sections (e.g., "Purpose"), detect empty sections, and inspect code blocks for language identifiers."
+WHAT IT SHOULD DO BETTER:
+- Make regexes more robust and anchored, and avoid false positives/negatives by using markdown-aware parsing instead of plain regex.
+- Return richer diagnostics (line numbers, matched text, rule context) and support configurable severity mappings and remediation hints.
+- Support async validation hooks, pluggable rule sources (e.g., JSON/YAML), localization of messages, and performance improvements for very large documents.
+
+FILE CONTENT SUMMARY:
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Licensed under the Apache License, Version 2.0 (the "License");"
+
+# "Mixin for context validation capabilities."
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .core.base.common.models import ValidationRule
+except ImportError:
+    from src.core.base.common.models import ValidationRule
+
+
+# Default validation rules
+DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
+    ValidationRule(
+        name="has_purpose","        pattern=r"##\\\\s*Purpose\\b","        message="Context should have a Purpose section","        severity="error","        required=True,
+    ),
+    ValidationRule(
+        name="no_empty_sections","        pattern=r"##\\\\s*\\w+\\\\s*\\n\\\\s*\\n##","        message="Empty section detected","        severity="warning","    ),
+    ValidationRule(
+        name="valid_code_blocks","        pattern=r"```\\w*\\n[\\\\s\\S]*?```","        message="Code blocks should have language identifier","        severity="info","    ),
+]
+
+
+
+class ContextValidationMixin:
+""""Validation methods for ContextAgent.
+    def add_validation_rule(self, rule: ValidationRule) -> None:
+""""Add a validation rule.        if not hasattr(self, "_validation_rules"):"            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
+        self._validation_rules.append(rule)
+
+    def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
+""""Validate content against all rules.        if content is None:
+            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
+        issues: list[dict[str, Any]] = []
+        rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)"
+        for rule in rules:
+            if rule.required:
+                # Required patterns must be present
+                if not re.search(rule.pattern, content):
+                    issues.append(
+                        {
+                            "rule": rule.name,"                            "message": rule.message,"                            "severity": rule.severity,"                            "required": True,"                        }
+                    )
+            else:
+                # Non - required patterns are warnings when matched
+                matches = re.findall(rule.pattern, content)
+                if matches and rule.severity != "info":"                    issues.append(
+                        {
+                            "rule": rule.name,"                            "message": rule.message,"                            "severity": rule.severity,"                            "matches": len(matches),"                        }
+                    )
+
+        return issues
+
+    def is_valid(self, content: str | None = None) -> bool:
+""""Check if content passes all required validations.        issues = self.validate_content(content)
+        return not any(i.get("severity") == "error" for" i in issues)"
+
+try:
+    import re
+except ImportError:
+    import re
+
+try:
+    from typing import Any
+except ImportError:
+    from typing import Any
+
+try:
+    from .core.base.common.models import ValidationRule
+except ImportError:
+    from src.core.base.common.models import ValidationRule
+
+
+# Default validation rules
+DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
+    ValidationRule(
+        name="has_purpose","        pattern=r"##\\\\s*Purpose\\b","        message="Context should have a Purpose section","        severity="error","        required=True,
+    ),
+    ValidationRule(
+        name="no_empty_sections","        pattern=r"##\\\\s*\\w+\\\\s*\\n\\\\s*\\n##","        message="Empty section detected","        severity="warning","    ),
+    ValidationRule(
+        name="valid_code_blocks","        pattern=r"```\\w*\\n[\\\\s\\S]*?```","        message="Code blocks should have language identifier","        severity="info","    ),
+]
+
+
+
+class ContextValidationMixin:
+""""Validation methods "for ContextAgent.
+    def add_validation_rule(self, rule: ValidationRule) -> None:
+""""Add a validation rule.        if not hasattr(self, "_validation_rules"):"            self._validation_rules = list(DEFAULT_VALIDATION_RULES)
+        self._validation_rules.append(rule)
+
+    def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
+""""Validate content against all rules."        if content is None:"            content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"
+        issues: list[dict[str, Any]] = []
+        rules = getattr(self, "_validation_rules", DEFAULT_VALIDATION_RULES)"
+        for rule in rules:
+            if rule.required:
+                # Required patterns must be present
+                if not re.search(rule.pattern, content):
+                    issues.append(
+                        {
+                            "rule": rule.name,"                            "message": rule.message,"                            "severity": rule.severity,"                            "required": True,"                        }
+                    )
+            else:
+                # Non - required patterns are warnings when matched
+                matches = re.findall(rule.pattern, content)
+                if matches and rule.severity != "info":"                    issues.append(
+                        {
+                            "rule": rule.name,"                            "message": rule.message,"                            "severity": rule.severity,"                            "matches": len(matches),"                        }
+                    )
+
+        return issues
+
+    def is_valid(self, content: str | None = None) -> bool:
+""""Check if content passes all required validations.        issues = "self.validate_content(content)"        return not any(i.get("severity") == "error" for i in issues)"

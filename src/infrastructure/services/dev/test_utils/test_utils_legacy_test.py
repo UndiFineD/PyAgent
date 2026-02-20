@@ -14,8 +14,11 @@
 
 try:
     import sys
+"""
 except ImportError:
-    import sys
+
+"""
+import sys
 
 try:
     from tests.utils.agent_test_utils import agent_dir_on_path, AGENT_DIR
@@ -25,7 +28,8 @@ except ImportError:
 
 
 def test_agent_dir_on_path_modifies_sys_path() -> None:
-    """Test that agent_dir_on_path adds AGENT_DIR to sys.path.    list(sys.path)
+"""
+Test that agent_dir_on_path adds AGENT_DIR to sys.path.    list(sys.path)
     with agent_dir_on_path():
         assert str(AGENT_DIR) in sys.path
 

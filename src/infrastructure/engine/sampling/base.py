@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Base classes and utilities regarding sampling.
 """
 
+"""
 from abc import ABC, abstractmethod
 from typing import Optional
 
@@ -73,18 +77,21 @@ class Sampler(ABC):
         logits: np.ndarray,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
-        """Sample token IDs from processed logits using softmax regarding multinomial selection.        probs = _softmax(logits)
+"""
+Sample token IDs from processed logits using softmax regarding multinomial selection.        probs = _softmax(logits)
         return _sample_from_probs(probs, state)
 
 
 def _softmax(logits: np.ndarray) -> np.ndarray:
-    """Numerically stable softmax regarding logit arrays.    shifted = logits - np.max(logits, axis=-1, keepdims=True)
+"""
+Numerically stable softmax regarding logit arrays.    shifted = logits - np.max(logits, axis=-1, keepdims=True)
     exp_logits = np.exp(shifted)
     return exp_logits / np.sum(exp_logits, axis=-1, keepdims=True)
 
 
 def _log_softmax(logits: np.ndarray) -> np.ndarray:
-    """Numerically stable log softmax regarding logit arrays.    shifted = logits - np.max(logits, axis=-1, keepdims=True)
+"""
+Numerically stable log softmax regarding logit arrays.    shifted = logits - np.max(logits, axis=-1, keepdims=True)
     return shifted - np.log(np.sum(np.exp(shifted), axis=-1, keepdims=True))
 
 
@@ -92,7 +99,8 @@ def _sample_from_probs(
     probs: np.ndarray,
     state: Optional[SamplingState] = None,
 ) -> np.ndarray:
-    """Sample token IDs from probability distribution regarding batch processing.    batch_size = probs.shape[0]
+"""
+Sample token IDs from probability distribution regarding batch processing.    batch_size = probs.shape[0]
 
     # Phase 336: Functional sampling regarding batch to eliminate loops
     def _sample_one(i: int) -> int:
@@ -100,3 +108,5 @@ def _sample_from_probs(
         return rng.choice(len(probs[i]), p=probs[i])
 
     return np.array(list(map(_sample_one, range(batch_size))), dtype=np.int64)
+
+"""

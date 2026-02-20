@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Notification Channel - Enumeration of notification channel types
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -27,14 +31,13 @@ USAGE:
     if channel == NotificationChannel.SLACK:
         handle_slack(channel.value)
     # or construct from string:
-    NotificationChannel("email")"
+    NotificationChannel("email")
 WHAT IT DOES:
 - Defines a lightweight enum, NotificationChannel, that centralizes canonical channel identifiers used across the codebase (slack, teams, email, webhook, discord) and exposes module __version__ from the project's VERSION.'
 WHAT IT SHOULD DO BETTER:
 - Add richer metadata per channel (display name, default configuration keys, required credentials) and helper methods for normalization, validation, and serialization.
 - Provide case-insensitive construction, explicit unit tests, and documentation linking enum members to channel-specific sender implementations or configuration entries.
 """
-
 try:
     from enum import Enum
 except ImportError:
@@ -51,10 +54,10 @@ __version__ = VERSION
 
 
 class NotificationChannel(Enum):
-    """
-    Notification channel types.
-    """
-    SLACK = "slack"
+"""
+Notification channel types.
+"""
+SLACK = "slack"
     TEAMS = "teams"
     EMAIL = "email"
     WEBHOOK = "webhook"

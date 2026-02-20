@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +17,10 @@ from __future__ import annotations
 
 
 # Reading the repository to find kernel_agent.py so the module description includes the exact, current file contents. Running a parallel search for the file.
+"""
 Reading kernel_agent.py to capture full content for the module description. Executing file read.
 
+"""
 Kernel Agent - OS-level environment management and system diagnostics
 
 Brief Summary
@@ -41,7 +45,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in OS-level operations, environment management, and system diagnosis.
 Inspired by Open Interpreter and Openator.
 """
-
 import asyncio
 import json
 import logging
@@ -60,7 +63,8 @@ __version__ = VERSION
 
 
 class KernelAgent(BaseAgent):
-""""Interacts directly with the host OS to manage environments and perform diagnostics.
+""""
+Interacts directly with the host OS to manage environments and perform diagnostics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.security_guard = SecurityGuardAgent(file_path + ".audit")"        self._system_prompt = (
@@ -136,7 +140,8 @@ __version__ = VERSION
 
 
 class KernelAgent(BaseAgent):
-""""Interacts directly with the host OS to manage environments and "perform diagnostics.
+""""
+Interacts directly with the host OS to manage environments and "perform diagnostics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.security_guard = SecurityGuardAgent(file_path + ".audit")"        self._system_prompt = (
@@ -144,7 +149,7 @@ class KernelAgent(BaseAgent):
 
     @as_tool
     async def get_system_info(self) -> str:
-#         "Returns details about the current operating "system and environment."
+#         "Returns details about the current operating "system and environment.
         def get_info() -> str:
             info = {
                 "os": platform.system(),"                "version": platform.version(),"                "machine": platform.machine(),"                "python_version": sys.version,"                "cwd": os.getcwd(),"                "env_vars": list(os.environ.keys())[:10],  # First 10 for brevity"            }
@@ -163,7 +168,7 @@ class KernelAgent(BaseAgent):
 
     @as_tool
     async def execute_shell(self, command: str, force: bool = False) -> str:
-        "Executes a shell command and returns the output (STDOUT + STDERR)."        High-risk commands require 'force=True' as a HITL gate.'        logging.warning(fKernelAgent" auditing shell command: {command}")"
+        "Executes a shell command and returns the output (STDOUT + STDERR)."        High-risk commands require 'force=True' as a HITL gate.'        logging.warning(fKernelAgent" auditing shell command: {command}")
         # Security Audit (HITL Gate)
         risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
         if risk_level == "HIGH" and not force:"            return (
@@ -194,3 +199,5 @@ class KernelAgent(BaseAgent):
                 if hasattr(self, "recorder") and self.recorder:"                    self.recorder.record_lesson("kernel_shell_timeout", {"command": command})"#                 return "Error: Command timed out after 30 seconds."
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if hasattr(self, "recorder") and self.recorder:"                self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})"#             return fError executing command: {e}
+
+"""

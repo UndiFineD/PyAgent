@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     import hashlib
 except ImportError:
@@ -39,14 +39,16 @@ __version__ = VERSION
 
 
 class RequestSigner:
-    """Signs and verifies requests for integrity and authenticity.""""
-    Uses HMAC - SHA256 to sign request payloads, enabling verification
+"""
+Signs and verifies requests for integrity and authenticity.""""
+Uses HMAC - SHA256 to sign request payloads, enabling verification
     that requests haven't been tampered with.'
     Example:
         signer=RequestSigner(secret_key="my-secret")"        signature=signer.sign("prompt data")"        assert signer.verify("prompt data", signature)"    
     def __init__(self, secret_key: str | None = None) -> None:
-        """Initialize request signer.""""
-        Args:
+"""
+Initialize request signer.""""
+Args:
             secret_key: Secret key for signing. If None, uses environment variable.
                 import hmac
 
@@ -54,8 +56,9 @@ class RequestSigner:
         self.secret_key = (secret_key or os.environ.get("DV_AGENT_SIGNING_KEY", "")).encode()"        self._signatures: dict[str, str] = {}
 
     def sign(self, data: str, request_id: str | None = None) -> str:
-        """Sign data and return signature.""""
-        Args:
+"""
+Sign data and return signature.""""
+Args:
             data: Data to sign.
             request_id: Optional request ID for tracking.
 
@@ -69,8 +72,9 @@ class RequestSigner:
         return signature
 
     def verify(self, data: str, signature: str) -> bool:
-        """Verify signature for data.""""
-        Args:
+"""
+Verify signature for data.""""
+Args:
             data: Original data.
             signature: Signature to verify.
 
@@ -81,4 +85,13 @@ class RequestSigner:
         return self._hmac.compare_digest(expected, signature)
 
     def get_stored_signature(self, request_id: str) -> str | None:
-        """Get stored signature by request ID.        return self._signatures.get(request_id)
+"""
+Get stored signature by request ID.        return self._signatures.get(request_id)
+
+"""
+
+"""
+
+""
+
+"""

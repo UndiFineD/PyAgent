@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.engine_core_client.suggested import RequestType, ClientConfig, EngineCoreClient, InprocClient, SyncMPClient, AsyncMPClient, create_client

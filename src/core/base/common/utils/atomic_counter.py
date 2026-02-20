@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,14 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""AtomicCounter - Thread-safe counters and related primitives.
+"""
+"""
+AtomicCounter - Thread-safe counters and related primitives.
 
+"""
 This module provides several simple concurrency primitives used in tests
 and lightweight parts of the codebase. Implementations favor clarity
 and correct behavior over performance; a Rust-accelerated variant may be
 plugged in later.
 """
-
 import threading
 from typing import Optional
 
@@ -36,9 +39,9 @@ except Exception:  # pragma: no cover - optional dependency
 
 
 class Counter:
-    """Simple non-atomic counter for single-threaded use."""
-
-    __slots__ = ("_value",)
+"""
+Simple non-atomic counter for single-threaded use.""
+__slots__ = ("_value",)
 
     def __init__(self, start: int = 0) -> None:
         self._value = int(start)
@@ -65,9 +68,9 @@ class Counter:
 
 
 class AtomicCounter:
-    """Thread-safe atomic counter implemented with a lock."""
-
-    __slots__ = ("_value", "_lock", "_use_rust")
+"""
+Thread-safe atomic counter implemented with a lock.""
+__slots__ = ("_value", "_lock", "_use_rust")
 
     def __init__(self, start: int = 0, use_rust: bool = True) -> None:
         self._value = int(start)
@@ -130,9 +133,9 @@ class AtomicCounter:
 
 
 class AtomicFlag:
-    """Thread-safe atomic boolean flag."""
-
-    __slots__ = ("_flag", "_lock")
+"""
+Thread-safe atomic boolean flag.""
+__slots__ = ("_flag", "_lock")
 
     def __init__(self, initial: bool = False) -> None:
         self._flag = bool(initial)
@@ -175,9 +178,9 @@ class AtomicFlag:
 
 
 class AtomicGauge:
-    """Thread-safe gauge that tracks min, max, and current value."""
-
-    __slots__ = ("_value", "_min", "_max", "_lock")
+"""
+Thread-safe gauge that tracks min, max, and current value.""
+__slots__ = ("_value", "_min", "_max", "_lock")
 
     def __init__(self, initial: float = 0.0) -> None:
         self._value = float(initial)

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -23,10 +25,10 @@ from src.logic.agents.cognitive.context.engines.context_compressor_core import (
     ContextCompressorCore,
 )
 
+"""
 __version__ = VERSION
 
-
-
+"""
 class ContextCompressor:
     "Reduces the size of source files while preserving structural context."
     Acts as the I/O Shell for ContextCompressorCore.
@@ -36,13 +38,14 @@ class ContextCompressor:
         self.core = ContextCompressorCore()
 
     def compress_file(self, file_path_raw: Any) -> str:
-""""Determines compression strategy based on file extension and handles I/O.        file_path = Path(file_path_raw)
+""""
+Determines compression strategy based on file extension and handles I/O.        file_path = Path(file_path_raw)
 
         if not file_path.exists():
 #             return fError: File {file_path} not found.
 
         try:
-            content = file_path.read_text(encoding="utf-8", errors="replace")"
+            content = file_path.read_text(encoding="utf-8", errors="replace")
             mode = self.core.decide_compression_mode(file_path.name)
             header = self.core.get_summary_header(file_path.name, mode.capitalize())
 
@@ -61,3 +64,11 @@ if __name__ == "__main__":"    # Test
     compressor = ContextCompressor()
     # Simple self-test
     print(compressor.compress_file(__file__))
+
+"""
+
+"""
+
+""
+
+"""

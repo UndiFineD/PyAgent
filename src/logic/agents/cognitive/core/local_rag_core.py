@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +19,13 @@ from __future__ import annotations
 
 # LocalRAGCore: Provides hyper-localized Retrieval-Augmented Generation (RAG) logic for vector sharding in PyAgent.
 # Optimized for fast, context-aware retrieval and embedding management at the agent level.
-
 try:
     from dataclasses import dataclass
+"""
 except ImportError:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 
 
 try:
@@ -34,7 +39,7 @@ __version__ = VERSION
 
 @dataclass(frozen=True)
 class RAGShard:
-    "Metadata for a localized vector "shard."
+    "Metadata for a localized vector "shard.
     Attributes:
         path: Filesystem path to the shard.
         tags: Categorical tags for the shard内容.

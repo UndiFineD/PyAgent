@@ -14,9 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Tensorizer Package
 High-performance tensor serialization and streaming system.
 
+"""
 try:
     from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,  # noqa: F401
 except ImportError:

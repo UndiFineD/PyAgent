@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Suppression Rule - Data model for error suppression
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -32,7 +36,6 @@ WHAT IT SHOULD DO BETTER:
 - Add validation for required fields (non-empty id/pattern/reason), canonicalize id format, and include unit tests and example fixtures demonstrating matching and expiry semantics.
 - Consider integration points: storage schema, versioned migrations, and clear handling of pattern types (regex vs substring) with an explicit enum.
 """
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -50,8 +53,9 @@ __version__ = VERSION
 
 @dataclass
 class SuppressionRule:
-    """Rule for suppressing specific errors."""
-    id: str
+    ""
+Rule for suppressing specific errors.""
+id: str
     pattern: str
     reason: str
     expires: str | None = None

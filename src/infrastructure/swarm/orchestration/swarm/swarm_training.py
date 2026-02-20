@@ -13,10 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
+"""
 Swarm Training & LoRA Merging (Phase 79).
 Decentralized merging of specialized LoRA adapters across the agent fleet.
-Enables 'Swarm Learning' without centralized bottleneck.'
+Enables 'Swarm Learning' without centralized bottleneck.
+
+"""
 import asyncio
 import logging
 from typing import Any, Dict, List
@@ -37,7 +40,7 @@ class SwarmTrainingCoordinator:
     async def merge_peer_loras(self, task_domain: str, peer_adapters: List[Dict[str, Any]]) -> Dict[str, Any]:
                 Merges adapters from multiple peers using weighted averaging.
         Simulates federated-style weight merging.
-                logger.info(f"SwarmLearning: Merging {len(peer_adapters)} adapters for domain '{task_domain}'")"'
+                logger.info(f"SwarmLearning: Merging {len(peer_adapters)} adapters for domain '{task_domain}'")
         if not peer_adapters:
             return {}
 
@@ -58,5 +61,8 @@ class SwarmTrainingCoordinator:
         return final_adapter
 
     def broadcast_adapter(self, adapter: Dict[str, Any]):
-        """Notifies peers of a newly converged local adapter.        adapter_id = f"{self.node_id}_{adapter['domain']}""'        self.adapter_registry[adapter_id] = adapter
-        logger.info(f"SwarmLearning: Broadcasted adapter {adapter_id} to swarm.")"
+"""
+Notifies peers of a newly converged local adapter.        adapter_id = f"{self.node_id}_{adapter['domain']}"
+self.adapter_registry[adapter_id] = adapter
+        logger.info(f"SwarmLearning: Broadcasted adapter {adapter_id} to swarm.")
+"""

@@ -15,11 +15,13 @@
 
 
 """
+"""
 Voyager package.
 """
-
 try:
-    from .discovery_node import DiscoveryNode  # noqa: F401
+
+"""
+from .discovery_node import DiscoveryNode  # noqa: F401
 except ImportError:
     from .discovery_node import DiscoveryNode # noqa: F401
 

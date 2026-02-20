@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.parallel_sampling import SamplingStrategy, OutputKind, SamplingParams, CompletionOutput, ParentRequest, ParallelSamplingManager, BeamState, BeamSearchManager, DiverseSamplingManager, BestOfNFilter, IterationStats

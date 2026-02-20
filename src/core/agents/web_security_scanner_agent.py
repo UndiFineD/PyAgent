@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,13 +16,15 @@ from __future__ import annotations
 
 
 """
+"""
 Module: web_security_scanner_agent
 Agent for web application security scanning, refactored from aem-eye patterns.
 Implements multi-agent coordination for distributed scanning tasks.
 """
-
 try:
-    from typing import Any, Dict, List, Optional
+
+"""
+from typing import Any, Dict, List, Optional
 except ImportError:
     from typing import Any, Dict, List, Optional
 
@@ -55,8 +58,9 @@ except ImportError:
 
 
 class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, TaskQueueMixin):
-    """Agent for web security scanning using patterns from aem-eye."""
-    def __init__(self, **kwargs: Any) -> None:
+"""
+Agent for web security scanning using patterns from aem-eye.""
+def __init__(self, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         SecurityMixin.__init__(self, **kwargs)
         TaskQueueMixin.__init__(self, **kwargs)
@@ -73,7 +77,8 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
         hosts: List[str],
         custom_patterns: Optional[Dict[str, str]] = None
     ) -> Dict[str, Any]:
-        """Scan hosts for security vulnerabilities using pattern matching.
+"""
+Scan hosts for security vulnerabilities using pattern matching.
 
         Args:
             hosts: List of hosts/URLs to scan
@@ -81,7 +86,7 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
 
         Returns:
             Scan results with detected patterns
-        """
+"""
         # Use default CMS patterns if none provided
         if custom_patterns is None:
             custom_patterns = {
@@ -106,7 +111,8 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
 
 
     async def _coordinate_scanning(self, hosts: List[str], patterns: Dict[str, str]) -> Dict[str, List[str]]:
-        """Coordinate scanning using task queue pattern similar to aem-eye's job system."""
+"""
+Coordinate scanning using task queue pattern similar to aem-eye's job system.""
         # Split hosts into batches for distributed processing
         batch_size = 50
         all_results = {}
@@ -132,8 +138,9 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
 
 
     async def _analyze_scan_results(self, results: Dict[str, List[str]]) -> Dict[str, Any]:
-        """Analyze scan results for security insights."""
-        pattern_counts = {}
+"""
+Analyze scan results for security insights.""
+pattern_counts = {}
         host_counts = {}
 
         for host, patterns in results.items():
@@ -151,15 +158,16 @@ class WebSecurityScannerAgent(BaseAgent, SecurityMixin, DataProcessingMixin, Tas
 
 
     async def detect_cms_instances(self, hosts: List[str]) -> Dict[str, Any]:
-        """Detect CMS instances across hosts.
+"""
+Detect CMS instances across hosts.
 
         Args:
             hosts: List of hosts to scan
 
         Returns:
             CMS detection results
-        """
-        results = await self.scanner_core.detect_cms_fingerprints(hosts)
+        ""
+results = await self.scanner_core.detect_cms_fingerprints(hosts)
         analysis = await self._analyze_scan_results(results)
 
         return {

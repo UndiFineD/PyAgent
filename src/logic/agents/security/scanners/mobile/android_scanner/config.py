@@ -23,7 +23,7 @@
 """     "2. strings.xml – Review the XML file for hardcoded sensitive data, insecure configurations,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     "and improper encoding.\\n"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     "3. AndroidManifest.xml – Analyze for improper permissions, exposed components, and security"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""     "misconfigurations.\\n"  # [BATCHFIX] closed string"    '4. Once the analysis is complete, respond with "✅ All code scanned. Coded by @X-Vector"\\n\\n\\n'"'# [BATCHFIX] Commented metadata/non-Python
+"""     "misconfigurations.\\n"  # [BATCHFIX] closed string"    '4. Once the analysis is complete, respond with " All code scanned. Coded by @X-Vector"\\n\\n\\n'"'# [BATCHFIX] Commented metadata/non-Python
 """     "Your goal is to identify security flaws in the Android code and provide:\\n"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     "1. A complete list of all vulnerabilities found.\\n"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """     "2. A clear explanation of each vulnerability.\\n"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python

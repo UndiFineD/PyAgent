@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 EagleProposer: Wrapper regarding modular EAGLE-style speculative decoding components.
 
+"""
 try:
     from .eagle.base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,
 except ImportError:

@@ -15,8 +15,10 @@
 
 
 """
+"""
 Heterogeneous speculator.py module.
 
+"""
 try:
     import logging
 except ImportError:
@@ -56,7 +58,7 @@ class HeterogeneousSpeculator:
         Drafters: acceleration_type in ['fp8_bitnet', 'int4_quant']'        Verifiers: acceleration_type in ['h100_tensor', 'standard']'                experts: List[ExpertProfile] = list(self.gatekeeper.experts.values())
 
         # Filter by domain
-        domain_experts: List[ExpertProfile] = [e for e in experts if domain in e.domains or "general" in e.domains]"
+        domain_experts: List[ExpertProfile] = [e for e in experts if domain in e.domains or "general" in e.domains]
         drafters: List[ExpertProfile] = [
             e for e in domain_experts
             if e.acceleration_type in ["fp8_bitnet", "int4_quant"]"        ]
@@ -82,6 +84,6 @@ class HeterogeneousSpeculator:
 
         drafter_id, verifier_id = pairs[0]
         # In a real integration, we'd call SpeculativeSwarmOrchestrator.execute_speculative_task'        # Here we simulate the handoff
-        return {"mode": "speculative", "drafter": drafter_id, "verifier": verifier_id, "task": task}"
+        return {"mode": "speculative", "drafter": drafter_id, "verifier": verifier_id, "task": task}
 
 """

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 AMD ROCm platform implementation.
 """
 
+"""
 import logging
 from typing import List, Set
 
@@ -32,7 +36,8 @@ logger = logging.getLogger(__name__)
 
 
 class RocmPlatform(Platform):
-    """AMD ROCm platform implementation.
+"""
+AMD ROCm platform implementation.
     _torch = None
 
     @classmethod

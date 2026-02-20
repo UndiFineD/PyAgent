@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +16,14 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tool core utilities: metadata extraction and argument filtering.
+"""
+"""
+Tool core utilities: metadata extraction and argument filtering.
 
+"""
 This module provides a trimmed, reliable implementation used by the
 test suite to inspect tool functions and filter invocation arguments.
 """
-
 import inspect
 import logging
 import re
@@ -52,9 +55,9 @@ class ToolMetadata(BaseModel):
 
 
 class ToolCore:
-    """Core helpers for tooling metadata and argument handling."""
-
-    def extract_metadata(self, owner_name: str, func: Callable, category: str = "general", priority: int = 0) -> ToolMetadata:
+"""
+Core helpers for tooling metadata and argument handling.""
+def extract_metadata(self, owner_name: str, func: Callable, category: str = "general", priority: int = 0) -> ToolMetadata:
         name: str = getattr(func, "__name__", "<anonymous>")
         doc: str = func.__doc__ or "No description provided."
 
@@ -86,8 +89,9 @@ class ToolCore:
         return {k: v for k, v in args_dict.items() if k in sig.parameters}
 
     def score_tool_relevance(self, metadata: ToolMetadata, query: str) -> float:
-        """Heuristic relevance scoring; defers to rust_core when available."""
-        if rc:
+"""
+Heuristic relevance scoring; defers to rust_core when available.""
+if rc:
             try:
                 return rc.score_tool_relevance(metadata.name, metadata.description, query)  # type: ignore[attr-defined]
             except Exception:

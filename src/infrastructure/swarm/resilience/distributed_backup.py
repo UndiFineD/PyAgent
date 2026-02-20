@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Module: distributed_backup
-Implements 'Shard RAID-10' protocol for distributed swarm resilience."""
+Implements 'Shard RAID-10' protocol for distributed swarm resilience.""
 
+"""
 import json
 import logging
 import hashlib
@@ -32,11 +35,11 @@ logger = logging.getLogger(__name__)
 
 
 class DistributedBackup:
-    """Manages distributed redundancy for agent state and memory.
+"""
+Manages distributed redundancy for agent state and memory.
     Ensures that no single node failure leads to data loss.
-    """
-
-    def __init__(self, node_id: str, replication_factor: int = 3):
+"""
+def __init__(self, node_id: str, replication_factor: int = 3):
         self.node_id = node_id
         self.replication_factor = replication_factor
         self.local_shards_dir = Path("data/shards")
@@ -44,10 +47,11 @@ class DistributedBackup:
 
 
     def create_shards(self, state_data: Dict[str, Any], custom_hash: Optional[str] = None) -> List[Dict[str, Any]]:
-        """Splits state into N encrypted shards using RAID-10 (Mirroring + Striping).
+"""
+Splits state into N encrypted shards using RAID-10 (Mirroring + Striping).
         Also includes a redundancy parity check.
-        """
-        raw_data = json.dumps(state_data).encode()
+"""
+raw_data = json.dumps(state_data).encode()
         data_hash = custom_hash if custom_hash else hashlib.sha256(raw_data).hexdigest()
 
         # Phase 326: Dynamic Striping
@@ -86,8 +90,9 @@ class DistributedBackup:
 
 
     def store_shard_locally(self, shard: Dict[str, Any]) -> bool:
-        """Stores a shard from a peer and verifies integrity."""
-        shard_id = shard["shard_id"]
+"""
+Stores a shard from a peer and verifies integrity.""
+shard_id = shard["shard_id"]
         data_b64 = shard.get("data_b64", "")
         part_hash = shard.get("part_hash")
         # Integrity check
@@ -109,8 +114,9 @@ class DistributedBackup:
 
 
     def get_local_shards_for_hash(self, full_hash: str) -> List[Dict[str, Any]]:
-        """Retrieves locally stored shards belonging to a specific state hash."""
-        shards = []
+"""
+Retrieves locally stored shards belonging to a specific state hash.""
+shards = []
         for shard_file in self.local_shards_dir.glob(f"{full_hash}_*.json"):
             try:
                 with open(shard_file, "r", encoding="utf-8") as f:
@@ -121,8 +127,9 @@ class DistributedBackup:
 
 
     def retrieve_shard(self, shard_id: str) -> Optional[Dict[str, Any]]:
-        """Retrieve a shard from local storage."""
-        file_path = self.local_shards_dir / f"{shard_id}.json"
+"""
+Retrieve a shard from local storage.""
+file_path = self.local_shards_dir / f"{shard_id}.json"
         if file_path.exists():
             with open(file_path, "r", encoding="utf-8") as f:
                 return json.load(f)
@@ -130,8 +137,9 @@ class DistributedBackup:
 
 
     def reassemble_state(self, shards: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Reconstructs state from a set of RAID-10 shards. Requires at least one mirror of each part."""
-        if not shards:
+        ""
+Reconstructs state from a set of RAID-10 shards. Requires at least one mirror of each part.""
+if not shards:
             return None
 
         # Group by part index

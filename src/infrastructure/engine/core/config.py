@@ -13,12 +13,13 @@
 # limitations under the License.
 
 
-"""Configuration and data structures for the inference engine core."""
-
-
-
+"""
+"""
+Configuration and data structures for the inference engine core.""
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -40,8 +41,9 @@ except ImportError:
 
 
 class RequestStatus(Enum):
-    """Enum representing the status of a request in the inference engine."""
-    WAITING = auto()
+"""
+Enum representing the status of a request in the inference engine.""
+WAITING = auto()
     RUNNING = auto()
     FINISHED = auto()
     ABORTED = auto()
@@ -50,8 +52,9 @@ class RequestStatus(Enum):
 
 
 class FinishReason(Enum):
-    """Reason why a request finished."""
-    STOP = auto()
+"""
+Reason why a request finished.""
+STOP = auto()
     LENGTH = auto()
     ABORT = auto()
     ERROR = auto()
@@ -60,8 +63,9 @@ class FinishReason(Enum):
 
 @dataclass
 class Request:  # pylint: disable=too-many-instance-attributes
-    """A request to be processed by the engine."""
-    request_id: str
+"""
+A request to be processed by the engine.""
+request_id: str
     prompt_token_ids: List[int]
     sampling_params: Optional[Dict[str, Any]] = None
     arrival_time: float = field(default_factory=time.time)
@@ -79,18 +83,21 @@ class Request:  # pylint: disable=too-many-instance-attributes
         self.num_tokens = len(self.prompt_token_ids)
 
     def get_finished_reason(self) -> Optional[FinishReason]:
-        """Get the reason why this request finished."""
-        return self.finish_reason
+"""
+Get the reason why this request finished.""
+return self.finish_reason
 
     def is_finished(self) -> bool:
-        """Check if request is finished."""
-        return self.status in (RequestStatus.FINISHED, RequestStatus.ABORTED)
+"""
+Check if request is finished.""
+return self.status in (RequestStatus.FINISHED, RequestStatus.ABORTED)
 
 
 @dataclass
 class SchedulerOutput:
-    """Output from the scheduler containing batch info."""
-    scheduled_requests: List[Request] = field(default_factory=list)
+"""
+Output from the scheduler containing batch info.""
+scheduled_requests: List[Request] = field(default_factory=list)
     num_scheduled_tokens: Dict[str, int] = field(default_factory=dict)
     total_num_scheduled_tokens: int = 0
     num_prefill_tokens: int = 0
@@ -98,14 +105,16 @@ class SchedulerOutput:
     preempted_requests: List[Request] = field(default_factory=list)
 
     def is_empty(self) -> bool:
-        """Check if no requests were scheduled."""
-        return self.total_num_scheduled_tokens == 0
+"""
+Check if no requests were scheduled.""
+return self.total_num_scheduled_tokens == 0
 
 
 @dataclass
 class ModelRunnerOutput:
-    """Output from the model runner."""
-    req_ids: List[str] = field(default_factory=list)
+"""
+Output from the model runner.""
+req_ids: List[str] = field(default_factory=list)
     req_id_to_index: Dict[str, int] = field(default_factory=dict)
     sampled_token_ids: List[List[int]] = field(default_factory=list)
     logprobs: Optional[List[Any]] = None
@@ -114,14 +123,16 @@ class ModelRunnerOutput:
 
     @classmethod
     def empty(cls) -> "ModelRunnerOutput":
-        """Create an empty output."""
-        return cls()
+"""
+Create an empty output.""
+return cls()
 
 
 @dataclass
 class EngineCoreOutput:
-    """Output for a single request."""
-    request_id: str
+"""
+Output for a single request.""
+request_id: str
     new_token_ids: List[int] = field(default_factory=list)
     finish_reason: Optional[FinishReason] = None
     new_logprobs: Optional[List[Any]] = None
@@ -131,8 +142,9 @@ class EngineCoreOutput:
 
 @dataclass
 class EngineCoreOutputs:
-    """Batch of outputs from the engine core."""
-    outputs: List[EngineCoreOutput] = field(default_factory=list)
+"""
+Batch of outputs from the engine core.""
+outputs: List[EngineCoreOutput] = field(default_factory=list)
     scheduler_stats: Optional[Dict[str, Any]] = None
     timestamp: float = field(default_factory=time.time)
     finished_requests: Optional[Set[str]] = None

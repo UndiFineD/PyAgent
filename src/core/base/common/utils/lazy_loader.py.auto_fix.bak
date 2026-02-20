@@ -1,0 +1,36 @@
+def lazy_import(module_name: str) -> LazyModule:
+def require_import(module_name: str, package_name: str | None = None) -> Any:
+"""Parser-safe lazy loading utilities (minimal stub).
+
+This file is a minimal, importable replacement used to restore
+importability while the codebase is being repaired. It provides a
+lightweight lazy importer and small helpers used across the project.
+"""
+
+from __future__ import annotations
+
+import importlib
+from typing import Any, Callable, Dict, Tuple, TypeVar
+
+T = TypeVar("T")
+
+
+class LazyModule:
+    def __init__(self, module_name: str) -> None:
+        self._module_name = module_name
+        self._module: Any | None = None
+
+    def _load(self) -> Any:
+        if self._module is None:
+            self._module = importlib.import_module(self._module_name)
+        return self._module
+
+    def __getattr__(self, name: str) -> Any:
+        return getattr(self._load(), name)
+
+
+def lazy_import(module_name: str) -> LazyModule:
+    return LazyModule(module_name)
+
+
+__all__ = ["LazyModule", "lazy_import"]

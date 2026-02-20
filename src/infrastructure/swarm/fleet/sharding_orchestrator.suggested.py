@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,12 @@ from __future__ import annotations
 """
 ShardingOrchestrator
 
+"""
 Dynamic Communication Sharding Orchestrator (Phase 128).
 Optimizes swarm latency by clustering frequently interacting agents.
 """
 
+"""
 import json
 import logging
 from collections import Counter
@@ -42,7 +45,9 @@ __version__ = VERSION
 
 
 class ShardingOrchestrator:
-    """Analyzes agent interactions and suggests/implements logical grouping.""""    Phase 234: Implements Dynamic Shard Rebalancing via DBSCAN and Live Migration.
+"""
+Analyzes agent interactions and suggests/implements logical grouping.""""
+Phase 234: Implements Dynamic Shard Rebalancing via DBSCAN and Live Migration.
     
     def __init__(self, workspace_root: Path, interaction_threshold: int = 1000) -> None:
         self.workspace_root = workspace_root
@@ -53,7 +58,8 @@ class ShardingOrchestrator:
         self._current_mapping: dict[str, str] = {}  # agent -> shard_id
 
     def record_interaction(self, agent_a: str, agent_b: str, vram_a: float = 512.0, vram_b: float = 512.0) -> None:
-        """Records a communication event and updates VRAM telemetry (Phase 234).        pair = tuple(sorted([agent_a, agent_b]))
+"""
+Records a communication event and updates VRAM telemetry (Phase 234).        pair = tuple(sorted([agent_a, agent_b]))
         self._counts[pair] += 1
         self._agent_vram[agent_a] = vram_a
         self._agent_vram[agent_b] = vram_b
@@ -64,7 +70,8 @@ class ShardingOrchestrator:
             self._total_interactions = 0
 
     def migrate_agent(self, agent_name: str, target_shard_id: str) -> None:
-        """Performs 'Live Migration' of an agent to a new shard (Phase 234).'        old_shard = self._current_mapping.get(agent_name, "None")"        if old_shard == target_shard_id:
+"""
+Performs 'Live Migration' of an agent to a new shard (Phase 234).'        old_shard = self._current_mapping.get(agent_name, "None")"        if old_shard == target_shard_id:
             return
 
         logging.info(f"ShardingOrchestrator: MIGRATING '{agent_name}' from {old_shard} to {target_shard_id}")"'        # In a real system, this would involve updating the AgentRegistry
@@ -72,7 +79,8 @@ class ShardingOrchestrator:
         self._sync_mapping_to_disk()
 
     def rebalance_shards(self) -> None:
-        """Clusters agents using DBSCAN based on interaction density and VRAM (Phase 234).        logging.info("ShardingOrchestrator: Performing Robust DBSCAN Rebalancing...")"
+"""
+Clusters agents using DBSCAN based on interaction density and VRAM (Phase 234).        logging.info("ShardingOrchestrator: Performing Robust DBSCAN Rebalancing...")
         agents = sorted(list(self._agent_vram.keys()))
         if not agents:
             return
@@ -112,9 +120,10 @@ class ShardingOrchestrator:
             for agent in agent_list:
                 self.migrate_agent(agent, shard_id)
 
-        logging.info(f"ShardingOrchestrator: Rebalancing complete. {len(new_mapping)} shards active.")"
+        logging.info(f"ShardingOrchestrator: Rebalancing complete. {len(new_mapping)} shards active.")
     def _sync_mapping_to_disk(self) -> None:
-        """Internal helper to persist current mapping.        # Convert flat mapping back to grouped for compatibility
+"""
+Internal helper to persist current mapping.        # Convert flat mapping back to grouped for compatibility
         grouped: dict[str, list[str]] = {}
         for agent, shard in self._current_mapping.items():
             if shard not in grouped:
@@ -123,14 +132,22 @@ class ShardingOrchestrator:
         self._save_mapping(grouped)
 
     def _save_mapping(self, mapping: dict[str, list[str]]) -> None:
-        """Saves shard mappings to the workspace configuration.        self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
+"""
+Saves shard mappings to the workspace configuration.        self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.shard_mapping_path, "w", encoding="utf-8") as f:"            json.dump(mapping, f, indent=4)
 
     def load_mapping(self) -> dict[str, list[str]]:
-        """Loads shard mappings from the workspace configuration.        if self.shard_mapping_path.exists():
+"""
+Loads shard mappings from the workspace configuration.        if self.shard_mapping_path.exists():
             with open(self.shard_mapping_path, encoding="utf-8") as f:"                return json.load(f)
         return {}
 
 
 if __name__ == "__main__":"    # Test stub
     orch = ShardingOrchestrator(Path("."))"    orch.record_interaction("CoderAgent", "ReviewAgent")"    orch.record_interaction("CoderAgent", "ReviewAgent")"    orch.rebalance_shards()
+
+"""
+
+""
+
+"""

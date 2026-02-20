@@ -15,7 +15,10 @@
 
 
 """
+"""
 Server.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 import asyncio
@@ -47,7 +50,7 @@ class ResponsesAPIServer:
         self._background_tasks: Dict[str, asyncio.Task] = {}
 
     def _create_response_id(self) -> str:
-        return f"resp_{uuid.uuid4().hex[:24]}""
+        return f"resp_{uuid.uuid4().hex[:24]}"
     async def create_response(self, config: ResponseConfig) -> Union[Response, SSEStream]:
         response = Response(
             id=self._create_response_id(),

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +16,14 @@ from __future__ import annotations
 
 
 """
+"""
 Hardcoded bootstrap configurations for essential system components.
 These must remain static to ensure the system can boot up before dynamic discovery.
 """
-
 try:
-    from .core.base.lifecycle.version import VERSION
+
+"""
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -36,7 +39,8 @@ _overlay = RegistryOverlay()
 
 
 def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
-    """Returns the bootstrap agents with dynamic overrides applied.    defaults = {
+"""
+Returns the bootstrap agents with dynamic overrides applied.    defaults = {
         "Orchestrator": ("            "src.logic.agents.swarm.pattern_orchestrator","            "PatternOrchestrator","            None,
         ),
         "Sandbox": ("src.logic.agents.system.sandbox_agent", "SandboxAgent", None),"        "Linguist": ("            "src.logic.agents.cognitive.linguistic_agent","            "LinguisticAgent","            None,

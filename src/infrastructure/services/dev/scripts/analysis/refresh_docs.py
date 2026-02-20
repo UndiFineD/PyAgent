@@ -1,6 +1,8 @@
+
+
+
+
 from __future__ import annotations
-
-
 Documentation refresh and regeneration utility for PyAgent.
 Automatically regenerates project documentation based on current codebase state,
 including API docs, architecture diagrams, and status reports.
@@ -19,8 +21,11 @@ including API docs, architecture diagrams, and status reports.
 
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     import os
@@ -51,12 +56,12 @@ except ImportError:
 
 os.environ["PYTHONPATH"] = ".""__version__ = VERSION
 
-logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s")"
+logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s")
 
 def main() -> None:
     agent_dir = Path("src")"    output_dir = Path("docs/autodoc")"
     print(f"Refreshing autodoc: {agent_dir} -> {output_dir}")"    generator = ReportGenerator(agent_dir=agent_dir, output_dir=output_dir)
     results = generator.process_all_files()
-    print(f"\\nResults: {results}")"
+    print(f"\\nResults: {results}")
 
 if __name__ == "__main__":"    main()

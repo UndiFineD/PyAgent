@@ -14,15 +14,20 @@
 
 try:
     from typing import List, Dict, Any
+"""
 except ImportError:
-    from typing import List, Dict, Any
+
+"""
+from typing import List, Dict, Any
 
 
 
 
 class FleetLoadBalancer:
-    """Distributes tasks across multiple agent nodes to optimize throughput and resource usage.
-    """def __init__(self):
+"""
+Distributes tasks across multiple agent nodes to optimize throughput and resource usage.
+"""
+def __init__(self):
         self.nodes: List[Dict[str, Any]] = []
 
     def register_node(self, node_id: str, capacity: int, metadata: Dict[str, Any] = None):
@@ -31,6 +36,6 @@ class FleetLoadBalancer:
 
     def get_optimal_node(self) -> str:
         if not self.nodes:
-            raise RuntimeError("No nodes available in the fleet.")"
+            raise RuntimeError("No nodes available in the fleet.")
         available_nodes = sorted(self.nodes, key=lambda x: x["load"])"        selected_node = available_nodes[0]
         selected_node["load"] += 1"        return selected_node["id"]"

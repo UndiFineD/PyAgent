@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.mcp.mcp_tool_server import adapt_tool_schema, discover_mcp_servers

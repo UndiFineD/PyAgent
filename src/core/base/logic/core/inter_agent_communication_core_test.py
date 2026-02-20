@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Tests for Inter-Agent Communication Core
+"""
+"""
+Tests for Inter-Agent Communication Core
+"""
+
 """
 import pytest
 
@@ -29,10 +33,12 @@ from src.core.base.logic.core.inter_agent_communication_core import (
 
 
 class TestInterAgentCommunicationCore:
-    """Test suite for inter-agent communication core."""
-    def test_agent_card_creation(self):
-        """Test agent card creation and validation."""
-        card = AgentCard(
+"""
+Test suite for inter-agent communication core.""
+def test_agent_card_creation(self):
+"""
+Test agent card creation and validation.""
+card = AgentCard(
             name="TestAgent",
             description="A test agent",
             version="1.0.0",
@@ -51,8 +57,9 @@ class TestInterAgentCommunicationCore:
         assert card.capabilities.push_notifications is True
 
     def test_message_creation(self):
-        """Test message creation and serialization."""
-        message = Message(
+"""
+Test message creation and serialization.""
+message = Message(
             content=[
                 TextPart(text="Hello, agent!"),
             ],
@@ -66,8 +73,9 @@ class TestInterAgentCommunicationCore:
 
     @pytest.mark.asyncio
     async def test_core_initialization(self):
-        """Test core initialization."""
-        comm_core = InterAgentCommunicationCore()
+"""
+Test core initialization.""
+comm_core = InterAgentCommunicationCore()
         try:
             assert comm_core.registered_agents == {}
             assert comm_core.active_tasks == {}

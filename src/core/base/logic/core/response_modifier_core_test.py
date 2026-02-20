@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.response_modifier_core import ResponseModificationRule, ModifiedResponse, ResponseModifierCore

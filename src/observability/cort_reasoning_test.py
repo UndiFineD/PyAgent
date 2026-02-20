@@ -14,8 +14,11 @@
 
 try:
     from unittest.mock import Mock
+"""
 except ImportError:
-    from unittest.mock import Mock
+
+"""
+from unittest.mock import Mock
 
 try:
     import inspect
@@ -30,7 +33,8 @@ except ImportError:
 
 
 class TestCoRTReasoning:
-    """Test cases for CoRT reasoning pipeline implementation.    @pytest.fixture
+"""
+Test cases for CoRT reasoning pipeline implementation.    @pytest.fixture
     def cort_core(self):
         mock_core = Mock()
         mock_core.evaluate_response.return_value = {"score": 0.9, "selected": "best_response"}"        def think_recursively_side_effect(query, **kwargs):
@@ -47,6 +51,6 @@ class TestCoRTReasoning:
     def test_dynamic_evaluation_engine(self, cort_core):
         responses = ["response1", "response2", "response3"]"        evaluation = cort_core.evaluate_response(responses)
         assert "score" in evaluation"        assert evaluation["score"] >= 0.0"        assert evaluation["score"] <= 1.0"    def test_adaptive_thinking_rounds(self, cort_core):
-        result = cort_core.think_recursively("test", complexity="high")"        assert result["rounds"] == 3"        assert result["final_answer"] == "solution""
+        result = cort_core.think_recursively("test", complexity="high")"        assert result["rounds"] == 3"        assert result["final_answer"] == "solution"
 
 """

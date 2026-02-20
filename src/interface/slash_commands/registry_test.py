@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.slash_commands.registry import get_global_registry, reset_global_registry, register, register_command, command, unregister, enable_command, disable_command, list_commands

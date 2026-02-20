@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ChangesPreviewMixin - Preview management and simple diff summary
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -49,7 +53,6 @@ FILE CONTENT SUMMARY:
 
 
 """
-
 Preview management logic for ChangesAgent"."
 
 try:
@@ -66,20 +69,25 @@ except ImportError:
 
 
 class ChangesPreviewMixin:
-""""Mixin for managing preview mode and changes.
+""""
+Mixin for managing preview mode and changes.
     def enable_preview_mode(self) -> None:
-""""Enable preview mode - changes won't be written to file.'        self._preview_mode = True
-        logging.info("Preview mode enabled")"
+""""
+Enable preview mode - changes won't be written to file.'        self._preview_mode = True
+        logging.info("Preview mode enabled")
     def disable_preview_mode(self) -> None:
-""""Disable preview mode.        self._preview_mode = False
-        logging.info("Preview mode disabled")"
+""""
+Disable preview mode.        self._preview_mode = False
+        logging.info("Preview mode disabled")
     def get_preview(self) -> str:
-""""Get the preview of changes without applying them.        return self._preview_content if getattr(self, "_preview_content", ") else getattr(self, "current_content", ")"
+""""
+Get the preview of changes without applying them.        return self._preview_content if getattr(self, "_preview_content", ") else getattr(self, "current_content", ")
     def preview_changes(self, content: str) -> Dict[str, Any]:
-""""Preview changes and return a summary.        self._preview_content = content
+""""
+Preview changes and return a summary.        self._preview_content = content
 
         # Calculate diff statistics
-        original_lines = getattr(self, "previous_content", ").split("\\n")"        new_lines = content.split("\\n")"
+        original_lines = getattr(self, "previous_content", ").split("\\n")"        new_lines = content.split("\\n")
         added = len([line for line in new_lines if line and line not in original_lines])
         removed = len([line for line in original_lines if line and line not in new_lines])
 
@@ -100,17 +108,22 @@ except ImportError:
 
 
 class ChangesPreviewMixin:
-""""Mixin for managing preview mode and changes.
+""""
+Mixin for managing preview mode and changes.
     def enable_preview_mode(self) -> None:
-""""Enable preview mode - changes won't be written to file.'   "     self._preview_mode = True"        logging.info("Preview mode enabled")"
+""""
+Enable preview mode - changes won't be written to file.'   "     self._preview_mode = True"        logging.info("Preview mode enabled")
     def disable_preview_mode(self) -> None:
-""""Disable preview mode. "       self._preview_mode = False"        logging.info("Preview mode disabled")"
+""""
+Disable preview mode. "       self._preview_mode = False"        logging.info("Preview mode disabled")
     def get_preview(self) -> str:
-""""Get the preview of changes without applying them.        return self._preview_content if getattr(self, "_preview_content", ") else "getattr(self, "current_content", ")"
+""""
+Get the preview of changes without applying them.        return self._preview_content if getattr(self, "_preview_content", ") else "getattr(self, "current_content", ")"
     def preview_changes(self, content: str) -> Dict[str, Any]:
-""""Preview changes and return a summary."        self._preview_content = content"
+""""
+Preview changes and return a summary."        self._preview_content = content"
         # Calculate diff statistics
-        original_lines = getattr(self, "previous_content", ").split("\\n")"        new_lines = content.split("\\n")"
+        original_lines = getattr(self, "previous_content", ").split("\\n")"        new_lines = content.split("\\n")
         added = len([line for line in new_lines if line and line not in original_lines])
         removed = len([line for line in original_lines if line and line not in new_lines])
 

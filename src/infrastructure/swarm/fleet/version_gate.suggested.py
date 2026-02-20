@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,12 @@ from __future__ import annotations
 """
 VersionGate
 
+"""
 Unified Version Gatekeeper for PyAgent Fleet.
 Handles semantic versioning checks and capability validation.
 """
 
+"""
 import logging
 
 from src.core.base.lifecycle.version import VERSION
@@ -64,4 +67,7 @@ class VersionGate:
 
     @staticmethod
     def filter_by_capability(available: list[str], required: list[str]) -> list[str]:
-        """Filters a list of providers by required capabilities.        return [p for p in available if all(cap in p for cap in required)]
+"""
+Filters a list of providers by required capabilities.        return [p for p in available if all(cap in p for cap in required)]
+
+"""

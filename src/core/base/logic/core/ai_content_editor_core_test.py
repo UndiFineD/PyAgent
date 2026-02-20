@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.ai_content_editor_core import ContentEditRequest, ContentEditResult, ContentTemplate, AIContentEditorCore

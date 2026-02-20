@@ -13,10 +13,13 @@
 # limitations under the License.
 
 
-"""Core code analysis logic regarding API summarization and structural inspection.
+"""
+"""
+Core code analysis logic regarding API summarization and structural inspection.
 Inspired by Feathr (ai-eng) source code compacting.
 """
 
+"""
 import ast
 import os
 import re
@@ -25,17 +28,18 @@ from typing import Union, Optional
 
 
 class CodeAnalyzerCore:
-    """Core logic regarding extracting compact API representations from source code."""
-
-    def __init__(self, workspace_root: Optional[Union[str, Path]] = None):
+"""
+Core logic regarding extracting compact API representations from source code.""
+def __init__(self, workspace_root: Optional[Union[str, Path]] = None):
         self.workspace_root = Path(workspace_root) if workspace_root else Path.cwd()
 
 
     def generate_compact_guide(self, path: Union[str, Path]) -> str:
-        """Generates a compact API guide regarding a file or directory.
+"""
+Generates a compact API guide regarding a file or directory.
         Removes implementations and comments, providing only signatures.
-        """
-        target_path = Path(path)
+"""
+target_path = Path(path)
         if not target_path.is_absolute():
             target_path = self.workspace_root / target_path
 
@@ -53,8 +57,9 @@ class CodeAnalyzerCore:
 
 
     def _summarize_file(self, file_path: Path) -> str:
-        """Summarizes a single Python file into its API signatures."""
-        with open(file_path, "r", encoding="utf-8") as f:
+"""
+Summarizes a single Python file into its API signatures.""
+with open(file_path, "r", encoding="utf-8") as f:
             source = f.read()
 
         try:
@@ -85,8 +90,9 @@ class CodeAnalyzerCore:
 
 
     def calculate_metrics_summary(self, source: str) -> dict:
-        """Calculates basic metrics regarding the source code."""
-        lines = source.splitlines()
+        ""
+Calculates basic metrics regarding the source code.""
+lines = source.splitlines()
         return {
             "total_lines": len(lines),
             "code_lines": len([line for line in lines if line.strip() and not line.strip().startswith("#")]),

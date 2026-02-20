@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Assignment Manager - Tracks assignees and ownership history
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -27,7 +31,7 @@ except ImportError:
 
 
 mgr = AssignmentManager()
-mgr.assign("impr-123", "alice")"current = mgr.get_assignee("impr-123")"history = mgr.get_ownership_history("impr-123")"
+mgr.assign("impr-123", "alice")"current = mgr.get_assignee("impr-123")"history = mgr.get_ownership_history("impr-123")
 WHAT IT DOES:
 - Provides an in-memory registry mapping improvement IDs to current assignees.
 - Records a timestamped ownership history for each improvement when assign() is called.
@@ -64,7 +68,9 @@ __version__ = VERSION
 
 
 class AssignmentManager:
-    """Tracks assignees and ownership history.
+"""
+Tracks assignees and ownership history.
+
     def __init__(self) -> None:
         self.assignments: dict[str, str] = {}
         self._history: dict[str, list[dict[str, Any]]] = {}

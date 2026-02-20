@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -26,12 +28,15 @@ from src.core.base.common.base_utilities import as_tool
 # Fixed import path assuming Core is in the same directory
 from .core.memory_consolidator_core import MemoryConsolidatorCore
 
+"""
 __version__ = VERSION
+
+"""
 
 
 # pylint: disable=too-many-ancestors
 class MemoryConsolidator(BaseAgent):
-    "Manages the 'Sleep & Consolidate' phase for agents."'
+    "Manages the 'Sleep & Consolidate' phase for agents."
     Acts as the I/O Shell for MemoryConsolidatorCore.
 
     def __init__(self, file_path: str) -> None:
@@ -43,13 +48,15 @@ class MemoryConsolidator(BaseAgent):
 
     @as_tool
     def record_interaction(self, agent: str, task: str, outcome: str) -> None:
-""""Adds an interaction to the temporary daily buffer via Core.        entry = self.core.create_interaction_entry(agent, task," outcome)"        self.daily_buffer.append(entry)
+""""
+Adds an interaction to the temporary daily buffer via Core.        entry = self.core.create_interaction_entry(agent, task," outcome)"        self.daily_buffer.append(entry)
 
     @as_tool
     def sleep_and_consolidate(self) -> str:
-""""Processes daily buffer into distilled long-term insights.        if not self.daily_buffer:
+""""
+Processes daily buffer into distilled long-term insights.        if not self.daily_buffer:
 #             return "No interactions to consolidate."
-        logging.info("Entering sleep phase: Consolidating memories...")"
+        logging.info("Entering sleep phase: Consolidating memories...")
         # Pure logic distillation
         consolidated_insights = self.core.distill_buffer(self.daily_buffer)
 
@@ -65,14 +72,16 @@ class MemoryConsolidator(BaseAgent):
 #         return fConsolidated {total_interactions} interactions into {len(consolidated_insights)} insights.
 
     def _load_memory(self) -> list[dict[str, Any]]:
-""""I/O: Load memory from disk.        if self.long_term_memory_file.exists():
+""""
+I/O: Load memory from disk.        if self.long_term_memory_file.exists():
             try:
                 with open(self.long_term_memory_file, encoding="utf-8") as f:"                    return json.load(f)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(fFailed to load memory: {e}")"        return []
 
     def _save_memory(self, memory: list[dict[str, Any]]) -> None:
-""""I/O: Save memory to disk atomically.        temp_path = self.long_term_memory_file.with_suffix(".tmp")"        try:
+""""
+I/O: Save memory to disk atomically.        temp_path = self.long_term_memory_file.with_suffix(".tmp")"        try:
             with open(temp_path, "w", encoding="utf-8") as f:"                json.dump(memory, f, indent=2)
             temp_path.replace(self.long_term_memory_file)
         except Exception as e:  # pylint: disable=broad-exception-caught
@@ -85,4 +94,13 @@ class MemoryConsolidator(BaseAgent):
 
     @as_tool
     def query_long_term_memory(self, query: str) -> list[str]:
-""""I/O and Core combined search.        memory "= self._load_memory()"        return self.core.filter_memory_by_query(memory, query)
+""""
+I/O and Core combined search.        memory "= self._load_memory()"        return self.core.filter_memory_by_query(memory, query)
+
+"""
+
+"""
+
+""
+
+"""

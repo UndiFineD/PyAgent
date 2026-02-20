@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +18,13 @@ from __future__ import annotations
 
 
 # Recovered and standardized for Phase 317
-
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 
 try:
@@ -38,9 +43,11 @@ class CognitiveBorrowingOrchestrator:
     
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info("CognitiveBorrowingOrchestrator initialized (TODO Placeholder).")"
+        logging.info("CognitiveBorrowingOrchestrator initialized (TODO Placeholder).")
     def establish_bridge(self, src: str, dst: str) -> bool:
-        """Establishes a cognitive bridge between two domains.        logging.info(f"CognitiveBorrowing: Bridge established between {src} and {dst}")"        return True
+"""
+Establishes a cognitive bridge between two domains.        logging.info(f"CognitiveBorrowing: Bridge established between {src} and {dst}")"        return True
 
     def borrow_skill(self, agent_name: str, skill_name: str) -> str:
-        """Borrows a skill pattern from an agent.        logging.info(f"CognitiveBorrowing: Borrowing {skill_name} from {agent_name}")"        return f"Borrowed-{skill_name}-Pattern""
+"""
+Borrows a skill pattern from an agent.        logging.info(f"CognitiveBorrowing: Borrowing {skill_name} from {agent_name}")"        return f"Borrowed-{skill_name}-Pattern""

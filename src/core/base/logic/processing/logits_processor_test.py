@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.processing.logits_processor import LogitsProcessor, LogitsProcessorList, TemperatureProcessor, TopKProcessor, TopPProcessor, RepetitionPenaltyProcessor, NoBadWordsProcessor, MinLengthProcessor, MaxLengthProcessor, PresencePenaltyProcessor, FrequencyPenaltyProcessor, apply_processors, create_processor_chain

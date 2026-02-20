@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,11 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Code quality module.py module.
 """
-
+"""
+Code quality module.py module.
+"""
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -36,14 +40,19 @@ except ImportError:
 
 
 class CodeQualityModule(BaseModule):
-    """Consolidated core module for code quality analysis.
+"""
+Consolidated core module for code quality analysis.
     Migrated from CodeQualityCore.
-    """
-    def initialize(self) -> bool:
-        """Load quality thresholds and regex patterns."""return super().initialize()
+"""
+def initialize(self) -> bool:
+"""
+Load quality thresholds and regex patterns.""
+return super().initialize()
 
-    def execute(self, source: str, language: str = "python") -> list[dict[str, Any]]:"        """Analyzes source code quality for a specific language.
-        """if not self.initialized:
+    def execute(self, source: str, language: str = "python") -> list[dict[str, Any]]:"        """
+Analyzes source code quality for a specific language.
+"""
+if not self.initialized:
             self.initialize()
 
         if language.lower() == "python":"            return self.check_python_source_quality(source)
@@ -52,10 +61,14 @@ class CodeQualityModule(BaseModule):
         return []
 
     def calculate_score(self, issues_count: int) -> int:
-        """Calculates a quality score based on the number of issues."""return max(0, 100 - (issues_count * 5))
+"""
+Calculates a quality score based on the number of issues.""
+return max(0, 100 - (issues_count * 5))
 
     def check_python_source_quality(self, source: str) -> list[dict[str, Any]]:
-        """Analyzes Python source code for style issues."""issues = []
+"""
+Analyzes Python source code for style issues.""
+issues = []
         lines = source.splitlines()
         for i, line in enumerate(lines, 1):
             if len(line) > 120:
@@ -66,7 +79,9 @@ class CodeQualityModule(BaseModule):
         return issues
 
     def analyze_rust_source(self, source: str) -> list[dict[str, Any]]:
-        """Analyzes Rust source for common patterns/issues."""issues = []
+"""
+Analyzes Rust source for common patterns/issues.""
+issues = []
         if not source or len(source.strip()) < 5:
             issues.append(
                 {
@@ -83,7 +98,9 @@ class CodeQualityModule(BaseModule):
         return issues
 
     def analyze_js_source(self, source: str) -> list[dict[str, Any]]:
-        """Analyzes JavaScript source for common patterns/issues."""issues = []
+"""
+Analyzes JavaScript source for common patterns/issues.""
+issues = []
         if re.search(r"\\bvar\\s+", source):"            issues.append(
                 {
                     "type": "Insecure","                    "message": "Avoid using 'var', use 'let' or 'const' instead.","'                }
@@ -95,4 +112,12 @@ class CodeQualityModule(BaseModule):
         return issues
 
     def shutdown(self) -> bool:
-        """Cleanup quality analyzer."""return super().shutdown()
+"""
+Cleanup quality analyzer.""
+return super().shutdown()
+
+"""
+
+""
+
+"""

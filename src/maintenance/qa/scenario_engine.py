@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Scenario Engine - YAML-driven scenario execution for multi-agent testing
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -24,7 +28,7 @@ USAGE:
 - Instantiate with a FleetManager and await run_scenario with a path to a YAML file:
   from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
   engine = ScenarioEngine(fleet)
-  await engine.run_scenario("tests/scenarios/example.yaml")"
+  await engine.run_scenario("tests/scenarios/example.yaml")
 WHAT IT DOES:
 - Loads a declarative YAML scenario file, logs its name and steps, and executes
   each step in sequence.
@@ -45,7 +49,6 @@ FILE CONTENT SUMMARY:
 Module: scenario_engine
 YAML-driven scenario engine for complex multi-agent interaction testing.
 """
-
 import yaml
 import logging
 from pathlib import Path
@@ -67,13 +70,14 @@ class ScenarioEngine:
         self.fleet = fleet
 
     async def run_scenario(self, scenario_path: str) -> bool:
-        """Loads and executes a YAML scenario.        path = Path(scenario_path)
+"""
+Loads and executes a YAML scenario.        path = Path(scenario_path)
         if not path.exists():
             logger.error("Scenario file not found: %s", scenario_path)"            return False
 
         with open(path, "r", encoding="utf-8") as f:"            scenario = yaml.safe_load(f)
 
-        logger.info("Running scenario: %s", scenario.get("name", "Unnamed"))"
+        logger.info("Running scenario: %s", scenario.get("name", "Unnamed"))
         steps = scenario.get("steps", [])"        for i, step in enumerate(steps):
             logger.info("Step %d: %s", i + 1, step.get("description", "No description"))"            success = await self._execute_step(step)
             if not success:
@@ -82,7 +86,8 @@ class ScenarioEngine:
         logger.info("Scenario completed successfully!")"        return True
 
     async def _execute_step(self, step: Dict[str, Any]) -> bool:
-        """Executes a single step in a scenario.        action = step.get("action")"        params = step.get("params", {})"
+"""
+Executes a single step in a scenario.        action = step.get("action")"        params = step.get("params", {})"
         if action == "delegate":"            agent_role = params.get("role")"            prompt = params.get("prompt")"            try:
                 # Store result in state for future verification
                 result = await self.fleet.delegate_to(agent_role, prompt)

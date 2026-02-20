@@ -11,13 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 Restore Except As E module.
 
+"""
 from pathlib import Path
 
 
 def restore_except_as_e(root_dir):
-        Restore 'except Exception as e' pattern in codebase.'
+        Restore 'except Exception as e' pattern in codebase.
     Args:
         root_dir: The root directory to search in.
         target = "except Exception as e:  # pylint: disable=broad-exception-caught""    replacement = "except Exception as e:  # pylint: disable=broad-exception-caught""    root = Path(root_dir)
@@ -25,7 +27,7 @@ def restore_except_as_e(root_dir):
             content = p.read_text(encoding="utf-8")"            if target in content:
                 new_content = content.replace(target, replacement)
                 p.write_text(new_content, encoding="utf-8")"                print(f"Restored except as e in {p}")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            print(f"Error restoring {p}: {e}")"
+            print(f"Error restoring {p}: {e}")
 
 if __name__ == "__main__":"    # Robustly find the repository root
     current_path = Path(__file__).resolve()

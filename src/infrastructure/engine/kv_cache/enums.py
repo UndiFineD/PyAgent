@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Enums.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 try:
@@ -25,7 +28,8 @@ except ImportError:
 
 
 class CacheGroupType(Enum):
-    """Type of KV cache group.
+"""
+Type of KV cache group.
     FULL_ATTENTION = auto()
     SLIDING_WINDOW = auto()
     CROSS_ATTENTION = auto()
@@ -36,7 +40,8 @@ class CacheGroupType(Enum):
 
 
 class AllocationStrategy(Enum):
-    """Block allocation strategy.
+"""
+Block allocation strategy.
     GREEDY = auto()  # Allocate as needed
     PREDICTIVE = auto()  # Pre-allocate based on expected length
     CONSERVATIVE = auto()  # Minimal allocation, grow on demand
@@ -45,8 +50,11 @@ class AllocationStrategy(Enum):
 
 
 class EvictionPolicy(Enum):
-    """Block eviction policy.
+"""
+Block eviction policy.
     LRU = auto()  # Least recently used
     ARC = auto()  # Adaptive replacement cache
     PRIORITY = auto()  # Priority-based eviction
     FREQUENCY = auto()  # Least frequently used
+
+"""

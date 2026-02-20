@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: ComplianceResult dataclass."""
+"""
+"""
+Types: ComplianceResult dataclass.""
 
+"""
 from dataclasses import dataclass, field
 
 try:
@@ -33,15 +37,17 @@ __version__ = VERSION
 
 @dataclass
 class ComplianceResult:
-    """Result of compliance checking.
+"""
+Result of compliance checking.
+
 
     Attributes:
         category: Compliance category checked.
         passed: Whether the check passed.
         issues: List of compliance issues found.
         recommendations: Recommendations for fixing issues.
-    """
-    category: ComplianceCategory
+    ""
+category: ComplianceCategory
     passed: bool
     issues: list[str] = field(default_factory=list)
     recommendations: list[str] = field(default_factory=list)

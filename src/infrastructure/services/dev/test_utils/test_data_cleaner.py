@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 import logging
 import shutil
 from collections.abc import Callable
@@ -32,8 +32,9 @@ __version__ = VERSION
 
 
 class TestDataCleaner:
-    """Utilities for cleaning up test data.""""
-    Manages cleanup of test artifacts with configurable strategies.
+"""
+Utilities for cleaning up test data.""""
+Manages cleanup of test artifacts with configurable strategies.
 
     Example:
         cleaner=TestDataCleaner()
@@ -44,8 +45,9 @@ class TestDataCleaner:
     __test__ = False
 
     def __init__(self, strategy: CleanupStrategy = CleanupStrategy.IMMEDIATE) -> None:
-        """Initialize cleaner.""""
-        Args:
+"""
+Initialize cleaner.""""
+Args:
             strategy: Default cleanup strategy.
                 self.strategy = strategy
         self._paths: list[tuple[Path, bool]] = []
@@ -54,27 +56,31 @@ class TestDataCleaner:
         self._cleanup_done = False
 
     def register_path(self, path: Path, recursive: bool = True) -> None:
-        """Register directory for cleanup.""""
-        Args:
+"""
+Register directory for cleanup.""""
+Args:
             path: Directory path.
             recursive: Whether to remove recursively.
                 self._paths.append((path, recursive))
 
     def register_file(self, path: Path) -> None:
-        """Register file for cleanup.""""
-        Args:
+"""
+Register file for cleanup.""""
+Args:
             path: File path.
                 self._files.append(path)
 
     def register_callback(self, callback: Callable[[], None]) -> None:
-        """Register cleanup callback.""""
-        Args:
+"""
+Register cleanup callback.""""
+Args:
             callback: Function to call during cleanup.
                 self._callbacks.append(callback)
 
     def cleanup_all(self, force: bool = False) -> int:
-        """Clean up all registered resources.""""
-        Args:
+"""
+Clean up all registered resources.""""
+Args:
             force: Force cleanup regardless of strategy.
 
         Returns:
@@ -91,7 +97,7 @@ class TestDataCleaner:
                     file_path.unlink()
                     cleaned += 1
             except OSError as e:
-                logging.warning(f"Failed to clean file {file_path}: {e}")"
+                logging.warning(f"Failed to clean file {file_path}: {e}")
         # Clean directories
         for path, recursive in self._paths:
             try:
@@ -102,20 +108,28 @@ class TestDataCleaner:
                         path.rmdir()
                     cleaned += 1
             except OSError as e:
-                logging.warning(f"Failed to clean path {path}: {e}")"
+                logging.warning(f"Failed to clean path {path}: {e}")
         # Run callbacks
         for callback in self._callbacks:
             try:
                 callback()
                 cleaned += 1
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.warning(f"Cleanup callback failed: {e}")"
+                logging.warning(f"Cleanup callback failed: {e}")
         self._cleanup_done = True
         return cleaned
 
     def __enter__(self) -> TestDataCleaner:
-        """Context manager entry.        return self
+"""
+Context manager entry.        return self
 
     def __exit__(self, *args: Any) -> None:
-        """Context manager exit - perform cleanup.        if self.strategy == CleanupStrategy.IMMEDIATE:
+"""
+Context manager exit - perform cleanup.        if self.strategy == CleanupStrategy.IMMEDIATE:
             self.cleanup_all()
+
+"""
+
+""
+
+"""

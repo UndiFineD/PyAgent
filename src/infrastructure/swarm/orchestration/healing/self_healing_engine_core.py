@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 
 """
+"""
 Self healing engine core.py module.
 """
 
+"""
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
@@ -35,7 +38,8 @@ __version__ = VERSION
 
 
 class FailureType:
-    """Enumeration of swarm failure types.    SYNTAX_ERROR = "fix_syntax""    DEPENDENCY_ERROR = "install_dependency""    CONFIG_ERROR = "check_config""    API_MISMATCH = "verify_api_compatibility""    STATE_CORRUPTION = "fix_state_corruption""    CONTEXT_LOSS = "restore_context""    UNKNOWN = "manual_review""
+"""
+Enumeration of swarm failure types.    SYNTAX_ERROR = "fix_syntax""    DEPENDENCY_ERROR = "install_dependency""    CONFIG_ERROR = "check_config""    API_MISMATCH = "verify_api_compatibility""    STATE_CORRUPTION = "fix_state_corruption""    CONTEXT_LOSS = "restore_context""    UNKNOWN = "manual_review"
 
 
 class SelfHealingEngineCore:
@@ -43,7 +47,8 @@ class SelfHealingEngineCore:
     Decides what kind of fix is needed based on the traceback.
     
     def analyze_failure(self, agent_name: str, tool_name: str, error_msg: str, tb: str) -> dict[str, Any]:
-        """Analyzes a failure and suggests a strategy.        # Rust-accelerated strategy detection
+"""
+Analyzes a failure and suggests a strategy.        # Rust-accelerated strategy detection
         if HAS_RUST:
             try:
                 strategy = rc.analyze_failure_strategy_rust(tb)  # type: ignore[attr-defined]
@@ -66,4 +71,6 @@ class SelfHealingEngineCore:
             "agent": agent_name,"            "tool": tool_name,"            "error": error_msg,"            "strategy": strategy,"            "is_critical": "Registry" in agent_name or "Fleet" in agent_name,"        }
 
     def format_healing_report(self, history: list[dict[str, Any]]) -> str:
-        """Standardized reporting logic.        return f"Self-Healing Engine: {len(history)} failures detected and queued for repair.""
+"""
+Standardized reporting logic.        return f"Self-Healing Engine: {len(history)} failures detected and queued for repair."
+"""

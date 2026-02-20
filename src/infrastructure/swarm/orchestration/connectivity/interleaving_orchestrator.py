@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Interleaving orchestrator.py module.
 """
 
+"""
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -41,17 +44,17 @@ class InterleavingOrchestrator:
 
     def execute_interleaved_task(self, task: str) -> str:
                 Executes a task by interleaving different agent capabilities based on dynamic complexity analysis.
-                logging.info(f"InterleavingOrchestrator: Beginning interleaved execution for: {task}")"
+                logging.info(f"InterleavingOrchestrator: Beginning interleaved execution for: {task}")
         # 1. Complexity Assessment (Uses a lightweight reasoning step)
         complexity_score = self._assess_complexity(task)
-        logging.info(f"Complexity Score: {complexity_score}/10")"
+        logging.info(f"Complexity Score: {complexity_score}/10")
         # 2. Strategy Selection
         strategy = self._select_strategy(complexity_score)
 
         # 3. Interleaved Execution
         results = []
-        for stage in strategy["stages"]:"            agent_tier = stage["tier"]"            phase = stage["phase"]"
-            logging.info(f"Interleaving: Routing {phase} to {agent_tier} model tier.")"
+        for stage in strategy["stages"]:"            agent_tier = stage["tier"]"            phase = stage["phase"]
+            logging.info(f"Interleaving: Routing {phase} to {agent_tier} model tier.")
             # Simulate routing to different 'tiers' in FleetManager'            # Tier 1: Small/Fast (Flash), Tier 2: Mid (Pro), Tier 3: Ultra/Deep Reasoning
             coro = self.fleet.call_by_capability(f"{phase}.process", task=task, tier=agent_tier)"            import asyncio
 
@@ -63,9 +66,9 @@ class InterleavingOrchestrator:
                     res = loop.run_until_complete(coro)
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 coro.close()
-                res = f"[ERROR] {phase} process""
-            results.append(f"### {phase} ({agent_tier} tier)\\n{res}\\n")"
-        return "\\n".join(results)"
+                res = f"[ERROR] {phase} process"
+            results.append(f"### {phase} ({agent_tier} tier)\\n{res}\\n")
+        return "\\n".join(results)
     def _assess_complexity(self, task: str) -> int:
                 Fast heuristic assessment of task complexity.
                 score = 1

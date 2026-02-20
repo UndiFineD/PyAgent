@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.testing.framework import ScenarioResult, TestType, TestStatus, TestResult, TestScenario, TestSuite, AgentTestingPyramidCore, ScenarioTestingEngine, PromptVersioningSystem, EvaluationNotebookSystem, assert_equal, run_scenario

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_coder.py
 """
 
+"""
 from collections.abc import Callable
 from dataclasses import dataclass
 
@@ -39,10 +42,10 @@ __version__ = VERSION
 
 @dataclass
 class StyleRule:
-    """A configurable code style rule.
-    """
-
-    name: str
+"""
+A configurable code style rule.
+"""
+name: str
     pattern: str
     message: str
     severity: StyleRuleSeverity = StyleRuleSeverity.WARNING

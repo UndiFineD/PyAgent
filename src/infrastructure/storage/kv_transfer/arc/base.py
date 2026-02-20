@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,14 @@ from __future__ import annotations
 
 
 """
+"""
 Phase 45: ARC Offload Base
 Abstract base for offloading managers.
 """
-
 try:
-    from abc import ABC, abstractmethod
+
+"""
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -45,23 +48,29 @@ if TYPE_CHECKING:
 
 
 class OffloadingManager(ABC):
-    """Abstract base for offloading managers.
+"""
+Abstract base for offloading managers.
     @abstractmethod
     def lookup(self, block_hashes: list[BlockHash]) -> int:
-        """Look up blocks, return hit count.        pass
+"""
+Look up blocks, return hit count.        pass
 
     @abstractmethod
     def prepare_load(self, block_hashes: list[BlockHash]) -> LoadStoreSpec:
-        """Prepare to load blocks.        pass
+"""
+Prepare to load blocks.        pass
 
     @abstractmethod
     def touch(self, block_hashes: list[BlockHash]) -> None:
-        """Update access recency for blocks.        pass
+"""
+Update access recency for blocks.        pass
 
     @abstractmethod
     def complete_load(self, block_hashes: list[BlockHash]) -> None:
-        """Complete load operation.        pass
+"""
+Complete load operation.        pass
 
     @abstractmethod
     def prepare_store(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
-        """Prepare to store blocks, returns None if cannot make space.        pass
+"""
+Prepare to store blocks, returns None if cannot make space.        pass

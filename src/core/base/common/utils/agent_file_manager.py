@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,9 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Manager for agent files and discovery.
+"""
+"""
+Manager for agent files and discovery.
 """
 
+"""
 import fnmatch
 import hashlib
 import logging
@@ -30,9 +34,9 @@ logger = logging.getLogger("pyagent.file_manager")
 
 
 class AgentFileManager:
-    """Manages file discovery, filtering, and snapshots for the Agent."""
-
-    SUPPORTED_EXTENSIONS = {".py", ".sh", ".js", ".ts", ".go", ".rb"}
+"""
+Manages file discovery, filtering, and snapshots for the Agent.""
+SUPPORTED_EXTENSIONS = {".py", ".sh", ".js", ".ts", ".go", ".rb"}
 
     def __init__(
         self,
@@ -46,8 +50,9 @@ class AgentFileManager:
 
 
     def find_code_files(self, max_files: Optional[int] = None) -> List[Path]:
-        """Finds all code files relevant to the current agent context."""
-        found: List[Path] = []
+"""
+Finds all code files relevant to the current agent context.""
+found: List[Path] = []
 
         if not self.repo_root.exists():
             return []
@@ -93,11 +98,12 @@ class AgentFileManager:
 
 
     def create_snapshot(self, file_path: Path) -> Optional[str]:
-        """Creates a timestamped snapshot of a file.
+"""
+Creates a timestamped snapshot of a file.
 
         Returns a snapshot id string, or None on failure.
-        """
-        try:
+"""
+try:
             if not file_path.exists():
                 return None
             snapshot_dir = self.repo_root / ".agent_snapshots"
@@ -114,11 +120,12 @@ class AgentFileManager:
 
 
     def restore_from_snapshot(self, file_path: Path, snapshot_id: str) -> bool:
-        """Restores a file from a snapshot.
+"""
+Restores a file from a snapshot.
 
         Returns True on success, False otherwise.
-        """
-        try:
+"""
+try:
             snapshot_dir = self.repo_root / ".agent_snapshots"
             matches = list(snapshot_dir.glob(f"{snapshot_id}_{file_path.name}"))
             if not matches:

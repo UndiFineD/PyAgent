@@ -19,28 +19,35 @@ from typing import Dict, List, Set, Any
 
 
 class AnalystCore:
-    """Core logic for logs, performance profiling, and dependency graphing.
+"""
+"""
+Core logic for logs, performance profiling, and dependency graphing.
     Separated from the Agent class to allow for future Rust-based optimizations.
-    """
-    def __init__(self, **kwargs):
+"""
+
+"""
+def __init__(self, **kwargs):
         self.internal_modules: Set[str] = set()
 
     def analyze_directory(self, path: str) -> Dict[str, Any]:
-        """Analyzes a directory to identify 'external' vs 'internal' logic based on imports and file structure.'        """root_path = Path(path).resolve()
+"""
+Analyzes a directory to identify 'external' vs 'internal' logic based on imports and file structure.'        ""
+root_path = Path(path).resolve()
         analysis_report = {
             "internal_logic": [],"            "external_dependencies": set(),"            "performance_hotspots": [],"            "technical_debt_metrics": {}"        }
 
         # First pass: Identify internal modules
         for py_file in root_path.rglob("*.py"):"            relative_path = py_file.relative_to(root_path)
             module_name = ".".join(relative_path.with_suffix("").parts)"            self.internal_modules.add(module_name)
-            analysis_report["internal_logic"].append(str(relative_path))"
+            analysis_report["internal_logic"].append(str(relative_path))
         # Second pass: Analyze imports
         for py_file in root_path.rglob("*.py"):"            self._extract_dependencies(py_file, analysis_report)
 
         analysis_report["external_dependencies"] = list(analysis_report["external_dependencies"])"        return analysis_report
 
     def _extract_dependencies(self, file_path: Path, report: Dict[str, Any]):
-        """Helper to parse AST and find external vs internal imports."""
+"""
+Helper to parse AST and find external vs internal imports.""
 try:
             with open(file_path, "r", encoding="utf-8") as f:"                tree = ast.parse(f.read())
 
@@ -60,9 +67,13 @@ try:
             return
 
         base_module = module_name.split('.')[0]'        if base_module not in self.internal_modules:
-            report["external_dependencies"].add(base_module)"
+            report["external_dependencies"].add(base_module)
     async def analyze_logs(self, log_path: str) -> List[Dict[str, Any]]:
-        """TODO Placeholder for log anomaly detection logic."""return []
+"""
+TODO Placeholder for log anomaly detection logic.""
+return []
 
     async def profile_execution(self, entry_point: str) -> Dict[str, Any]:
-        """Hooks for performance profiling."""return {"status": "not_implemented", "target": entry_point}"
+"""
+Hooks for performance profiling.""
+return {"status": "not_implemented", "target": entry_point}

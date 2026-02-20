@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,14 @@ from __future__ import annotations
 
 
 """
+"""
 FractalOrchestrator: Manages self-similar sub-swarm structures.
 Handles recursive task delegation to specialized fleet clusters.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -52,10 +55,11 @@ class FractalOrchestrator:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.sub_swarms: Dict[str, List[str]] = {}
-        logging.info(f"FractalOrchestrator v{VERSION} initialized.")"
+        logging.info(f"FractalOrchestrator v{VERSION} initialized.")
     def execute_fractal_task(self, task: str) -> str:
-        """Executes a task by recursively decomposing it into sub-tasks.        logging.info(f"Fractal: Executing task '{task}'")"'        return f"Fractal Decomposition: Depth 1: Analyzing '{task[:20]}...'""'
-    def create_sub_swarm(self, parent_task_id: str, required_capabilities: List[str]) -> str:
+"""
+Executes a task by recursively decomposing it into sub-tasks.        logging.info(f"Fractal: Executing task '{task}'")"'        return f"Fractal Decomposition: Depth 1: Analyzing '{task[:20]}...'""'
+def create_sub_swarm(self, parent_task_id: str, required_capabilities: List[str]) -> str:
                 Creates a new sub-swarm group for a specific task.
 
         Args:
@@ -84,6 +88,7 @@ class FractalOrchestrator:
         Returns:
             Execution results from the sub-swarm.
                 if swarm_id not in self.sub_swarms:
-            return {"status": "error", "message": f"Sub-swarm {swarm_id} not found."}"
+            return {"status": "error", "message": f"Sub-swarm {swarm_id} not found."}
         logging.info(f"FractalOrchestrator: Delegating task to sub-swarm {swarm_id}.")"        # (In a full implementation, this would use a SubSwarmExecutor)
-        return {"status": "delegated", "swarm_id": swarm_id, "members": self.sub_swarms[swarm_id]}"
+        return {"status": "delegated", "swarm_id": swarm_id, "members": self.sub_swarms[swarm_id]}
+"""

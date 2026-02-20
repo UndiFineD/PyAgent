@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Config.py module.
 """
-
 try:
-    import hashlib
+
+"""
+import hashlib
 except ImportError:
     import hashlib
 
@@ -45,7 +49,8 @@ if TYPE_CHECKING:
 
 
 class GrammarType(Enum):
-    """Types of grammar constraints supported.
+"""
+Types of grammar constraints supported.
     NONE = auto()
     JSON = auto()  # JSON Schema validation
     JSON_OBJECT = auto()  # Any valid JSON object
@@ -58,7 +63,8 @@ class GrammarType(Enum):
 
 
 class CompilationStatus(Enum):
-    """Status of grammar compilation.
+"""
+Status of grammar compilation.
     PENDING = auto()
     COMPILING = auto()
     READY = auto()
@@ -93,11 +99,13 @@ class CompilationResult:
 
     @property
     def is_ready(self) -> bool:
-        """Check if compilation finished successfully.        return self.status == CompilationStatus.READY
+"""
+Check if compilation finished successfully.        return self.status == CompilationStatus.READY
 
     @property
     def is_failed(self) -> bool:
-        """Check if compilation failed.        return self.status == CompilationStatus.FAILED
+"""
+Check if compilation failed.        return self.status == CompilationStatus.FAILED
 
 
 @dataclass
@@ -112,7 +120,8 @@ class ValidationResult:
 
 @dataclass
 class BackendStats:
-    """Statistics for a structured output backend.
+"""
+Statistics for a structured output backend.
     grammars_compiled: int = 0
     grammars_cached: int = 0
     compilations_failed: int = 0

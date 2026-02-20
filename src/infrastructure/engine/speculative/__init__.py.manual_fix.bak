@@ -1,0 +1,14 @@
+""
+Speculative decoding package (minimal stub).
+
+This package file is intentionally minimal to allow the test-suite to import
+the package while deeper implementations are repaired. It does not import
+heavy decoding components; those live in the submodules.
+""
+__all__ = [
+    # exported names (submodules provide implementations)
+    "SpeculativeDecoder",
+    "SpeculativeProposer",
+    "SpeculativeVerifier",
+    "SpeculativeTree",
+]

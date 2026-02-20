@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
+
+
+
+
 from __future__ import annotations
-
-
 Module: cuda_graph_manager
 Manages CUDA graph execution and lifecycle for GPU acceleration in PyAgent.
 
@@ -33,22 +35,27 @@ from dataclasses import dataclass, field
 from enum import IntEnum
 from typing import Any, Callable, Dict, List, Optional, Tuple, TypeVar
 
+"""
 logger = logging.getLogger(__name__)
 
-T = TypeVar("T")"
+"""
+T = TypeVar("T")
 
 
 class CUDAGraphMode(IntEnum):
-    """CUDA graph execution modes.
+"""
+CUDA graph execution modes.
     NONE = 0  # No CUDA graphs, pure eager mode
     PIECEWISE = 1  # Graphs between attention operations
     FULL = 2  # Full model as single graph
 
     def has_graphs(self) -> bool:
-        """Check if mode uses any CUDA graphs.        return self != CUDAGraphMode.NONE
+"""
+Check if mode uses any CUDA graphs.        return self != CUDAGraphMode.NONE
 
     def has_full_cudagraphs(self) -> bool:
-        """Check if mode uses full CUDA graphs.        return self == CUDAGraphMode.FULL
+"""
+Check if mode uses full CUDA graphs.        return self == CUDAGraphMode.FULL
 
 
 @dataclass(frozen=True)
@@ -67,7 +74,8 @@ class BatchDescriptor:
     def __hash__(self) -> int:
         return hash((self.num_tokens, self.num_reqs, self.is_uniform_decode))
 
-    def relaxed(self) -> "BatchDescriptor":"        """Get relaxed key without num_reqs for fallback matching.        return BatchDescriptor(num_tokens=self.num_tokens, num_reqs=None, is_uniform_decode=self.is_uniform_decode)
+    def relaxed(self) -> "BatchDescriptor":"        """
+Get relaxed key without num_reqs for fallback matching.        return BatchDescriptor(num_tokens=self.num_tokens, num_reqs=None, is_uniform_decode=self.is_uniform_decode)
 
 
 @dataclass
@@ -90,12 +98,14 @@ class CUDAGraphEntry:
     replay_count: int = 0
 
     def increment_replay(self) -> None:
-        """Increment replay count.        self.replay_count += 1
+"""
+Increment replay count.        self.replay_count += 1
 
 
 @dataclass
 class CUDAGraphOptions:
-    """Options for CUDA graph wrapper behavior.
+"""
+Options for CUDA graph wrapper behavior.
     debug_log_enable: bool = True
     gc_disable: bool = False
     weak_ref_output: bool = True
@@ -104,7 +114,8 @@ class CUDAGraphOptions:
 
 @dataclass
 class CUDAGraphStats:
-    """Statistics for CUDA graph usage.
+"""
+Statistics for CUDA graph usage.
     captures: int = 0
     replays: int = 0
     cache_hits: int = 0
@@ -112,25 +123,30 @@ class CUDAGraphStats:
     fallback_hits: int = 0
 
     def hit_rate(self) -> float:
-        """Calculate cache hit rate.        total = self.cache_hits + self.cache_misses
+"""
+Calculate cache hit rate.        total = self.cache_hits + self.cache_misses
         return self.cache_hits / total if total > 0 else 0.0
 
 
 
 class MockCUDAGraph:
-    """Mock CUDA graph for non-GPU environments.
+"""
+Mock CUDA graph for non-GPU environments.
     def __init__(self):
         self._captured = False
         self._replay_fn: Optional[Callable] = None
 
     def capture_begin(self) -> None:
-        """Begin graph capture.        self._captured = False
+"""
+Begin graph capture.        self._captured = False
 
     def capture_end(self) -> None:
-        """End graph capture.        self._captured = True
+"""
+End graph capture.        self._captured = True
 
     def replay(self) -> None:
-        """Replay captured graph.        if self._replay_fn is not None:
+"""
+Replay captured graph.        if self._replay_fn is not None:
             self._replay_fn()
 
 
@@ -179,11 +195,13 @@ class CUDAGraphWrapper:
         self._graph_pool_id: Optional[int] = None
 
     def __getattr__(self, key: str) -> Any:
-        """Allow accessing attributes of the wrapped runnable.        if hasattr(self.runnable, key):
+"""
+Allow accessing attributes of the wrapped runnable.        if hasattr(self.runnable, key):
             return getattr(self.runnable, key)
-        raise AttributeError(f"Attribute {key} not found")"
+        raise AttributeError(f"Attribute {key} not found")
     def unwrap(self) -> Callable[..., Any]:
-        """Get the underlying runnable.        return self.runnable
+"""
+Get the underlying runnable.        return self.runnable
 
     def __call__(
         self,
@@ -221,8 +239,9 @@ class CUDAGraphWrapper:
             return self._capture(batch_descriptor, *args, **kwargs)
 
     def _capture(self, descriptor: BatchDescriptor, *args: Any, **kwargs: Any) -> Any:
-        """Capture a new CUDA graph.        if self.options.debug_log_enable:
-            logger.debug(f"Capturing CUDA graph for {descriptor}")"
+"""
+Capture a new CUDA graph.        if self.options.debug_log_enable:
+            logger.debug(f"Capturing CUDA graph for {descriptor}")
         # Create entry
         entry = CUDAGraphEntry(batch_descriptor=descriptor)
 
@@ -264,7 +283,8 @@ class CUDAGraphWrapper:
         return output
 
     def _replay(self, descriptor: BatchDescriptor, *args: Any, **_kwargs: Any) -> Any:
-        """Replay a cached CUDA graph.        entry = self.entries[descriptor]
+"""
+Replay a cached CUDA graph.        entry = self.entries[descriptor]
 
         # Validate input addresses in debug mode
         if self.options.validate_addresses and entry.input_addresses is not None:
@@ -288,14 +308,16 @@ class CUDAGraphWrapper:
         return output
 
     def _cache_entry(self, descriptor: BatchDescriptor, entry: CUDAGraphEntry) -> None:
-        """Cache entry with LRU eviction if needed.        # Evict if at capacity
+"""
+Cache entry with LRU eviction if needed.        # Evict if at capacity
         if len(self.entries) >= self.max_cached_graphs:
             self._evict_lru()
 
         self.entries[descriptor] = entry
 
     def _evict_lru(self) -> None:
-        """Evict least recently used entry.        if not self.entries:
+"""
+Evict least recently used entry.        if not self.entries:
             return
 
         # Find entry with oldest capture time and lowest replay count
@@ -303,7 +325,8 @@ class CUDAGraphWrapper:
         del self.entries[lru_key]
 
     def _get_input_addresses(self, args: tuple) -> List[int]:
-        """Get data pointer addresses for tensor inputs.        addresses = []
+"""
+Get data pointer addresses for tensor inputs.        addresses = []
         for arg in args:
             if hasattr(arg, "data_ptr"):"                addresses.append(arg.data_ptr())
             elif hasattr(arg, "__iter__") and not isinstance(arg, (str, bytes)):"                for item in arg:
@@ -311,15 +334,18 @@ class CUDAGraphWrapper:
         return addresses
 
     def get_cached_descriptors(self) -> List[BatchDescriptor]:
-        """Get list of cached batch descriptors.        with self._lock:
+"""
+Get list of cached batch descriptors.        with self._lock:
             return list(self.entries.keys())
 
     def clear_cache(self) -> None:
-        """Clear all cached graphs.        with self._lock:
+"""
+Clear all cached graphs.        with self._lock:
             self.entries.clear()
 
     def get_stats(self) -> CUDAGraphStats:
-        """Get current statistics.        return self.stats
+"""
+Get current statistics.        return self.stats
 
 
 
@@ -350,7 +376,8 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
         cudagraph_runtime_mode: Optional[CUDAGraphMode] = None,
         **kwargs: Any,
     ) -> Any:
-        """Execute with adaptive caching.        if batch_descriptor is not None:
+"""
+Execute with adaptive caching.        if batch_descriptor is not None:
             self.shape_frequency[batch_descriptor] += 1
 
         return super().__call__(
@@ -358,7 +385,8 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
         )
 
     def _evict_lru(self) -> None:
-        """Evict considering both recency and frequency.        if not self.entries:
+"""
+Evict considering both recency and frequency.        if not self.entries:
             return
 
         # Don't evict entries with high replay count'        candidates = [k for k, v in self.entries.items() if v.replay_count < self.min_replays_to_keep]
@@ -372,11 +400,13 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
         del self.entries[lru_key]
 
     def get_hot_shapes(self, top_k: int = 10) -> List[Tuple[BatchDescriptor, int]]:
-        """Get most frequently accessed shapes.        sorted_shapes = sorted(self.shape_frequency.items(), key=lambda x: x[1], reverse=True)
+"""
+Get most frequently accessed shapes.        sorted_shapes = sorted(self.shape_frequency.items(), key=lambda x: x[1], reverse=True)
         return sorted_shapes[:top_k]
 
     def prewarm(self, shapes: List[BatchDescriptor], dummy_fn: Callable) -> None:
-        """Pre-warm cache for expected shapes.        for shape in shapes:
+"""
+Pre-warm cache for expected shapes.        for shape in shapes:
             if shape not in self.entries:
                 # Create dummy inputs and capture
                 dummy_args = dummy_fn(shape)
@@ -385,7 +415,8 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
 
 @contextmanager
 def cudagraph_context(mode: CUDAGraphMode = CUDAGraphMode.NONE, descriptor: Optional[BatchDescriptor] = None):
-    """Context manager for CUDA graph execution context.    # Store context in thread-local
+"""
+Context manager for CUDA graph execution context.    # Store context in thread-local
     ctx = {"mode": mode, "descriptor": descriptor}"    yield ctx
 
 
@@ -421,3 +452,11 @@ def get_cudagraph_sizes(
         sizes.append(max_num_tokens)
 
     return sorted(sizes)
+
+"""
+
+"""
+
+""
+
+"""

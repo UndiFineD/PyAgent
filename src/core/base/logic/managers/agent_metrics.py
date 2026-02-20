@@ -13,6 +13,10 @@
 # limitations under the License.
 
 
-"""Manager regarding agent performance metrics.
+"""
+"""
+Manager regarding agent performance metrics.
+
+"""
 (Facade regarding src.core.base.common.metrics_core)
 """

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import json
 except ImportError:
@@ -44,15 +44,18 @@ __version__ = VERSION
 
 
 class TestConfigLoader:
-    """Loads test configuration from files.
+"""
+Loads test configuration from files.
     __test__ = False
 
     def __init__(self, config_path: Path | None = None) -> None:
-        """Initialize config loader.        self.config_path = config_path or Path("test_config.json")"        self.config: dict[str, Any] = {}
+"""
+Initialize config loader.        self.config_path = config_path or Path("test_config.json")"        self.config: dict[str, Any] = {}
 
     def load(self, path: Path | None = None, defaults: dict[str, Any] | None = None) -> dict[str, Any]:
-        """Load configuration.""""
-        Compatibility:
+"""
+Load configuration.""""
+Compatibility:
         - Tests pass a `Path` to load.
         - Tests may pass `defaults=` to be merged.
                 if path is not None:
@@ -72,4 +75,7 @@ class TestConfigLoader:
         return self.config
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Get configuration value.        return self.config.get(key, default)
+"""
+Get configuration value.        return self.config.get(key, default)
+
+"""

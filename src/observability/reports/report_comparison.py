@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ReportComparison - Data model for comparing two reports
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,6 @@ WHAT IT DOES:
 WHAT IT SHOULD DO BETTER:
     Add methods for generating diff summaries, calculating change percentages, and serializing to/from JSON.
 """
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -61,8 +64,8 @@ __version__ = VERSION
 
 @dataclass
 class ReportComparison:
-    """
-    Comparison between two reports.
+"""
+Comparison between two reports.
     Attributes:
         old_path: Path to the old report.
         new_path: Path to the new report.
@@ -70,8 +73,8 @@ class ReportComparison:
         removed: List of removed content.
         changed: List of changed content pairs (old, new).
         unchanged_count: Number of unchanged items.
-    """
-    old_path: str
+"""
+old_path: str
     new_path: str
     added: list[str] = field(default_factory=list)
     removed: list[str] = field(default_factory=list)

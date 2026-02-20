@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+
+
+from __future__ import annotations
+
+
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Recovered and standardized for Phase 317
+"""
+The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
+
+"""
+
+For more information, visit:
+- Copilot CLI: https://github.com/github/copilot-cli
+- Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
+
+No commands will be executed.
+""
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    import time
+except ImportError:
+    import time
+
+try:
+    from typing import TYPE_CHECKING, Dict
+except ImportError:
+    from typing import TYPE_CHECKING, Dict
+
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+if TYPE_CHECKING:
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
+__version__ = VERSION
+
+
+
+class HeartbeatOrchestrator:
+        HeartbeatOrchestrator for managing agent vitality signals.
+    Standardized implementation for Phase 125 validation.
+    
+    def __init__(self, fleet: FleetManager) -> None:
+        self.fleet = fleet
+        self.version = VERSION
+        self.last_seen: Dict[str, float] = {}
+        logging.info("HeartbeatOrchestrator initialized.")
+    def record_heartbeat(self, agent_name: str) -> None:
+        ""
+Records a heartbeat for the given agent.        self.last_seen[agent_name] = time.time()
+        logging.debug(f"Heartbeat: Recorded signal from {agent_name}")

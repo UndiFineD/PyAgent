@@ -12,12 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Engine Core sub-package."""
-
-
-
+"""
+"""
+Engine Core sub-package.""
 try:
-    from .base import Executor, Scheduler  # noqa: F401
+
+"""
+from .base import Executor, Scheduler  # noqa: F401
 except ImportError:
     from .base import Executor, Scheduler # noqa: F401
 
@@ -54,8 +55,9 @@ def create_engine_core(
     max_tokens: int = 4096,
     log_stats: bool = True,
 ) -> EngineCore:
-    """Create an EngineCore with default settings."""
-    scheduler = SimpleScheduler(max_batch_size=max_batch_size, max_tokens=max_tokens)
+"""
+Create an EngineCore with default settings.""
+scheduler = SimpleScheduler(max_batch_size=max_batch_size, max_tokens=max_tokens)
     executor = MockExecutor()
     return EngineCore(scheduler=scheduler, executor=executor, log_stats=log_stats)
 

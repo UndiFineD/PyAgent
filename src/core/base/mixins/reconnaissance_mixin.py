@@ -22,18 +22,22 @@ import re
 
 
 class ReconnaissanceMixin:
-    """Mixin providing reconnaissance capabilities for target discovery.
+"""
+"""
+Mixin providing reconnaissance capabilities for target discovery.
 
-    Inspired by aem_discoverer.py patterns for identifying vulnerable services.
-    """
-    def __init__(self, *args, **kwargs):
+"""
+Inspired by aem_discoverer.py patterns for identifying vulnerable services.
+"""
+def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._discovery_patterns: Dict[str, List[str]] = {}
         self._load_default_patterns()
 
 
     def _load_default_patterns(self) -> None:
-        """Load default discovery patterns."""
+"""
+Load default discovery patterns.""
         # AEM-specific paths (inspired by aem_discoverer.py)
         self._discovery_patterns['aem'] = [
             '/content/dam.json',
@@ -93,7 +97,8 @@ class ReconnaissanceMixin:
         timeout: int = 5,
         proxy: Optional[Dict] = None
     ) -> Dict[str, List[str]]:
-        """Discover potential targets from a list of URLs.
+"""
+Discover potential targets from a list of URLs.
 
         Args:
             urls: List of base URLs to check
@@ -104,8 +109,8 @@ class ReconnaissanceMixin:
 
         Returns:
             Dict mapping URLs to list of discovered endpoints
-        """
-        if patterns is None:
+"""
+if patterns is None:
             patterns = []
             for pattern_list in self._discovery_patterns.values():
                 patterns.extend(pattern_list)
@@ -138,8 +143,9 @@ class ReconnaissanceMixin:
         timeout: int,
         proxy: Optional[Dict]
     ) -> List[str]:
-        """Discover endpoints for a single target."""
-        discovered = []
+"""
+Discover endpoints for a single target.""
+discovered = []
         proxies = proxy if proxy else {}
 
         for pattern in patterns:
@@ -156,7 +162,8 @@ class ReconnaissanceMixin:
         return discovered
 
     def _is_interesting_response(self, response: requests.Response) -> bool:
-        """Check if response indicates an interesting discovery."""
+"""
+Check if response indicates an interesting discovery.""
         # Status codes that indicate something exists
         if response.status_code in [200, 301, 302, 401, 403]:
             # Check for AEM-specific content
@@ -180,15 +187,16 @@ class ReconnaissanceMixin:
         return False
 
     async def fingerprint_service(self, url: str, proxy: Optional[Dict] = None) -> Dict[str, Any]:
-        """Fingerprint a service to identify its type.
+"""
+Fingerprint a service to identify its type.
 
         Args:
             url: URL to fingerprint
 
         Returns:
             Dict with fingerprint information
-        """
-        fingerprint: Dict[str, Any] = {
+"""
+fingerprint: Dict[str, Any] = {
             'url': url,
             'service_type': 'unknown',
             'version': 'unknown',
@@ -230,26 +238,28 @@ class ReconnaissanceMixin:
         return fingerprint
 
     def add_discovery_pattern(self, category: str, patterns: List[str]) -> None:
-        """Add custom discovery patterns.
+"""
+Add custom discovery patterns.
 
         Args:
             category: Category name
             patterns: List of URL patterns
-        """
-        if category in self._discovery_patterns:
+"""
+if category in self._discovery_patterns:
             self._discovery_patterns[category].extend(patterns)
         else:
             self._discovery_patterns[category] = patterns
 
     def get_discovery_patterns(self, category: Optional[str] = None) -> Dict[str, List[str]]:
-        """Get discovery patterns.
+"""
+Get discovery patterns.
 
         Args:
             category: Specific category or None for all
 
         Returns:
             Patterns dictionary
-        """
-        if category:
+        ""
+if category:
             return {category: self._discovery_patterns.get(category, [])}
         return self._discovery_patterns.copy()

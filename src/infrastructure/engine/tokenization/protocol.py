@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Tokenizer protocols.
 """
-
 try:
-    from typing import List, Optional, Protocol, Sequence, runtime_checkable
+
+"""
+from typing import List, Optional, Protocol, Sequence, runtime_checkable
 except ImportError:
     from typing import List, Optional, Protocol, Sequence, runtime_checkable
 
@@ -28,34 +32,43 @@ except ImportError:
 
 @runtime_checkable
 class TokenizerProtocol(Protocol):
-    """Protocol for tokenizer implementations.
+"""
+Protocol for tokenizer implementations.
     @property
     def vocab_size(self) -> int:
-        """Size of the vocabulary.
+"""
+Size of the vocabulary.
     @property
     def bos_token_id(self) -> Optional[int]:
-        """Beginning of sequence token ID.
+"""
+Beginning of sequence token ID.
     @property
     def eos_token_id(self) -> Optional[int]:
-        """End of sequence token ID.
+"""
+End of sequence token ID.
     @property
     def pad_token_id(self) -> Optional[int]:
-        """Padding token ID.
+"""
+Padding token ID.
     def encode(
         self,
         text: str,
         add_special_tokens: bool = True,
     ) -> List[int]:
-        """Encode text to token IDs.
+"""
+Encode text to token IDs.
     def decode(
         self,
         token_ids: Sequence[int],
         skip_special_tokens: bool = True,
     ) -> str:
-        """Decode token IDs to text.
+"""
+Decode token IDs to text.
     def batch_encode(
         self,
         texts: List[str],
         add_special_tokens: bool = True,
     ) -> List[List[int]]:
-        """Batch encode multiple texts.
+"""
+Batch encode multiple texts.
+"""

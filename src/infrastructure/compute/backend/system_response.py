@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -34,8 +34,9 @@ __version__ = VERSION
 
 @dataclass
 class SystemResponse:
-    """Response from a backend request.""""
-    Attributes:
+"""
+Response from a backend request.""""
+Attributes:
         content: Response content.
         backend: Backend that provided response.
         latency_ms: Response latency in milliseconds.

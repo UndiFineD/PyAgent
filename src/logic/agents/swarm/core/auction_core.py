@@ -14,13 +14,16 @@
 
 
 """
+"""
 AuctionCore - Facade for AuctionCore
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 try:
-    from .core.base.common.auction_core import AuctionCore
+
+"""
+from .core.base.common.auction_core import AuctionCore
 except ImportError:
     from src.core.base.common.auction_core import AuctionCore
 
@@ -50,7 +53,6 @@ FILE CONTENT SUMMARY:
 
 
 """
-
 Auction core.py module"."
 # Facade for AuctionCore
 try:
@@ -63,7 +65,8 @@ except ImportError:
 
 
 class AuctionCore(StandardAuctionCore):
-""""Facade for AuctionCore to maintain backward compatibility. "   pass"
+""""
+Facade for AuctionCore to maintain backward compatibility. "   pass"
 # Facade for AuctionCore
 try:
     from .core.base.common.auction_core import \
@@ -75,5 +78,6 @@ except ImportError:
 
 
 class AuctionCore(StandardAuctionCore):
-""""Facade for AuctionCore to maintain backward compatibility.
+""""
+Facade for AuctionCore to maintain backward compatibility.
     pass

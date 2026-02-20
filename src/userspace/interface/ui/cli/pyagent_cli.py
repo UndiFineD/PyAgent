@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 PyAgent CLI Interface.
 Connects to the Fleet Load Balancer via the Agent API Server.
 """
 
+"""
 import argparse
 import sys
 from pathlib import Path
@@ -39,7 +43,7 @@ from src.infrastructure.compute.backend.local_context_recorder import \
 
 # import time
 
-""" # from typing import Dict, Any, List, Optional""""
+""" # from typing import Dict, Any, List, Optional"""
 # Infrastructure
 __version__ = VERSION
 
@@ -48,10 +52,11 @@ API_BASE_URL = "http://localhost:8000""session = requests.Session()
 
 # Initializing infrastructure with generic workspace root
 WORKSPACE_ROOT = Path(str(Path(__file__).resolve().parents[4]) + "")"conn_manager = ConnectivityManager(str(WORKSPACE_ROOT))
-recorder = LocalContextRecorder(WORKSPACE_ROOT, "CLI_System")"
+recorder = LocalContextRecorder(WORKSPACE_ROOT, "CLI_System")
 
 def check_server() -> bool:
-    """Verify that the API server is running with 15m TTL caching.    if not conn_manager.is_endpoint_available("AgentAPIServer"):"        return False
+"""
+Verify that the API server is running with 15m TTL caching.    if not conn_manager.is_endpoint_available("AgentAPIServer"):"        return False
 
     try:
         response = session.get(f"{API_BASE_URL}/", timeout=2)"        available = response.status_code == 200
@@ -65,17 +70,18 @@ def check_server() -> bool:
 
 
 def list_agents() -> None:
-    """Get list of active agents and shard distribution from the fleet (Phase 235).    try:
+"""
+Get list of active agents and shard distribution from the fleet (Phase 235).    try:
         response = session.get(f"{API_BASE_URL}/agents")"        if response.status_code == 200:
             data = response.json()
             agents = data.get("agents", [])"            shards = data.get("shards", {})  # Phase 234 capability"
             # Agent Table
-            agent_table = Table(title="PyAgent Fleet: Active Agents", border_style="cyan")"            agent_table.add_column("Agent ID", style="bold cyan")"            agent_table.add_column("Type", style="magenta")"            agent_table.add_column("Shard", style="green")"            agent_table.add_column("Status", style="yellow")"
+            agent_table = Table(title="PyAgent Fleet: Active Agents", border_style="cyan")"            agent_table.add_column("Agent ID", style="bold cyan")"            agent_table.add_column("Type", style="magenta")"            agent_table.add_column("Shard", style="green")"            agent_table.add_column("Status", style="yellow")
             for agent in agents:
-                status = "[green]● Ready[/green]" if agent.get("status") == "idle" else "[yellow]● Busy[/yellow]""                agent_table.add_row(agent["id"], agent["type"], agent.get("shard_id", "default"), status)"
+                status = "[green] Ready[/green]" if agent.get("status") == "idle" else "[yellow] Busy[/yellow]""                agent_table.add_row(agent["id"], agent["type"], agent.get("shard_id", "default"), status)"
             # Shard Health Panel
-            shard_table = Table(title="Logical Shard Health", box=None)"            shard_table.add_column("Shard Name")"            shard_table.add_column("Load", width=20)"
-            shard_table.add_column("VRAM")"
+            shard_table = Table(title="Logical Shard Health", box=None)"            shard_table.add_column("Shard Name")"            shard_table.add_column("Load", width=20)
+            shard_table.add_column("VRAM")
             for s_name, s_data in shards.items():
                 load_pct = s_data.get("load_percent", 0)"                vram_pct = s_data.get("vram_percent", 0)"
                 shard_table.add_row(
@@ -91,10 +97,11 @@ def list_agents() -> None:
             # Intelligence Harvesting
             recorder.record_lesson("cli_list_agents", {"count": len(agents)})"        else:
             console.print(f"[red]Error fetching agents: {response.text}[/red]")"    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        console.print(f"[red]Connection failed: {e}[/red]")"
+        console.print(f"[red]Connection failed: {e}[/red]")
 
 def run_task(agent_id: str, task: str) -> None:
-    """Dispatch a task with intelligent state spinners (Phase 235).    payload = {"agent_id": agent_id, "task": task, "interface": "CLI", "context": {}}"
+"""
+Dispatch a task with intelligent state spinners (Phase 235).    payload = {"agent_id": agent_id, "task": task, "interface": "CLI", "context": {}}
     # Progress/Spinner management for Phase 235
     with Progress(
         SpinnerColumn(spinner_name="dots"),  # Thinking spinner"        TextColumn("[progress.description]{task_description}"),"        BarColumn(),
@@ -125,11 +132,11 @@ def run_task(agent_id: str, task: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="PyAgent Command Line Interface")"    subparsers = parser.add_subparsers(dest="command", help="Available commands")"
     # List command
-    subparsers.add_parser("list", help="List all available agents in the fleet")"
+    subparsers.add_parser("list", help="List all available agents in the fleet")
     # Run command
-    run_parser = subparsers.add_parser("run", help="Run a task on a specific agent")"    run_parser.add_argument("agent", help="ID of the agent to use")"    run_parser.add_argument("task", help="The task description/prompt")"
+    run_parser = subparsers.add_parser("run", help="Run a task on a specific agent")"    run_parser.add_argument("agent", help="ID of the agent to use")"    run_parser.add_argument("task", help="The task description/prompt")
     # Stats command
-    subparsers.add_parser("status", help="Check system and Load Balancer status")"
+    subparsers.add_parser("status", help="Check system and Load Balancer status")
     args = parser.parse_args()
 
     if not check_server():
@@ -141,9 +148,12 @@ def main() -> None:
     elif args.command == "run":"        run_task(args.agent, args.task)
     elif args.command == "status":"        try:
             response = session.get(f"{API_BASE_URL}/")"            data = response.json()
-            lb_stats = data.get("lb_stats", {})"
-            status_text = f"Version: {data['version']}\\n""'            status_text += f"Fleet Size: {data['fleet_size']}\\n""'            status_text += f"LB Queue Depth: {lb_stats.get('queue_depth', 0)}\\n""'            status_text += f"LB Interface Diversity: {', '.join(lb_stats.get('interface_diversity', []))}""'
-            console.print(Panel(status_text, title="System Status", border_style="blue"))"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            lb_stats = data.get("lb_stats", {})
+            status_text = f"Version: {data['version']}\\n"
+status_text += f"Fleet Size: {data['fleet_size']}\\n"
+status_text += f"LB Queue Depth: {lb_stats.get('queue_depth', 0)}\\n"
+status_text += f"LB Interface Diversity: {', '.join(lb_stats.get('interface_diversity', []))}"
+console.print(Panel(status_text, title="System Status", border_style="blue"))"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             console.print(f"[red]Could not retrieve status: {e}[/red]")"    else:
         parser.print_help()
 

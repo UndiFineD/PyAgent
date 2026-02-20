@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.compute.ssm.mamba_utils import MambaBlockState, compute_ssm_state_shape, compute_conv_state_shape, compute_state_dtype, discretize_ssm, apply_ssm_recurrence, silu_activation, swish_activation, softplus, chunk_sequence, merge_chunks, parallel_scan, init_A_log, init_dt_proj

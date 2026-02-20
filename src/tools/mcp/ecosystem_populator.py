@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Ecosystem Populator - MCP server metadata generator
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -55,15 +58,17 @@ except ImportError:
 
     @dataclass
     class MCPServerConfig:
-        """Dataclass representing MCP server metadata configuration.        name: str
+"""
+Dataclass representing MCP server metadata configuration.        name: str
         description: str
         category: str
         server_type: str
         capabilities: List[str]
-        security_level: str = "medium""
+        security_level: str = "medium"
 
 def get_expanded_ecosystem() -> List[MCPServerConfig]:
-    """Returns a list of 500+ MCP server metadata configurations.    # Note: In a real implementation, this might fetch from a JSON or GitHub registry.
+"""
+Returns a list of 500+ MCP server metadata configurations.    # Note: In a real implementation, this might fetch from a JSON or GitHub registry.
     # Here we populate a representative set of high-value MCP servers.
 
     servers = []

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Manager regarding conversation history.
+"""
+"""
+Manager regarding conversation history.
 (Facade regarding src.core.base.common.conversation_core)
 """
-
 try:
-    from .core.base.common.models import ConversationHistory
+
+"""
+from .core.base.common.models import ConversationHistory
 except ImportError:
     from src.core.base.common.models import ConversationHistory
 

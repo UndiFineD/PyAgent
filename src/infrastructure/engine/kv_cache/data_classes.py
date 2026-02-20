@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Data classes.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 try:
@@ -41,7 +44,8 @@ except ImportError:
 
 @dataclass(frozen=True)
 class BlockHash:
-    """Immutable block hash for prefix caching.
+"""
+Immutable block hash for prefix caching.
     hash_bytes: bytes
 
     def __hash__(self) -> int:
@@ -54,11 +58,13 @@ class BlockHash:
 
     @property
     def as_int(self) -> int:
-        """Convert to integer for legacy compatibility.        return int.from_bytes(self.hash_bytes[:8], byteorder="big")"
+"""
+Convert to integer for legacy compatibility.        return int.from_bytes(self.hash_bytes[:8], byteorder="big")
 
 @dataclass(frozen=True)
 class BlockHashWithGroupId:
-    """Block hash combined with group ID for multi-group caching.
+"""
+Block hash combined with group ID for multi-group caching.
     block_hash: BlockHash
     group_id: int
 
@@ -68,7 +74,8 @@ class BlockHashWithGroupId:
 
 @dataclass
 class KVCacheBlock:
-    """KV cache block metadata.
+"""
+KV cache block metadata.
     block_id: int
     ref_cnt: int = 0
     block_hash: Optional[BlockHashWithGroupId] = None
@@ -81,11 +88,13 @@ class KVCacheBlock:
     access_count: int = 0
 
     def touch(self) -> None:
-        """Mark block as accessed.        self.last_access_time = time.time()
+"""
+Mark block as accessed.        self.last_access_time = time.time()
         self.access_count += 1
 
     def reset(self) -> None:
-        """Reset block state for reuse.        self.ref_cnt = 0
+"""
+Reset block state for reuse.        self.ref_cnt = 0
         self.block_hash = None
         self.is_null = False
         self.access_count = 0
@@ -93,25 +102,31 @@ class KVCacheBlock:
 
 @dataclass
 class KVCacheBlocks:
-    """Allocation result for multi-group KV cache.
+"""
+Allocation result for multi-group KV cache.
     blocks: Tuple[Sequence[KVCacheBlock], ...]
 
-    def __add__(self, other: "KVCacheBlocks") -> "KVCacheBlocks":"        """Combine two KVCacheBlocks instances.        combined = tuple(list(b1) + list(b2) for b1, b2 in zip(self.blocks, other.blocks))
+    def __add__(self, other: "KVCacheBlocks") -> "KVCacheBlocks":"        """
+Combine two KVCacheBlocks instances.        combined = tuple(list(b1) + list(b2) for b1, b2 in zip(self.blocks, other.blocks))
         return KVCacheBlocks(combined)
 
     def get_block_ids(self) -> Tuple[List[int], ...]:
-        """Get block IDs for all groups.        return tuple([block.block_id for block in group] for group in self.blocks)
+"""
+Get block IDs for all groups.        return tuple([block.block_id for block in group] for group in self.blocks)
 
     def is_empty(self) -> bool:
-        """Check if all groups are empty.        return all(not group for group in self.blocks)
+"""
+Check if all groups are empty.        return all(not group for group in self.blocks)
 
     @classmethod
-    def empty(cls: type["KVCacheBlocks"], num_groups: int) -> "KVCacheBlocks":"        """Create empty KVCacheBlocks.        return cls(tuple(() for _ in range(num_groups)))
+    def empty(cls: type["KVCacheBlocks"], num_groups: int) -> "KVCacheBlocks":"        """
+Create empty KVCacheBlocks.        return cls(tuple(() for _ in range(num_groups)))
 
 
 @dataclass
 class CacheGroupSpec:
-    """Specification for a KV cache group.
+"""
+Specification for a KV cache group.
     group_id: int
     group_type: CacheGroupType
     block_size: int
@@ -122,20 +137,25 @@ class CacheGroupSpec:
 
     @property
     def bytes_per_token(self) -> int:
-        """Bytes per token in this group.        # 2 for K and V, 2 for FP16
+"""
+Bytes per token in this group.        # 2 for K and V, 2 for FP16
         return 2 * self.num_kv_heads * self.head_dim * 2
 
     @property
     def bytes_per_block(self) -> int:
-        """Bytes per block in this group.        return self.bytes_per_token * self.block_size
+"""
+Bytes per block in this group.        return self.bytes_per_token * self.block_size
 
 
 @dataclass
 class CacheConfig:
-    """Configuration for KV cache.
+"""
+Configuration for KV cache.
     num_blocks: int
     block_size: int
     groups: List[CacheGroupSpec]
     enable_prefix_caching: bool = True
     eviction_policy: EvictionPolicy = EvictionPolicy.LRU
     allocation_strategy: AllocationStrategy = AllocationStrategy.GREEDY
+
+"""

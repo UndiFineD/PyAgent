@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Models and configurations for media loading.
 """
-
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -45,7 +49,8 @@ except ImportError:
 
 
 class MediaType(Enum):
-    """Supported media types.
+"""
+Supported media types.
     IMAGE = auto()
     VIDEO = auto()
     AUDIO = auto()
@@ -54,7 +59,8 @@ class MediaType(Enum):
 
 
 class ImageFormat(Enum):
-    """Supported image formats.
+"""
+Supported image formats.
     JPEG = auto()
     PNG = auto()
     WEBP = auto()
@@ -66,7 +72,8 @@ class ImageFormat(Enum):
 
 
 class VideoFormat(Enum):
-    """Supported video formats.
+"""
+Supported video formats.
     MP4 = auto()
     WEBM = auto()
     AVI = auto()
@@ -76,7 +83,8 @@ class VideoFormat(Enum):
 
 
 class AudioFormat(Enum):
-    """Supported audio formats.
+"""
+Supported audio formats.
     WAV = auto()
     MP3 = auto()
     FLAC = auto()
@@ -86,7 +94,8 @@ class AudioFormat(Enum):
 
 
 class ResizeMode(Enum):
-    """Image resize modes.
+"""
+Image resize modes.
     CROP = auto()  # Center crop to target
     PAD = auto()  # Pad to target maintaining aspect
     STRETCH = auto()  # Stretch to target
@@ -96,7 +105,8 @@ class ResizeMode(Enum):
 
 @dataclass
 class MediaMetadata:
-    """Metadata for loaded media.
+"""
+Metadata for loaded media.
     media_type: MediaType
     format: Union[ImageFormat, VideoFormat, AudioFormat, None]
     width: Optional[int] = None
@@ -111,7 +121,8 @@ class MediaMetadata:
 
 @dataclass
 class ImageData:
-    """Loaded image data.
+"""
+Loaded image data.
     data: np.ndarray  # [H, W, C] or [N, H, W, C]
     metadata: MediaMetadata
     source: str
@@ -135,7 +146,8 @@ class ImageData:
 
 @dataclass
 class VideoData:
-    """Loaded video data.
+"""
+Loaded video data.
     frames: np.ndarray  # [N, H, W, C]
     metadata: MediaMetadata
     source: str
@@ -148,7 +160,8 @@ class VideoData:
 
 @dataclass
 class AudioData:
-    """Loaded audio data.
+"""
+Loaded audio data.
     waveform: np.ndarray  # [C, T] or [T]
     metadata: MediaMetadata
     source: str
@@ -162,7 +175,8 @@ class AudioData:
 
 @dataclass
 class MediaLoadConfig:
-    """Configuration for media loading.
+"""
+Configuration for media loading.
     # Image settings
     target_size: Optional[Tuple[int, int]] = None
     resize_mode: ResizeMode = ResizeMode.SHORTEST
@@ -182,7 +196,7 @@ class MediaLoadConfig:
     # GPU settings
     use_gpu_decode: bool = True
     use_tensorrt: bool = False
-    device: str = "cuda:0""
+    device: str = "cuda:0"
     # Caching
     enable_cache: bool = True
     cache_dir: Optional[str] = None
@@ -190,3 +204,5 @@ class MediaLoadConfig:
     # Distributed / Remote settings
     use_nixl: bool = False
     use_mooncake: bool = False
+
+"""

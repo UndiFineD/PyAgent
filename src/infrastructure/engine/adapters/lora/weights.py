@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""LoRA layer weight implementations."""
+"""
+"""
+LoRA layer weight implementations.""
 
+"""
 from dataclasses import dataclass
 
 import numpy as np
@@ -35,8 +39,9 @@ except ImportError:
 
 @dataclass
 class LoRALayerWeights:
-    """LoRA weights for a single layer."""
-    lora_a: NDArray[np.float32]  # [rank, in_features]
+"""
+LoRA weights for a single layer.""
+lora_a: NDArray[np.float32]  # [rank, in_features]
     lora_b: NDArray[np.float32]  # [out_features, rank]
     scaling: float
     module_name: str
@@ -44,25 +49,29 @@ class LoRALayerWeights:
 
     @property
     def rank(self) -> int:
-        """LoRA rank."""
-        return self.lora_a.shape[0]
+"""
+LoRA rank.""
+return self.lora_a.shape[0]
 
     @property
     def in_features(self) -> int:
-        """Input dimension."""
-        return self.lora_a.shape[1]
+"""
+Input dimension.""
+return self.lora_a.shape[1]
 
     @property
     def out_features(self) -> int:
-        """Output dimension."""
-        return self.lora_b.shape[0]
+"""
+Output dimension.""
+return self.lora_b.shape[0]
 
     def forward(
         self,
         x: NDArray[np.float32],
         apply_dropout: bool = False,
     ) -> NDArray[np.float32]:
-        """Compute LoRA output."""
+"""
+Compute LoRA output.""
         # Try Rust acceleration for inference
         if rc and not apply_dropout and hasattr(rc, "lora_forward_rust"):
             try:
@@ -102,7 +111,8 @@ class LoRALayerWeights:
         self,
         base_weight: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        """Merge LoRA weights into base weight."""
+"""
+Merge LoRA weights into base weight.""
         # Try Rust acceleration
         if rc and hasattr(rc, "lora_merge_rust"):
             try:
@@ -124,22 +134,25 @@ class LoRALayerWeights:
         return base_weight + delta
 
     def get_memory_bytes(self) -> int:
-        """Memory usage in bytes."""
-        return self.lora_a.nbytes + self.lora_b.nbytes
+"""
+Memory usage in bytes.""
+return self.lora_a.nbytes + self.lora_b.nbytes
 
 
 @dataclass
 class IA3LayerWeights:
-    """IA3 (Input-Activation-Attention Scaling) weights for a single layer."""
-    scaling_vector: NDArray[np.float32]  # [features]
+"""
+IA3 (Input-Activation-Attention Scaling) weights for a single layer.""
+scaling_vector: NDArray[np.float32]  # [features]
     module_name: str
 
     def forward(
         self,
         x: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        """Apply IA3 scaling."""
-        if rc and hasattr(rc, "apply_ia3_scaling_rust"):
+"""
+Apply IA3 scaling.""
+if rc and hasattr(rc, "apply_ia3_scaling_rust"):
             try:
                 res = rc.apply_ia3_scaling_rust(x.flatten().tolist(), self.scaling_vector.tolist())
                 return np.array(res, dtype=np.float32).reshape(x.shape)
@@ -149,14 +162,16 @@ class IA3LayerWeights:
         return x * self.scaling_vector
 
     def get_memory_bytes(self) -> int:
-        """Memory usage in bytes."""
-        return self.scaling_vector.nbytes
+"""
+Memory usage in bytes.""
+return self.scaling_vector.nbytes
 
 
 @dataclass
 class PackedLoRAWeights:
-    """Packed LoRA weights for fused QKV or gate+up projections."""
-    lora_a: NDArray[np.float32]  # [num_layers, rank, in_features]
+"""
+Packed LoRA weights for fused QKV or gate+up projections.""
+lora_a: NDArray[np.float32]  # [num_layers, rank, in_features]
     lora_b: NDArray[np.float32]  # [num_layers, out_features, rank]
     scalings: list[float]
     module_names: list[str]
@@ -166,8 +181,9 @@ class PackedLoRAWeights:
         cls,
         layer_weights: list[LoRALayerWeights],
     ) -> "PackedLoRAWeights":
-        """Create packed weights from individual layer weights."""
-        if not layer_weights:
+"""
+Create packed weights from individual layer weights.""
+if not layer_weights:
             raise ValueError("layer_weights cannot be empty")
         lora_a = np.stack([lw.lora_a for lw in layer_weights])
         lora_b = np.stack([lw.lora_b for lw in layer_weights])
@@ -177,8 +193,9 @@ class PackedLoRAWeights:
         return cls(lora_a, lora_b, scalings, module_names)
 
     def unpack(self) -> list[LoRALayerWeights]:
-        """Unpack into individual layer weights."""
-        return [
+"""
+Unpack into individual layer weights.""
+return [
             LoRALayerWeights(
                 lora_a=self.lora_a[i],
                 lora_b=self.lora_b[i],
@@ -190,5 +207,6 @@ class PackedLoRAWeights:
 
     @property
     def num_layers(self) -> int:
-        """Number of packed layers."""
-        return len(self.module_names)
+        ""
+Number of packed layers.""
+return len(self.module_names)

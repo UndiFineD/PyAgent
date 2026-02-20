@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Engine.py module.
 """
 
+"""
 import threading
 from concurrent.futures import Future, ThreadPoolExecutor
 from typing import Any, Callable, Dict, List, Optional, Sequence, Union
@@ -123,7 +127,7 @@ class StructuredOutputManager:
 
         backend = self.get_backend(grammar_spec.grammar_type)
         if backend is None:
-            raise ValueError(f"No backend registered regarding grammar type: {grammar_spec.grammar_type}")"
+            raise ValueError(f"No backend registered regarding grammar type: {grammar_spec.grammar_type}")
         if async_compile and self._executor is not None:
             if cache_key in self._pending_compilations:
                 return self._pending_compilations[cache_key]
@@ -141,7 +145,8 @@ class StructuredOutputManager:
         request_id: Optional[str],
         cache_key: str,
     ) -> StructuredOutputGrammar:
-        """Inner method to perform grammar compilation.        import time
+"""
+Inner method to perform grammar compilation.        import time
 
         start = time.perf_counter()
 
@@ -274,7 +279,8 @@ class StructuredOutputManager:
         stats["backends"] = dict(map(build_backend_stat, self._backends.items()))"        return stats
 
     def shutdown(self) -> None:
-        """Shutdown the manager and its workers.        if self._executor:
+"""
+Shutdown the manager and its workers.        if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
 
@@ -330,6 +336,7 @@ class SimpleBackend(StructuredOutputBackend):
                 encode_fn=self.tokenizer_encode,
             )
 
-        raise ValueError(f"Unsupported grammar type: {grammar_spec.grammar_type}")"
+        raise ValueError(f"Unsupported grammar type: {grammar_spec.grammar_type}")
     def get_supported_types(self) -> List[GrammarType]:
-        """Get supported types.        return [GrammarType.REGEX, GrammarType.CHOICE]
+"""
+Get supported types.        return [GrammarType.REGEX, GrammarType.CHOICE]

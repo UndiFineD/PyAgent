@@ -14,11 +14,14 @@
 
 
 def test_placeholder():
-    """Minimal parser-safe tests for multi-agent orchestration core."""
-    assert True
+"""
+"""
+Minimal parser-safe tests for multi-agent orchestration core.""
+assert True
 
-
+"""
 def test_multi_agent_orchestration_placeholder():
-    """Sanity placeholder to allow test collection to proceed."""
-    assert True
+"""
+Sanity placeholder to allow test collection to proceed.""
+assert True
 

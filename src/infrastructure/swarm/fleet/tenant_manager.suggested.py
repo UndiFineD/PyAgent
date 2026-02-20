@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,14 @@ from __future__ import annotations
 """
 TenantManager
 
+"""
 Manager for multi-tenant workspace isolation.
 Simulates Docker-based environment isolation by managing restricted root paths.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -60,21 +63,25 @@ class TenantManager:
         self.active_tenants: dict[str, str] = {}
 
     def create_tenant(self, tenant_id: str) -> str:
-        """Creates an isolated workspace for a new tenant.        tenant_path = os.path.join(self.tenants_dir, tenant_id)
+"""
+Creates an isolated workspace for a new tenant.        tenant_path = os.path.join(self.tenants_dir, tenant_id)
         if not os.path.exists(tenant_path):
             os.makedirs(tenant_path)
             # Use Core for standardized structure
             for sub_dir in self.core.get_required_dirs():
                 os.makedirs(os.path.join(tenant_path, sub_dir), exist_ok=True)
-            logging.info(f"TENANT-MGR: Created isolated workspace for {tenant_id}")"
+            logging.info(f"TENANT-MGR: Created isolated workspace for {tenant_id}")
         self.active_tenants[tenant_id] = tenant_path
         return tenant_path
 
     def get_isolated_path(self, tenant_id: str, relative_path: str) -> str:
-        """Translates a relative path into the tenant's isolated absolute path.'        tenant_root = self.active_tenants.get(tenant_id)
+"""
+Translates a relative path into the tenant's isolated absolute path.'        tenant_root = self.active_tenants.get(tenant_id)
         if not tenant_root:
-            raise ValueError(f"Tenant {tenant_id} not active.")"
+            raise ValueError(f"Tenant {tenant_id} not active.")
         return self.core.validate_and_translate_path(tenant_root, relative_path)
 
     def get_tenancy_report(self) -> str:
-        """Summary of active isolated environments.        return f"Tenant Manager: {len(self.active_tenants)} isolated environments established.""
+"""
+Summary of active isolated environments.        return f"Tenant Manager: {len(self.active_tenants)} isolated environments established."
+"""

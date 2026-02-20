@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 SSE-based MCP tool server implementation.
 """
 
+"""
 import asyncio
 import logging
 import time
@@ -34,7 +38,8 @@ logger = logging.getLogger(__name__)
 
 
 class SSEMCPServer(MCPToolServer):
-    """MCP server using Server-Sent Events.
+"""
+MCP server using Server-Sent Events.
     def __init__(self, config: MCPServerConfig):
         if not config.url:
             raise ValueError("SSE server requires URL")"        super().__init__(config)
@@ -42,7 +47,8 @@ class SSEMCPServer(MCPToolServer):
         self._event_queue: asyncio.Queue = asyncio.Queue()
 
     async def connect(self) -> MCPSession:
-        """Connect via SSE.        self._session = self._create_session()
+"""
+Connect via SSE.        self._session = self._create_session()
 
         try:
             await self._connect_sse()
@@ -58,7 +64,8 @@ class SSEMCPServer(MCPToolServer):
         return self._session
 
     async def _connect_sse(self) -> None:
-        """Establish SSE connection.        try:
+"""
+Establish SSE connection.        try:
             import aiohttp
 
             self._client = aiohttp.ClientSession()
@@ -70,7 +77,8 @@ class SSEMCPServer(MCPToolServer):
             logger.warning("aiohttp not available, using mock SSE connection")"            self._client = MockSSEClient(self.config.url)
 
     async def disconnect(self) -> None:
-        """Disconnect SSE.        if self._session:
+"""
+Disconnect SSE.        if self._session:
             self._session.state = SessionState.CLOSING
 
         if self._client:
@@ -83,8 +91,9 @@ class SSEMCPServer(MCPToolServer):
             self._session.state = SessionState.DISCONNECTED
 
     async def list_tools(self) -> List[ToolSchema]:
-        """List tools via SSE.        if not self._client:
-            raise RuntimeError("Not connected")"
+"""
+List tools via SSE.        if not self._client:
+            raise RuntimeError("Not connected")
         try:
             if hasattr(self._client, "get"):"                async with self._client.get(
                     f"{self.config.url}/tools","                    timeout=self.config.timeout_seconds,
@@ -105,8 +114,9 @@ class SSEMCPServer(MCPToolServer):
             logger.error(f"Failed to list tools: {e}")"            raise
 
     async def call_tool(self, call: ToolCall) -> ToolResult:
-        """Execute tool via SSE.        if not self._client:
-            raise RuntimeError("Not connected")"
+"""
+Execute tool via SSE.        if not self._client:
+            raise RuntimeError("Not connected")
         start_time = time.time()
         try:
             if hasattr(self._client, "post"):"                async with self._client.post(
@@ -142,7 +152,8 @@ class SSEMCPServer(MCPToolServer):
 
 
 class MockSSEClient:
-    """Mock SSE client for testing.
+"""
+Mock SSE client for testing.
     def __init__(self, url: str):
         self.url = url
         self._tools = [
@@ -155,8 +166,8 @@ class MockSSEClient:
         ]
 
     async def list_tools(self) -> dict:
-        return {"tools": self._tools}"
+        return {"tools": self._tools}
     async def call_tool(self, name: str, arguments: dict) -> dict:
-        return {"content": f"Mock result for {name}: {arguments}"}"
+        return {"content": f"Mock result for {name}: {arguments}"}
     async def close(self) -> None:
         pass

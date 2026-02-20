@@ -15,8 +15,10 @@
 
 
 """
+"""
 Reward predictor.py module.
 
+"""
 try:
     import logging
 except ImportError:
@@ -43,10 +45,11 @@ class ExpertRewardPredictor:
         self.expert_biases = self._precompute_biases()
 
     def _precompute_biases(self) -> Dict[str, float]:
-        """Calculates a global bias for each expert based on general success.        biases = {}
-        top_experts = {item[0]: 1.0 for item in self.wisdom.get("top_experts", [])}"
+"""
+Calculates a global bias for each expert based on general success.        biases = {}
+        top_experts = {item[0]: 1.0 for item in self.wisdom.get("top_experts", [])}
         # Expert synergies can also inform bias: if an expert has high average synergy, they are flexible
-        synergies = self.wisdom.get("expert_synergies", {})"
+        synergies = self.wisdom.get("expert_synergies", {})
         for ex_id, peers in synergies.items():
             avg_synergy = sum(peers.values()) / max(1, len(peers))
             # 10% bias toward experts with high synergy
@@ -69,4 +72,7 @@ class ExpertRewardPredictor:
         return max(0.0, adjusted_score)
 
     def get_synergy_boost(self, expert_a: str, expert_b: str) -> float:
-        """Returns a multiplier boost if two experts are known to work well together.        synergies = self.wisdom.get("expert_synergies", {})"        return synergies.get(expert_a, {}).get(expert_b, 0.0)
+"""
+Returns a multiplier boost if two experts are known to work well together.        synergies = self.wisdom.get("expert_synergies", {})"        return synergies.get(expert_a, {}).get(expert_b, 0.0)
+
+"""

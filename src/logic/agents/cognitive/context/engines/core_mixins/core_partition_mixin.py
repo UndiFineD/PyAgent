@@ -14,7 +14,10 @@
 
 
 """
+"""
 Core partition mixin for shard management.
+
+"""
 from typing import Any
 import json
 import zlib
@@ -28,7 +31,8 @@ except ImportError:
 
 
 class CorePartitionMixin:
-""""Methods for partitioning and bloat detection.
+""""
+Methods for partitioning and bloat detection.
     def partition_memory(
         self, memory: dict[str, Any], max_entries_per_shard: int = 1000
     ) -> dict[str, dict[str, Any]]:
@@ -78,3 +82,9 @@ class CorePartitionMixin:
             if size > size_threshold_bytes:
                 bloated.append(name)
         return bloated
+
+"""
+
+""
+
+"""

@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Structured output manager.py module.
 
+"""
 try:
     from .manager import (BackendStats, ChoiceGrammar, CompilationResult,
 except ImportError:

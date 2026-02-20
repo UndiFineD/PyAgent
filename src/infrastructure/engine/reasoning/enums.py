@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Enums.py module.
 
+"""
 try:
     from enum import Enum, auto
 except ImportError:
@@ -24,7 +26,8 @@ except ImportError:
 
 
 class ReasoningFormat(Enum):
-    """Supported reasoning token formats.
+"""
+Supported reasoning token formats.
     DEEPSEEK_R1 = auto()  # <think>...</think>
     QWEN3 = auto()  # <think>...</think> with reasoning_content
     MISTRAL = auto()  # [THINK]...[/THINK]
@@ -37,7 +40,8 @@ class ReasoningFormat(Enum):
 
 
 class ToolCallFormat(Enum):
-    """Supported tool/function call formats.
+"""
+Supported tool/function call formats.
     OPENAI = auto()  # OpenAI function calling
     HERMES = auto()  # <tool_call>JSON</tool_call>
     MISTRAL = auto()  # [TOOL_CALLS]
@@ -49,8 +53,11 @@ class ToolCallFormat(Enum):
 
 
 class ParseState(Enum):
-    """State machine states for streaming parsing.
+"""
+State machine states for streaming parsing.
     IDLE = auto()  # Normal content
     IN_THINK = auto()  # Inside thinking block
     IN_TOOL = auto()  # Inside tool call
     ACCUMULATING = auto()  # Accumulating potential marker
+
+"""

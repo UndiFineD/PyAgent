@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +18,11 @@ from __future__ import annotations
 
 # "Auto-extracted class from agent_context.py"try:
     import re
+"""
 except ImportError:
-    import re
+
+"""
+import re
 
 
 try:
@@ -44,16 +49,20 @@ class ContextDiffer:
 #         >>> diff=differ.diff_versions(old_content, new_content)
 
     def __init__(self) -> None:
-""""Initialize context differ.        self.diffs: list["str] = []"
+""""
+Initialize context differ.        self.diffs: list["str] = []"
     def compute_diff(self, content_from: str, content_to: str) -> ContextDiff:
-""""Compute a structured diff between two context contents.        return self.diff_versions(content_from," content_to)"
+""""
+Compute a structured diff between two context contents.        return self.diff_versions(content_from," content_to)"
     def get_section_changes(self, content_from: str, content_to: str) -> dict[str, list[str]]:
-""""Return section-level changes between two contents.        diff = self.diff_versions(content_from, content_to)
+""""
+Return section-level changes between two contents.        diff = self.diff_versions(content_from, content_to)
         return {
             "added": diff.added_sections,"            "removed": diff.removed_sections,"            "modified": diff.modified_sections,"        }
 
     def summarize_diff(self, diff: ContextDiff) -> str:
-""""Summarize a ContextDiff into a human-readable sentence.        return diff.change_summary or (
+""""
+Summarize a ContextDiff into a human-readable sentence.        return diff.change_summary or (
 #             fAdded {len(diff.added_sections)}, removed {len(diff.removed_sections)},
 #             fmodified {len(diff.modified_sections)} sections
         )
@@ -63,7 +72,7 @@ class ContextDiffer:
         content_from: str,
         content_to: str,
         version_from: str = "v1","        version_to: str = "v2","    ) -> ContextDiff:
-        "Create diff between "two content versions."
+        "Create diff between "two content versions.
         Args:
             content_from: Original content.
             content_to: New content.

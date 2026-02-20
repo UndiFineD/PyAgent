@@ -1,7 +1,6 @@
-"""Utility functions used by the Agent classes."""
 from __future__ import annotations
-
-
+"""
+Utility functions used by the Agent classes.""
 import importlib.util
 import logging
 import sys
@@ -16,11 +15,13 @@ _CODEIGNORE_CACHE_TIME: dict[str, float] = {}
 
 
 def load_codeignore(root: Path) -> set[str]:
-    """Load and parse ignore patterns from a .codeignore file.
+"""
+Load and parse ignore patterns from a .codeignore file.
+
 
     Returns a set of patterns. Empty set if file doesn't exist or can't be read.
-    """
-    codeignore_path = root / ".codeignore"
+"""
+codeignore_path = root / ".codeignore"
     cache_key = str(codeignore_path)
 
     # Check cache validity
@@ -54,11 +55,12 @@ def load_codeignore(root: Path) -> set[str]:
 
 
 def setup_logging(verbosity: str | None = None) -> None:
-    """Configure logging based on verbosity level.
+"""
+Configure logging based on verbosity level.
 
     Accepts friendly verbosity names or numeric levels as strings.
-    """
-    levels = {
+"""
+levels = {
         "quiet": logging.ERROR,
         "minimal": logging.WARNING,
         "normal": logging.INFO,
@@ -77,11 +79,12 @@ def setup_logging(verbosity: str | None = None) -> None:
 
 
 def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None:
-    """Worker function for multiprocessing file processing.
+"""
+Worker function for multiprocessing file processing.
 
     This function must be at module level to be pickleable for multiprocessing.
-    """
-    try:
+"""
+try:
         logging.debug("[worker] Processing %s", file_path.name)
         agent_instance.process_file(file_path)
         logging.info("[worker] Completed %s", file_path.name)
@@ -92,11 +95,12 @@ def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None
 
 
 def _load_fix_markdown_content() -> Callable[[str], str]:
-    """Load the markdown fixer module dynamically, return a callable.
+"""
+Load the markdown fixer module dynamically, return a callable.
 
     Falls back to an identity function if the module is not present.
-    """
-    def _fallback(text: str) -> str:
+    ""
+def _fallback(text: str) -> str:
         return text
 
     this_file = Path(__file__)

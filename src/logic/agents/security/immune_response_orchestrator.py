@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,10 @@ from __future__ import annotations
 """
 ImmuneResponseOrchestrator - Coordinates automated threat detection, response, and recovery
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
+
 # [BATCHFIX] Commented metadata/non-Python
-""" [Brief Summary]""""
+""" [Brief Summary]"""
 # DATE: 2026-02-13
 # [BATCHFIX] Commented metadata/non-Python
 # AUTHOR: Keimpe de Jong
@@ -43,7 +45,6 @@ FILE CONTENT SUMMARY:
 ImmuneResponseOrchestrator: Coordinates automated threat detection, response, and recovery.
 Implements bio-inspired defense and self-healing mechanisms.
 """
-
 import time
 from typing import Any
 
@@ -56,32 +57,37 @@ __version__ = VERSION
 class ImmuneResponseOrchestrator:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Coordinates rapid patching and vulnerability shielding across the "fleet.
+"""
+Coordinates rapid patching and vulnerability shielding across the "fleet.
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.active_shields: list[str] = []""""
+"""
+self.active_shields: list[str] = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.vulnerability_db: dict[str, Any] = {}""""
+"""
+self.vulnerability_db: dict[str, Any] = {}""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> dict[str, Any]:""""
+"""
+def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> dict[str, Any]:""""
 # [BATCHFIX] Commented metadata/non-Python
 #         Simulates deploying a hot-patch to all running "agent nodes."  # [BATCHFIX] closed string"       " _ "= patch_code"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.vulnerability_db[vulnerability_id] = {""""            "status": "patched","            "deployed_at": time.time(),"            "nodes_affected": "all","        }
+"""
+self.vulnerability_db[vulnerability_id] = {""""            "status": "patched","            "deployed_at": time.time(),"            "nodes_affected": "all","        }
         # Phase 108: Intelligence Recording
         try:
             from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
             recorder = LocalContextRecorder(user_context="ImmuneResponse")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             recorder.record_interaction(
                 "Internal","                "Shield","# [BATCHFIX] Commented metadata/non-Python
 #                 fPatch deployment: {vulnerability_id}","  # [BATCHFIX] closed string"                "Deployed","            )
@@ -92,9 +98,11 @@ class ImmuneResponseOrchestrator:
             "vulnerability": vulnerability_id,"            "status": "remediated","            "patch_applied": True,"        }
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def monitor_threat_vectors(self) -> dict[str, Any]:""""        Scans for zero-day patterns in communication logs.
+"""
+def monitor_threat_vectors(self) -> dict[str, Any]:""""
+Scans for zero-day patterns in communication logs.
    "   "  # Simulated scan"        return {
             "active_threats": 0,"            "system_integrity": 0.999,"            "last_scan": time.time(),"        }
 
@@ -103,33 +111,37 @@ class ImmuneResponseOrchestrator:
 class HoneypotAgent:
 # [BATCHFIX] Commented metadata/non-Python
 #     Detects and neutralizes prompt injection" and adversarial attacks"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-#     by acting as an attractive" but isolated target."  # [BATCHFIX] closed string"
+#     by acting as an attractive" but isolated target."  # [BATCHFIX] closed string
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.trapped_attempts: list[dict[str, Any]] = []""""
+"""
+self.trapped_attempts: list[dict[str, Any]] = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""""        Inspects input for "ignore previous instruction" or similar patterns."        adversarial_patterns = [
+"""
+def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""""
+Inspects input for "ignore previous instruction" or similar patterns."        adversarial_patterns = [
             "ignore all previous","            "system prompt","            "developer mode","        ]
         for pattern in adversarial_patterns:
             if pattern in prompt_input.lower():
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #                 self.trapped_attempts.append(
                     {
                         "input": prompt_input,"                        "type": "prompt_injection","                        "timestamp": time.time(),"                    }
                 )
                 return {"safe": False, "threat_type": "injection_detected"}"        return {"safe": True}"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def get_trap_statistics(self) -> dict[str, Any]:"Returns statistics on trapped adversarial attempts.        return {
+"""
+def get_trap_statistics(self) -> dict[str, Any]:"Returns statistics on trapped adversarial attempts.        return {
             "attempts_neutralized": len(self.trapped_attempts),"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #           "  "attacker_profiles_identified": 0,"  # [BATCHFIX] closed string"        }
 
 import time
@@ -143,32 +155,37 @@ __version__ = VERSION
 
 class ImmuneResponseOrchestrator:
 # [BATCHFIX] Commented metadata/non-Python
-#     Coordinates rapid patching and" vulnerability shielding across the fleet."  # [BATCHFIX] closed string"
+#     Coordinates rapid patching and" vulnerability shielding across the fleet."  # [BATCHFIX] closed string
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.active_shields: list[str] = []""""
+"""
+self.active_shields: list[str] = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.vulnerability_db: dict[str, Any] = {}""""
+"""
+self.vulnerability_db: dict[str, Any] = {}""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> dict[str, Any]:""""        Simulates deploying a hot-patch to all running agent nodes.
+"""
+def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> dict[str, Any]:""""
+Simulates deploying a hot-patch to all running agent nodes.
         _ = patch_code
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.vulnerability_db[vulnerability_id] = {""""            "status": "patched","            "deployed_at": time.time(),"            "nodes_affected": "all","        }
+"""
+self.vulnerability_db[vulnerability_id] = {""""            "status": "patched","            "deployed_at": time.time(),"            "nodes_affected": "all","        }
         # Phase 108: Intelligence Recording
         try:
             from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
             recorder = LocalContextRecorder(user_context="ImmuneResponse")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             recorder.record_interaction(
                 "Internal","                "Shield","# [BATCHFIX] Commented metadata/non-Python
 #                 fPatch deployment: {vulnerability_id}","  # [BATCHFIX] closed string"                "Deployed","            )
@@ -179,9 +196,10 @@ class ImmuneResponseOrchestrator:
             "vulnerability": vulnerability_id,"            "status": "remediated","            "patch_applied": True,"        }
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def monitor_threat_vectors(self) -> dict[str, Any]:""""    "    Scans for zero-day patterns in" communication logs."        # Simulated scan
+"""
+def monitor_threat_vectors(self) -> dict[str, Any]:""""    "    Scans for zero-day patterns in" communication logs."        # Simulated scan
         return {
             "active_threats": 0,"            "system_integrity": 0.999,"            "last_scan": time.time(),"        }
 
@@ -194,25 +212,31 @@ class HoneypotAgent:
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self.trapped_attempts: list[dict[str, Any]] = []""""
+"""
+self.trapped_attempts: list[dict[str, Any]] = []""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""""        Inspects input for "ignore previous instruction" or similar patterns."        adversarial_patterns = [
+"""
+def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:""""
+Inspects input for "ignore previous instruction" or similar patterns."        adversarial_patterns = [
             "ignore all previous","            "system prompt","            "developer mode","        ]
         for pattern in adversarial_patterns:
             if pattern in prompt_input.lower():
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #                 self.trapped_attempts.append(
                     {
                         "input": prompt_input,"                        "type": "prompt_injection","                        "timestamp": time.time(),"                    }
                 )
                 return {"safe": False, "threat_type": "injection_detected"}"        return {"safe": True}"
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def get_trap_statistics(self) -> dict[str, Any]:"Returns statistics on trapped adversarial attempts.        return {
+"""
+def get_trap_statistics(self) -> dict[str, Any]:"Returns statistics on trapped adversarial attempts.        return {
             "attempts_neutralized": len(self.trapped_attempts),"            "attacker_profiles_identified": 0,"        }
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Background Agent Execution Manager for the PyAgent GUI.
+"""
+"""
+Background Agent Execution Manager for the PyAgent GUI.
 
+"""
 import logging
 import threading
 import tkinter as tk
@@ -29,7 +33,9 @@ __version__ = VERSION
 
 
 class AgentRunner:
-    """Manages background threads and execution lifecycle for agents.
+"""
+Manages background threads and execution lifecycle for agents.
+
     def __init__(self, callbacks) -> None:
         self.callbacks: Any = callbacks
         self.history: dict[Any, Any] = {}  # Store history per agent instance
@@ -43,7 +49,8 @@ class AgentRunner:
             self.history[agent_id] = []
 
         # Get content from callbacks
-        global_ctx: str = """        if "get_global_context" in self.callbacks:"            global_ctx = self.callbacks["get_global_context"]()"
+        global_ctx: str = ""
+if "get_global_context" in self.callbacks:"            global_ctx = self.callbacks["get_global_context"]()"
         column.on_start()
         column.stop_event = threading.Event()
 
@@ -66,7 +73,7 @@ class AgentRunner:
                 # Dynamic import implementation
                 module_map: dict[str, str] = {
                     "Coder": "src.agent_coder","                    "Developer": "src.agent_coder","                    "Architect": "src.agent_architect","                    "PM": "src.agent_pm","                    "Analyst": "src.agent_pm","                    "Reviewer": "src.agent_reviewer","                    "Test Architect": "src.agent_tester","                    "UX Designer": "src.agent_ux","                    "BMad Master": "src.agent_master","                    "Scrum Master": "src.agent_pm","                    "Security Auditor": "src.agent_security","                }
-                module_map.get(agent_type, "src.agent_coder")"
+                module_map.get(agent_type, "src.agent_coder")
                 logger.info(f"Initialized {agent_type} agent on thread.")"                logger.info(f"Target Scope: {cfg['file'] or 'Workspace'}")"'                logger.info(f"Context Snippet: {global_ctx[:50]}...")"                logger.info(f"Memory Depth: {len(self.history[agent_id])} turns")"
                 # Simulation - In a real app we'd call the backend here'                # result = backend_call(self.history[agent_id], global_ctx, agent_type)
 
@@ -94,17 +101,20 @@ class AgentRunner:
                 self.history[agent_id] = []
 
     def get_history(self, column: Any) -> list[dict[str, Any]]:
-        """Returns the conversation history for a specific agent column.        return self.history.get(id(column), [])
+"""
+Returns the conversation history for a specific agent column.        return self.history.get(id(column), [])
 
     def set_history(self, column, new_history) -> None:
-        """Updates the conversation history for a specific agent column.        self.history[id(column)] = new_history
+"""
+Updates the conversation history for a specific agent column.        self.history[id(column)] = new_history
 
     def optimize_memory(self, agent_id, token_limit) -> None:
-        """Truncates history if it exceeds estimated token limit, preserving marked messages.        chars_per_token = 4  # Simple heuristic
+        ""
+Truncates history if it exceeds estimated token limit, preserving marked messages.        chars_per_token = 4  # Simple heuristic
         char_limit = token_limit * chars_per_token
 
         current_history = self.history.get(agent_id, [])
-        total_chars: int = sum(len(m["content"]) for m in current_history)"
+        total_chars: int = sum(len(m["content"]) for m in current_history)
         # Start dropping from the beginning, but skip "keep" messages"        i = 0
         while total_chars > char_limit and i < len(current_history) - 2:
             # Check if this exchange should be kept

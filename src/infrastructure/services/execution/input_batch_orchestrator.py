@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Facade for InputBatchOrchestrator.
 
+"""
 try:
     from .batch import (BatchUpdateBuilder, CachedRequestState, InputBatch,
 except ImportError:

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Duplicate code detection logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
+"""
 import hashlib
 import re
 from typing import Any, Dict, List
@@ -24,9 +28,11 @@ from typing import Any, Dict, List
 
 
 class CoderDuplicationMixin:
-""""Mixin for identifying duplicate code.
+""""
+Mixin for identifying duplicate code.
     def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:
-""""Find duplicate code blocks using hashing.        # Rust-accelerated sliding window hash
+""""
+Find duplicate code blocks using hashing.        # Rust-accelerated sliding window hash
         try:
             import rust_core as rc  # pylint: disable=no-member
 
@@ -48,7 +54,8 @@ class CoderDuplicationMixin:
         return self._find_duplicate_code_fallback(content, min_lines)
 
     def _find_duplicate_code_fallback(self, content: str, min_lines: int) -> List[Dict[str, Any]]:
-""""Non-Rust fallback for duplicate detection.        lines = content".split("\\n")"        duplicates = []
+""""
+Non-Rust fallback for duplicate detection.        lines = content".split("\\n")"        duplicates = []
         hashes: Dict[str, List[int]] = {}
 
         for i in range(len(lines) - min_lines + 1):
@@ -67,3 +74,11 @@ class CoderDuplicationMixin:
                         "hash": block_hash,"                        "occurrences": len(line_numbers),"                        "lines": line_numbers,"                        "preview": "\\n".join(lines[line_numbers[0] - 1 : line_numbers[0] - 1 + min_lines])[:100],"                    }
                 )
         return duplicates
+
+"""
+
+"""
+
+""
+
+"""

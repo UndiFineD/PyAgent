@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Fleet load balancer.py module.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -66,16 +69,19 @@ class FleetLoadBalancer:
     def balance_request(self, interface: str, command: str) -> dict[str, Any]:
                 Routes the request to the most available resource or queues it.
         Assigns model based on Interface Affinity.
-                logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")"
+                logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
         assigned_model: str = self.gateway_core.resolve_model_by_affinity(interface)
 
         # Simple simulation: If queue is large, increase latency or reject
         if len(self.request_queue) > 100:
-            return {"status": "REJECTED", "reason": "High Traffic Load"}"
-        self.request_queue.append({"interface": interface, "command": command, "model": assigned_model})"
+            return {"status": "REJECTED", "reason": "High Traffic Load"}
+        self.request_queue.append({"interface": interface, "command": command, "model": assigned_model})
         return {
             "status": "ACCEPTED","            "interface": interface,"            "assigned_model": assigned_model,"            "estimated_wait_ms": len(self.request_queue) * 10,"        }
 
     def get_stats(self) -> dict[str, Any]:
-        """Get current load balancer statistics.        return {
+"""
+Get current load balancer statistics.        return {
             "queue_depth": len(self.request_queue),"            "interface_diversity": list(set(r["interface"] for r in self.request_queue)),"        }
+
+"""

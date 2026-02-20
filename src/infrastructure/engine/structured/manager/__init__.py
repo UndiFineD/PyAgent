@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Manager package.
 
+"""
 try:
     from .base import StructuredOutputBackend, StructuredOutputGrammar  # noqa: F401
 except ImportError:

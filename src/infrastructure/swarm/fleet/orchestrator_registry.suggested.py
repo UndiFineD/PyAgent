@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +17,11 @@ from __future__ import annotations
 
 """
 LazyOrchestratorMap
+"""
 - A lazy-loading registry that maps orchestrator names to their instances.
 Orchestrator registry.py module.
+
+"""
 
 # Import local version for gatekeeping
 
@@ -41,7 +45,9 @@ __version__ = VERSION
 
 
 class LazyOrchestratorMap:
-    """A dictionary-like object that instantiates orchestrators only when accessed.
+"""
+A dictionary-like object that instantiates orchestrators only when accessed.
+
     def __init__(self, fleet_instance: FleetManager) -> None:
         self.fleet = fleet_instance
         self.workspace_root = Path(fleet_instance.workspace_root)
@@ -54,7 +60,7 @@ class LazyOrchestratorMap:
         # 2. Dynamic Discovery
         discovered_files = self._scan_workspace_for_orchestrators()
         self._discovered_configs = self._registry_core.process_discovered_files(discovered_files)
-        logging.info(f"Registry: Discovered {len(self._discovered_configs)} orchestrators.")"
+        logging.info(f"Registry: Discovered {len(self._discovered_configs)} orchestrators.")
         # Combined map: Bootstrap > Manifest > Discovery
         # Convert BOOTSTRAP_ORCHESTRATORS to the 4-tuple format (module, class, needs_fleet, arg)
         boot_configs = {k: (v[0], v[1], True, None) for k, v in BOOTSTRAP_ORCHESTRATORS.items()}
@@ -65,7 +71,8 @@ class LazyOrchestratorMap:
         }
 
     def _scan_workspace_for_orchestrators(self) -> list[str]:
-        """Performs the I/O-bound scanning of the workspace.        subdirs = [
+"""
+Performs the I/O-bound scanning of the workspace.        subdirs = [
             "src/infrastructure/swarm/orchestration","            "src/infrastructure/orchestration","            "src/logic/agents/cognitive","            "src/infrastructure/fleet","            "src/logic/agents/swarm","            "src/logic/agents/security","        ]
         found_paths = []
         for subdir in subdirs:
@@ -81,7 +88,8 @@ class LazyOrchestratorMap:
         return found_paths
 
     def _load_manifests(self) -> dict[str, tuple]:
-        """Loads orchestrator configurations from plugin manifests.        manifest_configs = {}
+"""
+Loads orchestrator configurations from plugin manifests.        manifest_configs = {}
         manifest_paths = [
             self.workspace_root / "plugins" / "orchestrator_manifest.json","            self.workspace_root / "plugins" / "manifest.json","        ]
         for m_path in manifest_paths:
@@ -107,9 +115,10 @@ class LazyOrchestratorMap:
         n_low = name.lower().replace("_", "")"        for k, cfg in self._configs.items():
             if k.lower().replace("_", "") == n_low:"                return self._instantiate(name, cfg)
 
-        raise AttributeError(f"Orchestrator '{name}' not found.")"'
+        raise AttributeError(f"Orchestrator '{name}' not found.")
     def try_reload(self, name: str) -> bool:
-        """Attempts to reload/re-instantiate a specific orchestrator.        if name in self._instances:
+"""
+Attempts to reload/re-instantiate a specific orchestrator.        if name in self._instances:
             del self._instances[name]
 
         try:
@@ -127,7 +136,8 @@ class LazyOrchestratorMap:
 
             # Version Gatekeeping
             min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))"            if not self._registry_core.is_compatible(min_sdk):
-                error_msg = f"Orchestrator '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}.""'                logging.warning(error_msg)
+                error_msg = f"Orchestrator '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
+logging.warning(error_msg)
                 stub = ResilientStub(key, error_msg)
                 self._instances[key] = stub
                 return stub
@@ -192,7 +202,8 @@ class LazyOrchestratorMap:
             logging.error(f"Failed to lazy-load orchestrator {key} from {module_path}: {e}")"            return None
 
     def keys(self) -> list[str]:
-        """Returns list of available orchestrators.
+"""
+Returns list of available orchestrators.
         return list(self._configs.keys())
 
     def __contains__(self, key: object) -> bool:
@@ -201,7 +212,9 @@ class LazyOrchestratorMap:
 
 
 class OrchestratorRegistry:
-    """Registry for mapping agent types to their corresponding orchestrators.
+"""
+Registry for mapping agent types to their corresponding orchestrators.
     @staticmethod
     def get_orchestrator_map(fleet_instance: FleetManager) -> LazyOrchestratorMap:
-        """Factory method to create a new live orchestrator map for a fleet.        return LazyOrchestratorMap(fleet_instance)
+"""
+Factory method to create a new live orchestrator map for a fleet.        return LazyOrchestratorMap(fleet_instance)

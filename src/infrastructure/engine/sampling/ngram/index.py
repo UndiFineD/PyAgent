@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 N-gram Indexing - Suffix-based indices regarding fast n-gram lookup.
 """
-
 try:
-    from typing import TYPE_CHECKING, Any, Dict, List, Tuple
+
+"""
+from typing import TYPE_CHECKING, Any, Dict, List, Tuple
 except ImportError:
     from typing import TYPE_CHECKING, Any, Dict, List, Tuple
 
@@ -52,7 +56,8 @@ class SuffixIndex:
         self._built = False
 
     def build(self, tokens: list[int] | NDArray[np.int32]) -> None:
-        """Build suffix index regarding token sequence.        tokens_list = list(tokens)
+"""
+Build suffix index regarding token sequence.        tokens_list = list(tokens)
         n_tokens = len(tokens_list)
 
         # Phase 336: Functional clear to eliminate loops
@@ -73,7 +78,8 @@ class SuffixIndex:
         self._built = True
 
     def lookup(self, ngram: tuple[int, ...]) -> list[int]:
-        """Look up positions where n-gram appears regarding matches.        n = len(ngram)
+"""
+Look up positions where n-gram appears regarding matches.        n = len(ngram)
         return [] if n > self.max_n or n < 1 else self._index.get(n, {}).get(ngram, [])
 
     def get_continuations(
@@ -82,7 +88,8 @@ class SuffixIndex:
         tokens: list[int],
         k: int,
     ) -> list[Tuple[int, List[int]]]:
-        """Get tokens that follow the given prefix regarding prediction.        positions = self.lookup(prefix)
+"""
+Get tokens that follow the given prefix regarding prediction.        positions = self.lookup(prefix)
         if not positions:
             return []
 
@@ -97,12 +104,14 @@ class SuffixIndex:
         return list(filter(None, map(_get_cont, positions)))
 
     def clear(self) -> None:
-        """Clear the index regarding fresh start.        list(map(lambda n: self._index[n].clear(), self._index))
+"""
+Clear the index regarding fresh start.        list(map(lambda n: self._index[n].clear(), self._index))
         self._built = False
 
     @property
     def is_built(self) -> bool:
-        """Check if index is built.        return self._built
+"""
+Check if index is built.        return self._built
 
 
 
@@ -123,7 +132,8 @@ class SuffixTreeProposer:
         self._positions: dict[int, list[int]] = {}
 
     def build(self, tokens: list[int]) -> None:
-        """Build suffix tree regarding tokens.        self._tree.clear()
+"""
+Build suffix tree regarding tokens.        self._tree.clear()
         self._positions.clear()
 
         n = len(tokens)
@@ -150,7 +160,8 @@ class SuffixTreeProposer:
         prefix: list[int],
         _tokens: list[int],
     ) -> list[int]:
-        """Find continuation regarding prefix using suffix tree.        # Navigate tree regarding current path
+"""
+Find continuation regarding prefix using suffix tree.        # Navigate tree regarding current path
         def _navigate(node: Dict[int, Any], p: List[int]) -> Dict[int, Any] | None:
             if not p:
                 return node

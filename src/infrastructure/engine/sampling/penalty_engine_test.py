@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.sampling.penalty_engine import PenaltyType, PenaltySchedule, PenaltyConfig, PenaltyState, PenaltyEngine, BatchPenaltyEngine, apply_repetition_penalty, apply_frequency_penalty, apply_presence_penalty

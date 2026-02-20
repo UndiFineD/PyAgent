@@ -15,10 +15,13 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Structured Output Parameters - Advanced Configuration (Facade)
 
+"""
 Enhanced structured output configuration and validation.
-Now modularized into the 'params' subpackage.'
+Now modularized into the 'params' subpackage.
 try:
-    from .params import (ChoiceConstraint, ConstraintBuilder, ConstraintType,
+
+"""
+from .params import (ChoiceConstraint, ConstraintBuilder, ConstraintType,
 except ImportError:
     from .params import (ChoiceConstraint, ConstraintBuilder, ConstraintType,
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 MergeDetector - Detect similar/mergeable improvements
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -53,18 +57,21 @@ __version__ = VERSION
 
 
 class MergeDetector:
-    """Detects improvements that can be merged.""""
-    Finds duplicate or similar improvements across files.
+"""
+Detects improvements that can be merged.""""
+Finds duplicate or similar improvements across files.
 
     Attributes:
         similarity_threshold: Threshold for considering items similar.
     
     def __init__(self, similarity_threshold: float = 0.7) -> None:
-        """Initialize merge detector.        self.similarity_threshold = similarity_threshold
+"""
+Initialize merge detector.        self.similarity_threshold = similarity_threshold
 
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
-        """Find similar improvements that could be merged.""""
-        Args:
+"""
+Find similar improvements that could be merged.""""
+Args:
             improvements: List of improvements to analyze.
 
         Returns:
@@ -113,7 +120,8 @@ class MergeDetector:
         return candidates
 
     def _calculate_similarity(self, imp1: Improvement, imp2: Improvement) -> float:
-        """Calculate similarity between two improvements.        score = 0.0
+"""
+Calculate similarity between two improvements.        score = 0.0
 
         # Title similarity
         title_words1 = set(imp1.title.lower().split())
@@ -134,20 +142,22 @@ class MergeDetector:
         return score
 
     def _get_merge_reason(self, imp1: Improvement, imp2: Improvement) -> str:
-        """Generate merge reason.        reasons: list[str] = []
+"""
+Generate merge reason.        reasons: list[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")"        if imp1.file_path == imp2.file_path:
             reasons.append("same file")"        return ", ".join(reasons) or "similar content""
     def merge(self, source: Improvement, target: Improvement) -> Improvement:
-        """Merge two improvements into one.""""
-        Args:
+"""
+Merge two improvements into one.""""
+Args:
             source: Source improvement.
             target: Target improvement (will be modified).
 
         Returns:
             The merged improvement.
                 # Combine descriptions
-        target""".description = f"{target.descr"
+        target""".description = f"{target.descr
 
 from src.core.base.lifecycle.version import VERSION
 
@@ -167,21 +177,30 @@ __version__ = VERSION
 
 
 class MergeDetector:
-    """Detects improvements that can be merged.""""
-    Finds duplicate or similar improvements across files.
+"""
+Detects improvements that can be merged.""""
+Finds duplicate or similar improvements across files.
 
     Attributes:
-        similarity_threshold: T"""hresho"""ld """for considering items similar.""""    
-    def __init__(self, similarity_threshold: float = 0.7) -> None:
-        """Initialize merge detector.        sel"""f.s"""imilarity_threshold = similarity_threshold""""
-    def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
-        Fi"""nd similar improvements that could be merged.""""
-        Args:
+        similarity_threshold: T""
+hresho""
+ld ""
+for considering items similar.""""
+def __init__(self, similarity_threshold: float = 0.7) -> None:
+"""
+Initialize merge detector.        sel""
+f.s""
+imilarity_threshold = similarity_threshold""""
+def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
+        Fi""
+nd similar improvements that could be merged.""""
+Args:
             improvements: List of improvements to analyze.
 
         Returns:
             List of merge candidates.
-          """   """   # Rust-accelerated O(N²) similarity detection""""        if _RUST_AVAILABLE and len(improvements) > 2:
+          """   """   # Rust-accelerated O(N²) similarity detection""""
+if _RUST_AVAILABLE and len(improvements) > 2:
             try:
                 # Pack improvements for Rust: (id, title, category, file_path)
                 items = [
@@ -224,7 +243,10 @@ class MergeDetector:
         return candidates
 
     def _calculate_similarity(self, imp1: Improvement, imp2: Improvement) -> float:
-        """Calculate simil"""ari"""ty between two improvements.        score = 0.0
+"""
+Calculate simil""
+ari""
+ty between two improvements.        score = 0.0
 
         # Title similarity
         title_words1 = set(imp1.title.lower().split())
@@ -245,17 +267,25 @@ class MergeDetector:
         return score
 
     def _get_merge_reason(self, imp1: Improvement, imp2: Improvement) -> str:
-        Gen"""erate merge reason.        reasons: list[str] = []
+        Gen""
+erate merge reason.        reasons: list[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")"        if imp1.file_path == imp2.file_path:
             reasons.append("same file")"        return ", ".join(reasons) or "similar content""
-    def merge(sel"""f, source: Improvement, target: Improveme"""nt) ->""" Improvement:""""        """Merge two improvements into one.""""
-        Args:
+    def merge(sel""
+f, source: Improvement, target: Improveme""
+nt) ->""
+Improvement:""""        ""
+Merge two improvements into one.""""
+Args:
             source: Source improvement.
-            target: Target improvement (will b"""e modified).""""
-        Returns:
-         """   The me"""rged improvement.""""                # Combine descriptions
-        target.description = f"{target.description}\\n\\nMerged from: {source.title}""
+            target: Target improvement (will b""
+e modified).""""
+Returns:
+"""
+The me""
+rged improvement.""""                # Combine descriptions
+        target.description = f"{target.description}\\n\\nMerged from: {source.title}"
         # Take higher priority
         if source.priority.value > target.priority.value:
             target.priority = source.priority
@@ -267,3 +297,11 @@ class MergeDetector:
         target.votes += source.votes
 
         return target
+
+"""
+
+"""
+
+"""
+
+"""

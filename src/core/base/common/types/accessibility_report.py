@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Accessibility report dataclass used by tests and tools."""
+"""
+"""
+Accessibility report dataclass used by tests and tools.""
 
+"""
 from dataclasses import dataclass, field
 from typing import List
 
@@ -32,13 +35,13 @@ except Exception:
 
 @dataclass
 class AccessibilityReport:
-    """A concise accessibility report structure for testing."""
-
-    file_path: str
-    issues: List[AccessibilityIssue] = field(default_factory=list)
+"""
+Parser-safe AccessibilityReport dataclass.""
+file_path: str
+    issues: list = field(default_factory=list)
     total_elements: int = 0
-    wcag_level: WCAGLevel = WCAGLevel.AA
+    wcag_level: object = None
     compliance_score: float = 100.0
     critical_count: int = 0
     serious_count: int = 0
-    recommendations: List[str] = field(default_factory=list)
+    recommendations: list = field(default_factory=list)

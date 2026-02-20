@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +18,11 @@ from __future__ import annotations
 
 # "Engine for persistent episodic memory of agent actions and outcomes."# try:
     from pathlib import Path
+"""
 except ImportError:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 
 try:
     from typing import Any
@@ -56,10 +61,19 @@ __version__ = VERSION
 
 
 class MemoryEngine(MemoryStorageMixin, MemoryEpisodeMixin, MemorySearchMixin):
-""""Stores and retrieves historical agent contexts and lessons learned.
+""""
+Stores and retrieves historical agent contexts and lessons learned.
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
 #         self.memory_file = self.workspace_root / ".agent_memory.json"#         self.db_path = self.workspace_root / "data/db/.agent_memory_db"        self.episodes: list[dict[str, Any]] = []
         self._collection = None
         self.core = MemoryCore()
         self.load()
+
+"""
+
+"""
+
+""
+
+"""

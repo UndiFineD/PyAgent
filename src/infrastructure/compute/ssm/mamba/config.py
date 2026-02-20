@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 Mamba Configuration and State Classes.
 """
-
 try:
-    import math
+
+"""
+import math
 except ImportError:
     import math
 
@@ -52,7 +56,7 @@ class MambaConfig:  # pylint: disable=too-many-instance-attributes
     time_step_rank: int | None = None  # dt_rank, defaults to ceil(hidden_size/16)
 
     # Activation
-    activation: str = "silu""
+    activation: str = "silu"
     # Normalization
     use_rms_norm: bool = True
     rms_norm_eps: float = 1e-5
@@ -66,14 +70,16 @@ class MambaConfig:  # pylint: disable=too-many-instance-attributes
         if self.hidden_size <= 0:
             raise ValueError(f"hidden_size must be > 0, got {self.hidden_size}")"        if self.ssm_state_size <= 0:
             raise ValueError(f"ssm_state_size must be > 0, got {self.ssm_state_size}")"        if self.conv_kernel_size <= 0:
-            raise ValueError(f"conv_kernel_size must be > 0, got {self.conv_kernel_size}")"
+            raise ValueError(f"conv_kernel_size must be > 0, got {self.conv_kernel_size}")
     @property
     def d_inner(self) -> int:
-        """Get intermediate size.        return self.intermediate_size or (2 * self.hidden_size)
+"""
+Get intermediate size.        return self.intermediate_size or (2 * self.hidden_size)
 
     @property
     def dt_rank(self) -> int:
-        """Get time step rank.        return self.time_step_rank or math.ceil(self.hidden_size / 16)
+"""
+Get time step rank.        return self.time_step_rank or math.ceil(self.hidden_size / 16)
 
 
 @dataclass
@@ -89,7 +95,8 @@ class MambaState:
         batch_size: int,
         config: MambaConfig,
         dtype: np.dtype = np.float32,
-    ) -> "MambaState":"        """Create zero-initialized state.        return cls(
+    ) -> "MambaState":"        """
+Create zero-initialized state.        return cls(
             conv_state=np.zeros(
                 (batch_size, config.d_inner, config.conv_kernel_size),
                 dtype=dtype,
@@ -100,7 +107,8 @@ class MambaState:
             ),
         )
 
-    def clone(self) -> "MambaState":"        """Clone state.        return MambaState(
+    def clone(self) -> "MambaState":"        """
+Clone state.        return MambaState(
             conv_state=self.conv_state.copy(),
             ssm_state=self.ssm_state.copy(),
         )
@@ -108,6 +116,7 @@ class MambaState:
 
 
 class MambaOutput(NamedTuple):
-    """Output from Mamba forward pass.
+"""
+Output from Mamba forward pass.
     output: np.ndarray  # [batch, seq_len, hidden_size]
     state: MambaState  # Updated state

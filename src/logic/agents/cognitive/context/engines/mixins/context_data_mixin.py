@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,16 +18,21 @@ from __future__ import annotations
 
 # "Data manipulation logic for GlobalContextEngine."# try:
     from typing import Any
+"""
 except ImportError:
-    from typing import Any
+
+"""
+from typing import Any
 
 
 
 
 class ContextDataMixin:
-""""Mixin for fundamental context data operations.
+""""
+Mixin for fundamental context data operations.
     def get(self, category: str, key: str | None = None) -> Any:
-""""Retrieves data with lazy shard loading.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded(category)
+""""
+Retrieves data with lazy shard loading.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded(category)
 
         if not hasattr(self, "memory"):"            return None
 
@@ -35,7 +42,8 @@ class ContextDataMixin:
         return data
 
     def set_with_conflict_resolution(
-"""self, category: str, key: str, value: Any, strategy: str = "latest    ) -> None:
+"""
+self, category: str, key: str, value: Any, strategy: str = "latest    ) -> None:
 #         "Sets a value in memory, resolving conflicts if the key already exists."        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded(category)
 
         if not hasattr(self, "memory") or not hasattr(self, "core"):"            return
@@ -56,13 +64,15 @@ class ContextDataMixin:
         if hasattr(self, "save"):"            self.save()
 
     def add_fact(self, key: str, value: Any) -> None:
-""""Adds or updates a project fact.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded("facts")"
+""""
+Adds or updates a project fact.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded("facts")"
         if not hasattr(self, "memory") or not hasattr(self, "core"):"            return
 
         self.memory["facts"][key] = self.core.prepare_fact(key, value)"        if hasattr(self, "save"):"            self.save()
 
     def add_insight(self, insight: str, source_agent: str) -> None:
-""""Adds a high-level insight learned from tasks.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded("insights")"
+""""
+Adds a high-level insight learned from tasks.        if hasattr(self, "_ensure_shard_loaded"):"            self._ensure_shard_loaded("insights")"
         if not hasattr(self, "memory") or not hasattr(self, "core"):"            return
 
         entry = self.core.prepare_insight(insight, source_agent)
@@ -70,6 +80,13 @@ class ContextDataMixin:
         if not any(i["text"] == insight for i in self.memory["insights"]):"            self.memory["insights"].append(entry)"            if hasattr(self, "save"):"                self.save()
 
     def add_constraint(self, constraint: str) -> None:
-""""Adds a project constraint.        if not hasattr(self, "memory"):"            return
+""""
+Adds a project constraint.        if not hasattr(self, "memory"):"            return
 
         if constraint not in self.memory["constraints"]:"            self.memory["constraints"].append(constraint)"            if hasattr(self, "save"):"                self.save()
+
+"""
+
+""
+
+"""

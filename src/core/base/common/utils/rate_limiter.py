@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Rate limiter utilities (token-bucket).
+"""
+"""
+Rate limiter utilities (token-bucket).
 
+"""
 Minimal, well-typed implementation used by tests. Config may be provided
 via a RateLimitConfig-like object with attributes `requests_per_second` and
 `burst_size`.
 """
-
 import threading
 import time
 from typing import Any
@@ -36,9 +39,9 @@ except Exception:
 
 
 class RateLimiter:
-    """A simple token-bucket rate limiter."""
-
-    def __init__(self, config: RateLimitConfig | None = None) -> None:
+"""
+A simple token-bucket rate limiter.""
+def __init__(self, config: RateLimitConfig | None = None) -> None:
         self.config = config or RateLimitConfig()
         self.tokens = float(self.config.burst_size)
         self.last_refill = time.time()
@@ -54,11 +57,12 @@ class RateLimiter:
         self.last_refill = now
 
     def acquire(self, timeout: float | None = None) -> bool:
-        """Acquire a token for making an API call.
+"""
+Acquire a token for making an API call.
 
         Blocks until a token is available or timeout expires.
-        """
-        start_time = time.time()
+"""
+start_time = time.time()
 
         with self._condition:
             while True:
@@ -86,8 +90,9 @@ class RateLimiter:
                 self._condition.wait(timeout=max(wait_time, 0.01))
 
     def get_stats(self) -> dict[str, Any]:
-        """Return simple stats about the limiter."""
-        with self._lock:
+"""
+Return simple stats about the limiter.""
+with self._lock:
             return {
                 "tokens_available": self.tokens,
                 "requests_last_minute": len(self._request_timestamps),

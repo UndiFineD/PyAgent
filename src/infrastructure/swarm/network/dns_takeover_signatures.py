@@ -14,9 +14,11 @@
 
 
 """
+"""
 DNS Takeover Signatures
 Source: 0xSojalSec-can-i-take-over-dns (https://github.com/indianajson/can-i-take-over-dns)
 
+"""
 DNS_TAKEOVER_SIGNATURES = {
     "000Domains": {"        "status": "Vulnerable (w/ purchase)","        "fingerprints": ["ns1.000domains.com", "ns2.000domains.com", "fwns1.000domains.com", "fwns2.000domains.com"]"    },
     "AWS Route 53": {"        "status": "Not Vulnerable","        "fingerprints": ["awsdns-"]"    },

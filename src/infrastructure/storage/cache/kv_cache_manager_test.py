@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.cache.kv_cache_manager import DeviceType, DType, KVCacheConfig, KVCacheBlock, KVCacheBlocks, KVCacheAllocator, PagedKVCache, KVCacheTransfer, KVCacheManager, create_kv_cache_manager

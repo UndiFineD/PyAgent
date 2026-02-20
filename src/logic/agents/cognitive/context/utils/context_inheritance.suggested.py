@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "Context inheritance manager for Cognitive agents."This module provides functionality for child contexts to inherit and resolve
+"""
 content from parent contexts using various merge strategies.
 """
-
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -45,29 +49,34 @@ __version__ = VERSION
 
 
 class ContextInheritance:
-    "Manages context inheritance from parent "files."
+    "Manages context inheritance from parent "files.
     Provides functionality for child contexts to inherit
     from parent contexts.
 
     Example:
         >>> inheritance = ContextInheritance()
-#         >>> inherited = inheritance.inherit_from("parent.md", "child.md")"
+#         >>> inherited = inheritance.inherit_from("parent.md", "child.md")
     def __init__(self) -> None:
-""""Initialize context inheritance manager.        self.inheritance_map: dict[str, InheritedContext] = {}
+""""
+Initialize context inheritance manager.        self.inheritance_map: dict[str, InheritedContext] = {}
         self.mode: InheritanceMode = InheritanceMode.MERGE
         self.parent_path: str | None = None
 
     def set_mode(self, mode: InheritanceMode) -> None:
-""""Set inheritance mode.        self.mode = mode
+""""
+Set inheritance mode.        self.mode = mode
 
     def set_parent(self, parent_path: str) -> None:
-""""Set parent context.        self.parent_path = parent_path
+""""
+Set parent context.        self.parent_path = parent_path
 
     def apply(self, child_content: str, parent_content: str) -> str:
-""""Apply the currently configured inheritance mode.        return self.resolve_inheritance(parent_content, child_content, self.mode)
+""""
+Apply the currently configured inheritance mode.        return self.resolve_inheritance(parent_content, child_content, self.mode)
 
     def get_hierarchy(self) -> list[str]:
-""""Get inheritance hierarchy.        return [self.parent_path] if "self.parent_path else []"
+""""
+Get inheritance hierarchy.        return [self.parent_path] if "self.parent_path else []"
     def inherit_from(
         self,
         parent_path: str,
@@ -105,3 +114,9 @@ class ContextInheritance:
         for section in parent_sections:
             section_name = re.search(r"##\\\\s+(\\w+)", section)"            if section_name and section_name.group(1) not in child_sections:
                 result += "\\n" + section.strip()"        return result
+
+"""
+
+""
+
+"""

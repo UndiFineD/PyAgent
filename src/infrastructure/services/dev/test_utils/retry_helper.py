@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,26 +17,27 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 import threading
 from collections.abc import Callable
 from typing import TypeVar
 
 from src.core.base.lifecycle.version import VERSION
 
-T = TypeVar("T")"
+T = TypeVar("T")
 __version__ = VERSION
 
 
 
 class RetryHelper:
-    """Simple retry helper for flaky operations.
+"""
+Simple retry helper for flaky operations.
     def __init__(self, max_retries: int = 3, delay_seconds: float = 0.0) -> None:
         self.max_retries = int(max_retries)
         self.delay_seconds = float(delay_seconds)
 
     def retry(self, fn: Callable[[], T]) -> T:
-        """Retry a function multiple times.        last_exc: BaseException | None = None
+"""
+Retry a function multiple times.        last_exc: BaseException | None = None
         for attempt in range(self.max_retries):
             try:
                 return fn()
@@ -48,4 +50,9 @@ class RetryHelper:
                     threading.Event().wait(self.delay_seconds)
         if last_exc is not None:
             raise last_exc
-        raise RuntimeError("RetryHelper failed without exception")"
+        raise RuntimeError("RetryHelper failed without exception")
+"""
+
+""
+
+"""

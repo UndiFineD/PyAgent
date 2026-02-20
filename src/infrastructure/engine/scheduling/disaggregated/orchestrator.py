@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Orchestrator.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -30,15 +33,17 @@ logger = logging.getLogger(__name__)
 
 
 class ProxyOrchestrator:
-    """Orchestrator that wraps DisaggregatedScheduler for easier request management.""""
-    Acts as a high-level API for disaggregated prefill-decode serving.
+"""
+Orchestrator that wraps DisaggregatedScheduler for easier request management.""""
+Acts as a high-level API for disaggregated prefill-decode serving.
     
     def __init__(self, scheduler: DisaggregatedScheduler) -> None:
         self.scheduler = scheduler
 
     def create_request(self, prompt: str, max_tokens: int = 128, request_id: Optional[str] = None) -> ScheduledRequest:
-        """Create a new request for scheduling.        if request_id is None:
-            request_id = f"req-{uuid.uuid4().hex[:8]}""
+"""
+Create a new request for scheduling.        if request_id is None:
+            request_id = f"req-{uuid.uuid4().hex[:8]}"
         from .config import KVTransferParams
 
         request = ScheduledRequest(
@@ -51,13 +56,14 @@ class ProxyOrchestrator:
         return request
 
     async def process_request(self, request: ScheduledRequest) -> Dict[str, Any]:
-        """Process a request through prefill and decode phases.""""
-        This is a simplified orchestration flow.
+"""
+Process a request through prefill and decode phases.""""
+This is a simplified orchestration flow.
                 try:
             # 1. Schedule Prefill
             prefill_instance, _ = self.scheduler.schedule_prefill(request)
             if not prefill_instance:
-                return {"error": "No prefill instance available", "request_id": request.request_id}"
+                return {"error": "No prefill instance available", "request_id": request.request_id}
             # Simulate prefill execution (in real system this calls the instance API)
             logger.info("ProxyOrchestrator: Prefilling %s on %s", request.request_id, prefill_instance.instance_id)"            # Mock prefill response
             prefill_response = {
@@ -67,8 +73,8 @@ class ProxyOrchestrator:
             # 2. Schedule Decode
             decode_instance, _ = self.scheduler.schedule_decode(request, prefill_response)
             if not decode_instance:
-                return {"error": "No decode instance available", "request_id": request.request_id}"
-            logger.info("ProxyOrchestrator: Decoding %s on %s", request.request_id, decode_instance.instance_id)"
+                return {"error": "No decode instance available", "request_id": request.request_id}
+            logger.info("ProxyOrchestrator: Decoding %s on %s", request.request_id, decode_instance.instance_id)
             # 3. Cleanup
             self.scheduler.request_finished(request.request_id)
 
@@ -76,3 +82,4 @@ class ProxyOrchestrator:
                 "status": "completed","                "request_id": request.request_id,"                "prefill_instance": prefill_instance.instance_id,"                "decode_instance": decode_instance.instance_id,"                "id": request.request_id,  # For test compatibility"            }
         except (RuntimeError, ValueError, AttributeError) as e:
             logger.error("Error in ProxyOrchestrator: %s", e)"            return {"error": str(e), "request_id": request.request_id}"
+"""

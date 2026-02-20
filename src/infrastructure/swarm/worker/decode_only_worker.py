@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +20,10 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 """
+"""
 Decode-Only Worker.
 
+"""
 This module implements a specialized worker for the decode stage of disaggregated inference.
 Decode-only workers receive KV cache from prefill workers and perform low-latency,
 autoregressive token generation.
@@ -33,7 +36,6 @@ Optimized for:
 
 Inspired by vLLM's specialized worker architectures and disaggregated prefill-decode patterns.
 """
-
 try:
     import logging
 except ImportError:
@@ -67,14 +69,14 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class DecodeOnlyWorker:
-    """
-    Worker specialized in the decode stage.
+"""
+Worker specialized in the decode stage.
 
     This worker assumes the prefill (initial prompt processing) has been done elsewhere.
     It pulls the necessary KV cache blocks on-demand or ahead-of-time from the
     distributed pool (e.g., Mooncake) and proceeds with generation.
-    """
-    def __init__(
+"""
+def __init__(
         self,
         worker_id: str,
         model_config: Any,
@@ -105,19 +107,21 @@ class DecodeOnlyWorker:
 
         logger.info("DecodeOnlyWorker %s initialized.", worker_id)
     def initialize(self) -> None:
-        """Initialize components for decoding."""
+"""
+Initialize components for decoding.""
         # Setup components, e.g., connectors and model executors
         self._is_active = True
         logger.info("DecodeOnlyWorker %s started.", self.worker_id)
     def execute_step(self, active_requests: List[Any]) -> None:
-        """Perform one decoding step for a batch of requests.
+"""
+Perform one decoding step for a batch of requests.
 
         1. Coordinate with KV connector to ensure blocks are loaded
         2. Execute model forward pass (single token)
         3. Sample next tokens
         4. Update local KV cache
-        """
-        if not active_requests:
+"""
+if not active_requests:
             return
 
         # Ahead-of-time loading coordination
@@ -132,14 +136,16 @@ class DecodeOnlyWorker:
         self.tokens_generated += len(active_requests)
 
     def _schedule_kv_prefetch_rust(self, seq_metadata: Any) -> List[int]:
-        """Rust-accelerated heuristic for prefetching KV blocks from remote.
+"""
+Rust-accelerated heuristic for prefetching KV blocks from remote.
         _ = seq_metadata
         # return RustBridge.schedule_kv_prefetch_rust(seq_metadata)
         return []
 
     def get_status(self) -> Dict[str, Any]:
-        """Return worker health and performance stats."""
-        return {
+"""
+Return worker health and performance stats.""
+return {
             "worker_id": self.worker_id,
             "role": "decode",
             "active_sequences": len(self._active_sequences),
@@ -149,11 +155,13 @@ class DecodeOnlyWorker:
         }
 
     def shutdown(self) -> None:
-        """Gracefully shut down the decode worker."""
-        self._is_active = False
+"""
+Gracefully shut down the decode worker.""
+self._is_active = False
         if self.kv_connector:
             self.kv_connector.close()
         logger.info("DecodeOnlyWorker %s shut down.", self.worker_id)
 
 # Lazy loading registration
 _worker = LazyLoader("src.infrastructure.swarm.worker.decode_only_worker", "DecodeOnlyWorker")
+""

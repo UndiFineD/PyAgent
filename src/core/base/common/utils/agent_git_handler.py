@@ -1,8 +1,8 @@
-"""Manager for git operations.
+"""
+Manager for git operations.
 
 Facade for a thin git operation layer used by higher-level code.
 """
-
 import logging
 from pathlib import Path
 from typing import Any
@@ -11,17 +11,18 @@ from src.core.base.common.shell_core import ShellCore
 
 
 class AgentGitHandler:
-    """Facade for Git operations with recording support."""
-
-    def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) -> None:
+"""
+Facade for Git operations with recording support.""
+def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) -> None:
         self.repo_root: Path = repo_root
         self.no_git: bool = no_git
         self.recorder: Any = recorder
         self.shell = ShellCore(repo_root=repo_root)
 
     def _record(self, action: str, result: str, meta: dict[str, Any] | None = None) -> None:
-        """Internal helper to record git operations if recorder is available."""
-        if self.recorder:
+"""
+Internal helper to record git operations if recorder is available.""
+if self.recorder:
             try:
                 self.recorder.record_interaction(provider="Git", model="cli", prompt=action, result=result, meta=meta)
             except Exception:
@@ -29,7 +30,8 @@ class AgentGitHandler:
                 logging.debug("Recorder failed during _record")
 
     def commit_changes(self, message: str, files: list[str] | None = None, *, enforce_tests: bool = False) -> bool:
-        """Commit changes to the repository.
+"""
+Commit changes to the repository.
 
         Args:
             message: Commit message
@@ -38,8 +40,8 @@ class AgentGitHandler:
 
         Returns:
             True if commit succeeded, False otherwise.
-        """
-        if self.no_git:
+"""
+if self.no_git:
             logging.info("Skipping git commit: no_git=True. Message: %s", message)
             return False
 
@@ -91,8 +93,9 @@ class AgentGitHandler:
             return False
 
     def create_branch(self, branch_name: str) -> bool:
-        """Create and switch to a new branch."""
-        if self.no_git:
+        ""
+Create and switch to a new branch.""
+if self.no_git:
             return False
         try:
             self.shell.execute(["git", "checkout", "-b", branch_name], check=True)

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +18,10 @@ from __future__ import annotations
 
 
 """
+"""
 ZeroCopySerializer - Zero-copy msgpack serialization for tensors and arrays.
 
+"""
 Implements vLLM's v1 serialization pattern for efficient tensor transfer'without copying data. Uses auxiliary buffers for large tensors to avoid
 memory copies in ZMQ multipart messages.
 
@@ -59,7 +62,7 @@ __all__ = [
 CUSTOM_TYPE_PICKLE = 1
 CUSTOM_TYPE_RAW_VIEW = 3
 
-T = TypeVar("T")"
+T = TypeVar("T")
 
 
 class ZeroCopyEncoder:
@@ -81,7 +84,7 @@ class ZeroCopyEncoder:
             size_threshold: Tensors/arrays smaller than this are inlined.
                           Larger ones use auxiliary buffers. Default 256 bytes.
                 if not MSGSPEC_AVAILABLE:
-            raise ImportError("msgspec is required for ZeroCopyEncoder")"
+            raise ImportError("msgspec is required for ZeroCopyEncoder")
         self.size_threshold = size_threshold
         self._encoder = msgpack.Encoder(enc_hook=self._enc_hook)
         self._aux_buffers: list[bytes | memoryview] | None = None
@@ -115,7 +118,9 @@ class ZeroCopyEncoder:
             self._aux_buffers = None
 
     def _enc_hook(self, obj: Any) -> Any:
-        """Custom encoding hook for special types.        # Handle torch tensors
+"""
+Custom encoding hook for special types.        # Handle torch tensors
+
         if _is_torch_tensor(obj):
             return self._encode_tensor(obj)
 
@@ -137,11 +142,12 @@ class ZeroCopyEncoder:
 
         # Handle Enums
         if isinstance(obj, Enum):
-            return {"__enum__": type(obj).__name__, "value": obj.value}"
+            return {"__enum__": type(obj).__name__, "value": obj.value}
         # Fallback to pickle for unknown types
         return msgpack.Ext(CUSTOM_TYPE_PICKLE, pickle.dumps(obj, protocol=pickle.HIGHEST_PROTOCOL))
 
-    def _encode_tensor(self, tensor: "torch.Tensor") -> tuple[str, tuple[int, ...], int | memoryview]:"        """Encode a torch tensor.
+    def _encode_tensor(self, tensor: "torch.Tensor") -> tuple[str, tuple[int, ...], int | memoryview]:"        """
+Encode a torch tensor.
         assert self._aux_buffers is not None
 
         # Get raw bytes view
@@ -162,7 +168,8 @@ class ZeroCopyEncoder:
 
         dtype_str = str(tensor.dtype).removeprefix("torch.")"        return dtype_str, tuple(tensor.shape), data
 
-    def _encode_ndarray(self, arr: "np.ndarray") -> tuple[str, tuple[int, ...], int | memoryview]:"        """Encode a numpy array.        assert self._aux_buffers is not None
+    def _encode_ndarray(self, arr: "np.ndarray") -> tuple[str, tuple[int, ...], int | memoryview]:"        """
+Encode a numpy array.        assert self._aux_buffers is not None
 
         # Ensure contiguous
         if arr.flags.c_contiguous:
@@ -198,7 +205,7 @@ class ZeroCopyDecoder:
             expected_type: Optional type hint for decoding
             share_memory: If True, tensors share memory with buffers
                 if not MSGSPEC_AVAILABLE:
-            raise ImportError("msgspec is required for ZeroCopyDecoder")"
+            raise ImportError("msgspec is required for ZeroCopyDecoder")
         self.share_memory = share_memory
         self._aux_buffers: Sequence[bytes | memoryview] = ()
 
@@ -227,13 +234,15 @@ class ZeroCopyDecoder:
             self._aux_buffers = ()
 
     def _ext_hook(self, code: int, data: bytes) -> Any:
-        """Handle msgpack extension types.        if code == CUSTOM_TYPE_PICKLE:
+"""
+Handle msgpack extension types.        if code == CUSTOM_TYPE_PICKLE:
             return pickle.loads(data)
         if code == CUSTOM_TYPE_RAW_VIEW:
             return data
-        raise ValueError(f"Unknown extension type: {code}")"
+        raise ValueError(f"Unknown extension type: {code}")
     def _dec_hook(self, typ: type, obj: Any) -> Any:
-        """Custom decoding hook for special types.        if NUMPY_AVAILABLE and typ is np.ndarray:
+"""
+Custom decoding hook for special types.        if NUMPY_AVAILABLE and typ is np.ndarray:
             return self._decode_ndarray(obj)
 
         if _is_torch_type(typ):
@@ -244,7 +253,8 @@ class ZeroCopyDecoder:
 
         return obj
 
-    def _decode_ndarray(self, obj: tuple) -> "np.ndarray":"        """Decode a numpy array.        dtype_str, shape, data = obj
+    def _decode_ndarray(self, obj: tuple) -> "np.ndarray":"        """
+Decode a numpy array.        dtype_str, shape, data = obj
 
         # Get buffer
         if isinstance(data, int):
@@ -260,7 +270,8 @@ class ZeroCopyDecoder:
 
         return arr
 
-    def _decode_tensor(self, obj: tuple) -> "torch.Tensor":"        """Decode a torch tensor.        import torch
+    def _decode_tensor(self, obj: tuple) -> "torch.Tensor":"        """
+Decode a torch tensor.        import torch
 
         dtype_str, shape, data = obj
 
@@ -316,14 +327,16 @@ def decode_with_buffers(
 
 
 @lru_cache(maxsize=32)
-def _str_to_torch_dtype(dtype_str: str) -> "torch.dtype":"    """Convert string to torch dtype.    import torch
+def _str_to_torch_dtype(dtype_str: str) -> "torch.dtype":"    """
+Convert string to torch dtype.    import torch
 
     dtype_map = {
         "float32": torch.float32,"        "float64": torch.float64,"        "float16": torch.float16,"        "bfloat16": torch.bfloat16,"        "int8": torch.int8,"        "int16": torch.int16,"        "int32": torch.int32,"        "int64": torch.int64,"        "uint8": torch.uint8,"        "bool": torch.bool,"        "complex64": torch.complex64,"        "complex128": torch.complex128,"    }
     return dtype_map.get(dtype_str, torch.float32)
 
 
-def _torch_dtype_to_numpy(dtype: "torch.dtype") -> "np.dtype":"    """Convert torch dtype to numpy dtype.    import torch
+def _torch_dtype_to_numpy(dtype: "torch.dtype") -> "np.dtype":"    """
+Convert torch dtype to numpy dtype.    import torch
 
     dtype_map = {
         torch.float32: np.float32,
@@ -344,7 +357,9 @@ def _torch_dtype_to_numpy(dtype: "torch.dtype") -> "np.dtype":"    """Convert to
 
 
 def _is_torch_tensor(obj: Any) -> bool:
-    """Check if object is a torch tensor without importing torch.    return type(obj).__module__.startswith("torch") and type(obj).__name__ == "Tensor""
+"""
+Check if object is a torch tensor without importing torch.    return type(obj).__module__.startswith("torch") and type(obj).__name__ == "Tensor"
 
 def _is_torch_type(typ: type) -> bool:
-    """Check if type is torch.Tensor.    return typ.__module__.startswith("torch") and typ.__name__ == "Tensor""
+"""
+Check if type is torch.Tensor.    return typ.__module__.startswith("torch") and typ.__name__ == "Tensor"

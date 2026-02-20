@@ -13,11 +13,13 @@
 # limitations under the License.
 
 
-"""Unit tests for communication models (CascadeContext)."""
-
-
+"""
+"""
+Unit tests for communication models (CascadeContext).""
 try:
-    import pytest
+
+"""
+import pytest
 except ImportError:
     import pytest
 
@@ -33,27 +35,30 @@ except ImportError:
 
 
 class TestCascadeContext:
-    """Tests for the CascadeContext model."""
-
-    def test_initialization_defaults(self):
-        """Test that default values are set correctly on initialization.
-        """
-        ctx = CascadeContext(task_id="test-task")
+"""
+Tests for the CascadeContext model.""
+def test_initialization_defaults(self):
+"""
+Test that default values are set correctly on initialization.
+"""
+ctx = CascadeContext(task_id="test-task")
         assert ctx.cascade_depth == 0
         assert ctx.depth_limit == 10
         assert ctx.failure_history == []
 
 
     def test_depth_limit_validation(self):
-        """Test that exceeding the depth limit raises an error.
-        """
-        with pytest.raises(RecursionError):
+"""
+Test that exceeding the depth limit raises an error.
+"""
+with pytest.raises(RecursionError):
             CascadeContext(task_id="test", cascade_depth=11, depth_limit=10)
 
 
     def test_failure_history_validation_schema(self):
-        """Test that invalid entries in failure history are filtered out.
-        """
+"""
+Test that invalid entries in failure history are filtered out.
+"""
         # Pass invalid types in failure history
         bad_history = ["not-a-dict", 123, {"valid": "mostly"}]
         ctx = CascadeContext(
@@ -68,9 +73,10 @@ class TestCascadeContext:
 
 
     def test_recursive_improvement_blocking(self):
-        """Test that recursive improvement loops are blocked.
-        """
-        ctx = CascadeContext(task_id="root")
+"""
+Test that recursive improvement loops are blocked.
+"""
+ctx = CascadeContext(task_id="root")
         # Simulate failure history with recursive improvement loops
         ctx.failure_history = [
             {"error": "e1", "failure_type": FailureClassification.RECURSIVE_IMPROVEMENT.value},
@@ -83,9 +89,10 @@ class TestCascadeContext:
 
 
     def test_repeating_error_circuit_breaker(self):
-        """Test that the circuit breaker triggers on repeating errors.
-        """
-        ctx = CascadeContext(task_id="root")
+"""
+Test that the circuit breaker triggers on repeating errors.
+"""
+ctx = CascadeContext(task_id="root")
         ctx.log_failure(stage="test", error="Same Error")
         ctx.log_failure(stage="test", error="Same Error")
         # Third time should trigger breaker

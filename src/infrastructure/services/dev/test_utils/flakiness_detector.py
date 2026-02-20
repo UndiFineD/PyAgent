@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 from collections.abc import Callable
 
 from src.core.base.lifecycle.version import VERSION
@@ -30,8 +30,9 @@ __version__ = VERSION
 
 
 class FlakinessDetector:
-    """Detects flaky tests through repeated execution.""""
-    Runs tests multiple times to identify intermittent failures.
+"""
+Detects flaky tests through repeated execution.""""
+Runs tests multiple times to identify intermittent failures.
 
     Example:
         detector=FlakinessDetector()
@@ -39,8 +40,9 @@ class FlakinessDetector:
         if report.flakiness_score > 0.1:
             print(f"Test is flaky: {report.flakiness_score}")"    
     def __init__(self, default_runs: int = 5) -> None:
-        """Initialize detector.""""
-        Args:
+"""
+Initialize detector.""""
+Args:
             default_runs: Default number of test runs.
                 self.default_runs = default_runs
         self._history: dict[str, list[FlakinessReport]] = {}
@@ -51,8 +53,9 @@ class FlakinessDetector:
         runs: int | None = None,
         test_name: str | None = None,
     ) -> FlakinessReport:
-        """Analyze test for flakiness.""""
-        Args:
+"""
+Analyze test for flakiness.""""
+Args:
             test_fn: Test function to analyze.
             runs: Number of runs.
             test_name: Test name for reporting.
@@ -101,10 +104,12 @@ class FlakinessDetector:
         return report
 
     def get_history(self, test_name: str) -> list[FlakinessReport]:
-        """Get flakiness history for a test.        return self._history.get(test_name, [])
+"""
+Get flakiness history for a test.        return self._history.get(test_name, [])
 
     def get_flaky_tests(self, threshold: float = 0.1) -> list[str]:
-        """Get tests that exceed flakiness threshold.        flaky: list[str] = []
+"""
+Get tests that exceed flakiness threshold.        flaky: list[str] = []
         for name, reports in self._history.items():
             if reports and reports[-1].flakiness_score > threshold:
                 flaky.append(name)

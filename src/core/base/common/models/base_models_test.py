@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.common.models.base_models import CacheEntry, AuthConfig, SerializationConfig, FilePriorityConfig, ExecutionCondition, ValidationRule, ModelConfig, ConfigProfile, DiffResult, EnvironmentConfig, EnvironmentInstance

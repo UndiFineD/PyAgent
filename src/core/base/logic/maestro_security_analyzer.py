@@ -13,10 +13,14 @@
 # limitations under the License.
 
 
-"""MAESTRO Security Analyzer for PyAgent Multi-Agent Systems
-Based on Agent-Wiz's MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome) framework'"""
+"""
+"""
+MAESTRO Security Analyzer for PyAgent Multi-Agent Systems
+Based on Agent-Wiz's MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome) framework'""
 try:
-    import json
+
+"""
+import json
 except ImportError:
     import json
 
@@ -45,7 +49,9 @@ except ImportError:
 
 @dataclass
 class AgentNode:
-    """Represents an agent in the multi-agent graph."""name: str
+"""
+Represents an agent in the multi-agent graph.""
+name: str
     tier: AgentTier
     capabilities: List[str]
     tools: List[str]
@@ -60,7 +66,9 @@ class AgentNode:
 
 @dataclass
 class ThreatAssessment:
-    """MAESTRO threat assessment result."""layer: str
+"""
+MAESTRO threat assessment result.""
+layer: str
     category: str
     threat: str
     description: str
@@ -75,11 +83,13 @@ class ThreatAssessment:
 
 
 class MAESTROSecurityAnalyzer:
-    """MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome) analyzer
+"""
+MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome) analyzer
     for PyAgent multi-agent systems.
 
-    Based on Agent-Wiz's implementation adapted for PyAgent's architecture.'    """
-    MAESTRO_FRAMEWORK = """MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome), a framework built for Agentic AI.
+    Based on Agent-Wiz's implementation adapted for PyAgent's architecture.'    ""
+MAESTRO_FRAMEWORK = ""
+MAESTRO (Multi-Agent Environment, Security, Threat Risk, and Outcome), a framework built for Agentic AI.
 
 1. Principles
 Extended Security Categories: Expanding traditional categories like STRIDE, PASTA,
@@ -100,11 +110,13 @@ Layer 3: Agent Frameworks - Development tools and agent construction frameworks
 Layer 2: Data Operations - Data processing, storage, and management systems
 Layer 1: Foundation Models - Core AI/ML models and capabilities
 """
-    def __init__(self, base_dir: Optional[Path] = None):
+def __init__(self, base_dir: Optional[Path] = None):
         self.base_dir = base_dir or Path(".")"        self.threat_database = self._load_threat_database()
 
     def _load_threat_database(self) -> Dict[str, List[Dict[str, Any]]]:
-        """Load the MAESTRO threat database."""return {
+"""
+Load the MAESTRO threat database.""
+return {
             "agent_ecosystem": ["                {
                     "threat": "Agent Impersonation","                    "description": ("                        "Malicious actors deceiving users or other agents by impersonating legitimate AI agents""                    ),
                     "impact": "High","                    "likelihood": "Medium","                    "mitigations": ["                        "Implement agent identity verification","                        "Use cryptographic signatures for agent communications","                        "Regular agent registry audits""                    ]
@@ -140,14 +152,16 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         }
 
     def analyze_multi_agent_system(self, agents: List[AgentNode]) -> Dict[str, Any]:
-        """Perform MAESTRO analysis on a multi-agent system.
+"""
+Perform MAESTRO analysis on a multi-agent system.
 
         Args:
             agents: List of agent nodes in the system
 
         Returns:
             Comprehensive security analysis report
-        """report = {
+"""
+report = {
             "maestro_framework": self.MAESTRO_FRAMEWORK,"            "system_overview": self._analyze_system_overview(agents),"            "layer_assessments": {},"            "overall_risk_assessment": {},"            "recommendations": []"        }
 
         # Analyze each MAESTRO layer
@@ -167,14 +181,18 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         return report
 
     def _analyze_system_overview(self, agents: List[AgentNode]) -> Dict[str, Any]:
-        """Analyze the overall system structure."""return {
+"""
+Analyze the overall system structure.""
+return {
             "total_agents": len(agents),"            "agent_distribution": {"                tier.value: len([a for a in agents if a.tier == tier])
                 for tier in AgentTier
             },
             "capability_coverage": self._analyze_capability_coverage(agents),"            "inter_agent_relationships": self._analyze_relationships(agents),"            "system_maturity": self._assess_system_maturity(agents)"        }
 
     def _analyze_capability_coverage(self, agents: List[AgentNode]) -> Dict[str, Any]:
-        """Analyze the coverage of capabilities across agents."""all_capabilities = set()
+"""
+Analyze the coverage of capabilities across agents.""
+all_capabilities = set()
         for agent in agents:
             all_capabilities.update(agent.capabilities)
 
@@ -192,7 +210,9 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
             "total_unique_capabilities": len(all_capabilities),"            "capabilities": list(all_capabilities),"            "single_points_of_failure": single_points_of_failure,"            "redundancy_level": "Low" if single_points_of_failure else "Good""        }
 
     def _analyze_relationships(self, agents: List[AgentNode]) -> Dict[str, Any]:
-        """Analyze inter-agent relationships and lineage."""lineage_chains = []
+"""
+Analyze inter-agent relationships and lineage.""
+lineage_chains = []
         for agent in agents:
             if agent.lineage:
                 lineage_chains.append({
@@ -213,7 +233,9 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
             "lineage_chains": lineage_chains,"            "cascading_failure_risks": cascading_risks,"            "relationship_complexity": "High" if len(lineage_chains) > 5 else "Moderate""        }
 
     def _assess_system_maturity(self, agents: List[AgentNode]) -> str:
-        """Assess the overall maturity of the multi-agent system."""total_agents = len(agents)
+"""
+Assess the overall maturity of the multi-agent system.""
+total_agents = len(agents)
         elite_agents = len([a for a in agents if a.tier == AgentTier.ELITE])
         avg_success_rate = sum(a.success_rate for a in agents) / total_agents if total_agents > 0 else 0
         avg_usage = sum(a.usage_count for a in agents) / total_agents if total_agents > 0 else 0
@@ -223,34 +245,41 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
             return "Growing""        elif avg_success_rate > 0.9 and avg_usage > 10:
             return "Mature""        elif avg_success_rate > 0.8:
             return "Established""        else:
-            return "Developing""
+            return "Developing"
     def _analyze_layer(self, layer_key: str, layer_name: str, agents: List[AgentNode]) -> Dict[str, Any]:
-        """Analyze a specific MAESTRO layer."""threats = self.threat_database.get(layer_key, [])
+"""
+Analyze a specific MAESTRO layer.""
+threats = self.threat_database.get(layer_key, [])
         layer_assessment = {
             "layer_description": self._get_layer_description(layer_name),"            "relevant_threats": [],"            "risk_assessment": "Low","            "agent_relevance": self._assess_layer_relevance(layer_key, agents)"        }
 
         # Assess each threat for this layer
         for threat_data in threats:
             threat_assessment = self._assess_threat(threat_data, agents)
-            layer_assessment["relevant_threats"].append(threat_assessment)"
+            layer_assessment["relevant_threats"].append(threat_assessment)
             # Update overall layer risk
             if threat_assessment["risk_level"] == "Critical":"                layer_assessment["risk_assessment"] = "Critical""            elif threat_assessment["risk_level"] == "High" and layer_assessment["risk_assessment"] != "Critical":"                layer_assessment["risk_assessment"] = "High""            elif (
                 threat_assessment["risk_level"] == "Medium""                and layer_assessment["risk_assessment"] not in ["Critical", "High"]"            ):
-                layer_assessment["risk_assessment"] = "Medium""
+                layer_assessment["risk_assessment"] = "Medium"
         return layer_assessment
 
     def _get_layer_description(self, layer_name: str) -> str:
-        """Get description for a MAESTRO layer."""descriptions = {
+"""
+Get description for a MAESTRO layer.""
+descriptions = {
             "Agent Ecosystem": "Marketplace where AI agents interface with real-world applications and users","            "Security and Compliance": "Vertical layer ensuring security controls across all operations","            "Evaluation and Observability": "Tools for tracking performance and detecting anomalies","            "Deployment Infrastructure": "Runtime environment and orchestration systems","            "Agent Frameworks": "Development tools and agent construction frameworks","            "Data Operations": "Data processing, storage, and management systems","            "Foundation Models": "Core AI/ML models and capabilities""        }
-        return descriptions.get(layer_name, "Unknown layer")"
+        return descriptions.get(layer_name, "Unknown layer")
     def _assess_layer_relevance(self, layer_key: str, agents: List[AgentNode]) -> str:
-        """Assess how relevant a layer is to the current agent system."""
+"""
+Assess how relevant a layer is to the current agent system.""
 # Simple relevance assessment based on agent characteristics
         if layer_key == "deployment_infrastructure":"            return "High"  # Always relevant for running agents"        elif layer_key == "agent_frameworks":"            return "High"  # Core to agent development"        elif layer_key == "evaluation_observability":"            avg_usage = sum(a.usage_count for a in agents) / len(agents) if agents else 0
             return "High" if avg_usage > 5 else "Medium""        elif layer_key == "security_compliance":"            return "High"  # Security is always important"        else:
-            return "Medium""
+            return "Medium"
     def _assess_threat(self, threat_data: Dict[str, Any], agents: List[AgentNode]) -> Dict[str, Any]:
-        """Assess a specific threat against the current agent system."""threat = threat_data["threat"]"        base_impact = threat_data["impact"]"        base_likelihood = threat_data["likelihood"]"
+"""
+Assess a specific threat against the current agent system.""
+threat = threat_data["threat"]"        base_impact = threat_data["impact"]"        base_likelihood = threat_data["likelihood"]
         # Adjust likelihood based on agent system characteristics
         adjusted_likelihood = self._adjust_threat_likelihood(threat, base_likelihood, agents)
 
@@ -261,7 +290,8 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
             "threat": threat,"            "description": threat_data["description"],"            "base_impact": base_impact,"            "adjusted_likelihood": adjusted_likelihood,"            "risk_level": risk_level,"            "mitigation_suggestions": threat_data["mitigations"]"        }
 
     def _adjust_threat_likelihood(self, threat: str, base_likelihood: str, agents: List[AgentNode]) -> str:
-        """Adjust threat likelihood based on agent system characteristics."""
+"""
+Adjust threat likelihood based on agent system characteristics.""
 # Simple adjustment logic based on system maturity and agent diversity
         system_maturity = self._assess_system_maturity(agents)
         agent_diversity = len(set(cap for agent in agents for cap in agent.capabilities))
@@ -277,11 +307,15 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         return likelihood_levels[adjusted_idx]
 
     def _calculate_risk_level(self, impact: str, likelihood: str) -> str:
-        """Calculate overall risk level from impact and likelihood."""risk_matrix = {
+"""
+Calculate overall risk level from impact and likelihood.""
+risk_matrix = {
             ("Critical", "High"): "Critical","            ("Critical", "Medium"): "Critical","            ("Critical", "Low"): "High","            ("High", "High"): "Critical","            ("High", "Medium"): "High","            ("High", "Low"): "Medium","            ("Medium", "High"): "High","            ("Medium", "Medium"): "Medium","            ("Medium", "Low"): "Low","            ("Low", "High"): "Medium","            ("Low", "Medium"): "Low","            ("Low", "Low"): "Low""        }
-        return risk_matrix.get((impact, likelihood), "Medium")"
+        return risk_matrix.get((impact, likelihood), "Medium")
     def _calculate_overall_risk(self, layer_assessments: Dict[str, Dict[str, Any]]) -> Dict[str, Any]:
-        """Calculate overall system risk assessment."""risk_levels = ["Low", "Medium", "High", "Critical"]"        max_risk = "Low""
+"""
+Calculate overall system risk assessment.""
+risk_levels = ["Low", "Medium", "High", "Critical"]"        max_risk = "Low""
         for assessment in layer_assessments.values():
             layer_risk = assessment["risk_assessment"]"            if risk_levels.index(layer_risk) > risk_levels.index(max_risk):
                 max_risk = layer_risk
@@ -292,7 +326,9 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
             "overall_risk_level": max_risk,"            "critical_layers_count": critical_layers,"            "high_risk_layers_count": high_risk_layers,"            "total_layers_assessed": len(layer_assessments),"            "risk_summary": f"System has {critical_layers} critical and {high_risk_layers} high-risk layers""        }
 
     def _generate_recommendations(self, layer_assessments: Dict[str, Any], agents: List[AgentNode]) -> List[str]:
-        """Generate security recommendations based on the assessment."""recommendations = []
+"""
+Generate security recommendations based on the assessment.""
+recommendations = []
 
         # Check for single points of failure
         capability_coverage = self._analyze_capability_coverage(agents)
@@ -321,23 +357,27 @@ Layer 1: Foundation Models - Core AI/ML models and capabilities
         return recommendations
 
     def export_report(self, report: Dict[str, Any], output_path: Path) -> None:
-        """Export the MAESTRO analysis report to a file."""with open(output_path, 'w', encoding='utf-8') as f:'            json.dump(report, f, indent=2, ensure_ascii=False)
+"""
+Export the MAESTRO analysis report to a file.""
+with open(output_path, 'w', encoding='utf-8') as f:'            json.dump(report, f, indent=2, ensure_ascii=False)
 
     def generate_markdown_report(self, report: Dict[str, Any], output_path: Path) -> None:
-        """Generate a human-readable markdown report."""md_content = [f"# MAESTRO Security Analysis Report\\n\\n{report['maestro_framework']}\\n"]"'
+"""
+Generate a human-readable markdown report.""
+md_content = [f"# MAESTRO Security Analysis Report\\n\\n{report['maestro_framework']}\\n"]
         # System Overview
-        overview = report["system_overview"]"        md_content.append("## System Overview\\n")"        md_content.append(f"- **Total Agents**: {overview['total_agents']}")"'        md_content.append(f"- **System Maturity**: {overview['system_maturity']}")"'        md_content.append(f"- **Unique Capabilities**: {overview['capability_coverage']['total_unique_capabilities']}")"'
-        if overview['capability_coverage']['single_points_of_failure']:'            failures = ", ".join(overview['capability_coverage']['single_points_of_failure'])"'            md_content.append(f"- **⚠️ Single Points of Failure**: {failures}")"
+        overview = report["system_overview"]"        md_content.append("## System Overview\\n")"        md_content.append(f"- **Total Agents**: {overview['total_agents']}")"'        md_content.append(f"- **System Maturity**: {overview['system_maturity']}")"'        md_content.append(f"- **Unique Capabilities**: {overview['capability_coverage']['total_unique_capabilities']}")
+        if overview['capability_coverage']['single_points_of_failure']:'            failures = ", ".join(overview['capability_coverage']['single_points_of_failure'])"'            md_content.append(f"- **️ Single Points of Failure**: {failures}")"
         # Layer Assessments
-        md_content.append("\\n## Layer Assessments\\n")"        for layer_name, assessment in report["layer_assessments"].items():"            md_content.append(f"### {layer_name}\\n")"            md_content.append(f"**Risk Level**: {assessment['risk_assessment']}\\n")"'            md_content.append(f"**Relevance**: {assessment['agent_relevance']}\\n")"'            md_content.append(f"**Description**: {assessment['layer_description']}\\n")"'
+        md_content.append("\\n## Layer Assessments\\n")"        for layer_name, assessment in report["layer_assessments"].items():"            md_content.append(f"### {layer_name}\\n")"            md_content.append(f"**Risk Level**: {assessment['risk_assessment']}\\n")"'            md_content.append(f"**Relevance**: {assessment['agent_relevance']}\\n")"'            md_content.append(f"**Description**: {assessment['layer_description']}\\n")"
             if assessment["relevant_threats"]:"                md_content.append("**Key Threats**:\\n")"                for threat in assessment["relevant_threats"]:"                    if threat["risk_level"] in ["Critical", "High"]:"                        threat_desc = threat["description"][:100]"                        md_content.append(
                             f"- **{threat['threat']}** ({threat['risk_level']} risk): {threat_desc}...\\n""'                        )
 
         # Overall Risk
         risk = report["overall_risk_assessment"]"        md_content.append("## Overall Risk Assessment\\n")"        md_content.append(f"- **Overall Risk Level**: {risk['overall_risk_level']}")"'        md_content.append(f"- **Critical Layers**: {risk['critical_layers_count']}")"'        md_content.append(f"- **High-Risk Layers**: {risk['high_risk_layers_count']}")"'        md_content.append(f"- **Summary**: {risk['risk_summary']}")"'
         # Recommendations
-        md_content.append("\\n## Security Recommendations\\n")"        for rec in report["recommendations"]:"            md_content.append(f"- {rec}\\n")"
-        with open(output_path, 'w', encoding='utf-8') as f:'            f.write(''.join(md_content))'
+        md_content.append("\\n## Security Recommendations\\n")"        for rec in report["recommendations"]:"            md_content.append(f"- {rec}\\n")
+        with open(output_path, 'w', encoding='utf-8') as f:'            f.write(''.join(md_content))
 
 if __name__ == "__main__":"    # Example usage
     analyzer = MAESTROSecurityAnalyzer()
@@ -367,4 +407,4 @@ if __name__ == "__main__":"    # Example usage
 
     # Export reports
     analyzer.export_report(report, Path("maestro_analysis.json"))"    analyzer.generate_markdown_report(report, Path("maestro_report.md"))"
-    print("MAESTRO security analysis completed!")"    print(f"Overall risk level: {report['overall_risk_assessment']['overall_risk_level']}")"'    print("Generated reports: maestro_analysis.json, maestro_report.md")"
+    print("MAESTRO security analysis completed!")"    print(f"Overall risk level: {report['overall_risk_assessment']['overall_risk_level']}")"'    print("Generated reports: maestro_analysis.json, maestro_report.md")

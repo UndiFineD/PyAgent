@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -14,7 +17,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 import logging
 from collections import Counter
 from dataclasses import dataclass, field
@@ -26,9 +28,11 @@ from src.core.base.common.models.core_enums import FailureClassification
 
 try:
     import rust_core as rc  # pylint: disable=no-member
+"""
 except (ImportError, AttributeError):
     rc = None  # type: ignore[assignment]
 
+"""
 logger = logging.getLogger(__name__)
 
 __version__ = VERSION
@@ -36,7 +40,8 @@ __version__ = VERSION
 
 @dataclass
 class SwarmInsight:
-    """Data class representing a derived insight from the swarm.
+"""
+Data class representing a derived insight from the swarm.
     agent: str
     insight: str
     confidence: float
@@ -44,11 +49,13 @@ class SwarmInsight:
     timestamp: float = field(default_factory=lambda: datetime.now().timestamp())
 
     def format_for_pool(self) -> str:
-        """Format the insight for the synthesis prompt.        return f"- {self.agent} ({self.confidence:.2f}): {self.insight}""
+"""
+Format the insight for the synthesis prompt.        return f"- {self.agent} ({self.confidence:.2f}): {self.insight}"
 
 
 class IntelligenceCore:
-    """Logic-only core for swarm intelligence synthesis.
+"""
+Logic-only core for swarm intelligence synthesis.
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root
         self._unclassified_tracker: Counter = Counter()
@@ -63,8 +70,9 @@ class IntelligenceCore:
             "hallucination": FailureClassification.AI_ERROR,"            "timeout": FailureClassification.NETWORK_FAILURE,"            "connection_refused": FailureClassification.NETWORK_FAILURE,"            "file_not_found": FailureClassification.STATE_CORRUPTION,"            "lock_error": FailureClassification.STATE_CORRUPTION,"            "memory_limit": FailureClassification.RESOURCE_EXHAUSTION,"            "disk_space": FailureClassification.RESOURCE_EXHAUSTION,"            "assertion_error": FailureClassification.TEST_INFRASTRUCTURE,"            "recursion_depth": FailureClassification.RECURSION_LIMIT,"            "shard": FailureClassification.SHARD_CORRUPTION,"            "integrity": FailureClassification.SHARD_CORRUPTION,"            "corrupt": FailureClassification.SHARD_CORRUPTION,"            "distributed": FailureClassification.DISTRIBUTED_STATE_ERROR,"            "synchronization": FailureClassification.DISTRIBUTED_STATE_ERROR,"            "recursive": FailureClassification.RECURSION_LIMIT,  # Map rough matches"            "self_improvement": FailureClassification.RECURSIVE_IMPROVEMENT,"            "self_healing": FailureClassification.RECURSIVE_IMPROVEMENT,"            "swarm_desynchronization": FailureClassification.DISTRIBUTED_STATE_ERROR,"        }
 
     def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
-        """Filters relevant insights from the pool.""""
-        Args:
+"""
+Filters relevant insights from the pool.""""
+Args:
             pool: list of insight dictionaries.
             limit: maximum number of insights to return.
 
@@ -75,7 +83,7 @@ class IntelligenceCore:
                 # Optimized sort and truncate in Rust
                 pool = rc.filter_relevant_insights(pool, limit)  # type: ignore[attr-defined]
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.warning(f"Rust filter_relevant_insights failed: {e}")"
+                logger.warning(f"Rust filter_relevant_insights failed: {e}")
         insights = []
         # Fallback/Process results
         for item in pool[:limit]:
@@ -86,8 +94,9 @@ class IntelligenceCore:
         return insights
 
     def generate_synthesis_prompt(self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]) -> str:
-        """Constructs a prompt for AI synthesis from collected insights.""""
-        Args:
+"""
+Constructs a prompt for AI synthesis from collected insights.""""
+Args:
             insights: List of SwarmInsight objects.
             sql_lessons: List of SQL lesson dictionaries.
 
@@ -95,13 +104,15 @@ class IntelligenceCore:
             A prompt string for the AI.
                 lines = [i.format_for_pool() for i in insights]
         for lesson in sql_lessons:
-            lines.append(f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})")"'
+            lines.append(f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})")
         pool_text = "\\n".join(lines)"        return (
-            "Analyze these swarm insights and relational lessons. ""            "Synthesize the top 5 high-level patterns or warnings. ""            "For each pattern, provide the following fields if possible: ""            "'file' (path), 'line' (number), and 'description' (what is wrong). ""'            "Format each pattern as: 'File: [path] | Line: [number] | Description: [desc]'\\n""'            f"Insights:\\n{pool_text}""        )
+            "Analyze these swarm insights and relational lessons. ""            "Synthesize the top 5 high-level patterns or warnings. ""            "For each pattern, provide the following fields if possible: ""            "'file' (path), 'line' (number), and 'description' (what is wrong). ""'            "Format each pattern as: 'File: [path] | Line: [number] | Description: [desc]'\\n""'
+f"Insights:\\n{pool_text}""        )
 
     def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[dict[str, Any]]:
-        """Filters raw AI output and converts to structured dictionaries.""""
-        Args:
+"""
+Filters raw AI output and converts to structured dictionaries.""""
+Args:
             raw_patterns: List of raw pattern strings from the AI.
 
         Returns:
@@ -126,7 +137,7 @@ class IntelligenceCore:
                         if key == "file":"                            pattern_dict["file"] = val"                        elif key == "line":"                            pattern_dict["line"] = val"                        elif key == "description":"                            pattern_dict["description"] = val"
             # Phase 336: Taxonomy Classification
             classification = FailureClassification.UNKNOWN
-            lower_desc = pattern_dict["description"].lower()"
+            lower_desc = pattern_dict["description"].lower()
             # Check map
             for keyword, cls in self._taxonomy_map.items():
                 if keyword in lower_desc:
@@ -167,3 +178,11 @@ class IntelligenceCore:
                 "file": "SwarmScanner","                "line": "0","                "description": f"[Unclassified Patterns Detected]: Found {len(unknown_failures)} unknown patterns.""            })
 
         return valid_patterns
+
+"""
+
+"""
+
+""
+
+"""

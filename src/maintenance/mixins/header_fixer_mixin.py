@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 HeaderFixerMixin - Fix file license headers and __future__ import placement
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -48,7 +52,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Mixin for fixing license headers and docstring placement.
 """
-
 import logging
 from pathlib import Path
 
@@ -57,7 +60,8 @@ logger = logging.getLogger(__name__)
 
 
 class HeaderFixerMixin:
-    """Provides automated fixes for license headers and __future__ imports.
+"""
+Provides automated fixes for license headers and __future__ imports.
     def clean_file_headers(self, file_path: Path) -> bool:
                 Remove duplicate license headers and docstrings, fix __future__ positioning.
         Salvaged from temp fix scripts.
@@ -89,13 +93,15 @@ class HeaderFixerMixin:
                     continue
 
                 # Handle docstrings - keep only the first one
-                if line.strip().startswith('"""') or line.strip().startswith("'''"):'''"'                    if docstring_count == 0:
+                if line.strip().startswith('"""') or line.strip().startswith("'''"):'''"
+if docstring_count == 0:
                         in_first_docstring = True
                         docstring_count += 1
                         result.append(line)
                     elif in_first_docstring:
                         result.append(line)
-                        if (line.strip().endswith('"""') or line.strip().endswith("'''")) and len(line.strip()) > 3:'''"'                            in_first_docstring = False
+                        if (line.strip().endswith('"""') or line.strip().endswith("'''")) and len(line.strip()) > 3:'''"
+in_first_docstring = False
                     i += 1
                     continue
 
@@ -111,9 +117,13 @@ class HeaderFixerMixin:
             docstring_done = False
 
             for line in result:
-                if '"""' in line or "'''" in line:'''"'                    final_lines.append(line)
+                if '"""'
+in line or "'''"
+in line:'''"'
+final_lines.append(line)
                     if line.strip().count('"""') >= 1 or line.strip().count("'''") >= 1:'''"'                        # Simple detection for end of docstring
-                        if line.strip().endswith('"""') or line.strip().endswith("'''"):'''"'                            docstring_done = True
+                        if line.strip().endswith('"""') or line.strip().endswith("'''"):'''"
+docstring_done = True
                 elif line.strip().startswith('from __future__'):'                    if not docstring_done:
                         future_imports.append(line)
                     else:
@@ -132,3 +142,9 @@ class HeaderFixerMixin:
             return False
         except (OSError, UnicodeDecodeError, ValueError) as e:
             logger.error(f"Failed to fix headers in {file_path}: {e}")"            return False
+
+"""
+
+""
+
+"""

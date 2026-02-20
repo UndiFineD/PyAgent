@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Syntax validation and linting logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
+"""
 import ast
 import logging
 import os
@@ -30,9 +33,12 @@ from src.core.base.common.types.code_language import CodeLanguage
 
 
 class CoderValidationMixin:
-""""Mixin for validating syntax and linting code.
+""""
+Mixin for validating syntax and linting code.
+
     def validate_syntax(self, content: str) -> bool:
-""""Validate Python syntax using ast.        if self.language != CodeLanguage.PYTHON:
+""""
+Validate Python syntax using ast.        if self.language != CodeLanguage.PYTHON:
             return True
         try:
             ast.parse(content)
@@ -41,7 +47,8 @@ class CoderValidationMixin:
             logging.error(fSyntax error in generated code: {e}")"            return False
 
     def validate_flake8(self, content: str) -> bool:
-""""Validate Python code using flake8 if available.        if self.language != CodeLanguage.PYTHON:
+""""
+Validate Python code using flake8 if available.        if self.language != CodeLanguage.PYTHON:
             return True
         if not shutil.which("flake8"):"            logging.warning("flake8 not found, skipping style validation")"            return True
         with tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False) as tmp:"            tmp.write(content)
@@ -66,3 +73,9 @@ class CoderValidationMixin:
         finally:
             if os.path.exists(tmp_path):
                 os.unlink(tmp_path)
+
+"""
+
+""
+
+"""

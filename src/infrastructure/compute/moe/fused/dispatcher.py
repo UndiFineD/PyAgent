@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Dispatcher.py module.
 """
-
 try:
-    from typing import Callable
+
+"""
+from typing import Callable
 except ImportError:
     from typing import Callable
 
@@ -32,7 +36,8 @@ except ImportError:
 
 
 class SparseDispatcher:
-    """Sparse dispatcher for token-to-expert assignment.
+"""
+Sparse dispatcher for token-to-expert assignment.
     def __init__(
         self,
         num_experts: int,
@@ -103,7 +108,8 @@ class SparseDispatcher:
 
 
 class DenseDispatcher:
-    """Dense dispatcher using matrix operations.
+"""
+Dense dispatcher using matrix operations.
     def __init__(self, num_experts: int, top_k: int) -> None:
         self.num_experts = num_experts
         self.top_k = top_k
@@ -126,3 +132,5 @@ class DenseDispatcher:
                     output[mask] += expert_weights[mask, k : k + 1] * expert_output
 
         return output
+
+"""

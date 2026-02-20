@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Truncation management for prompt rendering.
 """
-
 try:
-    from typing import List, Tuple
+
+"""
+from typing import List, Tuple
 except ImportError:
     from typing import List, Tuple
 
@@ -34,7 +38,8 @@ except ImportError:
 
 
 class TruncationManager:
-    """Manage prompt truncation strategies.
+"""
+Manage prompt truncation strategies.
     @classmethod
     def truncate(
         cls,
@@ -43,7 +48,8 @@ class TruncationManager:
         strategy: TruncationStrategy = TruncationStrategy.AUTO,
         reserve_tokens: int = 0,
     ) -> Tuple[List[int], TruncationResult]:
-        """Truncate token sequence to fit within limit.        target_tokens: int = max_tokens - reserve_tokens
+"""
+Truncate token sequence to fit within limit.        target_tokens: int = max_tokens - reserve_tokens
         original_len: int = len(tokens)
 
         if original_len <= target_tokens:
@@ -114,3 +120,5 @@ class TruncationManager:
     @classmethod
     def _truncate_smart(cls, tokens: List[int], target: int, original: int) -> Tuple[List[int], TruncationResult]:
         return cls._truncate_left(tokens, target, original)
+
+"""

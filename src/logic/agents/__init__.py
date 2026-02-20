@@ -1,4 +1,7 @@
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -18,11 +21,13 @@ from __future__ import annotations
 # Agent namespace containing specialized swarm agent implementations.
 # This module provides the agent namespace for specialized swarm agent implementations.
 # from __future__ import annotations
-
 try:
     from .core.base.lifecycle.version import VERSION
+"""
 except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+
+"""
+from src.core.base.lifecycle.version import VERSION
 
 
 # from .swarm.orchestrator_agent import OrchestratorAgent as Agent  # noqa: F401

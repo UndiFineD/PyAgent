@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +17,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Verifies speculative tokens regarding target model outputs.
+"""
+"""
+Verifies speculative tokens regarding target model outputs.
 
+"""
 try:
     import functools
 except ImportError:
@@ -49,7 +53,9 @@ except ImportError:
 
 @dataclass
 class VerificationResult:
-    """Result regarding speculative token verification.
+"""
+Result regarding speculative token verification.
+
     accepted_tokens: List[int]
     accepted_count: int
     total_proposed: int
@@ -59,12 +65,14 @@ class VerificationResult:
 
     @property
     def success(self) -> bool:
-        """True if at least one token was accepted.        return self.accepted_count > 0
+"""
+True if at least one token was accepted.        return self.accepted_count > 0
 
 
 
 class SpeculativeVerifier:
-    """Verifies speculative tokens regarding target model.
+"""
+Verifies speculative tokens regarding target model.
     def __init__(
         self, vocab_size: int, method: AcceptanceMethod = AcceptanceMethod.SPECULATIVE, temperature: float = 1.0
     ) -> None:
@@ -75,7 +83,8 @@ class SpeculativeVerifier:
         self._accept_count = 0
 
     def verify_greedy(self, proposed_tokens: List[int], target_logits: np.ndarray) -> VerificationResult:
-        """Greedy verification: accept if regarding matches argmax.
+"""
+Greedy verification: accept if regarding matches argmax.
         def step(
             acc: tuple[list[int], int, bool, int | None], item: tuple[int, int]
         ) -> tuple[list[int], int, bool, int | None]:
@@ -114,7 +123,8 @@ class SpeculativeVerifier:
     def verify_speculative(
         self, proposed_tokens: List[int], draft_probs: np.ndarray, target_logits: np.ndarray
     ) -> VerificationResult:
-        """Standard speculative sampling verification.        # Vectorized softmax
+"""
+Standard speculative sampling verification.        # Vectorized softmax
         logits = target_logits / self.temperature
         exp_logits = np.exp(logits - np.max(logits, axis=-1, keepdims=True))
         target_probs = exp_logits / np.sum(exp_logits, axis=-1, keepdims=True)
@@ -157,7 +167,8 @@ class SpeculativeVerifier:
     def verify(
         self, proposed_tokens: List[int], target_logits: np.ndarray, draft_probs: Optional[np.ndarray] = None
     ) -> VerificationResult:
-        """Verify using configured method.        if self.method == AcceptanceMethod.GREEDY:
+"""
+Verify using configured method.        if self.method == AcceptanceMethod.GREEDY:
             return self.verify_greedy(proposed_tokens, target_logits)
         if draft_probs is None:
             draft_probs = np.ones(len(proposed_tokens)) / self.vocab_size
@@ -165,4 +176,5 @@ class SpeculativeVerifier:
 
     @property
     def acceptance_rate(self) -> float:
-        """Average acceptance rate across all verifications.        return self._accept_count / self._verify_count if self._verify_count > 0 else 0.0
+"""
+Average acceptance rate across all verifications.        return self._accept_count / self._verify_count if self._verify_count > 0 else 0.0

@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Unified prompt preparation and rendering system.
 
+"""
 try:
     from .base import PromptRenderer  # noqa: F401
 except ImportError:

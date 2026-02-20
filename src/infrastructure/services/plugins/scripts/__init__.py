@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,23 +17,20 @@ from __future__ import annotations
 
 
 """
-Scripts package.
 """
+Minimal package init for plugins.scripts used during repair.
 
+"""
+Provides a lightweight `__version__` and keeps import paths stable
+for tests and other modules that import this package.
+"""
 try:
     from .core.base.lifecycle.version import VERSION as VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION as VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION as VERSION
+    except Exception:
+        VERSION = "0.0.0-repair"
 
-
+__all__ = ["VERSION"]
 __version__ = VERSION
-
-# You may obtain a copy of the License at
-#
-#
-# limitations under the License.
-
-
-"""
-
-"""Package initialization.

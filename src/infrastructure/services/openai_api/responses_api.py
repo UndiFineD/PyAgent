@@ -15,8 +15,10 @@
 
 
 """
+"""
 Bridge file for OpenAI API responses.
 
+"""
 try:
     from .responses import (
 except ImportError:

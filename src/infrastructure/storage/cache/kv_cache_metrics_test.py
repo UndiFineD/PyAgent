@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.cache.kv_cache_metrics import MetricType, AlertLevel, MetricsConfig, BlockMetricsState, KVCacheEvictionEvent, CacheAlert, CacheMetricsSummary, KVCacheMetricsCollector, BatchMetricsCollector, create_metrics_collector

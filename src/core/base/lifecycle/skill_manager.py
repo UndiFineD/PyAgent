@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: skill_manager
+"""
+"""
+Module: skill_manager
 Handles dynamic loading and orchestration of SkillCore components.
 """
 
+"""
 import importlib
 import logging
 from typing import TYPE_CHECKING, Dict, Type
@@ -31,15 +35,17 @@ logger = logging.getLogger(__name__)
 
 
 class SkillManager:
-    """Orchestrates the lifecycle of SkillCores for a Universal Agent."""
-    def __init__(self, agent: BaseAgent) -> None:
+"""
+Orchestrates the lifecycle of SkillCores for a Universal Agent.""
+def __init__(self, agent: BaseAgent) -> None:
         self.agent = agent
         self.skills: Dict[str, SkillCore] = {}
 
 
     async def load_skill(self, skill_name: str) -> bool:
-        """Dynamically load a skill core."""
-        if skill_name in self.skills:
+"""
+Dynamically load a skill core.""
+if skill_name in self.skills:
             return True
 
         try:
@@ -64,8 +70,9 @@ class SkillManager:
 
 
     async def shutdown_all(self) -> None:
-        """Shutdown all loaded skills."""
-        for name, skill in self.skills.items():
+"""
+Shutdown all loaded skills.""
+for name, skill in self.skills.items():
             try:
                 await skill.shutdown()
             except Exception as e:
@@ -73,5 +80,6 @@ class SkillManager:
         self.skills.clear()
 
     def get_skill(self, name: str) -> 'SkillCore | None':
-        """Retrieve a loaded skill instance."""
-        return self.skills.get(name)
+"""
+Retrieve a loaded skill instance.""
+return self.skills.get(name)

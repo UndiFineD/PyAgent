@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.execution.cuda_graph_config import CUDAGraphMode, CUDAGraphConfig, CUDAGraphEntry, CUDAGraphRegistry, CUDAGraphManager

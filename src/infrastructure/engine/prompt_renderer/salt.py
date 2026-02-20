@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Cache salt generation for prompt rendering.
 """
-
 try:
-    import hashlib
+
+"""
+import hashlib
 except ImportError:
     import hashlib
 
@@ -39,14 +43,16 @@ except ImportError:
 
 
 class CacheSaltGenerator:
-    """Generate cache salt for prefix caching disambiguation.
+"""
+Generate cache salt for prefix caching disambiguation.
     @classmethod
     def generate(
         cls,
         config: PromptConfig,
         additional_data: Optional[Dict[str, Any]] = None,
     ) -> str:
-        """Generate cache salt based on configuration.        components = []
+        ""
+Generate cache salt based on configuration.        components = []
         if config.chat_template:
             components.append(f"template:{hashlib.md5(config.chat_template.encode()).hexdigest()[:8]}")"        if config.add_generation_prompt:
             components.append("gen_prompt")"        if config.add_special_tokens:
@@ -57,5 +63,5 @@ class CacheSaltGenerator:
             components.append(config.cache_salt)
 
         if not components:
-            return """
-        salt_string: str = "|".join(components)"        return hashlib.sha256(salt_string.encode()).hexdigest()[:16]
+            return ""
+salt_string: str = "|".join(components)"        return hashlib.sha256(salt_string.encode()).hexdigest()[:16]

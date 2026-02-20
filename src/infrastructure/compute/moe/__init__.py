@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Mixture of Experts (MoE) Infrastructure.
 
+"""
 Phase 38: Advanced MoE patterns from vLLM with beyond-vLLM innovations.
 
 Modules:

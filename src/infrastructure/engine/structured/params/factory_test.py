@@ -15,8 +15,11 @@
 
 try:
     from .factory import create_json_constraint, create_regex_constraint, create_choice_constraint, combine_constraints
+"""
 except ImportError:
-    from src.infrastructure.engine.structured.params.factory import create_json_constraint, create_regex_constraint, create_choice_constraint, combine_constraints
+
+"""
+from src.infrastructure.engine.structured.params.factory import create_json_constraint, create_regex_constraint, create_choice_constraint, combine_constraints
 try:
     from .config import StructuredOutputConfig
 except ImportError:
@@ -30,32 +33,36 @@ except ImportError:
 
 
 def test_create_json_constraint():
-    """Test creating a JSON schema constraint using the factory function."""
-    config = create_json_constraint()
+"""
+Test creating a JSON schema constraint using the factory function.""
+config = create_json_constraint()
     assert isinstance(config, StructuredOutputConfig)
     assert config.output_type == StructuredOutputType.JSON_SCHEMA
     assert config.json_schema["type"] == "object"
 
 
 def test_create_regex_constraint():
-    """Test creating a regex constraint using the factory function."""
-    config = create_regex_constraint("^abc$")
+"""
+Test creating a regex constraint using the factory function.""
+config = create_regex_constraint("^abc$")
     assert isinstance(config, StructuredOutputConfig)
     assert config.output_type == StructuredOutputType.REGEX
     assert config.regex == "^abc$"
 
 
 def test_create_choice_constraint():
-    """Test creating a choice constraint using the factory function."""
-    config = create_choice_constraint(["a", "b", "c"])
+"""
+Test creating a choice constraint using the factory function.""
+config = create_choice_constraint(["a", "b", "c"])
     assert isinstance(config, StructuredOutputConfig)
     assert config.output_type == StructuredOutputType.CHOICE
     assert config.choices == ["a", "b", "c"]
 
 
 def test_combine_constraints():
-    """Test combining two constraints into a composite constraint."""
-    c1 = create_json_constraint()
+"""
+Test combining two constraints into a composite constraint.""
+c1 = create_json_constraint()
     c2 = create_regex_constraint("^abc$")
     combined = combine_constraints(c1, c2)
     assert isinstance(combined, StructuredOutputConfig)

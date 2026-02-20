@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ComplianceAgent - Monitoring and enforcing data privacy & compliance
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -37,7 +41,6 @@ FILE CONTENT SUMMARY:
 ComplianceAgent: Agent for monitoring, enforcing, and reporting on regulatory and organizational compliance.
 Automates compliance checks and remediation workflows.
 """
-
 try:
     from pathlib import Path
 except ImportError:
@@ -91,10 +94,12 @@ class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  
 
 # [AUTO-FIXED F821]     @as_tool
     def scan_shard(self, shard_data: str) -> dict:
-        """Scans a memory shard for compliance issues (Phase 57). Enforces privacy and rate limiting.        if not self._privacy_enforced:
+"""
+Scans a memory shard for compliance issues (Phase 57). Enforces privacy and rate limiting.        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for compliance scanning.")"        import re
         findings = []
         for name, pattern in self._pii_patterns.items():
             if re.search(pattern, shard_data):
                 findings.append(name)
-        return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}"
+        return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}
+"""

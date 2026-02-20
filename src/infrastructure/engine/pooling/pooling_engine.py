@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Facade for the Pooling Engine (AI-specific).
 
+"""
 try:
     from .engine import PoolingEngine, create_pooling_engine
 except ImportError:

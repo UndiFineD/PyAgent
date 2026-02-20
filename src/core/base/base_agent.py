@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,14 +15,17 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Compatibility shim for older imports expecting `src.core.base.base_agent`.
+"""
+"""
+Compatibility shim for older imports expecting `src.core.base.base_agent`.
 This module re-exports the modern BaseAgent implementation located under
 `src.core.base.lifecycle.base_agent` to maintain backward compatibility with
 external code and tests.
 """
-
 try:
-    from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: F401
+
+"""
+from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: F401
 except ImportError:
     # Fallback for legacy import structure
     from .lifecycle.base_agent import BaseAgent  # noqa: F401

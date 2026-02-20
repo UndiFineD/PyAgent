@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for Resource Quotas and budget enforcement.
 """
-
+"""
+Core logic for Resource Quotas and budget enforcement.
+"""
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -42,16 +46,18 @@ except ImportError:
 
 @dataclass
 class QuotaConfig:
-    """Configuration for agent resource quotas."""
-    max_tokens: Optional[int] = None
+"""
+Configuration for agent resource quotas.""
+max_tokens: Optional[int] = None
     max_time_seconds: Optional[int] = None
     max_cycles: Optional[int] = None
 
 
 @dataclass
 class ResourceUsage:
-    """Current resource usage for an agent session."""
-    tokens_input: int = 0
+"""
+Current resource usage for an agent session.""
+tokens_input: int = 0
     tokens_output: int = 0
     start_time: float = field(default_factory=time.time)
     cycles: int = 0
@@ -59,20 +65,23 @@ class ResourceUsage:
 
     @property
     def total_tokens(self) -> int:
-        """Calculate total tokens consumed."""
-        return self.tokens_input + self.tokens_output
+"""
+Calculate total tokens consumed.""
+return self.tokens_input + self.tokens_output
 
 
     @property
     def elapsed_time(self) -> float:
-        """Calculate elapsed time in seconds."""
-        return time.time() - self.start_time
+"""
+Calculate elapsed time in seconds.""
+return time.time() - self.start_time
 
 
 class ResourceCore(BaseCore):
-    """Authoritative engine for resource quota enforcement.
-    """
-    def __init__(self, config: Optional[QuotaConfig] = None) -> None:
+"""
+Authoritative engine for resource quota enforcement.
+"""
+def __init__(self, config: Optional[QuotaConfig] = None) -> None:
         super().__init__()
         self.config = config or QuotaConfig()
         self.usage = ResourceUsage()
@@ -80,15 +89,17 @@ class ResourceCore(BaseCore):
         self._interrupt_reason: Optional[str] = None
 
     def update_usage(self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0) -> bool:
-        """Update current usage metrics."""
-        self.usage.tokens_input += tokens_input
+"""
+Update current usage metrics.""
+self.usage.tokens_input += tokens_input
         self.usage.tokens_output += tokens_output
         self.usage.cycles += cycles
         return True
 
     def check_quotas(self) -> Tuple[bool, Optional[str]]:
-        """Check if any quotas have been exceeded."""
-        if self.config.max_tokens and self.usage.total_tokens >= self.config.max_tokens:
+"""
+Check if any quotas have been exceeded.""
+if self.config.max_tokens and self.usage.total_tokens >= self.config.max_tokens:
             self._is_interrupted = True
             self._interrupt_reason = f"Token quota exceeded ({self.usage.total_tokens} >= {self.config.max_tokens})"
             return True, self._interrupt_reason
@@ -109,17 +120,20 @@ class ResourceCore(BaseCore):
 
     @property
     def is_interrupted(self) -> bool:
-        """Check if the session has been interrupted."""
-        return self._is_interrupted
+"""
+Check if the session has been interrupted.""
+return self._is_interrupted
 
     @property
     def interrupt_reason(self) -> Optional[str]:
-        """Get the reason for interruption, if any."""
-        return self._interrupt_reason
+"""
+Get the reason for interruption, if any.""
+return self._interrupt_reason
 
     def get_report(self) -> Dict[str, Any]:
-        """Returns a summary of resource usage."""
-        return {
+        ""
+Returns a summary of resource usage.""
+return {
             "tokens_input": self.usage.tokens_input,
             "tokens_output": self.usage.tokens_output,
             "total_tokens": self.usage.total_tokens,

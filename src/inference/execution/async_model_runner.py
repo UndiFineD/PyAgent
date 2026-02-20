@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Facade for Async Model Runner modular implementation.
+"""
+"""
+Facade for Async Model Runner modular implementation.
 try:
-    from .model_runner import (AsyncGPUPoolingModelRunnerOutput, AsyncModelRunner,
+
+"""
+from .model_runner import (AsyncGPUPoolingModelRunnerOutput, AsyncModelRunner,
 except ImportError:
     from .model_runner import (AsyncGPUPoolingModelRunnerOutput, AsyncModelRunner,
 

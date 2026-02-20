@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +19,11 @@ from __future__ import annotations
 # "Agent for replaying episodic memories to consolidate knowledge."# 
 try:
     import random
+"""
 except ImportError:
-    import random
+
+"""
+import random
 
 try:
     import time
@@ -72,7 +77,7 @@ class MemoryReplayAgent:
                         "insight": fPattern found in {memory.get('action', 'task')}","'                        "confidence": utility_score,"                        "original_id": memory.get("id"),"                    }
                 )
                 results["consolidated"] += 1"            elif utility_score < 0.2:
-                results["pruned"] += 1"
+                results["pruned"] += 1
         self.is_sleeping = False
         results["end_ts"] = time.time()"        results["duration"] = results["end_ts"] - results["start_ts"]"        return results
 

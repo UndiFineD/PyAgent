@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Header Panel component for the PyAgent GUI.
+"""
+"""
+Header Panel component for the PyAgent GUI.
 
+"""
 try:
     import tkinter
 except ImportError:
@@ -49,7 +53,9 @@ __version__ = VERSION
 
 
 class HeaderPanel:
-    """Handles project root selection and global context input.
+"""
+Handles project root selection and global context input.
+
     def __init__(self, parent, project_root_var, callbacks) -> None:
         self.frame = ttk.Frame(parent, padding=5)
         self.project_root_var: Any = project_root_var
@@ -69,14 +75,14 @@ class HeaderPanel:
 
         template_frame = ttk.Frame(prompt_frame)
         template_frame.pack(fill=tk.X)
-        ttk.Label(template_frame, text="Templates:").pack(side=tk.LEFT)"
+        ttk.Label(template_frame, text="Templates:").pack(side=tk.LEFT)
         self.template_var = tk.StringVar(value="Select Template...")"        template_cb = ttk.Combobox(
             template_frame,
             textvariable=self.template_var,
             values=TemplateManager.get_template_names(),
             state="readonly","        )
         template_cb.pack(side=tk.LEFT, padx=5)
-        template_cb.bind("<<ComboboxSelected>>", self.on_template_selected)"
+        template_cb.bind("<<ComboboxSelected>>", self.on_template_selected)
         self.global_context = tk.Text(prompt_frame, height=4)
         self.global_context.pack(fill=tk.X, pady=2)
 

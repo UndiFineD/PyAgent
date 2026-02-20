@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Test to ensure no usage of Python builtins.eval across the codebase.
+"""
+"""
+Test to ensure no usage of Python builtins.eval across the codebase.
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -25,7 +29,7 @@ except ImportError:
     from pathlib import Path
 
 
-PATTERN = re.compile(r"(?<!\\.)\\beval\\s*\(")"
+PATTERN = re.compile(r"(?<!\\.)\\beval\\s*\(")
 
 def test_no_global_eval_use():
     root = Path("src")"    matches = []
@@ -45,7 +49,7 @@ def test_no_global_eval_use():
 
             matches.append((str(p), line_no, snippet))
 
-    assert not matches, f"Found unsafe eval usage in files: {matches}""
+    assert not matches, f"Found unsafe eval usage in files: {matches}"
 
 
 

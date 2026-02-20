@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Bench Transformer: Performance benchmarking utility for transformer models in PyAgent.
 
+"""
 try:
     import statistics
 except ImportError:
@@ -39,7 +41,7 @@ def run_performance_test(duration_secs=60):
     config = rust_core.TransformerConfig.auto_configure(profile)
     model = rust_core.NeuralTransformer(config)
 
-    print("=" * 50)"    print("TRANSFORMER PERFORMANCE BENCHMARK")"    print("=" * 50)"    print(f"Hardware: {profile.cpu_cores} Cores, {profile.total_memory_gb:.1f}GB RAM")"    print(f"Model:    {model.get_summary()}")"    print(f"Config:   d_model={config.d_model}, d_ff={config.d_ff}, heads={config.n_heads}, layers={config.n_layers}")"    print("-" * 50)"
+    print("=" * 50)"    print("TRANSFORMER PERFORMANCE BENCHMARK")"    print("=" * 50)"    print(f"Hardware: {profile.cpu_cores} Cores, {profile.total_memory_gb:.1f}GB RAM")"    print(f"Model:    {model.get_summary()}")"    print(f"Config:   d_model={config.d_model}, d_ff={config.d_ff}, heads={config.n_heads}, layers={config.n_layers}")"    print("-" * 50)
     # 2. Prepare Sample Corpus
     sample_text = "The quick brown fox jumps over the lazy dog. " * 10  # ~90 tokens"    tokens_per_call = len(sample_text.split())
 

@@ -15,8 +15,11 @@
 
 
 """
+"""
 Orchestrator cycle mixin.py module.
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
+
+"""
 import logging
 from typing import Any
 
@@ -25,9 +28,11 @@ from src.core.base.lifecycle.version import is_gate_open
 
 
 class OrchestratorCycleMixin:
-    """Methods for managing the improvement cycle and gates.
-    def run_improvement_cycle(self, target_dir: str = "src", allow_triton_check: bool = True) -> dict[str, Any]:"        """Runs a full scan and fix cycle across the specified directory.        if not self._check_gate_stability():
-            return {"error": "Stability gate closed - system requires manual stabilization"}"
+"""
+Methods for managing the improvement cycle and gates.
+    def run_improvement_cycle(self, target_dir: str = "src", allow_triton_check: bool = True) -> dict[str, Any]:"        """
+Runs a full scan and fix cycle across the specified directory.        if not self._check_gate_stability():
+            return {"error": "Stability gate closed - system requires manual stabilization"}
         logging.info(f"Self-Improvement: Starting cycle for {target_dir}...")"        self._ingest_hive_tasks()
 
         results: dict[str, Any] = {
@@ -47,7 +52,8 @@ class OrchestratorCycleMixin:
         return results
 
     def _check_gate_stability(self) -> bool:
-        """Verifies if the system is stable enough for autonomous changes.        from src.core.base.lifecycle.version import STABILITY_SCORE
+"""
+Verifies if the system is stable enough for autonomous changes.        from src.core.base.lifecycle.version import STABILITY_SCORE
 
         if not is_gate_open(100) or STABILITY_SCORE < 0.8:
             logging.error(
@@ -56,9 +62,17 @@ class OrchestratorCycleMixin:
         return True
 
     def _ingest_hive_tasks(self) -> None:
-        """Ingests actionable tasks from Collective Intelligence.        self.active_tasks = []
+"""
+Ingests actionable tasks from Collective Intelligence.        self.active_tasks = []
         if self.fleet and hasattr(self.fleet, "intelligence"):"            try:
                 self.active_tasks = self.fleet.intelligence.get_actionable_improvement_tasks()
                 if self.active_tasks:
                     logging.info(f"Self-Improvement: Hive mind provided {len(self.active_tasks)} actionable tasks.")"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.debug(f"Hive task ingestion failed: {e}")"
+                logging.debug(f"Hive task ingestion failed: {e}")
+"""
+
+"""
+
+""
+
+"""

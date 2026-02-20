@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""TypedPrompts - Type-safe prompt schemas with type guards.
+"""
+"""
+TypedPrompts - Type-safe prompt schemas with type guards.
 
+"""
 This module provides simple runtime checks and helpers for handling
 different prompt formats used across the codebase. The implementations
 are intentionally small and test-focused.
 """
-
 from typing import Any, Generic, TypeAlias, TypeVar
 try:
     from typing_extensions import NotRequired, TypedDict

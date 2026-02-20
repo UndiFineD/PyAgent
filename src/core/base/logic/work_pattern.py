@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Synaptic Modularization: The Work Pattern regarding structured multi-agent loops.
+"""
+"""
+Synaptic Modularization: The Work Pattern regarding structured multi-agent loops.
 Inspired by agentUniverse.
 """
 try:
-    import abc
+
+"""
+import abc
 except ImportError:
     import abc
 
@@ -35,27 +39,32 @@ except ImportError:
 
 
 class BaseWorkPattern(abc.ABC):
-    """Abstract base class regarding a 'Work Pattern'.'    Encapsulates orchestration logic regarding multiple agent roles or steps.
-    """
-    def __init__(self, name: str, description: str = ""):"        self.name = name
+"""
+Abstract base class regarding a 'Work Pattern'.'    Encapsulates orchestration logic regarding multiple agent roles or steps.
+"""
+def __init__(self, name: str, description: str = ""):"        self.name = name
         self.description = description
 
     @abc.abstractmethod
     async def execute(self, input_data: Any, context: CascadeContext, **kwargs: Any) -> Any:
-        """Execute the work pattern orchestration."""pass
+"""
+Execute the work pattern orchestration.""
+pass
 
 
 
 class PeerReviewPattern(BaseWorkPattern):
-    """Standard work pattern regarding a peer-review loop: Plan -> Execute -> Review.
-    """
-    def __init__(self):
+"""
+Standard work pattern regarding a peer-review loop: Plan -> Execute -> Review.
+"""
+def __init__(self):
         super().__init__(
             name="peer_review","            description="A loop regarding structured task execution with iterative reviews.""        )
 
     async def execute(self, input_data: Any, context: CascadeContext, **kwargs: Any) -> Any:
-        """Executes the Peer-Review pattern.
-        Expected kwargs: 'planner', 'executor', 'reviewer', 'eval_threshold', 'max_retries'.'        """
+"""
+Executes the Peer-Review pattern.
+        Expected kwargs: 'planner', 'executor', 'reviewer', 'eval_threshold', 'max_retries'.'        ""
 # Orchestration logic goes here...
         # This is a TODO Placeholder for the actual roles provided by the swarm.
-        return {"status": "Pattern initialized", "pattern": self.name}"
+        return {"status": "Pattern initialized", "pattern": self.name}

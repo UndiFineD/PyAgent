@@ -15,9 +15,11 @@
 
 
 """
+"""
 Heartbeat Service for Voyager Swarm.
 Bridges TelemetryCore with P2P transport to provide real-time cluster observability.
 
+"""
 import asyncio
 import psutil
 import time
@@ -42,13 +44,15 @@ class SwarmHeartbeatService:
         self._task: Optional[asyncio.Task] = None
 
     async def start(self) -> None:
-        """Starts the heartbeat loop.        if self.is_running:
+"""
+Starts the heartbeat loop.        if self.is_running:
             return
         self.is_running = True
         self._task = asyncio.create_task(self._run_loop())
-        logger.info("HeartbeatService: Started local metrics broadcasting.")"
+        logger.info("HeartbeatService: Started local metrics broadcasting.")
     async def stop(self) -> None:
-        """Stops the heartbeat loop.        self.is_running = False
+"""
+Stops the heartbeat loop.        self.is_running = False
         if self._task:
             self._task.cancel()
             try:
@@ -64,7 +68,7 @@ class SwarmHeartbeatService:
 
                 # 2. Record to local telemetry
                 for name, value in stats.items():
-                    self.telemetry.record_metric(f"swarm.node.{name}", value, MetricType.GAUGE)"
+                    self.telemetry.record_metric(f"swarm.node.{name}", value, MetricType.GAUGE)
                 # 3. Create Heartbeat Message
                 payload = {
                     "type": "heartbeat","                    "sender_id": self.identity.get_full_identity()["agent_type"] + "-" + self.identity.execution_id[:8],"                    "timestamp": time.time(),"                    "metrics": stats,"                    "hostname": self.identity.get_full_identity()["hostname"]"                }
@@ -73,9 +77,10 @@ class SwarmHeartbeatService:
                 if hasattr(self.synapse, "broadcast"):"                    await self.synapse.broadcast(payload)
 
             except Exception as e:
-                logger.error(f"HeartbeatService: Loop error: {e}")"
+                logger.error(f"HeartbeatService: Loop error: {e}")
             await asyncio.sleep(self.interval)
 
     def _get_local_stats(self) -> Dict[str, float]:
-        """Gathers system-level statistics.        return {
+"""
+Gathers system-level statistics.        return {
             "cpu_percent": psutil.cpu_percent(),"            "memory_percent": psutil.virtual_memory().percent,"            "tasks_active": len(asyncio.all_tasks())"        }

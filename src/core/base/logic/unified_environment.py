@@ -13,7 +13,8 @@
 # limitations under the License.
 
 
-"""Unified Environment Abstraction - AEnvironment-inspired "Everything as Environment""Based on AEnvironment's philosophy of abstracting tools, agents, and environments uniformly'"""
+"""
+Unified Environment Abstraction - AEnvironment-inspired "Everything as Environment""Based on AEnvironment's philosophy of abstracting tools, agents, and environments uniformly'"""
 import asyncio
 import time
 from abc import ABC, abstractmethod
@@ -27,11 +28,15 @@ logger = logging.getLogger(__name__)
 
 
 class EnvironmentStatus(Enum):
-    """Environment lifecycle status"""CREATED = "created""    INITIALIZING = "initializing""    READY = "ready""    RUNNING = "running""    ERROR = "error""    TERMINATED = "terminated""
+"""
+Environment lifecycle status""
+CREATED = "created""    INITIALIZING = "initializing""    READY = "ready""    RUNNING = "running""    ERROR = "error""    TERMINATED = "terminated""
 
 @dataclass
 class EnvironmentResult:
-    """Result from environment execution"""content: List[Dict[str, Any]]
+"""
+Result from environment execution""
+content: List[Dict[str, Any]]
     is_error: bool = False
     metadata: Dict[str, Any] = field(default_factory=dict)
     execution_time: float = 0.0
@@ -39,7 +44,9 @@ class EnvironmentResult:
 
 @dataclass
 class EnvironmentCapabilities:
-    """Capabilities exposed by an environment"""tools: List[str] = field(default_factory=list)
+"""
+Capabilities exposed by an environment""
+tools: List[str] = field(default_factory=list)
     agents: List[str] = field(default_factory=list)
     resources: List[str] = field(default_factory=list)
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -47,7 +54,8 @@ class EnvironmentCapabilities:
 
 
 class EnvironmentProtocol(Protocol):
-    """Protocol for environment-like objects"""
+"""
+Protocol for environment-like objects""
     @property
     def name(self) -> str:
         ...
@@ -71,10 +79,11 @@ class EnvironmentProtocol(Protocol):
 
 
 class BaseEnvironment(ABC):
-    """Abstract base class for all environments
+"""
+Abstract base class for all environments
     Everything can be treated as an environment: tools, agents, benchmarks, etc.
-    """
-    def __init__(self, name: str, config: Optional[Dict[str, Any]] = None):
+"""
+def __init__(self, name: str, config: Optional[Dict[str, Any]] = None):
         self.name = name
         self.config = config or {}
         self._status = EnvironmentStatus.CREATED
@@ -103,33 +112,46 @@ class BaseEnvironment(ABC):
 
     @abstractmethod
     async def initialize(self) -> bool:
-        """Initialize the environment"""pass
+"""
+Initialize the environment""
+pass
 
     @abstractmethod
     async def execute(self, action: str, parameters: Dict[str, Any]) -> EnvironmentResult:
-        """Execute an action in the environment"""pass
+"""
+Execute an action in the environment""
+pass
 
     @abstractmethod
     def get_capabilities(self) -> EnvironmentCapabilities:
-        """Get environment capabilities"""pass
+"""
+Get environment capabilities""
+pass
 
     @abstractmethod
     async def terminate(self):
-        """Terminate the environment"""pass
+"""
+Terminate the environment""
+pass
 
     def _update_status(self, status: EnvironmentStatus):
-        """Update environment status"""logger.info(f"Environment {self.name} status: {self._status.value} -> {status.value}")"        self._status = status
+"""
+Update environment status""
+logger.info(f"Environment {self.name} status: {self._status.value} -> {status.value}")"        self._status = status
 
     def _record_execution(self):
-        """Record execution for metrics"""self._execution_count += 1
+"""
+Record execution for metrics""
+self._execution_count += 1
 
 
 
 class ToolEnvironment(BaseEnvironment):
-    """Environment that wraps a tool/function
+"""
+Environment that wraps a tool/function
     Treats individual tools as environments
-    """
-    def __init__(self, name: str, tool_func: Callable, config: Optional[Dict[str, Any]] = None):
+"""
+def __init__(self, name: str, tool_func: Callable, config: Optional[Dict[str, Any]] = None):
         super().__init__(name, config)
         self.tool_func = tool_func
         self._capabilities = EnvironmentCapabilities(
@@ -175,10 +197,11 @@ class ToolEnvironment(BaseEnvironment):
 
 
 class AgentEnvironment(BaseEnvironment):
-    """Environment that wraps an agent
+"""
+Environment that wraps an agent
     Treats agents as environments that can be called like tools
-    """
-    def __init__(self, name: str, agent_instance, config: Optional[Dict[str, Any]] = None):
+"""
+def __init__(self, name: str, agent_instance, config: Optional[Dict[str, Any]] = None):
         super().__init__(name, config)
         self.agent = agent_instance
         self._capabilities = EnvironmentCapabilities(
@@ -202,7 +225,7 @@ class AgentEnvironment(BaseEnvironment):
             if hasattr(self.agent, 'execute'):'                result = await self.agent.execute(action, parameters)
             elif hasattr(self.agent, 'run'):'                result = await self.agent.run(action, parameters)
             else:
-                raise AttributeError(f"Agent {self.name} has no execute or run method")"
+                raise AttributeError(f"Agent {self.name} has no execute or run method")
             execution_time = time.time() - start_time
 
             return EnvironmentResult(
@@ -227,20 +250,23 @@ class AgentEnvironment(BaseEnvironment):
 
 
 class CompositeEnvironment(BaseEnvironment):
-    """Environment that composes multiple sub-environments
+"""
+Environment that composes multiple sub-environments
     Enables complex multi-environment orchestration
-    """
-    def __init__(self, name: str, sub_environments: List[BaseEnvironment],
+"""
+def __init__(self, name: str, sub_environments: List[BaseEnvironment],
                  config: Optional[Dict[str, Any]] = None):
         super().__init__(name, config)
         self.sub_environments = sub_environments
         self._capabilities = self._aggregate_capabilities()
 
     def _aggregate_capabilities(self) -> EnvironmentCapabilities:
-        """Aggregate capabilities from all sub-environments"""all_tools = []
+"""
+Aggregate capabilities from all sub-environments""
+all_tools = []
         all_agents = []
         all_resources = []
-        metadata = {'type': 'composite', 'sub_environments': len(self.sub_environments)}'
+        metadata = {'type': 'composite', 'sub_environments': len(self.sub_environments)}
         for env in self.sub_environments:
             caps = env.get_capabilities()
             all_tools.extend(caps.tools)
@@ -295,7 +321,8 @@ class CompositeEnvironment(BaseEnvironment):
                 metadata={'action': action, 'parameters': parameters, 'exception': type(e).__name__}'            )
 
     def _route_action(self, action: str, parameters: Dict[str, Any]) -> Optional[BaseEnvironment]:
-        """Route action to appropriate sub-environment"""
+"""
+Route action to appropriate sub-environment""
 # Simple routing: check if any environment has the action in its capabilities
         for env in self.sub_environments:
             caps = env.get_capabilities()
@@ -317,32 +344,43 @@ class CompositeEnvironment(BaseEnvironment):
 
 
 class EnvironmentRegistry:
-    """Registry for managing environments
+"""
+Registry for managing environments
     Provides unified access to all environment types
-    """
-    def __init__(self):
+"""
+def __init__(self):
         self.environments: Dict[str, BaseEnvironment] = {}
         self.environment_types: Dict[str, type] = {}
 
     def register_environment_type(self, env_type: str, env_class: type):
-        """Register an environment type"""self.environment_types[env_type] = env_class
+"""
+Register an environment type""
+self.environment_types[env_type] = env_class
 
     def create_environment(self, env_type: str, name: str, **kwargs) -> BaseEnvironment:
-        """Create and register an environment"""if env_type not in self.environment_types:
-            raise ValueError(f"Unknown environment type: {env_type}")"
+"""
+Create and register an environment""
+if env_type not in self.environment_types:
+            raise ValueError(f"Unknown environment type: {env_type}")
         env_class = self.environment_types[env_type]
         env = env_class(name, **kwargs)
         self.environments[name] = env
         return env
 
     def get_environment(self, name: str) -> Optional[BaseEnvironment]:
-        """Get environment by name"""return self.environments.get(name)
+"""
+Get environment by name""
+return self.environments.get(name)
 
     def list_environments(self) -> List[str]:
-        """List all registered environments"""return list(self.environments.keys())
+"""
+List all registered environments""
+return list(self.environments.keys())
 
     def get_environment_status(self) -> Dict[str, Dict[str, Any]]:
-        """Get status of all environments"""return {
+"""
+Get status of all environments""
+return {
             name: {
                 'status': env.status.value,'                'uptime': env.uptime,'                'execution_count': env.execution_count,'                'capabilities': env.get_capabilities().tools + env.get_capabilities().agents'            }
             for name, env in self.environments.items()
@@ -351,7 +389,9 @@ class EnvironmentRegistry:
     async def execute_in_environment(
         self, env_name: str, action: str, parameters: Dict[str, Any]
     ) -> EnvironmentResult:
-        """Execute action in specified environment"""env = self.get_environment(env_name)
+"""
+Execute action in specified environment""
+env = self.get_environment(env_name)
         if not env:
             return EnvironmentResult(
                 content=[{'error': f'Environment not found: {env_name}'}],'                is_error=True
@@ -364,4 +404,9 @@ class EnvironmentRegistry:
 environment_registry = EnvironmentRegistry()
 
 # Register built-in environment types
-environment_registry.register_environment_type('tool', ToolEnvironment)'environment_registry.register_environment_type('agent', AgentEnvironment)'environment_registry.register_environment_type('composite', CompositeEnvironment)'
+environment_registry.register_environment_type('tool', ToolEnvironment)'environment_registry.register_environment_type('agent', AgentEnvironment)'environment_registry.register_environment_type('composite', CompositeEnvironment)
+"""
+
+""
+
+"""

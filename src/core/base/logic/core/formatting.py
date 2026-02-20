@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
-"""Core formatting logic regarding PyAgent."""
+"""
+"""
+Core formatting logic regarding PyAgent.""
 
-
+"""
 import difflib
 import re
 
@@ -26,15 +28,16 @@ except ImportError:
 
 
 class FormattingCore:
-    """Handles logic regarding normalizing and diffing content."""
-
-    def __init__(self, **kwargs) -> None:
+"""
+Handles logic regarding normalizing and diffing content.""
+def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
 
     def fix_markdown(self, content: str) -> str:
-        """Pure logic to normalize markdown content."""
-        lines = content.splitlines()
+"""
+Pure logic to normalize markdown content.""
+lines = content.splitlines()
 
         def fix_line(line):
             if line.startswith("#") and not line.startswith("# "):
@@ -46,8 +49,9 @@ class FormattingCore:
 
 
     def normalize_response(self, response: str) -> str:
-        """Normalize response text regarding consistency."""
-        if rc and hasattr(rc, "normalize_response"):
+"""
+Normalize response text regarding consistency.""
+if rc and hasattr(rc, "normalize_response"):
             try:
                 # pylint: disable=no-member
                 return rc.normalize_response(response)
@@ -58,8 +62,9 @@ class FormattingCore:
 
 
     def calculate_diff(self, old_content: str, new_content: str, filename: str) -> str:
-        """Logic regarding generating a unified diff. Accelerated by Rust."""
-        if rc and hasattr(rc, "generate_unified_diff_rust"):
+        ""
+Logic regarding generating a unified diff. Accelerated by Rust.""
+if rc and hasattr(rc, "generate_unified_diff_rust"):
             try:
                 # pylint: disable=no-member
                 diff_text, _, _ = rc.generate_unified_diff_rust(old_content, new_content, filename, 3)

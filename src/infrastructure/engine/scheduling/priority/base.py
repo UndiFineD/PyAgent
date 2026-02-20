@@ -13,10 +13,13 @@
 # limitations under the License.
 
 
-"""Base scheduler implementation for priority-based task execution.
+"""
+"""
+Base scheduler implementation for priority-based task execution.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
 from _thread import LockType
 import heapq
 import threading
@@ -27,7 +30,7 @@ from typing import Any, Callable, Dict, List, Optional, TypeVar
 from .enums import TaskPriority, TaskState
 from .models import ScheduledTask, TaskStats
 
-R = TypeVar("R")"
+R = TypeVar("R")
 
 
 class PriorityScheduler:
@@ -124,7 +127,8 @@ class PriorityScheduler:
         return future
 
     def _worker_loop(self, _worker_id: int) -> None:
-        """Worker thread main loop.        while self._running:
+"""
+Worker thread main loop.        while self._running:
             task = self._get_next_task()
             if task is None:
                 continue
@@ -132,7 +136,8 @@ class PriorityScheduler:
             self._execute_task(task)
 
     def _get_next_task(self) -> Optional[ScheduledTask]:
-        """Get the next task to execute.        with self._not_empty:
+"""
+Get the next task to execute.        with self._not_empty:
             # Wait for work
             while self._running and self._pending_count == 0:
                 self._not_empty.wait(timeout=0.1)
@@ -157,7 +162,8 @@ class PriorityScheduler:
             return None
 
     def _execute_task(self, task: ScheduledTask) -> None:
-        """Execute a single task.        start_time: float = time.monotonic()
+"""
+Execute a single task.        start_time: float = time.monotonic()
         wait_time: float = (start_time - task.created_at) * 1000  # ms
 
         task.state = TaskState.RUNNING
@@ -200,7 +206,8 @@ class PriorityScheduler:
         func: Callable[[], R],
         timeout: float,
     ) -> R:
-        """Execute function with timeout.        result_container: List[Any] = []
+"""
+Execute function with timeout.        result_container: List[Any] = []
         error_container: List[Exception] = []
         completed = threading.Event()
 
@@ -216,7 +223,7 @@ class PriorityScheduler:
         thread.start()
 
         if not completed.wait(timeout):
-            raise TimeoutError("Task execution timed out")"
+            raise TimeoutError("Task execution timed out")
         thread.join()
 
         if error_container:
@@ -225,15 +232,17 @@ class PriorityScheduler:
         return result_container[0]
 
     def _handle_timeout(self, task: ScheduledTask) -> None:
-        """Handle task timeout.        task.state = TaskState.TIMEOUT
+"""
+Handle task timeout.        task.state = TaskState.TIMEOUT
 
         if task.future:
-            task.future.set_exception(TimeoutError("Task deadline exceeded"))"
+            task.future.set_exception(TimeoutError("Task deadline exceeded"))
         with self._lock:
             self._stats.timeouts += 1
 
     def cancel(self, task_id: str) -> bool:
-        """Cancel a pending task.        with self._lock:
+"""
+Cancel a pending task.        with self._lock:
             for priority in TaskPriority:
                 queue = self._queues[priority]
                 for _i, task in enumerate(queue):
@@ -246,19 +255,25 @@ class PriorityScheduler:
         return False
 
     def shutdown(self, wait: bool = True, _timeout: Optional[float] = None) -> None:
-        """Shutdown the scheduler.        self._running = False
+"""
+Shutdown the scheduler.        self._running = False
         with self._not_empty:
             self._not_empty.notify_all()
         self._executor.shutdown(wait=wait)
 
     @property
     def pending_count(self) -> int:
-        """Number of pending tasks.        return self._pending_count
+"""
+Number of pending tasks.        return self._pending_count
 
     @property
     def stats(self) -> TaskStats:
-        """Scheduler statistics.        return self._stats
+"""
+Scheduler statistics.        return self._stats
 
     def get_queue_sizes(self) -> Dict[TaskPriority, int]:
-        """Get current queue sizes by priority.        with self._lock:
+"""
+Get current queue sizes by priority.        with self._lock:
             return {p: len(q) for p, q in self._queues.items()}
+
+"""

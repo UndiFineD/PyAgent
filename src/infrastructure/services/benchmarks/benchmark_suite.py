@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,12 @@ from __future__ import annotations
 
 
 """
+"""
 Unified Benchmark Suite for PyAgent.
 Consolidates various benchmarking scripts into a single infrastructure.
 """
 
+"""
 import inspect
 import logging
 import time
@@ -38,7 +41,8 @@ from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 
 class BenchmarkSuite:
-    """Unified suite for running performance benchmarks on PyAgent components.
+"""
+Unified suite for running performance benchmarks on PyAgent components.
     def __init__(self, logger: Optional[logging.Logger] = None) -> None:
         self.logger: logging.Logger = logger or logging.getLogger(__name__)
         self.results: List[BenchmarkResult] = []
@@ -46,7 +50,8 @@ class BenchmarkSuite:
     def benchmark_tokenization(
         self, test_texts: Dict[str, str], iterations: int = 1000, compare_rust: bool = True
     ) -> List[BenchmarkResult]:
-        """Benchmarks token estimation speed across different text samples.        self.logger.info(f"Starting tokenization benchmark ({iterations} iterations)")"
+"""
+Benchmarks token estimation speed across different text samples.        self.logger.info(f"Starting tokenization benchmark ({iterations} iterations)")
         results = []
         for name, text in test_texts.items():
             # Warm-up
@@ -91,7 +96,8 @@ class BenchmarkSuite:
 
     async def benchmark_agent_performance(
         self, agent: Any, prompt: str, label: str = "Agent Performance", method_name: str = "chat""    ) -> BenchmarkResult:
-        """Benchmarks an agent's generation performance.'        self.logger.info(f"Benchmarking agent {label} using method {method_name}")"
+"""
+Benchmarks an agent's generation performance.'        self.logger.info(f"Benchmarking agent {label} using method {method_name}")
         input_tokens: int = estimate_token_count(prompt)
         start: float = time.perf_counter()
 
@@ -100,7 +106,7 @@ class BenchmarkSuite:
             if not method and hasattr(agent, "improve_content"):"                method = agent.improve_content
 
             if not method:
-                raise AttributeError(f"Agent does not have method {method_name} or improve_content")"
+                raise AttributeError(f"Agent does not have method {method_name} or improve_content")
             # Handle both sync and async methods
             if inspect.iscoroutinefunction(method):
                 output = await method(prompt)
@@ -122,7 +128,7 @@ class BenchmarkSuite:
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             duration: float = time.perf_counter() - start
             res = BenchmarkResult(name=label, duration=duration, success=False, error=str(e))
-            self.logger.error(f"Agent benchmark failed: {e}")"
+            self.logger.error(f"Agent benchmark failed: {e}")
         self.results.append(res)
         return res
 
@@ -132,7 +138,8 @@ class BenchmarkSuite:
         duration_seconds: int = 60,
         progress_callback: Optional[Callable[[float, int, int], None]] = None,
     ) -> BenchmarkResult:
-        """Runs a sustained throughput test for token estimation.        self.logger.info(f"Starting sustained throughput test for {duration_seconds}s")"
+"""
+Runs a sustained throughput test for token estimation.        self.logger.info(f"Starting sustained throughput test for {duration_seconds}s")
         start_time: float = time.perf_counter()
         iterations = 0
         total_tokens = 0
@@ -161,13 +168,15 @@ class BenchmarkSuite:
         return res
 
     def print_summary(self) -> None:
-        """Prints a formatted summary of all benchmark results.        if not self.results:
+"""
+Prints a formatted summary of all benchmark results.        if not self.results:
             print("\\nEmpty benchmark suite results.")"            return
 
-        print("\\n" + "=" * 80)"        print(f"{'BENCHMARK SUMMARY':^80}")"'        print("=" * 80)"        print(f"{'Test Name':<35} {'Duration':<10} {'Tokens':<10} {'Tokens/s':<15}")"'        print("-" * 80)"
+        print("\\n" + "=" * 80)"        print(f"{'BENCHMARK SUMMARY':^80}")"'        print("=" * 80)"        print(f"{'Test Name':<35} {'Duration':<10} {'Tokens':<10} {'Tokens/s':<15}")"'        print("-" * 80)
         for res in self.results:
             if not res.success:
                 print(f"{res.name[:34]:<35} {'FAILED':<10} {'-':<10} {res.error[:15] if res.error else 'Unknown'}")"'                continue
 
-            print(f"{res.name[:34]:<35} {res.duration:<10.3f} {res.total_tokens:<10,} {res.tokens_per_sec:<15,.2f}")"
+            print(f"{res.name[:34]:<35} {res.duration:<10.3f} {res.total_tokens:<10,} {res.tokens_per_sec:<15,.2f}")
         print("-" * 80)"        print("End of results.\\n")"
+"""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.scheduling.chunked_prefill_manager import ChunkedPrefillManager, create_prefill_manager, chunk_prompt

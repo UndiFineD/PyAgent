@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +20,10 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-
+"""
 Disaggregated Prefill Worker.
 
+"""
 This module implements a specialized worker for the prefill stage of disaggregated inference.
 In a disaggregated architecture, prefill workers focus on processing the input prompt and
 generating the initial KV cache, which is then transferred to decode-only workers.
@@ -100,9 +104,10 @@ class DisaggregatedPrefillWorker:
         self.tokens_prefilled = 0
         self.requests_completed = 0
 
-        logger.info("DisaggregatedPrefillWorker %s initialized.", worker_id)"
+        logger.info("DisaggregatedPrefillWorker %s initialized.", worker_id)
     def initialize(self) -> None:
-        """Initialize cache and connector components.        # Setup KV Cache Manager
+"""
+Initialize cache and connector components.        # Setup KV Cache Manager
         # self.cache_manager = KVCacheManager(...)
 
         # Setup KV Transfer Connector (e.g., Mooncake or Nixl)
@@ -110,7 +115,7 @@ class DisaggregatedPrefillWorker:
         #    self.kv_connector = MooncakeConnector(self.kv_transfer_config)
 
         self._is_active = True
-        logger.info("DisaggregatedPrefillWorker %s started.", self.worker_id)"
+        logger.info("DisaggregatedPrefillWorker %s started.", self.worker_id)
     def execute_prefill(self, request: Any) -> None:
                 Run the prefill stage for a single request.
 
@@ -119,7 +124,7 @@ class DisaggregatedPrefillWorker:
         3. Trigger KV transfer via connector (async)
         4. Signal completion to scheduler
                 request_id = request.request_id
-        logger.debug("Starting prefill for request %s", request_id)"
+        logger.debug("Starting prefill for request %s", request_id)
         # Compute prefill...
         # During model execution, for each layer:
         # self.kv_connector.save_kv_layer(layer_name, kv_layer, attn_metadata)
@@ -129,23 +134,28 @@ class DisaggregatedPrefillWorker:
 
         self.tokens_prefilled += request.num_tokens
         self.requests_completed += 1
-        logger.info("Completed prefill for request %s", request_id)"
+        logger.info("Completed prefill for request %s", request_id)
     def _optimize_prefill_overlap_rust(self, batch_metadata: Any) -> Any:
-        """Rust-accelerated optimization of prefill chunk overlap.        # return RustBridge.optimize_prefill_overlap_rust(batch_metadata)
+"""
+Rust-accelerated optimization of prefill chunk overlap.        # return RustBridge.optimize_prefill_overlap_rust(batch_metadata)
         return batch_metadata
 
     def handle_chunked_prefill(self, request: Any, chunk_size: int) -> None:
-        """Handle massive prompts by breaking them into manageable chunks.        # For each chunk, compute and intermediate KV sync
+"""
+Handle massive prompts by breaking them into manageable chunks.        # For each chunk, compute and intermediate KV sync
 
     def get_status(self) -> Dict[str, Any]:
-        """Return worker health and performance stats.        return {
+"""
+Return worker health and performance stats.        return {
             "worker_id": self.worker_id,"            "role": "prefill","            "active_requests": len(self._requests_in_prefill),"            "tokens_prefilled": self.tokens_prefilled,"            "requests_completed": self.requests_completed,"            "connector_health": self.kv_connector.get_health_report() if self.kv_connector else None,"        }
 
     def shutdown(self) -> None:
-        """Gracefully shut down the worker.        self._is_active = False
+"""
+Gracefully shut down the worker.        self._is_active = False
         if self.kv_connector:
             self.kv_connector.close()
-        logger.info("DisaggregatedPrefillWorker %s shut down.", self.worker_id)"
+        logger.info("DisaggregatedPrefillWorker %s shut down.", self.worker_id)
 
 # Lazy loading registration
-_worker = LazyLoader("src.infrastructure.swarm.worker.disaggregated_prefill_worker", "DisaggregatedPrefillWorker")"
+_worker = LazyLoader("src.infrastructure.swarm.worker.disaggregated_prefill_worker", "DisaggregatedPrefillWorker")
+"""

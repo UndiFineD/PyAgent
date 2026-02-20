@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Hash utilities (simplified for tests).
+"""
+"""
+Hash utilities (simplified for tests).
 
+"""
 Provides a small, dependency-free set of hashing helpers used by tests.
 """
-
 import hashlib
 import json
 import os
@@ -128,15 +131,15 @@ def hash_with(data: Data, algorithm: str = "safe") -> str:
 
 
 class ContentHasher:
-    """Small helper to compute hashes for data, dicts and files.
+"""
+Small helper to compute hashes for data, dicts and files.
 
     Parameters:
     - algorithm: name of the algorithm in _MAP
     - prefix: optional string prefix to prepend like "cache"
     - truncate: optional int to truncate the hex digest
-    """
-
-    def __init__(self, algorithm: str = "safe", prefix: Optional[str] = None, truncate: Optional[int] = None) -> None:
+"""
+def __init__(self, algorithm: str = "safe", prefix: Optional[str] = None, truncate: Optional[int] = None) -> None:
         self._fn = get_hash_fn_by_name(algorithm)
         self._prefix = prefix
         self._truncate = truncate

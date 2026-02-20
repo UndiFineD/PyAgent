@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""Inter-Agent Communication Core
+"""
+"""
+Inter-Agent Communication Core
 
+"""
 Implements A2A (Agent2Agent) protocol for secure, structured communication between agents.
 Based on agentgateway patterns with JSON-RPC messaging, agent cards, and capability negotiation.
 
@@ -43,14 +46,16 @@ logger = logging.getLogger(__name__)
 
 
 class Role(str, Enum):
-    """Message role enumeration."""
-    USER = "user"
+"""
+Message role enumeration.""
+USER = "user"
     AGENT = "agent"
 
 
 class TaskState(str, Enum):
-    """Task execution states."""
-    PENDING = "pending"
+"""
+Task execution states.""
+PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
     FAILED = "failed"
@@ -58,42 +63,48 @@ class TaskState(str, Enum):
 
 
 class SecuritySchemeType(str, Enum):
-    """Supported security scheme types."""
-    OAUTH2 = "oauth2"
+"""
+Supported security scheme types.""
+OAUTH2 = "oauth2"
     HTTP = "http"
     API_KEY = "apiKey"
     OPENID_CONNECT = "openIdConnect"
 
 
 class MessagePart(BaseModel):
-    """Base class for message parts."""
-    kind: str = Field(..., description="Type of content part")
+"""
+Base class for message parts.""
+kind: str = Field(..., description="Type of content part")
 
 
 class TextPart(BaseModel):
-    """Text content part."""
-    kind: str = Field(default="text", description="Type of content part")
+"""
+Text content part.""
+kind: str = Field(default="text", description="Type of content part")
     text: str = Field(..., description="Text content")
 
 
 class FilePart(BaseModel):
-    """File content part."""
-    kind: str = Field(default="file", description="Type of content part")
+"""
+File content part.""
+kind: str = Field(default="file", description="Type of content part")
     filename: str = Field(..., description="File name")
     mime_type: str = Field(..., description="MIME type")
     data: bytes = Field(..., description="File data")
 
 
 class DataPart(BaseModel):
-    """Structured data part."""
-    kind: str = Field(default="data", description="Type of content part")
+"""
+Structured data part.""
+kind: str = Field(default="data", description="Type of content part")
     mime_type: str = Field(..., description="MIME type")
     data: Any = Field(..., description="Structured data")
 
 
 class Message(BaseModel):
-    """Agent message with multi-part content."""
-    content: List[Union[TextPart, FilePart, DataPart]] = Field(
+"""
+Agent message with multi-part content.""
+content: List[Union[TextPart, FilePart, DataPart]] = Field(
         default_factory=list, description="Message content parts"
     )
     role: Role = Field(..., description="Message sender role")
@@ -104,8 +115,9 @@ class Message(BaseModel):
     metadata: Optional[Dict[str, Any]] = Field(default=None, description="Additional metadata")
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary representation."""
-        return {
+"""
+Convert to dictionary representation.""
+return {
             "content": [part.dict() for part in self.content],
             "role": self.role.value,
             "timestamp": self.timestamp.isoformat() if self.timestamp else None,
@@ -114,22 +126,25 @@ class Message(BaseModel):
 
 
 class AgentCapabilities(BaseModel):
-    """Agent capabilities declaration."""
-    streaming: bool = Field(default=False, description="Supports streaming responses")
+"""
+Agent capabilities declaration.""
+streaming: bool = Field(default=False, description="Supports streaming responses")
     push_notifications: Optional[bool] = Field(default=None, description="Supports push notifications")
     state_transition_history: Optional[bool] = Field(default=None, description="Tracks state transitions")
     extensions: List[Dict[str, Any]] = Field(default_factory=list, description="Custom extensions")
 
 
 class AgentAuthentication(BaseModel):
-    """Agent authentication configuration."""
-    schemes: List[str] = Field(default_factory=list, description="Supported authentication schemes")
+"""
+Agent authentication configuration.""
+schemes: List[str] = Field(default_factory=list, description="Supported authentication schemes")
     credentials: Optional[str] = Field(default=None, description="Authentication credentials")
 
 
 class AgentCard(BaseModel):
-    """Agent capability and configuration card."""
-    name: str = Field(..., description="Agent name")
+"""
+Agent capability and configuration card.""
+name: str = Field(..., description="Agent name")
     description: str = Field(..., description="Agent description")
     version: str = Field(default="1.0.0", description="Agent version")
     protocol_version: str = Field(default="0.2.6", description="A2A protocol version")
@@ -145,8 +160,9 @@ class AgentCard(BaseModel):
 
 
 class TaskStatus(BaseModel):
-    """Task execution status."""
-    state: TaskState = Field(..., description="Current task state")
+"""
+Task execution status.""
+state: TaskState = Field(..., description="Current task state")
     message: Optional[Message] = Field(default=None, description="Status message")
     timestamp: datetime = Field(default_factory=datetime.utcnow, description="Status timestamp")
     progress: Optional[float] = Field(default=None, ge=0.0, le=1.0, description="Progress percentage")
@@ -154,8 +170,9 @@ class TaskStatus(BaseModel):
 
 
 class Task(BaseModel):
-    """Agent task representation."""
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique task ID")
+"""
+Agent task representation.""
+id: str = Field(default_factory=lambda: str(uuid.uuid4()), description="Unique task ID")
     agent_id: str = Field(..., description="Target agent ID")
     message: Message = Field(..., description="Task message")
     status: TaskStatus = Field(default_factory=lambda: TaskStatus(state=TaskState.PENDING), description="Task status")
@@ -165,51 +182,56 @@ class Task(BaseModel):
 
 
 class JsonRpcRequest(BaseModel):
-    """JSON-RPC request structure."""
-    jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
+"""
+JSON-RPC request structure.""
+jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
     id: Union[str, int] = Field(..., description="Request ID")
     method: str = Field(..., description="Method name")
     params: Dict[str, Any] = Field(default_factory=dict, description="Method parameters")
 
 
 class JsonRpcResponse(BaseModel):
-    """JSON-RPC response structure."""
-    jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
+"""
+JSON-RPC response structure.""
+jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
     id: Union[str, int] = Field(..., description="Request ID")
     result: Any = Field(..., description="Response result")
 
 
 class JsonRpcError(BaseModel):
-    """JSON-RPC error structure."""
-    jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
+"""
+JSON-RPC error structure.""
+jsonrpc: str = Field(default="2.0", description="JSON-RPC version")
     id: Union[str, int] = Field(..., description="Request ID")
     error: Dict[str, Any] = Field(..., description="Error details")
 
 
 class A2AMessage(BaseModel):
-    """A2A protocol message envelope."""
-    request: Optional[JsonRpcRequest] = Field(default=None, description="RPC request")
+"""
+A2A protocol message envelope.""
+request: Optional[JsonRpcRequest] = Field(default=None, description="RPC request")
     response: Optional[JsonRpcResponse] = Field(default=None, description="RPC response")
     error: Optional[JsonRpcError] = Field(default=None, description="RPC error")
 
 
 class AgentEndpoint(BaseModel):
-    """Agent endpoint configuration."""
-    url: str = Field(..., description="Agent service URL")
+"""
+Agent endpoint configuration.""
+url: str = Field(..., description="Agent service URL")
     agent_card: Optional[AgentCard] = Field(default=None, description="Cached agent card")
     authentication: Optional[Dict[str, Any]] = Field(default=None, description="Authentication config")
 
 
 class InterAgentCommunicationCore(BaseCore):
-    """Minimal, test-friendly InterAgentCommunicationCore stub.
+"""
+Minimal, test-friendly InterAgentCommunicationCore stub.
 
     This version provides the small surface area needed by tests:
     - `registered_agents`, `active_tasks`, `message_handlers`, `security_schemes`
     - `http_client` property that is non-None until `cleanup()` is called
     - `cleanup()` coroutine
-    """
-
-    def __init__(self) -> None:
+"""
+def __init__(self) -> None:
         self.registered_agents: Dict[str, AgentEndpoint] = {}
         self.active_tasks: Dict[str, Task] = {}
         self.message_handlers: Dict[str, Callable] = {}
@@ -218,8 +240,9 @@ class InterAgentCommunicationCore(BaseCore):
         self.http_client = object()
 
     async def cleanup(self) -> None:
-        """Cleanup stub: mark http_client as closed."""
-        self.http_client = None
+"""
+Cleanup stub: mark http_client as closed.""
+self.http_client = None
 
     # Simple stubs for the API surface (no network calls)
     async def _fetch_agent_card(self, url: str) -> AgentCard:

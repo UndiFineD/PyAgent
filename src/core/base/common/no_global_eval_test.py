@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Test to ensure no usage of Python builtins.eval across the codebase."""
+"""
+"""
+Test to ensure no usage of Python builtins.eval across the codebase.""
 try:
-    import re
+
+""
+import re
 except ImportError:
     import re
 

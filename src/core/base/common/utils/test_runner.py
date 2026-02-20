@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,12 +20,13 @@ from __future__ import annotations
 
 
 """
+"""
 Test runner utilities.
 
+"""
 Provides a small helper to execute focused pytest runs and return results.
 Used by agents to verify changes before committing.
 """
-
 import shlex
 import subprocess
 from pathlib import Path
@@ -41,7 +43,8 @@ def _build_pytest_command(kexpr: Optional[str] = None, extra_args: Optional[Iter
 
 
 def run_focused_tests_for_files(files: Iterable[str], timeout: int = 300) -> Tuple[bool, str]:
-    """Run a focused pytest subset based on changed file names.
+"""
+Run a focused pytest subset based on changed file names.
     Args:
         files: Iterable of changed file paths (relative or absolute).
         timeout: Timeout in seconds for the pytest invocation.
@@ -52,8 +55,8 @@ def run_focused_tests_for_files(files: Iterable[str], timeout: int = 300) -> Tup
     Behavior:
         - Extracts base names from files and builds a -k expression joining with 'or'.
         - If no file names can be extracted, runs the entire `tests/unit` suite as a conservative fallback.
-    """
-    basenames = []
+"""
+basenames = []
     for p in files:
         try:
             pn = Path(p).name

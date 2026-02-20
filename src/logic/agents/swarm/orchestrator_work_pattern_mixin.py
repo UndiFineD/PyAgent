@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 OrchestratorWorkPatternMixin - Work pattern orchestration for OrchestratorAgent
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -25,7 +30,7 @@ USAGE:
 - Use list_work_patterns() to enumerate available patterns and validate_work_pattern_setup(name) to check readiness.
 
 WHAT IT DOES:
-Provides a lightweight mixin that stores and manages named WorkPattern objects, tracks a default pattern (prefers the first registered or a pattern named "PEER"), exposes methods to register, retrieve, list, validate, and asynchronously execute work patterns using a CascadeContext, and logs key lifecycle events."
+Provides a lightweight mixin that stores and manages named WorkPattern objects, tracks a default pattern (prefers the first registered or a pattern named "PEER"), exposes methods to register, retrieve, list, validate, and asynchronously execute work patterns using a CascadeContext, and logs key lifecycle events.
 WHAT IT SHOULD DO BETTER:
 - Provide clearer error types (custom exceptions) instead of ValueError for missing/default patterns to allow callers to handle specific failure modes.
 - Expose hooks or callbacks for lifecycle events (on_register, on_execute_start/finish) to allow customization without subclassing.
@@ -34,7 +39,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 OrchestratorWorkPatternMixin: Mixin for work pattern orchestration in PyAgent.
 """
-
 try:
     import logging
 except ImportError:
@@ -67,21 +71,25 @@ class OrchestratorWorkPatternMixin:
     predefined work patterns like PEER (Planning, Executing, Expressing, Reviewing).
     
     def __init__(self, **kwargs: Any) -> None:
-        """Initialize work pattern capabilities.        super().__init__(**kwargs)
+"""
+Initialize work pattern capabilities.        super().__init__(**kwargs)
         self._work_patterns: Dict[str, WorkPattern] = {}
         self._default_work_pattern: Optional[str] = None
 
     def register_work_pattern(self, pattern: WorkPattern) -> None:
-        """Register a work pattern for use in orchestration.""""
-        Args:
+"""
+Register a work pattern for use in orchestration.""""
+Args:
             pattern: The work pattern to register
                 self._work_patterns[pattern.name] = pattern
-        logger.info(f"Registered work pattern: {pattern.name}")"
-        # Set as default if it's the first one or named "PEER""'        if self._default_work_pattern is None or pattern.name == "PEER":"            self._default_work_pattern = pattern.name
+        logger.info(f"Registered work pattern: {pattern.name}")
+        # Set as default if it's the first one or named "PEER""'
+if self._default_work_pattern is None or pattern.name == "PEER":"            self._default_work_pattern = pattern.name
 
     def get_work_pattern(self, name: str) -> Optional[WorkPattern]:
-        """Get a registered work pattern by name.""""
-        Args:
+"""
+Get a registered work pattern by name.""""
+Args:
             name: Name of the work pattern
 
         Returns:
@@ -89,8 +97,9 @@ class OrchestratorWorkPatternMixin:
                 return self._work_patterns.get(name)
 
     def list_work_patterns(self) -> list[str]:
-        """List all registered work pattern names.""""
-        Returns:
+"""
+List all registered work pattern names.""""
+Returns:
             List of work pattern names
                 return list(self._work_patterns.keys())
 
@@ -111,15 +120,16 @@ class OrchestratorWorkPatternMixin:
             Results from the work pattern execution
                 pattern_name = pattern_name or self._default_work_pattern
         if not pattern_name:
-            raise ValueError("No work pattern specified and no default pattern set")"
+            raise ValueError("No work pattern specified and no default pattern set")
         pattern = self.get_work_pattern(pattern_name)
         if not pattern:
-            raise ValueError(f"Work pattern '{pattern_name}' not found")"'
+            raise ValueError(f"Work pattern '{pattern_name}' not found")
         logger.info(f"Executing task with work pattern: {pattern_name}")"        return await pattern.execute(context, **kwargs)
 
     def validate_work_pattern_setup(self, pattern_name: str) -> bool:
-        """Validate that a work pattern is properly configured.""""
-        Args:
+"""
+Validate that a work pattern is properly configured.""""
+Args:
             pattern_name: Name of the work pattern to validate
 
         Returns:

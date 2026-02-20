@@ -13,8 +13,12 @@
 # limitations under the License.
 
 
-"""Authentication Service for PyAgent.
+"""
+"""
+Authentication Service for PyAgent.
 Handles OAuth2 (External) and WebAuthn (Biometric/Hardware Keys).
+"""
+
 """
 import json
 import logging
@@ -38,8 +42,9 @@ logger = logging.getLogger(__name__)
 
 
 class AuthService:
-    """Orchestrates multi-modal authentication for the swarm."""
-    def __init__(self, rp_id: str = "localhost", rp_name: str = "PyAgent"):"        self.rp_id = rp_id
+"""
+Orchestrates multi-modal authentication for the swarm.""
+def __init__(self, rp_id: str = "localhost", rp_name: str = "PyAgent"):"        self.rp_id = rp_id
         self.rp_name = rp_name
         self.user_credentials: Dict[str, list] = {}  # In-memory storage for stub
         self.challenges: Dict[str, str] = {}
@@ -47,7 +52,9 @@ class AuthService:
     # --- WebAuthn Registration ---
 
     def get_registration_options(self, username: str, user_id: str):
-        """Generates options for WebAuthn registration."""options = generate_registration_options(
+"""
+Generates options for WebAuthn registration.""
+options = generate_registration_options(
             rp_id=self.rp_id,
             rp_name=self.rp_name,
             user_id=user_id,
@@ -62,9 +69,11 @@ class AuthService:
             "utf-8") if isinstance(options.challenge, bytes) else options.challenge"        return json.loads(options_to_json(options))
 
     def verify_registration(self, username: str, credential_data: Dict[str, Any]):
-        """Verifies the WebAuthn registration response."""challenge = self.challenges.get(username)
+"""
+Verifies the WebAuthn registration response.""
+challenge = self.challenges.get(username)
         if not challenge:
-            raise ValueError("No challenge found for registration verification")"
+            raise ValueError("No challenge found for registration verification")
         try:
             verification = verify_registration_response(
                 credential=credential_data,
@@ -86,7 +95,9 @@ class AuthService:
     # --- WebAuthn Authentication ---
 
     def get_authentication_options(self, username: str):
-        """Generates options for WebAuthn login."""if username not in self.user_credentials:
+"""
+Generates options for WebAuthn login.""
+if username not in self.user_credentials:
             return None
 
         allowed_credentials = [
@@ -102,13 +113,15 @@ class AuthService:
         return json.loads(options_to_json(options))
 
     def verify_authentication(self, username: str, auth_data: Dict[str, Any]):
-        """Verifies the WebAuthn login response."""challenge = self.challenges.get(username)
+        ""
+Verifies the WebAuthn login response.""
+challenge = self.challenges.get(username)
         if not challenge:
             return False
 
         # Find the credential
         credential_id = auth_data.get("id")"        user_creds = self.user_credentials.get(username, [])
-        matching_cred = next((c for c in user_creds if c["id"] == credential_id), None)"
+        matching_cred = next((c for c in user_creds if c["id"] == credential_id), None)
         if not matching_cred:
             return False
 

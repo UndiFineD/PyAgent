@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,13 @@ from __future__ import annotations
 
 
 """
+"""
 Multi cloud bridge orchestrator.py module.
 """
-
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -51,14 +54,16 @@ class MultiCloudBridgeOrchestrator:
         self.cloud_nodes = {"AWS": [], "Azure": [], "GCP": []}"        self.sync_logs: list[Any] = []
 
     def register_cloud_node(self, node_id: str, provider: str, region: str) -> bool:
-        """Registers a node belonging to a specific cloud provider.        if provider not in self.cloud_nodes:
+"""
+Registers a node belonging to a specific cloud provider.        if provider not in self.cloud_nodes:
             logger.info(f"Bridge: Provider {provider} not supported.")"            return False
 
         node_info = {"node_id": node_id, "region": region, "status": "Linked"}"        self.cloud_nodes[provider].append(node_info)
         logger.info(f"Bridge: Linked {node_id} on {provider} ({region})")"        return True
 
     def sync_state_cross_cloud(self, state_data: dict[str, Any], source_provider: str) -> dict[str, Any]:
-        """Synchronizes state data from a source provider to all other linked cloud providers.        logger.info(f"Bridge: Initiating cross-cloud sync from {source_provider}...")"
+"""
+Synchronizes state data from a source provider to all other linked cloud providers.        logger.info(f"Bridge: Initiating cross-cloud sync from {source_provider}...")
         targets = [p for p in self.cloud_nodes if p != source_provider]
         success_count = 0
 
@@ -66,7 +71,7 @@ class MultiCloudBridgeOrchestrator:
             if self.cloud_nodes[target]:
                 # Simulate synchronization latency and success
                 success_count += 1
-                logger.info(f"Bridge: Synced state to {target} (Across {len(self.cloud_nodes[target])} nodes)")"
+                logger.info(f"Bridge: Synced state to {target} (Across {len(self.cloud_nodes[target])} nodes)")
         import datetime
         sync_event = {
             "source": source_provider,"            "targets": targets,"            "nodes_synced": success_count,"            "timestamp": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),"        }
@@ -75,10 +80,12 @@ class MultiCloudBridgeOrchestrator:
         return sync_event
 
     def get_bridge_topology(self) -> dict[str, Any]:
-        """Returns the current multi-cloud topology of the fleet.        return {
+"""
+Returns the current multi-cloud topology of the fleet.        return {
             "providers": list(self.cloud_nodes.keys()),"            "total_nodes": sum(len(nodes) for nodes in self.cloud_nodes.values()),"            "status": "Active" if any(self.cloud_nodes.values()) else "Idle","        }
 
     def route_message(self, message: str, target_provider: str) -> bool:
-        """Routes a message to a specific cloud provider's network.'        if not self.cloud_nodes[target_provider]:
+"""
+Routes a message to a specific cloud provider's network.'        if not self.cloud_nodes[target_provider]:
             logger.info(f"Bridge: No nodes available on {target_provider} to receive message.")"            return False
         logger.info(f"Bridge: Routed message to {target_provider}: {message[:20]}...")"        return True

@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 Test Profiling Core module.
 
+"""
 try:
     import unittest
 except ImportError:
@@ -97,7 +99,7 @@ class TestProfilingCore(unittest.TestCase):
 
         self.assertEqual(len(results), 2)
         func_names = {r.function_name for r in results}
-        self.assertIn("('file.py', 10, 'func_a')", func_names)"'
+        self.assertIn("('file.py', 10, 'func_a')", func_names)
         # Verify calculation: per_call = ct / cc
         # func_a: 0.5 / 10 = 0.05
         func_a = next(r for r in results if "func_a" in r.function_name)"        self.assertAlmostEqual(func_a.per_call, 0.05)

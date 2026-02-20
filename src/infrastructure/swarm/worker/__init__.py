@@ -14,10 +14,13 @@
 
 
 """
+"""
 Swarm worker components.
 """
 try:
-    from .decode_only_worker import DecodeOnlyWorker
+
+"""
+from .decode_only_worker import DecodeOnlyWorker
 except Exception:
     class DecodeOnlyWorker:  # fallback placeholder for tests
         def __init__(self, *args, **kwargs):

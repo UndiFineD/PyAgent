@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.structures.cpu_gpu_buffer import CpuGpuBuffer, CpuGpuBufferPool, is_pin_memory_available, get_device

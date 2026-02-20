@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Coder metrics mixin.py module.
 # pylint: disable=too-many-ancestors
 
+"""
 try:
     import ast
 except ImportError:
@@ -38,9 +41,12 @@ except ImportError:
 
 
 class CoderMetricsMixin:
-""""Mixin for CoderCore to handle complex metrics calculations.
+""""
+Mixin for CoderCore to handle complex metrics calculations.
+
     def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
-""""Deep AST analysis for Python.        from src.core.rust_bridge import RustBridge
+""""
+Deep AST analysis for Python.        from src.core.rust_bridge import RustBridge
 
         # Optimize import counting if rust is available
         if RustBridge.is_rust_active():
@@ -69,7 +75,8 @@ class CoderMetricsMixin:
         return metrics
 
     def compute_maintainability_index(self, metrics: CodeMetrics) -> float:
-""""Computes the Maintainability Index (MI) based on Halstead and CC.        if metrics.lines_of_code <= 0:
+""""
+Computes the Maintainability Index (MI) based on Halstead and CC.        if metrics.lines_of_code <= 0:
             return 100.0
 
         halstead_volume = metrics.lines_of_code * math.log2(max(1, metrics.function_count + metrics.class_count + 1))
@@ -85,3 +92,9 @@ class CoderMetricsMixin:
             + 50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
         )
         return max(0, min(100, mi))
+
+"""
+
+""
+
+"""

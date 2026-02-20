@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 """
 FleetConsensusManager
+"""
 Consensus management for the FleetManager.
 """
 
+"""
 import asyncio
 import logging
 import time
@@ -31,11 +34,10 @@ if TYPE_CHECKING:
 
 
 class FleetConsensusManager:
-    """
-    Manages multi-agent consensus workflows.
-    """
-
-    def __init__(self, fleet: 'FleetManager') -> None:
+"""
+Manages multi-agent consensus workflows.
+"""
+def __init__(self, fleet: 'FleetManager') -> None:
         self.fleet = fleet
 
 
@@ -45,12 +47,12 @@ class FleetConsensusManager:
         primary_agent: str | None = None,
         secondary_agents: list[str] | None = None,
     ) -> dict[str, Any]:
-        """
+"""
                 [Pillar 1: Swarm Consensus]
         Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
         Fully asynchronous implementation for v4.0.0.
-        """
-        logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")
+"""
+logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")
         # 1. Committee Formation
         judge = self.fleet.agents.get("ByzantineConsensusAgent") or self.fleet.agents.get("byzantine_judge")
         if not judge:

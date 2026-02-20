@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Speculative decoding v2 components.
+"""
+"""
+Speculative decoding v2 components.
 try:
-    from .config import AcceptanceMethod, ProposerType  # noqa: F401
+
+"""
+from .config import AcceptanceMethod, ProposerType  # noqa: F401
 except ImportError:
     from .config import AcceptanceMethod, ProposerType # noqa: F401
 

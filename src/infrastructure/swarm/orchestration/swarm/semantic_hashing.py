@@ -15,8 +15,10 @@
 
 
 """
+"""
 Semantic hashing.py module.
 
+"""
 try:
     import logging
 except ImportError:
@@ -53,7 +55,8 @@ class SemanticHasher:
         self.buckets: Dict[int, Set[str]] = {}
 
     def compute_hash(self, embedding: np.ndarray) -> int:
-        """Converts an embedding into a bitstring hash via random projections.        if len(embedding) != self.dimension:
+"""
+Converts an embedding into a bitstring hash via random projections.        if len(embedding) != self.dimension:
             # Simple padding/truncation for flex
             temp = np.zeros(self.dimension)
             temp[: min(len(embedding), self.dimension)] = embedding[: min(len(embedding), self.dimension)]
@@ -70,18 +73,23 @@ class SemanticHasher:
         return hash_val
 
     def index_shard(self, shard_id: str, embedding: np.ndarray):
-        """Adds a shard to the semantic hash table.        h = self.compute_hash(embedding)
+"""
+Adds a shard to the semantic hash table.        h = self.compute_hash(embedding)
         if h not in self.buckets:
             self.buckets[h] = set()
         self.buckets[h].add(shard_id)
-        logger.debug(f"[Phase 88] SemanticHashing: Indexed {shard_id} in bucket {h:016b}")"
+        logger.debug(f"[Phase 88] SemanticHashing: Indexed {shard_id} in bucket {h:016b}")
     def find_nearest_shards(self, query_emb: np.ndarray) -> List[str]:
-        """Finds shards in the same semantic bucket.        h = self.compute_hash(query_emb)
+"""
+Finds shards in the same semantic bucket.        h = self.compute_hash(query_emb)
         shards = list(self.buckets.get(h, set()))
         if shards:
             logger.info(f"[Phase 88] SemanticHashing: Found {len(shards)} candidates in bucket {h:016b}")"        return shards
 
     def remove_shard(self, shard_id: str):
-        """Removes a shard from all buckets.        for bucket in self.buckets.values():
+"""
+Removes a shard from all buckets.        for bucket in self.buckets.values():
             if shard_id in bucket:
                 bucket.remove(shard_id)
+
+"""

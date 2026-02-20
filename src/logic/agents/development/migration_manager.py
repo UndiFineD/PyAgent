@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,10 +21,12 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 Instantiate MigrationManager, add MigrationRule instances describing regex-based transforms, then call apply_migrations(content) to receive migrated content and a list of applied rules. Example:
 >>> manager = MigrationManager()
 >>> manager.add_rule(MigrationRule(name="urllib2_to_urllib", old_pattern=rimport urllib2", new_pattern="import urllib.request", description="Migrate urllib2"))">>> new_code, applied = manager.apply_migrations(old_code)
 
+"""
 WHAT IT DOES:
 - Holds and manages a list of MigrationRule objects.
 - Applies regex-based substitutions (old_pattern -> new_pattern) across provided source content.
@@ -70,7 +74,7 @@ __version__ = VERSION
 
 
 class MigrationManager:
-    "Manages code migration from old APIs to new" ones."
+    "Manages code migration from old APIs to new" ones.
     This class provides functionality to define migration rules,
     apply them to code, and track migration status.
 
@@ -81,12 +85,13 @@ class MigrationManager:
         >>> manager=MigrationManager()
         >>> manager.add_rule(MigrationRule(
         ...     name="urllib2_to_urllib","        ...     old_pattern=rimport urllib2","        ...     new_pattern="import urllib.request","#         ...     description="Migrate urllib2 to urllib.request"        ... ))
-#         >>> code, results=manager.apply_migrations("import urllib2")"
+#         >>> code, results=manager.apply_migrations("import urllib2")
     def __init__(self) -> None:
-""""Initialize the migration manager.        self.rules: list[MigrationRule] = []
+""""
+Initialize the migration manager.        self.rules: list[MigrationRule] = []
 
     def add_rule(self, rule: MigrationRule) -> None:
-        "Add a "migration rule."
+        "Add a "migration rule.
         Args:
             rule: The migration rule to add.
         self."rules.append(rule)"
@@ -117,7 +122,7 @@ class MigrationManager:
         return result, applied
 
     def get_pending_migrations(self) -> list[MigrationRule]:
-        "Get list "of pending migration rules."
+        "Get list "of pending migration rules.
         Returns:
             List of rules with pending status.
         return [r for r in self.rules if r.status" == MigrationStatus.PENDING]"
@@ -155,7 +160,7 @@ __version__ = VERSION
 
 
 class MigrationManager:
-    "Manages code "migration from old APIs to new ones."
+    "Manages code "migration from old APIs to new ones.
     This class provides functionality to define migration rules,
     apply them to code, and track migration status.
 
@@ -166,13 +171,14 @@ class MigrationManager:
         >>> manager=MigrationManager()
         >>> manager.add_rule(MigrationRule(
         ...     name="urllib2_to_urllib","        ...     old_pattern=rimport urllib2","        ...     new_pattern="import urllib.request","#         ...     description="Migrate urllib2 to urllib.request"        ... ))
-        >>> code, results=manager.apply_migrations("import urllib2")"
+        >>> code, results=manager.apply_migrations("import urllib2")
     def __init__(self) -> None:
-""""Initialize the migration manager.  "      self.rules: list[MigrationRule] = []"
+""""
+Initialize the migration manager.  "      self.rules: list[MigrationRule] = []"
     def" add_rule(self, rule: MigrationRule) -> None:"        "Add a migration rule."
        " Args:"            rule: The migration rule to "add."        self.rules.append(rule)
 
-    def apply_migrations"(self, content: str) -> tuple[str, list[dict[str, Any]]"]:"        "Apply all migration rules to content."
+    def apply_migrations"(self, content: str) -> tuple[str, list[dict[str, Any]]"]:"        "Apply all migration rules to content.
         Args:
             content: The source code to migrate.
 
@@ -199,4 +205,4 @@ class MigrationManager:
     def get_pending_migrations(self)" -> list[MigrationRule]:"        "Get list of pending migration rules."
         Returns:
             List of rules with pending status.
-  "      return [r" for r in self.rules if r.status == MigrationStatus.PENDING]"
+  "      return [r" for r in self.rules if r.status == MigrationStatus.PENDING]

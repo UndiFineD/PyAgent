@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_changes.py""""
-
 from dataclasses import dataclass, field
 
 from src.core.base.lifecycle.version import VERSION
@@ -30,8 +30,9 @@ __version__ = VERSION
 
 @dataclass
 class ImportedEntry:
-    """An entry imported from external source.""""
-    Attributes:
+"""
+An entry imported from external source.""""
+Attributes:
         source: Where the entry was imported from.
         external_id: ID in the external system.
         title: Entry title.
@@ -44,4 +45,6 @@ class ImportedEntry:
     external_id: str
     title: str
     description: str
-    author: str = """    created_at: str = """    labels: list[str] = field(default_factory=lambda: [])
+    author: str = ""
+created_at: str = ""
+labels: list[str] = field(default_factory=lambda: [])

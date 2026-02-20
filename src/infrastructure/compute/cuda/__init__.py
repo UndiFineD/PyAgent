@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 CUDA Graph and Compilation Infrastructure.
 
+"""
 Phase 36: CUDA Graph & Compilation subsystem providing:
 - CUDAGraphManager: Graph capture and replay
 - UBatchProcessor: Micro-batch processing

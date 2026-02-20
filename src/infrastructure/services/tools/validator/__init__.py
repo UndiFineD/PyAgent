@@ -16,8 +16,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Validator Package
 
+"""
 Schema validation for tool calls.
 
+"""
 try:
     from .schema import (validate_argument_type, validate_tool_call,  # noqa: F401
 except ImportError:

@@ -92,7 +92,7 @@ jobs:
       - name: Run Loop Analysis
         run: python loop_analysis.py src/ --format json --output loop-report.json
       - name: Upload Report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: loop-analysis-report
           path: loop-report.json

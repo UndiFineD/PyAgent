@@ -15,7 +15,10 @@
 
 
 """
+"""
 Parsing.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 from typing import Any, Dict, List, Optional
@@ -27,7 +30,8 @@ from .models import (Message, Response, ResponseConfig, ToolCallContent,
 
 
 class ConversationBuilder:
-    """Build conversation messages from Responses API format.
+"""
+Build conversation messages from Responses API format.
     @staticmethod
     def from_input(
         input_text: Optional[str], instructions: Optional[str], messages: Optional[List[Message]]
@@ -54,7 +58,8 @@ class ConversationBuilder:
 
 
 def parse_response_request(data: Dict[str, Any]) -> ResponseConfig:
-    """Parse API request to ResponseConfig.    messages = [Message.from_dict(msg_data) for msg_data in data.get("messages", [])]"    tools = []
+"""
+Parse API request to ResponseConfig.    messages = [Message.from_dict(msg_data) for msg_data in data.get("messages", [])]"    tools = []
     for tool_data in data.get("tools", []):"        tool_type = ToolType(tool_data.get("type", "function"))"        if tool_type == ToolType.FUNCTION:
             func = tool_data.get("function", {})"            tools.append(
                 ToolDefinition(
@@ -71,7 +76,7 @@ def parse_response_request(data: Dict[str, Any]) -> ResponseConfig:
 
 
 def _try_rust_parse_response(data: str) -> Optional[Dict[str, Any]]:
-    """
+"""
 try Rust-accelerated response parsing.    try:
         from rust_core import parse_response_json_rust
 

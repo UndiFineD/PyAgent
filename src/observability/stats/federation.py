@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Federation - Stats federation engine
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -43,7 +47,6 @@ FILE CONTENT SUMMARY:
 Federation.py module.
 # Stats federation engine.
 """
-
 import logging
 from datetime import datetime
 from typing import Any
@@ -59,7 +62,8 @@ logger = logging.getLogger(__name__)
 
 
 class StatsFederation:
-    """Aggregate stats from multiple repositories.
+"""
+Aggregate stats from multiple repositories.
     def __init__(self, mode: FederationMode = FederationMode.PULL) -> None:
         self.mode = mode
         self.sources: dict[str, FederatedSource] = {}
@@ -135,14 +139,14 @@ class StatsFederation:
         )
 
     def get_federation_status(self) -> dict[str, Any]:
-        """Get status of federation.        # Include source names as keys for test compatibility
+"""
+Get status of federation.        # Include source names as keys for test compatibility
         status = {
             "sources": len(self.sources),"            "healthy": sum(1 for s in self.sources.values() if s.enabled),"            "last_sync": self._last_sync,"        }
         for name in self.sources:
             status[name] = "healthy" if self.sources[name].enabled else "unhealthy""        return status
 # Stats federation engine.
 """
-
 import logging
 from datetime import datetime
 from typing import Any
@@ -158,7 +162,8 @@ logger = logging.getLogger(__name__)
 
 
 class StatsFederation:
-    """Aggregate stats from multiple repositories.
+"""
+Aggregate stats from multiple repositories.
     def __init__(self, mode: FederationMode = FederationMode.PULL) -> None:
         self.mode = mode
         self.sources: dict[str, FederatedSource] = {}
@@ -234,8 +239,11 @@ class StatsFederation:
         )
 
     def get_federation_status(self) -> dict[str, Any]:
-        """Get status of federation.        # Include source names as keys for test compatibility
+"""
+Get status of federation.        # Include source names as keys for test compatibility
         status = {
             "sources": len(self.sources),"            "healthy": sum(1 for s in self.sources.values() if s.enabled),"            "last_sync": self._last_sync,"        }
         for name in self.sources:
             status[name] = "healthy" if self.sources[name].enabled else "unhealthy""        return status
+
+"""

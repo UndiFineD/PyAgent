@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Pooling core.py module.
 """
-
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -50,4 +54,5 @@ class PoolingCore:
         return min(endpoint_stats, key=endpoint_stats.get)
 
     def should_reuse_session(self, host: str, active_sessions: list[str]) -> bool:
-        """Checks if a host already has an active persistent session.        return host in active_sessions
+"""
+Checks if a host already has an active persistent session.        return host in active_sessions

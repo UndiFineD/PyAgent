@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,12 @@ from __future__ import annotations
 
 """
 KnowledgeTransferEngine
+"""
 Engine for cross-fleet knowledge transfer.
 Enables sharing lessons between decoupled fleet instances.
 """
 
+"""
 import json
 import logging
 from pathlib import Path
@@ -52,18 +55,23 @@ class KnowledgeTransferEngine:
         self.core = KnowledgeTransferCore()
 
     def export_knowledge(self, fleet_id: str, knowledge_data: dict[str, Any]) -> str:
-        """Exports a fleet's knowledge (lessons, entities) to a shareable file.'        export_file = self.export_path / f"knowledge_{fleet_id}.json""
+"""
+Exports a fleet's knowledge (lessons, entities) to a shareable file.'        export_file = self.export_path / f"knowledge_{fleet_id}.json"
         with open(export_file, "w", encoding="utf-8") as f:"            json.dump(knowledge_data, f, indent=2)
 
         logging.info(f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}")"        return str(export_file)
 
     def import_knowledge(self, source_file: str) -> dict[str, Any]:
-        """Imports knowledge from an external JSON file.        source_path = Path(source_file)
+"""
+Imports knowledge from an external JSON file.        source_path = Path(source_file)
         if not source_path.exists():
-            raise FileNotFoundError(f"Knowledge file not found: {source_file}")"
+            raise FileNotFoundError(f"Knowledge file not found: {source_file}")
         with open(source_path, encoding="utf-8") as f:"            data = json.load(f)
 
         logging.info(f"KnowledgeTransfer: Imported knowledge from {source_file}")"        return data
 
     def merge_lessons(self, current_lessons: list[Any], imported_lessons: list[Any]) -> list[Any]:
-        """Merges imported lessons into the current set, avoiding duplicates.        return self.core.merge_lessons(current_lessons, imported_lessons)
+"""
+Merges imported lessons into the current set, avoiding duplicates.        return self.core.merge_lessons(current_lessons, imported_lessons)
+
+"""

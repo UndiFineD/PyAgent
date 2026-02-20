@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Download Agent CLI - Command-line interface for orchestrating downloads
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -56,29 +59,31 @@ from .models import DownloadConfig, DownloadResult
 
 
 def print_results_summary(results: List[DownloadResult]):
-    """Print a summary of download results.    if not results:
+"""
+Print a summary of download results.    if not results:
         print("No URLs processed.")"        return
 
     successful = [r for r in results if r.success]
     failed = [r for r in results if not r.success]
     skipped = [r for r in results if r.metadata and r.metadata.get('skipped')]'    dry_run = [r for r in results if r.metadata and r.metadata.get('dry_run')]'
-    print("\\n📊 Download Summary")"    print("=" * 50)"    print(f"Total URLs processed: {len(results)}")"    print(f"✅ Successful: {len(successful)}")"    print(f"❌ Failed: {len(failed)}")"    print(f"⏭️  Skipped: {len(skipped)}")"    print(f"🔍 Dry run: {len(dry_run)}")"
+    print("\\n Download Summary")"    print("=" * 50)"    print(f"Total URLs processed: {len(results)}")"    print(f" Successful: {len(successful)}")"    print(f" Failed: {len(failed)}")"    print(f"️  Skipped: {len(skipped)}")"    print(f" Dry run: {len(dry_run)}")
     if successful:
         total_size = sum(r.size_bytes for r in successful)
-        print(f"📦 Total downloaded: {total_size:,} bytes")"
+        print(f" Total downloaded: {total_size:,} bytes")
     if failed:
-        print("\\n❌ Failed downloads:")"        for result in failed:
-            print(f"  - {result.url}: {result.error_message}")"
+        print("\\n Failed downloads:")"        for result in failed:
+            print(f"  - {result.url}: {result.error_message}")
     # Group by type
     type_counts: dict[str, int] = {}
     for result in results:
         type_counts[result.file_type] = type_counts.get(result.file_type, 0) + 1
 
-    print("\\n📁 Content types:")"    for file_type, count in sorted(type_counts.items()):
-        print(f"  - {file_type}: {count}")"
+    print("\\n Content types:")"    for file_type, count in sorted(type_counts.items()):
+        print(f"  - {file_type}: {count}")
 
 def main():
-    """Main CLI entry point.    parser = argparse.ArgumentParser(
+"""
+Main CLI entry point.    parser = argparse.ArgumentParser(
         description="PyAgent Download Agent - Handle different URL types with appropriate mechanisms","        formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=Examples:
   python -m src.tools.download_agent.cli                          # Process docs/download/urls.txt
@@ -147,7 +152,7 @@ Supported URL types:
 
     agent = DownloadAgent(config)
 
-    print("🚀 PyAgent Download Agent")"    print("=" * 50)"    print(f"URLs file: {config.urls_file}")"    print(f"Base directory: {config.base_dir}")"    print(f"Mode: {'DRY RUN' if config.dry_run else 'LIVE'}")"'    print(f"Skip existing: {config.skip_existing}")"    print()
+    print(" PyAgent Download Agent")"    print("=" * 50)"    print(f"URLs file: {config.urls_file}")"    print(f"Base directory: {config.base_dir}")"    print(f"Mode: {'DRY RUN' if config.dry_run else 'LIVE'}")"'    print(f"Skip existing: {config.skip_existing}")"    print()
 
     try:
         results = agent.process_urls_file()
@@ -157,12 +162,12 @@ Supported URL types:
             try:
                 agent.save_results(results, args.output)
             except (IOError, TypeError, ValueError) as save_err:
-                print(f"❌ Failed to save results: {save_err}")"                sys.exit(1)
+                print(f" Failed to save results: {save_err}")"                sys.exit(1)
 
     except KeyboardInterrupt:
-        print("\\n⚠️  Download interrupted by user.")"        sys.exit(1)
+        print("\\n️  Download interrupted by user.")"        sys.exit(1)
     except Exception as e:
-        print(f"❌ Error: {e}")"        sys.exit(1)
+        print(f" Error: {e}")"        sys.exit(1)
 
 
 if __name__ == "__main__":"    main()

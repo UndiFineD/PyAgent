@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Models.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -52,14 +55,16 @@ class RequestPriority:
     deadline: Optional[float] = None
     boost_factor: float = 1.0  # Dynamic priority boost
 
-    def __lt__(self, other: "RequestPriority") -> bool:"        """Compare for heap ordering.        # Priority first (lower is better)
+    def __lt__(self, other: "RequestPriority") -> bool:"        """
+Compare for heap ordering.        # Priority first (lower is better)
         if self.priority != other.priority:
             return self.priority < other.priority
         # Then arrival time (earlier is better)
         return self.arrival_time < other.arrival_time
 
     def effective_priority(self) -> float:
-        """Get effective priority with boost applied.        return self.priority / self.boost_factor
+"""
+Get effective priority with boost applied.        return self.priority / self.boost_factor
 
 
 @dataclass
@@ -84,7 +89,8 @@ class QueuedRequest:
     num_prompt_tokens: int = 0
     max_tokens: int = 256
 
-    def __lt__(self, other: "QueuedRequest") -> bool:"        """Compare for heap ordering.        return self.priority < other.priority
+    def __lt__(self, other: "QueuedRequest") -> bool:"        """
+Compare for heap ordering.        return self.priority < other.priority
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, QueuedRequest):
@@ -96,10 +102,14 @@ class QueuedRequest:
 
     @property
     def wait_time(self) -> float:
-        """Time spent waiting in queue.        return time.time() - self.queue_time
+"""
+Time spent waiting in queue.        return time.time() - self.queue_time
 
     @property
     def is_deadline_critical(self) -> bool:
-        """Check if deadline is approaching.        if self.priority.deadline is None:
+"""
+Check if deadline is approaching.        if self.priority.deadline is None:
             return False
         return time.time() > self.priority.deadline * 0.9
+
+"""

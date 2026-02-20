@@ -15,9 +15,11 @@
 
 # LatentReasoningAgent for PyAgent.
 # Specializes in detecting English-bias in multilingual swarm outputs and ensuring
+"""
 latent reasoning consistency across language boundaries.
 Ref: ArXiv 2601.02996 (Latent Reasoning in LLMs)
 
+"""
 try:
     import logging
 except ImportError:
@@ -51,7 +53,7 @@ __version__ = VERSION
 # pylint: disable=too-many-ancestors
 class LatentReasoningAgent(BaseAgent):
     Guardrail agent that validates cross-lingual reasoning integrity.
-#     Prevents 'representation collapse' in low-resource language outputs.'
+#     Prevents 'representation collapse' in low-resource language outputs.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (

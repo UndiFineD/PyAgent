@@ -13,9 +13,13 @@
 # limitations under the License.
 
 #!/usr/bin/env python3
-"""Minimal import test for BaseAgent to allow collection."""
+"""
+"""
+Minimal import test for BaseAgent to allow collection.""
 try:
-    from src.core.base.lifecycle.base_agent import BaseAgent
+
+""
+from src.core.base.lifecycle.base_agent import BaseAgent
 except Exception:  # pragma: no cover - test shim
     raise
 

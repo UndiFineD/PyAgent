@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +16,14 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Refactoring tool to standardize file headers across the PyAgent codebase.
 
+"""
 import os
 import re
 
-COPYRIGHT_BLOCK = """
+COPYRIGHT_BLOCK = ""
 # Copyright 2026 PyAgent Authors""""
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +41,9 @@ Fix headers.py module.
 
 
 def fix_header(lines: list[str], filename: str = "") -> list[str]:"    shebang = None
-    _future = "from __future__ import annotations\\n""    _v_import = "from src.core.base.lifecycle.version import VERSION\\n""    _v_assign = "__version__ = VERSION\\n""
+    _future = "from __future__ import annotations\\n""    _v_import = "from src.core.base.lifecycle.version import VERSION\\n""    _v_assign = "__version__ = VERSION\\n"
     # Skip version injection for the version file itself
-    skip_version = "version.py" in filename.lower()"
+    skip_version = "version.py" in filename.lower()
     remaining = []
 
     # 1. Strip all "header-like" items to re-insert them later"    for line in lines:
@@ -67,12 +71,13 @@ def fix_header(lines: list[str], filename: str = "") -> list[str]:"    shebang =
         new_lines.append(shebang)
 
     # Insert Copyright Block
-    new_lines.append(COPYRIGHT_BLOCK + "\\n")"
+    new_lines.append(COPYRIGHT_BLOCK + "\\n")
     # Insert Future Import
-    new_lines.append(_future + "\\n")"
+    new_lines.append(_future + "\\n")
     # 2. Add Docstring if one exists at the top of remaining
     idx = 0
-    if idx < len(remaining) and (remaining[idx].strip().startswith('"""') or remaining[idx].strip().startswith("'''")):'''"'        start_quote = remaining[idx].strip()[:3]
+    if idx < len(remaining) and (remaining[idx].strip().startswith('"""') or remaining[idx].strip().startswith("'''")):'''"
+start_quote = remaining[idx].strip()[:3]
         new_lines.append(remaining[idx])
         if remaining[idx].strip().count(start_quote) == 1:
             idx += 1
@@ -86,11 +91,11 @@ def fix_header(lines: list[str], filename: str = "") -> list[str]:"    shebang =
                 idx += 1
         else:
             idx += 1
-        new_lines.append("\\n")"
+        new_lines.append("\\n")
     # 3. Add Versioning
     if not skip_version:
         new_lines.append(_v_import)
-        new_lines.append(_v_assign + "\\n")"
+        new_lines.append(_v_assign + "\\n")
     # 4. Add the rest
     while idx < len(remaining):
         new_lines.append(remaining[idx])
@@ -120,7 +125,7 @@ def process_directory(directory: str) -> None:
 
                     with open(filepath, "w", encoding="utf-8") as f:"                        f.writelines(new_lines)
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    print(f"Error processing {filepath}: {e}")"
+                    print(f"Error processing {filepath}: {e}")
 
 if __name__ == "__main__":"    base_path = r"c:\\DEV\\PyAgent\\src""    process_directory(base_path)
     # Also process root files
@@ -131,4 +136,5 @@ if __name__ == "__main__":"    base_path = r"c:\\DEV\\PyAgent\\src""    process_
                 new_lines = fix_header(lines, filename=f)
                 with open(filepath, "w", encoding="utf-8") as file_handle:"                    file_handle.writelines(new_lines)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            print(f"Error processing {filepath}: {e}")"
+            print(f"Error processing {filepath}: {e}")
+""

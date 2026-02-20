@@ -13,11 +13,14 @@
 # limitations under the License.
 
 
-"""RAG (Retrieval-Augmented Generation) Core
+"""
+"""
+RAG (Retrieval-Augmented Generation) Core
 
+"""
 Implements advanced RAG patterns from AgentCloud for enhanced agent knowledge retrieval.
 Supports multiple vector databases, retrieval strategies, and tool integration.
-Based on AgentCloud's RAG tool implementation with pre/post processors.'"""
+Based on AgentCloud's RAG tool implementation with pre/post processors.'""
 import asyncio
 import logging
 from typing import Dict, List, Optional, Any, Callable, Protocol
@@ -30,19 +33,27 @@ from src.core.base.common.base_core import BaseCore
 
 
 class VectorStoreType(str, Enum):
-    """Supported vector store types."""QDRANT = "qdrant""    PINECONE = "pinecone""    CHROMA = "chroma""    WEAVIATE = "weaviate""    MILVUS = "milvus""
+"""
+Supported vector store types.""
+QDRANT = "qdrant""    PINECONE = "pinecone""    CHROMA = "chroma""    WEAVIATE = "weaviate""    MILVUS = "milvus"
 
 
 class RetrievalStrategy(str, Enum):
-    """Retrieval strategies for RAG."""SIMILARITY = "similarity""    MMR = "mmr"  # Maximal Marginal Relevance"    SELF_QUERY = "self_query""    MULTI_QUERY = "multi_query""    TIME_WEIGHTED = "time_weighted""    CONTEXTUAL_COMPRESSION = "contextual_compression""
+"""
+Retrieval strategies for RAG.""
+SIMILARITY = "similarity""    MMR = "mmr"  # Maximal Marginal Relevance"    SELF_QUERY = "self_query""    MULTI_QUERY = "multi_query""    TIME_WEIGHTED = "time_weighted""    CONTEXTUAL_COMPRESSION = "contextual_compression""
 
 
 class DocumentType(str, Enum):
-    """Types of documents that can be stored."""TEXT = "text""    PDF = "pdf""    WEBPAGE = "webpage""    CODE = "code""    MARKDOWN = "markdown""
+"""
+Types of documents that can be stored.""
+TEXT = "text""    PDF = "pdf""    WEBPAGE = "webpage""    CODE = "code""    MARKDOWN = "markdown"
 
 @dataclass
 class Document:
-    """Document for RAG storage."""doc_id: str
+"""
+Document for RAG storage.""
+doc_id: str
     content: str
     metadata: Dict[str, Any] = field(default_factory=dict)
     doc_type: DocumentType = DocumentType.TEXT
@@ -53,7 +64,9 @@ class Document:
 
 @dataclass
 class RetrievalConfig:
-    """Configuration for retrieval operations."""strategy: RetrievalStrategy = RetrievalStrategy.SIMILARITY
+"""
+Configuration for retrieval operations.""
+strategy: RetrievalStrategy = RetrievalStrategy.SIMILARITY
     top_k: int = 5
     score_threshold: float = 0.0
     fetch_k: int = 20  # For MMR and other strategies
@@ -63,7 +76,9 @@ class RetrievalConfig:
 
 @dataclass
 class RAGToolConfig:
-    """Configuration for RAG tool."""tool_id: str
+"""
+Configuration for RAG tool.""
+tool_id: str
     name: str
     description: str
     vector_store_type: VectorStoreType
@@ -79,7 +94,9 @@ class RAGToolConfig:
 
 @dataclass
 class RetrievalResult:
-    """Result of a retrieval operation."""query: str
+"""
+Result of a retrieval operation.""
+query: str
     documents: List[Document]
     scores: List[float]
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -88,7 +105,9 @@ class RetrievalResult:
 
 @dataclass
 class RAGQuery:
-    """RAG query with context."""query: str
+"""
+RAG query with context.""
+query: str
     filters: Dict[str, Any] = field(default_factory=dict)
     retrieval_config: Optional[RetrievalConfig] = None
     context: Dict[str, Any] = field(default_factory=dict)
@@ -96,9 +115,12 @@ class RAGQuery:
 
 
 class VectorStoreInterface(Protocol):
-    """Protocol for vector store implementations."""
-    async def add_documents(self, documents: List[Document]) -> List[str]:
-        """Add documents to the vector store."""pass
+"""
+Protocol for vector store implementations.""
+async def add_documents(self, documents: List[Document]) -> List[str]:
+"""
+Add documents to the vector store.""
+pass
 
     async def similarity_search(
         self,
@@ -107,24 +129,33 @@ class VectorStoreInterface(Protocol):
         filters: Optional[Dict[str, Any]] = None,
         **kwargs
     ) -> List[tuple[Document, float]]:
-        """Perform similarity search."""pass
+"""
+Perform similarity search.""
+pass
 
     async def delete_documents(self, doc_ids: List[str]) -> bool:
-        """Delete documents from vector store."""pass
+"""
+Delete documents from vector store.""
+pass
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
-        """Update a document in the vector store."""pass
+"""
+Update a document in the vector store.""
+pass
 
 
 
 class BaseVectorStore:
-    """Base class for vector store implementations."""
-    def __init__(self, config: Dict[str, Any]):
+"""
+Base class for vector store implementations.""
+def __init__(self, config: Dict[str, Any]):
         self.config = config
         self.logger = logging.getLogger(__name__)
 
     async def add_documents(self, documents: List[Document]) -> List[str]:
-        """Add documents to the vector store."""raise NotImplementedError
+"""
+Add documents to the vector store.""
+raise NotImplementedError
 
     async def similarity_search(
         self,
@@ -133,18 +164,25 @@ class BaseVectorStore:
         filters: Optional[Dict[str, Any]] = None,
         **kwargs
     ) -> List[tuple[Document, float]]:
-        """Perform similarity search."""raise NotImplementedError
+"""
+Perform similarity search.""
+raise NotImplementedError
 
     async def delete_documents(self, doc_ids: List[str]) -> bool:
-        """Delete documents from vector store."""raise NotImplementedError
+"""
+Delete documents from vector store.""
+raise NotImplementedError
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
-        """Update a document in the vector store."""raise NotImplementedError
+"""
+Update a document in the vector store.""
+raise NotImplementedError
 
 
 
 class RAGCore(BaseCore):
-    """RAG (Retrieval-Augmented Generation) Core
+"""
+RAG (Retrieval-Augmented Generation) Core
 
     Implements advanced RAG patterns from AgentCloud:
     - Multiple vector store support (Qdrant, Pinecone, etc.)
@@ -153,8 +191,8 @@ class RAGCore(BaseCore):
     - Document management and chunking
     - Tool integration for agent use
 
-    Based on AgentCloud's sophisticated RAG tool implementation.'    """
-    def __init__(self):
+    Based on AgentCloud's sophisticated RAG tool implementation.'    ""
+def __init__(self):
         super().__init__()
         self.vector_stores: Dict[str, BaseVectorStore] = {}
         self.rag_tools: Dict[str, RAGToolConfig] = {}
@@ -173,7 +211,8 @@ class RAGCore(BaseCore):
         store_type: VectorStoreType,
         config: Dict[str, Any]
     ) -> str:
-        """Register a vector store instance.
+"""
+Register a vector store instance.
 
         Args:
             store_id: Unique identifier for the store
@@ -182,7 +221,8 @@ class RAGCore(BaseCore):
 
         Returns:
             Store ID
-        """if store_type == VectorStoreType.QDRANT:
+"""
+if store_type == VectorStoreType.QDRANT:
             store = QdrantVectorStore(config)
         else:
             # Fallback to Mock for unknown types
@@ -200,7 +240,8 @@ class RAGCore(BaseCore):
         collection_name: str,
         **kwargs
     ) -> RAGToolConfig:
-        """Create a RAG tool configuration.
+"""
+Create a RAG tool configuration.
 
         Args:
             tool_id: Unique tool identifier
@@ -212,10 +253,11 @@ class RAGCore(BaseCore):
 
         Returns:
             RAG tool configuration
-        """if vector_store_id not in self.vector_stores:
-            raise ValueError(f"Vector store {vector_store_id} not found")"
+"""
+if vector_store_id not in self.vector_stores:
+            raise ValueError(f"Vector store {vector_store_id} not found")
         if tool_id in self.rag_tools:
-            raise ValueError(f"RAG tool {tool_id} already exists")"
+            raise ValueError(f"RAG tool {tool_id} already exists")
         tool_config = RAGToolConfig(
             tool_id=tool_id,
             name=name,
@@ -235,7 +277,8 @@ class RAGCore(BaseCore):
         documents: List[Document],
         chunk_documents: bool = True
     ) -> List[str]:
-        """Add documents to a RAG tool.
+"""
+Add documents to a RAG tool.
 
         Args:
             tool_id: RAG tool to add documents to
@@ -244,15 +287,16 @@ class RAGCore(BaseCore):
 
         Returns:
             List of document IDs added
-        """if tool_id not in self.rag_tools:
-            raise ValueError(f"RAG tool {tool_id} not found")"
+"""
+if tool_id not in self.rag_tools:
+            raise ValueError(f"RAG tool {tool_id} not found")
         tool_config = self.rag_tools[tool_id]
         # Resolve vector store by explicit id (preferred) or fall back to collection name
         store_key = tool_config.vector_store_id or tool_config.collection_name
         vector_store = self.vector_stores.get(store_key)
 
         if not vector_store:
-            raise ValueError(f"Vector store for tool {tool_id} not found")"
+            raise ValueError(f"Vector store for tool {tool_id} not found")
         # Process documents (chunking, preprocessing)
         processed_docs = []
         for doc in documents:
@@ -280,7 +324,8 @@ class RAGCore(BaseCore):
         retrieval_config: Optional[RetrievalConfig] = None,
         filters: Optional[Dict[str, Any]] = None
     ) -> RetrievalResult:
-        """Retrieve relevant documents for a query.
+"""
+Retrieve relevant documents for a query.
 
         Args:
             tool_id: RAG tool to query
@@ -290,8 +335,9 @@ class RAGCore(BaseCore):
 
         Returns:
             Retrieval results
-        """if tool_id not in self.rag_tools:
-            raise ValueError(f"RAG tool {tool_id} not found")"
+"""
+if tool_id not in self.rag_tools:
+            raise ValueError(f"RAG tool {tool_id} not found")
         tool_config = self.rag_tools[tool_id]
         config = retrieval_config or tool_config.retrieval_config
 
@@ -311,7 +357,7 @@ class RAGCore(BaseCore):
         # Perform retrieval based on strategy
         vector_store = self.vector_stores.get(tool_config.collection_name)
         if not vector_store:
-            raise ValueError(f"Vector store for tool {tool_id} not found")"
+            raise ValueError(f"Vector store for tool {tool_id} not found")
         results = await self._perform_retrieval(
             vector_store, processed_query, config, filters
         )
@@ -344,7 +390,8 @@ class RAGCore(BaseCore):
         rag_query: RAGQuery,
         generate_response: bool = True
     ) -> Dict[str, Any]:
-        """Perform a complete RAG query with optional response generation.
+"""
+Perform a complete RAG query with optional response generation.
 
         Args:
             tool_id: RAG tool to use
@@ -353,7 +400,7 @@ class RAGCore(BaseCore):
 
         Returns:
             RAG query results with optional generated response
-        """
+"""
 # Retrieve relevant documents
         retrieval_result = await self.retrieve(
             tool_id=tool_id,
@@ -371,7 +418,8 @@ class RAGCore(BaseCore):
         return result
 
     async def update_document(self, doc_id: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> bool:
-        """Update an existing document.
+"""
+Update an existing document.
 
         Args:
             doc_id: Document ID to update
@@ -380,7 +428,8 @@ class RAGCore(BaseCore):
 
         Returns:
             Success status
-        """if doc_id not in self.documents:
+"""
+if doc_id not in self.documents:
             return False
 
         doc = self.documents[doc_id]
@@ -394,14 +443,16 @@ class RAGCore(BaseCore):
         self.logger.info(f"Updated document {doc_id}")"        return True
 
     async def delete_documents(self, doc_ids: List[str]) -> bool:
-        """Delete documents from all tools and stores.
+"""
+Delete documents from all tools and stores.
 
         Args:
             doc_ids: Document IDs to delete
 
         Returns:
             Success status
-        """success = True
+"""
+success = True
         for doc_id in doc_ids:
             if doc_id in self.documents:
                 del self.documents[doc_id]
@@ -416,18 +467,22 @@ class RAGCore(BaseCore):
         self.logger.info(f"Deleted {len(doc_ids)} documents")"        return success
 
     async def get_tool_stats(self, tool_id: str) -> Dict[str, Any]:
-        """Get statistics for a RAG tool."""if tool_id not in self.rag_tools:
-            raise ValueError(f"RAG tool {tool_id} not found")"
+"""
+Get statistics for a RAG tool.""
+if tool_id not in self.rag_tools:
+            raise ValueError(f"RAG tool {tool_id} not found")
         tool_config = self.rag_tools[tool_id]
 
         # Count documents in this tool (simplified)
         doc_count = len([d for d in self.documents.values()
-                        if tool_id in d.metadata.get("tools", [])])"
+                        if tool_id in d.metadata.get("tools", [])])
         return {
             "tool_id": tool_id,"            "name": tool_config.name,"            "document_count": doc_count,"            "vector_store_type": tool_config.vector_store_type.value,"            "collection_name": tool_config.collection_name,"            "retrieval_strategy": tool_config.retrieval_config.strategy.value"        }
 
     async def _chunk_document(self, document: Document, config: RAGToolConfig) -> List[Document]:
-        """Chunk a document into smaller pieces."""content = document.content
+"""
+Chunk a document into smaller pieces.""
+content = document.content
         chunk_size = max(1, int(config.chunk_size))
         overlap = max(0, int(config.chunk_overlap))
 
@@ -473,7 +528,9 @@ class RAGCore(BaseCore):
         config: RetrievalConfig,
         filters: Optional[Dict[str, Any]]
     ) -> List[tuple[Document, float]]:
-        """Perform retrieval based on strategy."""if config.strategy == RetrievalStrategy.SIMILARITY:
+"""
+Perform retrieval based on strategy.""
+if config.strategy == RetrievalStrategy.SIMILARITY:
             return await vector_store.similarity_search(
                 query=query,
                 k=config.top_k,
@@ -566,7 +623,9 @@ class RAGCore(BaseCore):
             )
 
     def _calculate_similarity(self, text1: str, text2: str) -> float:
-        """Calculate simple text similarity (Jaccard similarity)."""words1 = set(text1.lower().split())
+"""
+Calculate simple text similarity (Jaccard similarity).""
+words1 = set(text1.lower().split())
         words2 = set(text2.lower().split())
 
         intersection = words1 & words2
@@ -575,7 +634,8 @@ class RAGCore(BaseCore):
         return len(intersection) / len(union) if union else 0.0
 
     async def _expand_query(self, query: str) -> List[str]:
-        """Expand a query into multiple related queries."""
+"""
+Expand a query into multiple related queries.""
 # Simple query expansion - in practice, this would use an LLM
         expansions = [
             query,
@@ -583,7 +643,9 @@ class RAGCore(BaseCore):
         return expansions
 
     async def cleanup(self):
-        """Cleanup all resources."""self.vector_stores.clear()
+"""
+Cleanup all resources.""
+self.vector_stores.clear()
         self.rag_tools.clear()
         self.documents.clear()
         self.retrieval_cache.clear()
@@ -593,9 +655,12 @@ class RAGCore(BaseCore):
 
 
 class QdrantVectorStore(BaseVectorStore):
-    """Real vector store implementation using Qdrant."""
-    def __init__(self, config: Dict[str, Any]):
-        """Initialize Qdrant client and collection."""super().__init__(config)
+"""
+Real vector store implementation using Qdrant.""
+def __init__(self, config: Dict[str, Any]):
+"""
+Initialize Qdrant client and collection.""
+super().__init__(config)
         try:
             from qdrant_client import QdrantClient
             url = config.get("url", "http://localhost:6333")"            api_key = config.get("api_key")"            self.client = QdrantClient(url=url, api_key=api_key)
@@ -605,7 +670,9 @@ class QdrantVectorStore(BaseVectorStore):
             self.documents = {}
 
     async def add_documents(self, documents: List[Document]) -> List[str]:
-        """Add documents to Qdrant collection."""if not self._initialized:
+"""
+Add documents to Qdrant collection.""
+if not self._initialized:
             # Fallback mock behavior
             for doc in documents:
                 self.documents[doc.doc_id] = doc
@@ -622,14 +689,18 @@ class QdrantVectorStore(BaseVectorStore):
         filters: Optional[Dict[str, Any]] = None,
         **kwargs
     ) -> List[tuple[Document, float]]:
-        """Perform similarity search in Qdrant."""if not self._initialized:
+"""
+Perform similarity search in Qdrant.""
+if not self._initialized:
             return []
         # Real search would be:
         # self.client.search(...)
         return []
 
     async def delete_documents(self, doc_ids: List[str]) -> bool:
-        """Delete documents from Qdrant."""if not self._initialized:
+"""
+Delete documents from Qdrant.""
+if not self._initialized:
             # Fallback mock behavior
             for doc_id in doc_ids:
                 self.documents.pop(doc_id, None)
@@ -638,7 +709,9 @@ class QdrantVectorStore(BaseVectorStore):
         return True
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
-        """Update a document in Qdrant."""if not self._initialized:
+"""
+Update a document in Qdrant.""
+if not self._initialized:
             # Fallback mock behavior
             if hasattr(self, 'documents'):'                self.documents[doc_id] = document
                 return True
@@ -649,14 +722,19 @@ class QdrantVectorStore(BaseVectorStore):
 
 
 class MockVectorStore(BaseVectorStore):
-    """Mock vector store for testing and development."""
-    def __init__(self, config: Dict[str, Any]):
-        """Initialize the mock vector store with in-memory storage."""super().__init__(config)
+"""
+Mock vector store for testing and development.""
+def __init__(self, config: Dict[str, Any]):
+"""
+Initialize the mock vector store with in-memory storage.""
+super().__init__(config)
         self.documents: Dict[str, Document] = {}
         self.embeddings: Dict[str, List[float]] = {}
 
     async def add_documents(self, documents: List[Document]) -> List[str]:
-        """Add documents to mock store."""doc_ids = []
+"""
+Add documents to mock store.""
+doc_ids = []
         for doc in documents:
             self.documents[doc.doc_id] = doc
             # Mock embedding
@@ -671,7 +749,8 @@ class MockVectorStore(BaseVectorStore):
         filters: Optional[Dict[str, Any]] = None,
         **kwargs
     ) -> List[tuple[Document, float]]:
-        """Perform mock similarity search."""
+"""
+Perform mock similarity search.""
 # Simple keyword matching for mock
         query_words = set(query.lower().split())
         results = []
@@ -698,13 +777,17 @@ class MockVectorStore(BaseVectorStore):
         return results[:k]
 
     async def delete_documents(self, doc_ids: List[str]) -> bool:
-        """Delete documents from mock store."""for doc_id in doc_ids:
+"""
+Delete documents from mock store.""
+for doc_id in doc_ids:
             self.documents.pop(doc_id, None)
             self.embeddings.pop(doc_id, None)
         return True
 
     async def update_document(self, doc_id: str, document: Document) -> bool:
-        """Update document in mock store."""if doc_id in self.documents:
+"""
+Update document in mock store.""
+if doc_id in self.documents:
             self.documents[doc_id] = document
             return True
         return False

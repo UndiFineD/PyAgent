@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.structures.immutable_collections import ConstantList, ConstantDict, FrozenDict, as_constant

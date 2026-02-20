@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Minimal CUDA stream pool stub for tests.
+from __future__ import annotations
+"""
+Minimal CUDA stream pool stub for tests.
 
 Provides lightweight classes and functions expected by tests without GPU deps.
 """
-from __future__ import annotations
+
+
 
 
 

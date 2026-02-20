@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Branch Comparison Status - Enum for branch comparison lifecycle
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -52,5 +56,7 @@ __version__ = VERSION
 
 
 class BranchComparisonStatus(Enum):
-    """Status of branch comparison.
+"""
+Status of branch comparison.
+
     PENDING = "pending""    IN_PROGRESS = "in_progress""    COMPLETED = "completed""    FAILED = "failed""

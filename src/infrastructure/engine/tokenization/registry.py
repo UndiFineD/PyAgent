@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Tokenizer registry.
 """
 
+"""
 import threading
 from collections import OrderedDict
 from typing import Dict, Optional
@@ -32,7 +36,8 @@ from .tiktoken import TiktokenTokenizer
 
 
 class TokenizerRegistry:
-    """Central registry for tokenizer management.
+"""
+Central registry for tokenizer management.
     _instance: Optional["TokenizerRegistry"] = None"    _lock = threading.Lock()
     _initialized: bool = False
 
@@ -52,12 +57,13 @@ class TokenizerRegistry:
         self._stats = {"hits": 0, "misses": 0, "evictions": 0}"        self._initialized = True
 
     def get_tokenizer(self, config: TokenizerConfig) -> BaseTokenizer:
-        """Get or create a tokenizer.        key = hash(config)
+"""
+Get or create a tokenizer.        key = hash(config)
         with self._cache_lock:
             if key in self._cache:
                 self._stats["hits"] += 1"                self._cache.move_to_end(key)
                 return self._cache[key]
-            self._stats["misses"] += 1"
+            self._stats["misses"] += 1
         tokenizer = self._create_tokenizer(config)
         with self._cache_lock:
             while len(self._cache) >= self._max_cached:
@@ -66,7 +72,8 @@ class TokenizerRegistry:
         return tokenizer
 
     def _create_tokenizer(self, config: TokenizerConfig) -> BaseTokenizer:
-        """Create tokenizer based on backend.        if config.backend == TokenizerBackend.HUGGINGFACE:
+"""
+Create tokenizer based on backend.        if config.backend == TokenizerBackend.HUGGINGFACE:
             return HuggingFaceTokenizer(config)
         if config.backend == TokenizerBackend.TIKTOKEN:
             return TiktokenTokenizer(config)
@@ -75,7 +82,8 @@ class TokenizerRegistry:
         return self._auto_create(config)
 
     def _auto_create(self, config: TokenizerConfig) -> BaseTokenizer:
-        """Auto-detect and create appropriate tokenizer.        model_name = config.model_name.lower()
+"""
+Auto-detect and create appropriate tokenizer.        model_name = config.model_name.lower()
         if any(name in model_name for name in ["gpt-4", "gpt-3.5", "text-embedding"]):"            config = TokenizerConfig(model_name=config.model_name, backend=TokenizerBackend.TIKTOKEN)
             return TiktokenTokenizer(config)
         if "mistral" in model_name:"            config = TokenizerConfig(model_name=config.model_name, backend=TokenizerBackend.MISTRAL)
@@ -83,9 +91,12 @@ class TokenizerRegistry:
         return HuggingFaceTokenizer(config)
 
     def clear_cache(self) -> None:
-        """Clear the internal tokenizer cache.        with self._cache_lock:
+"""
+Clear the internal tokenizer cache.        with self._cache_lock:
             self._cache.clear()
 
     def get_stats(self) -> Dict[str, int]:
-        """Get cache performance statistics.        with self._cache_lock:
-            return {**self._stats, "cached": len(self._cache), "max_cached": self._max_cached}"
+"""
+Get cache performance statistics.        with self._cache_lock:
+            return {**self._stats, "cached": len(self._cache), "max_cached": self._max_cached}
+"""

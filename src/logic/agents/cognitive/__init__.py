@@ -15,8 +15,11 @@
 # "Cognitive Agents for PyAgent Swarm."# from .knowledge_agent import KnowledgeAgent
 try:
     from .reasoning_agent import ReasoningAgent
+"""
 except ImportError:
-    from .reasoning_agent import ReasoningAgent
+
+"""
+from .reasoning_agent import ReasoningAgent
 
 # from .context_agent import ContextAgent
 try:

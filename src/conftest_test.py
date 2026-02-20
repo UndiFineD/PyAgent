@@ -15,8 +15,11 @@
 import pytest
 try:
     from .conftest import pytest_ignore_collect, agent_module, agent_backend_module, base_agent_module, agent_sandbox, transactional_test_env
+"""
 except ImportError:
-    from src.conftest import pytest_ignore_collect, agent_module, agent_backend_module, base_agent_module, agent_sandbox, transactional_test_env
+
+"""
+from src.conftest import pytest_ignore_collect, agent_module, agent_backend_module, base_agent_module, agent_sandbox, transactional_test_env
 
 
 def test_pytest_ignore_collect_basic():

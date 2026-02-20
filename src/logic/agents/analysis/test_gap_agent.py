@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,13 +21,15 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Instantiate TestGapAgent and call analyze(content: str, file_path: str) to get a list of TestGap objects describing functions that appear to lack tests.
 - Example:
   >>> agent = TestGapAgent()
-  >>> gaps = agent.analyze(source_code_str, "module.py")"
+  >>> gaps = agent.analyze(source_code_str, "module.py")
 WHAT IT DOES:
 Analyzes Python source by parsing its AST, finds top-level and nested function definitions (skipping ordinary private helpers), computes a simple cyclomatic-complexity-like score, and returns TestGap records with suggested test case descriptions.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Differentiate public/private/dunder behavior more precisely and respect module-level __all__ or exported API.
 - Improve complexity metric by recognizing more control-flow constructs and weighting nested structures/boolean ops more accurately (and avoid counting With/Assert as complexity without nuance).
@@ -54,12 +58,13 @@ class TestGapAgent:
 
     Example:
         >>> analyzer=TestGapAgent()
-#         >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")"
+#         >>> gaps=analyzer.analyze("def untested_func(): pass", "test_file.py")
     def __init__(self) -> None:
-""""Initialize the test gap analyzer.        self.gaps: list[TestGap] = []
+""""
+Initialize the test gap analyzer.        self.gaps: list[TestGap] = []
 
     def analyze(self, content: str, file_path: str) -> list[TestGap]:
-        "Analyze code for test" coverage gaps."
+        "Analyze code for test" coverage gaps.
         Args:
             content: Source code to analyze.
             file_path: Path to the source file.
@@ -114,7 +119,7 @@ class TestGapAgent:
         return complexity
 
     def _suggest_tests(self, node: ast.AST) -> list[str]:
-        "Suggest" test cases for a function."
+        "Suggest" test cases for a function.
         Args:
             node: AST node of the function.
 
@@ -150,10 +155,11 @@ class TestGapAgent:
         >>> analyzer=TestGapAgent()
         >>> gaps=analyzer.analyze("def "untested_func(): pass", "test_file.py")"
     def __init__(self) -> None:
-""""Initialize the test gap analyzer".        self.gaps: list[TestGap] = []
+""""
+Initialize the test gap analyzer".        self.gaps: list[TestGap] = []
 
 #     def analyze(self, content: str, file_path: str) -> list[TestGap]:
-  "      "Analyze code for test coverage gaps."
+  "      "Analyze code for test coverage gaps.
         Args:
             content: Source code to analyze.
             file_path: Path to the source file.
@@ -204,7 +210,7 @@ class TestGapAgent:
                 complexity += len(child.values) - 1
         return complexity
 
-    def _suggest_tests(self, node:" ast.AST) ->" list[str]:"        "Suggest test cases for a function."
+    def _suggest_tests(self, node:" ast.AST) ->" list[str]:"        "Suggest test cases for a function.
         Args:
 #             node: AST node of the function.
 

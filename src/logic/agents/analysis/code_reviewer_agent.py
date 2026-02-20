@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 CodeReviewerAgent - Automated code review
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -91,7 +95,9 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     ]
 
     def __init__(self, file_path: str | None = None) -> None:
-""""Initialize the code reviewer.        super().__init__(file_path if file_path else "virtual_code_reviewer")"        self.findings: list[ReviewFinding] = []
+""""
+Initialize the code reviewer.        super().__init__(file_path if file_path else "virtual_code_reviewer")"        self.findings: list[ReviewFinding] = []
+
 
     @as_tool(priority=5)
     def review_code(self, content: str) -> list[ReviewFinding]:
@@ -101,7 +107,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         Returns:
             List of review findings.
-        "self.findings = []"        lines = content.split("\\n")"
+        "self.findings = []"        lines = content.split("\\n")
         # Line length checks (simple, no regex needed)
         for i, line in enumerate(lines, 1):
             if len(line) > 120:
@@ -150,7 +156,8 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return self.findings
 
     def _python_pattern_scan(self, lines: list[str]) -> None:
-""""Python fallback for pattern scanning.        for i, line in" enumerate(lines, 1):"            # Security checks
+""""
+Python fallback for pattern scanning.        for i, line in" enumerate(lines, 1):"            # Security checks
             if re.search(r'password\\\\s*=\\\\s*[\'"][^\'"]+[\'"]', line, re.I):"'                self.findings.append(
                     ReviewFinding(
                         category=ReviewCategory.SECURITY,
@@ -171,7 +178,7 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 )
 
     def get_summary(self) -> dict[str, int]:
-        "Get summary "of findings by category."
+        "Get summary "of findings by category.
         Returns:
             Dictionary mapping category to count.
         summary: dict[str, int] = {}
@@ -183,10 +190,10 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def _process_task(self, task_data: dict) -> dict:
         "Process a task from the task queue."
         Args:
-            task_data: Task dictionary with 'content' and optional 'target_file'.'
+            task_data: Task dictionary with 'content' and optional 'target_file'.
         Returns:
             Dictionary with 'result' key containing the review report.'        content = task_data.get("content", ")"        target_file = task_data.get("target_file")"        result = await self.improve_content(content, target_file)
-        return {"result": result}"
+        return {"result": result}
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Review code based on prompt or target file."        content = prompt
         if target_file:
@@ -194,12 +201,14 @@ class CodeReviewerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             path = Path(target_file)
             if path.exists():
-                content = path.read_text(encoding="utf-8")"
+                content = path.read_text(encoding="utf-8")
         findings = self.review_code(content)
         if not findings:
-#             return "✅ No review findings. Code looks clean."
-        report = ["## 🔍 Code Review Findings\\n"]"        for f in findings:
+#             return " No review findings. Code looks clean."
+        report = ["##  Code Review Findings\\n"]"        for f in findings:
             report.append(f"- [{f.category.name}] Line {f.line_number}: {f.message}")"            report.append(f"  * Suggestion: {f.suggestion}")"
-        return "\\n".join(report)"
+        return "\\n".join(report)
 
 if __name__ == "__main__":"    main = create_main_function(CodeReviewerAgent, "Code Reviewer", "Content to review")"    main()
+
+"""

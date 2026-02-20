@@ -1,0 +1,48 @@
+from __future__ import annotations
+""
+Memory profiler utilities (parser-safe stub).
+
+Minimal memory profiler used by tests to simulate memory tracking.
+""
+
+
+
+import time
+from typing import Any, Dict, List
+
+
+class MemoryProfiler:
+    ""
+Simple memory profiler placeholder.""
+def __init__(self) -> None:
+        self.snapshots: List[Dict[str, Any]] = []
+        self.peak_memory = 0
+        self.start_time = time.time()
+
+    def take_snapshot(self, label: str = "auto") -> Dict[str, Any]:
+        usage = 0
+        frag = 0.0
+        snapshot = {
+            "timestamp": time.time() - self.start_time,
+            "label": label,
+            "usage_bytes": usage,
+            "fragmentation": frag,
+        }
+        self.snapshots.append(snapshot)
+        self.peak_memory = max(self.peak_memory, usage)
+        return snapshot
+
+    def analyze_patterns(self) -> Dict[str, Any]:
+        if not self.snapshots:
+            return {}
+        return {
+            "duration": time.time() - self.start_time,
+            "peak_mb": self.peak_memory / (1024 * 1024),
+            "avg_fragmentation": sum(s.get("fragmentation", 0.0) for s in self.snapshots) / len(self.snapshots),
+            "snapshot_count": len(self.snapshots),
+        }
+
+    def reset(self) -> None:
+        self.snapshots.clear()
+        self.peak_memory = 0
+        self.start_time = time.time()

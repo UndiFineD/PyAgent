@@ -14,8 +14,11 @@
 
 try:
     import subprocess
+"""
 except ImportError:
-    import subprocess
+
+"""
+import subprocess
 
 try:
     import socket

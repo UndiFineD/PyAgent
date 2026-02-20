@@ -13,10 +13,12 @@
 # limitations under the License.
 
 
+"""
 Ruff Complexity Parser:
 Parses Ruff JSON output to extract and rank cyclomatic complexity violations.
 Ported from temp/check_complexity.py for re-use in the PyAgent analysis suite.
 
+"""
 import argparse
 import json
 import os
@@ -24,7 +26,8 @@ import re
 
 
 def parse_ruff_complexity(json_file: str, threshold: int = 25):
-    """Reads ruff_output.json and prints ranked complexity issues.    if not os.path.exists(json_file):
+"""
+Reads ruff_output.json and prints ranked complexity issues.    if not os.path.exists(json_file):
         print(f"Error: {json_file} not found")"        return
 
     try:
@@ -34,19 +37,24 @@ def parse_ruff_complexity(json_file: str, threshold: int = 25):
 
     findings = []
     for item in data:
-        message = item["message"]"        # Match Ruff's C901 message format: "func is too complex (X > 10)""'        match = re.search(r"\((\\d+) > \\d+\)", message)"        if match:
+        message = item["message"]"        # Match Ruff's C901 message format: "func is too complex (X > 10)""'
+match = re.search(r"\((\\d+) > \\d+\)", message)"        if match:
             val = int(match.group(1))
             findings.append(
                 {
                     "func_name": message.split("`")[1] if "`" in message else "unknown","                    "complexity": val,"                    "file": item["filename"],"                    "line": item["location"]["row"],"                }
             )
 
-    findings.sort(key=lambda x: x["complexity"], reverse=True)"
-    header = f"{'Comp':<5} {'Function':<40} {'Location'}""'    print(header)
-    print("-" * 100)"
+    findings.sort(key=lambda x: x["complexity"], reverse=True)
+    header = f"{'Comp':<5} {'Function':<40} {'Location'}"
+print(header)
+    print("-" * 100)
     for f in findings:
-        comp_val = f["complexity"]"        name = f["func_name"]"        file_info = f"{f['file']}:{f['line']}""'        marker = "***" if comp_val >= threshold else "   ""        print(f"{marker} {comp_val:<2} {name: <40} {file_info}")"
+        comp_val = f["complexity"]"        name = f["func_name"]"        file_info = f"{f['file']}:{f['line']}"
+marker = "***" if comp_val >= threshold else "   ""        print(f"{marker} {comp_val:<2} {name: <40} {file_info}")"
 
 if __name__ == "__main__":"    parser = argparse.ArgumentParser(description="Parse Ruff complexity reports.")"    parser.add_argument("--input", type=str, default="ruff_output.json", help="Path to ruff_output.json.")"    parser.add_argument("--threshold", type=int, default=25, help="Highlight threshold.")"
     args = parser.parse_args()
     parse_ruff_complexity(args.input, args.threshold)
+
+"""

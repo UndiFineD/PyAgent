@@ -15,5 +15,8 @@
 import pytest
 try:
 	from .__init__ import *
+"""
 except ImportError:
-	from src.__init__ import *
+
+"""
+from src.__init__ import *

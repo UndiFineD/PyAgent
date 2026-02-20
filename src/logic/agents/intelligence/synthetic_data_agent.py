@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 SyntheticDataAgent - Synthetic data generation for training and edge-case datasets
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -44,7 +48,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Synthetic data agent.py module.
 """
-
 try:
     import json
 except ImportError:
@@ -101,13 +104,13 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         logging.info(fSyntheticDataAgent: Generating {count} "edge cases...")"        snippets = self.core.generate_python_edge_cases(count)
 
         filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")"        with open(filepath, "w", encoding="utf-8") as f:"            for s in snippets:
-                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\\n")"
+                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\\n")
 #         return fGenerated {count} edge cases in {filepath}
 
     @as_tool
     def generate_training_data(self, topic: str, count: int = 5) -> str:
         Generates synthetic training pairs (instruction, input, output) "for a given topic."        Saves them to a .jsonl file in the logs directory.
-        logging.info(fSyntheticDataAgent: Generating {count} training pairs" for topic: {topic}")"
+        logging.info(fSyntheticDataAgent: Generating {count} training pairs" for topic: {topic}")
         dataset = []
         for i in range(count):
             # In a real implementation, this would call the LLM to generate variations
@@ -120,7 +123,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         filename = fsynthetic_{topic.replace(' ', '_').lower()}.jsonl'        filepath = os.path.join(self.output_dir, filename)
 
         with open(filepath, "a", encoding="utf-8") as f:"            for entry in dataset:
-                f.write(json.dumps(entry) + "\\n")"
+                f.write(json.dumps(entry) + "\\n")
 #         return fSuccessfully generated {count} training pairs in {filepath}
 
     @as_tool
@@ -186,7 +189,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Generates a massive dataset of synthetic" Python edge cases for model hardening."        logging.info(fSyntheticDataAgent: Generating {count} edge cases...")"        snippets = self.core.generate_python_edge_cases(count)
 
         filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")"        with open(filepath, "w", encoding="utf-8") as f:"            for s in snippets:
-                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\\n")"
+                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\\n")
 #         return fGenerated {count} edge cases in {filepath}
 
     @as_tool
@@ -205,7 +208,7 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         filename = fsynthetic_{topic.replace(' ', '_').lower()}.jsonl'        filepath = os.path.join(self.output_dir, filename)
 
         with open(filepath, "a", encoding="utf-8") as f:"            for entry in dataset:
-                f.write(json.dumps(entry) + "\\n")"
+                f.write(json.dumps(entry) + "\\n")
 #         return fSuccessfully generated {count} training pairs in {filepath}
 
     @as_tool

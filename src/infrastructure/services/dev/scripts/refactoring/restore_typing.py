@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for restoring standard typing and library imports that were masked.
+"""
+"""
+Script for restoring standard typing and library imports that were masked.
 
+"""
 try:
     import os
 except ImportError:
@@ -36,7 +40,9 @@ __version__ = VERSION
 
 
 def fix_file(file_path: str) -> None:
-    """Uncomment standard library imports in a specific file.    with open(file_path, encoding="utf-8") as f:"        lines = f.readlines()
+"""
+Uncomment standard library imports in a specific file.    with open(file_path, encoding="utf-8") as f:"        lines = f.readlines()
+
 
     changed = False
 
@@ -61,12 +67,14 @@ def fix_file(file_path: str) -> None:
 
     if changed:
         with open(file_path, "w", encoding="utf-8") as f:"            f.writelines(new_lines)
-        print(f"Fixed {file_path}")"
+        print(f"Fixed {file_path}")
 
 def walk_dir(path: str) -> None:
-    """Walk directory to apply typing restoration to all python files.    for root, dirs, files in os.walk(path):
+"""
+Walk directory to apply typing restoration to all python files.    for root, dirs, files in os.walk(path):
         for file in files:
             if file.endswith(".py"):"                fix_file(os.path.join(root, file))
 
 
-if __name__ == "__main__":"    walk_dir("src")"    walk_dir("tests")"
+if __name__ == "__main__":"    walk_dir("src")"    walk_dir("tests")
+"""

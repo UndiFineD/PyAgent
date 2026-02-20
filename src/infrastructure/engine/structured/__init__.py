@@ -15,8 +15,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 39: Structured Output / Guided Decoding
 # Inspired by vLLM's structured output framework'
+"""
 Structured Output Framework for Constrained Generation.
 
+"""
 This module provides grammar-based token constraints for:
 - JSON Schema validation
 - Regex pattern matching

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,10 +20,11 @@ from __future__ import annotations
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Mistral Parser
-
+"""
 Mistral AI tool call parser.
 """
 
+""
 import json
 from typing import Optional, Tuple
 
@@ -34,7 +38,7 @@ class MistralToolParser(ToolParser):
 
     Format:
     [TOOL_CALLS] [{"name": "...", "arguments": {...}}]"    
-    TOOL_CALLS_TAG = "[TOOL_CALLS]""
+    TOOL_CALLS_TAG = "[TOOL_CALLS]"
     @property
     def parser_type(self) -> ToolParserType:
         return ToolParserType.MISTRAL
@@ -67,7 +71,7 @@ class MistralToolParser(ToolParser):
                         )
                         result.tool_calls.append(tool_call)
             except json.JSONDecodeError as e:
-                result.errors.append(f"JSON parse error: {e}")"
+                result.errors.append(f"JSON parse error: {e}")
         return result
 
     def parse_streaming(
@@ -111,5 +115,5 @@ class MistralToolParser(ToolParser):
                             pass
 
                         state.in_tool_call = False
-                        state.buffer = """
-        return state, completed_tool
+                        state.buffer = ""
+return state, completed_tool

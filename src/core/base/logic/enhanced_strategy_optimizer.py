@@ -13,10 +13,14 @@
 # limitations under the License.
 
 
-"""Enhanced Strategy Optimizer - AutoRAG-inspired optimization algorithms
-Based on AutoRAG's sophisticated strategy selection for multi-metric optimization'"""
+"""
+"""
+Enhanced Strategy Optimizer - AutoRAG-inspired optimization algorithms
+Based on AutoRAG's sophisticated strategy selection for multi-metric optimization'""
 try:
-    from typing import List, Dict, Any, Optional, Tuple
+
+"""
+from typing import List, Dict, Any, Optional, Tuple
 except ImportError:
     from typing import List, Dict, Any, Optional, Tuple
 
@@ -41,11 +45,15 @@ logger = logging.getLogger(__name__)
 
 
 class OptimizationStrategy(Enum):
-    """Strategy selection algorithms"""MEAN = "mean"  # Simple average across metrics"    RECIPROCAL_RANK = "rank"  # Reciprocal Rank fusion"    NORMALIZE_MEAN = "normalize_mean"  # Normalized mean combination"    WEIGHTED_SUM = "weighted_sum"  # Weighted combination"    PARETO_DOMINANCE = "pareto"  # Multi-objective optimization"
+"""
+Strategy selection algorithms""
+MEAN = "mean"  # Simple average across metrics"    RECIPROCAL_RANK = "rank"  # Reciprocal Rank fusion"    NORMALIZE_MEAN = "normalize_mean"  # Normalized mean combination"    WEIGHTED_SUM = "weighted_sum"  # Weighted combination"    PARETO_DOMINANCE = "pareto"  # Multi-objective optimization
 
 @dataclass
 class OptimizationResult:
-    """Result of strategy optimization"""best_strategy_index: int
+"""
+Result of strategy optimization""
+best_strategy_index: int
     best_score: float
     scores: List[float]
     metadata: Dict[str, Any]
@@ -54,28 +62,34 @@ class OptimizationResult:
 
 @dataclass
 class StrategyTrial:
-    """Single strategy trial result"""strategy_id: str
+"""
+Single strategy trial result""
+strategy_id: str
     metrics: Dict[str, float]
     metadata: Dict[str, Any] = None
 
 
 
 class EnhancedStrategyOptimizer:
-    """Enhanced strategy optimizer using AutoRAG-inspired algorithms
+"""
+Enhanced strategy optimizer using AutoRAG-inspired algorithms
     Supports multiple optimization strategies for multi-metric evaluation
-    """
-    def __init__(self):
+"""
+def __init__(self):
         self.trial_history: List[StrategyTrial] = []
 
     def add_trial(self, trial: StrategyTrial):
-        """Add a strategy trial result"""self.trial_history.append(trial)
+"""
+Add a strategy trial result""
+self.trial_history.append(trial)
 
     def optimize_strategies(
         self,
         strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK,
         weights: Optional[Dict[str, float]] = None
     ) -> OptimizationResult:
-        """Optimize strategies using specified algorithm
+"""
+Optimize strategies using specified algorithm
 
         Args:
             strategy: Optimization algorithm to use
@@ -83,8 +97,9 @@ class EnhancedStrategyOptimizer:
 
         Returns:
             OptimizationResult with best strategy and scores
-        """if not self.trial_history:
-            raise ValueError("No strategy trials available for optimization")"
+"""
+if not self.trial_history:
+            raise ValueError("No strategy trials available for optimization")
         # Convert trials to data structures
         strategy_ids, metrics_data = self._trials_to_data()
 
@@ -99,9 +114,11 @@ class EnhancedStrategyOptimizer:
         elif strategy == OptimizationStrategy.PARETO_DOMINANCE:
             return self._optimize_pareto_dominance(strategy_ids, metrics_data)
         else:
-            raise ValueError(f"Unknown optimization strategy: {strategy}")"
+            raise ValueError(f"Unknown optimization strategy: {strategy}")
     def _trials_to_data(self) -> Tuple[List[str], List[Dict[str, float]]]:
-        """Convert trial history to data structures"""strategy_ids = []
+"""
+Convert trial history to data structures""
+strategy_ids = []
         metrics_data = []
 
         for trial in self.trial_history:
@@ -111,13 +128,17 @@ class EnhancedStrategyOptimizer:
         return strategy_ids, metrics_data
 
     def _get_metric_columns(self, metrics_data: List[Dict[str, float]]) -> List[str]:
-        """Get all metric column names"""all_keys = set()
+"""
+Get all metric column names""
+all_keys = set()
         for metrics in metrics_data:
             all_keys.update(metrics.keys())
         return sorted(list(all_keys))
 
     def _optimize_mean(self, strategy_ids: List[str], metrics_data: List[Dict[str, float]]) -> OptimizationResult:
-        """Simple mean-based optimization"""metric_cols = self._get_metric_columns(metrics_data)
+"""
+Simple mean-based optimization""
+metric_cols = self._get_metric_columns(metrics_data)
 
         # Calculate mean across all metrics for each strategy
         mean_scores = []
@@ -139,7 +160,9 @@ class EnhancedStrategyOptimizer:
         strategy_ids: List[str],
         metrics_data: List[Dict[str, float]]
     ) -> OptimizationResult:
-        """Reciprocal Rank fusion optimization"""metric_cols = self._get_metric_columns(metrics_data)
+"""
+Reciprocal Rank fusion optimization""
+metric_cols = self._get_metric_columns(metrics_data)
 
         # Create ranking matrix
         rankings = []
@@ -174,7 +197,9 @@ class EnhancedStrategyOptimizer:
         strategy_ids: List[str],
         metrics_data: List[Dict[str, float]]
     ) -> OptimizationResult:
-        """Normalized mean optimization"""metric_cols = self._get_metric_columns(metrics_data)
+"""
+Normalized mean optimization""
+metric_cols = self._get_metric_columns(metrics_data)
 
         # Get min/max for each metric
         mins = {}
@@ -216,7 +241,9 @@ class EnhancedStrategyOptimizer:
         metrics_data: List[Dict[str, float]],
         weights: Dict[str, float]
     ) -> OptimizationResult:
-        """Weighted sum optimization"""metric_cols = self._get_metric_columns(metrics_data)
+"""
+Weighted sum optimization""
+metric_cols = self._get_metric_columns(metrics_data)
 
         # Set default weights if not provided
         if not weights:
@@ -256,10 +283,14 @@ class EnhancedStrategyOptimizer:
         strategy_ids: List[str],
         metrics_data: List[Dict[str, float]]
     ) -> OptimizationResult:
-        """Pareto dominance-based multi-objective optimization"""metric_cols = self._get_metric_columns(metrics_data)
+"""
+Pareto dominance-based multi-objective optimization""
+metric_cols = self._get_metric_columns(metrics_data)
 
         def dominates(idx_a, idx_b):
-            """Check if strategy A dominates strategy B (higher is better)"""    metrics_a = metrics_data[idx_a]
+"""
+Check if strategy A dominates strategy B (higher is better)""
+metrics_a = metrics_data[idx_a]
             metrics_b = metrics_data[idx_b]
             at_least_one_better = False
 
@@ -330,21 +361,27 @@ class EnhancedStrategyOptimizer:
             strategy_name='pareto_dominance''        )
 
     def get_optimization_history(self) -> List[Dict[str, Any]]:
-        """Get history of all optimization runs"""return [
+"""
+Get history of all optimization runs""
+return [
             {
                 'strategy_id': trial.strategy_id,'                'metrics': trial.metrics,'                'metadata': trial.metadata'            }
             for trial in self.trial_history
         ]
 
     def clear_history(self):
-        """Clear trial history"""self.trial_history.clear()
+"""
+Clear trial history""
+self.trial_history.clear()
 
     def get_best_strategies(
         self,
         top_k: int = 5,
         strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK
     ) -> List[Dict[str, Any]]:
-        """Get top-k best strategies"""if not self.trial_history:
+"""
+Get top-k best strategies""
+if not self.trial_history:
             return []
 
         result = self.optimize_strategies(strategy)

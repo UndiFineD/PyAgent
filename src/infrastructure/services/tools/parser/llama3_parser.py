@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,10 +20,11 @@ from __future__ import annotations
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Llama 3 Parser
-
+"""
 Llama 3 tool call parser.
 """
 
+"""
 import contextlib
 import json
 import re
@@ -39,7 +43,7 @@ class Llama3ToolParser(ToolParser):
     <|python_tag|>function_name(arg1=value1, arg2=value2)
     or
     {"name": "...", "parameters": {...}}"    
-    PYTHON_TAG = "<|python_tag|>""
+    PYTHON_TAG = "<|python_tag|>"
     @property
     def parser_type(self) -> ToolParserType:
         return ToolParserType.LLAMA3
@@ -68,7 +72,8 @@ class Llama3ToolParser(ToolParser):
         text: str,
         index: int,
     ) -> Optional[ToolCall]:
-        """Parse Python-style function call.        # Match function_name(args)
+"""
+Parse Python-style function call.        # Match function_name(args)
         pattern = re.compile(r"^(\\w+)\((.*)\)$", re.DOTALL)"        match = pattern.match(text.strip())
 
         if not match:
@@ -88,7 +93,8 @@ class Llama3ToolParser(ToolParser):
         )
 
     def _parse_kwargs(self, args_str: str) -> Dict[str, Any]:
-        """Parse keyword arguments.        args = {}
+"""
+Parse keyword arguments.        args = {}
 
         if not args_str:
             return args
@@ -110,8 +116,10 @@ class Llama3ToolParser(ToolParser):
         return args
 
     def _split_args(self, args_str: str) -> List[str]:
-        """Split arguments respecting quotes and brackets.        parts = []
-        current = """        depth = 0
+"""
+Split arguments respecting quotes and brackets.        parts = []
+        current = ""
+depth = 0
         in_string = False
         string_char = None
 
@@ -125,7 +133,8 @@ class Llama3ToolParser(ToolParser):
                 if char in "([{":"                    depth += 1
                 elif char in ")]}":"                    depth -= 1
                 elif char == "," and depth == 0:"                    parts.append(current.strip())
-                    current = """                    continue
+                    current = ""
+continue
 
             current += char
 
@@ -135,7 +144,8 @@ class Llama3ToolParser(ToolParser):
         return parts
 
     def _parse_value(self, value: str) -> Any:
-        """Parse a value string.        # Try JSON
+"""
+Parse a value string.        # Try JSON
         try:
             return json.loads(value)
         except json.JSONDecodeError:
@@ -199,3 +209,5 @@ class Llama3ToolParser(ToolParser):
                             break
 
         return state, completed_tool
+
+"""

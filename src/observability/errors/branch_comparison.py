@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 BranchComparison - Comparison of errors between two branches
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,6 @@ to avoid accidental in-place mutation when used in concurrent contexts.
 - Add repr/serialize helpers (to_dict, from_dict, json) and basic equality/merge utilities 
 to simplify integration and testing.
 """
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -56,8 +59,9 @@ __version__ = VERSION
 
 @dataclass
 class BranchComparison:
-    """Comparison of errors across branches.""""
-    Attributes:
+"""
+Comparison of errors across branches.""""
+Attributes:
         branch_a: First branch name.
         branch_b: Second branch name.
         errors_only_in_a: Error IDs only in branch A.
@@ -69,3 +73,9 @@ class BranchComparison:
     errors_only_in_a: list[str] = field(default_factory=lambda: [])
     errors_only_in_b: list[str] = field(default_factory=lambda: [])
     common_errors: list[str] = field(default_factory=lambda: [])
+
+"""
+
+""
+
+"""

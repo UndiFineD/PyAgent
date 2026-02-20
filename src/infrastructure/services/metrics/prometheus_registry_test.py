@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.metrics.prometheus_registry import MetricType, MetricsBackend, MetricSpec, MetricValue, MetricCollector, Counter, Gauge, HistogramBucket, Histogram, Summary, MetricsRegistry, SampledCounter, RateLimitedGauge, VLLMMetrics, get_metrics

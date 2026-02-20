@@ -12,9 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] """Tests for ImageGenerationAgent.
+# [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] ""
+"""
+Tests for ImageGenerationAgent.
 try:
-    import pytest
+
+"""
+import pytest
 except ImportError:
     import pytest
 
@@ -28,21 +32,25 @@ except ImportError:
 
 
 class TestImageGenerationAgent:
-# [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]     """Test ImageGenerationAgent functionality.
+# [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]     ""
+Test ImageGenerationAgent functionality.
     @patch('src.logic.agents.multimodal.image_generation_agent.HAS_DIFFUSERS', True)'    @patch('src.logic.agents.multimodal.image_generation_agent.torch')'    @patch('src.logic.agents.multimodal.image_generation_agent.FluxPipeline')'    def test_agent_initialization(self, mock_pipeline, mock_torch):
-        """Test agent initializes correctly.        mock_torch.cuda.is_available.return_value = False
+"""
+Test agent initializes correctly.        mock_torch.cuda.is_available.return_value = False
         mock_torch.bfloat16 = 'bfloat16''        mock_torch.float32 = 'float32''        mock_pipe = Mock()
         mock_pipeline.from_pretrained.return_value = mock_pipe
 
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]         agent = ImageGenerationAgent(model_name='test-model', device='cpu')'        assert agent.model_name == 'test-model''        assert agent.device == 'cpu''        assert agent.pipe == mock_pipe
 
     @patch('src.logic.agents.multimodal.image_generation_agent.HAS_DIFFUSERS', False)'    def test_agent_without_diffusers(self):
-        """Test agent fails without diffusers.        with pytest.raises(ImportError):
+"""
+Test agent fails without diffusers.        with pytest.raises(ImportError):
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]             ImageGenerationAgent()
 
     @pytest.mark.asyncio
     @patch('src.logic.agents.multimodal.image_generation_agent.HAS_DIFFUSERS', True)'    @patch('src.logic.agents.multimodal.image_generation_agent.torch')'    @patch('src.logic.agents.multimodal.image_generation_agent.FluxPipeline')'    async def test_generate_image(self, mock_pipeline, mock_torch):
-        """Test image generation task submission.        mock_torch.cuda.is_available.return_value = False
+"""
+Test image generation task submission.        mock_torch.cuda.is_available.return_value = False
         mock_torch.bfloat16 = Mock()
         mock_torch.float32 = Mock()
 
@@ -53,12 +61,13 @@ class TestImageGenerationAgent:
         await agent.start_task_processing()
 
         job_id = await agent.generate_image("test prompt", width=512, height=512)"        assert job_id in agent.task_results
-        assert agent.task_results[job_id]['prompt'] == "test prompt""'
-        await agent.stop_task_processing()
+        assert agent.task_results[job_id]['prompt'] == "test prompt"
+await agent.stop_task_processing()
 
     @pytest.mark.asyncio
     @patch('src.logic.agents.multimodal.image_generation_agent.HAS_DIFFUSERS', True)'    @patch('src.logic.agents.multimodal.image_generation_agent.torch')'    @patch('src.logic.agents.multimodal.image_generation_agent.FluxPipeline')'    async def test_process_task(self, mock_pipeline, mock_torch):
-        """Test task processing.        mock_torch.cuda.is_available.return_value = False
+"""
+Test task processing.        mock_torch.cuda.is_available.return_value = False
         mock_torch.bfloat16 = Mock()
         mock_torch.float32 = Mock()
 

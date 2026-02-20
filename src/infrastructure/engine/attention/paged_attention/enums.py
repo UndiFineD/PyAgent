@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Enums.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 try:
@@ -25,10 +28,12 @@ except ImportError:
 
 
 class AttentionType(Enum):
-    """Type of attention computation.
-    DECODER = "decoder""    ENCODER = "encoder""    ENCODER_DECODER = "encoder_decoder""
+"""
+Type of attention computation.
+    DECODER = "decoder""    ENCODER = "encoder""    ENCODER_DECODER = "encoder_decoder"
 
 
 class KVCacheDtype(Enum):
-    """Data type for KV cache storage.
-    AUTO = "auto""    FP16 = "fp16""    FP32 = "fp32""    FP8 = "fp8""    INT8 = "int8""
+"""
+Data type for KV cache storage.
+    AUTO = "auto""    FP16 = "fp16""    FP32 = "fp32""    FP8 = "fp8""    INT8 = "int8"

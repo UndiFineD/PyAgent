@@ -14,10 +14,13 @@
 
 
 """
+"""
 Test module for credential_extraction_agent
 """
 try:
-    import platform
+
+"""
+import platform
 except ImportError:
     import platform
 
@@ -36,15 +39,18 @@ except ImportError:
 
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")
 class TestCredentialExtractionAgent:
-    """Test cases for CredentialExtractionAgent."""
-    def test_init(self):
-        """Test agent initialization."""
-        agent = CredentialExtractionAgent()
+"""
+Test cases for CredentialExtractionAgent.""
+def test_init(self):
+"""
+Test agent initialization.""
+agent = CredentialExtractionAgent()
         assert agent is not None
 
     def test_extract_adsync_credentials_no_adsync(self):
-        """Test credential extraction when ADSync is not installed."""
-        agent = CredentialExtractionAgent()
+        ""
+Test credential extraction when ADSync is not installed.""
+agent = CredentialExtractionAgent()
         result = agent.extract_adsync_credentials()
 
         # Should fail gracefully if ADSync not present

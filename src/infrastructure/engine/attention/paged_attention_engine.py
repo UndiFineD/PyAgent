@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Paged attention engine.py module.
 
+"""
 try:
     from .paged_attention import (AttentionConfig, AttentionMetadata,
 except ImportError:

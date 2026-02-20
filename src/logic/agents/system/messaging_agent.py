@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +21,10 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 Used as a specialized agent to send and receive messages via external platforms (WhatsApp, Slack, Discord) and to format brief mobile-friendly reports for fleet notifications; can be run as a standalone tool by providing a messaging history path to the created main function.
 
+"""
 WHAT IT DOES:
 Provides a lightweight, skeleton MessagingAgent built on BaseAgent that:
 - Defines a system prompt tailored to messaging responsibilities.
@@ -37,7 +41,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in messaging platform integration (WhatsApp, Slack, Discord).
 Provides a unified interface for external communications.
 """
-
 try:
     import logging
 except ImportError:
@@ -70,7 +73,8 @@ __version__ = VERSION
 
 
 class MessagingAgent(BaseAgent):
-""""Integrates with messaging platforms for fleet notifications.
+""""
+Integrates with messaging platforms for fleet notifications.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -82,7 +86,7 @@ class MessagingAgent(BaseAgent):
         # Phase 125: Privacy Guard Integration
         if hasattr(self, "fleet") and self.fleet:"            privacy_guard = self.fleet.agents.get("PrivacyGuard")"
             if privacy_guard and hasattr(privacy_guard, "verify_message_safety"):"                check_result = privacy_guard.verify_message_safety(message)
-                if not check_result.get("safe", True):"#                     return fSAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}'
+                if not check_result.get("safe", True):"#                     return fSAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}
         # In a real implementation, use Twilio API, Slack Webhooks, or Discord bots
 #         return fMessage sent to {recipient} via {platform} (Simulated)
 
@@ -130,7 +134,8 @@ __version__ = VERSION
 
 
 class MessagingAgent(BaseAgent):
-""""Integrates with messaging platforms for fleet notifications.
+""""
+Integrates with messaging platforms for fleet notifications.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -138,11 +143,11 @@ class MessagingAgent(BaseAgent):
 
     @as_tool
     async def send_notification(self, platform: str, recipient: str, message: str) -> str:
-#         "Sends a message to a specific platform/recipient. (SKELETON)"        logging.info(fSending {platform} message to "{recipient}: {message}")"
+#         "Sends a message to a specific platform/recipient. (SKELETON)"        logging.info(fSending {platform} message to "{recipient}: {message}")
         # Phase 125: Privacy Guard Integration
         if hasattr(self, "fleet") and self.fleet:"            privacy_guard = self.fleet.agents.get("PrivacyGuard")"
             if privacy_guard and hasattr(privacy_guard, "verify_message_safety"):"                check_result = privacy_guard.verify_message_safety(message)
-                if not check_result.get("safe", True):"#                     return fSAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}'
+                if not check_result.get("safe", True):"#                     return fSAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}
         # In a real implementation, use Twilio API, Slack Webhooks, or Discord bots
 #         return fMessage sent to {recipient} via {platform} (Simulated)
 
@@ -157,3 +162,5 @@ class MessagingAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")"    main()
+
+"""

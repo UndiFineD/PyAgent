@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Core sampling kernels and strategies regarding production inference.
 """
 
+"""
 from typing import Optional
 
 import numpy as np
@@ -35,7 +39,8 @@ except ImportError:
 
 
 class TemperatureSampler(Sampler):
-    """Temperature scaling sampler.
+"""
+Temperature scaling sampler.
     def forward(
         self,
         logits: np.ndarray,
@@ -53,7 +58,8 @@ class TemperatureSampler(Sampler):
 
 
 class TopKSampler(Sampler):
-    """Top-K filtering sampler.
+"""
+Top-K filtering sampler.
     def forward(
         self,
         logits: np.ndarray,
@@ -69,11 +75,12 @@ class TopKSampler(Sampler):
         top_k_values = np.partition(logits, -k, axis=-1)[..., -k:]
         threshold = np.min(top_k_values, axis=-1, keepdims=True)
         mask = logits < threshold
-        return np.where(mask, -float("inf"), logits)"
+        return np.where(mask, -float("inf"), logits)
 
 
 class TopPSampler(Sampler):
-    """Top-P (nucleus) sampling.
+"""
+Top-P (nucleus) sampling.
     def forward(
         self,
         logits: np.ndarray,
@@ -101,7 +108,7 @@ class TopPSampler(Sampler):
             cumsum = np.cumsum(probs)
             cutoff_idx = np.searchsorted(cumsum, params.top_p) + 1
             remove_indices = sorted_indices[cutoff_idx:]
-            result[i, remove_indices] = -float("inf")"
+            result[i, remove_indices] = -float("inf")
         list(map(_apply_one, range(batch_size)))
 
         return result.squeeze(0) if was_1d else result
@@ -109,7 +116,8 @@ class TopPSampler(Sampler):
 
 
 class TopKTopPSampler(Sampler):
-    """Combined top-k and top-p filtering.
+"""
+Combined top-k and top-p filtering.
     def forward(
         self,
         logits: np.ndarray,
@@ -126,7 +134,7 @@ class TopKTopPSampler(Sampler):
             top_k_values = np.partition(result, -k, axis=-1)[..., -k:]
             threshold = np.min(top_k_values, axis=-1, keepdims=True)
             mask = result < threshold
-            result = np.where(mask, -float("inf"), result)"
+            result = np.where(mask, -float("inf"), result)
         if params.use_top_p:
             batch_size = result.shape[0]
 
@@ -143,7 +151,7 @@ class TopKTopPSampler(Sampler):
                 cumsum = np.cumsum(probs)
                 cutoff_idx = np.searchsorted(cumsum, params.top_p) + 1
                 remove_indices = sorted_indices[cutoff_idx:]
-                result[i, remove_indices] = -float("inf")"
+                result[i, remove_indices] = -float("inf")
             list(map(_apply_top_p, range(batch_size)))
 
         if params.use_min_p:
@@ -151,13 +159,14 @@ class TopKTopPSampler(Sampler):
             max_prob = np.max(probs, axis=-1, keepdims=True)
             threshold = params.min_p * max_prob
             mask = probs < threshold
-            result = np.where(mask, -float("inf"), result)"
+            result = np.where(mask, -float("inf"), result)
         return result.squeeze(0) if was_1d else result
 
 
 
 class GumbelSampler(Sampler):
-    """Gumbel-max trick sampler.
+"""
+Gumbel-max trick sampler.
     def forward(
         self,
         logits: np.ndarray,
@@ -189,7 +198,8 @@ class GumbelSampler(Sampler):
 
 
 class RepetitionPenaltySampler(Sampler):
-    """Repetition penalty sampler.
+"""
+Repetition penalty sampler.
     def forward(
         self,
         logits: np.ndarray,
@@ -217,7 +227,8 @@ class RepetitionPenaltySampler(Sampler):
 
 
 class PenaltySampler(Sampler):
-    """Presence and frequency penalty sampler.
+"""
+Presence and frequency penalty sampler.
     def forward(
         self,
         logits: np.ndarray,

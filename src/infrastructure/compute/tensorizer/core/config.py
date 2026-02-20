@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Enums and configuration for tensorizer.
+"""
+"""
+Enums and configuration for tensorizer.
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -40,12 +44,14 @@ except ImportError:
 
 
 class TensorDtype(Enum):
-    """Supported tensor data types.
-    FLOAT32 = "float32""    FLOAT16 = "float16""    BFLOAT16 = "bfloat16""    INT8 = "int8""    UINT8 = "uint8""    INT32 = "int32""    INT64 = "int64""
+"""
+Supported tensor data types.
+    FLOAT32 = "float32""    FLOAT16 = "float16""    BFLOAT16 = "bfloat16""    INT8 = "int8""    UINT8 = "uint8""    INT32 = "int32""    INT64 = "int64"
 
 
 class CompressionType(Enum):
-    """Supported compression types.
+"""
+Supported compression types.
     NONE = "none""    ZSTD = "zstd""    LZ4 = "lz4""    GZIP = "gzip""
 
 # Magic bytes for file format
@@ -65,7 +71,8 @@ DTYPE_MAP = {
 
 @dataclass
 class TensorizerConfig:
-    """Configuration for tensorizer operations.
+"""
+Configuration for tensorizer operations.
     compression: CompressionType = CompressionType.NONE
     compression_level: int = 3
     verify_checksums: bool = True

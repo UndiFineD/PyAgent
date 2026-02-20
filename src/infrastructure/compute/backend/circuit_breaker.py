@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     from collections.abc import Callable
 except ImportError:
@@ -45,8 +45,9 @@ __version__ = VERSION
 
 
 class CircuitBreaker:
-    """Circuit breaker pattern for failing backends.""""
-    Tracks failures per backend and temporarily disables them if they exceed
+"""
+Circuit breaker pattern for failing backends.""""
+Tracks failures per backend and temporarily disables them if they exceed
     a failure threshold. Prevents cascading failures and wasted retries.
     Shell for CircuitBreakerImpl.
 
@@ -60,7 +61,8 @@ class CircuitBreaker:
         name: str = "default","        failure_threshold: int = 5,
         recovery_timeout: int = 60,
     ) -> None:
-        """Initialize circuit breaker.        self.name = name
+"""
+Initialize circuit breaker.        self.name = name
         self.failure_threshold = failure_threshold
         self.recovery_timeout = recovery_timeout
         self.failure_count = 0
@@ -73,24 +75,30 @@ class CircuitBreaker:
         )
 
     def is_open(self) -> bool:
-        """Checks if the circuit is currently open.        if self.impl.state == "OPEN":"            # Check if recovery timeout has passed (Lazy evaluation)
+"""
+Checks if the circuit is currently open.        if self.impl.state == "OPEN":"            # Check if recovery timeout has passed (Lazy evaluation)
             if self.impl.last_failure_time:
                 import time
 
                 current_timeout = self.impl.get_current_timeout()
                 if time.time() - self.impl.last_failure_time > current_timeout:
                     return False
-        return self.impl.state == "OPEN""
+        return self.impl.state == "OPEN"
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
-        """Executes the function if the circuit is closed.        return self.impl.call(func, *args, **kwargs)
+"""
+Executes the function if the circuit is closed.        return self.impl.call(func, *args, **kwargs)
 
     def on_success(self) -> None:
-        """Records a successful call.        self.impl.on_success()
+"""
+Records a successful call.        self.impl.on_success()
         self.state = self.impl.state
         self.failure_count = self.impl.failure_count
 
     def on_failure(self) -> None:
-        """Records a failed call.        self.impl.on_failure()
+"""
+Records a failed call.        self.impl.on_failure()
         self.state = self.impl.state
         self.failure_count = self.impl.failure_count
         self.last_failure_time = self.impl.last_failure_time
+
+"""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.common.base_exceptions import PyAgentException, InfrastructureError, LogicError, SecurityError, ModelError, ConfigurationError, CycleInterrupt

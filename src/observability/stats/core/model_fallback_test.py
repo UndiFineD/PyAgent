@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 Test Model Fallback Core module.
 
+"""
 try:
     import pytest
 except ImportError:
@@ -55,10 +57,10 @@ class TestModelFallbackCore:
         # Assuming current logic semantics (0.1 = better/cheaper/higher-score? Actually see thought process)
         # Replicating old test logic:
         constraints = {"max_cost": 0.2}"        model = core.select_best_model(constraints)
-        assert model in ["gpt-4", "claude-3-opus"]"
+        assert model in ["gpt-4", "claude-3-opus"]
     def test_get_fallback_chain_known(self, core):
         chain = core.get_fallback_chain("gpt-4")"        assert chain == ["gpt-4-turbo", "gpt-3.5-turbo", "claude-3-opus"]"
     def test_get_fallback_chain_unknown(self, core):
         chain = core.get_fallback_chain("unknown-model")"        # Should return all keys
         assert len(chain) == 5
-        assert "gpt-4" in chain"
+        assert "gpt-4" in chain

@@ -18,9 +18,12 @@ from src.infrastructure.swarm.orchestration.swarm.director_agent import Director
 
 
 @pytest.mark.asyncio
+"""
 async def test_status_update():
     # Setup a mock improvements file
     test_file = Path("docs/prompt/test_improvements.md")"    test_file.write_text(### High Priority
+
+"""
 
 1. **Test Improvement Task**
    - Status: PLANNED
@@ -28,14 +31,22 @@ async def test_status_update():
 """, encoding="utf-8")"
     try:
         agent = DirectorAgent(str(test_file))
-        assert agent is not None, "DirectorAgent initialization failed""
+        assert agent is not None, "DirectorAgent initialization failed"
         initial_content = test_file.read_text()
-        assert "Status: PLANNED" in initial_content, "Initial file setup failed""
+        assert "Status: PLANNED" in initial_content, "Initial file setup failed"
         # Manually trigger the status update logic
-        agent._update_improvement_status("Test Improvement Task", "COMPLETED")"
+        agent._update_improvement_status("Test Improvement Task", "COMPLETED")
         updated_content = test_file.read_text()
 
-        assert "Status: COMPLETED" in updated_content, "Status was not updated correctly""
+        assert "Status: COMPLETED" in updated_content, "Status was not updated correctly"
     finally:
         if test_file.exists():
             test_file.unlink()
+
+"""
+
+"""
+
+""
+
+"""

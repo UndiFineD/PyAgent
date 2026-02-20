@@ -1,0 +1,46 @@
+"""Improvement dataclass - minimal, parser-safe shim for repairs."""
+
+from __future__ import annotations
+from dataclasses import dataclass, field
+from typing import List, Optional
+from enum import Enum
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+from .effort_estimate import EffortEstimate
+from .improvement_category import ImprovementCategory
+from .improvement_priority import ImprovementPriority
+from .improvement_status import ImprovementStatus
+
+__version__ = VERSION
+
+
+@dataclass
+class Improvement:
+    id: str
+    title: str
+    description: str = ""
+    file_path: Optional[str] = None
+    priority: ImprovementPriority = ImprovementPriority.MEDIUM
+    category: ImprovementCategory = ImprovementCategory.OTHER
+    status: ImprovementStatus = ImprovementStatus.PROPOSED
+    effort: EffortEstimate = EffortEstimate.MEDIUM
+    impact_score: float = 0.0
+    created_at: str = ""
+    assignee: Optional[str] = None
+    tags: List[str] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+        }
+
+__all__ = ["Improvement"]

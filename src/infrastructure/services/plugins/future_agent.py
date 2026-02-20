@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,13 @@ from __future__ import annotations
 
 
 """
+"""
 Future agent.py module.
 """
-
 try:
-    from .core.base.lifecycle.version import VERSION
+
+"""
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -35,14 +38,17 @@ __version__ = VERSION
 
 """
 
-"""Plugin demonstrating forward-compatibility testing for the SDK.
-SDK_REQUIRED = "10.0.0""
+"""
+Plugin demonstrating forward-compatibility testing for the SDK.
+SDK_REQUIRED = "10.0.0"
 
 
 class FutureAgent:
-    """Test agent for verifying forward compatibility with future SDK versions.
+"""
+Test agent for verifying forward compatibility with future SDK versions.
     def __init__(self, *args) -> None:
         pass
 
     def execute(self, task) -> str:
-        return "I am from the future!""
+        return "I am from the future!"
+"""

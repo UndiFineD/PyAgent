@@ -15,8 +15,11 @@
 
 try:
     import time
+"""
 except ImportError:
-    import time
+
+"""
+import time
 
 try:
     from dataclasses import dataclass, field
@@ -38,14 +41,15 @@ except ImportError:
 
 @dataclass
 class RequestEvent:
-    """A timestamped event in the request lifecycle.
+"""
+A timestamped event in the request lifecycle.
 
     Attributes:
         event_type: Type of the event
         timestamp: Unix timestamp when the event occurred
         details: Optional additional information about the event
-    """
-    event_type: RequestEventType
+"""
+event_type: RequestEventType
     timestamp: float = field(default_factory=time.time)
     details: Optional[Dict[str, Any]] = None
 
@@ -56,8 +60,9 @@ class RequestEvent:
         timestamp: Optional[float] = None,
         details: Optional[Dict[str, Any]] = None,
     ) -> "RequestEvent":
-        """Factory method to create a new event."""
-        return cls(
+        ""
+Factory method to create a new event.""
+return cls(
             event_type=event_type,
             timestamp=timestamp if timestamp is not None else time.time(),
             details=details,

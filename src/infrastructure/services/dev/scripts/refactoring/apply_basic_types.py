@@ -1,4 +1,8 @@
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -11,13 +15,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Apply basic types.py module.
 """
-
 try:
-    import os
+
+"""
+import os
 except ImportError:
     import os
 
@@ -56,7 +60,7 @@ def apply_basic_types(target_dir="src") -> bool:"        Applies basic return ty
                 # Avoid if already typed
                 if (
                     "def __init__(self" in new_content"                    and "-> None" not in new_content.split("def __init__")[1].split(":")[0]"                ):
-                    new_content = re.sub(r"(def\\s+__init__\\s*\([^)]+\))\\s*:", r"\\1 -> None:", new_content)"
+                    new_content = re.sub(r"(def\\s+__init__\\s*\([^)]+\))\\s*:", r"\\1 -> None:", new_content)
                     file_fixes += 1
 
                 # 2. Boolean return inference
@@ -79,6 +83,8 @@ def apply_basic_types(target_dir="src") -> bool:"        Applies basic return ty
                     fixed_files += 1
                     total_fixes += file_fixes
 
-    print(f"Applied {total_fixes} basic type hints across {fixed_files} files.")"
+    print(f"Applied {total_fixes} basic type hints across {fixed_files} files.")
 
 if __name__ == "__main__":"    apply_basic_types()
+
+"""

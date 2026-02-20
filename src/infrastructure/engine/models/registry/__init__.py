@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Registry package.
 
+"""
 try:
     from .config import (ArchitectureSpec, ModelArchitecture, ModelCapability,  # noqa: F401
 except ImportError:

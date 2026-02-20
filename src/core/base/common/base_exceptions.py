@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,10 +14,15 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Standard exception types for the PyAgent base framework."""
+"""
+"""
+Standard exception types for the PyAgent base framework.""
+
+"""
 class PyAgentException(Exception):
-    """Base exception for all PyAgent errors."""
-    def __init__(self, message: str, error_code: str | None = None) -> None:
+"""
+Base exception for all PyAgent errors.""
+def __init__(self, message: str, error_code: str | None = None) -> None:
         super().__init__(message)
 
         self.error_code = error_code
@@ -24,24 +30,20 @@ class PyAgentException(Exception):
 
 
 class InfrastructureError(PyAgentException):
-    """Errors related to system infrastructure (I/O, Network)."""
-
-
+"""
+Errors related to system infrastructure (I/O, Network).""
 class LogicError(PyAgentException):
-    """Errors related to agent logic or reasoning failure."""
-
-
+"""
+Errors related to agent logic or reasoning failure.""
 class SecurityError(PyAgentException):
-    """Errors related to unauthorized access or safety violations."""
-
-
+"""
+Errors related to unauthorized access or safety violations.""
 class ModelError(PyAgentException):
-    """Errors related to LLM connectivity or output parsing."""
-
-
+"""
+Errors related to LLM connectivity or output parsing.""
 class ConfigurationError(PyAgentException):
-    """Errors in settings or manifest validation."""
-
-
+"""
+Errors in settings or manifest validation.""
 class CycleInterrupt(PyAgentException):
-    """Interruption of an agent cycle (e.g., quota exceeded)."""
+"""
+Interruption of an agent cycle (e.g., quota exceeded).""

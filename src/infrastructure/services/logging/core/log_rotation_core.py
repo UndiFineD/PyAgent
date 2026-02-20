@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Log rotation core.py module.
 """
-
 try:
-    import contextlib
+
+"""
+import contextlib
 except ImportError:
     import contextlib
 
@@ -64,7 +67,8 @@ class LogRotationCore:
         self._fs = FileSystemCore()
 
     def should_rotate(self, file_path: str) -> bool:
-        """Checks if a log file exceeds the size limit.        if not os.path.exists(file_path):
+"""
+Checks if a log file exceeds the size limit.        if not os.path.exists(file_path):
             return False
         return os.path.getsize(file_path) > self.max_size_bytes
 
@@ -74,7 +78,7 @@ class LogRotationCore:
                 if not os.path.exists(file_path):
             return None
 
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")"        rotated_path = f"{file_path}.{timestamp}""        compressed_path = f"{rotated_path}.gz""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")"        rotated_path = f"{file_path}.{timestamp}""        compressed_path = f"{rotated_path}.gz"
         with contextlib.suppress(Exception):
             # Rename for rotation
             self._fs.move(file_path, rotated_path)
@@ -96,4 +100,5 @@ class LogRotationCore:
             return "DEBUG""        elif fleet_health_score < 0.6:
             return "INFO""        elif fleet_health_score < 0.8:
             return "WARNING""        else:
-            return "ERROR""
+            return "ERROR"
+"""

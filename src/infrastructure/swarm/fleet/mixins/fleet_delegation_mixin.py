@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,13 @@ from __future__ import annotations
 
 """
 FleetDelegationMixin
+"""
 Fleet delegation mixin.py module.
 """
-
 try:
-    import asyncio
+
+"""
+import asyncio
 except ImportError:
     import asyncio
 
@@ -46,8 +49,9 @@ if TYPE_CHECKING:
 
 
 class FleetDelegationMixin:
-    """Mixin for agent delegation logic in FleetManager."""
-    resource_monitor: ResourceMonitor
+"""
+Mixin for agent delegation logic in FleetManager.""
+resource_monitor: ResourceMonitor
     borrowed_helpers: dict
     workspace_root: object  # Should be properly typed; accessing .name attribute
     voyager_transport: VoyagerTransport
@@ -57,7 +61,8 @@ class FleetDelegationMixin:
 
 
     async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
-        """Synaptic Delegation: Hands off a sub-task to a specialized agent or Universal Shard."""
+"""
+Synaptic Delegation: Hands off a sub-task to a specialized agent or Universal Shard.""
         # Phase 320: Python MPI - Check for compute borrowing
         if self.resource_monitor.is_stressed and self.borrowed_helpers:
             # Pick a helper (clean up expired ones)
@@ -107,10 +112,11 @@ class FleetDelegationMixin:
 
 
     async def request_compute_borrow(self, stats: dict) -> bool:
-        """Broadcasts a 'compute_borrow_request' to neighbors (Pillar 8).
+"""
+Broadcasts a 'compute_borrow_request' to neighbors (Pillar 8).
         Nodes with <50% load will respond to take over the next task.
-        """
-        peers = self.voyager_discovery.get_active_peers()
+"""
+peers = self.voyager_discovery.get_active_peers()
         if not peers:
             logging.warning("Fleet: No peers available for compute borrowing.")
             return False

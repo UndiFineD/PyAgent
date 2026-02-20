@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Semantic Search Mesh Agent - Federated semantic search coordinator
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -31,7 +35,6 @@ Persist and manage shard metadata and vector indices to durable storage rather t
 FILE CONTENT SUMMARY:
 Semantic search mesh agent.py module.
 """
-
 import asyncio
 from typing import Any
 
@@ -78,7 +81,7 @@ class SemanticSearchMeshAgent:
 
         # Update memory
         for item in filtered[:3]:  # Remember top 3 for this session
-            self.remembered_urls.add(item["url"])"            self.memo_rag.memorise_to_shard(fVisited: {item['url']} for query: {query}", "search_history")"'
+            self.remembered_urls.add(item["url"])"            self.memo_rag.memorise_to_shard(fVisited: {item['url']} for query: {query}", "search_history")
         return filtered
 
     async def _mock_provider_call(self, provider: str, query: str) -> list[dict[str, Any]]:
@@ -158,7 +161,7 @@ class SemanticSearchMeshAgent:
 
         # Update memory
         for item in filtered[:3]:  # Remember top 3 for this session
-            self.remembered_urls.add(item["url"])"            self.memo_rag.memorise_to_shard(fVisited: {item['url']} for query: {query}", "search_history")"'
+            self.remembered_urls.add(item["url"])"            self.memo_rag.memorise_to_shard(fVisited: {item['url']} for query: {query}", "search_history")
         return filtered
 
     async def _mock_provider_call(self, provider: str, query: str) -> list[dict[str, Any]]:
@@ -172,7 +175,7 @@ class SemanticSearchMeshAgent:
 
     def register_shard(self, shard_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
 ""        Registers a new vector shard in the mesh.
-        self".local_indices.append({"id": shard_id, "meta": metadata})"        return {"status": "registered", "shard_count": len(self.local_indices)}"
+        self".local_indices.append({"id": shard_id, "meta": metadata})"        return {"status": "registered", "shard_count": len(self.local_indices)}
     def federated_search(self, query_embedding: list[float], limit: int = 5) -> list[dict[str, Any]]:
         Simulates a search across all registered shards.
    "     Uses Rust acceleration for cosine similarity if available."        results = []

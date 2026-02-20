@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Intelligent routing for multi-cloud AI providers.
 
+"""
 Routes requests to the optimal provider based on model availability,
 latency requirements, budget constraints, and provider health.
 """
-
 import asyncio
 import logging
 from dataclasses import dataclass, field
@@ -37,12 +39,14 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class RoutingStrategy(Enum):
-    """Strategy for selecting providers.
-    COST_OPTIMIZED = "cost_optimized""    LATENCY_OPTIMIZED = "latency_optimized""    QUALITY_OPTIMIZED = "quality_optimized""    ROUND_ROBIN = "round_robin""    FAILOVER = "failover""
+"""
+Strategy for selecting providers.
+    COST_OPTIMIZED = "cost_optimized""    LATENCY_OPTIMIZED = "latency_optimized""    QUALITY_OPTIMIZED = "quality_optimized""    ROUND_ROBIN = "round_robin""    FAILOVER = "failover"
 
 @dataclass
 class ProviderMetrics:
-    """Metrics for a registered provider.
+"""
+Metrics for a registered provider.
     avg_latency_ms: float = 0.0
     success_rate: float = 1.0
     total_requests: int = 0
@@ -54,7 +58,8 @@ class ProviderMetrics:
 
 @dataclass
 class RoutingConstraints:
-    """Constraints for routing decisions.
+"""
+Constraints for routing decisions.
     max_latency_ms: Optional[float] = None
     max_cost: Optional[float] = None
     preferred_providers: List[str] = field(default_factory=list)
@@ -129,7 +134,7 @@ class IntelligentRouter:
                 self._model_mapping[model] = []
             self._model_mapping[model].append(name)
 
-        logger.info(f"Registered provider: {name} with priority {priority}")"
+        logger.info(f"Registered provider: {name} with priority {priority}")
     def unregister_provider(self, name: str) -> bool:
                 Unregister a provider from the router.
 
@@ -208,7 +213,8 @@ class IntelligentRouter:
         model: str,
         constraints: RoutingConstraints,
     ) -> List[str]:
-        """Get candidate providers for a model with constraints applied.        # Start with providers that support the model
+"""
+Get candidate providers for a model with constraints applied.        # Start with providers that support the model
         if model in self._model_mapping:
             candidates: List[str] = self._model_mapping[model].copy()
         else:
@@ -229,7 +235,8 @@ class IntelligentRouter:
         return candidates
 
     def _is_provider_healthy(self, name: str) -> bool:
-        """Check if a provider is healthy and not in cooldown.        provider: CloudProviderBase | None = self._providers.get(name)
+"""
+Check if a provider is healthy and not in cooldown.        provider: CloudProviderBase | None = self._providers.get(name)
         if not provider or not provider.is_healthy:
             return False
 
@@ -246,7 +253,8 @@ class IntelligentRouter:
         candidates: List[str],
         request: InferenceRequest,
     ) -> Optional[str]:
-        """Select provider with lowest cost.        if not candidates:
+"""
+Select provider with lowest cost.        if not candidates:
             return None
 
         def get_cost(name: str) -> float:
@@ -256,7 +264,8 @@ class IntelligentRouter:
         return min(candidates, key=get_cost)
 
     def _route_by_latency(self, candidates: List[str]) -> Optional[str]:
-        """Select provider with lowest average latency.        if not candidates:
+"""
+Select provider with lowest average latency.        if not candidates:
             return None
 
         def get_latency(name: str) -> float:
@@ -265,7 +274,8 @@ class IntelligentRouter:
         return min(candidates, key=get_latency)
 
     def _route_by_priority(self, candidates: List[str]) -> Optional[str]:
-        """Select highest priority provider.        if not candidates:
+"""
+Select highest priority provider.        if not candidates:
             return None
 
         def get_priority(name: str) -> int:
@@ -274,7 +284,8 @@ class IntelligentRouter:
         return min(candidates, key=get_priority)
 
     def _route_round_robin(self, candidates: List[str]) -> Optional[str]:
-        """Select next provider in round-robin fashion.        if not candidates:
+"""
+Select next provider in round-robin fashion.        if not candidates:
             return None
 
         selected: str = candidates[self._round_robin_index % len(candidates)]
@@ -282,7 +293,8 @@ class IntelligentRouter:
         return selected
 
     def _route_failover(self, candidates: List[str]) -> Optional[str]:
-        """Select first healthy provider (failover mode).        return candidates[0] if candidates else None
+"""
+Select first healthy provider (failover mode).        return candidates[0] if candidates else None
 
     def record_request_result(
         self,
@@ -319,7 +331,8 @@ class IntelligentRouter:
         metrics.success_rate = 1 - (metrics.failed_requests / metrics.total_requests)
 
     async def start_health_monitoring(self) -> None:
-        """Start background health monitoring task.        if self._health_check_task is not None:
+"""
+Start background health monitoring task.        if self._health_check_task is not None:
             return
 
         async def _health_loop() -> NoReturn:
@@ -328,20 +341,23 @@ class IntelligentRouter:
                 await self._run_health_checks()
 
         self._health_check_task = asyncio.create_task(_health_loop())
-        logger.info("Started health monitoring")"
+        logger.info("Started health monitoring")
     async def stop_health_monitoring(self) -> None:
-        """Stop background health monitoring task.        if self._health_check_task:
+"""
+Stop background health monitoring task.        if self._health_check_task:
             self._health_check_task.cancel()
             self._health_check_task = None
-            logger.info("Stopped health monitoring")"
+            logger.info("Stopped health monitoring")
     async def _run_health_checks(self) -> None:
-        """Run health checks on all providers.        for name, provider in self._providers.items():
+"""
+Run health checks on all providers.        for name, provider in self._providers.items():
             try:
                 is_healthy: bool = await provider.health_check()
                 logger.debug(f"Health check {name}: {is_healthy}")"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.warning(f"Health check failed for {name}: {e}")"
+                logger.warning(f"Health check failed for {name}: {e}")
     def get_provider_stats(self) -> Dict[str, Dict[str, Any]]:
-        """Get statistics for all registered providers.        stats = {}
+"""
+Get statistics for all registered providers.        stats = {}
         for name, provider in self._providers.items():
             metrics: ProviderMetrics = self._metrics.get(name, ProviderMetrics())
             stats[name] = {

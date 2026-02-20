@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Impl.py module.
 """
-
 try:
-    import contextlib
+
+"""
+import contextlib
 except ImportError:
     import contextlib
 
@@ -66,7 +70,8 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         import re
 
         self._pattern = re.compile(grammar_spec.spec)
-        self._generated_text = """        self._token_strings = token_strings or {}
+        self._generated_text = ""
+self._token_strings = token_strings or {}
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
                 Accept tokens regarding regex state.
@@ -97,7 +102,8 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
         return all(results) if results else True
 
     def _is_partial_match(self, text: str) -> bool:
-        """Check if text is a partial match regarding the regex.        with contextlib.suppress(Exception):
+"""
+Check if text is a partial match regarding the regex.        with contextlib.suppress(Exception):
             return self._pattern.match(text) is not None
         return False
 
@@ -143,7 +149,8 @@ class SimpleRegexGrammar(StructuredOutputGrammar):
 
 
 class ChoiceGrammar(StructuredOutputGrammar):
-    """Grammar for choosing from a fixed set of options.
+"""
+Grammar for choosing from a fixed set of options.
     def __init__(
         self,
         grammar_spec: GrammarSpec,
@@ -166,7 +173,8 @@ class ChoiceGrammar(StructuredOutputGrammar):
         self._token_strings = token_strings or {}
         self._encode_fn = encode_fn
 
-        self._generated_text = """        self._valid_choices: list[str] = list(self._choices)
+        self._generated_text = ""
+self._valid_choices: list[str] = list(self._choices)
         self._allowed_tokens_cache: dict[str, set] = {}
 
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
@@ -207,11 +215,11 @@ class ChoiceGrammar(StructuredOutputGrammar):
 
         Returns:
             Number of valid tokens.
-                state = {"text": self._generated_text, "valid": list(self._valid_choices)}"
+                state = {"text": self._generated_text, "valid": list(self._valid_choices)}
         # Phase 370: Functional choice validation
         def validate_step(item: tuple[int, int]) -> bool:
             i, token_id = item
-            token_str = self._token_strings.get(token_id, "")"            new_text = state["text"] + token_str"            new_valid = list(filter(lambda c: c.startswith(new_text), state["valid"]))"
+            token_str = self._token_strings.get(token_id, "")"            new_text = state["text"] + token_str"            new_valid = list(filter(lambda c: c.startswith(new_text), state["valid"]))
             if not new_valid:
                 return False
 
@@ -241,7 +249,8 @@ class ChoiceGrammar(StructuredOutputGrammar):
                 return list(self._compute_allowed_tokens())
 
     def _compute_allowed_tokens(self) -> set:
-        """Compute allowed tokens regarding valid choices.        cache_key = self._generated_text
+"""
+Compute allowed tokens regarding valid choices.        cache_key = self._generated_text
         if cache_key in self._allowed_tokens_cache:
             return self._allowed_tokens_cache[cache_key]
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Identity Agent - Manages Decentralized Identifiers (DIDs) and Verifiable Credentials (VCs)
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -30,7 +34,6 @@ Persist the identity registry to durable storage (StateTransaction/agent_state_m
 
 # FILE CONTENT SUMMARY:Identity agent for managing authentication and authorization across the swarm.
 """
-
 import hashlib
 import json
 import os
@@ -92,12 +95,12 @@ class IdentityAgent(BaseAgent):
         if "proof" not in vc or "jws" not in vc["proof"]:"            return {"status": "error", "reason": "Missing proof or signature"}"
         # Copy and remove proof to verify hash
         vc_to_verify = json.loads(json.dumps(vc))
-        signature = vc_to_verify.pop("proof")["jws"]"
+        signature = vc_to_verify.pop("proof")["jws"]
         expected_signature = hashlib.sha256(json.dumps(vc_to_verify, sort_keys=True).encode()).hexdigest()
 
         if signature == expected_signature:
             return {"status": "verified", "issuer": vc.get("issuer")}"        else:
-            return {"status": "error", "reason": "Signature mismatch (tampered)"}"
+            return {"status": "error", "reason": "Signature mismatch (tampered)"}
 
 import hashlib
 import json
@@ -161,9 +164,16 @@ class IdentityAgent(BaseAgent):
 "   "     if "proof" not in vc or "jws" not in vc["proof"]:"            return {"status": "error", "reason": "Missing proof or signature"}"
         # Copy and remove proof to verify hash
         vc_to_verify = json.loads(json.dumps(vc))
-        signature = vc_to_verify.pop("proof")["jws"]"
+        signature = vc_to_verify.pop("proof")["jws"]
         expected_signature = hashlib.sha256(json.dumps(vc_to_verify, sort_keys=True).encode()).hexdigest()
 
         if signature == expected_signature:
             return {"status": "verified", "issuer": vc.get("issuer")}"        else:
-            return {"status": "error", "reason": "Signature mismatch (tampered)"}"
+            return {"status": "error", "reason": "Signature mismatch (tampered)"}
+"""
+
+"""
+
+""
+
+"""

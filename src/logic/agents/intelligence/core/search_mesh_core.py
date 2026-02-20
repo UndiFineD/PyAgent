@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,10 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Search mesh core module.
 
+"""
 from typing import Any
 
 try:
@@ -71,7 +75,7 @@ class SearchMeshCore:
 
     def filter_redundant(self, results: list[dict[str, Any]], remembered_urls: set[str]) -> list[dict[str, Any]]:
         Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
-        return [res for res in results if res["url"] not in remembered_urls]"
+        return [res for res in results if res["url"] not in remembered_urls]
     async def parallel_search_TODO Placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
         Generic structure for the Mesh agent to invoke search providers in parallel.
         (The Shell agent will provide the actual API implementation callbacks).

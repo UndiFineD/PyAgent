@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Shard Deduplication Agent - Deduplicates semantic records in compressed shard files
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,6 @@ Add robust unit tests and better error handling for partial failures and filesys
 FILE CONTENT SUMMARY:
 Agent for deduplicating redundant data in shards.
 """
-
 import gzip
 import hashlib
 import json
@@ -78,7 +81,8 @@ class ShardDeduplicationAgent(BaseAgent):
         logging.info(fDeduplication complete. Stats: {self.stats}")"        return self.stats
 
     def _process_single_shard(self, file_path: Path) -> None:
-""""Deduplicates a single compressed shard file.        self.stats["files_processed"] += 1"        original_size = file_path.stat().st_size
+""""
+Deduplicates a single compressed shard file.        self.stats["files_processed"] += 1"        original_size = file_path.stat().st_size
 
         temp_file = file_path.with_suffix(".tmp.gz")"        unique_records = {}  # Map (prompt_hash, result_hash) -> record_line
 
@@ -94,9 +98,9 @@ class ShardDeduplicationAgent(BaseAgent):
                     prompt_hash = data.get("prompt_hash", ")"                    result = data.get("result", ")"
                     if not prompt_hash:
                         # Fallback if hash missing: hash the prompt
-                        prompt = data.get("prompt", ")"                        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()"
+                        prompt = data.get("prompt", ")"                        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
                     # Hash the result to ensure safe key usage
-                    result_hash = hashlib.sha256(str(result).encode("utf-8")).hexdigest()"
+                    result_hash = hashlib.sha256(str(result).encode("utf-8")).hexdigest()
                     key = (prompt_hash, result_hash)
 
                     if key in unique_records:
@@ -126,7 +130,7 @@ class ShardDeduplicationAgent(BaseAgent):
                     os.remove(temp_file)
 
         except Exception as e:
-            logging.error(fFailed to process "{file_path}: {e}")"
+            logging.error(fFailed to process "{file_path}: {e}")
 
 import gzip
 import hashlib
@@ -167,7 +171,8 @@ class ShardDeduplicationAgent(BaseAgent):
         logging.info(fDeduplication complete. Stats: {self.stats}")"        return self.stats
 
     def _process_single_shard(self, file_path: Path) -> None:
-""""Deduplicates a single compressed shard file.   "   "  self.stats["files_processed"] += 1"        original_size = file_path.stat().st_size
+""""
+Deduplicates a single compressed shard file.   "   "  self.stats["files_processed"] += 1"        original_size = file_path.stat().st_size
 
         temp_file = file_path.with_suffix(".tmp.gz")"        unique_records = {}  # Map (prompt_hash, result_hash) -> record_line
 
@@ -183,9 +188,9 @@ class ShardDeduplicationAgent(BaseAgent):
                     prompt_hash = data.get("prompt_hash", ")"                    result = data.get("result", ")"
                     if not prompt_hash:
                         # Fallback if hash missing: hash the prompt
-                        prompt = data.get("prompt", ")"                        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()"
+                        prompt = data.get("prompt", ")"                        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
                     # Hash the result to ensure safe key usage
-                    result_hash = hashlib.sha256(str(result).encode("utf-8")).hexdigest()"
+                    result_hash = hashlib.sha256(str(result).encode("utf-8")).hexdigest()
                     key = (prompt_hash, result_hash)
 
                     if key in unique_records:

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 """
 AsyncFleetManager
+"""
 An enhanced FleetManager that supports parallel execution of agent workflows.
 """
 
+"""
 import asyncio
 import inspect
 import logging
@@ -35,20 +38,19 @@ __version__ = VERSION
 
 
 class AsyncFleetManager:
-    """
-    Enhanced FleetManager that supports parallel execution of agent workflows.
+"""
+Enhanced FleetManager that supports parallel execution of agent workflows.
     Inherits from FleetManager at runtime to avoid circular import.
-    """
-    def __init__(self, *args, **kwargs):
+"""
+def __init__(self, *args, **kwargs):
         from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
         self.__class__ = type(self.__class__.__name__, (FleetManager,), dict(self.__class__.__dict__))
         super(self.__class__, self).__init__(*args, **kwargs)
-    """
-    Executes agent workflows in parallel using native asyncio.
+"""
+Executes agent workflows in parallel using native asyncio.
     Supports dependency-aware batching for optimized execution (Phase 232).
-    """
-    
-    def __init__(self, workspace_root: str, max_workers: int = 4) -> None:
+"""
+def __init__(self, workspace_root: str, max_workers: int = 4) -> None:
         super().__init__(workspace_root)
         self.max_workers = max_workers
         self.active_workflows: dict[str, WorkflowState] = {}
@@ -60,8 +62,9 @@ class AsyncFleetManager:
         workflow_steps: list[dict[str, Any]],
         workflow_id: str | None = None,
     ) -> str:
-        """Runs multiple agent steps in parallel with dependency-aware batching (Phase 232)."""
-        logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")
+"""
+Runs multiple agent steps in parallel with dependency-aware batching (Phase 232).""
+logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")
         if not workflow_id:
             workflow_id = f"async_wf_{int(time.time())}"
         # Phase 239: Initialize or retrieve workflow state
@@ -127,10 +130,10 @@ class AsyncFleetManager:
 
 
     async def migrate_workflow(self, workflow_id: str, remote_manager: AsyncFleetManager) -> bool:
-        """
-        Phase 239: Migrates an active workflow to another manager without downtime.
-        """
-        if workflow_id not in self.active_workflows:
+"""
+Phase 239: Migrates an active workflow to another manager without downtime.
+"""
+if workflow_id not in self.active_workflows:
             logging.error(f"Cannot migrate {workflow_id}: Not found.")
             return False
 
@@ -158,8 +161,9 @@ class AsyncFleetManager:
 
 
     async def handoff_state(self, state: WorkflowState) -> bool:
-        """Phase 239: Receives a migrated workflow state and prepares for resumption."""
-        logging.info(f"Received handoff for workflow {state.task_id}")
+"""
+Phase 239: Receives a migrated workflow state and prepares for resumption.""
+logging.info(f"Received handoff for workflow {state.task_id}")
         state.set("migration_pending", False)
         self.active_workflows[state.task_id] = state
         # In a real system, we'd trigger execute_workflow_async here or wait for a signal
@@ -168,8 +172,9 @@ class AsyncFleetManager:
 
 
     async def _run_single_step(self, step: dict[str, Any], workflow_id: str) -> str:
-        """Phase 152 Refactor: Native asyncio orchestration with async locking."""
-        agent_name = step.get("agent")
+"""
+Phase 152 Refactor: Native asyncio orchestration with async locking.""
+agent_name = step.get("agent")
         action_name = step.get("action")
         args = step.get("args", [])
         resources = step.get("resources", [])
@@ -223,10 +228,10 @@ class AsyncFleetManager:
 
 
     async def _pre_commit_audit(self, content: str, agent_name: str) -> str:
-        """
-        Phase 240: Runs legal and compliance audits before finalizing output.
-        """
-        if agent_name == "LegalAuditAgent":
+"""
+Phase 240: Runs legal and compliance audits before finalizing output.
+"""
+if agent_name == "LegalAuditAgent":
             return content
 
         try:
@@ -282,10 +287,10 @@ if __name__ == "__main__":
 
 
     async def run_test() -> None:
-        """
-        Executes a test workflow.
-        """
-        report = await afleet.execute_workflow_async("Parallel Test", wf)
+"""
+Executes a test workflow.
+        ""
+report = await afleet.execute_workflow_async("Parallel Test", wf)
         print(report)
 
     asyncio.run(run_test())

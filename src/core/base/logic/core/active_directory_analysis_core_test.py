@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.active_directory_analysis_core import PrivilegeLevel, ADObjectType, ADObject, ADEnumerationResult, ADVulnerability, ActiveDirectoryAnalysisCore

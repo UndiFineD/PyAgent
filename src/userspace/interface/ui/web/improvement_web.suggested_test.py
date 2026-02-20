@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .improvement_web.suggested import load_reasoning_chains, load_audit_log, save_steering_directive, load_self_improvement_log_tail, format_timestamp, main

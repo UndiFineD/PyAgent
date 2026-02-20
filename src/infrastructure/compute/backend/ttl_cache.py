@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Cache with time-to-live expiration.
 (Facade for src.core.base.common.cache_core)
 
+"""
 import threading
 import time
 from dataclasses import dataclass
@@ -27,7 +31,8 @@ from src.core.base.common.cache_core import CacheCore as StandardCacheCore
 
 @dataclass
 class CachedResponse:
-    """Structure for a cached response with metadata.
+"""
+Structure for a cached response with metadata.
     content: str
     created_at: float
     expires_at: float
@@ -46,8 +51,9 @@ class TTLCache(StandardCacheCore):
         default_ttl_seconds: float = 300.0,
         max_entries: int = 1000,
     ) -> None:
-        """Initialize TTL cache.""""
-        Args:
+"""
+Initialize TTL cache.""""
+Args:
             default_ttl_seconds: Default TTL for entries.
             max_entries: Maximum cache entries.
                 super().__init__()
@@ -62,8 +68,9 @@ class TTLCache(StandardCacheCore):
         value: str,
         ttl_seconds: float | None = None,
     ) -> None:
-        """Set cache entry.""""
-        Args:
+"""
+Set cache entry.""""
+Args:
             key: Cache key.
             value: Value to cache.
             ttl_seconds: Optional custom TTL.
@@ -82,8 +89,9 @@ class TTLCache(StandardCacheCore):
             )
 
     def get(self, key: str) -> str | None:
-        """Get cache entry if not expired.""""
-        Args:
+"""
+Get cache entry if not expired.""""
+Args:
             key: Cache key.
 
         Returns:
@@ -101,8 +109,9 @@ class TTLCache(StandardCacheCore):
             return entry.content
 
     def _cleanup_expired(self) -> int:
-        """Remove expired entries.""""
-        Returns:
+"""
+Remove expired entries.""""
+Returns:
             int: Number of entries removed.
                 now = time.time()
         expired = [k for k, v in self._cache.items() if now > v.expires_at]
@@ -111,8 +120,9 @@ class TTLCache(StandardCacheCore):
         return len(expired)
 
     def invalidate(self, key: str) -> bool:
-        """Invalidate cache entry.""""
-        Args:
+"""
+Invalidate cache entry.""""
+Args:
             key: Cache key.
 
         Returns:
@@ -124,8 +134,9 @@ class TTLCache(StandardCacheCore):
             return False
 
     def clear(self) -> int:
-        """Clear all cache entries.""""
-        Returns:
+"""
+Clear all cache entries.""""
+Returns:
             int: Number of entries cleared.
                 with self._lock:
             count = len(self._cache)
@@ -133,10 +144,19 @@ class TTLCache(StandardCacheCore):
         return count
 
     def get_stats(self) -> dict[str, Any]:
-        """Get cache statistics.""""
-        Returns:
+"""
+Get cache statistics.""""
+Returns:
             Dict: Cache stats.
                 with self._lock:
             total_hits = sum(e.hit_count for e in self._cache.values())
             return {
                 "entries": len(self._cache),"                "max_entries": self.max_entries,"                "total_hits": total_hits,"                "default_ttl_seconds": self.default_ttl_seconds,"            }
+
+"""
+
+"""
+
+""
+
+"""

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,11 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Consensus module.py module.
 """
-
+"""
+Consensus module.py module.
+"""
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -31,15 +35,20 @@ except ImportError:
 
 
 class ConsensusModule(BaseModule):
-    """Consolidated core module for consensus protocols.
+"""
+Consolidated core module for consensus protocols.
     Migrated from ConsensusCore.
-    """
-    def initialize(self) -> bool:
-        """Initialize voting parameters."""self.mode = self.config.get("mode", "plurality")"        return super().initialize()
+"""
+def initialize(self) -> bool:
+"""
+Initialize voting parameters.""
+self.mode = self.config.get("mode", "plurality")"        return super().initialize()
 
     def execute(self, proposals: list[str], weights: list[float] | None = None) -> dict[str, Any]:
-        """Executes the consensus protocol to find a winner.
-        """if not self.initialized:
+"""
+Executes the consensus protocol to find a winner.
+"""
+if not self.initialized:
             self.initialize()
 
         winner = self.calculate_winner(proposals, weights)
@@ -49,9 +58,11 @@ class ConsensusModule(BaseModule):
             "winner": winner,"            "agreement_score": score,"            "quorum_reached": score >= 0.667,  # BFT 2/3 requirement"        }
 
     def calculate_winner(self, proposals: list[str], weights: list[float] | None = None) -> str:
-        """Determines the winning proposal based on voting rules."""if not proposals:
-            return """
-        if weights and len(weights) != len(proposals):
+"""
+Determines the winning proposal based on voting rules.""
+if not proposals:
+            return ""
+if weights and len(weights) != len(proposals):
             weights = None
 
         counts: dict[str, float] = {}
@@ -64,10 +75,16 @@ class ConsensusModule(BaseModule):
         return winner
 
     def get_agreement_score(self, proposals: list[str], winner: str) -> float:
-        """Calculates the percentage of agents that agreed with the winner."""if not proposals:
+"""
+Calculates the percentage of agents that agreed with the winner.""
+if not proposals:
             return 0.0
         match_count = sum(1 for p in proposals if p == winner)
         return match_count / len(proposals)
 
     def shutdown(self) -> bool:
-        """Cleanup consensus resources."""return super().shutdown()
+"""
+Cleanup consensus resources.""
+return super().shutdown()
+
+""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from observability.stats.ab_engine import ABComparisonResult, ABSignificanceResult, ABComparison, ABComparisonEngine, ABComparator

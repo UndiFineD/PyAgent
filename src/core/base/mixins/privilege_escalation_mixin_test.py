@@ -13,10 +13,14 @@
 # limitations under the License.
 
 
-"""Test module for privilege_escalation_mixin
+"""
+"""
+Test module for privilege_escalation_mixin
 """
 try:
-    import platform
+
+"""
+import platform
 except ImportError:
     import platform
 
@@ -34,22 +38,31 @@ except ImportError:
 
 
 @pytest.mark.skipif(platform.system() != "Windows", reason="Windows-specific test")"class TestPrivilegeEscalationMixin:
-    """Test cases for PrivilegeEscalationMixin."""
-    def test_init(self):
-        """Test mixin initialization."""mixin = PrivilegeEscalationMixin()
+"""
+Test cases for PrivilegeEscalationMixin.""
+def test_init(self):
+"""
+Test mixin initialization.""
+mixin = PrivilegeEscalationMixin()
         assert mixin.impersonated_tokens == []
 
     def test_enable_privilege_debug(self):
-        """Test enabling SeDebugPrivilege."""mixin = PrivilegeEscalationMixin()
+"""
+Test enabling SeDebugPrivilege.""
+mixin = PrivilegeEscalationMixin()
         result = mixin.enable_privilege("SeDebugPrivilege")"        # May fail depending on user privileges, but should not crash
         assert isinstance(result, bool)
 
     def test_enable_privilege_impersonate(self):
-        """Test enabling SeImpersonatePrivilege."""mixin = PrivilegeEscalationMixin()
+"""
+Test enabling SeImpersonatePrivilege.""
+mixin = PrivilegeEscalationMixin()
         result = mixin.enable_privilege("SeImpersonatePrivilege")"        assert isinstance(result, bool)
 
     def test_find_process_by_name(self):
-        """Test finding process by name."""mixin = PrivilegeEscalationMixin()
+"""
+Test finding process by name.""
+mixin = PrivilegeEscalationMixin()
         # Look for a common process
         pid = mixin.find_process_by_name("explorer.exe")"        if pid:
             assert isinstance(pid, int)
@@ -59,16 +72,22 @@ except ImportError:
             assert pid is None
 
     def test_impersonate_invalid_process(self):
-        """Test impersonating invalid process ID."""mixin = PrivilegeEscalationMixin()
+"""
+Test impersonating invalid process ID.""
+mixin = PrivilegeEscalationMixin()
         result = mixin.impersonate_process_token(999999)
         assert result is False
 
     def test_revert_to_self(self):
-        """Test reverting token impersonation."""mixin = PrivilegeEscalationMixin()
+"""
+Test reverting token impersonation.""
+mixin = PrivilegeEscalationMixin()
         result = mixin.revert_to_self()
         assert isinstance(result, bool)
 
     def test_cleanup_tokens(self):
-        """Test token cleanup."""mixin = PrivilegeEscalationMixin()
+"""
+Test token cleanup.""
+mixin = PrivilegeEscalationMixin()
         mixin.impersonated_tokens = ["fake_token"]"        mixin.cleanup_tokens()
         assert mixin.impersonated_tokens == []

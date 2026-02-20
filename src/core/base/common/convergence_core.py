@@ -14,10 +14,11 @@
 
 
 """
+"""
 Unified Fleet Convergence and Health core.
 """
 
-
+"""
 from typing import Any, Dict, List, Optional
 
 from .base_core import BaseCore
@@ -30,16 +31,18 @@ except ImportError:
 
 
 class ConvergenceCore(BaseCore):
-    """Standard implementation for Fleet Convergence and Health Management.
+"""
+Standard implementation for Fleet Convergence and Health Management.
     Handles 'Full Fleet Sync' summaries and health verification.
-    """
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+"""
+def __init__(self, workspace_root: Optional[str] = None) -> None:
         super().__init__(name="Convergence", workspace_root=workspace_root)
 
 
     def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:
-        """Verifies if all registered agents are healthy."""
-        if rc and hasattr(rc, "verify_fleet_health"):  # pylint: disable=no-member
+"""
+Verifies if all registered agents are healthy.""
+if rc and hasattr(rc, "verify_fleet_health"):  # pylint: disable=no-member
             try:
                 # Use Rust for high-throughput health checking
                 # pylint: disable=no-member
@@ -66,8 +69,9 @@ class ConvergenceCore(BaseCore):
 
 
     def generate_strategic_summary(self, _phase_history: List[Dict[str, Any]]) -> str:
-        """Generates a strategic summary of fleet progress."""
-        summary = "# SWARM STRATEGIC SUMMARY: PROXIMA EVOLUTION\n\n"
+"""
+Generates a strategic summary of fleet progress.""
+summary = "# SWARM STRATEGIC SUMMARY: PROXIMA EVOLUTION\n\n"
         summary += "## Overview\n"
         summary += "Transitioned from a Python-heavy fleet to a Core/Shell architecture.\n\n"
         summary += "## Key Achievements\n"

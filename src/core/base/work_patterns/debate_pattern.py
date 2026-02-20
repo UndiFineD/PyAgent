@@ -13,9 +13,13 @@
 # limitations under the License.
 
 
-"""Debate work pattern implementation for multi-agent adversarial reasoning."""
+"""
+"""
+Debate work pattern implementation for multi-agent adversarial reasoning.""
 try:
-    from typing import Dict, List, Any, Optional
+
+"""
+from typing import Dict, List, Any, Optional
 except ImportError:
     from typing import Dict, List, Any, Optional
 
@@ -39,8 +43,9 @@ except ImportError:
 
 @dataclass
 class DebateAgent:
-    """Represents an agent in a debate with specific role and incentives."""
-    agent_id: str
+"""
+Represents an agent in a debate with specific role and incentives.""
+agent_id: str
     role: str
     incentives: str
     system_prompt: str
@@ -49,19 +54,21 @@ class DebateAgent:
 
 @dataclass
 class DebateConfig:
-    """Configuration for debate pattern execution."""
-    max_rounds: int = 3
+"""
+Configuration for debate pattern execution.""
+max_rounds: int = 3
     quality_threshold: float = 0.8
-    synthesis_method: str = "auto"  # "auto", "manual", "weighted_vote""
+    synthesis_method: str = "auto"  # "auto", "manual", "weighted_vote"
 
 
 class DebateWorkPattern(WorkPattern):
-    """Implements opponent processor / multi-agent debate pattern.""""
-    This pattern spawns opposing agents with different goals or perspectives
+"""
+Implements opponent processor / multi-agent debate pattern.""""
+This pattern spawns opposing agents with different goals or perspectives
     to debate solutions, reducing bias and improving decision quality through
     adversarial reasoning.
-    """
-    def __init__(self, name: str = "Debate", description: str = "Multi-agent debate pattern","                 advocate_agent: Any = None, auditor_agent: Any = None, **debate_agents):
+"""
+def __init__(self, name: str = "Debate", description: str = "Multi-agent debate pattern","                 advocate_agent: Any = None, auditor_agent: Any = None, **debate_agents):
         super().__init__(name, description)
         self.config = DebateConfig()
         self.advocate_agent = advocate_agent
@@ -69,13 +76,15 @@ class DebateWorkPattern(WorkPattern):
         self.additional_agents = debate_agents
 
     def validate_agents(self, agents: List[Any]) -> bool:
-        """Validate that agents are suitable for debate pattern.""""
-        Args:
+"""
+Validate that agents are suitable for debate pattern.""""
+Args:
             agents: List of agents to validate
 
         Returns:
             True if agents are valid for debate
-        """if len(agents) < 2:
+"""
+if len(agents) < 2:
             return False
 
         # Check that agents have different roles/perspectives
@@ -83,17 +92,19 @@ class DebateWorkPattern(WorkPattern):
         for agent in agents:
             if not hasattr(agent, 'role'):'                return False
             if hasattr(agent, 'role') and agent.role in roles:'                return False  # Duplicate roles not allowed
-            roles.append(getattr(agent, 'role', ''))'
+            roles.append(getattr(agent, 'role', ''))
         return True
 
     def _find_agent_by_id(self, agent_id: str) -> Any:
-        """Find an agent instance by its ID.""""
-        Args:
+"""
+Find an agent instance by its ID.""""
+Args:
             agent_id: The agent ID to find
 
         Returns:
             The agent instance or None
-        """agents = []
+"""
+agents = []
         if self.advocate_agent:
             agents.append(self.advocate_agent)
         if self.auditor_agent:
@@ -105,13 +116,14 @@ class DebateWorkPattern(WorkPattern):
         return None
 
     async def execute(self, context: CascadeContext) -> Dict[str, Any]:
-        """Execute the debate pattern.""""
-        Args:
+"""
+Execute the debate pattern.""""
+Args:
             context: The cascade context containing task information
 
         Returns:
             Dict containing debate results and final decision
-        """
+"""
 # Get agents from pattern configuration
         debate_agents = []
         if self.advocate_agent:
@@ -121,7 +133,7 @@ class DebateWorkPattern(WorkPattern):
         debate_agents.extend(self.additional_agents.values())
 
         if not self.validate_agents(debate_agents):
-            raise ValueError("Debate pattern requires at least 2 agents with different roles")"
+            raise ValueError("Debate pattern requires at least 2 agents with different roles")
         # Initialize debate agents
         debate_participants = []
         for agent in debate_agents:
@@ -154,8 +166,9 @@ class DebateWorkPattern(WorkPattern):
         participants: List[DebateAgent],
         history: List[Dict]
     ) -> Dict[str, Any]:
-        """Execute a single round of debate.""""
-        Args:
+"""
+Execute a single round of debate.""""
+Args:
             round_num: Current round number
             context: Cascade context
             participants: List of debate participants
@@ -163,7 +176,8 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Results of the debate round
-        """round_results = {
+"""
+round_results = {
             "round": round_num + 1,"            "arguments": [],"            "counter_arguments": []"        }
 
         # Each participant presents their position
@@ -191,20 +205,21 @@ class DebateWorkPattern(WorkPattern):
         context: CascadeContext,
         history: List[Dict]
     ) -> Dict[str, Any]:
-        """Generate a position for an agent in the debate.""""
-        Args:
+"""
+Generate a position for an agent in the debate.""""
+Args:
             agent: The debate agent
             context: Cascade context
             history: Previous debate history
 
         Returns:
             Generated position
-        """
+"""
 # Find the actual agent instance
         actual_agent = self._find_agent_by_id(agent.agent_id)
         if actual_agent and hasattr(actual_agent, 'execute_task'):'            # Create a context with debate-specific information
             debate_context = context.next_level(child_task_id=f"debate_position_{agent.agent_id}")"            debate_context.work_state = WorkState()
-            debate_context.work_state.update("debate_role", agent.role)"            debate_context.work_state.update("debate_incentives", agent.incentives)"            debate_context.work_state.update("debate_history", history)"
+            debate_context.work_state.update("debate_role", agent.role)"            debate_context.work_state.update("debate_incentives", agent.incentives)"            debate_context.work_state.update("debate_history", history)
             response = await actual_agent.execute_task(debate_context)
             return {
                 "stance": response.get("position", f"Position from {agent.role}"),"                "reasoning": response.get("reasoning", f"Based on {agent.incentives}"),"                "confidence": response.get("confidence", 0.85)"            }
@@ -220,8 +235,9 @@ class DebateWorkPattern(WorkPattern):
         context: CascadeContext,
         history: List[Dict]
     ) -> Dict[str, Any]:
-        """Generate a counter-argument to an opposing position.""""
-        Args:
+"""
+Generate a counter-argument to an opposing position.""""
+Args:
             agent: The agent generating the counter-argument
             opposing_position: The position to counter
             context: Cascade context
@@ -229,12 +245,12 @@ class DebateWorkPattern(WorkPattern):
 
         Returns:
             Counter-argument
-        """
+"""
 # Find the actual agent instance
         actual_agent = self._find_agent_by_id(agent.agent_id)
         if actual_agent and hasattr(actual_agent, 'execute_task'):'            # Create a context with counter-argument information
             counter_context = context.next_level(child_task_id=f"counter_arg_{agent.agent_id}")"            counter_context.work_state = WorkState()
-            counter_context.work_state.update("debate_role", agent.role)"            counter_context.work_state.update("opposing_position", opposing_position)"            counter_context.work_state.update("debate_history", history)"
+            counter_context.work_state.update("debate_role", agent.role)"            counter_context.work_state.update("opposing_position", opposing_position)"            counter_context.work_state.update("debate_history", history)
             response = await actual_agent.execute_task(counter_context)
             return {
                 "critique": response.get("critique", f"Counter-argument from {agent.role}"),"                "weaknesses_identified": response.get("weaknesses", ["Potential bias", "Missing context"]),"                "alternative_suggestion": response.get("alternative", "Consider alternative approach")"            }
@@ -244,13 +260,14 @@ class DebateWorkPattern(WorkPattern):
                 "critique": f"Counter-argument from {agent.role}","                "weaknesses_identified": ["Potential bias", "Missing context"],"                "alternative_suggestion": "Consider alternative approach""            }
 
     def _check_consensus(self, round_results: Dict[str, Any]) -> bool:
-        """Check if consensus has been reached in the debate.""""
-        Args:
+"""
+Check if consensus has been reached in the debate.""""
+Args:
             round_results: Results from the current round
 
         Returns:
             True if consensus reached
-        """
+"""
 # Simple consensus check - all agents agree on key points
         # In practice, this would be more sophisticated
         arguments = round_results.get("arguments", [])"        if len(arguments) < 2:
@@ -264,14 +281,16 @@ class DebateWorkPattern(WorkPattern):
         debate_history: List[Dict],
         participants: List[DebateAgent]
     ) -> Dict[str, Any]:
-        """Synthesize final decision from debate history.""""
-        Args:
+"""
+Synthesize final decision from debate history.""""
+Args:
             debate_history: Complete debate history
             participants: Debate participants
 
         Returns:
             Final synthesized decision
-        """if self.config.synthesis_method == "auto":"            return await self._auto_synthesis(debate_history, participants)
+"""
+if self.config.synthesis_method == "auto":"            return await self._auto_synthesis(debate_history, participants)
         elif self.config.synthesis_method == "weighted_vote":"            return await self._weighted_vote_synthesis(debate_history, participants)
         else:
             # Manual synthesis - return all perspectives
@@ -283,14 +302,15 @@ class DebateWorkPattern(WorkPattern):
         debate_history: List[Dict],
         participants: List[DebateAgent]
     ) -> Dict[str, Any]:
-        """Automatically synthesize decision from debate.""""
-        Args:
+"""
+Automatically synthesize decision from debate.""""
+Args:
             debate_history: Debate history
             participants: Participants
 
         Returns:
             Synthesized decision
-        """
+"""
 # Simple synthesis - take the position with highest average confidence
         final_round = debate_history[-1]
         best_position = max(
@@ -304,14 +324,15 @@ class DebateWorkPattern(WorkPattern):
         debate_history: List[Dict],
         participants: List[DebateAgent]
     ) -> Dict[str, Any]:
-        """Synthesize decision using weighted voting.""""
-        Args:
+"""
+Synthesize decision using weighted voting.""""
+Args:
             debate_history: Debate history
             participants: Participants
 
         Returns:
             Synthesized decision
-        """
+"""
 # Weight votes by agent incentives and historical performance
         votes = {}
         for participant in participants:
@@ -324,3 +345,11 @@ class DebateWorkPattern(WorkPattern):
 
         return {
             "method": "weighted_vote","            "votes": votes,"            "recommendation": "Implement checks and balances""        }
+
+"""
+
+"""
+
+"""
+
+"""

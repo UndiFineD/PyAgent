@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 LoRA adapter registry.
 
+"""
 import logging
 from typing import Dict, List, Optional
 
@@ -74,7 +76,8 @@ class LoraRegistry:
         logger.info(f"Registered LoRA adapter: {name} (ID: {adapter_id})")"        return adapter
 
     def unregister(self, name: str) -> bool:
-        """Remove an adapter from the registry.        if name not in self._adapters:
+"""
+Remove an adapter from the registry.        if name not in self._adapters:
             return False
 
         self._adapters.pop(name)
@@ -83,19 +86,24 @@ class LoraRegistry:
         logger.info(f"Unregistered LoRA adapter: {name}")"        return True
 
     def get(self, name: str) -> Optional[LoraAdapter]:
-        """Get adapter by name.        return self._adapters.get(name)
+"""
+Get adapter by name.        return self._adapters.get(name)
 
     def get_by_id(self, adapter_id: int) -> Optional[LoraAdapter]:
-        """Get adapter by ID.        for adapter in self._adapters.values():
+"""
+Get adapter by ID.        for adapter in self._adapters.values():
             if adapter.adapter_id == adapter_id:
                 return adapter
         return None
 
     def list_adapters(self) -> List[LoraAdapter]:
-        """List all registered adapters.        return list(self._adapters.values())
+"""
+List all registered adapters.        return list(self._adapters.values())
 
     def list_loaded(self) -> List[LoraAdapter]:
-        """List adapters that are currently loaded.        return [a for a in self._adapters.values() if a.state in (AdapterState.LOADED, AdapterState.ACTIVE)]
+"""
+List adapters that are currently loaded.        return [a for a in self._adapters.values() if a.state in (AdapterState.LOADED, AdapterState.ACTIVE)]
 
     def find_by_base_model(self, base_model: str) -> List[LoraAdapter]:
-        """Find adapters compatible with a base model.        return [a for a in self._adapters.values() if a.base_model == base_model]
+"""
+Find adapters compatible with a base model.        return [a for a in self._adapters.values() if a.base_model == base_model]

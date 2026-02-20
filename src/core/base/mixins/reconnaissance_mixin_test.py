@@ -14,8 +14,11 @@
 
 try:
     from unittest.mock import Mock, patch
+"""
 except ImportError:
-    from unittest.mock import Mock, patch
+
+"""
+from unittest.mock import Mock, patch
 
 try:
     from .core.base.mixins.reconnaissance_mixin import ReconnaissanceMixin
@@ -26,12 +29,14 @@ except ImportError:
 
 
 class TestReconnaissanceMixin:
-    """Test cases for ReconnaissanceMixin."""
-    def setup_method(self):
+"""
+Test cases for ReconnaissanceMixin.""
+def setup_method(self):
         self.mixin = ReconnaissanceMixin()
 
     @patch('src.core.base.mixins.reconnaissance_mixin.requests.get')'    def test_discover_targets(self, mock_get):
-        """Test target discovery."""
+"""
+Test target discovery.""
 # Mock response
         mock_response = Mock()
         mock_response.status_code = 200
@@ -46,20 +51,26 @@ class TestReconnaissanceMixin:
         asyncio.run(run())
 
     @patch('src.core.base.mixins.reconnaissance_mixin.requests.get')'    def test_fingerprint_service(self, mock_get):
-        """Test service fingerprinting."""mock_response = Mock()
+"""
+Test service fingerprinting.""
+mock_response = Mock()
         mock_response.status_code = 200
         mock_response.text = 'Adobe Experience Manager 6.5''        mock_get.return_value = mock_response
 
         async def run():
-            fingerprint = await self.mixin.fingerprint_service('http://example.com')'
+            fingerprint = await self.mixin.fingerprint_service('http://example.com')
             assert fingerprint['service_type'] == 'aem''            assert fingerprint['version'] == '6.5''
         import asyncio
         asyncio.run(run())
 
     def test_add_discovery_pattern(self):
-        """Test adding custom discovery patterns."""self.mixin.add_discovery_pattern('custom', ['/custom/path'])'        patterns = self.mixin.get_discovery_patterns('custom')'        assert '/custom/path' in patterns['custom']'
+"""
+Test adding custom discovery patterns.""
+self.mixin.add_discovery_pattern('custom', ['/custom/path'])'        patterns = self.mixin.get_discovery_patterns('custom')'        assert '/custom/path' in patterns['custom']
     def test_get_discovery_patterns(self):
-        """Test getting discovery patterns."""patterns = self.mixin.get_discovery_patterns()
+        ""
+Test getting discovery patterns.""
+patterns = self.mixin.get_discovery_patterns()
         assert 'aem' in patterns'        assert 'cms' in patterns'
         # Test specific category
-        aem_patterns = self.mixin.get_discovery_patterns('aem')'        assert 'aem' in aem_patterns'        assert len(aem_patterns['aem']) > 0'
+        aem_patterns = self.mixin.get_discovery_patterns('aem')'        assert 'aem' in aem_patterns'        assert len(aem_patterns['aem']) > 0

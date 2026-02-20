@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Platform abstraction package.
 
+"""
 try:
     from .base import Platform  # noqa: F401
 except ImportError:

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     from abc import ABC, abstractmethod
 except ImportError:
@@ -34,13 +34,15 @@ __version__ = VERSION
 
 
 class ResponseTransformerBase(ABC):
-    """Abstract base class for response transformers.""""
-    Implement this to create custom response transformation logic.
+"""
+Abstract base class for response transformers.""""
+Implement this to create custom response transformation logic.
     
     @abstractmethod
     def transform(self, response: str) -> str:
-        """Transform a response string.""""
-        Args:
+"""
+Transform a response string.""""
+Args:
             response: Raw response string.
 
         Returns:
@@ -48,4 +50,12 @@ class ResponseTransformerBase(ABC):
         
     @abstractmethod
     def get_name(self) -> str:
-        """Get transformer name.
+"""
+Get transformer name.
+"""
+
+"""
+
+""
+
+"""

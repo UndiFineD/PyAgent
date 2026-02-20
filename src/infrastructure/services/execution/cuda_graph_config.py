@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +18,10 @@ from __future__ import annotations
 
 
 """
+"""
 CUDAGraphConfig.py - CUDA graph mode management and configuration.
 
+"""
 Inspired by vLLM's config/compilation.py. Provides CUDA graph capture'and replay management for optimized inference.
 
 Phase 29: Execution Context, Batching & Async Streaming
@@ -94,7 +97,9 @@ class CUDAGraphConfig:
         batch_size: int,
         seq_len: int,
     ) -> bool:
-        """Check if CUDA graph should be used for given batch.        if not self.enabled:
+"""
+Check if CUDA graph should be used for given batch.        if not self.enabled:
+
             return False
         if batch_size > self.max_capture_batch_size:
             return False
@@ -103,20 +108,24 @@ class CUDAGraphConfig:
         return True
 
     def get_padded_batch_size(self, batch_size: int) -> int:
-        """Get padded batch size for graph lookup.        for size in sorted(self.capture_sizes):
+"""
+Get padded batch size for graph lookup.        for size in sorted(self.capture_sizes):
             if size >= batch_size:
                 return size
         return batch_size  # Fallback to exact size
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary.        return {
+"""
+Convert to dictionary.        return {
             "enabled": self.enabled,"            "max_capture_batch_size": self.max_capture_batch_size,"            "capture_sizes": self.capture_sizes,"            "max_capture_seq_len": self.max_capture_seq_len,"            "use_memory_pool": self.use_memory_pool,"            "memory_pool_size_mb": self.memory_pool_size_mb,"            "cudagraph_copy_inputs": self.cudagraph_copy_inputs,"            "warmup_iterations": self.warmup_iterations,"            "per_layer_graphs": self.per_layer_graphs,"            "debug_mode": self.debug_mode,"        }
 
     @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> "CUDAGraphConfig":"        """Create from dictionary.        return cls(**d)
+    def from_dict(cls, d: Dict[str, Any]) -> "CUDAGraphConfig":"        """
+Create from dictionary.        return cls(**d)
 
     @classmethod
-    def disabled(cls) -> "CUDAGraphConfig":"        """Create a disabled config.        return cls(enabled=False)
+    def disabled(cls) -> "CUDAGraphConfig":"        """
+Create a disabled config.        return cls(enabled=False)
 
 
 # ============================================================================
@@ -169,11 +178,13 @@ class CUDAGraphEntry:
 
     @property
     def key(self) -> Tuple[int, int]:
-        """Get lookup key.        return (self.batch_size, self.seq_len)
+"""
+Get lookup key.        return (self.batch_size, self.seq_len)
 
     @property
     def avg_replay_time_ms(self) -> float:
-        """Average replay time in milliseconds.        if self.replay_count == 0:
+"""
+Average replay time in milliseconds.        if self.replay_count == 0:
             return 0.0
         return self.total_replay_time_ms / self.replay_count
 
@@ -258,7 +269,8 @@ class CUDAGraphRegistry:
         batch_size: int,
         seq_len: int,
     ) -> Optional[CUDAGraphEntry]:
-        """Get a captured graph for the given dimensions.        # Try exact match first
+"""
+Get a captured graph for the given dimensions.        # Try exact match first
         key = (batch_size, seq_len)
         with self._lock:
             if key in self._graphs:
@@ -271,10 +283,12 @@ class CUDAGraphRegistry:
             return self._graphs.get(padded_key)
 
     def has(self, batch_size: int, seq_len: int) -> bool:
-        """Check if a graph exists.        return self.get(batch_size, seq_len) is not None
+"""
+Check if a graph exists.        return self.get(batch_size, seq_len) is not None
 
     def remove(self, batch_size: int, seq_len: int) -> bool:
-        """Remove a graph from the registry.        key = (batch_size, seq_len)
+"""
+Remove a graph from the registry.        key = (batch_size, seq_len)
         with self._lock:
             if key in self._graphs:
                 del self._graphs[key]
@@ -282,15 +296,18 @@ class CUDAGraphRegistry:
             return False
 
     def clear(self) -> None:
-        """Clear all captured graphs.        with self._lock:
+"""
+Clear all captured graphs.        with self._lock:
             self._graphs.clear()
 
     @property
     def num_graphs(self) -> int:
-        """Number of captured graphs.        return len(self._graphs)
+"""
+Number of captured graphs.        return len(self._graphs)
 
     def stats(self) -> Dict[str, Any]:
-        """Get registry statistics.        with self._lock:
+"""
+Get registry statistics.        with self._lock:
             total_replays = sum(g.replay_count for g in self._graphs.values())
             total_replay_time = sum(g.total_replay_time_ms for g in self._graphs.values())
 
@@ -320,18 +337,22 @@ class CUDAGraphManager:
 
     @property
     def mode(self) -> CUDAGraphMode:
-        """Current CUDA graph mode.        return self._mode
+"""
+Current CUDA graph mode.        return self._mode
 
     @mode.setter
     def mode(self, value: CUDAGraphMode) -> None:
-        """Set CUDA graph mode.        with self._lock:
+"""
+Set CUDA graph mode.        with self._lock:
             self._mode = value
 
     def is_enabled(self) -> bool:
-        """Check if CUDA graphs are enabled.        return self.config.enabled and self._mode != CUDAGraphMode.DISABLED
+"""
+Check if CUDA graphs are enabled.        return self.config.enabled and self._mode != CUDAGraphMode.DISABLED
 
     def should_capture(self, batch_size: int, seq_len: int) -> bool:
-        """Check if we should capture a graph for given dimensions.        if not self.is_enabled():
+"""
+Check if we should capture a graph for given dimensions.        if not self.is_enabled():
             return False
         if not self.config.should_use_cudagraph(batch_size, seq_len):
             return False
@@ -340,7 +361,8 @@ class CUDAGraphManager:
         return True
 
     def get_mode_for_batch(self, batch_size: int, seq_len: int) -> CUDAGraphMode:
-        """Get the appropriate mode for a batch.        if not self.is_enabled():
+"""
+Get the appropriate mode for a batch.        if not self.is_enabled():
             return CUDAGraphMode.DISABLED
 
         if not self.config.should_use_cudagraph(batch_size, seq_len):
@@ -444,9 +466,13 @@ class CUDAGraphManager:
         return execute_fn(inputs)
 
     def stats(self) -> Dict[str, Any]:
-        """Get manager statistics.        return {
+"""
+Get manager statistics.        return {
             "enabled": self.config.enabled,"            "mode": self._mode.name,"            "registry": self.registry.stats(),"            "config": self.config.to_dict(),"        }
 
     def reset(self) -> None:
-        """Reset the manager.        self.registry.clear()
+"""
+Reset the manager.        self.registry.clear()
         self._mode = CUDAGraphMode.NONE
+
+"""

@@ -14,8 +14,11 @@
 
 try:
     import asyncio
+"""
 except ImportError:
-    import asyncio
+
+"""
+import asyncio
 
 try:
     import pytest
@@ -41,7 +44,8 @@ except ImportError:
 
 
 class MockNode(FleetBackupMixin):
-    """Mock node for testing distributed RAID-10 recovery.    def __init__(self, node_id):
+"""
+Mock node for testing distributed RAID-10 recovery.    def __init__(self, node_id):
         self.node_id = node_id
         self.config = {"resilience": {"shard_parts": 4, "mirror_factor": 2}}"        self.voyager_transport = AsyncMock()
         self.fleet_manager = MagicMock()
@@ -69,9 +73,9 @@ class MockNode(FleetBackupMixin):
 async def test_raid10_sharding_and_recovery():
         Simulates a multi-node P2P RAID-10 sharding and recovery process.
         # 1. Setup Nodes
-    node_a = MockNode("node-a")"    node_b = MockNode("node-b")"    node_c = MockNode("node-c")"
+    node_a = MockNode("node-a")"    node_b = MockNode("node-b")"    node_c = MockNode("node-c")
     # Connect them conceptually
-    node_a.fleet_manager.connected_peers = {"node-b": {}, "node-c": {}}"
+    node_a.fleet_manager.connected_peers = {"node-b": {}, "node-c": {}}
     # Mock send_to_peer to route messages between mock nodes
     async def route_message(target_host, target_port, message, timeout=5000):
         print(f"Routing message to {target_host}:{target_port} - Type: {message.get('type')}")"'        target_node = None
@@ -89,10 +93,10 @@ async def test_raid10_sharding_and_recovery():
     node_c.voyager_transport.send_to_peer = AsyncMock(side_effect=route_message)
 
     # 2. Hardening (Sharding)
-    test_state = {"agent_id": "test_agent", "data": "Singularity v4.0.0", "memory": [1, 2, 3]}"
+    test_state = {"agent_id": "test_agent", "data": "Singularity v4.0.0", "memory": [1, 2, 3]}
     # Perform hardening on Node-A
     # This will use DistributedBackup to shard and then call send_to_peer
-    success = await node_a.harden_agent_state("test_agent", test_state)"
+    success = await node_a.harden_agent_state("test_agent", test_state)
     assert success is True
     assert len(node_b._shard_store) > 0
     assert len(node_c._shard_store) > 0
@@ -102,7 +106,7 @@ async def test_raid10_sharding_and_recovery():
     # We need to mock the response collection for recover_agent_state
     # In reality, this would happen via listener callbacks.
     # For the test, we'll manually simulate the arrival of responses.'
-    backup_tool = DistributedBackup("recovery-manager")"
+    backup_tool = DistributedBackup("recovery-manager")
     # Verify we can reconstruct manually first to ensure logic is sound
     all_shards = {}
     all_shards.update(node_b._shard_store)
@@ -110,13 +114,13 @@ async def test_raid10_sharding_and_recovery():
 
     reconstructed = backup_tool.reassemble_state(all_shards)
     assert reconstructed == test_state
-    print("Manual reconstruction successful!")"
+    print("Manual reconstruction successful!")
     # 4. Verify Shard Distribution Logic
     # N=3 parts, 2 mirror = 6 shards total (for small state)
     # Distributed across Node-B and Node-C.
     assert len(all_shards) == 6
 
-    print("Multi-node RAID-10 Resilience Test PASSED")"
+    print("Multi-node RAID-10 Resilience Test PASSED")
 if __name__ == "__main__":"    asyncio.run(test_raid10_sharding_and_recovery())
 
 

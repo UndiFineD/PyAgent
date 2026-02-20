@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +21,10 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 Used as a specialized BaseAgent to compress large text/code contexts into dense semantic blocks, run relevance queries across those compressed blocks (optionally using rust acceleration), export a JSON knowledge graph, and provide an async hook for memory optimization; intended to be invoked programmatically (as an as_tool-enabled agent) or via an agent CLI integration.
 
+"""
 WHAT IT DOES:
 Manages and caches hierarchical compressed context blocks to enable million-token reasoning by (1) compressing raw text into dense summaries and tracking them in an in-memory pool, (2) searching and selectively hydrating only relevant compressed blocks for downstream reasoning, (3) exporting the compressed pool as a JSON knowledge graph, and (4) offering a TODO Placeholder async optimization method for further memory quantization and retrieval tuning.
 
@@ -34,7 +38,6 @@ FILE CONTENT SUMMARY:
 - async improve_content(prompt: str, target_file: str | None = None) -> str: stub that returns an optimization-status string.
 Module ends with an incomplete __main__ guard that imports create_main_function and begins to construct a main for QuantumMemoryAgent (truncated in file).
 """
-
 import json
 import logging
 from typing import Any
@@ -55,7 +58,8 @@ __version__ = VERSION
 
 
 class QuantumMemoryAgent(BaseAgent):
-""""Manages massive context windows through compression and quantization.
+""""
+Manages massive context windows through compression and quantization.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.context_cache_dir = self._workspace_root / "data" / "logs" / "quantum_context"        self.context_cache_dir.mkdir(parents=True, exist_ok=True)
@@ -69,12 +73,12 @@ class QuantumMemoryAgent(BaseAgent):
         "Compresses a large block of text into a high-density semantic" summary."        Args:
             context_text: The raw text to compress.
             target_ratio: The desired compression ratio (default 10%).
-        logging.info(fQuantumMemory: Compressing {len(context_text)"} chars...")"
+        logging.info(fQuantumMemory: Compressing {len(context_text)"} chars...")
         # Simplified logic: In a real scenario, this would use a small model (like 4-bit quantized)
         # to generate a dense representation. For now, we simulate extraction.
 #         summary = f"[Compressed Context]: Dense summary of {len(context_text)} characters. Main themes preserved."
 #         block_id = fblock_{len(self.active_context_blocks)}
-        self.active_context_blocks.append({"id": block_id, "original_len": len(context_text), "summary": summary})"
+        self.active_context_blocks.append({"id": block_id, "original_len": len(context_text), "summary": summary})
 #         return fSUCCESS: Compressed block {block_id}. Current context pool: {len(self.active_context_blocks)} blocks.
 
     @as_tool
@@ -91,13 +95,14 @@ class QuantumMemoryAgent(BaseAgent):
 
         if not relevant_blocks:
             # Fallback to general search across the last 3 blocks
-            relevant_blocks = [b["id"] for b in self.active_context_blocks[-3:]]"
+            relevant_blocks = [b["id"] for b in self.active_context_blocks[-3:]]
         return (
 #             f"### Results for '{query}'\\n\\nFound relevant data in blocks: {', '.join(relevant_blocks)}. \\n"'#             "[Hydrated Context]: Re-assembling memory nodes for reasoning..."        )
 
     @as_tool
     def export_context_knowledge_graph(self) -> str:
-""""Exports the current compressed context as a JSON" Knowledge Graph.
+""""
+Exports the current compressed context as a JSON" Knowledge Graph.
 #         filepath = self.context_cache_dir / "knowledge_graph.json"        with open(filepath, 'w', encoding='utf-8') as f:'            json.dump(self.active_context_blocks, f, indent=2)
 
 #         return fKnowledge Graph exported to {filepath}
@@ -108,3 +113,5 @@ class QuantumMemoryAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool")"    main()
+
+"""

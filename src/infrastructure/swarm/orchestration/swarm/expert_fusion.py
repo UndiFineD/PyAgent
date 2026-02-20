@@ -15,9 +15,11 @@
 
 
 """
+"""
 Weighted Expert Fusion (Phase 62).
 Provides consensus mechanisms to merge outputs from multiple experts in an MoE swarm.
 
+"""
 try:
     import logging
 except ImportError:
@@ -51,7 +53,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class FusionResult:
-    """The result of a weighted expert fusion operation.
+"""
+The result of a weighted expert fusion operation.
     merged_content: str
     consensus_score: float
     contributing_experts: List[str]
@@ -76,7 +79,7 @@ class WeightedExpertFusion:
     ) -> FusionResult:
                 Main fusion entry point.
                 if not outputs or len(outputs) != len(weights):
-            raise ValueError("Outputs and weights must be non-empty and of equal length.")"
+            raise ValueError("Outputs and weights must be non-empty and of equal length.")
         if mode == "weighted_plurality":"            result = await self._weighted_plurality(outputs, weights, expert_ids)
         elif mode == "semantic_consensus":"            result = await self._semantic_consensus(outputs, weights, expert_ids)
         else:

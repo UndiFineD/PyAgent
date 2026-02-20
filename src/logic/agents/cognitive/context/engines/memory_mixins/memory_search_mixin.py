@@ -13,12 +13,14 @@
 # limitations under the License.
 
 
-"""Memory search mixin for retrieving historical agent experiences.
+"""
+"""
+Memory search mixin for retrieving historical agent experiences.
 
+"""
 This mixin provides small, deterministic search helpers used by tests
 and environments where a vector DB (e.g., Chroma) may not be present.
 """
-
 try:
     import logging
 except ImportError:
@@ -32,11 +34,12 @@ except ImportError:
 
 
 class MemorySearchMixin:
-    """Methods for searching memories."""
-
-    def get_lessons_learned(self, query: str = "", limit: int = 5, min_utility: float = 0.0) -> List[dict[str, Any]]:
-        """Retrieves past episodes relevant to the query, filtered by utility."""
-        if not query:
+"""
+Methods for searching memories.""
+def get_lessons_learned(self, query: str = "", limit: int = 5, min_utility: float = 0.0) -> List[dict[str, Any]]:
+"""
+Retrieves past episodes relevant to the query, filtered by utility.""
+if not query:
             # Return recent high utility episodes
             candidates = [ep for ep in self.episodes if ep.get("utility_score", 0.5) >= min_utility]
             return candidates[-limit:]
@@ -52,10 +55,11 @@ class MemorySearchMixin:
         return relevant
 
     def search_memories(self, query: str, limit: int = 5) -> List[dict[str, Any]]:
-        """Public interface for semantic search across episodic memories.
+"""
+Public interface for semantic search across episodic memories.
 
         Returns a list of dictionaries with `content`, `metadata`, and `score`.
-        """
+"""
         # If a collection is available, higher-fidelity search could be used.
         # For tests we provide a simple, deterministic fallback.
         matches: List[dict[str, Any]] = []

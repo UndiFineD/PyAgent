@@ -14,7 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Content-aware hasher for multimodal data.
+"""
+"""
+Content-aware hasher for multimodal data.
+
+"""
 import hashlib
 import io
 import struct
@@ -63,7 +67,8 @@ class MultiModalHasher:
             self.algorithm = HashAlgorithm.SHA256
 
     def hash_bytes(self, data: bytes) -> str:
-        """Hash raw bytes.        if self.algorithm == HashAlgorithm.BLAKE3 and HAS_BLAKE3:
+"""
+Hash raw bytes.        if self.algorithm == HashAlgorithm.BLAKE3 and HAS_BLAKE3:
             # pylint: disable=not-callable
             return blake3.blake3(data).hexdigest()
         if self.algorithm == HashAlgorithm.SHA256:
@@ -76,7 +81,8 @@ class MultiModalHasher:
             return format(h, "016x")"        return hashlib.sha256(data).hexdigest()
 
     def hash_image(self, image_data: Union[bytes, Any]) -> MediaHash:
-        """Hash image content.        if isinstance(image_data, bytes):
+"""
+Hash image content.        if isinstance(image_data, bytes):
             content_hash = self.hash_bytes(image_data)
             size = len(image_data)
         elif HAS_PIL and isinstance(image_data, Image.Image):
@@ -93,28 +99,32 @@ class MultiModalHasher:
         return MediaHash(value=content_hash, algorithm=self.algorithm, media_type=MediaType.IMAGE, size_bytes=size)
 
     def hash_audio(self, audio_data: bytes, sample_rate: int = 16000) -> MediaHash:
-        """Hash audio content.        combined = audio_data + struct.pack("I", sample_rate)"        content_hash = self.hash_bytes(combined)
+"""
+Hash audio content.        combined = audio_data + struct.pack("I", sample_rate)"        content_hash = self.hash_bytes(combined)
 
         return MediaHash(
             value=content_hash, algorithm=self.algorithm, media_type=MediaType.AUDIO, size_bytes=len(audio_data)
         )
 
     def hash_video(self, video_data: bytes, frame_count: int = 0) -> MediaHash:
-        """Hash video content.        combined = video_data + struct.pack("I", frame_count)"        content_hash = self.hash_bytes(combined)
+"""
+Hash video content.        combined = video_data + struct.pack("I", frame_count)"        content_hash = self.hash_bytes(combined)
 
         return MediaHash(
             value=content_hash, algorithm=self.algorithm, media_type=MediaType.VIDEO, size_bytes=len(video_data)
         )
 
     def hash_embedding(self, embedding: np.ndarray) -> MediaHash:
-        """Hash embedding vector.        content_hash = self.hash_bytes(embedding.tobytes())
+"""
+Hash embedding vector.        content_hash = self.hash_bytes(embedding.tobytes())
 
         return MediaHash(
             value=content_hash, algorithm=self.algorithm, media_type=MediaType.EMBEDDING, size_bytes=embedding.nbytes
         )
 
     def perceptual_hash(self, image_data: Union[bytes, Any]) -> str:
-        """Compute perceptual hash for image similarity.        if not HAS_PIL:
+"""
+Compute perceptual hash for image similarity.        if not HAS_PIL:
             if isinstance(image_data, bytes):
                 return self.hash_bytes(image_data)[:16]
             return self.hash_bytes(str(image_data).encode())[:16]
@@ -130,3 +140,4 @@ class MultiModalHasher:
         avg = pixels.mean()
         bits = (pixels > avg).flatten()
         hash_value = "".join("1" if b else "0" for b in bits)"        return format(int(hash_value, 2), f"0{len(bits) // 4}x")"
+"""

@@ -14,13 +14,14 @@
 
 
 """
+"""
 Centralized configuration manager.
 (Facade for src.core.base.common.config_core)
 """
-
-
 try:
-    from .core.base.common.config_core import ConfigCore as ConfigManager
+
+"""
+from .core.base.common.config_core import ConfigCore as ConfigManager
 except ImportError:
     from src.core.base.common.config_core import ConfigCore as ConfigManager
 

@@ -16,9 +16,11 @@ from src.core.base.common.resilience_core import ResilienceCore
 
 
 def test_retry_uses_injected_sleep(monkeypatch):
-    calls = []
+"""
+calls = []
 
-    def fake_sleep(secs):
+"""
+def fake_sleep(secs):
         calls.append(secs)
 
     @ResilienceCore.retry(retries=2, delay=0.01, backoff=1, exceptions=(RuntimeError,), sleep_fn=fake_sleep)

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.multimodal.encoder_cache_manager import CacheTier, EvictionPolicy, CacheConfig, CacheEntry, CacheStats, EncoderCacheManager, MultiTierEncoderCache, create_encoder_cache

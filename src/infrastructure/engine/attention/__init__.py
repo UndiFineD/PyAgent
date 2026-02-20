@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Attention infrastructure for efficient attention computation.
 
+"""
 Phase 33 modules:
 - AttentionBackendRegistry: Dynamic backend selection
 

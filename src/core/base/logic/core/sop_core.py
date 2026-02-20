@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal, parser-safe SOP Core used for tests."""
-
+""
+Minimal, parser-safe SOP Core used for tests.""
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 GPU-resident input buffers for batch management.
 """
 
+"""
 import logging
 from typing import Any
 
@@ -83,9 +87,10 @@ class InputBuffers:
         else:
             self.inputs_embeds = None
 
-        logger.debug(f"InputBuffers initialized: max_reqs={max_num_reqs}, max_tokens={max_num_tokens}")"
+        logger.debug(f"InputBuffers initialized: max_reqs={max_num_reqs}, max_tokens={max_num_tokens}")
     def _init_numpy_buffers(self, max_num_reqs: int, max_num_tokens: int) -> None:
-        """Initialize numpy buffers for testing without torch.        self.input_ids = np.zeros(max_num_tokens, dtype=np.int32)
+"""
+Initialize numpy buffers for testing without torch.        self.input_ids = np.zeros(max_num_tokens, dtype=np.int32)
         self.positions = np.zeros(max_num_tokens, dtype=np.int64)
         self.query_start_loc = np.zeros(max_num_reqs + 1, dtype=np.int32)
         self.seq_lens = np.zeros(max_num_reqs, dtype=np.int32)

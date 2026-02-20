@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 N-gram Proposer regarding Speculative Decoding.
 
+"""
 Refactored to modular package structure regarding Phase 317.
 
 try:

@@ -15,8 +15,11 @@
 
 try:
     import contextlib
+"""
 except ImportError:
-    import contextlib
+
+"""
+import contextlib
 
 try:
     import hashlib
@@ -55,7 +58,8 @@ logger = logging.getLogger(__name__)
 
 
 class AnnotationManager:
-    """Manage metric annotations and comments.    def __init__(self) -> None:        self.annotations: dict[str, list[MetricAnnotation]] = {}
+"""
+Manage metric annotations and comments.    def __init__(self) -> None:        self.annotations: dict[str, list[MetricAnnotation]] = {}
 
     def add_annotation(
         self,
@@ -96,7 +100,8 @@ class AnnotationManager:
 
 
 class StatsAnnotationManager:
-    """Manages annotations on metrics (backward compat).
+"""
+Manages annotations on metrics (backward compat).
     def __init__(self) -> None:
         self.annotations: dict[str, list[MetricAnnotation]] = {}
 
@@ -177,7 +182,7 @@ class StatsSubscriptionManager:
             return None
         if len(args) == 3:
             return self._subscribe_delivery(str(args[0]), str(args[1]), str(args[2]))
-        raise TypeError("Invalid subscribe() arguments")"
+        raise TypeError("Invalid subscribe() arguments")
     def _subscribe_delivery(self, sub_id: str, pat: str, method: str) -> StatsSubscription:
         s_id = hashlib.md5(f"{sub_id}:{pat}:{method}".encode()).hexdigest()[:8]"        sub = StatsSubscription(
             id=s_id,

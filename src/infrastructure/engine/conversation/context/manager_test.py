@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.conversation.context.manager import ContextManager, get_context_manager, create_context, merge_contexts, restore_context

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 import logging
 from collections.abc import Callable
 
@@ -29,19 +29,31 @@ __version__ = VERSION
 
 
 class CleanupManager:
-    """Manages cleanup hooks for tests.
+"""
+Manages cleanup hooks for tests.
     def __init__(self) -> None:
-        """Initialize cleanup manager.        self.hooks: list[Callable[[], None]] = []
+"""
+Initialize cleanup manager.        self.hooks: list[Callable[[], None]] = []
 
     def add_hook(self, hook: Callable[[], None]) -> None:
-        """Add cleanup hook.        self.hooks.append(hook)
+"""
+Add cleanup hook.        self.hooks.append(hook)
 
     def register(self, hook: Callable[[], None]) -> None:
-        """Compatibility alias for add_hook.        self.add_hook(hook)
+"""
+Compatibility alias for add_hook.        self.add_hook(hook)
 
     def cleanup(self) -> None:
-        """Execute all cleanup hooks.        for hook in reversed(self.hooks):
+"""
+Execute all cleanup hooks.        for hook in reversed(self.hooks):
             try:
                 hook()
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.debug("Cleanup hook execution failed.")"
+                logging.debug("Cleanup hook execution failed.")
+"""
+
+"""
+
+""
+
+"""

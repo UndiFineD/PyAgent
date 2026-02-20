@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.common.utils.jsontree.mapping import json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves, json_map_leaves_async

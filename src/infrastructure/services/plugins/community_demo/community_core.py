@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Community core.py module.
 """
-
 try:
-    from .core.base.lifecycle.version import VERSION
+
+"""
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -35,17 +38,19 @@ __version__ = VERSION
 
 
 """
-
 CommunityCore: Logic-only module for demonstration.
 This part can be easily converted to a Rust library in the future.
 
 
 
 class CommunityCore:
-    """Pure logic for a custom community plugin.
+"""
+Pure logic for a custom community plugin.
     def process_data(self, input_text: str) -> str:
-        """A simple transformation: Mock logic.        if not input_text:
+"""
+A simple transformation: Mock logic.        if not input_text:
             return "No data provided.""        # Logic: Reverse the text and add a community tag
-        return f"[COMMUNITY-PROCESSED] {input_text[::-1]}""
+        return f"[COMMUNITY-PROCESSED] {input_text[::-1]}"
     def calculate_priority(self, count: int) -> int:
-        """Pure mathematical logic.        return count * 2 if count > 5 else count
+"""
+Pure mathematical logic.        return count * 2 if count > 5 else count

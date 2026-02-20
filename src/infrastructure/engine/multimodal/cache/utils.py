@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Utility functions for multimodal caching.
+"""
+"""
+Utility functions for multimodal caching.
 try:
-    from typing import Any, Union
+
+"""
+from typing import Any, Union
 except ImportError:
     from typing import Any, Union
 
@@ -64,7 +68,8 @@ def compute_media_hash(
     media_type: MediaType = MediaType.UNKNOWN,
     algorithm: HashAlgorithm = HashAlgorithm.BLAKE3,
 ) -> MediaHash:
-    """Compute hash for media content.    hasher = MultiModalHasher(algorithm=algorithm)
+"""
+Compute hash for media content.    hasher = MultiModalHasher(algorithm=algorithm)
 
     if media_type == MediaType.IMAGE or (media_type == MediaType.UNKNOWN and HAS_PIL):
         return hasher.hash_image(data)
@@ -95,9 +100,12 @@ def create_cache(
     max_entries: int = 10000,
     **kwargs,
 ) -> MultiModalCache:
-    """Factory function to create cache instance.    if backend == CacheBackend.MEMORY:
+"""
+Factory function to create cache instance.    if backend == CacheBackend.MEMORY:
         return MemoryMultiModalCache(max_size_bytes, max_entries)
     if backend == CacheBackend.SHARED:
         return IPCMultiModalCache(
             name=kwargs.get("name", "pyagent_mm_cache"), max_size_bytes=max_size_bytes, max_entries=max_entries"        )
     return MemoryMultiModalCache(max_size_bytes, max_entries)
+
+"""

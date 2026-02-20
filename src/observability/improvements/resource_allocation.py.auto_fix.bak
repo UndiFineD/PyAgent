@@ -1,0 +1,23 @@
+"""ResourceAllocation dataclass - minimal parser-safe shim."""
+
+from __future__ import annotations
+from dataclasses import dataclass, field
+from typing import List
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+__version__ = VERSION
+
+
+@dataclass
+class ResourceAllocation:
+    improvement_id: str
+    resources: List[str] = field(default_factory=list)
+
+__all__ = ["ResourceAllocation"]

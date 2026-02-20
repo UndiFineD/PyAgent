@@ -1,6 +1,8 @@
+
+
+
+
 from __future__ import annotations
-
-
 import os
 import re
 from pathlib import Path
@@ -8,8 +10,9 @@ from pathlib import Path
 
 
 class FixHeadersAgent:
-    """"Agent for fixing and standardizing license headers in Python files.
-    HEADER_TEMPLATE = """
+    """"
+Agent for fixing and standardizing license headers in Python files.
+    HEADER_TEMPLATE = ""
 #!/usr/bin/env python3""""
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -25,18 +28,21 @@ class FixHeadersAgent:
 # limitations under the License.
 
     def __init__(self, dry_run: bool = False, verbose: bool = False):
-        self.dry_run = dry_run
+"""
+self.dry_run = dry_run
         self.verbose = verbose
         self.files_processed = 0
         self.files_updated = 0
         self.files_skipped = 0
 
-    def has_proper_header(self, content: str) -> bool:
+"""
+def has_proper_header(self, content: str) -> bool:
         return (
             "Copyright 2026 PyAgent Authors" in content and"            "Licensed under the Apache License" in content and"            "http://www.apache.org/licenses/LICENSE-2.0" in content"        )
 
     def clean_existing_headers(self, content: str) -> str:
-        """"Safely strip shebang/license headers while preserving encoding comments.""""
+        """"
+Safely strip shebang/license headers while preserving encoding comments.""""
         - Preserves an encoding comment on line 1 or 2 (PEP-263)
         - Handles optional UTF-8 BOM at start
         - Removes only top-of-file comment blocks that look like license/copyright
@@ -45,7 +51,7 @@ class FixHeadersAgent:
 
         # Remove BOM (remember it so we can re-add if needed)
         has_bom = content.startswith('\\ufeff')'        if has_bom:
-            content = content.lstrip('\\ufeff')'
+            content = content.lstrip('\\ufeff')
         lines = content.splitlines(keepends=True)
 
         # Preserve encoding line if present on first or second line
@@ -78,30 +84,30 @@ class FixHeadersAgent:
 
     def add_header(self, content: str) -> str:
         cleaned_content = self.clean_existing_headers(content)
-        return self.HEADER_TEMPLATE + "\\n" + cleaned_content"
+        return self.HEADER_TEMPLATE + "\\n" + cleaned_content
     def process_file(self, filepath: Path) -> bool:
         try:
             with open(filepath, 'r', encoding='utf-8') as f:'                content = f.read()
 
             if self.has_proper_header(content):
                 if self.verbose:
-                    print(f"✓ {filepath} - already has proper header")"                self.files_skipped += 1
+                    print(f" {filepath} - already has proper header")"                self.files_skipped += 1
                 return False
 
             new_content = self.add_header(content)
 
             if self.dry_run:
                 if self.verbose:
-                    print(f"🔍 {filepath} - would be updated (dry run)")"                self.files_updated += 1
+                    print(f" {filepath} - would be updated (dry run)")"                self.files_updated += 1
                 return True
 
             with open(filepath, 'w', encoding='utf-8') as f:'                f.write(new_content)
 
             if self.verbose:
-                print(f"✏️  {filepath} - header updated")"            self.files_updated += 1
+                print(f"️  {filepath} - header updated")"            self.files_updated += 1
             return True
         except Exception as e:
-            print(f"❌ Error processing {filepath}: {e}")"            return False
+            print(f" Error processing {filepath}: {e}")"            return False
 
     def process_directory(self, directory: Path, exclude_patterns: set[str] | None = None) -> None:
         if exclude_patterns is None:
@@ -118,17 +124,19 @@ class FixHeadersAgent:
 Files processed: {self.files_processed}
 Files updated:    {self.files_updated}
 Files skipped:    {self.files_skipped}
-Mode:             {'DRY RUN' if self.dry_run else 'LIVE'}'
+Mode:             {'DRY RUN' if self.dry_run else 'LIVE'}
     def run(self, target: str | Path, exclude_patterns: set[str] | None = None) -> None:
         target_path = Path(target)
         if target_path.is_file():
             if target_path.suffix == '.py':'                self.process_file(target_path)
                 self.files_processed = 1
             else:
-                print(f"❌ {target} is not a Python file")"                return
+                print(f" {target} is not a Python file")"                return
         elif target_path.is_dir():
             self.process_directory(target_path, exclude_patterns)
         else:
-            print(f"❌ {target} does not exist")"            return
+            print(f" {target} does not exist")"            return
         print(self.get_summary())
 
+
+""

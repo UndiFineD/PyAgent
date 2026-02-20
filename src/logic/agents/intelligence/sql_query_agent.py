@@ -14,7 +14,10 @@
 
 
 """
+"""
 SqlQueryAgent - SQL generation and schema analysis
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -40,7 +43,8 @@ except ImportError:
 
 
 class SqlQueryAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in SQL query generation and database schema analysis.
+""""
+Agent specialized in SQL query generation and database schema analysis.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the SqlQueryAgent (via DataIntelligence core)."
@@ -53,7 +57,9 @@ except ImportError:
 
 
 class SqlQueryAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in SQL query generation and database schema analysis.
+""""
+Agent specialized in SQL query generation and database schema analysis.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the SqlQueryAgent (via DataIntelligence core)."
+"""

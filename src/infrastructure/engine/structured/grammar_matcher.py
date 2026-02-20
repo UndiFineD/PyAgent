@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Matcher for grammar-based token validation.
 
+"""
 from dataclasses import dataclass, field
 from typing import Any, List
 
@@ -41,7 +43,8 @@ class GrammarMatcher:
     _state_history: List[Any] = field(default_factory=list)
 
     def accept_token(self, token_id: int) -> bool:
-        """Accept token with history tracking.        # Save state before accepting
+"""
+Accept token with history tracking.        # Save state before accepting
         if self.max_rollback_tokens > 0:
             self._token_history.append(token_id)
             # Trim history if needed
@@ -51,14 +54,23 @@ class GrammarMatcher:
         return self.grammar.accept_token(token_id)
 
     def rollback(self, num_tokens: int) -> None:
-        """Rollback with history.        num_tokens = min(num_tokens, len(self._token_history))
+"""
+Rollback with history.        num_tokens = min(num_tokens, len(self._token_history))
         if num_tokens > 0:
             self._token_history = self._token_history[:-num_tokens]
             self.grammar.rollback(num_tokens)
 
     def reset(self) -> None:
-        """Reset matcher state.        self._token_history.clear()
+"""
+Reset matcher state.        self._token_history.clear()
         self._state_history.clear()
         self.grammar.reset()
 
-    def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:"        """Fill bitmask for next token.        self.grammar.fill_bitmask(bitmask)
+    def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:"        """
+Fill bitmask for next token.        self.grammar.fill_bitmask(bitmask)
+
+"""
+
+""
+
+"""

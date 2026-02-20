@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Sub swarm spawner.py module.
 """
 
+"""
 import logging
 import uuid
 from typing import TYPE_CHECKING
@@ -34,7 +37,8 @@ if TYPE_CHECKING:
 
 
 class SubSwarm:
-    """A lightweight sub-swarm with a subset of capabilities.
+"""
+A lightweight sub-swarm with a subset of capabilities.
     def __init__(self, swarm_id: str, agents: list[str], parent_fleet: FleetManager) -> None:
         self.swarm_id = swarm_id
         self.agents = agents
@@ -43,7 +47,7 @@ class SubSwarm:
 
     def execute_mini_task(self, task: str) -> str:
         logging.info(f"SubSwarm {self.swarm_id}: Executing mini-task: {task}")"        if not self.agents:
-            return "Error: Sub-swarm has no agents.""
+            return "Error: Sub-swarm has no agents."
         # We try to find a tool that matches the requested agent/capability
         agent_name = self.agents[0]
         try:
@@ -55,15 +59,15 @@ class SubSwarm:
                 loop = asyncio.get_event_loop()
                 if loop.is_running():
                     # If we can't block, we return a pending indicator and close coro to avoid warning (Phase 33 fix)'                    coro.close()
-                    return f"[PENDING] {agent_name} logic execution""
+                    return f"[PENDING] {agent_name} logic execution"
                 result = loop.run_until_complete(coro)
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 # Fallback for complex loop states
-                result = f"Direct execution of {agent_name} failed""
+                result = f"Direct execution of {agent_name} failed"
             self.task_log.append(task)
             return str(result)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            return f"SubSwarm execution failed: {e}""
+            return f"SubSwarm execution failed: {e}"
 
 
 class SubSwarmSpawner:

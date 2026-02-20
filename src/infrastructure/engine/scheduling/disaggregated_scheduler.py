@@ -14,9 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Disaggregated Scheduler Facade.
 Redirects to the modular implementation in .disaggregated
 
+"""
 try:
     from .disaggregated import (DCPConfig, DisaggregatedScheduler, HashSelector,
 except ImportError:

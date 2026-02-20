@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Indexing assistant: prepare documents, metadatas and ids for vector stores.
+"""
+"""
+Indexing assistant: prepare documents, metadatas and ids for vector stores.
 
+"""
 Minimal, import-safe implementation used in tests.
 """
-
-
 try:
     from typing import Any, Dict, List, Tuple
 except ImportError:
@@ -28,11 +30,12 @@ except ImportError:
 
 
 class KnowledgeIndexingAssistant:
-    """Handles workspace traversal and data preparation for vector indexing."""
-
-    def __init__(self, workspace_root: str) -> None:
+"""
+Handles workspace traversal and data preparation for vector indexing.""
+def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
 
     def build_vector_data(self, target_path: Any) -> Tuple[List[str], List[Dict[str, Any]], List[str]]:
-        """Return empty lists (stub) for tests and imports."""
-        return [], [], []
+"""
+Return empty lists (stub) for tests and imports.""
+return [], [], []

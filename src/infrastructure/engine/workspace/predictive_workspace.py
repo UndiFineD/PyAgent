@@ -1,3 +1,21 @@
+"""
+Predictive workspace helpers (parser-safe stub).
+
+Provides a minimal PredictiveWorkspace used by higher-level modules during
+tests. The real implementation includes advanced caching and prefetching.
+"""
+from typing import Any, Dict
+
+
+class PredictiveWorkspace:
+    def __init__(self) -> None:
+        self._state: Dict[str, Any] = {}
+
+    def predict(self, key: str) -> Any:
+        return self._state.get(key)
+
+    def update(self, key: str, value: Any) -> None:
+        self._state[key] = value
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -13,9 +31,11 @@
 # limitations under the License.
 
 
+"""
 Predictive Workspace Manager (Phase 58).
 Predicts upcoming batch memory requirements and pre-allocates resources.
 
+"""
 try:
     import logging
 except ImportError:
@@ -62,7 +82,8 @@ class PredictiveWorkspace:
         self.cache_misses = 0
 
     def record_allocation(self, size: int) -> None:
-        """Records a successful allocation to refine future predictions.        self.history.append(size)
+"""
+Records a successful allocation to refine future predictions.        self.history.append(size)
 
     def predict_next_batch_requirement(self) -> int:
                 Predicts the memory required for the next inference wave.
@@ -83,7 +104,7 @@ class PredictiveWorkspace:
                 if size not in self.pre_allocated_buffers:
                     self.pre_allocated_buffers[size] = []
                 self.pre_allocated_buffers[size].append(buf)
-                logger.debug(f"Pre-warmed buffer of size {size}")"
+                logger.debug(f"Pre-warmed buffer of size {size}")
     def get_buffered_allocation(self, size: int) -> Optional[memoryview]:
                 Tries to retrieve a pre-allocated buffer of the requested size.
         Exact match for Phase 58, fuzzy match for Phase 59.
@@ -96,7 +117,8 @@ class PredictiveWorkspace:
         return None
 
     def analyze_patterns(self) -> Dict[str, Any]:
-        """Analyzes recent traffic to identify recurring batch sizes.        if not self.history:
+"""
+Analyzes recent traffic to identify recurring batch sizes.        if not self.history:
             return {}
 
         # Count frequency of sizes (binned to nearest 1KB)

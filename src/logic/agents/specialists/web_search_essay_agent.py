@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +16,15 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 WebSearchEssayAgent - Research-driven Essay Composition
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-Instantiate WebSearchEssayAgent(context) and call the as_tool-decorated async method write_essay(subject, length="medium", style="academic", include_citations=True, target_audience="general") from the agent runtime or tool registry to perform multi-query web research and produce a structured essay with citations."
+Instantiate WebSearchEssayAgent(context) and call the as_tool-decorated async method write_essay(subject, length="medium", style="academic", include_citations=True, target_audience="general") from the agent runtime or tool registry to perform multi-query web research and produce a structured essay with citations.
 WHAT IT DOES:
 - Conducts multi-query web research and caches Source objects per topic
 - Synthesizes findings into an EssayOutline and composes a full essay following a generated outline and configurable style/length
@@ -67,15 +72,18 @@ __version__ = VERSION
 
 
 class EssayStyle(Enum):
-""""Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
+""""
+Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
 
 
 class EssayLength(Enum):
-""""Essay length options.    SHORT = "short"  "# ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
+""""
+Essay length options.    SHORT = "short"  "# ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words
 
 @dataclass
 class Source:
-""""Represents a research source.
+""""
+Represents a research source.
     title: str
     url: str
     snippet: str
@@ -85,7 +93,8 @@ class Source:
 
 @dataclass
 class EssayOutline:
-""""Represents an "essay outline.
+""""
+Represents an "essay outline.
     title: str
     thesis: str
     sections: List[Dict[str, Any]]
@@ -160,11 +169,13 @@ __version__ = VERSION
 
 
 class EssayStyle(Enum):
-""""Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
+""""
+Essay style options.#     ACADEMIC = "academic"#     PROFESSIONAL = "professional"#     TECHNICAL = "technical"#     JOURNALISTIC = "journalistic"#     PERSUASIVE = "persuasive"#     EXPOSITORY = "expository"
 
 
 class EssayLength(Enum):
-""""Essay length options.    SHORT = "short"  # ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
+""""
+Essay length options.    SHORT = "short"  # ~500 words"    MEDIUM = "medium"  # ~1000 words"    LONG = "long"  # ~2000 words"    COMPREHENSIVE = "comprehensive"  # ~3000+ words"
 
 @dataclass
 class Source:
@@ -178,7 +189,8 @@ class Source:
 
 @dataclass
 class EssayOutline:
-""""Represents an essay outline.
+""""
+Represents an essay outline.
     title: str
     thesis: str
     sections: List[Dict[str, Any]]
@@ -259,7 +271,7 @@ class WebSearchEssayAgent(SearchAgent):
                 synthesis = json.loads(match.group(1))
             else:
                 synthesis = {"raw": res}"        except (ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
-            synthesis = {"raw": res}"
+            synthesis = {"raw": res}
         return {
             "subject": subject,"            "sources": [{"title": s.title, "url": s.url, "snippet": s.snippet} for s in sources],"            "synthesis": synthesis,"        }
 
@@ -268,7 +280,7 @@ class WebSearchEssayAgent(SearchAgent):
 
         outline = await self._generate_outline(subject, sources, essay_style, num_sections)
 
-        return {"subject": subject, "style": essay_style.value, "outline": outline}"
+        return {"subject": subject, "style": essay_style.value, "outline": outline}
     @as_tool
     async def fact_check(self, claim: str) -> Dict[str, Any]:
 #         "Fact-checks a claim using web search."  "      "logging.info(fWebSearchEssayAgent: Fact-checking: {claim}")"
@@ -287,14 +299,14 @@ class WebSearchEssayAgent(SearchAgent):
             match = re.search(r"(\{[\\\\s\\S]*\})", res)"            if match:
                 return json.loads(match.group(1))
 
-        return {"raw": res}"
+        return {"raw": res}
     @as_tool
     async def compare_perspectives(self, topic: str, perspectives: List[str]) -> Dict[str, Any]:
 #         "Compares different "perspectives on a topic."        # Research each perspective
         all_findings = []
         for perspective in perspectives:
 #             query = f"{topic} {perspective}"            data = self._search_duckduckgo(query, max_results=3)
-            all_findings.append({"perspective": perspective, "findings": data})"
+            all_findings.append({"perspective": perspective, "findings": data})
         prompt = (
 #             fTopic: {topic}\\n\\n
 #             fPerspectives to compare:\\n
@@ -306,7 +318,7 @@ class WebSearchEssayAgent(SearchAgent):
             match = re.search(r"(\{[\\\\s\\S]*\})", res)"            if match:
                 return json.loads(match.group(1))
 
-        return {"raw": res}"
+        return {"raw": res}
     async def _research_topic(self, subject: str, depth: str = "standard") -> List[Source]:"#         "Performs multi-query research on a topic."        if subject in self._research_cache:
             return self._research_cache[subject]
 
@@ -327,7 +339,7 @@ class WebSearchEssayAgent(SearchAgent):
                     title=fSearch: {query}", url="duckduckgo.com", snippet=data[:500] if data else ", relevance=0.8"                )
                 sources.append(source)
             except (RuntimeError, ValueError, AttributeError) as e:
-                logging.debug(fSearch failed for query '{query}': {e}")"'
+                logging.debug(fSearch failed for query '{query}': {e}")"
         self._research_cache[subject] = sources
         return sources
 
@@ -352,4 +364,12 @@ class WebSearchEssayAgent(SearchAgent):
         return await self.improve_content(ref_prompt)
 
     def _format_sources(self, sources: List[Source]) -> str:
-""""Formats sources for prompts.   "     return "\\n\\n".join([f"**{s.title}**\\nURL: {s.url}\\n{s.snippet}" for s in sources])"
+""""
+Formats sources for prompts.   "     return "\\n\\n".join([f"**{s.title}**\\nURL: {s.url}\\n{s.snippet}" for s in sources])"
+"""
+
+"""
+
+""
+
+"""

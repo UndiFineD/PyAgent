@@ -14,8 +14,11 @@
 
 try:
     from types import SimpleNamespace
+"""
 except ImportError:
-    from types import SimpleNamespace
+
+"""
+from types import SimpleNamespace
 
 
 try:

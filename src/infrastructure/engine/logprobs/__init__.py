@@ -15,8 +15,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Logprobs Processing Package
 
+"""
 Logprobs processing with GC-optimized storage.
 
+"""
 Exports:
     - LogprobFormat: Format enum
     - LogprobEntry: Single token logprob

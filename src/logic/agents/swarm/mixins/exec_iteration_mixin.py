@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 ExecIterationMixin - File iteration logic for OrchestratorAgent
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -30,16 +35,17 @@ Allow configurable max_iterations (currently fixed to 1), improve fine-grained e
 FILE CONTENT SUMMARY:
 ExecIterationMixin module.
 """
-
 import logging
 from pathlib import Path
 
 
 
 class ExecIterationMixin:
-    """Mixin for processing individual files and iterations.
+"""
+Mixin for processing individual files and iterations.
     def _perform_iteration(self, code_file: Path) -> bool:
-        """Perform one iteration of improvements on the code file.        changes_made = False
+"""
+Perform one iteration of improvements on the code file.        changes_made = False
         if not getattr(self, "skip_code_update", False):"            if hasattr(self, "run_tests"):"                self.run_tests(code_file)
         # Update Errors, Improvements
         if hasattr(self, "update_errors_improvements"):"            changes_made |= self.update_errors_improvements(code_file)
@@ -51,7 +57,8 @@ class ExecIterationMixin:
 
 
     def process_file(self, code_file: Path) -> None:
-        """Process a single code file through the improvement loop.        if hasattr(self, "shutdown_handler") and not self.shutdown_handler.should_continue():"            logging.info(f"Skipping {code_file.name} due to shutdown request")"            return
+"""
+Process a single code file through the improvement loop.        if hasattr(self, "shutdown_handler") and not self.shutdown_handler.should_continue():"            logging.info(f"Skipping {code_file.name} due to shutdown request")"            return
 
         if hasattr(self, "lock_manager"):"            lock = self.lock_manager.acquire_lock(code_file)
             if not lock:
@@ -61,7 +68,7 @@ class ExecIterationMixin:
             if hasattr(self, "shutdown_handler"):"                self.shutdown_handler.set_current_file(code_file)
 
             repo_root = getattr(self, "repo_root", None)"            rel_path = code_file.relative_to(repo_root) if repo_root else code_file.name
-            logging.info(f"Processing {rel_path}...")"
+            logging.info(f"Processing {rel_path}...")
             max_iterations = 1
             iteration = 0
             all_fixed = False
@@ -88,9 +95,9 @@ class ExecIterationMixin:
                 if not changes_made:
                     all_fixed = True
                     logging.info(f"No changes made in iteration {iteration}, marking as fixed")"                else:
-                    logging.info(f"Changes made in iteration {iteration}, continuing...")"
+                    logging.info(f"Changes made in iteration {iteration}, continuing...")
             if iteration >= max_iterations:
-                logging.info(f"Reached maximum iterations ({max_iterations}) for {code_file.name}")"
+                logging.info(f"Reached maximum iterations ({max_iterations}) for {code_file.name}")
             if hasattr(self, "_commit_and_push"):"                self._commit_and_push(code_file)
 
             if hasattr(self, "incremental_processor"):"                self.incremental_processor.mark_processed(code_file)

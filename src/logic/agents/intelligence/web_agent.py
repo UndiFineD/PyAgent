@@ -14,13 +14,16 @@
 
 
 """
+"""
 Web Agent - Web content extraction and scraping orchestration
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Import and instantiate where a WebIntelligence-based agent is needed by higher-level orchestrators:
-  from <package>.web_agent import WebAgent
+
+"""
+from <package>.web_agent import WebAgent
   agent = WebAgent(file_path="path/to/config_or_state")"- Intended to be composed into multi-agent workflows that need structured web extraction, scraping tasks, or web-based intelligence collection.
 WHAT IT DOES:
 - Provides a thin, purpose-specific agent class that specializes the WebIntelligenceAgent core for web scraping and content extraction orchestration.
@@ -43,7 +46,8 @@ except ImportError:
 
 
 class WebAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in web content extraction and scraping orchestration.
+""""
+Agent specialized in web content extraction and scraping orchestration.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the WebAgent (via WebIntelligence core)."
@@ -56,7 +60,9 @@ except ImportError:
 
 
 class WebAgent(WebIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in web content extraction and scraping orchestration.
+""""
+Agent specialized in web content extraction and scraping orchestration.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the WebAgent (via WebIntelligence core)."
+"""

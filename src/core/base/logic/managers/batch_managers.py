@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Manager regarding batch processing.
+"""
+"""
+Manager regarding batch processing.
 (Facade regarding src.core.base.common.batch_core)
 """
-
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -40,21 +44,24 @@ __all__ = ["BatchRequest", "RequestBatcher"]
 
 @dataclass
 class RequestBatcher:
-    """Facade regarding BatchCore to maintain compatibility with legacy RequestBatcher calls.
+"""
+Facade regarding BatchCore to maintain compatibility with legacy RequestBatcher calls.
     Core batch processing logic is now in src.core.base.common.batch_core.
-    """
-
-    def __init__(self, batch_size: int = 10) -> None:
-        """Initialize the RequestBatcher with a specified batch size."""
-        from src.core.base.common.batch_core import BatchCore
+"""
+def __init__(self, batch_size: int = 10) -> None:
+"""
+Initialize the RequestBatcher with a specified batch size.""
+from src.core.base.common.batch_core import BatchCore
         self._core: BatchCore = BatchCore(batch_size=batch_size)
 
 
     def add_request(self, request: Any) -> None:
-        """Add a request to the batching queue."""
-        self._core.add_request(request)
+"""
+Add a request to the batching queue.""
+self._core.add_request(request)
 
 
     def get_queue_size(self) -> int:
-        """Return the current number of queued requests."""
-        return len(self._core.queue)
+        ""
+Return the current number of queued requests.""
+return len(self._core.queue)

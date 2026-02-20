@@ -15,8 +15,10 @@
 
 
 """
+"""
 Load balancer.py module.
 
+"""
 import asyncio
 import logging
 from typing import Any, Dict, List
@@ -74,7 +76,7 @@ class SwarmLoadBalancer:
             return
 
         # Sort cool ranks by utilization (ascending) to pick the most empty one first
-        cool_ranks.sort(key=lambda r: metrics.get(f"rank_{r}_util", 1.0))"
+        cool_ranks.sort(key=lambda r: metrics.get(f"rank_{r}_util", 1.0))
         for hot_rank in hot_ranks:
             # Find shards currently on this rank
             shards_on_hot_rank = self._get_shards_on_rank(hot_rank)
@@ -100,9 +102,10 @@ class SwarmLoadBalancer:
                 # After one migration, re-sort or break to avoid over-filling a cool rank in one pass
                 break
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error(f"Failed to migrate shard during load balancing: {e}")"
+                logger.error(f"Failed to migrate shard during load balancing: {e}")
     def _get_shards_on_rank(self, rank_id: int) -> List[tuple]:
-        """Scans the shard manager for shards hosted on a specific rank.        res = []
+"""
+Scans the shard manager for shards hosted on a specific rank.        res = []
         # Accessing the internal registry of the shard manager
         for ctx_id, shards in self.shard_manager.context_registry.items():
             for i, shard in enumerate(shards):
@@ -111,9 +114,11 @@ class SwarmLoadBalancer:
         return res
 
     async def start_loop(self, interval: float = 5.0) -> None:
-        """Starts a background balancing loop.        while self.balancing_active:
+"""
+Starts a background balancing loop.        while self.balancing_active:
             await self.run_balancing_cycle()
             await asyncio.sleep(interval)
 
     def stop(self) -> None:
-        """Stops the balancing service.        self.balancing_active = False
+"""
+Stops the balancing service.        self.balancing_active = False

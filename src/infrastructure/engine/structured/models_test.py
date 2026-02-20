@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     import numpy as np
@@ -29,8 +32,9 @@ except ImportError:
 
 
 def test_fsm_state_transitions():
-    """Test the FSMState by creating a state with specific transitions and verifying them."""
-    state = FSMState(state_id=1, is_accepting=True, is_initial=True, transitions=(('a', 2), ('b', 3)))
+"""
+Test the FSMState by creating a state with specific transitions and verifying them.""
+state = FSMState(state_id=1, is_accepting=True, is_initial=True, transitions=(('a', 2), ('b', 3)))
     assert state.get_transition('a') == 2
     assert state.get_transition('b') == 3
     assert state.get_transition('c') is None
@@ -38,8 +42,9 @@ def test_fsm_state_transitions():
     assert transitions == {'a': 2, 'b': 3}
 
 def test_fsm_transition_table():
-    """Test the FSMTransitionTable by adding transitions and verifying state changes and accepting states."""
-    table = FSMTransitionTable(num_states=2, initial_state=0, accepting_states=frozenset([1]))
+"""
+Test the FSMTransitionTable by adding transitions and verifying state changes and accepting states.""
+table = FSMTransitionTable(num_states=2, initial_state=0, accepting_states=frozenset([1]))
     table.add_transition(0, 'a', 1)
     assert table.get_next_state(0, 'a') == 1
     assert table.get_next_state(0, 'b') == -1
@@ -48,8 +53,9 @@ def test_fsm_transition_table():
     assert 'a' in allowed
 
 def test_token_mask_allow_disallow():
-    """Test allowing and disallowing tokens in a TokenMask."""
-    mask = TokenMask(vocab_size=5)
+"""
+Test allowing and disallowing tokens in a TokenMask.""
+mask = TokenMask(vocab_size=5)
     mask.allow_only({1, 3})
     assert mask.mask.tolist() == [False, True, False, True, False]
     mask.disallow({1})
@@ -63,8 +69,9 @@ def test_token_mask_allow_disallow():
 
 
 def test_token_mask_combine():
-    """Test combining two TokenMask instances using AND and OR operations."""
-    m1 = TokenMask(vocab_size=3)
+"""
+Test combining two TokenMask instances using AND and OR operations.""
+m1 = TokenMask(vocab_size=3)
     m1.allow_only({0, 1})
     m2 = TokenMask(vocab_size=3)
     m2.allow_only({1, 2})

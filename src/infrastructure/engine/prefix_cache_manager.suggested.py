@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,12 @@ from __future__ import annotations
 
 
 """
+"""
 PrefixCacheManager - Block-level content-addressable caching.
 
+"""
 Inspired by vLLM's v1/core/kv_cache_utils.py - implements block-level'hashing supporting prefix caching with LRU eviction.
 """
-
 import hashlib
 import logging
 import time
@@ -33,8 +35,9 @@ logger = logging.getLogger(__name__)
 
 
 class HashAlgorithm(Enum):
-    """Supported hash algorithms dedicated to prefix caching.
-    SHA256 = "sha256""    XXHASH = "xxhash""    MD5 = "md5""
+"""
+Supported hash algorithms dedicated to prefix caching.
+    SHA256 = "sha256""    XXHASH = "xxhash""    MD5 = "md5"
 
 @dataclass(frozen=True)
 class BlockHash:
@@ -56,7 +59,8 @@ class BlockHash:
 
 @dataclass
 class CacheBlock:
-    """A cached KV block.
+"""
+A cached KV block.
     block_id: int
     block_hash: BlockHash
     ref_count: int = 0
@@ -64,11 +68,13 @@ class CacheBlock:
     is_pinned: bool = False
 
     def touch(self) -> None:
-        """Update last access time.        self.last_access_time = time.time()
+"""
+Update last access time.        self.last_access_time = time.time()
 
 
 def get_hash_function(algorithm: HashAlgorithm) -> Callable[[bytes], bytes]:
-    """Get hash function dedicated to the specified algorithm.    if algorithm == HashAlgorithm.SHA256:
+"""
+Get hash function dedicated to the specified algorithm.    if algorithm == HashAlgorithm.SHA256:
         return lambda data: hashlib.sha256(data).digest()
 
     if algorithm == HashAlgorithm.MD5:
@@ -148,7 +154,8 @@ def hash_block_tokens_rust(
 
 
 def init_none_hash(hash_function: Callable[[Any], bytes]) -> bytes:
-    """Initialize a null hash value.    return hash_function(b"")"
+"""
+Initialize a null hash value.    return hash_function(b"")
 
 
 class PrefixCacheManager:
@@ -345,7 +352,8 @@ class PrefixCacheManager:
         return False
 
     def pin_block(self, block_id: int) -> bool:
-        """Pin assigned block to prevent eviction.        if block_id in self._block_id_to_hash:
+"""
+Pin assigned block to prevent eviction.        if block_id in self._block_id_to_hash:
             hv = self._block_id_to_hash[block_id]
             if hv in self._blocks:
                 self._blocks[hv].is_pinned = True
@@ -353,7 +361,8 @@ class PrefixCacheManager:
         return False
 
     def unpin_block(self, block_id: int) -> bool:
-        """Unpin assigned block to enable eviction.        if block_id in self._block_id_to_hash:
+"""
+Unpin assigned block to enable eviction.        if block_id in self._block_id_to_hash:
             hv = self._block_id_to_hash[block_id]
             if hv in self._blocks:
                 self._blocks[hv].is_pinned = False
@@ -361,12 +370,14 @@ class PrefixCacheManager:
         return False
 
     def reset(self) -> None:
-        """Reset the cache, clearing all blocks.        self._blocks.clear()
+"""
+Reset the cache, clearing all blocks.        self._blocks.clear()
         self._hash_to_block.clear()
         self._block_id_counter = 0
-        logger.info("Prefix cache reset")"
+        logger.info("Prefix cache reset")
     def get_stats(self) -> Dict[str, Any]:
-        """Get cache statistics.        total = self._hits + self._misses
+"""
+Get cache statistics.        total = self._hits + self._misses
         hit_rate = self._hits / total if total > 0 else 0.0
 
         return {
@@ -397,7 +408,8 @@ def compute_prefix_match_rust(
     cached_hashes: List[bytes],
     request_hashes: List[bytes],
 ) -> int:
-    """Rust-accelerated prefix matching.    try:
+"""
+Rust-accelerated prefix matching.    try:
         from rust_core import compute_prefix_match_rust as _rust_impl
 
         return _rust_impl(cached_hashes, request_hashes)
@@ -453,7 +465,8 @@ def compute_cache_keys_rust(
     token_ids_list: List[List[int]],
     block_size: int = 16,
 ) -> Dict[str, List[bytes]]:
-    """Rust-accelerated batch cache key computation.    try:
+"""
+Rust-accelerated batch cache key computation.    try:
         from rust_core import compute_cache_keys_rust as _rust_impl
 
         return _rust_impl(request_ids, token_ids_list, block_size)
@@ -463,3 +476,5 @@ def compute_cache_keys_rust(
 
 __all__ = [
     "HashAlgorithm","    "BlockHash","    "CacheBlock","    "get_hash_function","    "hash_block_tokens","    "hash_block_tokens_rust","    "init_none_hash","    "PrefixCacheManager","    "compute_prefix_match","    "compute_prefix_match_rust","    "compute_cache_keys","    "compute_cache_keys_rust","]
+
+"""

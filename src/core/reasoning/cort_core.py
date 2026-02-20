@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +16,11 @@ from __future__ import annotations
 
 
 
-"""Coarse but robust Chain-of-Recursive-Thoughts (CoRT) reasoning core.
+"""
+"""
+Coarse but robust Chain-of-Recursive-Thoughts (CoRT) reasoning core.
 
+"""
 This module provides a deterministic, test-friendly implementation of a
 lightweight reasoning loop suitable for unit tests and integration where a
 full model backend isn't available. It intentionally avoids external
@@ -29,8 +33,6 @@ dependencies and focuses on reproducible heuristics:
 The goal is to provide a stable API that higher-level code and tests can
 depend on while leaving room to plug in a real model later.
 """
-
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -79,13 +81,13 @@ class CoRTResult:
 
 
 class CoRTReasoningCore:
-    """A minimal, deterministic CoRT-style reasoning core.
+"""
+A minimal, deterministic CoRT-style reasoning core.
 
     Parameters
     - seed: optional RNG seed to make outputs deterministic for tests.
-    """
-
-    def __init__(self, seed: Optional[int] = 0) -> None:
+"""
+def __init__(self, seed: Optional[int] = 0) -> None:
         # Default to a fixed seed so unit tests are deterministic
         self._seed = seed
         self._rng = random.Random(seed)
@@ -98,14 +100,14 @@ class CoRTReasoningCore:
         alternatives_per_round: int = 3,
         temperature: float = 0.0,
     ) -> CoRTResult:
-        """Run a short CoRT loop and return structured reasoning output.
+"""
+Run a short CoRT loop and return structured reasoning output.
 
         This implementation is intentionally lightweight: it synthesizes
         alternatives by perturbing the current best response and scores
         candidates using simple heuristics (keyword overlap, brevity).
-        """
-
-        if rounds <= 0:
+"""
+if rounds <= 0:
             raise ValueError("rounds must be >= 1")
 
         state_prompt = prompt if context is None else f"{context}\n{prompt}"
@@ -148,11 +150,12 @@ class CoRTReasoningCore:
         return CoRTResult(final_response=final_response, rounds=rounds_out, overall_confidence=overall_confidence, best_round_index=best_round_index)
 
     def _generate_initial_response(self, prompt: str) -> str:
-        """Produce a concise baseline response from a prompt.
+"""
+Produce a concise baseline response from a prompt.
 
         The method is intentionally simple: it extracts the most salient
         sentence-like fragment from the prompt and formats it as an answer.
-        """
+"""
 
         # Pick the longest sentence-like fragment as a naive "answer"
         sentences = re.split(r"[\n\.\?!]+\s*", prompt.strip())
@@ -160,12 +163,12 @@ class CoRTReasoningCore:
         return f"Answer: {best.strip()}"
 
     def _generate_alternatives(self, base: str, n: int, rnd: random.Random, temperature: float) -> List[str]:
-        """Produce n variations of the base response.
+"""
+Produce n variations of the base response.
 
         Variations are deterministic given the provided Random instance.
-        """
-
-        alts: List[str] = []
+"""
+alts: List[str] = []
         words = base.split()
         for i in range(n):
             # simple deterministic shuffle/trim operations influenced by i
@@ -192,15 +195,15 @@ class CoRTReasoningCore:
         return alts
 
     def _evaluate_response(self, candidate: str, prompt: str) -> float:
-        """Score a candidate response against the prompt using heuristics.
+"""
+Score a candidate response against the prompt using heuristics.
 
         Heuristics used:
         - Keyword overlap (higher is better)
         - Penalty for excessive length
         - Small boost if candidate reads like a sentence
-        """
-
-        prompt_tokens = set(self._tokenize(prompt))
+"""
+prompt_tokens = set(self._tokenize(prompt))
         cand_tokens = set(self._tokenize(candidate))
 
         # keyword overlap ratio
@@ -218,13 +221,13 @@ class CoRTReasoningCore:
         return float(score)
 
     def _calculate_confidence(self, scores: Sequence[float]) -> float:
-        """Convert a list of scores into a 0..1 confidence value.
+"""
+Convert a list of scores into a 0..1 confidence value.
 
         We use a simple softmax-like normalization but deterministic and
         numerically stable for the small vectors we produce here.
-        """
-
-        if not scores:
+"""
+if not scores:
             return 0.0
         # normalize to 0..1 range
         mx = max(scores)
@@ -237,14 +240,14 @@ class CoRTReasoningCore:
         return float(max(0.0, min(1.0, confidence)))
 
     def _self_correct(self, chosen: str, prompt: str) -> str:
-        """Apply a tiny deterministic correction to the chosen response.
+"""
+Apply a tiny deterministic correction to the chosen response.
 
         Currently this trims repeated whitespace and ensures the response is
         concise. This is a placeholder for a more advanced self-correction
         mechanism later.
-        """
-
-        s = re.sub(r"\s+", " ", chosen).strip()
+"""
+s = re.sub(r"\s+", " ", chosen).strip()
         # if response redundantly echoes the prompt, shorten it
         if len(s) > 200:
             s = s[:200].rsplit(" ", 1)[0] + "..."

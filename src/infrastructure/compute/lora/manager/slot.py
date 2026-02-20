@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Slot.py module.
 """
-
 try:
-    from _thread import LockType
+
+"""
+from _thread import LockType
 except ImportError:
     from _thread import LockType
 
@@ -47,7 +51,8 @@ except ImportError:
 
 
 class LoRASlotManager:
-    """Manages GPU slots for LoRA adapters.
+"""
+Manages GPU slots for LoRA adapters.
     def __init__(self, num_slots: int = 8) -> None:
         self.num_slots: int = num_slots
         self._slots: List[AdapterSlot] = [AdapterSlot(i) for i in range(num_slots)]

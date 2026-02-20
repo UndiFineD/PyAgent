@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 AgentChain - Chain multiple agents for sequential execution
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -67,15 +72,17 @@ __version__ = VERSION
 
 
 class AgentChain:
-    """Chain multiple agents for sequential execution.""""
-    Allows output of one agent to be used as input to the next.
+"""
+Chain multiple agents for sequential execution.""""
+Allows output of one agent to be used as input to the next.
 
     Example:
         chain=AgentChain()
         chain.add_step("coder", output_transform=extract_code)"        chain.add_step("tests", input_transform=prepare_for_tests)"        results=chain.execute(initial_input)
     
-    def __init__(self, name: str = "default_chain") -> None:"        """Initialize agent chain.""""
-        Args:
+    def __init__(self, name: str = "default_chain") -> None:"        """
+Initialize agent chain.""""
+Args:
             name: Chain name for identification.
                 self.name = name
         self._steps: list[AgentChainStep] = []
@@ -88,8 +95,9 @@ class AgentChain:
         output_transform: Callable[[Any], Any] | None = None,
         condition: Callable[[Any], bool] | None = None,
     ) -> AgentChain:
-        """Add a step to the chain.""""
-        Args:
+"""
+Add a step to the chain.""""
+Args:
             agent_name: Name of agent to execute.
             input_transform: Transform input before agent.
             output_transform: Transform output after agent.
@@ -107,8 +115,9 @@ class AgentChain:
         return self
 
     def execute(self, initial_input: Any, agent_executor: Callable[[str, Any], Any]) -> list[dict[str, Any]]:
-        """Execute the chain.""""
-        Args:
+"""
+Execute the chain.""""
+Args:
             initial_input: Input to first agent.
             agent_executor: Function to execute an agent.
 
@@ -158,4 +167,13 @@ class AgentChain:
         return self._results
 
     def get_results(self) -> list[dict[str, Any]]:
-        """Get results from last execution.        return self._results
+"""
+Get results from last execution.        return self._results
+
+"""
+
+"""
+
+""
+
+"""

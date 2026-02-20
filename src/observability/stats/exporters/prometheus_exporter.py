@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Prometheus Exporter - Formats fleet telemetry into Prometheus/OpenMetrics metrics
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -40,7 +44,6 @@ FILE CONTENT SUMMARY:
 Exporter for fleet metrics in Prometheus/OpenMetrics format.
 Enables real-time dashboards in Grafana and ELK stack.
 """
-
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
@@ -50,22 +53,29 @@ __version__ = VERSION
 
 
 class PrometheusExporter:
-    """Formats fleet telemetry into Prometheus-compatible metrics.
+"""
+Formats fleet telemetry into Prometheus-compatible metrics.
     def __init__(self) -> None:
         self.metrics_registry: dict[str, float] = {}
 
     def record_metric(self, name: str, value: float, labels: dict[str, str] | None = None) -> str:
-        """Records a metric with optional labels.        label_str = """        if labels:
-            label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}""'
-        metric_key = f"{name}{label_str}""        self.metrics_registry[metric_key] = value
+"""
+Records a metric with optional labels.        label_str = ""
+if labels:
+            label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}"
+metric_key = f"{name}{label_str}""        self.metrics_registry[metric_key] = value
         return metric_key
 
     def generate_scrape_response(self) -> str:
-        """Generates the text response for a Prometheus scrape endpoint.        lines = []
+"""
+Generates the text response for a Prometheus scrape endpoint.        lines = []
         for key, value in self.metrics_registry.items():
             # Basic Prometheus format: metric_name{labels} value
-            lines.append(f"pyagent_{key} {value}")"
-        return "\\n".join(lines)"
+            lines.append(f"pyagent_{key} {value}")
+        return "\\n".join(lines)
     def get_grafana_info(self) -> dict[str, Any]:
-        """Returns connection details for Grafana integration.        return {
+"""
+Returns connection details for Grafana integration.        return {
             "datasource_type": "Prometheus","            "scrape_interval": "15s","            "endpoint": "/metrics","            "suggested_dashboard_uid": "pyagent-swarm-health-main","            "provisioning_status": "Ready","            "metric_prefix": "pyagent_","        }
+
+""

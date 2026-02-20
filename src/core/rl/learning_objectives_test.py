@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.rl.learning_objectives import ObjectiveStatus, ObjectiveType, LearningObjective, ObjectiveConstraint, ObjectiveTracker

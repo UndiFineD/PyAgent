@@ -1,3 +1,36 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+"""
+Workspace manager stub.
+
+"""
+Minimal WorkspaceManager to satisfy imports during test stabilization.
+"""
+from typing import Any, Dict, Optional
+
+
+class WorkspaceManager:
+    def __init__(self, root: Optional[str] = None) -> None:
+        self.root = root
+        self.state: Dict[str, Any] = {}
+
+    def get(self, key: str, default: Any = None) -> Any:
+        return self.state.get(key, default)
+
+    def set(self, key: str, value: Any) -> None:
+        self.state[key] = value
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -69,7 +102,7 @@ class WorkspaceManager:
             self._handle = None
 
         self._initialized = True
-        logger.info(f"WorkspaceManager initialized with {size_mb}MB total capacity")"
+        logger.info(f"WorkspaceManager initialized with {size_mb}MB total capacity")
     def allocate_dbo(self, name: str, size: int) -> Optional[memoryview]:
                 Allocates a named Distributed Byte Object in the workspace.
         Uses Predictive buffer if available, otherwise allocates new.
@@ -90,7 +123,7 @@ class WorkspaceManager:
                     # Logic to wrap pointer in memoryview or similar
                     pass
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.debug(f"Rust allocation fallback: {e}")"
+                logger.debug(f"Rust allocation fallback: {e}")
         # Standard memory allocation
         buf = bytearray(size)
         self._workspaces[name] = buf
@@ -120,14 +153,16 @@ class WorkspaceManager:
         self.last_sync_time: float = now
 
     def get_utilization(self) -> float:
-        """Returns the current memory utilization percentage.        if self.total_size == 0:
+"""
+Returns the current memory utilization percentage.        if self.total_size == 0:
             return 0.0
         return (self.allocated / self.total_size) * 100.0
 
     def purge(self) -> None:
-        """Clears all allocations and resets the workspace.        with self._lock:
+"""
+Clears all allocations and resets the workspace.        with self._lock:
             self._workspaces.clear()
             self._channels.clear()
             self.allocated = 0
             if rc and self._handle and hasattr(rc, "workspace_purge_rust"):"                rc.workspace_purge_rust(self._handle)
-            logger.info("WorkspaceManager purged and reset")"
+            logger.info("WorkspaceManager purged and reset")

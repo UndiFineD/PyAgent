@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,10 +21,12 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-# - As script: python svg_agent.py "path\\to\\file.svg"- As library: from svg_agent import SvgAgent; agent = SvgAgent("path\\to\\file.svg"); use via CoderAgent workflow (generate/optimize and save)."
+# - As script: python svg_agent.py "path\\to\\file.svg"- As library: from svg_agent import SvgAgent; agent = SvgAgent("path\\to\\file.svg"); use via CoderAgent workflow (generate/optimize and save).
+"""
 WHAT IT DOES:
 Provides an agent class (SvgAgent) specialized for producing and optimizing 2D SVG markup; it sets XML language context, supplies an SVG-focused system prompt for the underlying CoderAgent, and returns a small default SVG template.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Expose CLI options for viewport, precision, and optimization level.
 - Implement concrete SVG optimization routines (path simplification, precision trimming, ID deduplication) rather than relying solely on LLM guidance.
@@ -31,7 +35,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 # Agent specializing in 2D SVG image generation and optimization.
 """
-
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -53,10 +56,11 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class SvgAgent(CoderAgent):
-""""Agent for generating and optimizing 2D SVG vector graphics.
+""""
+Agent for generating and optimizing 2D SVG vector graphics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._language = "xml"  # SVG is XML-based"
+        self._language = "xml"  # SVG is XML-based
         self._system_prompt = (
 #             "You are an SVG Graphic Designer and Vector Optimization Expert."#             "You generate high-quality, clean, and optimized 2D SVG code."#             "Focus on semantic tags, proper viewports, path optimization, and CSS styling within the SVG."#             "Avoid bloated markup and use minimal precision for coordinates."        )
 
@@ -88,10 +92,11 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class SvgAgent(CoderAgent):
-""""Agent for generating and optimizing 2D SVG vector graphics.
+""""
+Agent for generating and optimizing 2D SVG vector graphics.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._language = "xml"  # SVG is XML-based"
+        self._language = "xml"  # SVG is XML-based
         self._system_prompt = (
 #             "You are an SVG Graphic Designer and Vector Optimization Expert."#             "You generate high-quality, clean, and optimized 2D SVG code."#             "Focus on semantic tags, proper viewports, path optimization, and CSS styling within the SVG."#             "Avoid bloated markup and use minimal precision for coordinates."        )
 
@@ -101,3 +106,5 @@ class SvgAgent(CoderAgent):
 
 
 if __name__ == "__main__":"    main = create_main_function(SvgAgent, "SVG Agent", "Path to SVG file (.svg)")"    main()
+
+"""

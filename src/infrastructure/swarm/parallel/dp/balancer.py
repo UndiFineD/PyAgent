@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Load balancing strategies for Data Parallel coordination.
 """
-
 try:
-    from _thread import LockType
+
+"""
+from _thread import LockType
 except ImportError:
     from _thread import LockType
 
@@ -60,7 +64,8 @@ class P2CLoadBalancer:
         self._lock: LockType = threading.Lock()
 
     def select_worker(self, locality_group: Optional[int] = None) -> WorkerState:
-        """Select best worker using P2C algorithm.        with self._lock:
+"""
+Select best worker using P2C algorithm.        with self._lock:
             # Filter healthy workers
             healthy: list[WorkerState] = [
                 w for w in self._workers
@@ -89,5 +94,8 @@ class P2CLoadBalancer:
             return best
 
     def update_workers(self, workers: list[WorkerState]) -> None:
-        """Update worker list.        with self._lock:
+"""
+Update worker list.        with self._lock:
             self._workers: list[WorkerState] = workers
+
+"""

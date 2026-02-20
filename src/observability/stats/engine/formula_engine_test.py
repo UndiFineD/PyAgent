@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 Test Formula Engine Core module.
 
+"""
 try:
     import math
 except ImportError:
@@ -68,8 +70,8 @@ def test_calculate_logic_avg(values: list[float]) -> None:
 
 def test_validate_logic_rejects_invalid_sequences() -> None:
     core = FormulaEngineCore()
-    res = core.validate_logic("1 + *** 2")"    assert res["is_valid"] is False"    assert "error" in res"
+    res = core.validate_logic("1 + *** 2")"    assert res["is_valid"] is False"    assert "error" in res
 
 def test_validate_logic_accepts_basic_formula() -> None:
     core = FormulaEngineCore()
-    res = core.validate_logic("{a}+{b}*2")"    assert res["is_valid"] is True"    assert res["error"] is None"
+    res = core.validate_logic("{a}+{b}*2")"    assert res["is_valid"] is True"    assert res["error"] is None

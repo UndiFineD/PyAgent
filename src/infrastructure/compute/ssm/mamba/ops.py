@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +17,10 @@ from __future__ import annotations
 
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 Mamba Operations - Causal Convolution and Selective Scan.
+
+"""
 
 # pylint: disable=invalid-name, too-many-function-args
 
@@ -92,7 +97,8 @@ class CausalConv1d:
         x: np.ndarray,
         conv_state: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Single-step update for decoding.        new_state = np.roll(conv_state, -1, axis=-1)
+"""
+Single-step update for decoding.        new_state = np.roll(conv_state, -1, axis=-1)
         new_state[:, :, -1] = x
 
         output = (new_state * self.weight).sum(axis=-1)
@@ -125,7 +131,8 @@ class SelectiveScan:
         C: np.ndarray,
         ssm_state: np.ndarray | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Selective scan forward pass.        batch_size, seq_len, d_inner = x.shape
+"""
+Selective scan forward pass.        batch_size, seq_len, d_inner = x.shape
         if ssm_state is None:
             ssm_state = np.zeros(
                 (batch_size, d_inner, self.ssm_state_size),
@@ -158,9 +165,12 @@ class SelectiveScan:
         C: np.ndarray,
         ssm_state: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray]:
-        """Single-step update for decoding.        dA = np.exp(dt[:, :, None] * self.A)
+"""
+Single-step update for decoding.        dA = np.exp(dt[:, :, None] * self.A)
         dB = dt[:, :, None] * B[:, None, :]
         new_state = dA * ssm_state + dB * x[:, :, None]
         output = (new_state * C[:, None, :]).sum(axis=-1) + self.D * x
 
         return output, new_state
+
+"""

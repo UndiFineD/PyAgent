@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Unified code analysis and AST inspection core."""
+"""
+"""
+Unified code analysis and AST inspection core.""
+
+"""
 import ast
 import re
 from pathlib import Path
@@ -27,12 +31,14 @@ except ImportError:
 
 
 class AnalysisCore:
-    """Standardized tools regarding analyzing Python source code without execution.
-    """
+"""
+Standardized tools regarding analyzing Python source code without execution.
+"""
     @staticmethod
     def calculate_complexity(source: str) -> int:
-        """Calculate cyclomatic complexity (Rust accelerated)."""
-        if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member
+"""
+Calculate cyclomatic complexity (Rust accelerated).""
+if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
                 return rc.calculate_complexity_rust(source)  # type: ignore
@@ -46,8 +52,9 @@ class AnalysisCore:
 
     @staticmethod
     def get_imports(source_or_path: str | Path) -> List[str]:  # pylint: disable=too-many-branches
-        """Extract all top-level imports from source or a file (Rust accelerated)."""
-        if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
+"""
+Extract all top-level imports from source or a file (Rust accelerated).""
+if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
             try:
                 if isinstance(source_or_path, Path):
                     content = source_or_path.read_text(encoding="utf-8")
@@ -93,14 +100,17 @@ class AnalysisCore:
 
     @staticmethod
     def is_pytest_file(path: Path) -> bool:
-        """Heuristic check for pytest files."""
-        return path.name.startswith("test_") and path.name.endswith(".py")
+"""
+Heuristic check for pytest files.""
+return path.name.startswith("test_") and path.name.endswith(".py")
     @staticmethod
     def has_main_block(source: str) -> bool:
-        """Detect if 'if __name__ == "__main__":' exists."""
-        return bool(re.search(r'if\s+__name__\s*==\s*["\']__main__["\']\s*:', source))
+"""
+Detect if 'if __name__ == "__main__":' exists.""
+return bool(re.search(r'if\s+__name__\s*==\s*["\']__main__["\']\s*:', source))
     @staticmethod
     def detect_library_usage(source: str, library_name: str) -> bool:
-        """Check if a library is likely used in the source."""
+"""
+Check if a library is likely used in the source.""
 # Simple string check for now, can be expanded to AST check
         return library_name in source

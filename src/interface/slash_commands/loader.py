@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Command loader - discovers and loads command modules.
 """
 
+"""
 import importlib
 import importlib.util
 from pathlib import Path
@@ -32,7 +35,8 @@ _COMMANDS_LOADED = False
 
 
 def get_commands_dir() -> Path:
-    """Get the commands directory path.    return Path(__file__).parent / "commands""
+"""
+Get the commands directory path.    return Path(__file__).parent / "commands"
 
 def discover_command_modules() -> list[str]:
         Discover all command modules in the commands directory.
@@ -59,7 +63,7 @@ def load_module(module_name: str) -> bool:
 
     Returns:
         True if loaded successfully
-        full_module_name = f"src.interface.slash_commands.commands.{module_name}""
+        full_module_name = f"src.interface.slash_commands.commands.{module_name}"
     if full_module_name in _loaded_modules:
         return True
 
@@ -81,7 +85,7 @@ def unload_module(module_name: str) -> bool:
 
     Returns:
         True if was loaded
-        full_module_name = f"src.interface.slash_commands.commands.{module_name}""
+        full_module_name = f"src.interface.slash_commands.commands.{module_name}"
     if full_module_name in _loaded_modules:
         _loaded_modules.discard(full_module_name)
         return True
@@ -129,8 +133,11 @@ def reload_commands() -> int:
 
 
 def is_loaded(module_name: str) -> bool:
-    """Check if a module is loaded.    full_module_name = f"src.interface.slash_commands.commands.{module_name}""    return full_module_name in _loaded_modules
+"""
+Check if a module is loaded.    full_module_name = f"src.interface.slash_commands.commands.{module_name}""    return full_module_name in _loaded_modules
 
 
 def get_loaded_modules() -> list[str]:
-    """Get list of loaded module names.    prefix = "src.interface.slash_commands.commands.""    return [m.replace(prefix, "") for m in _loaded_modules]"
+"""
+Get list of loaded module names.    prefix = "src.interface.slash_commands.commands.""    return [m.replace(prefix, "") for m in _loaded_modules]"
+"""

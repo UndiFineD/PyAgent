@@ -13,12 +13,14 @@
 # limitations under the License.
 
 
-"""Manager for diff generation.
+"""
+"""
+Manager for diff generation.
 
+"""
 This module provides a lightweight import wrapper exposing `DiffGenerator`.
 It attempts a relative import first and falls back to the package import path.
 """
-
 try:
     from .diff_core import DiffCore as DiffGenerator  # type: ignore
 except Exception:

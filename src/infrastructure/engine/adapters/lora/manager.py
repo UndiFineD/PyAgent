@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +17,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""High-level manager for multi-adapter serving.
+"""
+"""
+High-level manager for multi-adapter serving.
 
+"""
 from typing import Any
 
 import numpy as np
@@ -35,13 +39,16 @@ except ImportError:
 
 
 class LoRAManager:
-    """High-level manager for LoRA adapter serving.
+"""
+High-level manager for LoRA adapter serving.
+
     def __init__(
         self,
         registry: LoRARegistry | None = None,
         default_config: LoRAConfig | None = None,
     ) -> None:
-        """Initialize LoRA manager.        self.registry = registry or LoRARegistry()
+"""
+Initialize LoRA manager.        self.registry = registry or LoRARegistry()
         self.default_config = default_config or LoRAConfig()
         self._active_adapters: dict[int, str] = {}  # request_id -> model_id
 
@@ -52,7 +59,8 @@ class LoRAManager:
         config: LoRAConfig | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> LoRAModel:
-        """Load a LoRA adapter.        config = config or self.default_config
+"""
+Load a LoRA adapter.        config = config or self.default_config
         model = LoRAModel(
             model_id=model_id,
             config=config,
@@ -70,11 +78,12 @@ class LoRAManager:
             model.add_layer(layer)
 
         if not self.registry.register(model):
-            raise RuntimeError(f"Failed to register LoRA model {model_id}")"
+            raise RuntimeError(f"Failed to register LoRA model {model_id}")
         return model
 
     def unload_adapter(self, model_id: str) -> bool:
-        """Unload a LoRA adapter.        self._active_adapters = {k: v for k, v in self._active_adapters.items() if v != model_id}
+"""
+Unload a LoRA adapter.        self._active_adapters = {k: v for k, v in self._active_adapters.items() if v != model_id}
         return self.registry.unregister(model_id)
 
     def set_request_adapter(
@@ -82,16 +91,19 @@ class LoRAManager:
         request_id: int,
         model_id: str | None,
     ) -> None:
-        """Set adapter for a request.        if model_id is None:
+"""
+Set adapter for a request.        if model_id is None:
             self._active_adapters.pop(request_id, None)
         else:
             self._active_adapters[request_id] = model_id
 
     def get_request_adapter(self, request_id: int) -> str | None:
-        """Get adapter for a request.        return self._active_adapters.get(request_id)
+"""
+Get adapter for a request.        return self._active_adapters.get(request_id)
 
     def clear_request(self, request_id: int) -> None:
-        """Clear request's adapter binding.'        self._active_adapters.pop(request_id, None)
+"""
+Clear request's adapter binding.'        self._active_adapters.pop(request_id, None)
 
     def apply_lora(
         self,
@@ -100,7 +112,8 @@ class LoRAManager:
         base_output: NDArray[np.float32],
         x: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        """Apply LoRA to base model output.        model_id = self._active_adapters.get(request_id)
+"""
+Apply LoRA to base model output.        model_id = self._active_adapters.get(request_id)
         if model_id is None:
             return base_output
 
@@ -121,7 +134,8 @@ class LoRAManager:
         base_outputs: NDArray[np.float32],
         inputs: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        """Apply LoRA to batched outputs with different adapters.        outputs = base_outputs.copy()
+"""
+Apply LoRA to batched outputs with different adapters.        outputs = base_outputs.copy()
 
         adapter_groups: dict[str | None, list[int]] = {}
         for i, req_id in enumerate(request_ids):
@@ -149,10 +163,12 @@ class LoRAManager:
         return outputs
 
     def list_adapters(self) -> list[str]:
-        """List all loaded adapters.        return self.registry.list_models()
+"""
+List all loaded adapters.        return self.registry.list_models()
 
     def get_adapter_info(self, model_id: str) -> dict[str, Any] | None:
-        """Get adapter information.        model = self.registry.get(model_id)
+"""
+Get adapter information.        model = self.registry.get(model_id)
         if model is None:
             return None
 
@@ -161,8 +177,11 @@ class LoRAManager:
             "num_layers": len(model.layers),"            "num_parameters": model.num_parameters,"            "memory_bytes": model.get_memory_bytes(),"            "metadata": model.metadata,"        }
 
     def get_stats(self) -> dict[str, Any]:
-        """Get manager statistics.        return {
+"""
+Get manager statistics.        return {
             "registry": self.registry.get_stats(),"            "active_requests": len(self._active_adapters),"            "adapter_usage": dict("                (adapter, list(self._active_adapters.values()).count(adapter))
                 for adapter in set(self._active_adapters.values())
             ),
         }
+
+"""

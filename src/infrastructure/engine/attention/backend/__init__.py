@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Attention backend module.
 
+"""
 try:
     from .base import AttentionBackend  # noqa: F401
 except ImportError:

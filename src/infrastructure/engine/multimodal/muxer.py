@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,10 +16,12 @@ from __future__ import annotations
 
 
 """
+"""
 Multi-Channel MUXer for high-speed (120fps) multimodal I/O.
 Synchronizes separate channels for video, audio, and text.
 """
 
+"""
 import logging
 import time
 from dataclasses import dataclass
@@ -34,8 +37,9 @@ logger = logging.getLogger("pyagent.multimodal.muxer")
 
 
 class ChannelType(Enum):
-    """Enumeration of supported modality channel types."""
-    TEXT = 0x01
+"""
+Enumeration of supported modality channel types.""
+TEXT = 0x01
     AUDIO = 0x02
     VIDEO = 0x03
     COMMAND = 0x04
@@ -43,27 +47,29 @@ class ChannelType(Enum):
 
 @dataclass
 class ModalityChannel:
-    """Configuration for a specific modality streaming channel.""" 
-    name: str
+"""
+Configuration for a specific modality streaming channel.""
+name: str
     modality_type: str
     fps: float = 120.0
     buffer_size: int = 1024
 
 
 class Muxer:
-    """Coordinates multiple high-speed modality channels.
-    Supports "DVD-style" separate streams for video, audio, and text."""
-
-    def __init__(self, target_fps: float = 120.0) -> None:
+"""
+Coordinates multiple high-speed modality channels.
+    Supports "DVD-style" separate streams for video, audio, and text.""
+def __init__(self, target_fps: float = 120.0) -> None:
         self.target_fps = target_fps
         self.channels: Dict[str, ModalityChannel] = {}
         self.active = False
 
 
     def synchronize_tick(self, audio: bytes, video: bytes, text: str) -> bytes:
-        """Packs separate modalities into a single sync-packet for 120fps DVD-like streaming.
-        Uses 0xDEADBEEF binary muxer."""
-        packets = [
+"""
+Packs separate modalities into a single sync-packet for 120fps DVD-like streaming.
+        Uses 0xDEADBEEF binary muxer.""
+packets = [
             {"channel_id": 1, "modality_type": "VIDEO", "payload": video},
             {"channel_id": 2, "modality_type": "AUDIO", "payload": audio},
             {"channel_id": 3, "modality_type": "TEXT", "payload": text.encode("utf-8")},
@@ -72,14 +78,16 @@ class Muxer:
 
 
     def add_channel(self, name: str, m_type: str, fps: Optional[float] = None) -> None:
-        """Register a new modality channel."""
-        self.channels[name] = ModalityChannel(name=name, modality_type=m_type, fps=fps or self.target_fps)
+"""
+Register a new modality channel.""
+self.channels[name] = ModalityChannel(name=name, modality_type=m_type, fps=fps or self.target_fps)
         logger.info(f"Registered channel: {name} ({m_type}) at {fps or self.target_fps} fps")
 
 
     def mux(self, raw_packets: List[Dict[str, Any]]) -> bytes:
-        """Mux multiple inputs into a binary stream."""
-        if rc and hasattr(rc, "mux_channels_rust") and hasattr(rc, "ModalityPacket"):
+"""
+Mux multiple inputs into a binary stream.""
+if rc and hasattr(rc, "mux_channels_rust") and hasattr(rc, "ModalityPacket"):
             packets = []
             for p in raw_packets:
                 packets.append(
@@ -96,8 +104,9 @@ class Muxer:
 
 
     def demux(self, stream_data: bytes) -> List[Dict[str, Any]]:
-        """Demux a binary stream into individual channel packets."""
-        if rc and hasattr(rc, "demux_channels_rust"):
+"""
+Demux a binary stream into individual channel packets.""
+if rc and hasattr(rc, "demux_channels_rust"):
             packets = rc.demux_channels_rust(list(stream_data))
             return [
                 {
@@ -113,7 +122,8 @@ class Muxer:
 
 
     def synchronize(self, packets: List[Dict[str, Any]], jitter_ms: float = 8.33) -> Dict[int, List[Dict[str, Any]]]:
-        """Synchronize packets across channels using a jitter window."""
+"""
+Synchronize packets across channels using a jitter window.""
         # 8.33ms = 1 frame at 120fps.
         if rc and hasattr(rc, "synchronize_channels_rust") and hasattr(rc, "ModalityPacket"):
             rust_packets = []

@@ -1,0 +1,24 @@
+"""MergeCandidate dataclass - minimal parser-safe shim."""
+
+from __future__ import annotations
+from dataclasses import dataclass
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+__version__ = VERSION
+
+
+@dataclass
+class MergeCandidate:
+    source_id: str
+    target_id: str
+    similarity_score: float = 0.0
+    merge_reason: str = ""
+
+__all__ = ["MergeCandidate"]

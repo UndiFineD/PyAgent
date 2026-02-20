@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 error_category.py - ErrorCategory Enum
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -33,7 +37,6 @@ Defines a compact Enum, ErrorCategory, enumerating common error classifications 
 WHAT IT SHOULD DO BETTER:
 Add richer documentation for each category, provide mappings to severity/HTTP codes or remediation guidance, include unit tests and type hints for consumers, and consider localization or extensibility (custom categories) and conversion helpers (from string, to human-friendly label).
 """
-
 try:
     from enum import Enum
 except ImportError:
@@ -51,8 +54,9 @@ __version__ = VERSION
 
 
 class ErrorCategory(Enum):
-    """Error categories."""
-    SYNTAX = "syntax"
+    ""
+Error categories.""
+SYNTAX = "syntax"
     RUNTIME = "runtime"
     LOGIC = "logic"
     TYPE = "type"

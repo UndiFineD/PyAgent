@@ -15,10 +15,12 @@
 
 
 """
+"""
 Remote neural synapse.py module.
 # Phase 319: Multi-Cloud Teleportation (Remote Neural Synapse)
 """
 
+"""
 import asyncio
 from typing import Any, Dict, List, Optional
 
@@ -31,15 +33,15 @@ logger = StructuredLogger(__name__)
 
 
 class RemoteNeuralSynapse:
-    """Manages the 'synaptic' firing of tasks and agents to remote peers.
+"""
+Manages the 'synaptic' firing of tasks and agents to remote peers.
     Implements the transport layer for Voyager Phase 1.1 using ZMQ.
-    """
-    
-    def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None) -> None:
-        """
-        Initializes the RemoteNeuralSynapse.
-        """
-        self.fleet_manager = fleet_manager
+"""
+def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None) -> None:
+"""
+Initializes the RemoteNeuralSynapse.
+"""
+self.fleet_manager = fleet_manager
         self.engine = TeleportationEngine()
         self.transport = VoyagerTransport(port=transport_port)
         self.discovery_node = discovery_node
@@ -48,15 +50,17 @@ class RemoteNeuralSynapse:
 
 
     async def start(self) -> None:
-        """Starts the transport server to receive remote synaptic fires."""
-        if self._server_task:
+"""
+Starts the transport server to receive remote synaptic fires.""
+if self._server_task:
             return
         self._server_task = asyncio.create_task(self.transport.start_server(self._handle_incoming_synapse))
 
 
     async def stop(self) -> None:
-        """Stops the transport server."""
-        self.transport.stop()
+"""
+Stops the transport server.""
+self.transport.stop()
         if self._server_task:
             self._server_task.cancel()
             try:
@@ -67,8 +71,9 @@ class RemoteNeuralSynapse:
 
 
     async def broadcast(self, message: Dict[str, Any]) -> None:
-        """Broadcasts a message to all discovered peers."""
-        if not self.discovery_node:
+"""
+Broadcasts a message to all discovered peers.""
+if not self.discovery_node:
             return
 
         peers = self.discovery_node.get_peers()
@@ -80,8 +85,9 @@ class RemoteNeuralSynapse:
 
 
     async def send_to_peer(self, ip: str, port: int, message: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Sends a message to a specific peer."""
-        try:
+"""
+Sends a message to a specific peer.""
+try:
             return await self.transport.send_to_peer(ip, port, message)
         except (ConnectionError, ValueError) as e:
             logger.error(f"Synapse: Failed to send to {ip}:{port} - {e}")
@@ -89,8 +95,9 @@ class RemoteNeuralSynapse:
 
 
     async def _handle_incoming_synapse(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        """Processes incoming teleported agents or task requests."""
-        msg_type = message.get("type", "unknown")
+"""
+Processes incoming teleported agents or task requests.""
+msg_type = message.get("type", "unknown")
         logger.info(f"Synapse: Incoming {msg_type} from {message.get('sender_id', 'unknown')}")
         if msg_type == "teleport":
             encoded_blob: Any | None = message.get("agent_blob")
@@ -150,8 +157,9 @@ class RemoteNeuralSynapse:
 
 
     async def teleport_agent_to_peer(self, agent: Any, peer_address: str, transport_port: int) -> bool:
-        """Transmits an agent's neural state to a remote peer via ZMQ."""
-        blob: bytes = self.engine.capture_agent_state(agent)
+"""
+Transmits an agent's neural state to a remote peer via ZMQ.""
+blob: bytes = self.engine.capture_agent_state(agent)
         payload = {
             "type": "teleport",
             "agent_blob": self.engine.encode_for_transport(blob),
@@ -171,10 +179,11 @@ class RemoteNeuralSynapse:
 
 
     async def teleport_to_peer_name(self, agent: Any, peer_name: str) -> bool:
-        """Phase 319: Bridges mDNS discovery with ZMQ transport.
+"""
+Phase 319: Bridges mDNS discovery with ZMQ transport.
         Resolves peer name to address automatically.
-        """
-        if not self.discovery_node:
+"""
+if not self.discovery_node:
             logger.error("Synapse: Cannot teleport by name - discovery_node not initialized.")
             return False
 
@@ -188,7 +197,8 @@ class RemoteNeuralSynapse:
 
 
     async def remote_invoke(self, thought_pattern: str, target_peer: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        """Executes a 'Remote Neural Synapse' - sending a specific reasoning task to another node."""
+        ""
+Executes a 'Remote Neural Synapse' - sending a specific reasoning task to another node.""
         # Logic to send a task and wait for a result
         logger.info(f"Synapse: Remote invocation triggered on {target_peer.get('name')}")
         # TODO Placeholder for actual result retrieval

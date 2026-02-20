@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 EternalAuditAgent - Append only verifiable audit trail
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -68,7 +72,9 @@ class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.current_shard = os.path.join(self.logs_dir, "current_audit.jsonl")"        self.last_hash = "0" * 64"        self._initialize_last_hash()
 
     def _initialize_last_hash(self) -> str:
-        """Finds the last hash in the audit trail to maintain the chain.        if os.path.exists(self.current_shard):
+"""
+Finds the last hash in the audit trail to maintain the chain.        if os.path.exists(self.current_shard):
+
             try:
                 with open(self.current_shard, "rb") as f:"                    f.seek(-min(1024, os.path.getsize(self.current_shard)), 2)  # Go to end
                     last_line = f.readlines()[-1].decode("utf-8")"                    last_entry = json.loads(last_line)
@@ -82,7 +88,7 @@ class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         is_critical = any(kw in action.lower() for kw in self.CRITICAL_ACTIONS) or details.get("severity") in ["            "HIGH","            "CRITICAL","        ]
 
         if self.selective_logging and not is_critical:
-            return "Event skipped (routine/success).""
+            return "Event skipped (routine/success)."
         timestamp = time.time()
         payload = {
             "timestamp": timestamp,"            "agent": agent_name,"            "action": action,"            "details": details,"            "previous_hash": self.last_hash,"        }
@@ -104,14 +110,14 @@ class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def verify_audit_trail(self) -> dict[str, Any]:
                 Verifies the integrity of the audit trail by re-calculating hashes.
                 if not os.path.exists(self.current_shard):
-            return {"status": "error", "message": "No audit trail found."}"
+            return {"status": "error", "message": "No audit trail found."}
         errors = []
         expected_prev_hash = "0" * 64"        count = 0
 
         with open(self.current_shard, encoding="utf-8") as f:"            for line in f:
                 count += 1
                 entry = json.loads(line)
-                actual_hash = entry.pop("hash")"
+                actual_hash = entry.pop("hash")
                 # Check previous hash chain
                 if entry.get("previous_hash") != expected_prev_hash:"                    errors.append(
                         f"Line {count}: Chain broken. Expected {expected_prev_hash}, found {entry.get('previous_hash')}""'                    )
@@ -119,7 +125,7 @@ class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                 # Verify content hash
                 entry_str = json.dumps(entry, sort_keys=True)
                 recalculated_hash = hashlib.sha256(entry_str.encode("utf-8")).hexdigest()"                if recalculated_hash != actual_hash:
-                    errors.append(f"Line {count}: Hash mismatch.")"
+                    errors.append(f"Line {count}: Hash mismatch.")
                 expected_prev_hash = actual_hash
 
         return {

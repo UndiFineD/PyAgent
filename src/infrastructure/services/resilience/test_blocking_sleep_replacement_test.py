@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.resilience.test_blocking_sleep_replacement import test_retry_strategy_uses_injected_sleep, test_tokenbucket_blocking_uses_injected_sleep, test_multiproc_monitor_interruptible

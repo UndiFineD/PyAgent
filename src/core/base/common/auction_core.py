@@ -13,11 +13,14 @@
 # limitations under the License.
 
 
-"""Core logic for Swarm Resource Auctioning.
 """
-
+"""
+Core logic for Swarm Resource Auctioning.
+"""
 try:
-    from typing import Any, Dict, List
+
+"""
+from typing import Any, Dict, List
 except ImportError:
     from typing import Any, Dict, List
 
@@ -30,15 +33,17 @@ except ImportError:
 
 
 class AuctionCore(BaseCore):
-    """Authoritative engine for VCG-based resource auctions."""
+"""
+Authoritative engine for VCG-based resource auctions.""
 
     @staticmethod
     def calculate_vcg_auction(bids: List[Dict[str, Any]], slots: int) -> List[Dict[str, Any]]:
-        """Simple VCG-style winner calculation (deterministic, test-friendly).
+"""
+Simple VCG-style winner calculation (deterministic, test-friendly).
 
         This implementation is intentionally small and clear for unit tests.
-        """
-        if not bids:
+"""
+if not bids:
             return []
         sorted_bids = sorted(bids, key=lambda x: x["amount"], reverse=True)
         winners = sorted_bids[:slots]
@@ -49,5 +54,6 @@ class AuctionCore(BaseCore):
 
     @staticmethod
     def enforce_vram_quota(agent_vram_request: float, total_available: float, quota_percent: float = 0.2) -> bool:
-        """Return True when request within quota."""
-        return agent_vram_request <= (total_available * quota_percent)
+"""
+Return True when request within quota.""
+return agent_vram_request <= (total_available * quota_percent)

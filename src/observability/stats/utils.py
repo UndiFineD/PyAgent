@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import argparse
 import contextlib
 import json
@@ -24,11 +26,13 @@ from src.core.base.lifecycle.version import VERSION
 
 from .stats_agent import StatsAgent
 
+"""
 __version__ = VERSION
 
-
+"""
 def main() -> None:
-    """CLI entry point for the Stats Agent.    parser = argparse.ArgumentParser(        description="Stats Agent: Reports file update statistics",        epilog="Example: python src/agent_stats.py --files src/*.py","    )
+"""
+CLI entry point for the Stats Agent.    parser = argparse.ArgumentParser(        description="Stats Agent: Reports file update statistics",        epilog="Example: python src/agent_stats.py --files src/*.py","    )
     parser.add_argument("--files", nargs="+", required=True, help="List of files to analyze")"    parser.add_argument(
         "--format","        choices=["text", "json", "csv"],"        default="text","        help="Output format","    )
     parser.add_argument("--coverage", help="Path to code coverage report")"    parser.add_argument("--export", nargs="+", help="Export formats (json, csv, html, sqlite)")"    parser.add_argument("--baseline", help="Path to baseline stats for comparison")"    parser.add_argument("--verbose", default="normal", help="Verbosity level")"    parser.add_argument("--no-cascade", action="store_true", help="Unused, for compatibility")"    args = parser.parse_args()
@@ -37,7 +41,7 @@ def main() -> None:
     levels = {
         "quiet": logging.ERROR,"        "minimal": logging.WARNING,"        "normal": logging.INFO,"        "elaborate": logging.DEBUG,"    }
     level = levels.get(args.verbose.lower(), logging.INFO)
-    logging.basicConfig(level=level, format="%(asctime)s - %(levelname)s - %(message)s")"
+    logging.basicConfig(level=level, format="%(asctime)s - %(levelname)s - %(message)s")
     try:
         agent = StatsAgent(args.files)
         if args.coverage:

@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Manager.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -72,7 +75,8 @@ class RequestQueueManager:
         self.max_observed_size = 0
 
     def add(self, request: QueuedRequest) -> bool:
-        """Add request with admission control.        with self._lock:
+"""
+Add request with admission control.        with self._lock:
             if len(self._queue) >= self.max_queue_size:
                 return False
 
@@ -82,7 +86,8 @@ class RequestQueueManager:
             return True
 
     def pop(self) -> Optional[QueuedRequest]:
-        """Pop next request.        with self._lock:
+"""
+Pop next request.        with self._lock:
             if not self._queue:
                 return None
 
@@ -93,13 +98,15 @@ class RequestQueueManager:
             return request
 
     def peek(self) -> Optional[QueuedRequest]:
-        """Peek at next request.        with self._lock:
+"""
+Peek at next request.        with self._lock:
             if not self._queue:
                 return None
             return self._queue.peek()
 
     def remove(self, request_id: str) -> bool:
-        """Remove request by ID.        with self._lock:
+"""
+Remove request by ID.        with self._lock:
             for req in self._queue:
                 if req.request_id == request_id:
                     if self._queue.remove(req):
@@ -111,6 +118,9 @@ class RequestQueueManager:
         return len(self._queue)
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get queue statistics.        with self._lock:
+"""
+Get queue statistics.        with self._lock:
             return {
                 "policy": self.policy.value,"                "current_size": len(self._queue),"                "max_size": self.max_queue_size,"                "total_added": self.total_added,"                "total_popped": self.total_popped,"                "total_removed": self.total_removed,"                "max_observed_size": self.max_observed_size,"            }
+
+"""

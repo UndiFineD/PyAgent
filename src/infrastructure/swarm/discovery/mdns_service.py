@@ -14,8 +14,10 @@
 
 
 """
+"""
 PyAgentServiceListener and MDNSService for mDNS-based peer discovery in PyAgent Swarm.
 
+"""
 import asyncio
 import socket
 import logging
@@ -27,7 +29,8 @@ logger = logging.getLogger(__name__)
 
 
 class PyAgentServiceListener(ServiceListener):
-    """Listener to handle PyAgent node discovery events.
+"""
+Listener to handle PyAgent node discovery events.
     def __init__(self, discovery_callback):
         self.discovery_callback = discovery_callback
 
@@ -35,7 +38,7 @@ class PyAgentServiceListener(ServiceListener):
         pass
 
     def remove_service(self, zc: Zeroconf, type_: str, name: str) -> None:
-        logger.info(f"Service {name} removed")"
+        logger.info(f"Service {name} removed")
     def add_service(self, zc: Zeroconf, type_: str, name: str) -> None:
         info = zc.get_service_info(type_, name)
         if info:
@@ -45,15 +48,16 @@ class PyAgentServiceListener(ServiceListener):
                     for k, v in info.properties.items()
                 }
             }
-            logger.info(f"Discovered PyAgent node: {node_data}")"
+            logger.info(f"Discovered PyAgent node: {node_data}")
             if self.discovery_callback:
                 self.discovery_callback(node_data)
 
 
 
 class MDNSService:
-    """Handles mDNS registration and discovery for PyAgent nodes.
-    SERVICE_TYPE = "_pyagent._tcp.local.""
+"""
+Handles mDNS registration and discovery for PyAgent nodes.
+    SERVICE_TYPE = "_pyagent._tcp.local."
     def __init__(self, node_id: str, port: int, properties: Optional[Dict[str, Any]] = None):
         self.node_id = node_id
         self.port = port
@@ -63,7 +67,8 @@ class MDNSService:
         self.discovered_nodes: Set[str] = set()
 
     async def start(self):
-        """Initializes Zeroconf and registers the local node.        self.zc = Zeroconf(ip_version=IPVersion.V4Only)
+"""
+Initializes Zeroconf and registers the local node.        self.zc = Zeroconf(ip_version=IPVersion.V4Only)
 
         # Determine local IP
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -83,16 +88,18 @@ class MDNSService:
 
         loop = asyncio.get_running_loop()
         await loop.run_in_executor(None, self.zc.register_service, info)
-        logger.info(f"Registered mDNS service for node {self.node_id}")"
+        logger.info(f"Registered mDNS service for node {self.node_id}")
         # Start discovery
         listener = PyAgentServiceListener(self._on_node_discovered)
         self.browser = ServiceBrowser(self.zc, self.SERVICE_TYPE, listener)
 
     def _on_node_discovered(self, node_data: Dict[str, Any]):
-        self.discovered_nodes.add(node_data["name"])"
+        self.discovered_nodes.add(node_data["name"])
     async def stop(self):
-        """Cleans up mDNS resources.        if self.zc:
+"""
+Cleans up mDNS resources.        if self.zc:
             loop = asyncio.get_running_loop()
             await loop.run_in_executor(None, self.zc.unregister_all_services)
             await loop.run_in_executor(None, self.zc.close)
-            logger.info("mDNS service stopped")"
+            logger.info("mDNS service stopped")
+"""

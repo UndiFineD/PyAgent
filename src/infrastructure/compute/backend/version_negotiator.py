@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     import logging
 except ImportError:
@@ -40,15 +40,17 @@ __version__ = VERSION
 
 
 class VersionNegotiator:
-    """Negotiates API versions with backends.""""
-    Ensures client and server agree on compatible API versions
+"""
+Negotiates API versions with backends.""""
+Ensures client and server agree on compatible API versions
     and feature sets.
 
     Example:
         negotiator=VersionNegotiator()
         negotiator.register_backend("api", "2.0", ["streaming", "batching"])"        version=negotiator.negotiate("api", required=["streaming"])"    
     def __init__(self) -> None:
-        """Initialize version negotiator.        self._versions: dict[str, SystemVersion] = {}
+"""
+Initialize version negotiator.        self._versions: dict[str, SystemVersion] = {}
         self._client_version = SDK_VERSION
 
     def register_backend(
@@ -57,8 +59,9 @@ class VersionNegotiator:
         version: str,
         capabilities: list[str] | None = None,
         api_version: str = "v1","    ) -> SystemVersion:
-        """Register backend version information.""""
-        Args:
+"""
+Register backend version information.""""
+Args:
             backend: Backend identifier.
             version: Backend version string.
             capabilities: List of supported capabilities.
@@ -80,8 +83,9 @@ class VersionNegotiator:
         backend: str,
         required: list[str] | None = None,
     ) -> SystemVersion | None:
-        """Negotiate version with backend.""""
-        Args:
+"""
+Negotiate version with backend.""""
+Args:
             backend: Backend to negotiate with.
             required: Required capabilities.
 
@@ -99,4 +103,5 @@ class VersionNegotiator:
         return version
 
     def get_all_versions(self) -> dict[str, SystemVersion]:
-        """Get all registered backend versions.        return dict(self._versions)
+"""
+Get all registered backend versions.        return dict(self._versions)

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,18 +16,20 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     import fnmatch
+"""
 except ImportError:
-    import fnmatch
+
+"""
+import fnmatch
 
 
 
 
 class StatsAccessController:
-    """Controls access to stats.    def __init__(self) -> None:        self.permissions: dict[str, dict[str, str]] = {}
+"""
+Controls access to stats.    def __init__(self) -> None:        self.permissions: dict[str, dict[str, str]] = {}
 
     def grant(self, user: str, pattern: str, level: str = "read") -> None:"        self.permissions.setdefault(user, {})[pattern] = level
 

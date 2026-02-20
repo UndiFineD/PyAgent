@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,14 +16,17 @@ from __future__ import annotations
 
 
 """
+"""
 FixSuggestion - Data model for automated fix suggestions
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Import the dataclass and construct suggestions for downstream tools or UIs.
 - Example: from src.core.base.agent_errors.fix_suggestion import FixSuggestion
-           s = FixSuggestion(error_id="E123", suggestion="Replace X with Y", confidence=0.85, code_snippet="x = y", source="linter")"
+           s = FixSuggestion(error_id="E123", suggestion="Replace X with Y", confidence=0.85, code_snippet="x = y", source="linter")
 WHAT IT DOES:
 - Defines a simple dataclass (FixSuggestion) that encapsulates an automated fix suggestion for a detected error: id, textual suggestion, confidence score, example code snippet, and source attribution.
 - Exposes __version__ from src.core.base.lifecycle.version for module versioning.
@@ -32,7 +36,6 @@ WHAT IT SHOULD DO BETTER:
 - Add metadata (tags, priority, affected_files) and provenance (timestamp, agent_id) to improve traceability and filtering.
 - Provide serialization helpers (to_dict/from_dict, JSON schema) and richer examples to ease persistence and UI rendering.
 """
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -50,7 +53,8 @@ __version__ = VERSION
 
 @dataclass
 class FixSuggestion:
-    """Automated fix suggestion for an error.
+"""
+Automated fix suggestion for an error.
     
     Attributes:
         error_id: ID of the error to fix.
@@ -58,8 +62,8 @@ class FixSuggestion:
         confidence: Confidence score (0 - 1).
         code_snippet: Example code for the fix.
         source: Source of the suggestion.
-    """
-    error_id: str
+"""
+error_id: str
     suggestion: str
     confidence: float = 0.0
     code_snippet: str = ""

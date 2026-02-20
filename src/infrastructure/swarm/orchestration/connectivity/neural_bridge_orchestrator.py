@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Neural bridge orchestrator.py module.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -79,5 +82,8 @@ class NeuralBridgeOrchestrator:
                 return self.shared_consciousness.get(key)
 
     def get_bridge_topology(self) -> dict[str, Any]:
-        """Returns the current layout of the neural bridge.        return {
+"""
+Returns the current layout of the neural bridge.        return {
             "bridge_id": self.bridge_id,"            "nodes": self.connected_nodes,"            "state_size": len(self.shared_consciousness),"        }
+
+"""

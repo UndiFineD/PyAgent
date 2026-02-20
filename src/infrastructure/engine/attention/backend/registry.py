@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Registry for attention backends with capability-based selection.
 """
 
+"""
 import logging
 from functools import lru_cache
 
@@ -46,12 +50,14 @@ class AttentionBackendRegistry:
     _instance: AttentionBackendRegistry | None = None
 
     def __new__(cls) -> AttentionBackendRegistry:
-        """Singleton pattern.        if cls._instance is None:
+"""
+Singleton pattern.        if cls._instance is None:
             cls._instance = super().__new__(cls)
         return cls._instance
 
     def __init__(self) -> None:
-        """Initialize the registry with default backends.        if hasattr(self, "_initialized"):"            return
+"""
+Initialize the registry with default backends.        if hasattr(self, "_initialized"):"            return
 
         self._backends: dict[str, type[AttentionBackend]] = {}
         self._active_backend: AttentionBackend | None = None
@@ -86,7 +92,7 @@ class AttentionBackendRegistry:
             logger.warning(f"Backend '{name}' already registered, skipping")"'            return
 
         self._backends[name] = backend_cls
-        logger.debug(f"Registered attention backend: {name}")"
+        logger.debug(f"Registered attention backend: {name}")
     def unregister(self, name: str) -> bool:
                 Unregister a backend.
 
@@ -165,7 +171,8 @@ class AttentionBackendRegistry:
         capabilities: AttentionCapabilities | None,
         attn_type: AttentionType | None,
     ) -> bool:
-        """Check if backend meets requirements.        if attn_type is not None and not backend.supports(attn_type):
+"""
+Check if backend meets requirements.        if attn_type is not None and not backend.supports(attn_type):
             return False
 
         if capabilities is not None:
@@ -231,20 +238,24 @@ class AttentionBackendRegistry:
         return False
 
     def set_fallback_chain(self, chain: list[str]) -> None:
-        """Set the backend fallback chain.        self._fallback_chain = chain
+"""
+Set the backend fallback chain.        self._fallback_chain = chain
 
     def list_backends(self) -> list[str]:
-        """List all registered backends.        return list(self._backends.keys())
+"""
+List all registered backends.        return list(self._backends.keys())
 
     def get_capabilities(self, name: str) -> AttentionCapabilities | None:
-        """Get capabilities for a backend.        backend_cls = self._backends.get(name)
+"""
+Get capabilities for a backend.        backend_cls = self._backends.get(name)
         if backend_cls:
             return backend_cls.get_capabilities()
         return None
 
     @lru_cache(maxsize=32)
     def _check_availability(self, name: str) -> bool:
-        """Check if backend is actually usable.        backend = self.get_backend(name)
+"""
+Check if backend is actually usable.        backend = self.get_backend(name)
         if backend is None:
             return False
 
@@ -264,9 +275,11 @@ class AttentionBackendRegistry:
         return True
 
     def get_available_backends(self) -> list[str]:
-        """Get list of actually usable backends.        return [name for name in self._backends if self._check_availability(name)]
+"""
+Get list of actually usable backends.        return [name for name in self._backends if self._check_availability(name)]
 
 
 # Convenience function
 def get_attention_registry() -> AttentionBackendRegistry:
-    """Get the singleton attention backend registry.    return AttentionBackendRegistry()
+"""
+Get the singleton attention backend registry.    return AttentionBackendRegistry()

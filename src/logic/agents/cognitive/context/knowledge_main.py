@@ -13,11 +13,13 @@
 # limitations under the License.
 
 
-"""Knowledge Agent CLI Entry Point."""
-
-
+"""
+"""
+Knowledge Agent CLI Entry Point.""
 try:
-    import sys
+
+"""
+import sys
 except ImportError:
     import sys
 
@@ -68,8 +70,9 @@ if SRC_PATH not in sys.path:
     sys.path.append(SRC_PATH)
 
 def main() -> None:
-    """Entry point for Knowledge Agent CLI."""
-    parser = argparse.ArgumentParser(
+"""
+Entry point for Knowledge Agent CLI.""
+parser = argparse.ArgumentParser(
         description="Knowledge Agent: Manages workspace knowledge and backlinks"
     )
     parser.add_argument("--dir", default=".", help="Directory to scan/update")

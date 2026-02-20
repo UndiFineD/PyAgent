@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,12 +18,14 @@ from __future__ import annotations
 """
 ScalingManager
 
+"""
 Manager for dynamic scaling of the agent fleet.
 Monitors system load and spawns new agent instances as needed.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -55,17 +58,27 @@ class ScalingManager:
         self.fleet = fleet_manager
         self.core = ScalingCore(scale_threshold=5.0, window_size=10, backoff_seconds=60)
 
-    def record_metric(self, agent_name: str, value: float, metric_type: str = "latency") -> None:"        """Records a metric and checks if scaling is required.        self.core.add_metric(agent_name, value, metric_type=metric_type)
+    def record_metric(self, agent_name: str, value: float, metric_type: str = "latency") -> None:"        """
+Records a metric and checks if scaling is required.        self.core.add_metric(agent_name, value, metric_type=metric_type)
 
         if self.core.should_scale(agent_name):
             self._execute_scale_out(agent_name)
 
     def _execute_scale_out(self, agent_name: str) -> None:
-        """Spawns a new instance of an agent if load is too high.        load_score = self.core.calculate_weighted_load(agent_name)
-        logging.warning(f"SCALING: High load score ({load_score:.2f}) detected for {agent_name}. Spawning replica.")"
+"""
+Spawns a new instance of an agent if load is too high.        load_score = self.core.calculate_weighted_load(agent_name)
+        logging.warning(f"SCALING: High load score ({load_score:.2f}) detected for {agent_name}. Spawning replica.")
         # Replica naming logic
         replica_name = f"{agent_name}_replica_{int(time.time())}""        # Implementation depends on FleetManager dynamic registration
         if hasattr(self.fleet, "register_agent_runtime"):"            self.fleet.register_agent_runtime(replica_name, agent_name)
 
     def get_scaling_status(self) -> str:
-        """Returns the current scaling status.        return f"Scaling Manager: Monitoring {len(self.core.load_metrics)} active agent archetypes.""
+"""
+Returns the current scaling status.        return f"Scaling Manager: Monitoring {len(self.core.load_metrics)} active agent archetypes."
+"""
+
+"""
+
+""
+
+"""

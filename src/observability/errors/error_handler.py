@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Errors Agent Entrypoint - Create CLI main for ErrorsAgent
 
+"""
 A small entrypoint module that prepares import paths, exposes the
 package VERSION, and constructs a CLI main function for the ErrorsAgent
 using the shared create_main_function helper. It is intended to be the
@@ -56,7 +59,6 @@ WHAT IT SHOULD DO BETTER:
   instead of a top-level script, and add type hints and inline module
   docstrings describing expected agent behavior.
 """
-
 try:
     import sys
 except ImportError:

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Testgenerated agent.py module.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -47,6 +50,8 @@ class TestGeneratedAgent(BaseAgent):
     
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        self.name = "TestGenerated""
+        self.name = "TestGenerated"
     def perform_specialized_task(self, *args, **kwargs) -> str:
-        """Specialize this method based on: Perform complex math and string analysis        logging.info(f"Generated agent TestGenerated performing task with args: {args}")"        return "Result from generated agent TestGenerated for task: specialized""
+"""
+Specialize this method based on: Perform complex math and string analysis        logging.info(f"Generated agent TestGenerated performing task with args: {args}")"        return "Result from generated agent TestGenerated for task: specialized""
+"""

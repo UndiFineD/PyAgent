@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Immunization orchestrator.py module.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -66,9 +69,9 @@ class ImmunizationOrchestrator:
 
     def immunize(self, adversarial_example: str, label: str) -> str:
                 Develops a new signature from an adversarial example.
-                logging.info(f"ImmunizationOrchestrator: Immunizing fleet against new threat: {label}")"
+                logging.info(f"ImmunizationOrchestrator: Immunizing fleet against new threat: {label}")
         # In a real system, we'd use an LLM or clustering to generate a clean regex'        # For simulation, we take a substring or simplified pattern
-        pattern = re.escape(adversarial_example[:20]) + ".*""
+        pattern = re.escape(adversarial_example[:20]) + ".*"
         if pattern not in self.threat_signatures:
             self.threat_signatures.append(pattern)
             self.immunization_log.append(

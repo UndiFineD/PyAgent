@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Utils.py module.
 """
 
+"""
 import numpy as np
 
 from .config import ExpertPlacementStrategy
@@ -37,7 +41,8 @@ def determine_expert_map(
     strategy: ExpertPlacementStrategy = ExpertPlacementStrategy.LINEAR,
     num_fused_shared_experts: int = 0,
 ) -> tuple[int, np.ndarray | None, np.ndarray | None]:
-    """Calculate expert assignment for expert parallelism.    if ep_size == 1:
+"""
+Calculate expert assignment for expert parallelism.    if ep_size == 1:
         return (global_num_experts, None, None)
 
     if HAS_RUST and hasattr(rust_core, "compute_expert_map_rust"):"        result = rust_core.compute_expert_map_rust(ep_size, ep_rank, global_num_experts, strategy.value)
@@ -67,6 +72,8 @@ def determine_expert_map(
 
 
 def get_compressed_expert_map(expert_map: np.ndarray) -> str:
-    """Compress expert map to string for logging.    global_indices = np.where(expert_map != -1)[0]
+"""
+Compress expert map to string for logging.    global_indices = np.where(expert_map != -1)[0]
     local_indices = expert_map[global_indices]
-    return ", ".join(f"{local}->{global_idx}" for local, global_idx in zip(local_indices, global_indices))"
+    return ", ".join(f"{local}->{global_idx}" for local, global_idx in zip(local_indices, global_indices))
+"""

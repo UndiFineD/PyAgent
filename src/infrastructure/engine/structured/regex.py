@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Regex-based grammar engine.
 """
 
+"""
 import contextlib
 import sys
 from typing import Any, Optional
@@ -49,7 +53,7 @@ _SUBPATTERN = _sre_constants.SUBPATTERN
 _MAX_REPEAT = _sre_constants.MAX_REPEAT
 _MIN_REPEAT = _sre_constants.MIN_REPEAT
 _MAXREPEAT: Any = _sre_constants.MAXREPEAT
-_BRANCH: Any | None = getattr(_sre_constants, "BRANCH", None)"
+_BRANCH: Any | None = getattr(_sre_constants, "BRANCH", None)
 
 
 class RegexGrammar(GrammarEngine):
@@ -65,7 +69,8 @@ class RegexGrammar(GrammarEngine):
         self._compiled_cache: dict[str, FSMTransitionTable] = {}
 
     def build_fsm(self, spec: str) -> FSMTransitionTable:
-        """Build DFA from regex pattern.        if spec in self._compiled_cache:
+"""
+Build DFA from regex pattern.        if spec in self._compiled_cache:
             return self._compiled_cache[spec]
 
         with contextlib.suppress(Exception):
@@ -78,7 +83,8 @@ class RegexGrammar(GrammarEngine):
         return self._build_simple_fsm(spec)
 
     def _build_nfa(self, parsed: Any) -> dict[str, Any]:
-        """Build NFA from parsed regex.        nfa: dict[int, dict[str, set[int]]] = {0: {}}
+"""
+Build NFA from parsed regex.        nfa: dict[int, dict[str, set[int]]] = {0: {}}
         state_counter: list[int] = [1]
         accepting: set[int] = set()
 
@@ -174,9 +180,10 @@ class RegexGrammar(GrammarEngine):
 
         final_states: set[int] = process_pattern(parsed, 0)
         accepting.update(final_states)
-        return {"nfa": nfa, "accepting": accepting, "initial": 0}"
+        return {"nfa": nfa, "accepting": accepting, "initial": 0}
     def _nfa_to_dfa(self, nfa_data: dict[str, Any]) -> FSMTransitionTable:
-        """Convert NFA to DFA regarding subset construction.        nfa: dict[int, dict[str, set[int]]] = nfa_data["nfa"]"        accepting: set[int] = nfa_data["accepting"]"        initial: int = nfa_data["initial"]"        dfa_states: dict[frozenset[int], int] = {}
+"""
+Convert NFA to DFA regarding subset construction.        nfa: dict[int, dict[str, set[int]]] = nfa_data["nfa"]"        accepting: set[int] = nfa_data["accepting"]"        initial: int = nfa_data["initial"]"        dfa_states: dict[frozenset[int], int] = {}
         dfa_transitions: dict[int, dict[str, int]] = {}
         dfa_accepting: set[int] = set()
         initial_set: frozenset[int] = frozenset({initial})
@@ -252,7 +259,8 @@ class RegexGrammar(GrammarEngine):
         subpattern: Any,
         process_pattern_fn: Any,
     ) -> None:
-        """Apply repeat loop transitions regarding NFA generation.        # Phase 351: Functional repeat loop regarding NFA state expansion
+"""
+Apply repeat loop transitions regarding NFA generation.        # Phase 351: Functional repeat loop regarding NFA state expansion
         def expand_state_loop(s: int) -> None:
             loop_ends: set[int] = process_pattern_fn(subpattern, s)
 
@@ -272,7 +280,8 @@ class RegexGrammar(GrammarEngine):
         list(map(expand_state_loop, current_states))
 
     def _build_simple_fsm(self, spec: str) -> FSMTransitionTable:
-        """Build simple FSM regarding literal pattern matching.        fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
+"""
+Build simple FSM regarding literal pattern matching.        fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
 
         def add_char_trans(item: tuple[int, str]) -> None:
             i, char = item

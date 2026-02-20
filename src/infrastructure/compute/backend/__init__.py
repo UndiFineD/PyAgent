@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-generated module exports.
+"""
+"""
+Auto-generated module exports.
 
+"""
 try:
     from .core.base.lifecycle.version import VERSION as VERSION
 except ImportError:
@@ -266,3 +270,4 @@ __all__ = [
 
 
 """
+

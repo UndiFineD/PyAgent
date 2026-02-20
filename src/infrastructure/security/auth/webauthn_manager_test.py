@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .infrastructure.security.auth.webauthn_manager import WebAuthnManager
@@ -40,7 +43,7 @@ async def test_webauthn_options_generation():
 async def test_oauth_initialization():
     manager = WebAuthnManager()
     assert manager.oauth is not None
-    assert 'github' in manager.oauth._clients'
+    assert 'github' in manager.oauth._clients
 
 @pytest.mark.asyncio
 async def test_rdma_checkpoint_basic():
@@ -48,7 +51,8 @@ async def test_rdma_checkpoint_basic():
     manager = CheckpointManager(rank=0, world_size=2)
     assert manager.peer_rank == 1
 
-    state = b'{"agents": ["coder"], "version": "4.0.0"}'"'    checkpoint_id = await manager.create_checkpoint(state)
+    state = b'{"agents": ["coder"], "version": "4.0.0"}'
+checkpoint_id = await manager.create_checkpoint(state)
 
     assert checkpoint_id.startswith("ckpt-")"    latest = manager.get_latest_checkpoint()
     assert latest is not None

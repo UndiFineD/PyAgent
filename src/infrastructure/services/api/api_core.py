@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,12 @@ from __future__ import annotations
 
 
 """
+"""
 APICore logic for fleet communication.
 Pure logic for OpenAPI spec generation and tool contract validation.
 """
 
+"""
 import json
 from typing import Any
 
@@ -36,12 +39,14 @@ except ImportError:
 
 
 class APICore:
-    """Logic for API-related operations, including OpenAPI schema generation.
+"""
+Logic for API-related operations, including OpenAPI schema generation.
     def __init__(self, version: str = SDK_VERSION) -> None:
         self.version = version
 
     def build_openapi_json(self, tool_definitions: list[dict[str, Any]]) -> str:
-        """Constructs an OpenAPI 3.0 string from tool metadata.        if rc:
+"""
+Constructs an OpenAPI 3.0 string from tool metadata.        if rc:
             try:
                 return rc.generate_openapi_spec(tool_definitions, self.version)  # type: ignore[attr-defined]
             except Exception:  # pylint: disable=broad-exception-caught
@@ -61,4 +66,6 @@ class APICore:
         return json.dumps(spec, indent=2)
 
     def validate_tool_contract(self, spec: dict[str, Any]) -> bool:
-        """Checks if an external tool definition is valid.        return "name" in spec and ("endpoint" in spec or "implementation" in spec)"
+"""
+Checks if an external tool definition is valid.        return "name" in spec and ("endpoint" in spec or "implementation" in spec)
+"""

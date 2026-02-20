@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,14 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Helper utilities used across the codebase (small, import-safe).
+"""
+"""
+Helper utilities used across the codebase (small, import-safe).
 
+"""
 This module provides a few light helpers required by dataclasses and tests:
 - optional `requests` detection
 - optional `tqdm` fallback
 - `_empty_plugin_config_list` default factory
 """
-
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any, Final, TypeVar
 
@@ -57,13 +60,15 @@ if _tqdm is not None:
     tqdm = _tqdm  # pylint: disable=invalid-name
 else:
     def tqdm(iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
-        """Fallback if tqdm is not installed: iterate unchanged."""
-        return iterable
+"""
+Fallback if tqdm is not installed: iterate unchanged.""
+return iterable
 
 
 def _empty_plugin_config_list() -> list["AgentPluginConfig"]:
-    """Default factory for lists of AgentPluginConfig to avoid mutable defaults."""
-    return []
+"""
+Default factory for lists of AgentPluginConfig to avoid mutable defaults.""
+return []
 
 
 __all__ = [

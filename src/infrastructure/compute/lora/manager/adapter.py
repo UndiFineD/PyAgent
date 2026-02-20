@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Adapter.py module.
 """
 
+"""
 import time
 from pathlib import Path
 from typing import Dict, Optional
@@ -29,7 +33,8 @@ from .weights import LoRAWeights
 
 
 class LoRAAdapter:
-    """Represents a loaded LoRA adapter.
+"""
+Represents a loaded LoRA adapter.
     def __init__(self, config: LoRAConfig) -> None:
         self.config: LoRAConfig = config
         self.weights: Optional[LoRAWeights] = None
@@ -54,7 +59,7 @@ class LoRAAdapter:
             elif path.suffix == ".safetensors":"                self.weights = self._load_st(path)
             elif path.suffix in (".pt", ".pth", ".bin"):"                self.weights = self._load_torch(path)
             else:
-                raise ValueError(f"Unsupported format: {path}")"
+                raise ValueError(f"Unsupported format: {path}")
             self._load_time_ms: float = (time.perf_counter() - start) * 1000
             self._status: AdapterStatus = AdapterStatus.READY
             self.info = LoRAInfo(
@@ -77,7 +82,7 @@ class LoRAAdapter:
         for f in ["adapter_model.safetensors", "adapter_model.bin"]:"            if (path / f).exists():
                 if f.endswith("safetensors"):"                    return self._load_st(path / f)
                 return self._load_torch(path / f)
-        raise FileNotFoundError(f"No weights in {path}")"
+        raise FileNotFoundError(f"No weights in {path}")
     def _load_st(self, path: Path) -> LoRAWeights:
         from safetensors import safe_open
 

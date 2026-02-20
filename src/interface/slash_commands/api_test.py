@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.slash_commands.api import get_slash_commands, reset_slash_commands, process_prompt, execute_command, get_help

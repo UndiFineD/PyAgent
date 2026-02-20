@@ -15,8 +15,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .infrastructure.swarm.network.censys_intelligence import CensysIntelligence
@@ -49,12 +52,12 @@ async def test_file_classifier_instantiation():
     fc = FileClassifier()
     assert fc.MAGIC_DB_PATH.parts[-1] == "file_magics.json""    hashes = await fc.analyze_file(__file__)
     assert hashes.size_bytes > 0
-    assert "https://" not in hashes.extracted_urls  # This file has no urls like that"
+    assert "https://" not in hashes.extracted_urls  # This file has no urls like that
 
 @pytest.mark.asyncio
 async def test_cors_scanner_instantiation():
     scanner = CORSScanner()
-    assert "wildcard value" in scanner.DETAILS"
+    assert "wildcard value" in scanner.DETAILS
 
 def test_dns_takeover_sigs():
     assert "AWS Route 53" in DNS_TAKEOVER_SIGNATURES"    assert len(DNS_TAKEOVER_SIGNATURES) > 10

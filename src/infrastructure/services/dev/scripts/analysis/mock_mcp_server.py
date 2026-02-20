@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Mock MCP server implementation for testing Agentic capabilities.
+"""
+"""
+Mock MCP server implementation for testing Agentic capabilities.
 
+"""
 import json
 import sys
 
@@ -25,7 +29,9 @@ __version__ = VERSION
 
 
 def main() -> None:
-    """Run a basic JSON-RPC server loop for MCP tool mocking.    while True:
+"""
+Run a basic JSON-RPC server loop for MCP tool mocking.    while True:
+
         line = sys.stdin.readline()
         if not line:
             break

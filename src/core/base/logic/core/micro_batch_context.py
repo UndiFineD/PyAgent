@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-"""Micro-batching context utilities.
+
+"""
+Micro-batching context utilities.
 
 This module provides a lightweight MicroBatchContext and stream manager
 stubs for environments without CUDA. It intentionally avoids GPU-specific
 complexity for unit tests.
 """
-
 import threading
 import time
 from contextlib import contextmanager
@@ -68,9 +69,9 @@ class MicroBatchInfo:
 
 
 class StreamManager:
-    """Simple round-robin stream manager used for tests."""
-
-    def __init__(self, num_compute_streams: int = 1, num_comm_streams: int = 1):
+"""
+Simple round-robin stream manager used for tests.""
+def __init__(self, num_compute_streams: int = 1, num_comm_streams: int = 1):
         self._compute_streams = [StreamHandle(i, StreamType.COMPUTE) for i in range(num_compute_streams)]
         self._comm_streams = [StreamHandle(i, StreamType.COMMUNICATION) for i in range(num_comm_streams)]
         self._compute_idx = 0
@@ -117,17 +118,18 @@ class StreamManager:
 
 
 class MicroBatchContext:
-    """Minimal micro-batch context for tests."""
-
-    def __init__(self, batch_size: int = 1, micro_batch_size: int = 1):
+"""
+Minimal micro-batch context for tests.""
+def __init__(self, batch_size: int = 1, micro_batch_size: int = 1):
         self.batch_size = batch_size
         self.micro_batch_size = micro_batch_size
         self.stream_manager = StreamManager()
         self._infos: list[MicroBatchInfo] = []
 
     def iterate(self):
-        """Yield micro-batch placeholders."""
-        num = max(1, self.batch_size // max(1, self.micro_batch_size))
+"""
+Yield micro-batch placeholders.""
+num = max(1, self.batch_size // max(1, self.micro_batch_size))
         for i in range(num):
             info = MicroBatchInfo(batch_idx=i, start_idx=i * self.micro_batch_size, end_idx=(i + 1) * self.micro_batch_size, size=self.micro_batch_size)
             yield info
@@ -140,34 +142,36 @@ class MicroBatchContext:
 
 
 class AdaptiveMicroBatchContext(MicroBatchContext):
-    """Thin adaptive micro-batch context used in tests.
+"""
+Thin adaptive micro-batch context used in tests.
 
     It behaves like MicroBatchContext but exposes a simple `adapt()` method
     to change `micro_batch_size` at runtime.
-    """
-
-    def adapt(self, new_micro_batch_size: int) -> None:
+"""
+def adapt(self, new_micro_batch_size: int) -> None:
         self.micro_batch_size = max(1, int(new_micro_batch_size))
 
 
 def create_micro_batch_context(batch_size: int = 1, micro_batch_size: int = 1) -> MicroBatchContext:
-    """Factory returning a MicroBatchContext instance (or adaptive variant).
+"""
+Factory returning a MicroBatchContext instance (or adaptive variant).
 
     Tests import this factory and expect a callable.
-    """
-    return MicroBatchContext(batch_size=batch_size, micro_batch_size=micro_batch_size)
+"""
+return MicroBatchContext(batch_size=batch_size, micro_batch_size=micro_batch_size)
 
 
 @contextmanager
 def micro_batch_scope(batch_size: int = 1, micro_batch_size: int = 1) -> Iterator[MicroBatchContext]:
-    """Context manager returning a micro-batch context for a block.
+"""
+Context manager returning a micro-batch context for a block.
 
     Example:
         with micro_batch_scope(32, 8) as ctx:
             for info in ctx.iterate():
                 ...
-    """
-    ctx = create_micro_batch_context(batch_size=batch_size, micro_batch_size=micro_batch_size)
+    ""
+ctx = create_micro_batch_context(batch_size=batch_size, micro_batch_size=micro_batch_size)
     try:
         yield ctx
     finally:

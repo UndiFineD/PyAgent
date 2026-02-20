@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Configuration and enums for advanced request scheduling.
+"""
+"""
+Configuration and enums for advanced request scheduling.
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -29,7 +33,8 @@ except ImportError:
 
 
 class RequestPriority(Enum):
-    """Priority levels for inference requests.
+"""
+Priority levels for inference requests.
     CRITICAL = 0  # System-critical (must execute immediately)
     HIGH = 1  # User-facing, latency-sensitive
     NORMAL = 2  # Standard priority
@@ -39,7 +44,8 @@ class RequestPriority(Enum):
 
 
 class RequestState(Enum):
-    """State of an inference request.
+"""
+State of an inference request.
     WAITING = auto()  # In queue, not yet scheduled
     RUNNING = auto()  # Currently executing
     PREEMPTED = auto()  # Paused to make room for higher priority
@@ -51,7 +57,8 @@ class RequestState(Enum):
 
 
 class PreemptionReason(Enum):
-    """Reason for request preemption.
+"""
+Reason for request preemption.
     HIGHER_PRIORITY = auto()  # Higher priority request arrived
     MEMORY_PRESSURE = auto()  # Need to free GPU memory
     TIMEOUT = auto()  # Exceeded time limit
@@ -61,7 +68,8 @@ class PreemptionReason(Enum):
 
 @dataclass
 class SchedulerConfig:
-    """Configuration for the request scheduler.
+"""
+Configuration for the request scheduler.
     max_running_requests: int = 32
     max_tokens_per_batch: int = 4096
     max_prompt_tokens: int = 2048
@@ -70,3 +78,5 @@ class SchedulerConfig:
     chunk_token_threshold: int = 512
     starvation_prevention: bool = True
     deadline_scheduling: bool = True
+
+"""

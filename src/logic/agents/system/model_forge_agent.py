@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +21,10 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 Instantiate ModelForgeAgent(path) inside the PyAgent environment and call its @as_tool methods (prepare_dataset, start_finetuning, trigger_autonomous_tuning) or use monitor_agent_quality to trigger autonomous tuning workflows; datasets and adapters are stored under data/forge. Intended to be used by orchestration layers that schedule tuning jobs and manage model adapters.
 
+"""
 WHAT IT DOES:
 Provides a lightweight orchestration layer for preparing JSONL datasets, simulating LoRA-style fine-tuning job starts, managing on-disk directories for adapters/datasets, and triggering autonomous tuning when agent quality metrics fall below thresholds driven by ModelRegistryCore.
 
@@ -31,7 +35,6 @@ FILE CONTENT SUMMARY:
 Model Forge Agent for PyAgent.
 Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
 """
-
 import asyncio
 import json
 import logging
@@ -49,7 +52,8 @@ __version__ = VERSION
 
 
 class ModelForgeAgent(BaseAgent):
-""""Orchestrates local model fine-tuning and adapter management.
+""""
+Orchestrates local model fine-tuning and adapter management.
     def __init__(self, path: str) -> None:
         super().__init__(path)
 #         self.name = "ModelForge"        self.forge_dir = Path("data/forge")"        self.forge_dir.mkdir(parents=True, exist_ok=True)
@@ -79,7 +83,7 @@ class ModelForgeAgent(BaseAgent):
             examples: List of dictionaries with 'instruction' and 'output'.'#         output_path = self.datasets_dir / f"{task_name}.jsonl"
         def write_dataset() -> None:
             with open(output_path, "w", encoding="utf-8") as f:"                for ex in examples:
-                    f.write(json.dumps(ex) + "\\n")"
+                    f.write(json.dumps(ex) + "\\n")
         try:
             await asyncio.to_thread(write_dataset)
 #             return fDataset prepared at {output_path} with {len(examples)} examples.
@@ -90,7 +94,7 @@ class ModelForgeAgent(BaseAgent):
     async def trigger_autonomous_tuning(self, module_name: str, evolution_data: dict[str, Any]) -> str:
         Triggers an autonomous fine-tuning loop for a specific agent/module.
         Args:
-            module_name: The target agent or module (e.g., 'SQLAgent').'            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.'        version = evolution_data".get("version", "v1")"        examples = evolution_data.get("synthetic_examples", [])"
+            module_name: The target agent or module (e.g., 'SQLAgent').'            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.'        version = evolution_data".get("version", "v1")"        examples = evolution_data.get("synthetic_examples", [])
 #         task_name = fopt_{module_name}_{version}
 
         # 1. Prepare Dataset
@@ -131,7 +135,8 @@ __version__ = VERSION
 
 
 class ModelForgeAgent(BaseAgent):
-""""Orchestrates local model fine-tuning and adapter management.
+""""
+Orchestrates local model fine-tuning and adapter management.
     def __init__(self, path: str) -> None:
         super().__init__(path)
 #         self.name = "ModelForge"        self.forge_dir = Path("data/forge")"        self.forge_dir.mkdir(parents=True, exist_ok=True)
@@ -158,10 +163,10 @@ class ModelForgeAgent(BaseAgent):
     async def prepare_dataset(self, task_name: str, examples: list[dict[str, str]]) -> str:
         "Prepares a JSONL dataset for fine-tuning."        Args:
             task_name: Unique name for the fine-tuning task.
-            examples: List of dictionaries with 'instruction' and 'output'.'#         output_path "= self.datasets_dir / f"{task_name}.jsonl"
+            examples: List of dictionaries with 'instruction' and 'output'.'#         output_path "= self.datasets_dir / f"{task_name}.jsonl
         def write_dataset() -> None:
             with open(output_path, "w", encoding="utf-8") as f:"                for ex in examples:
-                    f.write(json.dumps(ex) + "\\n")"
+                    f.write(json.dumps(ex) + "\\n")
         try:
             await asyncio.to_thread(write_dataset)
 #             return fDataset prepared at {output_path} with {len(examples)} examples.
@@ -171,7 +176,7 @@ class ModelForgeAgent(BaseAgent):
     @as_tool
     async def trigger_autonomous_tuning(self, module_name: str, evolution_data: dict[str, Any]) -> str:
         Triggers an autonomous "fine-tuning loop for a specific agent/module."        Args:
-            module_name: The target agent or module (e.g., 'SQLAgent').'            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.'     "   version = evolution_data.get("version", "v1")"        examples = evolution_data.get("synthetic_examples", [])"
+            module_name: The target agent or module (e.g., 'SQLAgent').'            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.'     "   version = evolution_data.get("version", "v1")"        examples = evolution_data.get("synthetic_examples", [])
 #         task_name = fopt_{module_name}_{version}
 
         # 1. Prepare Dataset
@@ -195,7 +200,7 @@ class ModelForgeAgent(BaseAgent):
 #             job_id = fjob_{task_name}_{int(time.time())}
             # Save config to data/config (Phase 282: Dedicated config storage)
 #             config_path = Path("data/config") / f"{task_name}_adapter_config.json"            config_path.parent.mkdir(parents=True, exist_ok=True)
-            with open(config_path, 'w', encoding='utf-8') as f:'                json.dump({"base_model": base_model, "peft_type": "LORA", "job_id": job_id}, f)"
+            with open(config_path, 'w', encoding='utf-8') as f:'                json.dump({"base_model": base_model, "peft_type": "LORA", "job_id": job_id}, f)
             # Keep adapter directory for other artifacts
             adapter_path = self.adapters_dir / task_name
             adapter_path.mkdir(parents=True, exist_ok=True)
@@ -217,8 +222,10 @@ class ModelForgeAgent(BaseAgent):
             # Fallback to legacy path
 #             adapter_path = self.adapters_dir / task_name / "adapter_config.json"
         if not adapter_path.exists():
-#             return fError: Adapter '{task_name}' not found.'
+#             return fError: Adapter '{task_name}' not found.
         def read_config() -> str:
             with open(adapter_path, encoding='utf-8') as f:'                return f.read()
 
         return await asyncio.to_thread(read_config)
+
+"""

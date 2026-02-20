@@ -13,12 +13,13 @@
 # limitations under the License.
 
 
-"""Standard executor implementations."""
-
-
-
+"""
+"""
+Standard executor implementations.""
 try:
-    from .base import Executor
+
+"""
+from .base import Executor
 except ImportError:
     from .base import Executor
 
@@ -30,9 +31,9 @@ except ImportError:
 
 
 class MockExecutor(Executor):
-    """Mock executor for testing."""
-
-    def __init__(self, tokens_per_step: int = 1) -> None:
+"""
+Mock executor for testing.""
+def __init__(self, tokens_per_step: int = 1) -> None:
         self.tokens_per_step = tokens_per_step
 
 
@@ -40,8 +41,9 @@ class MockExecutor(Executor):
         self,
         scheduler_output: SchedulerOutput,
     ) -> ModelRunnerOutput:
-        """Generate mock tokens."""
-        output = ModelRunnerOutput()
+"""
+Generate mock tokens.""
+output = ModelRunnerOutput()
         for request in scheduler_output.scheduled_requests:
             output.req_ids.append(request.request_id)
             output.req_id_to_index[request.request_id] = len(output.req_ids) - 1
@@ -51,5 +53,6 @@ class MockExecutor(Executor):
 
 
     def shutdown(self) -> None:
-        """No-op shutdown."""
-        pass
+"""
+No-op shutdown.""
+pass

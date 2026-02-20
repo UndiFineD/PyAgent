@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Profiling Core - cProfile aggregation and bottleneck analysis
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -62,7 +66,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Profiling core.py module.
 """
-
 import pstats
 from dataclasses import dataclass
 from typing import Any
@@ -85,11 +88,14 @@ class ProfileStats:
 
 
 class ProfilingCore:
-    """Pure logic for cProfile aggregation and bottleneck analysis.""""    Identifies slow methods and calculates optimization priority.
+"""
+Pure logic for cProfile aggregation and bottleneck analysis.""""
+Identifies slow methods and calculates optimization priority.
     
     def analyze_stats(self, pstats_obj: pstats.Stats, limit: int = 10) -> list[ProfileStats]:
-        """Converts raw pstats into a list of pure ProfileStats dataclasses.        results: list[Any] = []
-        pstats_obj.sort_stats("cumulative")"
+"""
+Converts raw pstats into a list of pure ProfileStats dataclasses.        results: list[Any] = []
+        pstats_obj.sort_stats("cumulative")
         # pstats stores data in a complex tuple structure
         # (cc, nc, tt, ct, callers)
         stats_dict: dict[Any, Any] = pstats_obj.stats  # type: ignore[attr-defined]
@@ -108,7 +114,8 @@ class ProfilingCore:
         return results
 
     def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
-        """Identifies functions exceeding the time threshold.        if rc:
+"""
+Identifies functions exceeding the time threshold.        if rc:
             try:
                 # Convert list of dataclasses to list of dicts for Rust
                 stats_list = [
@@ -122,4 +129,13 @@ class ProfilingCore:
         return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
 
     def calculate_optimization_priority(self, stats: ProfileStats) -> float:
-        """Heuristic for optimization: time * frequency.        return stats.total_time * stats.call_count
+"""
+Heuristic for optimization: time * frequency.        return stats.total_time * stats.call_count
+
+"""
+
+"""
+
+""
+
+"""

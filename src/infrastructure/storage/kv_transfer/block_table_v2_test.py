@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.kv_transfer.block_table_v2 import BlockAllocationStrategy, BlockTableConfig, BlockInfo, CpuGpuBuffer, BlockTable, SparseBlockTable, PredictiveBlockAllocator, DistributedBlockTable, BlockTableV2, BlockTableFactory

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ImprovementDiff - Represent a single improvement difference between branches
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -64,8 +68,9 @@ __version__ = VERSION
 
 @dataclass(order=True)
 class ImprovementDiff:
-    """Difference in a single improvement between branches.""""
-    Attributes:
+"""
+Difference in a single improvement between branches.""""
+Attributes:
         improvement_id: Unique improvement identifier.
         diff_type: Type of difference.
         source_version: Improvement in source branch (if exists).
@@ -75,23 +80,26 @@ class ImprovementDiff:
     diff_type: ImprovementDiffType
     source_version: Improvement | None = None
     target_version: Improvement | None = None
-    change_summary: str = """
-    def __post_init__(self):
+    change_summary: str = ""
+def __post_init__(self):
         # Validate diff_type
         if not isinstance(self.diff_type, ImprovementDiffType):
             raise TypeError(f"diff_type must be ImprovementDiffType, got {type(self.diff_type)}")"        # At least one version must be present
         if self.source_version is None and self.target_version is None:
-            raise ValueError("At least one of source_version or target_version must be provided.")"
+            raise ValueError("At least one of source_version or target_version must be provided.")
     def pretty_print(self) -> str:
-        """Return a human-readable summary of the improvement diff.        src = f"source: {self.source_version}" if self.source_version else "source: None""        tgt = f"target: {self.target_version}" if self.target_version else "target: None""        return (
+"""
+Return a human-readable summary of the improvement diff.        src = f"source: {self.source_version}" if self.source_version else "source: None""        tgt = f"target: {self.target_version}" if self.target_version else "target: None""        return (
             f"ImprovementDiff(id={self.improvement_id}, type={self.diff_type},\\n  {src},\\n  {tgt},\\n  summary={self.change_summary})""        )
 
     def to_dict(self) -> dict:
-        """Serialize to a dictionary.        return {
+"""
+Serialize to a dictionary.        return {
             "improvement_id": self.improvement_id,"            "diff_type": self.diff_type.name if hasattr(self.diff_type, "name") else str(self.diff_type),"            "source_version": self.source_version.to_dict() if self.source_version and hasattr(self.source_version, "to_dict") else None,"            "target_version": self.target_version.to_dict() if self.target_version and hasattr(self.target_version, "to_dict") else None,"            "change_summary": self.change_summary,"        }
 
     @classmethod
-    def from_dict(cls, d: dict) -> "ImprovementDiff":"        """Deserialize from a dictionary.        diff_type = ImprovementDiffType[d["diff_type"]] if isinstance(d["diff_type"], str) else d["diff_type"]"        src = Improvement.from_dict(d["source_version"]) if d.get("source_version") else None"        tgt = Improvement.from_dict(d["target_version"]) if d.get("target_version") else None"        return cls(
+    def from_dict(cls, d: dict) -> "ImprovementDiff":"        """
+Deserialize from a dictionary.        diff_type = ImprovementDiffType[d["diff_type"]] if isinstance(d["diff_type"], str) else d["diff_type"]"        src = Improvement.from_dict(d["source_version"]) if d.get("source_version") else None"        tgt = Improvement.from_dict(d["target_version"]) if d.get("target_version") else None"        return cls(
             improvement_id=d["improvement_id"],"            diff_type=diff_type,
             source_version=src,
             target_version=tgt,
@@ -102,3 +110,5 @@ class ImprovementDiff:
             return NotImplemented
         # Deterministic comparison: by improvement_id, then diff_type name
         return (self.improvement_id, str(self.diff_type)) < (other.improvement_id, str(other.diff_type))
+
+""

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 from argparse import Namespace
 import ast
 import hashlib
@@ -33,20 +35,21 @@ from src.observability.structured_logger import StructuredLogger
 from .compile_result import CompileResult
 from .core.deduplication_core import DeduplicationCore
 
+"""
 __version__: str = VERSION
 
-
-
+"""
 class ReportGenerator:
-    """Generates quality reports (description, errors, improvements) for agent files."""
-
-    def __init__(        self,
+"""
+Generates quality reports (description, errors, improvements) for agent files.""
+def __init__(        self,
         agent_dir: Path | str | None = None,
         output_dir: Path | str | None = None,
         recorder: Any = None,
     ) -> None:
-        """Initialize with directory containing agent scripts."""
-        Args:
+"""
+Initialize with directory containing agent scripts.""
+Args:
             agent_dir: Directory containing agent scripts.
             output_dir: Directory where reports should be written.
             recorder: Optional LocalContextRecorder.
@@ -66,14 +69,16 @@ class ReportGenerator:
 
 
     def _record(self, action: str, result: str) -> None:
-        """Record report generation activities."""
-        if self.recorder:
+"""
+Record report generation activities.""
+if self.recorder:
             self.recorder.record_interaction("Reporting", "ReportGenerator", action, result)
 
 
     def process_all_files(self) -> dict[str, Any]:
-        """Process all .py files in agent_dir and generate reports."""
-        py_files: list[Path] = list(self.iter_agent_py_files())
+"""
+Process all .py files in agent_dir and generate reports.""
+py_files: list[Path] = list(self.iter_agent_py_files())
         if not py_files:
             logging.error(f"No .py files found under {self.agent_dir}")
             return {"count": 0, "skipped": 0, "errors": 0}
@@ -97,8 +102,9 @@ class ReportGenerator:
 
 
     def _process_single_file(self, py_path: Path) -> str:
-        """Helper to process a single file with error handling. Returns 'processed', 'skipped', or 'error'."""
-        try:
+"""
+Helper to process a single file with error handling. Returns 'processed', 'skipped', or 'error'.""
+try:
             if self.process_file(py_path):
                 return "processed"
             else:
@@ -109,8 +115,9 @@ class ReportGenerator:
 
 
     def export_jsonl_report(self, items: list[dict[str, Any]], filename: str = "audit_log.jsonl") -> bool:
-        """Exports report items to JSONL format (Phase 183)."""
-        output_path: Path = self.output_dir / filename
+"""
+Exports report items to JSONL format (Phase 183).""
+output_path: Path = self.output_dir / filename
         # Deduplicate before export
         unique_items: list[dict[str, Any]] = DeduplicationCore.deduplicate_items(items)
         DeduplicationCore.export_to_jsonl(unique_items, str(output_path))
@@ -123,21 +130,22 @@ class ReportGenerator:
 
 
     def generate_full_report(self) -> str:
-        """Generate a comprehensive project report including the dashboard grid."""
-        processed: dict[str, Any] = self.process_all_files()
+"""
+Generate a comprehensive project report including the dashboard grid.""
+processed: dict[str, Any] = self.process_all_files()
 
         lines: list[str] = [
-            "# 🚀 PyAgent Active Progress Dashboard",
+            "#  PyAgent Active Progress Dashboard",
             f"*Last Updated: {time.strftime('%Y-%m-%d %H:%M:%S')}*",
             "",
             self.render_3x3_grid(),
             "",
-            "## 📈 Processing Summary",
+            "##  Processing Summary",
             f"- Files Processed: {processed.get('count', 0)}",
             f"- Files Skipped: {processed.get('skipped', 0)}",
             f"- Errors Encountered: {processed.get('errors', 0)}",
             "",
-            "## 📂 Module Reports",
+            "##  Module Reports",
             (
                 "Individual module reports (description, errors, improvements) "
                 "have been generated in the agent directory."
@@ -150,7 +158,8 @@ class ReportGenerator:
 
 
     def render_3x3_grid(self) -> str:
-        """Generate a 3x3 visual grid for project progress as requested in improvements.txt."""
+"""
+Generate a 3x3 visual grid for project progress as requested in improvements.txt.""
         # Visual breakdown of project status across three key domains
         grid: list[str] = [
             "## BMAD Progress Grid",
@@ -166,8 +175,9 @@ class ReportGenerator:
 
 
     def process_file(self, py_path: Path) -> bool:
-        """Process a single file. Returns True if processed, False if skipped."""
-        source: str = self._read_text(py_path)
+"""
+Process a single file. Returns True if processed, False if skipped.""
+source: str = self._read_text(py_path)
         current_sha: str = self._sha256_text(source)[:16]
         rel_path: Path = py_path.relative_to(self.agent_dir)
         stem: str = "_".join(rel_path.with_suffix("").parts)
@@ -201,21 +211,22 @@ class ReportGenerator:
 
 
     def generate_full_report(self) -> str:
-        """Generate a comprehensive project report including the dashboard grid."""
-        processed: dict[str, Any] = self.process_all_files()
+"""
+Generate a comprehensive project report including the dashboard grid.""
+processed: dict[str, Any] = self.process_all_files()
 
         lines: list[str] = [
-            "# 🚀 PyAgent Active Progress Dashboard",
+            "#  PyAgent Active Progress Dashboard",
             f"*Last Updated: {time.strftime('%Y-%m-%d %H:%M:%S')}*",
             "",
             self.render_3x3_grid(),
             "",
-            "## 📈 Processing Summary",
+            "##  Processing Summary",
             f"- Files Processed: {processed.get('count', 0)}",
             f"- Files Skipped: {processed.get('skipped', 0)}",
             f"- Errors Encountered: {processed.get('errors', 0)}",
             "",
-            "## 📂 Module Reports",
+            "##  Module Reports",
             (
                 "Individual module reports (description, errors, improvements) "
                 "have been generated in the agent directory."
@@ -228,17 +239,19 @@ class ReportGenerator:
 
 
     def render_3x3_grid(self) -> str:
-        """Generate a 3x3 visual grid for project progress as requested in improvements.txt."""
+"""
+Generate a 3x3 visual grid for project progress as requested in improvements.txt.""
         # Visual breakdown of project status across three key domains
         grid: list[str] = [
-            "## 📊 BMAD Progress Grid","            "","            "| Planning | Advancement | Quality |","            "| :--- | :--- | :--- |","            "| 📝 **Project Brief**: ✅ | 🚀 **Phase 34**: SUCCESS | 🧪 **Test Coverage**: 92% |","            "| 📐 **Tech Spec**: ✅ | 🧠 **Reality Grafting**: ACTIVE | 🟢 **Lint Success**: ✅ |","            "| 🏛️ **Architecture**: ✅ | ⏱️ **Temporal Sync**: ONLINE | 🛡️ **Security Audit**: PASS |","            "","        
+            "##  BMAD Progress Grid","            "","            "| Planning | Advancement | Quality |","            "| :--- | :--- | :--- |","            "|  **Project Brief**:  |  **Phase 34**: SUCCESS |  **Test Coverage**: 92% |","            "|  **Tech Spec**:  |  **Reality Grafting**: ACTIVE |  **Lint Success**:  |","            "| ️ **Architecture**:  | ️ **Temporal Sync**: ONLINE | ️ **Security Audit**: PASS |","            "","        
             ]
         return "\n".join(grid)
 
 
     def process_file(self, py_path: Path) -> bool:
-        """Process a single file. Returns True if processed, False if skipped."""
-        source: str = self._read_text(py_path)
+"""
+Process a single file. Returns True if processed, False if skipped.""
+source: str = self._read_text(py_path)
         current_sha: str = self._sha256_text(source)[:16]
         rel_path: Path = py_path.relative_to(self.agent_dir)
         stem: str = "_".join(rel_path.with_suffix("").parts)
@@ -272,13 +285,15 @@ class ReportGenerator:
 
 
     def iter_agent_py_files(self) -> Iterable[Path]:
-        """Find all .py files in agent_dir recursively."""
-        return sorted(self.agent_dir.rglob("*.py"))"
+"""
+Find all .py files in agent_dir recursively.""
+return sorted(self.agent_dir.rglob("*.py"))
 
 
     def render_description(self, py_path: Path, source: str, tree: ast.AST) -> str:
-        """Generate description markdown from AST."""
-        funcs, classes = self._find_top_level_defs(tree)
+"""
+Generate description markdown from AST.""
+funcs, classes = self._find_top_level_defs(tree)
         imports: list[str] = self._find_imports(tree)
         sha: str = self._sha256_text(source)[:16]
         lines: list[str] = [
@@ -287,25 +302,27 @@ class ReportGenerator:
         behavior_bits: list[str] = []
         if self._detect_cli_entry(source):
             behavior_bits.append("Has a CLI entrypoint (`__main__`).")"        if self._detect_argparse(source):
-            behavior_bits.append("Uses `argparse` for CLI parsing.")"        if "subprocess" in source:"            behavior_bits.append("Invokes external commands via `subprocess`.")"        if "sys.path.insert" in source:"            behavior_bits.append("Mutates `sys.path` to import sibling modules.")"
+            behavior_bits.append("Uses `argparse` for CLI parsing.")"        if "subprocess" in source:"            behavior_bits.append("Invokes external commands via `subprocess`.")"        if "sys.path.insert" in source:"            behavior_bits.append("Mutates `sys.path` to import sibling modules.")
         if not behavior_bits:
-            behavior_bits.append("Pure module (no obvious CLI / side effects).")"
+            behavior_bits.append("Pure module (no obvious CLI / side effects).")
         for bit in behavior_bits:
-            lines.append(f"- {bit}")"
+            lines.append(f"- {bit}")
         lines.append("")"        lines.append("## Key dependencies")"        if imports:
             shown = imports[:12]
-            shown_imports = ", ".join(f"`{x}`" for x in shown)"            suffix = " ..." if len(imports) > len(shown) else """            lines.append(f"- Top imports: {shown_imports}{suffix}")"        else:
-            lines.append("- (none)")"
+            shown_imports = ", ".join(f"`{x}`" for x in shown)"            suffix = " ..." if len(imports) > len(shown) else """
+lines.append(f"- Top imports: {shown_imports}{suffix}")"        else:
+            lines.append("- (none)")
         lines.extend(
             [
                 "","                "## Metadata","                "","                f"- SHA256(source): `{sha}`","                f"- Last updated: `{time.strftime('%Y-%m-%d %H:%M:%S')}`","'                f"- File: `{self._rel(py_path)}`","            ]
         )
-        return "\\n".join(lines)"
+        return "\\n".join(lines)
 
 
     def render_errors(self, py_path: Path, source: str, compile_result: CompileResult | str | None) -> str:
-        """Generate errors report."""
-        lines: list[str] = [
+"""
+Generate errors report.""
+lines: list[str] = [
             f"# Errors: `{py_path.name}`","            "","            "## Scan scope","            "- Static scan (AST parse) + lightweight compile / syntax check","            "- VS Code / Pylance Problems are not embedded by this script","            "","            "## Syntax / compile","            "","        ]
         error_msg = None
         if isinstance(compile_result, str):
@@ -319,7 +336,7 @@ class ReportGenerator:
             lines.append(error_msg.strip())
             lines.append("```")"        
         else:
-            lines.append("- `py_compile` equivalent: OK (AST parse succeeded)")"
+            lines.append("- `py_compile` equivalent: OK (AST parse succeeded)")
         lines.extend(
             [
                 "","                "## Known issues / hazards","            ]
@@ -331,7 +348,7 @@ class ReportGenerator:
         if 'subprocess.run(["gh"' in source or "subprocess.run(['gh'" in source:"'            
         known.append("Runs GitHub CLI via `subprocess`; requires `gh` to be authenticated.")"        
         if "copilot" in source and "subprocess.run" in source:"            
-        known.append("Invokes `copilot` CLI; will be a no-op / fallback if Copilot CLI is not installed.")"
+        known.append("Invokes `copilot` CLI; will be a no-op / fallback if Copilot CLI is not installed.")
         # Detected by AST
         try:
             for node in ast.walk(ast.parse(source)):
@@ -344,17 +361,18 @@ class ReportGenerator:
         if known:
             for item in known:
                 lines.append(f"- {item}")"        else:
-            lines.append("- None detected by the lightweight scan")"
+            lines.append("- None detected by the lightweight scan")
         lines.extend(
             [
                 "","                "## Notes","                "- This report only shows fundamental static analysis errors.","                f"- File: `{self._rel(py_path)}`","            ]
         )
-        return "\\n".join(lines)"
+        return "\\n".join(lines)
 
 
     def render_improvements(self, py_path: Path, source: str, tree: ast.AST) -> str:
-        """Generate improvements report."""
-        _, classes = self._find_top_level_defs(tree)
+"""
+Generate improvements report.""
+_, classes = self._find_top_level_defs(tree)
         suggestions: list[str] = []
         suggestions.extend(self._find_issues(tree, source, py_path))
 
@@ -364,7 +382,7 @@ class ReportGenerator:
             if classes and "__init__" not in source:"            
             suggestions.append("Consider documenting class construction / expected invariants.")"        
             if "print(" in source and "logging" not in source:"            
-            suggestions.append("Consider using `logging` instead of `print` for controllable verbosity.")"
+            suggestions.append("Consider using `logging` instead of `print` for controllable verbosity.")
         suggestions = sorted(list(set(suggestions)))
         lines: list[str] = [
             f"# Improvements: `{py_path.name}`","            "","            "## Suggested improvements","            "","        ]
@@ -375,7 +393,7 @@ class ReportGenerator:
             [
                 "","                "## Notes","                "- These are suggestions based on static inspection; validate behavior with tests / runs.","                f"- File: `{self._rel(py_path)}`","            ]
         )
-        return "\\n".join(lines)"
+        return "\\n".join(lines)
 
 
     def _find_top_level_defs(self, tree: ast.AST) -> tuple[list[str], list[str]]:
@@ -397,7 +415,8 @@ class ReportGenerator:
                 for alias in node.names:
                     imports.append(alias.name)
             elif isinstance(node, ast.ImportFrom):
-                mod: str = node.module or """                imports.append(mod)
+                mod: str = node.module or ""
+imports.append(mod)
         # De-dupe while preserving order
         seen: set[str] = set()
         out: list[str] = []
@@ -425,26 +444,26 @@ class ReportGenerator:
                 missing_arg_type = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")"                missing_return_type = node.returns is None
                 if missing_arg_type or missing_return_type:
                     issues.append(f"Function `{node.name}` is missing type annotations.")"        if "TODO" in source or "FIXME" in source:"            issues.append("Contains TODO or FIXME comments.")"        if "sys.path.insert" in source:"            issues.append("Avoid `sys.path.insert(...)` imports; prefer a proper package layout or relative imports.")"        if "subprocess.run" in source:"            issues.append("Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting).")"        if self._detect_cli_entry(source) and self._detect_argparse(source):
-            issues.append("Add `--help` examples and validate CLI args (paths, required files).")"
+            issues.append("Add `--help` examples and validate CLI args (paths, required files).")
         if self._is_pytest_test_file(py_path) and re.search(r"def\\\\s+test_TODO Placeholder\\\\s*\(", source):"            issues.append("Replace TODO Placeholder tests with real assertions; target the most important behaviors first.")"        if self._looks_like_pytest_import_problem(py_path):
-            issues.append("Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references.")"'
+            issues.append("Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references.")
         return issues
 
 
     def _detect_cli_entry(self, source: str) -> bool:
-        return 'if __name__ == "__main__":' in source or "if __name__ == '__main__':" in source"'
+        return 'if __name__ == "__main__":' in source or "if __name__ == '__main__':" in source
 
 
     def _detect_argparse(self, source: str) -> bool:
-        return "import argparse" in source or "from argparse import" in source"
+        return "import argparse" in source or "from argparse import" in source
 
 
     def _is_pytest_test_file(self, path: Path) -> bool:
-        return path.name.startswith("test_") and path.name.endswith(".py")"
+        return path.name.startswith("test_") and path.name.endswith(".py")
 
 
     def _looks_like_pytest_import_problem(self, path: Path) -> bool:
-        return "-" in path.name or path.name.count(".") > 1"
+        return "-" in path.name or path.name.count(".") > 1
 
 
     def _try_parse_python(self, source: str, filename: str) -> tuple[ast.AST | None, str | None]:
@@ -476,15 +495,15 @@ class ReportGenerator:
 
 
     def _sha256_text(self, text: str) -> str:
-        return hashlib.sha256(text.encode("utf-8")).hexdigest()"
+        return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
     def _read_text(self, path: Path) -> str:
-        return path.read_text(encoding="utf-8", errors="replace")"
+        return path.read_text(encoding="utf-8", errors="replace")
 
 
     def _write_md(self, path: Path, content: str) -> None:
-        path.write_text(content, encoding="utf-8")"
+        path.write_text(content, encoding="utf-8")
 
 
     def _rel(self, path: Path) -> str:
@@ -496,7 +515,8 @@ class ReportGenerator:
 
 
 if __name__ == "__main__":"    def main() -> None:
-        """Main entry point.        # Internal CLI for repairing/refreshing autodocs
+"""
+Main entry point.        # Internal CLI for repairing/refreshing autodocs
         import argparse
 
         parser = argparse.ArgumentParser(description="Repair or refresh autodocs for the workspace.")
@@ -512,14 +532,22 @@ if __name__ == "__main__":"    def main() -> None:
         # Resolve paths relative to workspace root if possible
         base_dir_main: Path = Path(__file__).resolve().parent.parent.parent.parent
         agent_dir_main: Path = Path(args.src) if args.src else (base_dir_main / "src")"        output_dir_main: Path = Path(args.out) if args.out else (base_dir_main / "docs" / "autodoc")"
-        print("Starting autodoc generation...")"        print(f"Source: {agent_dir_main}")"        print(f"Output: {output_dir_main}")"
+        print("Starting autodoc generation...")"        print(f"Source: {agent_dir_main}")"        print(f"Output: {output_dir_main}")
         output_dir_main.mkdir(parents=True, exist_ok=True)
 
         generator = ReportGenerator(agent_dir=agent_dir_main, output_dir=output_dir_main)
         results: dict[str, Any] = generator.process_all_files()
 
-        print("Generation completed.")"        print(f"Files Processed: {results.get('count', 0)}")"'        print(f"Files Skipped: {results.get('skipped', 0)}")"'        print(f"Errors: {results.get('errors', 0)}")"'
+        print("Generation completed.")"        print(f"Files Processed: {results.get('count', 0)}")"'        print(f"Files Skipped: {results.get('skipped', 0)}")"'        print(f"Errors: {results.get('errors', 0)}")"
         if not args.no_dashboard:
             dashboard_content: str = generator.generate_full_report()
-            dashboard_path: Path = output_dir_main / "AUTODOC_DASHBOARD.md""            dashboard_path.write_text(dashboard_content, encoding="utf-8")"            print(f"Dashboard generated at {dashboard_path}")"
+            dashboard_path: Path = output_dir_main / "AUTODOC_DASHBOARD.md""            dashboard_path.write_text(dashboard_content, encoding="utf-8")"            print(f"Dashboard generated at {dashboard_path}")
     main()
+
+"""
+
+"""
+
+"""
+
+"""

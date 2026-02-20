@@ -15,9 +15,11 @@
 
 
 """
+"""
 RDMA Checkpointing Manager (Phase 93).
 Provides zero-latency state background snapshots via NIXL RDMA.
 
+"""
 import logging
 import time
 import uuid
@@ -41,7 +43,8 @@ class CheckpointMetadata:
 
 
 class CheckpointManager:
-    """Manages high-speed state checkpoints using RDMA teleportation.
+"""
+Manages high-speed state checkpoints using RDMA teleportation.
     def __init__(self, rank: int, world_size: int):
         self.rank = rank
         self.world_size = world_size
@@ -50,7 +53,7 @@ class CheckpointManager:
 
         # Determine peer for mirroring (circular buddies)
         self.peer_rank = (self.rank + 1) % self.world_size if self.world_size > 1 else self.rank
-        logger.info(f"CheckpointManager initialized. Rank {rank} buddies with {self.peer_rank}")"
+        logger.info(f"CheckpointManager initialized. Rank {rank} buddies with {self.peer_rank}")
     async def create_checkpoint(self, state_buffer: bytes) -> str:
                 Creates a checkpoint by 'teleporting' it to a peer rank via RDMA.'        This is a non-blocking operation for the main reasoning loop if backgrounded.
                 checkpoint_id = f"ckpt-{uuid.uuid4().hex[:8]}""        start_time = time.perf_counter()
@@ -81,14 +84,15 @@ class CheckpointManager:
                 logger.info(f"Checkpoint {checkpoint_id} teleported to rank {self.peer_rank} in {latency:.2f}ms")"                return checkpoint_id
             else:
                 logger.error(f"RDMA Checkpoint failed: {result.get('error', 'Unknown error')}")"'                return """
-        except Exception as e:
+except Exception as e:
             logger.error(f"Failed to execute RDMA checkpoint: {e}")"            return """
-    def get_latest_checkpoint(self) -> Optional[CheckpointMetadata]:
-        """Returns the most recent successful checkpoint.        return self.checkpoints[-1] if self.checkpoints else None
+def get_latest_checkpoint(self) -> Optional[CheckpointMetadata]:
+"""
+Returns the most recent successful checkpoint.        return self.checkpoints[-1] if self.checkpoints else None
 
     async def recover_from_checkpoint(self, checkpoint_id: str) -> Optional[bytes]:
                 Recovers state from a peer node using RDMA Read.
-                logger.info(f"Initiating RDMA Recovery for {checkpoint_id} from rank {self.peer_rank}")"
+                logger.info(f"Initiating RDMA Recovery for {checkpoint_id} from rank {self.peer_rank}")
         try:
             # nixl_rdma_read_rust pulls the data back
             result = self.rust_bridge.execute(
@@ -99,3 +103,5 @@ class CheckpointManager:
             if result.get("success"):"                return b"RECOVERED_STATE_STUB"  # In real imp, Rust would return the buffer"            return None
         except Exception as e:
             logger.error(f"RDMA Recovery failed: {e}")"            return None
+
+"""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.structures.object_pool import Resettable, PoolStats, ObjectPool, TypedObjectPool, BufferPool, TieredBufferPool, PooledContextManager, get_list_pool, get_dict_pool, get_set_pool, pooled_list, pooled_dict, pooled_set

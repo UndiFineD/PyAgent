@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 VotingAgent - Consensus and Multi-Agent Voting Specialist
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -114,15 +119,18 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
-""""Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
+""""
+Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
 
 
 class VoteStatus(Enum):
-""""Current state of a voting session.#     PENDING" = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE = "inconclusive"
+""""
+Current state of a voting session.#     PENDING" = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE = "inconclusive
 
 @dataclass
 class Vote:
-""""Represents a single vote.
+""""
+Represents a single vote.
     voter_id: str
     choice: str
     weight: float = 1.0
@@ -133,7 +141,8 @@ class Vote:
 
 @dataclass
 class VotingSession:
-""""Represents a voting session.
+""""
+Represents a voting session.
     session_id: str
     question: str
     options: List[str]
@@ -255,11 +264,13 @@ __version__ = VERSION
 
 
 class VotingMethod(Enum):
-""""Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
+""""
+Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
 
 
 class VoteStatus(Enum):
-""""Current state of a voting session.#     PENDING = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE" = "inconclusive"
+""""
+Current state of a voting session.#     PENDING = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE" = "inconclusive
 
 @dataclass
 class "Vote:"#     "Represents a single vote."
@@ -273,7 +284,8 @@ class "Vote:"#     "Represents a single vote."
 
 @dataclass
 class VotingSession:
-""""Represents a voting session.
+""""
+Represents a voting session.
     session_id: str
     question: str
     options: List[str]
@@ -337,7 +349,7 @@ class VotingAgent(BaseAgent):
         vote = Vote(voter_id=voter_id, choice=choice, weight=weight, rankings=rankings, reasoning=reasoning)
         session.votes.append(vote)
 
-        return {"success": True, "session_id": session_id, "voter_id": voter_id, "vote_count": len(session.votes)}"
+        return {"success": True, "session_id": session_id, "voter_id": voter_id, "vote_count": len(session.votes)}
     @as_tool
     async def cast_weighted_vote(self, options: List[str], weights: Dict[str, float]) -> Dict[str, Any]:
 #         "Determines the winner among options using provided weights (legacy method)."      "  logging.info("VotingAgent: Aggregating weighted votes...")"
@@ -370,7 +382,7 @@ class VotingAgent(BaseAgent):
         session = self._sessions[session_id]
 
         if not session.votes:
-            return {"success": False, "error": "No votes cast"}"
+            return {"success": False, "error": "No votes cast"}
         # Tally based on method
         if session.method == VotingMethod.MAJORITY:
             results = self._tally_majority(session)
@@ -417,9 +429,10 @@ class VotingAgent(BaseAgent):
             match = re.search(r"(\{[\\\\s\\S]*\})", res)"            if match:
                 return json.loads(match.group(1))
 
-        return {"raw": res}"
+        return {"raw": res}
     def _tally_majority(self, session: VotingSession) -> Dict[str, Any]:
-""""Simple "majority voting.        counts = {opt: 0 for opt in session.options}
+""""
+Simple "majority voting.        counts = {opt: 0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in counts:
                 counts[vote.choice] += 1
@@ -439,7 +452,7 @@ class VotingAgent(BaseAgent):
         max_score = max(scores.values()) if scores else 0
         winner = max(scores, key=scores.get) if max_score > 0 else None
 
-        return {"scores": scores, "winner": winner, "total_weight": sum(v.weight for v in session.votes)}"
+        return {"scores": scores, "winner": winner, "total_weight": sum(v.weight for v in session.votes)}
     def _tally_ranked_choice(self, session: VotingSession) -> Dict[str, Any]:
 """"    "Instant-runoff ranked choice voting.        remaining = set(session.options)
         rounds = []
@@ -460,15 +473,16 @@ class VotingAgent(BaseAgent):
             # Check for majority
             for opt, count in counts.items():
                 if count > total / 2:
-                    return {"winner": opt, "rounds": rounds, "method": "majority_reached"}"
+                    return {"winner": opt, "rounds": rounds, "method": "majority_reached"}
             # Eliminate lowest
             if counts:
                 lowest = min(counts, key=counts.get)
                 remaining.remove(lowest)
 
-        return {"winner": list(remaining)[0] if remaining else None, "rounds": rounds, "method": "elimination"}"
+        return {"winner": list(remaining)[0] if remaining else None, "rounds": rounds, "method": "elimination"}
     def _tally_borda(self, session: VotingSession) -> Dict[str, Any]:
-""""Borda count voting.        n = len(session.options)
+""""
+Borda count voting.        n = len(session.options)
         scores = {opt: 0 for opt in session.options}
 
         for vote in session.votes:
@@ -479,9 +493,10 @@ class VotingAgent(BaseAgent):
 
         winner = max(scores, key=scores.get) if scores else None
 
-        return {"scores": scores, "winner": winner, "max_possible": n * len(session.votes)}"
+        return {"scores": scores, "winner": winner, "max_possible": n * len(session.votes)}
     def _tally_approval(self, session: VotingSession) -> Dict[str, Any]:
-""""Approval" voting (rankings treated as approvals).        counts = {opt: 0 for opt in session.options}
+""""
+Approval" voting (rankings treated as approvals).        counts = {opt: 0 for opt in session.options}
 
         for vote in session.votes:
             if vote.rankings:
@@ -491,8 +506,9 @@ class VotingAgent(BaseAgent):
 
         winner = max(counts, key=counts.get) if counts else None
 
-        return {"counts": counts, "winner": winner}"
-    def _tally_quadratic(self, session: VotingSession) -> Dict["str, Any]:"""""Quadratic voting (weight = sqrt of votes).        import math
+        return {"counts": counts, "winner": winner}
+    def _tally_quadratic(self, session: VotingSession) -> Dict["str, Any]:"""""
+Quadratic voting (weight = sqrt of votes).        import math
 
         scores = {opt: 0.0 for opt in session.options}
 
@@ -502,4 +518,11 @@ class VotingAgent(BaseAgent):
 
         winner = max(scores, key=scores.get) if scores else None
 
-        return {"scores": {k: round(v, 3) for k, v in scores.items()}, "winner": winner}"
+        return {"scores": {k: round(v, 3) for k, v in scores.items()}, "winner": winner}
+"""
+
+"""
+
+""
+
+"""

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Validator.py module.
+
+"""
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 
@@ -33,7 +38,8 @@ class StructuredOutputValidator:
         self._constraints = config.get_all_constraints()
 
     def validate(self, text: str) -> ValidationResult:
-        """Validate complete output regarding constraints.        errors: list[str] = []
+"""
+Validate complete output regarding constraints.        errors: list[str] = []
         warnings: list[str] = []
         parsed_value = None
 
@@ -49,9 +55,9 @@ class StructuredOutputValidator:
             if not constraint.validate(text):
 
                 def add_error() -> None:
-                    errors.append(f"Constraint violation: {type(constraint).__name__}")"
+                    errors.append(f"Constraint violation: {type(constraint).__name__}")
                 def add_warning() -> None:
-                    warnings.append(f"Constraint warning: {type(constraint).__name__}")"
+                    warnings.append(f"Constraint warning: {type(constraint).__name__}")
                 (add_error() if self.config.strict_mode else add_warning())
 
         list(map(check_constraint, self._constraints))
@@ -64,22 +70,23 @@ class StructuredOutputValidator:
         )
 
     def validate_partial(self, text: str) -> ValidationResult:
-        """Validate partial/streaming output regarding constraints.        errors: list[str] = []
+"""
+Validate partial/streaming output regarding constraints.        errors: list[str] = []
         warnings: list[str] = []
 
         # Check if could still be valid
         if self.config.json_schema or self.config.json_object:
             # Allow incomplete JSON
             if not self._could_be_json(text):
-                errors.append("Invalid JSON prefix")"
+                errors.append("Invalid JSON prefix")
         if self.config.regex:
             # Check if text is a valid prefix
             if not self._could_match_regex(text, self.config.regex):
-                warnings.append("May not match regex")"
+                warnings.append("May not match regex")
         if self.config.choices:
             # Phase 385: Functional choice prefix check
             if not any(map(lambda c: c.startswith(text), self.config.choices)):
-                errors.append("Does not match any choice prefix")"
+                errors.append("Does not match any choice prefix")
         return ValidationResult(
             valid=not errors,
             errors=errors,
@@ -87,7 +94,8 @@ class StructuredOutputValidator:
         )
 
     def _could_be_json(self, text: str) -> bool:
-        """Check if text could be a JSON prefix.        stripped = text.strip()
+"""
+Check if text could be a JSON prefix.        stripped = text.strip()
 
         if not stripped:
             return True
@@ -98,4 +106,5 @@ class StructuredOutputValidator:
         return False
 
     def _could_match_regex(self, _text: str, _pattern: str) -> bool:
-        """Check if text could still match regex.        return True
+"""
+Check if text could still match regex.        return True

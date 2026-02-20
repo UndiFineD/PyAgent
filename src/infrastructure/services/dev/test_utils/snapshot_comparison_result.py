@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import json
 except ImportError:
@@ -44,8 +44,9 @@ __version__ = VERSION
 
 @dataclass
 class SnapshotComparisonResult:
-    """Result of comparing snapshots.""""
-    Attributes:
+"""
+Result of comparing snapshots.""""
+Attributes:
         matches: Whether snapshots match.
         expected: Expected content.
         actual: Actual content.
@@ -58,7 +59,8 @@ class SnapshotComparisonResult:
 
     @property
     def diff(self) -> str | None:
-        """Get a simple diff representation.        if self.matches:
+"""
+Get a simple diff representation.        if self.matches:
             return None
 
         if isinstance(self.expected, dict) and isinstance(self.actual, dict):
@@ -68,4 +70,5 @@ class SnapshotComparisonResult:
             expected_str = str(self.expected)  # type: ignore[arg-type]
             actual_str = str(self.actual)  # type: ignore[arg-type]
 
-        return f"Expected:\\n{expected_str}\\n\\nActual:\\n{actual_str}""
+        return f"Expected:\\n{expected_str}\\n\\nActual:\\n{actual_str}"
+"""

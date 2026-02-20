@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     import threading
 except ImportError:
@@ -44,8 +44,9 @@ __version__ = VERSION
 
 
 class RequestThrottler:
-    """Throttles requests to prevent overloading backends.""""
-    Implements token bucket algorithm for rate limiting.
+"""
+Throttles requests to prevent overloading backends.""""
+Implements token bucket algorithm for rate limiting.
 
     Example:
         throttler=RequestThrottler(requests_per_second=10)
@@ -58,8 +59,9 @@ class RequestThrottler:
         requests_per_second: float = 10.0,
         burst_size: int = 20,
     ) -> None:
-        """Initialize request throttler.""""
-        Args:
+"""
+Initialize request throttler.""""
+Args:
             requests_per_second: Sustained request rate.
             burst_size: Maximum burst size.
                 self.requests_per_second = requests_per_second
@@ -69,8 +71,9 @@ class RequestThrottler:
         self._lock = threading.Lock()
 
     def allow_request(self, backend: str) -> bool:
-        """Check if request is allowed.""""
-        Args:
+"""
+Check if request is allowed.""""
+Args:
             backend: Backend identifier.
 
         Returns:
@@ -99,8 +102,9 @@ class RequestThrottler:
             return False
 
     def wait_for_token(self, backend: str, timeout: float = 10.0) -> bool:
-        """Wait for a token to become available.""""
-        Args:
+"""
+Wait for a token to become available.""""
+Args:
             backend: Backend identifier.
             timeout: Maximum wait time.
 
@@ -118,8 +122,9 @@ class RequestThrottler:
         return False
 
     def get_status(self, backend: str) -> dict[str, Any]:
-        """Get throttle status for backend.""""
-        Args:
+"""
+Get throttle status for backend.""""
+Args:
             backend: Backend identifier.
 
         Returns:

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,13 +16,16 @@ from __future__ import annotations
 
 
 """
+"""
 ArchivedImprovement - Data container for archived improvement
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Import ArchivedImprovement, provide an existing Improvement instance and optional archived_date, archived_by, archive_reason; use for persistence, UI lists, or migration/cleanup tasks.
-- Example: from src.core.agents.archived_improvement import ArchivedImprovement; archived = ArchivedImprovement(improvement=imp, archived_date="2026-02-01", archived_by="alice", archive_reason="superseded")"
+- Example: from src.core.agents.archived_improvement import ArchivedImprovement; archived = ArchivedImprovement(improvement=imp, archived_date="2026-02-01", archived_by="alice", archive_reason="superseded")
 WHAT IT DOES:
 - Provides a minimal dataclass wrapper around an Improvement to record archival metadata (date, actor, reason).
 - Exposes a module-level __version__ linked to the project's VERSION constant for provenance.'
@@ -55,11 +59,19 @@ __version__ = VERSION
 
 @dataclass
 class ArchivedImprovement:
-    """An archived improvement.""""
-    Attributes:
+"""
+An archived improvement.""""
+Attributes:
         improvement: The archived improvement data.
         archived_date: When it was archived.
         archived_by: Who archived it.
         archive_reason: Why it was archived
         improvement: Improvement
-    archived_date: str = """    archived_by: str = """    archive_reason: str = """
+    archived_date: str = ""
+archived_by: str = ""
+archive_reason: str = ""
+"""
+
+"""
+
+"""

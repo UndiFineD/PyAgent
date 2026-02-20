@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from observability.stats.scheduler_stats import MetricExportFormat, PrefixCacheStats, SpecDecodingStats, CUDAGraphStats, PerfStats, KVCacheEvictionEvent, SchedulerStats, SchedulerStatsCollector, create_scheduler_stats, create_stats_collector

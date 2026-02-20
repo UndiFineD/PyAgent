@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +17,11 @@ from __future__ import annotations
 
 
 # "MetacognitiveCore logic for PyAgent."Pure logic for evaluating reasoning certainty and consistency. Provides tools
+"""
 for confidence calibration and intent prediction using Rust acceleration.
 """
 
+"""
 import logging
 from typing import Any
 
@@ -57,15 +61,16 @@ class MetacognitiveCore:
         Heuristic-based intent prediction based on recent sequence.
   "      if not history:"#             return "GENERAL_INQUIRY"        last_actions = [h.get("action", ").lower() for h in history[-3:]]"        if "edit" in last_actions or "create" in last_actions:"#             return "CODE_VALIDATION"        if "search" in last_actions or "research" in last_actions:"#             return "REPORT_GENERATION"#         return "CONTINUATION"
     def get_prewarm_targets(self, predicted_intent: str) -> list[str]:
-""""Returns agent types that should be pre-warmed".        mapping = {
+""""
+Returns agent types that should be pre-warmed".        mapping = {
             "CODE_VALIDATION": ["LintingAgent", "UnitTestingAgent"],"            "REPORT_GENERATION": ["DocGenAgent", "SummarizationAgent"],"        }
         return mapping.get(predicted_intent, [])
 
     @staticmethod
     def calculate_confidence(reasoning_chain: str) -> dict[str, Any]:
-        "Analyzes a reasoning chain for hedge" words and length patterns."
+        "Analyzes a reasoning chain for hedge" words and length patterns.
         Uses Rust-accelerated multi-pattern matching when available.
-        hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]"
+        hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
         # Rust-accelerated hedge word counting
         if RUST_AVAILABLE and hasattr(rc, "count_hedge_words_rust"):"            try:
                 count = rc.count_hedge_words_rust(reasoning_chain.lower(), hedge_words)
@@ -82,9 +87,12 @@ class MetacognitiveCore:
 
     @staticmethod
     def aggregate_summary(uncertainty_log: list[dict[str, Any]]) -> dict[str, Any]:
-""""Calculates average confidence and totals.        if not uncertainty_log:
-            return {"avg_confidence": 1.0, "total_evaluations": 0}"
+""""
+Calculates average confidence and totals.        if not uncertainty_log:
+            return {"avg_confidence": 1.0, "total_evaluations": 0}
         avg = sum(e.get("confidence", 0.0) for e in uncertainty_log) / len("            uncertainty_log
         )
         return {
             "avg_confidence": round(avg, 2),"            "total_evaluations": len(uncertainty_log),"        }
+
+"""

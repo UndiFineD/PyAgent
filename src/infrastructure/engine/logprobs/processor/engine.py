@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Engine.py module.
 """
-
 try:
-    import contextlib
+
+"""
+import contextlib
 except ImportError:
     import contextlib
 
@@ -58,7 +62,8 @@ except ImportError:
 
 
 class LogprobsProcessor:
-    """Process and extract logprobs from model outputs.
+"""
+Process and extract logprobs from model outputs.
     def __init__(self, top_k: int = 5, output_format: LogprobFormat = LogprobFormat.FLAT) -> None:
         self.top_k = top_k
         self.output_format = output_format
@@ -66,7 +71,8 @@ class LogprobsProcessor:
     def process_logits(
         self, logits: np.ndarray, token_ids: np.ndarray, tokenizer: Optional[Any] = None
     ) -> FlatLogprobs | list[LogprobEntry]:
-        """Process raw logits into formatted logprobs.        logprobs = self._log_softmax(logits)
+"""
+Process raw logits into formatted logprobs.        logprobs = self._log_softmax(logits)
         n = len(token_ids)
         selected_logprobs = logprobs[np.arange(n), token_ids]
         top_k_indices = np.argsort(logprobs, axis=1)[:, -self.top_k :][:, ::-1]
@@ -93,7 +99,8 @@ class LogprobsProcessor:
         top_k_logprobs: np.ndarray,
         tokenizer: Optional[Any],
     ) -> list[LogprobEntry]:
-        """Format structured logprob entries.        entries = []
+"""
+Format structured logprob entries.        entries = []
         for i in range(n):
             tops = [
                 TopLogprob(
@@ -117,22 +124,26 @@ class LogprobsProcessor:
     def process_batch(
         self, batch_logits: list[np.ndarray], batch_token_ids: list[np.ndarray], tokenizer: Optional[Any] = None
     ) -> list[FlatLogprobs | list[LogprobEntry]]:
-        """Process a batch of logits.        return [self.process_logits(logits, tids, tokenizer) for logits, tids in zip(batch_logits, batch_token_ids)]
+"""
+Process a batch of logits.        return [self.process_logits(logits, tids, tokenizer) for logits, tids in zip(batch_logits, batch_token_ids)]
 
     def _log_softmax(self, logits: np.ndarray) -> np.ndarray:
-        """Numerically stable log-softmax.        max_logits = np.max(logits, axis=-1, keepdims=True)
+"""
+Numerically stable log-softmax.        max_logits = np.max(logits, axis=-1, keepdims=True)
         shifted = logits - max_logits
         return shifted - np.log(np.sum(np.exp(shifted), axis=-1, keepdims=True))
 
     def _decode(self, tid: int, tokenizer: Optional[Any]) -> str:
-        """Decode token ID to string if possible.        if tokenizer:
+"""
+Decode token ID to string if possible.        if tokenizer:
             with contextlib.suppress(AttributeError, ValueError, RuntimeError):
                 return tokenizer.decode([tid])
-        return f"<{tid}>""
+        return f"<{tid}>"
 
 
 class StreamingLogprobs:
-    """Streaming logprobs accumulator.
+"""
+Streaming logprobs accumulator.
     def __init__(self, top_k: int = 5, max_tokens: int = 4096) -> None:
         self.top_k = top_k
         self.max_tokens = max_tokens
@@ -145,16 +156,19 @@ class StreamingLogprobs:
 
     @property
     def num_tokens(self) -> int:
-        """Get number of accumulated tokens.        return self._position
+"""
+Get number of accumulated tokens.        return self._position
 
     @property
     def mean_logprob(self) -> float:
-        """Get average logprob.        with self._lock:
+"""
+Get average logprob.        with self._lock:
             return self._sum_logprobs / self._position if self._position > 0 else 0.0
 
     @property
     def perplexity(self) -> float:
-        """Get perplexity.        with self._lock:
+"""
+Get perplexity.        with self._lock:
             return math.exp(-self.mean_logprob) if self._position > 0 else 1.0
 
     def add_token(
@@ -164,7 +178,8 @@ class StreamingLogprobs:
         top_k_ids: Optional[np.ndarray] = None,
         top_k_logprobs: Optional[np.ndarray] = None,
     ) -> None:
-        """Append a new token to the stream.        with self._lock:
+"""
+Append a new token to the stream.        with self._lock:
             if self._position >= self.max_tokens:
                 return
             i = self._position
@@ -178,7 +193,8 @@ class StreamingLogprobs:
             self._position += 1
 
     def add_from_logits(self, logits: np.ndarray, token_id: int) -> None:
-        """Add a token from raw logits.        max_logits = np.max(logits)
+"""
+Add a token from raw logits.        max_logits = np.max(logits)
         shifted = logits - max_logits
         log_sum_exp = np.log(np.sum(np.exp(shifted)))
         logprobs = shifted - log_sum_exp
@@ -190,15 +206,17 @@ class StreamingLogprobs:
         self.add_token(token_id, float(lp), indices, lps)
 
     def reset(self) -> None:
-        """Reset the accumulator.        with self._lock:
+"""
+Reset the accumulator.        with self._lock:
             self._position = 0
             self._sum_logprobs = 0.0
             self._token_ids.fill(0)
             self._logprobs.fill(0)
             self._top_k_ids.fill(0)
-            self._top_k_lps.fill(-float("inf"))"
+            self._top_k_lps.fill(-float("inf"))
     def finalize(self) -> FlatLogprobs:
-        """Finalize and return accumulated logprobs as FlatLogprobs.        with self._lock:
+"""
+Finalize and return accumulated logprobs as FlatLogprobs.        with self._lock:
             n = self._position
             return FlatLogprobs(
                 self._token_ids[:n].copy(),
@@ -206,3 +224,5 @@ class StreamingLogprobs:
                 self._top_k_ids[:n].copy(),
                 self._top_k_lps[:n].copy(),
             )
+
+"""

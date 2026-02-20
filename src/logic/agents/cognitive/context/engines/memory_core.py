@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,13 +17,15 @@ from __future__ import annotations
 
 # MemoryCore logic for PyAgent (Facade).
 # Delegates to the standardized src.core.base.common.memory_core.
-"""Facade wrapper around a standardized MemoryCore implementation.
+"""
+"""
+Facade wrapper around a standardized MemoryCore implementation.
 
+"""
 This module provides a thin adapter so higher-level tests and code
 can import a well-formed MemoryCore even if the full implementation
 is swapped out for testing.
 """
-
 from typing import Any
 
 try:
@@ -40,9 +43,9 @@ __version__ = VERSION
 
 
 class MemoryCore:
-    """Logic for episodic memory construction and utility estimation (Facade)."""
-
-    def __init__(self, baseline_utility: float = 0.5) -> None:
+"""
+Logic for episodic memory construction and utility estimation (Facade).""
+def __init__(self, baseline_utility: float = 0.5) -> None:
         self._core = StandardMemoryCore()
         self.baseline_utility = baseline_utility
 
@@ -54,11 +57,12 @@ class MemoryCore:
         success: bool,
         metadata: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-        """Construct an episode dict and delegate utility calculation.
+"""
+Construct an episode dict and delegate utility calculation.
 
         Keeps the public API stable for callers in tests.
-        """
-        if hasattr(self._core, "create_episode"):
+"""
+if hasattr(self._core, "create_episode"):
             return self._core.create_episode(
                 agent_id=agent_name,
                 task=task,
@@ -79,8 +83,9 @@ class MemoryCore:
         }
 
     def format_for_indexing(self, episode: dict[str, Any]) -> str:
-        """Standardized string representation for vector databases."""
-        return (
+"""
+Standardized string representation for vector databases.""
+return (
             f"Agent: {episode.get('agent_id')}\n"
             f"Task: {episode.get('task')}\n"
             f"Outcome: {episode.get('content')}\n"
@@ -88,18 +93,20 @@ class MemoryCore:
         )
 
     def calculate_new_utility(self, old_score: float, increment: float) -> float:
-        """Logic for utility score decay/boost."""
-        return max(0.0, min(1.0, old_score + increment))
+"""
+Logic for utility score decay/boost.""
+return max(0.0, min(1.0, old_score + increment))
 
     def filter_relevant_memories(
         self, memories: list[dict[str, Any]], min_utility: float = 0.3
     ) -> list[dict[str, Any]]:
-        """Filters memories by utility threshold.
+"""
+Filters memories by utility threshold.
 
         Delegates to the underlying core if available, otherwise uses a
         simple utility key lookup.
-        """
-        if hasattr(self._core, "rank_memories"):
+        ""
+if hasattr(self._core, "rank_memories"):
             try:
                 return self._core.rank_memories(memories, limit=len(memories), min_utility=min_utility)
             except Exception:

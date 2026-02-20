@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Neox.py module.
 
+"""
 try:
     from typing import Any, Tuple
 except ImportError:
@@ -40,8 +42,9 @@ if HAS_NUMPY:
 
 
 class NeoxRotaryEmbedding(RotaryEmbeddingBase):
-    """NeoX style rotary position embedding.""""
-    Rotates pairs of dimensions (0, d/2), (1, d/2+1), etc.
+"""
+NeoX style rotary position embedding.""""
+Rotates pairs of dimensions (0, d/2), (1, d/2+1), etc.
     This is the standard implementation used in Llama, Mistral, and others.
     
     def __init__(self, config: RoPEConfig) -> None:
@@ -49,13 +52,15 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
         self.inv_freq = self._compute_inv_freq()
 
     def _compute_inv_freq(self) -> Any:
-        """Compute inverse frequencies.        if HAS_TORCH:
+"""
+Compute inverse frequencies.        if HAS_TORCH:
             return 1.0 / (self.base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
         if HAS_NUMPY:
             return 1.0 / (self.base ** (np.arange(0, self.rotary_dim, 2, axis=0) / self.rotary_dim))
-        raise RuntimeError("No numerical backend available")"
+        raise RuntimeError("No numerical backend available")
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
-        """Compute cos/sin cache.        if HAS_TORCH:
+"""
+Compute cos/sin cache.        if HAS_TORCH:
             t = torch.arange(max_len, dtype=torch.float32)
             freqs = torch.outer(t, self.inv_freq)
             # NeoX style expects [cos, cos] and [sin, sin] for symmetry
@@ -66,21 +71,23 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
             freqs = np.outer(t, self.inv_freq)
             emb = np.concatenate((freqs, freqs), axis=-1)
             return np.cos(emb), np.sin(emb)
-        raise RuntimeError("No numerical backend available")"
+        raise RuntimeError("No numerical backend available")
     def forward_native(
         self,
         positions: Any,
         query: Any,
         key: Any,
     ) -> Tuple[Any, Any]:
-        """Apply NeoX style rotary embeddings.        if HAS_TORCH and isinstance(positions, torch.Tensor):
+"""
+Apply NeoX style rotary embeddings.        if HAS_TORCH and isinstance(positions, torch.Tensor):
             return self._forward_torch(positions, query, key)
         if HAS_NUMPY:
             return self._forward_numpy(positions, query, key)
-        raise RuntimeError("No numerical backend available")"
+        raise RuntimeError("No numerical backend available")
     def _forward_torch(
         self,
-        positions: "torch.Tensor","        query: "torch.Tensor","        key: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        """PyTorch implementation of NeoX RoPE.        seq_len = int(positions.max().item()) + 1
+        positions: "torch.Tensor","        query: "torch.Tensor","        key: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        ""
+PyTorch implementation of NeoX RoPE.        seq_len = int(positions.max().item()) + 1
         self._ensure_cache(seq_len)
 
         # Get cos/sin for positions
@@ -113,7 +120,8 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
 
     def _forward_numpy(
         self,
-        positions: "np.ndarray","        query: "np.ndarray","        key: "np.ndarray","    ) -> Tuple["np.ndarray", "np.ndarray"]:"        """NumPy implementation of NeoX RoPE.        seq_len = int(positions.max()) + 1
+        positions: "np.ndarray","        query: "np.ndarray","        key: "np.ndarray","    ) -> Tuple["np.ndarray", "np.ndarray"]:"        ""
+NumPy implementation of NeoX RoPE.        seq_len = int(positions.max()) + 1
         self._ensure_cache(seq_len)
 
         cos = self._cos_cache[positions]
@@ -132,3 +140,11 @@ class NeoxRotaryEmbedding(RotaryEmbeddingBase):
         k_rotated = k_rotary * cos_q + rotate_half(k_rotary) * sin_q
 
         return q_rotated, k_rotated
+
+"""
+
+"""
+
+""
+
+"""

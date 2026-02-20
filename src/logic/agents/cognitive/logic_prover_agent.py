@@ -14,9 +14,12 @@
 
 
 """
+"""
 Logic Prover Agent for formal verification of reasoning chains.
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -42,11 +45,11 @@ class LogicProverAgent:
         self, hypothesis: str, evidence: list[str], conclusion: str
     ) -> dict[str, Any]:
         Simulates formal logic verification "(TPTP-like)."        # Crude simulation of logical" consistency"        if not evidence:
-            return {"status": "unproven", "error": "Missing evidence for conclusion"}"
+            return {"status": "unproven", "error": "Missing evidence for conclusion"}
         # Check if conclusion is derived from evidence in a simulated way
         # Real implementation would use something like Z3 or Prover9
         if "error" in conclusion.lower() and "fix" in hypothesis.lower():"            return {"status": "verified", "proof_confidence": 0.98}"
-        return {"status": "verified", "proof_confidence": 0.5}"
+        return {"status": "verified", "proof_confidence": 0.5}
     def solve_scheduling_constraints(
         self, tasks: list[str], deadlines: dict[str, float]
     ) -> dict[str, Any]:

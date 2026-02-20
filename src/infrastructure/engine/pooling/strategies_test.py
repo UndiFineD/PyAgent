@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.pooling.strategies import BasePooler, MeanPooler, CLSPooler, LastTokenPooler, MaxPooler, AttentionPooler, WeightedMeanPooler, MatryoshkaPooler, MultiVectorPooler, StepPooler

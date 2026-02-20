@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Awq.py module.
 """
-
 try:
-    from typing import TYPE_CHECKING
+
+"""
+from typing import TYPE_CHECKING
 except ImportError:
     from typing import TYPE_CHECKING
 
@@ -56,7 +60,8 @@ if TYPE_CHECKING:
 
 
 class AWQQuantizer(Quantizer):
-    """Activation-Aware Weight Quantization (AWQ).
+"""
+Activation-Aware Weight Quantization (AWQ).
     def __init__(
         self,
         config: QuantConfig,
@@ -71,7 +76,8 @@ class AWQQuantizer(Quantizer):
         weight: NDArray[np.float32],
         activations: NDArray[np.float32] | None = None,
     ) -> QuantizedTensor:
-        """Quantizes weights using activation-aware scaling to protect salient weights.        activations = activations if activations is not None else self.calibration_data
+"""
+Quantizes weights using activation-aware scaling to protect salient weights.        activations = activations if activations is not None else self.calibration_data
 
         if activations is not None:
             importance: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = (
@@ -93,7 +99,8 @@ class AWQQuantizer(Quantizer):
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
-        """Dequantizes the tensor and reverses AWQ scaling if applicable.        result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = qtensor.dequantize()
+"""
+Dequantizes the tensor and reverses AWQ scaling if applicable.        result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = qtensor.dequantize()
         if qtensor.shape in self._importance_cache:
             importance = self._importance_cache[qtensor.shape]
             result = result / importance
@@ -104,9 +111,12 @@ class AWQQuantizer(Quantizer):
         activations: NDArray[np.float32],
         weight: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        """Calculates weight importance scores from calibration activations.        act_importance = np.mean(np.abs(activations), axis=0)
+"""
+Calculates weight importance scores from calibration activations.        act_importance = np.mean(np.abs(activations), axis=0)
         weight_importance = np.max(np.abs(weight), axis=0)
         importance = act_importance * weight_importance
         importance = importance / (np.max(importance) + 1e-8)
         scales = 1.0 + importance * 0.5
         return scales.astype(np.float32)
+
+"""

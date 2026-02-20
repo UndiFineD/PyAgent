@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin

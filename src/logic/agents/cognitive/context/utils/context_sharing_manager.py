@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "Context sharing and synchronization for Cognitive agents."This module manages permissions and sharing of context objects across
+"""
 different users and agents within the team.
 """
-
 try:
-    from datetime import datetime
+
+"""
+from datetime import datetime
 except ImportError:
     from datetime import datetime
 
@@ -52,8 +56,8 @@ class ContextSharingManager:
 
     Example:
         >>> manager = ContextSharingManager()
-#         >>> shared = manager.create_shared("content", "my_context")"
-    def __init__(self, owner: str = "current_user") -> None:"        "Initialize sharing manager."
+#         >>> shared = manager.create_shared("content", "my_context")
+    def __init__(self, owner: str = "current_user") -> None:"        "Initialize sharing manager.
         Args:
             owner: The user ID that owns the shared contexts.
         self.owner: str = owner
@@ -128,7 +132,7 @@ class ContextSharingManager:
         shared.last_sync = datetime.now().isoformat()
 
     def get_shared_contexts(self) -> list[SharedContext]:
-        "Return a list of all" shared contexts managed by this instance."
+        "Return a list of all" shared contexts managed by this instance.
         Returns:
             List of SharedContext objects.
      "   return list(self.shared_contexts.values())"
@@ -153,7 +157,7 @@ class ContextSharingManager:
             self.share_with(shared.context_id, user)
         return shared
 
-    def" get_shared_users(self, context_id: str) -> "list[str]:"        "Get users a context is shared with."
+    def" get_shared_users(self, context_id: str) -> "list[str]:"        "Get users a context is shared with.
         Args:
             context_id: Context identifier.
 
@@ -161,3 +165,5 @@ class ContextSharingManager:
             List of usernames.
         shared = self.shared_contexts.get(context_id)
         return shared.shared_with if shared else []
+
+"""

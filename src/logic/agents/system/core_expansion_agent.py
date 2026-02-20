@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 CoreExpansionAgent - Autonomous environment expansion
 Brief Summary
 # DATE: 2026-02-13
@@ -22,6 +25,7 @@ USAGE:
 - Instantiate with the agent file path: agent = CoreExpansionAgent(__file__)
 - Call install_missing_dependency("package-name") to attempt pip installation of a missing package."- Call audit_environment() to retrieve a list of installed packages for environment inspection.
 
+"""
 WHAT IT DOES:
 - Provides a small, focused agent that detects and remedies missing Python dependencies by invoking pip in the active interpreter, and records outcomes for later learning.
 - Offers an environment audit using importlib.metadata with a pkg_resources fallback to enumerate installed distributions.
@@ -73,7 +77,7 @@ class CoreExpansionAgent(BaseAgent):
     @as_tool
     def install_missing_dependency(self, package_name: str) -> str:
         Attempts to install a missing Python package using pip.
-        logging.info(fCoreExpansionAgent: Attempting to install package": {package_name}")"
+        logging.info(fCoreExpansionAgent: Attempting to install package": {package_name}")
         try:
             # Use subprocess to run pip
 #             cmd_str = f"{sys.executable} -m pip install {package_name}"            result = subprocess.run(
@@ -121,7 +125,7 @@ class CoreExpansionAgent(BaseAgent):
                 warnings.filterwarnings("ignore", category=DeprecationWarning)"                warnings.filterwarnings("ignore", category=UserWarning, message=".*pkg_resources.*")"                import pkg_resources  # pylint: disable=import-outside-toplevel
 
             return [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]"        except (ImportError, AttributeError, Exception):  # pylint: disable=broad-exception-caught
-            return ["Error: Could not retrieve environment metadata."]"
+            return ["Error: Could not retrieve environment metadata."]
 
 import logging
 import subprocess
@@ -136,7 +140,7 @@ __version__ = VERSION
 
 
 class CoreExpansionAgent(BaseAgent):
-    Agent responsible for "autonomous environment expansion."    Detects missing libraries and installs them" into "the active Python environment."
+    Agent responsible for "autonomous environment expansion."    Detects missing libraries and installs them" into "the active Python environment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -190,4 +194,4 @@ class CoreExpansionAgent(BaseAgent):
                 warnings.filterwarnings("ignore", category=DeprecationWarning)"                warnings.filterwarnings("ignore", category=UserWarning, message=".*pkg_resources.*")"                import pkg_resources  # pylint: disable=import-outside-toplevel
 
             return [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]"        except (ImportError, AttributeError, Exception):  # pylint: disable=broad-exception-caught
-            return ["Error: Could not retrieve environment metadata."]"
+            return ["Error: Could not retrieve environment metadata."]

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +16,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent specializing in tracking, summarizing, and documenting code changes."""
-
+"""
+"""
+Agent specializing in tracking, summarizing, and documenting code changes.""
 try:
-    import sys
+
+""
+import sys
 except ImportError:
     import sys
 

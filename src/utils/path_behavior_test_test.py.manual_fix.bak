@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+""
+"""
+Test script to verify Path behavior with mock objects.
+
+"""
+from pathlib import Path
+
+
+
+class MockFleet:
+    ""
+Mock fleet class for path testing.    pass
+
+
+def test_path_behavior_with_mock():
+    ""
+Test Path behavior when passed a mock object.    f = MockFleet()
+    # The original script just printed. We assert it behaves as expected (likely raises TypeError).
+    try:
+        p = Path(f)
+        # If it somehow works (e.g. if MockFleet had __fspath__), ensure it's a Path'        assert isinstance(p, Path)
+    except TypeError:
+        # This is the expected behavior for a plain object
+        pass
+
+""

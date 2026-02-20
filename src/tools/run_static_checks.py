@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 run_static_checks.py - Run static-safety checks on extracted candidate packages
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -55,7 +60,7 @@ import json
 import ast
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT_DIR = ROOT / '.external' / 'static_checks''
+OUT_DIR = ROOT / '.external' / 'static_checks'
 CHECKS = [
     {
         'name': 'bandit','        'cmd': lambda target, out: ['bandit', '-r', str(target), '-f', 'json', '-o', str(out)],'        'out_suffix': 'bandit.json','        'install_hint': 'pip install bandit''    },
@@ -65,7 +70,9 @@ CHECKS = [
 
 
 def run_python_only_checks(target: Path) -> dict:
-    """Run fast AST-based checks for banned imports/names and dangerous calls.""""    Returns a mapping of file -> list of findings.
+"""
+Run fast AST-based checks for banned imports/names and dangerous calls.""""
+Returns a mapping of file -> list of findings.
         findings: dict[str, list[str]] = {}
     banned_imports = {'ctypes', 'cffi', 'subprocess', 'multiprocessing', 'socket', 'ssl', 'paramiko'}'    banned_names = {'eval', 'exec', 'compile', 'execfile', 'open', 'os.system'}'    dangerous_attrs = {'system', 'popen', 'Popen'}'    for p in target.rglob('*.py'):'        try:
             text = p.read_text(encoding='utf-8', errors='ignore')'            mod = ast.parse(text)
@@ -107,7 +114,8 @@ def run_check(check, target: Path) -> tuple[int, str]:
         # Prefer the current Python executable (venv), fall back to system python
         py = sys.executable or shutil.which('python')'        if name == 'bandit':'            cmd = [py, '-m', 'bandit', '-r', str(target), '-f', 'json', '-o', str(out)]'        elif name == 'semgrep':'            # semgrep exposes CLI via semgrep.cli module
             cmd = [py, '-m', 'semgrep.cli', '--config', 'auto', '--json', '--output', str(out), str(target)]'        else:
-            return 127, f"{name} not found; {check['install_hint']}""'    try:
+            return 127, f"{name} not found; {check['install_hint']}"
+try:
         p = subprocess.run(cmd, check=False, capture_output=True, text=True)
         if p.returncode != 0:
             # return stderr or stdout for diagnostics
@@ -137,3 +145,9 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == '__main__':'    raise SystemExit(main())
+
+"""
+
+""
+
+"""

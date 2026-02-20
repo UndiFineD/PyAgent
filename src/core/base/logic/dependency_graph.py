@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,24 +16,24 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
-
-
 import graphlib
 
 from src.core.base.lifecycle.version import VERSION
 
+"""
 __version__ = VERSION
 
-
+"""
 class DependencyGraph:
-    """Resolve agent dependencies regarding ordered execution.
+"""
+Resolve agent dependencies regarding ordered execution.
     
     Manages a directed acyclic graph (DAG) of nodes with dependencies and resource
     constraints, enabling topological sorting for parallel batch execution.
-    """
-
-    def __init__(self) -> None:
-        """Initialize dependency graph."""
+"""
+def __init__(self) -> None:
+"""
+Initialize dependency graph.""
         # Initialize dependency graph.
         self._nodes: set[str] = set()
         self._edges: dict[str, set[str]] = {}  # node -> dependencies (must run first)
@@ -37,8 +41,9 @@ class DependencyGraph:
 
 
     def add_node(self, name: str, resources: list[str] | None = None) -> None:
-        """Add a node to the dependency graph."""
-        self._nodes.add(name)
+"""
+Add a node to the dependency graph.""
+self._nodes.add(name)
         if name not in self._edges:
             self._edges[name] = set()
         if resources:
@@ -48,15 +53,17 @@ class DependencyGraph:
 
 
     def add_dependency(self, node: str, depends_on: str) -> None:
-        """Add a dependency between two nodes."""
-        self.add_node(node)
+"""
+Add a dependency between two nodes.""
+self.add_node(node)
         self.add_node(depends_on)
         self._edges[node].add(depends_on)
 
 
     def resolve(self) -> list[list[str]]:
-        """Resolve execution order into parallel batches using graphlib (Phase 272)."""
-        if not self._nodes:
+"""
+Resolve execution order into parallel batches using graphlib (Phase 272).""
+if not self._nodes:
             return []
 
         # TopologicalSorter expects {node: dependencies}
@@ -68,8 +75,9 @@ class DependencyGraph:
             raise ValueError(f"Circular dependency detected: {e}") from e
         
         def collect_batches() -> list[list[str]]:
-            """Recursive batch collection regarding active sorter state."""
-            if not ts.is_active():
+"""
+Recursive batch collection regarding active sorter state.""
+if not ts.is_active():
                 return []
             ready = list(ts.get_ready())
             if not ready:
@@ -81,8 +89,9 @@ class DependencyGraph:
 
 
     def _refine_batch_by_resources(self, batch: list[str]) -> list[list[str]]:
-        """Refines a batch into sub-batches based on resource collisions."""
-        from functools import reduce
+"""
+Refines a batch into sub-batches based on resource collisions.""
+from functools import reduce
 
         def insert_node(refined: list[list[str]], node: str) -> list[list[str]]:
             node_resources = self._resources.get(node, set())

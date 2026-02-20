@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,14 +14,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Delegation management for agent cascading.
+"""
+"""
+Delegation management for agent cascading.
 Enables agents to launch sub-tasks by spawning other specialized agents.
 """
-
-
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -56,10 +58,12 @@ __version__ = VERSION
 
 # pylint: disable=too-few-public-methods
 class AgentDelegator:
-    """Handles cascading sub-tasks to other agents."""
-    def __init__(self, parent_agent: Any) -> None:
-        """Initialize with parent agent for context."""
-        self.parent_agent = parent_agent
+"""
+Handles cascading sub-tasks to other agents.""
+def __init__(self, parent_agent: Any) -> None:
+"""
+Initialize with parent agent for context.""
+self.parent_agent = parent_agent
 
     async def delegate(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
@@ -69,6 +73,7 @@ class AgentDelegator:
         context: CascadeContext | None = None,
         priority: AgentPriority = AgentPriority.NORMAL,
     ) -> str:
-        """Launch another agent to perform a sub-task (minimal stub)."""
+        ""
+Launch another agent to perform a sub-task (minimal stub).""
         # Minimal behavior for tests: return a stubbed string
         return f"Delegated to {agent_type}"

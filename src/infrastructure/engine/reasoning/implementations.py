@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Implementations.py module.
 
+"""
 import json
 import re
 from typing import Generator, Iterator, List, Optional, Tuple
@@ -26,7 +28,8 @@ from .parsers import ReasoningParser, ToolParser
 
 
 class DeepSeekReasoningParser(ReasoningParser):
-    """Parser for DeepSeek R1-style <think>...</think> blocks.
+"""
+Parser for DeepSeek R1-style <think>...</think> blocks.
     def __init__(self) -> None:
         super().__init__(reasoning_format=ReasoningFormat.DEEPSEEK_R1, start_marker="<think>", end_marker="</think>")"        self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)"
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
@@ -46,7 +49,7 @@ class DeepSeekReasoningParser(ReasoningParser):
             last_end = match.end()
 
         content_parts.append(text[last_end:])
-        return "".join(content_parts).strip(), blocks"
+        return "".join(content_parts).strip(), blocks
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
         content_buffer = []
         thinking_buffer = []
@@ -116,10 +119,11 @@ class DeepSeekReasoningParser(ReasoningParser):
 
 
 class QwenReasoningParser(ReasoningParser):
-    """Parser for Qwen3-style reasoning with enable_thinking flag.
+"""
+Parser for Qwen3-style reasoning with enable_thinking flag.
     def __init__(self, enable_thinking: bool = True) -> None:
         super().__init__(reasoning_format=ReasoningFormat.QWEN3, start_marker="<think>", end_marker="</think>")"        self.enable_thinking = enable_thinking
-        self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)"
+        self._pattern = re.compile(r"<think>(.*?)</think>", re.DOTALL)
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
         if not self.enable_thinking:
             return text, []
@@ -141,7 +145,7 @@ class QwenReasoningParser(ReasoningParser):
             last_end = match.end()
 
         content_parts.append(text[last_end:])
-        return "".join(content_parts).strip(), blocks"
+        return "".join(content_parts).strip(), blocks
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
         deepseek = DeepSeekReasoningParser()
         deepseek.reasoning_format = self.reasoning_format
@@ -151,14 +155,15 @@ class QwenReasoningParser(ReasoningParser):
                 continue
             yield (token, is_thinking)
 
-        return ParseResult(content="", thinking_blocks=deepseek.thinking_blocks, raw_text="")"
+        return ParseResult(content="", thinking_blocks=deepseek.thinking_blocks, raw_text="")
 
 
 class GenericReasoningParser(ReasoningParser):
-    """Configurable parser for any reasoning format.
+"""
+Configurable parser for any reasoning format.
     def __init__(self, start_marker: str = "<think>", end_marker: str = "</think>", nested: bool = False) -> None:"        super().__init__(reasoning_format=ReasoningFormat.GENERIC, start_marker=start_marker, end_marker=end_marker)
         self.nested = nested
-        self._pattern = re.compile(re.escape(start_marker) + r"(.*?)" + re.escape(end_marker), re.DOTALL)"
+        self._pattern = re.compile(re.escape(start_marker) + r"(.*?)" + re.escape(end_marker), re.DOTALL)
     def extract_thinking(self, text: str) -> Tuple[str, List[ThinkingBlock]]:
         blocks = []
         content_parts = []
@@ -174,7 +179,7 @@ class GenericReasoningParser(ReasoningParser):
             blocks.append(block)
             last_end = match.end()
         content_parts.append(text[last_end:])
-        return "".join(content_parts).strip(), blocks"
+        return "".join(content_parts).strip(), blocks
     def parse_streaming(self, token_stream: Iterator[str]) -> Generator[Tuple[str, bool], None, ParseResult]:
         content = []
         thinking = []
@@ -231,10 +236,11 @@ class GenericReasoningParser(ReasoningParser):
 
 
 class OpenAIToolParser(ToolParser):
-    """Parser for OpenAI-style tool calls.
+"""
+Parser for OpenAI-style tool calls.
     def __init__(self, strict: bool = False) -> None:
         super().__init__(ToolCallFormat.OPENAI, strict)
-        self._function_pattern = re.compile(r'"function_call"\\s*:\\s*\{[^}]+\}', re.DOTALL)"'
+        self._function_pattern = re.compile(r'"function_call"\\s*:\\s*\{[^}]+\}', re.DOTALL)
     def parse_tool_calls(self, text: str) -> List[ToolCall]:
         calls = []
         try:
@@ -258,7 +264,8 @@ class OpenAIToolParser(ToolParser):
     def parse_streaming(
         self, token_stream: Iterator[str]
     ) -> Generator[Tuple[str, Optional[ToolCall]], None, List[ToolCall]]:
-        buffer = """        for token in token_stream:
+        buffer = ""
+for token in token_stream:
             buffer += token
             yield (token, None)
         return self.parse_tool_calls(buffer)
@@ -266,10 +273,11 @@ class OpenAIToolParser(ToolParser):
 
 
 class HermesToolParser(ToolParser):
-    """Parser for Hermes-style tool calls.
+"""
+Parser for Hermes-style tool calls.
     def __init__(self, strict: bool = False) -> None:
         super().__init__(ToolCallFormat.HERMES, strict)
-        self._pattern = re.compile(r"<tool_call>\\s*(.*?)\\s*</tool_call>", re.DOTALL)"
+        self._pattern = re.compile(r"<tool_call>\\s*(.*?)\\s*</tool_call>", re.DOTALL)
     def parse_tool_calls(self, text: str) -> List[ToolCall]:
         calls = []
         for match in self._pattern.finditer(text):
@@ -291,16 +299,19 @@ class HermesToolParser(ToolParser):
     def parse_streaming(
         self, token_stream: Iterator[str]
     ) -> Generator[Tuple[str, Optional[ToolCall]], None, List[ToolCall]]:
-        buffer = """        calls = []
+        buffer = ""
+calls = []
         in_tool = False
-        tool_buffer = """        for token in token_stream:
+        tool_buffer = ""
+for token in token_stream:
             buffer += token
             if not in_tool:
                 if "<tool_call>" in buffer:"                    idx = buffer.find("<tool_call>")"                    content_before = buffer[:idx]
                     if content_before:
                         yield (content_before, None)
                     buffer = buffer[idx + len("<tool_call>") :]"                    in_tool = True
-                    tool_buffer = """                else:
+                    tool_buffer = ""
+else:
                     if len(buffer) > 20:
                         emit = buffer[:-20]
                         yield (emit, None)
@@ -319,3 +330,5 @@ class HermesToolParser(ToolParser):
                 else:
                     tool_buffer += token
         return calls
+
+"""

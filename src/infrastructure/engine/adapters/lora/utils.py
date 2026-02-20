@@ -14,7 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Utility functions for LoRA initialization and analysis.
+"""
+"""
+Utility functions for LoRA initialization and analysis.
+
+"""
 import math
 from typing import Any
 
@@ -36,7 +40,8 @@ def create_lora_weights(
     rank: int,
     alpha: float = 16.0,
     module_name: str = "linear","    init_method: str = "kaiming",") -> LoRALayerWeights:
-    """Create initialized LoRA layer weights.    if init_method == "kaiming":"        # Kaiming uniform for A, zeros for B
+"""
+Create initialized LoRA layer weights.    if init_method == "kaiming":"        # Kaiming uniform for A, zeros for B
         bound = math.sqrt(6.0 / (rank + in_features))
         lora_a = np.random.uniform(-bound, bound, (rank, in_features)).astype(np.float32)
         lora_b = np.zeros((out_features, rank), dtype=np.float32)
@@ -61,7 +66,8 @@ def create_lora_model(
     layer_dims: dict[str, tuple[int, int]],
     config: LoRAConfig | None = None,
 ) -> LoRAModel:
-    """Create a LoRA model with initialized weights.    config = config or LoRAConfig()
+"""
+Create a LoRA model with initialized weights.    config = config or LoRAConfig()
     model = LoRAModel(model_id=model_id, config=config)
 
     for module_name, (in_features, out_features) in layer_dims.items():
@@ -84,7 +90,8 @@ def merge_lora_weights(
     base_weights: dict[str, NDArray[np.float32]],
     lora_model: LoRAModel,
 ) -> dict[str, NDArray[np.float32]]:
-    """Merge LoRA weights into base model weights.    merged = {}
+"""
+Merge LoRA weights into base model weights.    merged = {}
 
     for module_name, base_weight in base_weights.items():
         lora_layer = lora_model.get_layer(module_name)
@@ -101,7 +108,8 @@ def compute_effective_rank(
     lora_b: NDArray[np.float32],
     threshold: float = 0.01,
 ) -> int:
-    """Compute effective rank of LoRA matrices.    # Compute BA product
+"""
+Compute effective rank of LoRA matrices.    # Compute BA product
     product = lora_b @ lora_a
 
     # SVD
@@ -114,3 +122,5 @@ def compute_effective_rank(
 
     effective = int(np.sum(s / max_s > threshold))
     return effective
+
+"""

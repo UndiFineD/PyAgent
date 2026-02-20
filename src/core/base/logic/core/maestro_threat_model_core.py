@@ -14,8 +14,11 @@
 
 try:
     from typing import Dict, Any, List
+"""
 except ImportError:
-    from typing import Dict, Any, List
+
+"""
+from typing import Dict, Any, List
 
 try:
     from enum import Enum
@@ -56,11 +59,11 @@ class AgentThreat:
 
 
 class MaestroThreatModelCore:
-    """Evaluates agentic systems against the MAESTRO security framework.
+"""
+Evaluates agentic systems against the MAESTRO security framework.
     (Multi-Agent Environment, Security, Threat Risk, and Outcome).
-    """
-
-    THREAT_CATALOG = {
+"""
+THREAT_CATALOG = {
         MaestroLayer.AGENT_ECOSYSTEM: [
             "Compromised Agents",
             "Agent Impersonation",
@@ -110,8 +113,9 @@ class MaestroThreatModelCore:
         self.active_threats: List[AgentThreat] = []
 
     def perform_scan(self, system_config: Dict[str, Any]) -> List[AgentThreat]:
-        """Simulates a security scan against the MAESTRO layers."""
-        threats_found: List[AgentThreat] = []
+"""
+Simulates a security scan against the MAESTRO layers.""
+threats_found: List[AgentThreat] = []
 
         if system_config.get("tools_sandboxed") is False:
             threats_found.append(
@@ -147,9 +151,10 @@ class MaestroThreatModelCore:
         return threats_found
 
     def generate_maestro_report(self) -> str:
-        """Generates a Markdown report of the threat landscape."""
-        if not self.active_threats:
-            return "# MAESTRO Security Report\n\n[✓] No critical threats detected in current architecture."
+"""
+Generates a Markdown report of the threat landscape.""
+if not self.active_threats:
+            return "# MAESTRO Security Report\n\n[] No critical threats detected in current architecture."
 
         report = "# MAESTRO Security Report\n\n"
         report += f"Total Threats Detected: {len(self.active_threats)}\n\n"

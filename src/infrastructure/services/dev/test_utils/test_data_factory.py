@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -40,8 +40,9 @@ __version__ = VERSION
 
 @dataclass
 class TestDataFactory:
-    """Factory for generating test data.""""
-    Attributes:
+"""
+Factory for generating test data.""""
+Attributes:
         data_type: Type of data to generate.
         template: Template for generation.
         variations: Number of variations to create.
@@ -50,5 +51,8 @@ class TestDataFactory:
     __test__ = False
 
     data_type: TestDataType
-    template: str = """    variations: int = 1
+    template: str = ""
+variations: int = 1
     seed: int | None = None
+
+""

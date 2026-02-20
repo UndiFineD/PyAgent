@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +18,10 @@ from __future__ import annotations
 
 
 """
+"""
 Data models for test agent functionality.
 
+"""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -64,7 +67,9 @@ def _empty_action_list() -> list[dict[str, Any]]:
 
 @dataclass
 class TestCase:
-    """Represents a single test case.
+"""
+Represents a single test case.
+
     __test__ = False
 
     id: str
@@ -79,7 +84,8 @@ class TestCase:
     duration_ms: float = 0.0
 
     flakiness_score: float = 0.0
-    last_run: str = """    run_count: int = 0
+    last_run: str = ""
+run_count: int = 0
     failure_count: int = 0
     tags: list[str] = field(default_factory=lambda: [])
 
@@ -88,7 +94,8 @@ class TestCase:
 
 @dataclass
 class TestRun:
-    """A test execution run.
+"""
+A test execution run.
     __test__ = False
 
     id: str
@@ -108,27 +115,30 @@ class TestRun:
 
 @dataclass
 class CoverageGap:
-    """Represents a gap in test coverage.
+"""
+Represents a gap in test coverage.
     file_path: str
     line_start: int
     line_end: int
     coverage_type: CoverageType
 
-    suggestion: str = """
+    suggestion: str = ""
 
 @dataclass
 class TestFactory:
-    """A test data factory for generating test data.
+"""
+A test data factory for generating test data.
     __test__ = False
     name: str
     return_type: str
     parameters: dict[str, str] = field(default_factory=lambda: {})
 
-    generator: str = ""  # Code snippet or function name"
+    generator: str = ""  # Code snippet or function name
 
 @dataclass
 class VisualRegressionConfig:
-    """Configuration for visual regression testing.
+"""
+Configuration for visual regression testing.
     baseline_dir: str
 
     diff_threshold: float = 0.01
@@ -140,7 +150,8 @@ class VisualRegressionConfig:
 
 @dataclass
 class ContractTest:
-    """A contract test for API boundaries.
+"""
+A contract test for API boundaries.
     consumer: str
     provider: str
     endpoint: str
@@ -151,11 +162,13 @@ class ContractTest:
 
 @dataclass
 class TestEnvironment:
-    """Test environment configuration.
+"""
+Test environment configuration.
     __test__ = False
     name: str
 
-    base_url: str = """    variables: dict[str, str] = field(default_factory=lambda: {})
+    base_url: str = ""
+variables: dict[str, str] = field(default_factory=lambda: {})
     fixtures: list[str] = field(default_factory=lambda: [])
     setup_commands: list[str] = field(default_factory=lambda: [])
     teardown_commands: list[str] = field(default_factory=lambda: [])
@@ -163,24 +176,29 @@ class TestEnvironment:
 
 @dataclass
 class ExecutionTrace:
-    """Test execution trace for replay.
+"""
+Test execution trace for replay.
     test_id: str
     timestamp: str
     steps: list[dict[str, Any]] = field(default_factory=lambda: [])
     variables: dict[str, Any] = field(default_factory=lambda: {})
-    stdout: str = """    stderr: str = """
+    stdout: str = ""
+stderr: str = ""
 
 @dataclass
 class TestDependency:
-    """A dependency for test injection.
+"""
+A dependency for test injection.
     __test__ = False
     name: str
     dependency_type: str
-    implementation: str = """    mock_behavior: str = """
+    implementation: str = ""
+mock_behavior: str = ""
 
 @dataclass
 class CrossBrowserConfig:
-    """Cross-browser testing configuration.
+"""
+Cross-browser testing configuration.
     browsers: list[BrowserType]
     parallel: bool = True
     headless: bool = True
@@ -190,7 +208,8 @@ class CrossBrowserConfig:
 
 @dataclass
 class AggregatedResult:
-    """Aggregated test result from multiple sources.
+"""
+Aggregated test result from multiple sources.
     source: TestSourceType
     test_name: str
     status: TestStatus
@@ -201,7 +220,8 @@ class AggregatedResult:
 
 @dataclass
 class Mutation:
-    """A code mutation for mutation testing.
+"""
+A code mutation for mutation testing.
     id: str
     file_path: str
     line_number: int
@@ -213,7 +233,8 @@ class Mutation:
 
 @dataclass
 class GeneratedTest:
-    """A test generated from specification.
+"""
+A test generated from specification.
     name: str
     specification: str
     generated_code: str
@@ -223,18 +244,20 @@ class GeneratedTest:
 
 @dataclass
 class TestProfile:
-    """Runtime profiling data for a test.
+"""
+Runtime profiling data for a test.
     __test__ = False
     test_id: str
     cpu_time_ms: float
     memory_peak_mb: float
     io_operations: int
     function_calls: int
-    timestamp: str = """
+    timestamp: str = ""
 
 @dataclass
 class ScheduleSlot:
-    """A scheduled time slot for test execution.
+"""
+A scheduled time slot for test execution.
     start_time: str
     end_time: str
     tests: list[str] = field(default_factory=lambda: [])
@@ -244,28 +267,35 @@ class ScheduleSlot:
 
 @dataclass
 class ProvisionedEnvironment:
-    """A provisioned test environment.
+"""
+A provisioned test environment.
     status: str
-    python_version: str = """    dependencies: list[str] = field(default_factory=lambda: [])
+    python_version: str = ""
+dependencies: list[str] = field(default_factory=lambda: [])
     config: dict[str, Any] = field(default_factory=lambda: {})
 
 
 @dataclass
 class ValidationResult:
-    """Result of a validation operation.
+"""
+Result of a validation operation.
     valid: bool
     errors: list[str] = field(default_factory=lambda: [])
 
 
 @dataclass
 class Recording:
-    """A recording of test execution.
+"""
+A recording of test execution.
     test_name: str
     actions: list[dict[str, Any]] = field(default_factory=lambda: [])
 
 
 @dataclass
 class ReplayResult:
-    """Result of replaying a recorded test.
+"""
+Result of replaying a recorded test.
     success: bool
     errors: list[str] = field(default_factory=lambda: [])
+
+""

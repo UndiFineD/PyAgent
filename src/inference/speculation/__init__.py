@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Speculation module for accelerated LLM inference.
 
+"""
 Provides speculative decoding implementations for faster token generation.
 
 try:

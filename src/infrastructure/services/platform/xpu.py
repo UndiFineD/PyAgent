@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Intel XPU (GPU/Accelerator) platform implementation.
 """
 
+"""
 import contextlib
 from typing import List, Set
 
@@ -30,7 +34,8 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 
 
 class XpuPlatform(Platform):
-    """Intel XPU (GPU/Accelerator) platform implementation.
+"""
+Intel XPU (GPU/Accelerator) platform implementation.
     @classmethod
     def get_platform_type(cls) -> PlatformType:
         return PlatformType.XPU
@@ -95,4 +100,4 @@ class XpuPlatform(Platform):
         return AttentionBackend.TRITON
 
     def is_quantization_supported(self, quant_type: str) -> bool:
-        return quant_type == "none""
+        return quant_type == "none"

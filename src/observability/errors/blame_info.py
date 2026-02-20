@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 BlameInfo - Git blame container
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -48,8 +52,9 @@ __version__ = VERSION
 
 @dataclass
 class BlameInfo:
-    """Git blame information for an error.""""
-    Attributes:
+"""
+Git blame information for an error.""""
+Attributes:
         error_id: ID of the error.
         commit_hash: Commit that introduced the error.
         author: Author of the commit.
@@ -57,4 +62,14 @@ class BlameInfo:
         commit_message: Commit message.
     
     error_id: str
-    commit_hash: str = """    author: str = """    commit_date: str = """    commit_message: str = """
+    commit_hash: str = ""
+author: str = ""
+commit_date: str = ""
+commit_message: str = ""
+"""
+
+"""
+
+""
+
+"""

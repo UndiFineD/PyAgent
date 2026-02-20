@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 schedule_status.py - ScheduleStatus enum for scheduled improvements
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -54,5 +58,7 @@ __version__ = VERSION
 
 
 class ScheduleStatus(Enum):
-    """Status of scheduled improvements.
-    UNSCHEDULED = "unscheduled""    SCHEDULED = "scheduled""    IN_SPRINT = "in_sprint""    BLOCKED = "blocked""    OVERDUE = "overdue""
+"""
+Status of scheduled improvements.
+
+    UNSCHEDULED = "unscheduled""    SCHEDULED = "scheduled""    IN_SPRINT = "in_sprint""    BLOCKED = "blocked""    OVERDUE = "overdue"

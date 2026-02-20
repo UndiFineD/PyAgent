@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Code smell detection logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
+"""
 import ast
 from typing import Any, Dict, List
 
@@ -36,9 +39,12 @@ CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
 
 
 class CoderSmellMixin:
-""""Mixin for detecting code smells.
+""""
+Mixin for detecting code smells.
+
     def detect_code_smells(self, content: str) -> List[CodeSmell]:
-""""Detect common architectural code smells.        from src.core.rust_bridge import RustBridge
+""""
+Detect common architectural code smells.        from src.core.rust_bridge import RustBridge
 
         smells: List[CodeSmell] = []
 
@@ -57,7 +63,8 @@ class CoderSmellMixin:
         return smells
 
     def _detect_python_smells(self, content: str) -> List[CodeSmell]:
-""""Python-specific AST-based smell detection.        smells: List[CodeSmell] = []
+""""
+Python-specific AST-based smell detection.        smells: List[CodeSmell] = []
         try:
             tree = ast.parse(content)
         except SyntaxError:
@@ -92,7 +99,8 @@ class CoderSmellMixin:
             )
 
     def _check_python_class_smells(self, node: ast.ClassDef, smells: List[CodeSmell]) -> None:
-""""Check for god classes.        method_count = sum(1 for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
+""""
+Check for god classes.        method_count = sum(1 for n in node.body if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
         threshold = CODE_SMELL_PATTERNS["god_class"]["threshold"]"        if method_count > threshold:
             smells.append(
                 CodeSmell(
@@ -101,7 +109,8 @@ class CoderSmellMixin:
             )
 
     def _detect_generic_smells(self, content: str) -> List[CodeSmell]:
-""""Language-agnostic smell detection (e.g. nesting).        smells:" List[CodeSmell] = []"        lines = content.split("\\n")"        # Deep nesting detection
+""""
+Language-agnostic smell detection (e.g. nesting).        smells:" List[CodeSmell] = []"        lines = content.split("\\n")"        # Deep nesting detection
         for i, line in enumerate(lines, 1):
             indent = len(line) - len(line.lstrip())
             nesting = indent // 4
@@ -112,3 +121,9 @@ class CoderSmellMixin:
                         suggestion="Consider early returns or extracting nested logic","                        category="complexity","                    )
                 )
         return smells
+
+"""
+
+""
+
+"""

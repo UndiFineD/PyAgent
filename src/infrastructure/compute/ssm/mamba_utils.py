@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,10 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Mamba Utilities.
 
+"""
 vLLM Pattern: vllm/model_executor/layers/mamba/mamba_utils.py
 Utility functions for Mamba computation.
 
@@ -208,7 +212,8 @@ def softplus(x: np.ndarray, beta: float = 1.0, threshold: float = 20.0) -> np.nd
 
 @dataclass
 class MambaBlockState:
-    """State for a block of Mamba layers.
+"""
+State for a block of Mamba layers.
     layer_states: list[tuple[np.ndarray, np.ndarray]]  # List of (conv_state, ssm_state)
 
     @classmethod
@@ -220,7 +225,8 @@ class MambaBlockState:
         conv_kernel_size: int,
         ssm_state_size: int,
         dtype: np.dtype = np.float32,
-    ) -> "MambaBlockState":"        """Create zero-initialized block state.        layer_states = []
+    ) -> "MambaBlockState":"        """
+Create zero-initialized block state.        layer_states = []
         for _ in range(num_layers):
             conv_state = np.zeros(
                 (batch_size, d_inner, conv_kernel_size),
@@ -235,7 +241,8 @@ class MambaBlockState:
         return cls(layer_states=layer_states)
 
     def get_layer(self, layer_idx: int) -> tuple[np.ndarray, np.ndarray]:
-        """Get state for a specific layer.        return self.layer_states[layer_idx]
+"""
+Get state for a specific layer.        return self.layer_states[layer_idx]
 
     def set_layer(
         self,
@@ -243,9 +250,11 @@ class MambaBlockState:
         conv_state: np.ndarray,
         ssm_state: np.ndarray,
     ) -> None:
-        """Set state for a specific layer.        self.layer_states[layer_idx] = (conv_state, ssm_state)
+"""
+Set state for a specific layer.        self.layer_states[layer_idx] = (conv_state, ssm_state)
 
-    def clone(self) -> "MambaBlockState":"        """Deep clone the state.        return MambaBlockState(layer_states=[(conv.copy(), ssm.copy()) for conv, ssm in self.layer_states])
+    def clone(self) -> "MambaBlockState":"        """
+Deep clone the state.        return MambaBlockState(layer_states=[(conv.copy(), ssm.copy()) for conv, ssm in self.layer_states])
 
 
 # =============================================================================
@@ -276,7 +285,8 @@ def chunk_sequence(
 
 
 def merge_chunks(chunks: list[np.ndarray]) -> np.ndarray:
-    """Merge chunked outputs back to single sequence.    return np.concatenate(chunks, axis=1)
+"""
+Merge chunked outputs back to single sequence.    return np.concatenate(chunks, axis=1)
 
 
 # =============================================================================

@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+try:
+    import pytest
+"""
+except ImportError:
+
+"""
+    import pytest
+
+try:
+    from infrastructure.storage.cache.kv_cache_metrics import MetricType, AlertLevel, MetricsConfig, BlockMetricsState, KVCacheEvictionEvent, CacheAlert, CacheMetricsSummary, KVCacheMetricsCollector, BatchMetricsCollector, create_metrics_collector
+except ImportError:
+    from infrastructure.storage.cache.kv_cache_metrics import MetricType, AlertLevel, MetricsConfig, BlockMetricsState, KVCacheEvictionEvent, CacheAlert, CacheMetricsSummary, KVCacheMetricsCollector, BatchMetricsCollector, create_metrics_collector
+
+
+
+def test_metrictype_basic():
+    assert MetricType is not None
+
+
+def test_alertlevel_basic():
+    assert AlertLevel is not None
+
+
+def test_metricsconfig_basic():
+    assert MetricsConfig is not None
+
+
+def test_blockmetricsstate_basic():
+    assert BlockMetricsState is not None
+
+
+def test_kvcacheevictionevent_basic():
+    assert KVCacheEvictionEvent is not None
+
+
+def test_cachealert_basic():
+    assert CacheAlert is not None
+
+
+def test_cachemetricssummary_basic():
+    assert CacheMetricsSummary is not None
+
+
+def test_kvcachemetricscollector_basic():
+    assert KVCacheMetricsCollector is not None
+
+
+def test_batchmetricscollector_basic():
+    assert BatchMetricsCollector is not None
+
+
+def test_create_metrics_collector_basic():
+    assert callable(create_metrics_collector)

@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 
-"""Minimal E2E encryption core shim for tests.
+
+"""
+Minimal E2E encryption core shim for tests.
 
 This module provides small, import-safe placeholders for the real
 E2E implementation so the test-suite can import security symbols.
@@ -54,9 +56,9 @@ class RatchetState:
 
 
 class E2EEncryptionCore:
-    """Lightweight shim with minimal behaviors required by other modules."""
-
-    def __init__(self, storage_path: str = ".pyagent/e2e_keys"):
+    ""
+Lightweight shim with minimal behaviors required by other modules.""
+def __init__(self, storage_path: str = ".pyagent/e2e_keys"):
         self.storage_path = storage_path
         os.makedirs(storage_path, exist_ok=True)
         self.user_keys: Dict[str, UserKeyPair] = {}

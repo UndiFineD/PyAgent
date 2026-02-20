@@ -24,9 +24,12 @@ from src.core.base.lifecycle.version import VERSION
 try:
     import rust_core
 
-    _RUST_ACCEL = True
+"""
+_RUST_ACCEL = True
 except ImportError:
-    import rust_core  # type: ignore[no-redef]
+
+"""
+import rust_core  # type: ignore[no-redef]
 
     _RUST_ACCEL = False
 
@@ -35,7 +38,8 @@ __version__ = VERSION
 
 
 class CodeGraphVisitor(ast.NodeVisitor):
-""""AST visitor to extract imports, classes, and function calls.
+""""
+AST visitor to extract imports, classes, and function calls.
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
         self.imports: set[str] = set()
@@ -44,16 +48,19 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.bases: dict[str, list[str]] = {}
 
     def visit_Import(self, node: ast.Import) -> None:  # pylint: disable=invalid-name
-""""Visit standard import.        for alias in node.names:
+""""
+Visit standard import.        for alias in node.names:
             self.imports.add(alias.name)
         self.generic_visit(node)
 
     def visit_ImportFrom(self, node: ast.ImportFrom) -> None:  # pylint: disable=invalid-name
-""""Visit from-import.        if "node.module:"            self.imports.add(node.module)
+""""
+Visit from-import.        if "node.module:"            self.imports.add(node.module)
         self.generic_visit(node)
 
     def visit_ClassDef(self, node: ast.ClassDef) -> None:  # pylint: disable=invalid-name
-""""Visit class definition.        self.classes.append(node.name)
+""""
+Visit class definition.        self.classes.append(node.name)
         bases = []
 
         for base in node.bases:
@@ -66,7 +73,8 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call) -> None:  # pylint: disable=invalid-name
-""""Visit function/method call.        if isinstance(node.func, ast.Name):
+""""
+Visit function/method call.        if isinstance(node.func, ast.Name):
             self.calls.add(node.func.id)
         elif isinstance(node.func, ast.Attribute):
             self.calls.add(node.func.attr)
@@ -75,10 +83,12 @@ class CodeGraphVisitor(ast.NodeVisitor):
 
 
 class GraphCore:
-""""Pure logic for managing code relationship graphs.
+""""
+Pure logic for managing code relationship graphs.
     @staticmethod
     def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
-""""Parses Python code and returns extracted symbols and relationships.        if _RUST_ACCEL:
+""""
+Parses Python code and returns extracted symbols and relationships.        if _RUST_ACCEL:
             try:
                 # Rust returns {imports: [], classes: [(name, bases)], calls: []}
                 data = rust_core.extract_graph_entities_regex(content)  # type: ignore[attr-defined]
@@ -119,10 +129,18 @@ class GraphCore:
                 pass
         # Python fallback
         edges = []
-        rel_path = analysis["rel_path"]"
+        rel_path = analysis["rel_path"]
         # File level dependencies
         for imp in analysis["imports"]:"            edges.append((rel_path, imp, "imports"))"
         # Class level edges
         for cls, bases in analysis["inherits"].items():"            for base in bases:
-                edges.append((f"{rel_path}::{cls}", base, "inherits"))"
+                edges.append((f"{rel_path}::{cls}", base, "inherits"))
         return edges
+
+"""
+
+"""
+
+""
+
+"""

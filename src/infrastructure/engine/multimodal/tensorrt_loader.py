@@ -14,10 +14,12 @@
 
 
 """
+"""
 TensorRT Engine Loader for Phase 51 Multimedia & Attention.
 Provides 120fps throughput for separate Video, Audio, and Text channels.
 """
 
+"""
 import logging
 import os
 from pathlib import Path
@@ -33,13 +35,14 @@ except ImportError:
 
 
 class TensorRTLoader:
-    """Manages TensorRT engines for multimodal inference.
+"""
+Manages TensorRT engines for multimodal inference.
     Supports FP8, INT8, and FP16 quantization paths.
-    """
-
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
-        """Initializes the TensorRTLoader with a workspace for engine caching."""
-        self.workspace_root = Path(workspace_root or os.getcwd())
+"""
+def __init__(self, workspace_root: Optional[str] = None) -> None:
+"""
+Initializes the TensorRTLoader with a workspace for engine caching.""
+self.workspace_root = Path(workspace_root or os.getcwd())
         self.engine_dir = self.workspace_root / "data" / "forge" / "tensorrt"
         self.engine_dir.mkdir(parents=True, exist_ok=True)
         self.active_engines: Dict[str, Any] = {}
@@ -47,8 +50,9 @@ class TensorRTLoader:
 
 
     async def load_engine(self, model_id: str, precision: str = "fp16") -> bool:
-        """Loads or builds a TensorRT engine for the given model and precision."""
-        engine_path = self.engine_dir / f"{model_id}_{precision}.engine"
+"""
+Loads or builds a TensorRT engine for the given model and precision.""
+engine_path = self.engine_dir / f"{model_id}_{precision}.engine"
         if engine_path.exists():
             self.logger.info(f"Loading cached TensorRT engine: {engine_path}")  # In a real environment, this would call tensorrt.Runtime
             # Here we simulate or call rust_core stub
@@ -64,9 +68,10 @@ class TensorRTLoader:
 
 
     def run_inference(self, model_id: str, inputs: List[np.ndarray]) -> List[np.ndarray]:
-        """                Runs inference on the loaded engine.
-        Optimized for 120fps (8.33ms budget)."""
-        if model_id not in self.active_engines:
+"""
+Runs inference on the loaded engine.
+        Optimized for 120fps (8.33ms budget).""
+if model_id not in self.active_engines:
             raise RuntimeError(f"Engine {model_id} not loaded.")
         if rust_core:
             # Convert numpy inputs to List[List[f32]] for Rust FFI
@@ -82,14 +87,16 @@ class TensorRTLoader:
 
 
     def optimize_multimodal_batch(self, video_frames: np.ndarray, audio_samples: np.ndarray) -> Dict[str, np.ndarray]:
-        """Specialized batching for 120fps DVD-like channels.
+"""
+Specialized batching for 120fps DVD-like channels.
         Packs channels into a single TensorRT execution block.
-        """
+"""
         # Simulated packing logic
         return {"video_processed": video_frames * 0.5, "audio_processed": audio_samples * 0.5}
 
 
     def close(self) -> None:
-        """Releases all hardware resources."""
-        self.active_engines.clear()
+"""
+Releases all hardware resources.""
+self.active_engines.clear()
         self.logger.info("TensorRT resources released.")

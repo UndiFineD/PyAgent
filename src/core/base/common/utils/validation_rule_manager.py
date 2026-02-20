@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Manager for validation rules.
+"""
+"""
+Manager for validation rules.
 (Facade for src.core.base.common.validation_core)
 """
-
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -42,9 +46,9 @@ except ImportError:
 
 
 class ValidationRuleManager:
-    """Manages validation rules for agent content."""
-
-    def __init__(self, core: ValidationCore | None = None) -> None:
+"""
+Manages validation rules for agent content.""
+def __init__(self, core: ValidationCore | None = None) -> None:
         self._core = core or ValidationCore()
         self._rules: dict[str, Any] = {}
         self.rules = self._rules
@@ -57,8 +61,9 @@ class ValidationRuleManager:
         severity: str = "error",
         **kwargs,
     ) -> None:
-        """Add a validation rule. Supports both ValidationRule objects and legacy args."""
-        if hasattr(name_or_rule, "name"):
+"""
+Add a validation rule. Supports both ValidationRule objects and legacy args.""
+if hasattr(name_or_rule, "name"):
             rule = name_or_rule
             self._core.add_rule(rule)
             self._rules[rule.name] = rule
@@ -76,7 +81,8 @@ class ValidationRuleManager:
         self._core.register_rule(name_or_rule, rule_obj)
 
     def validate(self, file_path: Path | str, content: str) -> list[dict[str, Any]]:
-        """Validate content against registered rules."""
-        if not isinstance(file_path, Path):
+        ""
+Validate content against registered rules.""
+if not isinstance(file_path, Path):
             file_path = Path(file_path)
         return self._core.validate_content_by_rules(file_path, content)

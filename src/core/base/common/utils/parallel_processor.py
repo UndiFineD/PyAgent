@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Manager for parallel execution.
+"""
+"""
+Manager for parallel execution.
 (Facade for src.core.base.common.execution_core)
 """
 
+"""
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from functools import partial
@@ -35,19 +39,20 @@ from src.core.base.common.execution_core import ExecutionCore
 
 
 class ParallelProcessor:
-    """Facade for parallel execution utilities.
+"""
+Facade for parallel execution utilities.
 
     Uses ExecutionCore for underlying orchestration. This class provides a small
     compatibility layer so tests can exercise threaded and async execution.
-    """
-
-    def __init__(self, max_workers: int = 4) -> None:
+"""
+def __init__(self, max_workers: int = 4) -> None:
         self.max_workers = max_workers
         self._execution_core = ExecutionCore(max_workers=max_workers)
 
     def process_files_threaded(self, files: List[Path], worker_func: Callable[[Path], Any]) -> List[Any]:
-        """Process files using worker threads and return non-None results."""
-        with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+"""
+Process files using worker threads and return non-None results.""
+with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             if HAS_TQDM:
                 results = list(tqdm(executor.map(worker_func, files), total=len(files), desc="Processing (Threads)"))
             else:
@@ -55,9 +60,9 @@ class ParallelProcessor:
         return [r for r in results if r is not None]
 
     async def async_process_files(self, files: List[Path], worker_func: Callable[[Path], Any]) -> List[Any]:
-        """Process files using ExecutionCore's async API."""
-
-        def _wrapped_task(file_path: Path) -> Any:
+"""
+Process files using ExecutionCore's async API.""
+def _wrapped_task(file_path: Path) -> Any:
             try:
                 return worker_func(file_path)
             except Exception as exc:  # pylint: disable=broad-exception-caught

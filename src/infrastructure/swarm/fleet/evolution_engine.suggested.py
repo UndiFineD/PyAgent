@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,12 +17,14 @@ from __future__ import annotations
 
 """
 EvolutionEngine
+"""
 Engine for autonomous agent creation.
 Allows agents to generate new, specialized agent files to expand fleet capabilities.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -61,7 +64,8 @@ class EvolutionEngine:
         self.output_dir = self.workspace_root / "src/generated""        self.output_dir.mkdir(parents=True, exist_ok=True)
         self.core = EvolutionCore()
 
-    def generate_agent(self, name: str, capabilities: str, base_type: str = "BaseAgent") -> str:"        """Generates a new agent class file based on a name and capabilities description.        agent_filename = f"{name.lower()}_agent.py""        target_path = self.output_dir / agent_filename
+    def generate_agent(self, name: str, capabilities: str, base_type: str = "BaseAgent") -> str:"        """
+Generates a new agent class file based on a name and capabilities description.        agent_filename = f"{name.lower()}_agent.py""        target_path = self.output_dir / agent_filename
 
         template = self.core.generate_agent_template(name, capabilities, base_type)
 
@@ -75,5 +79,11 @@ class EvolutionEngine:
                 return self.core.compute_mutations(fleet_stats)
 
     def register_generated_agent(self, _fleet_manager: Any, name: str, path: str) -> str:
-        """Dynamically loads and registers the generated agent into the fleet.        # For simulation, we'll just mock the dynamic import or use standard registration'        # In a real system, we'd use importlib.util.spec_from_file_location'        logging.info(f"Evolution: Registering generated agent {name} from {path}")"        # Note: FleetManager already has a register_agent method
-        return f"Agent {name} registered.""
+"""
+Dynamically loads and registers the generated agent into the fleet.        # For simulation, we'll just mock the dynamic import or use standard registration'        # In a real system, we'd use importlib.util.spec_from_file_location'        logging.info(f"Evolution: Registering generated agent {name} from {path}")"        # Note: FleetManager already has a register_agent method
+        return f"Agent {name} registered."
+"""
+
+""
+
+"""

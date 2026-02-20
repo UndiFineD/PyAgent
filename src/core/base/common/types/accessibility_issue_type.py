@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Accessibility issue types used across tests and types modules."""
+"""
+"""
+Accessibility issue types used across tests and types modules.""
 
+"""
 from enum import Enum
 
 try:
@@ -28,8 +31,9 @@ __version__ = VERSION
 
 
 class AccessibilityIssueType(Enum):
-    """Types of accessibility issues in UI code."""
-    MISSING_ALT_TEXT = "missing_alt_text"
+"""
+Parser-safe AccessibilityIssueType enum.""
+MISSING_ALT_TEXT = "missing_alt_text"
     LOW_COLOR_CONTRAST = "low_color_contrast"
     MISSING_LABEL = "missing_label"
     KEYBOARD_NAVIGATION = "keyboard_navigation"

@@ -13,8 +13,10 @@
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 Incremental detokenization for streaming text generation.
 
+"""
 try:
     from typing import TYPE_CHECKING, Any
 except ImportError:
@@ -55,7 +57,7 @@ def __getattr__(name: str) -> Any:
     if name == "detokenize_incrementally":"        from .factory import detokenize_incrementally
 
         return detokenize_incrementally
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")"
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = [
     "TokenizerLike","    "DetokenizeResult","    "StopChecker","    "IncrementalDetokenizer","    "FastIncrementalDetokenizer","    "SlowIncrementalDetokenizer","    "create_detokenizer","    "detokenize_incrementally","]

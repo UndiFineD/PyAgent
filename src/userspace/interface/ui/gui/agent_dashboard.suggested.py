@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Dashboard component for managing multiple agent columns.
+"""
+"""
+Dashboard component for managing multiple agent columns.
 
+"""
 try:
     import tkinter
 except ImportError:
@@ -43,7 +47,9 @@ __version__ = VERSION
 
 
 class AgentDashboard:
-    """Manages the agent columns container and provides controls to add agents.
+"""
+Manages the agent columns container and provides controls to add agents.
+
     def __init__(self, parent, callbacks) -> None:
         self.frame = ttk.Frame(parent)
         self.callbacks: Any = callbacks
@@ -54,7 +60,7 @@ class AgentDashboard:
         v_scrollbar = ttk.Scrollbar(self.frame, orient="vertical", command=canvas.yview)"        self.dash_content = ttk.Frame(canvas)
 
         self.dash_content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))"        # Ensure dash_content matches canvas width
-        canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))"
+        canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
         canvas_window: int = canvas.create_window((0, 0), window=self.dash_content, anchor="nw")"        canvas.configure(yscrollcommand=v_scrollbar.set)
 
         v_scrollbar.pack(side="right", fill="y")"        canvas.pack(side="left", fill="both", expand=True)"
@@ -78,7 +84,7 @@ class AgentDashboard:
         ttk.Button(
             dash_ctrl,
             text="+ Security","            command=lambda: self.callbacks.get("add_agent")("Security"),"        ).pack(side=tk.LEFT, padx=2)
-        ttk.Button(dash_ctrl, text="+ Custom...", command=self.callbacks.get("add_custom")).pack(side=tk.LEFT, padx=5)"
+        ttk.Button(dash_ctrl, text="+ Custom...", command=self.callbacks.get("add_custom")).pack(side=tk.LEFT, padx=5)
         # Container for columns (rows now)
         self.columns_container = ttk.Frame(self.dash_content)
         self.columns_container.pack(fill=tk.BOTH, expand=True)

@@ -1,0 +1,31 @@
+"""Minimal parser-safe GUIAgent shim used during repository repair.
+
+Exposes small API for design/interpretation to satisfy imports.
+"""
+
+from __future__ import annotations
+from typing import Any, Dict, List
+
+
+class GUIAgent:
+    def __init__(self, file_path: str | None = None) -> None:
+        self._element_cache: Dict[str, Dict[str, Any]] = {}
+        self._action_history: List[Dict[str, Any]] = []
+
+    async def design_layout(self, framework: str, description: str, **kwargs: Any) -> Dict[str, Any]:
+        return {"framework": framework, "code": "", "features": kwargs}
+
+    async def interpret_ui_structure(self, ui_dump: str, _format: str = "auto") -> Dict[str, Any]:
+        return {"elements": [], "navigation_structure": "", "accessibility_issues": [], "suggested_actions": []}
+
+    async def generate_action_sequence(self, goal: str, ui_dump: str) -> Dict[str, Any]:
+        return {"actions": []}
+
+    def get_cached_elements(self) -> Dict[str, Dict[str, Any]]:
+        return self._element_cache
+
+    def get_action_history(self) -> List[Dict[str, Any]]:
+        return self._action_history
+
+
+__all__ = ["GUIAgent"]

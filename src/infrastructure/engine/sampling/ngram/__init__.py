@@ -13,8 +13,10 @@
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 N-gram Proposer Package - Speculative decoding via pattern matching.
 
+"""
 try:
     from .infrastructure.engine.sampling.ngram.factory import \
 except ImportError:

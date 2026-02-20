@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Module: tts
 Text-to-speech backend integration TODO Placeholder for LMStudio backend.
 
+"""
 This module provides a minimal plugin stub used for integration tests and local
 development. It intentionally avoids pulling large external dependencies.
 try:
@@ -32,7 +34,8 @@ except ImportError:
 
 
 class MyLMPlugin(torch.nn.Module):
-    """TODO Placeholder LMStudio plugin (torch.nn.Module).
+"""
+TODO Placeholder LMStudio plugin (torch.nn.Module).
     def __init__(self) -> None:
         super(MyLMPlugin, self).__init__()
         # TODO Placeholder for model and tokenizer objects
@@ -51,7 +54,8 @@ class MyLMPlugin(torch.nn.Module):
 
 
 def speak(text: str) -> str:  # pylint: disable=missing-function-docstring
-    """Speak text using TTS backend - TODO Placeholder returning input for now.    # TODO Placeholder implementation
+"""
+Speak text using TTS backend - TODO Placeholder returning input for now.    # TODO Placeholder implementation
     return text
 
 # Register the plugin

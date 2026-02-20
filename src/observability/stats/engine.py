@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     import time
@@ -76,7 +81,8 @@ logger = logging.getLogger(__name__)
 
 
 class ObservabilityCore:
-    """Pure logic for processing agent telemetry data.    def __init__(self) -> None:        self.metrics_history: list[AgentMetric] = []
+"""
+Pure logic for processing agent telemetry data.    def __init__(self) -> None:        self.metrics_history: list[AgentMetric] = []
 
     def process_metric(self, metric: AgentMetric) -> None:
                 Add a new AgentMetric to the metrics history.
@@ -91,7 +97,7 @@ class ObservabilityCore:
         Returns:
             dict[str, Any]: A dictionary containing total count, average duration, and total cost.
                 if not self.metrics_history:
-            return {"count": 0, "avg_duration": 0, "total_cost": 0}"
+            return {"count": 0, "avg_duration": 0, "total_cost": 0}
         total_d = sum(m.duration_ms for m in self.metrics_history)
         total_c = sum(m.estimated_cost for m in self.metrics_history)
         count = len(self.metrics_history)
@@ -101,7 +107,8 @@ class ObservabilityCore:
 
 
 class ObservabilityEngine:
-    """Provides telemetry and performance tracking for the agent fleet.
+"""
+Provides telemetry and performance tracking for the agent fleet.
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = Path(workspace_root or ".")"        self.telemetry_file = self.workspace_root / ".agent_telemetry.json""        self.core = ObservabilityCore()
         self.cost_engine = TokenCostEngine()
@@ -160,11 +167,12 @@ class ObservabilityEngine:
         )
 
         self.core.process_metric(metric)
-        self.metrics_exporter.record_agent_call(agent, duration, status == "success")"
+        self.metrics_exporter.record_agent_call(agent, duration, status == "success")
 
 
 class StatsCore:
-    """Core logic for statistics processing.
+"""
+Core logic for statistics processing.
     def __init__(self) -> None:
         self.namespaces: dict[str, list[Metric]] = {}
         self.rollup = StatsRollupCalculator()
@@ -187,7 +195,8 @@ class StatsCore:
 
 
 class StatsNamespaceManager:
-    """Manages multiple namespaces (backward compat).
+"""
+Manages multiple namespaces (backward compat).
     def __init__(self) -> None:
         self.namespaces: dict[str, Any] = {}
 

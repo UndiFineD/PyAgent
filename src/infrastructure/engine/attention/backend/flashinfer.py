@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 FlashInfer backend for decode-focused attention.
 """
 
+"""
 import logging
 from typing import Any
 
@@ -37,7 +41,7 @@ class FlashInferBackend(AttentionBackend[None]):
     
     @staticmethod
     def get_name() -> str:
-        return "flashinfer""
+        return "flashinfer"
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -68,7 +72,8 @@ class FlashInferBackend(AttentionBackend[None]):
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-        """FlashInfer implementation.        try:
+"""
+FlashInfer implementation.        try:
             import flashinfer  # pylint: disable=unused-import # noqa: F401
         except ImportError:
             logger.warning("flashinfer not available, falling back to SDPA")"            return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)

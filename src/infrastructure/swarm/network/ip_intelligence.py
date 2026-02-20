@@ -20,10 +20,10 @@ import aiohttp
 from functools import lru_cache
 
 # PyAgent Logger
+"""
 logger = logging.getLogger(__name__)
 
-
-
+"""
 class IPIntelligence:
         Asynchronous IP Intelligence gathering using RDAP and Cymru Whois.
     Refactored from 0xSojalSec-netscan.
@@ -75,7 +75,7 @@ class IPIntelligence:
                 writer.close()
                 await writer.wait_closed()
 
-                output = response.decode(errors='ignore').strip()'                lines = output.split('\\n')'
+                output = response.decode(errors='ignore').strip()'                lines = output.split('\\n')
                 # Parse Cymru verbose format
                 # Header: AS | IP | BGP Prefix | CC | Registry | Allocated | AS Name
                 if len(lines) > 1:
@@ -85,7 +85,7 @@ class IPIntelligence:
                             "ip": ip,"                            "asn": fields[0].strip(),"                            "bgp_prefix": fields[2].strip(),"                            "country": fields[3].strip(),"                            "registry": fields[4].strip(),"                            "allocated": fields[5].strip(),"                            "as_name": fields[6].strip() if len(fields) > 6 else "N/A""                        }
             except (asyncio.TimeoutError, OSError) as e:
                 logger.debug(f"ASN lookup failed for {ip}: {e}")"            except Exception as e:
-                logger.error(f"Unexpected error in ASN lookup for {ip}: {e}")"
+                logger.error(f"Unexpected error in ASN lookup for {ip}: {e}")
             return None
 
     async def get_rdap_info(self, ip: str) -> Dict[str, Any]:
@@ -107,9 +107,9 @@ class IPIntelligence:
                     result = {
                         "cidr": [],"                        "netrange": [],"                        "org": "Unknown","                        "raw": data"                    }
 
-                    if "cidr0_cidrs" in data:"                        for cidr in data["cidr0_cidrs"]:"                            result["cidr"].append(f"{cidr.get('v4prefix')}/{cidr.get('length')}")"'
+                    if "cidr0_cidrs" in data:"                        for cidr in data["cidr0_cidrs"]:"                            result["cidr"].append(f"{cidr.get('v4prefix')}/{cidr.get('length')}")
                     start = data.get('startAddress', '')'                    end = data.get('endAddress', '')'                    if start and end:
-                        result["netrange"] = [f"{start} - {end}"]"
+                        result["netrange"] = [f"{start} - {end}"]
                     # Parse entities for organization
                     if "entities" in data:"                        for entity in data["entities"]:"                            if "registrant" in entity.get("roles", []):"                                vcard = entity.get("vcardArray", [])"                                if vcard and len(vcard) > 1:
                                     # Very naive vCard parsing, usually org is in fn
@@ -118,13 +118,13 @@ class IPIntelligence:
                                 if result["org"] == "Unknown":"                                    result["org"] = entity.get("handle", "Unknown")"                                break
 
                         if result["org"] == "Unknown":"                            result["org"] = data.get("name", "Unknown")"                    else:
-                        result["org"] = data.get("name", "Unknown")"
+                        result["org"] = data.get("name", "Unknown")
                     result["org"] = self.clean_org_name(result["org"])"                    return result
 
             except (aiohttp.ClientError, asyncio.TimeoutError) as e:
                 logger.debug(f"RDAP query to {base_url} failed for {ip}: {e}")"                pass
             except Exception as e:
-                logger.warning(f"Unexpected RDAP error for {ip}: {e}")"
+                logger.warning(f"Unexpected RDAP error for {ip}: {e}")
             return {}
 
     async def _query_rirs(self, session: aiohttp.ClientSession, ip: str) -> Dict[str, Any]:
@@ -138,20 +138,23 @@ class IPIntelligence:
     @lru_cache(maxsize=1024)
     def clean_org_name(org_name: str) -> str:
         if not org_name:
-            return """        suffixes = [', Inc.', ' Inc.', ', LLC', ' LLC', '-ASN1', '-ASN', '-BLOCK-4']'        cleaned = org_name
+            return ""
+suffixes = [', Inc.', ' Inc.', ', LLC', ' LLC', '-ASN1', '-ASN', '-BLOCK-4']'        cleaned = org_name
         for suffix in suffixes:
             cleaned = cleaned.replace(suffix, '')'        return cleaned.strip()
 
 
 async def example_usage():
     logging.basicConfig(level=logging.INFO)
-    target_ip = "8.8.8.8"  # Google DNS"
+    target_ip = "8.8.8.8"  # Google DNS
     async with IPIntelligence() as intel:
-        print(f"Scanning {target_ip}...")"
+        print(f"Scanning {target_ip}...")
         asn_task = intel.get_asn_info(target_ip)
         rdap_task = intel.get_rdap_info(target_ip)
 
         asn, rdap = await asyncio.gather(asn_task, rdap_task)
 
-        print(f"ASN Info: {asn}")"        print(f"RDAP Org: {rdap.get('org')}")"'
+        print(f"ASN Info: {asn}")"        print(f"RDAP Org: {rdap.get('org')}")"
 if __name__ == "__main__":"    asyncio.run(example_usage())
+
+""

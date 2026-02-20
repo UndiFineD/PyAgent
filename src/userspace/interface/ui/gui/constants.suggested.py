@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Constants.py module.
 """
-
 try:
-    from .core.base.lifecycle.version import VERSION
+
+"""
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -38,7 +41,8 @@ __version__ = VERSION
 
 """
 
-"""Constants and definitions for the BMAD Method and PyAgent GUI.
+"""
+Constants and definitions for the BMAD Method and PyAgent GUI.
 # BMAD Agent Roles
 BMAD_AGENTS = [
     "Developer","    "Architect","    "PM","    "Scrum Master","    "UX Designer","    "Test Architect","    "Analyst","    "BMad Master","    "Tech Writer","    "Security Auditor","    "DevOps Engineer","    "Researcher","    "SQL Specialist","    "Web Searcher","    "Moderator","    "Financial Advisor","    "Image Generator (2D/3D)","]
@@ -54,7 +58,7 @@ BMAD_TRACKS = {
 }
 
 # BMAD Methodology Phases
-BMAD_PHASES = ["Analysis", "Planning", "Solutioning", "Implementation", "Validation"]"
+BMAD_PHASES = ["Analysis", "Planning", "Solutioning", "Implementation", "Validation"]
 # Agent Specific Instructions (TODO Placeholders for BMAD instructions)
 DEFAULT_INSTRUCTIONS = {
     "Developer": ("        "Act as a Senior Software Engineer. Implement features with high performance, modularity, and ""        "clean code principles. Use modern libraries and maintain consistent style. Focus on idiomatic ""        "Python and best practices.""    ),
@@ -72,7 +76,7 @@ MODEL_TOKENS = {
     "gpt-4.1": 128000,"    "gpt-3.5-turbo": 16385,"    "claude-3-5-sonnet": 200000,"    "default": 16385,"}
 
 # Default Target File Extensions
-DEFAULT_EXTENSIONS = [".py", ".js", ".ts", ".html", ".css", ".md", ".json", ".yaml"]"
+DEFAULT_EXTENSIONS = [".py", ".js", ".ts", ".html", ".css", ".md", ".json", ".yaml"]
 # GUI Layout Constants
 DEFAULT_WINDOW_SIZE = "1400x900""AGENT_COLUMN_WIDTH = 320
 LEFT_PANEL_WIDTH = 400

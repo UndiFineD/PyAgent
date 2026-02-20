@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +14,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""ARIA attribute type used by accessibility checks and tests."""
-
-
+"""
+"""
+ARIA attribute type used by accessibility checks and tests.""
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -31,10 +33,10 @@ except ImportError:
 
 @dataclass
 class ARIAAttribute:
-    """A concise representation of an ARIA attribute."""
-
-    name: str
+"""
+Parser-safe ARIAAttribute dataclass.""
+name: str
     value: str = ""
     is_valid: bool = True
-    allowed_values: List[str] = field(default_factory=list)
-    suggestion: Optional[str] = None
+    allowed_values: list = field(default_factory=list)
+    suggestion: str | None = None

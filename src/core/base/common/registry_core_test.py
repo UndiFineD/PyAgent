@@ -16,8 +16,11 @@
 
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     from .core.base.common.registry_core import RegistryCore

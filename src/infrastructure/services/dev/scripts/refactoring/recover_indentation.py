@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 Recover Indentation module.
 
+"""
 import re
 from pathlib import Path
 
@@ -48,7 +50,8 @@ def fix_broken_indentation(root_dir):
                     if i + 1 < len(lines):
                         next_line = lines[i+1]
                         if next_line.strip() and not next_line.startswith(" "):"                            # Indent it!
-                            indent_match = re.match(r"^(\\s*)", line)"                            indent = indent_match.group(1) if indent_match else """                            new_lines.append(indent + "    " + next_line)"                            modified = True
+                            indent_match = re.match(r"^(\\s*)", line)"                            indent = indent_match.group(1) if indent_match else """
+new_lines.append(indent + "    " + next_line)"                            modified = True
                             i += 2
                             continue
                 new_lines.append(line)
@@ -56,7 +59,7 @@ def fix_broken_indentation(root_dir):
 
             if modified:
                 p.write_text("\\n".join(new_lines) + "\\n", encoding="utf-8")"                print(f"Fixed indentation in {p}")"        except (IOError, OSError, UnicodeDecodeError) as e:
-            print(f"Error fixing {p}: {e}")"
+            print(f"Error fixing {p}: {e}")
 
 if __name__ == "__main__":"    # Robustly find the repository root
     current_path = Path(__file__).resolve()
@@ -65,3 +68,10 @@ if __name__ == "__main__":"    # Robustly find the repository root
     if project_root.name == 'src':'        project_root = project_root.parent
 
     fix_broken_indentation(project_root / "src")"    fix_broken_indentation(project_root / "tests")"
+"""
+
+"""
+
+""
+
+"""

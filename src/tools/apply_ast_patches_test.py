@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .apply_ast_patches import parse_patch, apply_hunks_to_source, apply_patch_file, main

@@ -14,11 +14,15 @@
 
 
 """
-""""MCP-based tool registration using official mcp library.
+""""
+"""
+MCP-based tool registration using official mcp library.
 Provides register_tool decorator compatible with mcp.mcp_tool.
 """
 try:
-    import inspect
+
+"""
+import inspect
 except ImportError:
     import inspect
 
@@ -45,22 +49,23 @@ def register_tool(
     name: Optional[str] = None,
     description: Optional[str] = None,
 ):
-    """Decorator to register a function as a tool using MCP format.
+"""
+Decorator to register a function as a tool using MCP format.
     Compatible with mcp.mcp_tool descriptor.
 
     Args:
         name: Optional custom tool name
         description: Optional custom description
-    """
-    def decorator(func: Callable) -> Callable:
+"""
+def decorator(func: Callable) -> Callable:
         tool_name = name or func.__name__
-        tool_description = description or func.__doc__ or f"Tool {tool_name}""
+        tool_description = description or func.__doc__ or f"Tool {tool_name}"
         # Register with global registry
         registry = get_registry()
 
         # Check for duplicate registration
         if tool_name in [t.name for t in registry.list_tools()]:
-            raise ValueError(f"Tool '{tool_name}' already registered")"'
+            raise ValueError(f"Tool '{tool_name}' already registered")
         registry.register(func, name=tool_name, description=tool_description)
 
         return func
@@ -69,7 +74,9 @@ def register_tool(
 
 
 def _generate_mcp_schema(func: Callable) -> Dict[str, Any]:
-    """Generate MCP-compatible JSON schema from function signature."""sig = inspect.signature(func)
+"""
+Generate MCP-compatible JSON schema from function signature.""
+sig = inspect.signature(func)
     type_hints = get_type_hints(func)
 
     properties = {}
@@ -84,19 +91,20 @@ def _generate_mcp_schema(func: Callable) -> Dict[str, Any]:
         type_mapping = {
             str: "string","            int: "integer","            float: "number","            bool: "boolean","            list: "array","            dict: "object","            list[str]: "array","            list[int]: "array","            dict[str, Any]: "object","        }
 
-        json_type = type_mapping.get(param_type, "string")"
+        json_type = type_mapping.get(param_type, "string")
         properties[param_name] = {
             "type": json_type,"            "description": f"Parameter {param_name}","        }
 
         if param.default == inspect.Parameter.empty:
             required.append(param_name)
         else:
-            properties[param_name]["default"] = param.default"
+            properties[param_name]["default"] = param.default
     return {
         "type": "object","        "properties": properties,"        "required": required,"        "additionalProperties": False,"    }
 
 
-def create_mcp_server(name: str = "aenv-server", version: str = "0.1.0"):"    """Create MCP server with registered tools.
+def create_mcp_server(name: str = "aenv-server", version: str = "0.1.0"):"    """
+Create MCP server with registered tools.
 
     Args:
         name: Server name
@@ -104,8 +112,8 @@ def create_mcp_server(name: str = "aenv-server", version: str = "0.1.0"):"    ""
 
     Returns:
         MCP server instance
-    """
-    registry = get_registry()
+"""
+registry = get_registry()
 
     # Create MCP server
     server = Server(name=name)
@@ -117,3 +125,5 @@ def create_mcp_server(name: str = "aenv-server", version: str = "0.1.0"):"    ""
             server.define_tool(tool_descriptor.name, _generate_mcp_schema(tool_func), tool_func)
 
     return server
+
+""

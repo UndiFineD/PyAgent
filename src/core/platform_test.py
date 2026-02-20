@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Test platform module."""
+"""
+"""
+Test platform module.""
+
+""
 import platform
 import sys
 print("Testing platform module...", flush=True)"try:

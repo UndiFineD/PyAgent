@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Base model classes and utility functions."""
+"""
+"""
+Base model classes and utility functions.""
 
+"""
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -72,8 +76,9 @@ __all__ = [
 
 @dataclass(slots=True)
 class CacheEntry:
-    """Cached response entry."""
-    key: str
+"""
+Cached response entry.""
+key: str
     response: str
     timestamp: float
 
@@ -83,8 +88,9 @@ class CacheEntry:
 
 @dataclass(slots=True)
 class AuthConfig:
-    """Authentication configuration."""
-    method: AuthMethod = AuthMethod.NONE
+"""
+Authentication configuration.""
+method: AuthMethod = AuthMethod.NONE
     api_key: str = ""
     token: str = ""
     username: str = ""
@@ -96,8 +102,9 @@ class AuthConfig:
 
 @dataclass(slots=True)
 class SerializationConfig:
-    """Configuration for custom serialization."""
-    format: SerializationFormat = SerializationFormat.JSON
+"""
+Configuration for custom serialization.""
+format: SerializationFormat = SerializationFormat.JSON
     options: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     compression: bool = False
     encryption: bool = False
@@ -105,24 +112,27 @@ class SerializationConfig:
 
 @dataclass(slots=True)
 class FilePriorityConfig:
-    """Configuration for file priority."""
-    path_patterns: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
+"""
+Configuration for file priority.""
+path_patterns: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     extension_priorities: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     default_priority: FilePriority = FilePriority.NORMAL
 
 
 @dataclass(slots=True)
 class ExecutionCondition:
-    """A condition for agent execution."""
-    name: str
+"""
+A condition for agent execution.""
+name: str
     check: Callable[[Path, str], bool]
     description: str = ""
 
 
 @dataclass(slots=True)
 class ValidationRule:
-    """Consolidated validation rule for Phase 126."""
-    name: str
+"""
+Consolidated validation rule for Phase 126.""
+name: str
     pattern: str = ""
     message: str = "Validation failed"
     severity: str = "error"  # error, warning, info
@@ -144,8 +154,9 @@ class ValidationRule:
 
 @dataclass(slots=True)
 class ModelConfig:
-    """Model configuration."""
-    model_id: str
+"""
+Model configuration.""
+model_id: str
     temperature: float = 0.7
     max_tokens: int = 2000
     enable_thinking: bool = False
@@ -154,20 +165,23 @@ class ModelConfig:
 
 @dataclass(slots=True)
 class ConfigProfile:
-    """Configuration profile."""
-    name: str
+"""
+Configuration profile.""
+name: str
     settings: dict[str, Any]
     parent: str | None = None
 
     def get(self, key: str, default: Any = None) -> Any:
-        """Get setting value."""
-        return self.settings.get(key, default)
+"""
+Get setting value.""
+return self.settings.get(key, default)
 
 
 @dataclass(slots=True)
 class DiffResult:
-    """Result of a diff operation."""
-    file_path: Optional[Path | str] = None
+"""
+Result of a diff operation.""
+file_path: Optional[Path | str] = None
     original_content: str = ""
     modified_content: str = ""
     diff_text: str = ""
@@ -179,8 +193,9 @@ class DiffResult:
 
 @dataclass(slots=True)
 class EnvironmentConfig:
-    """Configuration for agent environments."""
-    name: str
+"""
+Configuration for agent environments.""
+name: str
     version: str = "1.0.0"
     description: str = ""
     tags: list[str] = field(default_factory=_empty_list_str)
@@ -198,8 +213,9 @@ class EnvironmentConfig:
 
 @dataclass(slots=True)
 class EnvironmentInstance:
-    """Runtime instance of an environment."""
-    id: str
+"""
+Runtime instance of an environment.""
+id: str
     environment_name: str
     status: EnvironmentStatus = EnvironmentStatus.PENDING
     created_at: float = field(default_factory=time.time)
@@ -216,14 +232,16 @@ class EnvironmentInstance:
 
 
     def is_expired(self) -> bool:
-        """Check if the environment instance has expired."""
-        if self.expires_at is None:
+"""
+Check if the environment instance has expired.""
+if self.expires_at is None:
             return False
         return time.time() > self.expires_at
 
     def update_status(self, new_status: EnvironmentStatus) -> None:
-        """Update the instance status and timestamp."""
-        self.status = new_status
+        ""
+Update the instance status and timestamp.""
+self.status = new_status
         self.updated_at = time.time()
 
 

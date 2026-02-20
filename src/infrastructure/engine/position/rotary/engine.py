@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Engine.py module.
 
+"""
 try:
     from typing import Any, Dict, List, Optional, Tuple, Union
 except ImportError:
@@ -55,8 +57,9 @@ except ImportError:
 
 
 class RotaryEmbeddingEngine:
-    """Unified engine for rotary position embeddings.""""
-    Provides automatic variant detection and unified interface
+"""
+Unified engine for rotary position embeddings.""""
+Provides automatic variant detection and unified interface
     for all RoPE implementations.
     
     _VARIANT_MAP: Dict[RoPEVariant, type] = {
@@ -67,27 +70,31 @@ class RotaryEmbeddingEngine:
     }
 
     def __init__(self, config: Optional[RoPEConfig] = None) -> None:
-        """Initialize the RoPE engine.        self.config = config or RoPEConfig()
+"""
+Initialize the RoPE engine.        self.config = config or RoPEConfig()
         self._embeddings: Dict[RoPEVariant, RotaryEmbeddingBase] = {}
         self._current_variant = self.config.variant
         self._current_embedding: Optional[RotaryEmbeddingBase] = None
 
     def _get_or_create_embedding(self, variant: RoPEVariant) -> RotaryEmbeddingBase:
-        """Get or create an embedding instance for the variant.        if variant not in self._embeddings:
+"""
+Get or create an embedding instance for the variant.        if variant not in self._embeddings:
             if variant not in self._VARIANT_MAP:
-                raise ValueError(f"Unsupported RoPE variant: {variant}")"
+                raise ValueError(f"Unsupported RoPE variant: {variant}")
             embedding_cls = self._VARIANT_MAP[variant]
             self._embeddings[variant] = embedding_cls(self.config)
 
         return self._embeddings[variant]
 
     def set_variant(self, variant: RoPEVariant) -> None:
-        """Set the current RoPE variant.        self._current_variant = variant
+"""
+Set the current RoPE variant.        self._current_variant = variant
         self._current_embedding = self._get_or_create_embedding(variant)
 
     @property
     def embedding(self) -> RotaryEmbeddingBase:
-        """Get the current embedding instance.        if self._current_embedding is None:
+"""
+Get the current embedding instance.        if self._current_embedding is None:
             self._current_embedding = self._get_or_create_embedding(self._current_variant)
         return self._current_embedding
 
@@ -98,13 +105,15 @@ class RotaryEmbeddingEngine:
         key: Any,
         use_cuda: bool = True,
     ) -> Tuple[Any, Any]:
-        """Apply rotary embeddings.        return self.embedding.forward(positions, query, key, use_cuda)
+"""
+Apply rotary embeddings.        return self.embedding.forward(positions, query, key, use_cuda)
 
     @classmethod
     def from_model_config(
         cls,
         model_config: Dict[str, Any],
-    ) -> "RotaryEmbeddingEngine":"        """Create engine from model configuration.        config = RoPEConfig(
+    ) -> "RotaryEmbeddingEngine":"        """
+Create engine from model configuration.        config = RoPEConfig(
             head_dim=model_config.get("head_dim", 64),"            rotary_dim=model_config.get("rotary_dim"),"            max_position_embeddings=model_config.get("max_position_embeddings", 2048),"            base=model_config.get("rope_theta", 10000.0),"            is_neox_style=model_config.get("is_neox_style", True),"        )
 
         # Detect scaling type
@@ -119,7 +128,8 @@ class RotaryEmbeddingEngine:
 
     @classmethod
     def list_variants(cls) -> List[str]:
-        """List all supported RoPE variants.        return [v.name for v in RoPEVariant]
+"""
+List all supported RoPE variants.        return [v.name for v in RoPEVariant]
 
 
 def create_rope_embedding(
@@ -129,7 +139,8 @@ def create_rope_embedding(
     variant: Union[str, RoPEVariant] = RoPEVariant.NEOX,
     **kwargs: Any,
 ) -> RotaryEmbeddingBase:
-    """Create a RoPE embedding instance.    if isinstance(variant, str):
+"""
+Create a RoPE embedding instance.    if isinstance(variant, str):
         variant = RoPEVariant[variant.upper()]
 
     config = RoPEConfig(

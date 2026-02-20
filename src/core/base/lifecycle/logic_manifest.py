@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: logic_manifest
+"""
+"""
+Module: logic_manifest
 Defines the cognitive structure and capability set for a Universal Agent.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -32,11 +36,11 @@ except ImportError:
 
 @dataclass
 class LogicManifest:
-    """
-    The 'Logic Shard' that defines how an agent thinks and what it can do.
+"""
+The 'Logic Shard' that defines how an agent thinks and what it can do.
     This replaces hard-coded specialist logic.
-    """
-    version: str = "1.0.0"
+"""
+version: str = "1.0.0"
     role: str = "generalist"
     description: str = "A universal autonomous agent"
     # Required skill cores to load
@@ -59,7 +63,8 @@ class LogicManifest:
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> LogicManifest:
-        """Hydrate a manifest from a dictionary."""
+        ""
+Hydrate a manifest from a dictionary.""
 # Ensure only known fields are passed
         valid_fields = cls.__dataclass_fields__.keys()
         filtered_data = {k: v for k, v in data.items() if k in valid_fields}

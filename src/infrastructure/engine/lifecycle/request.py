@@ -15,8 +15,11 @@
 
 try:
     import time
+"""
 except ImportError:
-    import time
+
+"""
+import time
 
 try:
     from dataclasses import dataclass, field
@@ -39,8 +42,8 @@ except ImportError:
 
 @dataclass
 class Request:
-    """
-        Core request representation with lifecycle tracking.
+"""
+Core request representation with lifecycle tracking.
 
     This class tracks the full lifecycle of an inference request from
     creation through completion, including state transitions and timing.
@@ -55,9 +58,8 @@ class Request:
         output_token_ids: Generated token IDs
         stop_reason: Why the request stopped (if finished)
         finish_reason: High-level finish reason enum
-    """
-
-    request_id: str
+"""
+request_id: str
     prompt: Union[str, List[int]]
     max_tokens: int = 100
 
@@ -94,8 +96,9 @@ class Request:
 
 
     def __post_init__(self) -> None:
-        """Record creation event."""
-        self.record_event(RequestEventType.CREATED)
+"""
+Record creation event.""
+self.record_event(RequestEventType.CREATED)
 
 
     def record_event(
@@ -103,13 +106,15 @@ class Request:
         event_type: RequestEventType,
         details: Optional[Dict[str, Any]] = None,
     ) -> None:
-        """Record a lifecycle event."""
-        self.events.append(RequestEvent.new_event(event_type, details=details))
+"""
+Record a lifecycle event.""
+self.events.append(RequestEvent.new_event(event_type, details=details))
 
 
     def _transition_to(self, new_status: RequestStatus) -> None:
-        """Transition to a new status with validation."""
-        if not is_valid_transition(self.status, new_status):
+"""
+Transition to a new status with validation.""
+if not is_valid_transition(self.status, new_status):
             raise ValueError(f"Invalid status transition: {self.status} -> {new_status}")
         self.status = new_status
 
@@ -118,23 +123,27 @@ class Request:
     # Status Properties
     # -------------------------------------------------------------------------
     def is_finished(self) -> bool:
-        """Check if the request is finished."""
-        return RequestStatus.is_finished(self.status)
+"""
+Check if the request is finished.""
+return RequestStatus.is_finished(self.status)
 
 
     def is_waiting(self) -> bool:
-        """Check if the request is waiting."""
-        return RequestStatus.is_waiting(self.status)
+"""
+Check if the request is waiting.""
+return RequestStatus.is_waiting(self.status)
 
 
     def is_running(self) -> bool:
-        """Check if the request is currently running."""
-        return self.status == RequestStatus.RUNNING
+"""
+Check if the request is currently running.""
+return self.status == RequestStatus.RUNNING
 
 
     def get_finished_reason(self) -> Optional[FinishReason]:
-        """Get the finish reason if finished."""
-        return self.finish_reason or RequestStatus.get_finished_reason(self.status)
+"""
+Get the finish reason if finished.""
+return self.finish_reason or RequestStatus.get_finished_reason(self.status)
 
 
     # -------------------------------------------------------------------------
@@ -142,14 +151,16 @@ class Request:
     # -------------------------------------------------------------------------
     @property
     def num_output_tokens(self) -> int:
-        """Number of output tokens generated so far."""
-        return len(self.output_token_ids)
+"""
+Number of output tokens generated so far.""
+return len(self.output_token_ids)
 
 
     @property
     def num_prompt_tokens(self) -> int:
-        """Number of prompt tokens."""
-        if self.prompt_token_ids is not None:
+"""
+Number of prompt tokens.""
+if self.prompt_token_ids is not None:
             return len(self.prompt_token_ids)
         if isinstance(self.prompt, list):
             return len(self.prompt)
@@ -159,30 +170,34 @@ class Request:
 
     @property
     def num_tokens(self) -> int:
-        """Total number of tokens (prompt + output)."""
-        return self.num_prompt_tokens + self.num_output_tokens
+"""
+Total number of tokens (prompt + output).""
+return self.num_prompt_tokens + self.num_output_tokens
 
 
     @property
     def time_in_queue(self) -> Optional[float]:
-        """Time spent waiting in queue."""
-        if self.first_scheduled_time is None:
+"""
+Time spent waiting in queue.""
+if self.first_scheduled_time is None:
             return None
         return self.first_scheduled_time - self.arrival_time
 
 
     @property
     def time_to_first_token(self) -> Optional[float]:
-        """Time from scheduling to first token."""
-        if self.first_token_time is None or self.first_scheduled_time is None:
+"""
+Time from scheduling to first token.""
+if self.first_token_time is None or self.first_scheduled_time is None:
             return None
         return self.first_token_time - self.first_scheduled_time
 
 
     @property
     def total_time(self) -> Optional[float]:
-        """Total time from arrival to completion."""
-        if self.finished_time is None:
+"""
+Total time from arrival to completion.""
+if self.finished_time is None:
             return None
         return self.finished_time - self.arrival_time
 
@@ -191,8 +206,9 @@ class Request:
     # Lifecycle Methods
     # -------------------------------------------------------------------------
     def start_running(self) -> None:
-        """Transition to RUNNING state."""
-        now = time.time()
+"""
+Transition to RUNNING state.""
+now = time.time()
         self._transition_to(RequestStatus.RUNNING)
         if self.first_scheduled_time is None:
             self.first_scheduled_time = now
@@ -200,8 +216,9 @@ class Request:
 
 
     def add_output_token(self, token_id: int) -> None:
-        """Add a generated token to the output."""
-        if not self.is_running():
+"""
+Add a generated token to the output.""
+if not self.is_running():
             raise RuntimeError(f"Cannot add token to request in state {self.status}")
         was_empty = not self.output_token_ids
         self.output_token_ids.append(token_id)
@@ -211,14 +228,16 @@ class Request:
 
 
     def preempt(self) -> None:
-        """Preempt the request (move back to waiting)."""
-        self._transition_to(RequestStatus.PREEMPTED)
+"""
+Preempt the request (move back to waiting).""
+self._transition_to(RequestStatus.PREEMPTED)
         self.record_event(RequestEventType.PREEMPTED)
 
 
     def resume(self) -> None:
-        """Resume a preempted request."""
-        if self.status != RequestStatus.PREEMPTED:
+"""
+Resume a preempted request.""
+if self.status != RequestStatus.PREEMPTED:
             raise ValueError("Can only resume preempted requests")
         self.status = RequestStatus.WAITING
         self.record_event(RequestEventType.RESUMED)
@@ -229,7 +248,8 @@ class Request:
         reason: FinishReason,
         stop_reason: Optional[Union[int, str]] = None,
     ) -> None:
-        """Finish the request with a reason."""
+"""
+Finish the request with a reason.""
         # Determine the finish status based on reason
         status_map = {
             FinishReason.STOP: RequestStatus.FINISHED_STOPPED,
@@ -249,8 +269,9 @@ class Request:
 
 
     def abort(self) -> None:
-        """Abort the request."""
-        if not self.is_finished():
+"""
+Abort the request.""
+if not self.is_finished():
             self.status = RequestStatus.FINISHED_ABORTED
             self.finish_reason = FinishReason.ABORT
             self.finished_time = time.time()
@@ -258,8 +279,9 @@ class Request:
 
 
     def error(self, error_msg: Optional[str] = None) -> None:
-        """Mark the request as errored."""
-        if not self.is_finished():
+"""
+Mark the request as errored.""
+if not self.is_finished():
             self.status = RequestStatus.FINISHED_ERROR
             self.finish_reason = FinishReason.ERROR
             self.finished_time = time.time()
@@ -267,8 +289,9 @@ class Request:
 
 
     def should_stop(self, max_model_len: Optional[int] = None) -> bool:
-        """Check if the request should stop generating."""
-        if self.is_finished():
+        ""
+Check if the request should stop generating.""
+if self.is_finished():
             return True
 
         if self.num_output_tokens >= self.max_tokens:

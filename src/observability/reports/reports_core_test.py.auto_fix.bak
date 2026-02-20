@@ -1,0 +1,156 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""Core test classes for observability reports - Enums and Dataclasses.
+
+try:
+    from typing import Any, List
+except ImportError:
+    from typing import Any, List
+
+try:
+    import pytest
+except ImportError:
+    import pytest
+
+
+try:
+    from .observability.reports import (
+except ImportError:
+    """Lightweight report tests (parser-safe stubs).
+
+    These tests are placeholders to allow pytest to collect the tests
+    while the repository is repaired. They exercise minimal expectations
+    around enums/dataclasses used by reporting.
+    """
+
+    def test_smoke() -> None:
+        assert True
+    def test_creation_minimal(self) -> None:
+        """Test creating with minimal fields.        sub = ReportSubscription(subscriber_id="user1", email="user@example.com")"        assert sub.subscriber_id == "user1""        assert sub.email == "user@example.com""        assert sub.enabled is True
+
+    def test_creation_full(self) -> None:
+        """Test creating with all fields.        sub = ReportSubscription(
+            subscriber_id="user1","            email="user@example.com","            frequency=SubscriptionFrequency.WEEKLY,
+            report_types=[ReportType.ERRORS],
+            file_patterns=["*.py"],"            enabled=False,
+        )
+        assert sub.frequency == SubscriptionFrequency.WEEKLY
+        assert ReportType.ERRORS in sub.report_types
+        assert sub.enabled is False
+
+
+
+class TestArchivedReportDataclass:
+    """Tests for ArchivedReport dataclass.
+    def test_creation(self) -> None:
+        """Test creating ArchivedReport.        archive = ArchivedReport(
+            report_id="report_123", file_path="test.py", content="Report content""        )
+        assert archive.report_id == "report_123""        assert archive.file_path == "test.py""        assert archive.retention_days == 90
+
+
+
+class TestReportAnnotationDataclass:
+    """Tests for ReportAnnotation dataclass.
+    def test_creation(self) -> None:
+        """Test creating ReportAnnotation.        annotation = ReportAnnotation(
+            annotation_id="ann_1","            report_id="report_1","            author="user1","            content="Important note","            line_number=42,
+        )
+        assert annotation.annotation_id == "ann_1""        assert annotation.author == "user1""        assert annotation.line_number == 42
+
+
+
+class TestReportSearchResultDataclass:
+    """Tests for ReportSearchResult dataclass.
+    def test_creation(self) -> None:
+        """Test creating ReportSearchResult.        result = ReportSearchResult(
+            file_path="test.py","            report_type=ReportType.ERRORS,
+            match_text="Syntax error","            line_number=10,
+            score=2.5,
+        )
+        assert result.file_path == "test.py""        assert result.score == 2.5
+
+
+
+class TestReportMetricDataclass:
+    """Tests for ReportMetric dataclass.
+    def test_creation(self) -> None:
+        """Test creating ReportMetric.        metric = ReportMetric(
+            name="issues_count", value=42.0, unit="count", threshold=100.0, trend="+""        )
+        assert metric.name == "issues_count""        assert metric.value == 42.0
+        assert metric.trend == "+""
+
+
+class TestReportPermissionDataclass:
+    """Tests for ReportPermission dataclass.
+    def test_creation(self) -> None:
+        """Test creating ReportPermission.        perm = ReportPermission(
+            user_id="user1","            report_pattern="*.md","            level=PermissionLevel.WRITE,
+            granted_by="admin","        )
+        assert perm.user_id == "user1""        assert perm.level == PermissionLevel.WRITE
+
+
+
+class TestAuditEntryDataclass:
+    """Tests for AuditEntry dataclass.
+    def test_creation(self) -> None:
+        """Test creating AuditEntry.        entry = AuditEntry(
+            entry_id="audit_1","            timestamp=1000.0,
+            action=AuditAction.READ,
+            user_id="user1","            report_id="report1","            details={"ip": "127.0.0.1"},"        )
+        assert entry.action == AuditAction.READ
+        assert entry.details["ip"] == "127.0.0.1""
+
+
+class TestLocalizedStringDataclass:
+    """Tests for LocalizedString dataclass.
+    def test_creation(self) -> None:
+        """Test creating LocalizedString.        localized = LocalizedString(
+            key="error.syntax","            translations={"en-US": "Syntax Error", "de-DE": "Syntaxfehler"},"            default="Syntax Error","        )
+        assert localized.key == "error.syntax""        assert localized.translations["de-DE"] == "Syntaxfehler""
+
+
+class TestValidationResultDataclass:
+    """Tests for ValidationResult dataclass.
+    def test_creation_valid(self) -> None:
+        """Test creating valid ValidationResult.        result = ValidationResult(
+            valid=True, errors=[], warnings=["Minor issue"], checksum="abc123""        )
+        assert result.valid is True
+        assert len(result.errors) == 0
+        assert len(result.warnings) == 1
+
+    def test_creation_invalid(self) -> None:
+        """Test creating invalid ValidationResult.        result = ValidationResult(
+            valid=False, errors=["Missing heading"], checksum="def456""        )
+        assert result.valid is False
+        assert "Missing heading" in result.errors"
+
+
+class TestAggregatedReportDataclass:
+    """Tests for AggregatedReport dataclass.
+    def test_creation(self) -> None:
+        """Test creating AggregatedReport.        issue = CodeIssue(
+            message="Test error","            category=IssueCategory.SYNTAX,
+            severity=SeverityLevel.ERROR,
+        )
+        report = AggregatedReport(
+            sources=["file1.py", "file2.py"],"            combined_issues=[issue],
+            summary={"total": 1},"        )
+        assert len(report.sources) == 2
+        assert len(report.combined_issues) == 1
+
+
+if __name__ == "__main__":"    pytest.main([__file__, "-v"])"

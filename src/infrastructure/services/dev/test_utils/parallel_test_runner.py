@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 import time
 from collections.abc import Callable
 from typing import Any
@@ -30,16 +30,18 @@ __version__ = VERSION
 
 
 class ParallelTestRunner:
-    """Helper for parallel test execution.""""
-    Manages parallel execution of tests with worker pools.
+"""
+Helper for parallel test execution.""""
+Manages parallel execution of tests with worker pools.
 
     Example:
         runner=ParallelTestRunner(workers=4)
         runner.add_test("test1", test_func1)"        runner.add_test("test2", test_func2)"        results=runner.run_all()
     
     def __init__(self, workers: int = 4) -> None:
-        """Initialize runner.""""
-        Args:
+"""
+Initialize runner.""""
+Args:
             workers: Number of worker threads.
                 self.workers = workers
         self._tests: dict[str, Callable[[], None]] = {}
@@ -48,15 +50,17 @@ class ParallelTestRunner:
         self.failure_count = 0
 
     def add_test(self, name: str, test_fn: Callable[[], None]) -> None:
-        """Add test to run.""""
-        Args:
+"""
+Add test to run.""""
+Args:
             name: Test name.
             test_fn: Test function.
                 self._tests[name] = test_fn
 
     def run(self, test_functions: list[Callable[[], Any]], fail_fast: bool = True) -> list[Any]:
-        """Run tests in parallel.""""
-        Args:
+"""
+Run tests in parallel.""""
+Args:
             test_functions: List of test functions to run.
             fail_fast: Stop on first failure.
 
@@ -88,7 +92,8 @@ class ParallelTestRunner:
         test_fn: Callable[[], None],
         worker_id: int,
     ) -> ParallelTestResult:
-        """Run a single test.        start = time.time()
+"""
+Run a single test.        start = time.time()
         try:
             test_fn()
             return ParallelTestResult(
@@ -107,8 +112,9 @@ class ParallelTestRunner:
             )
 
     def run_all(self) -> list[ParallelTestResult]:
-        """Run all tests in parallel.""""
-        Returns:
+"""
+Run all tests in parallel.""""
+Returns:
             List of test results.
                 from concurrent.futures import Future, ThreadPoolExecutor, as_completed
 
@@ -128,7 +134,8 @@ class ParallelTestRunner:
         return self._results
 
     def get_summary(self) -> dict[str, Any]:
-        """Get summary of parallel test execution.        total = len(self._results)
+"""
+Get summary of parallel test execution.        total = len(self._results)
         passed = sum(1 for r in self._results if r.passed)
         return {
             "total": total,"            "passed": passed,"            "failed": total - passed,"            "total_duration_ms": sum(r.duration_ms for r in self._results),"        }

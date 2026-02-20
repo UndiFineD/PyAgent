@@ -14,7 +14,10 @@
 
 
 """
+"""
 Cognitive Super-Agent - Fused Reasoning & Reflection
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -62,7 +65,8 @@ class CognitiveSuperAgent(BaseAgent):
 
     @as_tool
     def accelerated_think(self, prompt: str) -> str:
-""""Combines reasoning and reflection into a single step.        # Simulated" fused logic"#         reasoning = fReasoning about: {prompt}
+""""
+Combines reasoning and reflection into a single step.        # Simulated" fused logic"#         reasoning = fReasoning about: {prompt}
 #         reflection = fReflecting on reasoning: {reasoning}
 #         return fFinal cognitive output: {reflection}
 
@@ -99,10 +103,13 @@ class CognitiveSuperAgent(BaseAgent):
 
     @as_tool
     def accelerated_think(self, prompt: str) -> str:
-""""Combines reasoning and reflection into a single step. "   "    # Simulated fused logic"#         reasoning = fReasoning about: {prompt}
+""""
+Combines reasoning and reflection into a single step. "   "    # Simulated fused logic"#         reasoning = fReasoning about: {prompt}
 #         reflection = fReflecting on reasoning: {reasoning}
 #         return fFinal cognitive output: {reflection}
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Override to use cognitive acceleration."        _ = target_file
         return self.accelerated_think(prompt)
+
+"""

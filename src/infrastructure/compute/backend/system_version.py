@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -26,8 +26,17 @@ except ImportError:
 
 @dataclass
 class SystemVersion:
-    """Version information for a system component.
+"""
+Version information for a system component.
     component: str
     version: str
     capabilities: list[str] = field(default_factory=lambda: [])
     api_version: str = "v1""    deprecated_features: list[str] = field(default_factory=lambda: [])
+
+"""
+
+"""
+
+""
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: database_access_mixin
+"""
+"""
+Module: database_access_mixin
 Database access mixin for BaseAgent, implementing ODBC database operations.
 Inspired by ADSyncDump-BOF database connection patterns.
 """
-
 try:
-    import platform
+
+"""
+import platform
 except ImportError:
     import platform
 
@@ -39,24 +43,29 @@ except ImportError:
 
 
 class DatabaseAccessMixin:
-    """Mixin providing database access features using ODBC."""
-    def __init__(self, **kwargs: Any) -> None:
+"""
+Mixin providing database access features using ODBC.""
+def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("DatabaseAccessMixin is only supported on Windows")
         self.db_core = DatabaseAccessCore()
 
     def connect_odbc(self, connection_string: str) -> bool:
-        """Connect to database using ODBC connection string."""
-        return self.db_core.connect(connection_string)
+"""
+Connect to database using ODBC connection string.""
+return self.db_core.connect(connection_string)
 
     def execute_query(self, query: str) -> Optional[List[Dict[str, Any]]]:
-        """Execute SQL query and return results."""
-        return self.db_core.execute_query(query)
+"""
+Execute SQL query and return results.""
+return self.db_core.execute_query(query)
 
     def disconnect(self) -> None:
-        """Disconnect from database."""
-        self.db_core.disconnect()
+"""
+Disconnect from database.""
+self.db_core.disconnect()
 
     def get_last_error(self) -> str:
-        """Get last database error message."""
-        return self.db_core.get_last_error()
+        ""
+Get last database error message.""
+return self.db_core.get_last_error()

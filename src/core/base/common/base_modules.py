@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Lifecycle definitions for core modules."""
-
+"""
+"""
+Lifecycle definitions for core modules.""
 try:
-    from abc import ABC, abstractmethod
+
+"""
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -30,27 +34,32 @@ except ImportError:
 
 
 class BaseModule(ABC):
-    """Base class for all core modules in the swarm.
+"""
+Base class for all core modules in the swarm.
+
     Standardizes the lifecycle of global specialized logic.
-    """
-    def __init__(self, config: dict[str, Any] | None = None) -> None:
+"""
+def __init__(self, config: dict[str, Any] | None = None) -> None:
         self.config = config or {}
         self.initialized = False
 
 
     def initialize(self) -> bool:
-        """Sets up the module resources."""
-        self.initialized = True
+"""
+Sets up the module resources.""
+self.initialized = True
         return True
 
 
     @abstractmethod
     def execute(self, *args: Any, **kwargs: Any) -> Any:
-        """Main entry point for module logic."""
-        raise NotImplementedError()
+"""
+Main entry point for module logic.""
+raise NotImplementedError()
 
 
     def shutdown(self) -> bool:
-        """Cleans up the module resources."""
-        self.initialized = False
+"""
+Cleans up the module resources.""
+self.initialized = False
         return True

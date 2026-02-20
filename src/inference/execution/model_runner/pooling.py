@@ -14,22 +14,27 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Output object pooling regarding the model runner."""
+"""
+"""
+Output object pooling regarding the model runner.""
+
+"""
 import queue
 import threading
 from typing import Callable, Generic, Optional, TypeVar
 
-T = TypeVar("T")"
+T = TypeVar("T")
 
 
 class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
-    """Pooled async output container.
+"""
+Pooled async output container.
 
     vLLM Pattern: AsyncGPUPoolingModelRunnerOutput
 
     Reduces allocation overhead by reusing output objects.
-    """
-    def __init__(self, pool_size: int = 100) -> None:
+"""
+def __init__(self, pool_size: int = 100) -> None:
         self._pool: queue.Queue[T] = queue.Queue(maxsize=pool_size)
         self._factory: Optional[Callable[[], T]] = None
         self._allocated = 0
@@ -37,10 +42,13 @@ class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
         self._lock = threading.Lock()
 
     def set_factory(self, factory: Callable[[], T]) -> None:
-        """Set factory regarding creating new output objects."""self._factory = factory
+"""
+Set factory regarding creating new output objects.""
+self._factory = factory
 
     def acquire(self) -> Optional[T]:
-        """Acquire output object from pool."""
+"""
+Acquire output object from pool.""
 try:
             obj = self._pool.get_nowait()
             with self._lock:
@@ -54,12 +62,15 @@ try:
             return None
 
     def release(self, obj: T) -> None:
-        """Return output object to pool."""
+"""
+Return output object to pool.""
 try:
             self._pool.put_nowait(obj)
         except queue.Full:
             pass  # Pool is full, object will be GC'd'
     def get_stats(self) -> dict[str, int]:
-        """Get pool statistics."""with self._lock:
+        ""
+Get pool statistics.""
+with self._lock:
             return {
                 "pool_size": self._pool.qsize(),"                "allocated": self._allocated,"                "reused": self._reused,"                "reuse_ratio": self._reused / max(1, self._allocated + self._reused),"            }

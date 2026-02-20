@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -34,10 +34,19 @@ __version__ = VERSION
 
 @dataclass
 class UsageRecord:
-    """A usage record for analytics.
+"""
+A usage record for analytics.
     timestamp: float
     backend: str
     tokens_used: int
     latency_ms: int
     success: bool
     cost_estimate: float = 0.0
+
+"""
+
+"""
+
+""
+
+"""

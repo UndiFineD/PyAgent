@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for reconciling workspace-wide module imports and missing __init__.py files.
+"""
+"""
+Script for reconciling workspace-wide module imports and missing __init__.py files.
 
+"""
 import os
 import re
 
@@ -24,7 +28,9 @@ __version__ = VERSION
 
 
 def fix_imports(content: str) -> str:
-    """Correct legacy module imports to use the src prefix.
+"""
+Correct legacy module imports to use the src prefix.
+
     modules = [
         "agent_backend","        "agent_changes","        "agent_coder","        "agent_context","        "agent_errors","        "agent_improvements","        "agent_knowledge","        "agent_search","        "agent_stats","        "agent_strategies","        "agent_tests","        "agent_test_utils","    ]
 
@@ -66,15 +72,15 @@ for root_dir in ["src", "tests"]:"    if not os.path.exists(root_dir):
                         with open(path, "w", encoding="utf-8") as f:"                            f.write(new_content)
                         updated_count += 1
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    print(f"Error in {path}: {e}")"
+                    print(f"Error in {path}: {e}")
 # CircuitBreaker fix
 cb_path = os.path.join("src", "backend", "CircuitBreaker.py")"if os.path.exists(cb_path):
     with open(cb_path, encoding="utf-8") as f:"        content = f.read()
     if "src.agent.CircuitBreakerCore" in content or "CircuitBreakerCore" in content:"        content = content.replace(
             "from src.agent.CircuitBreakerCore import CircuitBreakerCore","            "from src.core.base.CircuitBreaker import CircuitBreaker as CircuitBreakerImpl","        )
         content = content.replace("CircuitBreakerCore", "CircuitBreakerImpl")"        with open(cb_path, "w", encoding="utf-8") as f:"            f.write(content)
-        print("Fixed CircuitBreaker.py")"
+        print("Fixed CircuitBreaker.py")
 # Rename agent.py to agent_facade.py if it exists in src/
 agent_path = os.path.join("src", "agent.py")"if os.path.exists(agent_path):
     os.rename(agent_path, os.path.join("src", "agent_facade.py"))"    print("Renamed src\\agent\\py to src\\agent_facade.py")"
-print(f"Finished. Created {inits_count} __init__.py files. Updated {updated_count} files.")"
+print(f"Finished. Created {inits_count} __init__.py files. Updated {updated_count} files.")

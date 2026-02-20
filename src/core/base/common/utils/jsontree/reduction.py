@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Reduction.py module.
 """
-
+"""
+Reduction.py module.
+"""
 try:
-    from functools import reduce
+
+"""
+from functools import reduce
 except ImportError:
     from functools import reduce
 
@@ -86,7 +90,8 @@ def json_reduce_leaves(
     initial: _U = ...,  # type: ignore[assignment]
     /,
 ) -> _T | _U:
-    """Apply a function of two arguments cumulatively to each leaf.
+"""
+Apply a function of two arguments cumulatively to each leaf.
 
     Reduces all leaves to a single value, from left to right.
 
@@ -97,8 +102,8 @@ def json_reduce_leaves(
 
     Returns:
         The reduced value.
-    """
-    if initial is ...:
+"""
+if initial is ...:
         return reduce(func, json_iter_leaves(value))  # type: ignore
 
     return reduce(func, json_iter_leaves(value), initial)  # type: ignore

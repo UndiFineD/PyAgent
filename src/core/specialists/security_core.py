@@ -15,18 +15,27 @@
 
 try:
     from typing import Dict, Any, List
+"""
 except ImportError:
-    from typing import Dict, Any, List
+
+"""
+from typing import Dict, Any, List
 
 
 
 
 class SecurityCore:
-    """Core domain logic for security auditing, secret detection, and vulnerability scanning."""def __init__(self, config: Dict[str, Any] = None):
+"""
+Core domain logic for security auditing, secret detection, and vulnerability scanning.""
+def __init__(self, config: Dict[str, Any] = None):
         self.config = config or {}
 
     async def scan_source(self, code: str, language: str) -> List[Dict[str, Any]]:
-        """Scans source code for potential security vulnerabilities."""return []
+"""
+Scans source code for potential security vulnerabilities.""
+return []
 
     async def audit_dependencies(self, manifest: str) -> List[Dict[str, Any]]:
-        """Audits project dependencies for known vulnerabilities."""return []
+        ""
+Audits project dependencies for known vulnerabilities.""
+return []

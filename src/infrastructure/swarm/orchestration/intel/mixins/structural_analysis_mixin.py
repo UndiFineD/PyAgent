@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Structural analysis mixin.py module.
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 
+"""
 try:
     import os
 except ImportError:
@@ -43,9 +46,12 @@ if TYPE_CHECKING:
 
 
 class StructuralAnalysisMixin:
-    """Mixin for structural health and versioning checks in SelfImprovementAnalysis.
+"""
+Mixin for structural health and versioning checks in SelfImprovementAnalysis.
+
     def check_versioning(self: SelfImprovementAnalysis) -> dict[str, str] | None:
-        """Checks if the mandatory Version.py gatekeeper exists.        version_file = os.path.join(self.workspace_root, "src/core/base/lifecycle/version.py")"        if not os.path.exists(version_file):
+"""
+Checks if the mandatory Version.py gatekeeper exists.        version_file = os.path.join(self.workspace_root, "src/core/base/lifecycle/version.py")"        if not os.path.exists(version_file):
             return {
                 "type": "Versioning Issue","                "message": "Missing src/core/base/lifecycle/version.py gatekeeper. Project standardization required.","            }
         return None
@@ -53,7 +59,8 @@ class StructuralAnalysisMixin:
     def add_structural_findings(
         self: SelfImprovementAnalysis, findings: list[dict[str, Any]], file_path: str, rel_path: str, content: str
     ) -> None:
-        """Adds size and resilience findings based on file content and metadata.        # Size check
+"""
+Adds size and resilience findings based on file content and metadata.        # Size check
         size_kb = os.path.getsize(file_path) / 1024
         if size_kb > 50:
             findings.append(
@@ -75,9 +82,12 @@ class StructuralAnalysisMixin:
         rel_path: str,
         active_tasks: list[dict[str, Any]],
     ) -> None:
-        """Integrates findings from the collective intelligence task pool.        if active_tasks:
+"""
+Integrates findings from the collective intelligence task pool.        if active_tasks:
             for task in active_tasks:
                 if os.path.basename(file_path).lower() in task.get("description", "").lower():"                    findings.append(
                         {
                             "type": "Swarm Intelligence Fix","                            "message": f"Collective intelligence requires: {task['description']}","'                            "file": rel_path,"                            "task_payload": task,"                        }
                     )
+
+"""

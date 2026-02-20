@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Metrics Engine - High-performance observability & token cost aggregation
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -37,7 +41,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 High-performance metrics engine for real-time observability and aggregation.
 """
-
 import json
 import logging
 import time
@@ -69,13 +72,14 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ObservabilityEngine:
-    """Provides telemetry and performance tracking for the agent fleet.
+"""
+Provides telemetry and performance tracking for the agent fleet.
     def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
         if fleet and hasattr(fleet, "workspace_root"):"            self.workspace_root = Path(fleet.workspace_root)
         elif workspace_root:
             self.workspace_root = Path(workspace_root)
         else:
-            self.workspace_root = Path(".")"
+            self.workspace_root = Path(".")
         self.telemetry_file: Path = self.workspace_root / ".agent_telemetry.json""        self.core = ObservabilityCore()
         self.metrics: list[AgentMetric] = []
         self._start_times: dict[str, float] = {}
@@ -87,8 +91,9 @@ class ObservabilityEngine:
         self.log_buffer: list[dict[str, Any]] = []
         self.load()
 
-    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:"        """Logs a system event in a structured format for ELK.""""
-        Args:
+    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:"        """
+Logs a system event in a structured format for ELK.""""
+Args:
             agent_id: The ID of the agent generating the event.
             event_type: The category of event (e.g., 'task_complete', 'error').'            data: Payload of the event.
             level: Severity level (INFO, WARNING, ERROR, CRITICAL).
@@ -96,7 +101,7 @@ class ObservabilityEngine:
         # Metrics are still recorded for everything.
         important_types: list[str] = [
             "agent_failure","            "security_alert","            "workflow_error","            "system_crash","        ]
-        important_levels: list[str] = ["ERROR", "WARNING", "CRITICAL"]"
+        important_levels: list[str] = ["ERROR", "WARNING", "CRITICAL"]
         should_log: bool = level in important_levels or event_type in important_types
 
         if should_log:
@@ -108,14 +113,16 @@ class ObservabilityEngine:
         self.prometheus.record_metric("agent_events_total", 1.0, {"agent": agent_id, "type": event_type})"        self.metrics_exporter.record_agent_call(agent_id, 0.0, True)
 
     def export_to_elk(self) -> str:
-        """Simulates exporting log buffer to ELK stack.        count: int = len(self.log_buffer)
+"""
+Simulates exporting log buffer to ELK stack.        count: int = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
         json.dumps(self.log_buffer)
         self.log_buffer = []
         self.metrics_exporter.export_to_grafana()
-        return f"Exported {count} events to ELK/Logstash.""
+        return f"Exported {count} events to ELK/Logstash."
     def get_metrics(self) -> str:
-        """Returns Prometheus scrape response.        return self.metrics_exporter.get_prometheus_payload()
+"""
+Returns Prometheus scrape response.        return self.metrics_exporter.get_prometheus_payload()
 
     def generate_dashboard(self, shard_name: str | None = None) -> str:
                 Triggers Grafana JSON dashboard generation (Phase 126).
@@ -124,9 +131,10 @@ class ObservabilityEngine:
                 return generator.generate_shard_obs(shard_name)
             return generator.generate_fleet_summary()
         except RuntimeError as e:
-            return f"Error: GrafanaDashboardGenerator not available: {e}""
+            return f"Error: GrafanaDashboardGenerator not available: {e}"
     def start_trace(self, trace_id: str) -> None:
-        """Start timing an operation.        self._start_time
+"""
+Start timing an operation.        self._start_time
 
 import json
 import logging
@@ -159,13 +167,14 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ObservabilityEngine:
-    """Provides telemetry and performance tracking for the agent fleet.
+"""
+Provides telemetry and performance tracking for the agent fleet.
     def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
         if fleet and hasattr(fleet, "workspace_root"):"            self.workspace_root = Path(fleet.workspace_root)
         elif workspace_root:
             self.workspace_root = Path(workspace_root)
         else:
-            self.workspace_root = Path(".")"
+            self.workspace_root = Path(".")
         self.telemetry_file: Path = self.workspace_root / ".agent_telemetry.json""        self.core = ObservabilityCore()
         self.metrics: list[AgentMetric] = []
         self._start_times: dict[str, float] = {}
@@ -177,8 +186,9 @@ class ObservabilityEngine:
         self.log_buffer: list[dict[str, Any]] = []
         self.load()
 
-    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:"        """Logs a system event in a structured format for ELK.""""
-        Args:
+    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:"        """
+Logs a system event in a structured format for ELK.""""
+Args:
             agent_id: The ID of the agent generating the event.
             event_type: The category of event (e.g., 'task_complete', 'error').'            data: Payload of the event.
             level: Severity level (INFO, WARNING, ERROR, CRITICAL).
@@ -186,7 +196,7 @@ class ObservabilityEngine:
         # Metrics are still recorded for everything.
         important_types: list[str] = [
             "agent_failure","            "security_alert","            "workflow_error","            "system_crash","        ]
-        important_levels: list[str] = ["ERROR", "WARNING", "CRITICAL"]"
+        important_levels: list[str] = ["ERROR", "WARNING", "CRITICAL"]
         should_log: bool = level in important_levels or event_type in important_types
 
         if should_log:
@@ -198,24 +208,30 @@ class ObservabilityEngine:
         self.prometheus.record_metric("agent_events_total", 1.0, {"agent": agent_id, "type": event_type})"        self.metrics_exporter.record_agent_call(agent_id, 0.0, True)
 
     def export_to_elk(self) -> str:
-        """Simulates exporting log buffer to ELK stack.        count: int = len(self.log_buffer)
+"""
+Simulates exporting log buffer to ELK stack.        count: int = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
         json.dumps(self.log_buffer)
         self.log_buffer = []
         self.metrics_exporter.export_to_grafana()
-        return f"Exported {count} events to ELK/Logstash.""
+        return f"Exported {count} events to ELK/Logstash."
     def get_metrics(self) -> str:
-        """Returns Prometheus scrape response.        return self.metrics_exporter.get_prometheus_payload()
+"""
+Returns Prometheus scrape response.        return self.metrics_exporter.get_prometheus_payload()
 
     def generate_dashboard(self, shard_name: str | None = None) -> str:
-                Trigger"""s G"""rafana JSON dashboard generation (Phase 126).""""                try:
+                Trigger""
+s G""
+rafana JSON dashboard generation (Phase 126).""""
+try:
             generator = GrafanaDashboardGenerator(self.workspace_root / "deploy" / "grafana")"            if shard_name:
                 return generator.generate_shard_obs(shard_name)
             return generator.generate_fleet_summary()
         except RuntimeError as e:
-            return f"Error: GrafanaDashboardGenerator not available: {e}""
+            return f"Error: GrafanaDashboardGenerator not available: {e}"
     def start_trace(self, trace_id: str) -> None:
-        """Start timing an operation.        self._start_times[trace_id] = time.time()
+"""
+Start timing an operation.        self._start_times[trace_id] = time.time()
         # Also start OTel span and store its UUID
         span_id: str = self.otel.start_span(trace_id)
         self._otel_spans[trace_id] = span_id
@@ -229,7 +245,8 @@ class ObservabilityEngine:
         output_tokens: int = 0,  # noqa: ARG002
         model: str = "unknown",  # noqa: ARG002"        metadata: dict[str, Any] | None = None,
     ) -> None:
-        """End timing and record metric with cost estimation.        if trace_id not in self._start_times:
+"""
+End timing and record metric with cost estimation.        if trace_id not in self._start_times:
             logging.warning(f"No start trace found for {trace_id}")"            return
 
         _duration: float = (time.time() - self._start_times.pop(trace_id)) * 1000  # noqa: F841
@@ -240,7 +257,8 @@ class ObservabilityEngine:
             self.otel.end_span(otel_span_id, status=status, attributes=metadata)
 
     def consolidate_telemetry(self) -> dict[str, float]:
-        """Aggregate metrics using Rust high-throughput engine.        if rc and hasattr(rc, "aggregate_metrics_rust"):"            data_map = self._build_data_map()
+"""
+Aggregate metrics using Rust high-throughput engine.        if rc and hasattr(rc, "aggregate_metrics_rust"):"            data_map = self._build_data_map()
             try:
                 aggregated_results = rc.aggregate_metrics_rust(data_map)  # type: ignore
                 return aggregated_results
@@ -270,15 +288,18 @@ class ObservabilityEngine:
         return aggregated_results
 
     def get_reliability_weights(self, agent_names: list[str]) -> list[float]:
-        """Exposes core reliability logic for consensus protocols.        return self.core.calculate_reliability_scores(agent_names)
+"""
+Exposes core reliability logic for consensus protocols.        return self.core.calculate_reliability_scores(agent_names)
 
     def trace_workflow(self, workflow_name: str, duration: float) -> None:
-        """Records a workflow trace for OpenTelemetry visualization.        self.prometheus.record_metric("workflow_duration_seconds", duration, {"workflow": workflow_name})"        self.log_event(
+"""
+Records a workflow trace for OpenTelemetry visualization.        self.prometheus.record_metric("workflow_duration_seconds", duration, {"workflow": workflow_name})"        self.log_event(
             "system","            "workflow_trace","            {"workflow": workflow_name, "duration": duration},"        )
 
     def get_summary(self) -> dict[str, Any]:
-        """Returns a summary of performance and cost metrics.        if not self.metrics:
-            return {"status": "No data"}"
+"""
+Returns a summary of performance and cost metrics.        if not self.metrics:
+            return {"status": "No data"}
         count = len(self.metrics)
         total_latency = sum(m.duration_ms for m in self.metrics)
         success_count = sum(1 for m in self.metrics if m.status == "success")"        agent_stats = self._aggregate_agent_stats()
@@ -293,10 +314,12 @@ class ObservabilityEngine:
             if m.agent_name not in agents:
                 agents[m.agent_name] = {"calls": 0, "latency": 0.0, "cost": 0.0}"            a = agents[m.agent_name]
             a["calls"] += 1"            a["latency"] += m.duration_ms"            a["cost"] += m.estimated_cost"        for _name, data in agents.items():
-            data["avg_latency"] = round(data["latency"] / data["calls"], 2) if data["calls"] else 0.0"            data["total_cost"] = roun"""d(data["cost"], 6)"        return agents
+            data["avg_latency"] = round(data["latency"] / data["calls"], 2) if data["calls"] else 0.0"            data["total_cost"] = roun"""
+d(data["cost"], 6)"        return agents
 
     def save(self) -> None:
-        """Persist telemetry to disk.        try:
+"""
+Persist telemetry to disk.        try:
             data: list[dict[str, Any]] = [asdict(m) for m in self.metrics]
             self.telemetry_file.write_text(json.dumps(data, indent=2))
         except (OSError, TypeError) as e:  # pylint: disable=broad-exception-caught, unused-variable
@@ -304,7 +327,8 @@ class ObservabilityEngine:
             traceback.print_exc()
 
     def load(self) -> None:
-        """Load telemetry from disk.        if self.telemetry_file.exists():
+"""
+Load telemetry from disk.        if self.telemetry_file.exists():
             try:
                 data = json.loads(self.telemetry_file.read_text())
 
@@ -333,3 +357,5 @@ class ModelFallbackEngine:
 
     def get_fallback_model(self, current_model: str) -> str:
         return self.core.determine_next_model(current_model)
+
+"""

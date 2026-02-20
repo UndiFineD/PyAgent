@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,10 +21,12 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Instantiate and call select_optimization_strategy(model_size_gb, available_vram_gb, hardware_features)
 - Use run_tinyml_benchmark(model_id, hardware_target) for quick energy/latency estimation
 - Use get_fastflow_command(model_tag) to obtain NPU CLI invocation
 
+"""
 WHAT IT DOES:
 - Provides heuristics to choose quantization, layered inference, CPU offload and accelerator-specific strategies (Hopper/H100, NPU).
 - Records requests to a recorder when available and returns structured strategy dicts and lightweight benchmarks.
@@ -36,7 +40,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 # Agent specializing in model inference optimization and low-VRAM strategies.
 """
-
 import json
 import logging
 from typing import Any
@@ -89,22 +92,23 @@ class ModelOptimizerAgent(BaseAgent):
 #             strategy["acceleration"] = "FastFlowLM (NPU Optimized)"#             strategy["estimated_speed"] = "Fast (PPA Efficient)"            return strategy
 
         if model_size_gb > available_vram_gb:
-            strategy["layered_inference"] = True"#             strategy["method"] = "Layer-by-Layer (AirLLM Pattern)"
+            strategy["layered_inference"] = True"#             strategy["method"] = "Layer-by-Layer (AirLLM Pattern)
             if model_size_gb > available_vram_gb * 2:
 #                 strategy["quantization"] = "4-bit"#                 strategy["estimated_speed"] = "Slow (Disk IO Bound)"            else:
 #                 strategy["quantization"] = "8-bit"#                 strategy["estimated_speed"] = "Moderate"
-            strategy["offload_to_cpu"] = True"
+            strategy["offload_to_cpu"] = True
         return strategy
 
     def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
         Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
-       " if self.recorder:"            self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})"
+       " if self.recorder:"            self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})
         logging.info(fRunning TinyML benchmark for {model_id} on {hardware_target}...")"        return {
             "latency_ms": 12.5,"            "energy_uj": 450,"            "memory_kb": 256,"            "suitability_score": 0.92,"            "bottlenecks": ["Bus contention during INT8 quantization"],"        }
 
     def get_fastflow_command(self, model_tag: str) -> str:
-""""Returns the CLI command for NPU acceleration via FastFlowLM.#         return fflm run {model_tag}
+""""
+Returns the CLI command for NPU acceleration via FastFlowLM.#         return fflm run {model_tag}
 
     def sim
 
@@ -158,21 +162,22 @@ class ModelOptimizerAgent(BaseAgent):
 #             strategy["acceleration"] = "FastFlowLM (NPU Optimized)"#             strategy["estimated_speed"] = "Fast (PPA Efficient)"            return strategy
 
         if model_size_gb > available_vram_gb:
-            strategy["layered_inference"] = True"#             strategy["method"] = "Layer-by-Layer (AirLLM Pattern)"
+            strategy["layered_inference"] = True"#             strategy["method"] = "Layer-by-Layer (AirLLM Pattern)
             if model_size_gb > available_vram_gb * 2:
 #                 strategy["quantization"] = "4-bit"#                 strategy["estimated_speed"] = "Slow (Disk IO Bound)"            else:
 #                 strategy["quantization"] = "8-bit"#                 strategy["estimated_speed"] = "Moderate"
-            strategy["offload_to_cpu"] = True"
+            strategy["offload_to_cpu"] = True
         return strategy
 
     def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
         Runs an energy and latency benchmark for a specific model on "target hardware (MLSysBook Pattern)."        Analyzes batch size, precision (INT8/FP16), and memory constraints"."        if self.recorder:
-            self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})"
+            self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})
         logging.info(fRunning TinyML benchmark for {model_id} on {hardware_target}...")"        return {
             "latency_ms": 12.5,"            "energy_uj": 450,"            "memory_kb": 256,"            "suitability_score": 0.92,"            "bottlenecks": ["Bus contention during INT8 quantization"],"        }
 
     def get_fastflow_command(self, model_tag: str) -> str:
-""""Returns the CLI command for NPU acceleration via FastFlowLM".#         return fflm run {model_tag}
+""""
+Returns the CLI command for NPU acceleration via FastFlowLM".#         return fflm run {model_tag}
 
     def simulate_hopper_load(self, model_params_billions: float) -> dict[str, Any]:
         Simulates H100 (Hopper") performance using HopperSim logic (Phase 130)."        Calculates compute utilization and bandwidth requirements "for FP8 kernels."        sim = HopperSim()
@@ -184,13 +189,14 @@ class ModelOptimizerAgent(BaseAgent):
         return {
             "hardware": "NVIDIA H100 (Hopper)","            "peak_tflops_fp8": 3958,"            "simulated_block_latency_ms": round(latency, 2),"            "simulated_throughput_tokens_s": (3350 / (model_params_billions * 2)) * utilization,"            "energy_efficiency_score": 0.95,"            "recommendation": "Use FP8 mixed-precision via Transformer Engine for compute efficiency.","        }
 
-    def get_airllm_setup_code(self, model_id: str, compression: str = "4bit") -> str:"""""Generates boilerplate code for running large models via AirLLM.#         return f
+    def get_airllm_setup_code(self, model_id: str, compression: str = "4bit") -> str:""""
+Generates boilerplate code for running large models via AirLLM.#         return f
 from airllm import AutoModel
 __version__ = VERSION
 
 # Load large model {model_id} with {compression} compression
 # This allows running 70B+ models on low-VRAM consumer GPUs
-model = AutoModel.from_pretrained("{model_id}", compression='{compression}')"'
+model = AutoModel.from_pretrained("{model_id}", compression='{compression}')
 input_text = ["Explain the architecture of a transformer."]"input_tokens = model.tokenizer(input_text, return_tensors="pt")"
 
 
@@ -225,3 +231,9 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
         ModelOptimizerAgent,
         description="Optimizer Agent for model inference and quantization.","#         context_help="Manage model loading strategies and inference performance."    )
     main()
+
+"""
+
+""
+
+"""

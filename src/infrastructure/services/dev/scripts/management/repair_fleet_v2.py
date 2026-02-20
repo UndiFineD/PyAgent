@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for repairing specific import corruption patterns in the fleet.
+"""
+"""
+Script for repairing specific import corruption patterns in the fleet.
 
+"""
 import os
 import re
 
@@ -24,7 +28,9 @@ __version__ = VERSION
 
 
 def repair() -> None:
-    """Repair multiple types of import and string formatting corruption.    for root, _, files in os.walk("src"):"        for file in files:
+"""
+Repair multiple types of import and string formatting corruption.    for root, _, files in os.walk("src"):"        for file in files:
+
             if file.endswith(".py"):"                path = os.path.join(root, file)
                 try:
                     with open(path, encoding="utf-8") as f:"                        content = f.read()
@@ -60,9 +66,9 @@ def repair() -> None:
                     )
 
                     if content != original_content:
-                        print(f"Repaired {path}")"
+                        print(f"Repaired {path}")
                         with open(path, "w", encoding="utf-8") as f:"                            f.write(content)
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    print(f"Error repairing {path}: {e}")"
+                    print(f"Error repairing {path}: {e}")
 
 if __name__ == "__main__":"    repair()

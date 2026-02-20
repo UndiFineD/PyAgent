@@ -14,8 +14,11 @@
 
 try:
     from .logic.agents.development.coder_core import CoderCore
+"""
 except ImportError:
-    from src.logic.agents.development.coder_core import CoderCore
+
+"""
+from src.logic.agents.development.coder_core import CoderCore
 
 try:
     from .core.base.common.types.code_language import CodeLanguage
@@ -26,7 +29,8 @@ except ImportError:
 
 def test_coder_core_rust_metrics():
     core = CoderCore(CodeLanguage.PYTHON)
-    content = """def hello():""""    # This is a comment
+    content = ""
+def hello():""""    # This is a comment
     if True:
         print('hi')'    import os
         metrics = core.calculate_metrics(content)
@@ -47,15 +51,16 @@ def test_coder_core_rust_smells():
     content = "import time\\ntime.sleep(10)\\n""    smells = core.detect_code_smells(content)
 
     perf_smells = [s for s in smells if s.category == "performance"]"    assert len(perf_smells) > 0
-    assert "time.sleep" in perf_smells[0].description.lower() or "blocking" in perf_smells[0].description.lower()"
+    assert "time.sleep" in perf_smells[0].description.lower() or "blocking" in perf_smells[0].description.lower()
 
 def test_coder_core_quality_score():
     core = CoderCore(CodeLanguage.PYTHON)
-    content = """def hello():""""    # TODO: implement this
+    content = ""
+def hello():""""    # TODO: implement this
     pass
         metrics = core.calculate_metrics(content)
     smells = core.detect_code_smells(content)
     score = core.calculate_quality_score(metrics, [], smells, 0.0, content=content)
 
     assert score.technical_debt < 100.0
-    assert any("Tech Debt" in issue for issue in score.issues)"
+    assert any("Tech Debt" in issue for issue in score.issues)

@@ -15,8 +15,10 @@
 
 
 """
+"""
 Meta optimizer.py module.
 
+"""
 import logging
 from typing import Any, Dict, List
 
@@ -42,7 +44,7 @@ class FederatedMetaOptimizer:
                 metrics = self.telemetry.get_grid_metrics()
 
         # 1. Check Latency vs. Throughput
-        avg_vram_util = metrics.get("avg_vram_util", 0.5)"
+        avg_vram_util = metrics.get("avg_vram_util", 0.5)
         # Goal: Keep latency < 400ms while keeping VRAM < 80%
 
         updates = {}
@@ -59,8 +61,9 @@ class FederatedMetaOptimizer:
 
         # Apply updates
         self.config.update(updates)
-        self.history.append({"metrics": metrics, "updates": updates})"
+        self.history.append({"metrics": metrics, "updates": updates})
         return updates
 
     def get_optimized_config(self) -> Dict[str, Any]:
-        """Returns the current state of tuned swarm hyperparameters.        return self.config
+"""
+Returns the current state of tuned swarm hyperparameters.        return self.config

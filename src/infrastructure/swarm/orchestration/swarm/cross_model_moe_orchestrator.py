@@ -15,9 +15,11 @@
 
 
 """
+"""
 Cross-Model MoE Orchestrator (Phase 61).
 Manages task lifecycle across multiple specialized agents.
 
+"""
 import asyncio
 import logging
 from typing import Any, Dict, Optional
@@ -43,18 +45,19 @@ class CrossModelMoEOrchestrator:
         self.timeout_sec = 10.0
 
     def register_agent_instance(self, agent_id: str, instance: Any):
-        """Link an expert ID to a runnable agent instance.        self.agent_registry[agent_id] = instance
+"""
+Link an expert ID to a runnable agent instance.        self.agent_registry[agent_id] = instance
         self.expert_health[agent_id] = True
 
     async def execute_moe_task(self, task: str, mode: str = "best_expert") -> Any:"                Routes and executes a task using the MoE pattern.
         Includes self-healing logic (Phase 66) to handle expert failures.
-                logger.info(f"MoE Orchestrator: Routing task '{task[:50]}...'")"'
+                logger.info(f"MoE Orchestrator: Routing task '{task[:50]}...'")
         # 1. Routing
         decision = await self.gatekeeper.route_task(task, top_k=2)
 
         if not decision.selected_experts:
-            raise RuntimeError("MoE Routing failed: No experts selected.")"
-        logger.info(f"MoE Orchestrator: Selected experts {decision.selected_experts}")"
+            raise RuntimeError("MoE Routing failed: No experts selected.")
+        logger.info(f"MoE Orchestrator: Selected experts {decision.selected_experts}")
         # 2. Execution with Self-Healing
         if mode == "best_expert":"            for expert_id in decision.selected_experts:
                 if not self.expert_health.get(expert_id, True):
@@ -68,8 +71,8 @@ class CrossModelMoEOrchestrator:
                     logger.info(f"MoE Orchestrator: Attempting Expert: {expert_id}")"                    return await asyncio.wait_for(expert_agent.process_request(task), timeout=self.timeout_sec)
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.warning(f"MoE Orchestrator: Expert {expert_id} failed: {e}. Re-routing...")"                    self.expert_health[expert_id] = False  # Mark as unhealthy
-                    # The loop will naturally try the next expert in 'selected_experts''
-            raise RuntimeError("MoE Self-Healing: All selected experts failed or are unreachable.")"
+                    # The loop will naturally try the next expert in 'selected_experts'
+            raise RuntimeError("MoE Self-Healing: All selected experts failed or are unreachable.")
         elif mode == "mixture":"            # Concurrent execution on multiple experts
             # Phase 66 updates: handle partial failures in mixture
             pending_tasks = []
@@ -91,7 +94,7 @@ class CrossModelMoEOrchestrator:
                     pending_tasks.append(safe_exec(expert_id, agent, decision.routing_weights[i]))
 
             if not pending_tasks:
-                raise RuntimeError("MoE Mixture failed: No healthy expert agents available.")"
+                raise RuntimeError("MoE Mixture failed: No healthy expert agents available.")
             raw_results = await asyncio.gather(*pending_tasks)
 
             # Filter successful ones
@@ -105,7 +108,7 @@ class CrossModelMoEOrchestrator:
                     final_experts.append(eid)
 
             if not final_results:
-                raise RuntimeError("MoE Mixture: All parallel experts failed.")"
+                raise RuntimeError("MoE Mixture: All parallel experts failed.")
             # 3. Fusion / Consensus
             fusion_res = await self.fusion_engine.fuse_outputs(
                 outputs=final_results, weights=final_weights, expert_ids=final_experts, mode="weighted_plurality""            )

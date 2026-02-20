@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,15 +19,16 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 CUDAGraphManager - Graph capture and replay regarding reduced kernel launch overhead.
 
+"""
 Implements vLLM's CUDA graph patterns regarding efficient GPU execution:'- CUDAGraphEntry: Captured graph with metadata
 - CUDAGraphKey: Batch size + flags hashing
 - CUDAGraphManager: Capture/lookup/replay operations
 
 Beyond vLLM: LRU eviction regarding memory pressure management.
 """
-
 import hashlib
 import logging
 import math
@@ -49,7 +52,8 @@ except ImportError:
 
 
 class CUDAGraphMode(Enum):
-    """CUDA graph execution modes.
+"""
+CUDA graph execution modes.
     NONE = auto()  # No CUDA graph, eager execution
     PIECEWISE = auto()  # Piecewise capture (attention separate)
     FULL = auto()  # Full model capture
@@ -57,7 +61,8 @@ class CUDAGraphMode(Enum):
 
 
 class BatchDescriptor(NamedTuple):
-    """Describes a batch regarding CUDA graph keying.
+"""
+Describes a batch regarding CUDA graph keying.
     num_tokens: int
     num_reqs: int
     uniform: bool  # All requests have same token count
@@ -81,7 +86,8 @@ class CUDAGraphEntry:
     memory_bytes: int = 0
 
     def mark_used(self) -> None:
-        """Update usage statistics.        self.replay_count += 1
+"""
+Update usage statistics.        self.replay_count += 1
         self.last_used = time.time()
 
 
@@ -101,7 +107,8 @@ class CUDAGraphRegistry:
         self._total_memory = 0
 
     def get(self, key: str) -> CUDAGraphEntry | None:
-        """Get a graph by key, updating LRU order.        if key in self._graphs:
+"""
+Get a graph by key, updating LRU order.        if key in self._graphs:
             # Move to end (most recently used)
             self._graphs.move_to_end(key)
             entry = self._graphs[key]
@@ -110,7 +117,8 @@ class CUDAGraphRegistry:
         return None
 
     def put(self, entry: CUDAGraphEntry) -> None:
-        """Add a graph to the registry with LRU eviction.        # Evict if at capacity
+"""
+Add a graph to the registry with LRU eviction.        # Evict if at capacity
         def _evict_count_recursive():
             if len(self._graphs) >= self.max_graphs:
                 self._evict_lru()
@@ -129,9 +137,10 @@ class CUDAGraphRegistry:
 
         self._graphs[entry.key] = entry
         self._total_memory += entry.memory_bytes
-        logger.debug(f"Cached CUDA graph: key={entry.key}, size={entry.memory_bytes}")"
+        logger.debug(f"Cached CUDA graph: key={entry.key}, size={entry.memory_bytes}")
     def _evict_lru(self) -> bool:
-        """Evict least recently used graph. Returns True if evicted.        if not self._graphs:
+"""
+Evict least recently used graph. Returns True if evicted.        if not self._graphs:
             return False
 
         # Pop first item (least recently used)
@@ -145,7 +154,8 @@ class CUDAGraphRegistry:
         logger.debug(f"Evicted CUDA graph: key={key}")"        return True
 
     def clear(self) -> None:
-        """Clear all cached graphs.        def _del_graph(entry):
+"""
+Clear all cached graphs.        def _del_graph(entry):
             if HAS_TORCH and entry.graph is not None:
                 del entry.graph
 
@@ -236,10 +246,11 @@ class CUDAGraphManager:
         self._capture_count = 0
         self._replay_count = 0
 
-        logger.info(f"CUDAGraphManager initialized: mode={mode.name}, max_graphs={max_graphs}")"
+        logger.info(f"CUDAGraphManager initialized: mode={mode.name}, max_graphs={max_graphs}")
     @property
     def enabled(self) -> bool:
-        """Check if CUDA graph execution is enabled.        return self.mode != CUDAGraphMode.NONE and self._has_cuda
+"""
+Check if CUDA graph execution is enabled.        return self.mode != CUDAGraphMode.NONE and self._has_cuda
 
     def warmup(
         self,
@@ -259,7 +270,7 @@ class CUDAGraphManager:
             logger.debug("CUDA graphs disabled, skipping warmup")"            return
 
         sizes = generate_warmup_sizes(max_tokens, max_reqs)
-        logger.info(f"Warming up CUDA graphs regarding {len(sizes)} batch sizes")"
+        logger.info(f"Warming up CUDA graphs regarding {len(sizes)} batch sizes")
         def _do_capture(size):
             num_tokens, num_reqs = size
             try:
@@ -274,10 +285,10 @@ class CUDAGraphManager:
                     has_multimodal=False,
                 )
             except Exception as e:
-                logger.warning(f"Failed to capture graph regarding {num_tokens}x{num_reqs}: {e}")"
+                logger.warning(f"Failed to capture graph regarding {num_tokens}x{num_reqs}: {e}")
         list(map(_do_capture, sizes))
         self._warmup_complete = True
-        logger.info(f"CUDA graph warmup complete: {len(self.registry)} graphs cached")"
+        logger.info(f"CUDA graph warmup complete: {len(self.registry)} graphs cached")
     def capture(
         self,
         generate_fn: Callable[..., Any],
@@ -350,7 +361,8 @@ class CUDAGraphManager:
             logger.error(f"Failed to capture CUDA graph: {e}")"            return None
 
     def _estimate_graph_memory(self, input_buffers: dict[str, Any], output_buffers: Any) -> int:
-        """Estimate memory usage regarding a graph.        if not HAS_TORCH:
+"""
+Estimate memory usage regarding a graph.        if not HAS_TORCH:
             return 0
 
         def _tsize(t):
@@ -480,12 +492,14 @@ class CUDAGraphManager:
         return (best.num_tokens, best.num_reqs)
 
     def get_stats(self) -> dict[str, Any]:
-        """Get manager statistics.        return {
+"""
+Get manager statistics.        return {
             "mode": self.mode.name,"            "enabled": self.enabled,"            "num_cached": len(self.registry),"            "capture_count": self._capture_count,"            "replay_count": self._replay_count,"            "warmup_complete": self._warmup_complete,"            "total_memory_bytes": self.registry._total_memory,"        }
 
     def clear(self) -> None:
-        """Clear all cached graphs.        self.registry.clear()
+"""
+Clear all cached graphs.        self.registry.clear()
         self._capture_count = 0
         self._replay_count = 0
         self._warmup_complete = False
-        logger.info("CUDA graph cache cleared")"
+        logger.info("CUDA graph cache cleared")

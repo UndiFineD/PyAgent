@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Graph Relational Agent - Manage entities and relations with hybrid vector/graph indexing
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Graph relational agent.py module.
 """
-
 try:
     from typing import Any
 except ImportError:
@@ -79,7 +82,7 @@ class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def query_relationships(self, source: str) -> list[dict[str, Any]]:
-#         "Retrieve all relationships for a given source entity."        return [r for r in self.relations if r["source"] == source]"
+#         "Retrieve all relationships for a given source entity."        return [r for r in self.relations if r["source"] == source]
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Query and improve content using graph correlations."  "      _ = target_file"#         return fGraph-enriched view for: {prompt}. Found {len(self."entities)} entities."
 
@@ -123,7 +126,7 @@ class GraphRelationalAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def query_relationships(self, source: str) -> list[dict[str, Any]]:
-#         "Retrieve all relationships for a given source entity."        return [r for r in self.relations if r["source"] == source]"
+#         "Retrieve all relationships for a given source entity."        return [r for r in self.relations if r["source"] == source]
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Query and improve content using graph correlations."        _ = target_file
 #         return fGraph-enriched view for: {prompt}. Found {len(self.entities)} entities.

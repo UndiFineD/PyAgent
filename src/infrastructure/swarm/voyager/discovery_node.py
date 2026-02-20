@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,12 @@ from __future__ import annotations
 
 
 """
+"""
 Discovery node.py module.
 # Phase 319: Multi-Cloud Teleportation (Discovery Node)
 """
 
+"""
 import asyncio
 import contextlib
 import socket
@@ -38,29 +41,32 @@ logger = StructuredLogger(__name__)
 
 
 class VoyagerPeerListener(ServiceListener):
-    """Listens for other PyAgent Voyager peers on the local network."""
-
-    def __init__(self, node: DiscoveryNode, loop: asyncio.AbstractEventLoop) -> None:
+"""
+Listens for other PyAgent Voyager peers on the local network.""
+def __init__(self, node: DiscoveryNode, loop: asyncio.AbstractEventLoop) -> None:
         self.node = node
         self.loop: asyncio.AbstractEventLoop = loop
 
 
     def add_service(self, zc: Any, type_: str, name: str) -> None:
-        """Called by Zeroconf when a new service is discovered."""
-        asyncio.run_coroutine_threadsafe(self._async_add_service(zc, type_, name), self.loop)
+"""
+Called by Zeroconf when a new service is discovered.""
+asyncio.run_coroutine_threadsafe(self._async_add_service(zc, type_, name), self.loop)
 
 
     async def _async_add_service(self, zc: Any, type_: str, name: str) -> None:
-        """Asynchronously retrieves service info and notifies the node."""
-        info = await zc.async_get_service_info(type_, name)
+"""
+Asynchronously retrieves service info and notifies the node.""
+info = await zc.async_get_service_info(type_, name)
         if info:
             logger.info(f"Voyager: Discovered peer {name} at {info.parsed_addresses()}")
             self.node._peer_added(info)
 
 
     def update_service(self, zc: Any, type_: str, name: str) -> None:
-        """Called by Zeroconf when a service is updated."""
-        asyncio.run_coroutine_threadsafe(self._async_update_service(zc, type_, name), self.loop)
+"""
+Called by Zeroconf when a service is updated.""
+asyncio.run_coroutine_threadsafe(self._async_update_service(zc, type_, name), self.loop)
 
 
     async def _async_update_service(self, zc: Any, type_: str, name: str) -> None:
@@ -70,17 +76,19 @@ class VoyagerPeerListener(ServiceListener):
 
 
     def remove_service(self, zc: Any, type_: str, name: str) -> None:
-        """Called by Zeroconf when a service is removed from the network."""
-        logger.info(f"Voyager: Peer {name} removed from network.")
+"""
+Called by Zeroconf when a service is removed from the network.""
+logger.info(f"Voyager: Peer {name} removed from network.")
         self.node._peer_removed(name)
 
 
 
 class DiscoveryNode:
-    """DiscoveryNode handles decentralized peer advertisement and lookup.
+"""
+DiscoveryNode handles decentralized peer advertisement and lookup.
     Uses mDNS (zeroconf) for Phase 1.0 of Project Voyager.
-    """
-    SERVICE_TYPE = "_pyagentv._tcp.local."
+"""
+SERVICE_TYPE = "_pyagentv._tcp.local."
 
     def __init__(self, node_name: Optional[str] = None, port: int = 8000, transport_port: int = 5555) -> None:
         self.node_id: str = str(uuid.uuid4())[:8]
@@ -99,23 +107,26 @@ class DiscoveryNode:
 
 
     def register_on_peer_added(self, callback: Callable[[Dict[str, Any]], Awaitable[None]]) -> None:
-        """Registers a callback to be executed when a new peer is discovered."""
-        self._on_peer_added_callbacks.append(callback)
+"""
+Registers a callback to be executed when a new peer is discovered.""
+self._on_peer_added_callbacks.append(callback)
 
 
     def update_peer_metadata(self, peer_id: str, metadata: Dict[str, Any]) -> None:
-        """Updates extended metadata received via side-channels (e.g. Heartbeats)."""
-        if peer_id not in self.peer_metadata:
+"""
+Updates extended metadata received via side-channels (e.g. Heartbeats).""
+if peer_id not in self.peer_metadata:
             self.peer_metadata[peer_id] = {}
         self.peer_metadata[peer_id].update(metadata)
         logger.debug(f"Voyager: Updated metadata for peer {peer_id}")
 
 
     def get_nearest_peers(self, count: int = 5) -> List[Dict[str, Any]]:
-        """Returns the N nearest peers based on network proximity.
+"""
+Returns the N nearest peers based on network proximity.
         Follows Pillar 5: Community Mesh.
-        """
-        all_peers = self.get_peers()
+"""
+all_peers = self.get_peers()
         # Sort by IP subnet similarity (simplified proximity metric)
         local_prefix = ".".join(self.local_ip.split(".")[:3])
         
@@ -129,8 +140,9 @@ class DiscoveryNode:
 
 
     def _get_local_ip(self) -> str:
-        """Returns the local IPv4 address of the node."""
-        ip_address = "127.0.0.1"
+"""
+Returns the local IPv4 address of the node.""
+ip_address = "127.0.0.1"
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         with contextlib.suppress(Exception):
             # doesn't even have to be reachable
@@ -141,8 +153,9 @@ class DiscoveryNode:
 
 
     async def start_advertising(self) -> None:
-        """Broadcasts this node to the local network."""
-        import os
+"""
+Broadcasts this node to the local network.""
+import os
         import platform
 
         if self.aiozc is None:
@@ -181,8 +194,9 @@ class DiscoveryNode:
 
 
     async def start_discovery(self) -> None:
-        """Starts browsing for other Voyager peers."""
-        if self.aiozc is None:
+"""
+Starts browsing for other Voyager peers.""
+if self.aiozc is None:
             self.aiozc = AsyncZeroconf(ip_version=IPVersion.V4Only)
 
         logger.info("Voyager: Starting peer discovery browser...")
@@ -193,8 +207,9 @@ class DiscoveryNode:
 
 
     def _peer_added(self, info: ServiceInfo) -> None:
-        """Internal callback for when a peer is discovered or updated."""
-        name = info.name
+"""
+Internal callback for when a peer is discovered or updated.""
+name = info.name
         is_new = name not in self.peers
         self.peers[name] = info
         logger.info(f"Voyager: Peer Registry updated ({name}). Total: {len(self.peers)}")
@@ -215,15 +230,17 @@ class DiscoveryNode:
 
 
     def _peer_removed(self, name: str) -> None:
-        """Internal callback for when a peer leaves the network."""
-        if name in self.peers:
+"""
+Internal callback for when a peer leaves the network.""
+if name in self.peers:
             del self.peers[name]
             logger.info(f"Voyager: Peer {name} removed. Total remaining: {len(self.peers)}")
 
 
     async def stop(self) -> None:
-        """Stops advertising and discovery."""
-        if self.aiozc:
+"""
+Stops advertising and discovery.""
+if self.aiozc:
             if self.info:
                 await self.aiozc.zeroconf.async_unregister_service(self.info)
             await self.aiozc.async_close()
@@ -232,8 +249,9 @@ class DiscoveryNode:
 
 
     def get_active_peers(self) -> List[Dict[str, Any]]:
-        """Returns a list of active peers found on the network, including dynamic metadata."""
-        results = []
+"""
+Returns a list of active peers found on the network, including dynamic metadata.""
+results = []
         for name, info in self.peers.items():
             props = {
                 k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
@@ -252,9 +270,10 @@ class DiscoveryNode:
 
 
     def resolve_synapse_address(self, peer_name: str) -> Optional[tuple[str, int]]:
-        """Phase 319: Resolves a peer name or node_id to an (IP, transport_port) tuple.
-        This enables decentralized routing without hardcoded IPs."""
-        for name, info in self.peers.items():
+"""
+Phase 319: Resolves a peer name or node_id to an (IP, transport_port) tuple.
+        This enables decentralized routing without hardcoded IPs.""
+for name, info in self.peers.items():
             props: Dict[str, str] = {
                 k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
                 for k, v in info.properties.items()
@@ -277,8 +296,9 @@ if __name__ == "__main__":
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 
     async def run_test() -> None:
-        """Manual test runner for discovery node."""
-        node = DiscoveryNode()
+"""
+Manual test runner for discovery node.""
+node = DiscoveryNode()
         try:
             await node.start_advertising()
             await node.start_discovery()

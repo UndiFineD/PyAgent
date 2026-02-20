@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,11 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Graph store.py module.
 """
-
+"""
+Graph store.py module.
+"""
 try:
-    import hashlib
+
+"""
+import hashlib
 except ImportError:
     import hashlib
 
@@ -49,22 +53,25 @@ __version__ = VERSION
 
 
 class GraphKnowledgeStore(KnowledgeStore):
-    """Sharded Graph storage for relational and ontological knowledge.
+"""
+Sharded Graph storage for relational and ontological knowledge.
     Scales to trillions of triples by sharding nodes across the filesystem.
     Utilization of MemoryCore for standardized backend.
-    """
-    def _hash_node(self, node_id: str) -> str:
+"""
+def _hash_node(self, node_id: str) -> str:
         return hashlib.md5(node_id.encode()).hexdigest()
 
     def _get_node_path(self, node_id: str) -> Path:
-        """Hierarchical Sharding for Graph Nodes (Phase 130)."""hash_val = self._hash_node(node_id)
+        ""
+Hierarchical Sharding for Graph Nodes (Phase 130).""
+hash_val = self._hash_node(node_id)
         tier1 = hash_val[:2]
         tier2 = hash_val[2:4]
 
         # Use MemoryCore via base class to ensure path alignment
         shard_dir = self.storage_path / tier1 / tier2
         shard_dir.mkdir(exist_ok=True, parents=True)
-        return shard_dir / f"{node_id}.json""
+        return shard_dir / f"{node_id}.json"
     def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
         path = self._get_node_path(key)
 
@@ -72,10 +79,10 @@ class GraphKnowledgeStore(KnowledgeStore):
         # pylint: disable=protected-access
         data = self._memory_core._storage.load_json(path)
         if not data:
-            data = {"id": key, "edges": []}"
+            data = {"id": key, "edges": []}
         relationship = "related_to""        if metadata and isinstance(metadata, dict):
-            relationship = metadata.get("relationship", "related_to")"
-        data["edges"].append({"to": value, "type": relationship})"
+            relationship = metadata.get("relationship", "related_to")
+        data["edges"].append({"to": value, "type": relationship})
         # Atomic write via storage core
         # pylint: disable=protected-access
         self._memory_core._storage.save_json(path, data)

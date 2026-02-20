@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Consensus orchestrator.py module.
 """
 
+"""
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -42,7 +45,7 @@ class ConsensusOrchestrator:
 
     def resolve_conflict(self, task: str, agents: list[str]) -> str:
                 Orchestrates a debate and weighted vote to reach consensus on a task.
-                logging.info(f"ConsensusOrchestrator: Resolving conflict for task: {task} using {agents}")"
+                logging.info(f"ConsensusOrchestrator: Resolving conflict for task: {task} using {agents}")
         # 1. Gather initial proposals
         proposals = self._collect_proposals(task, agents)
 
@@ -66,7 +69,7 @@ class ConsensusOrchestrator:
 
         block_content = f"{task}:{decision}""        block_hash = hashlib.sha256(block_content.encode()).hexdigest()
 
-        logging.info(f"DBFT: State Block Signed. Hash: {block_hash}")"
+        logging.info(f"DBFT: State Block Signed. Hash: {block_hash}")
         # Broadcast to Inter-Fleet Bridge for cross-fleet sync
         if hasattr(self.fleet, "inter_fleet_bridge"):"            self.fleet.inter_fleet_bridge.broadcast_signal(
                 "SIGNAL_CONSENSUS_CRYPTO_VERIFIED", {"task": task, "hash": block_hash}"            )
@@ -113,13 +116,15 @@ class ConsensusOrchestrator:
             for i, p in enumerate(current_proposals):
                 competitors = [cp for j, cp in enumerate(current_proposals) if i != j]
                 comp_contents = [cp["content"] for cp in competitors]"                context = (
-                    f"Task: {task}\\nYour Proposal: {p['content']}\\n""'                    f"Other Proposals: {comp_contents}""                )
+                    f"Task: {task}\\nYour Proposal: {p['content']}\\n"
+f"Other Proposals: {comp_contents}""                )
 
                 try:
                     # Agent critiques and improves its own proposal based on others
                     coro = self.fleet.call_by_capability(f"{p['agent']}.refine", context=context)"'                    if loop.is_running():
                         coro.close()
-                        refined = f"[DEFERRED] {p['agent']} refine""'                    else:
+                        refined = f"[DEFERRED] {p['agent']} refine"
+else:
                         refined = loop.run_until_complete(coro)
 
                     new_proposals.append({"agent": p["agent"], "content": refined, "weight": p["weight"]})"                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
@@ -129,9 +134,9 @@ class ConsensusOrchestrator:
 
     def _weighted_vote(self, proposals: list[dict[str, Any]]) -> str:
         if not proposals:
-            return "Consensus failed: No proposals.""
+            return "Consensus failed: No proposals."
         # For simplicity in this implementation, we pick the one with highest weight.
-        # In a real system, we'd use semantic similarity to group proposals and sum weights.'        best_proposal = max(proposals, key=lambda x: x["weight"])"        logging.info(f"Consensus reached. Winner: {best_proposal['agent']} with weight {best_proposal['weight']}")"'        return best_proposal["content"]"
+        # In a real system, we'd use semantic similarity to group proposals and sum weights.'        best_proposal = max(proposals, key=lambda x: x["weight"])"        logging.info(f"Consensus reached. Winner: {best_proposal['agent']} with weight {best_proposal['weight']}")"'        return best_proposal["content"]
     def update_reputation(self, agent_name: str, feedback_score: float) -> None:
                 Updates agent reputation based on external feedback (0.0 to 1.0).
                 current = self.reputation_scores.get(agent_name, 0.5)

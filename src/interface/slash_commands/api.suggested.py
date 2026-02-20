@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 High-level API functions for SlashCommands.
 """
-
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -38,14 +41,16 @@ _DEFAULT_SLASH_COMMANDS: SlashCommands | None = None
 
 
 def get_slash_commands() -> SlashCommands:
-    """Get the default SlashCommands instance.    global _DEFAULT_SLASH_COMMANDS  # pylint: disable=global-statement
+"""
+Get the default SlashCommands instance.    global _DEFAULT_SLASH_COMMANDS  # pylint: disable=global-statement
     if _DEFAULT_SLASH_COMMANDS is None:
         _DEFAULT_SLASH_COMMANDS = SlashCommands()
     return _DEFAULT_SLASH_COMMANDS
 
 
 def reset_slash_commands() -> None:
-    """Reset the default instance (for testing).    global _DEFAULT_SLASH_COMMANDS  # pylint: disable=global-statement
+"""
+Reset the default instance (for testing).    global _DEFAULT_SLASH_COMMANDS  # pylint: disable=global-statement
     _DEFAULT_SLASH_COMMANDS = None
 
 

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     from typing import Any
+"""
 except ImportError:
-    from typing import Any
+
+"""
+from typing import Any
 
 
 try:
@@ -52,7 +57,8 @@ __version__ = VERSION
 
 
 class EffortEstimator:
-    """Estimates effort for improvements.    def __init__(self) -> None:        self.base_rates: dict[str, float] = {
+    ""
+Estimates effort for improvements.    def __init__(self) -> None:        self.base_rates: dict[str, float] = {
             "low": 2.0,"            "medium": 6.0,"            "high": 16.0,"        }
         self.historical_data: dict[str, list[float]] = {}
 
@@ -63,11 +69,11 @@ class EffortEstimator:
         complexity = str(kwargs.get("complexity", "medium")).lower()"        category = kwargs.get("category")"        if isinstance(category, ImprovementCategory):
             category_key = category.value
         else:
-            category_key = str(category) if category is not None else """
-        if category_key and category_key in self.historical_data and self.historical_data[category_key]:
+            category_key = str(category) if category is not None else ""
+if category_key and category_key in self.historical_data and self.historical_data[category_key]:
             base = sum(self.historical_data[category_key]) / len(self.historical_data[category_key])
         else:
-            base = float(self.base_rates.get(complexity, self.base_rates["medium"]))"
+            base = float(self.base_rates.get(complexity, self.base_rates["medium"]))
         # If an EffortEstimate enum is present, bias the base.
         effort = getattr(improvement, "effort", None)"        if isinstance(effort, EffortEstimate):
             scale = {

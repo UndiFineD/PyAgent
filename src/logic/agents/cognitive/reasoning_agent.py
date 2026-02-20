@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +19,11 @@ from __future__ import annotations
 # "Agent specializing in logical reasoning, chain-of-thought analysis, and problem decomposition."# 
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     from typing import Any
@@ -37,12 +42,11 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class ReasoningAgent(BaseAgent):
-    """
-    Tier 2 (Cognitive Logic) - Reasoning Agent: Analyzes complex problems
+"""
+Tier 2 (Cognitive Logic) - Reasoning Agent: Analyzes complex problems
     and provides a logical blueprint before action using Chain-of-Thought reasoning.
-    """
-
-    def __init__(self, file_path: str) -> None:
+"""
+def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = ("You are the Reasoning Agent, specializing in logical analysis of technical problems.")
 
@@ -53,8 +57,9 @@ class ReasoningAgent(BaseAgent):
 
     @as_tool
     def analyze(self, problem: str, context: str | None = None) -> str:
-        """Performs a structured analysis of a technical problem."""
-        self._track_tokens(len(problem) // 4 + 100)
+"""
+Performs a structured analysis of a technical problem.""
+self._track_tokens(len(problem) // 4 + 100)
         analysis = [
             f"## Reasoning Blueprint: {problem[:50]}...",
             "",
@@ -82,8 +87,9 @@ class ReasoningAgent(BaseAgent):
 
     @as_tool
     def analyze_tot(self, problem: str) -> str:
-        """Performs Tree-of-Thought reasoning by exploring multiple solution paths."""
-        analysis = [
+"""
+Performs Tree-of-Thought reasoning by exploring multiple solution paths.""
+analysis = [
             f"## Tree-of-Thought Analysis: {problem}",
             "Exploring multiple reasoning paths...",
             "- Path 1: Decomposition and sequential solving.",
@@ -98,11 +104,12 @@ class ReasoningAgent(BaseAgent):
         self, problem: str, 
         language: str = "english"
         ) -> dict[str, Any]:
-        """Validates reasoning across language boundaries (Latent Reasoning Guardrail).
+"""
+Validates reasoning across language boundaries (Latent Reasoning Guardrail).
         
         Checks if the internal reasoning steps align when translated to low-resource languages.
-        """
-        logging.info(f"ReasoningAgent: Checking latent consistency for {language}")  # Simulation of Cross-Lingual consistency check (ArXiv 2601.02996)
+"""
+logging.info(f"ReasoningAgent: Checking latent consistency for {language}")  # Simulation of Cross-Lingual consistency check (ArXiv 2601.02996)
 
         is_consistent = language.lower() in ["english", "chinese", "spanish"]
         confidence = 0.95 if is_consistent else 0.45
@@ -119,8 +126,9 @@ class ReasoningAgent(BaseAgent):
 
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        """Perform a reasoning analysis."""
-        return self.analyze(prompt)
+        ""
+Perform a reasoning analysis.""
+return self.analyze(prompt)
 
 if __name__ == "__main__":
     main_func = create_main_function(

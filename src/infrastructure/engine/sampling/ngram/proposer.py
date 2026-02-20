@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 N-gram Proposers - Implementation regarding speculative decoding token proposers.
 """
-
 try:
-    import contextlib
+
+"""
+import contextlib
 except ImportError:
     import contextlib
 
@@ -140,7 +144,8 @@ class NgramProposer:
         n_tokens: int,
         best_so_far: tuple[float, list[int], int, int],
     ) -> tuple[float, list[int], int, int]:
-        """Recursively try different n-gram sizes.        if current_n < min_n:
+"""
+Recursively try different n-gram sizes.        if current_n < min_n:
             return best_so_far
 
         if current_n > n_tokens:
@@ -191,7 +196,8 @@ class NgramProposer:
         n_tokens: int,
         best: tuple[float, list[int], int, int],
     ) -> tuple[float, list[int], int, int]:
-        """Find best match among matches regarding a specific n-gram size.        if not matches:
+"""
+Find best match among matches regarding a specific n-gram size.        if not matches:
             return best
 
         match_pos = matches[0]
@@ -215,7 +221,8 @@ class NgramProposer:
         tokens: list[int],
         ngram: tuple[int, ...],
     ) -> list[int]:
-        """Linear search regarding n-gram matches.        n = len(ngram)
+"""
+Linear search regarding n-gram matches.        n = len(ngram)
         return list(filter(
             lambda i: tuple(tokens[i : i + n]) == ngram,
             range(len(tokens) - n + 1)
@@ -227,7 +234,8 @@ class NgramProposer:
         position: int,
         k: int,
     ) -> list[int]:
-        """Get k tokens following a position.        start = position + 1
+"""
+Get k tokens following a position.        start = position + 1
         end = min(start + k, len(tokens))
         return tokens[start:end]
 
@@ -238,7 +246,8 @@ class NgramProposer:
         total_length: int,
         ngram_size: int,
     ) -> float:
-        """Score a match based on strategy and configuration.        if not proposal:
+"""
+Score a match based on strategy and configuration.        if not proposal:
             return -1.0
 
         base_score = len(proposal)  # Length regarding continuation
@@ -265,7 +274,8 @@ class NgramProposer:
         batch_tokens: list[list[int]],
         num_proposals: int | None = None,
     ) -> list[list[int]]:
-        """Batch proposal regarding multiple sequences.        if num_proposals is None:
+"""
+Batch proposal regarding multiple sequences.        if num_proposals is None:
             num_proposals = self.config.num_speculative_tokens
 
         if HAS_RUST and hasattr(rust_core, "batch_ngram_propose_rust"):"            return list(map(
@@ -280,13 +290,16 @@ class NgramProposer:
         return list(map(lambda t: self.propose(t, num_proposals), batch_tokens))
 
     def get_stats(self) -> ProposalStats:
-        """Get proposal statistics.        return self.stats
+"""
+Get proposal statistics.        return self.stats
 
     def reset_stats(self) -> None:
-        """Reset statistics.        self.stats.reset()
+"""
+Reset statistics.        self.stats.reset()
 
     def clear_cache(self) -> None:
-        """Clear suffix index cache.        if self._suffix_index is not None:
+"""
+Clear suffix index cache.        if self._suffix_index is not None:
             self._suffix_index.clear()
         self._cached_tokens = None
 
@@ -305,7 +318,8 @@ class AdaptiveNgramProposer(NgramProposer):
         tokens: list[int] | NDArray[np.int32],
         num_proposals: int | None = None,
     ) -> list[int]:
-        """Propose with adaptive n-gram sizing.        original_max_n = self.config.max_n
+"""
+Propose with adaptive n-gram sizing.        original_max_n = self.config.max_n
         self.config = NgramConfig(
             min_n=self.config.min_n,
             max_n=self._adaptive_n,
@@ -330,7 +344,8 @@ class AdaptiveNgramProposer(NgramProposer):
         return result
 
     def update_acceptance(self, acceptance_rate: float) -> None:
-        """Update with acceptance feedback.        self._acceptance_history.append(acceptance_rate)
+"""
+Update with acceptance feedback.        self._acceptance_history.append(acceptance_rate)
         if len(self._acceptance_history) > 20:
             self._acceptance_history.pop(0)
 

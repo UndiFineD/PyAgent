@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.validation.tensor_schema import DynamicDim, TensorShape, TensorSchema, validate_tensor, validate_tensor_shape

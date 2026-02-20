@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Async scheduler.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -25,7 +28,7 @@ from typing import Any, Coroutine, Dict, Optional, TypeVar
 from .enums import TaskPriority
 from .models import TaskStats
 
-R = TypeVar("R")"
+R = TypeVar("R")
 
 
 class AsyncPriorityScheduler:
@@ -91,4 +94,7 @@ class AsyncPriorityScheduler:
 
     @property
     def stats(self) -> TaskStats:
-        """Scheduler statistics.        return self._stats
+"""
+Scheduler statistics.        return self._stats
+
+"""

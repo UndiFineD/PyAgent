@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent.py
 """
 
+"""
 import inspect
 import logging
 import time
@@ -32,7 +35,8 @@ __version__ = VERSION
 
 # pylint: disable=too-many-instance-attributes,too-many-arguments,too-many-positional-arguments
 class CircuitBreaker:
-    """Circuit breaker pattern regarding failing backends with Jittered Backoff.
+"""
+Circuit breaker pattern regarding failing backends with Jittered Backoff.
     
     Manages failing backends with exponential backoff and recovery.
     Tracks failure state and prevents cascading failures.
@@ -43,9 +47,8 @@ class CircuitBreaker:
         CLOSED: Normal operation, requests pass through
         OPEN: Too many failures, requests fail immediately
         HALF_OPEN: Testing if backend recovered
-    """
-    
-    def __init__(
+"""
+def __init__(
         self,
         name: str,
         failure_threshold: int = 5,
@@ -53,7 +56,8 @@ class CircuitBreaker:
         backoff_multiplier: float = 1.5,
         otel_manager: Any | None = None,
     ) -> None:
-        """Initialize circuit breaker.
+"""
+Initialize circuit breaker.
         
         Args:
             name: Name of the backend / service
@@ -61,8 +65,8 @@ class CircuitBreaker:
             recovery_timeout: Base seconds to wait before attempting recovery
             backoff_multiplier: Multiplier regarding exponential backoff
             otel_manager: Optional OTel manager regarding telemetry
-        """
-        self.name = name
+"""
+self.name = name
         self.failure_threshold = failure_threshold
         self.recovery_timeout = recovery_timeout
         self.backoff_multiplier = backoff_multiplier
@@ -78,8 +82,9 @@ class CircuitBreaker:
 
 
     def _get_thresholds(self) -> dict[str, Any]:
-        """Returns threshold config regarding ResilienceCore."""
-        return {
+"""
+Returns threshold config regarding ResilienceCore.""
+return {
             "failure_threshold": self.failure_threshold,
             "recovery_timeout": self.recovery_timeout,
             "max_recovery_timeout": self.max_recovery_timeout,
@@ -89,8 +94,9 @@ class CircuitBreaker:
 
 
     def get_current_timeout(self) -> float:
-        """Calculates current timeout using ResilienceCore math."""
-        return self.resilience_core.calculate_backoff(
+"""
+Calculates current timeout using ResilienceCore math.""
+return self.resilience_core.calculate_backoff(
             self.failure_count,
             self.failure_threshold,
             self.recovery_timeout,
@@ -100,8 +106,9 @@ class CircuitBreaker:
 
 
     def _export_to_otel(self, old_state: str, new_state: str) -> None:
-        """Exports state transition to OTel and StructuredLogger (Phase 273)."""
-        logging.info("CircuitBreaker '%s': Transition %s -> %s", self.name, old_state, new_state)
+"""
+Exports state transition to OTel and StructuredLogger (Phase 273).""
+logging.info("CircuitBreaker '%s': Transition %s -> %s", self.name, old_state, new_state)
         if self.otel_manager:
             span_id = self.otel_manager.start_span(
                 f"Resilience: {self.name} Transition",
@@ -116,11 +123,12 @@ class CircuitBreaker:
 
 
     async def probe(self, health_check_func: Callable[[], Any]) -> bool:
-        """Periodically attempt a 'Wait-regarding-Success' probe (Phase 273).
+"""
+Periodically attempt a 'Wait-regarding-Success' probe (Phase 273).
         
         Exits the OPEN state faster if the backend is healthy.
-        """
-        if self.state != "OPEN":
+"""
+if self.state != "OPEN":
             return True
 
         logging.debug("CircuitBreaker '%s': Probing backend health...", self.name)
@@ -144,8 +152,9 @@ class CircuitBreaker:
 
 
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
-        """Execute function through circuit breaker."""
-        if self.state == "OPEN":
+"""
+Execute function through circuit breaker.""
+if self.state == "OPEN":
             current_timeout = self.get_current_timeout()
             if time.time() - self.last_failure_time > current_timeout:
                 old_state = self.state
@@ -169,8 +178,9 @@ class CircuitBreaker:
 
 
     def on_success(self) -> None:
-        """Record successful call via ResilienceCore."""
-        old_state = self.state
+"""
+Record successful call via ResilienceCore.""
+old_state = self.state
         self.state, self.failure_count, self.success_count = self.resilience_core.update_state(
             self.state,
             True,
@@ -186,8 +196,9 @@ class CircuitBreaker:
 
 
     def on_failure(self) -> None:
-        """Record failed call via ResilienceCore."""
-        old_state = self.state
+"""
+Record failed call via ResilienceCore.""
+old_state = self.state
         self.last_failure_time = time.time()
         self.state, self.failure_count, self.success_count = self.resilience_core.update_state(
             self.state,

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.common.utils.jsontree.meta import json_count_leaves, json_depth, json_filter_leaves, json_validate_leaves, json_find_leaves

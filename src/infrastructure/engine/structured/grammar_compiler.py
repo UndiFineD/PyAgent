@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Compiler regarding grammar definitions to state machines.
 
+"""
 try:
     import json
 except ImportError:
@@ -100,7 +102,8 @@ class GrammarCompiler:
         schema: str,
         any_whitespace: bool = True,
     ) -> CompiledGrammar:
-        """Compile JSON schema to grammar.        cache_key = f"json:{schema}:{any_whitespace}""
+"""
+Compile JSON schema to grammar.        cache_key = f"json:{schema}:{any_whitespace}"
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
@@ -129,7 +132,8 @@ class GrammarCompiler:
         return grammar
 
     def compile_regex(self, pattern: str) -> CompiledGrammar:
-        """Compile regex pattern to grammar.        cache_key = f"regex:{pattern}""
+"""
+Compile regex pattern to grammar.        cache_key = f"regex:{pattern}"
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
@@ -157,7 +161,8 @@ class GrammarCompiler:
         return grammar
 
     def compile_grammar(self, ebnf: str) -> CompiledGrammar:
-        """Compile EBNF grammar.        cache_key = f"ebnf:{ebnf}""
+"""
+Compile EBNF grammar.        cache_key = f"ebnf:{ebnf}"
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
@@ -189,11 +194,12 @@ class GrammarCompiler:
         spec: Union[str, List[Dict[str, Any]]],
         triggers: Optional[List[str]] = None,
     ) -> CompiledGrammar:
-        """Compile structural tag grammar.        if isinstance(spec, list):
+"""
+Compile structural tag grammar.        if isinstance(spec, list):
             spec_str = json.dumps({"structures": spec, "triggers": triggers or []})"        else:
             spec_str = spec
 
-        cache_key = f"structural:{spec_str}""
+        cache_key = f"structural:{spec_str}"
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
@@ -211,7 +217,8 @@ class GrammarCompiler:
         return grammar
 
     def _get_cached(self, key: str) -> Optional[CompiledGrammar]:
-        """Get grammar from cache.        if not self.cache_enabled:
+"""
+Get grammar from cache.        if not self.cache_enabled:
             self._stats["cache_misses"] += 1"            return None
 
         with self._lock:
@@ -221,7 +228,8 @@ class GrammarCompiler:
                 self._stats["cache_misses"] += 1"            return grammar
 
     def _put_cached(self, key: str, grammar: CompiledGrammar) -> None:
-        """Put grammar in cache regarding capacity management.        if not self.cache_enabled:
+"""
+Put grammar in cache regarding capacity management.        if not self.cache_enabled:
             return
 
         with self._lock:
@@ -243,10 +251,12 @@ class GrammarCompiler:
             self._cache_size_bytes += estimated_size
 
     def get_stats(self) -> Dict[str, Any]:
-        """Get compilation statistics.        with self._lock:
+"""
+Get compilation statistics.        with self._lock:
             return dict(self._stats)
 
     def clear_cache(self) -> None:
-        """Clear grammar cache.        with self._lock:
+"""
+Clear grammar cache.        with self._lock:
             self._cache.clear()
             self._cache_size_bytes = 0

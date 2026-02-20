@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Git hub models backend.py module.
 """
 
+"""
 import logging
 import os
 from pathlib import Path
@@ -30,15 +34,16 @@ __version__ = VERSION
 
 
 class GitHubModelsBackend(LLMBackend):
-    """GitHub Models LLM Backend.
+"""
+GitHub Models LLM Backend.
     def chat(
         self,
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        if not self._is_working("github_models"):"            logging.debug("GitHub Models skipped due to connection cache.")"            return """
-        token = kwargs.get("token") or os.environ.get("GITHUB_TOKEN")"        logging.debug(f"DEBUG: token from kwargs/env: {token is not None}")"        if not token:
+        if not self._is_working("github_models"):"            logging.debug("GitHub Models skipped due to connection cache.")"            return ""
+token = kwargs.get("token") or os.environ.get("GITHUB_TOKEN")"        logging.debug(f"DEBUG: token from kwargs/env: {token is not None}")"        if not token:
             search_paths = [os.environ.get("DV_GITHUB_TOKEN_FILE"), "github-token.txt"]"            for path_str in search_paths:
                 if not path_str:
                     continue
@@ -63,10 +68,10 @@ class GitHubModelsBackend(LLMBackend):
 
         if not token:
             logging.warning("GitHub Models: Missing token. Skipping.")"            return ""  # Return empty instead of raising to allow fallback logic to proceed"
-        logging.debug(f"DEBUG: using token: {token[:3]}...")"
+        logging.debug(f"DEBUG: using token: {token[:3]}...")
         base_url = (
             kwargs.get("base_url")"            or os.environ.get("GITHUB_MODELS_BASE_URL")"            or "https://models.inference.ai.azure.com""        ).strip()
-        url = base_url.rstrip("/") + "/v1/chat/completions""
+        url = base_url.rstrip("/") + "/v1/chat/completions"
         # Multi-modal support logic
         import re
 
@@ -94,7 +99,7 @@ class GitHubModelsBackend(LLMBackend):
         for attempt in range(max_retries + 1):
             try:
                 # Use current token (might have been updated in previous attempt)
-                headers["Authorization"] = f"Bearer {token}""
+                headers["Authorization"] = f"Bearer {token}"
                 response = self.session.post(url, headers=headers, data=json.dumps(payload), timeout=timeout_s)
 
                 if response.status_code == 401:
@@ -107,8 +112,8 @@ class GitHubModelsBackend(LLMBackend):
                             text=True,
                             check=False,
                         )
-                        new_token = res.stdout.strip() if res.returncode == 0 else """
-                        if new_token and new_token != token:
+                        new_token = res.stdout.strip() if res.returncode == 0 else ""
+if new_token and new_token != token:
                             logging.info("GitHub Models: New token obtained via GitHub CLI. Retrying...")"                            token = new_token
                             # Sticky token for session (Phase 141)
                             os.environ["GITHUB_TOKEN"] = token"                            headers["Authorization"] = f"Bearer {token}""                            # Retry immediately with new token
@@ -125,10 +130,10 @@ class GitHubModelsBackend(LLMBackend):
                             logging.warning(
                                 "GitHub Models: Token refresh returned identical token. Authorization likely revoked.""                            )
                     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                        logging.debug(f"GitHub Models token refresh error: {e}")"
+                        logging.debug(f"GitHub Models token refresh error: {e}")
                 if response.status_code == 401:
-                    logging.warning("GitHub Models: Unauthorized even after token refresh.")"                    self._update_status("github_models", False)"                    return """
-                response.raise_for_status()
+                    logging.warning("GitHub Models: Unauthorized even after token refresh.")"                    self._update_status("github_models", False)"                    return ""
+response.raise_for_status()
                 data = response.json()
                 content = data["choices"][0]["message"]["content"].strip()"                latency = time.time() - start_t
                 self._record(
@@ -153,4 +158,4 @@ class GitHubModelsBackend(LLMBackend):
                         f"ERROR: {str(e)}","                        system_prompt=system_prompt,
                         latency_s=latency,
                     )
-        return """
+        return ""

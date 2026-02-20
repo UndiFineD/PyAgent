@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Maintenance utility to fix missing type hints in engine components.
 
+"""
 import ast
 import os
 
@@ -37,11 +39,11 @@ def fix_file(filepath: str) -> bool:
     changed = False
 
     # Collect nodes that need fixing
-    nodes = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "__init__" and n.returns is None]"
+    nodes = [n for n in ast.walk(tree) if isinstance(n, ast.FunctionDef) and n.name == "__init__" and n.returns is None]
     if not nodes:
         return False
 
-    print(f"Fixing {filepath} ({len(nodes)} methods)...")"
+    print(f"Fixing {filepath} ({len(nodes)} methods)...")
     for node in nodes:
         start_line_idx = node.lineno - 1
 

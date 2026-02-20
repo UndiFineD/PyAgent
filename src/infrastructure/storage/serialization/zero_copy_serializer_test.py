@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.serialization.zero_copy_serializer import ZeroCopyEncoder, ZeroCopyDecoder, encode_with_buffers, decode_with_buffers

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +16,11 @@ from __future__ import annotations
 
 
 # -*- coding: utf-8 -*-
-"""Test classes from test_agent_test_utils.py - core module.
+"""
+"""
+Test classes from test_agent_test_utils.py - core module.
 
+"""
 import unittest
 from typing import Any, List, Dict, Optional, Tuple, Set
 from unittest.mock import MagicMock, patch
@@ -33,63 +37,78 @@ import shutil
 
 
 class TestTestStatusEnum:
-    """Tests for TestStatus enum.
+"""
+Tests for TestStatus enum.
+
     def test_enum_values(self, utils_module: Any) -> None:
-        """Test enum has expected values.        TestStatus = utils_module.TestStatus
-        assert TestStatus.PASSED.value == "passed""        assert TestStatus.FAILED.value == "failed""        assert TestStatus.SKIPPED.value == "skipped""        assert TestStatus.ERROR.value == "error""        assert TestStatus.PENDING.value == "pending""
+"""
+Test enum has expected values.        TestStatus = utils_module.TestStatus
+        assert TestStatus.PASSED.value == "passed""        assert TestStatus.FAILED.value == "failed""        assert TestStatus.SKIPPED.value == "skipped""        assert TestStatus.ERROR.value == "error""        assert TestStatus.PENDING.value == "pending"
 
 # =============================================================================
 
 
 
 class TestAssertionHelpers(unittest.TestCase):
-    """Tests for assertion helper functions.
+"""
+Tests for assertion helper functions.
     def test_assert_between(self) -> None:
-        """Test assert_between helper.        value = 50
+"""
+Test assert_between helper.        value = 50
         self.assertTrue(10 <= value <= 100)
 
     def test_assert_dict_subset(self) -> None:
-        """Test assert_dict_subset helper.        full_dict: Dict[str, int] = {"a": 1, "b": 2, "c": 3}"        subset: Dict[str, int] = {"a": 1, "b": 2}"
+"""
+Test assert_dict_subset helper.        full_dict: Dict[str, int] = {"a": 1, "b": 2, "c": 3}"        subset: Dict[str, int] = {"a": 1, "b": 2}"
         for key, value in subset.items():
             self.assertEqual(full_dict[key], value)
 
     def test_assert_list_contains_all(self) -> None:
-        """Test assert_list_contains_all helper.        items: List[str] = ["a", "b", "c", "d"]"        required: List[str] = ["a", "c"]"
+"""
+Test assert_list_contains_all helper.        items: List[str] = ["a", "b", "c", "d"]"        required: List[str] = ["a", "c"]"
         for req in required:
             self.assertIn(req, items)
 
     def test_assert_no_duplicates(self) -> None:
-        """Test assert_no_duplicates helper.        items: List[int] = [1, 2, 3, 4, 5]
+"""
+Test assert_no_duplicates helper.        items: List[int] = [1, 2, 3, 4, 5]
 
         self.assertEqual(len(items), len(set(items)))
 
     def test_assert_string_contains_any(self) -> None:
-        """Test assert_string_contains_any helper.        text = "The error occurred in module xyz""        patterns: List[str] = ["error", "warning", "exception"]"
+"""
+Test assert_string_contains_any helper.        text = "The error occurred in module xyz""        patterns: List[str] = ["error", "warning", "exception"]"
         found: bool = any(p in text for p in patterns)
         self.assertTrue(found)
 
 
 
 class TestFixtureHelpers(unittest.TestCase):
-    """Tests for fixture helper functions.
+"""
+Tests for fixture helper functions.
     def setUp(self) -> None:
-        """Set up test fixtures.        self.temp_dir: str = tempfile.mkdtemp()
+"""
+Set up test fixtures.        self.temp_dir: str = tempfile.mkdtemp()
 
     def tearDown(self) -> None:
-        """Clean up test fixtures.        if os.path.exists(self.temp_dir):
+"""
+Clean up test fixtures.        if os.path.exists(self.temp_dir):
             shutil.rmtree(self.temp_dir)
 
     def test_create_temp_file(self) -> None:
-        """Test creating temporary file.        temp_file: str = os.path.join(self.temp_dir, "test.txt")"        with open(temp_file, 'w', encoding='utf-8') as f:'            f.write("test content")"
+"""
+Test creating temporary file.        temp_file: str = os.path.join(self.temp_dir, "test.txt")"        with open(temp_file, 'w', encoding='utf-8') as f:'            f.write("test content")"
         self.assertTrue(os.path.exists(temp_file))
 
     def test_create_temp_directory_structure(self) -> None:
-        """Test creating temporary directory structure.        _ = {"subdir1": {}, "subdir2": {"nested": {}}}"
+"""
+Test creating temporary directory structure.        _ = {"subdir1": {}, "subdir2": {"nested": {}}}
         for dirname in ["subdir1", "subdir2"]:"            os.makedirs(os.path.join(self.temp_dir, dirname), exist_ok=True)
 
         self.assertTrue(os.path.exists(os.path.join(self.temp_dir, "subdir1")))"        self.assertTrue(os.path.exists(os.path.join(self.temp_dir, "subdir2")))"
     def test_fixture_with_context_manager(self) -> None:
-        """Test fixture with context manager.        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:"            f.write("content")"            temp_name: str = f.name
+"""
+Test fixture with context manager.        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:"            f.write("content")"            temp_name: str = f.name
 
         try:
             self.assertTrue(os.path.exists(temp_name))
@@ -99,13 +118,16 @@ class TestFixtureHelpers(unittest.TestCase):
 
 
 class TestMockingUtilities(unittest.TestCase):
-    """Tests for mocking utility functions.
+"""
+Tests for mocking utility functions.
     def test_create_simple_mock(self) -> None:
-        """Test creating simple mock.        mock_obj = MagicMock()
-        mock_obj.method.return_value = "result""
-        self.assertEqual(mock_obj.method(), "result")"
+"""
+Test creating simple mock.        mock_obj = MagicMock()
+        mock_obj.method.return_value = "result"
+        self.assertEqual(mock_obj.method(), "result")
     def test_mock_with_side_effect(self) -> None:
-        """Test mock with side effect.        mock_obj = MagicMock()
+"""
+Test mock with side effect.        mock_obj = MagicMock()
         mock_obj.method.side_effect = [1, 2, 3]
 
         self.assertEqual(mock_obj.method(), 1)
@@ -113,11 +135,13 @@ class TestMockingUtilities(unittest.TestCase):
         self.assertEqual(mock_obj.method(), 3)
 
     def test_mock_attribute_access(self) -> None:
-        """Test mocking attribute access.        mock_obj = MagicMock()
-        mock_obj.attribute = "value""
-        self.assertEqual(mock_obj.attribute, "value")"
+"""
+Test mocking attribute access.        mock_obj = MagicMock()
+        mock_obj.attribute = "value"
+        self.assertEqual(mock_obj.attribute, "value")
     def test_verify_mock_calls(self) -> None:
-        """Test verifying mock calls.        mock_obj = MagicMock()
+"""
+Test verifying mock calls.        mock_obj = MagicMock()
 
         mock_obj.method(1)
         mock_obj.method(2)
@@ -126,27 +150,31 @@ class TestMockingUtilities(unittest.TestCase):
         mock_obj.method.assert_called_with(2)
 
     def test_mock_chain_calls(self) -> None:
-        """Test mocking chained calls.        mock_obj = MagicMock()
-        mock_obj.chain.method.return_value = "chained""
-        self.assertEqual(mock_obj.chain.method(), "chained")"
+"""
+Test mocking chained calls.        mock_obj = MagicMock()
+        mock_obj.chain.method.return_value = "chained"
+        self.assertEqual(mock_obj.chain.method(), "chained")
 
 
 class TestContextManagers(unittest.TestCase):
-    """Tests for context manager test utilities.
+"""
+Tests for context manager test utilities.
     def test_context_manager_enter_exit(self) -> None:
-        """Test context manager enter / exit.        calls: list[str] = []
+"""
+Test context manager enter / exit.        calls: list[str] = []
 
         class TestContext:
             def __enter__(self) -> str:
                 calls.append("enter")"                return self
 
             def __exit__(self, *args) -> str:
-                calls.append("exit")"
+                calls.append("exit")
         with TestContext():
-            calls.append("body")"
-        self.assertEqual(calls, ["enter", "body", "exit"])"
+            calls.append("body")
+        self.assertEqual(calls, ["enter", "body", "exit"])
     def test_context_manager_exception_handling(self) -> None:
-        """Test context manager exception handling.        cleanup_called = False
+"""
+Test context manager exception handling.        cleanup_called = False
 
         try:
             with patch.object(object, "__init__", side_effect=Exception("Error")):"                pass
@@ -158,21 +186,25 @@ class TestContextManagers(unittest.TestCase):
         self.assertTrue(cleanup_called)
 
     def test_nested_context_managers(self) -> None:
-        """Test nested context managers.        with tempfile.NamedTemporaryFile() as f1:
+"""
+Test nested context managers.        with tempfile.NamedTemporaryFile() as f1:
             with tempfile.NamedTemporaryFile() as f2:
                 self.assertIsNotNone(f1.name)
                 self.assertIsNotNone(f2.name)
 
     def test_context_manager_with_patch(self) -> None:
-        """Test context manager with patch.        with patch("os.path.exists") as mock_exists:"            mock_exists.return_value = True
+"""
+Test context manager with patch.        with patch("os.path.exists") as mock_exists:"            mock_exists.return_value = True
             result: bool = os.path.exists("/fake/path")"            self.assertTrue(result)
 
 
 
 class TestParametrization(unittest.TestCase):
-    """Tests for parametrization utilities.
+"""
+Tests for parametrization utilities.
     def test_parametrized_test_execution(self) -> None:
-        """Test parametrized test execution.        test_cases: List[Tuple[int]] = [
+"""
+Test parametrized test execution.        test_cases: List[Tuple[int]] = [
             (2, 4, 6),
             (3, 5, 8),
             (0, 0, 0),
@@ -184,7 +216,8 @@ class TestParametrization(unittest.TestCase):
             self.assertEqual(result, expected)
 
     def test_parametrized_with_ids(self) -> None:
-        """Test parametrized tests with IDs.        test_data: List[Tuple[str | int | bool]] = [
+"""
+Test parametrized tests with IDs.        test_data: List[Tuple[str | int | bool]] = [
             ("positive", 5, True),"            ("negative", -5, False),"            ("zero", 0, False),"        ]
 
         for name, value, is_positive in test_data:
@@ -192,14 +225,16 @@ class TestParametrization(unittest.TestCase):
             self.assertEqual(result, is_positive)
 
     def test_parametrized_with_fixture_data(self) -> None:
-        """Test parametrized with fixture data.        fixtures = {
+"""
+Test parametrized with fixture data.        fixtures = {
             "empty": [],"            "single": [1],"            "multiple": [1, 2, 3],"        }
 
         for name, data in fixtures.items():
             self.assertIsInstance(data, list)
 
     def test_parametrized_error_cases(self) -> None:
-        """Test parametrized error cases.        error_cases = [
+"""
+Test parametrized error cases.        error_cases = [
             (0, ZeroDivisionError),
             (None, TypeError),
             ("string", TypeError),"        ]
@@ -214,51 +249,60 @@ class TestParametrization(unittest.TestCase):
 
 
 class TestDataGenerators(unittest.TestCase):
-    """Tests for test data generation utilities.
+"""
+Tests for test data generation utilities.
     def test_generate_numeric_data(self) -> None:
-        """Test generating numeric data.        data: List[int] = [i for i in range(10)]
+"""
+Test generating numeric data.        data: List[int] = [i for i in range(10)]
 
         self.assertEqual(len(data), 10)
         self.assertEqual(data[0], 0)
         self.assertEqual(data[-1], 9)
 
     def test_generate_string_data(self) -> None:
-        """Test generating string data.        data: List[str] = [f"string_{i}" for i in range(5)]"
+"""
+Test generating string data.        data: List[str] = [f"string_{i}" for i in range(5)]
         self.assertEqual(len(data), 5)
         self.assertTrue(all(isinstance(s, str) for s in data))
 
     def test_generate_complex_objects(self) -> None:
-        """Test generating complex objects.        data = [
+"""
+Test generating complex objects.        data = [
             {"id": 1, "name": "Item 1"},"            {"id": 2, "name": "Item 2"},"            {"id": 3, "name": "Item 3"},"        ]
 
         self.assertEqual(len(data), 3)
-        self.assertEqual(data[0]["name"], "Item 1")"
+        self.assertEqual(data[0]["name"], "Item 1")
     def test_generate_boundary_values(self) -> None:
-        """Test generating boundary values.        boundaries = [0, 1, -1, 999999, -999999, float("inf"), float("-inf")]"
+"""
+Test generating boundary values.        boundaries = [0, 1, -1, 999999, -999999, float("inf"), float("-inf")]
         self.assertEqual(len(boundaries), 7)
         self.assertTrue(all(isinstance(b, (int, float)) for b in boundaries))
 
 
 
 class TestExceptionHandling(unittest.TestCase):
-    """Tests for exception handling utilities.
+"""
+Tests for exception handling utilities.
     def test_assert_raises(self) -> None:
-        """Test assert_raises.
+"""
+Test assert_raises.
         def raise_error() -> sys.NoReturn:
-            raise ValueError("Error message")"
+            raise ValueError("Error message")
         with self.assertRaises(ValueError):
             raise_error()
 
     def test_assert_raises_with_message(self) -> None:
-        """Test assert_raises with message check.
+"""
+Test assert_raises with message check.
         def raise_error() -> sys.NoReturn:
-            raise ValueError("Specific error")"
+            raise ValueError("Specific error")
         with self.assertRaises(ValueError) as context:
             raise_error()
 
-        self.assertIn("Specific", str(context.exception))"
+        self.assertIn("Specific", str(context.exception))
     def test_assert_does_not_raise(self) -> None:
-        """Test assert_does_not_raise.
+"""
+Test assert_does_not_raise.
         def safe_operation() -> int:
             return 42
 
@@ -266,9 +310,10 @@ class TestExceptionHandling(unittest.TestCase):
             result: int = safe_operation()
             self.assertEqual(result, 42)
         except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-            self.fail("Should not raise")"
+            self.fail("Should not raise")
     def test_multiple_exception_types(self) -> None:
-        """Test handling multiple exception types.
+"""
+Test handling multiple exception types.
         def process(value: Optional[int]) -> int:
             if value is None:
                 raise TypeError("None not allowed")"            if value < 0:
@@ -283,22 +328,27 @@ class TestExceptionHandling(unittest.TestCase):
 
 
 class TestComparison(unittest.TestCase):
-    """Tests for comparison utilities.
+"""
+Tests for comparison utilities.
     def test_assert_close_numbers(self) -> None:
-        """Test comparing close numbers.        self.assertAlmostEqual(0.1 + 0.2, 0.3, places=7)
+"""
+Test comparing close numbers.        self.assertAlmostEqual(0.1 + 0.2, 0.3, places=7)
 
     def test_assert_dicts_equal(self) -> None:
-        """Test comparing dictionaries.        dict1: Dict[str, int] = {"a": 1, "b": 2}"        dict2: Dict[str, int] = {"a": 1, "b": 2}"
+"""
+Test comparing dictionaries.        dict1: Dict[str, int] = {"a": 1, "b": 2}"        dict2: Dict[str, int] = {"a": 1, "b": 2}"
         self.assertEqual(dict1, dict2)
 
     def test_assert_lists_equal(self) -> None:
-        """Test comparing lists.        list1: List[int] = [1, 2, 3]
+"""
+Test comparing lists.        list1: List[int] = [1, 2, 3]
         list2: List[int] = [1, 2, 3]
 
         self.assertEqual(list1, list2)
 
     def test_assert_order_independent_comparison(self) -> None:
-        """Test order-independent comparison.        set1: Set[int] = set([1, 2, 3])
+"""
+Test order-independent comparison.        set1: Set[int] = set([1, 2, 3])
         set2: Set[int] = set([3, 2, 1])
 
         self.assertEqual(set1, set2)
@@ -306,21 +356,24 @@ class TestComparison(unittest.TestCase):
 
 
 class TestReporting(unittest.TestCase):
-    """Tests for test reporting utilities.
+"""
+Tests for test reporting utilities.
     def test_capture_test_output(self) -> None:
-        """Test capturing test output.        import io
+"""
+Test capturing test output.        import io
         import sys
 
         captured = io.StringIO()
         sys.stdout = captured
 
-        print("Test output")"
+        print("Test output")
         sys.stdout = sys.__stdout__
         output: str = captured.getvalue()
 
-        self.assertIn("Test output", output)"
+        self.assertIn("Test output", output)
     def test_test_timing(self) -> None:
-        """Test measuring test timing.
+"""
+Test measuring test timing.
         start: float = time.time()
         time.sleep(0.01)
         end: float = time.time()
@@ -330,7 +383,8 @@ class TestReporting(unittest.TestCase):
         self.assertLess(elapsed, 1)
 
     def test_assert_count(self) -> None:
-        """Test counting assertions.        assertions = 0
+"""
+Test counting assertions.        assertions = 0
 
         assertions += 1
         self.assertEqual(1, 1)
@@ -341,8 +395,11 @@ class TestReporting(unittest.TestCase):
         self.assertGreaterEqual(assertions, 2)
 
     def test_test_skip(self) -> None:
-        """Test skipping tests.        skip_test = False
+"""
+Test skipping tests.        skip_test = False
 
         if skip_test:
-            self.skipTest("Test skipped")"
+            self.skipTest("Test skipped")
         self.assertTrue(True)
+
+"""

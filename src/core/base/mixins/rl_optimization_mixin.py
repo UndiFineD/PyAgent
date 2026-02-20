@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""RL Optimization Mixin.
+"""
+"""
+RL Optimization Mixin.
 Allows agents to record and learn from decision-making using Markov Decision Processes (MDP).
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -42,10 +46,11 @@ logger = logging.getLogger(__name__)
 
 
 class RLOptimizationMixin:
-    """Mixin for Reinforcement Learning based agent optimization.
+"""
+Mixin for Reinforcement Learning based agent optimization.
     Enables tracking of State, Action, and Rewards to optimize cognitive paths.
-    """
-    def __init__(self, **kwargs):
+"""
+def __init__(self, **kwargs):
         gamma = kwargs.get("rl_gamma", 0.95)
         self.mdp = MDP(gamma=gamma)
         self.current_state: Optional[Any] = None
@@ -54,8 +59,9 @@ class RLOptimizationMixin:
             super().__init__(**kwargs)
 
     def record_step(self, action: Any, reward: float, next_state: Any, done: bool = False):
-        """Records a transition in the agent's internal MDP."""
-        if self.current_state is None:
+"""
+Records a transition in the agent's internal MDP.""
+if self.current_state is None:
             self.current_state = "initial"
         self.mdp.add_transition(
             state=self.current_state,
@@ -69,14 +75,16 @@ class RLOptimizationMixin:
 
 
     def get_best_action(self, state: Any) -> Optional[Any]:
-        """Queries the MDP policy for the best action in the given state."""
+"""
+Queries the MDP policy for the best action in the given state.""
 # Value iteration or simple policy lookup
         return self.mdp.policy.get(state)
 
 
     def optimize_policy(self):
-        """Triggers value iteration on the gathered experiences."""
-        logger.info("RLOptimization: Optimizing agent policy via value iteration...")
+        ""
+Triggers value iteration on the gathered experiences.""
+logger.info("RLOptimization: Optimizing agent policy via value iteration...")
         # TODO Placeholder for complex value iteration if implemented in MDP
         # For now, we'll just use the best-observed action per state
         for state in self.mdp.states:

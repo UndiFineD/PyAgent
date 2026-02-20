@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Rotary embedding engine.py module.
 
+"""
 try:
     from .rotary import (GptJRotaryEmbedding, MRotaryEmbedding,
 except ImportError:

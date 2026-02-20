@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,29 +15,34 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: data_parsing_core
+"""
+"""
+Module: data_parsing_core
 Core logic for data parsing operations.
 Implements XML/HTML parsing patterns from ADSyncDump-BOF.
 """
 
+"""
 import html
 from typing import Optional
 
 
 class DataParsingCore:
-    """Core class for data parsing operations (simple, deterministic)."""
-
-    def html_unescape(self, text: str) -> str:
-        """Unescape HTML entities in text."""
-        return html.unescape(text)
+"""
+Core class for data parsing operations (simple, deterministic).""
+def html_unescape(self, text: str) -> str:
+"""
+Unescape HTML entities in text.""
+return html.unescape(text)
 
     def extract_xml_value(self, xml: str, tag_pattern: str) -> Optional[str]:
-        """Extract a simple tag value from XML-like content.
+"""
+Extract a simple tag value from XML-like content.
 
         This is a very small helper used by tests; it does not attempt
         full XML parsing and uses simple string matching intentionally.
-        """
-        try:
+"""
+try:
             start_pattern = f"<{tag_pattern}>"
             end_pattern = f"</{tag_pattern}>"
             start_pos = xml.find(start_pattern)
@@ -54,8 +60,9 @@ class DataParsingCore:
             return None
 
     def find_pattern(self, haystack: str, needle: str) -> Optional[str]:
-        """Return substring starting at the found needle or None."""
-        try:
+        ""
+Return substring starting at the found needle or None.""
+try:
             pos = haystack.find(needle)
             if pos == -1:
                 return None

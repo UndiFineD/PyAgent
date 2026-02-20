@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from logic.tools.mcp_server import init_openspec, create_sdd_spec, confirm_proceed, create_task, store_memory

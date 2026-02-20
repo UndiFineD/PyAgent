@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,13 @@ from __future__ import annotations
 
 """
 PrivacyCore
+"""
 Provides high-speed text redaction and log scanning for PII.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -52,10 +55,11 @@ class PrivacyCore:
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         _ = (args, kwargs)
         self.version = VERSION
-        logging.info("PrivacyCore initialized.")"
+        logging.info("PrivacyCore initialized.")
     @staticmethod
     def redact_text(text: str) -> str:
-        """Redacts PII from text using regex patterns.        if not text:
+"""
+Redacts PII from text using regex patterns.        if not text:
             return text
 
         patterns = {
@@ -68,7 +72,8 @@ class PrivacyCore:
 
     @staticmethod
     def scan_log_entry(data: Any) -> Any:
-        """Recursively scan and redact data structures.        if isinstance(data, str):
+"""
+Recursively scan and redact data structures.        if isinstance(data, str):
             return PrivacyCore.redact_text(data)
         if isinstance(data, list):
             return [PrivacyCore.scan_log_entry(item) for item in data]

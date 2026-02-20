@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.services.execution.cpu_gpu_buffer_pool import MemoryPlacement, CpuGpuBuffer, UvaBufferPool, PinnedMemoryManager, copy_with_indices, scatter_with_indices, pad_to_multiple, compute_cumsum_offsets, flatten_with_offsets, split_by_offsets

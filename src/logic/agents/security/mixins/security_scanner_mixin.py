@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,11 @@ from typing import TYPE_CHECKING
 from src.core.base.common.types.security_issue_type import SecurityIssueType
 from src.core.base.common.types.security_vulnerability import SecurityVulnerability
 
+"""
 if TYPE_CHECKING:
-    from src.logic.agents.security.security_core import SecurityCore
+
+"""
+from src.logic.agents.security.security_core import SecurityCore
 
 # Rust acceleration imports
 try:
@@ -38,28 +42,35 @@ except ImportError:
 class SecurityScannerMixin:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Mixin for content and injection scanning.
+""""
+Mixin for content and injection scanning.
+
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def scan_content(self: SecurityCore, content: str) -> list[SecurityVulnerability]:"Performs a comprehensive scan of the provided content.# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+"""
+def scan_content(self: SecurityCore, content: str) -> list[SecurityVulnerability]:"Performs a comprehensive scan of the provided content.# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         vulnerabilities = []""""
+"""
+vulnerabilities = []""""
         # Rust-accelerated multi-pattern scanning
         if _RUST_AVAILABLE:
             try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                 patterns = [p[0] for p in self.SECURITY_PATTERNS]""""                matches = scan_lines_multi_pattern_rust(content, patterns)
+"""
+patterns = [p[0] for p in self.SECURITY_PATTERNS]""""
+matches = scan_lines_multi_pattern_rust(content, patterns)
                 for line_num, pat_idx, _ in matches:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                     _, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pat_idx]""""
+"""
+_, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pat_idx]""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #                     vuln = SecurityVulnerability(
                         type=issue_type,
                         severity=severity,
@@ -81,7 +92,7 @@ class SecurityScannerMixin:
             for pattern, issue_type, severity, desc, fix in self.SECURITY_PATTERNS:
                 if re.search(pattern, line):
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #                     vuln = SecurityVulnerability(
                         type=issue_type,
                         severity=severity,
@@ -96,50 +107,57 @@ class SecurityScannerMixin:
         return self._add_injection_findings(vulnerabilities, content)
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def scan_for_injection(self, content: str) -> list[str]:"Detects prompt injection or agent manipulation attempts.        injection_patterns = {
+"""
+def scan_for_injection(self, content: str) -> list[str]:"Detects prompt injection or agent manipulation attempts.        injection_patterns = {
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             "Instruction Override": ("# [BATCHFIX] Commented metadata/non-Python
-"""                 r"(?i)(ignore previous instructions|disregard all earlier commands|"  # [BATCHFIX] closed string"#                 rsystem prompt reset|you are now a|stay in character as)
+"""
+r"(?i)(ignore previous instructions|disregard all earlier commands|"  # [BATCHFIX] closed string"#                 rsystem prompt reset|you are now a|stay in character as)
             ),
             "Indirect Directive": r"(?i)(agent:|assistant:|bot:)\\\\s*(execute|run|delete|send|upload|rm |chmod)","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             "Payload Loader": ("# [BATCHFIX] Commented metadata/non-Python
-"""                 r"(?i)(fetch the following url and run|download and execute|base64 decode this|eval\(base64)"  # [BATCHFIX] closed string"            ),
+"""
+r"(?i)(fetch the following url and run|download and execute|base64 decode this|eval\(base64)"  # [BATCHFIX] closed string"            ),
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             "Social Engineering": ("# [BATCHFIX] Commented metadata/non-Python
-"""                 r"(?i)(congratulations!|security alert: action|verify your account|login to continue)"  # [BATCHFIX] closed string"            ),
+"""
+r"(?i)(congratulations!|security alert: action|verify your account|login to continue)"  # [BATCHFIX] closed string"            ),
         }
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         findings = []""""        for name, pattern in injection_patterns.items():
+"""
+findings = []""""
+for name, pattern in injection_patterns.items():
             if re.search(pattern, content):
 # [BATCHFIX] Commented metadata/non-Python
 #                 findings.append(fINJECTION ATTEMPT: {name} pattern detected.")"  # [BATCHFIX] closed string"        return findings
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #     def _add_injection_findings(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         self, vulnerabilities: list[SecurityVulnerability], content: str""""
+"""
+self, vulnerabilities: list[SecurityVulnerability], content: str""""
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     ) -> list[SecurityVulnerability]:""""
+"""     ) -> list[SecurityVulnerability]:"""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Add injection scanning findings to vulnerability list."  # [BATCHFIX] closed string"        injection_findings = self.scan_for_injection(content)
         for inf in injection_findings:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #             vulnerabilities.append(
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 #                 SecurityVulnerability(
                     type=SecurityIssueType.INJECTION_ATTEMPT,
                     severity="high","                    description=inf,

@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+""
+"""
+Unified Model Provider Registry.
+Simple, minimal provider registry used for tests and bootstrapping.
+""
+
+"""
+from typing import Dict, List, TypedDict
+
+
+class ModelSpec(TypedDict):
+    id: str
+    context_window: int
+    input_price: float
+    output_price: float
+    provider: str
+    literals: List[str]
+
+
+class ProviderRegistry:
+    ""
+Central repository for model provider identifiers and simple catalog.""
+OPENAI = "openai"
+    ANTHROPIC = "anthropic"
+    GOOGLE = "google"
+    META = "meta"
+    MISTRAL = "mistral"
+    GROQ = "groq"
+    TOGETHER = "together"
+    COHERE = "cohere"
+    DEEPSEEK = "deepseek"
+    QWEN = "qwen"
+    YI = "01-ai"
+    OLLAMA = "ollama"
+
+    @staticmethod
+    def get_all_models() -> Dict[str, ModelSpec]:
+        ""
+Return a small sample catalog of models for tests.""
+return {
+            "gpt-4-turbo": {
+                "id": "gpt-4-turbo-2024-04-09",
+                "context_window": 128000,
+                "input_price": 10.0,
+                "output_price": 30.0,
+                "provider": ProviderRegistry.OPENAI,
+                "literals": ["gpt4t", "turbo"],
+            },
+            "gemini-1.5-flash": {
+                "id": "gemini-1.5-flash-latest",
+                "context_window": 1000000,
+                "input_price": 0.35,
+                "output_price": 1.05,
+                "provider": ProviderRegistry.GOOGLE,
+                "literals": ["flash"],
+            },
+        }
+
+    @staticmethod
+    def get_provider_list() -> List[str]:
+        ""
+Return the list of known providers.""
+return [
+            ProviderRegistry.OPENAI,
+            ProviderRegistry.ANTHROPIC,
+            ProviderRegistry.GOOGLE,
+            ProviderRegistry.META,
+            ProviderRegistry.MISTRAL,
+            ProviderRegistry.GROQ,
+            ProviderRegistry.TOGETHER,
+        ]

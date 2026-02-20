@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,15 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Module: database_access_core
+"""
+"""
+Module: database_access_core
 Core logic for ODBC database operations.
 Implements database connection and query patterns from ADSyncDump-BOF.
 """
-
-
-
 try:
-    import ctypes
+
+"""
+import ctypes
 except ImportError:
     import ctypes
 
@@ -52,8 +54,9 @@ SQL_C_LONG = 4
 
 
 class DatabaseAccessCore:
-    """Core class for ODBC database operations."""
-    def __init__(self) -> None:
+"""
+Core class for ODBC database operations.""
+def __init__(self) -> None:
         # Lightweight shim: don't attempt to use system ODBC in tests
         self.connected = False
         self.env_handle = None
@@ -62,27 +65,31 @@ class DatabaseAccessCore:
         self.last_error = ""
 
     def connect(self, connection_string: str) -> bool:
-        """Connect to database using ODBC.
+"""
+Connect to database using ODBC.
 
         In the test shim we accept any connection string and report success.
-        """
-        self.connected = True
+"""
+self.connected = True
         return True
 
     def execute_query(self, query: str) -> Optional[List[Dict[str, Any]]]:
-        """Execute SQL query. Returns empty result in shim."""
-        if not self.connected:
+"""
+Execute SQL query. Returns empty result in shim.""
+if not self.connected:
             self.last_error = "Not connected to database"
             return None
         return []
 
     def disconnect(self) -> None:
-        """Disconnect from database (shim)."""
-        self.connected = False
+"""
+Disconnect from database (shim).""
+self.connected = False
 
     def get_last_error(self) -> str:
-        """Get last error message."""
-        return self.last_error
+"""
+Get last error message.""
+return self.last_error
 
     def _get_error_message(self) -> str:
         return "ODBC Error"

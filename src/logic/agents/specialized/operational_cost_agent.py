@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Operational Cost Agent - Estimate improvement cycle costs
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Operational cost agent module for estimating improvement cycle costs.
 """
-
 from typing import Any
 
 from src.core.base.common.base_utilities import as_tool
@@ -61,8 +64,8 @@ class OperationalCostAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             rate = self.pricing.get(model, 1.0)  # Default to 1.0/million if unknown
             cost = (count / 1_000_000) * rate
             total_usd += cost
-            details.append({"model": model, "tokens": count, "cost_usd": round(cost, 4)})"
-        return {"total_usd": round(total_usd, 2), "breakdown": details}"
+            details.append({"model": model, "tokens": count, "cost_usd": round(cost, 4)})
+        return {"total_usd": round(total_usd, 2), "breakdown": details}
     async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
 #         "Provides financial audit results." "       _ = context"        # Financial agent doesn't modify code directly, it audits.'        return []
 

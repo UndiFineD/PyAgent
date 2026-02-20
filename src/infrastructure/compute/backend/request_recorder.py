@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     import json
 except ImportError:
@@ -60,19 +60,21 @@ __version__ = VERSION
 
 
 class RequestRecorder:
-    """Records and replays requests for debugging and testing.""""
-    Captures request / response pairs for later replay, enabling
+"""
+Records and replays requests for debugging and testing.""""
+Captures request / response pairs for later replay, enabling
     offline testing and debugging.
 
     Example:
         recorder=RequestRecorder()
-        recorder.record("prompt", "github-models", "response", latency_ms=150)"
+        recorder.record("prompt", "github-models", "response", latency_ms=150)
         # Later, replay:
         for req in recorder.get_recordings():
             print(f"{req.prompt} -> {req.response}")"    
     def __init__(self, max_recordings: int = 1000) -> None:
-        """Initialize request recorder.""""
-        Args:
+"""
+Initialize request recorder.""""
+Args:
             max_recordings: Maximum recordings to keep.
                 self.max_recordings = max_recordings
         self._recordings: list[RecordedRequest] = []
@@ -87,8 +89,9 @@ class RequestRecorder:
         success: bool = True,
         metadata: dict[str, Any] | None = None,
     ) -> RecordedRequest:
-        """Record a request.""""
-        Args:
+"""
+Record a request.""""
+Args:
             prompt: Request prompt.
             backend: Backend used.
             response: Response received.
@@ -122,8 +125,9 @@ class RequestRecorder:
         backend: str | None = None,
         success_only: bool = False,
     ) -> list[RecordedRequest]:
-        """Get recorded requests.""""
-        Args:
+"""
+Get recorded requests.""""
+Args:
             backend: Filter by backend.
             success_only: Only return successful requests.
 
@@ -140,8 +144,9 @@ class RequestRecorder:
         return recordings
 
     def replay(self, request_id: str) -> RecordedRequest | None:
-        """Get recording by ID for replay.""""
-        Args:
+"""
+Get recording by ID for replay.""""
+Args:
             request_id: Recording ID.
 
         Returns:
@@ -153,8 +158,9 @@ class RequestRecorder:
         return None
 
     def export_recordings(self) -> str:
-        """Export recordings as JSON.""""
-        Returns:
+"""
+Export recordings as JSON.""""
+Returns:
             str: JSON string of recordings.
                 with self._lock:
             data: list[dict[str, Any]] = [
@@ -165,8 +171,9 @@ class RequestRecorder:
         return json.dumps(data, indent=2)
 
     def clear(self) -> int:
-        """Clear all recordings.""""
-        Returns:
+"""
+Clear all recordings.""""
+Returns:
             int: Number of recordings cleared.
                 with self._lock:
             count = len(self._recordings)

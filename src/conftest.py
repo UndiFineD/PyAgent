@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
-"""Pytest configuration for PyAgent tests."""
+"""
+"""
+Pytest configuration for PyAgent tests.""
 
-
+"""
 import types
 import tempfile
 import pytest
@@ -30,8 +32,9 @@ _repo_root = Path(__file__).resolve().parents[1]
 
 
 def _spec_from_file_location(name, location, *args, **kwargs):
-    """Custom importlib hook to rewrite Windows absolute paths in test modules to point to the correct location in the repo."""
-    try:
+"""
+Custom importlib hook to rewrite Windows absolute paths in test modules to point to the correct location in the repo.""
+try:
         loc = str(location)
         # Detect Windows absolute path like C:\\Dev\\PyAgent\\... or C:/Dev/PyAgent/...
         if re.match(r'^[A-Za-z]:[\\/]', loc):
@@ -52,7 +55,8 @@ importlib.util.spec_from_file_location = _spec_from_file_location
 
 
 def pytest_ignore_collect(collection_path, config):
-    """Ignore auto-generated tests that reference Windows absolute paths or external_candidates."""
+"""
+Ignore auto-generated tests that reference Windows absolute paths or external_candidates.""
     # Many auto-generated tests include hard-coded Windows-style paths (C:\\Dev\\...) which
     # cause collection errors on non-Windows CI runners. Skip these tests during collection.
     # This hook accepts either a `py.path.local` or a `pathlib.Path` to be compatible with
@@ -77,7 +81,8 @@ def pytest_ignore_collect(collection_path, config):
 
 @pytest.fixture
 def agent_module():
-    """Provides a mock module with Agent and CircuitBreaker classes."""
+"""
+Provides a mock module with Agent and CircuitBreaker classes.""
     # Lazy imports to avoid circular dependencies
     try:
         from .core.base.lifecycle.base_agent import BaseAgent
@@ -106,8 +111,9 @@ def agent_module():
 
 @pytest.fixture
 def agent_backend_module():
-    """Provides backend infrastructure classes."""
-    mod = types.SimpleNamespace()
+"""
+Provides backend infrastructure classes.""
+mod = types.SimpleNamespace()
     # Lazy imports to avoid circular dependencies
     try:
         try:
@@ -153,8 +159,9 @@ def agent_backend_module():
 
 @pytest.fixture
 def base_agent_module():
-    """Provides core base agent classes including BatchManagers."""
-    mod = types.SimpleNamespace()
+"""
+Provides core base agent classes including BatchManagers.""
+mod = types.SimpleNamespace()
     try:
         try:
             from .core.base.logic.managers.batch_managers import BatchRequest, RequestBatcher
@@ -170,8 +177,9 @@ def base_agent_module():
 
 @pytest.fixture
 def agent_sandbox():
-    """Provides a clean, temporary src/ and data/ environment for agent tests."""
-    with tempfile.TemporaryDirectory() as temp_dir:
+"""
+Provides a clean, temporary src/ and data/ environment for agent tests.""
+with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
         src_dir = temp_path / "src"
         data_dir = temp_path / "data"
@@ -185,9 +193,10 @@ def agent_sandbox():
 
 @pytest.fixture
 def transactional_test_env(agent_sandbox):
-    """Provides a transactional wrapper around the sandbox.
+"""
+Provides a transactional wrapper around the sandbox.
     Ensures that file modifications are tracked and can be rolled back on failure.
-    """
+    ""
     # Lazy import to avoid circular dependencies
     try:
         from .core.base.state.agent_state_manager import StateTransaction

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.crew_orchestrator import AgentRole, TaskStatus, AgentConfig, TaskConfig, TaskResult, CrewAgent, CrewOrchestrator

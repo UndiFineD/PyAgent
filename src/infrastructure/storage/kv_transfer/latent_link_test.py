@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.kv_transfer.latent_link import SynapticAdapter, LatentLinkManager, SynapticLink

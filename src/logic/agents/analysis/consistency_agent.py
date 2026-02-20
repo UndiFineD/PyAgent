@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,14 +16,17 @@ from __future__ import annotations
 
 
 """
+"""
 Consistency Agent - Check code consistency across the codebase
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 Instantiate ConsistencyAgent and call check(file_contents) where file_contents is a dict mapping file paths to their text content. Example:
 >>> checker = ConsistencyAgent()
->>> issues = checker.check({"src/foo.py": open("src/foo.py").read(), "src/bar.py": open("src/bar.py").read()})"
+>>> issues = checker.check({"src/foo.py": open("src/foo.py").read(), "src/bar.py": open("src/bar.py").read()})
 WHAT IT DOES:
 Detects mixed naming conventions for functions (simple snake_case vs camelCase detection) and mixed import styles (absolute vs relative) using regular-expression scans over provided file contents, and emits ConsistencyIssue objects summarizing sample occurrences and a recommended style.
 
@@ -64,9 +68,11 @@ class ConsistencyAgent:
 
     Example:
         >>> checker=ConsistencyAgent()
-#         >>> issues=checker.check(["file1.py", "file2.py"], {})"
+#         >>> issues=checker.check(["file1.py", "file2.py"], {})
     def __init__(self) -> None:
-""""Initialize the consistency checker.        self.issues: list[ConsistencyIssue] = []
+""""
+Initialize the consistency checker.        self.issues: list[ConsistencyIssue] = []
+
 
     def check(self, file_contents: dict[str, str]) -> list[ConsistencyIssue]:
         "Check for consistency issues across files."
@@ -112,3 +118,9 @@ class ConsistencyAgent:
                     issue_type="import_style","                    description="Mixed import styles (absolute and relative)","                    occurrences=absolute_imports[:3] + relative_imports[:3],
                     recommended_style="Prefer absolute imports (PEP 8)","                )
             )
+
+"""
+
+""
+
+"""

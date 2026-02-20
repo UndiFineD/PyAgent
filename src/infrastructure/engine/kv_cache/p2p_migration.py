@@ -12,11 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
+"""
 P2P Shard Migration Service (Phase 72).
 Enables zero-copy (simulated RDMA) migration of context shards between DP-ranks.
 Reduces CPU overhead during swarm rebalancing.
 
+"""
 try:
     import asyncio
 except ImportError:
@@ -61,7 +63,7 @@ class P2PMigrationEngine:
         Simulates an RDMA transfer by bypassing standard I/O waits.
                 shards = self.shard_manager.context_registry.get(context_id, [])
         if shard_index >= len(shards):
-            raise IndexError("Shard index out of range for migration.")"
+            raise IndexError("Shard index out of range for migration.")
         shard = shards[shard_index]
         source_rank = shard.rank_id
 
@@ -69,7 +71,7 @@ class P2PMigrationEngine:
             return  # Already there
 
         start_time = time.time()
-        logger.info(f"P2P Migration: Moving {shard.shard_id} from Rank {source_rank} to Rank {target_rank}...")"
+        logger.info(f"P2P Migration: Moving {shard.shard_id} from Rank {source_rank} to Rank {target_rank}...")
         # Simulate high-speed P2P transfer (e.g. 400Gbps NDR link)
         # For a 512-token block, this is nearly instantaneous
         await asyncio.sleep(0.05)
@@ -80,8 +82,10 @@ class P2PMigrationEngine:
         self.migration_history.append(
             {"shard_id": shard.shard_id, "from": source_rank, "to": target_rank, "duration_ms": duration}"        )
 
-        logger.info(f"P2P Migration: {shard.shard_id} successfully moved in {duration:.2f}ms.")"
+        logger.info(f"P2P Migration: {shard.shard_id} successfully moved in {duration:.2f}ms.")
     def get_migration_stats(self) -> Dict[str, Any]:
-        """Returns cumulative migration metrics.        history = self.migration_history
+"""
+Returns cumulative migration metrics.        history = self.migration_history
         count = max(1, len(history))
-        return {"total_migrations": len(history), "avg_duration_ms": sum(m["duration_ms"] for m in history) / count}"
+        return {"total_migrations": len(history), "avg_duration_ms": sum(m["duration_ms"] for m in history) / count}
+"""

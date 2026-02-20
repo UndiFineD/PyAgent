@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 ChatTemplateRegistry Facade.
 
+"""
 This module provides a backward-compatible interface to the modularized
 chat template registry implementation.
 

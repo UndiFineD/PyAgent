@@ -16,13 +16,16 @@ import xml.etree.ElementTree as ET
 from typing import Dict, List, Optional
 
 def get_interactive_elements(xml_content: str) -> List[Dict]:
-"""Parses Android Accessibility XML and returns a lean list of interactive elements.#     Calculates center coordinates (x, y) for every clickable element.
+"""
+"""
+Parses Android Accessibility XML and returns a lean list of interactive elements.#     Calculates center coordinates (x, y) for every clickable element.
     try:
         root = ET.fromstring(xml_content)
     except ET.ParseError:
-        print("⚠️ Error parsing XML. The screen might be loading.")"        return []
+        print("️ Error parsing XML. The screen might be loading.")"        return []
 
-    elements = []
+"""
+elements = []
 
     # Recursively find all nodes
     for node in root.iter():
@@ -66,3 +69,5 @@ def get_interactive_elements(xml_content: str) -> List[Dict]:
 
 
 
+
+"""

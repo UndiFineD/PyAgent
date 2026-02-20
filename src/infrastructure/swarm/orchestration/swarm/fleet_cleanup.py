@@ -13,12 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
+"""
 Fleet Decommissioning Service (Phase 80).
 Automatically prunes idle resources, low-performance agents, and expired context shards.
 Ensures the swarm doesn't suffer from resource exhaustion.'
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -48,7 +51,7 @@ class FleetDecommissioner:
     async def run_cleanup_audit(self) -> Dict[str, Any]:
                 Runs a full audit of all swarm resources and removes zombies.
                 now = time.time()
-        stats = {"agents_pruned": 0, "contexts_purged": 0}"
+        stats = {"agents_pruned": 0, "contexts_purged": 0}
         # 1. Prune Low-Performance Agents (failed evolution)
         # We don't delete them from the dict entirely to allow for 'hibernation','        # but we remove them from active routing.
         to_prune = []
@@ -62,7 +65,7 @@ class FleetDecommissioner:
                 self.gatekeeper.experts[agent_id].performance_score,
             )
             del self.gatekeeper.experts[agent_id]
-            stats["agents_pruned"] += 1"
+            stats["agents_pruned"] += 1
         # 2. Purge Idle Contexts
         contexts_to_delete = []
         for context_id, shards in self.shard_manager.context_registry.items():
@@ -74,5 +77,5 @@ class FleetDecommissioner:
 
         for context_id in contexts_to_delete:
             self.shard_manager.delete_context(context_id)
-            stats["contexts_purged"] += 1"
+            stats["contexts_purged"] += 1
         return stats

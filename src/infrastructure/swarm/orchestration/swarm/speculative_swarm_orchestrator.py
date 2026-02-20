@@ -15,9 +15,11 @@
 
 
 """
+"""
 Speculative Swarm Orchestrator (Phase 56).
 Enables cross-agent speculative execution where fast agents draft for accurate agents.
 
+"""
 try:
     import logging
 except ImportError:
@@ -59,13 +61,13 @@ class SpeculativeSwarmOrchestrator:
         self.similarity_service = EmbeddingSimilarityService()
         self.similarity_threshold = similarity_threshold
         self.active_speculations: Dict[str, SpeculativeProposal] = {}
-        self.stats = {"total_speculations": 0, "accepted_proposals": 0, "total_latency_saved": 0.0}"
+        self.stats = {"total_speculations": 0, "accepted_proposals": 0, "total_latency_saved": 0.0}
     async def execute_speculative_task(
         self, task: str, draft_agent_id: str, target_agent_id: str, context: Optional[CascadeContext] = None
     ) -> VerificationOutcome:
                 Executes a task using speculative swarm logic.
                 start_time = time.perf_counter()
-        self.stats["total_speculations"] += 1"
+        self.stats["total_speculations"] += 1
         # 1. Start the drafting agent (Fast tier)
         logger.info(f"SpeculativeSwarm: Drafting task via {draft_agent_id}")"        draft_task = self.fleet.delegate_task(
             task, draft_agent_id, context=context.next_level(draft_agent_id) if context else None
@@ -105,11 +107,12 @@ class SpeculativeSwarmOrchestrator:
         )
 
         if accepted:
-            self.stats["accepted_proposals"] += 1"
+            self.stats["accepted_proposals"] += 1
         return outcome
 
     def get_efficiency_metrics(self) -> Dict[str, Any]:
-        """Returns performance metrics for the speculative swarm.        acceptance_rate = (
+"""
+Returns performance metrics for the speculative swarm.        acceptance_rate = (
             self.stats["accepted_proposals"] / self.stats["total_speculations"]"            if self.stats["total_speculations"] > 0"            else 0
         )
         return {

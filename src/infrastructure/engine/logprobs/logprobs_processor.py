@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Logprobs Processing Facade.
 
+"""
 try:
     from .processor import (FlatLogprobs, LogprobEntry, LogprobFormat,
 except ImportError:

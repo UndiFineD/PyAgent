@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Lightweight WorkflowExecutor for test collection.
+"""
+"""
+Lightweight WorkflowExecutor for test collection.
 
+"""
 This simplified executor provides a minimal implementation that
 supports basic task execution and variable substitution for tests.
 """
-
 import logging
 import re
 from typing import Any, Dict, List

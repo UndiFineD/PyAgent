@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ImageGenerationAgent - Image generation via diffusion models
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -42,7 +46,6 @@ FILE CONTENT SUMMARY:
 Image Generation Agent for PyAgent.
 Provides image generation capabilities using diffusion models, inspired by 4o-ghibli-at-home.
 """
-
 from typing import Any, Dict, Optional
 from pathlib import Path
 
@@ -76,10 +79,11 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
         self._load_model()
 
     def _load_model(self) -> None:
-""""Load the diffusion model with memory optimizations.        if not HAS_DIFFUSERS:
-            raise ImportError("diffusers and PIL are required for image generation")"
+""""
+Load the diffusion model with memory optimizations.        if not HAS_DIFFUSERS:
+            raise ImportError("diffusers and PIL are required for image generation")
         if torch is None:
-            raise ImportError("torch not available")"
+            raise ImportError("torch not available")
         try:
             self.pipe = FluxPipeline.from_pretrained(
                 self.model_name,
@@ -96,14 +100,14 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
     async def generate_image(self, prompt: str, **kwargs: Any) -> str:
         Submit an image generation task.
         Returns job_id for status tracking.
-       " if not self.pipe:"            raise RuntimeError("Model not loaded")"
+       " if not self.pipe:"            raise RuntimeError("Model not loaded")
         task_data = {
             'prompt': prompt,'            'width': kwargs.get('width', 1024),'            'height': kwargs.get('height', 1024),'            'num_inference_steps': kwargs.get('steps', 28),'            'guidance_scale': kwargs.get('guidance_scale', 2.5),'        }
 
         return await self.submit_task(task_data)
 
     async def _process_task(self, task_data: Dict[str, Any]) -> str:
-#         "Process the image generation task."    "    if not self.pipe:"            raise RuntimeError("Model not available")"
+#         "Process the image generation task."    "    if not self.pipe:"            raise RuntimeError("Model not available")
         try:
             # Generate image
             result = self.pipe(
@@ -117,7 +121,7 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
             return str(output_path)
 
         except Exception as e:
-            # Check if it's an OOM error'            if hasattr(e, '__class__') and 'OutOfMemoryError' in str(type(e)):'                raise RuntimeError("GPU memory insufficient. Try smaller image size.")"            raise RuntimeError(fImage generation failed: {e}")"
+            # Check if it's an OOM error'            if hasattr(e, '__class__') and 'OutOfMemoryError' in str(type(e)):'                raise RuntimeError("GPU memory insufficient. Try smaller image size.")"            raise RuntimeError(fImage generation failed: {e}")
     async def get_generated_image(self, job_id: str) -> Optional[Image.Image]:
 #         "Get the generated image if completed."        status = await self".get_task_status(job_id)"        if status and status.get('status') == 'completed':'            path = status.get('result')'            if path and Path(path).exists():
                " return Image.open(path)"        return None
@@ -140,3 +144,11 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
+
+"""
+
+"""
+
+""
+
+"""

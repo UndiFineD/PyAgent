@@ -15,10 +15,12 @@
 
 
 """
+"""
 Teleportation engine.py module.
 # Phase 319: Multi-Cloud Teleportation (Teleportation Engine)
 """
 
+"""
 import base64
 import zlib
 from typing import Any, Dict
@@ -33,14 +35,16 @@ logger = StructuredLogger(__name__)
 
 
 class TeleportationEngine:
-    """Handles the serialization and deserialization of agent states for
-    cross-machine 'teleportation'.'
-    """
+"""
+Handles the serialization and deserialization of agent states for
+    cross-machine 'teleportation'.
+"""
 
     @staticmethod
     def capture_agent_state(agent: Any) -> bytes:
-        """Captures the complete state of an agent into a compressed binary blob."""
-        logger.info(f"Teleportation: Capturing state for agent {getattr(agent, 'name', 'Unknown')}")
+"""
+Captures the complete state of an agent into a compressed binary blob.""
+logger.info(f"Teleportation: Capturing state for agent {getattr(agent, 'name', 'Unknown')}")
         # Extract core state
         # In a real scenario, we'd use the persistence mixin or __getstate__'        
         state = {
@@ -64,8 +68,9 @@ class TeleportationEngine:
 
     @staticmethod
     def restore_agent_state(blob: bytes) -> Dict[str, Any]:
-        """Restores an agent state from a binary blob."""
-        try:
+"""
+Restores an agent state from a binary blob.""
+try:
             # Decompress
             decompressed = zlib.decompress(blob)
             # Unpack
@@ -79,10 +84,12 @@ class TeleportationEngine:
 
     @staticmethod
     def encode_for_transport(blob: bytes) -> str:
-        """Encodes binary blob as a base64 string for text-based protocols (JSON/HTTP)."""
-        return base64.b64encode(blob).decode("utf-8")
+"""
+Encodes binary blob as a base64 string for text-based protocols (JSON/HTTP).""
+return base64.b64encode(blob).decode("utf-8")
 
     @staticmethod
     def decode_from_transport(encoded: str) -> bytes:
-        """Decodes base64 string back to binary blob."""
-        return base64.b64decode(encoded)
+"""
+Decodes base64 string back to binary blob.""
+return base64.b64decode(encoded)

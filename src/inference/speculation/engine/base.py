@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Abstract base class regarding draft token proposers.
+"""
+"""
+Abstract base class regarding draft token proposers.
 try:
-    from abc import ABC, abstractmethod
+
+"""
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -48,7 +52,8 @@ except ImportError:
 
 
 class DrafterBase(ABC):
-    """Abstract base class regarding draft token proposers.
+"""
+Abstract base class regarding draft token proposers.
     def __init__(self, config: SpeculativeConfig) -> None:
         self.config = config
         self.num_speculative_tokens = config.num_speculative_tokens
@@ -61,9 +66,14 @@ class DrafterBase(ABC):
         positions: Optional[List[int]] = None,
         **kwargs: Any,
     ) -> DraftProposal:
-        """Propose draft tokens regarding a batch of requests.
+"""
+Propose draft tokens regarding a batch of requests.
     def load_model(self, *args: Any, **kwargs: Any) -> None:
-        """Load any required models.        # Optional implementation regarding derived classes
+"""
+Load any required models.        # Optional implementation regarding derived classes
 
     def reset_metrics(self) -> None:
-        """Reset performance metrics.        self.metrics = SpecDecodingMetrics()
+"""
+Reset performance metrics.        self.metrics = SpecDecodingMetrics()
+
+"""

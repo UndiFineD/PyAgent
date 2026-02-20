@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""ReportCache - Cache for report data.
+"""
+"""
+ReportCache - Cache for report data.
 
+"""
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 
@@ -49,7 +53,6 @@ WHAT IT SHOULD DO BETTER:
     - Consider concurrency safety (thread/process locks) and pluggable
       backends (memory, disk, redis) for scaling.
 """
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -67,8 +70,8 @@ __version__ = VERSION
 
 @dataclass
 class ReportCache:
-    """
-    Cache for report data.
+"""
+Cache for report data.
 
     Attributes:
         path: File path for the cached report.
@@ -76,8 +79,8 @@ class ReportCache:
         content: The cached report content.
         created_at: Timestamp when cache was created.
         ttl_seconds: Time-to-live for cache entries.
-    """
-    path: str = ""
+"""
+path: str = ""
     content_hash: str = ""
     content: str = ""
     created_at: float = 0.0

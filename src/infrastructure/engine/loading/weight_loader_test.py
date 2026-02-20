@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.loading.weight_loader import WeightFormat, WeightSpec, LoadStats, AtomicWriter, WeightLoader, SafetensorsLoader, MultiThreadWeightLoader, FastSafetensorsLoader, StreamingWeightLoader, GGUFLoader, atomic_writer, detect_weight_format, get_file_lock_path, compute_weight_hash_rust, validate_weight_shapes_rust, filter_shared_tensors

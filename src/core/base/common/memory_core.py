@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Unified Memory and Knowledge management core."""
+"""
+"""
+Unified Memory and Knowledge management core.""
+
+"""
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -32,10 +36,11 @@ logger = logging.getLogger("pyagent.memory")
 
 
 class MemoryCore:
-    """Centralized handler for Episodic, Long-term, and Sharded Knowledge.
+"""
+Centralized handler for Episodic, Long-term, and Sharded Knowledge.
     Standardizes utility scoring, filtering, and cross-agent indexing.
-    """
-    _instance: Optional["MemoryCore"] = None
+"""
+_instance: Optional["MemoryCore"] = None
     def __new__(cls) -> "MemoryCore":
         if cls._instance is None:
             cls._instance = super(MemoryCore, cls).__new__(cls)
@@ -69,10 +74,11 @@ class MemoryCore:
         metadata: dict[str, Any] | None = None,
         base_utility: float = 0.5,
     ) -> dict[str, Any]:
-        """Create a standardized episodic memory record.
+"""
+Create a standardized episodic memory record.
         Hot path for Rust acceleration (utility scoring).
-        """
-        if rc and hasattr(rc, "create_episode_struct"):
+"""
+if rc and hasattr(rc, "create_episode_struct"):
             try:
                 # pylint: disable=no-member
                 return rc.create_episode_struct(  # type: ignore
@@ -98,10 +104,11 @@ class MemoryCore:
     def rank_memories(
         self, memories: list[dict[str, Any]], limit: int = 5, min_utility: float = 0.0
     ) -> list[dict[str, Any]]:
-        """Rank memories by utility score and recency.
+"""
+Rank memories by utility score and recency.
         Hot path for Rust acceleration.
-        """
-        if rc and hasattr(rc, "rank_memories_rust"):
+"""
+if rc and hasattr(rc, "rank_memories_rust"):
             try:
                 # pylint: disable=no-member
                 return rc.rank_memories_rust(memories, limit, min_utility)  # type: ignore
@@ -115,8 +122,9 @@ class MemoryCore:
 
 
     def retrieve_memory_graph(self, root_id: str, depth: int = 2) -> list[dict[str, str]]:
-        """Rust-accelerated graph traversal for complex memory retrieval."""
-        if rc and hasattr(rc, "retrieve_memory_graph_rust"):
+"""
+Rust-accelerated graph traversal for complex memory retrieval.""
+if rc and hasattr(rc, "retrieve_memory_graph_rust"):
             try:
                 # pylint: disable=no-member
                 return rc.retrieve_memory_graph_rust(root_id, depth)  # type: ignore
@@ -129,8 +137,9 @@ class MemoryCore:
     def store_knowledge(
         self, agent_id: str, key: str, content: Any, mode: str = "structured", metadata: Optional[Dict[str, Any]] = None
     ) -> bool:
-        """Store knowledge based on mode."""
-        if mode == "semantic":
+"""
+Store knowledge based on mode.""
+if mode == "semantic":
             return self._store_semantic(agent_id, key, content, metadata)
 
         # Structured storage
@@ -145,8 +154,9 @@ class MemoryCore:
 
 
     def _store_semantic(self, agent_id: str, key: str, content: Any, metadata: Optional[Dict[str, Any]]) -> bool:
-        """Internal helper for semantic (vector) storage."""
-        try:
+"""
+Internal helper for semantic (vector) storage.""
+try:
             import chromadb  # pylint: disable=import-outside-toplevel
 
             client = chromadb.PersistentClient(path=str(self.base_path / "vector_db"))
@@ -164,8 +174,9 @@ class MemoryCore:
     def retrieve_knowledge(
         self, agent_id: str, query: str, mode: str = "structured", limit: int = 5
     ) -> List[Dict[str, Any]]:
-        """Retrieve knowledge based on mode and query."""
-        if mode == "semantic":
+"""
+Retrieve knowledge based on mode and query.""
+if mode == "semantic":
             return self._retrieve_semantic(agent_id, query, limit)
 
         # Python Fallback / Structured Logic
@@ -184,8 +195,9 @@ class MemoryCore:
 
 
     def _retrieve_semantic(self, agent_id: str, query: str, limit: int) -> List[Dict[str, Any]]:
-        """Internal helper for semantic retrieval."""
-        if rc and hasattr(rc, "semantic_search"):
+"""
+Internal helper for semantic retrieval.""
+if rc and hasattr(rc, "semantic_search"):
             try:
                 # pylint: disable=no-member
                 return rc.semantic_search(agent_id, query, limit)  # type: ignore
@@ -214,8 +226,9 @@ class MemoryCore:
 
 
     def delete_knowledge(self, agent_id: str, key: str, mode: str = "structured") -> bool:
-        """Standardized deletion of knowledge."""
-        if mode == "semantic":
+"""
+Standardized deletion of knowledge.""
+if mode == "semantic":
             try:
                 import chromadb  # pylint: disable=import-outside-toplevel
 
@@ -238,16 +251,18 @@ class MemoryCore:
 
 
     def _get_agent_path(self, agent_id: str, mode: str) -> Path:
-        """Helper to get partitioned storage path."""
-        path = self.base_path / agent_id / mode
+"""
+Helper to get partitioned storage path.""
+path = self.base_path / agent_id / mode
         self._fs.ensure_directory(path)
         return path
 
 
     def update_index(self, agent_id: str, tags: List[str]) -> bool:
-        """Update the global knowledge index with agent metadata.
+"""
+Update the global knowledge index with agent metadata.
         This file can be very large (>50MB), so we use atomic write.
-        """
-        index = self._storage.load_json(self.index_path, default={})
+"""
+index = self._storage.load_json(self.index_path, default={})
         index[agent_id] = {"tags": tags, "last_updated": datetime.now().isoformat()}
         return self._fs.atomic_write(self.index_path, self._storage.to_json(index))

@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Mlfq.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -25,7 +28,7 @@ from typing import Dict, Iterator, List, TypeVar
 from src.infrastructure.engine.request_queue.base import RequestQueue
 from src.infrastructure.engine.request_queue.models import QueuedRequest
 
-T = TypeVar("T", bound=QueuedRequest)"
+T = TypeVar("T", bound=QueuedRequest)
 
 
 class MLFQueue(RequestQueue):
@@ -48,13 +51,15 @@ class MLFQueue(RequestQueue):
         self._last_aging = time.time()
 
     def add(self, request: T) -> None:
-        """Add request to highest priority level.        self._levels[0].append(request)
+"""
+Add request to highest priority level.        self._levels[0].append(request)
         self._request_levels[request.request_id] = 0
         self._request_runtime[request.request_id] = 0.0
         self._total_requests += 1
 
     def pop(self) -> T:
-        """Pop from highest non-empty priority level.        self._maybe_age_requests()
+"""
+Pop from highest non-empty priority level.        self._maybe_age_requests()
 
         for queue in self._levels:
             if queue:
@@ -62,19 +67,22 @@ class MLFQueue(RequestQueue):
                 self._total_requests -= 1
                 return request
 
-        raise IndexError("pop from empty MLFQ")"
+        raise IndexError("pop from empty MLFQ")
     def peek(self) -> T:
-        """Peek at highest priority request.        for queue in self._levels:
+"""
+Peek at highest priority request.        for queue in self._levels:
             if queue:
                 return queue[0]
-        raise IndexError("peek from empty MLFQ")"
+        raise IndexError("peek from empty MLFQ")
     def prepend(self, request: T) -> None:
-        """Prepend to appropriate level.        level = self._request_levels.get(request.request_id, 0)
+"""
+Prepend to appropriate level.        level = self._request_levels.get(request.request_id, 0)
         self._levels[level].appendleft(request)
         self._total_requests += 1
 
     def remove(self, value: T) -> bool:
-        """Remove specific request.        level = self._request_levels.get(value.request_id)
+"""
+Remove specific request.        level = self._request_levels.get(value.request_id)
         if level is not None:
             try:
                 self._levels[level].remove(value)
@@ -87,7 +95,8 @@ class MLFQueue(RequestQueue):
         return False
 
     def demote(self, request_id: str, runtime_increment: float) -> None:
-        """Demote request to lower priority after using quantum.        if request_id not in self._request_levels:
+"""
+Demote request to lower priority after using quantum.        if request_id not in self._request_levels:
             return
 
         self._request_runtime[request_id] += runtime_increment
@@ -99,7 +108,8 @@ class MLFQueue(RequestQueue):
             self._request_runtime[request_id] = 0.0
 
     def _maybe_age_requests(self) -> None:
-        """Age requests to prevent starvation.        now = time.time()
+"""
+Age requests to prevent starvation.        now = time.time()
         if now - self._last_aging < self.aging_interval:
             return
 
@@ -120,3 +130,5 @@ class MLFQueue(RequestQueue):
     def __iter__(self) -> Iterator[T]:
         for queue in self._levels:
             yield from queue
+
+"""

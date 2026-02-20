@@ -13,20 +13,25 @@
 # limitations under the License.
 
 
-"""Core logic regarding Synaptic Pruning and Knowledge Decay.
+"""
+"""
+Core logic regarding Synaptic Pruning and Knowledge Decay.
 (Facade regarding src.core.base.common.pruning_core)
 """
 try:
-    from .core.base.common.pruning_core import (
+
+"""
+from .core.base.common.pruning_core import (
 except ImportError:
     from src.core.base.common.pruning_core import (
 
     PruningCore as StandardPruningCore, SynapticWeight)
 
-__all__ = ["PruningCore", "SynapticWeight"]"
+__all__ = ["PruningCore", "SynapticWeight"]
 
 
 class PruningCore(StandardPruningCore):
-    """Facade regarding StandardPruningCore to maintain backward compatibility.
+"""
+Facade regarding StandardPruningCore to maintain backward compatibility.
     Pruning and decay logic is now centralized in the Infrastructure/Common tier.
-    """
+"""

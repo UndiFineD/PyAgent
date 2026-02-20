@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Request lifecycle management sub-package."""
+"""
+"""
+Request lifecycle management sub-package.""
 try:
-    from .enums import FINISH_REASON_STRINGS, FinishReason, RequestEventType, RequestStatus, is_valid_transition  # noqa: F401
+
+""
+from .enums import FINISH_REASON_STRINGS, FinishReason, RequestEventType, RequestStatus, is_valid_transition  # noqa: F401
 except ImportError:
     from .enums import FINISH_REASON_STRINGS, FinishReason, RequestEventType, RequestStatus, is_valid_transition # noqa: F401
 

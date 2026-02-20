@@ -14,7 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Data structures for multimodal caching.
+"""
+"""
+Data structures for multimodal caching.
+
+"""
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict
@@ -24,7 +28,8 @@ from .enums import HashAlgorithm, MediaType
 
 @dataclass(frozen=True)
 class MediaHash:
-    """Content hash for media items.
+"""
+Content hash for media items.
     value: str
     algorithm: HashAlgorithm
     media_type: MediaType
@@ -41,7 +46,8 @@ class MediaHash:
 
 @dataclass
 class CacheEntry:
-    """Entry in the multimodal cache.
+"""
+Entry in the multimodal cache.
     key: MediaHash
     data: Any  # Cached data (embeddings, processed tensors)
     media_type: MediaType
@@ -52,13 +58,15 @@ class CacheEntry:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def touch(self) -> None:
-        """Update access time and count.        self.last_accessed = time.time()
+"""
+Update access time and count.        self.last_accessed = time.time()
         self.access_count += 1
 
 
 @dataclass
 class CacheStats:
-    """Statistics for cache performance.
+"""
+Statistics for cache performance.
     hits: int = 0
     misses: int = 0
     evictions: int = 0
@@ -68,17 +76,22 @@ class CacheStats:
 
     @property
     def hit_rate(self) -> float:
-        """Calculate the cache hit rate (0.0 to 1.0).        total = self.hits + self.misses
+"""
+Calculate the cache hit rate (0.0 to 1.0).        total = self.hits + self.misses
         return self.hits / total if total > 0 else 0.0
 
 
 @dataclass
 class TODO PlaceholderRange:
-    """Range of tokens for multimodal TODO Placeholder.
+"""
+Range of tokens for multimodal TODO Placeholder.
     start: int
     end: int
     modality: MediaType
-    content_hash: str = """
+    content_hash: str = ""
     @property
     def length(self) -> int:
-        """Calculate the length of the tokens range.        return self.end - self.start
+"""
+Calculate the length of the tokens range.        return self.end - self.start
+
+""

@@ -13,8 +13,10 @@
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
+"""
 ReasoningEngine: Wrapper for modular reasoning and tool call components.
 
+"""
 try:
     from .data_classes import (ParseResult, ReasoningToken, ThinkingBlock,
 except ImportError:

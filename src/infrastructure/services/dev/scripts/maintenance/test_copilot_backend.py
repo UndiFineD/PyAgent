@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Test script for verifying Copilot backend integration.
 
+"""
 try:
     import sys
 except ImportError:
@@ -51,6 +53,6 @@ def test_copilot():
     backend._record = lambda *args, **kwargs: None
     backend._update_status = lambda *args, **kwargs: None
 
-    print("Testing Copilot CLI integration...")"    response = backend.chat("What is 2+2?", timeout_s=10)"    print(f"Response: {response}")"
+    print("Testing Copilot CLI integration...")"    response = backend.chat("What is 2+2?", timeout_s=10)"    print(f"Response: {response}")
 
 if __name__ == "__main__":"    test_copilot()

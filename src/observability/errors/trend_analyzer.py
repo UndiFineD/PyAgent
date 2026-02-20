@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 TrendAnalyzer - Error trend analysis and prediction
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -43,7 +47,6 @@ WHAT IT SHOULD DO BETTER:
       consider statistical or ML-based forecasting for better long-range
       predictions.
 """
-
 try:
     from datetime import datetime
 except ImportError:
@@ -71,25 +74,28 @@ __version__ = VERSION
 
 
 class TrendAnalyzer:
-    """Analyzes error trends over time.
+"""
+Analyzes error trends over time.
     Provides trend analysis with predictions based on
     historical error data.
 
     Attributes:
         data_points: Map of metric names to TrendData.
-    """
-    def __init__(self) -> None:
-        """Initialize the trend analyzer."""
-        self.data_points: dict[str, TrendData] = {}
+"""
+def __init__(self) -> None:
+"""
+Initialize the trend analyzer.""
+self.data_points: dict[str, TrendData] = {}
 
 
     def record(self, metric: str, value: float) -> None:
-        """Record a data point.
+"""
+Record a data point.
         Args:
             metric: Metric name.
             value: Value to record.
-        """
-        if metric not in self.data_points:
+"""
+if metric not in self.data_points:
             self.data_points[metric] = TrendData(metric_name=metric)
         data = self.data_points[metric]
         data.values.append(value)
@@ -97,15 +103,16 @@ class TrendAnalyzer:
 
 
     def analyze(self, metric: str) -> TrendData:
-        """Analyze trend for a metric.
+"""
+Analyze trend for a metric.
         
         Args:
             metric: Metric name.
 
         Returns:
             TrendData with direction and prediction.
-        """
-        if metric not in self.data_points:
+"""
+if metric not in self.data_points:
             return TrendData(metric_name=metric)
         data = self.data_points[metric]
         if len(data.values) < 2:
@@ -126,8 +133,8 @@ class TrendAnalyzer:
 
 
     def predict(self, metric: str, periods: int = 1) -> list[float]:
-        """
-        Predict future values.
+"""
+Predict future values.
 
         Args:
             metric: Metric name.
@@ -135,8 +142,8 @@ class TrendAnalyzer:
 
         Returns:
             List of predicted values.
-        """
-        data = self.analyze(metric)
+        ""
+data = self.analyze(metric)
         if not data.values:
             return []
         predictions: list[float] = []

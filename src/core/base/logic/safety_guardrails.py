@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""Guardrails and Safety Patterns for Agent Systems
+"""
+"""
+Guardrails and Safety Patterns for Agent Systems
 
+"""
 This module implements comprehensive safety mechanisms for multi-agent systems including:
 - Input validation and moderation
 - Output validation and filtering
@@ -39,26 +42,34 @@ from pydantic import BaseModel, Field, ValidationError, field_validator
 
 logger = logging.getLogger(__name__)
 
-T = TypeVar('T')'
+T = TypeVar('T')
 
 
 class ValidationResult(BaseModel):
-    """Result of a validation operation."""is_valid: bool
+"""
+Result of a validation operation.""
+is_valid: bool
     message: str
     details: Optional[Dict[str, Any]] = None
-    severity: str = Field(default="low", description="Validation severity level")"
+    severity: str = Field(default="low", description="Validation severity level")
 
 
 class SafetyLevel(Enum):
-    """Safety enforcement levels."""PERMISSIVE = "permissive""    MODERATE = "moderate""    STRICT = "strict""    PARANOID = "paranoid""
+"""
+Safety enforcement levels.""
+PERMISSIVE = "permissive""    MODERATE = "moderate""    STRICT = "strict""    PARANOID = "paranoid""
 
 
 class ContentCategory(Enum):
-    """Content categories for filtering."""VIOLENCE = "violence""    HATE_SPEECH = "hate_speech""    ADULT_CONTENT = "adult_content""    SPAM = "spam""    MALICIOUS_CODE = "malicious_code""    SENSITIVE_DATA = "sensitive_data""
+"""
+Content categories for filtering.""
+VIOLENCE = "violence""    HATE_SPEECH = "hate_speech""    ADULT_CONTENT = "adult_content""    SPAM = "spam""    MALICIOUS_CODE = "malicious_code""    SENSITIVE_DATA = "sensitive_data""
 
 @dataclass
 class SafetyConfig:
-    """Configuration for safety mechanisms."""level: SafetyLevel = SafetyLevel.MODERATE
+"""
+Configuration for safety mechanisms.""
+level: SafetyLevel = SafetyLevel.MODERATE
     blocked_categories: List[ContentCategory] = field(default_factory=lambda: [
         ContentCategory.VIOLENCE,
         ContentCategory.HATE_SPEECH,
@@ -74,13 +85,16 @@ class SafetyConfig:
 
 
 class InputValidator:
-    """Validates and moderates input content."""
-    def __init__(self, config: SafetyConfig):
+"""
+Validates and moderates input content.""
+def __init__(self, config: SafetyConfig):
         self.config = config
         self._patterns = self._build_patterns()
 
     def _build_patterns(self) -> Dict[ContentCategory, List[str]]:
-        """Build regex patterns for content filtering."""return {
+"""
+Build regex patterns for content filtering.""
+return {
             ContentCategory.VIOLENCE: [
                 r'\\b(kill|murder|attack|assault|harm|injure)\\b','                r'\\b(weapon|gun|knife|bomb|explosive)\\b','                r'\\b(violent|brutal|savage)\\b''            ],
             ContentCategory.HATE_SPEECH: [
@@ -96,7 +110,8 @@ class InputValidator:
         }
 
     async def validate_input(self, content: str, context: Optional[Dict[str, Any]] = None) -> ValidationResult:
-        """Validate input content against safety rules."""
+"""
+Validate input content against safety rules.""
 try:
             # Length check
             if len(content) > self.config.max_input_length:
@@ -130,7 +145,8 @@ try:
                 message=f"Validation error: {str(e)}","                severity="high""            )
 
     async def _run_filter(self, filter_func: Callable[[str], ValidationResult], content: str) -> ValidationResult:
-        """Run a custom filter function."""
+"""
+Run a custom filter function.""
 try:
             # Run filter in thread pool if it's synchronous'            if asyncio.iscoroutinefunction(filter_func):
                 return await filter_func(content)
@@ -145,8 +161,9 @@ try:
 
 
 class OutputValidator:
-    """Validates and filters output content."""
-    def __init__(self, config: SafetyConfig):
+"""
+Validates and filters output content.""
+def __init__(self, config: SafetyConfig):
         self.config = config
 
     async def validate_output(
@@ -155,7 +172,8 @@ class OutputValidator:
         expected_schema: Optional[BaseModel] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> ValidationResult:
-        """Validate output content."""
+"""
+Validate output content.""
 try:
             # Convert to string for basic checks
             content_str = str(content)
@@ -187,7 +205,8 @@ try:
                 message=f"Validation error: {str(e)}","                severity="high""            )
 
     async def _validate_schema(self, content: Any, schema: BaseModel) -> ValidationResult:
-        """Validate content against a Pydantic schema."""
+"""
+Validate content against a Pydantic schema.""
 try:
             if isinstance(content, dict):
                 validated = schema(**content)
@@ -209,7 +228,8 @@ try:
                 message=f"Schema validation failed: {str(e)}","                severity="medium","                details={"error": str(e)}"            )
 
     async def _check_output_safety(self, content: str) -> ValidationResult:
-        """Check output content for safety issues."""
+"""
+Check output content for safety issues.""
 # Basic checks for potentially harmful content
         dangerous_patterns = [
             r'\\b(rm -rf|del|format|destroy)\\b','            r'\\b(password|secret|token)\\s*[:=]\\s*\\S+\\b','            r'\\b(malware|virus|exploit)\\b''        ]
@@ -220,18 +240,21 @@ try:
                     is_valid=False,
                     message="Potentially harmful content detected","                    severity="high","                    details={"pattern": pattern}"                )
 
-        return ValidationResult(is_valid=True, message="Safety check passed")"
+        return ValidationResult(is_valid=True, message="Safety check passed")
 
 
 class RateLimiter:
-    """Rate limiting for agent requests."""
-    def __init__(self, requests_per_window: int = 100, window_seconds: int = 60):
+"""
+Rate limiting for agent requests.""
+def __init__(self, requests_per_window: int = 100, window_seconds: int = 60):
         self.requests_per_window = requests_per_window
         self.window_seconds = window_seconds
         self.requests: Dict[str, List[datetime]] = {}
 
     async def check_rate_limit(self, identifier: str) -> ValidationResult:
-        """Check if request is within rate limits."""now = datetime.now()
+"""
+Check if request is within rate limits.""
+now = datetime.now()
         window_start = now - timedelta(seconds=self.window_seconds)
 
         # Clean old requests
@@ -261,8 +284,9 @@ class RateLimiter:
 
 
 class Guardrail:
-    """Comprehensive guardrail system combining multiple safety mechanisms."""
-    def __init__(self, config: Optional[SafetyConfig] = None):
+"""
+Comprehensive guardrail system combining multiple safety mechanisms.""
+def __init__(self, config: Optional[SafetyConfig] = None):
         self.config = config or SafetyConfig()
         self.input_validator = InputValidator(self.config)
         self.output_validator = OutputValidator(self.config)
@@ -277,7 +301,8 @@ class Guardrail:
         user_id: Optional[str] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> ValidationResult:
-        """Validate an incoming request."""
+"""
+Validate an incoming request.""
 # Rate limiting
         if user_id:
             rate_result = await self.rate_limiter.check_rate_limit(user_id)
@@ -301,7 +326,9 @@ class Guardrail:
         expected_schema: Optional[BaseModel] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> ValidationResult:
-        """Validate an outgoing response."""return await self.output_validator.validate_output(output_content, expected_schema, context)
+"""
+Validate an outgoing response.""
+return await self.output_validator.validate_output(output_content, expected_schema, context)
 
     def create_guarded_function(
         self,
@@ -309,7 +336,8 @@ class Guardrail:
         input_param: str = "input","        output_schema: Optional[BaseModel] = None,
         user_id_param: Optional[str] = None
     ) -> Callable[..., T]:
-        """Create a guarded version of a function with automatic validation."""
+"""
+Create a guarded version of a function with automatic validation.""
         @wraps(func)
         async def guarded_function(*args, **kwargs) -> T:
             # Extract parameters - try kwargs first, then positional args
@@ -326,7 +354,7 @@ class Guardrail:
             if input_content is not None:
                 request_validation = await self.validate_request(input_content, user_id)
                 if not request_validation.is_valid:
-                    raise ValueError(f"Request validation failed: {request_validation.message}")"
+                    raise ValueError(f"Request validation failed: {request_validation.message}")
             # Execute function
             try:
                 result = await func(*args, **kwargs)
@@ -335,7 +363,7 @@ class Guardrail:
                 if output_schema:
                     response_validation = await self.validate_response(result, output_schema)
                     if not response_validation.is_valid:
-                        raise ValueError(f"Response validation failed: {response_validation.message}")"
+                        raise ValueError(f"Response validation failed: {response_validation.message}")
                 return result
 
             except Exception as e:
@@ -346,7 +374,8 @@ class Guardrail:
 
 
 class ResilienceDecorator:
-    """Decorator for adding resilience patterns to functions."""
+"""
+Decorator for adding resilience patterns to functions.""
     @staticmethod
     def retry_with_exponential_backoff(
         max_retries: int = 3,
@@ -354,7 +383,9 @@ class ResilienceDecorator:
         backoff_factor: float = 2.0,
         max_delay: float = 60.0
     ):
-        """Decorator that retries a function with exponential backoff."""def decorator(func):
+"""
+Decorator that retries a function with exponential backoff.""
+def decorator(func):
             @wraps(func)
             async def wrapper(*args, **kwargs):
                 delay = initial_delay
@@ -383,10 +414,12 @@ class ResilienceDecorator:
         recovery_timeout: float = 60.0,
         expected_exception: Exception = Exception
     ):
-        """Circuit breaker decorator."""def decorator(func):
+"""
+Circuit breaker decorator.""
+def decorator(func):
             failures = 0
             last_failure_time = None
-            state = "closed"  # closed, open, half-open"
+            state = "closed"  # closed, open, half-open
             @wraps(func)
             async def wrapper(*args, **kwargs):
                 nonlocal failures, last_failure_time, state
@@ -403,7 +436,7 @@ class ResilienceDecorator:
 
                     # Success - reset failures and close circuit
                     if state == "half-open":"                        state = "closed""                        failures = 0
-                        logger.info(f"Circuit breaker for {func.__name__} closed after successful call")"
+                        logger.info(f"Circuit breaker for {func.__name__} closed after successful call")
                     return result
 
                 except expected_exception as e:
@@ -422,7 +455,9 @@ class ResilienceDecorator:
 
 
 class ResearchSummary(BaseModel):
-    """Schema for research summary outputs."""title: str = Field(..., description="A concise title for the research summary")"    key_findings: List[str] = Field(..., description="A list of 3-5 key findings")"    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")"
+"""
+Schema for research summary outputs.""
+title: str = Field(..., description="A concise title for the research summary")"    key_findings: List[str] = Field(..., description="A list of 3-5 key findings")"    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")
     @field_validator('title')'    @classmethod
     def validate_title(cls, v: str) -> str:
         if len(v.strip()) < 5:
@@ -437,17 +472,23 @@ class ResearchSummary(BaseModel):
 
 
 class CodeReviewResult(BaseModel):
-    """Schema for code review outputs."""overall_score: int = Field(..., ge=1, le=10, description="Overall code quality score")"    issues: List[Dict[str, str]] = Field(..., description="List of identified issues")"    recommendations: List[str] = Field(..., description="Improvement recommendations")"    security_concerns: List[str] = Field(default_factory=list, description="Security-related concerns")"
+"""
+Schema for code review outputs.""
+overall_score: int = Field(..., ge=1, le=10, description="Overall code quality score")"    issues: List[Dict[str, str]] = Field(..., description="List of identified issues")"    recommendations: List[str] = Field(..., description="Improvement recommendations")"    security_concerns: List[str] = Field(default_factory=list, description="Security-related concerns")"
 
 # Convenience functions
 
 def create_default_guardrail(level: SafetyLevel = SafetyLevel.MODERATE) -> Guardrail:
-    """Create a guardrail with default configuration."""config = SafetyConfig(level=level)
+"""
+Create a guardrail with default configuration.""
+config = SafetyConfig(level=level)
     return Guardrail(config)
 
 
 def validate_with_schema(schema: BaseModel):
-    """Decorator to validate function output against a schema."""def decorator(func):
+    ""
+Decorator to validate function output against a schema.""
+def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
             result = await func(*args, **kwargs)
@@ -461,6 +502,6 @@ def validate_with_schema(schema: BaseModel):
                     validated = schema(result)
                 return validated
             except ValidationError as e:
-                raise ValueError(f"Output validation failed: {e}")"
+                raise ValueError(f"Output validation failed: {e}")
         return wrapper
     return decorator

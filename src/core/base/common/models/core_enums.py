@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Enum definitions for PyAgent models."""
-
+"""
+"""
+Enum definitions for PyAgent models.""
 try:
-    from enum import Enum, auto
+
+"""
+from enum import Enum, auto
 except ImportError:
     from enum import Enum, auto
 
@@ -25,8 +29,9 @@ except ImportError:
 
 
 class AgentState(Enum):
-    """Agent lifecycle states."""
-    INITIALIZED = "initialized"
+"""
+Agent lifecycle states.""
+INITIALIZED = "initialized"
     IDLE = "idle"
     READING = "reading"
     PROCESSING = "processing"
@@ -38,8 +43,9 @@ class AgentState(Enum):
 
 
 class ResponseQuality(Enum):
-    """AI response quality levels."""
-    EXCELLENT = 5
+"""
+AI response quality levels.""
+EXCELLENT = 5
 
     GOOD = 4
     ACCEPTABLE = 3
@@ -51,8 +57,9 @@ class ResponseQuality(Enum):
 
 
 class FailureClassification(Enum):
-    """Phase 336: Structured failure taxonomy for collective intelligence."""
-    AI_ERROR = "ai_error"
+"""
+Phase 336: Structured failure taxonomy for collective intelligence.""
+AI_ERROR = "ai_error"
     NETWORK_FAILURE = "network_failure"
     STATE_CORRUPTION = "state_corruption"
     RESOURCE_EXHAUSTION = "resource_exhaustion"
@@ -65,8 +72,9 @@ class FailureClassification(Enum):
 
 
 class OptimizationMetric(Enum):
-    """Metrics for strategy optimization."""
-    LATENCY = "latency"
+"""
+Metrics for strategy optimization.""
+LATENCY = "latency"
     THROUGHPUT = "throughput"
     ACCURACY = "accuracy"
     PRECISION = "precision"
@@ -77,8 +85,9 @@ class OptimizationMetric(Enum):
 
 
 class EventType(Enum):
-    """Agent event types for hooks."""
-    PRE_READ = "pre_read"
+"""
+Agent event types for hooks.""
+PRE_READ = "pre_read"
     POST_READ = "post_read"
     PRE_IMPROVE = "pre_improve"
     POST_IMPROVE = "post_improve"
@@ -88,8 +97,9 @@ class EventType(Enum):
 
 
 class AuthMethod(Enum):
-    """Authentication methods for backends."""
-    NONE = "none"
+"""
+Authentication methods for backends.""
+NONE = "none"
     API_KEY = "api_key"
     TOKEN = "token"
     BEARER_TOKEN = "bearer_token"
@@ -99,8 +109,9 @@ class AuthMethod(Enum):
 
 
 class SerializationFormat(Enum):
-    """Custom serialization formats."""
-    JSON = "json"
+"""
+Custom serialization formats.""
+JSON = "json"
     YAML = "yaml"
     MSGPACK = "msgpack"
     PICKLE = "pickle"
@@ -109,8 +120,9 @@ class SerializationFormat(Enum):
 
 
 class FilePriority(Enum):
-    """File priority levels for request prioritization."""
-    CRITICAL = 5
+"""
+File priority levels for request prioritization.""
+CRITICAL = 5
     HIGH = 4
     NORMAL = 3
     LOW = 2
@@ -119,8 +131,9 @@ class FilePriority(Enum):
 
 
 class InputType(Enum):
-    """Input types for multimodal support."""
-    TEXT = "text"
+"""
+Input types for multimodal support.""
+TEXT = "text"
     IMAGE = "image"
     DIAGRAM = "diagram"
     CODE = "code"
@@ -169,8 +182,9 @@ class InputType(Enum):
 
 
 class AgentType(Enum):
-    """Agent type classifications."""
-    GENERAL = "general"
+"""
+Agent type classifications.""
+GENERAL = "general"
     CODE_REVIEW = "code_review"
     DOCUMENTATION = "documentation"
     TESTING = "testing"
@@ -178,22 +192,25 @@ class AgentType(Enum):
 
 
 class MessageRole(Enum):
-    """Roles for conversation messages."""
-    USER = "user"
+"""
+Roles for conversation messages.""
+USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
 
 
 class AgentEvent(Enum):
-    """Agent event types."""
-    START = "start"
+"""
+Agent event types.""
+START = "start"
     COMPLETE = "complete"
     ERROR = "error"
 
 
 class AgentExecutionState(Enum):
-    """Execution state for an agent run."""
-    PENDING = auto()
+"""
+Execution state for an agent run.""
+PENDING = auto()
     RUNNING = auto()
     COMPLETED = auto()
     FAILED = auto()
@@ -203,8 +220,9 @@ class AgentExecutionState(Enum):
 
 
 class AgentPriority(Enum):
-    """Priority level for agent execution."""
-    CRITICAL = 1
+"""
+Priority level for agent execution.""
+CRITICAL = 1
     HIGH = 2
     NORMAL = 3
     LOW = 4
@@ -213,8 +231,9 @@ class AgentPriority(Enum):
 
 
 class ConfigFormat(Enum):
-    """Configuration file format."""
-    YAML = auto()
+"""
+Configuration file format.""
+YAML = auto()
     TOML = auto()
     JSON = auto()
     INI = auto()
@@ -222,8 +241,9 @@ class ConfigFormat(Enum):
 
 
 class DiffOutputFormat(Enum):
-    """Output format for diff preview."""
-    UNIFIED = auto()  # Unified diff format
+"""
+Output format for diff preview.""
+UNIFIED = auto()  # Unified diff format
     CONTEXT = auto()  # Context diff format
     SIDE_BY_SIDE = auto()  # Side by side diff
     HTML = auto()  # HTML formatted diff
@@ -231,8 +251,9 @@ class DiffOutputFormat(Enum):
 
 
 class HealthStatus(Enum):
-    """Health status for components."""
-    HEALTHY = auto()
+"""
+Health status for components.""
+HEALTHY = auto()
     DEGRADED = auto()
     UNHEALTHY = auto()
     UNKNOWN = auto()
@@ -240,16 +261,18 @@ class HealthStatus(Enum):
 
 
 class LockType(Enum):
-    """File locking type."""
-    SHARED = auto()  # Multiple readers allowed
+"""
+File locking type.""
+SHARED = auto()  # Multiple readers allowed
     EXCLUSIVE = auto()  # Single writer only
     ADVISORY = auto()  # Advisory lock (not enforced by OS)
 
 
 
 class RateLimitStrategy(Enum):
-    """Rate limiting strategy for API calls."""
-    FIXED_WINDOW = auto()  # Fixed time window rate limiting
+"""
+Rate limiting strategy for API calls.""
+FIXED_WINDOW = auto()  # Fixed time window rate limiting
     SLIDING_WINDOW = auto()  # Sliding window rate limiting
     TOKEN_BUCKET = auto()  # Token bucket algorithm
     LEAKY_BUCKET = auto()  # Leaky bucket algorithm
@@ -257,8 +280,9 @@ class RateLimitStrategy(Enum):
 
 
 class EnvironmentStatus(Enum):
-    """Environment instance status."""
-    PENDING = "pending"
+"""
+Environment instance status.""
+PENDING = "pending"
     CREATING = "creating"
     RUNNING = "running"
     FAILED = "failed"
@@ -267,8 +291,9 @@ class EnvironmentStatus(Enum):
 
 
 class EnvironmentIsolation(Enum):
-    """Environment isolation levels."""
-    NONE = "none"  # No isolation
+"""
+Environment isolation levels.""
+NONE = "none"  # No isolation
     PROCESS = "process"  # Separate process
     CONTAINER = "container"  # Docker container
     VM = "vm"  # Virtual machine

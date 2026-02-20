@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Latent signal bus.py module.
 """
 
+"""
 import base64
 import json
 import logging
@@ -64,8 +67,8 @@ class LatentSignalBus:
             return None
 
         latent_data = self.latent_space[channel]
-        vector = latent_data["vector"]"
-        logging.info(f"LatentSignalBus: Decoding latent signal from channel '{channel}'")"'
+        vector = latent_data["vector"]
+        logging.info(f"LatentSignalBus: Decoding latent signal from channel '{channel}'")
         try:
             decoded_json = base64.b64decode(vector).decode()
             return json.loads(decoded_json)

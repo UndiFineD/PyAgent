@@ -16,8 +16,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Parser Package
 
+"""
 Tool parser implementations for various model formats.
 
+"""
 Exports all parser classes and base types.
 
 try:

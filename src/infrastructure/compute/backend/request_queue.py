@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_backend.py"""
+"""
+"""
+Auto-extracted class from agent_backend.py""
 
+"""
 import logging
 import threading
 import time
@@ -33,7 +37,9 @@ __version__ = VERSION
 
 
 class RequestQueue:
-    """Priority queue for backend requests.
+"""
+Priority queue for backend requests.
+
     Manages request ordering by priority and timestamp.
     Thread - safe for concurrent access.
 
@@ -41,15 +47,15 @@ class RequestQueue:
         queue = RequestQueue()
         queue.enqueue("prompt", RequestPriority.HIGH)
         request = queue.dequeue()
-    """
-
-    def __init__(self, max_size: int = 1000, recorder: LocalContextRecorder | None = None) -> None:
-        """Initialize request queue.
+"""
+def __init__(self, max_size: int = 1000, recorder: LocalContextRecorder | None = None) -> None:
+"""
+Initialize request queue.
         Args:
             max_size: Maximum queue size.
             recorder: Infrastructure recorder for intelligence harvesting.
-        """        
-        self.max_size = max_size
+"""
+self.max_size = max_size
         self._queue: PriorityQueue[QueuedRequest] = PriorityQueue(maxsize=max_size)
         self.recorder = recorder
         self._lock = threading.Lock()
@@ -62,7 +68,8 @@ class RequestQueue:
         priority: RequestPriority = RequestPriority.NORMAL,
         callback: Callable[[str], None] | None = None,
     ) -> str:
-        """Add request to queue.
+"""
+Add request to queue.
         
         Args:
             prompt: The prompt to queue.
@@ -71,8 +78,8 @@ class RequestQueue:
 
         Returns:
             str: Request ID for tracking.
-        """
-        request_id = str(uuid.uuid4())
+"""
+request_id = str(uuid.uuid4())
         request = QueuedRequest(
             priority=priority.value,
             timestamp=time.time(),
@@ -92,14 +99,15 @@ class RequestQueue:
 
 
     def dequeue(self, timeout: float | None = None) -> QueuedRequest | None:
-        """Get next request from queue.
+"""
+Get next request from queue.
         Args:
             timeout: Maximum wait time in seconds.
 
         Returns:
             Optional[QueuedRequest]: Next request or None if empty / timeout.
-        """
-        try:
+"""
+try:
             request = self._queue.get(timeout=timeout)
             with self._lock:
                 self._pending.pop(request.request_id, None)
@@ -109,16 +117,19 @@ class RequestQueue:
 
 
     def size(self) -> int:
-        """Get current queue size."""
-        return self._queue.qsize()
+"""
+Get current queue size.""
+return self._queue.qsize()
 
 
     def is_empty(self) -> bool:
-        """Check if queue is empty."""
-        return self._queue.empty()
+"""
+Check if queue is empty.""
+return self._queue.empty()
 
 
     def get_pending(self, request_id: str) -> QueuedRequest | None:
-        """Get pending request by ID."""
-        with self._lock:
+"""
+Get pending request by ID.""
+with self._lock:
             return self._pending.get(request_id)

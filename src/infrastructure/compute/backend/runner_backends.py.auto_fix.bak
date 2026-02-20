@@ -1,0 +1,216 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""Backend implementation handlers for SubagentRunner.
+
+import json
+import logging
+import os
+
+import subprocess
+from pathlib import Path
+from typing import Any
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__: str = VERSION
+
+
+
+class BackendHandlers:
+    """Namespace for backend execution logic.
+    @staticmethod
+    def _parse_content(text: str) -> Any:
+        if "[IMAGE_DATA:" not in text:"            return text
+
+        parts = []
+        import re
+
+        # Find [IMAGE_DATA:base64]
+        pattern = r"\[IMAGE_DATA:([^\]\\s]+)\]""        last_idx = 0
+        for match in re.finditer(pattern, text):
+            pre_text: str = text[last_idx : match.start()].strip()
+            if pre_text:
+                parts.append({"type": "text", "text": pre_text})"
+            image_data: str | Any = match.group(1)
+            if not image_data.startswith("data:image"):"                image_data: str = f"data:image/png;base64,{image_data}""
+            parts.append({"type": "image_url", "image_url": {"url": image_data}})"            last_idx: int = match.end()
+
+        remaining: str = text[last_idx:].strip()
+        if remaining:
+            parts.append({"type": "text", "text": remaining})"
+        return parts if parts else text
+
+    @staticmethod
+    def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
+        """Build full prompt with task description, prompt, and context.        try:
+            max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))"        except ValueError:
+            max_context_chars = 12_000
+        trimmed_original: str = (original_content or "")[:max_context_chars]"        return (
+            f"Task: {description}\\n\\nPrompt:\\n{prompt}\\n\\nContext (existing file content):\\n{trimmed_original}""        ).strip()
+
+    @staticmethod
+    def try_codex_cli(full_prompt: str, repo_root: Path, recorder: Any | None = None) -> str | None:
+        """
+try to use Codex CLI backend for code generation.        try:
+            logging.debug("Attempting to use Codex CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
+                [
+                    "codex","                    "--prompt","                    full_prompt,
+                    "--no-color","                    "--log-level","                    "error","                    "--add-dir","                    str(repo_root),
+                    "--allow-all-tools","                    "--disable-parallel-tools-execution","                    "--deny-tool","                    "write","                    "--deny-tool","                    "shell","                    "--silent","                    "--stream","                    "off","                ],
+                capture_output=True,
+                text=True,
+                encoding="utf-8","                errors="replace","                timeout=180,
+                cwd=str(repo_root),
+                check=False,
+            )
+            stdout: str = (result.stdout or "").strip()"
+            # Phase 108: Recording
+            if recorder:
+                recorder.record_interaction(
+                    "codex","                    "cli","                    full_prompt[:200],
+                    stdout[:1000] if result.returncode == 0 else "FAILED","                )
+
+            if result.returncode == 0 and stdout:
+                logging.info("Codex CLI backend succeeded")"                return stdout
+            if result.returncode != 0:
+                logging.debug(f"Codex CLI failed (code {result.returncode}): {result.stderr}")"        except subprocess.TimeoutExpired:
+            logging.warning("Codex CLI timed out")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.warning(f"Codex CLI error: {e}")"        return None
+
+    @staticmethod
+    def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
+        """
+try to use Copilot CLI backend for code generation.        try:
+            logging.debug("Attempting to use local Copilot CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
+                ["copilot", "explain", full_prompt],"                capture_output=True,
+                text=True,
+                encoding="utf-8","                errors="replace","                timeout=60,
+                cwd=str(repo_root),
+                check=False,
+            )
+            stdout: str = (result.stdout or "").strip()"            if result.returncode == 0 and stdout:
+                logging.info("Copilot CLI backend succeeded")"                return stdout
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.warning(f"Copilot CLI error: {e}")"        return None
+
+    @staticmethod
+    def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
+        """
+try to use GitHub Copilot CLI backend for code generation.        # Optimization: if not a command and not allowed, skip
+        if not allow_non_command:
+            # Basic heuristic: if it doesn't look like a command, skip gh copilot explain'            # (This logic was partially in SubagentRunner, but we can pass a flag)
+            pass
+
+        try:
+            logging.debug("Attempting to use gh copilot alias backend")"            # Note: gh copilot requires interactive session or specific config for shell completion
+            # We attempt it as a subprocess call
+            result: subprocess.CompletedProcess[str] = subprocess.run(
+                ["gh", "copilot", "explain", full_prompt],"                capture_output=True,
+                text=True,
+                encoding="utf-8","                errors="replace","                timeout=60,
+                cwd=str(repo_root),
+                check=False,
+            )
+            if result.returncode == 0 and result.stdout:
+                return result.stdout.strip()
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.debug(f"gh copilot failed: {e}")"        return None
+
+    @staticmethod
+    def _get_github_token() -> str | None:
+        """Get GitHub token from environment or file.        # Try environment variable first
+        token: str | None = os.environ.get("GITHUB_TOKEN")"        if token:
+            return token
+
+        # Try various file paths
+        search_paths = [
+            os.environ.get("DV_GITHUB_TOKEN_FILE"),"            r"C:\\DEV\\github-gat.txt","            "github-token.txt","        ]
+
+        for path_str in search_paths:
+            if not path_str:
+                continue
+            path = Path(path_str)
+            if path.exists():
+                try:
+                    token: str = path.read_text(encoding="utf-8").strip()"                    if token:
+                        return token
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                    continue
+
+        return None
+
+    @staticmethod
+    def _prepare_github_request(full_prompt: str, model: str, _base_url: str) -> tuple[dict[str, str], dict[str, Any]]:
+        """Prepare headers and payload for GitHub Models API request.        content = BackendHandlers._parse_content(full_prompt)
+        headers: dict[str, str] = {
+            "Authorization": f"Bearer {BackendHandlers._get_github_token()}","            "Content-Type": "application/json","        }
+        payload = {
+            "messages": ["                {
+                    "role": "system","                    "content": "You are a helpful coding assistant.","                },
+                {"role": "user", "content": content},"            ],
+            "model": model,"            "temperature": 0.1,"            "max_tokens": 4096,"        }
+        return headers, payload
+
+    @staticmethod
+    def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
+        """Attempt to invoke GitHub Models API for code generation.        if not requests_lib:
+            return None
+
+        base_url: str = (
+            (os.environ.get("GITHUB_MODELS_BASE_URL")"             or "https://models.inference.ai.azure.com").strip().rstrip("/")"        )
+        model: str = (
+            os.environ.get("DV_AGENT_MODEL")"            or os.environ.get("GITHUB_MODELS_MODEL")"            or "gpt-4.1""        ).strip()
+
+        token = BackendHandlers._get_github_token()
+        if not token:
+            logging.debug("GitHub Models skipped: No token found")"            return None
+
+        logging.debug(f"Attempting GitHub Models (model: {model})")"        try:
+            headers, payload = BackendHandlers._prepare_github_request(full_prompt, model, base_url)
+            url: str = f"{base_url}/v1/chat/completions""            response = requests_lib.post(url, headers=headers, data=json.dumps(payload), timeout=120)
+            response.raise_for_status()
+            data = response.json()
+            return data["choices"][0]["message"]["content"].strip()"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            # Lowered logging level for fallback-friendly behavior (Phase 123)
+            logging.debug(f"GitHub Models error: {e}")"            return None
+
+    @staticmethod
+    def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
+        """
+try to use OpenAI API backend for code generation.        if not requests_lib:
+            return None
+
+        api_key: str | None = os.environ.get("OPENAI_API_KEY")"        base_url: str = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1""        model: str = os.environ.get("OPENAI_MODEL") or "gpt-4.1-mini""
+        if not api_key:
+            logging.debug("OpenAI API skipped: No API key")"            return None
+
+        try:
+            content = BackendHandlers._parse_content(full_prompt)
+            headers: dict[str, str] = {
+                "Authorization": f"Bearer {api_key}","                "Content-Type": "application/json","            }
+            payload = {
+                "model": model,"                "messages": ["                    {"role": "system", "content": "You are a helpful assistant."},"                    {"role": "user", "content": content},"                ],
+                "temperature": 0,"            }
+            response = requests_lib.post(
+                f"{base_url}/chat/completions","                headers=headers,
+                json=payload,
+                timeout=60,
+            )
+            response.raise_for_status()
+            data = response.json()
+            return data["choices"][0]["message"]["content"].strip()"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.warning(f"OpenAI API error: {e}")"            return None

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +20,10 @@ from __future__ import annotations
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Model-Specific Parsing
-
+"""
 Tool/function call parsing with model-specific parsers.
 
+"""
 Inspired by vLLM's tool_parsers patterns, this module provides:'- Model-specific tool call parsing (Hermes, Llama3, Mistral, etc.)
 - Streaming tool call extraction
 - JSON schema validation

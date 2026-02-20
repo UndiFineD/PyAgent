@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,9 +21,11 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Import FleetDeployerAgent from src.core.base.lifecycle and instantiate with a path to the agent file (e.g., FleetDeployerAgent("path/to/file"))."- Use exposed async tools to generate Dockerfiles, spawn nodes, list active nodes, scale up instances, and perform consensus-driven deploy workflows from orchestration code or other agents.
 - Intended for automation pipelines or higher-level orchestrators that coordinate agent swarms and deployments.
 
+"""
 WHAT IT DOES:
 - Provides async tool-wrapped methods to generate simple Dockerfiles for specific agent types, append provisioning logs, and read active nodes from those logs.
 - Simulates node provisioning via spawn_node and supports bulk scaling via scale_up by invoking spawn_node repeatedly.
@@ -37,7 +41,6 @@ FleetDeployerAgent for PyAgent.
 Specializes in autonomous containerization, Dockerfile generation,
 and managing node spawning across environments.
 """
-
 import asyncio
 import json
 import logging
@@ -54,7 +57,8 @@ __version__ = VERSION
 
 
 class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages the lifecycle of fleet nodes, including containerization and deployment.
+""""
+Manages the lifecycle of fleet nodes, including containerization and deployment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.deploy_dir = Path("deploy")"        self.deploy_dir.mkdir(parents=True, exist_ok=True)
@@ -62,7 +66,7 @@ class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             "You are the Fleet Deployer Agent. Your mission is to scale the agent swarm."#             "You generate Dockerfiles, docker-compose configurations, and deployment logs."#             "You can spawn new agent nodes autonomously and manage their lifecycle."        )
 
     @as_tool
-    async def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:"        "Generates a specialized Dockerfile for an agent type."
+    async def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:"        "Generates a specialized Dockerfile for an agent type.
 
 
 
@@ -109,7 +113,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path = 
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
-        logging.info(fFleetDeployer: Spawning new node '{agent_name}' of "type '{agent_type}'")"'
+        logging.info(fFleetDeployer: Spawning new node '{agent_name}' of "type '{agent_type}'")
         spawn_log = {
             "node_id": agent_name,"            "type": agent_type,"            "status": "provisioning","            "timestamp": time.time() if "time" in globals() else 0,"        }
 
@@ -118,7 +122,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path = 
             with open(log_path, "a", encoding="utf-8") as f:"                f.write(json.dumps(spawn_log) + "\\n")"
         await asyncio.to_thread(append_log)
 
-#         return fNode '{agent_name}' ({agent_type}) provisioning initialized.'
+#         return fNode '{agent_name}' ({agent_type}) provisioning initialized.
     @as_tool
     async def list_active_nodes(self) -> list[str]:
 #         "Lists nodes currently marked as active in the provisioning logs."#         log_path = self.deploy_dir / "provisioning_logs.jsonl"        if not log_path.exists():
@@ -141,7 +145,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path = 
         for i in range(count):
 #             node_name = f"{agent_type.lower()}-{i}-{os.urandom(2).hex()}"            res = await self.spawn_node(node_name, agent_type)
             results.append(res)
-        return "\\n".join(results)"
+        return "\\n".join(results)
     @as_tool
     async def consensus_driven_deploy(self, agent_type: str," node_name": "str) -> str:"        "Depl"
 
@@ -161,7 +165,8 @@ __version__ = VERSION
 
 
 class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""""Manages the lifecycle of fleet nodes, including "containerization and deployment.
+""""
+Manages the lifecycle of fleet nodes, including "containerization and deployment.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.deploy_dir = Path("deploy")"        self.deploy_dir.mkdir(parents=True, exist_ok=True)
@@ -169,7 +174,7 @@ class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             "You are the Fleet Deployer Agent. Your mission is to scale the agent swarm."#             "You generate Dockerfiles, docker-compose configurations, and deployment logs."#             "You can spawn new agent nodes autonomously and manage their lifecycle."        )
 
     @as_tool
-    async def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:"        "Generates a specialized Dockerfile for an agent type."
+    async def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:"        "Generates a specialized Dockerfile for an agent type.
 
 
 
@@ -211,11 +216,11 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path ="
 
     @as_tool
     async def spawn_node(self, agent_name: str, agent_type: str) -> str:
-        "Simulates "spawning a new agent node in the infrastructure."
+        "Simulates "spawning a new agent node in the infrastructure.
         Args:
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
-        logging.info(fFleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")"'
+        logging.info(fFleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")"
         spawn_log = {
             "node_id": agent_name,"            "type": agent_type,"            "status": "provisioning","            "timestamp": time.time() if "time" in globals() else 0,"        }
 
@@ -224,7 +229,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path ="
             with open(log_path, "a", encoding="utf-8") as f:"                f.write(json.dumps(spawn_log) + "\\n")"
         await asyncio.to_thread(append_log)
 
-#         return fNode '{agent_name}' ({agent_type}) provisioning initialized.'
+#         return fNode '{agent_name}' ({agent_type}) provisioning initialized.
     @as_tool
     async def list_active_nodes(self) -> list[str]:
 #         "Lists nodes currently marked as active in the provisioning logs."#         "log_path = self.deploy_dir / "provisioning_logs.jsonl"        if not log_path.exists():
@@ -247,8 +252,10 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path ="
         for i in range(count):
 #             node_name = f"{agent_type.lower()}-{i}-{os.urandom(2).hex()}"            res = await self.spawn_node(node_name, agent_type)
             results.append(res)
-        return "\\n".join(results)"
+        return "\\n".join(results)
     @as_tool
     async def consensus_driven_deploy(self, agent_type: str, node_name: str) -> str:
 #         "Deploys an agent, but only after reaching consensus (Mock)."        logging.info(fFleetDeployer: Requesting consensus for deployment of {node_name}...")"        # Mock approval
         return await self.spawn_node(node_name, agent_type)
+
+"""

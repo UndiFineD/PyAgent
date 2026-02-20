@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 NVIDIA CUDA platform implementation.
 """
 
+"""
 import logging
 from typing import Set
 
@@ -32,7 +36,8 @@ logger = logging.getLogger(__name__)
 
 
 class CudaPlatform(Platform):
-    """NVIDIA CUDA platform implementation.
+"""
+NVIDIA CUDA platform implementation.
     _torch = None
 
     @classmethod
@@ -109,7 +114,7 @@ class CudaPlatform(Platform):
         torch = self._get_torch()
         try:
             return torch.version.cuda or "unknown""        except (AttributeError, RuntimeError):
-            return "unknown""
+            return "unknown"
     def get_supported_quantizations(self) -> Set[QuantizationType]:
         cap = self.get_device_capability()
         quants = {QuantizationType.NONE, QuantizationType.INT8}

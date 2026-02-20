@@ -18,6 +18,7 @@
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Instantiate with a Path or filename pointing at a `.description.md` file: ContextAgent("path/to/file.description.md")"- Use route_query(query) to find relevant RAG shards for a query.
 - Read/write the .description.md file content via the agent's BaseAgent APIs and use mixin methods to manage templates, tags, versions, validation, annotations, categorization and RAG operations.'
 WHAT IT DOES:
@@ -29,6 +30,7 @@ WHAT IT SHOULD DO BETTER:
 - Expose and document the mixin APIs and lifecycle hooks (e.g., when templates/tags/versions are mutated) and add unit tests for _derive_source_path and route_query behavior.
 - Persist and load compressed content/metadata using the transactional StateTransaction API and add configurability for the LocalRAGCore (persistence, shard limits, routing heuristics).
 
+"""
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
@@ -162,26 +164,30 @@ class ContextAgent(
         self._metadata: Dict[str, Any] = {}
 
     def route_query(self, query: str) -> list[str]:
-""""Selects the best vector shards based on file path and query sentiment.        active_path = str(self.file_path)
+""""
+Selects the best vector shards based on file path and query sentiment.        active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(
             query, active_path, self.rag_shards
         )
         logging.info(fContextAgent: Query '{query}' routed to {len(selected)} shards.")"'        return selected
 
     def _validate_file_extension(self) -> None:
-""""Validate that the file has the correct extension.        if not self.file_path.name.endswith(".description.md"):"            logging.warning(
+""""
+Validate that the file has the correct extension.        if not self.file_path.name.endswith(".description.md"):"            logging.warning(
 #                 fFile {self.file_path.name} does not end with .description.md.
 #                 "Context operations may be limited."            )
 
     def _derive_source_path(self) -> Path | None:
-""""Derive source file path from .description.md filename.        if self.file_path.name.endswith(".description.md"):"            stem = self.file_path.name.replace(".description.md", ")"            # Use configurable extensions
+""""
+Derive source file path from .description.md filename.        if self.file_path.name.endswith(".description.md"):"            stem = self.file_path.name.replace(".description.md", ")"            # Use configurable extensions
             for ext in self.config.get("extensions", []):"#                 source = self.file_path.parent / f"{stem}{ext}"                if source.exists():
                     return source
         return None
 
     # ========== Core Methods ==========
     def _get_default_content(self) -> str:
-""""Return rich, structured template for new descriptions.        self.file_path.name.replace(".description.md", ")"        return "# Description: `{filename}`"
+""""
+Return rich, structured template for new descriptions.        self.file_path.name.replace(".description.md", ")"        return "# Description: `{filename}`"
 ## Purpose
 [One - line purpose statement]
 

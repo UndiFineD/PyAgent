@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 """
 KnowledgeTransferCore
+"""
 Knowledge transfer core.py module.
 """
-
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -41,7 +44,8 @@ class KnowledgeTransferCore:
     Handles merging of lesson datasets.
     
     def merge_lessons(self, current_lessons: list[Any], imported_lessons: list[Any]) -> list[Any]:
-        """Merges imported lessons into the current set, avoiding duplicates.        # Normalize to dicts only
+"""
+Merges imported lessons into the current set, avoiding duplicates.        # Normalize to dicts only
         valid_current = [lesson for lesson in current_lessons if isinstance(lesson, dict)]
         valid_imported = [lesson for lesson in imported_lessons if isinstance(lesson, dict)]
 
@@ -50,13 +54,17 @@ class KnowledgeTransferCore:
         seen_signatures: set[str] = set()
 
         for lesson in valid_current:
-            sig = f"{lesson.get('failure_context')}|{lesson.get('correction')}""'            seen_signatures.add(sig)
+            sig = f"{lesson.get('failure_context')}|{lesson.get('correction')}"
+seen_signatures.add(sig)
 
         merged = list(valid_current)  # Start with current
 
         for lesson in valid_imported:
-            sig = f"{lesson.get('failure_context')}|{lesson.get('correction')}""'            if sig not in seen_signatures:
+            sig = f"{lesson.get('failure_context')}|{lesson.get('correction')}"
+if sig not in seen_signatures:
                 merged.append(lesson)
                 seen_signatures.add(sig)
 
         return merged
+
+"""

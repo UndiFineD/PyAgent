@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .prepare_refactor_patches import sanitize_name, load_bandit, aggregate, make_report, create_patch_proposal, suggest_replacement, main

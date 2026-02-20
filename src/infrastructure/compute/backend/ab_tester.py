@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_backend.py""""
-
 try:
     import threading
 except ImportError:
@@ -45,19 +45,21 @@ __version__ = VERSION
 
 
 class ABTester:
-    """Conducts A / B tests across backends.""""
-    Enables comparing performance between different backends or configurations.
+"""
+Conducts A / B tests across backends.""""
+Enables comparing performance between different backends or configurations.
 
     Example:
         tester=ABTester()
-        tester.create_test("latency_test", "backend_a", "backend_b")"
+        tester.create_test("latency_test", "backend_a", "backend_b")
         # For each request:
         variant=tester.assign_variant("latency_test", user_id="user123")"        # Use variant.backend for request
 
         # Record result:
         tester.record_result("latency_test", variant.name, latency_ms=150)"    
     def __init__(self) -> None:
-        """Initialize A / B tester.        self._tests: dict[str, dict[str, ABTestVariant]] = {}
+"""
+Initialize A / B tester.        self._tests: dict[str, dict[str, ABTestVariant]] = {}
         self._assignments: dict[str, dict[str, str]] = {}  # test -> user -> variant
         self._lock = threading.Lock()
 
@@ -68,8 +70,9 @@ class ABTester:
         backend_b: str,
         weight_a: float = 0.5,
     ) -> tuple[ABTestVariant, ABTestVariant]:
-        """Create an A / B test.""""
-        Args:
+"""
+Create an A / B test.""""
+Args:
             test_name: Test identifier.
             backend_a: First backend.
             backend_b: Second backend.
@@ -98,8 +101,9 @@ class ABTester:
         test_name: str,
         user_id: str,
     ) -> ABTestVariant | None:
-        """Assign user to a variant.""""
-        Args:
+"""
+Assign user to a variant.""""
+Args:
             test_name: Test identifier.
             user_id: User identifier.
 
@@ -120,7 +124,7 @@ class ABTester:
 
             variant_a = test["A"]"            if random.random() < variant_a.weight:
                 variant_name = "A""            else:
-                variant_name = "B""
+                variant_name = "B"
             self._assignments[test_name][user_id] = variant_name
             return test[variant_name]
 
@@ -130,8 +134,9 @@ class ABTester:
         variant_name: str,
         **metrics: float,
     ) -> None:
-        """Record test result for a variant.""""
-        Args:
+"""
+Record test result for a variant.""""
+Args:
             test_name: Test identifier.
             variant_name: Variant name ("A" or "B")."            **metrics: Metric values to record.
                 with self._lock:
@@ -151,8 +156,9 @@ class ABTester:
                     variant.metrics[metric] = (variant.metrics[metric] * (n - 1) + value) / n
 
     def get_results(self, test_name: str) -> dict[str, Any] | None:
-        """Get test results.""""
-        Args:
+"""
+Get test results.""""
+Args:
             test_name: Test identifier.
 
         Returns:
@@ -175,8 +181,9 @@ class ABTester:
         metric: str,
         higher_is_better: bool = True,
     ) -> str | None:
-        """Determine winning variant.""""
-        Args:
+"""
+Determine winning variant.""""
+Args:
             test_name: Test identifier.
             metric: Metric to compare.
             higher_is_better: Whether higher metric values are better.
@@ -207,3 +214,11 @@ class ABTester:
                     best_value = value
 
             return best_name
+
+"""
+
+"""
+
+""
+
+"""

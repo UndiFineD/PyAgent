@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from unittest.mock import patch
@@ -31,8 +34,9 @@ except ImportError:
 
 
 class TestSecurityScannerAgent:
-    """Test cases for SecurityScannerAgent."""
-    def setup_method(self):
+"""
+Test cases for SecurityScannerAgent.""
+def setup_method(self):
         self.agent = SecurityScannerAgent()
 
     @patch('src.core.agents.security_scanner_agent.ReconnaissanceMixin.discover_targets')
@@ -42,7 +46,8 @@ class TestSecurityScannerAgent:
     @patch('src.core.agents.security_scanner_agent.SSRFDetectorMixin.stop_ssrf_detector')
     def test_comprehensive_scan(self, mock_stop, mock_start, mock_vuln_scan,
                                 mock_fingerprint, mock_discover):
-        """Test comprehensive security scan."""
+"""
+Test comprehensive security scan.""
         # Mock returns
         mock_start.return_value = True
         mock_discover.return_value = {'http://example.com': ['/admin']}

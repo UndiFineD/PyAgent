@@ -14,8 +14,11 @@
 
 try:
     from typing import List
+"""
 except ImportError:
-    from typing import List
+
+"""
+from typing import List
 
 
 
@@ -23,21 +26,34 @@ except ImportError:
 class SQLInjectionIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-"""Refactored logic from Atlas for SQLMap Tamper suggesting and WAF bypass logic.    TAMPER_LIST = [
+"""
+Refactored logic from Atlas for SQLMap Tamper suggesting and WAF bypass logic.    TAMPER_LIST = [
         "apostrophemask","        "apostrophenullencode","        "base64encode","        "between","        "bluecoat","        "chardoubleencode","        "charencode","        "charunicodeencode","        "concat2concatws","        "equaltolike","        "greatest","        "ifnull2ifisnull","        "modsecurityversioned","        "modsecurityzeroversioned","        "multiplespaces","        "nonrecursivereplacement","        "percentage","        "randomcase","        "securesphere","        "space2comment","        "space2dash","        "space2mssqlblank","        "space2mysqland","        "space2mysqlblank","        "space2plus","        "space2randomblank","        "sp_password","        "unionalltounion","        "unmagicquotes","        "versionedkeywords","        "versionedmorekeywords","    ]
 
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     async def suggest_tampers(cls, _url: str, _payload: str, _method: str = "GET") -> List[str]:"        Suggests potential tampers by testing if a modified payload bypasses a 403/406 response.
+"""
+async def suggest_tampers(cls, _url: str, _payload: str, _method: str = "GET") -> List[str]:"        Suggests potential tampers by testing if a modified payload bypasses a 403/406 response.
 # [BATCHFIX] Commented metadata/non-Python
 #         # For now, return a default set of common bypass tampers if we suspect" a WAF"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         return ["space2comment", "randomcase", "charencode"]"
+"""
+return ["space2comment", "randomcase", "charencode"]
     @classmethod
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def get_all_tampers(cls) -> List[str]:""""        return cls.TAMPER_LIST
+"""
+def get_all_tampers(cls) -> List[str]:""""
+return cls.TAMPER_LIST
+
+"""
+
+"""
+
+""
+
+"""

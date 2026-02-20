@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,11 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Code metrics and line counting utilities for analyzing PyAgent codebase.""""
+"""
+Code metrics and line counting utilities for analyzing PyAgent codebase.""""
 Provides functions to count lines of code, measure file sizes, and generate
 code statistics across the project.
 """
-
 import ast
 import os
 from pathlib import Path
@@ -67,4 +68,11 @@ for root, dirs, files in os.walk(src_path):
                 stubs.append((path, count))
 
 for path, count in sorted(stubs, key=lambda x: x[1]):
-    print(f"{count}: {path}")"
+    print(f"{count}: {path}")
+"""
+
+"""
+
+""
+
+"""

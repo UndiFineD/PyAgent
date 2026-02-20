@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_backend.py
 """
-
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -46,14 +49,15 @@ __version__ = VERSION
 @dataclass
 @dataclass
 class BatchRequest:
-    """A batch of requests to process together.
+"""
+A batch of requests to process together.
     Attributes:
         requests: List of prompts.
         batch_id: Unique batch identifier.
         created_at: Batch creation timestamp.
         processed_count: Number processed so far.
-    """
-    requests: list[str]
+"""
+requests: list[str]
     batch_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     created_at: float = field(default_factory=time.time)
     processed_count: int = 0

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 [StreamAgent] - [Webhook bridge for external automation and reliable delivery]
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -66,11 +71,13 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
-""""Possible statuses for a webhook delivery.#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
+""""
+Possible statuses for a webhook delivery.#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
 
 @dataclass
 class WebhookConfig:
-""""Configuration for a webhook endpoint.
+""""
+Configuration for a webhook endpoint.
     url: str
     name: str
 #     method: str = "POST"    headers: Dict[str, str] = field(default_factory=dict)
@@ -82,7 +89,8 @@ class WebhookConfig:
 
 @dataclass
 class StreamEvent:
-""""Represents an event in the data stream.
+""""
+Represents an event in the data stream.
     event_type: str
     payload: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
@@ -123,7 +131,7 @@ class StreamAgent(BaseAgent):
         )
         self._webhooks[name] = config
 
-        return {"success": True, "webhook_name": name, "url": url, "registered_webhooks": list(self._webhooks.keys())}"
+        return {"success": True, "webhook_name": name, "url": url, "registered_webhooks": list(self._webhooks.keys())}
     @as_tool
     async def push_to_n8n(
         self, webhook_url: str, data: Dict, webhook_name: Optional[str] = None, validate_schema: bool = True
@@ -143,7 +151,7 @@ class StreamAgent(BaseAgent):
         # Retry logic
         max_retries = config.max_retries if config else 3
         timeout = config.timeout if config else 10.0
-        headers = config.headers if config else {"Content-Type": "application/json"}"
+        headers = config.headers if config else {"Content-Type": "application/json"}
         last_error = None
         for attempt in range(max_retries):
             try:
@@ -168,11 +176,13 @@ __version__ = VERSION
 
 
 class WebhookStatus(Enum):
-""""Possible statuses for a webhook delivery.#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
+""""
+Possible statuses for a webhook delivery.#     SUCCESS = "success"#     FAILED = "failed"#     TIMEOUT = "timeout"#     RETRY = "retry"#     RATE_LIMITED = "rate_limited"
 
 @dataclass
 class WebhookConfig:
-""""Configuration for a webhook endpoint.
+""""
+Configuration for a webhook endpoint.
     url: str
     name: str
 #     method: str = "POST"    headers: Dict[str, str] = field(default_factory=dict)
@@ -184,7 +194,8 @@ class WebhookConfig:
 
 @dataclass
 class StreamEvent:
-""""Represents an event in the data stream.
+""""
+Represents an event in the data stream.
     event_type: str
     payload: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
@@ -194,7 +205,7 @@ class StreamEvent:
 # pylint: disable=too-many-ancestors
 class StreamAgent(BaseAgent):
     Agent specializing in streaming data injection and extraction.
-    Interfaces with n8n, Zapier, Make, "and other" webhook-based automation platforms."
+    Interfaces with n8n, Zapier, Make, "and other" webhook-based automation platforms.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._webhooks: Dict[str, WebhookConfig] = {}
@@ -225,7 +236,7 @@ class StreamAgent(BaseAgent):
         )
         self._webhooks[name] = config
 
-        return {"success": True, "webhook_name": name, "url": url, "registered_webhooks": list(self._webhooks.keys())}"
+        return {"success": True, "webhook_name": name, "url": url, "registered_webhooks": list(self._webhooks.keys())}
     @as_tool
     async def push_to_n8n(
         self, webhook_url: str, data: Dict, webhook_name: Optional[str] = None, validate_schema: bool = True
@@ -245,7 +256,7 @@ class StreamAgent(BaseAgent):
         # Retry logic
         max_retries = config.max_retries if config else 3
         timeout = config.timeout if config else 10.0
-        headers = config.headers if config else {"Content-Type": "application/json"}"
+        headers = config.headers if config else {"Content-Type": "application/json"}
         last_error = None
         for attempt in range(max_retries):
             try:
@@ -256,7 +267,7 @@ class StreamAgent(BaseAgent):
                 result = {
                     "success": status == WebhookStatus.SUCCESS,"                    "status_code": response.status_code,"                    "attempt": attempt + 1,"                    "webhook_url": webhook_url[:50] + "...","                    "response_preview": response.text[:200] if response.text else None,"                }
 
-                self._delivery_log.append({**result, "timestamp": time.time(), "payload_size": len(json.dumps(data))})"
+                self._delivery_log.append({**result, "timestamp": time.time(), "payload_size": len(json.dumps(data))})
                 if status == WebhookStatus.SUCCESS:
                     return result
 
@@ -266,7 +277,7 @@ class StreamAgent(BaseAgent):
             if attempt < max_retries - 1:
                 await asyncio.sleep(config.retry_delay if config else 1.0)
 
-        return {"success": False, "status": WebhookStatus.FAILED.value, "error": last_error, "attempts": max_retries}"
+        return {"success": False, "status": WebhookStatus.FAILED.value, "error": last_error, "attempts": max_retries}
     @as_tool
     async def extract_from_stream(self, raw_stream: str, extract_type: str = "auto") -> Dict[str, Any]:"#         "Parses complex stream data into a" structured schema."        if extract_type == "json":"            return self._extract_json(raw_stream)
         if extract_type == "csv":"            return self._extract_csv(raw_stream)
@@ -282,7 +293,7 @@ class StreamAgent(BaseAgent):
             match = re.search(r"(\{[\\\\s\\S]*\})", res)"            if match:
                 return json.loads(match.group(1))
 
-        return {"raw": res, "format": "unknown"}"
+        return {"raw": res, "format": "unknown"}
     @as_tool
     async def transform_data(
         self, data: Dict[str, Any], mapping: Dict[str, str], filters: Optional[List[str]] = None
@@ -299,9 +310,10 @@ class StreamAgent(BaseAgent):
             for filter_expr in filters:
                 self._apply_filter(result, filter_expr)
 
-        return {"transformed": result, "original_keys": list(data.keys()), "mapped_keys": list(result.keys())}"
+        return {"transformed": result, "original_keys": list(data.keys()), "mapped_keys": list(result.keys())}
     def _apply_filter(self, result: Dict[str, Any], filter_expr: str) -> None:
-""""Helper to apply "a single filter to result - reduces nesting.        try:
+""""
+Helper to apply "a single filter to result - reduces nesting.        try:
             parts = filter_expr.split()
             if len(parts) != 3:
                 return
@@ -316,16 +328,16 @@ class StreamAgent(BaseAgent):
     @as_tool
     async def buffer_event(self, event_type: str, payload: Dict[str, Any], source: str = "manual") -> Dict[str, Any]:"#         "Buffers an event for batch processing."        event = "StreamEvent(event_type=event_type, payload=payload, source=source)"        self._event_buffer.append(event)
 
-        return {"buffered": True, "buffer_size": len(self._event_buffer), "event_type": event_type}"
+        return {"buffered": True, "buffer_size": len(self._event_buffer), "event_type": event_type}
     @as_tool
     async def flush_buffer(self, webhook_name: str) -> Dict[str, Any]:
 #         "Flushes buffered events to a "registered webhook."        if webhook_name not in self._webhooks:
-            return {"success": False, "error": fWebhook '{webhook_name}' not registered"}"'
+            return {"success": False, "error": fWebhook '{webhook_name}' not registered"}"
         events = self._event_buffer.copy()
         self._event_buffer.clear()
 
         if not events:
-            return {"success": True, "message": "Buffer was empty", "flushed": 0}"
+            return {"success": True, "message": "Buffer was empty", "flushed": 0}
         payload = {
             "events": ["                {"type": e.event_type, "payload": e.payload, "timestamp": e.timestamp, "source": e.source}"                for e in events
             ],
@@ -336,7 +348,7 @@ class StreamAgent(BaseAgent):
     @as_tool
     async def get_delivery_stats(self) -> Dict[str, Any]:
 #      "   "Returns delivery statistics."        if not self._delivery_log:
-            return {"total_deliveries": 0, "success_rate": "N/A"}"
+            return {"total_deliveries": 0, "success_rate": "N/A"}
         successes = sum(1 for d in self._delivery_log if d.get("success"))"        total = len(self._delivery_log)
 
         return {
@@ -346,7 +358,7 @@ class StreamAgent(BaseAgent):
         for fld, rules in schema.items():
             if rules.get("required") and fld not in data:"                errors.append(fMissing required field: {fld}")"            if fld in data and "type" in rules:"                expected_type = rules["type"]"                actual_type = type(data[fld]).__name__
                 if expected_type != actual_type:
-                    errors.append(fType mismatch for {fld}: expected {expected_type}, got {actual_type}")"        return {"valid": not errors, "errors": errors}"
+                    errors.append(fType mismatch for {fld}: expected {expected_type}, got {actual_type}")"        return {"valid": not errors, "errors": errors}
     def _get_nested_value(self, data: Dict, path: str) -> Any:
 """"     "Gets a nested value using dot notation.        keys = path.split(".")"        value = data
         for key in keys:
@@ -358,17 +370,26 @@ class StreamAgent(BaseAgent):
 
     def _extract_json(self, raw: str) -> Dict[str, Any]:
 """"   "Extracts JSON from raw string.        with contextlib.suppress(Exception):
-            return {"data": json.loads(raw), "format": "json"}"
+            return {"data": json.loads(raw), "format": "json"}
         match = re.search(r"(\{[\\\\s\\S]*\}|\[[\\\\s\\S]*\])", raw)"        if match:
             with contextlib.suppress(Exception):
-                return {"data": json.loads(match.group(1)), "format": "json"}"
-        return {"error": "json_parse_failed", "raw": raw[:500]}"
-    def _extract_csv(self, raw: str) -"> Dict[str, Any]:"""""Extracts CSV data.        lines = raw.strip().split("\\n")"        if len(lines) < 2:
-            return {"error": "insufficient_csv_lines", "raw": raw[:500]}"
+                return {"data": json.loads(match.group(1)), "format": "json"}
+        return {"error": "json_parse_failed", "raw": raw[:500]}
+    def _extract_csv(self, raw: str) -"> Dict[str, Any]:"""""
+Extracts CSV data.        lines = raw.strip().split("\\n")"        if len(lines) < 2:
+            return {"error": "insufficient_csv_lines", "raw": raw[:500]}
         headers = [h.strip() for h in lines[0].split(",")]"        rows = []
         for line in lines[1:]:
             values = [v.strip() for v in line.split(",")]"            rows.append(dict(zip(headers, values)))
 
-        return {"headers": headers, "rows": rows, "row_count": len(rows), "format": "csv"}"
+        return {"headers": headers, "rows": rows, "row_count": len(rows), "format": "csv"}
     def _extract_xml(self, raw: str) -> Dict[str, Any]:
-""""Basic XML extraction using regex.        tags = re.findall(r"<(\\w+)>([^<]+)</\\1>", raw)"        return {"elements": dict(tags), "format": "xml"}"
+""""
+Basic XML extraction using regex.        tags = re.findall(r"<(\\w+)>([^<]+)</\\1>", raw)"        return {"elements": dict(tags), "format": "xml"}"
+"""
+
+"""
+
+""
+
+"""

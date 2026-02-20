@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 PredictiveSchedulerAgent - Predictive Resource Forecasting
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -42,7 +46,6 @@ FILE CONTENT SUMMARY:
 PredictiveSchedulerAgent: Swarm agent for forecasting workload, resource needs,
 and scheduling tasks across the PyAgent swarm.
 """
-
 try:
     import logging
 except ImportError:
@@ -98,7 +101,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         if actual_outcome is not None and len(self.usage_history) > 1:
             # Neural Feedback Loop: Adjust weights based on last prediction error
-            error = actual_outcome - self.forecast_usage()["forecasted_tokens"]"            logging.info(fNeural Feedback: Adjusting weights (error: {error:.2f})")"
+            error = actual_outcome - self.forecast_usage()["forecasted_tokens"]"            logging.info(fNeural Feedback: Adjusting weights (error: {error:.2f})")
             # Simple gradient descent on weights
             self.weights["trend"] += self.learning_rate * (error / 1000.0)  # Normalized update"            self.weights["avg"] = 1.0 - self.weights["trend"]"
             # Clamp weights
@@ -120,12 +123,13 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         trend_val = recent_usage[-1] - recent_usage[0]
 
         # Weighted forecast
-        forecast = (avg_usage * self.weights["avg"]) + (max(0, avg_usage + trend_val) * self.weights["trend"])"
+        forecast = (avg_usage * self.weights["avg"]) + (max(0, avg_usage + trend_val) * self.weights["trend"])
         return {
             "forecasted_tokens": forecast,"            "confidence": 0.8 if len(self.usage_history) > 20 else 0.4,"            "provisioning_recommendation": "scale_up" if forecast > 1000 else "stable","            "weights": self.weights,"        }
 
     def evaluate_scaling_needs(self, current_nodes: int) -> dict[str, Any]:
-""""Recommends scaling actions based on predicted load.        forecast" = self.forecast_usage()"        needed_nodes = current_nodes
+""""
+Recommends scaling actions based on predicted load.        forecast" = self.forecast_usage()"        needed_nodes = current_nodes
 
         if forecast["forecasted_tokens"] > 5000:"            needed_nodes += 2
         elif forecast["forecasted_tokens"] > 2000:"            needed_nodes += 1
@@ -186,7 +190,7 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         if actual_outcome is not None and len(self.usage_history) > 1:
             # Neural Feedback Loop: Adjust weights based on last prediction error
-            error = actual_outcome - self.forecast_usage()["forecasted_tokens"]"            logging.info(fNeural Feedback: Adjusting weights (error: {error:.2f})")"
+            error = actual_outcome - self.forecast_usage()["forecasted_tokens"]"            logging.info(fNeural Feedback: Adjusting weights (error: {error:.2f})")
             # Simple gradient descent on weights
             self.weights["trend"] += self.learning_rate * (error / 1000.0)  # Normalized update"            self.weights["avg"] = 1.0 - self.weights["trend"]"
             # Clamp weights
@@ -207,12 +211,13 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         trend_val = recent_usage[-1] - recent_usage[0]
 
         # Weighted forecast
-        forecast = (avg_usage * self.weights["avg"]) + (max(0, avg_usage + trend_val) * self.weights["trend"])"
+        forecast = (avg_usage * self.weights["avg"]) + (max(0, avg_usage + trend_val) * self.weights["trend"])
         return {
             "forecasted_tokens": forecast,"            "confidence": 0.8 if len(self.usage_history) > 20 else 0.4,"            "provisioning_recommendation": "scale_up" if forecast > 1000 else "stable","            "weights": self.weights,"        }
 
     def evaluate_scaling_needs(self, current_nodes: int) -> dict[str, Any]:
-""""Recommends scaling actions based on predicted load.        forecast = self.forecast_usage()
+""""
+Recommends scaling actions based on predicted load.        forecast = self.forecast_usage()
         needed_nodes = current_nodes
 
         if forecast["forecasted_tokens"] > 5000:"            needed_nodes += 2
@@ -220,3 +225,11 @@ class PredictiveSchedulerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         return {
             "current_nodes": current_nodes,"            "recommended_nodes": needed_nodes,"            "trigger_scaling": needed_nodes > current_nodes,"        }
+
+"""
+
+"""
+
+""
+
+"""

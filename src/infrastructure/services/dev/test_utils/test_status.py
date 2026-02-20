@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from enum import Enum
 except ImportError:
@@ -34,7 +34,14 @@ __version__ = VERSION
 
 
 class TestStatus(Enum):
-    """Enumeration for test execution status.
+"""
+Enumeration for test execution status.
     __test__ = False
-    """Status of a test execution.
-    PASSED = "passed""    FAILED = "failed""    SKIPPED = "skipped""    ERROR = "error""    PENDING = "pending""
+"""
+Status of a test execution.
+    PASSED = "passed""    FAILED = "failed""    SKIPPED = "skipped""    ERROR = "error""    PENDING = "pending"
+"""
+
+""
+
+"""

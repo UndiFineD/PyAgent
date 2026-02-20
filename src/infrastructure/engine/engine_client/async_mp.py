@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Phase 45: Async Multi-process Engine Client
 Queue-based asynchronous client.
 """
 
+"""
 import asyncio
 import logging
 from typing import TYPE_CHECKING, Optional
@@ -70,9 +74,10 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"    
             except asyncio.CancelledError:
                 break
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error(f"Busy loop error: {e}")"
+                logger.error(f"Busy loop error: {e}")
     async def _output_handler(self) -> None:
-        """Handle output distribution to waiting futures.        while self._running:
+"""
+Handle output distribution to waiting futures.        while self._running:
             try:
                 output = await asyncio.wait_for(self._output_queue.get(), timeout=0.1)
 
@@ -86,9 +91,10 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"    
             except asyncio.CancelledError:
                 break
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error(f"Output handler error: {e}")"
+                logger.error(f"Output handler error: {e}")
     def send_request(self, request: SchedulerOutput) -> str:
-        """Submit request to async queue.        request_id = self._generate_request_id()
+"""
+Submit request to async queue.        request_id = self._generate_request_id()
 
         # loop = asyncio.get_event_loop() # Use get_running_loop if available or create_task to use current loop
         try:
@@ -105,7 +111,8 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"    
         return request_id
 
     def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        """Blocking get (runs event loop).        if request_id not in self._pending_futures:
+"""
+Blocking get (runs event loop).        if request_id not in self._pending_futures:
             return None
 
         try:
@@ -121,7 +128,8 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"    
             return None
 
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        """Non-blocking async get.        if request_id not in self._pending_futures:
+"""
+Non-blocking async get.        if request_id not in self._pending_futures:
             return None
 
         timeout = (timeout_ms or self.config.request_timeout_ms) / 1000.0
@@ -132,7 +140,8 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"    
             return None
 
     def start(self) -> None:
-        """Start async workers.        self._running = True
+"""
+Start async workers.        self._running = True
 
         try:
             loop = asyncio.get_running_loop()
@@ -142,9 +151,10 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"    
         self._worker_task = loop.create_task(self._run_busy_loop())
         self._output_task = loop.create_task(self._output_handler())
 
-        logger.info("AsyncMPClient started")"
+        logger.info("AsyncMPClient started")
     def shutdown(self) -> None:
-        """Shutdown async workers.        self._running = False
+"""
+Shutdown async workers.        self._running = False
 
         if self._worker_task:
             self._worker_task.cancel()
@@ -156,4 +166,5 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"    
             if not future.done():
                 future.cancel()
 
-        logger.info("AsyncMPClient shutdown")"
+        logger.info("AsyncMPClient shutdown")
+"""

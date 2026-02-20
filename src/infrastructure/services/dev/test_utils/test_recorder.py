@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 import json
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -32,8 +32,9 @@ __version__ = VERSION
 
 
 class TestRecorder:
-    """Records and replays test interactions.""""
-    Useful for recording external calls and replaying in tests.
+"""
+Records and replays test interactions.""""
+Useful for recording external calls and replaying in tests.
 
     Example:
         recorder=TestRecorder()
@@ -47,9 +48,10 @@ class TestRecorder:
     __test__ = False
 
     def __init__(self) -> None:
-        """Initialize recorder.        self._recordings: list[RecordedInteraction] = []
+"""
+Initialize recorder.        self._recordings: list[RecordedInteraction] = []
         self._replay_index = 0
-        self._mode: str = "normal"  # "record", "replay", "normal""
+        self._mode: str = "normal"  # "record", "replay", "normal"
     def record_interaction(
         self,
         call_type: str,
@@ -58,8 +60,9 @@ class TestRecorder:
         kwargs: dict[str, Any],
         result: Any,
     ) -> None:
-        """Record an interaction.""""
-        Args:
+"""
+Record an interaction.""""
+Args:
             call_type: Type of call.
             call_name: Name of the call.
             args: Arguments.
@@ -79,8 +82,9 @@ class TestRecorder:
         call_type: str,
         call_name: str,
     ) -> Any | None:
-        """Get replayed result for a call.""""
-        Args:
+"""
+Get replayed result for a call.""""
+Args:
             call_type: Type of call.
             call_name: Name of the call.
 
@@ -98,20 +102,23 @@ class TestRecorder:
 
     @contextmanager
     def record(self) -> Iterator[TestRecorder]:
-        """Context manager for recording mode.        self._mode = "record""        self._recordings = []
+"""
+Context manager for recording mode.        self._mode = "record""        self._recordings = []
         try:
             yield self
         finally:
-            self._mode = "normal""
+            self._mode = "normal"
     @contextmanager
     def replay(self) -> Iterator[TestRecorder]:
-        """Context manager for replay mode.        self._mode = "replay""        self._replay_index = 0
+"""
+Context manager for replay mode.        self._mode = "replay""        self._replay_index = 0
         try:
             yield self
         finally:
-            self._mode = "normal""
+            self._mode = "normal"
     def save(self, path: Path) -> None:
-        """Save recordings to file.        data: list[dict[str, Any]] = []
+"""
+Save recordings to file.        data: list[dict[str, Any]] = []
         for r in self._recordings:
             data.append(
                 {
@@ -120,9 +127,12 @@ class TestRecorder:
         with open(path, 'w', encoding='utf-8') as f:'            json.dump(data, f, indent=2, default=str)
 
     def load(self, path: Path) -> None:
-        """Load recordings from file.        with open(path, encoding='utf-8') as f:'            data = json.load(f)
+"""
+Load recordings from file.        with open(path, encoding='utf-8') as f:'            data = json.load(f)
         self._recordings = [
             RecordedInteraction(
                 call_type=d["call_type"],"                call_name=d["call_name"],"                args=tuple(d["args"]),"                kwargs=d["kwargs"],"                result=d["result"],"                timestamp=d["timestamp"],"            )
             for d in data
         ]
+
+"""

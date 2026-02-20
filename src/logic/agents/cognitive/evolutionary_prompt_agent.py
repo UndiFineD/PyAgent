@@ -14,7 +14,10 @@
 
 
 """
+"""
 Evolutionary Prompt Agent - Genetic optimization of agent prompts
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -79,7 +82,7 @@ class EvolutionaryPromptAgent(BaseAgent):
 #         return "Invalid prompt index."
     @as_tool
     def evolve_generation(self) -> dict[str, Any]:
-        Performs selection, crossover, and mutation to create next" generation (Phase 182)."    "    if not self.population:"            return {"error": "Population not initialized."}"
+        Performs selection, crossover, and mutation to create next" generation (Phase 182)."    "    if not self.population:"            return {"error": "Population not initialized."}
         # 1. Selection
         self.population.sort(key=lambda x: x.get("fitness", 0), reverse=True)"        winners = self.population[: self.population_size // 2]
 
@@ -160,7 +163,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     def evolve_generation(self) -> dict[str, Any]:
         Performs selection, crossover, and mutation to create next generation (Phase 182).
         if not self.population:
-            return {"error": "Population not initialized."}"
+            return {"error": "Population not initialized."}
         # 1. Selection
         self.population.sort(key=lambda x: x.get("fitness", 0), reverse=True)"        winners = self.population[: self.population_size // 2]
 
@@ -195,7 +198,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     def update_all_agent_prompts(self) -> dict[str, Any]:
       "  Scans all agent directories in data/agents/ that have prompt.txt files"        and updates them with evolved, optimized versions of their current prompts.
 """     ""#         agents_dir = Path(self._workspace_root) / "data" / "agents"        if not agents_dir.exists():
-            return {"error": "Agents directory not found", "path": str(agents_dir)}"
+            return {"error": "Agents directory not found", "path": str(agents_dir)}
         updated_agents = []
         skipped_dirs = []
 
@@ -227,7 +230,7 @@ class EvolutionaryPromptAgent(BaseAgent):
                     "agent": agent_name,"                    "original_length": len(current_prompt),"                    "optimized_length": len(optimized_prompt),"                    "improvement": len(optimized_prompt) - len(current_prompt)"                })
 
             except Exception as e:  # pylint: disable=broad-exception-caught
-                skipped_dirs.append(f"{agent_name} (error: {str(e)})")"
+                skipped_dirs.append(f"{agent_name} (error: {str(e)})")
         return {
             "updated_count": len(updated_agents),"            "updated_agents": updated_agents,"            "skipped_count": len(skipped_dirs),"            "skipped_dirs": skipped_dirs[:10],  # Limit for readability"            "total_agent_dirs": len(list(agents_dir.iterdir())),"            "dirs_with_prompts": len(updated_agents) + len([s for s in skipped_dirs if "(error:" in s or "(empty" in s])"        }
 
@@ -289,3 +292,9 @@ class EvolutionaryPromptAgent(BaseAgent):
         # Ensure the prompt ends with a call to action or capability statement
         if not any(phrase in improved.lower() for phrase in ['always', 'focus on', 'specialize in']):'#             improved += "\\n\\nAlways provide high-quality, accurate responses."
         return improved
+
+"""
+
+""
+
+"""

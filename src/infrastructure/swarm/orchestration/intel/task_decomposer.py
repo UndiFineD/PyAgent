@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     from typing import Any
@@ -46,12 +51,17 @@ class TaskDecomposer:
     Shell for TaskDecomposerCore.
     
     def __init__(self, fleet_manager: Any) -> None:
-        """Initializes the TaskDecomposer.        self.fleet = fleet_manager
+"""
+Initializes the TaskDecomposer.        self.fleet = fleet_manager
         self.core = TaskDecomposerCore()
 
     def decompose(self, request: str) -> list[dict[str, Any]]:
-        """Splits a request into a sequence of agent steps.        logging.info(f"Decomposing task: {request}")"        steps = self.core.generate_plan(request)
+"""
+Splits a request into a sequence of agent steps.        logging.info(f"Decomposing task: {request}")"        steps = self.core.generate_plan(request)
         logging.info(f"Generated {len(steps)} steps for task.")"        return steps
 
     def get_plan_summary(self, steps: list[dict[str, Any]]) -> str:
-        """Provides a concise summary of the plan.        return self.core.summarize_plan(steps)
+"""
+Provides a concise summary of the plan.        return self.core.summarize_plan(steps)
+
+"""

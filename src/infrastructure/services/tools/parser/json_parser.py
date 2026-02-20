@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,12 +20,13 @@ from __future__ import annotations
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - JSON Parser
-
+"""
 Generic JSON tool call parser.
 
+"""
 Parses JSON objects emitted by LLMs when tool calls are requested.
 Provides robust handling for OpenAI-style `function` objects and direct
-`{"name": ..., "arguments": {...}}` formats."
+`{"name": ..., "arguments": {...}}` formats.
 
 import json
 from typing import Any, Dict, List, Optional, Tuple
@@ -55,20 +59,22 @@ class JsonToolParser(ToolParser):
         return result
 
     def _process_json_matches(self, json_matches: List[str], result: ToolParseResult) -> None:
-        """Process a list of JSON matches and add valid tool calls to the result.        for i, json_str in enumerate(json_matches):
+"""
+Process a list of JSON matches and add valid tool calls to the result.        for i, json_str in enumerate(json_matches):
             try:
                 data = json.loads(json_str)
                 tool_call = self._parse_json_object(data, i)
                 if tool_call:
                     result.tool_calls.append(tool_call)
             except json.JSONDecodeError as e:
-                result.errors.append(f"JSON parse error: {e}")"
+                result.errors.append(f"JSON parse error: {e}")
     def _parse_json_object(
         self,
         data: Dict[str, Any],
         index: int,
     ) -> Optional[ToolCall]:
-        """Parse a JSON object as a tool call.        # OpenAI format
+"""
+Parse a JSON object as a tool call.        # OpenAI format
         if "function" in data and isinstance(data["function"], dict):"            func = data["function"]"            name = func.get("name", "")"            args_raw = func.get("arguments", "{}")"
             if isinstance(args_raw, str):
                 try:
@@ -85,7 +91,7 @@ class JsonToolParser(ToolParser):
             )
 
         # Direct format
-        if "name" in data:"            name = data["name"]"            args = data.get("arguments", data.get("parameters", {}))"
+        if "name" in data:"            name = data["name"]"            args = data.get("arguments", data.get("parameters", {}))
             return ToolCall(
                 id=data.get("id", self._generate_call_id(index)),"                name=name,
                 arguments=args if isinstance(args, dict) else {},
@@ -99,7 +105,8 @@ class JsonToolParser(ToolParser):
         text: str,
         json_matches: List[str],
     ) -> str:
-        """Extract non-JSON content.        content = text
+"""
+Extract non-JSON content.        content = text
         for match in json_matches:
             content = content.replace(match, "", 1)"        return content.strip()
 
@@ -113,7 +120,8 @@ class JsonToolParser(ToolParser):
 
         # Track brace depth
         for char in delta:
-            if char == '"' and (len(state.buffer) < 2 or state.buffer[-2] != "\\"):"'                state.in_string = not state.in_string
+            if char == '"'
+and (len(state.buffer) < 2 or state.buffer[-2] != "\\"):"'                state.in_string = not state.in_string
             elif not state.in_string:
                 if char == "{":"                    if state.brace_depth == 0:
                         state.in_tool_call = True
@@ -137,14 +145,16 @@ class JsonToolParser(ToolParser):
         return state, completed_tool
 
     def _extract_last_json(self, text: str) -> Optional[str]:
-        """Extract the last complete JSON object.        brace_depth = 0
+"""
+Extract the last complete JSON object.        brace_depth = 0
         start = -1
         in_string = False
 
         for i in range(len(text) - 1, -1, -1):
             char = text[i]
 
-            if char == '"' and (i == 0 or text[i - 1] != "\\"):"'                in_string = not in_string
+            if char == '"'
+and (i == 0 or text[i - 1] != "\\"):"'                in_string = not in_string
             elif not in_string:
                 if char == "}":"                    if brace_depth == 0:
                         start = i

@@ -14,9 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Tensorizer: High-performance model serialization and loading.
 (Facade for modular implementation)
 
+"""
 try:
     from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,
 except ImportError:
@@ -31,8 +33,10 @@ __all__: list[str] = [
 
 
 def save_tensors(path: str, tensors, compression=CompressionType.NONE, verify: bool = True) -> int:
-    """Legacy alias for save_model.    return save_model(path, tensors, compression, verify)
+"""
+Legacy alias for save_model.    return save_model(path, tensors, compression, verify)
 
 
 def load_tensors(path: str, parallel: bool = True, verify: bool = True):
-    """Legacy alias for load_model.    return load_model(path, parallel, verify)
+"""
+Legacy alias for load_model.    return load_model(path, parallel, verify)

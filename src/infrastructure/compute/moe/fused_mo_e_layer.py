@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Fused mo e layer.py module.
 
+"""
 try:
     from .fused import (AdaptiveMoELayer, DenseDispatcher, ExpertPlacementStrategy,
 except ImportError:

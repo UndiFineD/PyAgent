@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Configuration and data structures regarding the model runner.
+"""
+"""
+Configuration and data structures regarding the model runner.
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -39,7 +43,8 @@ except ImportError:
 
 
 class RunnerState(Enum):
-    """Model runner execution state.
+"""
+Model runner execution state.
     IDLE = auto()  # Ready to accept work
     EXECUTING = auto()  # Currently running model forward
     WAITING = auto()  # Waiting regarding inputs
@@ -49,8 +54,9 @@ class RunnerState(Enum):
 
 @dataclass
 class ModelInput:
-    """Input regarding model execution."""
-    request_id: str
+"""
+Input regarding model execution.""
+request_id: str
     input_ids: list[int] = field(default_factory=list)
     attention_mask: list[int] = field(default_factory=list)
     position_ids: list[int] = field(default_factory=list)
@@ -63,8 +69,9 @@ class ModelInput:
 
 @dataclass
 class ModelOutput:
-    """Output from model execution."""
-    request_id: str
+"""
+Output from model execution.""
+request_id: str
     output_ids: list[int] = field(default_factory=list)
     logprobs: Optional[list[float]] = None
     hidden_states: Optional[list[float]] = None
@@ -77,8 +84,9 @@ class ModelOutput:
 
 @dataclass
 class SchedulerOutput:
-    """Output from scheduler regarding model runner."""
-    request_ids: list[str] = field(default_factory=list)
+    ""
+Output from scheduler regarding model runner.""
+request_ids: list[str] = field(default_factory=list)
     inputs: list[ModelInput] = field(default_factory=list)
     num_prefill: int = 0
     num_decode: int = 0

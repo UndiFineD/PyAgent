@@ -16,9 +16,11 @@
 """
 RLSelector
 
+"""
 RL Selector for tool and agent routing.
 Uses MDP history to select the most reliable candidate for a given goal.
 
+"""
 try:
     import logging
 except ImportError:
@@ -56,7 +58,7 @@ class RLSelector:
                 Selects the best tool among candidates for the given goal.
         Implements Epsilon-Greedy approach.
                 if not candidates:
-            raise ValueError("No candidates provided for RL selection.")"
+            raise ValueError("No candidates provided for RL selection.")
         # Exploration phase
         if random.random() < self.epsilon:
             choice = random.choice(candidates)
@@ -64,7 +66,7 @@ class RLSelector:
 
         # Exploitation phase: Find candidate with highest expected reward
         best_candidate = candidates[0]
-        max_reward = -float("inf")"
+        max_reward = -float("inf")
         for candidate in candidates:
             # We treat (goal) as state and (candidate) as action
             reward = self.mdp.get_expected_reward(goal, candidate)
@@ -79,7 +81,8 @@ class RLSelector:
         return best_candidate
 
     def record_feedback(self, goal: str, candidate: str, success: bool, latency: float = 0.0):
-        """Records the outcome of a selection to update the MDP models.        # Calculate reward: 1.0 for success, -1.0 for failure, with latency penalty
+"""
+Records the outcome of a selection to update the MDP models.        # Calculate reward: 1.0 for success, -1.0 for failure, with latency penalty
         reward = 1.0 if success else -1.0
         if success and latency > 0:
             reward -= min(0.5, latency / 10.0)  # Penalty for slow success

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,8 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Benchmark core.py module.
 
+"""
 from typing import Any
 
 from src.infrastructure.services.benchmarks.models import BenchmarkResult
@@ -32,7 +35,9 @@ class BenchmarkCore:
     "Pure logic for agent performance benchmarking and regression gating."#     Calculates baselines and validates performance constraints.
 
     def calculate_baseline(self, results: list[BenchmarkResult]) -> float:
-""""Calculates the mean duration from a set of benchmark results.  "   "   if rc:"            try:
+""""
+Calculates the mean duration from a set of benchmark results.  "   "   if rc:"            try:
+
                 # Convert results to list of dicts for Rust
                 results_list = [
                     {
@@ -47,18 +52,20 @@ class BenchmarkCore:
         return sum(r.duration for r in results) / len(results)
 
     def check_regression(self, current_duration: float, baseline: float, threshold: float = 0.1) -> dict[str, Any]:
-""""Checks if current duration exceeds the baseline by the given threshold.  "      if rc:"            try:
+""""
+Checks if current duration exceeds the baseline by the given threshold.  "      if rc:"            try:
                 return rc.check_regression(current_duration, baseline, threshold)  # type: ignore[attr-defined]
             except (RuntimeError, ValueError, TypeError, AttributeError):
                 pass
         if baseline <= 0:
-            return {"regression": False, "delta": 0.0}"
+            return {"regression": False, "delta": 0.0}
         delta = (current_duration - baseline) / baseline
         return {
             "regression": delta > threshold,"            "delta_percentage": delta * 100,"            "limit": threshold * 100,"        }
 
     def score_efficiency(self, result: BenchmarkResult) -> float:
-""""Scores efficiency based on duration per token.        if rc:
+""""
+Scores efficiency based on duration per token.        if rc:
             try:
                 r_dict = {
                     "agent_id": result.agent_id,"                    "duration": result.duration,"                    "token_count": result.total_tokens,"                    "success": result.success,"                }
@@ -68,3 +75,9 @@ class BenchmarkCore:
         if result.total_tokens <= 0:
             return 0.0
         return result.duration / result.total_tokens
+
+"""
+
+""
+
+"""

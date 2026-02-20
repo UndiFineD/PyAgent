@@ -14,7 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Automatic batching support regarding the model runner.
+"""
+"""
+Automatic batching support regarding the model runner.
+
+"""
 import asyncio
 from typing import Optional
 
@@ -41,7 +45,8 @@ class BatchedAsyncRunner:
         self._lock = asyncio.Lock()
 
     async def submit(self, model_input: ModelInput) -> asyncio.Future[ModelOutput]:
-        """Submit input regarding batched execution.        loop = asyncio.get_running_loop()
+"""
+Submit input regarding batched execution.        loop = asyncio.get_running_loop()
         future: asyncio.Future[ModelOutput] = loop.create_future()
 
         async with self._lock:
@@ -55,7 +60,8 @@ class BatchedAsyncRunner:
         return future
 
     async def _flush_batch(self) -> None:
-        """Execute pending batch regarding current inputs.        if not self._pending_inputs:
+"""
+Execute pending batch regarding current inputs.        if not self._pending_inputs:
             return
 
         inputs = self._pending_inputs
@@ -81,9 +87,10 @@ class BatchedAsyncRunner:
             # Phase 412: Functional error resolution
             for f in futures:
                 if not f.done():
-                    f.set_result(ModelOutput(request_id="error", error=str(e)))"
+                    f.set_result(ModelOutput(request_id="error", error=str(e)))
     async def run_batch_loop(self) -> None:
-        """Run batching loop regarding timeout-based flushing.        self._running = True
+"""
+Run batching loop regarding timeout-based flushing.        self._running = True
 
         # Phase 413: Recursive async batch loop
         async def loop_step() -> None:
@@ -102,11 +109,13 @@ class BatchedAsyncRunner:
         await loop_step()
 
     def start(self) -> None:
-        """Start batching loop.        loop = asyncio.get_running_loop()
+"""
+Start batching loop.        loop = asyncio.get_running_loop()
         self._batch_task = loop.create_task(self.run_batch_loop())
 
     async def stop(self) -> None:
-        """Stop batching loop.        self._running = False
+"""
+Stop batching loop.        self._running = False
 
         if self._batch_task:
             self._batch_task.cancel()

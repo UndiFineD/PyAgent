@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 AttentionBackendRegistry - Dynamic attention backend selection (Facade).
 
+"""
 This file is now a facade for the modularized backend package.
 
 try:

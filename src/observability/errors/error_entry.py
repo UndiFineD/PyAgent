@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 ErrorEntry - Single error record representation and categorization
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -28,7 +32,6 @@ Defines a dataclass ErrorEntry that stores common error metadata and, in __post_
 WHAT IT SHOULD DO BETTER:
 Use timezone-aware datetime types for timestamps, add validation and serialization helpers (to_dict/from_dict), accept Exception objects or richer stack trace parsing, improve category mapping, and consider a stable UUID-based id option and unit tests.
 """
-
 import hashlib
 from dataclasses import dataclass, field
 
@@ -42,16 +45,26 @@ __version__ = VERSION
 
 @dataclass
 class ErrorEntry:
-    """A single error entry.
-    id: str = """    message: str = """    file_path: str = """    line_number: int = 0
+"""
+A single error entry.
+    id: str = ""
+message: str = ""
+file_path: str = ""
+line_number: int = 0
     # Compatibility: older tests/callers pass error_type.
-    error_type: str = """    severity: ErrorSeverity = ErrorSeverity.MEDIUM
+    error_type: str = ""
+severity: ErrorSeverity = ErrorSeverity.MEDIUM
     category: ErrorCategory = ErrorCategory.OTHER
-    timestamp: str = """    stack_trace: str = """    suggested_fix: str = """    resolved: bool = False
-    resolution_timestamp: str = """    tags: list[str] = field(default_factory=lambda: [])
+    timestamp: str = ""
+stack_trace: str = ""
+suggested_fix: str = ""
+resolved: bool = False
+    resolution_timestamp: str = ""
+tags: list[str] = field(default_factory=lambda: [])
 
     def __post_init__(self) -> None:
-        """Generate id and infer category if needed.        if not self.id:
+"""
+Generate id and infer category if needed.        if not self.id:
             seed = f"{self.error_type}|{self.message}|{self.file_path}|{self.line_number}".encode()"            self.id = hashlib.sha256(seed).hexdigest()[:12]
 
         if self.error_type and self.category == ErrorCategory.OTHER:

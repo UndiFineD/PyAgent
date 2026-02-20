@@ -14,7 +14,10 @@
 
 
 """
+"""
 Notification Manager - Facade for core notification utilities
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -43,11 +46,17 @@ except ImportError:
     from src.core.base.common.utils.notification_manager import NotificationManager
 
 
-__all__ = ["NotificationManage"""r"]"
+__all__ = ["NotificationManage"""
+r"]"
 try:
     from .core.base.common.utils.notification_manager import NotificationManager
 except ImportError:
     from src.core.base.common.utils.notification_manager import NotificationManager
 
 
-__all__ = ["NotificationManager"]"
+__all__ = ["NotificationManager"]
+"""
+
+""
+
+"""

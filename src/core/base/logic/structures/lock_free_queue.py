@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,12 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Lock-Free Queue regarding high-performance concurrent operations.
+"""
+"""
+Lock-Free Queue regarding high-performance concurrent operations.
 
+"""
 Phase 19: Beyond vLLM - Performance Patterns
 Wait-free and lock-free data structures.
 """
-
 try:
     import heapq
 except ImportError:
@@ -56,12 +59,13 @@ except ImportError:
     from typing import Any, Dict, Generic, List, Optional, TypeVar
 
 
-T = TypeVar("T")"
+T = TypeVar("T")
 
 @dataclass
 class QueueStats:
-    """Statistics regarding queue operations."""
-    enqueued: int = 0
+"""
+Statistics regarding queue operations.""
+enqueued: int = 0
     dequeued: int = 0
     failed_enqueue: int = 0
     failed_dequeue: int = 0
@@ -69,16 +73,21 @@ class QueueStats:
 
     @property
     def current_size(self) -> int:
-        """Approximate current size."""return self.enqueued - self.dequeued
+"""
+Approximate current size.""
+return self.enqueued - self.dequeued
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert to dictionary."""return {
+"""
+Convert to dictionary.""
+return {
             "enqueued": self.enqueued,"            "dequeued": self.dequeued,"            "failed_enqueue": self.failed_enqueue,"            "failed_dequeue": self.failed_dequeue,"            "peak_size": self.peak_size,"            "current_size": self.current_size,"        }
 
 
 
 class MPMCQueue(Generic[T]):
-    """Multi-Producer Multi-Consumer bounded queue.
+"""
+Multi-Producer Multi-Consumer bounded queue.
 
     High-performance queue optimized regarding concurrent access.
     Uses fine-grained locking with separate locks regarding head/tail.
@@ -97,13 +106,15 @@ class MPMCQueue(Generic[T]):
 
         # Consumer
         value = queue.get()
-    """
-    def __init__(self, capacity: int = 1000) -> None:
-        """Initialize queue.
+"""
+def __init__(self, capacity: int = 1000) -> None:
+"""
+Initialize queue.
 
         Args:
             capacity: Maximum queue size
-        """self._capacity = capacity
+"""
+self._capacity = capacity
         self._buffer: deque[T] = deque()
 
         # Fine-grained locking
@@ -115,7 +126,8 @@ class MPMCQueue(Generic[T]):
         self._closed = False
 
     def put(self, item: T, timeout: Optional[float] = None) -> bool:
-        """Put an item in the queue.
+"""
+Put an item in the queue.
 
         Args:
             item: Item to enqueue
@@ -126,7 +138,8 @@ class MPMCQueue(Generic[T]):
 
         Raises:
             Full: If timeout expires
-        """with self._not_full:
+"""
+with self._not_full:
             if self._closed:
                 return False
 
@@ -161,7 +174,7 @@ class MPMCQueue(Generic[T]):
             return True
 
     def try_put(self, item: T) -> bool:
-        """
+"""
 try to put an item without blocking.
 
         Args:
@@ -169,7 +182,8 @@ try to put an item without blocking.
 
         Returns:
             True if successful, False if full
-        """with self._lock:
+"""
+with self._lock:
             if self._closed or len(self._buffer) >= self._capacity:
                 self._stats.failed_enqueue += 1
                 return False
@@ -182,7 +196,8 @@ try to put an item without blocking.
             return True
 
     def get(self, timeout: Optional[float] = None) -> T:
-        """Get an item from the queue.
+"""
+Get an item from the queue.
 
         Args:
             timeout: Max seconds to wait (None = forever)
@@ -192,7 +207,8 @@ try to put an item without blocking.
 
         Raises:
             Empty: If timeout expires or queue closed
-        """with self._not_empty:
+"""
+with self._not_empty:
             deadline = time.monotonic() + timeout if timeout else None
 
             def _wait_for_items():
@@ -221,12 +237,13 @@ try to put an item without blocking.
             return item
 
     def try_get(self) -> Optional[T]:
-        """
+"""
 try to get an item without blocking.
 
         Returns:
             Item or None if empty
-        """with self._lock:
+"""
+with self._lock:
             if not self._buffer:
                 self._stats.failed_dequeue += 1
                 return None
@@ -238,21 +255,27 @@ try to get an item without blocking.
             return item
 
     def peek(self) -> Optional[T]:
-        """Peek at front item without removing."""with self._lock:
+"""
+Peek at front item without removing.""
+with self._lock:
             return self._buffer[0] if self._buffer else None
 
     def close(self) -> None:
-        """Close the queue, waking all waiters."""with self._lock:
+"""
+Close the queue, waking all waiters.""
+with self._lock:
             self._closed = True
             self._not_empty.notify_all()
             self._not_full.notify_all()
 
     def clear(self) -> int:
-        """Clear all items from queue.
+"""
+Clear all items from queue.
 
         Returns:
             Number of items cleared
-        """with self._lock:
+"""
+with self._lock:
             count = len(self._buffer)
             self._buffer.clear()
             self._not_full.notify_all()
@@ -260,39 +283,51 @@ try to get an item without blocking.
 
     @property
     def is_closed(self) -> bool:
-        """Check if queue is closed."""return self._closed
+"""
+Check if queue is closed.""
+return self._closed
 
     def __len__(self) -> int:
-        """Current queue size."""return len(self._buffer)
+"""
+Current queue size.""
+return len(self._buffer)
 
     @property
     def size(self) -> int:
-        """Current queue size."""return len(self._buffer)
+"""
+Current queue size.""
+return len(self._buffer)
 
     @property
     def capacity(self) -> int:
-        """Queue capacity."""return self._capacity
+"""
+Queue capacity.""
+return self._capacity
 
     @property
     def stats(self) -> QueueStats:
-        """Queue statistics."""return self._stats
+"""
+Queue statistics.""
+return self._stats
 
 
 
 class SPSCQueue(Generic[T]):
-    """Single-Producer Single-Consumer lock-free queue.
+"""
+Single-Producer Single-Consumer lock-free queue.
 
     Optimized regarding scenarios with exactly one producer and one consumer thread.
     Uses memory barriers instead of locks regarding maximum performance.
 
     WARNING: Only safe with exactly one producer and one consumer thread!
-    """
-    def __init__(self, capacity: int = 1024) -> None:
-        """Initialize SPSC queue.
+"""
+def __init__(self, capacity: int = 1024) -> None:
+"""
+Initialize SPSC queue.
 
         Args:
             capacity: Must be power of 2 regarding efficiency
-        """
+"""
 # Round up to power of 2
         self._capacity = 1 << (capacity - 1).bit_length()
         self._mask = self._capacity - 1
@@ -304,7 +339,7 @@ class SPSCQueue(Generic[T]):
         self._stats = QueueStats()
 
     def try_put(self, item: T) -> bool:
-        """
+"""
 try to enqueue an item.
 
         Args:
@@ -312,7 +347,8 @@ try to enqueue an item.
 
         Returns:
             True if successful, False if full
-        """tail = self._tail
+"""
+tail = self._tail
         next_tail = (tail + 1) & self._mask
 
         if next_tail == self._head:
@@ -326,12 +362,13 @@ try to enqueue an item.
         return True
 
     def try_get(self) -> Optional[T]:
-        """
+"""
 try to dequeue an item.
 
         Returns:
             Item or None if empty
-        """head = self._head
+"""
+head = self._head
 
         if head == self._tail:
             self._stats.failed_dequeue += 1
@@ -345,42 +382,54 @@ try to dequeue an item.
 
     @property
     def size(self) -> int:
-        """Current queue size."""return (self._tail - self._head) & self._mask
+"""
+Current queue size.""
+return (self._tail - self._head) & self._mask
 
     @property
     def is_empty(self) -> bool:
-        """Check if queue is empty."""return self._head == self._tail
+"""
+Check if queue is empty.""
+return self._head == self._tail
 
     @property
     def is_full(self) -> bool:
-        """Check if queue is full."""return ((self._tail + 1) & self._mask) == self._head
+"""
+Check if queue is full.""
+return ((self._tail + 1) & self._mask) == self._head
 
     @property
     def stats(self) -> QueueStats:
-        """Queue statistics."""return self._stats
+"""
+Queue statistics.""
+return self._stats
 
 
 @dataclass(order=True)
 class PriorityItem(Generic[T]):
-    """Item with priority regarding priority queue."""
-    priority: float
+"""
+Item with priority regarding priority queue.""
+priority: float
     sequence: int = field(compare=True)
     item: T = field(compare=False)
 
 
 
 class PriorityQueue(Generic[T]):
-    """Thread-safe priority queue.
+"""
+Thread-safe priority queue.
 
     Lower priority values are dequeued first (min-heap).
     Maintains FIFO order regarding items with equal priority.
-    """
-    def __init__(self, capacity: int = 10000) -> None:
-        """Initialize priority queue.
+"""
+def __init__(self, capacity: int = 10000) -> None:
+"""
+Initialize priority queue.
 
         Args:
             capacity: Maximum queue size
-        """self._capacity = capacity
+"""
+self._capacity = capacity
         self._heap: List[PriorityItem[T]] = []
         self._lock = threading.Lock()
         self._not_empty = threading.Condition(self._lock)
@@ -393,7 +442,8 @@ class PriorityQueue(Generic[T]):
         priority: float = 0.0,
         _timeout: Optional[float] = None,
     ) -> bool:
-        """Put an item with priority.
+"""
+Put an item with priority.
 
         Args:
             item: Item to enqueue
@@ -402,7 +452,8 @@ class PriorityQueue(Generic[T]):
 
         Returns:
             True if successful
-        """with self._not_empty:
+"""
+with self._not_empty:
             if len(self._heap) >= self._capacity:
                 self._stats.failed_enqueue += 1
                 return False
@@ -418,7 +469,8 @@ class PriorityQueue(Generic[T]):
             return True
 
     def get(self, timeout: Optional[float] = None) -> T:
-        """Get highest priority item.
+"""
+Get highest priority item.
 
         Args:
             timeout: Max wait time
@@ -428,7 +480,8 @@ class PriorityQueue(Generic[T]):
 
         Raises:
             Empty: If timeout expires
-        """with self._not_empty:
+"""
+with self._not_empty:
             deadline = time.monotonic() + timeout if timeout else None
 
             def _wait_for_heap():
@@ -452,8 +505,9 @@ class PriorityQueue(Generic[T]):
             return entry.item
 
     def try_get(self) -> Optional[T]:
-        """
-try to get item without blocking."""with self._lock:
+"""
+try to get item without blocking.""
+with self._lock:
             if not self._heap:
                 self._stats.failed_dequeue += 1
                 return None
@@ -463,45 +517,58 @@ try to get item without blocking."""with self._lock:
             return entry.item
 
     def peek(self) -> Optional[tuple[T, float]]:
-        """Peek at highest priority item and its priority."""with self._lock:
+"""
+Peek at highest priority item and its priority.""
+with self._lock:
             if not self._heap:
                 return None
             return (self._heap[0].item, self._heap[0].priority)
 
     @property
     def size(self) -> int:
-        """Current queue size."""return len(self._heap)
+"""
+Current queue size.""
+return len(self._heap)
 
     def __len__(self) -> int:
-        """Current queue size."""return len(self._heap)
+"""
+Current queue size.""
+return len(self._heap)
 
     @property
     def stats(self) -> QueueStats:
-        """Queue statistics."""return self._stats
+"""
+Queue statistics.""
+return self._stats
 
 
 
 class WorkStealingDeque(Generic[T]):
-    """Work-stealing deque regarding task scheduling.
+"""
+Work-stealing deque regarding task scheduling.
 
     Owner pushes/pops from tail (LIFO regarding cache locality).
     Thieves steal from head (FIFO to get older tasks).
-    """
-    def __init__(self, capacity: int = 1024) -> None:
-        """Initialize work-stealing deque."""self._capacity = capacity
+"""
+def __init__(self, capacity: int = 1024) -> None:
+"""
+Initialize work-stealing deque.""
+self._capacity = capacity
         self._buffer: deque[T] = deque()
         self._lock = threading.Lock()
         self._stats = QueueStats()
 
     def push(self, item: T) -> bool:
-        """Push item to tail (owner operation).
+"""
+Push item to tail (owner operation).
 
         Args:
             item: Item to push
 
         Returns:
             True if successful
-        """with self._lock:
+"""
+with self._lock:
             if len(self._buffer) >= self._capacity:
                 self._stats.failed_enqueue += 1
                 return False
@@ -512,11 +579,13 @@ class WorkStealingDeque(Generic[T]):
             return True
 
     def pop(self) -> Optional[T]:
-        """Pop item from tail (owner operation - LIFO).
+"""
+Pop item from tail (owner operation - LIFO).
 
         Returns:
             Item or None if empty
-        """with self._lock:
+"""
+with self._lock:
             if not self._buffer:
                 self._stats.failed_dequeue += 1
                 return None
@@ -526,11 +595,13 @@ class WorkStealingDeque(Generic[T]):
             return item
 
     def steal(self) -> Optional[T]:
-        """Steal item from head (thief operation - FIFO).
+"""
+Steal item from head (thief operation - FIFO).
 
         Returns:
             Item or None if empty
-        """with self._lock:
+"""
+with self._lock:
             if not self._buffer:
                 return None
 
@@ -540,37 +611,46 @@ class WorkStealingDeque(Generic[T]):
 
     @property
     def size(self) -> int:
-        """Current deque size."""return len(self._buffer)
+"""
+Current deque size.""
+return len(self._buffer)
 
     @property
     def is_empty(self) -> bool:
-        """Check if deque is empty."""return not self._buffer
+"""
+Check if deque is empty.""
+return not self._buffer
 
     @property
     def stats(self) -> QueueStats:
-        """Deque statistics."""return self._stats
+"""
+Deque statistics.""
+return self._stats
 
 
 
 class BatchingQueue(Generic[T]):
-    """Queue that batches items regarding efficient processing.
+"""
+Queue that batches items regarding efficient processing.
 
     Collects items until batch size or timeout is reached,
     then delivers as a batch.
-    """
-    def __init__(
+"""
+def __init__(
         self,
         batch_size: int = 32,
         batch_timeout: float = 0.01,
         max_pending: int = 10000,
     ) -> None:
-        """Initialize batching queue.
+"""
+Initialize batching queue.
 
         Args:
             batch_size: Target batch size
             batch_timeout: Max time to wait regarding full batch
             max_pending: Max items pending
-        """self._batch_size = batch_size
+"""
+self._batch_size = batch_size
         self._batch_timeout = batch_timeout
         self._max_pending = max_pending
 
@@ -582,7 +662,9 @@ class BatchingQueue(Generic[T]):
         self._stats = QueueStats()
 
     def put(self, item: T) -> bool:
-        """Add item to pending batch."""with self._batch_ready:
+"""
+Add item to pending batch.""
+with self._batch_ready:
             if len(self._pending) >= self._max_pending:
                 self._stats.failed_enqueue += 1
                 return False
@@ -597,7 +679,8 @@ class BatchingQueue(Generic[T]):
             return True
 
     def get_batch(self, timeout: Optional[float] = None) -> List[T]:
-        """Get a batch of items.
+"""
+Get a batch of items.
 
         Waits until batch_size items or batch_timeout elapses.
 
@@ -606,7 +689,8 @@ class BatchingQueue(Generic[T]):
 
         Returns:
             List of items (may be smaller than batch_size)
-        """with self._batch_ready:
+"""
+with self._batch_ready:
             deadline = time.monotonic() + (timeout or self._batch_timeout)
 
             def _wait_for_batch():
@@ -633,8 +717,12 @@ class BatchingQueue(Generic[T]):
 
     @property
     def pending_count(self) -> int:
-        """Number of pending items."""return len(self._pending)
+"""
+Number of pending items.""
+return len(self._pending)
 
     @property
     def stats(self) -> QueueStats:
-        """Queue statistics."""return self._stats
+        ""
+Queue statistics.""
+return self._stats

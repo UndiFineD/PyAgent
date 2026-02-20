@@ -15,10 +15,12 @@
 
 
 """
+"""
 Lan discovery.py module.
 # Phase 320: LAN Discovery & Peer Synchronization
 """
 
+"""
 import hashlib
 import hmac
 import json
@@ -38,8 +40,9 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class PeerInfo:
-    """Discovery metadata for a peer agent on the LAN."""
-    agent_id: str
+"""
+Discovery metadata for a peer agent on the LAN.""
+agent_id: str
     ip: str
     port: int
     last_seen: float
@@ -48,17 +51,19 @@ class PeerInfo:
     latency: float = 0.0
 
     def to_dict(self) -> Dict[str, Any]:
-        """Serializes peer info to a dictionary."""
-        return asdict(self)
+"""
+Serializes peer info to a dictionary.""
+return asdict(self)
 
 
 class LANDiscovery:
-    """Decentralized LAN Discovery for PyAgents.
+"""
+Decentralized LAN Discovery for PyAgents.
     Follows an Announce -> Respond -> Register -> Sync cycle.
 
     Network-aware implementation that detects subnet and uses proper broadcasting.
-    """
-    DEFAULT_DISCOVERY_PORT = 31415
+"""
+DEFAULT_DISCOVERY_PORT = 31415
     MAX_CLOCK_SKEW = 300.0  # Seconds
 
 
@@ -73,8 +78,9 @@ class LANDiscovery:
         enable_broadcast: bool = True,
         auto_find_port: bool = True,
     ):
-        """Initializes the LANDiscovery instance."""
-        self.agent_id = agent_id
+"""
+Initializes the LANDiscovery instance.""
+self.agent_id = agent_id
         self.service_port = service_port
         self.secret_key = secret_key
         self.metadata = metadata or {}
@@ -117,15 +123,16 @@ class LANDiscovery:
 
 
     def _test_port_available(self, port: int) -> bool:
-        """Test if a port is available for binding.
+"""
+Test if a port is available for binding.
 
         Args:
             port: Port number to test.
 
         Returns:
             True if port is available, False otherwise.
-        """
-        try:
+"""
+try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             sock.bind(("", port))
@@ -140,8 +147,8 @@ class LANDiscovery:
 
 
     def find_available_port(self, start_port: int, max_attempts: int = 100) -> Optional[int]:
-        """
-                Find an available port starting from start_port.
+"""
+Find an available port starting from start_port.
 
         Args:
             start_port: Port number to start searching from.
@@ -149,15 +156,16 @@ class LANDiscovery:
 
         Returns:
             Available port number or None if none found.
-        """
-        for port in range(start_port, start_port + max_attempts):
+"""
+for port in range(start_port, start_port + max_attempts):
             if self._test_port_available(port):
                 return port
         return None
 
     def _detect_network_config(self):
-        """Detects local IP and broadcast address."""
-        self._local_ip = get_local_network_ip()
+"""
+Detects local IP and broadcast address.""
+self._local_ip = get_local_network_ip()
         if self._local_ip and self._local_ip != "127.0.0.1":
             # Simple assumption for /24 subnet broadcast
             parts = self._local_ip.split(".")
@@ -166,12 +174,13 @@ class LANDiscovery:
         else:
             self._subnet_broadcast = "255.255.255.255"
     def _detect_subnet_broadcast(self) -> Optional[str]:
-        """Detect the proper subnet broadcast address for the local network.
+"""
+Detect the proper subnet broadcast address for the local network.
 
         Returns:
             Subnet broadcast address, or None if detection fails.
-        """
-        try:
+"""
+try:
             # Get local IP
             local_ip = self.local_ip
             if local_ip == "0.0.0.0" or local_ip.startswith("127."):
@@ -197,23 +206,26 @@ class LANDiscovery:
 
     @property
     def local_ip(self) -> str:
-        """Lazily identifies and returns the local network IPv4 address for LAN discovery."""
-        if not self._local_ip:
+"""
+Lazily identifies and returns the local network IPv4 address for LAN discovery.""
+if not self._local_ip:
             self._local_ip = self._detect_local_network_ip()
         return self._local_ip or "127.0.0.1"
 
 
     def _detect_local_network_ip(self) -> str:
-        """Detect the IP address of the local network interface for LAN discovery.
+"""
+Detect the IP address of the local network interface for LAN discovery.
         Delegates to the shared network_utils.get_local_network_ip implementation.
-        """
-        return get_local_network_ip()
+"""
+return get_local_network_ip()
 
 
     @property
     def broadcast_addr(self) -> str:
-        """Get the appropriate broadcast address for this network."""
-        if not self.enable_broadcast:
+"""
+Get the appropriate broadcast address for this network.""
+if not self.enable_broadcast:
             return "255.255.255.255"  # Fallback when broadcast is disabled
         if not self._subnet_broadcast:
             self._subnet_broadcast = self._detect_subnet_broadcast()
@@ -252,8 +264,9 @@ class LANDiscovery:
 
 
     def start(self):
-        """Starts the discovery threads."""
-        if self._running:
+"""
+Starts the discovery threads.""
+if self._running:
             logger.warning("LANDiscovery: Already running")
             return
 
@@ -309,12 +322,13 @@ class LANDiscovery:
 
 
     def get_network_info(self) -> Dict[str, Any]:
-        """Get information about the current network configuration.
+"""
+Get information about the current network configuration.
 
         Returns:
             Dictionary with network information.
-        """
-        connectivity = self.test_network_connectivity()
+"""
+connectivity = self.test_network_connectivity()
 
         return {
             "local_ip": self.local_ip,
@@ -328,12 +342,13 @@ class LANDiscovery:
         }
 
     def test_network_connectivity(self) -> Dict[str, Any]:
-        """Test network connectivity for discovery operations.
+"""
+Test network connectivity for discovery operations.
 
         Returns:
             Dictionary with connectivity test results.
-        """
-        results = {
+"""
+results = {
             "port_available": self._test_port_available(self.discovery_port),
             "can_bind_socket": False,
             "broadcast_reachable": False,
@@ -375,8 +390,9 @@ class LANDiscovery:
 
 
     def stop(self):
-        """Stops the discovery threads."""
-        self._running = False
+"""
+Stops the discovery threads.""
+self._running = False
 
 
     def _announce_loop(self):
@@ -503,8 +519,9 @@ class LANDiscovery:
             logger.debug(f"LANDiscovery: Malformed packet from {addr}: {exc}")
 
     def update_peer(self, data: Dict[str, Any]):
-        """Registers or updates a peer in the local registry."""
-        agent_id = data.get("agent_id")
+"""
+Registers or updates a peer in the local registry.""
+agent_id = data.get("agent_id")
         if not agent_id or agent_id == self.agent_id:
             return
 
@@ -524,15 +541,17 @@ class LANDiscovery:
 
 
     def get_active_peers(self, max_age: int = 300) -> List[PeerInfo]:
-        """Returns list of peers seen within max_age seconds."""
-        now = time.time()
+"""
+Returns list of peers seen within max_age seconds.""
+now = time.time()
         with self._lock:
             return [p for p in self.registry.values() if now - p.last_seen < max_age]
 
 
     def clear_stale_peers(self, max_age: int = 3600):
-        """Removes peers not seen for an hour."""
-        now = time.time()
+        ""
+Removes peers not seen for an hour.""
+now = time.time()
         with self._lock:
             stale = [k for k, v in self.registry.items() if now - v.last_seen > max_age]
             for k in stale:

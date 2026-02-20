@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,9 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for response caching and prompt prefix mapping.
+"""
+"""
+Core logic for response caching and prompt prefix mapping.
 """
 
+"""
 import hashlib
 import json
 import logging
@@ -34,10 +38,11 @@ except ImportError:
 
 
 class CacheCore(BaseCore):
-    """Authoritative engine for result caching.
+"""
+Authoritative engine for result caching.
     Includes hooks for Rust-accelerated hashing.
-    """
-    def __init__(self, cache_dir: Optional[Path] = None) -> None:
+"""
+def __init__(self, cache_dir: Optional[Path] = None) -> None:
         super().__init__()
         self.cache_dir = cache_dir or Path("data/cache")
         self.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -55,11 +60,13 @@ class CacheCore(BaseCore):
         return hashlib.md5(content.encode()).hexdigest()
 
     def _make_complex_key(self, file_path: str, agent_name: str, content_hash: str) -> str:
-        """Constructs a unique cache key from multiple dimensions."""
-        return f"{file_path}:{agent_name}:{content_hash}"
+"""
+Constructs a unique cache key from multiple dimensions.""
+return f"{file_path}:{agent_name}:{content_hash}"
     def set(self, prompt: str, response: Any, ttl_seconds: int = 3600) -> None:
-        """Stores a result in memory and disk cache."""
-        key = self._get_cache_key(prompt)
+"""
+Stores a result in memory and disk cache.""
+key = self._get_cache_key(prompt)
         self.cache_data[key] = {"result": response, "timestamp": time.time(), "ttl": ttl_seconds}
         if len(prompt) > 500:
             prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
@@ -73,8 +80,9 @@ class CacheCore(BaseCore):
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.logger.error("Failed to write cache file: %s", e)
     def get(self, prompt: str) -> Optional[Any]:
-        """Retrieves a cached result if available and not expired."""
-        key = self._get_cache_key(prompt)
+        ""
+Retrieves a cached result if available and not expired.""
+key = self._get_cache_key(prompt)
 
         # Check memory cache
         if key in self.cache_data:

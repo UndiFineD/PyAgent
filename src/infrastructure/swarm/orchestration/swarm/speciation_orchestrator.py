@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     from typing import TYPE_CHECKING, Dict, List
@@ -43,14 +48,17 @@ class SpeciationOrchestrator:
     Uses task telemetry to identify gaps in agent capabilities.
     
     def __init__(self, fleet: FleetManager) -> None:
-        """Initializes the SpeciationOrchestrator.        self.fleet = fleet
+"""
+Initializes the SpeciationOrchestrator.        self.fleet = fleet
         self.species_map: Dict[str, List[str]] = {
             "developer": ["CoderAgent", "SandboxAgent", "GitAgent"],"            "researcher": ["KnowledgeAgent", "SearchAgent"],"            "coordinator": ["PatternOrchestrator", "FleetManager"],"        }
-        logging.info(f"SpeciationOrchestrator v{VERSION} initialized.")"
+        logging.info(f"SpeciationOrchestrator v{VERSION} initialized.")
     def speciate(self, domain: str) -> dict:
-        """Creates a specialized sub-swarm (species) for a specific domain.        logging.info(f"Speciation: Creating new species for domain {domain}")"        breed_name = f"{domain.split('-')[-1]}-Specialist""'        return {"domain": domain, "breed_name": breed_name, "agents": [f"{breed_name}-1", f"{breed_name}-2"]}"
+"""
+Creates a specialized sub-swarm (species) for a specific domain.        logging.info(f"Speciation: Creating new species for domain {domain}")"        breed_name = f"{domain.split('-')[-1]}-Specialist""
+return {"domain": domain, "breed_name": breed_name, "agents": [f"{breed_name}-1", f"{breed_name}-2"]}
     def identify_niche_gap(self, unhandled_tasks: List[str]) -> str | None:
-                Analyzes a list of failed or unhandled tasks to identify a missing "niche"."
+                Analyzes a list of failed or unhandled tasks to identify a missing "niche".
         Returns:
             Name of a recommended new agent species, or None.
                 if not unhandled_tasks:
@@ -71,4 +79,7 @@ class SpeciationOrchestrator:
         return None
 
     def record_evolution_event(self, species_name: str, parent_type: str) -> bool:
-        """Records the creation of a new specialized agent type.        logging.info(f"Speciation: New species '{species_name}' evolved from '{parent_type}'.")"'        return True
+"""
+Records the creation of a new specialized agent type.        logging.info(f"Speciation: New species '{species_name}' evolved from '{parent_type}'.")"'        return True
+
+"""

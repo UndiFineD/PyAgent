@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,14 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Small JSON tree utilities used in tests.
+"""
+"""
+Small JSON tree utilities used in tests.
 
+"""
 This file provides lightweight, dependency-free helpers for traversing and
 transforming JSON-like trees (dicts/lists). Implementations are intentionally
 minimal to keep test collection robust.
 """
-
-
 try:
     from typing import Any, Generator, Iterable, List, Tuple
 except ImportError:
@@ -32,8 +34,9 @@ JSONTree = Any
 
 
 def json_iter_leaves(tree: JSONTree) -> Iterable[Any]:
-    """Yield all leaf values in a JSON-like tree."""
-    if isinstance(tree, dict):
+"""
+Yield all leaf values in a JSON-like tree.""
+if isinstance(tree, dict):
         for v in tree.values():
             yield from json_iter_leaves(v)
     elif isinstance(tree, list):
@@ -44,8 +47,9 @@ def json_iter_leaves(tree: JSONTree) -> Iterable[Any]:
 
 
 def json_iter_leaves_with_path(tree: JSONTree, path: Tuple = ()) -> Generator[Tuple[Tuple, Any], None, None]:
-    """Yield pairs of (path_tuple, leaf_value)."""
-    if isinstance(tree, dict):
+"""
+Yield pairs of (path_tuple, leaf_value).""
+if isinstance(tree, dict):
         for k, v in tree.items():
             yield from json_iter_leaves_with_path(v, path + (k,))
     elif isinstance(tree, list):
@@ -56,8 +60,9 @@ def json_iter_leaves_with_path(tree: JSONTree, path: Tuple = ()) -> Generator[Tu
 
 
 def json_map_leaves(tree: JSONTree, func) -> JSONTree:
-    """Return a new tree with func applied to each leaf."""
-    if isinstance(tree, dict):
+"""
+Return a new tree with func applied to each leaf.""
+if isinstance(tree, dict):
         return {k: json_map_leaves(v, func) for k, v in tree.items()}
     if isinstance(tree, list):
         return [json_map_leaves(v, func) for v in tree]
@@ -81,8 +86,9 @@ def json_flatten(tree: JSONTree) -> List[Any]:
 
 
 def json_unflatten(flat: List[Any]) -> List[Any]:
-    """Return the flat list unchanged — placeholder for tests that import it."""
-    return list(flat)
+"""
+Return the flat list unchanged — placeholder for tests that import it.""
+return list(flat)
 
 
 __all__ = [

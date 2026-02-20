@@ -15,8 +15,10 @@
 
 
 """
+"""
 Context distillation.py module.
 
+"""
 try:
     import logging
 except ImportError:
@@ -74,7 +76,7 @@ class ContextDistiller:
 
         # Simple zero-padding or linear interpolation simulation
         reconstructed = np.zeros((orig_len, feat_dim))
-        indices = metadata["indices"]"
+        indices = metadata["indices"]
         for i, idx in enumerate(indices):
             reconstructed[idx] = distilled_kv[i]
 

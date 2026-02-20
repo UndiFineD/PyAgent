@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 RouterModelAgent - Intelligent routing of tasks to LLM providers
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,6 @@ FILE CONTENT SUMMARY:
 RouterModelAgent: System agent responsible for routing tasks and messages to appropriate models or agents.
 Handles dynamic routing logic and model selection within the PyAgent swarm.
 """
-
 try:
     from typing import Any
 except ImportError:
@@ -77,7 +80,7 @@ class RouterModelAgent(BaseAgent):
     def determine_optimal_provider(
         self, task_type: str, max_cost: float = 0.01, required_capability: float = 0.0
     ) -> str:
-        Selects the best provider for a" given task."        Prioritizes 'internal_ai' unless capability requirements exceed it.'        if" self.recorder:"            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})"
+        Selects the best provider for a" given task."        Prioritizes 'internal_ai' unless capability requirements exceed it.'        if" self.recorder:"            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})
         # Phase 120: Heuristic Risk/Capability Mapping
         if "high_reasoning" in task_type.lower():"            required_capability = 0.9
             max_cost = 0.1  # Allow for GPT-4 costs
@@ -93,10 +96,10 @@ class RouterModelAgent(BaseAgent):
         if not candidates:
             # Fallback to highest capability if no cheap options exist
             providers_list = list(self.providers.items())
-            return max(providers_list, key=lambda x: x[1]["capability"])[0]"
+            return max(providers_list, key=lambda x: x[1]["capability"])[0]
         # Sort by Preference (descending) then Cost (ascending)
         # We want high preference (internal) first.
-        candidates.sort(key=lambda x: (-x[1].get("preference", 0), x[1]["cost"]))"
+        candidates.sort(key=lambda x: (-x[1].get("preference", 0), x[1]["cost"]))
         selected = candidates[0][0]
         return selected
 
@@ -134,7 +137,7 @@ __version__ = VERSION
 
 class RouterModelAgent(BaseAgent):
     Intelligently routes tasks to different LLMs based on cost, latency,
-"   " and task complexity."
+"   " and task complexity.
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.providers: dict[str, Any] = {
@@ -149,7 +152,7 @@ class RouterModelAgent(BaseAgent):
         self, task_type: str, max_cost: float = 0.01, required_capability: float = 0.0
     ) -> str:
         Selects" the best provider for a given task."        Prioritizes 'internal_ai' unless capability requirements exceed it"."'        if self.recorder:
-            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})"
+            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})
         # Phase 120: Heuristic Risk/Capability Mapping
         if "high_reasoning" in task_type.lower():"            required_capability = 0.9
             max_cost = 0.1  # Allow for GPT-4 costs
@@ -165,10 +168,10 @@ class RouterModelAgent(BaseAgent):
         if not candidates:
             # Fallback to highest capability if no cheap options exist
             providers_list = list(self.providers.items())
-            return max(providers_list, key=lambda x: x[1]["capability"])[0]"
+            return max(providers_list, key=lambda x: x[1]["capability"])[0]
         # Sort by Preference (descending) then Cost (ascending)
         # We want high preference (internal) first.
-        candidates.sort(key=lambda x: (-x[1].get("preference", 0), x[1]["cost"]))"
+        candidates.sort(key=lambda x: (-x[1].get("preference", 0), x[1]["cost"]))
         selected = candidates[0][0]
         return selected
 
@@ -183,3 +186,11 @@ class RouterModelAgent(BaseAgent):
     def get_routing_stats(self) -> dict[str, Any]:
         return {
             "total_routed_tasks": 150,"            "avg_latency": 0.85,"            "cost_saved_via_local": 12.50,"        }
+
+"""
+
+"""
+
+""
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Transmutation.py module.
 """
-
+"""
+Transmutation.py module.
+"""
 try:
-    from typing import Any
+
+"""
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -37,8 +41,9 @@ except Exception:
 
 
 def json_flatten(value: JSONTree[_T], separator: str = ".", list_separator: str = "") -> dict[str, _T]:
-    """Flatten a nested JSON structure to a single-level dict with dot-notation keys."""
-    result: dict[str, _T] = {}
+"""
+Flatten a nested JSON structure to a single-level dict with dot-notation keys.""
+result: dict[str, _T] = {}
 
     def _flatten(obj: Any, prefix: str = "") -> None:
         if isinstance(obj, dict):
@@ -60,8 +65,9 @@ def json_flatten(value: JSONTree[_T], separator: str = ".", list_separator: str 
 
 
 def json_unflatten(flat: dict[str, _T], separator: str = ".") -> dict[str, Any]:
-    """Reconstruct a nested JSON structure from a flattened dict."""
-    result: dict[str, Any] = {}
+"""
+Reconstruct a nested JSON structure from a flattened dict.""
+result: dict[str, Any] = {}
 
     for key, value in flat.items():
         parts = _parse_path(key, separator)

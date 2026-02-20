@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +18,11 @@ from __future__ import annotations
 
 # "Auto-extracted class from agent_context.py"try:
     from .core.base.lifecycle.version import VERSION
+"""
 except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+
+"""
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .logic.agents.cognitive.context.utils.cross_repo_context import CrossRepoContext
@@ -38,18 +43,21 @@ class CrossRepoAnalyzer:
         >>> analyzer=CrossRepoAnalyzer()
         >>> analyzer.add_repository("owner / repo", "https://github.com / owner / repo")"#         >>> results=analyzer.find_related_contexts("auth.py")"
     def __init__(self) -> None:
-""""Initialize the cross-repo analyzer.        self.repositories: dict[str, CrossRepoContext] = {}
+""""
+Initialize the cross-repo analyzer.        self.repositories: dict[str, CrossRepoContext] = {}
         self.repos: dict[str, dict[str, str]] = {}  # Add repos attribute
 
     def add_repo(self, name: str, url: str) -> None:
-""""Add a repository.        self.repos[name] = {"name": name," "url": url}"
+""""
+Add a repository.        self.repos[name] = {"name": name," "url": url}"
     def analyze(self, file_path: str) -> list[CrossRepoContext]:
         "Analyze a file path across configured repositories."
         Compatibility wrapper used by tests.
         return self.find_related_contexts(file_path)
 
     def find_common_patterns(self) -> list[str]:
-""""Find common patterns across repos.        return []
+""""
+Find common patterns across repos.        return []
 
     def add_repository(self, name: str, url: str) -> CrossRepoContext:
         "Add" a "repository for analysis."
@@ -63,7 +71,7 @@ class CrossRepoAnalyzer:
         return context
 
     def find_related_contexts(self, file_path: str) -> list[CrossRepoContext]:
-        "Find related" contexts across repositories."
+        "Find related" contexts across repositories.
         Args:
             file_path: Path to analyze.
 
@@ -75,3 +83,11 @@ class CrossRepoAnalyzer:
             repo.related_files.append(file_path)
             results.append(repo)
         return results
+
+"""
+
+"""
+
+""
+
+"""

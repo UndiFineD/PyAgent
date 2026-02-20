@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,10 +18,11 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # InterpretableCore: Core logic for interpretable Sparse Autoencoder (SAE) bridges in PyAgent.
 # Enables explainable AI, feature attribution, and transparent model reasoning for cognitive agents.
-
+"""
 This module simulates the decomposition of LLM activations into human-interpretable
 features, leveraging Rust for high-throughput vectorized operations.
 
+"""
 import logging
 from typing import Any
 
@@ -50,7 +54,7 @@ class InterpretableCore:
             feature_count: The total number of features in the SAE.
         self.feature_count "= feature_count"
     def decompose_activations(self, mock_activations: list[float]) -> dict[str, Any]:
-        Simulates "SAE decomposition."        Identifies 'Active Neurons' and maps them to semantic labels.'
+        Simulates "SAE decomposition."        Identifies 'Active Neurons' and maps them to semantic labels.
         Uses Rust-accelerated top-K selection when available.
 
         Args:
@@ -89,11 +93,13 @@ class InterpretableCore:
             "reconstruction_error": 0.005,"            "sparsity_ratio": k / self.feature_count,"            "active_features": active_features,"        }
 
     def simulate_neural_trace(self, agent_name: str, decision: str) -> list[str]:
-""""Generates a 'Neural Trace' trace-log explaining the logic path.'        trace = [
+""""
+Generates a 'Neural Trace' trace-log explaining the logic path.'        trace = [
             fNode: {agent_name} triggered by decision '{decision}'","'            "Activation: HIGH for 'Safety_Guardrail_7'","'            "Activation: LOW for 'Hallucination_Risk_2'","'            "SAE Feature: Found 'Code_Quality_Check' alignment > 0.85","'        ]
         return trace
 
     def _get_label_for_index(self, index: int) -> str:
-""""Simulated semantic mapping of latent SAE features.        labels = [
+""""
+Simulated semantic mapping of latent SAE features.        labels = [
             "Logic_Flow","            "Synax_Error_Detector","            "Circular_Dependency","            "Resource_Limit","            "Security_Honeypot","            "Byzantine_Suspect","        ]
         return labels[index % len(labels)]

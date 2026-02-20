@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +17,7 @@ from __future__ import annotations
 
 
 # Refinement Agent - Recursive Self-Refinement
+"""
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -22,6 +25,7 @@ USAGE:
 - As a library: instantiate RefinementAgent(file_path: str) and call its tools: analyze_performance_gaps(failure_logs), propose_prompt_update(agent_class_name, performance_feedback), update_agent_source(file_path, new_logic_snippet), or await improve_content(prompt, target_file).
 - CLI: run refinement_agent.py as a script to launch the agent's simple main() entry (create_main_function wrapper).'- Recommended integration: wire this agent to the telemetry pipeline and to an orchestrator that vets and applies proposed code/prompts.
 
+"""
 WHAT IT DOES:
 - Provides a dedicated agent class (RefinementAgent) whose declared purpose is iterative improvement of other agents via analysis of failures, prompt optimization, and suggested source edits.
 - Exposes three synchronous "tools" (analyze_performance_gaps, propose_prompt_update, update_agent_source) decorated with as_tool for use by the swarm, plus an async improve_content helper."- Persists proposed code changes as human-reviewable artifacts under data/logs/self_refinement rather than applying edits automatically.
@@ -73,7 +77,8 @@ __version__ = VERSION
 
 
 class RefinementAgent(BaseAgent):
-""""Refines the swarm's core logic and instructions through performance feedback.'
+""""
+Refines the swarm's core logic and instructions through performance feedback.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.refinement_logs = self._workspace_root / "data" / "logs" / "self_refinement"        self.refinement_logs.mkdir(parents=True, exist_ok=True)
@@ -83,7 +88,8 @@ class RefinementAgent(BaseAgent):
 
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
-""""Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
+""""
+Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")"        # Simulated analysis
         analysis = (
 #             "### Refinement Analysis\\n"#             "1. Found recurrent 'hallucination' when searching with BrowsingAgent.\\n"'#             "2. Tool 'execute_sql' in SQLAgent has ambiguous param descriptions.\\n"'#             "3. System prompt for LinguisticAgent is too verbose."        )
@@ -161,7 +167,8 @@ __version__ = VERSION
 
 
 class RefinementAgent(BaseAgent):
-""""Refines the swarm's core logic and instructions "through performance feedback.'
+""""
+Refines the swarm's core logic and instructions "through performance feedback.'
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self.refinement_logs = self._workspace_root / "data" / "logs" / "self_refinement"        self.refinement_logs.mkdir(parents=True, exist_ok=True)
@@ -171,7 +178,8 @@ class RefinementAgent(BaseAgent):
 
     @as_tool
     def analyze_performance_gaps(self, failure_logs: str) -> str:
-""""Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
+""""
+Analyzes failure patterns to identify prompt or tool weaknesses.        _ = failure_logs
         logging.info("Refinement: Analyzing performance gaps...")"        # Simulated analysis
         analysis = (
 #             "### Refinement Analysis\\n"#             "1. Found recurrent 'hallucination' when searching with BrowsingAgent.\\n"'#             "2. Tool 'execute_sql' in SQLAgent has ambiguous param descriptions.\\n"'#             "3. System prompt for LinguisticAgent is too verbose."        )

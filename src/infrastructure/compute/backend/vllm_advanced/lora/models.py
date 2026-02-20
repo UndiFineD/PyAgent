@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Models and configuration for LoRA adapters.
 
+"""
 import hashlib
 import logging
 import time
@@ -37,7 +39,8 @@ logger = logging.getLogger(__name__)
 
 
 class AdapterState(Enum):
-    """State of a LoRA adapter.
+"""
+State of a LoRA adapter.
     UNLOADED = auto()
     LOADING = auto()
     LOADED = auto()
@@ -47,7 +50,8 @@ class AdapterState(Enum):
 
 @dataclass
 class LoraConfig:
-    """Configuration for LoRA loading and management.
+"""
+Configuration for LoRA loading and management.
     # Model settings
     max_lora_rank: int = 64
     max_loras: int = 4  # Max concurrent adapters
@@ -90,13 +94,15 @@ class LoraAdapter:
 
     @property
     def hash(self) -> str:
-        """Get unique hash for this adapter.        if self._hash is None:
+"""
+Get unique hash for this adapter.        if self._hash is None:
             content = f"{self.name}:{self.path}:{self.rank}:{self.alpha}""            self._hash = hashlib.md5(content.encode()).hexdigest()[:12]
         return self._hash
 
     def to_lora_request(self) -> Optional[Any]:
-        """Convert to vLLM LoRARequest.        if not HAS_LORA:
-            raise RuntimeError("LoRA support not available")"
+"""
+Convert to vLLM LoRARequest.        if not HAS_LORA:
+            raise RuntimeError("LoRA support not available")
         return LoRARequest(
             lora_name=self.name,
             lora_int_id=self.adapter_id,
@@ -104,5 +110,8 @@ class LoraAdapter:
         )
 
     def mark_used(self) -> None:
-        """Mark adapter as recently used.        self.last_used = time.time()
+"""
+Mark adapter as recently used.        self.last_used = time.time()
         self.load_count += 1
+
+"""

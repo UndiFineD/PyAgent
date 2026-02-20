@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,9 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for Hardware Acceleration and NPU interaction.
+"""
+"""
+Core logic for Hardware Acceleration and NPU interaction.
 """
 
+"""
 import logging
 from typing import Optional
 
@@ -31,15 +35,17 @@ logger = logging.getLogger("pyagent.hardware")
 
 
 class HardwareCore(BaseCore):
-    """Standard interface for hardware-specific optimizations (NPU, GPU).
-    """
-    def __init__(self, name: str = "HardwareCore", repo_root: Optional[str] = None) -> None:
+"""
+Standard interface for hardware-specific optimizations (NPU, GPU).
+"""
+def __init__(self, name: str = "HardwareCore", repo_root: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=repo_root)
         self._npu_status = False
 
     def initialize_npu(self) -> bool:
-        """Attempts to initialize NPU acceleration via Rust core."""
-        if rc and hasattr(rc, "initialize_npu"):  # pylint: disable=no-member
+        ""
+Attempts to initialize NPU acceleration via Rust core.""
+if rc and hasattr(rc, "initialize_npu"):  # pylint: disable=no-member
             # pylint: disable=no-member
             result = rc.initialize_npu()
             self._npu_status = result == 0

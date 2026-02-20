@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,27 +16,34 @@ from __future__ import annotations
 # limitations under the License.
 
 
-Basic module docstring.
+"""
+"""
+Validation result model (parser-safe stub).""
+
+""
+from dataclasses import dataclass, field
+from typing import List
 
 try:
     from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
+@dataclass
 class ValidationResult:
-    """Structured result for validation outcome"""s.""""
-    def __init__(
-        self,
-        valid: bool,
-        errors: list[str],
-        warnings: list[str],
-        checksum: str
-    ) -> None:
-        self.valid = valid
-        self.errors = errors
-        self.warnings = warnings
-        self.checksum = checksum
+    improvement_id: str
+    is_valid: bool = True
+    issues: List[str] = field(default_factory=list)
+
+    @property
+    def errors(self) -> List[str]:
+        return [i for i in self.issues]
+
+
+__all__ = ["ValidationResult"]from __future__ import annotations

@@ -16,8 +16,11 @@
 
 """
 ResourceMonitor
+"""
 Monitors local CPU, RAM, and Disk usage using psutil.
 Triggers 'compute borrow' requests when thresholds are exceeded.
+"""
+
 """
 import asyncio
 import psutil
@@ -29,12 +32,11 @@ logger = StructuredLogger(__name__)
 
 
 class ResourceMonitor:
-    """
-    Monitors local CPU, RAM, and Disk usage using psutil.
+"""
+Monitors local CPU, RAM, and Disk usage using psutil.
     Triggers 'compute borrow' requests when thresholds are exceeded.
-    """
-
-    def __init__(self, fleet=None, high_threshold: float = 70.0, critical_threshold: float = 90.0):
+"""
+def __init__(self, fleet=None, high_threshold: float = 70.0, critical_threshold: float = 90.0):
         self.fleet = fleet
         self.high_threshold = high_threshold
         self.critical_threshold = critical_threshold
@@ -45,8 +47,9 @@ class ResourceMonitor:
 
     @property
     def is_stressed(self) -> bool:
-        """Returns True if any core metric exceeds the high threshold."""
-        stats = self.get_latest_stats()
+"""
+Returns True if any core metric exceeds the high threshold.""
+stats = self.get_latest_stats()
         core_metrics = [
             stats.get("cpu_usage", 0.0),
             stats.get("memory_usage", 0.0),
@@ -56,8 +59,9 @@ class ResourceMonitor:
 
 
     async def start(self, interval: int = 10):
-        """Starts the background monitoring loop."""
-        self.running = True
+"""
+Starts the background monitoring loop.""
+self.running = True
         logger.info(f"ResourceMonitor: Starting with thresholds H:{self.high_threshold}% C:{self.critical_threshold}%")
         while self.running:
             try:
@@ -72,8 +76,9 @@ class ResourceMonitor:
 
 
     def collect_stats(self) -> Dict[str, Any]:
-        """Collects current hardware metrics including processing, memory, disk, network, and sensors."""
-        stats = {
+"""
+Collects current hardware metrics including processing, memory, disk, network, and sensors.""
+stats = {
             "cpu_percent": psutil.cpu_percent(interval=None),
             "memory_percent": psutil.virtual_memory().percent,
             "disk_percent": psutil.disk_usage("/").percent,
@@ -89,8 +94,9 @@ class ResourceMonitor:
 
 
     def _get_temperature(self) -> float:
-        """Attempts to retrieve the primary system temperature."""
-        try:
+"""
+Attempts to retrieve the primary system temperature.""
+try:
             if not hasattr(psutil, "sensors_temperatures"):
                 return 0.0
             # temps = psutil.sensors_temperatures()
@@ -108,8 +114,9 @@ class ResourceMonitor:
 
 
     def _get_gpu_stats(self) -> Dict[str, Any]:
-        """Attempts to retrieve GPU utilization using GPUtil if available."""
-        gpu_data = {"usage": 0.0, "mem": 0.0}
+"""
+Attempts to retrieve GPU utilization using GPUtil if available.""
+gpu_data = {"usage": 0.0, "mem": 0.0}
         try:
             import GPUtil
             gpus = GPUtil.getGPUs()
@@ -122,12 +129,14 @@ class ResourceMonitor:
 
 
     def get_latest_stats(self) -> Dict[str, Any]:
-        """Returns the most recently collected hardware metrics."""
-        return self.last_stats or self.collect_stats()
+"""
+Returns the most recently collected hardware metrics.""
+return self.last_stats or self.collect_stats()
 
 
     async def _evaluate_stress(self, stats: Dict[str, Any]):
-        """Checks if local node is under heavy load and needs to delegate."""
+        ""
+Checks if local node is under heavy load and needs to delegate.""
         # Only check core metrics for stress evaluation
         core_metrics = [
             stats.get("cpu_usage", 0.0), 

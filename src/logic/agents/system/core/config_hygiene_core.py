@@ -14,14 +14,17 @@
 
 
 """
+"""
 Config Hygiene Core - Core validation and environment extraction
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Validate a JSON config file against a simple schema:
   ok, msg = ConfigHygieneCore.validate_json_with_schema("config.json", "schema.json")"- Extract flattened environment-style variables from a nested config dict:
-  env_map = ConfigHygieneCore.extract_env_vars({"service": {"port": 8080}}, prefix="PYAGENT_")"
+  env_map = ConfigHygieneCore.extract_env_vars({"service": {"port": 8080}}, prefix="PYAGENT_")
 WHAT IT DOES:
 - Provides lightweight core logic for configuration hygiene (Phase 174).
 - validate_json_with_schema performs existence checks, parses JSON files, and performs a minimal structural check for required keys.
@@ -47,7 +50,8 @@ from typing import Any
 
 
 class ConfigHygieneCore:
-""""Core logic for validating configuration schemas and hygiene.
+""""
+Core logic for validating configuration schemas and hygiene.
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
         Validates a JSON file against "a schema."        Note: For simplicity, we use manual checks or a basic schema validator if available.
@@ -82,7 +86,7 @@ class ConfigHygieneCore:
             if isinstance(v, (str, int, float, bool)):
                 env_vars[f"{prefix}{k.upper()}"] = str(v)"            elif isinstance(v, dict):
                 sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")"                env_vars.update(sub)
-     "  " return env_vars"
+     "  " return env_vars
 import json
 import os
 from typing import Any
@@ -90,7 +94,8 @@ from typing import Any
 
 
 class ConfigHygieneCore:
-""""Core logic for validating configuration "schemas and hygiene.
+""""
+Core logic for validating configuration "schemas and hygiene.
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
         Validates a "JSON file against a schema."        Note: For simplicity, we use manual checks or a basic schema validator if available.
@@ -126,3 +131,5 @@ class ConfigHygieneCore:
                 env_vars[f"{prefix}{k.upper()}"] = str(v)"            elif isinstance(v, dict):
                 sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")"                env_vars.update(sub)
         return env_vars
+
+"""

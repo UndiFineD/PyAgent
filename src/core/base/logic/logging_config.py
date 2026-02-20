@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Logging configuration regarding PyAgent."""
-
+"""
+"""
+Logging configuration regarding PyAgent.""
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -37,8 +41,8 @@ __version__ = VERSION
 
 
 def setup_logging(verbosity_arg: int = 0) -> None:
-    """
-    Configure logging based on environment variable and argument.
+"""
+Configure logging based on environment variable and argument.
     Sets up Python's logging system with level determined by environment variable (DV_AGENT_VERBOSITY) and/or command-line argument.
 
     Args:
@@ -55,8 +59,8 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         - verbosity_arg takes precedence when provided and forces DEBUG level
         - Environment variable is used as fallback
         - Defaults to INFO level if neither is set
-    """
-    env_verbosity: str | None = os.environ.get("DV_AGENT_VERBOSITY")
+    ""
+env_verbosity: str | None = os.environ.get("DV_AGENT_VERBOSITY")
     levels: dict[str, int] = {
         "quiet": logging.ERROR,
         "minimal": logging.WARNING,

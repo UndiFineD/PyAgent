@@ -15,9 +15,11 @@
 
 
 """
+"""
 Core logic for Broken Import Self-Healing (Phase 186).
 Suggests fixes for ModuleNotFound errors and builds import maps.
 
+"""
 try:
     import os
 except ImportError:
@@ -32,12 +34,13 @@ except ImportError:
 
 
 class ImportHealerCore:
-    """Core logic for diagnosing and fixing import errors.
+"""
+Core logic for diagnosing and fixing import errors.
     @staticmethod
     def suggest_fix(error_message: str) -> str:
                 Parses a ModuleNotFoundError and suggests a pip install command.
                 match = re.search(r"No module named ['\"](.*?)['\"]", error_message)"'        if match:
-            module = match.group(1).split(".")[0]"            return f"Suggested fix: pip install {module}""        return "Suggested fix: Check sys.path or internal module naming.""
+            module = match.group(1).split(".")[0]"            return f"Suggested fix: pip install {module}""        return "Suggested fix: Check sys.path or internal module naming."
     @staticmethod
     def build_internal_import_map(directory: str) -> dict[str, list[str]]:
                 Scans directory for internal imports and builds a map.

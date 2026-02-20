@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,13 @@ from __future__ import annotations
 
 
 """
+"""
 Signal core.py module.
 """
-
 try:
-    from datetime import datetime
+
+"""
+from datetime import datetime
 except ImportError:
     from datetime import datetime
 
@@ -45,10 +48,12 @@ class SignalCore:
     Handles event structure and history windowing.
     
     def create_event(self, signal_name: str, data: Any, sender: str) -> dict[str, Any]:
-        """Creates a standardized signal event object.        import time
+"""
+Creates a standardized signal event object.        import time
 
         return {
             "signal": signal_name,"            "data": data,"            "sender": sender,"            "timestamp": time.time(),"            "timestamp_iso": datetime.now().isoformat(),"        }
 
     def prune_history(self, history: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
-        """Returns the last N events from the signal history.        return history[-limit:]
+"""
+Returns the last N events from the signal history.        return history[-limit:]

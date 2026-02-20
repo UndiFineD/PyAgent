@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Global command registry and registration utilities.
+
+"""
 
 # pylint: disable=cyclic-import
 
@@ -31,14 +35,17 @@ _GLOBAL_REGISTRY: CommandRegistry | None = None
 
 
 def get_global_registry() -> CommandRegistry:
-    """Get the global command registry.    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
+"""
+Get the global command registry.    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
+
     if _GLOBAL_REGISTRY is None:
         _GLOBAL_REGISTRY = CommandRegistry()
     return _GLOBAL_REGISTRY
 
 
 def reset_global_registry() -> None:
-    """Reset the global registry (for testing).    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
+"""
+Reset the global registry (for testing).    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
     if _GLOBAL_REGISTRY:
         _GLOBAL_REGISTRY.clear()
     _GLOBAL_REGISTRY = None
@@ -95,19 +102,23 @@ def register_command(
 
 
 def command(name: str, **kwargs: Any) -> Callable[[CommandHandler], CommandHandler]:
-    """Alias for register() decorator.    return register(name, **kwargs)
+"""
+Alias for register() decorator.    return register(name, **kwargs)
 
 
 def unregister(name: str) -> bool:
-    """Remove a command from the global registry.    return get_global_registry().unregister(name)
+"""
+Remove a command from the global registry.    return get_global_registry().unregister(name)
 
 
 def enable_command(name: str) -> bool:
-    """Enable a command.    return get_global_registry().enable(name)
+"""
+Enable a command.    return get_global_registry().enable(name)
 
 
 def disable_command(name: str) -> bool:
-    """Disable a command.    return get_global_registry().disable(name)
+"""
+Disable a command.    return get_global_registry().disable(name)
 
 
 def list_commands(
@@ -115,7 +126,8 @@ def list_commands(
     include_disabled: bool = False,
     category: str | None = None,
 ) -> list[CommandDefinition]:
-    """List all registered commands.    return get_global_registry().list_commands(
+"""
+List all registered commands.    return get_global_registry().list_commands(
         include_hidden=include_hidden,
         include_disabled=include_disabled,
         category=category,

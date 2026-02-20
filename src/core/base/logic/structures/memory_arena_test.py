@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.structures.memory_arena import ArenaStats, MemoryArena, TypedArena, StackArena, SlabAllocator, get_thread_arena, temp_arena, thread_temp_alloc

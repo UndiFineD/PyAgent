@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for Sharded Knowledge Management.
+"""
+"""
+Core logic for Sharded Knowledge Management.
 Handles trillion-parameter scale entity distribution.
 """
 
+"""
 import hashlib
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -32,26 +36,29 @@ except ImportError:
 
 
 class KnowledgeCore(BaseCore):
-    """Standardized sharded knowledge management.
+"""
+Standardized sharded knowledge management.
     Uses Adler-32 or MD5 based sharding.
-    """
-    def __init__(self, shard_count: int = 1024, base_path: Optional[Path] = None) -> None:
+"""
+def __init__(self, shard_count: int = 1024, base_path: Optional[Path] = None) -> None:
         super().__init__()
         self.shard_count = shard_count
         self.base_path = base_path
 
 
     def get_shard_id(self, entity_key: str) -> int:
-        """Determines the shard index for a given entity key."""
-        if rc and hasattr(rc, "get_adler32_shard"):  # pylint: disable=no-member
+"""
+Determines the shard index for a given entity key.""
+if rc and hasattr(rc, "get_adler32_shard"):  # pylint: disable=no-member
             return rc.get_adler32_shard(entity_key, self.shard_count)  # pylint: disable=no-member
         hash_val = int(hashlib.md5(entity_key.encode()).hexdigest(), 16)
         return hash_val % self.shard_count
 
 
     def index_entity(self, entity: Dict[str, Any]) -> bool:
-        """Maintains the global knowledge index footprint."""
-        key = entity.get("id") or entity.get("name", "unknown")
+"""
+Maintains the global knowledge index footprint.""
+key = entity.get("id") or entity.get("name", "unknown")
         # Determine shard placement but don't store yet
         self.get_shard_id(key)
         # Logic for writing to shard storage

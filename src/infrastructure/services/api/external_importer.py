@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_changes.py""""
-
 import logging
 import os
 from pathlib import Path
@@ -38,15 +38,17 @@ __version__ = VERSION
 
 
 class ExternalImporter:
-    """Imports changelog entries from external sources.""""
-    Supports importing from GitHub releases, JIRA, and other sources.
+"""
+Imports changelog entries from external sources.""""
+Supports importing from GitHub releases, JIRA, and other sources.
 
     Attributes:
         imported_entries: List of imported entries.
         github_token: Optional token for Auth.
     
     def __init__(self, workspace_root: str | None = None) -> None:
-        """Initialize the external importer.        self.imported_entries: list[ImportedEntry] = []
+"""
+Initialize the external importer.        self.imported_entries: list[ImportedEntry] = []
         self.github_token = os.environ.get("GITHUB_TOKEN")"        self.conn_mgr = ConnectivityManager(workspace_root=workspace_root)
         try:
             from src.infrastructure.compute.backend.local_context_recorder import \
@@ -65,12 +67,14 @@ class ExternalImporter:
         result: str,
         meta: dict[str, Any] | None = None,
     ) -> None:
-        """Record an interaction for intelligence harvesting (Phase 108).        if self.recorder:
+"""
+Record an interaction for intelligence harvesting (Phase 108).        if self.recorder:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
 
     def import_github_releases(self, owner: str, repo: str, pages: int = 1) -> list[ImportedEntry]:
-        """Import entries from GitHub releases using the official API (Simulated Tier 1).""""
-        Args:
+"""
+Import entries from GitHub releases using the official API (Simulated Tier 1).""""
+Args:
             owner: Repository owner.
             repo: Repository name.
             pages: Number of pages to fetch (v2 feature).
@@ -79,7 +83,7 @@ class ExternalImporter:
             List of imported entries.
                 if not self.conn_mgr.is_online("github_api"):"            logging.warning(f"GitHub API is currently down (cached). Skipping fetch for {owner}/{repo}.")"            return []
 
-        logging.info(f"Fetching GitHub releases for {owner}/{repo}")"
+        logging.info(f"Fetching GitHub releases for {owner}/{repo}")
         headers = {}
         if self.github_token:
             headers["Authorization"] = f"token {self.github_token}""            logging.debug("Using GITHUB_TOKEN for authentication.")"
@@ -88,7 +92,7 @@ class ExternalImporter:
             for page in range(1, pages + 1):
                 url = f"https://api.github.com/repos/{owner}/{repo}/releases?page={page}&per_page=30""                response = requests.get(url, headers=headers, timeout=10)
 
-                self.conn_mgr.update_status("github_api", response.status_code == 200)"
+                self.conn_mgr.update_status("github_api", response.status_code == 200)
                 if response.status_code == 200:
                     releases = response.json()
                     if not releases:
@@ -120,27 +124,28 @@ class ExternalImporter:
         return entries
 
     def import_jira(self, project_key: str, max_results: int = 50) -> list[ImportedEntry]:
-        """Import entries from JIRA using REST API (v2 feature).""""
-        Args:
+"""
+Import entries from JIRA using REST API (v2 feature).""""
+Args:
             project_key: JIRA project key.
             max_results: Max issues to fetch.
 
         Returns:
             List of imported entries.
-                logging.info(f"Fetching JIRA issues for {project_key}")"
-        jira_url = os.environ.get("JIRA_URL")"        jira_user = os.environ.get("JIRA_USER")"        jira_token = os.environ.get("JIRA_TOKEN")"
+                logging.info(f"Fetching JIRA issues for {project_key}")
+        jira_url = os.environ.get("JIRA_URL")"        jira_user = os.environ.get("JIRA_USER")"        jira_token = os.environ.get("JIRA_TOKEN")
         all_issues = []
         if jira_url and jira_user and jira_token:
             from requests.auth import HTTPBasicAuth
 
             auth = HTTPBasicAuth(jira_user, jira_token)
-            headers = {"Accept": "application/json"}"
+            headers = {"Accept": "application/json"}
             try:
                 url = f"{jira_url}/rest/api/2/search?jql=project={project_key}&maxResults={max_results}""                response = requests.get(url, headers=headers, auth=auth)
                 if response.status_code == 200:
                     all_issues = response.json().get("issues", [])"                else:
                     logging.error(f"JIRA API Error: {response.status_code} - {response.text}")"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error(f"JIRA API Exception: {e}")"
+                logging.error(f"JIRA API Exception: {e}")
         if not all_issues:
             # Simulated JIRA response fallback
             all_issues = [
@@ -164,8 +169,9 @@ class ExternalImporter:
         return entries
 
     def convert_to_changelog_entries(self) -> list[ChangelogEntry]:
-        """Convert imported entries to changelog entries.""""
-        Returns:
+"""
+Convert imported entries to changelog entries.""""
+Returns:
             List of ChangelogEntry instances.
                 result: list[ChangelogEntry] = []
         for imported in self.imported_entries:
@@ -176,3 +182,9 @@ class ExternalImporter:
                 )
             )
         return result
+
+"""
+
+""
+
+"""

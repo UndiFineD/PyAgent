@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Phase 45: Pooling Infrastructure
 vLLM-inspired pooling metadata and cursor management.
 
+"""
 Beyond vLLM:
 - Multi-strategy pooling (mean, max, first, last, attention-weighted)
 - Async pooling with prefetch
@@ -41,11 +45,12 @@ except ImportError:
     rust_core = None
 
 # Type variable for tensor types
-T = TypeVar("T")"
+T = TypeVar("T")
 
 
 class PoolingStrategy(Enum):
-    """Pooling strategies for sequence embeddings.
+"""
+Pooling strategies for sequence embeddings.
     MEAN = auto()
     MAX = auto()
     FIRST = auto()
@@ -75,29 +80,35 @@ class PoolingCursor:
     token_offset: int = 0
 
     def advance(self, num_tokens: int) -> None:
-        """Advance cursor by number of tokens.        self.current_pos += num_tokens
+"""
+Advance cursor by number of tokens.        self.current_pos += num_tokens
         if self.is_chunked:
             self.chunk_start += num_tokens
 
     def reset(self) -> None:
-        """Reset cursor to start.        self.current_pos = 0
+"""
+Reset cursor to start.        self.current_pos = 0
         self.chunk_start = 0
 
     @property
     def remaining(self) -> int:
-        """Get remaining tokens to process.        return self.seq_len - self.current_pos
+"""
+Get remaining tokens to process.        return self.seq_len - self.current_pos
 
     @property
     def is_complete(self) -> bool:
-        """Check if pooling is complete.        return self.current_pos >= self.seq_len
+"""
+Check if pooling is complete.        return self.current_pos >= self.seq_len
 
     @property
     def global_start(self) -> int:
-        """Get global start index.        return self.seq_start_idx + self.current_pos
+"""
+Get global start index.        return self.seq_start_idx + self.current_pos
 
     @property
     def global_end(self) -> int:
-        """Get global end index.        return self.seq_start_idx + self.seq_len
+"""
+Get global end index.        return self.seq_start_idx + self.seq_len
 
 
 @dataclass
@@ -121,7 +132,8 @@ class PoolingStates:
     strategy: PoolingStrategy = PoolingStrategy.MEAN
 
     def initialize(self, hidden_dim: int, strategy: PoolingStrategy) -> None:
-        """Initialize states for a strategy.        self.strategy = strategy
+"""
+Initialize states for a strategy.        self.strategy = strategy
         self.token_count = 0
 
         if strategy == PoolingStrategy.MEAN:
@@ -136,7 +148,8 @@ class PoolingStates:
         hidden_states: np.ndarray,
         attention_weights: Optional[np.ndarray] = None,
     ) -> None:
-        """Update states with new hidden states.        if self.strategy == PoolingStrategy.MEAN:
+"""
+Update states with new hidden states.        if self.strategy == PoolingStrategy.MEAN:
             self.sum_hidden += hidden_states.sum(axis=0)
             self.token_count += hidden_states.shape[0]
         elif self.strategy == PoolingStrategy.MAX:
@@ -157,7 +170,8 @@ class PoolingStates:
             self.token_count += hidden_states.shape[0]
 
     def finalize(self) -> np.ndarray:
-        """Finalize and return pooled output.        if self.strategy == PoolingStrategy.MEAN:
+"""
+Finalize and return pooled output.        if self.strategy == PoolingStrategy.MEAN:
             return self.sum_hidden / max(self.token_count, 1)
         if self.strategy == PoolingStrategy.MAX:
             return self.max_hidden
@@ -165,7 +179,7 @@ class PoolingStates:
             return self.sum_hidden
         if self.strategy == PoolingStrategy.ATTENTION_WEIGHTED:
             return self.sum_hidden / max(self.attention_sum, 1e-9)
-        raise ValueError(f"Unknown strategy: {self.strategy}")"
+        raise ValueError(f"Unknown strategy: {self.strategy}")
 
 @dataclass
 class PoolingMetadata:
@@ -200,7 +214,8 @@ class PoolingMetadata:
         hidden_dim: int,
         strategy: PoolingStrategy = PoolingStrategy.MEAN,
         chunk_sizes: Optional[List[int]] = None,
-    ) -> "PoolingMetadata":"        """Create pooling metadata regarding a batch.        batch_size = len(seq_starts)
+    ) -> "PoolingMetadata":"        """
+Create pooling metadata regarding a batch.        batch_size = len(seq_starts)
         is_chunked = chunk_sizes is not None
 
         def create_cursor_and_state(i: int) -> tuple[PoolingCursor, PoolingStates]:
@@ -233,7 +248,8 @@ class PoolingMetadata:
         hidden_states_batch: List[np.ndarray],
         attention_weights_batch: Optional[List[np.ndarray]] = None,
     ) -> None:
-        """Update all states with a batch regarding hidden states.
+"""
+Update all states with a batch regarding hidden states.
         def update_step(i: int) -> None:
             state = self.states[i]
             hidden = hidden_states_batch[i]
@@ -244,10 +260,12 @@ class PoolingMetadata:
         list(map(update_step, range(len(self.states))))
 
     def finalize_all(self) -> List[np.ndarray]:
-        """Finalize all pooling operations.        return list(map(lambda s: s.finalize(), self.states))
+"""
+Finalize all pooling operations.        return list(map(lambda s: s.finalize(), self.states))
 
     def get_incomplete_indices(self) -> List[int]:
-        """Get indices regarding incomplete sequences.        return list(map(
+"""
+Get indices regarding incomplete sequences.        return list(map(
             lambda pair: pair[0],
             filter(lambda pair: not pair[1].is_complete, enumerate(self.cursors))
         ))
@@ -255,24 +273,28 @@ class PoolingMetadata:
 
 
 class Pooler(ABC):
-    """Abstract base for pooling implementations.
+"""
+Abstract base for pooling implementations.
     @abstractmethod
     def pool(
         self,
         hidden_states: np.ndarray,
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
-        """Pool hidden states according to metadata.        raise NotImplementedError("Subclasses must implement pool()")"
+"""
+Pool hidden states according to metadata.        raise NotImplementedError("Subclasses must implement pool()")
 
 
 class MeanPooler(Pooler):
-    """Mean pooling implementation.
+"""
+Mean pooling implementation.
     def pool(
         self,
         hidden_states: np.ndarray,
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
-        """Pool using mean strategy.
+"""
+Pool using mean strategy.
         def get_mean(cursor: PoolingCursor) -> np.ndarray:
             start = cursor.seq_start_idx
             end = start + cursor.seq_len
@@ -283,13 +305,15 @@ class MeanPooler(Pooler):
 
 
 class MaxPooler(Pooler):
-    """Max pooling implementation.
+"""
+Max pooling implementation.
     def pool(
         self,
         hidden_states: np.ndarray,
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
-        """Pool using max strategy.
+"""
+Pool using max strategy.
         def get_max(cursor: PoolingCursor) -> np.ndarray:
             start = cursor.seq_start_idx
             end = start + cursor.seq_len
@@ -300,13 +324,15 @@ class MaxPooler(Pooler):
 
 
 class LastTokenPooler(Pooler):
-    """Last token pooling regarding decoder-only models.
+"""
+Last token pooling regarding decoder-only models.
     def pool(
         self,
         hidden_states: np.ndarray,
         metadata: PoolingMetadata,
     ) -> List[np.ndarray]:
-        """Pool using last token.
+"""
+Pool using last token.
         def get_last(cursor: PoolingCursor) -> np.ndarray:
             last_idx = cursor.seq_start_idx + cursor.seq_len - 1
             return hidden_states[last_idx]
@@ -316,7 +342,8 @@ class LastTokenPooler(Pooler):
 
 
 class AttentionWeightedPooler(Pooler):
-    """Attention-weighted pooling implementation.
+"""
+Attention-weighted pooling implementation.
     def __init__(self, attention_head_idx: int = 0) -> None:
         self.attention_head_idx = attention_head_idx
 
@@ -326,7 +353,8 @@ class AttentionWeightedPooler(Pooler):
         metadata: PoolingMetadata,
         attention_weights: Optional[np.ndarray] = None,
     ) -> List[np.ndarray]:
-        """Pool using attention weights.        if attention_weights is None:
+"""
+Pool using attention weights.        if attention_weights is None:
             # Fall back to mean pooling
             return MeanPooler().pool(hidden_states, metadata)
 
@@ -347,10 +375,12 @@ class AttentionWeightedPooler(Pooler):
 
 
 class PoolerFactory:
-    """Factory for creating poolers.
+"""
+Factory for creating poolers.
     @staticmethod
     def create(strategy: PoolingStrategy) -> Pooler:
-        """Create a pooler for the given strategy.        if strategy == PoolingStrategy.MEAN:
+"""
+Create a pooler for the given strategy.        if strategy == PoolingStrategy.MEAN:
             return MeanPooler()
         if strategy == PoolingStrategy.MAX:
             return MaxPooler()
@@ -358,7 +388,7 @@ class PoolerFactory:
             return LastTokenPooler()
         if strategy == PoolingStrategy.ATTENTION_WEIGHTED:
             return AttentionWeightedPooler()
-        raise ValueError(f"Unknown pooling strategy: {strategy}")"
+        raise ValueError(f"Unknown pooling strategy: {strategy}")
 
 @dataclass
 class PoolerOutput:
@@ -373,13 +403,16 @@ class PoolerOutput:
 
     @property
     def batch_size(self) -> int:
-        """Get the number of sequences in the batch.        return len(self.embeddings)
+"""
+Get the number of sequences in the batch.        return len(self.embeddings)
 
     def to_numpy(self) -> np.ndarray:
-        """Stack embeddings into a single array.        return np.stack(self.embeddings)
+"""
+Stack embeddings into a single array.        return np.stack(self.embeddings)
 
     def get_embedding(self, idx: int) -> np.ndarray:
-        """Get embedding by index.        return self.embeddings[idx]
+"""
+Get embedding by index.        return self.embeddings[idx]
 
 
 
@@ -405,7 +438,8 @@ class ChunkedPoolingManager:
         seq_id: str,
         seq_len: int,
     ) -> PoolingMetadata:
-        """Start tracking a new sequence regarding chunked pooling.        # Calculate chunks
+"""
+Start tracking a new sequence regarding chunked pooling.        # Calculate chunks
         num_chunks = (seq_len + self.max_chunk_size - 1) // self.max_chunk_size
 
         def get_chunk_size(idx: int) -> int:
@@ -432,7 +466,8 @@ class ChunkedPoolingManager:
         seq_id: str,
         hidden_states: np.ndarray,
     ) -> bool:
-        """Process a chunk of hidden states. Returns True if complete.        with self._lock:
+"""
+Process a chunk of hidden states. Returns True if complete.        with self._lock:
             if seq_id not in self._pending:
                 return True
 
@@ -442,7 +477,8 @@ class ChunkedPoolingManager:
             return metadata.cursors[0].is_complete
 
     def finalize(self, seq_id: str) -> Optional[np.ndarray]:
-        """Finalize pooling for a sequence.        with self._lock:
+"""
+Finalize pooling for a sequence.        with self._lock:
             if seq_id not in self._pending:
                 return None
 
@@ -451,7 +487,8 @@ class ChunkedPoolingManager:
             return results[0] if results else None
 
     def get_pending_count(self) -> int:
-        """Get number of pending sequences.        with self._lock:
+"""
+Get number of pending sequences.        with self._lock:
             return len(self._pending)
 
 
@@ -475,3 +512,11 @@ def pool_with_rust(
 
 __all__ = [
     "PoolingStrategy","    "PoolingCursor","    "PoolingStates","    "PoolingMetadata","    "Pooler","    "MeanPooler","    "MaxPooler","    "LastTokenPooler","    "AttentionWeightedPooler","    "PoolerFactory","    "PoolerOutput","    "ChunkedPoolingManager","    "pool_with_rust","]
+
+"""
+
+"""
+
+""
+
+"""

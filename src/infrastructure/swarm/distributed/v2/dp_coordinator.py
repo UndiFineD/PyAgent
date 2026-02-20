@@ -15,9 +15,11 @@
 
 
 """
+"""
 Data Parallel Coordinator (V2) for Phase 55.
 Handles ZMQ-based request coordination, wave tracking, and stats publishing.
 
+"""
 import logging
 import time
 from typing import Any, Dict, List, Optional
@@ -51,12 +53,13 @@ class DPCoordinatorV2:
         self.locality = LocalityManager()
 
         if not is_master:
-            self.socket.setsockopt(zmq.SUBSCRIBE, b"")"
-    async def connect(self, host: str = "localhost"):"        """Connects or binds the ZMQ socket.        addr = f"tcp://{host}:{self.port}""        if self.is_master:
+            self.socket.setsockopt(zmq.SUBSCRIBE, b"")
+    async def connect(self, host: str = "localhost"):"        """
+Connects or binds the ZMQ socket.        addr = f"tcp://{host}:{self.port}""        if self.is_master:
             self.socket.bind(addr)
             logger.info(f"DP Master bound to {addr}")"        else:
             self.socket.connect(addr)
-            logger.info(f"DP Worker connected to {addr}")"
+            logger.info(f"DP Worker connected to {addr}")
     async def publish_wave(self, request_ids: List[int]):
                 Publishes a new request wave to all active workers.
                 if not self.is_master:
@@ -66,7 +69,7 @@ class DPCoordinatorV2:
         message = {
             "type": "NEW_WAVE","            "wave_id": self.current_wave,"            "request_ids": request_ids,"            "timestamp": time.time(),"        }
         await self.socket.send_json(message)
-        logger.debug(f"Published Wave {self.current_wave} with {len(request_ids)} requests")"
+        logger.debug(f"Published Wave {self.current_wave} with {len(request_ids)} requests")
     async def publish_wave_to_locality(self, request_ids: List[int], locality_tag: str):
                 Phase 59: Targets a specific locality for a wave to reduce inter-rack traffic.
                 if not self.is_master:
@@ -76,9 +79,10 @@ class DPCoordinatorV2:
         message = {
             "type": "LOCALITY_WAVE","            "wave_id": self.current_wave,"            "request_ids": request_ids,"            "locality": locality_tag,"            "timestamp": time.time(),"        }
         await self.socket.send_json(message)
-        logger.info(f"Published Locality Wave {self.current_wave} to {locality_tag}")"
+        logger.info(f"Published Locality Wave {self.current_wave} to {locality_tag}")
     async def receive_update(self) -> Optional[Dict[str, Any]]:
-        """Receives a wave update or status message.        if self.is_master:
+"""
+Receives a wave update or status message.        if self.is_master:
             return None
 
         try:
@@ -99,6 +103,12 @@ class DPCoordinatorV2:
             "avg_latency": avg_latency,"            "total_throughput": sum(s.get("throughput", 0) for s in self.rank_stats.values()),"            "wave_count": self.current_wave,"        }
 
     async def close(self):
-        """Closes the socket and context.        self.socket.close()
+"""
+Closes the socket and context.        self.socket.close()
         self.ctx.term()
-        logger.info("DPCoordinator ZMQ context terminated")"
+        logger.info("DPCoordinator ZMQ context terminated")
+"""
+
+""
+
+"""

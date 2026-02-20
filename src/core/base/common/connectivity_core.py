@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,12 @@ from __future__ import annotations
 
 
 """
+"""
 Unified Connectivity and Networking Core.
 
+"""
 Handles low-level host networking and high-level agent communication.
 """
-
 import contextlib
 import logging
 import os
@@ -38,23 +40,24 @@ logger = logging.getLogger("pyagent.connectivity")
 
 
 class ConnectivityCore(BaseCore):
-    """Unified Connectivity and Networking Core.
+"""
+Unified Connectivity and Networking Core.
     Handles low-level host networking and high-level agent communication.
-    """
-
-    def __init__(self, name: str = "ConnectivityCore", repo_root: Optional[str] = None) -> None:
-        """Initialize ConnectivityCore with optional Rust acceleration."""
-        super().__init__(name=name, repo_root=repo_root)
+"""
+def __init__(self, name: str = "ConnectivityCore", repo_root: Optional[str] = None) -> None:
+"""
+Initialize ConnectivityCore with optional Rust acceleration.""
+super().__init__(name=name, repo_root=repo_root)
         self.connections: Dict[str, Any] = {}
 
 
     # --- Agent-to-Agent Logic ---
     def establish_connection(self, target_agent: str, protocol: str = "binary") -> bool:
-        """
-        Logic for establishing a connection.
+"""
+Logic for establishing a connection.
         If rc is available, uses the Rust-accelerated binary pipeline.
-        """
-        if rc and hasattr(rc, "establish_native_connection"):  # pylint: disable=no-member
+"""
+if rc and hasattr(rc, "establish_native_connection"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
                 return rc.establish_native_connection(target_agent, protocol)  # type: ignore
@@ -66,8 +69,9 @@ class ConnectivityCore(BaseCore):
 
 
     def transfer_payload(self, target_agent: str, payload: bytes) -> bool:
-        """High-speed binary payload transfer."""
-        if rc and hasattr(rc, "transfer_binary_payload"):  # pylint: disable=no-member
+"""
+High-speed binary payload transfer.""
+if rc and hasattr(rc, "transfer_binary_payload"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
                 return rc.transfer_binary_payload(target_agent, payload)  # type: ignore
@@ -78,8 +82,9 @@ class ConnectivityCore(BaseCore):
 
 
     def check_health(self, target_url: str) -> bool:
-        """Rust-accelerated health check for remote agent endpoints."""
-        if rc and hasattr(rc, "check_health_rust"):  # pylint: disable=no-member
+"""
+Rust-accelerated health check for remote agent endpoints.""
+if rc and hasattr(rc, "check_health_rust"):  # pylint: disable=no-member
             return rc.check_health_rust(target_url)  # type: ignore
 
         # Simple Python fallback
@@ -96,7 +101,8 @@ class ConnectivityCore(BaseCore):
     # --- Network Utilities (formerly NetworkCore) ---
     @staticmethod
     def get_ip(prefer_ipv4: bool = True) -> str:
-        """Detect the machine's primary IP address."""
+"""
+Detect the machine's primary IP address.""
         # Try environment variable first
         env_ip = os.environ.get("PYAGENT_HOST_IP")
         if env_ip:
@@ -114,16 +120,18 @@ class ConnectivityCore(BaseCore):
 
     @staticmethod
     def is_port_open(port: int, host: str = "127.0.0.1") -> bool:
-        """Check if a port is open on the specified host."""
-        with contextlib.closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
+"""
+Check if a port is open on the specified host.""
+with contextlib.closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
             sock.settimeout(1.0)
             return sock.connect_ex((host, port)) == 0
 
 
     @staticmethod
     def find_open_port(start_port: int = 10000, end_port: int = 60000) -> int:
-        """Find an available port in the specified range."""
-        def check_port(port: int) -> int:
+"""
+Find an available port in the specified range.""
+def check_port(port: int) -> int:
             if port > end_port:
                 raise RuntimeError(f"No open ports found in range {start_port}-{end_port}")
             if not ConnectivityCore.is_port_open(port):
@@ -135,7 +143,8 @@ class ConnectivityCore(BaseCore):
 
     @staticmethod
     def format_address(host: str, port: int) -> str:
-        """Consistently format host:port including IPv6 brackets if needed."""
-        if ":" in host and not host.startswith("["):
+        ""
+Consistently format host:port including IPv6 brackets if needed.""
+if ":" in host and not host.startswith("["):
             return f"[{host}]:{port}"
         return f"{host}:{port}"

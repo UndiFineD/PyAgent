@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,14 +16,17 @@ from __future__ import annotations
 
 
 """
+"""
 RollbackRecord - Data container for improvement rollback records
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to record a rollback and its metadata, e.g.:
   from src.core.base.lifecycle.rollback_record import RollbackRecord
-  r = RollbackRecord(improvement_id="IMP-1234", rollback_date="2026-02-12", reason="regression", previous_state="v1.2.3", rollback_commit="abcde123")"
+  r = RollbackRecord(improvement_id="IMP-1234", rollback_date="2026-02-12", reason="regression", previous_state="v1.2.3", rollback_commit="abcde123")
 WHAT IT DOES:
 - Provides a minimal, typed dataclass to hold metadata about an improvement rollback: improvement identifier, rollback timestamp, human-readable reason, a textual snapshot of the previous state, and the associated git commit hash for the rollback.
 - Exposes a stable __version__ imported from the project's lifecycle VERSION constant so the module version aligns with project release metadata.'
@@ -50,12 +54,23 @@ __version__ = VERSION
 
 @dataclass
 class RollbackRecord:
-    """Record of an improvement rollback.""""
-    Attributes:
+"""
+Record of an improvement rollback.""""
+Attributes:
         improvement_id: ID of the rolled back improvement.
         rollback_date: When the rollback occurred.
         reason: Reason for the rollback.
         previous_state: State before the improvement.
         rollback_commit: Git commit of the rollback.
         improvement_id: str
-    rollback_date: str = """    reason: str = """    previous_state: str = """    rollback_commit: str = """
+    rollback_date: str = ""
+reason: str = ""
+previous_state: str = ""
+rollback_commit: str = ""
+"""
+
+"""
+
+""
+
+"""

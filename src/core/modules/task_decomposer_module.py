@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,11 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Task decomposer module.py module.
 """
-
+"""
+Task decomposer module.py module.
+"""
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -36,8 +40,9 @@ except ImportError:
 
 @dataclass
 class PlanStep:
-    """Represents a single step in a decomposed task plan."""
-    agent: str
+"""
+Represents a single step in a decomposed task plan.""
+agent: str
     action: str
     args: list[Any] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
@@ -45,17 +50,21 @@ class PlanStep:
 
 
 class TaskDecomposerModule(BaseModule):
-    """Consolidated core module for task decomposition.
+"""
+Consolidated core module for task decomposition.
     Migrated from TaskDecomposerCore.
-    """
-    def initialize(self) -> bool:
-        """Initialize decomposition heuristics."""
+"""
+def initialize(self) -> bool:
+"""
+Initialize decomposition heuristics.""
 # Future: Load dynamic heuristics from a config file
         return super().initialize()
 
     def execute(self, request: str) -> list[dict[str, Any]]:
-        """Executes the planning logic for a given request.
-        """if not self.initialized:
+"""
+Executes the planning logic for a given request.
+"""
+if not self.initialized:
             self.initialize()
 
         request_lower = request.lower()
@@ -101,7 +110,11 @@ class TaskDecomposerModule(BaseModule):
             "agent": step.agent,"            "action": step.action,"            "args": step.args,"            "metadata": step.metadata,"        }
 
     def summarize_plan(self, steps: list[dict[str, Any]]) -> str:
-        """Core summary logic."""summary_lines = ["# 📋 Task Execution Plan"]"        for i, step in enumerate(steps):
+"""
+Core summary logic.""
+summary_lines = ["#  Task Execution Plan"]"        for i, step in enumerate(steps):
             meta = step.get("metadata", {})"            pri = meta.get("priority", 5)"            summary_lines.append(f"{i + 1}. **{step.get('agent')}** :: `{step.get('action')}` (P{pri})")"'        return "\\n".join(summary_lines)"
     def shutdown(self) -> bool:
-        """Cleanup decomposition resources."""return super().shutdown()
+"""
+Cleanup decomposition resources.""
+return super().shutdown()

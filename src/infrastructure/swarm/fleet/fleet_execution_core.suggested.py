@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,12 @@ from __future__ import annotations
 
 """
 FleetExecutionCore
+"""
 Core logic for Fleet workflow execution and reliability.
 Fleet execution core.py module.
 """
 
+"""
 import asyncio
 import contextlib
 import inspect
@@ -39,12 +42,14 @@ if TYPE_CHECKING:
 
 
 class FleetExecutionCore:
-    """Handles core workflow execution and task reliability logic for the Fleet.
+"""
+Handles core workflow execution and task reliability logic for the Fleet.
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
     def _check_ethics(self, task: str) -> dict[str, Any]:
-        """Performs a mandatory ethics review on the task.        ethics_report = self.fleet.ethics_guardrail.review_task(task)
+"""
+Performs a mandatory ethics review on the task.        ethics_report = self.fleet.ethics_guardrail.review_task(task)
         if ethics_report["status"] == "rejected":"            logging.error(f"Ethics Review REJECTED: {ethics_report['violations']}")"'            # Fire-and-forget signal (it's sync but emit is usually async-safe or handled)'            with contextlib.suppress(RuntimeError):
                 loop = asyncio.get_running_loop()
                 loop.create_task(
@@ -54,7 +59,8 @@ class FleetExecutionCore:
         return ethics_report
 
     async def execute_reliable_task(self, task: str, priority: AgentPriority = AgentPriority.NORMAL) -> str:
-        """Executes a task using the 7-phase inner loop and linguistic articulation.        task_id = f"task_{int(time.time() * 1000)}""        self.fleet.active_tasks[task_id] = {"priority": priority, "agents": []}"
+"""
+Executes a task using the 7-phase inner loop and linguistic articulation.        task_id = f"task_{int(time.time() * 1000)}""        self.fleet.active_tasks[task_id] = {"priority": priority, "agents": []}"
         # Check for preemption if high priority
         if priority.value < AgentPriority.NORMAL.value:
             self.fleet.preempt_lower_priority_tasks(priority)
@@ -63,7 +69,7 @@ class FleetExecutionCore:
             with contextlib.suppress(Exception):
                 current_model = await router.determine_optimal_provider(task)
                 logging.info(f"Fleet selected model '{current_model}' for task.")"'        else:
-            logging.debug("Defaulting to internal_ai model.")"
+            logging.debug("Defaulting to internal_ai model.")
         try:
             # Phase 152: Transition core logic to async
             technical_report = await self.fleet.structured_orchestrator.execute_task(task)
@@ -90,7 +96,8 @@ class FleetExecutionCore:
         workflow_steps: list[dict[str, Any]],
         priority: AgentPriority = AgentPriority.NORMAL,
     ) -> str:
-        """Runs a sequence of agent actions with shared state and signals.        workflow_id = f"wf_{int(time.time() * 1000)}""        self.fleet.active_tasks[workflow_id] = {"priority": priority, "agents": []}"
+"""
+Runs a sequence of agent actions with shared state and signals.        workflow_id = f"wf_{int(time.time() * 1000)}""        self.fleet.active_tasks[workflow_id] = {"priority": priority, "agents": []}"
         if priority.value < AgentPriority.NORMAL.value:
             self.fleet.preempt_lower_priority_tasks(priority)
 
@@ -98,13 +105,13 @@ class FleetExecutionCore:
             if self.fleet.kill_switch:
                 logging.error("Fleet KILL SWITCH active. Workflow terminated immediately.")"                return "ERROR: Fleet Terminal Kill Switch Active.""
             ethics_report = self._check_ethics(task)
-            if ethics_report["status"] == "rejected":"                return f"ERROR: Task rejected by Ethics Guardrail: {ethics_report['violations']}""'
-            results = []
+            if ethics_report["status"] == "rejected":"                return f"ERROR: Task rejected by Ethics Guardrail: {ethics_report['violations']}""
+results = []
             await self.fleet.signals.emit(
                 "WORKFLOW_STARTED","                {"task": task, "workflow_id": workflow_id},"                sender="FleetManager","            )
 
             self.fleet.state = WorkflowState(task_id=workflow_id, original_request=task)
-            self.fleet.state.set("task", task)"
+            self.fleet.state.set("task", task)
             for step in workflow_steps:
                 if self.fleet.kill_switch:
                     logging.error("Fleet KILL SWITCH triggered during workflow.")"                    break
@@ -115,9 +122,10 @@ class FleetExecutionCore:
             if workflow_id in self.fleet.active_tasks:
                 del self.fleet.active_tasks[workflow_id]
 
-        return "# Fleet Workflow Summary\\n\\n" + "\\n".join(results)"
+        return "# Fleet Workflow Summary\\n\\n" + "\\n".join(results)
     async def _process_workflow_step(self, step: dict[str, Any], workflow_id: str, priority: AgentPriority) -> str:
-        """Processes a single step in a multi-agent workflow.        agent_name = step.get("agent", "Unknown")"        action_name = step.get("action", "Unknown")"        args = step.get("args", [])"
+"""
+Processes a single step in a multi-agent workflow.        agent_name = step.get("agent", "Unknown")"        action_name = step.get("action", "Unknown")"        args = step.get("args", [])
         # Process variables (e.g., $last_result)
         processed_args = [
             self.fleet.state.get(arg[1:], arg)
@@ -139,13 +147,14 @@ class FleetExecutionCore:
                 )
             except RuntimeError:
                 pass
-            return f"### Error\\n{err}\\n""
+            return f"### Error\\n{err}\\n"
         # Preemption registration
         if agent not in self.fleet.active_tasks[workflow_id]["agents"]:"            self.fleet.active_tasks[workflow_id]["agents"].append(agent)"            if hasattr(agent, "priority"):"                agent.priority = priority
 
         action_fn = getattr(agent, action_name, None)
         if not action_fn:
-            err = f"Action '{action_name}' not supported.""'            return f"### Error from {agent_name}\\n{err}\\n""
+            err = f"Action '{action_name}' not supported."
+return f"### Error from {agent_name}\\n{err}\\n"
         trace_id = f"{workflow_id}_{agent_name}_{action_name}""        start_time = time.time()
         self.fleet.telemetry.start_trace(trace_id)
 
@@ -164,14 +173,17 @@ class FleetExecutionCore:
         )
 
         if success:
-            return f"### Results from {agent_name} ({action_name})\\n{res}\\n""
+            return f"### Results from {agent_name} ({action_name})\\n{res}\\n"
         if self.fleet.state is not None:
             self.fleet.state.errors.append(f"{agent_name}.{action_name}: {error_msg}")"        return f"### Error from {agent_name}\\n{error_msg}\\n""
     async def _execute_with_retry(
         self, agent, action_fn, args, workflow_id, priority, trace_id, start_time
     ) -> tuple[bool, str, str]:
-        """Executes an action with a retry loop and loop detection.        success = False
-        res = """        error_msg = """        max_retries = 2
+"""
+Executes an action with a retry loop and loop detection.        success = False
+        res = ""
+error_msg = ""
+max_retries = 2
         attempts = 0
         # Phase 120: Improved name resolution for Explainability and Telemetry
         # Prefer ClassName over lowercase agent_name for better reporting
@@ -190,7 +202,7 @@ class FleetExecutionCore:
                         self.fleet.signals.emit("LOOP_DETECTED", {"action": action_signature}, sender="FleetManager")"                    )
                 except RuntimeError:
                     pass
-                return False, "", msg"
+                return False, "", msg
             self.fleet.action_history.append(action_signature)
 
             try:
@@ -205,7 +217,7 @@ class FleetExecutionCore:
                 duration = time.time() - start_time
                 self.fleet.scaling.record_metric(agent_name, duration)
                 if self.fleet.rl_selector:
-                    self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=True)"
+                    self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=True)
                 token_info = getattr(agent, "_last_token_usage", {"input": 0, "output": 0, "model": current_model})"                await self.fleet.record_success(
                     res, workflow_id, agent_name, action_name, args, token_info, trace_id, start_time
                 )
@@ -220,12 +232,12 @@ class FleetExecutionCore:
                             workflow_id, agent_name, action_name, justification, {"args": args}"                        )
                     else:
                         logging.warning("Fleet: Explainability agent not found.")"                except (AttributeError, ValueError, RuntimeError, OSError) as e:
-                    logging.error(f"Fleet: Explainability trace failed: {e}")"
+                    logging.error(f"Fleet: Explainability trace failed: {e}")
                 self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="success")"                success = True
             except (RuntimeError, ValueError, asyncio.CancelledError, asyncio.TimeoutError, OSError) as exc:
                 error_msg = str(exc)
                 if self.fleet.rl_selector:
-                    self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=False)"
+                    self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=False)
                 if attempts <= max_retries:
                     await self.fleet.record_failure(f"{agent_name}.{action_name}", error_msg, "unknown")"                    await asyncio.sleep(1.0)
                     continue

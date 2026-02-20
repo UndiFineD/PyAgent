@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Model cache for LM Studio handles.
 
+"""
 try:
     import time
 except ImportError:
@@ -36,13 +38,15 @@ except ImportError:
 
 
 class ModelCache:
-    """Simple model cache with TTL.
+"""
+Simple model cache with TTL.
     def __init__(self, ttl: float = 300.0) -> None:
         self._cache: dict[str, CachedModel] = {}
         self._ttl = ttl
 
     def get(self, model_id: str) -> CachedModel | None:
-        """Get cached model if not expired.        entry = self._cache.get(model_id)
+"""
+Get cached model if not expired.        entry = self._cache.get(model_id)
         if entry is None:
             return None
         if entry.is_expired(self._ttl):
@@ -52,7 +56,8 @@ class ModelCache:
         return entry
 
     def set(self, model_id: str, model_info: Any) -> CachedModel:
-        """Cache a model reference.        entry = CachedModel(
+"""
+Cache a model reference.        entry = CachedModel(
             model_id=model_id,
             model_info=model_info,
             loaded_at=time.time(),
@@ -61,10 +66,14 @@ class ModelCache:
         return entry
 
     def clear(self) -> None:
-        """Clear the cache.        self._cache.clear()
+"""
+Clear the cache.        self._cache.clear()
 
     def prune_expired(self) -> int:
-        """Remove expired entries, return count removed.        expired = [k for k, v in self._cache.items() if v.is_expired(self._ttl)]
+"""
+Remove expired entries, return count removed.        expired = [k for k, v in self._cache.items() if v.is_expired(self._ttl)]
         for k in expired:
             del self._cache[k]
         return len(expired)
+
+"""

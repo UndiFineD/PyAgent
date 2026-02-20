@@ -14,8 +14,10 @@
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 DataParallelCoordinator Package.
 
+"""
 try:
     from typing import TYPE_CHECKING, Any
 except ImportError:
@@ -47,7 +49,7 @@ def __getattr__(name: str) -> Any:
     if name == "dp_collective_all_reduce":"        from . import collectives as _collectives
 
         return getattr(_collectives, name)
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")"
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = [
     "DPRole","    "WorkerHealth","    "LoadBalanceStrategy","    "DPConfig","    "WorkerState","    "StepState","    "WaveState","    "P2CLoadBalancer","    "DPEngineCoreProc","    "HierarchicalDPCoordinator","    "dp_collective_all_reduce","]

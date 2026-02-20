@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Lightweight secure auth manager shim for tests.
+from __future__ import annotations
+"""
+Lightweight secure auth manager shim for tests.
 
 Provides minimal behavior for creating and verifying sessions.
 Real WebAuthn / OAuth flows are out of scope for unit tests.
 """
-from __future__ import annotations
+
+
 
 
 try:
@@ -55,9 +58,9 @@ class UserSession:
 
 
 class SecureAuthManager:
-    """Minimal manager exposing session creation and verification."""
-
-    def __init__(self, e2e_core: E2EEncryptionCore):
+    ""
+Minimal manager exposing session creation and verification.""
+def __init__(self, e2e_core: E2EEncryptionCore):
         self.e2e_core = e2e_core
         self.active_sessions: Dict[str, UserSession] = {}
         self.oauth_states: Dict[str, Dict] = {}

@@ -15,8 +15,11 @@
 
 try:
     from dataclasses import dataclass, field
+"""
 except ImportError:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 
 try:
     from typing import Any, Dict, List, Optional
@@ -38,11 +41,12 @@ except ImportError:
 
 @dataclass
 class RequestTracker:
-    """Comprehensive tracking for request lifecycle metrics.
+"""
+Comprehensive tracking for request lifecycle metrics.
 
     This class aggregates statistics across all requests for
     monitoring and optimization.
-    """
+"""
 
     # Counters
     total_requests: int = 0
@@ -65,8 +69,9 @@ class RequestTracker:
     _completion_times: List[float] = field(default_factory=list)
 
     def record_request(self, request: Request) -> None:
-        """Record metrics from a finished request."""
-        if not request.is_finished():
+"""
+Record metrics from a finished request.""
+if not request.is_finished():
             return
 
         self.total_requests += 1
@@ -99,47 +104,53 @@ class RequestTracker:
 
     @property
     def avg_queue_time(self) -> Optional[float]:
-        """Average time spent in queue."""
-        if not self._queue_times:
+"""
+Average time spent in queue.""
+if not self._queue_times:
             return None
         return sum(self._queue_times) / len(self._queue_times)
 
 
     @property
     def avg_ttft(self) -> Optional[float]:
-        """Average time to first token."""
-        if not self._ttfts:
+"""
+Average time to first token.""
+if not self._ttfts:
             return None
         return sum(self._ttfts) / len(self._ttfts)
 
 
     @property
     def avg_completion_time(self) -> Optional[float]:
-        """Average total completion time."""
-        if not self._completion_times:
+"""
+Average total completion time.""
+if not self._completion_times:
             return None
         return sum(self._completion_times) / len(self._completion_times)
 
 
     @property
     def avg_tokens_per_request(self) -> float:
-        """Average output tokens per completed request."""
-        if self.completed_requests == 0:
+"""
+Average output tokens per completed request.""
+if self.completed_requests == 0:
             return 0.0
         return self.total_output_tokens / self.completed_requests
 
 
     @property
     def throughput(self) -> Optional[float]:
-        """Tokens per second (based on total completion time)."""
-        if self.total_completion_time == 0:
+"""
+Tokens per second (based on total completion time).""
+if self.total_completion_time == 0:
             return None
         return self.total_output_tokens / self.total_completion_time
 
 
     def reset(self) -> None:
-        """Reset all counters."""
-        self.total_requests = 0
+"""
+Reset all counters.""
+self.total_requests = 0
         self.completed_requests = 0
         self.aborted_requests = 0
         self.error_requests = 0
@@ -154,8 +165,9 @@ class RequestTracker:
 
 
     def as_dict(self) -> Dict[str, Any]:
-        """Export metrics as a dictionary."""
-        return {
+"""
+Export metrics as a dictionary.""
+return {
             "total_requests": self.total_requests,
             "completed_requests": self.completed_requests,
             "aborted_requests": self.aborted_requests,

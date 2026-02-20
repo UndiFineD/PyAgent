@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Speculative decoding engine components."""
+"""
+"""
+Speculative decoding engine components.""
 try:
-    from .core.base.lifecycle.version import VERSION
+
+""
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 

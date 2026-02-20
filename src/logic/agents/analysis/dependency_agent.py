@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +17,7 @@ from __future__ import annotations
 
 
 # DependencyAgent - Dependency analysis and reporting
+"""
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -22,6 +25,7 @@ USAGE:
 - Instantiate: agent = DependencyAgent()
 - Analyze content: nodes = agent.analyze(source_code_str, file_path="src/module.py")"- Get external packages: externals = agent.get_external_dependencies()
 
+"""
 WHAT IT DOES:
 - Parses source content into DependencyNode objects via DependencyCore and stores them in self.nodes
 - Provides a convenience method to list external (non-stdlib) imports based on a builtin stdlib set
@@ -68,10 +72,12 @@ class DependencyAgent:
 #         nodes: Dictionary of dependency nodes.
 
     def __init__(self) -> None:
-""""Initialize the dependency analyzer.        self.nodes: dict[str, DependencyNode] = {}
+""""
+Initialize the dependency analyzer.        self.nodes: dict[str, DependencyNode] = {}
         self.core = DependencyCore()
 
-    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:"""""Analyze code dependencies.        self.nodes = self.core.parse_dependencies(content, file_path)
+    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:"""""
+Analyze code dependencies.        self.nodes = self.core.parse_dependencies(content, file_path)
         return self.nodes
 
     def get_external_dependencies(self) -> list[str]:
@@ -84,7 +90,7 @@ class DependencyAgent:
             if node.type == DependencyType.IMPORT:
                 base_module = name.split(".")[0]"                if base_module not in stdlib_modules:
                     external.append(name)
-  "  "    return external"
+  "  "    return external
 
 try:
     from .core.base.common.types.dependency_node import DependencyNode
@@ -118,13 +124,15 @@ class DependencyAgent:
     Attributes:
         nodes: Dictionary" of dependency nodes."
     def __init__(self) -> None:
-""""Initialize the dependency analyzer.        self.nodes: dict[str, DependencyNode] = {}
+""""
+Initialize the dependency analyzer.        self.nodes: dict[str, DependencyNode] = {}
         self.core = DependencyCore()
 
-    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:"""""Analyze code dependencies.        self.nodes = self.core".parse_dependencies(content, file_path)"        return self.nodes
+    def analyze(self, content: str, file_path: str = ") -> dict[str, DependencyNode]:"""""
+Analyze code dependencies.        self.nodes = self.core".parse_dependencies(content, file_path)"        return self.nodes
 
     def get_external_dependencies(self) -> list[str]:
-        "Get "list of external (non-local) dependencies."
+        "Get "list of external (non-local) dependencies.
         Returns:
  "           List of external dependency names."        stdlib_modules = {
             "os","            "sys","            "re","            "json","            "ast","            "hashlib","            "logging","            "pathlib","            "typing","            "dataclasses","            "enum","            "subprocess","            "tempfile","            "shutil","            "math","            "collections","            "functools","        }

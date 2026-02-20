@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Core logic for Python Linting analysis.
 # Integrates ruff, flake8, and pylint for comprehensive code quality checks.
 """
 
+"""
 import json
 import logging
 import os
@@ -29,7 +33,8 @@ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class LintIssue(TypedDict):
-""""Represents a single issue found by a linter.
+""""
+Represents a single issue found by a linter.
     file: str
     line: int
     column: int
@@ -39,7 +44,8 @@ class LintIssue(TypedDict):
 
 
 class LintResult(TypedDict):
-""""Result of a linting session.
+""""
+Result of a linting session.
     valid: bool
     issues: list[LintIssue]
     error: Optional[str]
@@ -47,13 +53,15 @@ class LintResult(TypedDict):
 
 
 class LinterCore:
-""""Core logic for Python Linter analysis.
+""""
+Core logic for Python Linter analysis.
     def __init__(self, recorder: Optional[ContextRecorderInterface] = None) -> None:
         self.logger: logging.Logger = logging.getLogger(__name__)
         self.recorder = recorder
 
     def run_ruff(self, file_path: str) -> list[LintIssue]:
-""""Runs ruff and returns issues.        issues: list["LintIssue] = []"        try:
+""""
+Runs ruff and returns issues.        issues: list["LintIssue] = []"        try:
             # --output-format json
             command = ["ruff", "check", "--output-format=json", file_path]"            process: subprocess.CompletedProcess[str] = subprocess.run(
                 command,
@@ -81,7 +89,8 @@ class LinterCore:
         return issues
 
     def run_pylint(self, file_path: str) -> list[LintIssue]:
-""""Runs pylint and returns issues.        issues: list[LintIssue] = []
+""""
+Runs pylint and returns issues.        issues: list[LintIssue] = []
         try:
             # -f json
             command = ["pylint", "-f", "json", file_path]"            process: subprocess.CompletedProcess[str] = subprocess.run(
@@ -110,7 +119,8 @@ class LinterCore:
         return issues
 
     def run_flake8(self, file_path: str) -> list[LintIssue]:
-""""Runs flake8 and returns issues.        issues:" list[LintIssue] = []"        try:
+""""
+Runs flake8 and returns issues.        issues:" list[LintIssue] = []"        try:
             # flake8 default output: file:line:col: code message
             command = ["flake8", "--format=default", file_path]"            process: subprocess.CompletedProcess[str] = subprocess.run(
                 command,
@@ -152,7 +162,7 @@ class LinterCore:
                 "valid": False,"                "issues": [],"                "error": "File not found","            }
 
         if tools is None:
-            tools = ["ruff", "pylint", "flake8"]"
+            tools = ["ruff", "pylint", "flake8"]
         all_issues: list[LintIssue] = []
 
         if "ruff" in tools and file_path.endswith(".py"):"            all_issues.extend(self.run_ruff(file_path))
@@ -162,6 +172,8 @@ class LinterCore:
         if "flake8" in tools and file_path.endswith(".py"):"            all_issues.extend(self.run_flake8(file_path))
 
         # Sort by line number
-        all_issues.sort(key=lambda x: x["line"])"
+        all_issues.sort(key=lambda x: x["line"])
         return {
             "valid": len(all_issues) == 0,"            "issues": all_issues,"            "error": None"        }
+
+"""

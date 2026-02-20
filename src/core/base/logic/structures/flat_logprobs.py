@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""FlatLogprobs - Memory-efficient flat storage for token log probabilities.
+"""
+"""
+FlatLogprobs - Memory-efficient flat storage for token log probabilities.
 
+"""
 Inspired by vLLM's FlatLogprobs pattern for reduced GC overhead compared'to list[dict[int, Logprob]] by flattening into primitive type arrays.
 
 Phase 24: Advanced Observability & Parsing
 """
-
 try:
     from collections.abc import Iterable, Iterator, MutableSequence, Sequence
 except ImportError:
@@ -40,14 +43,15 @@ except ImportError:
 
 @dataclass
 class Logprob:
-    """Log probability information for a single token.
+"""
+Log probability information for a single token.
 
     Attributes:
         logprob: The log probability of the token
         rank: The vocab rank of the token (1-based, or None)
         decoded_token: The decoded string representation
-    """
-    logprob: float
+"""
+logprob: float
     rank: int | None = None
     decoded_token: str | None = None
 
@@ -58,7 +62,8 @@ LogprobsOnePosition = dict[int, Logprob]
 
 @dataclass
 class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
-    """Memory-efficient flat storage for log probabilities.
+"""
+Memory-efficient flat storage for log probabilities.
 
     Compared to list[dict[int, Logprob]], this data structure reduces GC
     overhead significantly by flattening logprob information for all positions
@@ -74,7 +79,7 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
 
         # Access like a list
         position_0 = logprobs[0]  # Returns dict[int, Logprob]
-    """
+"""
     # Start/end indices for each position's range of logprobs'    start_indices: list[int] = field(default_factory=list)
     end_indices: list[int] = field(default_factory=list)
 
@@ -85,11 +90,13 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
     decoded_tokens: list[str | None] = field(default_factory=list)
 
     def append(self, value: LogprobsOnePosition | None) -> None:
-        """Append logprobs for the next position.
+"""
+Append logprobs for the next position.
 
         Args:
             value: Dict of token_id -> Logprob, or None
-        """self.start_indices.append(len(self.logprobs))
+"""
+self.start_indices.append(len(self.logprobs))
         if value:
             def _proc_item(item):
                 token_id, logprob = item
@@ -108,7 +115,8 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
         ranks: Iterable[int | None],
         decoded_tokens: Iterable[str | None],
     ) -> None:
-        """Append logprobs for the next position without intermediate dict.
+"""
+Append logprobs for the next position without intermediate dict.
 
         More efficient than append() when you already have the data
         in separate lists.
@@ -118,7 +126,8 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
             logprobs: List of log probabilities
             ranks: Iterable of ranks (can be chain/iterator)
             decoded_tokens: Iterable of decoded token strings
-        """self.start_indices.append(len(self.logprobs))
+"""
+self.start_indices.append(len(self.logprobs))
 
         def _proc_tuple(tup):
             token_id, logprob, rank, decoded_token = tup
@@ -131,29 +140,35 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
         self.end_indices.append(len(self.logprobs))
 
     def extend(self, values: Iterable[LogprobsOnePosition | None]) -> None:
-        """Extend with logprobs for multiple positions."""list(map(self.append, values))
+"""
+Extend with logprobs for multiple positions.""
+list(map(self.append, values))
 
     def __len__(self) -> int:
-        """Get number of positions stored."""return len(self.start_indices)
+"""
+Get number of positions stored.""
+return len(self.start_indices)
 
     @overload
     def __getitem__(self, position: int) -> LogprobsOnePosition: ...
 
     @overload
-    def __getitem__(self, s: slice) -> "FlatLogprobs": ..."
-    def __getitem__(self, index: int | slice) -> LogprobsOnePosition | "FlatLogprobs":"        """Extract logprobs for a position or slice.
+    def __getitem__(self, s: slice) -> "FlatLogprobs": ...
+    def __getitem__(self, index: int | slice) -> LogprobsOnePosition | "FlatLogprobs":"        """
+Extract logprobs for a position or slice.
 
         Args:
             index: Position index or slice
 
         Returns:
             LogprobsOnePosition for single index, FlatLogprobs for slice
-        """if isinstance(index, int):
+"""
+if isinstance(index, int):
             # Handle negative indices
             if index < 0:
                 index = len(self) + index
             if index < 0 or index >= len(self):
-                raise IndexError(f"Index {index} out of range [0, {len(self)})")"
+                raise IndexError(f"Index {index} out of range [0, {len(self)})")
             return dict(
                 map(
                     lambda i: (
@@ -188,15 +203,23 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
                 decoded_tokens=self.decoded_tokens[min_idx:max_idx],
             )
 
-        raise TypeError(f"Invalid index type: {type(index)}")"
+        raise TypeError(f"Invalid index type: {type(index)}")
     def __setitem__(self, index: int, value: Any) -> None:  # type: ignore[override]
-        """Setting items is not supported."""raise TypeError("Cannot set logprobs in FlatLogprobs")"
+"""
+Setting items is not supported.""
+raise TypeError("Cannot set logprobs in FlatLogprobs")
     def __delitem__(self, index: int) -> None:  # type: ignore[override]
-        """Deleting items is not supported."""raise TypeError("Cannot delete logprobs from FlatLogprobs")"
+"""
+Deleting items is not supported.""
+raise TypeError("Cannot delete logprobs from FlatLogprobs")
     def insert(self, index: int, value: Any) -> None:
-        """Inserting items is not supported."""raise TypeError("Cannot insert logprobs into FlatLogprobs")"
+"""
+Inserting items is not supported.""
+raise TypeError("Cannot insert logprobs into FlatLogprobs")
     def __iter__(self) -> Iterator[LogprobsOnePosition]:
-        """Iterate over all positions."""def _recursive_gen(idx):
+"""
+Iterate over all positions.""
+def _recursive_gen(idx):
             if idx >= len(self):
                 return
             yield self[idx]
@@ -204,7 +227,9 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
         return _recursive_gen(0)
 
     def clear(self) -> None:
-        """Clear all stored logprobs."""self.start_indices.clear()
+"""
+Clear all stored logprobs.""
+self.start_indices.clear()
         self.end_indices.clear()
         self.token_ids.clear()
         self.logprobs.clear()
@@ -213,15 +238,18 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
 
     @property
     def total_entries(self) -> int:
-        """Total number of (token_id, logprob) entries across all positions."""return len(self.logprobs)
+"""
+Total number of (token_id, logprob) entries across all positions.""
+return len(self.logprobs)
 
     @property
     def memory_efficient(self) -> bool:
-        """Check if this is more memory efficient than list[dict].
+"""
+Check if this is more memory efficient than list[dict].
 
         FlatLogprobs is more efficient when there are many positions
         with few tokens each, as it avoids dict overhead.
-        """
+"""
 # Each dict has ~232 bytes overhead, each entry ~96 bytes
         # FlatLogprobs has 6 list overhead (~448 bytes) + 8 bytes per entry
         positions = len(self)
@@ -234,14 +262,16 @@ class FlatLogprobs(MutableSequence[LogprobsOnePosition]):
 
 
 def create_prompt_logprobs(flat_logprobs: bool = True) -> FlatLogprobs | list[LogprobsOnePosition | None]:
-    """Create a container for prompt logprobs.
+"""
+Create a container for prompt logprobs.
 
     Args:
         flat_logprobs: If True, use memory-efficient FlatLogprobs
 
     Returns:
         Empty container with None appended for first token
-    """if flat_logprobs:
+"""
+if flat_logprobs:
         lp_container: FlatLogprobs | list[LogprobsOnePosition | None] = FlatLogprobs()
     else:
         lp_container = []
@@ -252,24 +282,27 @@ def create_prompt_logprobs(flat_logprobs: bool = True) -> FlatLogprobs | list[Lo
 
 
 def create_sample_logprobs(flat_logprobs: bool = True) -> FlatLogprobs | list[LogprobsOnePosition]:
-    """Create a container for sampled (decode) logprobs.
+"""
+Create a container for sampled (decode) logprobs.
 
     Args:
         flat_logprobs: If True, use memory-efficient FlatLogprobs
 
     Returns:
         Empty container for storing decode logprobs
-    """return FlatLogprobs() if flat_logprobs else []
+"""
+return FlatLogprobs() if flat_logprobs else []
 
 
 @dataclass
 class LogprobsAccumulator:
-    """Accumulator for building FlatLogprobs incrementally.
+"""
+Accumulator for building FlatLogprobs incrementally.
 
     Provides a builder pattern for constructing logprobs
     with validation and statistics.
-    """
-    _logprobs: FlatLogprobs = field(default_factory=FlatLogprobs)
+"""
+_logprobs: FlatLogprobs = field(default_factory=FlatLogprobs)
     _min_logprob: float = field(default=float("inf"))"    _max_logprob: float = field(default=float("-inf"))"
     def add_position(
         self,
@@ -278,14 +311,16 @@ class LogprobsAccumulator:
         ranks: Sequence[int | None] | None = None,
         decoded_tokens: Sequence[str | None] | None = None,
     ) -> None:
-        """Add logprobs for a single position.
+"""
+Add logprobs for a single position.
 
         Args:
             token_ids: Token IDs for this position
             logprobs: Log probabilities for each token
             ranks: Optional ranks for each token
             decoded_tokens: Optional decoded strings for each token
-        """n = len(token_ids)
+"""
+n = len(token_ids)
         if ranks is None:
             ranks = [None] * n
         if decoded_tokens is None:
@@ -306,19 +341,34 @@ class LogprobsAccumulator:
         list(map(_upd_stats, logprobs))
 
     def build(self) -> FlatLogprobs:
-        """Return the accumulated FlatLogprobs."""return self._logprobs
+"""
+Return the accumulated FlatLogprobs.""
+return self._logprobs
 
     @property
     def num_positions(self) -> int:
-        """Number of positions added."""return len(self._logprobs)
+"""
+Number of positions added.""
+return len(self._logprobs)
 
     @property
     def total_entries(self) -> int:
-        """Total logprob entries across all positions."""return self._logprobs.total_entries
+"""
+Total logprob entries across all positions.""
+return self._logprobs.total_entries
 
     @property
     def min_logprob(self) -> float:
-        """Minimum log probability seen."""return self._min_logprob if self._min_logprob != float("inf") else 0.0"
+"""
+Minimum log probability seen.""
+return self._min_logprob if self._min_logprob != float("inf") else 0.0
     @property
     def max_logprob(self) -> float:
-        """Maximum log probability seen."""return self._max_logprob if self._max_logprob != float("-inf") else 0.0"
+"""
+Maximum log probability seen.""
+return self._max_logprob if self._max_logprob != float("-inf") else 0.0
+"""
+
+"""
+
+"""

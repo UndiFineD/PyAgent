@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,13 @@ from __future__ import annotations
 # flake8: noqa
 # ruff: noqa: F401
 
-"""Lazy-loading entry point for observability.improvements.from __future__ import annotationsfrom typing import Any, TYPE_CHECKING
+"""
+"""
+Lazy-loading entry point for observability.improvements.from __future__ import annotationsfrom typing import Any, TYPE_CHECKING
 try:
-    from .core.base.lifecycle.version import VERSION
+
+"""
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -98,6 +103,7 @@ _loader = ModuleLazyLoader(_LAZY_REGISTRY)
 def __getattr__(name: str) -> Any:
     return _loader.load(name)
 
-__all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())"
+__all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())
 
 """
+

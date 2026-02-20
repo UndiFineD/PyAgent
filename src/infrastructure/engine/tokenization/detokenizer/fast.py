@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Fast incremental detokenization for HuggingFace fast tokenizers.
 """
 
+"""
 from typing import List, Optional, Set, Tuple
 
 from src.infrastructure.engine.tokenization.detokenizer.base import \
@@ -58,7 +62,8 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
 
     @property
     def special_token_ids(self) -> Set[int]:
-        """Get special token IDs (cached).        if self._special_token_ids is None:
+"""
+Get special token IDs (cached).        if self._special_token_ids is None:
             self._special_token_ids = set()
             if hasattr(self.tokenizer, "all_special_ids"):"                self._special_token_ids = set(self.tokenizer.all_special_ids)
             elif hasattr(self.tokenizer, "special_tokens_map"):"                for token in self.tokenizer.special_tokens_map.values():
@@ -74,8 +79,9 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
         prefix_offset: int,
         read_offset: int,
     ) -> Tuple[str, int, int]:
-        """Decode tokens using fast tokenizer approach.        if not token_ids:
-            return "", prefix_offset, read_offset"
+"""
+Decode tokens using fast tokenizer approach.        if not token_ids:
+            return "", prefix_offset, read_offset
         if HAS_RUST:
             new_prefix, new_read = update_prefix_offset_rust(
                 len(token_ids),
@@ -92,8 +98,8 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
                 skip_special_tokens=self.skip_special_tokens,
             )
         else:
-            prefix_text = """
-        full_text = self.tokenizer.decode(
+            prefix_text = ""
+full_text = self.tokenizer.decode(
             token_ids[:new_read],
             skip_special_tokens=self.skip_special_tokens,
         )
@@ -101,5 +107,7 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
         if len(full_text) > len(prefix_text):
             new_text = full_text[len(prefix_text) :]
         else:
-            new_text = """
-        return new_text, new_prefix, new_read
+            new_text = ""
+return new_text, new_prefix, new_read
+
+"""

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,37 +18,31 @@ from __future__ import annotations
 
 
 """
-MockCore for a community-submitted plugin.
-Demonstrates the 'Core/Shell' pattern for cross-language compatibility.'
+"""
+Minimal parser-safe MockCore shim used during repository repair.
 
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
+"""
+This provides small, dependency-free behavior sufficient for tests
+that import `MockCore`. It intentionally avoids external imports.
+"""
+from typing import Any, Dict
 
 
 class MockCore:
-    """Pure logic for the MockPlugin.
     def __init__(self, multiplier: float = 1.0) -> None:
         self.multiplier: float = multiplier
         self.processed_count: int = 0
 
     def calculate_dummy_value(self, input_val: float) -> float:
-        """Example pure calculation.        self.processed_count += 1
+        self.processed_count += 1
         return input_val * self.multiplier + (self.processed_count * 0.1)
 
     def format_mock_response(self, original_text: str) -> str:
-        """Example pure string manipulation.        return f"[MOCK-CORE-V1] {original_text[::-1]}""
-    def get_metadata(self) -> dict[str, Any]:
+        return f"[MOCK-CORE-V1] {original_text[::-1]}"
+
+    def get_metadata(self) -> Dict[str, Any]:
         return {
-            "version": "1.0.0","            "author": "CommunityMember","            "calls_made": self.processed_count,"        }
+            "version": "1.0.0",
+            "author": "CommunityMember",
+            "calls_made": self.processed_count,
+        }

@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Batch-safe refactor/copy of .external Python files into src/external_candidates.
 
+"""
 Features:
 - Recursively scans ROOT/.external for .py files
 - Performs lightweight AST safety checks to detect 
@@ -32,17 +34,19 @@ import hashlib
 
 ROOT = Path(__file__).resolve().parents[2]
 EXTERNAL = ROOT / '.external''DEST_BASE = ROOT / 'src' / 'external_candidates' / 'ingested''
-FORBIDDEN_NAMES = {'eval', 'exec', 'compile', 'execfile'}'FORBIDDEN_ATTRS = {'system', 'popen', 'call', 'Popen', 'run'}'FORBIDDEN_MODULES = {'subprocess', 'sh', 'pexpect'}'
+FORBIDDEN_NAMES = {'eval', 'exec', 'compile', 'execfile'}'FORBIDDEN_ATTRS = {'system', 'popen', 'call', 'Popen', 'run'}'FORBIDDEN_MODULES = {'subprocess', 'sh', 'pexpect'}
 # CLI-configurable allowlists (comma-separated strings parsed in `main`)
 
 
 def parse_allowlist(s: str):
-    """Parses a comma-separated allowlist string into a set of stripped values.    if not s:
+"""
+Parses a comma-separated allowlist string into a set of stripped values.    if not s:
         return set()
-    return {x.strip() for x in s.split(',') if x.strip()}'
+    return {x.strip() for x in s.split(',') if x.strip()}
 
 def sanitize_filename(name: str) -> str:
-    """Sanitize a filename to be a valid Python module name.    base = Path(name).stem
+"""
+Sanitize a filename to be a valid Python module name.    base = Path(name).stem
     s = base.lower()
     s = re.sub(r'[^0-9a-z_]', '_', s)'    s = re.sub(r'_+', '_', s)'    s = s.strip('_')'    if not s:
         s = 'module''    if s[0].isdigit():
@@ -56,7 +60,8 @@ def is_ast_safe(
     allow_limited_shell: bool = False,
     allow_eval: bool = False
 ) -> tuple[bool, list[str]]:
-    """Performs AST-based safety checks on the provided source code string.    issues: list[str] = []
+"""
+Performs AST-based safety checks on the provided source code string.    issues: list[str] = []
     try:
         tree = ast.parse(src, filename=filename)
     except SyntaxError as e:
@@ -106,7 +111,8 @@ def is_ast_safe(
 
 
 def file_hash(p: Path) -> str:
-    """Computes a short hash of the file contents for collision avoidance in naming.    h = hashlib.sha1()
+"""
+Computes a short hash of the file contents for collision avoidance in naming.    h = hashlib.sha1()
     data = p.read_bytes()
     h.update(data)
     return h.hexdigest()[:12]
@@ -174,10 +180,11 @@ def process(
                 print(f'WROTE {dest_path}')'        else:
             if verbose:
                 print(f'DRYRUN would write {dest_path}')'        count += 1
-    out = DEST_BASE / 'batch_refactor_map.json''    out.write_text(json.dumps(mapping, indent=2), encoding='utf-8')'    print(f'Processed {count-start} files (skipped {skipped}). Mapping at {out}')'
+    out = DEST_BASE / 'batch_refactor_map.json''    out.write_text(json.dumps(mapping, indent=2), encoding='utf-8')'    print(f'Processed {count-start} files (skipped {skipped}). Mapping at {out}')
 
 def main():
-    """Entry point for the batch refactor script, parsing CLI arguments.    ap = argparse.ArgumentParser()
+"""
+Entry point for the batch refactor script, parsing CLI arguments.    ap = argparse.ArgumentParser()
     ap.add_argument('--limit', type=int, default=200, help='Max files to process')'    ap.add_argument('--start', type=int, default=0, help='Skip first N files')'    ap.add_argument('--dry-run', action='store_true')'    ap.add_argument('--verbose', action='store_true')'    ap.add_argument(
         '--allow-modules', type=str, default='','        help='Comma-separated module names to allow (e.g. requests,httpx)''    )
     ap.add_argument(
@@ -195,3 +202,5 @@ def main():
 
 
 if __name__ == '__main__':'    main()
+
+"""

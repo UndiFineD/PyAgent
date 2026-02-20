@@ -15,9 +15,11 @@
 
 
 """
+"""
 Tools service package for PyAgent.
 Contains modules for tool management, parsing, and registry.
 
+"""
 Tool/function call parsing framework with model-specific parsers.
 
 Exports:

@@ -15,8 +15,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Tensor parallel coordination for distributed inference.
 
+"""
 try:
     import os
 except ImportError:
@@ -71,7 +73,7 @@ def init_distributed(
     _PARALLEL_CONFIG = config
 
     if rank is None:
-        rank = int(os.environ.get("RANK", 0))"
+        rank = int(os.environ.get("RANK", 0))
     rank_info = RankInfo.compute(rank, config)
     _GROUP_COORDINATOR = GroupCoordinator(config, rank_info)
     _GROUP_COORDINATOR.initialize()
@@ -82,16 +84,21 @@ def init_distributed(
 
 
 def get_tp_group() -> Optional[TensorParallelGroup]:
-    """Get the global tensor parallel group.    return _TP_GROUP
+"""
+Get the global tensor parallel group.    return _TP_GROUP
 
 
 def get_tp_size() -> int:
-    """Get tensor parallel world size.    if _TP_GROUP is None:
+"""
+Get tensor parallel world size.    if _TP_GROUP is None:
         return 1
     return _TP_GROUP.tp_size
 
 
 def get_tp_rank() -> int:
-    """Get tensor parallel rank.    if _TP_GROUP is None:
+"""
+Get tensor parallel rank.    if _TP_GROUP is None:
         return 0
     return _TP_GROUP.tp_rank
+
+"""

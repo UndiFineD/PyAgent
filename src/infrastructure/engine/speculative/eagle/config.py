@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Configuration regarding EAGLE speculative decoding.
 """
-
 try:
-    from dataclasses import dataclass
+
+"""
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -33,7 +37,8 @@ except ImportError:
 
 
 class EagleMethod(Enum):
-    """EAGLE method variants.
+"""
+EAGLE method variants.
     EAGLE_1 = auto()  # Original EAGLE
     EAGLE_2 = auto()  # EAGLE-2 with tree attention
     EAGLE_3 = auto()  # EAGLE-3 with aux hidden states
@@ -42,7 +47,8 @@ class EagleMethod(Enum):
 
 
 class AttentionBackend(Enum):
-    """Attention backend types.
+"""
+Attention backend types.
     FLASH_ATTENTION = auto()
     TREE_ATTENTION = auto()
     TRITON_ATTENTION = auto()
@@ -51,7 +57,8 @@ class AttentionBackend(Enum):
 
 @dataclass(frozen=True, slots=True)
 class EagleConfig:
-    """Configuration regarding EAGLE proposer.
+"""
+Configuration regarding EAGLE proposer.
     num_speculative_tokens: int = 5
     max_model_len: int = 4096
     block_size: int = 16

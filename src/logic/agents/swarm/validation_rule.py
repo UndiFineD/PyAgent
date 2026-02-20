@@ -14,7 +14,10 @@
 
 
 """
+"""
 validation_rule.py - ValidationRule dataclass for changelog validation
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -47,7 +50,8 @@ except ImportError:
 
 @dataclass
 class ValidationRule:
-""""Rule used by ChangesAgent to validate changelog entries against standards.    name: str
+""""
+Rule used by ChangesAgent to validate changelog entries against standards.    name: str
     pattern: str
     message: str
     severity:" str"
@@ -60,6 +64,9 @@ except ImportError:
 
 @dataclass
 class ValidationRule:
-""""Rule used by ChangesAgent to validate changelog entries against standards. "   name: str"    pattern: str
+""""
+Rule used by ChangesAgent to validate changelog entries against standards. "   name: str"    pattern: str
     message: str
     severity: str
+
+"""

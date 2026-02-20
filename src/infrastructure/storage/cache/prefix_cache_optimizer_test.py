@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.cache.prefix_cache_optimizer import CacheTier, PrefixCacheConfig, PrefixEntry, CacheHitResult, RadixTreeNode, PrefixTree, PrefixCacheOptimizer

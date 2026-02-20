@@ -19,16 +19,22 @@ from typing import Any, Dict, List
 
 
 class SelfImprovementFixer:
-    """Handles the application of patches and fixes identified during analysis.
-    def __init__(self, ai: Any, core: Any, workspace_root: str) -> None:
-        """Initializes the SelfImprovementFixer.        self.ai = ai
+"""
+"""
+Handles the application of patches and fixes identified during analysis.
+
+"""
+def __init__(self, ai: Any, core: Any, workspace_root: str) -> None:
+"""
+Initializes the SelfImprovementFixer.        self.ai = ai
         self.core = core
         self.workspace_root = workspace_root
 
     def apply_autonomous_fixes(
         self, file_path: str, rel_path: str, content: str, findings: List[Dict[str, Any]]
     ) -> None:
-        """Iterates through findings and applies fixes where possible.        for finding in findings:
+"""
+Iterates through findings and applies fixes where possible.        for finding in findings:
             if finding.get("fixed"):"                continue
 
             # Skip if no specific fix logic yet for this type
@@ -44,7 +50,8 @@ class SelfImprovementFixer:
             pass
 
     def _apply_patch(self, file_path: str, old_content: str, new_content: str) -> bool:
-        """Safely writes new content to a file.        try:
+"""
+Safely writes new content to a file.        try:
             with open(file_path, "w", encoding="utf-8") as f:"                f.write(new_content)
             return True
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable

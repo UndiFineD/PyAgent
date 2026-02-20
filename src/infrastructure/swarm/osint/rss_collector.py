@@ -20,10 +20,10 @@ from typing import List, Dict
 from datetime import datetime
 from time import mktime
 
+"""
 logger = logging.getLogger(__name__)
 
-
-
+"""
 class RssCollector:
         RSS feed collector for OSINT agents.
     Refactored from auto-news ops_rss.

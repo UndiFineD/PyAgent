@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 EAGLE speculative decoding implementation.
 
+"""
 try:
     from .base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,  # noqa: F401
 except ImportError:

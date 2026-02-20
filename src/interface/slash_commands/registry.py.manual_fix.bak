@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+""
+"""
+Minimal, parser-safe command registry utilities used during repair.
+
+"""
+
+This module exposes the public helper functions expected by imports
+while keeping dependencies light. It will use the project's real
+`CommandRegistry` when available and fall back to a tiny in-memory
+implementation otherwise.
+""
+from typing import Any, Callable, Dict, List, Optional
+
+try:
+    from .core import CommandDefinition, CommandHandler, CommandRegistry
+except Exception:
+    CommandDefinition = Dict[str, Any]
+    CommandHandler = Callable[..., Any]
+
+    class CommandRegistry:
+        def __init__(self) -> None:
+            self._map: Dict[str, Dict[str, Any]] = {}
+
+        def register(self, name: str, handler: CommandHandler, **kwargs: Any) -> CommandDefinition:
+            self._map[name] = {"handler": handler, **kwargs}
+            return {"name": name}
+
+        def clear(self) -> None:
+            self._map.clear()
+
+        def unregister(self, name: str) -> bool:
+            return self._map.pop(name, None) is not None
+
+        def enable(self, name: str) -> bool:
+            return True
+
+        def disable(self, name: str) -> bool:
+            return True
+
+        def list_commands(self, include_hidden: bool = False, include_disabled: bool = False, category: Optional[str] = None) -> List[CommandDefinition]:
+            return []
+
+
+_GLOBAL_REGISTRY: Optional[CommandRegistry] = None
+
+
+def get_global_registry() -> CommandRegistry:
+    ""
+Return the global CommandRegistry, creating a fallback if needed.""
+global _GLOBAL_REGISTRY
+    if _GLOBAL_REGISTRY is None:
+        _GLOBAL_REGISTRY = CommandRegistry()
+    return _GLOBAL_REGISTRY
+
+
+def reset_global_registry() -> None:
+    ""
+Reset the global registry (useful for tests).""
+global _GLOBAL_REGISTRY
+    if _GLOBAL_REGISTRY:
+        _GLOBAL_REGISTRY.clear()
+    _GLOBAL_REGISTRY = None
+
+
+def register(
+    name: str,
+    *,
+    description: str = "",
+    usage: str = "",
+    aliases: Optional[List[str]] = None,
+    hidden: bool = False,
+    requires_args: bool = False,
+    category: str = "general",
+) -> Callable[[CommandHandler], CommandHandler]:
+    ""
+Decorator to register a command with the global registry.""
+def decorator(handler: CommandHandler) -> CommandHandler:
+        get_global_registry().register(
+            name,
+            handler,
+            description=description,
+            usage=usage,
+            aliases=aliases,
+            hidden=hidden,
+            requires_args=requires_args,
+            category=category,
+        )
+        return handler
+
+    return decorator
+
+
+def register_command(name: str, handler: CommandHandler, **kwargs: Any) -> CommandDefinition:
+    ""
+Register a command directly with the global registry.""
+return get_global_registry().register(name, handler, **kwargs)
+
+
+def command(name: str, **kwargs: Any) -> Callable[[CommandHandler], CommandHandler]:
+    ""
+Alias for `register()`.""
+return register(name, **kwargs)
+
+
+def unregister(name: str) -> bool:
+    return get_global_registry().unregister(name)
+
+
+def enable_command(name: str) -> bool:
+    return get_global_registry().enable(name)
+
+
+def disable_command(name: str) -> bool:
+    return get_global_registry().disable(name)
+
+
+def list_commands(include_hidden: bool = False, include_disabled: bool = False, category: Optional[str] = None) -> List[CommandDefinition]:
+    return get_global_registry().list_commands(include_hidden=include_hidden, include_disabled=include_disabled, category=category)
+
+
+__all__ = [
+    "get_global_registry",
+    "reset_global_registry",
+    "register",
+    "register_command",
+    "command",
+    "unregister",
+    "enable_command",
+    "disable_command",
+    "list_commands",
+]

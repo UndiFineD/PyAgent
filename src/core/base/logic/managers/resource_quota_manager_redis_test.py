@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""Integration tests for ResourceQuotaManager with Redis backend.
+"""
+"""
+Integration tests for ResourceQuotaManager with Redis backend.
 
+"""
 NOTE: These tests require a Redis instance running locally.
 Set REDIS_URL environment variable to run these tests:
     export REDIS_URL=redis://localhost:6379

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Base.py module.
 """
-
 try:
-    import threading
+
+"""
+import threading
 except ImportError:
     import threading
 
@@ -122,7 +126,8 @@ class StructuredOutputGrammar(ABC):
                 return self._is_terminated
 
     def reset(self) -> None:
-        """Reset the grammar state.        self._is_terminated = False
+"""
+Reset the grammar state.        self._is_terminated = False
         self._tokens_accepted = 0
         self._state_history.clear()
 
@@ -209,5 +214,8 @@ class StructuredOutputBackend(ABC):
             self.stats.total_compile_time_ms += elapsed_ms
 
     def record_compilation_failure(self) -> None:
-        """Record a failed grammar compilation.        with self._lock:
+"""
+Record a failed grammar compilation.        with self._lock:
             self.stats.compilations_failed += 1
+
+"""

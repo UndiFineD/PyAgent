@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Diagnostic and status logic for SubagentRunner.
+"""
+"""
+Diagnostic and status logic for SubagentRunner.
 
+"""
 import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -30,12 +34,15 @@ if TYPE_CHECKING:
 
 
 class SubagentStatus:
-    """Delegated status/diagnostic manager for SubagentRunner.
+"""
+Delegated status/diagnostic manager for SubagentRunner.
+
     def __init__(self, runner: SubagentRunner) -> None:
         self.runner = runner
 
     def get_backend_status(self) -> dict[str, Any]:
-        """Return diagnostic snapshot of backend availability.        backend = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()"        repo_root = str(self.runner._resolve_repo_root())
+"""
+Return diagnostic snapshot of backend availability.        backend = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()"        repo_root = str(self.runner._resolve_repo_root())
         try:
             max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))"        except ValueError:
             max_context_chars = 12_000
@@ -59,12 +66,13 @@ class SubagentStatus:
         }
 
     def describe_backends(self) -> str:
-        """Return human-readable backend diagnostics.        status = self.get_backend_status()
+"""
+Return human-readable backend diagnostics.        status = self.get_backend_status()
         cmd = status["commands"]"        models = status["github_models"]"
         def yn(v: bool) -> str:
-            return "yes" if v else "no""
+            return "yes" if v else "no"
         lines = [
             "Backend diagnostics:","            f"- selected: {status['selected_backend']}","'            f"- repo_root: {status['repo_root']}","'            f"- max_context_chars: {status['max_context_chars']}","'            f"- codex CLI available: {yn(bool(cmd.get('codex')))}","'            f"- local copilot CLI available: {yn(bool(cmd.get('copilot')))}","'            f"- gh CLI available: {yn(bool(cmd.get('gh')))}","'            "- github-models configured:","            f"  - requests installed: {yn(bool(models.get('requests_installed')))}","'            f"  - base_url set: {yn(bool(models.get('base_url_set')))}","'            f"  - model set: {yn(bool(models.get('model_set')))}","'            f"  - token set: {yn(bool(models.get('token_set')))}","'        ]
 
         if status.get("warnings"):"            lines.append("- POTENTIAL CONFLICTS:")"            for w in status["warnings"]:"                lines.append(f"  ! {w}")"
-        return "\\n".join(lines)"
+        return "\\n".join(lines)

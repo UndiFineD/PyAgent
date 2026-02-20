@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 LM Studio streaming chat completion handler.
 
+"""
 import json
 import logging
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Optional
@@ -30,16 +32,19 @@ logger = logging.getLogger(__name__)
 
 
 class StreamingChatHandler:
-    """Handler for streaming chat operations with SDK-first and HTTP fallback support.
+"""
+Handler for streaming chat operations with SDK-first and HTTP fallback support.
     def __init__(self, api_client: LMStudioAPIClient):
-        """Initialize streaming chat handler.""""
-        Args:
+"""
+Initialize streaming chat handler.""""
+Args:
             api_client: LMStudioAPIClient instance for HTTP fallback.
                 self.api_client = api_client
 
     def _build_prediction_config(self, sdk_available: bool, **kwargs) -> Optional[Any]:
-        """Build prediction config from kwargs.""""
-        Args:
+"""
+Build prediction config from kwargs.""""
+Args:
             sdk_available: Whether LM Studio SDK is available.
             **kwargs: Configuration parameters.
 
@@ -53,8 +58,9 @@ class StreamingChatHandler:
         return lmstudio.LlmPredictionConfig(
             temperature=kwargs.get("temperature", 0.7),"            max_tokens=kwargs.get("max_tokens", 2048),"            top_p=kwargs.get("top_p", 1.0),"            stop_strings=kwargs.get("stop", []),"        )
 
-    def _extract_chat_from_lmstudio(self, system_prompt: str) -> "lmstudio.Chat":"        """Create an LM Studio Chat object.""""
-        Args:
+    def _extract_chat_from_lmstudio(self, system_prompt: str) -> "lmstudio.Chat":"        """
+Create an LM Studio Chat object.""""
+Args:
             system_prompt: System prompt/context.
 
         Returns:
@@ -70,8 +76,9 @@ class StreamingChatHandler:
         on_fragment: Optional[Callable[[str], None]] = None,
         **kwargs,
     ) -> Iterator[str]:
-        """Stream chat via LM Studio SDK.""""
-        Args:
+"""
+Stream chat via LM Studio SDK.""""
+Args:
             llm: LM Studio LLM model handle.
             prompt: User prompt/message.
             system_prompt: System prompt/context.
@@ -98,8 +105,9 @@ class StreamingChatHandler:
         on_fragment: Optional[Callable[[str], None]] = None,
         **kwargs,
     ) -> Iterator[str]:
-        """Stream chat via HTTP REST API fallback with SSE.""""
-        Args:
+"""
+Stream chat via HTTP REST API fallback with SSE.""""
+Args:
             prompt: User prompt/message.
             model: Model identifier.
             system_prompt: System prompt/context.
@@ -126,7 +134,7 @@ class StreamingChatHandler:
             logger.info(f"[LMStudio] HTTP fallback chat_stream: POST {url} | model={payload['model']}")"'            headers = self.api_client._get_headers()  # pylint: disable=protected-access
 
             with httpx.stream("POST", url, json=payload, headers=headers, timeout=60) as resp:"                resp.raise_for_status()
-                logger.info(f"[LMStudio] HTTP fallback chat_stream response: {resp.status_code}")"
+                logger.info(f"[LMStudio] HTTP fallback chat_stream response: {resp.status_code}")
                 # Use SSE client to parse events
                 client = sseclient.SSEClient(resp.iter_text())
                 for event in client.events():
@@ -139,7 +147,7 @@ class StreamingChatHandler:
                         choices = data.get("choices", [])"                        if choices:
                             content = choices[0].get("delta", {}).get("content", "")"                        else:
                             # Fallback to older format (message.delta event)
-                            content = data.get("content", "")"
+                            content = data.get("content", "")
                         if content:
                             if on_fragment:
                                 on_fragment(content)
@@ -151,9 +159,9 @@ class StreamingChatHandler:
                                 on_fragment(event.data)
                             yield event.data
 
-                logger.info("[LMStudio] HTTP fallback chat_stream completed successfully")"
+                logger.info("[LMStudio] HTTP fallback chat_stream completed successfully")
         except (RuntimeError, ValueError, httpx.HTTPError) as e:
-            logger.error(f"[LMStudio] HTTP fallback streaming error: {e}")"
+            logger.error(f"[LMStudio] HTTP fallback streaming error: {e}")
     def chat_stream(
         self,
         llm: Optional[Any],
@@ -164,8 +172,9 @@ class StreamingChatHandler:
         on_fragment: Optional[Callable[[str], None]] = None,
         **kwargs,
     ) -> Iterator[str]:
-        """Stream chat completion with SDK-first and HTTP fallback.""""
-        Args:
+"""
+Stream chat completion with SDK-first and HTTP fallback.""""
+Args:
             llm: LM Studio LLM model handle (from SDK).
             prompt: User prompt/message.
             model: Model identifier.
@@ -182,6 +191,14 @@ class StreamingChatHandler:
                 yield from self._sdk_chat_stream(llm, prompt, system_prompt, on_fragment, **kwargs)
                 return
             except (RuntimeError, ValueError, AttributeError) as e:
-                logger.warning(f"LM Studio SDK chat_stream failed: {e}; will try HTTP fallback.")"
+                logger.warning(f"LM Studio SDK chat_stream failed: {e}; will try HTTP fallback.")
         # HTTP fallback
         yield from self._http_fallback_chat_stream(prompt, model, system_prompt, on_fragment, **kwargs)
+
+"""
+
+"""
+
+""
+
+"""

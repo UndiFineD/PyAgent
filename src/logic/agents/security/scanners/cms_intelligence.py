@@ -22,28 +22,32 @@ from typing import Dict, Optional
 class CMSIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""""Intelligence engine for CMS identification and version detection.#     FINGERPRINTS = {
+""""
+Intelligence engine for CMS identification and version detection.#     FINGERPRINTS = {
         "wordpress": {"            "path": "/wp-links-opml.php","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "regex": rgenerator=\"WordPress/([\\\\d.]+)\","            "indicator": "/wp-content/","        },
         "joomla": {"            "path": "/administrator/manifests/files/joomla.xml","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
 """             "regex": r"<version>([\\\\d.]+)</version>","            "indicator": "/templates/system/css/system.css","        },
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string""""
+""" [BATCHFIX] Commented unterminated string"""
 #         "drupal": {"path": "/core/install.php", "regex": rDrupal ([\\\\d.]+)", "indicator": "/sites/default/"},"  # [BATCHFIX] closed string"        "magento": {"path": "/js/mage/cookies.js", "indicator": "Mage.Cookies"},"        "opencart": {"path": "/index.php?route=common/home", "indicator": "catalog/view/"},"        "oscommerce": {"path": "/admin/images/cal_date_over.gif", "indicator": "osCommerce"},"        "prestashop": {"path": "/js/jquery/plugins/fancybox/jquery.fancybox.js", "indicator": "prestashop"},"    }
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""        self.session = session
+"""
+def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
+self.session = session
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""     async def identify_cms(self, url: str) -> Dict[str, str]:""""
+"""
+async def identify_cms(self, url: str) -> Dict[str, str]:""""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Identify CMS and version from a URL."  # [BATCHFIX] closed string"        if not self.session:
             self.session = aiohttp.ClientSession()
@@ -54,26 +58,33 @@ class CMSIntelligence:
 
             for cms, data in self.FINGERPRINTS.items():
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                 if data["indicator"] in text:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+"""
+if data["indicator"] in text:"# [BATCHFIX] Commented metadata/non-Python
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                     results["name"] = cms"
+"""
+results["name"] = cms
                     # Try version detection
                     try:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                         async with self.session.get(f"{url.rstrip('/')}{data['path']}", timeout=10) as vresp:"'                            vtext = await vresp.text()
+"""
+async with self.session.get(f"{url.rstrip('/')}{data['path']}", timeout=10) as vresp:"'                            vtext = await vresp.text()
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                             match = re.search(data["regex"], vtext)"                            if match:
+"""
+match = re.search(data["regex"], vtext)"                            if match:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                                 results["version"] = match.group(1)"                    except (asyncio.TimeoutError, aiohttp.ClientError):
+"""
+results["version"] = match.group(1)"                    except (asyncio.TimeoutError, aiohttp.ClientError):
                         pass
                     break
         return results
+
+"""

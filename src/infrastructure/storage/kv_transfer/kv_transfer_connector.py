@@ -15,8 +15,10 @@
 
 
 """
+"""
 KV Transfer Connector - Base framework for disaggregated prefill-decode inference.
 
+"""
 Refactored to modular package structure for Phase 317.
 Decomposed into types, base, implementations, and factory modules.
 

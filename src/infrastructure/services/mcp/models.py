@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 MCP-related data models and enums.
 """
-
 try:
-    import json
+
+"""
+import json
 except ImportError:
     import json
 
@@ -54,22 +58,26 @@ except ImportError:
 
 
 class MCPServerType(Enum):
-    """MCP server connection types.
-    SSE = "sse"  # Server-Sent Events"    STDIO = "stdio"  # Standard I/O"    WEBSOCKET = "websocket""    HTTP = "http""    LOCAL = "local"  # In-process"
+"""
+MCP server connection types.
+    SSE = "sse"  # Server-Sent Events"    STDIO = "stdio"  # Standard I/O"    WEBSOCKET = "websocket""    HTTP = "http""    LOCAL = "local"  # In-process
 
 
 class ToolStatus(Enum):
-    """Tool execution status.
+"""
+Tool execution status.
     PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""    TIMEOUT = "timeout""
 
 
 class SessionState(Enum):
-    """MCP session state.
+"""
+MCP session state.
     DISCONNECTED = "disconnected""    CONNECTING = "connecting""    CONNECTED = "connected""    READY = "ready""    ERROR = "error""    CLOSING = "closing""
 
 @dataclass
 class MCPServerConfig:
-    """MCP server configuration.
+"""
+MCP server configuration.
     name: str
     server_type: MCPServerType
     url: Optional[str] = None
@@ -89,7 +97,8 @@ class MCPServerConfig:
 
 @dataclass
 class ToolSchema:
-    """Tool schema definition.
+"""
+Tool schema definition.
     name: str
     description: str
     parameters: Dict[str, Any] = field(default_factory=dict)
@@ -101,14 +110,16 @@ class ToolSchema:
     is_async: bool = True
 
     def to_openai_format(self) -> Dict[str, Any]:
-        """Convert to OpenAI tool format.        return {
+"""
+Convert to OpenAI tool format.        return {
             "type": "function","            "function": {"                "name": self.full_name,"                "description": self.description,"                "parameters": {"                    "type": "object","                    "properties": self.parameters,"                    "required": self.required,"                },
             },
         }
 
     @property
     def full_name(self) -> str:
-        """Get namespaced tool name.        if self.namespace:
+"""
+Get namespaced tool name.        if self.namespace:
             return f"{self.namespace}__{self.name}""        return self.name
 
     def to_dict(self) -> Dict[str, Any]:
@@ -118,7 +129,8 @@ class ToolSchema:
 
 @dataclass
 class ToolCall:
-    """Tool call request.
+"""
+Tool call request.
     id: str
     name: str
     arguments: Dict[str, Any]
@@ -127,7 +139,8 @@ class ToolCall:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_openai_format(cls, data: Dict[str, Any]) -> "ToolCall":"        """Parse from OpenAI format.        func = data.get("function", {})"        args = func.get("arguments", "{}")"        if isinstance(args, str):
+    def from_openai_format(cls, data: Dict[str, Any]) -> "ToolCall":"        """
+Parse from OpenAI format.        func = data.get("function", {})"        args = func.get("arguments", "{}")"        if isinstance(args, str):
             args = json.loads(args)
 
         return cls(
@@ -137,7 +150,8 @@ class ToolCall:
 
 @dataclass
 class ToolResult:
-    """Tool execution result.
+"""
+Tool execution result.
     call_id: str
     name: str
     status: ToolStatus
@@ -147,13 +161,15 @@ class ToolResult:
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_openai_format(self) -> Dict[str, Any]:
-        """Convert to OpenAI tool result format.        content = """        if self.status == ToolStatus.COMPLETED:
+"""
+Convert to OpenAI tool result format.        content = ""
+if self.status == ToolStatus.COMPLETED:
             if isinstance(self.result, str):
                 content = self.result
             else:
                 content = json.dumps(self.result)
         elif self.status == ToolStatus.FAILED:
-            content = f"Error: {self.error}""
+            content = f"Error: {self.error}"
         return {
             "role": "tool","            "tool_call_id": self.call_id,"            "content": content,"        }
 
@@ -164,7 +180,8 @@ class ToolResult:
 
 @dataclass
 class MCPSession:
-    """MCP session information.
+"""
+MCP session information.
     session_id: str
     server_name: str
     state: SessionState = SessionState.DISCONNECTED
@@ -184,3 +201,9 @@ class MCPSession:
         if self.connected_at is None:
             return 0.0
         return time.time() - self.connected_at
+
+"""
+
+"""
+
+"""

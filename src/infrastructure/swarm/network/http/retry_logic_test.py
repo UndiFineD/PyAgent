@@ -14,8 +14,11 @@
 
 try:
     from .infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
+"""
 except ImportError:
-    from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
+
+"""
+from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin
 
 
 
@@ -23,7 +26,7 @@ except ImportError:
 class DummyResponse:
     def __init__(self, status_code: int, data=None):
         self.status_code = status_code
-        self._data = data or {"ok": True}"
+        self._data = data or {"ok": True}
     def __enter__(self):
         return self
 
@@ -32,7 +35,7 @@ class DummyResponse:
 
     def raise_for_status(self):
         if self.status_code >= 400:
-            raise RuntimeError(f"status {self.status_code}")"
+            raise RuntimeError(f"status {self.status_code}")
     def json(self):
         return self._data
 
@@ -44,7 +47,7 @@ class DummyConnection(RetryHTTPMixin):
         self.retry_backoff = 1.0
         self.max_retries = 2
         self.retry_on = {500}
-        self._responses = [DummyResponse(500), DummyResponse(500), DummyResponse(200, {"result": "ok"})]"
+        self._responses = [DummyResponse(500), DummyResponse(500), DummyResponse(200, {"result": "ok"})]
     def get_response(self, url: str, timeout=None):
         # pop off next response
         return self._responses.pop(0)

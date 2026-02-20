@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Quantization engine.py module.
 
+"""
 try:
     from .engine import (AWQQuantizer, DequantizedLinear, GPTQQuantizer,
 except ImportError:

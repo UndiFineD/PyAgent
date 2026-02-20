@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Factory for incremental detokenizers.
 """
-
 try:
-    from typing import List, Optional, Set, Tuple
+
+"""
+from typing import List, Optional, Set, Tuple
 except ImportError:
     from typing import List, Optional, Set, Tuple
 
@@ -76,7 +80,7 @@ def create_detokenizer(
         )
 
     # Check if tokenizer supports fast decoding
-    is_fast = use_fast and hasattr(tokenizer, "is_fast") and tokenizer.is_fast"
+    is_fast = use_fast and hasattr(tokenizer, "is_fast") and tokenizer.is_fast
     if is_fast or use_fast:
         return FastIncrementalDetokenizer(
             tokenizer,
@@ -117,3 +121,5 @@ def detokenize_incrementally(
     # Finalize
     result = detokenizer.finalize()
     return result.full_text, result.stop_reason
+
+"""

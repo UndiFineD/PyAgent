@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.output_processor import EventType, RequestEvent, LoRARequest, ParentRequest, SamplingParams, EngineCoreRequest, EngineCoreOutput, EngineCoreOutputs, RequestOutput, OutputProcessorOutput, RequestOutputCollector, RequestState, LoRARequestStates, OutputProcessor, IterationStats

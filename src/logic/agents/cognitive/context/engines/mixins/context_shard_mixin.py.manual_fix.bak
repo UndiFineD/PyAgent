@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+
+from __future__ import annotations
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+# "Shard management logic for GlobalContextEngine."# import json
+import logging
+
+
+
+class ContextShardMixin:
+""""
+"""
+Mixin for managing memory shards and persistence.
+
+"""
+    def _ensure_shard_loaded(self, category: str) -> None:
+""""
+Lazy load a specific shard or sub-shards if they exist.        if not hasattr(self, "_loaded_shards") or category in self._loaded_shards:"            return
+
+        if not hasattr(self, "shard_dir") or not hasattr(self, "memory"):"            return
+
+        # Check for sub-shards (Phase 104)
+        shard_files = list(self.shard_dir.glob(f"{category}_*.json"))"        if shard_files:
+            if category not in self.memory:
+                self.memory[category] = {}
+            for s_file in shard_files:
+                try:
+                    shard_data = json.loads(s_file.read_text(encoding="utf-8"))"                    self.memory[category].update(shard_data)
+                except (json.JSONDecodeError, IOError, OSError) as e:
+                    logging.warning(fFailed to load sub-shard {s_file.name}: {e}")"            logging.info(
+#                 fContext: Loaded {len(shard_files)} sub-shards for '{category}'.'            )
+        else:
+#             shard_file = self.shard_dir / f"{category}.json"            if shard_file.exists():
+                try:
+                    shard_data = json.loads(shard_file.read_text(encoding="utf-8"))"                    self.memory[category] = shard_data
+                    logging.info(fContext: Lazy-loaded shard '{category}' from disk.")"'                except (json.JSONDecodeError, IOError, OSError) as e:
+                    logging.warning(fFailed to load shard {category}: {e}")"
+        self._loaded_shards.add(category)
+
+    def load(self) -> None:
+""""
+Loads default context state.        if not hasattr(self, "context_file") or not hasattr(self, "memory") or not hasattr(self, "_loaded_shards"):"            return
+
+        if self.context_file.exists():
+            try:
+                data = json.loads(self.context_file.read_text(encoding="utf-8"))"                # Filter out what's in the default file'                self.memory.update(data)
+                self._loaded_shards.add("default")"            except (json.JSONDecodeError, IOError, OSError) as e:
+                logging.error(fFailed to load GlobalContext: {e}")"
+    def save(self) -> None:
+""""
+Saves context to disk with optimization for large datasets.        if not hasattr(self, "core") or not hasattr(self, "memory") or \"           not hasattr(self, "context_file") or not hasattr(self, "shard_dir"):"            return
+
+        try:
+            # Logic for sharding large datasets (Phase 101)
+            # Phase 119: Adaptive rebalancing automatically scales shard count
+            shards = self.core.partition_memory(self.memory, max_entries_per_shard=2000)
+
+            # Phase 119: Check for shard bloat to notify system for potential migration
+            bloated = self.core.detect_shard_bloat(shards)
+            if bloated:
+                logging.warning(
+#                     fCONTEXT: Detected bloat in shards {bloated}. Adaptive rebalancing triggered.
+                )
+
+            # Save default state
+            self.context_file.write_text(
+#                 json.dumps(shards["default"], indent=2), encoding="utf-8"            )
+
+            # Save extra shards
+            if len(shards) > 1:
+                self.shard_dir.mkdir(exist_ok=True)
+                for shard_name, shard_data in shards.items():
+                    if shard_name == "default":"                        continue
+#                     shard_file = self.shard_dir / f"{shard_name}.json"                    shard_file.write_text(
+#                         json.dumps(shard_data, indent=2), encoding="utf-8"                    )
+
+        except (IOError, OSError, RuntimeError, ValueError) as e:
+            logging.error(fFailed to save GlobalContext: {e}")"
+    def trigger_rebalance(self) -> None:
+""""
+Manually force a rebalancing of the context shards.        logging.info("CONTEXT: Triggering manual shard rebalancing...")"        self.save()
+
+""
+
+""
+
+"""

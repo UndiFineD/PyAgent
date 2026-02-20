@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +16,15 @@ from __future__ import annotations
 
 
 """
+"""
 Rollback Tracker - Track and record improvement rollbacks
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
-- Instantiate RollbackTracker(), call save_state(improvement) before applying an Improvement, call record_rollback(improvement, reason, commit_hash="") when reverting, query with get_rollbacks(improvement_id) and get_rollback_rate(total_completed)."
+- Instantiate RollbackTracker(), call save_state(improvement) before applying an Improvement, call record_rollback(improvement, reason, commit_hash="") when reverting, query with get_rollbacks(improvement_id) and get_rollback_rate(total_completed).
 WHAT IT DOES:
 - Records and stores snapshots of an Improvement's state (status, updated_at, votes) in memory prior to changes.'- Appends RollbackRecord objects when rollbacks occur, capturing improvement_id, rollback_date, reason, previous_state and optional rollback_commit.
 - Provides retrieval of per-improvement rollback history and computes a simple rollback rate (percentage) given a total completed count.
@@ -67,27 +71,31 @@ __version__ = VERSION
 
 
 class RollbackTracker:
-    """Tracks improvement rollbacks.""""
-    Records when and why improvements are rolled back.
+"""
+Tracks improvement rollbacks.""""
+Records when and why improvements are rolled back.
 
     Attributes:
         rollbacks: List of rollback records.
     
     def __init__(self) -> None:
-        """Initialize the rollback tracker.        self.rollbacks: list[RollbackRecord] = []
+"""
+Initialize the rollback tracker.        self.rollbacks: list[RollbackRecord] = []
         self.states: dict[str, str] = {}  # improvement_id -> previous state
 
     def save_state(self, improvement: Improvement) -> None:
-        """Save the current state before an improvement.""""
-        Args:
+"""
+Save the current state before an improvement.""""
+Args:
             improvement: The improvement being applied.
                 self.states[improvement.id] = json.dumps(
             {
                 "status": improvement.status.value,"                "updated_at": improvement.updated_at,"                "votes": improvement.votes,"            }
         )
 
-    def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:"        """Record a rollback.""""
-        Args:
+    def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:"        """
+Record a rollback.""""
+Args:
             improvement: The rolled back improvement.
             reason: Why the rollback occurred.
             commit_hash: Git commit of the rollback.
@@ -104,11 +112,13 @@ class RollbackTracker:
         return record
 
     def get_rollbacks(self, improvement_id: str | None = None) -> list[RollbackRecord]:
-        """Get rollback records.        if improvement_id:
+"""
+Get rollback records.        if improvement_id:
             return [r for r in self.rollbacks if r.improvement_id == improvement_id]
         return self.rollbacks
 
     def get_rollback_rate(self, total_completed: int) -> float:
-        """Calculate rollback rate.        if total_completed == 0:
+"""
+Calculate rollback rate.        if total_completed == 0:
             return 0.0
         return (len(self.rollbacks) / total_completed) * 100

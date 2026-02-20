@@ -14,15 +14,20 @@
 
 
 """
+"""
 Memory search mixin for retrieving historical agent experiences.
+
+"""
 import logging
 from typing import Any
 
 
 
 class MemorySearchMixin:
-""""Methods for searching memories.
-    def get_lessons_learned(self, query: str = ", limit: int = 5, min_utility: float = 0.0) -> list[dict[str, Any]]:"""""Retrieves past episodes relevant to the query, filtered by high utility.        if not "query:"            # Return recent high utility episodes
+""""
+Methods for searching memories.
+    def get_lessons_learned(self, query: str = ", limit: int = 5, min_utility: float = 0.0) -> list[dict[str, Any]]:"""""
+Retrieves past episodes relevant to the query, filtered by high utility.        if not "query:"            # Return recent high utility episodes
             candidates = [ep for ep in self.episodes if ep.get("utility_score", 0.5) >= min_utility]"            return candidates[-limit:]
 
         collection = self._init_db()
@@ -49,7 +54,8 @@ class MemorySearchMixin:
         return relevant
 
     def search_memories(self, query: str, limit: int = 5) -> list[dict[str, Any]]:
-""""Public interface for semantic search across episodic memories.        collection = self._init_db()
+""""
+Public interface for semantic search across episodic memories.        collection = self._init_db()
         if not collection:
             # Fallback to simple matching if Chroma is not available
             return [
@@ -69,3 +75,9 @@ class MemorySearchMixin:
             return matches
         except (RuntimeError, ValueError, AttributeError) as e:
             logging.error(fsearch_memories error: {e}")"            return []
+
+"""
+
+""
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 AsyncioThreadingCoderAgent - High-concurrency orchestration for coding tasks
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -27,7 +31,7 @@ except ImportError:
     from src.agents.asyncio_threading_coder_agent import AsyncioThreadingCoderAgent
 
 agent = AsyncioThreadingCoderAgent(rC:\\\\path\\to\\workspace")"result = await agent.think("refactor module X", fleet_state=some_state)"new_defs = await agent.run_speciation(fleet_state)
-improved = await agent.improve_content("optimize I/O-heavy routine", "module.py")"
+improved = await agent.improve_content("optimize I/O-heavy routine", "module.py")
 WHAT IT DOES:
 - Provides a lightweight specialized Agent class derived from BaseAgent tailored to coordinate high-concurrency coding tasks using asyncio and threading idioms.
 - Exposes three primary asynchronous entry points:
@@ -46,7 +50,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Asyncio threading coder agent.py module.
 """
-
 try:
     from typing import Any
 except ImportError:
@@ -67,7 +70,8 @@ except ImportError:
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-"""Specialized Agent for high-concurrency coding tasks using asyncio and threading.
+"""
+Specialized Agent for high-concurrency coding tasks using asyncio and threading.
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.version = VERSION
@@ -84,7 +88,6 @@ class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancesto
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Improves content using asyncio and threading patterns."     "   "_ = target_file"#         return fOptimized {prompt} for asyncio/threading concurrency.
 """
-
 try:
     from typing import Any
 except ImportError:

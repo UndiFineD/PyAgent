@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""Minimal extension registry used for tests.
+from __future__ import annotations
+"""
+Minimal extension registry used for tests.
 
 This file provides a lightweight, well-typed registry API that
 preserves the names expected by tests while keeping behavior simple.
 """
-from __future__ import annotations
+
+
 
 
 from dataclasses import dataclass, field
@@ -19,9 +22,9 @@ class ExtensionInfo:
 
 
 class ExtensionRegistry:
-    """A minimal registry for registering and retrieving extensions."""
-
-    def __init__(self, name: str = "default") -> None:
+    ""
+A minimal registry for registering and retrieving extensions.""
+def __init__(self, name: str = "default") -> None:
         self.name: str = name
         self._extensions: Dict[str, ExtensionInfo] = {}
 

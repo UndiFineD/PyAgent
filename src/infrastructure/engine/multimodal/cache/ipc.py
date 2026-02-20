@@ -14,7 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""IPC-enabled multimodal cache.
+"""
+"""
+IPC-enabled multimodal cache.
+
+"""
 from pathlib import Path
 from typing import Any, Dict, Optional, Set
 
@@ -45,7 +49,8 @@ class IPCMultiModalCache(MultiModalCache):
             self._initialize_shared()
 
     def _initialize_shared(self) -> None:
-        """Initialize shared memory structures.        try:
+"""
+Initialize shared memory structures.        try:
             if not self._index_path.parent.exists():
                 self._index_path.parent.mkdir(parents=True, exist_ok=True)
             self._index_path.write_text("{}", encoding="utf-8")"        except (IOError, OSError):
@@ -53,7 +58,8 @@ class IPCMultiModalCache(MultiModalCache):
             pass
 
     def get(self, key: MediaHash) -> Optional[CacheEntry]:
-        """Get from local cache first, then check shared.        entry = self._local_cache.get(key)
+"""
+Get from local cache first, then check shared.        entry = self._local_cache.get(key)
         if entry is not None:
             return entry
 
@@ -65,22 +71,27 @@ class IPCMultiModalCache(MultiModalCache):
         return None
 
     def put(self, key: MediaHash, data: Any, metadata: Optional[Dict] = None) -> CacheEntry:
-        """Put in local cache and mark for sharing.        entry = self._local_cache.put(key, data, metadata)
+"""
+Put in local cache and mark for sharing.        entry = self._local_cache.put(key, data, metadata)
         self._shared_keys.add(key.value)
         return entry
 
     def evict(self, count: int = 1) -> int:
-        """Evict from local cache.        return self._local_cache.evict(count)
+"""
+Evict from local cache.        return self._local_cache.evict(count)
 
     def clear(self) -> None:
-        """Clear local and shared caches.        self._local_cache.clear()
+"""
+Clear local and shared caches.        self._local_cache.clear()
         self._shared_keys.clear()
 
     def contains(self, key: MediaHash) -> bool:
-        """Check local and shared.        return self._local_cache.contains(key) or key.value in self._shared_keys
+"""
+Check local and shared.        return self._local_cache.contains(key) or key.value in self._shared_keys
 
     def share_entry(self, key: MediaHash) -> bool:
-        """Explicitly share an entry.        if not self._local_cache.contains(key):
+"""
+Explicitly share an entry.        if not self._local_cache.contains(key):
             return False
         self._shared_keys.add(key.value)
         return True

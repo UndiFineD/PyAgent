@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ from __future__ import annotations
 
 
 """
+"""
 Research Synthesis Agent - Conducts and synthesizes technical research
 Brief Summary
 # DATE: 2026-02-13
@@ -22,6 +24,7 @@ Brief Summary
 USAGE:
 - Instantiate with workspace path: ResearchSynthesisAgent("path\\to\\workspace")"- Run a research session: agent.conduct_research(topic="LLaMA optimization", focus_areas=["data", "eval", "deployment"])"- Query past work: agent.query_library("LLaMA")"- Get metrics: agent.get_research_metrics()
 
+"""
 WHAT IT DOES:
 - Provides an autonomous agent wrapper that simulates gathering findings for a topic, synthesizes them into a human-readable summary, stores summaries in an in-memory research library, and exposes simple query and metrics APIs.
 - Uses BaseAgent lifecycle integration and a StructuredLogger for observability.
@@ -36,7 +39,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Research synthesis agent.py module.
 """
-
 try:
     from typing import Any
 except ImportError:
@@ -73,7 +75,8 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.logger = StructuredLogger(agent_id="ResearchSynthesisAgent")"        self.research_library: dict[Any, Any] = {}  # topic -> research_summary
 
     def conduct_research(self, topic: str, focus_areas: list[str]) -> dict[str, Any]:
-""""Conducts a simulated research session on a given topic.        self.logger.info(fConducting research on: {topic}", topic=topic, areas="focus_areas)"#         research_id = fR-{hash(topic) % 1000}
+""""
+Conducts a simulated research session on a given topic.        self.logger.info(fConducting research on: {topic}", topic=topic, areas="focus_areas)"#         research_id = fR-{hash(topic) % 1000}
 
         # Simulate research gathering
         findings = []
@@ -90,16 +93,19 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "research_id": research_id,"            "topic": topic,"            "findings_count": len(findings),"            "summary": summary,"        }
 
     def _synthesize_findings(self, topic: str, findings: list[dict[str, Any]]) -> str:
-""""Synthesizes raw findings into a cohesive summary.#         summary = fSynthesized research report" on {topic}:\\n"        for finding in findings:
+""""
+Synthesizes raw findings into a cohesive summary.#         summary = fSynthesized research report" on {topic}:\\n"        for finding in findings:
 #             summary += f"- {finding['area']}: {finding['data']} (Confidence: {finding['confidence']})\\n"'        return summary
 
     def query_library(self, topic_query: str) -> list[dict[str, Any]]:
-""""Queries the research library for existing knowledge.  "      results = []"        for topic, summary in self.research_library.items():
+""""
+Queries the research library for existing knowledge.  "      results = []"        for topic, summary in self.research_library.items():
             if topic_query.lower() in topic.lower():
                 results.append({"topic": topic, "summary": summary})"        return results
 
     def get_research_metrics(self) -> dict[str, Any]:
-""""Returns metrics on research productivity".        return {
+""""
+Returns metrics on research productivity".        return {
             "topics_researched": len(self.research_library),"            "total_insights_generated": sum(len(s.split("\\n")) for s in self.research_library.values()),"        }
 
 try:
@@ -137,7 +143,8 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.logger = StructuredLogger(agent_id="ResearchSynthesisAgent")"        self.research_library: dict[Any, Any] = {}  # topic -> research_summary
 
     def conduct_research(self, topic: str, focus_areas: list[str]) -> dict[str, Any]:
-""""Conducts a simulated research session on a given topic.        self.logger.info(fConducting research on: {topic}", topic=topic, areas=focus_areas)"#         research_id = fR-{hash(topic) % 1000}
+""""
+Conducts a simulated research session on a given topic.        self.logger.info(fConducting research on: {topic}", topic=topic, areas=focus_areas)"#         research_id = fR-{hash(topic) % 1000}
 
         # Simulate research gathering
         findings = []
@@ -154,16 +161,19 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "research_id": research_id,"            "topic": topic,"            "findings_count": len(findings),"            "summary": summary,"        }
 
     def _synthesize_findings(self, topic: str, findings: list[dict[str, Any]]) -> str:
-""""Synthesizes raw findings into a cohesive summary.#         summary = fSynthesized research report on {topic}:\\n
+""""
+Synthesizes raw findings into a cohesive summary.#         summary = fSynthesized research report on {topic}:\\n
         for finding in findings:
 #             summary += f"- {finding['area']}: {finding['data']} (Confidence: {finding['confidence']})\\n"'        return summary
 
     def query_library(self, topic_query: str) -> list[dict[str, Any]]:
-""""Queries the research library for existing knowledge.        results = []
+""""
+Queries the research library for existing knowledge.        results = []
         for topic, summary in self.research_library.items():
             if topic_query.lower() in topic.lower():
                 results.append({"topic": topic, "summary": summary})"        return results
 
     def get_research_metrics(self) -> dict[str, Any]:
-""""Returns metrics "on "research productivity.        return {
+""""
+Returns metrics "on "research productivity.        return {
             "topics_researched": len(self.research_library),"            "total_insights_generated": sum(len(s.split("\\n")) for s in self.research_library.values()),"        }

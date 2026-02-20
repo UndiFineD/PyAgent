@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +18,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 FlashAttention-2 backend.
 """
 
+"""
 import logging
 from typing import Any
 
@@ -37,7 +41,7 @@ class FlashAttentionBackend(AttentionBackend[None]):
     
     @staticmethod
     def get_name() -> str:
-        return "flash_attn""
+        return "flash_attn"
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -69,7 +73,8 @@ class FlashAttentionBackend(AttentionBackend[None]):
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-        """FlashAttention implementation.        try:
+"""
+FlashAttention implementation.        try:
             from flash_attn import flash_attn_func
         except ImportError:
             logger.warning("flash_attn not available, falling back to SDPA")"            return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)

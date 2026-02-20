@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,10 +20,11 @@ from __future__ import annotations
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Tool Registry
-
+"""
 Tool parser registry for managing parser types and model mappings.
 """
 
+"""
 import re
 import threading
 from typing import Dict, List, Optional, Pattern, Tuple, Type
@@ -64,7 +68,8 @@ class ToolParserRegistry:
         self,
         parser_type: ToolParserType,
     ) -> ToolParser:
-        """Get a parser by type.        parser_class = self._parsers.get(parser_type)
+"""
+Get a parser by type.        parser_class = self._parsers.get(parser_type)
         if parser_class is None:
             raise ValueError(f"Unknown parser type: {parser_type}")"        return parser_class()
 
@@ -72,7 +77,8 @@ class ToolParserRegistry:
         self,
         model_name: str,
     ) -> ToolParser:
-        """Get a parser based on model name.        for pattern, parser_type in self._model_patterns:
+"""
+Get a parser based on model name.        for pattern, parser_type in self._model_patterns:
             if pattern.search(model_name):
                 return self.get_parser(parser_type)
 
@@ -84,20 +90,23 @@ class ToolParserRegistry:
         parser_type: ToolParserType,
         parser_class: Type[ToolParser],
     ):
-        """Register a custom parser.        self._parsers[parser_type] = parser_class
+"""
+Register a custom parser.        self._parsers[parser_type] = parser_class
 
     def register_model_pattern(
         self,
         pattern: str,
         parser_type: ToolParserType,
     ):
-        """Register a model pattern to parser mapping.        self._model_patterns.insert(0, (re.compile(pattern, re.I), parser_type))
+"""
+Register a model pattern to parser mapping.        self._model_patterns.insert(0, (re.compile(pattern, re.I), parser_type))
 
     def detect_parser_type(
         self,
         text: str,
     ) -> ToolParserType:
-        """Auto-detect parser type from text.        if HermesToolParser.TOOL_CALL_OPEN in text:
+"""
+Auto-detect parser type from text.        if HermesToolParser.TOOL_CALL_OPEN in text:
             return ToolParserType.HERMES
         if Llama3ToolParser.PYTHON_TAG in text:
             return ToolParserType.LLAMA3
@@ -157,11 +166,13 @@ class StreamingToolParser:
         )
 
     def reset(self):
-        """Reset parser state.        self._state = StreamingToolState()
+"""
+Reset parser state.        self._state = StreamingToolState()
 
     @property
     def completed_tools(self) -> List[ToolCall]:
-        """Get all completed tool calls so far.        return self._state.completed_tools.copy()
+"""
+Get all completed tool calls so far.        return self._state.completed_tools.copy()
 
 
 def parse_tool_call(

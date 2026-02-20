@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,15 +20,15 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-
+"""
 Pipeline-Parallel Aware KV Transfer.
 
+"""
 This module provides orchestration for KV cache transfers when Pipeline Parallelism (PP)
 is enabled. In PP scenarios, different layers of the model reside on different pipeline
 stages (processes/nodes). KV transfer must be coordinated such that each stage's'respective KV blocks are transferred to the correct corresponding stages in the
 destination (prefill -> decode) group.
 """
-
 try:
     import logging
 except ImportError:
@@ -67,23 +70,27 @@ class PipelineParallelTransfer:
         self.local_connector = local_connector
 
     def _calculate_pp_stage_mapping_rust(self, num_layers: int, pp_size: int) -> Dict[int, int]:
-        """Rust-accelerated calculation of layer-to-stage distribution.        # return RustBridge.calculate_pp_stage_mapping_rust(num_layers, pp_size)
+"""
+Rust-accelerated calculation of layer-to-stage distribution.        # return RustBridge.calculate_pp_stage_mapping_rust(num_layers, pp_size)
         # Dummy fallback: evenly divide
         return {i: i // (num_layers // pp_size) for i in range(num_layers)}
 
     def coordinate_transfer_start(self, request_id: str, metadata: Any):
-        """Coordinate the start of a multi-stage KV transfer.        # Only rank 0 typically coordinates the global metadata
+"""
+Coordinate the start of a multi-stage KV transfer.        # Only rank 0 typically coordinates the global metadata
         if self.pp_rank == 0:
             logger.debug("PP Rank 0 coordinating transfer for %s", request_id)"            # Broadcast or register metadata
             pass
 
     def sync_stage_transfer(self, layer_idx: int):
-        """Barrier or sync point for a specific layer's transfer across stages.'        # Ensure that previous stages in the pipeline have flushed their data
+"""
+Barrier or sync point for a specific layer's transfer across stages.'        # Ensure that previous stages in the pipeline have flushed their data
         # if there are dependencies.
         pass
 
     def get_stage_status(self) -> Dict[str, Any]:
-        """Return status of PP-aware transfer.        status = "OK""        if hasattr(self.local_connector, "get_health_report"):"            status = self.local_connector.get_health_report()
+"""
+Return status of PP-aware transfer.        status = "OK""        if hasattr(self.local_connector, "get_health_report"):"            status = self.local_connector.get_health_report()
 
         return {
             "pp_rank": self.pp_rank,"            "pp_size": self.pp_size,"            "active_layers": len(self.local_layers),"            "connector_status": status,"        }
@@ -92,3 +99,5 @@ class PipelineParallelTransfer:
 # Lazy loading registration
 _orchestrator = LazyLoader(
     "src.infrastructure.storage.kv_transfer.pipeline_parallel_transfer", "PipelineParallelTransfer"")
+
+"""

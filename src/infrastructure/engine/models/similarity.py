@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Embedding Similarity Service (Phase 57).
 Provides semantic similarity calculation between text snippets using local or remote embeddings.
 
+"""
 import logging
 from typing import List
 

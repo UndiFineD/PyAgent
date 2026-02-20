@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,13 +16,16 @@ from __future__ import annotations
 
 
 """
+"""
 ConflictResolution - Resolution dataclass for conflicting improvements
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
 - Instantiate to represent the outcome of resolving a conflict between proposed improvements.
-- Example: cr = ConflictResolution(improvement_id="imp-123", resolution=improvement_obj, strategy="merge", resolved_by="keimpe")"
+- Example: cr = ConflictResolution(improvement_id="imp-123", resolution=improvement_obj, strategy="merge", resolved_by="keimpe")
 WHAT IT DOES:
 - Simple dataclass encapsulating an improvement conflict resolution: stores the conflicting improvement ID, the chosen Improvement instance, the strategy used, and who resolved it.
 
@@ -56,8 +60,9 @@ __version__ = VERSION
 
 @dataclass
 class ConflictResolution:
-    """Resolution for a conflicting improvement.""""
-    Attributes:
+"""
+Resolution for a conflicting improvement.""""
+Attributes:
         improvement_id: ID of conflicting improvement.
         resolution: Resolved improvement version.
         strategy: Resolution strategy used.

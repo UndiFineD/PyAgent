@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,11 +21,13 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 Instantiate InfrastructureManagerAgent with a valid file path and interact programmatically:
 - agent = InfrastructureManagerAgent("config/path")"- agent.list_proxmox_vms(host, token_id, secret)
 - agent.control_homeassistant_device(entity_id, action, api_url, token)
 Or run as a script: python infrastructure_manager_agent.py (uses create_main_function to start a CLI-style main).
 
+"""
 WHAT IT DOES:
 Provides an agent wrapper exposing tools for basic Proxmox VM/container inventory, simple HomeAssistant device control, and remote system metrics retrieval. Implements simulated API interactions (TODO Placeholders for real Proxmox REST and HomeAssistant REST calls) and an async improve_content stub to acknowledge readiness. Integrates with BaseAgent lifecycle and registers methods as tools via as_tool decorator.
 
@@ -37,7 +41,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
 Provides tools for remote system administration and automated environment scaling.
 """
-
 try:
     import logging
 except ImportError:
@@ -70,7 +73,8 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
-""""Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
+""""
+Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -99,7 +103,8 @@ class InfrastructureManagerAgent(BaseAgent):
 
     @as_tool
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
-""""Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP.        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
+""""
+Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP.        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
         return {
             "server": server_ip,"            "cpu_usage": "15%","            "ram_free": "8.2GB","            "disk_status": "Healthy","            "uptime": "14 days, 3 hours","        }
 
@@ -144,7 +149,8 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class InfrastructureManagerAgent(BaseAgent):
-""""Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
+""""
+Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -173,7 +179,8 @@ class InfrastructureManagerAgent(BaseAgent):
 
     @as_tool
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
-""""Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP.        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
+""""
+Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP.        logging.info(fINFRA: Fetching metrics for {server_ip}")"        # Mock metrics
         return {
             "server": server_ip,"            "cpu_usage": "15%","            "ram_free": "8.2GB","            "disk_status": "Healthy","            "uptime": "14 days, 3 hours","        }
 
@@ -185,3 +192,5 @@ class InfrastructureManagerAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(InfrastructureManagerAgent, "Infra Manager", "Infra logs")"    main()
+
+"""

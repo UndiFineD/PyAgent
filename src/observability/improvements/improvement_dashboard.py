@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Improvement Dashboard - Renders a lightweight improvements dashboard and emits update callbacks
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -62,7 +66,9 @@ __version__ = VERSION
 
 
 class ImprovementDashboard:
-    """Renders a lightweight dashboard and emits update callbacks.
+"""
+Renders a lightweight dashboard and emits update callbacks.
+
     def __init__(self) -> None:
         self._callbacks: list[Callable[[], None]] = []
         self._improvements: list[Improvement] = []

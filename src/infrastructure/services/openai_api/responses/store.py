@@ -15,7 +15,10 @@
 
 
 """
+"""
 Store.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 try:
@@ -43,29 +46,35 @@ except ImportError:
 
 
 class ResponseStore(ABC):
-    """Abstract response store.
+"""
+Abstract response store.
     @abstractmethod
     async def save(self, response: Response) -> None:
-        """Save a response.        ...
+"""
+Save a response.        ...
 
     @abstractmethod
     async def get(self, response_id: str) -> Optional[Response]:
-        """Get a response by ID.        ...
+"""
+Get a response by ID.        ...
 
     @abstractmethod
     async def delete(self, response_id: str) -> bool:
-        """Delete a response by ID.        ...
+"""
+Delete a response by ID.        ...
 
     @abstractmethod
     async def list(
         self, limit: int = 20, after: Optional[str] = None, before: Optional[str] = None
     ) -> List[Response]:
-        """List responses.        ...
+"""
+List responses.        ...
 
 
 
 class InMemoryResponseStore(ResponseStore):
-    """In-memory response store.
+"""
+In-memory response store.
     def __init__(self, max_size: int = 1000):
         self._store: Dict[str, Response] = {}
         self._order: List[str] = []
@@ -104,3 +113,5 @@ class InMemoryResponseStore(ResponseStore):
                 order = order[:idx]
             order = order[:limit]
             return [self._store[rid] for rid in order if rid in self._store]
+
+"""

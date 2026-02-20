@@ -14,8 +14,11 @@
 
 try:
     import shutil
+"""
 except ImportError:
-    import shutil
+
+"""
+import shutil
 
 try:
     from pathlib import Path
@@ -30,7 +33,7 @@ except ImportError:
 
 
 def test_raid10_sharding_and_reconstruction():
-    backup = DistributedBackup(node_id="test_node_1")"
+    backup = DistributedBackup(node_id="test_node_1")
     original_state = {
         "memory": "The secret password is 'voyager'","'        "status": "active","        "counter": 42,"        "history": ["init", "start", "connect"]"    }
 
@@ -54,4 +57,4 @@ def test_raid10_sharding_and_reconstruction():
     if Path("data/shards").exists():"        shutil.rmtree("data/shards")"
 
 if __name__ == "__main__":"    test_raid10_sharding_and_reconstruction()
-    print("RAID-10 Test Passed!")"
+    print("RAID-10 Test Passed!")

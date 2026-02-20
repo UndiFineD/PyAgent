@@ -14,8 +14,11 @@
 
 try:
     import unittest
+"""
 except ImportError:
-    import unittest
+
+"""
+import unittest
 
 try:
     from .infrastructure.security.auth.webauthn_manager import WebAuthnManager
@@ -27,21 +30,23 @@ except ImportError:
 
 class TestWebAuthnAuth(unittest.TestCase):
     def setUp(self):
-        self.auth_manager = WebAuthnManager(rp_id="localhost")"
+        self.auth_manager = WebAuthnManager(rp_id="localhost")
     def test_registration_flow_mock(self):
-        """Test the registration flow (mocked if lib not present).        username = "testuser""        options = self.auth_manager.get_registration_options(username)
-        self.assertIn("challenge", options)"
+"""
+Test the registration flow (mocked if lib not present).        username = "testuser""        options = self.auth_manager.get_registration_options(username)
+        self.assertIn("challenge", options)
         # Simulate registration response
         response = {"id": "cred123", "rawId": "cred123", "type": "public-key"}"        success = self.auth_manager.verify_registration(username, response)
         self.assertTrue(success)
 
     def test_authentication_flow_mock(self):
-        """Test the authentication flow (mocked if lib not present).        username = "testuser""        # Register first
+"""
+Test the authentication flow (mocked if lib not present).        username = "testuser""        # Register first
         self.auth_manager.get_registration_options(username)
-        self.auth_manager.verify_registration(username, {"id": "cred123"})"
+        self.auth_manager.verify_registration(username, {"id": "cred123"})
         # Now authenticate
         options = self.auth_manager.get_authentication_options(username)
-        self.assertIn("challenge", options)"
+        self.assertIn("challenge", options)
         success = self.auth_manager.verify_authentication(username, {"id": "cred123"})"        self.assertTrue(success)
 
 

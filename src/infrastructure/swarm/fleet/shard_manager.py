@@ -16,9 +16,11 @@
 """
 ShardManager
 
+"""
 Sharding and partitioning logic.
 (Facade for src.core.base.common.shard_core)
 
+"""
 try:
     import logging
 except ImportError:
@@ -46,7 +48,8 @@ logger = logging.getLogger(__name__)
 
 
 class ShardManager(StandardShardCore):
-    """Facade for ShardCore.
+"""
+Facade for ShardCore.
     def __init__(self, workspace_root: str):
         super().__init__()
         self.workspace_root = Path(workspace_root)
@@ -55,15 +58,18 @@ class ShardManager(StandardShardCore):
         self.communication_log: dict[frozenset[str], int] = {}  # Pairs of agents to frequency
 
     def log_communication(self, agent_a: str, agent_b: str) -> None:
-        """Records a communication event between two agents.        pair = frozenset([agent_a, agent_b])
+"""
+Records a communication event between two agents.        pair = frozenset([agent_a, agent_b])
         self.communication_log[pair] = self.communication_log.get(pair, 0) + 1
 
     def create_shard(self, shard_name: str, capacity: int = 100) -> None:
-        """Initializes a new shard.        if shard_name not in self.shard_assignments:
+"""
+Initializes a new shard.        if shard_name not in self.shard_assignments:
             self.shard_assignments[shard_name] = set()
-            logger.info(f"ShardManager: Created shard '{shard_name}' with capacity {capacity}")"'
+            logger.info(f"ShardManager: Created shard '{shard_name}' with capacity {capacity}")
     def assign_agent(self, agent_name: str, shard_name: str) -> bool:
-        """Assigns an agent to a specific shard.        if shard_name not in self.shard_assignments:
+"""
+Assigns an agent to a specific shard.        if shard_name not in self.shard_assignments:
             self.create_shard(shard_name)
 
         # Phase 95: Zero-Downtime Migration logic
@@ -80,7 +86,7 @@ class ShardManager(StandardShardCore):
                 Phase 95: Zero-Downtime Re-sharding.
         Redistributes agents to balance load while preserving task state.
         Uses SwarmConsensus to propagate routing changes live.
-                logger.info("ShardManager: Initiating zero-downtime re-sharding...")"
+                logger.info("ShardManager: Initiating zero-downtime re-sharding...")
         # 1. Identify overloaded shards (>80% capacity)
         # 2. Identify underloaded neighbors
         # 3. Move agents (Logic handled by consensus updates)
@@ -105,15 +111,17 @@ class ShardManager(StandardShardCore):
         return True
 
     def get_shard_members(self, shard_name: str) -> list[str]:
-        """Returns all agents in a shard.        return list(self.shard_assignments.get(shard_name, set()))
+"""
+Returns all agents in a shard.        return list(self.shard_assignments.get(shard_name, set()))
 
     def get_agent_shard(self, agent_name: str) -> str | None:
-        """Gets the shard containing the specified agent.        return self.agent_to_shard.get(agent_name)
+"""
+Gets the shard containing the specified agent.        return self.agent_to_shard.get(agent_name)
 
     def optimize_sharding(self, threshold: int = 5) -> None:
                 Dynamic sharding logic based on communication frequency.
         Nodes that talk to each other frequently (>= threshold) are clustered together.
-                logging.info("ShardManager: Running dynamic sharding optimization (Phase 128)...")"
+                logging.info("ShardManager: Running dynamic sharding optimization (Phase 128)...")
         # Identify high-frequency pairings
         clusters: list[set[str]] = []
         for pair, count in self.communication_log.items():
@@ -133,4 +141,5 @@ class ShardManager(StandardShardCore):
             shard_name = f"swarm_shard_{i}""            for agent in cluster:
                 self.assign_agent(agent, shard_name)
 
-        logging.info(f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards.")"
+        logging.info(f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards.")
+"""

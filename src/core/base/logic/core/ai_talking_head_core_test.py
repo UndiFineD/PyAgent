@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.ai_talking_head_core import TalkingHeadRequest, TalkingHeadResult, FaceAlignmentResult, AudioFeatures, AITalkingHeadCore

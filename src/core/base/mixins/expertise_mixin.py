@@ -13,13 +13,15 @@
 # limitations under the License.
 
 
-"""Expertise Mixin (Phase 61).
+"""
+"""
+Expertise Mixin (Phase 61).
 Allows agents to declare their domains and performance metrics for MoE routing.
 """
-
-
 try:
-    from typing import Any, List, Optional
+
+"""
+from typing import Any, List, Optional
 except ImportError:
     from typing import Any, List, Optional
 
@@ -31,19 +33,21 @@ except ImportError:
 
 
 class ExpertiseMixin:
-    """Mixin for agents that participate in Cross-Model MoE.
-    """
-
-    def __init__(self, *args, **kwargs) -> None:
-        """Initialize expertise mixin."""
-        super().__init__(*args, **kwargs)
+"""
+Mixin for agents that participate in Cross-Model MoE.
+"""
+def __init__(self, *args, **kwargs) -> None:
+"""
+Initialize expertise mixin.""
+super().__init__(*args, **kwargs)
         self.expertise_profile: Optional[ExpertProfile] = None
 
 
     def declare_expertise(
         self, domains: List[str], performance_score: float = 1.0, model_family: str = "unknown"
     ) -> None:
-        """Registers the agent's expertise profile."""
+"""
+Registers the agent's expertise profile.""
         # Note: agent_id should be available on the base agent
         agent_id: Any | str = getattr(self, "agent_id", "unknown_agent")
         self.expertise_profile = ExpertProfile(
@@ -52,5 +56,6 @@ class ExpertiseMixin:
 
 
     def get_expert_profile(self) -> Optional[ExpertProfile]:
-        """Returns the current expertise profile."""
-        return self.expertise_profile
+        ""
+Returns the current expertise profile.""
+return self.expertise_profile

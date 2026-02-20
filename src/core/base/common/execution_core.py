@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Unified Execution Core for PyAgent.
+"""
+"""
+Unified Execution Core for PyAgent.
 Handles concurrent, parallel, and serial task orchestration.
 """
 
+"""
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Callable, List
@@ -32,18 +36,20 @@ except ImportError:
 
 
 class ExecutionCore(BaseCore):
-    """Standard implementation for task orchestration.
+"""
+Standard implementation for task orchestration.
     Supports ThreadPool, ProcessPool, and native Rust-based async scheduling.
-    """
-    def __init__(self, max_workers: int = 4) -> None:
+"""
+def __init__(self, max_workers: int = 4) -> None:
         super().__init__()
         self.max_workers = max_workers
         self._thread_pool = ThreadPoolExecutor(max_workers=max_workers)
 
 
     async def execute_parallel(self, tasks: List[Callable]) -> List[Any]:
-        """Executes a list of callables in parallel using threads."""
-        if rc and hasattr(rc, "execute_parallel_rust"):
+"""
+Executes a list of callables in parallel using threads.""
+if rc and hasattr(rc, "execute_parallel_rust"):
             return rc.execute_parallel_rust(tasks)  # pylint: disable=no-member
 
         loop = asyncio.get_event_loop()
@@ -51,5 +57,6 @@ class ExecutionCore(BaseCore):
         return await asyncio.gather(*futures)
 
     def map_seq(self, func: Callable, items: List[Any]) -> List[Any]:
-        """Sequenced map implementation."""
-        return [func(item) for item in items]
+"""
+Sequenced map implementation.""
+return [func(item) for item in items]

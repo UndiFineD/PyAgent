@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Cloud provider implementations.
 
+"""
 This package contains concrete implementations of CloudProviderBase
 for various cloud AI providers.
 """
-
 try:
     from typing import TYPE_CHECKING
 except ImportError:
@@ -53,7 +56,8 @@ __all__: list[str] = [
 
 def __getattr__(
         name: str) -> type[GeminiConnector] | type[AWSBedrockConnector] | type[GroqConnector] | type[AzureAIConnector]:
-    """Lazy load provider implementations.    if name == "GeminiConnector":"        from .gemini import GeminiConnector
+"""
+Lazy load provider implementations.    if name == "GeminiConnector":"        from .gemini import GeminiConnector
 
         return GeminiConnector
     if name == "AWSBedrockConnector":"        from .bedrock import AWSBedrockConnector
@@ -65,6 +69,6 @@ def __getattr__(
     if name == "AzureAIConnector":"        from .azure import AzureAIConnector
 
         return AzureAIConnector
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")"
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 

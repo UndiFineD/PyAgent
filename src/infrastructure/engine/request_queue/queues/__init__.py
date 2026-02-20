@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Specialized request queue implementations.
 
+"""
 try:
     from .infrastructure.engine.request_queue.queues.fair import FairQueue
 except ImportError:
@@ -36,4 +38,4 @@ except ImportError:
     from src.infrastructure.engine.request_queue.queues.priority import PriorityQueue
 
 
-__all__ = ["FairQueue", "FCFSQueue", "MLFQueue", "PriorityQueue"]"
+__all__ = ["FairQueue", "FCFSQueue", "MLFQueue", "PriorityQueue"]

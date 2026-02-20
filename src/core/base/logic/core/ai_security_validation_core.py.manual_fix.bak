@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+""
+Parser-safe stub: AI security validation core (conservative).
+
+Minimal stub to keep imports working and preserve basic types.
+""
+
+from dataclasses import dataclass
+from typing import List, Optional
+
+
+@dataclass
+class SecurityIssue:
+    id: str
+    description: str
+    severity: str = "medium"
+
+
+@dataclass
+class SecurityScanResult:
+    issues: List[SecurityIssue]
+
+
+class AISecurityValidationCore:
+    def analyze(self, text: str) -> SecurityScanResult:
+        return SecurityScanResult(issues=[])
+
+
+__all__ = ["SecurityIssue", "SecurityScanResult", "AISecurityValidationCore"]

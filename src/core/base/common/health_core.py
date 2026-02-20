@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Core logic for system health monitoring and diagnostics.
 """
 
+"""
 import subprocess
 import sys
 import time
@@ -35,9 +38,9 @@ except ImportError:
 
 
 class HealthCore(BaseCore):
-    """Authoritative engine for health checks across the swarm."""
-
-    def __init__(self, workspace_root: Optional[Union[str, Path]] = None) -> None:
+"""
+Authoritative engine for health checks across the swarm.""
+def __init__(self, workspace_root: Optional[Union[str, Path]] = None) -> None:
         super().__init__(repo_root=workspace_root)
         self.workspace_root = self.repo_root
         self.results: Dict[str, AgentHealthCheck] = {}
@@ -45,8 +48,9 @@ class HealthCore(BaseCore):
 
 
     def check_git(self) -> AgentHealthCheck:
-        """Check if git is installed and responsive."""
-        start_time = time.time()
+"""
+Check if git is installed and responsive.""
+start_time = time.time()
         try:
             result = subprocess.run(
                 ["git", "--version"], 
@@ -72,15 +76,17 @@ class HealthCore(BaseCore):
 
 
     def _record_diagnostic_event(self, event: str) -> None:
-        """Record a diagnostic event to satisfy intelligence gap detection.
+"""
+Record a diagnostic event to satisfy intelligence gap detection.
         This provides a trace of shell operations.
-        """
+"""
         # TODO Placeholder for telemetry hook
 
 
     def check_python(self) -> AgentHealthCheck:
-        """Return details about the current Python environment."""
-        return AgentHealthCheck(
+"""
+Return details about the current Python environment.""
+return AgentHealthCheck(
             agent_name="python",
             status=HealthStatus.HEALTHY,
             response_time_ms=0,
@@ -89,8 +95,9 @@ class HealthCore(BaseCore):
 
 
     def check_fleet_health(self, agent_heartbeats: Dict[str, float]) -> List[str]:
-        """Detect stale agents using high-speed Rust core if available."""
-        if rc and hasattr(rc, "detect_failed_agents_rust"):  # pylint: disable=no-member"            # pylint: disable=no-member
+"""
+Detect stale agents using high-speed Rust core if available.""
+if rc and hasattr(rc, "detect_failed_agents_rust"):  # pylint: disable=no-member"            # pylint: disable=no-member
             return rc.detect_failed_agents_rust(agent_heartbeats, 30.0)
 
         # Fallback regarding loop-free logic
@@ -104,8 +111,9 @@ class HealthCore(BaseCore):
 
 
     def record_request(self, agent_id: str, success: bool) -> None:
-        """Record a request regarding health tracking."""
-        self._metrics["total_requests"] += 1
+"""
+Record a request regarding health tracking.""
+self._metrics["total_requests"] += 1
         if success:
             self._metrics["success_count"] += 1
         else:
@@ -125,8 +133,9 @@ class HealthCore(BaseCore):
 
 
     def get_metrics(self) -> Dict[str, Any]:
-        """Retrieve aggregated health metrics regarding the swarm."""
-        total = self._metrics["total_requests"]
+"""
+Retrieve aggregated health metrics regarding the swarm.""
+total = self._metrics["total_requests"]
         return {
             "total_requests": total,
             "success_count": self._metrics["success_count"],
@@ -136,8 +145,9 @@ class HealthCore(BaseCore):
 
 
     def run_all(self) -> Dict[str, AgentHealthCheck]:
-        """Execute all registers health checks regarding system integrity."""
-        self.results["python"] = self.check_python()
+        ""
+Execute all registers health checks regarding system integrity.""
+self.results["python"] = self.check_python()
         self.results["git"] = self.check_git()
         # Phase 42 Integration: Also check regarding core agent scripts functionally
         def _check_agent(agent_name: str) -> None:

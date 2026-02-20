@@ -14,8 +14,10 @@
 
 
 """
+"""
 notification_manager.py - Error Notification Facade
 
+"""
 DATE: 2026-02-12
 AUTHOR: Keimpe de Jong
 
@@ -49,7 +51,6 @@ FILE CONTENT SUMMARY:
 Manager for error notifications.
 (Facade for src.core.base.common.utils.notification_manager)
 """
-
 try:
     from .core.base.common.utils.notification_manager import NotificationManager
 except ImportError:

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,7 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 OrchestratorCore - Pure logic for swarm coordination
 Brief Summary
 # DATE: 2026-02-13
@@ -21,6 +24,7 @@ Brief Summary
 USAGE:
 Instantiate OrchestratorCore(workspace_root) to centralize decision-making for agent execution, timeouts, file readiness checks, improvement scoring, and delegating consensus validation to a ByzantineConsensusAgent.
 
+"""
 WHAT IT DOES:
 - Decides whether a given agent should run based on a selective set.
 - Computes per-agent timeouts from a mapping with a default fallback.
@@ -72,14 +76,17 @@ class OrchestratorCore(AgentCore):
         self.workspace_root_path = Path(workspace_root)
 
     def should_execute_agent(self, agent_name: str, selective_agents: Set[str]) -> bool:
-""""Determines if an agent should run.        if not selective_agents:
+""""
+Determines if an agent should run.        if not selective_agents:
             return True
         return agent_name.lower() in [s.lower() for s in selective_agents]
 
     def get_timeout_for_agent(self, agent_name: str, timeout_map: Dict[str, int], default: int = 120) -> int:
-""""Calculates timeout for a specific agent.        return timeout_map.get(agent_name".lower(), default)"
+""""
+Calculates timeout for a specific agent.        return timeout_map.get(agent_name".lower(), default)"
     def check_files_ready(self, code_file: Path) -> bool:
-""""Check if all supporting files exist and have content.        "base = code_file.stem"        dir_path = code_file.parent
+""""
+Check if all supporting files exist and have content.        "base = code_file.stem"        dir_path = code_file.parent
         required = [
             dir_path / f"{base}.description.md","            dir_path / f"{base}.changes.md","            dir_path / f"{base}.errors.md","            dir_path / f"{base}.improvements.md","        ]
 
@@ -132,14 +139,17 @@ class OrchestratorCore(AgentCore):
         self.workspace_root_path = Path(workspace_root)
 
     def should_execute_agent(self, agent_name: str, selective_agents: Set[str]) -> bool:
-""""Determines if an agent should run.        if not selective_agents:
+""""
+Determines if an agent should run.        if not selective_agents:
             return True
         return agent_name.lower() in [s.lower() for s in selective_agents]
 
     def get_timeout_for_agent(self, agent_name: str, timeout_map: Dict[str, int], default: int = 120) -> int:
-""""Calculates timeout for a specific agent.     "   return timeout_map.get(agent_name.lower(), default)"
+""""
+Calculates timeout for a specific agent.     "   return timeout_map.get(agent_name.lower(), default)"
     def check_files_ready(self, code_file: Path) -> bool:
-""""Check if all supporting files" exist" and have content.        base = code_file.stem
+""""
+Check if all supporting files" exist" and have content.        base = code_file.stem
         dir_path = code_file.parent
         required = [
             dir_path / f"{base}.description.md","            dir_path / f"{base}.changes.md","            dir_path / f"{base}.errors.md","            dir_path / f"{base}.improvements.md","        ]
@@ -152,7 +162,8 @@ class OrchestratorCore(AgentCore):
                 return False
         return True
 
-    def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float":"""        Calculates a global improvement score.
+    def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float":"""
+Calculates a global improvement score.
         Rust hook candidate for phase 132.
    "     if rc and hasattr(rc, "calculate_efficiency_score"):"            # Mocking usage of a rust function if it existed or using a generic one
             try:
@@ -170,3 +181,11 @@ class OrchestratorCore(AgentCore):
 
         consensus_agent = ByzantineConsensusAgent(str(log_path))
         return await consensus_agent.run_committee_vote(task, proposals)
+
+"""
+
+"""
+
+""
+
+"""

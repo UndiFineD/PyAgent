@@ -16,21 +16,23 @@
 # GraphCore logic for PyAgent.
 # Pure logic for AST-based code relationship analysis and graph management.
 
-"""Graph core: lightweight AST-based graph extraction.
+"""
+"""
+Graph core: lightweight AST-based graph extraction.
 
+"""
 This module provides a small, pure-Python fallback implementation
 for tests and environments where the original implementation is
 corrupted or a Rust acceleration layer isn't available.
 """
-
 import ast
 from typing import Any, Dict, List, Set, Tuple
 
 
 class CodeGraphVisitor(ast.NodeVisitor):
-    """AST visitor to collect imports, classes, bases and simple calls."""
-
-    def __init__(self, file_path: str) -> None:
+"""
+AST visitor to collect imports, classes, bases and simple calls.""
+def __init__(self, file_path: str) -> None:
         self.file_path = file_path
         self.imports: Set[str] = set()
         self.classes: List[str] = []
@@ -67,7 +69,8 @@ class CodeGraphVisitor(ast.NodeVisitor):
 
 
 class GraphCore:
-    """Utility class exposing parsing and simple edge building."""
+"""
+Utility class exposing parsing and simple edge building.""
 
     @staticmethod
     def parse_python_content(rel_path: str, content: str) -> Dict[str, Any]:
@@ -87,11 +90,12 @@ class GraphCore:
 
     @staticmethod
     def build_edges(analysis: Dict[str, Any]) -> List[Tuple[str, str, str]]:
-        """Build simple edges from analysis results.
+"""
+Build simple edges from analysis results.
 
         Returns list of tuples (source, target, relationship_type).
-        """
-        edges: List[Tuple[str, str, str]] = []
+"""
+edges: List[Tuple[str, str, str]] = []
         rel_path = analysis.get("rel_path", "")
         for imp in analysis.get("imports", []):
             edges.append((rel_path, imp, "imports"))

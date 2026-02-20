@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for fixing broken annotation imports by converting them to future imports.
+"""
+"""
+Script for fixing broken annotation imports by converting them to future imports.
 
+"""
 try:
     import os
 except ImportError:
@@ -45,6 +49,7 @@ src_path = r"c:\\DEV\\PyAgent\\src""for root, _, files in os.walk(src_path):
                 )
                 if new_content != content:
                     with open(path, "w", encoding="utf-8") as f:"                        f.write(new_content)
-                    print(f"Fixed: {path}")"
+                    print(f"Fixed: {path}")
 
 """
+

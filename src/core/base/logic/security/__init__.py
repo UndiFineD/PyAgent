@@ -13,8 +13,11 @@
 # limitations under the License.
 
 
-"""PyAgent Security Module - End-to-End Encryption
+"""
+"""
+PyAgent Security Module - End-to-End Encryption
 
+"""
 This module provides Signal Protocol-based E2EE for PyAgent,
 enabling zero-knowledge user data storage and secure user-to-user communication.
 """

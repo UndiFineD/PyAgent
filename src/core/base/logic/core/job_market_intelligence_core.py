@@ -25,7 +25,8 @@ from src.core.base.common.base_core import BaseCore
 
 @dataclass
 class JobPosting:
-    company_name: str
+"""
+company_name: str
     company_url: Optional[str]
     job_title: str
     job_locations: str
@@ -39,7 +40,8 @@ class JobPosting:
     is_usa: bool = True
     tags: List[str] = None
 
-    def __post_init__(self):
+"""
+def __post_init__(self):
         if self.tags is None:
             self.tags = []
 
@@ -56,9 +58,9 @@ class JobMarketStats:
 
 
 class JobMarketIntelligenceCore(BaseCore):
-    """Job Market Intelligence Core for automated job data collection and analysis."""
-
-    def __init__(self):
+    ""
+Job Market Intelligence Core for automated job data collection and analysis.""
+def __init__(self):
         super().__init__()
         self.job_database: List[JobPosting] = []
         self.data_sources: List[str] = []

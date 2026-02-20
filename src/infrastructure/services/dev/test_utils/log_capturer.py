@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import logging
 except ImportError:
@@ -41,9 +41,11 @@ __version__ = VERSION
 
 
 class LogCapturer:
-    """Captures logging output for testing.
+"""
+Captures logging output for testing.
     def __init__(self, level: int = logging.INFO) -> None:
-        """Initialize log capturer.        self.level = level
+"""
+Initialize log capturer.        self.level = level
         self.logs: list[logging.LogRecord] = []
         self.handler = logging.Handler()
         self.handler.emit = lambda record: self.logs.append(record)
@@ -56,14 +58,25 @@ class LogCapturer:
         self.stop()
 
     def start(self) -> None:
-        """Start capturing logs.        root_logger = logging.getLogger()
+"""
+Start capturing logs.        root_logger = logging.getLogger()
         root_logger.addHandler(self.handler)
         root_logger.setLevel(self.level)
 
     def stop(self) -> None:
-        """Stop capturing logs.        logging.getLogger().removeHandler(self.handler)
+"""
+Stop capturing logs.        logging.getLogger().removeHandler(self.handler)
 
     def get_logs(self, level: int | None = None) -> list[str]:
-        """Get captured log messages.        if level is None:
+"""
+Get captured log messages.        if level is None:
             return [record.getMessage() for record in self.logs]
         return [record.getMessage() for record in self.logs if record.levelno >= level]
+
+"""
+
+"""
+
+""
+
+"""

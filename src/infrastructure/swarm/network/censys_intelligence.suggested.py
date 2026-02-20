@@ -15,10 +15,11 @@
 
 
 """
+"""
 CensysResult and CensysIntelligence
 classes for subdomain enumeration and host enrichment using Censys API.
 
-
+"""
 import asyncio
 import logging
 import os
@@ -66,7 +67,7 @@ class CensysIntelligence:
             return set()
 
         subdomains = set()
-        query = f"names: {domain}""
+        query = f"names: {domain}"
         try:
             # Run blocking SDK in executor
             loop = asyncio.get_event_loop()
@@ -88,7 +89,7 @@ class CensysIntelligence:
                             if name.endswith(domain) and "*" not in name:"                                subdomains.add(name)
 
         except Exception as e:
-            self.logger.error(f"Censys subdomain search failed: {e}")"
+            self.logger.error(f"Censys subdomain search failed: {e}")
         return subdomains
 
     async def recursive_host_search(self, ip: str, depth: int = 1) -> CensysResult:
@@ -108,7 +109,7 @@ class CensysIntelligence:
             # Simple aggregation logic (lite version of Censeye)
             # Extract TLS cert fingerprints to find other hosts using same cert
             services = host_data.get("services", [])"            for service in services:
-                tls = service.get("tls", {})"                cert = tls.get("certificate", {})"                sha256 = cert.get("parsed", {}).get("fingerprint_sha256")"
+                tls = service.get("tls", {})"                cert = tls.get("certificate", {})"                sha256 = cert.get("parsed", {}).get("fingerprint_sha256")
                 if sha256 and depth > 0:
                     # Search for other hosts with this cert
                     query = f"services.tls.certificate.parsed.fingerprint_sha256: {sha256}""                    search_hits = await loop.run_in_executor(
@@ -120,7 +121,7 @@ class CensysIntelligence:
                             result.related_ips.add(found_ip)
 
         except Exception as e:
-            self.logger.error(f"Censys host enrichment failed for {ip}: {e}")"
+            self.logger.error(f"Censys host enrichment failed for {ip}: {e}")
         return result
 
 
@@ -130,7 +131,7 @@ async def main():
     if ci.available:
         print("Censys Available")"        # subs = await ci.find_subdomains("example.com")"        # print(subs)
     else:
-        print("Censys Not Configured")"
+        print("Censys Not Configured")
 
 if __name__ == "__main__":"    asyncio.run(main())
 

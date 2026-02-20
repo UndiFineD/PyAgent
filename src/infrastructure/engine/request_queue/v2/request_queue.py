@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Advanced Asynchronous Request Queue (V2) for Phase 54.
 Supports priority, deadlines, and fair-share policies with Rust acceleration.
 
+"""
 import heapq
 import logging
 import time
@@ -54,7 +56,7 @@ class RequestQueueV2:
 
         self._counter += 1
         heapq.heappush(self._waiting, (score, self._counter, request))
-        logger.debug(f"Added request {getattr(request, 'request_id', 'unknown')} with score {score:.4f}")"'
+        logger.debug(f"Added request {getattr(request, 'request_id', 'unknown')} with score {score:.4f}")
     def pop_next_batch(self, max_tokens: int) -> List[Any]:
                 Pops the highest priority requests that fit within max_tokens.
                 batch = []
@@ -64,7 +66,7 @@ class RequestQueueV2:
 
         while self._waiting and current_tokens < max_tokens:
             score, count, req = heapq.heappop(self._waiting)
-            req_tokens = getattr(req, "num_tokens", 1)"
+            req_tokens = getattr(req, "num_tokens", 1)
             if current_tokens + req_tokens <= max_tokens:
                 batch.append(req)
                 current_tokens += req_tokens
@@ -79,9 +81,11 @@ class RequestQueueV2:
         return batch
 
     def get_queue_stats(self) -> Dict[str, Any]:
-        """Returns statistics on queue depth and urgency.        if not self._waiting:
-            return {"depth": 0, "max_urgency": 0.0}"
+"""
+Returns statistics on queue depth and urgency.        if not self._waiting:
+            return {"depth": 0, "max_urgency": 0.0}
         max_urgency = 0.0
         if rc and hasattr(rc, "deadline_urgency_rust"):"            deadlines = [getattr(r[2], "deadline", 0) for r in self._waiting]"            max_urgency = rc.deadline_urgency_rust(deadlines)
 
-        return {"depth": len(self._waiting), "max_urgency": max_urgency, "running_count": len(self._running)}"
+        return {"depth": len(self._waiting), "max_urgency": max_urgency, "running_count": len(self._running)}
+"""

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .refactor_external_batch import parse_allowlist, sanitize_filename, is_ast_safe, file_hash, process, main

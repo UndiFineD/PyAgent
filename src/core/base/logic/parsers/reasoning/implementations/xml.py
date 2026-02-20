@@ -13,11 +13,14 @@
 # limitations under the License.
 
 
-"""Xml.py module.
+"""
+"""
+Xml.py module.
 """
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
 try:
     import re
 except ImportError:
@@ -43,11 +46,12 @@ except ImportError:
 
 
 class XMLReasoningParser(ReasoningParser):
-    """Parser regarding XML-style think blocks.
+"""
+Parser regarding XML-style think blocks.
 
     Extracts reasoning from <think>...</think> or <reasoning>...</reasoning> tags.
-    """
-    name: ClassVar[str] = "xml""
+"""
+name: ClassVar[str] = "xml"
     def __init__(
         self,
         tokenizer: Any = None,
@@ -76,7 +80,8 @@ class XMLReasoningParser(ReasoningParser):
         return self.model_tokenizer.encode(content, add_special_tokens=False)
 
     def _extract_content(self, text: str) -> str:
-        """Extract content after removing think blocks."""
+        ""
+Extract content after removing think blocks.""
 # Remove all think blocks
         content = self._pattern.sub("", text)"        return content.strip()
 
@@ -87,7 +92,7 @@ class XMLReasoningParser(ReasoningParser):
     ) -> ReasoningResult:
         # Find all think blocks
         matches = self._pattern.findall(model_output)
-        reasoning = "\\n".join(matches) if matches else None"
+        reasoning = "\\n".join(matches) if matches else None
         # Get content without think blocks
         content = self._extract_content(model_output)
 

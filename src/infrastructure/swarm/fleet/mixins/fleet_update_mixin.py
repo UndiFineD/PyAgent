@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,12 @@ from __future__ import annotations
 
 
 """
+"""
 Fleet update mixin.py module.
 # Phase 322: Fleet Autonomous Update Mixin
 """
 
+"""
 import subprocess
 import threading
 from pathlib import Path
@@ -33,17 +36,18 @@ logger = StructuredLogger(__name__)
 
 
 class FleetUpdateMixin:
-    """
-    Mixin for FleetManager to support autonomous periodic updates.
+"""
+Mixin for FleetManager to support autonomous periodic updates.
     Checks for repository updates every 15 minutes.
-    """
-    def init_update_service(self, interval_seconds: int = 900, sleep_fn: Callable[[float], None] | None = None):
-        """Initializes the periodic repository update cycle.
+"""
+def init_update_service(self, interval_seconds: int = 900, sleep_fn: Callable[[float], None] | None = None):
+"""
+Initializes the periodic repository update cycle.
         `sleep_fn` may be supplied to make the background loop testable and
         interruptible. By default the mixin uses an internal `threading.Event`
         which allows a fast wake-up when `stop_update_service` is called.
-        """
-        self._update_interval = interval_seconds
+"""
+self._update_interval = interval_seconds
         # Kill event allows responsive interruption of sleeps
         self._kill_event = threading.Event()
         if sleep_fn is None:
@@ -59,8 +63,9 @@ class FleetUpdateMixin:
         logger.info(f"FleetUpdateMixin: Auto-update service started with {interval_seconds}s interval.")
 
     def stop_update_service(self) -> None:
-        """Stop the background update thread cleanly."""
-        self._kill_event.set()
+"""
+Stop the background update thread cleanly.""
+self._kill_event.set()
         self.kill_switch = True
         t = getattr(self, "_updater_thread", None)
         if t is not None and getattr(t, "is_alive", lambda: False)():
@@ -71,7 +76,8 @@ class FleetUpdateMixin:
 
 
     def _update_loop(self):
-        """Background thread loop for git operations."""
+"""
+Background thread loop for git operations.""
         # Initial short delay to let the system stabilize
         self._sleep_fn(30)
 
@@ -87,8 +93,9 @@ class FleetUpdateMixin:
                 self._sleep_fn(5)
 
     def _run_git_pull(self):
-        """Executes the git pull command."""
-        workspace_path = getattr(self, "workspace_root", Path.cwd())
+        ""
+Executes the git pull command.""
+workspace_path = getattr(self, "workspace_root", Path.cwd())
         # Check if it's a git repo
         git_dir = workspace_path / ".git"
         if not git_dir.exists():

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,11 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Priority queue for ordered agent execution with simple dependency support."""
-
-
+"""
+"""
+Priority queue for ordered agent execution with simple dependency support.""
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -30,15 +33,16 @@ except ImportError:
 
 
 class AgentPriorityQueue:
-    """Simple priority queue for agents.
+"""
+Simple priority queue for agents.
+
 
     Lower numeric `priority` means higher execution priority. Dependencies are
     honored: an agent will not be scheduled until all its dependencies have
     been executed. Cycles are handled by placing remaining items in sorted
     order with a warning.
-    """
-
-    def __init__(self) -> None:
+    ""
+def __init__(self) -> None:
         self._agents: Dict[str, Dict[str, Any]] = {}
 
     def add_agent(

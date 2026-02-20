@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Decoder package.
 
+"""
 try:
     from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,  # noqa: F401
 except ImportError:

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal, parser-safe Satellite Reconnaissance Core used for tests."""
-
+""
+Minimal, parser-safe Satellite Reconnaissance Core used for tests.""
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional

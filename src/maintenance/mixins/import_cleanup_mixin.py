@@ -14,7 +14,10 @@
 
 
 """
+"""
 ImportCleanupMixin - Automated import resolution and normalization
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -47,7 +50,8 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ImportCleanupMixin:
-    """Provides utilities for resolving and fixing Python imports after refactors.
+"""
+Provides utilities for resolving and fixing Python imports after refactors.
     def build_module_map(self, root_dir: Path, dirs: List[str]) -> Dict[Tuple[str, str], str]:
                 Builds a map from (parent_path_lower, name_lower) to actual_case_name.
         Useful for fixing imports after snake_case renaming.
@@ -71,7 +75,8 @@ class ImportCleanupMixin:
         root_dir: Path,
         search_dirs: List[str]
     ) -> str:
-        """Resolves a module string to its correct casing and path.        parts: List[str] = mod_str.split(".")"        if mod_str.startswith("."):"            # Relative import
+"""
+Resolves a module string to its correct casing and path.        parts: List[str] = mod_str.split(".")"        if mod_str.startswith("."):"            # Relative import
             m: re.Match[str] | None = re.match(r"^(\\.+)", mod_str)"            if not m:
                 return mod_str
             dots: int = len(m.group(1))
@@ -91,7 +96,7 @@ class ImportCleanupMixin:
                     curr = curr / real
                 else:
                     return mod_str  # Cannot resolve
-            return "." * dots + ".".join(res)"
+            return "." * dots + ".".join(res)
         # Absolute import
         curr_path: Path | None = None
         res = []
@@ -117,7 +122,7 @@ class ImportCleanupMixin:
             else:
                 res.extend(parts[i:])
                 break
-        return ".".join(res)"
+        return ".".join(res)
     def fix_imports_in_file(
         self,
         file_path: Path,
@@ -125,12 +130,13 @@ class ImportCleanupMixin:
         root_dir: Path,
         search_dirs: List[str]
     ) -> bool:
-        """Updates imports in a file to match the actual filesystem casing/naming.        try:
-            content: str = file_path.read_text(encoding="utf-8")"
+"""
+Updates imports in a file to match the actual filesystem casing/naming.        try:
+            content: str = file_path.read_text(encoding="utf-8")
             def replacer(match) -> str:
                 mod = match.group(2)
                 resolved: str = self.resolve_module_path(mod, file_path, name_map, root_dir, search_dirs)
-                return f"{match.group(1)}{resolved}""
+                return f"{match.group(1)}{resolved}"
             # Regex for 'import ...' and 'from ... import ...''            new_content: str = re.sub(
                 r"^((?:import|from)\\s+)([a-zA-Z0-9_\\.]+)","                replacer,
                 content,

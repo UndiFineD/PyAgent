@@ -14,8 +14,11 @@
 
 try:
     import socket
+"""
 except ImportError:
-    import socket
+
+"""
+import socket
 
 try:
     import struct
@@ -36,7 +39,8 @@ except ImportError:
 
 @dataclass
 class RTPSession:
-    """Represents an active RTP session for a call.    call_id: str
+"""
+Represents an active RTP session for a call.    call_id: str
     local_port: int
     socket: socket.socket
     created_at: float
@@ -69,22 +73,26 @@ class RTPServerCore:
         self.running = False
 
     async def start(self):
-        """Starts the RTP listener.        self.running = True
+"""
+Starts the RTP listener.        self.running = True
         # Logic to listen for incoming RTP packets
         pass
 
     async def stop(self):
-        """Stops the RTP listener.        self.running = False
+"""
+Stops the RTP listener.        self.running = False
         for session in self.sessions.values():
             session.socket.close()
         self.sessions.clear()
 
     def allocate_session(self, call_id: str) -> int:
-        """Allocates a port and creates a new RTP session.        # Port allocation logic here
+"""
+Allocates a port and creates a new RTP session.        # Port allocation logic here
         return 10000  # TODO Placeholder
 
     def handle_packet(self, data: bytes, addr: Tuple[str, int]):
-        """Parses and processes an incoming RTP packet.        if len(data) < self.RTP_HEADER_SIZE:
+"""
+Parses and processes an incoming RTP packet.        if len(data) < self.RTP_HEADER_SIZE:
             return
 
         # Simple RTP header parsing
@@ -98,3 +106,5 @@ class RTPServerCore:
 
         return {
             "payload_type": payload_type,"            "seq_num": seq_num,"            "timestamp": timestamp,"            "ssrc": ssrc,"            "payload": payload"        }
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -10,14 +11,15 @@ from __future__ import annotations
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-"""Tool Framework Mixin for BaseAgent.
+"""
+"""
+Tool Framework Mixin for BaseAgent.
 
+"""
 Provides a minimal, import-safe tool framework used by the tests. This
 implementation intentionally keeps behavior simple: register tools via the
 `create_tool` decorator and execute them with `execute_tool`.
 """
-
-
 import asyncio
 import inspect
 import json

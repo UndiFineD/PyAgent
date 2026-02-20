@@ -1,0 +1,13 @@
+"""userspace.interface.ui.mobile.mobile_flutter package init (parser-safe stub)."""
+
+from __future__ import annotations
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+__all__ = []

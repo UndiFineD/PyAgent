@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,10 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Core logic for batch request processing and queuing."""
-
+"""
+"""
+Core logic for batch request processing and queuing.""
 try:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -39,9 +43,9 @@ except ImportError:
 
 
 class BatchRequest:
-    """Request in a batch processing queue."""
-
-    def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+"""
+Request in a batch processing queue.""
+def __init__(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         file_path: Optional[Path] = None,
         prompt: Optional[str] = None,
@@ -58,28 +62,31 @@ class BatchRequest:
 
 
     def add(self, item: Any) -> None:
-        """Add an item to the batch."""
-        if self.max_size is not None and len(self.items) >= self.max_size:
+"""
+Add an item to the batch.""
+if self.max_size is not None and len(self.items) >= self.max_size:
             return
         self.items.append(item)
 
 
     @property
     def size(self) -> int:
-        """Return the number of items in the batch."""
-        return len(self.items)
+"""
+Return the number of items in the batch.""
+return len(self.items)
 
 
     def execute(self, processor: Callable[[List[Any]], List[Any]]) -> List[Any]:
-        """Process the items in the batch."""
-        return processor(self.items)
+"""
+Process the items in the batch.""
+return processor(self.items)
 
 
 class BatchCore(BaseCore):
-    """Authoritative engine for batch request management.
-    """
-
-    def __init__(self, batch_size: int = 10, max_concurrent: int = 4) -> None:
+"""
+Authoritative engine for batch request management.
+"""
+def __init__(self, batch_size: int = 10, max_concurrent: int = 4) -> None:
         super().__init__()
         self.batch_size = batch_size
         self.max_concurrent = max_concurrent
@@ -88,15 +95,18 @@ class BatchCore(BaseCore):
 
 
     def add_request(self, request: BatchRequest) -> None:
-        """Add a request to the queue."""
-        self.queue.append(request)
+"""
+Add a request to the queue.""
+self.queue.append(request)
 
 
     def clear_queue(self) -> None:
-        """Clear all requests from the queue."""
-        self.queue.clear()
+"""
+Clear all requests from the queue.""
+self.queue.clear()
 
 
     def sort_by_priority(self) -> List[BatchRequest]:
-        """Return requests sorted by priority (Descending)."""
-        return sorted(self.queue, key=lambda r: r.priority.value, reverse=True)
+"""
+Return requests sorted by priority (Descending).""
+return sorted(self.queue, key=lambda r: r.priority.value, reverse=True)

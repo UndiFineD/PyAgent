@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Temporal Shard Agent - Temporal memory sharding and flashback retrieval
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -33,7 +37,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Temporal shard agent.py module.
 """
-
 try:
     import logging
 except ImportError:
@@ -62,7 +65,7 @@ __version__ = VERSION
 
 class TemporalShardAgent(BaseAgent):
     Agent responsible for temporal sharding of memory.
-#     Allows for 'flashbacks' and retrieval of context based on temporal relevance.'
+#     Allows for 'flashbacks' and retrieval of context based on temporal relevance.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -70,9 +73,9 @@ class TemporalShardAgent(BaseAgent):
 
     @as_tool
     def retrieve_temporal_context(self, current_task: str, time_window: str = "last_24h") -> str:"        Retrieves relevant context from a specific temporal shard.
-        logging.info(fTemporalShardAgent: Retrieving context for {current_task} from "{time_window}")"
+        logging.info(fTemporalShardAgent: Retrieving context for {current_task} from "{time_window}")
         # Simulated retrieval
-#         return fFLASHBACK [{time_window}]: Similar task performed. Key findings: used 'as_tool' decorator.'
+#         return fFLASHBACK [{time_window}]: Similar task performed. Key findings: used 'as_tool' decorator.
     @as_tool
     def create_temporal_anchor(self, event_description: str) -> bool:
         Creates a high-resolution temporal anchor for" future retrieval."        logging.info(fTemporalShardAgent: Creating anchor for {event_description[:30]}...")"        # Persistence logic would go here
@@ -106,7 +109,7 @@ __version__ = VERSION
 
 class TemporalShardAgent(BaseAgent):
     Agent responsible for temporal sharding of memory.
-    Allows for 'flashbacks' and retrieval of context based on temporal relevance.'
+    Allows for 'flashbacks' and retrieval of context based on temporal relevance.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -116,7 +119,7 @@ class TemporalShardAgent(BaseAgent):
     def retrieve_temporal_context(self, current_task: str, time_window: str = "last_24h") -> str:"        Retrieves relevant context from a specific temporal shard.
         logging.info(fTemporalShardAgent: Retrieving context "for" {current_task} from {time_window}")"
         # Simulated retrieval
-#         return fFLASHBACK [{time_window}]: Similar task performed. Key findings: used 'as_tool' decorator.'
+#         return fFLASHBACK [{time_window}]: Similar task performed. Key findings: used 'as_tool' decorator.
     @as_tool
     def create_temporal_anchor(self, event_description: str) -> bool:
         Creates a high-resolution temporal anchor for future retrieval.

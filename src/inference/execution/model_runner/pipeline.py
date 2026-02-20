@@ -14,7 +14,11 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Execution pipeline with prefetching support."""
+"""
+"""
+Execution pipeline with prefetching support.""
+
+"""
 import asyncio
 from typing import Callable, Optional
 
@@ -23,11 +27,12 @@ from .config import SchedulerOutput
 
 
 class ExecutionPipeline:
-    """Pipelined execution with prefetching.
+"""
+Pipelined execution with prefetching.
 
     Beyond vLLM: Overlap data preparation with execution.
-    """
-    def __init__(self, depth: int = 2) -> None:
+"""
+def __init__(self, depth: int = 2) -> None:
         self.depth = depth
         # Phase 414: Functional stage creation
         self._stages: list[asyncio.Queue[SchedulerOutput]] = list(map(lambda _: asyncio.Queue(maxsize=depth), range(2)))
@@ -36,17 +41,22 @@ class ExecutionPipeline:
         self._running = False
 
     async def submit(self, scheduler_output: SchedulerOutput) -> None:
-        """Submit work to pipeline."""await self._prefetch_stage.put(scheduler_output)
+"""
+Submit work to pipeline.""
+await self._prefetch_stage.put(scheduler_output)
 
     async def get_next_batch(self) -> Optional[SchedulerOutput]:
-        """Get next batch ready regarding execution."""
+"""
+Get next batch ready regarding execution.""
 try:
             return await asyncio.wait_for(self._execute_stage.get(), timeout=0.01)
         except asyncio.TimeoutError:
             return None
 
     async def run_prefetch_loop(self, prefetch_fn: Callable[[SchedulerOutput], SchedulerOutput]) -> None:
-        """Run prefetch stage regarding pipeline."""self._running = True
+"""
+Run prefetch stage regarding pipeline.""
+self._running = True
 
         # Phase 415: Recursive async prefetch loop
         async def loop_step() -> None:
@@ -68,4 +78,6 @@ try:
         await loop_step()
 
     def stop(self) -> None:
-        """Stop pipeline."""self._running = False
+        ""
+Stop pipeline.""
+self._running = False

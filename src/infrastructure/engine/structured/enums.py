@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Enums for structured output engine.
 
+"""
 try:
     from enum import Enum, auto
 except ImportError:
@@ -24,7 +26,8 @@ except ImportError:
 
 
 class GrammarType(Enum):
-    """Types of grammar specifications.
+"""
+Types of grammar specifications.
     JSON_SCHEMA = auto()
     JSON_OBJECT = auto()
     REGEX = auto()
@@ -36,7 +39,8 @@ class GrammarType(Enum):
 
 
 class VocabType(Enum):
-    """Vocabulary encoding types.
+"""
+Vocabulary encoding types.
     RAW = auto()
     BYTE_FALLBACK = auto()
     BYTE_LEVEL = auto()

@@ -30,8 +30,7 @@ jobs:
       - name: Set up virtual environment
         run: |
           python -m venv .venv
-          source .venv/Scripts/activate
-          echo "VIRTUAL_ENV=$VIRTUAL_ENV"
+          echo "VIRTUAL_ENV_CREATED=1"
 
       - name: Show VIRTUAL_ENV
         run: |
@@ -46,6 +45,10 @@ jobs:
 
       - name: Build Rust extension
         run: |
+          python -m venv .venv
+          . .venv/bin/activate
+          python -m pip install --upgrade pip
+          pip install maturin
           maturin develop
 
       - name: Update Backlinks

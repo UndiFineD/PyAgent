@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.serialization.fast_serializer import SerializationFormat, SerializerStats, Serializer, JSONSerializer, PickleSerializer, MsgPackSerializer, CBORSerializer, BinarySerializer, SerializerRegistry, get_serializer_registry, fast_serialize, fast_deserialize, to_json, from_json, to_msgpack, from_msgpack

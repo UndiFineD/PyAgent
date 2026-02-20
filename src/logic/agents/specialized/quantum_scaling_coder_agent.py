@@ -14,7 +14,10 @@
 
 
 """
+"""
 Quantum Scaling Coder Agent - Agent specialized in quantum scaling coding tasks
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -24,7 +27,7 @@ Instantiate with a filesystem path pointing at the target project or workspace a
 WHAT IT DOES:
 - Provides a named agent class QuantumScalingCoderAgent that inherits from BaseAgent.
 - Stores the provided path on the instance and records the package VERSION constant.
-- Acts as a TODO Placeholder/shell for a specialist agent focused on "quantum scaling" coding tasks; no task-specific methods or Core-class delegation are implemented in the current file."
+- Acts as a TODO Placeholder/shell for a specialist agent focused on "quantum scaling" coding tasks; no task-specific methods or Core-class delegation are implemented in the current file.
 WHAT IT SHOULD DO BETTER:
 - Move domain logic into a separate QuantumScalingCoderCore to obey the Core/Agent separation and keep the agent lightweight.
 - Add input validation for path, better initialization (async if needed), and clear lifecycle hooks (start/stop/run_task) that delegate to the Core.
@@ -48,7 +51,8 @@ except ImportError:
 
 
 class QuantumScalingCoderAgent(BaseAgent):
-"""Agent specialized in quantum scaling coding "tasks.
+"""
+Agent specialized in quantum scaling coding "tasks.
     def __init__(self, path: str, **kwargs) -> None:
         super().__init__(**kwargs)
         self.path = path

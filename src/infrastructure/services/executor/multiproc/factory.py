@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Factory.py module.
 """
-
 try:
-    from typing import Any, Callable, Dict
+
+"""
+from typing import Any, Callable, Dict
 except ImportError:
     from typing import Any, Callable, Dict
 
@@ -59,7 +62,8 @@ except ImportError:
 
 
 class ExecutorFactory:
-    """Factory for creating executors.
+"""
+Factory for creating executors.
     @staticmethod
     def create(
         backend: ExecutorBackend,
@@ -67,11 +71,12 @@ class ExecutorFactory:
         functions: Dict[str, Callable] = None,
         **kwargs: Any,
     ) -> Executor:
-        """Create an executor.        if backend == ExecutorBackend.MULTIPROC:
+"""
+Create an executor.        if backend == ExecutorBackend.MULTIPROC:
             return MultiprocExecutor(num_workers=num_workers, functions=functions, **kwargs)
         elif backend == ExecutorBackend.UNIPROC:
             return UniprocExecutor(functions=functions)
         elif backend == ExecutorBackend.DISTRIBUTED:
             return DistributedExecutor(local_size=num_workers, functions=functions, **kwargs)
         else:
-            raise ValueError(f"Unknown backend: {backend}")"
+            raise ValueError(f"Unknown backend: {backend}")

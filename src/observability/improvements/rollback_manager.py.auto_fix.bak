@@ -1,0 +1,27 @@
+"""Rollback manager - minimal parser-safe shim."""
+
+from __future__ import annotations
+from typing import Any, Dict
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+__version__ = VERSION
+
+
+class RollbackManager:
+    def __init__(self) -> None:
+        self.points: Dict[str, Dict[str, Any]] = {}
+
+    def record(self, name: str, state: Dict[str, Any]) -> None:
+        self.points[name] = state.copy()
+
+    def rollback(self, name: str) -> Dict[str, Any] | None:
+        return self.points.get(name)
+
+__all__ = ["RollbackManager"]

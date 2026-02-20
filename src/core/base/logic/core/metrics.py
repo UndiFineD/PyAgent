@@ -13,17 +13,21 @@
 # limitations under the License.
 
 
-"""Core logic regarding metrics.
+"""
+"""
+Core logic regarding metrics.
 (Facade regarding src.core.base.common.metrics_core)
 """
-
 try:
-    from .core.base.common.metrics_core import MetricsCore as StandardMetricsCore
+
+"""
+from .core.base.common.metrics_core import MetricsCore as StandardMetricsCore
 except ImportError:
     from src.core.base.common.metrics_core import MetricsCore as StandardMetricsCore
 
 
 
 class MetricsCore(StandardMetricsCore):
-    """Facade regarding MetricsCore."""
-    pass
+    ""
+Facade regarding MetricsCore.""
+pass

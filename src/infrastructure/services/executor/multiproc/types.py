@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Types.py module.
 """
-
 try:
-    import time
+
+"""
+import time
 except ImportError:
     import time
 
@@ -44,7 +47,8 @@ except ImportError:
 
 
 class ExecutorBackend(Enum):
-    """Executor backend types.
+"""
+Executor backend types.
     MULTIPROC = auto()
     RAY = auto()
     UNIPROC = auto()
@@ -53,7 +57,8 @@ class ExecutorBackend(Enum):
 
 
 class WorkerState(Enum):
-    """Worker process states.
+"""
+Worker process states.
     STARTING = auto()
     READY = auto()
     BUSY = auto()
@@ -63,7 +68,8 @@ class WorkerState(Enum):
 
 @dataclass
 class WorkerInfo:
-    """Information about a worker process.
+"""
+Information about a worker process.
     worker_id: int
     pid: Optional[int] = None
     state: WorkerState = WorkerState.STARTING
@@ -77,7 +83,8 @@ class WorkerInfo:
 
 @dataclass
 class TaskMessage:
-    """Message for task execution.
+"""
+Message for task execution.
     task_id: str
     func_name: str
     args: Tuple[Any, ...]
@@ -88,7 +95,8 @@ class TaskMessage:
 
 @dataclass
 class ResultMessage:
-    """Message for task result.
+"""
+Message for task result.
     task_id: str
     worker_id: int
     success: bool
@@ -96,3 +104,5 @@ class ResultMessage:
     error: Optional[str] = None
     traceback: Optional[str] = None
     execution_time_ns: int = 0
+
+"""

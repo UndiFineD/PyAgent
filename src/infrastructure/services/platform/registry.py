@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Registry for platform implementations.
 """
 
+"""
 import logging
 import threading
 from typing import Dict, Optional, Type
@@ -38,18 +42,21 @@ logger = logging.getLogger(__name__)
 
 
 class PlatformRegistry:
-    """Registry for platform implementations.
+"""
+Registry for platform implementations.
     _platforms: Dict[PlatformType, Type[Platform]] = {}
     _current: Optional[Platform] = None
     _lock = threading.Lock()
 
     @classmethod
     def register(cls, platform_type: PlatformType, platform_cls: Type[Platform]) -> None:
-        """Register a platform implementation.        cls._platforms[platform_type] = platform_cls
+"""
+Register a platform implementation.        cls._platforms[platform_type] = platform_cls
 
     @classmethod
     def get_platform(cls, platform_type: PlatformType) -> Optional[Platform]:
-        """Get platform instance by type.        if platform_type not in cls._platforms:
+"""
+Get platform instance by type.        if platform_type not in cls._platforms:
             return None
         platform_cls = cls._platforms[platform_type]
         if platform_cls.is_available():
@@ -58,7 +65,8 @@ class PlatformRegistry:
 
     @classmethod
     def detect_current(cls) -> Platform:
-        """Detect and return current platform.        with cls._lock:
+"""
+Detect and return current platform.        with cls._lock:
             if cls._current is not None:
                 return cls._current
 
@@ -82,13 +90,15 @@ class PlatformRegistry:
 
     @classmethod
     def get_current(cls) -> Platform:
-        """Get current platform (cached).        if cls._current is None:
+"""
+Get current platform (cached).        if cls._current is None:
             return cls.detect_current()
         return cls._current
 
     @classmethod
     def reset(cls) -> None:
-        """Reset cached platform.        with cls._lock:
+"""
+Reset cached platform.        with cls._lock:
             cls._current = None
 
 
@@ -128,3 +138,5 @@ def select_attention_backend(
     preferred: Optional[AttentionBackend] = None,
 ) -> AttentionBackend:
     return get_current_platform().select_attention_backend(preferred)
+
+"""

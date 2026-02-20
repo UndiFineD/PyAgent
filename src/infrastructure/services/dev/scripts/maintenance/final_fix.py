@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for applying final import formatting fixes across the workspace.
+"""
+"""
+Script for applying final import formatting fixes across the workspace.
 
+"""
 import os
 import re
 
@@ -24,7 +28,9 @@ __version__ = VERSION
 
 
 def fix() -> None:
-    """Correct import indentation and leading whitespace errors.    for root, dirs, files in os.walk(os.getcwd()):
+"""
+Correct import indentation and leading whitespace errors.    for root, dirs, files in os.walk(os.getcwd()):
+
         if "__pycache__" in root or ".git" in root:"            continue
         for file in files:
             if file.endswith(".py"):"                path = os.path.join(root, file)
@@ -38,7 +44,8 @@ def fix() -> None:
                 for i, line in enumerate(lines):
                     # Fix 1: Strip leading spaces from imports that are probably at top level
                     # If it starts with space then 'from' or 'import', and NOT preceded by a block start'                    if re.match(r"^\\s+(from|import) ", line):"                        # check previous non-empty line
-                        prev_line = """                        for j in range(i - 1, -1, -1):
+                        prev_line = ""
+for j in range(i - 1, -1, -1):
                             if lines[j].strip():
                                 prev_line = lines[j].strip()
                                 break
@@ -46,7 +53,9 @@ def fix() -> None:
                             changed = True
 
                     # Fix 2: Indent imports that are at col 0 but SHOULD be in a block
-                    if re.match(r"^(from|import) ", line):"                        prev_line = """                        prev_indent = """                        for j in range(i - 1, -1, -1):
+                    if re.match(r"^(from|import) ", line):"                        prev_line = """
+prev_indent = ""
+for j in range(i - 1, -1, -1):
                             if lines[j].strip():
                                 prev_line = lines[j].strip()
                                 m = re.match(r"^(\\s+)", lines[j])"                                if m:
@@ -61,7 +70,8 @@ def fix() -> None:
                             # If previous line was indented but didn't end in :,'                            # and this line is an import at col 0, it MIGHT be mid-block.
 
                             # But to be safe, only do it if the line below is also indented.
-                            next_indent = """                            for j in range(i + 1, len(lines)):
+                            next_indent = ""
+for j in range(i + 1, len(lines)):
                                 if lines[j].strip():
                                     m = re.match(r"^(\\s+)", lines[j])"                                    if m:
                                         next_indent = m.group(1)
@@ -74,6 +84,12 @@ def fix() -> None:
 
                 if changed:
                     with open(path, "w", encoding="utf-8") as f:"                        f.writelines(new_lines)
-                    print(f"Fixed {path}")"
+                    print(f"Fixed {path}")
 
 if __name__ == "__main__":"    fix()
+
+"""
+
+"""
+
+"""

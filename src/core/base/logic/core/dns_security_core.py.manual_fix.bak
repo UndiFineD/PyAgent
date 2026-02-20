@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+""
+Parser-safe stub: DNS Security Core (conservative).
+
+Provides minimal types and a no-op implementation to keep imports working.
+""
+
+from dataclasses import dataclass
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Tuple
+from enum import Enum
+
+
+class FilterAction(Enum):
+    ALLOW = "allow"
+    BLOCK = "block"
+
+
+class QueryResult(Enum):
+    ALLOWED = "allowed"
+    BLOCKED = "blocked"
+
+
+@dataclass
+class DnsQuery:
+    domain: str
+    record_type: str
+    client_ip: str
+    timestamp: datetime
+
+
+class DnsSecurityCore:
+    def __init__(self) -> None:
+        self.filter_rules: List[Tuple[str, FilterAction]] = []
+
+    async def initialize(self) -> bool:
+        return True
+
+
+__all__ = ["DnsSecurityCore", "DnsQuery", "FilterAction", "QueryResult"]

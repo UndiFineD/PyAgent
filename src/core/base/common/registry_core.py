@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
-"""Unified Registry core for all PyAgent components."""
+"""
+"""
+Unified Registry core for all PyAgent components.""
 
-
+"""
 import logging
 from typing import Callable, Dict, Generic, List, TypeVar
 
@@ -31,28 +33,31 @@ logger = logging.getLogger("pyagent.registry")
 
 
 class RegistryCore(BaseCore, Generic[T]):
-    """Generic registry to handle Tools, Signals, Plugins, and Capabilities.
+"""
+Generic registry to handle Tools, Signals, Plugins, and Capabilities.
     Standardizes registration, lookup, and lifecycle management.
-    """
-
-    def __init__(self, name: str = "generic") -> None:
-        """Initialize the registry with an optional name for logging purposes."""
-        BaseCore.__init__(self, name=name)
+"""
+def __init__(self, name: str = "generic") -> None:
+"""
+Initialize the registry with an optional name for logging purposes.""
+BaseCore.__init__(self, name=name)
         self._items: Dict[str, T] = {}
         self._hooks: Dict[str, List[Callable[[str, T], None]]] = {"on_register": [], "on_unregister": []}
 
 
     def detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool:
-        """High-speed cycle detection for dependency graphs."""
-        result = self._try_rust_detect_cycles(nodes, edges)
+"""
+High-speed cycle detection for dependency graphs.""
+result = self._try_rust_detect_cycles(nodes, edges)
         if result is not None:
             return result
         return self._python_detect_cycles(nodes, edges)
 
 
     def _try_rust_detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool | None:
-        """Attempt to use Rust-accelerated cycle detection. Falls back to Python implementation on failure."""
-        if rc and hasattr(rc, "detect_cycles_rust"):
+"""
+Attempt to use Rust-accelerated cycle detection. Falls back to Python implementation on failure.""
+if rc and hasattr(rc, "detect_cycles_rust"):
             try:
                 return rc.detect_cycles_rust(nodes, edges)  # type: ignore
             except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust fallback
@@ -61,8 +66,9 @@ class RegistryCore(BaseCore, Generic[T]):
 
 
     def _python_detect_cycles(self, nodes: list[str], edges: list[tuple[str, str]]) -> bool:
-        """Pure Python implementation of cycle detection using DFS."""
-        visited = set()
+"""
+Pure Python implementation of cycle detection using DFS.""
+visited = set()
         path = set()
         adj = {n: [] for n in nodes}
         for u, v in edges:
@@ -71,8 +77,9 @@ class RegistryCore(BaseCore, Generic[T]):
 
 
         def has_cycle(v) -> bool:
-            """DFS to detect cycles in the graph."""
-            visited.add(v)
+"""
+DFS to detect cycles in the graph.""
+visited.add(v)
             path.add(v)
             for neighbor in adj.get(v, []):
                 if neighbor not in visited:
@@ -90,16 +97,18 @@ class RegistryCore(BaseCore, Generic[T]):
 
 
     def topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str]:
-        """Rust-accelerated topological sort for agent task ordering."""
-        result = self._try_rust_topological_sort(nodes, edges)
+"""
+Rust-accelerated topological sort for agent task ordering.""
+result = self._try_rust_topological_sort(nodes, edges)
         if result is not None:
             return result
         return self._python_topological_sort(nodes, edges)
 
 
     def _try_rust_topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str] | None:
-        """Attempt to use Rust-accelerated topological sort. Falls back to Python implementation on failure."""
-        if rc and hasattr(rc, "topological_sort_rust"):
+"""
+Attempt to use Rust-accelerated topological sort. Falls back to Python implementation on failure.""
+if rc and hasattr(rc, "topological_sort_rust"):
             try:
                 return rc.topological_sort_rust(nodes, edges)  # type: ignore
             except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust fallback
@@ -108,8 +117,9 @@ class RegistryCore(BaseCore, Generic[T]):
 
 
     def _python_topological_sort(self, nodes: list[str], edges: list[tuple[str, str]]) -> list[str]:
-        """Pure Python implementation of topological sort using Kahn's algorithm."""
-        in_degree = {n: 0 for n in nodes}
+"""
+Pure Python implementation of topological sort using Kahn's algorithm.""
+in_degree = {n: 0 for n in nodes}
         adj = {n: [] for n in nodes}
         for u, v in edges:
             if u in adj and v in in_degree:
@@ -128,8 +138,9 @@ class RegistryCore(BaseCore, Generic[T]):
 
 
     def register(self, key: str, item: T | None = None) -> bool:
-        """Register an item with a specific key. Supports single-argument item registration."""
-        from typing import cast
+"""
+Register an item with a specific key. Supports single-argument item registration.""
+from typing import cast
 
         if item is None:
             # Fallback for single-argument registration where key acts as the item
@@ -156,8 +167,9 @@ class RegistryCore(BaseCore, Generic[T]):
 
 
     def unregister(self, key: str) -> T | None:
-        """Unregister an item and return it."""
-        item = self._items.pop(key, None)
+"""
+Unregister an item and return it.""
+item = self._items.pop(key, None)
         if item:
             for hook in self._hooks["on_unregister"]:
                 try:
@@ -168,28 +180,33 @@ class RegistryCore(BaseCore, Generic[T]):
 
 
     def get(self, key: str) -> T | None:
-        """Retrieve an item by key."""
-        return self._items.get(key)
+"""
+Retrieve an item by key.""
+return self._items.get(key)
 
 
     def list_keys(self) -> list[str]:
-        """List all registered keys."""
-        return list(self._items.keys())
+"""
+List all registered keys.""
+return list(self._items.keys())
 
 
     def list_items(self) -> list[T]:
-        """List all registered items."""
-        return list(self._items.values())
+"""
+List all registered items.""
+return list(self._items.values())
 
 
     def clear(self) -> None:
-        """Clear the registry."""
-        self._items.clear()
+"""
+Clear the registry.""
+self._items.clear()
 
 
     def add_hook(self, event: str, callback: Callable[[str, T], None]) -> None:
-        """Add a lifecycle hook."""
-        if event in self._hooks:
+"""
+Add a lifecycle hook.""
+if event in self._hooks:
             self._hooks[event].append(callback)
         else:
             raise ValueError(f"Unsupported registry event: {event}")

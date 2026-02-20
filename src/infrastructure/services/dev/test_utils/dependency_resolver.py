@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -30,20 +30,25 @@ __version__ = VERSION
 
 
 class DependencyResolver:
-    """Resolves dependencies between tests.
+"""
+Resolves dependencies between tests.
     def __init__(self) -> None:
-        """Initialize resolver.        self.dependencies: dict[str, list[str]] = {}
+"""
+Initialize resolver.        self.dependencies: dict[str, list[str]] = {}
 
     def add_test(self, name: str, depends_on: list[str]) -> None:
-        """Register a test and its dependencies (test compatibility API).        self.dependencies[name] = list(depends_on)
+"""
+Register a test and its dependencies (test compatibility API).        self.dependencies[name] = list(depends_on)
 
     def add_dependency(self, test: str, depends_on: str) -> None:
-        """Add dependency.        if test not in self.dependencies:
+"""
+Add dependency.        if test not in self.dependencies:
             self.dependencies[test] = []
         self.dependencies[test].append(depends_on)
 
     def resolve(self) -> list[str]:
-        """Resolve execution order or raise on circular dependencies.        visiting: set[str] = set()
+"""
+Resolve execution order or raise on circular dependencies.        visiting: set[str] = set()
         visited: set[str] = set()
         order: list[str] = []
 
@@ -66,7 +71,8 @@ class DependencyResolver:
         return order
 
     def resolve_order(self) -> list[str]:
-        """Resolve execution order (topological sort).        visited: set[str] = set()
+"""
+Resolve execution order (topological sort).        visited: set[str] = set()
         order: list[str] = []
 
         def visit(node: str) -> None:
@@ -82,7 +88,8 @@ class DependencyResolver:
         return order
 
     def detect_cycle(self) -> bool:
-        """Detect circular dependencies.        visited: set[str] = set()
+"""
+Detect circular dependencies.        visited: set[str] = set()
         rec_stack: set[str] = set()
 
         def has_cycle(node: str) -> bool:
@@ -102,3 +109,11 @@ class DependencyResolver:
                 if has_cycle(test):
                     return True
         return False
+
+"""
+
+"""
+
+""
+
+"""

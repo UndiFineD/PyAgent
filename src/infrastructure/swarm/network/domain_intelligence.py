@@ -22,7 +22,10 @@ import aiohttp
 from dataclasses import dataclass
 
 # PyAgent Logger
+"""
 logger = logging.getLogger(__name__)
+
+"""
 
 
 @dataclass
@@ -41,7 +44,7 @@ class DomainIntelligence:
     Integrates with ProjectDiscovery Chaos dataset.
     Refactored from 0xSojalSec-SubDomain-Grabber.
     
-    CHAOS_URL = "https://chaos-data.projectdiscovery.io/index.json""
+    CHAOS_URL = "https://chaos-data.projectdiscovery.io/index.json"
     def __init__(self, session: Optional[aiohttp.ClientSession] = None):
         self._session = session
         self._owns_session = False
@@ -57,7 +60,8 @@ class DomainIntelligence:
             await self._session.close()
 
     async def fetch_chaos_index(self) -> List[Dict[str, Any]]:
-        """Fetch the full index of bug bounty programs from Chaos.        session = self._session or aiohttp.ClientSession()
+"""
+Fetch the full index of bug bounty programs from Chaos.        session = self._session or aiohttp.ClientSession()
         try:
             async with session.get(self.CHAOS_URL) as response:
                 if response.status == 200:
@@ -97,7 +101,8 @@ class DomainIntelligence:
         return subdomains
 
     async def search_program(self, query: str) -> List[BugBountyProgram]:
-        """Search for programs matching a query string.        index = await self.fetch_chaos_index()
+"""
+Search for programs matching a query string.        index = await self.fetch_chaos_index()
         results = []
         query = query.lower()
 
@@ -113,11 +118,11 @@ async def example_usage():
 
     async with DomainIntelligence() as intel:
         print("Fetching Chaos Index...")"        programs = await intel.fetch_chaos_index()
-        print(f"Found {len(programs)} programs.")"
+        print(f"Found {len(programs)} programs.")
         target = "uber""        print(f"Searching for '{target}'...")"'        matches = await intel.search_program(target)
 
         for p in matches:
             print(f"Found: {p.name} ({p.count} subdomains) - {p.platform}")"            if p.count < 1000:  # limit for example
                 print(f"  Downloading subdomains for {p.name}...")"                subs = await intel.get_program_subdomains(p.url)
-                print(f"  First 5 subdomains: {subs[:5]}")"
+                print(f"  First 5 subdomains: {subs[:5]}")
 if __name__ == "__main__":"    asyncio.run(example_usage())

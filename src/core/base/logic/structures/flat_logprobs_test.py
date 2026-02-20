@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.structures.flat_logprobs import Logprob, FlatLogprobs, LogprobsAccumulator, create_prompt_logprobs, create_sample_logprobs

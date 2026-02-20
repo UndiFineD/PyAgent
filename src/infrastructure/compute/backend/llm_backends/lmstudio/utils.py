@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Convenience functions for LM Studio.
 
+"""
 import logging
 from typing import Iterator
 
@@ -26,7 +28,8 @@ def lmstudio_chat(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    **_kwargs,
 ) -> str:
-    """Convenience function for quick LM Studio chat.    try:
+"""
+Convenience function for quick LM Studio chat.    try:
         import lmstudio
 
         llm = lmstudio.llm(model) if model else lmstudio.llm()
@@ -38,11 +41,11 @@ def lmstudio_chat(
 
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logger.error(f"lmstudio_chat error: {e}")"        return """
-
 def lmstudio_stream(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.",") -> Iterator[str]:
-    """Convenience function for streaming LM Studio chat.    try:
+"""
+Convenience function for streaming LM Studio chat.    try:
         import lmstudio
 
         llm = lmstudio.llm(model) if model else lmstudio.llm()
@@ -53,13 +56,14 @@ def lmstudio_stream(
             yield str(fragment)
 
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        logger.error(f"lmstudio_stream error: {e}")"
+        logger.error(f"lmstudio_stream error: {e}")
 
 async def lmstudio_chat_async(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    host: str = "localhost:1234",") -> str:
-    """Async convenience function for LM Studio chat.""""
-    This function is robust to different SDK shapes for `client.llm`.
+"""
+Async convenience function for LM Studio chat.""""
+This function is robust to different SDK shapes for `client.llm`.
         try:
         import lmstudio
         import inspect
@@ -87,3 +91,8 @@ async def lmstudio_chat_async(
 
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logger.error(f"lmstudio_chat_async error: {e}")"        return """
+"""
+
+""
+
+"""

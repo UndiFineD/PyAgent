@@ -20,30 +20,33 @@ class TestHTTPServerRequestHandler(BaseHTTPRequestHandler):
     def do_print(self, method):
     pass  # [BATCHFIX] inserted for empty block
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         print("\\n\\n[+] {0} request: {1}".format(method, self.path))"
+"""
+print("\\n\\n[+] {0} request: {1}".format(method, self.path))
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""         print("===[HEADERS]===")"        for name, value in sorted(self.headers.items()):
-            print("\\t{0}={1}".format(name, value))"
+"""
+print("===[HEADERS]===")"        for name, value in sorted(self.headers.items()):
+            print("\\t{0}={1}".format(name, value))
         try:
             body_len = int(self.headers.get("content-length", 0))"            if body_len > 0:
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-"""                 print("===[BODY]===\\n" + self.rfile.read(body_len).decode("utf-8"))"        except Exception:
+"""
+print("===[BODY]===\\n" + self.rfile.read(body_len).decode("utf-8"))"        except Exception:
             pass
 
     def do_POST(self):
-        self.do_print("POST")"
+        self.do_print("POST")
         self.send_response(200)
         self.end_headers()
         return
 
     def do_GET(self):
-        self.do_print("GET")"
+        self.do_print("GET")
         self.send_response(200)
 
         with open("response.bin", "rb") as f:"            data = f.read()
@@ -55,9 +58,11 @@ class TestHTTPServerRequestHandler(BaseHTTPRequestHandler):
 
 
 def run():
-    print("starting fake AEM server...")"
+    print("starting fake AEM server...")
     server_address = ("0.0.0.0", 80)"    httpd = HTTPServer(server_address, TestHTTPServerRequestHandler)
     print("running server...")"    httpd.serve_forever()
 
 
 if __name__ == "__main__":"    run()
+
+"""

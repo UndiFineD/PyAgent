@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from core.base.logic.core.cloud_asset_discovery_core import CertificateInfo, AssetFinding, DiscoveryResult, CloudAssetDiscoveryCore

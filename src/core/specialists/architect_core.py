@@ -13,5 +13,10 @@
 
 
 class ArchitectCore:
-    """Core logic for pattern enforcement and system design."""async def validate_structure(self, project_path: str) -> bool:
+"""
+"""
+Core logic for pattern enforcement and system design.""
+
+""
+async def validate_structure(self, project_path: str) -> bool:
         return True

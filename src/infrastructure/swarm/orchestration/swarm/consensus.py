@@ -15,11 +15,13 @@
 
 
 """
+"""
 Swarm Consensus Protocol (Phase 73).
 Implements a lightweight async-Raft simplified state machine for swarm-wide consistency.
 Ensures every node agrees on the routing table and topology state.
 """
 
+"""
 import asyncio
 import logging
 import time
@@ -31,8 +33,9 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SwarmState:
-    """The synchronized state of the swarm."""
-    routing_table: Dict[str, str] = field(default_factory=dict)
+"""
+The synchronized state of the swarm.""
+routing_table: Dict[str, str] = field(default_factory=dict)
     mcp_registry_version: int = 0
     active_shards: List[str] = field(default_factory=list)
     consensus_weights: Dict[str, float] = field(default_factory=dict)
@@ -40,8 +43,9 @@ class SwarmState:
 
 @dataclass
 class LogEntry:
-    """Represents a log entry in the consensus protocol."""
-    index: int
+"""
+Represents a log entry in the consensus protocol.""
+index: int
     term: int
     command: Dict[str, Any]
     timestamp: float = field(default_factory=time.time)
@@ -49,11 +53,11 @@ class LogEntry:
 
 
 class SwarmConsensus:
-    """
-    SwarmConsensus (Phase 3.0): Replicated state machine using BFT-weighted Raft Lite.
+"""
+SwarmConsensus (Phase 3.0): Replicated state machine using BFT-weighted Raft Lite.
     Ensures every node agrees on the routing table, MCP tool availability, and shard ownership.
-    """
-    def __init__(self, node_id: str, transport: Any = None) -> None:
+"""
+def __init__(self, node_id: str, transport: Any = None) -> None:
         self.node_id = node_id
         self.transport = transport  # VoyagerTransport instance
         self.term = 0
@@ -69,13 +73,15 @@ class SwarmConsensus:
 
 
     def set_peers(self, peers: List[str]):
-        """Updates the list of known peers."""
-        self.peers = peers
+"""
+Updates the list of known peers.""
+self.peers = peers
 
 
     async def propose_change(self, action: str, data: Any):
-        """Proposes a change to the global swarm state (e.g., 'ADD_MCP_SERVER')."""
-        if not self.is_leader:
+"""
+Proposes a change to the global swarm state (e.g., 'ADD_MCP_SERVER').""
+if not self.is_leader:
             logger.info(f"Node {self.node_id} initiating leader election to propose change.")
             await self._start_election()
             if not self.is_leader:
@@ -122,8 +128,9 @@ class SwarmConsensus:
 
 
     async def _start_election(self):
-        """Phase 3.0: Leader election with BFT weights."""
-        self.term += 1
+"""
+Phase 3.0: Leader election with BFT weights.""
+self.term += 1
         self.votes_received[self.term] = {self.node_id}
 
         if not self.transport:
@@ -153,8 +160,9 @@ class SwarmConsensus:
 
 
     def _apply_entry(self, entry: LogEntry):
-        """Applies a committed log entry to the state machine."""
-        action = entry.command["action"]
+"""
+Applies a committed log entry to the state machine.""
+action = entry.command["action"]
         data = entry.command["data"]
         if action == "UPDATE_ROUTING":
             self.state.routing_table.update(data)
@@ -169,8 +177,9 @@ class SwarmConsensus:
 
 
     def handle_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        """Handles incoming consensus messages from peers."""
-        msg_type = message.get("type")
+        ""
+Handles incoming consensus messages from peers.""
+msg_type = message.get("type")
         if msg_type == "CONSENSUS_VOTE_REQUEST":
             term = message.get("term", 0)
             if term >= self.term:

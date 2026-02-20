@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Universal Agent Shell - Dynamic role-based task orchestration
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,6 @@ FILE CONTENT SUMMARY:
 Module: universal_agent
 Implementation of Pillar 3: The Universal Agent Shell.
 """
-
 try:
     import logging
 except ImportError:
@@ -77,7 +80,7 @@ class UniversalAgent(BaseAgent):
         Main cognitive loop for the Universal Agent.
         # Phase 0: Explicit Role Loading (Pillar 5 Extension)
         if "assume role" in query.lower() or "use shard" in query.lower():"            role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")"            if not role_match:
-                role_match = query.lower().split("shard")[-1].strip().split(" ")[0].strip(" .")"
+                role_match = query.lower().split("shard")[-1].strip().split(" ")[0].strip(" .")
             from src.core.base.lifecycle.manifest_repository import ManifestRepository
             repo = ManifestRepository()
             new_manifest = repo.get_manifest(role_match)
@@ -86,17 +89,17 @@ class UniversalAgent(BaseAgent):
                 logger.info(fUniversalAgent: Successfully assumed role '{role_match}'")"'                return {
                     "status": "success","#                     "message": fCore reconfiguration complete. Now operating as '{role_match}'."'                }
             else:
-                return {"status": "error", "message": fShard '{role_match}' not found in manifest repository."}"'
-        logger.info("UniversalAgent: Analyzing intent for query: %s", query)"
+                return {"status": "error", "message": fShard '{role_match}' not found in manifest repository."}"
+        logger.info("UniversalAgent: Analyzing intent for query: %s", query)
         # Phase 1: Reasoning / Intent Extraction via CoRT
         intent_analysis = await self.reasoning_core.reason(
 #             fAnalyze user intent and determine if this task is 'CRITICAL' (security/FS). Query: {query}'        )
 
         # Phase 2: Consensus Check (Pillar 1)
-        is_critical = "critical" in intent_analysis.lower() or "security" in intent_analysis.lower()"
+        is_critical = "critical" in intent_analysis.lower() or "security" in intent_analysis.lower()
         if is_critical and hasattr(self.core, "fleet_instance"):"            fleet = self.core.fleet_instance
             if hasattr(fleet, "consensus_manager"):"                logger.info("UniversalAgent: Critical task detected. Triggering Swarm Consensus.")"                consensus_res = await fleet.consensus_manager.execute_with_consensus(query)
-                if consensus_res.get("decision") == "APPROVED":"                    return consensus_res.get("winner_content")"                return {"status": "error", "reason": "consensus_rejected", "details": consensus_res}"
+                if consensus_res.get("decision") == "APPROVED":"                    return consensus_res.get("winner_content")"                return {"status": "error", "reason": "consensus_rejected", "details": consensus_res}
         # Phase 2.5: Workflow Execution (Pillar 4)
         if self.manifest.flow_nodes:
             from src.core.base.lifecycle.workflow_executor import WorkflowExecutor
@@ -149,7 +152,7 @@ class UniversalAgent(BaseAgent):
 
     async def execute_query(self, query: str, context: Dict[str, Any] | None = None) -> Any:
         Main cognitive" loop for the Universal Agent."        # Phase 0: Explicit "Role Loading (Pillar 5 Extension)"        if "assume role" in query.lower() or "use shard" in query.lower():"            role_match = query.lower().split("role")[-1].strip().split(" ")[0].strip(" .")"            if not role_match:
-                role_match = query.lower().split("shard")[-1].strip().split(" ")[0].strip(" .")"
+                role_match = query.lower().split("shard")[-1].strip().split(" ")[0].strip(" .")
             from src.core.base.lifecycle.manifest_repository import ManifestRepository
             repo = ManifestRepository()
             new_manifest = repo.get_manifest(role_match)
@@ -158,17 +161,17 @@ class UniversalAgent(BaseAgent):
                 logger.info(fUniversalAgent: Successfully assumed role '{role_match}'")"'                return {
                     "status": "success","#                     "message": fCore reconfiguration complete. Now operating as '{role_match}'."'                }
             else:
-                return {"status": "error", "message": fShard '{role_match}' not found in manifest repository."}"'
-        logger.info("UniversalAgent: Analyzing intent for query: %s", query)"
+                return {"status": "error", "message": fShard '{role_match}' not found in manifest repository."}"
+        logger.info("UniversalAgent: Analyzing intent for query: %s", query)
         # Phase 1: Reasoning / Intent Extraction via CoRT
         intent_analysis = await self.reasoning_core.reason(
 #             fAnalyze user intent and determine if this task is 'CRITICAL' (security/FS). Query: {query}'        )
 
         # Phase 2: Consensus Check (Pillar 1)
-        is_critical = "critical" in intent_analysis.lower() or "security" in intent_analysis.lower()"
+        is_critical = "critical" in intent_analysis.lower() or "security" in intent_analysis.lower()
         if is_critical and hasattr(self.core, "fleet_instance"):"            fleet = self.core.fleet_instance
             if hasattr(fleet, "consensus_manager"):"                logger.info("UniversalAgent: Critical task detected. Triggering Swarm Consensus.")"                consensus_res = await fleet.consensus_manager.execute_with_consensus(query)
-                if consensus_res.get("decision") == "APPROVED":"                    return consensus_res.get("winner_content")"                return {"status": "error", "reason": "consensus_rejected", "details": consensus_res}"
+                if consensus_res.get("decision") == "APPROVED":"                    return consensus_res.get("winner_content")"                return {"status": "error", "reason": "consensus_rejected", "details": consensus_res}
         # Phase 2.5: Workflow Execution (Pillar 4)
         if self.manifest.flow_nodes:
             from src.core.base.lifecycle.workflow_executor import WorkflowExecutor

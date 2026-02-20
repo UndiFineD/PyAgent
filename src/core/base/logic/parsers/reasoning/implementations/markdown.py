@@ -13,11 +13,14 @@
 # limitations under the License.
 
 
-"""Markdown.py module.
+"""
+"""
+Markdown.py module.
 """
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
 try:
     import re
 except ImportError:
@@ -43,11 +46,12 @@ except ImportError:
 
 
 class MarkdownReasoningParser(ReasoningParser):
-    """Parser regarding Markdown-style think blocks.
+"""
+Parser regarding Markdown-style think blocks.
 
     Extracts reasoning from ```thinking blocks or > prefixed lines.
-    """
-    name: ClassVar[str] = "markdown""
+"""
+name: ClassVar[str] = "markdown"
     def __init__(
         self,
         tokenizer: Any = None,

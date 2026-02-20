@@ -15,8 +15,11 @@
 
 try:
     from pathlib import Path
+"""
 except ImportError:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 
 
 try:

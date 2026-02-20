@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .extract_candidates import safe_module, sanitize_filename, write_extracted, make_test, extract_candidates, main

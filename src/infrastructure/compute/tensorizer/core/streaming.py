@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Streaming reader for large models.
+"""
+"""
+Streaming reader for large models.
 try:
-    from pathlib import Path
+
+"""
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -67,10 +71,12 @@ class StreamingTensorizerReader:
         self._reader.close()
 
     def set_cache_limit(self, limit_bytes: int) -> None:
-        """Set cache size limit in bytes.        self._cache_size_limit: int = limit_bytes
+"""
+Set cache size limit in bytes.        self._cache_size_limit: int = limit_bytes
 
     def get(self, name: str) -> Optional[np.ndarray]:
-        """Get tensor, loading if needed.        if name in self._cache:
+"""
+Get tensor, loading if needed.        if name in self._cache:
             return self._cache[name]
 
         tensor = self._reader.read_tensor(name)
@@ -80,7 +86,8 @@ class StreamingTensorizerReader:
         return tensor
 
     def _add_to_cache(self, name: str, tensor: np.ndarray) -> None:
-        """Add tensor to cache with eviction.        size: int = tensor.nbytes
+"""
+Add tensor to cache with eviction.        size: int = tensor.nbytes
 
         # Evict if needed
         while self._cache and self._current_cache_size + size > self._cache_size_limit:
@@ -92,13 +99,18 @@ class StreamingTensorizerReader:
         self._current_cache_size += size
 
     def preload(self, names: List[str]) -> None:
-        """Preload specific tensors into cache.        for name in names:
+"""
+Preload specific tensors into cache.        for name in names:
             self.get(name)
 
     def clear_cache(self) -> None:
-        """Clear tensor cache.        self._cache.clear()
+"""
+Clear tensor cache.        self._cache.clear()
         self._current_cache_size = 0
 
     @property
     def tensor_names(self) -> List[str]:
-        """Get available tensor names.        return self._reader.tensor_names
+"""
+Get available tensor names.        return self._reader.tensor_names
+
+"""

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,37 +14,29 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: QualityScore dataclass."""
+"""
+"""
+Parser-safe QualityScore stub.""
 
+""
 from dataclasses import dataclass, field
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
 
 
 @dataclass
 class QualityScore:
-    """Code quality score with breakdown."""
     overall_score: float = 0.0
     maintainability: float = 0.0
     readability: float = 0.0
     complexity: float = 0.0
     documentation: float = 0.0
     test_coverage: float = 0.0
-    technical_debt: float = 0.0  # Percentage of debt free markers
-    issues: list[str] = field(default_factory=lambda: [])
+    technical_debt: float = 0.0
+    issues: list = field(default_factory=list)
 
     @property
-    def score(self) -> float:
-        """Compatibility alias for overall_score."""
+    def score(self):
         return self.overall_score
 
     @score.setter
-    def score(self, value: float) -> None:
-        self.overall_score = value
+    def score(self, value):
+        self.overall_score = float(value)

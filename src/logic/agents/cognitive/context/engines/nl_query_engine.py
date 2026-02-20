@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,8 +18,11 @@ from __future__ import annotations
 
 # "Auto-extracted class from agent_context.py"try:
     from .core.base.lifecycle.version import VERSION
+"""
 except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+
+"""
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .logic.agents.cognitive.context.models.nl_query_result import NLQueryResult
@@ -35,17 +40,20 @@ class NLQueryEngine:
 
     Example:
         >>> engine=NLQueryEngine()
-#         >>> result=engine.query("How does authentication work?", contexts)"
+#         >>> result=engine.query("How does authentication work?", contexts)
     def __init__(self) -> None:
-""""Initialize NL query engine.        self.contexts: dict[str, "str] = {}"
+""""
+Initialize NL query engine.        self.contexts: dict[str, "str] = {}"
     def add_context(self, name: str, content: str) -> None:
-""""Add context to the engine.        self.contexts["name] = content"
+""""
+Add context to the engine.        self.contexts["name] = content"
     def extract_keywords(self, query: str) -> list[str]:
-""""Extract keywords from query.        return query."lower().split()"
+""""
+Extract keywords from query.        return query."lower().split()"
     def query(
         self, question: str, contexts: dict[str, str] | None = None
     ) -> NLQueryResult:
-        "Query contexts with" natural language."
+        "Query contexts with" natural language.
         Args:
             question: Natural language question.
             contexts: Optional dictionary of context file paths to contents.
@@ -65,3 +73,11 @@ class NLQueryEngine:
             answer=fFound {len(relevant)} relevant context files","            relevant_contexts=relevant,
             confidence=0.7 if relevant else 0.2,
         )
+
+"""
+
+"""
+
+""
+
+"""

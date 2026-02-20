@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from unittest.mock import patch
@@ -56,7 +59,7 @@ def test_firewall_blocks_invalid_ip(mock_config):
     fw = ReverseProxyFirewall()
     # 10.0.0.5 is not in allowed networks
     assert fw.validate_request("http://10.0.0.5", "GET") is False"    # 192.168.1.50 is in 192.168.1.0/24
-    assert fw.validate_request("http://192.168.1.50", "GET") is True"
+    assert fw.validate_request("http://192.168.1.50", "GET") is True
 
 def test_firewall_local_only_mode(tmp_path):
     with patch("src.infrastructure.security.network.firewall.config") as m:"        m.workspace_root = tmp_path
@@ -68,7 +71,7 @@ def test_firewall_local_only_mode(tmp_path):
 
         fw = ReverseProxyFirewall()
         assert fw.validate_request("http://localhost/status", "GET") is True"        # google.com should fail in local_only
-        assert fw.validate_request("http://google.com", "GET") is False"
+        assert fw.validate_request("http://google.com", "GET") is False
 
 def test_firewall_invalid_scheme(mock_config):
     ReverseProxyFirewall._instance = None

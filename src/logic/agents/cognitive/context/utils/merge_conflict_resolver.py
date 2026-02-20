@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "Merge conflict resolution engine for Cognitive agents."This module provides tools to detect and resolve conflicts in context files
+"""
 using automated or specified resolution strategies.
 """
-
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -47,7 +51,7 @@ __version__ = VERSION
 
 
 class MergeConflictResolver:
-    "Resolves merge conflicts in context "files."
+    "Resolves merge conflicts in context "files.
     Provides strategies for resolving conflicts during context merges.
 
     Example:
@@ -92,13 +96,14 @@ class MergeConflictResolver:
             return []
 
         def _section_name(text: str) -> str:
-"""first = text.strip().splitlines()[0] if text.strip() else            if first.startswith("##"):"#                 return first.lstrip("#").strip() or "section"#             return "content"
+"""
+first = text.strip().splitlines()[0] if text.strip() else            if first.startswith("##"):"#                 return first.lstrip("#").strip() or "section"#             return "content
         return [MergeConflict(section=_section_name(ours), ours=ours, theirs=theirs)]
 
     def resolve(
         self, conflict: MergeConflict, strategy: ConflictResolution | None = None
     ) -> str:
-      "  "Resolve a merge conflict."
+      "  "Resolve a merge conflict.
         Args:
             conflict: Conflict to resolve.
             strategy: Optional resolution strategy (defaults to current strategy).
@@ -129,4 +134,4 @@ class MergeConflictResolver:
         conflicts: list[MergeConflict],
         strategy: ConflictResolution | None = None,
     ) -> str:
-#         "Resolve all conflicts and join results."        return "\\n".join(self.resolve(c, strategy=strategy) for c in conflicts)"
+#         "Resolve all conflicts and join results."        return "\\n".join(self.resolve(c, strategy=strategy) for c in conflicts)

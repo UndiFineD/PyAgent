@@ -12,10 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Factory.py module."""
-
+"""
+"""
+Factory.py module.""
 try:
-    from typing import Any, Dict, List, Optional
+
+"""
+from typing import Any, Dict, List, Optional
 except ImportError:
     from typing import Any, Dict, List, Optional
 
@@ -37,8 +40,9 @@ def create_json_constraint(
     properties: Optional[Dict[str, Dict[str, Any]]] = None,
     required: Optional[List[str]] = None,
 ) -> StructuredOutputConfig:
-    """Create a JSON schema constraint configuration."""
-    if schema is None:
+"""
+Create a JSON schema constraint configuration.""
+if schema is None:
         schema = {"type": "object"}
         if properties:
             schema["properties"] = properties
@@ -54,8 +58,9 @@ def create_regex_constraint(
     pattern: str,
     _flags: int = 0,
 ) -> StructuredOutputConfig:
-    """Create a regex constraint configuration."""
-    return StructuredOutputConfig(
+"""
+Create a regex constraint configuration.""
+return StructuredOutputConfig(
         output_type=StructuredOutputType.REGEX,
         regex=pattern,
     )
@@ -64,8 +69,9 @@ def create_regex_constraint(
 def create_choice_constraint(
     choices: List[str],
 ) -> StructuredOutputConfig:
-    """Create a choice constraint configuration."""
-    return StructuredOutputConfig(
+"""
+Create a choice constraint configuration.""
+return StructuredOutputConfig(
         output_type=StructuredOutputType.CHOICE,
         choices=choices,
     )
@@ -74,8 +80,9 @@ def create_choice_constraint(
 def combine_constraints(
     *configs: StructuredOutputConfig,
 ) -> StructuredOutputConfig:
-    """Combine multiple constraint configurations into a composite configuration."""
-    if not configs:
+    ""
+Combine multiple constraint configurations into a composite configuration.""
+if not configs:
         return StructuredOutputConfig()
 
     combined = StructuredOutputConfig(

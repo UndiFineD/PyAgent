@@ -13,11 +13,15 @@
 # limitations under the License.
 
 
-"""Configuration loader.
+"""
+"""
+Configuration loader.
 (Facade for src.core.base.common.config_core)
 """
 try:
-    from .core.base.common.config_core import ConfigCore as ConfigLoader
+
+"""
+from .core.base.common.config_core import ConfigCore as ConfigLoader
 except ImportError:
     from src.core.base.common.config_core import ConfigCore as ConfigLoader
 

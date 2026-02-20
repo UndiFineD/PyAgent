@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,21 +15,23 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Minimal crypto_core shim used for tests.
+"""
+"""
+Minimal crypto_core shim used for tests.
 
+"""
 This module provides a tiny, safe stand-in for the real Windows crypto
 helpers. It intentionally avoids ctypes and system calls so tests can run
 in non-Windows CI environments.
 """
-
 import base64
 from typing import Optional
 
 
 class CryptoCore:
-    """Safe shim for cryptographic helpers used in tests."""
-
-    def __init__(self) -> None:
+    ""
+Safe shim for cryptographic helpers used in tests.""
+def __init__(self) -> None:
         # real implementation would initialize ctypes handles; shim does nothing
         pass
 

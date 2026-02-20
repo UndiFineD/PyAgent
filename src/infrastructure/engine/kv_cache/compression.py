@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Adaptive Swarm Compression (Phase 65).
 Dynamically manages KV-cache precision and eviction based on shard activity.
 
+"""
 try:
     import logging
 except ImportError:
@@ -49,14 +51,14 @@ class AdaptiveSwarmCompressor:
     def __init__(self, shard_manager: ContextShardManager, idle_threshold_sec: float = 60.0) -> None:
         self.shard_manager = shard_manager
         self.idle_threshold_sec = idle_threshold_sec
-        self.bit_depth_map = {"float16": 16, "fp8": 8, "int4": 4, "int2": 2}"
+        self.bit_depth_map = {"float16": 16, "fp8": 8, "int4": 4, "int2": 2}
     async def apply_pressure_quantization(self, vram_pressure: float) -> Dict[str, int]:
                 Phase 76: Dynamic compression based on VRAM pressure (0.0 to 1.0).
         Aggressively reduces bit-depth as pressure increases.
                 if vram_pressure < 0.5:
             return {}  # Normal operation
 
-        stats = {"scaled_down": 0}"
+        stats = {"scaled_down": 0}
         for _, shards in self.shard_manager.context_registry.items():
             for shard in shards:
                 if not shard.is_cached:
@@ -73,7 +75,8 @@ class AdaptiveSwarmCompressor:
                     shard.precision = "fp8""                    stats["scaled_down"] += 1"
         if stats["scaled_down"] > 0:"            load_pct = vram_pressure * 100
             msg = (
-                f"MemPressure: Dynamically scaled {stats['scaled_down']} ""'                f"shards due to {load_pct:.1f}% load.""            )
+                f"MemPressure: Dynamically scaled {stats['scaled_down']} "
+f"shards due to {load_pct:.1f}% load.""            )
             logger.warning(msg)
 
         return stats
@@ -84,7 +87,7 @@ class AdaptiveSwarmCompressor:
         - Idle (10s - 60s): FP8 (Lossless-ish compression)
         - Cold (> 60s): INT4 or Evict
                 now = time.time()
-        stats = {"compressed": 0, "evicted": 0, "kept": 0}"
+        stats = {"compressed": 0, "evicted": 0, "kept": 0}
         for _, shards in self.shard_manager.context_registry.items():
             for shard in shards:
                 idle_time = now - shard.last_access
@@ -97,14 +100,17 @@ class AdaptiveSwarmCompressor:
                     # Idle: Compress to FP8
                     if shard.precision != "fp8":"                        logger.debug(f"Compressor: Compressing shard {shard.shard_id} to FP8")"                        shard.precision = "fp8""                        stats["compressed"] += 1"                else:
                     # Active
-                    stats["kept"] += 1"
+                    stats["kept"] += 1
         return stats
 
     def touch_shard(self, context_id: str, token_index: int) -> None:
-        """Updates last_access and restores precision if needed.        shards = self.shard_manager.context_registry.get(context_id, [])
+"""
+Updates last_access and restores precision if needed.        shards = self.shard_manager.context_registry.get(context_id, [])
         for shard in shards:
             if shard.start_token <= token_index < shard.end_token:
                 shard.last_access = time.time()
                 if not shard.is_cached:
                     logger.info(f"Compressor: Reloading evicted shard {shard.shard_id}")"                    shard.is_cached = True
                 if shard.precision != "float16":"                    shard.precision = "float16"  # Decompress on access"                break
+
+"""

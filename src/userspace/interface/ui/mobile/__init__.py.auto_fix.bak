@@ -1,0 +1,16 @@
+"""userspace.interface.ui.mobile package initialization (parser-safe stub).
+
+Minimal safe package init to restore importability during repository repair.
+"""
+
+from __future__ import annotations
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except Exception:
+    try:
+        from src.core.base.lifecycle.version import VERSION
+    except Exception:
+        VERSION = "0.0.0"
+
+__all__ = []

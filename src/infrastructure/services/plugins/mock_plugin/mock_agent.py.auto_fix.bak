@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""Minimal parser-safe MockAgent shim used during repository repair.
+
+This file provides a tiny, well-typed MockAgent class exposing the
+basic API expected by consumers. It intentionally avoids heavy
+dependencies and defers to `mock_core` where available.
+"""
+
+from __future__ import annotations
+from typing import Any, Dict
+
+try:
+    import logging
+except Exception:
+    class _Logger:
+        def info(self, *a, **k):
+            pass
+    logging = _Logger()
+
+try:
+    from .mock_core import MockCore
+except Exception:
+    class MockCore:
+        def __init__(self, multiplier: float = 1.0) -> None:
+            self.multiplier = multiplier
+
+        def format_mock_response(self, task: str) -> str:
+            return task
+
+        def get_metadata(self) -> Dict[str, Any]:
+            return {"mock_core": True}
+
+
+__all__ = ["MockAgent"]
+
+
+class MockAgent:
+    def __init__(self, arg_path: str | None = None) -> None:
+        self.core = MockCore(multiplier=1.0)
+
+    def run(self, task: str) -> str:
+        logging.info(f"MockAgent handling task: {task}")
+        processed = self.core.format_mock_response(task)
+        return f"MockAgent processed your task: {processed}"
+
+    def get_status(self) -> Dict[str, Any]:
+        return self.core.get_metadata()

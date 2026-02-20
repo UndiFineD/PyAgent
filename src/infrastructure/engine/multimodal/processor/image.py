@@ -16,8 +16,11 @@
 
 try:
     from typing import Any, Dict, Optional, Tuple
+"""
 except ImportError:
-    from typing import Any, Dict, Optional, Tuple
+
+"""
+from typing import Any, Dict, Optional, Tuple
 
 try:
     import numpy
@@ -32,8 +35,9 @@ except ImportError:
 
 
 class ImageProcessor(BaseMultiModalProcessor[Any]):
-    """Processor for image inputs."""
-    modality = ModalityType.IMAGE
+"""
+Processor for image inputs.""
+modality = ModalityType.IMAGE
 
     def __init__(
         self,
@@ -43,8 +47,9 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
         std: Tuple[float, ...] = (0.229, 0.224, 0.225),
         patch_size: int = 14,
     ) -> None:
-        """Initialize the image processor with configuration and processing parameters."""
-        super().__init__(config)
+"""
+Initialize the image processor with configuration and processing parameters.""
+super().__init__(config)
         self.target_size = target_size
         self.mean = np.array(mean).reshape((1, 1, 3))
         self.std = np.array(std).reshape((1, 1, 3))
@@ -55,7 +60,8 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
         data: Any,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        """Process image data. Expects a PIL Image or a numpy array. Returns a normalized numpy array and metadata."""
+"""
+Process image data. Expects a PIL Image or a numpy array. Returns a normalized numpy array and metadata.""
         # Convert PIL to numpy if needed
         if hasattr(data, "convert"):
             data = data.convert("RGB")
@@ -104,8 +110,9 @@ class ImageProcessor(BaseMultiModalProcessor[Any]):
         image: np.ndarray,
         target_size: Tuple[int, int],
     ) -> np.ndarray:
-        """Resize the image to the target size using bilinear interpolation."""
-        src_h, src_w = image.shape[:2]
+"""
+Resize the image to the target size using bilinear interpolation.""
+src_h, src_w = image.shape[:2]
         tgt_h, tgt_w = target_size
 
         if (src_h, src_w) == (tgt_h, tgt_w):

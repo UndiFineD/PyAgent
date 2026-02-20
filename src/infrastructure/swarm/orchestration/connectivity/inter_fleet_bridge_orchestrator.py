@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Inter fleet bridge orchestrator.py module.
 # Phase 319: Multi-Cloud Teleportation (Inter-Fleet Bridge)
 
+"""
 import asyncio
 from typing import Any, Dict, List, Optional
 
@@ -52,9 +55,11 @@ class InterFleetBridgeOrchestrator:
             fleet_manager, transport_port=self.zmq_port, discovery_node=self.discovery_node
         )
         self.is_active = False
-        logger.info("InterFleetBridgeOrchestrator (Voyager) initialized.")"
+        logger.info("InterFleetBridgeOrchestrator (Voyager) initialized.")
     async def start_constellation_sync(self):
-        """Starts the P2P discovery and transport server.        try:
+"""
+Starts the P2P discovery and transport server.        try:
+
             # 1. Start ZMQ Transport Server
             await self.synapse.start()
 
@@ -64,37 +69,47 @@ class InterFleetBridgeOrchestrator:
 
             self.is_active = True
             logger.info("Voyager: Constellation synchronization and transport server active.")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"Voyager: Failed to start constellation sync: {e}")"
+            logger.error(f"Voyager: Failed to start constellation sync: {e}")
     def broadcast_signal(self, signal_name: str, payload: Dict[str, Any] = None) -> None:
-        """Broadcasts a signal to all connected peers and local cache.        logger.info(f"Voyager: Broadcasting signal {signal_name}")"        self.shared_state_cache.append(signal_name)
+"""
+Broadcasts a signal to all connected peers and local cache.        logger.info(f"Voyager: Broadcasting signal {signal_name}")"        self.shared_state_cache.append(signal_name)
         # In a real implementation, this would send ZMQ messages to peers
 
     def transmit_binary_packet(self, packet: bytes) -> bool:
-        """Transmits a binary packet across the bridge.        logger.info(f"Voyager: Transmitting binary packet ({len(packet)} bytes)")"        return True
+"""
+Transmits a binary packet across the bridge.        logger.info(f"Voyager: Transmitting binary packet ({len(packet)} bytes)")"        return True
 
     async def toggle_quantum_sync(self, state: bool) -> bool:
-        """Toggles the quantum state synchronization layer.        logger.info(f"Voyager: Toggling quantum sync to {state}")"        return True
+"""
+Toggles the quantum state synchronization layer.        logger.info(f"Voyager: Toggling quantum sync to {state}")"        return True
 
     def connect_to_peer(self, peer_id: str, address: str) -> bool:
-        """Connects to a remote fleet peer.        logger.info(f"Voyager: Connecting to peer {peer_id} at {address}")"        return True
+"""
+Connects to a remote fleet peer.        logger.info(f"Voyager: Connecting to peer {peer_id} at {address}")"        return True
 
     def broadcast_state(self, key: str, value: Any) -> None:
-        """Broadcasts a specific state variable to the constellation.        logger.info(f"Voyager: Broadcasting state {key}={value}")"        self.shared_state_cache.append(f"{key}:{value}")"
+"""
+Broadcasts a specific state variable to the constellation.        logger.info(f"Voyager: Broadcasting state {key}={value}")"        self.shared_state_cache.append(f"{key}:{value}")"
     def sync_external_state(self, peer_id: str, state: Dict[str, Any]) -> None:
-        """Syncs state received from an external peer.        logger.info(f"Voyager: Syncing external state from {peer_id}")"
+"""
+Syncs state received from an external peer.        logger.info(f"Voyager: Syncing external state from {peer_id}")
     def query_global_intelligence(self, query: str) -> str:
-        """Queries the global constellation for a specific capability or state.        logger.info(f"Voyager: Querying global intelligence for {query}")"        return "Global Sync Active""
+"""
+Queries the global constellation for a specific capability or state.        logger.info(f"Voyager: Querying global intelligence for {query}")"        return "Global Sync Active""
     async def stop_constellation_sync(self):
-        """Stops the P2P discovery and transport server.        await self.discovery_node.stop()
+"""
+Stops the P2P discovery and transport server.        await self.discovery_node.stop()
         await self.synapse.stop()
         self.is_active = False
-        logger.info("Voyager: Constellation synchronization stopped.")"
+        logger.info("Voyager: Constellation synchronization stopped.")
     def get_known_peers(self) -> List[Dict[str, Any]]:
-        """Returns the list of discovered peers in the constellation.        return self.discovery_node.get_active_peers()
+"""
+Returns the list of discovered peers in the constellation.        return self.discovery_node.get_active_peers()
 
     @property
     def connected_fleets(self) -> Dict[str, Any]:
-        """Phase 319: Legacy compatibility for FederatedKnowledgeOrchestrator.        return self.discovery_node.peers
+"""
+Phase 319: Legacy compatibility for FederatedKnowledgeOrchestrator.        return self.discovery_node.peers
 
     async def send_signal(self, peer_name: str, signal_type: str, data: Any) -> Any:
                 Sends a synaptic signal to a specific peer.
@@ -138,7 +153,7 @@ class InterFleetBridgeOrchestrator:
             return None
 
         peer_ip, peer_port = target
-        logger.info(f"Voyager: Offloading task to peer at {peer_ip}:{peer_port}")"
+        logger.info(f"Voyager: Offloading task to peer at {peer_ip}:{peer_port}")
         payload = {
             "type": "task_offload","            "task": task_description,"            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),"            "requirements": {"cpu": required_cpu, "ram": required_ram}"        }
 
@@ -148,7 +163,7 @@ class InterFleetBridgeOrchestrator:
     async def query_federated_memory(self, query: str, limit_per_peer: int = 3) -> List[Dict[str, Any]]:
                 Broadcasting query to the 'Experience Buffers' of the entire constellation.'        Returns aggregated list of results.
                 peers = self.discovery_node.get_active_peers()
-        logger.info(f"Voyager: Querying federated memory across {len(peers)} peers: '{query}'")"'
+        logger.info(f"Voyager: Querying federated memory across {len(peers)} peers: '{query}'")
         payload = {
             "type": "memory_query","            "query": query,"            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),"            "limit": limit_per_peer"        }
 
@@ -169,12 +184,13 @@ class InterFleetBridgeOrchestrator:
         for res in results:
             if isinstance(res, dict) and res.get("status") == "success":"                items = res.get("results", [])"                aggregated.extend(items)
             elif isinstance(res, Exception):
-                logger.debug(f"Voyager: Peer query failed: {res}")"
+                logger.debug(f"Voyager: Peer query failed: {res}")
         return aggregated
 
     async def broadcast_task(self, task_description: str, metadata: Optional[Dict[str, Any]] = None):
-        """Broadcasts a task opportunity to all discovered peers.        peers = self.get_known_peers()
-        logger.info(f"Voyager: Broadcasting task to {len(peers)} peers: {task_description[:30]}...")"
+"""
+Broadcasts a task opportunity to all discovered peers.        peers = self.get_known_peers()
+        logger.info(f"Voyager: Broadcasting task to {len(peers)} peers: {task_description[:30]}...")
         payload = {
             "type": "task_broadcast","            "task": task_description,"            "metadata": metadata or {},"            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),"        }
 
@@ -189,3 +205,5 @@ class InterFleetBridgeOrchestrator:
             results = await asyncio.gather(*tasks, return_exceptions=True)
             logger.info(
                 f"Voyager: Broadcast results: {len([r for r in results if not isinstance(r, Exception)])} successful.""            )
+
+"""

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     import json
+"""
 except ImportError:
-    import json
+
+"""
+import json
 
 try:
     from pathlib import Path
@@ -41,7 +46,8 @@ class GrafanaDashboardGenerator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def generate_fleet_summary(self) -> str:
-        """Generates a summary dashboard for the entire fleet.        dashboard = {
+"""
+Generates a summary dashboard for the entire fleet.        dashboard = {
             "title": "PyAgent Fleet Summary","            "panels": ["                {
                     "title": "Agent Count","                    "type": "stat","                    "targets": [{"expr": "count(agent_up)"}],"                },
                 {
@@ -53,7 +59,8 @@ class GrafanaDashboardGenerator:
         return str(output_path)
 
     def generate_shard_obs(self, shard_name: str) -> str:
-        """Generates a dashboard for a specific swarm shard.        dashboard = {
+"""
+Generates a dashboard for a specific swarm shard.        dashboard = {
             "title": f"PyAgent Shard: {shard_name}","            "panels": ["                {
                     "title": "Shard Load","                    "type": "gauge","                    "targets": [{"expr": f"shard_load{{shard='{shard_name}'}} "}],"'                }
             ],

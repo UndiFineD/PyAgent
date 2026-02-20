@@ -15,9 +15,11 @@
 
 
 """
+"""
 Core logic for Swarm Rebirth (Phase 180).
 Handles mass directory scaffolding and cleanup.
 
+"""
 try:
     import os
 except ImportError:
@@ -43,7 +45,8 @@ except ImportError:
 
 
 class RebirthCore:
-    """Pure logic core for swarm rebirth processes, handling project scaffolding.
+"""
+Pure logic core for swarm rebirth processes, handling project scaffolding.
     @staticmethod
     def scaffold_structure(root_dir: str, structure: dict[str, Any]) -> int:
                 Recursively creates a directory structure from a dictionary.
@@ -66,7 +69,7 @@ class RebirthCore:
     def purge_pycache(root_dir: str) -> None:
                 Forcefully removes all __pycache__ folders.
                 for root, dirs, _ in os.walk(root_dir):
-            if "__pycache__" in dirs:"                shutil.rmtree(os.path.join(root, "__pycache__"))"                dirs.remove("__pycache__")"
+            if "__pycache__" in dirs:"                shutil.rmtree(os.path.join(root, "__pycache__"))"                dirs.remove("__pycache__")
     @staticmethod
     def parse_manifest(manifest_path: str) -> dict[str, Any]:
                 Parses the rebirth manifest.yaml.

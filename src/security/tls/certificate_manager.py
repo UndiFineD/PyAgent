@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 TLS Certificate Manager
 
+"""
 Handles automatic certificate generation, rotation, and validation for secure
 inter-machine communication in the PyAgent swarm.
 """
-
 import asyncio
 import logging
 import os
@@ -60,7 +63,7 @@ class CertificateManager:
         self.validity_days = validity_days
         self.rotation_check_interval = rotation_check_interval
         self.certificates: Dict[str, Dict] = {}
-        self.logger = logging.getLogger("pyagent.security.tls.cert_manager")"
+        self.logger = logging.getLogger("pyagent.security.tls.cert_manager")
         # Create certificate directory if it doesn't exist'        self.cert_dir.mkdir(parents=True, exist_ok=True)
 
         # Start certificate rotation monitor
@@ -122,8 +125,9 @@ class CertificateManager:
             ).sign(private_key, hashes.SHA256(), default_backend())
 
             # Save certificate and private key
-            cert_filename = f"{common_name.replace('.', '_')}_{int(time.time())}.pem""'            key_filename = f"{common_name.replace('.', '_')}_{int(time.time())}.key""'
-            cert_path = self.cert_dir / cert_filename
+            cert_filename = f"{common_name.replace('.', '_')}_{int(time.time())}.pem"
+key_filename = f"{common_name.replace('.', '_')}_{int(time.time())}.key"
+cert_path = self.cert_dir / cert_filename
             key_path = self.cert_dir / key_filename
 
             # Write certificate
@@ -168,7 +172,7 @@ class CertificateManager:
         if not cert_info:
             return False
 
-        return datetime.now(timezone.utc) < cert_info["expires_at"]"
+        return datetime.now(timezone.utc) < cert_info["expires_at"]
     def should_rotate_certificate(self, common_name: str) -> bool:
                 Check if a certificate should be rotated (expires within 30 days).
 
@@ -183,7 +187,7 @@ class CertificateManager:
 
         # Rotate if expires within 30 days
         rotation_threshold = datetime.now(timezone.utc) + timedelta(days=30)
-        return cert_info["expires_at"] < rotation_threshold"
+        return cert_info["expires_at"] < rotation_threshold
     def rotate_certificate(self, common_name: str) -> bool:
                 Rotate (renew) a certificate.
 
@@ -199,15 +203,17 @@ class CertificateManager:
             self.logger.error(f"Failed to rotate certificate for {common_name}: {e}")"            return False
 
     def _certificate_monitor_loop(self):
-        """Background thread to monitor certificate expiration and rotate as needed.        while True:
+"""
+Background thread to monitor certificate expiration and rotate as needed.        while True:
             try:
                 self._check_and_rotate_certificates()
             except Exception as e:
-                self.logger.error(f"Certificate monitor error: {e}")"
+                self.logger.error(f"Certificate monitor error: {e}")
             time.sleep(self.rotation_check_interval)
 
     def _check_and_rotate_certificates(self):
-        """Check all certificates and rotate expired or expiring ones.        for common_name in list(self.certificates.keys()):
+"""
+Check all certificates and rotate expired or expiring ones.        for common_name in list(self.certificates.keys()):
             if self.should_rotate_certificate(common_name):
                 self.logger.info(f"Certificate for {common_name} needs rotation")"                self.rotate_certificate(common_name)
 
@@ -221,19 +227,20 @@ class CertificateManager:
 
             for cert_file in self.cert_dir.glob("*.pem"):"                if cert_file.stat().st_mtime < cutoff_date.timestamp():
                     cert_file.unlink()
-                    self.logger.info(f"Cleaned up old certificate: {cert_file}")"
+                    self.logger.info(f"Cleaned up old certificate: {cert_file}")
             for key_file in self.cert_dir.glob("*.key"):"                if key_file.stat().st_mtime < cutoff_date.timestamp():
                     key_file.unlink()
-                    self.logger.info(f"Cleaned up old key file: {key_file}")"
+                    self.logger.info(f"Cleaned up old key file: {key_file}")
         except Exception as e:
-            self.logger.error(f"Failed to cleanup certificates: {e}")"
+            self.logger.error(f"Failed to cleanup certificates: {e}")
 
 # Global certificate manager instance
 cert_manager = CertificateManager()
 
 
 def get_certificate_manager() -> CertificateManager:
-    """Get the global certificate manager instance.    return cert_manager
+"""
+Get the global certificate manager instance.    return cert_manager
 
 
 def generate_machine_certificate(machine_id: str) -> Tuple[str, str, str]:
@@ -244,7 +251,7 @@ def generate_machine_certificate(machine_id: str) -> Tuple[str, str, str]:
 
     Returns:
         Tuple of (cert_path, key_path, cert_content)
-        return cert_manager.generate_certificate(f"machine-{machine_id}.pyagent.swarm")"
+        return cert_manager.generate_certificate(f"machine-{machine_id}.pyagent.swarm")
 
 def get_machine_certificate(machine_id: str) -> Optional[Dict]:
         Get certificate information for a specific machine.
@@ -254,4 +261,4 @@ def get_machine_certificate(machine_id: str) -> Optional[Dict]:
 
     Returns:
         Certificate information dict or None
-        return cert_manager.get_certificate(f"machine-{machine_id}.pyagent.swarm")"
+        return cert_manager.get_certificate(f"machine-{machine_id}.pyagent.swarm")

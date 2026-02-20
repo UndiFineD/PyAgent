@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_test_utils.py""""
-
 try:
     import inspect
 except ImportError:
@@ -46,14 +46,15 @@ except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
 
-T = TypeVar("T")"
+T = TypeVar("T")
 __version__ = VERSION
 
 
 
 class DependencyContainer:
-    """Container for test dependency injection.""""
-    Manages dependencies for configurable testing with easy mocking.
+"""
+Container for test dependency injection.""""
+Manages dependencies for configurable testing with easy mocking.
 
     Example:
         container=DependencyContainer()
@@ -63,33 +64,37 @@ class DependencyContainer:
             ...
     
     def __init__(self) -> None:
-        """Initialize dependency container.        self._dependencies: dict[str, Any] = {}
+"""
+Initialize dependency container.        self._dependencies: dict[str, Any] = {}
         self._factories: dict[str, tuple[Callable[[], Any], bool]] = {}
         self._singletons: dict[str, Any] = {}
 
     def register(self, name: str, instance: Any) -> None:
-        """Register a dependency instance.""""
-        Args:
+"""
+Register a dependency instance.""""
+Args:
             name: Dependency name.
             instance: Dependency instance.
                 self._dependencies[name] = instance
-        logging.debug(f"Registered dependency: {name}")"
+        logging.debug(f"Registered dependency: {name}")
     def register_factory(
         self,
         name: str,
         factory: Callable[[], Any],
         singleton: bool = False,
     ) -> None:
-        """Register a dependency factory.""""
-        Args:
+"""
+Register a dependency factory.""""
+Args:
             name: Dependency name.
             factory: Factory function.
             singleton: Whether to create only once.
                 self._factories[name] = (factory, singleton)
 
     def resolve(self, name: str) -> Any:
-        """Resolve a dependency.""""
-        Args:
+"""
+Resolve a dependency.""""
+Args:
             name: Dependency name.
 
         Returns:
@@ -107,10 +112,11 @@ class DependencyContainer:
             if singleton:
                 self._singletons[name] = instance
             return instance
-        raise KeyError(f"Dependency not found: {name}")"
+        raise KeyError(f"Dependency not found: {name}")
     def inject(self, fn: Callable[..., T]) -> Callable[..., T]:
-        """Decorator to inject dependencies into function.""""
-        Args:
+"""
+Decorator to inject dependencies into function.""""
+Args:
             fn: Function to inject into.
 
         Returns:
@@ -126,6 +132,7 @@ class DependencyContainer:
         return wrapper
 
     def clear(self) -> None:
-        """Clear all dependencies.        self._dependencies.clear()
+"""
+Clear all dependencies.        self._dependencies.clear()
         self._factories.clear()
         self._singletons.clear()

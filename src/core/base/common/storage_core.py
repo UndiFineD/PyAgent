@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Core storage utilities for PyAgent.
+"""
+"""
+Core storage utilities for PyAgent.
+"""
+
 """
 import json
 import logging
@@ -32,13 +36,15 @@ logger = logging.getLogger("pyagent.storage")
 
 
 class StorageCore:
-    """Centralized I/O logic for JSON and YAML.
+"""
+Centralized I/O logic for JSON and YAML.
     Reduces redundancy across the codebase.
-    """
+"""
     @staticmethod
     def load_json(path: Union[str, Path], default: Any = None) -> Any:
-        """Safely load JSON data from a file."""
-        p = Path(path)
+"""
+Safely load JSON data from a file.""
+p = Path(path)
         if not p.exists():
             return default
         try:
@@ -50,8 +56,9 @@ class StorageCore:
 
     @staticmethod
     def save_json(path: Union[str, Path], data: Any, indent: int = 4) -> None:
-        """Safely save data to a JSON file, creating directories if needed."""
-        p = Path(path)
+"""
+Safely save data to a JSON file, creating directories if needed.""
+p = Path(path)
         try:
             p.parent.mkdir(parents=True, exist_ok=True)
 
@@ -67,8 +74,9 @@ class StorageCore:
             logger.error("Failed to save JSON to %s: %s", p, e)
     @staticmethod
     def load_yaml(path: Union[str, Path], default: Any = None) -> Any:
-        """Safely load YAML data from a file."""
-        p = Path(path)
+"""
+Safely load YAML data from a file.""
+p = Path(path)
         if not p.exists():
             return default
         try:
@@ -80,8 +88,9 @@ class StorageCore:
 
     @staticmethod
     def save_yaml(path: Union[str, Path], data: Any) -> None:
-        """Safely save data to a YAML file, creating directories if needed."""
-        p = Path(path)
+"""
+Safely save data to a YAML file, creating directories if needed.""
+p = Path(path)
         try:
             p.parent.mkdir(parents=True, exist_ok=True)
             with open(p, "w", encoding="utf-8") as f:
@@ -90,8 +99,9 @@ class StorageCore:
             logger.error("Failed to save YAML to %s: %s", p, e)
     @staticmethod
     def to_json(data: Any, indent: int = 4) -> str:
-        """Convert data to a JSON formatted string."""
-        if rc and hasattr(rc, "to_json_rust"):
+"""
+Convert data to a JSON formatted string.""
+if rc and hasattr(rc, "to_json_rust"):
             try:
                 # Assuming rc.to_json_rust returns a string
                 return rc.to_json_rust(data, indent)
@@ -101,5 +111,6 @@ class StorageCore:
 
     @staticmethod
     def to_yaml(data: Any) -> str:
-        """Convert data to a YAML formatted string."""
-        return yaml.dump(data, default_flow_style=False)
+"""
+Convert data to a YAML formatted string.""
+return yaml.dump(data, default_flow_style=False)

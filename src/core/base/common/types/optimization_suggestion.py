@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +16,11 @@ from __future__ import annotations
 
 
 """
+"""
 Auto-extracted class from agent_coder.py
 """
 
+"""
 from dataclasses import dataclass
 
 try:
@@ -34,7 +37,8 @@ __version__ = VERSION
 
 @dataclass
 class OptimizationSuggestion:
-    """A suggestion for code optimization.
+"""
+A suggestion for code optimization.
 
     Attributes:
         type: Type of optimization.
@@ -43,11 +47,10 @@ class OptimizationSuggestion:
         code_location: File and line information.
         before_snippet: Code before optimization.
         after_snippet: Suggested optimized code.
-    """
-
-    type: OptimizationType
+"""
+type: OptimizationType
     description: str
     impact: str
     code_location: str
-    before_snippet: str = """
-    after_snippet: str = """
+    before_snippet: str = ""
+after_snippet: str = ""

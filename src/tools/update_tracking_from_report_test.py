@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .update_tracking_from_report import load_report, append_tracking, move_completed_rows, build_candidates, write_candidates, main

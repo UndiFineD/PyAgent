@@ -14,8 +14,11 @@
 
 try:
     import threading
+"""
 except ImportError:
-    import threading
+
+"""
+import threading
 
 try:
     import pytest

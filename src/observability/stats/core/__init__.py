@@ -14,9 +14,12 @@
 
 
 """
+"""
 Core package.
 try:
-    from .profiling_core import ProfileStats, ProfilingCore  # noqa: F401
+
+"""
+from .profiling_core import ProfileStats, ProfilingCore  # noqa: F401
 except ImportError:
     from .profiling_core import ProfileStats, ProfilingCore # noqa: F401
 

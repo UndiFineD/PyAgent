@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 check_registry - Registry diagnostic and validation
+
+"""
 
 [Brief Summary]
 # DATE: 2026-02-12
@@ -61,9 +64,10 @@ sys.path.append(os.getcwd())
 
 
 def run_diagnostic() -> None:
-    """Run diagnostic checks on PyAgent registries.    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")"    root = Path(os.getcwd())
+"""
+Run diagnostic checks on PyAgent registries.    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")"    root = Path(os.getcwd())
 
-    print("=== PyAgent Registry Diagnostic ===")"
+    print("=== PyAgent Registry Diagnostic ===")
     # Check Agents
     print("\\n[Agents]")"    try:
         # In reality, LazyAgentMap expects a fleet or workspace root
@@ -86,3 +90,5 @@ def run_diagnostic() -> None:
 
 
 if __name__ == "__main__":"    run_diagnostic()
+
+"""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Maintenance Utilities - Support for filesystem cleanup, log rotation, and environment integrity checks
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -40,7 +44,6 @@ Standard maintenance utilities for the PyAgent ecosystem.
 Provides shared helper functions for filesystem cleanup, log rotation,
 and environment verification used by other maintenance components.
 """
-
 try:
     import logging
 except ImportError:
@@ -71,4 +74,4 @@ class MaintenanceUtils:
     
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.version = VERSION
-        logging.info(f"MaintenanceUtils initialized (v{VERSION}).")"
+        logging.info(f"MaintenanceUtils initialized (v{VERSION}).")

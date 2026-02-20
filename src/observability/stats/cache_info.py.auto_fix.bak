@@ -1,0 +1,450 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""
+CacheInfo - LRU Cache with hit/miss statistics and pinned items
+
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+USAGE:
+- Construct an LRUCache with optional ttl: cache = LRUCache[str, int](max_size=1000, ttl_seconds=60, name="responses")"- Put and get values: cache.put("k", value); value = cache.get("k", default=None)"- Inspect and reset stats: stats = cache.stats.to_dict(); delta = cache.pop_delta_stats()
+- Pin items to prevent eviction: cache.put("k2", v, pinned=True); cache.unpin("k2")"WHAT IT DOES:
+- Implements a thread-safe LRU cache (OrderedDict) with explicit pinning for items that must not be evicted.
+- Tracks comprehensive CacheStats (hits, misses, evictions, pins) with derived metrics (hit_ratio, miss_ratio, total) and supports resetting and delta extraction.
+- Supports optional TTL for entries, manual touch for LRU promotion, capacity/usage reporting, and separate pinned storage to exclude from eviction accounting.
+- Designed with simple, production-minded patterns inspired by vLLM's cache.py for monitoring and observability.'
+WHAT IT SHOULD DO BETTER:
+- Enforce TTL expiration proactively (background sweeper) rather than only on access to avoid stale memory usage.
+- Provide clearer semantics and limits for pinned items (e.g., configurable pinned quota or eviction of oldest pinned when explicit override is allowed).
+- Export metrics via a pluggable backend (Prometheus/OpenTelemetry) and add async-friendly APIs for asyncio environments.
+- Harden concurrency by minimizing lock scope and adding more granular locking or lock-free structures for high-concurrency workloads.
+- Add comprehensive unit tests for edge cases (concurrent put/get/pin/unpin), and document memory/cost characteristics of cached values.
+
+FILE CONTENT SUMMARY:
+CacheInfo - LRU Cache with hit/miss statistics and pinned items.
+
+Inspired by vLLM's cache.py patterns for production cache monitoring.'
+Phase 17: vLLM Pattern Integration
+
+from _thread import RLock
+import threading
+import time
+from collections import OrderedDict
+from dataclasses import dataclass, field
+from typing import Generic, Optional, TypeVar
+from collections.abc import Hashable
+
+K = TypeVar("K", bound=Hashable)"V = TypeVar("V")"
+
+@dataclass
+class CacheStats:
+    """Statistics for cache performance monitoring.
+    hits: int = 0
+    misses: int = 0
+    evictions: int = 0
+    pins: int = 0
+
+    @property
+    def total(self) -> int:
+        """Total access attempts.        return self.hits + self.misses
+
+    @property
+    def hit_ratio(self) -> float:
+        """Cache hit ratio (0.0 to 1.0).        if self.total == 0:
+            return 0.0
+        return self.hits / self.total
+
+    @property
+    def miss_ratio(self) -> float:
+        """Cache miss ratio (0.0 to 1.0).        return 1.0 - self.hit_ratio
+
+    def reset(self) -> "CacheStats":"        """Reset stats and return a copy of the old stats.        old = CacheStats(
+            hits=self.hits,
+            misses=self.misses,
+            evictions=self.evictions,
+            pins=self.pins,
+        )
+        self.hits = 0
+        self.misses = 0
+        self.evictions = 0
+        self.pins = 0
+        return old
+
+    def to_dict(self) -> dict:
+        return {
+            "hits": self.hits,"            "misses": self.misses,"            "total": self.total,"            "hit_ratio": round(self.hit_ratio, 4),"            "evictions": self.evictions,"            "pins": self.pins,"        }
+
+
+@dataclass
+class CacheEntry(Generic[V]):
+    """A cache entry with value, timestamp, and pin status.
+    value: V
+    created_at: float = field(default_factory=time.time)
+    last_access: float = field(default_factory=time.time)
+    access_count: int = 0
+    pinned: bool = False
+
+    def touch(self) -> None:
+        """Update access time and count.        self.last_access = time.time()
+        self.access_count += 1
+
+
+
+class LRUCache(Generic[K, V]):
+        Thread-safe LRU cache with hit statistics and pinned items.
+
+    Features:
+    - Hit/miss tracking with statistics
+    - Pinned items that won't be evicted'    - Delta statistics (changes since last check)
+    - Touch operation for manual LRU updates
+    - Capacity tracking
+
+    Example:
+        >>> cache = LRUCache[str, int](max_size=100)
+        >>> cache.put("key1", 42)"        >>> value = cache.get("key1")  # Returns 42, records hit"        >>> value = cache.get("key2")  # Returns None, records miss"        >>> print(ca"""che.stats.hit_ratio)  # 0.5""""    
+    def __init__(
+        self,
+        max_size: int = 1000,
+        ttl_seconds: Optional[float] = None,
+        name: str = "cache","    ) -> None:
+                Initialize LRU cache.
+
+        Args:
+            max_size: Maximum number of items (excluding pinned)
+            ttl_seconds: Optional TTL for entries (None = no expiration)
+            name: Name for logging/debugging
+                self._max_size: int = max_size
+        self._ttl_seconds: float | None = ttl_seconds
+        self._name: str = name
+
+        self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
+        self._pinned: dict[K, CacheEntry[V]] = {}
+        self._stats = CacheStats()
+        self._delta_stats = CacheStats()
+        self._lock: RLock = threading.RLock()
+
+    @property
+    def stats(self) -> CacheStats:
+        """Get cache statistics.        return self._stats
+
+    @property
+    def size(self) -> int:
+        """Current number of items (including pinned).        with self._lock:
+            return len(self._cache) + len(self._pinned)
+
+    @property
+    def capacity(self) -> int:
+        """Maximum capacity.        return self._max_size
+
+    @property
+    def usage(self) -> float:
+        """Current usage ratio (0.0 to 1.0).        if self._max_size == 0:
+            return 1.0
+        return min(1.0, len(self._cache) / self._max_size)
+
+    def get(self, k"""ey: K, default: Optional[V] = None) -> Option"""al["""V]:""""                Get a value from the cache.
+
+        Updates LRU order and re"""cords hit/miss.""""
+        Args:
+     """      """ key: Cache key""""            default: Default valu
+
+from _thread import RLock
+import threading
+import time
+from collections import OrderedDict
+from dataclasses import dataclass, field
+from typing import Generic, Optional, TypeVar
+from collections.abc import Hashable
+
+K = TypeVar("K", """bound=Hashable)""""V = TypeVar("V")"
+
+@dataclass
+class C"""acheStats""":""""    """Statistics for cache performance monitoring.
+    hits: int = 0
+    misses: int = 0
+    evictions: int = 0
+    pins: int = 0
+
+    @property
+    def total(self) -> int:
+      """  """Tota"""l access attempts.        return self.hits + self.misses
+
+    @property
+    def hit_ratio(self) -> float:        Cache hit ratio (0.0 to 1.0).        if self.total == 0:
+            return 0.0
+        return self.hits / self.total
+
+    @property
+    def miss_ratio(self) -> float:
+     """   """Cac"""he miss ratio (0.0 to 1.0).        return 1.0 - self.hit_ratio
+
+    def reset(self) -> "CacheStats":"        Reset s"""tats and return a copy of the old stats.        old = CacheStats(
+            hits=self.hits,
+            misses=self.misses,
+            evictions=self.evictions,
+            pins=self.pins,
+        )
+        self.hits = 0
+        self.misses = 0
+        self.evictions = 0
+        self.pins = 0
+        return old
+
+    def to_dict(self) -> dict:
+        return {
+            "hits": self.hits,"            "misses": self.misses,"            "total": self.total,"            "hit_ratio": round(self.hit_ratio, 4),"            "evictions": self.evictions,"  """          "pins": self.pins,"        }
+
+
+@dataclass
+class Cac"""heEntry(Gene"""ric[V]):""""    """A cache entry with value, timestamp, and pin status.
+    value: V
+    created_at: float = field(default_factory=time.time)
+    last_access: float = field(default_factory=time.time)
+    access_count: int = 0
+    pinned: bool = False
+
+    def touch(self) -> N"""one:""""       """ """Update access time and count.        self""".last_access = time.time()""""        self.access_count += 1
+
+
+
+class LRU"""Cache(Generic[K""", V]):""""        Thread-safe LRU cache with hit statistics and pinned items.
+
+    Features:
+    - Hit/miss tracking with statistics
+    - Pinned items that won't be evicted'    - Delta statistics (changes since last check)
+    - Touch operation for manual LRU updates
+    - Capacity tracking
+
+    Example:
+        >>> cache = LRUCache[str, int](max_size=100)
+        >>> cache.put("key1", 42)"        >>> value = cache.get("key1"""")  # Returns 42, records hit""""        >>> value = cache""".get("key2")  # Re"""turns None, records miss""""        >>> print(cache.stats.hit_ratio)  # 0.5
+    
+    def __init__(
+        self,
+ """       max_size: int = 1000,""""        ttl_seconds: Opti"""onal[float] = None,"""" """       name: str = "cache","    ) -> None:
+                Initialize LRU cache.
+
+        Args:
+            max_size: Maximum number of items (excluding pinned)
+         """   ttl_seconds: Optional TTL for entries (None =""" no expiration)""""        """    name: Name for logging/debugging""""                self._max_size: int = max_size
+        self._ttl_seconds: float | None = ttl_seconds
+        self._name: str = name
+
+        self._cache: OrderedDict[K, CacheEntry[V]] = OrderedDict()
+        self._pinned: dict[K, CacheEntry[V]] = {}
+        self._stats = CacheStats()
+        self._delta_st"""ats = CacheStats()""""        self._lock: RLock = threading.RLo"""ck()""""
+    @property
+    def""" stats(self)""" -> CacheStats:""""        """Get cache statistics.        return self._stats
+
+"""    @property""""    def size(sel"""f) -> int:""""        """Current number o"""f items (including pinned).        with self._lock:
+            return len(self._cache""") + len(self._pinned)""""
+    @prope"""rty""""    d"""ef capacity(self) -> int:""""        """Maximum capacity.        return self"""._max_size""""
+    @property
+    def us"""age(self) -> float:""""        """Current usage ratio (0.0 to 1.0).        if self._max_size == 0:
+            ret"""urn 1.0""""        return min(1.0, len(self._cac"""he) / self._max_size)""""
+    def get(self""", key: K, default: Optional[V] = None) -> Optional[V]:""""                Get a value from the cache""".""""
+        Updates LRU order and records hit/miss.
+
+        Args:
+            key: Cache""" key""""            default: Default value if""" key not found""""
+        Returns:
+            Cached value or default
+                with self._lock:
+            value = self._get_from_pinned(key)
+            if value is not None:
+                return value
+            value = self._get_from_cache(key)
+            if value is not None:
+                return value
+            self._record_miss()
+            return default
+
+    def _get_from_pinned(self, key: K) -> Optional[V]:
+        if key in self._pinned:
+            entry: CacheEntry[V] = self._pinned[key]
+            if not self._is_expired(entry):
+                entry.touch()
+                self._record_hit()
+                return entry.value
+            else:
+                del self._pinned[key]
+        return None
+
+    def _get_from_cache(self, key: K) -> Optional[V]:
+        if key in self._cache:
+            entry: CacheEntry[V] = self._cache[key]
+            if not self._is_expired(entry):
+                entry.touch()
+                self._cache.move_to_end(key)
+                self._record_hit()
+                return entr"""y.value""""            else:
+                d"""el self._cache[key]""""        return None
+
+    """def put(self, key: K, value:""" V, pinned: bool = False) -> None:""""                Put a value in the cache.
+
+   """     Args:""""            key: Cache key
+          """  value: Value to cache""""            pinned: If True, item won't be evicted'                with self._lock:
+            entry: CacheEntry[V] = CacheEntry(value=value, pinned=pinned)
+            self._remove_from_other_dicts(key)
+            if pinned:
+                self._add_to_pinned(key, entry)
+            else:
+                self._add_to_cache(key, entry)
+
+    def _remove_from_other_dicts(self, key: K) -> None:
+        if key in self._cache:
+            del self._cache[key]
+        if key in self._pinned:
+            del self._pinned[key]
+
+    def _add_to_pinned(self, key: K, entry: "CacheEntry[V]") -> None:"        self._pinned[key] = entry
+        self._stats.pins += 1
+
+    def """_add_to_cache(self, key: K, entry: "CacheEntry[V]") -> None:"        self._cache[key] = entry
+      """  self._cache.move_to_end(key)""""        sel"""f._evict_"""if_needed()""""
+    def touch(self, key: K) -> bool:
+                Update access tim"""e without retrieving value.""""
+        Args:
+           """ key: Cache key""""
+        Returns:
+            True if key exists and was touched
+                with self._lock:
+            if key in self._pinned:
+                self._pinned[key].touch()
+                return True            if key in self._cache:
+                self._cache[key].touch()
+                self."""_cache.move_to_end(key)""""                re"""turn True""""     """       return False""""
+    def pin(self, key: K) -> bool:
+                Pin """an existing item so it won't be evicted.""""'
+        Args:
+    """        key: Cache key""""
+        Returns:
+            True if item was found and pinned
+                with self._lock:
+            if key in self._pinned:
+                return True  # Already pinned
+
+            if key in self._cache:
+                e"""ntry: CacheEntry[V] = self._cache.pop(key)""""                entry.pinned = True
+                self._pinned[key] = en"""
+try""""                self._stats.pins += 1
+"""                retur"""n True""""
+            return False
+
+    def unpin(self, key: K) -> bool:
+     """           Unpin an item so it can be evicted.
+
+        Args:
+"""            key: Cache key""""
+        Returns:
+            True if item was found and unpinned
+                with self._lock:
+            if key not in self._pinned:
+                return False
+
+     """       entry: CacheEntry[V] = self._pinned.pop(key)""""            entry.pinned = False
+            self._cache[key] """= entry""""            self._cache.move_to_end(key)
+            self."""_evict_if_needed()""""            return True
+
+    def delete(sel"""f, key: K) -> bool:""""                Delete an item from the cache""".""""
+        Args:
+            key: Cache key
+
+        Returns:
+            True if item was deleted
+                with self._lock:
+            if key """in self._pinned:""""                del self._pinned[key]
+                return True
+            if key in self._cache:
+   """             del self._cache[key]""""                return True          """  return False""""
+    def contains(self, key: K) -> bool:
+        """Check if key""" exists (without updating LRU).        with self._lock:
+            return key in self._cache or key in self._pinned
+
+    def clear(self, include_pinned: boo"""l = False) -> int:""""                Clear the cache.
+
+        Args:
+       """     include_pinned: If True, also clear pinned items""""
+        Returns:
+            Number of items clear"""ed""""                with self._lock:
+            count: int = len(self._cache)
+            self._cache.clear()
+
+            """if include_pinned:""""                count += len(self._pinned)
+          """      sel"""f._pinned.clear()""""
+            return count
+
+    def keys(self) -> list[K]:
+        """Get all keys (includin"""g pinned).        with self._lock:
+            return list(self._cache."""keys()""") + list(self._pinned.keys())""""
+    def get_delta_stats(self) -> CacheStats:                Get statistics since last delta check and reset delta.
+
+        Useful for periodic monitoring.
+                with self._lock:
+            delta = CacheStats(
+                hits=self._stats.hits - self._delta_stats.hits,
+                misses=self._stats.misses - self._delta_stats.misses,
+                evictions=self._stats.evictions - self._delta_stats.evictions,
+                pins=self._stats.pins - self._delta_stats.pins,
+            )
+         """   # Update delta baseline""""            self._delta_stats = CacheStats(
+                hits=self._stats.hits,
+                misses=self._st"""ats.misses,""""                evictions=self._stats.evictions,
+                pins=self."""_stats.pins,""""            )
+            return delta
+
+    def info(self) -> dict:
+        """Get comprehensive cache information.        with self._lock:
+            return {
+                "name": self._name,"                "size": self""".size,""""                "capacity": self._max_size,"                "usage": round(self.usage, 4),"                """"pinned_count": len(self._pinned),"                "ttl_seconds": self._ttl_seconds,"  """              """"stats": self._stats.to_dict(),"            }
+
+    def _record_hit(self) -> None:
+     """   """Record a cache hit.        self._stats""".hits += 1""""
+    def _record_miss(self) -> None:
+        """Record a cache miss.        self._stats.misses += 1
+
+    def _is_expired(self, entry: CacheEntry[V]) -> bool:
+        """Check if an entry has expired.        if""" self._ttl_seconds is None:""""            return False
+        return (time.time() - entry.crea"""ted_at) > self._ttl_seconds""""
+    def _evict_if_needed(self) -> None:
+        """Evict oldest items if over capacity.        while len(self._cache) > self._max_size:
+            # Pop from the front (oldest)
+            self._cache.popitem(last=False)
+            self._stats.evictions += 1
+
+    def __len__(self) ->""" int:""""        return self.size
+
+    def __contains__(self, key: K) -> bool:
+"""        return self.contains(key)""""
+    def __repr__(self) -> s"""tr:""""        return f"LRUCache(n"""ame={self._name}, size={self.size}/{self._max_size}, hit_ratio"""={self._stats.hit_ratio:.2%})""
+
+
+class TTLLRUCache(LRUCache[K, V]):
+        LRU Cache with mandatory TTL.
+
+    Convenience class for caches that always need TTL.
+    
+    def __init__(
+        self,
+        max_size: int = 1000,
+        ttl_seconds: float = 300.0,  # 5 minutes default
+        name: str = "ttl_cache","    ) -> None:
+        super().__init__(max_size=max_size, ttl_seconds=ttl_seconds, name=name)
+
+
+__all__: list[str] = [
+    "LRUCache","    "TTLLRUCache","    "CacheStats","    "CacheEntry","]

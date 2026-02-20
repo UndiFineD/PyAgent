@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +16,13 @@ from __future__ import annotations
 
 
 """
+"""
 Web Intelligence Agent - Unified Web Research and Navigation
 [Brief Summary]
 A unified agent that consolidates web search, autonomous navigation, browsing, and internal self-search capabilities for PyAgent. Exposes tool-wrapped methods for ArXiv search and retrieval, multi-provider web search (DuckDuckGo/Bing/Google), content fetching and safety scanning, and local context recording. DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 
+"""
 USAGE:
 Instantiate with the agent workspace file path, then call the provided tools:
 - agent = WebIntelligenceAgent("path/to/agent_file")"- agent.search_web("quantum computing", provider="duckduckgo", max_results=5)"- agent.search_arxiv("transformers", max_results=3)"- agent.fetch_arxiv_paper("https://arxiv.org/pdf/...", "paper.pdf")"Intended to be used as part of the PyAgent toolset where methods are exposed as tools via @as_tool for orchestration.
@@ -39,7 +42,6 @@ FILE CONTENT SUMMARY:
 Unified Web Intelligence Agent for PyAgent.
 Consolidates Search, Web Navigation, Browsing, and Self-Search.
 """
-
 import logging
 import os
 from pathlib import Path
@@ -67,7 +69,7 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.bing_api_key = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")"        self.google_api_key = os.environ.get("GOOGLE_SEARCH_API_KEY")"        self.google_cse_id = os.environ.get("GOOGLE_SEARCH_CSE_ID")"
+        self.bing_api_key = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")"        self.google_api_key = os.environ.get("GOOGLE_SEARCH_API_KEY")"        self.google_cse_id = os.environ.get("GOOGLE_SEARCH_CSE_ID")
         work_root = getattr(self, "_workspace_root", None)"        self.connectivity = ConnectivityManager(work_root)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
         self.web_core = WebCore()
@@ -82,23 +84,26 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def search_arxiv(self, query: str, max_results: int = 5) -> str:
-""""Searches Arxiv for research papers and returns summarized metadata.        logging.info(fWebIntelligence: Searching Arxiv for" '{query}'")"'        results = self.arxiv_core.search(query, max_results)
+""""
+Searches Arxiv for research papers and returns summarized metadata.        logging.info(fWebIntelligence: Searching Arxiv for" '{query}'")"'        results = self.arxiv_core.search(query, max_results)
         return self.arxiv_core.summarize_results(results)
 
     @as_tool
     def fetch_arxiv_paper(self, pdf_url: str, filename: str) -> str:
-""""Downloads an Arxiv paper and extracts its text for analysis.        logging.info(fWebIntelligence: Fetching Arxiv paper {pdf_url}")"        path = self.arxiv_core.download_paper(pdf_url, filename)
+""""
+Downloads an Arxiv paper and extracts its text for analysis.        logging.info(fWebIntelligence: Fetching Arxiv paper {pdf_url}")"        path = self.arxiv_core.download_paper(pdf_url, filename)
         if not path:
 #             return "Failed to download paper."
         text = self.arxiv_core.extract_text(path)
         # Scan for safety
         injections = self.security_guard.scan_for_injection(text)
         if injections:
-#             return fERROR: Content blocked for safety: {', '.join(injections)}'
+#             return fERROR: Content blocked for safety: {', '.join(injections)}
         return text
 
     @as_tool
-    def search_web(self, query: str, provider: str = "duckduckgo", max_results: int = 5) -> str:"""""Performs a web search using specified provider (duckduckgo, bing, google).        logging.info(fWebIntelligence: Searching {provider} for '{query}'")"'
+    def search_web(self, query: str, provider: str = "duckduckgo", max_results: int = 5) -> str:""""
+Performs a web search using specified provider (duckduckgo, bing, google).        logging.info(fWebIntelligence: Searching {provider} for '{query}'")"
         if provider == "bing":"            return self._search_bing(query, max_results)
         if provider == "google":"            return self._search_google(query, max_results)
 
@@ -144,7 +149,7 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     Consolidates SearchAgent, WebAgent, BrowsingAgent," and SelfSearchAgent."
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.bing_api_key = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")"        self.google_api_key = os.environ.get("GOOGLE_SEARCH_API_KEY")"        self.google_cse_id = os.environ.get("GOOGLE_SEARCH_CSE_ID")"
+        self.bing_api_key = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")"        self.google_api_key = os.environ.get("GOOGLE_SEARCH_API_KEY")"        self.google_cse_id = os.environ.get("GOOGLE_SEARCH_CSE_ID")
         work_root = getattr(self, "_workspace_root", None)"        self.connectivity = ConnectivityManager(work_root)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
         self.web_core = WebCore()
@@ -159,23 +164,26 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def search_arxiv(self, query: str, max_results: int = 5) -> str:
-""""Searches Arxiv for research papers and returns summarized metadata.        logging.info(fWebIntelligence": Searching Arxiv for '{query}'")"'        results = self.arxiv_core.search(query, max_results)
+""""
+Searches Arxiv for research papers and returns summarized metadata.        logging.info(fWebIntelligence": Searching Arxiv for '{query}'")"'        results = self.arxiv_core.search(query, max_results)
         return self.arxiv_core.summarize_results(results)
 
     @as_tool
     def fetch_arxiv_paper(self, pdf_url: str, filename: str) -> str:
-""""Downloads an Arxiv paper and extracts its text for analysis.        logging.info(fWebIntelligence:" Fetching Arxiv paper {pdf_url}")"        path = self.arxiv_core.download_paper(pdf_url, filename)
+""""
+Downloads an Arxiv paper and extracts its text for analysis.        logging.info(fWebIntelligence:" Fetching Arxiv paper {pdf_url}")"        path = self.arxiv_core.download_paper(pdf_url, filename)
         if not path:
 #             return "Failed to download paper."
         text = self.arxiv_core.extract_text(path)
         # Scan for safety
         injections = self.security_guard.scan_for_injection(text)
         if injections:
-#             return fERROR: Content blocked for safety: {', '.join(injections)}'
+#             return fERROR: Content blocked for safety: {', '.join(injections)}
         return text
 
     @as_tool
-    def search_web(self, query: str, provider: str = "duckduckgo", max_results: int = 5) -> str:"""""Performs a web search using specified provider (duckduckgo, bing, google).        logging.info(fWebIntelligence: "Searching {provider} for '{query}'")"'
+    def search_web(self, query: str, provider: str = "duckduckgo", max_results: int = 5) -> str:""""
+Performs a web search using specified provider (duckduckgo, bing, google).        logging.info(fWebIntelligence: "Searching {provider} for '{query}'")
         if provider == "bing":"            return self._search_bing(query, max_results)
         if provider == "google":"            return self._search_google(query, max_results)
 
@@ -197,17 +205,18 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         _ = max_results
         if not self.bing_api_key:
 #             return "Bing API Key not configured."        # Simulated implementation for brevity
-#         return fBing results for '{query}' (Simulated).'
+#         return fBing results for '{query}' (Simulated).
     def _search_google(self, query: str, max_results: int) -> str:
         _ = max_results
         if not self.google_api_key:
 #             return "Google API Key not configured."        # Simulated implementation for brevity
-#         return fGoogle results for '{query}' (Simulated).'
+#         return fGoogle results for '{query}' (Simulated).
     # --- NAVIGATION TOOLS (Consolidated from WebAgent, BrowsingAgent) ---
 
     @as_tool
     def fetch_web_content(self, url: str) -> str:
-""""Fetches and cleans content from a" URL with safety scanning.        try:
+""""
+Fetches and cleans content from a" URL with safety scanning.        try:
             response = requests.get(url, timeout=15)
             response.raise_for_status()
             text = self.web_core.clean_html(response.text)
@@ -215,21 +224,31 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             # Safety Scan
             injections = self.security_guard.scan_for_injection(text)
             if injections:
-#                 return fERROR: Content blocked for safety: {', '.join(injections)}'
+#                 return fERROR: Content blocked for safety: {', '.join(injections)}
             return text
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
 #             return fError fetching {url}: {e}
 
     @as_tool
     def extract_api_specification(self, url: str) -> str:
-""""Attempts to find and extract an OpenAPI/Swagger spec from a given URL.        logging.info(fWebIntelligence: Extracting spec from {url}")"#         return fBrowsing {url}... Detected possible API spec. (Consolidated logic)
+""""
+Attempts to find and extract an OpenAPI/Swagger spec from a given URL.        logging.info(fWebIntelligence: Extracting spec from {url}")"#         return fBrowsing {url}... Detected possible API spec. (Consolidated logic)
 
     # --- SELF-SEARCH TOOLS (Consolidated from SelfSearchAgent) ---
 
     @as_tool
     def perform_internal_self_search(self, query: str) -> str:
-""""Uses 'Structured Self-Search' to extract latent knowledge from training data.'#         return f"<SelfSearchTask>\\nQuery: {query}\\n[Simulated Internal Recall Result]\\n</SelfSearchTask>"
+""""
+Uses 'Structured Self-Search' to extract latent knowledge from training data.'#         return f"<SelfSearchTask>\\nQuery: {query}\\n[Simulated Internal Recall Result]\\n</SelfSearchTask>"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         _ = target_file
         if "http" in prompt:"            return self.fetch_web_content(prompt)
         return self.search_web(prompt)
+
+"""
+
+"""
+
+""
+
+"""

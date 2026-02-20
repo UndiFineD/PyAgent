@@ -11,7 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""Test Auth Core module.
+"""
+"""
+Test Auth Core module.
+"""
+
 """
 import unittest
 from hypothesis import given, strategies as st
@@ -70,7 +74,7 @@ class TestAuthCore(unittest.TestCase):
         # But the method calls time.time().
 
         # Ideally we refactor the python code to accept current_time too.
-        # Since I can't easily mock time.time() inside hypothesis without side effects...'        # I will test the bounds relative to 'now'.'
+        # Since I can't easily mock time.time() inside hypothesis without side effects...'        # I will test the bounds relative to 'now'.
         now = time.time()
 
         # expired case

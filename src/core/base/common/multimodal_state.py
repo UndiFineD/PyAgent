@@ -13,10 +13,13 @@
 # limitations under the License.
 
 
-"""Multimodal state definitions."""
+"""
+"""
+Multimodal state definitions.""
 
-
+"""
 class StreamState:
-    """State management for incomplete modality tags in a stream."""
-    def __init__(self) -> None:
+"""
+State management for incomplete modality tags in a stream.""
+def __init__(self) -> None:
         self.buffer = ""

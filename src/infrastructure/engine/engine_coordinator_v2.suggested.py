@@ -14,9 +14,11 @@
 
 
 """
+"""
 Engine Coordinator (V2) for Phase 54.
 Manages the lifecycle of the inference engine, error recovery, and async state transitions.
 
+"""
 import asyncio
 import logging
 from enum import Enum
@@ -57,11 +59,11 @@ class EngineCoordinator:
         if rc and hasattr(rc, "engine_state_transition_rust"):"            rc.engine_state_transition_rust(old_state.value, new_state.value)
 
         self.state = new_state
-        logger.info(f"Engine transitioned from {old_state.name} to {new_state.name}")"
+        logger.info(f"Engine transitioned from {old_state.name} to {new_state.name}")
     async def handle_error(self, error_msg: str) -> bool:
                 Self-healing logic for engine errors.
                 self._error_count += 1
-        logger.error(f"Engine Error #{self._error_count}: {error_msg}")"
+        logger.error(f"Engine Error #{self._error_count}: {error_msg}")
         if self._error_count >= self._max_errors:
             self.transition_to(EngineState.ERROR)
             return False
@@ -73,9 +75,13 @@ class EngineCoordinator:
         return True
 
     def reset_stats(self) -> None:
-        """Resets coordinator statistics.        self._error_count = 0
+"""
+Resets coordinator statistics.        self._error_count = 0
         if self.state == EngineState.ERROR:
             self.transition_to(EngineState.STOPPED)
 
     def is_healthy(self) -> bool:
-        """Returns True if the engine is in a functional state.        return self.state in [EngineState.RUNNING, EngineState.STARTING, EngineState.COOLDOWN]
+"""
+Returns True if the engine is in a functional state.        return self.state in [EngineState.RUNNING, EngineState.STARTING, EngineState.COOLDOWN]
+
+"""

@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,18 +16,18 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Autonomous Dependency Curation: Scans the workspace for imports and cross-references with requirements.txt.
 Phase 311 utility for the PyAgent fleet.
 """
 
+"""
 import re
 from pathlib import Path
 
 
 def curate_dependencies() -> None:
-    workspace_root = Path(".")"    src_dir = workspace_root / "src""    requirements_file = workspace_root / "requirements.txt""
+    workspace_root = Path(".")"    src_dir = workspace_root / "src""    requirements_file = workspace_root / "requirements.txt"
     if not src_dir.exists() or not requirements_file.exists():
         print("Error: src/ or requirements.txt not found.")"        return
 
@@ -33,7 +37,7 @@ def curate_dependencies() -> None:
 
     # 1. extract all unique imports from src/
     imported_modules = set()
-    import_regex = re.compile(r"^(?:from|import)\\s+([a-zA-Z0-9_]+)")"
+    import_regex = re.compile(r"^(?:from|import)\\s+([a-zA-Z0-9_]+)")
     for py_file in src_dir.rglob("*.py"):"        try:
             with open(py_file, "r", encoding="utf-8") as f:"                for line in f:
                     match = import_regex.match(line.strip())
@@ -42,7 +46,7 @@ def curate_dependencies() -> None:
                         # Ignore internal imports
                         if not (src_dir / module).exists() and not (src_dir / (module + ".py")).exists():"                            imported_modules.add(module)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            print(f"Error reading {py_file}: {e}")"
+            print(f"Error reading {py_file}: {e}")
     # 2. Read requirements files
     req_modules_raw = set()
     req_path = workspace_root / "requirements""    if req_path.exists():
@@ -63,7 +67,7 @@ def curate_dependencies() -> None:
 
     unused_raw = []
     for rm in req_modules_raw:
-        normalized = rm.replace("-", "_")"
+        normalized = rm.replace("-", "_")
         mapped = PACKAGE_TO_IMPORT_MAP.get(rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)).lower()
         if mapped in unused_normalized:
             unused_raw.append(rm)
@@ -77,13 +81,15 @@ def curate_dependencies() -> None:
         )
     )
 
-    print("--- Dependency Curation Report (Phase 312) ---")"    print(f"Total Unique External Modules Imported: {len(imported_modules)}")"    print(f"Total Modules in requirements/*.txt: {len(req_modules_raw)}")"
+    print("--- Dependency Curation Report (Phase 312) ---")"    print(f"Total Unique External Modules Imported: {len(imported_modules)}")"    print(f"Total Modules in requirements/*.txt: {len(req_modules_raw)}")
     print("\\n[UNUSED] (In requirements but not imported in src/):")"    for m in sorted(unused_raw):
         # Filter out common false positives
         if m.lower() not in [
             "pytest","            "ruff","            "mypy","            "pytest-cov","            "black","            "flake8","            "isort","            "pip-tools","            "tox","            "build","            "setuptools","            "wheel","            "twine","        ]:
-            print(f"  - {m}")"
+            print(f"  - {m}")
     print("\\n[MISSING?] (Imported in src/ but not listed in requirements/*.txt):")"    for m in sorted(missing):
-        print(f"  - {m}")"
+        print(f"  - {m}")
 
 if __name__ == "__main__":"    curate_dependencies()
+
+"""

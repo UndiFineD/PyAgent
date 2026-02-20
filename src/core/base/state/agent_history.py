@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,10 +14,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Logic for Agent Conversation History.
+"""
+"""
+Logic for Agent Conversation History.
 Extracted from BaseAgent for decomposition.
 """
 
+"""
 import logging
 from typing import TYPE_CHECKING
 
@@ -29,12 +33,15 @@ if TYPE_CHECKING:
 
 
 class AgentConversationHistory:
-    """Manages an agent's conversation history."""'
-    def __init__(self) -> None:
+"""
+Manages an agent's conversation history."""'
+def __init__(self) -> None:
         self._history: list[ConversationMessage] = []
 
     def add_message(self, role: str, content: str) -> None:
-        """Add a message to conversation history."""role_value: str = role.strip().lower()
+"""
+Add a message to conversation history.""
+role_value: str = role.strip().lower()
         try:
             role_enum = MessageRole(role_value)
         except ValueError:
@@ -42,14 +49,26 @@ class AgentConversationHistory:
         self._history.append(ConversationMessage(role=role_enum, content=content))
 
     def clear(self) -> None:
-        """Clear conversation history."""self._history.clear()
-        logging.debug("Conversation history cleared")"
+"""
+Clear conversation history.""
+self._history.clear()
+        logging.debug("Conversation history cleared")
     def get_messages(self) -> list[ConversationMessage]:
-        """Get conversation history."""return self._history.copy()
+"""
+Get conversation history.""
+return self._history.copy()
 
     def build_prompt(self, prompt: str, agent_logic_core: BaseAgentCore, core: BaseCore) -> str:
-        """Build prompt with conversation history context."""if not self._history:
+"""
+Build prompt with conversation history context.""
+if not self._history:
             return prompt
 
         history_str: list[dict[str, str]] = agent_logic_core.format_history_for_prompt(self._history)
         return core.build_prompt_with_history(prompt, history_str)
+
+"""
+
+""
+
+"""

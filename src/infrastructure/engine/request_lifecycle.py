@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Request lifecycle management for PyAgent Engine."""
+"""
+"""
+Request lifecycle management for PyAgent Engine.""
 
-
+""
 from .lifecycle import (
     FINISH_REASON_STRINGS,
     FinishReason,

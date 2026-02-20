@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,12 @@ from __future__ import annotations
 
 """
 OrchestratorRegistryCore
+"""
 - Core logic for orchestrator registry management.
 Orchestrator registry core.py module.
 """
 
+"""
 import os
 from typing import Any
 
@@ -64,7 +67,7 @@ class OrchestratorRegistryCore:
                         "Orchestrator","                        "Manager","                        "Selector","                        "Engine","                        "Spawner","                        "Bridge","                    ]
                 ):
                     # Calculate module path
-                    module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")"
+                    module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
                     # Convert ClassName -> snake_case key
                     # Robust handling for both PascalCase and snake_case (Phase 135)
                     # "SelfHealingOrchestrator" -> "self_healing""                    # "signal_bus_orchestrator" -> "signal_bus""                    raw_short = class_name
@@ -106,7 +109,7 @@ class OrchestratorRegistryCore:
         for key, cfg in raw_manifest.items():
             # Expecting: "Name": ["module.path", "ClassName", needs_fleet, "arg_path", "min_sdk_version"]"            if isinstance(cfg, list) and len(cfg) >= 2:
                 # Version gate
-                min_sdk: str = cfg[4] if len(cfg) > 4 else "1.0.0""
+                min_sdk: str = cfg[4] if len(cfg) > 4 else "1.0.0"
                 if self.is_compatible(min_sdk):
                     needs_fleet: bool = cfg[2] if len(cfg) > 2 else False
                     arg_path: str | None = cfg[3] if len(cfg) > 3 else None

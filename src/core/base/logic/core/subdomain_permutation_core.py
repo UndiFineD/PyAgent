@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal, parser-safe Subdomain Permutation Core used for tests."""
-
+""
+Minimal, parser-safe Subdomain Permutation Core used for tests.""
 from dataclasses import dataclass
 from typing import List, Dict, Any
 
@@ -13,6 +13,11 @@ class Permutation:
 @dataclass
 class PermutationConfig:
     patterns: List[str]
+
+
+@dataclass
+class PermutationResult:
+    permutations: List[str]
 
 
 class SubdomainPermutationCore:

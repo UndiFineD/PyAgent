@@ -13,8 +13,10 @@
 # limitations under the License.
 
 
+"""
 Compilation Infrastructure.
 
+"""
 Phase 36: torch.compile integration providing:
 - TorchCompileIntegration: torch.compile wrapper
 - CompilationCounter: Compilation metrics

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal parser-safe tests for ResilienceCore."""
-
+""
+Minimal parser-safe tests for ResilienceCore.""
 import importlib
 
 

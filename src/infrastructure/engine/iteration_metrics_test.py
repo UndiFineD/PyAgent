@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.iteration_metrics import MetricType, BaseCacheStats, PrefixCacheStats, MultiModalCacheStats, KVCacheEvictionEvent, CachingMetrics, RequestStateStats, FinishedRequestStats, SchedulerStats, IterationStats, PercentileTracker, TrendAnalyzer, AnomalyDetector, MetricsCollector

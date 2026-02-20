@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for ensuring __future__ imports appear before any logic category markers.
+"""
+"""
+Script for ensuring __future__ imports appear before any logic category markers.
 
+"""
 import os
 
 from src.core.base.lifecycle.version import VERSION
@@ -23,7 +27,9 @@ __version__ = VERSION
 
 
 def fix_future_ordering(directory: str) -> None:
-    """Reorder file content to place __future__ imports correctly.    for root, _, files in os.walk(directory):
+"""
+Reorder file content to place __future__ imports correctly.    for root, _, files in os.walk(directory):
+
         for file in files:
             if file.endswith(".py"):"                path = os.path.join(root, file)
                 try:
@@ -49,6 +55,6 @@ def fix_future_ordering(directory: str) -> None:
                             lines.insert(future_idx + 1, logic_line)
 
                             with open(path, "w", encoding="utf-8") as f:"                                f.write("\\n".join(lines) + "\\n")"                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    print(f"Error processing {path}: {e}")"
+                    print(f"Error processing {path}: {e}")
 
 if __name__ == "__main__":"    fix_future_ordering("src")"

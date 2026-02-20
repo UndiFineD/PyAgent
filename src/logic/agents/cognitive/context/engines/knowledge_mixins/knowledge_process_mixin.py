@@ -15,10 +15,13 @@
 
 
 """
+"""
 Knowledge process mixin for content analysis.
 """
 try:
-    import re
+
+"""
+import re
 except ImportError:
     import re
 
@@ -26,12 +29,14 @@ except ImportError:
 
 
 class KnowledgeProcessMixin:
-    """Methods for processing file content and computing similarity."""
-    def process_file_content(
+"""
+Methods for processing file content and computing similarity.""
+def process_file_content(
         self, rel_path: str, content: str, extension: str
     ) -> list[tuple[str, str, str, str]]:
-        """Parses content and returns a list of (symbol, path, category, snippet) tuples."""
-        results: list[tuple[str, str, str, str]] = []
+"""
+Parses content and returns a list of (symbol, path, category, snippet) tuples.""
+results: list[tuple[str, str, str, str]] = []
         if extension == ".py":
             symbols = self.extract_python_symbols(content)
             for s in symbols:
@@ -43,8 +48,9 @@ class KnowledgeProcessMixin:
         return results
 
     def compute_similarity(self, text_a: str, text_b: str) -> float:
-        """Computes basic string similarity (Jaccard) for symbol matching."""
-        set_a = set(re.findall(r"\w+", text_a.lower()))
+        ""
+Computes basic string similarity (Jaccard) for symbol matching.""
+set_a = set(re.findall(r"\w+", text_a.lower()))
         set_b = set(re.findall(r"\w+", text_b.lower()))
         if not set_a or not set_b:
             return 0.0

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 
 try:
@@ -71,4 +74,4 @@ def test_multiproc_monitor_interruptible(monkeypatch):
             raise RuntimeError("break")"    execr._shutdown_event = DummyEvent()
     with pytest.raises(RuntimeError):
         execr._monitor_workers()
-    assert getattr(execr._shutdown_event, "_called", False) is True"
+    assert getattr(execr._shutdown_event, "_called", False) is True

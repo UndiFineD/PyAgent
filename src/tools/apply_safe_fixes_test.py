@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .apply_safe_fixes import find_py_files, transform_text, remove_top_level_asserts, write_patch, apply_fixes, main

@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from .fuzzing import FuzzingTarget, FuzzingTechnique, FuzzingResult, FuzzingSession, AIFuzzingEngine, MultiCycleFuzzing

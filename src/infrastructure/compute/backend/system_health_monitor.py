@@ -15,15 +15,18 @@
 
 try:
     from .core.base.common.health_core import HealthCore as StandardHealthCore
+"""
 except ImportError:
-    from src.core.base.common.health_core import HealthCore as StandardHealthCore
+
+"""
+from src.core.base.common.health_core import HealthCore as StandardHealthCore
 
 
 class SystemHealthMonitor(StandardHealthCore):
-    """Monitors backend health and manages failover.
-    Integrated with StabilityCore for advanced fleet-wide stasis detection."""
-    
-    def __init__(
+"""
+Monitors backend health and manages failover.
+    Integrated with StabilityCore for advanced fleet-wide stasis detection.""
+def __init__(
         self,
         health_threshold: float = 0.8,
         window_size: int = 100,
@@ -39,8 +42,9 @@ class SystemHealthMonitor(StandardHealthCore):
 
 
     def record_success(self, backend: str, latency_ms: int) -> None:
-        """Record success."""
-        if backend not in self._history:
+"""
+Record success.""
+if backend not in self._history:
             self._history[backend] = []
         self._history[backend].append((True, latency_ms))
         self._history[backend] = self._history[backend][-self.window_size :]
@@ -48,8 +52,9 @@ class SystemHealthMonitor(StandardHealthCore):
 
 
     def record_failure(self, backend: str, latency_ms: int = 0) -> None:
-        """Record failure."""
-        if backend not in self._history:
+"""
+Record failure.""
+if backend not in self._history:
             self._history[backend] = []
         self._history[backend].append((False, latency_ms))
         self._history[backend] = self._history[backend][-self.window_size :]
@@ -57,8 +62,9 @@ class SystemHealthMonitor(StandardHealthCore):
 
 
     def _update_status(self, backend_id: str) -> None:
-        """Update backend status based on history."""
-        hist = self._history.get(backend_id, [])
+"""
+Update backend status based on history.""
+hist = self._history.get(backend_id, [])
         if not hist:
             return
         success_count = sum(1 for success, _ in hist if success)
@@ -67,13 +73,15 @@ class SystemHealthMonitor(StandardHealthCore):
 
 
     def is_healthy(self, backend_id: str) -> bool:
-        """Check if backend is healthy."""
-        return self._status.get(backend_id, True)
+"""
+Check if backend is healthy.""
+return self._status.get(backend_id, True)
 
 
     def get_healthiest(self, backends: list[str]) -> str | None:
-        """Return the healthiest backend from a list based on success ratio and latency."""
-        best_backend = None
+"""
+Return the healthiest backend from a list based on success ratio and latency.""
+best_backend = None
         best_score = -1.0
 
         for b in backends:

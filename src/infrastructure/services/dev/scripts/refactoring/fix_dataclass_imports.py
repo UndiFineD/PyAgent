@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for automatically injecting missing dataclass imports where decorators are used.
+"""
+"""
+Script for automatically injecting missing dataclass imports where decorators are used.
 
+"""
 try:
     import os
 except ImportError:
@@ -36,7 +40,9 @@ __version__ = VERSION
 
 
 def fix_dataclass_imports(root_dir: str) -> None:
-    """Inject dataclass and field imports into files missing them.    for root, _, files in os.walk(root_dir):
+"""
+Inject dataclass and field imports into files missing them.    for root, _, files in os.walk(root_dir):
+
         for file in files:
             if file.endswith(".py"):"                path = os.path.join(root, file)
                 # print(f"Checking {path}")"                with open(path, encoding="utf-8") as f:"                    content = f.read()
@@ -55,8 +61,8 @@ def fix_dataclass_imports(root_dir: str) -> None:
                             if line.startswith("import ") or line.startswith("from "):"                                lines.insert(i, "from dataclasses import dataclass, field")"                                inserted = True
                                 break
                         if not inserted:
-                            lines.insert(0, "from dataclasses import dataclass, field")"
-                        new_content = "\\n".join(lines)"
+                            lines.insert(0, "from dataclasses import dataclass, field")
+                        new_content = "\\n".join(lines)
                     with open(path, "w", encoding="utf-8") as f:"                        f.write(new_content)
 
 

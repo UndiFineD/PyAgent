@@ -13,10 +13,14 @@
 # limitations under the License.
 
 
-"""Tests for the Task Prioritization System.
+"""
+"""
+Tests for the Task Prioritization System.
 """
 try:
-    import asyncio
+
+"""
+import asyncio
 except ImportError:
     import asyncio
 
@@ -55,9 +59,12 @@ except ImportError:
 
 
 class TestTask:
-    """Test Task model functionality."""
-    def test_task_creation(self):
-        """Test creating a task."""task = Task(
+"""
+Test Task model functionality.""
+def test_task_creation(self):
+"""
+Test creating a task.""
+task = Task(
             title="Test Task","            description="A test task","            type=TaskType.CODE_GENERATION,
             priority=PriorityLevel.P1
         )
@@ -68,7 +75,9 @@ class TestTask:
         assert task.id is not None
 
     def test_task_with_deadline(self):
-        """Test task with deadline validation."""future_date = datetime.now() + timedelta(days=1)
+"""
+Test task with deadline validation.""
+future_date = datetime.now() + timedelta(days=1)
         task = Task(
             title="Urgent Task","            description="Needs to be done soon","            type=TaskType.CODE_GENERATION,
             deadline=future_date
@@ -78,7 +87,9 @@ class TestTask:
         assert not task.is_overdue()
 
     def test_overdue_task(self):
-        """Test overdue task detection."""past_date = datetime.now() - timedelta(hours=1)
+"""
+Test overdue task detection.""
+past_date = datetime.now() - timedelta(hours=1)
         task = Task(
             title="Overdue Task","            description="Should have been done","            type=TaskType.CODE_GENERATION,
             deadline=past_date,
@@ -88,7 +99,8 @@ class TestTask:
         assert task.is_overdue()
 
     def test_priority_score_calculation(self):
-        """Test priority score calculation."""
+"""
+Test priority score calculation.""
 # High priority task
         high_priority = Task(
             title="High Priority","            description="Important task","            type=TaskType.CODE_GENERATION,
@@ -104,7 +116,9 @@ class TestTask:
         assert high_priority.priority_score() < low_priority.priority_score()  # Lower score = higher priority
 
     def test_task_with_dependencies(self):
-        """Test task with dependencies."""task = Task(
+"""
+Test task with dependencies.""
+task = Task(
             title="Dependent Task","            description="Depends on others","            type=TaskType.CODE_GENERATION,
             dependencies=["task-1", "task-2"]"        )
 
@@ -113,9 +127,12 @@ class TestTask:
 
 
 class TestAgentCapability:
-    """Test AgentCapability model."""
-    def test_agent_creation(self):
-        """Test creating an agent capability."""agent = AgentCapability(
+"""
+Test AgentCapability model.""
+def test_agent_creation(self):
+"""
+Test creating an agent capability.""
+agent = AgentCapability(
             agent_id="agent-001","            name="Code Agent","            skills=[TaskType.CODE_GENERATION, TaskType.CODE_REVIEW],
             max_concurrent_tasks=3
         )
@@ -125,7 +142,9 @@ class TestAgentCapability:
         assert agent.current_workload == 0
 
     def test_can_handle_task(self):
-        """Test task handling capability check."""agent = AgentCapability(
+"""
+Test task handling capability check.""
+agent = AgentCapability(
             agent_id="agent-001","            name="Code Agent","            skills=[TaskType.CODE_GENERATION]
         )
 
@@ -141,7 +160,9 @@ class TestAgentCapability:
         assert not agent.can_handle_task(research_task)
 
     def test_workload_capacity(self):
-        """Test workload capacity calculation."""agent = AgentCapability(
+"""
+Test workload capacity calculation.""
+agent = AgentCapability(
             agent_id="agent-001","            name="Agent","            skills=[TaskType.CODE_GENERATION],
             max_concurrent_tasks=2,
             current_workload=1
@@ -150,7 +171,9 @@ class TestAgentCapability:
         assert agent.workload_capacity() == 0.5  # 1/2 = 0.5
 
     def test_suitability_score(self):
-        """Test suitability score calculation."""agent = AgentCapability(
+"""
+Test suitability score calculation.""
+agent = AgentCapability(
             agent_id="agent-001","            name="Code Agent","            skills=[TaskType.CODE_GENERATION],
             specialization_score={TaskType.CODE_GENERATION: 0.9}
         )
@@ -163,7 +186,9 @@ class TestAgentCapability:
         assert score == 0.9  # Specialization score
 
     def test_unsuitable_task(self):
-        """Test suitability for unsuitable task."""agent = AgentCapability(
+"""
+Test suitability for unsuitable task.""
+agent = AgentCapability(
             agent_id="agent-001","            name="Code Agent","            skills=[TaskType.CODE_GENERATION]
         )
 
@@ -177,13 +202,18 @@ class TestAgentCapability:
 
 
 class TestTaskManager:
-    """Test TaskManager functionality."""
+"""
+Test TaskManager functionality.""
     @pytest.fixture
     def manager(self):
-        """Create a task manager for testing."""return TaskManager()
+"""
+Create a task manager for testing.""
+return TaskManager()
 
     def test_add_task(self, manager):
-        """Test adding a task."""task = create_task(
+"""
+Test adding a task.""
+task = create_task(
             "Test Task","            "A test task","            TaskType.CODE_GENERATION,
             PriorityLevel.P1
         )
@@ -192,23 +222,28 @@ class TestTaskManager:
 
         assert task_id is not None
         assert task_id in manager.tasks
-        assert manager.tasks[task_id].title == "Test Task""
+        assert manager.tasks[task_id].title == "Test Task"
     def test_update_task(self, manager):
-        """Test updating a task."""task = create_task("Original", "Original desc", TaskType.CODE_GENERATION)"        task_id = manager.add_task(task)
+"""
+Test updating a task.""
+task = create_task("Original", "Original desc", TaskType.CODE_GENERATION)"        task_id = manager.add_task(task)
 
-        updated = manager.update_task(task_id, title="Updated", priority=PriorityLevel.P0)"
+        updated = manager.update_task(task_id, title="Updated", priority=PriorityLevel.P0)
         assert updated is not None
         assert updated.title == "Updated""        assert updated.priority == PriorityLevel.P0
 
     def test_remove_task(self, manager):
-        """Test removing a task."""task = create_task("Test", "Test", TaskType.CODE_GENERATION)"        task_id = manager.add_task(task)
+"""
+Test removing a task.""
+task = create_task("Test", "Test", TaskType.CODE_GENERATION)"        task_id = manager.add_task(task)
 
         success = manager.remove_task(task_id)
         assert success is True
         assert task_id not in manager.tasks
 
     def test_assign_task(self, manager):
-        """Test manual task assignment."""
+"""
+Test manual task assignment.""
 # Create task
         task = create_task("Test Task", "Test", TaskType.CODE_GENERATION)"        task_id = manager.add_task(task)
 
@@ -226,7 +261,8 @@ class TestTaskManager:
         assert agent.current_workload == 1
 
     def test_assign_incompatible_task(self, manager):
-        """Test assigning incompatible task."""
+"""
+Test assigning incompatible task.""
 # Create research task
         task = create_task("Research", "Research task", TaskType.RESEARCH)"        task_id = manager.add_task(task)
 
@@ -240,7 +276,8 @@ class TestTaskManager:
         success = manager.assign_task(task_id, "agent-001")"        assert success is False
 
     def test_auto_assign_tasks(self, manager):
-        """Test automatic task assignment."""
+"""
+Test automatic task assignment.""
 # Create tasks
         task1 = create_task("Code Task", "Generate code", TaskType.CODE_GENERATION)"        task2 = create_task("Research Task", "Do research", TaskType.RESEARCH)"        manager.add_task(task1)
         manager.add_task(task2)
@@ -261,12 +298,13 @@ class TestTaskManager:
         assert len(assignments) == 2
         assert ("code-agent", task1.id) in [(a, t) for t, a in assignments]"        assert ("research-agent", task2.id) in [(a, t) for t, a in assignments]"
     def test_complete_task(self, manager):
-        """Test completing a task."""
+"""
+Test completing a task.""
 # Create and assign task
         task = create_task("Test", "Test", TaskType.CODE_GENERATION)"        task_id = manager.add_task(task)
 
         agent = create_agent_capability("agent-001", "Agent", skills=[TaskType.CODE_GENERATION])"        manager.register_agent(agent)
-        manager.assign_task(task_id, "agent-001")"
+        manager.assign_task(task_id, "agent-001")
         # Complete task
         success = manager.complete_task(task_id, success=True)
         assert success is True
@@ -275,7 +313,8 @@ class TestTaskManager:
         assert agent.current_workload == 0  # Workload should be reduced
 
     def test_get_overdue_tasks(self, manager):
-        """Test getting overdue tasks."""
+"""
+Test getting overdue tasks.""
 # Create overdue task
         past_deadline = datetime.now() - timedelta(hours=1)
         overdue_task = Task(
@@ -290,9 +329,10 @@ class TestTaskManager:
 
         overdue = manager.get_overdue_tasks()
         assert len(overdue) == 1
-        assert overdue[0].title == "Overdue""
+        assert overdue[0].title == "Overdue"
     def test_get_task_queue(self, manager):
-        """Test getting prioritized task queue."""
+"""
+Test getting prioritized task queue.""
 # Create tasks with different priorities
         high_priority = create_task("High", "High priority", TaskType.CODE_GENERATION, PriorityLevel.P0)"        low_priority = create_task("Low", "Low priority", TaskType.CODE_GENERATION, PriorityLevel.P2)"
         manager.add_task(high_priority)
@@ -305,24 +345,31 @@ class TestTaskManager:
         assert queue[0].priority_score() <= queue[1].priority_score()
 
     def test_agent_workload_info(self, manager):
-        """Test getting agent workload information."""agent = create_agent_capability("agent-001", "Agent", skills=[TaskType.CODE_GENERATION])"        manager.register_agent(agent)
+"""
+Test getting agent workload information.""
+agent = create_agent_capability("agent-001", "Agent", skills=[TaskType.CODE_GENERATION])"        manager.register_agent(agent)
 
         workload = manager.get_agent_workload()
-        assert "agent-001" in workload"        assert workload["agent-001"]["current_workload"] == 0"        assert workload["agent-001"]["max_concurrent_tasks"] == 3"
+        assert "agent-001" in workload"        assert workload["agent-001"]["current_workload"] == 0"        assert workload["agent-001"]["max_concurrent_tasks"] == 3
 
 
 class TestTaskScheduler:
-    """Test TaskScheduler functionality."""
+"""
+Test TaskScheduler functionality.""
     @pytest_asyncio.fixture
     async def scheduler(self):
-        """Create a task scheduler for testing."""manager = TaskManager()
+"""
+Create a task scheduler for testing.""
+manager = TaskManager()
         scheduler = TaskScheduler(manager, check_interval=0.1)
         yield scheduler
         await scheduler.stop()
 
     @pytest.mark.asyncio
     async def test_scheduler_start_stop(self, scheduler):
-        """Test starting and stopping the scheduler."""assert not scheduler._running
+"""
+Test starting and stopping the scheduler.""
+assert not scheduler._running
 
         await scheduler.start()
         assert scheduler._running
@@ -332,7 +379,8 @@ class TestTaskScheduler:
 
     @pytest.mark.asyncio
     async def test_scheduler_auto_assignment(self, scheduler):
-        """Test scheduler automatic task assignment."""
+"""
+Test scheduler automatic task assignment.""
 # Create tasks and agents
         task = create_task("Test Task", "Test", TaskType.CODE_GENERATION)"        scheduler.task_manager.add_task(task)
 
@@ -359,9 +407,12 @@ class TestTaskScheduler:
 
 
 class TestConvenienceFunctions:
-    """Test convenience functions."""
-    def test_create_task(self):
-        """Test create_task convenience function."""task = create_task(
+"""
+Test convenience functions.""
+def test_create_task(self):
+"""
+Test create_task convenience function.""
+task = create_task(
             "Test Task","            "A test task","            TaskType.CODE_GENERATION,
             PriorityLevel.P1,
             tags=["urgent"],"            dependencies=["dep-1"]"        )
@@ -369,7 +420,9 @@ class TestConvenienceFunctions:
         assert task.title == "Test Task""        assert task.priority == PriorityLevel.P1
         assert "urgent" in task.tags"        assert "dep-1" in task.dependencies"
     def test_create_agent_capability(self):
-        """Test create_agent_capability convenience function."""agent = create_agent_capability(
+        ""
+Test create_agent_capability convenience function.""
+agent = create_agent_capability(
             "agent-001","            "Test Agent","            [TaskType.CODE_GENERATION, TaskType.CODE_REVIEW],
             max_concurrent_tasks=5,
             specialization_scores={TaskType.CODE_GENERATION: 0.9}

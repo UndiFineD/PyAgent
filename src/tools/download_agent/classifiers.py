@@ -14,7 +14,10 @@
 
 
 
+"""
 classifiers.py - URL classification for the Download Agent
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -68,10 +71,12 @@ except ImportError:
 
 
 class URLClassifier:
-    """Classifies URLs by type and determines appropriate download strategy.
+"""
+Classifies URLs by type and determines appropriate download strategy.
     @staticmethod
     def classify_url(url: str) -> Tuple[str, Dict]:
-        """Classify URL and return type with metadata.        url_lower = url.lower().strip()
+"""
+Classify URL and return type with metadata.        url_lower = url.lower().strip()
 
         # GitHub repositories
         if re.match(r'^https?://github\\.com/[^/]+/[^/]+/?$', url_lower):'            owner, repo = url.split('/')[-2:]'            return 'github_repo', {'                'owner': owner,'                'repo': repo,'                'destination': '.external''            }

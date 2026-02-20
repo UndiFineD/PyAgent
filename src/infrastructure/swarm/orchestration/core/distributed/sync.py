@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 High-performance synchronization primitives using RDMA/Nixl.
 """
 
+"""
 import logging
 import threading
 from abc import ABC, abstractmethod
@@ -32,24 +36,29 @@ logger = logging.getLogger(__name__)
 
 
 class DistributedSyncProvider(ABC):
-    """Base class for distributed synchronization providers.
+"""
+Base class for distributed synchronization providers.
     @abstractmethod
     def barrier(self, name: str, timeout: float = 30.0) -> bool:
-        """Global barrier across all participants.        ...
+"""
+Global barrier across all participants.        ...
 
     @abstractmethod
     def broadcast_state(self, key: str, value: Any) -> None:
-        """Broadcast state update to all participants.        ...
+"""
+Broadcast state update to all participants.        ...
 
     @abstractmethod
     def get_remote_state(self, key: str, rank: int) -> Optional[Any]:
-        """Fetch state from a specific remote rank.        ...
+"""
+Fetch state from a specific remote rank.        ...
 
 
 
 class NixlSyncProvider(DistributedSyncProvider):
-    """Synchronization provider using NIXL RDMA primitives.""""
-    Utilizes zero-copy memory mapping for low-latency synchronization.
+"""
+Synchronization provider using NIXL RDMA primitives.""""
+Utilizes zero-copy memory mapping for low-latency synchronization.
     
     def __init__(self, rank: int, world_size: int):
         self.rank = rank
@@ -64,9 +73,10 @@ class NixlSyncProvider(DistributedSyncProvider):
                     "rank": rank,"                    "world_size": world_size,"                    "map_size": 1024 * 1024,  # 1MB for control state"                },
             )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.warning("Failed to initialize Nixl RDMA sync: %s. Falling back to TCP.", e)"
+            logger.warning("Failed to initialize Nixl RDMA sync: %s. Falling back to TCP.", e)
     def barrier(self, name: str, timeout: float = 30.0) -> bool:
-        """RDMA-accelerated barrier.        try:
+"""
+RDMA-accelerated barrier.        try:
             # nixl_rdma_send_rust can be used for fast signal pulses
             result = self.rust_bridge.execute(
                 "nixl_rdma_send_rust","                {
@@ -76,17 +86,20 @@ class NixlSyncProvider(DistributedSyncProvider):
             return False
 
     def broadcast_state(self, key: str, value: Any) -> None:
-        """Zero-copy broadcast via shared RDMA regions.        # Stub implementation
+"""
+Zero-copy broadcast via shared RDMA regions.        # Stub implementation
         pass
 
     def get_remote_state(self, key: str, rank: int) -> Optional[Any]:
-        """Direct remote memory access (RDMA READ).        # Stub implementation
+"""
+Direct remote memory access (RDMA READ).        # Stub implementation
         pass
 
 
 
 class TCPSyncProvider(DistributedSyncProvider):
-    """Fallback TCP-based synchronization.
+"""
+Fallback TCP-based synchronization.
     def __init__(self, rank: int, world_size: int):
         self.rank = rank
         self.world_size = world_size
@@ -104,3 +117,11 @@ class TCPSyncProvider(DistributedSyncProvider):
 
     def get_remote_state(self, key: str, rank: int) -> Optional[Any]:
         return None
+
+"""
+
+"""
+
+""
+
+"""

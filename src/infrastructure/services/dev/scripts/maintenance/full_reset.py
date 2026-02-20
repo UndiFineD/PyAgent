@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Full Reset / Rebirth Script (Phase 180).
 Re-scaffolds the entire swarm structure from a manifest.
 
+"""
 try:
     import os
 except ImportError:
@@ -36,7 +38,7 @@ except ImportError:
 
 def full_reset() -> None:
     root = os.getcwd()
-    manifest_path = os.path.join(root, "config/rebirth_manifest.yaml")"
+    manifest_path = os.path.join(root, "config/rebirth_manifest.yaml")
     print("!!! WARNING: FULL RESET INITIATED !!!")"    print("This will re-scaffold the swarm directory structure.")"
     core = RebirthCore()
 

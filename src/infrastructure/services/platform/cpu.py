@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +19,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 CPU-only platform implementation.
 """
 
+"""
 import platform
 from typing import List, Set
 
@@ -30,7 +34,8 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 
 
 class CpuPlatform(Platform):
-    """CPU-only platform implementation.
+"""
+CPU-only platform implementation.
     @classmethod
     def get_platform_type(cls) -> PlatformType:
         return PlatformType.CPU
@@ -46,7 +51,7 @@ class CpuPlatform(Platform):
         return DeviceCapability(major=0, minor=0)
 
     def get_device_name(self, _device_id: int = 0) -> str:
-        return platform.processor() or "CPU""
+        return platform.processor() or "CPU"
     def get_memory_info(self, _device_id: int = 0) -> MemoryInfo:
         try:
             import psutil

@@ -16,8 +16,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Registry Package
 
+"""
 Tool parser registry for managing parser types and model mappings.
 
+"""
 try:
     from .tool_registry import (StreamingToolParser, ToolParserRegistry,  # noqa: F401
 except ImportError:

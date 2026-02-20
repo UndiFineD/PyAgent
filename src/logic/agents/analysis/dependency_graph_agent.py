@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import ast
 import os
 from pathlib import Path
@@ -28,11 +30,13 @@ from src.core.base.lifecycle.version import VERSION
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-- Import DependencyGraphAgent from dependency_graph_agent and instantiate with the repository workspace path, e.g. DependencyGraphAgent("C:\\\\DEV\\PyAgent")."- Call scan_dependencies(start_dir="src") to populate the internal dependency_map."- Use get_impact_scope("package.module") to list modules that depend on a given module, generate_graph_stats() to get basic graph metrics, or run the module as a script to use the provided CLI entrypoint."
+"""
+- Import DependencyGraphAgent from dependency_graph_agent and instantiate with the repository workspace path, e.g. DependencyGraphAgent("C:\\\\DEV\\PyAgent")."- Call scan_dependencies(start_dir="src") to populate the internal dependency_map."- Use get_impact_scope("package.module") to list modules that depend on a given module, generate_graph_stats() to get basic graph metrics, or run the module as a script to use the provided CLI entrypoint.
 WHAT IT DOES:
 - Walks the workspace tree (default "src") and parses every .py file to extract import statements into a dependency_map keyed by relative module path."- Offers a Rust-accelerated path (rust_core.find_dependents_rust) for faster dependent lookup when the optional native extension is installed; otherwise falls back to a Python scan.
 - Computes simple graph statistics (node/edge counts and density) and exposes an async improve_content method that reports impact for a target module in a human-readable form.
 
+"""
 WHAT IT SHOULD DO BETTER:
 - Resolve imports to canonical module names (package-relative resolution) and map file paths to Python package import paths to avoid false positives from simple substring matching.
 - Handle and index from-import members and dynamic imports, and normalize aliasing and __init__.py package boundaries for more accurate dependency graphs.
@@ -94,7 +98,7 @@ class DependencyGraphAgent(BaseAgent):
                     except ValueError:
                         continue
 
-        return {"modules_scanned": len(self.dependency_map)}"
+        return {"modules_scanned": len(self.dependency_map)}
     def _extract_imports(self, file_path: Path) -> list[str]:
         imports: set[str] = set()
         try:
@@ -127,7 +131,8 @@ class DependencyGraphAgent(BaseAgent):
         return dependents
 
     def generate_graph_stats(self) -> dict[str, Any]:
-""""Returns complexity metrics for the dependency graph.        total_links = sum(len(imps) for imps in" self.dependency_map.values())"        return {
+""""
+Returns complexity metrics for the dependency graph.        total_links = sum(len(imps) for imps in" self.dependency_map.values())"        return {
             "node_count": len(self.dependency_map),"            "edge_count": total_links,"            "density": total_links / (len(self.dependency_map) ** 2) if self.dependency_map else 0,"        }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
@@ -135,8 +140,8 @@ class DependencyGraphAgent(BaseAgent):
         impact = self.get_impact_scope(module)
 
         if not impact:
-#             return f"✅ No modules directly depend on {module} according to current scan."
-        return f"## Dependency Impact for: {module}\\n" + "\\n".join([f"- {m}" for m in impact])"
+#             return f" No modules directly depend on {module} according to current scan."
+        return f"## Dependency Impact for: {module}\\n" + "\\n".join([f"- {m}" for m in impact])
 
 if __name__ == "__main__":"    main = create_main_function(DependencyGraphAgent, "Dependency Agent", "Module to analyze")"    main()
 
@@ -169,7 +174,7 @@ class DependencyGraphAgent(BaseAgent):
                     except ValueError:
                         continue
 
-        return {"modules_scanned": len(self.dependency_map)}"
+        return {"modules_scanned": len(self.dependency_map)}
     def _extract_imports(self, file_path: Path) -> list[str]:
         imports: set[str] = set()
         try:
@@ -201,7 +206,8 @@ class DependencyGraphAgent(BaseAgent):
         return dependents
 
     def generate_graph_stats(self) -> dict[str, Any]:
-""""Returns complexity metrics for the dependency graph.        total_links = sum(len(imps) for imps in self.dependency_map.values())
+""""
+Returns complexity metrics for the dependency graph.        total_links = sum(len(imps) for imps in self.dependency_map.values())
         return {
             "node_count": len(self.dependency_map),"            "edge_count": total_links,"            "density": total_links / (len(self.dependency_map) ** 2) if self.dependency_map else 0,"        }
 
@@ -211,7 +217,7 @@ class DependencyGraphAgent(BaseAgent):
         impact = self.get_impact_scope(module)
 
         if not impact:
-#             return f"✅ No modules directly depend on {module} according to current scan."
-        return f"## Dependency Impact for: {module}\\n" + "\\n".join([f"- {m}" for m in impact])"
+#             return f" No modules directly depend on {module} according to current scan."
+        return f"## Dependency Impact for: {module}\\n" + "\\n".join([f"- {m}" for m in impact])
 
 if __name__ == "__main__":"    main = create_main_function(DependencyGraphAgent, "Dependency Agent", "Module to analyze")"    main()

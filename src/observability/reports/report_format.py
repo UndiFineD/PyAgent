@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +16,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Report Format - Enumerating supported report output formats
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -64,5 +69,7 @@ __version__ = VERSION
 
 
 class ReportFormat(Enum):
-    """Output format for reports.
-    MARKDOWN = "markdown""    JSON = "json""    HTML = "html""
+"""
+Output format for reports.
+    MARKDOWN = "markdown""    JSON = "json""    HTML = "html"
+"""

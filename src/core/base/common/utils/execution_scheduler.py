@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,8 +16,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict
@@ -21,21 +23,22 @@ from typing import Any, Dict
 
 @dataclass
 class _Schedule:
-    name: str
+"""
+name: str
     cron: str
     agent_config: Dict[str, Any] = field(default_factory=dict)
     enabled: bool = True
     last_run: float | None = None
     next_run: float | None = None
 
-
+"""
 class ExecutionScheduler:
-    """A small scheduler for testing purposes.
+"""
+A small scheduler for testing purposes.
 
     It supports simplified crons: 'hourly', 'daily', 'weekly', or 'HH:MM'.
-    """
-
-    def __init__(self) -> None:
+"""
+def __init__(self) -> None:
         self._schedules: dict[str, _Schedule] = {}
 
     def add_schedule(self, name: str, cron: str, agent_config: dict | None = None) -> None:

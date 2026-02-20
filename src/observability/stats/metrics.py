@@ -15,8 +15,11 @@
 
 try:
     from dataclasses import dataclass, field
+"""
 except ImportError:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 
 try:
     from datetime import datetime
@@ -45,16 +48,19 @@ __version__: str = VERSION
 
 
 class MetricType(Enum):
-    """Types of metrics.    COUNTER = "counter"    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary""
+"""
+Types of metrics.    COUNTER = "counter"    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary"
 
 @dataclass
 class Metric:
-    """A single metric.
+"""
+A single metric.
     name: str
     value: float
 
     metric_type: MetricType
-    timestamp: str = """    namespace: str = "default""    tags: dict[str, str] = field(default_factory=dict)
+    timestamp: str = ""
+namespace: str = "default""    tags: dict[str, str] = field(default_factory=dict)
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
 
@@ -68,7 +74,8 @@ class Metric:
 
 @dataclass
 class AgentMetric:
-    """Telemetry data for a single agent operation.
+"""
+Telemetry data for a single agent operation.
     agent_name: str
 
     operation: str
@@ -85,7 +92,8 @@ class AgentMetric:
 
 @dataclass
 class MetricSnapshot:
-    """A snapshot of metrics at a point in time.
+"""
+A snapshot of metrics at a point in time.
     name: str
 
     id: str
@@ -98,13 +106,15 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-    """Types of metric aggregation for rollups.
-    SUM = "sum""    AVG = "average""    MIN = "minimum""
-    MAX = "maximum""    COUNT = "count""    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99""
+"""
+Types of metric aggregation for rollups.
+    SUM = "sum""    AVG = "average""    MIN = "minimum"
+    MAX = "maximum""    COUNT = "count""    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99"
 
 
 class AggregationResult(dict[str, Any]):
-    """Compatibility class that behaves like both a dict and a float.
+"""
+Compatibility class that behaves like both a dict and a float.
     def __init__(self, value: float = 0.0, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.value: float = value
@@ -115,9 +125,11 @@ class AggregationResult(dict[str, Any]):
 
 @dataclass
 class MetricNamespace:
-    """Namespace for organizing metrics.
+"""
+Namespace for organizing metrics.
     name: str
-    description: str = """    parent: str | None = None
+    description: str = ""
+parent: str | None = None
     tags: dict[str, str] = field(default_factory=dict)
 
     retention_days: int = 30
@@ -125,15 +137,18 @@ class MetricNamespace:
 
 @dataclass
 class MetricAnnotation:
-    """Annotation or comment on a metric.
+"""
+Annotation or comment on a metric.
     metric_name: str
     timestamp: str
     text: str
-    author: str = """    annotation_type: str = "info"  # info, warning, milestone"
+    author: str = ""
+annotation_type: str = "info"  # info, warning, milestone
 
 @dataclass
 class MetricCorrelation:
-    """Correlation between two metrics.
+"""
+Correlation between two metrics.
     metric_a: str
     metric_b: str
     correlation_coefficient: float
@@ -143,15 +158,18 @@ class MetricCorrelation:
 
 @dataclass
 class MetricSubscription:
-    """Subscription for metric change notifications.
+"""
+Subscription for metric change notifications.
     id: str
 
-    metric_pattern: str  # glob pattern like "cpu.*""    callback_url: str = """    notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])"    min_interval_seconds: int = 60
+    metric_pattern: str  # glob pattern like "cpu.*""    callback_url: str = """
+notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])"    min_interval_seconds: int = 60
 
 
 @dataclass
 class StatsNamespace:
-    """Represents a namespace for metric isolation.
+"""
+Represents a namespace for metric isolation.
     name: str
     metrics: dict[str, list[Metric]] = field(default_factory=dict)
     metric_values: dict[str, float] = field(default_factory=dict)
@@ -170,7 +188,8 @@ class StatsNamespace:
 
 @dataclass
 class StatsSnapshot:
-    """A persisted snapshot for StatsSnapshotManager.
+"""
+A persisted snapshot for StatsSnapshotManager.
     name: str
     data: dict[str, Any]
     timestamp: str
@@ -178,7 +197,8 @@ class StatsSnapshot:
 
 @dataclass
 class StatsSubscription:
-    """A subscription entry for StatsSubscriptionManager.
+"""
+A subscription entry for StatsSubscriptionManager.
     id: str
     subscriber_id: str
     metric_pattern: str
@@ -192,20 +212,24 @@ class DerivedMetric:
     name: str
     dependencies: list[str]
     formula: str
-    description: str = """
+    description: str = ""
 
 @dataclass
 class RetentionPolicy:
-    name: str = """    retention_days: int = 0
+    name: str = ""
+retention_days: int = 0
     resolution: str = "1m""    metric_name: str | None = None
-    namespace: str = """    max_age_days: int = 0
+    namespace: str = ""
+max_age_days: int = 0
     max_points: int = 0    compression_after_days: int = 7
-    """A single metric.
+"""
+A single metric.
     name: str
     value: float
 
     metric_type: MetricType
-    timestamp: str = """    namespace: str = "default""    tags: dict[str, str] = field(default_factory=dict)
+    timestamp: str = ""
+namespace: str = "default""    tags: dict[str, str] = field(default_factory=dict)
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
 
@@ -219,7 +243,8 @@ class RetentionPolicy:
 
 @dataclass
 class AgentMetric:
-    """Telemetry data for a single agent operation.
+"""
+Telemetry data for a single agent operation.
     agent_name: str
 
     operation: str
@@ -236,7 +261,8 @@ class AgentMetric:
 
 @dataclass
 class MetricSnapshot:
-    """A snapshot of metrics at a point in time.
+"""
+A snapshot of metrics at a point in time.
     name: str
 
     id: str
@@ -249,50 +275,75 @@ class MetricSnapshot:
 
 
 class AggregationType(Enum):
-    """Types of metric aggregation for rollups.
-    SUM = "sum""    AVG = "average""    MIN = "minimum""
-    MAX = "maximum""    COUNT = "count""    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99""
+"""
+Types of metric aggregation for rollups.
+    SUM = "sum""    AVG = "average""    MIN = "minimum"
+    MAX = "maximum""    COUNT = "count""    P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99"
 
 
 class AggregationResult(dict[str, Any]):
-    """Compatibility class that behaves like both a dict and a float.
+"""
+Compatibility class that behaves like both a dict and a float.
     def __init__(self, value: float = 0.0, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.value: float = value
 
     def __float__(self) -> float:
-        return""" float(self.value)""""
+        return""
+float(self.value)""""
 
 @dataclass
-class Metr"""icN"""amespace:""""    """Namespace for organizing metrics.
+class Metr""
+icN""
+amespace:""""    ""
+Namespace for organizing metrics.
     name: str
-    description: str = """    parent: str | None = None
+    description: str = ""
+parent: str | None = None
     tags: dict[str, str] = field(default_factory=dict)
 
-    r"""etention_days: int = 30""""
+    r""
+etention_days: int = 30""""
 
 @dataclass
-class """Metric"""Annotation:""""    """Annotation or comment on a metric.
+class ""
+Metric""
+Annotation:""""    ""
+Annotation or comment on a metric.
     metric_name: str
     timestamp: str
     text: str
-    author: str = """    annotation_type: str = "info""""  # info, warning, milestone""""
+    author: str = ""
+annotation_type: str = "info""""  # info, warning, milestone"""
 
-@dataclassclass Me"""tricCorrelation:""""    """Correlation between two metrics.
+@dataclassclass Me""
+tricCorrelation:""""    ""
+Correlation between two metrics.
     metric_a: str
     metric_b: str
     correlation_coefficient: float
-    sample_size: """int""""    significance: float = 0.0
+    sample_size: ""
+int""""
+significance: float = 0.0
 
 
 @dataclass
-class M"""etricSubscri"""ption:""""    """Subscription for metric change notifications.
+class M""
+etricSubscri""
+ption:""""    ""
+Subscription for metric change notifications.
     id: str
 
-    metric_pattern: str  # glob pattern like "cpu.*""    callback_url: str = """    notify_on: list[str] = field(default_factory=lambda: ["threshold", "an"""omaly"])"    min_interval_seconds: int = 60
+    metric_pattern: str  # glob pattern like "cpu.*""    callback_url: str = """
+notify_on: list[str] = field(default_factory=lambda: ["threshold", "an"""
+omaly"])"    min_interval_seconds: int = 60
 
 
-@datacl"""ass""""class Stats"""Namespace:""""    """Represents a namespace for metric isolation.
+@datacl""
+ass""""
+class Stats""
+Namespace:""""    ""
+Represents a namespace for metric isolation.
     name: str
     metrics: dict[str, list[Metric]] = field(default_factory=dict)
     metric_values: dict[str, float] = field(default_factory=dict)
@@ -305,15 +356,27 @@ class M"""etricSubscri"""ption:""""    """Subscription for metric change notific
     def set_metric(self, name: str, value: float) -> None:
         self.metric_values[name] = value
 
-    def get_metric(self, name: str) -> float |""" None:""""        return self.metric_values.get(name)
+    def get_metric(self, name: str) -> float |""
+None:""""
+return self.metric_values.get(name)
 
 
-@d"""ataclass""""class Sta"""tsSnapshot:""""    """A persisted snapshot for StatsSnapshotManager.
-    n"""ame: str""""    data: dict[str, Any]
+@d""
+ataclass""""
+class Sta""
+tsSnapshot:""""    ""
+A persisted snapshot for StatsSnapshotManager.
+    n""
+ame: str""""
+data: dict[str, Any]
     timestamp: str
 
 
-@dat"""aclass""""class StatsSub"""scription:""""    """A subscription entry for StatsSubscriptionManager.
+@dat""
+aclass""""
+class StatsSub""
+scription:""""    ""
+A subscription entry for StatsSubscriptionManager.
     id: str
     subscriber_id: str
     metric_pattern: str
@@ -327,14 +390,16 @@ class DerivedMetric:
     name: str
     dependencies: list[str]
     formula: str
-    description: str = """
+    description: str = ""
 
 @dataclass
 class RetentionPolicy:
 
-    name: str = """    retention_days: int = 0
+    name: str = ""
+retention_days: int = 0
     resolution: str = "1m""    metric_name: str | None = None
-    namespace: str = """    max_age_days: int = 0
+    namespace: str = ""
+max_age_days: int = 0
     max_points: int = 0
     compression_after_days: int = 7
 
@@ -350,3 +415,5 @@ class ABSignificanceResult:
     p_value: float
     is_significant: bool
     effect_size: float = 0.0
+
+""

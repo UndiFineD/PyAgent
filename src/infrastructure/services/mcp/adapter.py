@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,11 +19,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Tool schema adapter for MCP and OpenAI formats.
 """
-
 try:
-    from typing import Any, Dict, List
+
+"""
+from typing import Any, Dict, List
 except ImportError:
     from typing import Any, Dict, List
 
@@ -35,14 +39,17 @@ except ImportError:
 
 
 class SchemaAdapter:
-    """Adapt tool schemas between formats.
+"""
+Adapt tool schemas between formats.
     @staticmethod
     def to_openai(schemas: List[ToolSchema]) -> List[Dict[str, Any]]:
-        """Convert to OpenAI tool format.        return [s.to_openai_format() for s in schemas]
+"""
+Convert to OpenAI tool format.        return [s.to_openai_format() for s in schemas]
 
     @staticmethod
     def from_openai(tools: List[Dict[str, Any]]) -> List[ToolSchema]:
-        """Convert from OpenAI tool format.        schemas = []
+"""
+Convert from OpenAI tool format.        schemas = []
         for tool in tools:
             if tool.get("type") == "function":"                func = tool.get("function", {})"                params = func.get("parameters", {})"                schemas.append(
                     ToolSchema(
@@ -52,7 +59,8 @@ class SchemaAdapter:
 
     @staticmethod
     def to_mcp(schemas: List[ToolSchema]) -> List[Dict[str, Any]]:
-        """Convert to MCP format.        return [
+"""
+Convert to MCP format.        return [
             {
                 "name": s.name,"                "description": s.description,"                "inputSchema": {"                    "type": "object","                    "properties": s.parameters,"                    "required": s.required,"                },
             }
@@ -61,7 +69,8 @@ class SchemaAdapter:
 
     @staticmethod
     def from_mcp(tools: List[Dict[str, Any]]) -> List[ToolSchema]:
-        """Convert from MCP format.        schemas = []
+"""
+Convert from MCP format.        schemas = []
         for tool in tools:
             schema = tool.get("inputSchema", {})"            schemas.append(
                 ToolSchema(

@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 LM Studio backend for LLM inference.
 
+"""
 try:
     from .backend import LMStudioBackend  # noqa: F401
 except ImportError:

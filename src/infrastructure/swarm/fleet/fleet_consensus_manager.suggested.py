@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,11 @@ from __future__ import annotations
 
 """
 FleetConsensusManager
+"""
 Consensus management for the FleetManager.
 """
 
+"""
 import asyncio
 import logging
 import time
@@ -30,7 +33,8 @@ if TYPE_CHECKING:
 
 
 class FleetConsensusManager:
-    """Manages multi-agent consensus workflows.
+"""
+Manages multi-agent consensus workflows.
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
@@ -43,10 +47,10 @@ class FleetConsensusManager:
                 [Pillar 1: Swarm Consensus]
         Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
         Fully asynchronous implementation for v4.0.0.
-                logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")"
+                logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")
         # 1. Committee Formation
         judge = self.fleet.agents.get("ByzantineConsensusAgent") or self.fleet.agents.get("byzantine_judge")"        if not judge:
-            return {"decision": "REJECTED", "reason": "ByzantineConsensusAgent not found."}"
+            return {"decision": "REJECTED", "reason": "ByzantineConsensusAgent not found."}
         if not primary_agent or not secondary_agents:
             available = [a for a in self.fleet.agents.keys() if a not in ["ByzantineConsensusAgent", "FleetManager"]]"            committee = judge.select_committee(task, available)
             if not committee:
@@ -77,9 +81,9 @@ class FleetConsensusManager:
                     content = str(res)
                 proposals[agent_name] = content
             except (asyncio.TimeoutError, asyncio.CancelledError, RuntimeError) as e:
-                logging.error(f"Fleet Consensus: Agent {agent_name} proposal error: {e}")"
+                logging.error(f"Fleet Consensus: Agent {agent_name} proposal error: {e}")
         if not proposals:
-            return {"decision": "REJECTED", "reason": "No valid proposals gathered."}"
+            return {"decision": "REJECTED", "reason": "No valid proposals gathered."}
         # 3. [Phase 3.0] Multi-surgeon BFT Audit
         # Selection of 'surgeons' (agents with security/audit skills)'        surgeons = [a for a in all_agents if a and ("security" in a.lower() or "audit" in a.lower())]"        if not surgeons and judge:
             # Fallback to general practitioners if no specialists available
@@ -101,7 +105,7 @@ class FleetConsensusManager:
                     )
                 )
             except Exception:  # pylint: disable=broad-exception-caught
-                logging.warning("FleetConsensus: Failed to trigger federated broadcast")"
+                logging.warning("FleetConsensus: Failed to trigger federated broadcast")
         return result
 
 

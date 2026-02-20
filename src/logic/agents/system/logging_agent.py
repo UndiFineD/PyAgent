@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +21,10 @@ from __future__ import annotations
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 Instantiate the agent with a path to its configuration/state file, call configure_aggregator to set an HTTP or SysLog destination, then use broadcast_log to forward entries and get_buffer_summary/get_aggregated_logs to inspect local buffer.
 
+"""
 WHAT IT DOES:
 Manages distributed logging for a fleet by buffering log entries locally, forwarding to a configured SysLog server and (TODO Placeholder) HTTP aggregator, and exposing simple tools for configuration and buffer inspection.
 
@@ -33,7 +37,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in distributed logging and log aggregation.
 Supports forwarding logs to central aggregators via syslog or HTTP.
 """
-
 import asyncio
 import logging
 import logging.handlers
@@ -49,7 +52,8 @@ __version__ = VERSION
 
 
 class LoggingAgent(BaseAgent):
-""""Manages distributed fleet logs and integrates with external aggregators.
+""""
+Manages distributed fleet logs and integrates with external aggregators.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -129,7 +133,7 @@ class LoggingAgent(BaseAgent):
 
     @as_tool
     def get_aggregated_logs(self) -> list[dict[str, Any]]:
-        "Returns the internal "buffer logs. (Sync for"
+        "Returns the internal "buffer logs. (Sync for
 
 import asyncio
 import logging
@@ -146,7 +150,8 @@ __version__ = VERSION
 
 
 class LoggingAgent(BaseAgent):
-""""Manages distributed fleet logs and integrates "with external aggregators.
+""""
+Manages distributed fleet logs and integrates "with external aggregators.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -223,4 +228,11 @@ class LoggingAgent(BaseAgent):
 
     @as_tool
     def get_aggregated_logs(self) -> list[dict[str, Any]]:
-""""Returns the internal buffer logs. (Sync for test" access)        return self._internal_buffer
+""""
+Returns the internal buffer logs. (Sync for test" access)        return self._internal_buffer
+
+"""
+
+""
+
+"""

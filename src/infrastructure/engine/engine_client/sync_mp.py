@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,12 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Phase 45: Synchronous Multi-process Engine Client
 ZMQ-based synchronous client.
 """
 
+"""
 import logging
 from typing import TYPE_CHECKING, Optional
 
@@ -45,7 +49,8 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"     
         self._pending: dict[str, EngineOutput] = {}
 
     def _init_zmq(self) -> None:
-        """Initialize ZMQ socket.        try:
+"""
+Initialize ZMQ socket.        try:
             import zmq
 
             self._context = zmq.Context()
@@ -54,9 +59,10 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"     
             self._socket.setsockopt(zmq.SNDTIMEO, self.config.request_timeout_ms)
             self._socket.connect(self.config.zmq_endpoint)
         except ImportError:
-            logger.warning("ZMQ not available, using mock mode")"
+            logger.warning("ZMQ not available, using mock mode")
     def send_request(self, request: SchedulerOutput) -> str:
-        """Send request via ZMQ.        request_id = self._generate_request_id()
+"""
+Send request via ZMQ.        request_id = self._generate_request_id()
 
         if self._socket is None:
             # Mock mode
@@ -84,19 +90,24 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"     
         return request_id
 
     def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        """Get output synchronously.        return self._pending.pop(request_id, None)
+"""
+Get output synchronously.        return self._pending.pop(request_id, None)
 
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        """Get output (sync wrapper for async interface).        return self.get_output(request_id, timeout_ms)
+"""
+Get output (sync wrapper for async interface).        return self.get_output(request_id, timeout_ms)
 
     def start(self) -> None:
-        """Start client.        self._init_zmq()
+"""
+Start client.        self._init_zmq()
         self._running = True
-        logger.info("SyncMPClient started")"
+        logger.info("SyncMPClient started")
     def shutdown(self) -> None:
-        """Shutdown client.        self._running = False
+"""
+Shutdown client.        self._running = False
         if self._socket:
             self._socket.close()
         if self._context:
             self._context.term()
-        logger.info("SyncMPClient shutdown")"
+        logger.info("SyncMPClient shutdown")
+"""

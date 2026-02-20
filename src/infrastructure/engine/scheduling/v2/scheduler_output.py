@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Asynchronous Scheduler Output models for Phase 54.
 Handles complete output structures, speculative tokens, and structured metadata.
 
+"""
 try:
     import time
 except ImportError:
@@ -35,7 +37,8 @@ except ImportError:
 
 @dataclass
 class ScheduledSequence:
-    """Represents a sequence scheduled for execution.
+"""
+Represents a sequence scheduled for execution.
     seq_id: int
     prompt_len: int
     output_len: int
@@ -64,10 +67,13 @@ class SchedulerOutput:
     TODO Placeholder_ids: Set[int] = field(default_factory=set)
 
     def add_sequence(self, seq: ScheduledSequence) -> None:
-        """Adds a sequence to the current batch.        self.scheduled_seqs.append(seq)
+"""
+Adds a sequence to the current batch.        self.scheduled_seqs.append(seq)
 
     def is_empty(self) -> bool:
-        """Returns True if no sequences are scheduled.        return not self.scheduled_seqs
+"""
+Returns True if no sequences are scheduled.        return not self.scheduled_seqs
 
     def get_seq_ids(self) -> List[int]:
-        """Returns list of all scheduled sequence IDs.        return [s.seq_id for s in self.scheduled_seqs]
+"""
+Returns list of all scheduled sequence IDs.        return [s.seq_id for s in self.scheduled_seqs]

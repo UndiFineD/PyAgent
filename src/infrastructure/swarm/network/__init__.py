@@ -15,12 +15,13 @@
 
 
 """
+"""
 Network Utilities Package - Phase 20
 ====================================
 
+"""
 Network operation utilities including IP detection and port management.
 """
-
 try:
     from .lan_discovery import LANDiscovery, PeerInfo  # noqa: F401
 except ImportError:

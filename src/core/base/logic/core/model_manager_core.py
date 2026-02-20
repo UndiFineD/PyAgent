@@ -14,32 +14,38 @@
 
 try:
     from typing import Dict, Any
+"""
 except ImportError:
-    from typing import Dict, Any
+
+"""
+from typing import Dict, Any
 
 
 
 
 class ModelManagerCore:
-    """Manages the lifecycle of local/remote models (minimal test stub)."""
-
-    def __init__(self, provider: str = "ollama") -> None:
+"""
+Manages the lifecycle of local/remote models (minimal test stub).""
+def __init__(self, provider: str = "ollama") -> None:
         self.provider = provider
         self.model_stats: Dict[str, Any] = {}
 
     async def check_health(self, model_name: str) -> bool:
-        """Verifies if a model is loaded and responsive (stub)."""
+"""
+Verifies if a model is loaded and responsive (stub).""
         # In tests, assume healthy
         return True
 
     async def optimize_context(self, model_name: str, task_complexity: float) -> int:
-        """Return a recommended context length based on task complexity."""
-        if task_complexity > 0.8:
+"""
+Return a recommended context length based on task complexity.""
+if task_complexity > 0.8:
             return 128000
         if task_complexity > 0.5:
             return 32000
         return 4000
 
     async def pull_if_missing(self, model_name: str) -> None:
-        """Stub for downloading/pulling a model if missing."""
-        return None
+"""
+Stub for downloading/pulling a model if missing.""
+return None

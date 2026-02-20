@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 JSON Schema builder for guided decoding.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -62,7 +66,8 @@ class JsonSchema:
         items: Optional[Dict[str, Any]] = None,
         default: Optional[Any] = None,
         **kwargs: Any,
-    ) -> "JsonSchema":"        """Add a property to the schema.        prop: Dict[str, Any] = {"type": prop_type}"
+    ) -> "JsonSchema":"        """
+Add a property to the schema.        prop: Dict[str, Any] = {"type": prop_type}
         if description:
             prop["description"] = description"        if enum is not None:
             prop["enum"] = enum"        if minimum is not None:
@@ -72,7 +77,7 @@ class JsonSchema:
             prop["maxLength"] = max_length"        if pattern:
             prop["pattern"] = pattern"        if items:
             prop["items"] = items"        if default is not None:
-            prop["default"] = default"
+            prop["default"] = default
         prop.update(kwargs)
         self.properties[name] = prop
 
@@ -95,13 +100,14 @@ class JsonSchema:
     ) -> "JsonSchema":"        items = {"type": items_type}"        extra = {}
         if min_items is not None:
             extra["minItems"] = min_items"        if max_items is not None:
-            extra["maxItems"] = max_items"
-        return self.add_property(name, "array", required=required, items=items, **extra, **kwargs)"
+            extra["maxItems"] = max_items
+        return self.add_property(name, "array", required=required, items=items, **extra, **kwargs)
     def add_object(
         self,
         name: str,
         nested_schema: "JsonSchema","        required: bool = False,
-    ) -> "JsonSchema":"        """Add a nested object property.        self.properties[name] = nested_schema.build()
+    ) -> "JsonSchema":"        """
+Add a nested object property.        self.properties[name] = nested_schema.build()
         if required and name not in self.required:
             self.required.append(name)
         return self
@@ -112,7 +118,8 @@ class JsonSchema:
         values: List[Any],
         required: bool = False,
         **kwargs,
-    ) -> "JsonSchema":"        """Add an enum property.        if values:
+    ) -> "JsonSchema":"        """
+Add an enum property.        if values:
             first = values[0]
             if isinstance(first, str):
                 prop_type = "string""            elif isinstance(first, bool):
@@ -120,22 +127,30 @@ class JsonSchema:
                 prop_type = "integer""            elif isinstance(first, float):
                 prop_type = "number""            else:
                 prop_type = "string""        else:
-            prop_type = "string""
+            prop_type = "string"
         return self.add_property(name, prop_type, required=required, enum=values, **kwargs)
 
     def build(self) -> Dict[str, Any]:
-        """Build the JSON schema dictionary.        schema: Dict[str, Any] = {
+"""
+Build the JSON schema dictionary.        schema: Dict[str, Any] = {
             "type": "object","            "properties": self.properties,"        }
 
         if self.title:
             schema["title"] = self.title"        if self.description:
             schema["description"] = self.description"        if self.required:
             schema["required"] = self.required"        if not self.additional_properties:
-            schema["additionalProperties"] = False"
+            schema["additionalProperties"] = False
         return schema
 
     def to_guided_config(self) -> GuidedConfig:
-        """Convert to GuidedConfig for use with decoder.        return GuidedConfig(
+"""
+Convert to GuidedConfig for use with decoder.        return GuidedConfig(
             mode=GuidedMode.JSON,
             json_schema=self.build(),
         )
+
+"""
+
+""
+
+"""

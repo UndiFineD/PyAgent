@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Legal Audit Agent - License compliance scanning and remediation
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -38,7 +42,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Legal audit agent.py module.
 """
-
 import asyncio
 import os
 import re
@@ -57,7 +60,8 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "Apache License, Version 2.0","            "MIT License","            "Apache-2.0","            "MIT","        ]
         self.header_pattern = re.compile(rLicensed under the Apache License, Version 2.0")"
     def scan_licensing(self, content: str) -> dict[str, Any]:
-""""Identifies licenses and flags copyleft risks (Phase 59).        license_patterns = {
+""""
+Identifies licenses and flags copyleft risks (Phase 59).        license_patterns = {
             "GPL": rGPL|General Public License","            "AGPL": rAGPL|Affero General Public License","            "MIT": rMIT License","            "Apache": rApache License 2\\.0","        }
         detected = []
         for name, pattern in license_patterns.items():
@@ -69,7 +73,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def run_audit(self, directory: str) -> dict[str, Any]:
-#         "Scans a directory for license compliance (Phase 59)."        results: dict[str, list[Any]] = {"compliant": [], "non_compliant": []}"
+#         "Scans a directory for license compliance (Phase 59)."        results: dict[str, list[Any]] = {"compliant": [], "non_compliant": []}
         def walk_and_check():
             for root, _, files in os.walk(directory):
                 if any(x in root for x in [".git", "__pycache__", "node_modules"]):"                    continue
@@ -92,7 +96,8 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return await asyncio.to_thread(walk_and_check)
 
     def verify_smart_contract(self, contract_code: str) -> dict[str, Any]:
-""""Verifies a smart contract for legal commonalities and risks (Phase 59).       " _ = contract_code"        return {"risk_level": "low", "findings": ["Standard ERC20 implementation detected."], "compliant": True}"
+""""
+Verifies a smart contract for legal commonalities and risks (Phase 59).       " _ = contract_code"        return {"risk_level": "low", "findings": ["Standard ERC20 implementation detected."], "compliant": True}
     async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
 #         "Provides improvements for files missing license headers."        target = context.get("target_dir", ".")"        audit = await self.run_audit(target)
 
@@ -124,7 +129,8 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "Apache License, Version 2.0","            "MIT License","            "Apache-2.0","            "MIT","        ]
         self.header_pattern = re.compile(rLicensed under the Apache License, Version 2.0")"
     def scan_licensing(self, content: str) -> dict[str, Any]:
-""""Identifies licenses and flags copyleft risks (Phase "59).        license_patterns = {
+""""
+Identifies licenses and flags copyleft risks (Phase "59).        license_patterns = {
             "GPL": rGPL|General Public License","            "AGPL": rAGPL|Affero General Public License","            "MIT": rMIT License","            "Apache": rApache License 2\\.0","        }
         detected = []
         for name, pattern in license_patterns.items():
@@ -136,7 +142,7 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     async def run_audit(self, directory: str) -> dict[str, Any]:
-#         "Scans a directory for license compliance (Phase 59)."        results: dict[str, list[Any]"] =" {"compliant": [], "non_compliant": []}"
+#         "Scans a directory for license compliance (Phase 59)."        results: dict[str, list[Any]"] =" {"compliant": [], "non_compliant": []}
         def walk_and_check():
             for root, _, files in os.walk(directory):
                 if any(x in root for x in [".git", "__pycache__", "node_modules"]):"                    continue
@@ -159,8 +165,9 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return await asyncio.to_thread(walk_and_check)
 
     def verify_smart_contract(self, contract_code: str) -> dict[str, Any]:
-""""Verifies a smart contract for legal commonalities and risks (Phase 59).        _ = contract_code
-        return {"risk_level": "low", "findings": ["Standard ERC20 implementation detected."], "compliant": True}"
+""""
+Verifies a smart contract for legal commonalities and risks (Phase 59).        _ = contract_code
+        return {"risk_level": "low", "findings": ["Standard ERC20 implementation detected."], "compliant": True}
     async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
 #         "Provides improvements for files missing license headers."  "      target = context.get("target_dir", ".")"        audit = await self.run_audit(target)
 
@@ -174,6 +181,6 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Improve legal compliance of a file or directory."  "   "   path = target_file if target_file else prompt"        if os.path.isfile(path):
             with open(path, "r", encoding="utf-8") as f:"                res = self.scan_licensing(f.read())
-#             return fLegal Audit for {path}: {res['summary']} (Risk: {res['risk_level']})'
+#             return fLegal Audit for {path}: {res['summary']} (Risk: {res['risk_level']})
         audit = await self.run_audit(path)
-#         return fAudit for {path}: {len(audit['compliant'])} Compliant, {len(audit['non_compliant'])} Issues.'
+#         return fAudit for {path}: {len(audit['compliant'])} Compliant, {len(audit['non_compliant'])} Issues.

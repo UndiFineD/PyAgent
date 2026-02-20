@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "MIRIX memory logic for GraphMemoryAgent."Implements the 6-component MIRIX memory architecture for graph-based agents,
+"""
 including storage, retrieval, and temporal decay mechanisms.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -49,7 +53,8 @@ __version__ = VERSION
 
 
 class GraphMIRIXMixin:
-""""Mixin for MIRIX 6-component memory logic.
+""""
+Mixin for MIRIX 6-component memory logic.
     @as_tool
     def store_mirix_memory(self, category: str, name: str, data: Any) -> str:
         "Stores a memory into one of the 6 MIRIX components."
@@ -59,9 +64,9 @@ class GraphMIRIXMixin:
 
         Returns:
             Success or error message.
-        if not hasattr(self, "memory_store"):"#             return "Error: Memory store not initialized."
+        if not hasattr(self, "memory_store"):"#             return "Error: Memory store not initialized.
         if category not in self.memory_store:
-#             return fError: Category '{category}' is not a valid MIRIX component.'
+#             return fError: Category '{category}' is not a valid MIRIX component.
         entry = {
             "name": name,"            "data": data,"            "timestamp": time.time(),"            "access_count": 0,"        }
 
@@ -105,7 +110,8 @@ class GraphMIRIXMixin:
 
     @as_tool
     def record_outcome(self, entity_id: str, success: bool) -> str:
-""""Adjusts the reliability score of a memory based on user feedback (Roampal pattern).        if not hasattr(self, "outcomes") or not hasattr(self, "entities"):"#             return "Error: Memory system not fully initialized."
+""""
+Adjusts the reliability score of a memory based on user feedback (Roampal pattern).        if not hasattr(self, "outcomes") or not hasattr(self, "entities"):"#             return "Error: Memory system not fully initialized.
         current = self.outcomes.get(entity_id, 1.0)
         delta = 0.2 if success else -0.3
         self.outcomes[entity_id] = round(max(0.0, min(2.0, current + delta)), 2)
@@ -126,3 +132,5 @@ class GraphMIRIXMixin:
 #             return fMemory {entity_id} deleted due to consistently poor outcomes.
 
 #         return fMemory {entity_id} score updated to {self.outcomes[entity_id]} ({status}).
+
+"""

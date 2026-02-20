@@ -22,8 +22,10 @@ from pathlib import Path
 from unittest.mock import AsyncMock, MagicMock, patch
 
 # Force add project root to sys.path
+"""
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 
+"""
 _repo_root = os.path.abspath(os.path.join(_script_dir, "..", ".."))
 if _repo_root not in sys.path:
     sys.path.insert(0, _repo_root)
@@ -34,17 +36,15 @@ from src.core.agents.change_monitoring_agent import (  # noqa: E402
     HistoryManager
 )
 
-"""Tests for ChangeMonitoringAgent."""
-
-
-
+"""
+Tests for ChangeMonitoringAgent.""
 class TestHistoryManager(unittest.TestCase):
-    """Test cases for HistoryManager."""
-
-
-    def test_add_and_get_previous_value(self):
-        """Test adding changes and retrieving previous values."""
-        manager = HistoryManager()
+"""
+Test cases for HistoryManager.""
+def test_add_and_get_previous_value(self):
+"""
+Test adding changes and retrieving previous values.""
+manager = HistoryManager()
         # Add some changes
         manager.add_change({
             'object': 'obj1', 'attribute_name': 'attr1', 'attribute_value': 'value1'
@@ -58,8 +58,9 @@ class TestHistoryManager(unittest.TestCase):
 
 
     def test_save_and_load_history(self):
-        """Test saving and loading history to/from file."""
-        manager = HistoryManager()
+"""
+Test saving and loading history to/from file.""
+manager = HistoryManager()
         manager.add_change({
             'object': 'test_obj',
             'attribute_name': 'test_attr',
@@ -81,23 +82,25 @@ class TestHistoryManager(unittest.TestCase):
 
 
 class TestFileSystemDataSource(unittest.TestCase):
-    """Test cases for FileSystemDataSource."""
-
-
-    def setUp(self):
-        """Set up test fixtures."""
-        self.temp_dir = tempfile.mkdtemp()
+"""
+Test cases for FileSystemDataSource.""
+def setUp(self):
+"""
+Set up test fixtures.""
+self.temp_dir = tempfile.mkdtemp()
 
 
     def tearDown(self):
-        """Clean up test fixtures."""
-        import shutil
+"""
+Clean up test fixtures.""
+import shutil
         shutil.rmtree(self.temp_dir)
 
 
     def test_get_current_usn(self):
-        """Test getting current USN (mtime)."""
-        loop = asyncio.new_event_loop()
+"""
+Test getting current USN (mtime).""
+loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
 
         data_source = FileSystemDataSource(self.temp_dir)
@@ -108,8 +111,9 @@ class TestFileSystemDataSource(unittest.TestCase):
 
 
     def test_get_changes_since(self):
-        """Test getting changes since a USN."""
-        loop = asyncio.new_event_loop()
+"""
+Test getting changes since a USN.""
+loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
 
         data_source = FileSystemDataSource(self.temp_dir)
@@ -129,38 +133,43 @@ class TestFileSystemDataSource(unittest.TestCase):
 
 
 class TestChangeMonitoringAgent(unittest.TestCase):
-    """Test cases for ChangeMonitoringAgent."""
-
-    def setUp(self):
-        """Set up test fixtures."""
-        self.automem_patcher = patch('src.core.base.lifecycle.base_agent.AutoMemCore')
+"""
+Test cases for ChangeMonitoringAgent.""
+def setUp(self):
+"""
+Set up test fixtures.""
+self.automem_patcher = patch('src.core.base.lifecycle.base_agent.AutoMemCore')
         self.mock_automem = self.automem_patcher.start()
         self.agent = ChangeMonitoringAgent(__file__)
 
 
     def tearDown(self):
-        """Clean up test fixtures."""
-        if hasattr(self, 'automem_patcher'):
+"""
+Clean up test fixtures.""
+if hasattr(self, 'automem_patcher'):
             self.automem_patcher.stop()
 
 
     def test_add_data_source(self):
-        """Test adding a data source."""
-        data_source = FileSystemDataSource('/tmp')
+"""
+Test adding a data source.""
+data_source = FileSystemDataSource('/tmp')
         self.agent.add_data_source('test_ds', data_source)
         self.assertIn('test_ds', self.agent.data_sources)
         self.assertIn('test_ds', self.agent.history_managers)
 
 
     def test_get_change_summary_empty(self):
-        """Test getting change summary for empty history."""
-        summary = asyncio.run(self.agent.get_change_summary('nonexistent'))
+"""
+Test getting change summary for empty history.""
+summary = asyncio.run(self.agent.get_change_summary('nonexistent'))
         self.assertEqual(summary, {})
 
 
     @patch('src.core.agents.change_monitoring_agent.FileSystemDataSource')
     def test_get_initial_dump(self, mock_ds_class):
-        """Test getting initial dump."""
+"""
+Test getting initial dump.""
         # Mock data source
         mock_ds = MagicMock()
         mock_ds.get_initial_dump = AsyncMock(return_value=[
@@ -175,8 +184,9 @@ class TestChangeMonitoringAgent(unittest.TestCase):
 
 
     def test_format_output_integration(self):
-        """Test that agent can format output using mixin."""
-        changes = [
+"""
+Test that agent can format output using mixin.""
+changes = [
             {
                 'object': 'CN=TestUser',
                 'attribute_name': 'userAccountControl',

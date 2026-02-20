@@ -14,7 +14,10 @@
 
 
 """
+"""
 DataScienceAgent - Advanced statistical analysis and data science workflows
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -46,7 +49,8 @@ except ImportError:
 
 
 class DataScienceAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in advanced statistical analysis and data science workflows.
+""""
+Agent specialized in advanced statistical analysis and data science workflows.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the DataScienceAgent (via DataIntelligence core)."
@@ -59,7 +63,9 @@ except ImportError:
 
 
 class DataScienceAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-""""Agent specialized in advanced statistical analysis and data science workflows.
+""""
+Agent specialized in advanced statistical analysis and data science workflows.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 #         self._system_prompt = "You are the DataScienceAgent (via DataIntelligence core)."
+"""

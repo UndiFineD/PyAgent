@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 trend_direction.py - TrendDirection Enum
+
+"""
 
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -34,7 +38,6 @@ WHAT IT SHOULD DO BETTER:
 - Add explicit __all__ export, unit tests covering string round-trips and parsing, and richer member docstrings or comments explaining when to use VOLATILE vs STABLE.
 - Consider making it pluggable/configurable (thresholds for STABLE vs VOLATILE) rather than fixed labels, and include typing stubs or pydantic models when used in public APIs.
 """
-
 try:
     from enum import Enum
 except ImportError:
@@ -50,10 +53,10 @@ except ImportError:
 __version__ = VERSION
 
 class TrendDirection(Enum):
-    """
-    Trend direction indicators.
-    """
-    INCREASING = "increasing"
+"""
+Trend direction indicators.
+"""
+INCREASING = "increasing"
     DECREASING = "decreasing"
     STABLE = "stable"
     VOLATILE = "volatile"

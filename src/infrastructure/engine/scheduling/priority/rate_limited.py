@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Rate limited.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
@@ -60,7 +63,7 @@ except ImportError:
     from .models import TaskStats
 
 
-R = TypeVar("R")"
+R = TypeVar("R")
 
 
 class RateLimitedScheduler:
@@ -93,8 +96,9 @@ class RateLimitedScheduler:
         func: Callable[[], R],
         priority: TaskPriority = TaskPriority.NORMAL,
     ) -> Future[R]:
-        """Submit a rate-limited task.        rate: float = self._rates.get(priority, 10.0)
-        min_interval: float = 1.0 / rate if rate < float("inf") else 0.0"
+"""
+Submit a rate-limited task.        rate: float = self._rates.get(priority, 10.0)
+        min_interval: float = 1.0 / rate if rate < float("inf") else 0.0
         with self._lock:
             now: float = time.monotonic()
             last: float = self._last_execution[priority]
@@ -109,8 +113,12 @@ class RateLimitedScheduler:
         return self._scheduler.submit(func, priority=priority)
 
     def shutdown(self, wait: bool = True) -> None:
-        """Shutdown the scheduler.        self._scheduler.shutdown(wait=wait)
+"""
+Shutdown the scheduler.        self._scheduler.shutdown(wait=wait)
 
     @property
     def stats(self) -> TaskStats:
-        """Scheduler statistics.        return self._scheduler.stats
+"""
+Scheduler statistics.        return self._scheduler.stats
+
+"""

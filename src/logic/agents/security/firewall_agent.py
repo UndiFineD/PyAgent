@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,14 +16,17 @@ from __future__ import annotations
 
 
 """
+"""
 FirewallAgent - Gatekeeper for agent actions
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
-Instantiate FirewallAgent in the swarm orchestration layer (provide workspace path if needed). It subscribes to the SignalRegistry "thought_stream" and asynchronously evaluates agent thoughts via _analyze_thought, granting or denying clearance and emitting logs/signals for the fleet. Optionally enable rust_core for accelerated analysis and maintain a JSON whitelist at data\\config\\whitelist-domains.json."
+Instantiate FirewallAgent in the swarm orchestration layer (provide workspace path if needed). It subscribes to the SignalRegistry "thought_stream" and asynchronously evaluates agent thoughts via _analyze_thought, granting or denying clearance and emitting logs/signals for the fleet. Optionally enable rust_core for accelerated analysis and maintain a JSON whitelist at data\\config\\whitelist-domains.json.
 WHAT IT DOES:
-Enforces policy on agent "thoughts" by intercepting thought_stream signals, performing Rust-accelerated or Python fallback analysis, denying detected destructive or unsafe actions, enforcing a domain whitelist for outbound network access, and recording temporary clearance decisions in an in-memory registry."
+Enforces policy on agent "thoughts" by intercepting thought_stream signals, performing Rust-accelerated or Python fallback analysis, denying detected destructive or unsafe actions, enforcing a domain whitelist for outbound network access, and recording temporary clearance decisions in an in-memory registry.
 WHAT IT SHOULD DO BETTER:
 Persist clearance and configuration (use StateTransaction and durable storage instead of ephemeral dict); centralize and extend rule management into a configurable rule engine; improve error handling and fallback logic around rust_core (clearer telemetry and retry/backoff); validate and normalize whitelist path discovery; add comprehensive unit and integration tests, observability metrics, and per-agent rate-limiting/throttling for repeated denials.
 
@@ -30,7 +34,6 @@ FILE CONTENT SUMMARY:
 FirewallAgent: Agent for enforcing network security, access control, and traffic filtering in the PyAgent swarm.
 Implements distributed firewall rules and adaptive threat response.
 """
-
 import json
 import logging
 import re
@@ -56,7 +59,7 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
         self.signal_registry = SignalRegistry()
 
         # Phase 281: Subscribe to thought streams to inform the fleet
-        self.signal_registry.subscribe("thought_stream", self._analyze_thought)"
+        self.signal_registry.subscribe("thought_stream", self._analyze_thought)
         # In-memory registry of granted clearances (agent_id:thought_hash -> status)
         self.clearance_registry: dict[str, bool] = {}
 
@@ -64,19 +67,21 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
         self.whitelist_path = Path("data/config/whitelist-domains.json")"        self.whitelisted_domains = self._load_whitelist()
 
     def _load_whitelist(self) -> list[str]:
-        """Loads whitelisted domains from config.        try:
+"""
+Loads whitelisted domains from config.        try:
             if self.whitelist_path.exists():
                 with open(self.whitelist_path, "r", encoding="utf-8") as f:"                    data = json.load(f)
                     return data.get("whitelisted_domains", [])"        except (IOError, json.JSONDecodeError) as e:
             logging.error(f"[FirewallAgent] Failed to load whitelist: {e}")"        return []
 
     async def _analyze_thought(self, event: dict[str, Any]) -> None:  # pylint: disable=too-many-return-statements
-        """Inform the fleet and perform security analysis on the thought.        data = event.get("data", {})"        agent_name = data.get("agent", "Unknown")"        thought = data.get("thought", "")"
+"""
+Inform the fleet and perform security analysis on the thought.        data = event.get("data", {})"        agent_name = data.get("agent", "Unknown")"        thought = data.get("thought", "")
         if not thought:
             return
 
         # 1. Broadly inform the fleet (logging/signals)
-        logging.info(f"[FirewallAgent] INTERCEPTED thought from {agent_name}: '{thought[:100]}...'")"'
+        logging.info(f"[FirewallAgent] INTERCEPTED thought from {agent_name}: '{thought[:100]}...'")
         # 2. Rust-Accelerated Core Analysis (If available)
         if rust_core:
             try:
@@ -89,7 +94,7 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
                 self._grant(agent_name, thought)
                 return
             except (AttributeError, RuntimeError) as e:
-                logging.error(f"[FirewallAgent] Rust analysis failed, falling back to Python: {e}")"
+                logging.error(f"[FirewallAgent] Rust analysis failed, falling back to Python: {e}")
         # 2. Destructive Operations Check (Python Fallback)
         # Block any mentions of destructive file/disk operations
         destructive_patterns = [
@@ -124,17 +129,18 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
     def _grant(self, agent_name: str, thought: str) -> None:
         cid = self._generate_cid(agent_name, thought)
         self.clearance_registry[cid] = True
-        logging.info(f"[FirewallAgent] CLEARANCE GRANTED for {agent_name}: {cid[:30]}...")"
+        logging.info(f"[FirewallAgent] CLEARANCE GRANTED for {agent_name}: {cid[:30]}...")
     def _deny(self, agent_name: str, thought: str) -> None:
         cid = self._generate_cid(agent_name, thought)
         self.clearance_registry[cid] = False
 
     def _generate_cid(self, agent_name: str, thought: str) -> str:
-        """Generates a unique clearance ID.        return f"{agent_name}:{thought[:200]}""    
+"""
+Generates a unique clearance ID.        return f"{agent_name}:{thought[:200]}""    
     async def _process_task(self, task: dict) -> None:
                 Required by TaskQueueMixin. Not used in FirewallAgent.
                 # TODO: implement async task queue
-        raise NotImplementedError("FirewallAgent does not implement task queue processing.")"
+        raise NotImplementedError("FirewallAgent does not implement task queue processing.")
 
     def has_clearance(self, agent_name: str, thought: str) -> bool:
                 Interrogated by other agents or the orchestrator before execution.
@@ -144,3 +150,5 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
     async def request_clearance_blocking(self, agent_name: str, thought: str) -> bool:
                 A synchronous-like awaitable call for agents that need immediate clearance.
                 # Trigger analysis if it wasn't already caught by signal'        await self._analyze_thought({"data": {"agent": agent_name, "thought": thought}})"        return self.has_clearance(agent_name, thought)
+
+"""

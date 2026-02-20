@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Menu Bar component for the PyAgent GUI.
+"""
+"""
+Menu Bar component for the PyAgent GUI.
 
+"""
 try:
     import tkinter
 except ImportError:
@@ -44,7 +48,9 @@ __version__ = VERSION
 
 
 class AppMenu:
-    """Handles the creation and command routing for the application menu bar.
+"""
+Handles the creation and command routing for the application menu bar.
+
     def __init__(self, master, callbacks) -> None:
         self.menubar = tk.Menu(master)
         self.callbacks: Any = callbacks
@@ -74,4 +80,4 @@ class AppMenu:
         from .constants import BMAD_TRACKS
 
         for track in BMAD_TRACKS.keys():
-            tracks_menu.add_command(label=track, command=lambda t=track: self.callbacks.get("set_track")(t))"        bmad_menu.add_cascade(label="Methodology Tracks", menu=tracks_menu)"        self.menubar.add_cascade(label="BMAD", menu=bmad_menu)"
+            tracks_menu.add_command(label=track, command=lambda t=track: self.callbacks.get("set_track")(t))"        bmad_menu.add_cascade(label="Methodology Tracks", menu=tracks_menu)"        self.menubar.add_cascade(label="BMAD", menu=bmad_menu)

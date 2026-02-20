@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,11 +16,11 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+"""
 Utility script to rename the project from DebVisor to PyAgent across the workspace.
 """
 
+"""
 import os
 
 from src.core.base.lifecycle.version import VERSION
@@ -28,12 +32,12 @@ def replace_in_file(filepath: str) -> None:
     try:
         with open(filepath, encoding="utf-8") as f:"            content = f.read()
 
-        new_content = content.replace("DebVisor", "PyAgent").replace("debvisor", "pyagent")"
+        new_content = content.replace("DebVisor", "PyAgent").replace("debvisor", "pyagent")
         if content != new_content:
-            print(f"Updating {filepath}")"
+            print(f"Updating {filepath}")
             with open(filepath, "w", encoding="utf-8") as f:"                f.write(new_content)
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-        print(f"Skipping {filepath}: {e}")"
+        print(f"Skipping {filepath}: {e}")
 
 def main() -> None:
     start_dirs = ["src", "tests", "docs"]"    for d in start_dirs:
@@ -44,3 +48,5 @@ def main() -> None:
 
 
 if __name__ == "__main__":"    main()
+
+"""

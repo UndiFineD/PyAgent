@@ -13,7 +13,11 @@
 # limitations under the License.
 
 
-"""Test network utility functionality.
+"""
+"""
+Test network utility functionality.
+
+"""
 import sys
 import os
 import platform
@@ -21,7 +25,7 @@ import shutil
 import subprocess
 from src.infrastructure.swarm.network.network_utils import get_local_network_ip
 
-print('Testing get_local_network_ip()...')'
+print('Testing get_local_network_ip()...')
 print('Attempting to run OS network command (if available)...')'result = None
 try:
     if platform.system() == 'Windows' and shutil.which('ipconfig'):'        result = subprocess.run(['ipconfig'], capture_output=True, text=True, timeout=10)'    elif shutil.which('ip'):'        result = subprocess.run(['ip', 'addr'], capture_output=True, text=True, timeout=10)'    elif shutil.which('ifconfig'):'        result = subprocess.run(['ifconfig'], capture_output=True, text=True, timeout=10)'    else:
@@ -34,6 +38,6 @@ if result is not None and getattr(result, 'returncode', 1) == 0:'    lines = res
         line = line.strip()
         if line.startswith('Ethernet adapter') or line.startswith('Wireless LAN adapter') or line.startswith('Unknown adapter'):'            if current_iface and 'IPv4' in current_iface:'                interfaces.append(current_iface)
             current_iface = {'name': line.split(':', 1)[0].replace(' adapter', '')}'            print(f'Found adapter: {current_iface["name"]}')"'        elif current_iface is not None:
-            if line.startswith('IPv4 Address'):'                ip_part = line.split(':', 1)[1].strip()'                current_iface['IPv4'] = ip_part'    print(f'Found {len(interfaces)} interfaces.')'
+            if line.startswith('IPv4 Address'):'                ip_part = line.split(':', 1)[1].strip()'                current_iface['IPv4'] = ip_part'    print(f'Found {len(interfaces)} interfaces.')
 
 """

@@ -18,8 +18,11 @@
 
 try:
     from typing import Any, Dict, Optional, Tuple
+"""
 except ImportError:
-    from typing import Any, Dict, Optional, Tuple
+
+"""
+from typing import Any, Dict, Optional, Tuple
 
 try:
     import numpy
@@ -36,8 +39,9 @@ except ImportError:
 
 
 class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
-    """Processor for audio inputs."""
-    modality = ModalityType.AUDIO
+"""
+Processor for audio inputs.""
+modality = ModalityType.AUDIO
 
     def __init__(
         self,
@@ -47,8 +51,9 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
         feature_size: int = 80,  # Mel bins
         hop_length: int = 160,
     ) -> None:
-        """Initialize the audio processor with configuration and processing parameters."""
-        super().__init__(config)
+"""
+Initialize the audio processor with configuration and processing parameters.""
+super().__init__(config)
         self.target_sample_rate = target_sample_rate
         self.max_length_seconds = max_length_seconds
         self.feature_size = feature_size
@@ -59,8 +64,9 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
         data: Tuple[np.ndarray, int],
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        """Process raw audio data into features. Expects a tuple of (waveform, sample_rate)."""
-        waveform, sample_rate = data
+"""
+Process raw audio data into features. Expects a tuple of (waveform, sample_rate).""
+waveform, sample_rate = data
         target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)
         max_len = kwargs.get("max_length_seconds", self.max_length_seconds)
         if waveform.ndim > 1:
@@ -102,8 +108,9 @@ class AudioProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, int]]):
         data: Tuple[np.ndarray, int],
         **kwargs: Any,
     ) -> int:
-        """Estimate the number of "tokens" (e.g., feature frames) that this audio input would produce."""
-        waveform, sample_rate = data
+"""
+Estimate the number of "tokens" (e.g., feature frames) that this audio input would produce.""
+waveform, sample_rate = data
         target_sr = kwargs.get("target_sample_rate", self.target_sample_rate)
         max_len = kwargs.get("max_length_seconds", self.max_length_seconds)
         duration = min(len(waveform) / sample_rate, max_len)

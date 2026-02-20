@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,29 +14,18 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: RefactoringPattern dataclass."""
+"""
+"""
+Parser-safe RefactoringPattern stub.""
 
+""
 from dataclasses import dataclass
-
-try:
-    from src.core.base.common.types.code_language import CodeLanguage
-except Exception:
-    class CodeLanguage:
-        PYTHON = "python"
-
-try:
-    from src.core.base.lifecycle.version import VERSION
-except Exception:  # pragma: no cover - fallback
-    VERSION = "0.0.0"
-
-__version__ = VERSION
 
 
 @dataclass
 class RefactoringPattern:
-    """A code refactoring pattern."""
-    name: str
-    description: str
-    pattern: str
-    replacement: str
-    language: CodeLanguage = CodeLanguage.PYTHON
+    name: str = ""
+    description: str = ""
+    pattern: str = ""
+    replacement: str = ""
+    language: str = "python"

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Script for final namespace correction and import migration.
+"""
+"""
+Script for final namespace correction and import migration.
 
+"""
 import os
 import re
 
@@ -24,7 +28,9 @@ __version__ = VERSION
 
 
 def fix_imports(content: str) -> str:
-    """Migrate legacy module names to the src namespace.
+"""
+Migrate legacy module names to the src namespace.
+
     modules = [
         "agent_backend","        "agent_changes","        "agent_coder","        "agent_context","        "agent_errors","        "agent_improvements","        "agent_knowledge","        "agent_search","        "agent_stats","        "agent_strategies","        "agent_tests","        "agent_test_utils","    ]
 
@@ -61,4 +67,4 @@ for root_dir in ["src", "tests"]:"    for root, dirs, files in os.walk(root_dir)
                 except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                     pass
 
-print(f"Updated {updated_count} files.")"
+print(f"Updated {updated_count} files.")

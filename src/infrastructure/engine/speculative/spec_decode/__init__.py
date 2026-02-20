@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Speculative decoding verification package.
 
+"""
 try:
     from .config import AcceptancePolicy, SpecDecodeConfig, VerificationStrategy  # noqa: F401
 except ImportError:

@@ -13,7 +13,10 @@
 # limitations under the License.
 
 
+"""
 Agentic Patterns - Sequential Agent Orchestration
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -72,21 +75,25 @@ else:
 
 
 class CascadeContext:
-    """Fallback stub for CascadeContext.""""
-    Lightweight stub used at runtime when real CascadeContext is unavailable;
+"""
+Fallback stub for CascadeContext.""""
+Lightweight stub used at runtime when real CascadeContext is unavailable;
     preserves a task_id and can create child contexts.
         def __init__(self, *_args, task_id: str = "task", **_kwargs):"        self.task_id = task_id
 
-    def next_level(self, child_task_id: str = ", _agent_id: str = ") -> "CascadeContext":"        """Return a child CascadeContext preserving or overriding task_id.        # Simple passthrough stub that preserves a task_id for downstream code that uses it.
+    def next_level(self, child_task_id: str = ", _agent_id: str = ") -> "CascadeContext":"        """
+Return a child CascadeContext preserving or overriding task_id.        # Simple passthrough stub that preserves a task_id for downstream code that uses it.
         return CascadeContext(task_id=child_task_id or self.task_id)
 
 
 class WorkState:
-    """Fallback stub for WorkState which stores results in a dict.    def __init__(self):
+"""
+Fallback stub for WorkState which stores results in a dict.    def __init__(self):
         self.results = {}
 
     def update(self, key, value):
-        """Update the internal results mapping.        self.results[key] = value
+"""
+Update the internal results mapping.        self.results[key] = value
 
 from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
@@ -95,7 +102,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SequentialAgentConfig:
-    """Configuration for sequential agent execution.
+"""
+Configuration for sequential agent execution.
     name: str
 #     description: str =
     sub_agents: List[Dict[str, Any]] = field(default_factory=list)
@@ -106,11 +114,13 @@ class SequentialAgentConfig:
 
 
 class SequentialAgentPattern:
-    """Sequential agent execution pattern.""""
-    This pattern executes agents in sequence, where each agent's output'    can be used as input for subsequent agents. Inspired by agentic design
+"""
+Sequential agent execution pattern.""""
+This pattern executes agents in sequence, where each agent's output'    can be used as input for subsequent agents. Inspired by agentic design
     patterns from ADK (Agentic" Design Patterns)."    
 def __init__(self, orchestrator: OrchestratorWorkPatternMixin):
-    """Initialize the sequential agent pattern.    self.orchestrator = orchestrator
+"""
+Initialize the sequential agent pattern.    self.orchestrator = orchestrator
 
     async def execute_sequential(
         self,
@@ -129,7 +139,7 @@ def __init__(self, orchestrator: OrchestratorWorkPatternMixin):
 
         Returns:
             Dict containing execution results
-                logger.info(f"Starting sequential execution for {config.name}")"
+                logger.info(f"Starting sequential execution for {config.name}")
         # Initialize execution state safely (WorkState API may vary)
         execution_state = WorkState()
         # Prefer WorkState.update when available; otherwise store data in execution_state.results map
@@ -281,3 +291,11 @@ def __init__(self, orchestrator: OrchestratorWorkPatternMixin):
         if isinstance(current_input, dict):
             next_input.update(current_input)
         next_input["last_output"] = agent_result"        return next_input
+
+"""
+
+"""
+
+""
+
+"""

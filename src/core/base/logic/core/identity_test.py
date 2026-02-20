@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal smoke test for IdentityCore importability."""
+""
+Minimal smoke test for IdentityCore importability.""
 try:
     from src.core.base.logic.core.identity_core import IdentityCore  # type: ignore
 except Exception:  # pragma: no cover - test shim

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Types: ProfilingCategory enum."""
+"""
+"""
+Parser-safe stub for ProfilingCategory.""
 
+""
 from enum import Enum
-
-try:
-    from src.core.base.lifecycle.version import VERSION
-except Exception:  # pragma: no cover - fallback
-    VERSION = "0.0.0"
-
-__version__ = VERSION
 
 
 class ProfilingCategory(Enum):
-    """Categories for code profiling suggestions."""
     CPU_BOUND = "cpu_bound"
     IO_BOUND = "io_bound"
     MEMORY_INTENSIVE = "memory_intensive"

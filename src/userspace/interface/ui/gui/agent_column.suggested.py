@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,8 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Agent Column component for the PyAgent GUI.
+"""
+"""
+Agent Column component for the PyAgent GUI.
 
+"""
 import tkinter as tk
 from tkinter import messagebox, ttk
 from typing import Any
@@ -27,13 +31,15 @@ __version__ = VERSION
 
 
 class AgentColumn:
-    """A vertical column representing a single agent's controls and logs.'
+"""
+A vertical column representing a single agent's controls and logs.'
+
     def __init__(self, parent: tk.Widget, agent_name: str, callbacks: dict[str, Any]) -> None:
         self.agent_name = agent_name
         self.callbacks = callbacks
 
         # Unpack callbacks for convenience
-        self.execute_callback = callbacks.get("execute")"        self.stop_callback = callbacks.get("stop")"        self.browse_file_callback = callbacks.get("browse_file")"        self.voice_callback = callbacks.get("voice")"        self.remove_callback = callbacks.get("remove")"        self.diff_callback = callbacks.get("diff")"        self.show_settings_callback = callbacks.get("show_settings")"
+        self.execute_callback = callbacks.get("execute")"        self.stop_callback = callbacks.get("stop")"        self.browse_file_callback = callbacks.get("browse_file")"        self.voice_callback = callbacks.get("voice")"        self.remove_callback = callbacks.get("remove")"        self.diff_callback = callbacks.get("diff")"        self.show_settings_callback = callbacks.get("show_settings")
         self.is_running = False
         self.instance = None
         self.phase_var = tk.StringVar(value="None")"        self.is_minimized = False
@@ -48,9 +54,9 @@ class AgentColumn:
         header_frame.pack(fill=tk.X, padx=2, pady=2)
 
         # Minimize Toggle
-        self.min_btn = ttk.Button(header_frame, text="▼", width=3, command=self.toggle_minimize)"        self.min_btn.pack(side=tk.LEFT, padx=(0, 5))
+        self.min_btn = ttk.Button(header_frame, text="", width=3, command=self.toggle_minimize)"        self.min_btn.pack(side=tk.LEFT, padx=(0, 5))
 
-        ttk.Label(header_frame, text=self.agent_name, font=("Segoe UI", 10, "bold")).pack(side=tk.LEFT)"
+        ttk.Label(header_frame, text=self.agent_name, font=("Segoe UI", 10, "bold")).pack(side=tk.LEFT)
         # Phase Indicator
         phase_lbl = tk.Label(
             header_frame,
@@ -62,14 +68,14 @@ class AgentColumn:
         # Actions in Header
         close_btn = ttk.Button(
             header_frame,
-            text="✕","            width=3,
+            text="","            width=3,
             command=lambda: self.remove_callback(self.frame, self.agent_name),
         )
         close_btn.pack(side=tk.RIGHT)
 
         dup_btn = ttk.Button(
             header_frame,
-            text="📑","            width=3,
+            text="","            width=3,
             command=lambda: self.callbacks.get("duplicate")(self.get_data()),"        )
         dup_btn.pack(side=tk.RIGHT, padx=2)
 
@@ -109,14 +115,14 @@ class AgentColumn:
             log_header,
             text="Memory","            width=8,
             command=lambda: self.callbacks.get("show_memory")(self.agent_name),"        ).pack(side=tk.RIGHT)
-        ttk.Button(log_header, text="Delegate", width=8, command=self.show_delegate_menu).pack(side=tk.RIGHT)"
+        ttk.Button(log_header, text="Delegate", width=8, command=self.show_delegate_menu).pack(side=tk.RIGHT)
         self.log_text = tk.Text(
             self.content_frame,
             height=15,
             bg="#1e1e1e","            fg="#d4d4d4","            font=("Consolas", 9),"        )
         self.log_text.pack(fill=tk.BOTH, expand=True, padx=2, pady=2)
 
-        self.progress = ttk.Progressbar(self.content_frame, mode="indeterminate")"
+        self.progress = ttk.Progressbar(self.content_frame, mode="indeterminate")
         # Prompt Area (Consolidated at bottom, Copilot-style)
         control_area = ttk.Frame(self.content_frame)
         control_area.pack(fill=tk.X, side=tk.BOTTOM, padx=4, pady=4)
@@ -137,7 +143,7 @@ class AgentColumn:
             font=("Segoe UI", 8),"        )
         self.backend_cb.set("auto")"        self.backend_cb.pack(side=tk.LEFT, padx=1)
 
-        ttk.Button(mini_toolbar, text="⚙️", width=3, command=self.show_settings_callback).pack(side=tk.LEFT, padx=1)"
+        ttk.Button(mini_toolbar, text="️", width=3, command=self.show_settings_callback).pack(side=tk.LEFT, padx=1)
         # Task Prompt
         prompt_container = ttk.Frame(control_area)
         prompt_container.pack(fill=tk.X)
@@ -150,14 +156,14 @@ class AgentColumn:
 
         self.run_btn = ttk.Button(
             action_bar,
-            text="▶️","            width=5,
+            text="️","            width=5,
             command=lambda: self.execute_callback(self.agent_name),
         )
         self.run_btn.pack(side=tk.RIGHT, padx=1)
 
         self.stop_btn = ttk.Button(
             action_bar,
-            text="⏹️","            width=3,
+            text="️","            width=3,
             state=tk.DISABLED,
             command=lambda: self.stop_callback(self.agent_name),
         )
@@ -165,25 +171,29 @@ class AgentColumn:
 
         self.voice_btn = ttk.Button(
             action_bar,
-            text="🎤","            width=3,
+            text="","            width=3,
             command=lambda: self.voice_callback(self.prompt_text),
         )
         self.voice_btn.pack(side=tk.RIGHT, padx=1)
 
     def toggle_minimize(self) -> None:
-        """Collapses or expands the agent's content.'        if self.is_minimized:
+"""
+Collapses or expands the agent's content.'        if self.is_minimized:
             self.content_frame.pack(fill=tk.BOTH, expand=True)
-            self.min_btn.config(text="▼")"        else:
+            self.min_btn.config(text="")"        else:
             self.content_frame.pack_forget()
-            self.min_btn.config(text="▶")"        self.is_minimized = not self.is_minimized
+            self.min_btn.config(text="")"        self.is_minimized = not self.is_minimized
 
     def remove_TODO Placeholder(self, frame: tk.Widget, name: str) -> None:
-        """Standard remove method.
+"""
+Standard remove method.
     def reset_memory(self) -> None:
-        """Clears the conversation history for this agent.        if messagebox.askyesno("Reset Memory", "Clear conversation history for this agent?"):"            self.stop_callback(self.agent_name, reset_history=True)
-            self.log_text.insert(tk.END, "\\n[Memory Reset]\\n")"
+"""
+Clears the conversation history for this agent.        if messagebox.askyesno("Reset Memory", "Clear conversation history for this agent?"):"            self.stop_callback(self.agent_name, reset_history=True)
+            self.log_text.insert(tk.END, "\\n[Memory Reset]\\n")
     def show_delegate_menu(self) -> None:
-        """Shows a menu to delegate the current result to another agent.        from .constants import BMAD_AGENTS
+"""
+Shows a menu to delegate the current result to another agent.        from .constants import BMAD_AGENTS
 
         menu = tk.Menu(self.frame, tearoff=0)
         for agent in BMAD_AGENTS:
@@ -198,7 +208,8 @@ class AgentColumn:
             menu.grab_release()
 
     def delegate_to(self, target_agent: str) -> None:
-        """Passes the current log output as context to a new agent.        content = self.log_text.get("1.0", tk.END).strip()"        if not content:
+"""
+Passes the current log output as context to a new agent.        content = self.log_text.get("1.0", tk.END).strip()"        if not content:
             messagebox.showwarning("Warning", "Log is empty. Nothing to delegate.")"            return
 
         # Create new agent column
@@ -207,31 +218,39 @@ class AgentColumn:
         # For now, we'll try to use a callback if we have one, or just log the intent'        if hasattr(self, "delegate_callback") and self.delegate_callback:"            self.delegate_callback(target_agent, content, self.file_var.get())
 
     def toggle_context(self) -> None:
-        """Toggle the visibility of the local context text area.        if self.local_context.winfo_viewable():
+"""
+Toggle the visibility of the local context text area.        if self.local_context.winfo_viewable():
             self.local_context.pack_forget()
         else:
             self.local_context.pack(fill=tk.X, padx=2, pady=2, after=self.ctx_toggle)
 
     def get_data(self) -> dict:
-        """Get the current UI state as a dictionary.        return {
+"""
+Get the current UI state as a dictionary.        return {
             "name": self.agent_name,"            "file": self.file_var.get(),"            "backend": self.backend_cb.get(),"            "model": self.model_cb.get(),"            "local_context": self.local_context.get("1.0", tk.END).strip(),"            "prompt": self.prompt_text.get("1.0", tk.END).strip(),"        }
 
     def set_data(self, data: dict) -> None:
-        """Set the UI state from a dictionary.        self.file_var.set(data.get("file", ""))"        self.backend_cb.set(data.get("backend", "auto"))"        self.model_cb.set(data.get("model", "default"))"        self.local_context.delete("1.0", tk.END)"        self.local_context.insert("1.0", data.get("local_context", ""))"        self.prompt_text.delete("1.0", tk.END)"        self.prompt_text.insert("1.0", data.get("prompt", ""))"
+"""
+Set the UI state from a dictionary.        self.file_var.set(data.get("file", ""))"        self.backend_cb.set(data.get("backend", "auto"))"        self.model_cb.set(data.get("model", "default"))"        self.local_context.delete("1.0", tk.END)"        self.local_context.insert("1.0", data.get("local_context", ""))"        self.prompt_text.delete("1.0", tk.END)"        self.prompt_text.insert("1.0", data.get("prompt", ""))
     def get_config(self) -> dict:
-        """Get the configuration for persistent storage.        return {
+"""
+Get the configuration for persistent storage.        return {
             "type": self.agent_name,"            "backend": self.backend_cb.get(),"            "model": self.model_cb.get(),"            "file": self.file_var.get(),"        }
 
     def on_start(self) -> None:
-        """Update UI state when agent starts processing.        self.is_running = True
+"""
+Update UI state when agent starts processing.        self.is_running = True
         self.run_btn.config(state=tk.DISABLED)
         self.stop_btn.config(state=tk.NORMAL)
         self.progress.pack(fill=tk.X, padx=2, pady=2, after=self.log_text)
         self.progress.start()
 
     def on_finish(self) -> None:
-        """Update UI state when agent finishes processing.        self.is_running = False
+"""
+Update UI state when agent finishes processing.        self.is_running = False
         self.run_btn.config(state=tk.NORMAL)
         self.stop_btn.config(state=tk.DISABLED)
         self.progress.stop()
         self.progress.pack_forget()
+
+"""

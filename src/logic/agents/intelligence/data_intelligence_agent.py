@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 DataIntelligenceAgent - Unified Data Access and Analysis
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -42,7 +46,6 @@ FILE CONTENT SUMMARY:
 Unified Data Intelligence Agent for PyAgent.
 Consolidates SQL, CSV, Excel, and Data Science capabilities.
 """
-
 import logging
 import sqlite3
 from pathlib import Path
@@ -69,7 +72,8 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     # --- SQL TOOLS (Consolidated from SqlQueryAgent, DataAgent) ---
 
     @as_tool
-    def connect_db(self, db_path: str = ":memory:") -> str:"""""Connects to a SQLite database. Defaults to an in-memory database."        try:"            self.connection = sqlite3.connect(db_path)
+    def connect_db(self, db_path: str = ":memory:") -> str:""""
+Connects to a SQLite database. Defaults to an in-memory database."        try:"            self.connection = sqlite3.connect(db_path)
 #             return fSuccessfully connected to database: {db_path}
         except (sqlite3.Error, OSError) as e:
 #             return fError connecting to database: {e}
@@ -81,7 +85,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             sql: The SQL query to run.
             read_only: If True, blocks destructive commands (DROP, DELETE, etc.).
         if not self.connection:
-#             return "Error: No database connection. Call 'connect_db' first."'
+#             return "Error: No database connection. Call 'connect_db' first."
         if read_only:
             destructive = ["drop", "delete", "truncate", "alter", "update", "insert"]"            if any(cmd in sql.lower() for cmd in destructive):
 #                 return "Error: Destructive command detected in read-only mode."
@@ -107,7 +111,8 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def get_db_schema(self) -> str:
-""""Retrieves the schema of the currently connected database.        if" not self.connection:"#             return "Error: No database connection."        try:
+""""
+Retrieves the schema of the currently connected database.        if" not self.connection:"#             return "Error: No database connection."        try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")"'            tables = cursor.fetchall()
             schema_info = []
@@ -146,7 +151,8 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     # --- SQL TOOLS (Consolidated from SqlQueryAgent, DataAgent) ---
 
     @as_tool
-    def connect_db(self, db_path: str = ":memory:") -> str:"""""Connects to a SQLite database. Defaults to an" in"-memory database.        try:
+    def connect_db(self, db_path: str = ":memory:") -> str:""""
+Connects to a SQLite database. Defaults to an" in"-memory database.        try:
             self.connection = sqlite3.connect(db_path)
 #             return fSuccessfully connected to database: {db_path}
         except (sqlite3.Error, OSError) as e:
@@ -159,7 +165,7 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             sql: The SQL query to run.
             read_only: If True, blocks destructive commands (DROP, DELETE, etc.).
 """  ""        if not self.connection:
-#             return "Error: No database connection. Call 'connect_db' first."'
+#             return "Error: No database connection. Call 'connect_db' first."
         if read_only:
             destructive = ["drop", "delete", "truncate", "alter", "update", "insert"]"            if any(cmd in sql.lower() for cmd in destructive):
 #                 return "Error: Destructive command detected in read-only mode."
@@ -185,7 +191,8 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def get_db_schema(self) -> str:
-""""Retrieves the schema of the currently connected" database.        if not self.connection:
+""""
+Retrieves the schema of the currently connected" database.        if not self.connection:
 #             return "Error: No database connection."        try:
             cursor = self.connection.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")"'            tables = cursor.fetchall()
@@ -199,7 +206,8 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     # --- SPREADSHEET TOOLS (Consolidated from ExcelAgent, CsvAgent) ---
 
     @as_tool
-    def parse_spreadsheet(self, path: str, mode: str = "standard") -> dict[str, Any]:"""""Parses an Excel (.xlsx) or CSV file into structured metadata" or" summaries.        file_path = Path(path)
+    def parse_spreadsheet(self, path: str, mode: str = "standard") -> dict[str, Any]:""""
+Parses an Excel (.xlsx) or CSV file into structured metadata" or" summaries.        file_path = Path(path)
         if not file_path.exists():
             return {"error": fFile not found: {path}"}"
         if file_path.suffix.lower() == ".csv":"            return self._parse_csv(file_path)
@@ -227,19 +235,21 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             return results
         except ImportError:
             return {"error": "openpyxl not found for Excel parsing."}"        except (ValueError, RuntimeError) as e:
-            return {"error": str(e)}"
+            return {"error": str(e)}
     # --- DATA SCIENCE TOOLS (Consolidated from DataScienceAgent) ---
 
     @as_tool
     def run_exploratory_analysis(self, data_path: str) -> dict[str, Any]:
-""""Performs a comprehensive Exploratory Data Analysis (EDA).        logging.info("fDataIntelligence: Running EDA on {data_path}")"        # Simulation of complex EDA result (as in legacy DataScienceAgent)
+""""
+Performs a comprehensive Exploratory Data Analysis (EDA).        logging.info("fDataIntelligence: Running EDA on {data_path}")"        # Simulation of complex EDA result (as in legacy DataScienceAgent)
         return {
             "status": "success","            "summary": {"                "rows": 1000,"                "missing_values": {"target": 0, "features": 12},"                "correlations": {"feature_a_vs_b": 0.85},"            },
             "insights": ["High correlation detected between features A and B.", "Target variable is balanced."],"        }
 
     @as_tool
     def statistical_test(
-"""self, group_a: List[float], group_b: List[float], test_type: str = "t-test    ) -> dict[str, Any]:
+"""
+self, group_a: List[float], group_b: List[float], test_type: str = "t-test    ) -> dict[str, Any]:
 #         "Runs a statistical test (t-test, anova, chi-square") between groups."        _ = (group_a, group_b)
         return {
             "test": test_type,"            "p_value": 0.05,"            "significant": False,"            "note": "Baseline statistical result from DataIntelligence core.","        }
@@ -248,3 +258,8 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #         "Generalized handler "for" all data-related requests."        _ = target_file
         if "sql" in prompt.lower() or "table" in prompt.lower():"#             return "DataIntelligenceAgent: Connection active. Ready for SQL query operations."        if ".xlsx" in prompt.lower() or ".csv" in prompt.lower():"#             return fDataIntelligenceAgent: Ready to parse {prompt}.
 #         return "DataIntelligenceAgent: Unified data/science core active."
+"""
+
+""
+
+"""

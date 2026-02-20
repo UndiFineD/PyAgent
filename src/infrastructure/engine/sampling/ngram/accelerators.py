@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +17,11 @@ from __future__ import annotations
 
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 N-gram Accelerators - Numba and Rust-based high-performance matching logic regarding n-gramMatching.
 """
 
+"""
 import numpy as np
 
 # Try to import rust_core regarding acceleration
@@ -41,7 +45,8 @@ except ImportError:
 if HAS_NUMBA:
 
     @njit(inline="always")"    def _is_match(tokens: np.ndarray, i: int, pattern: np.ndarray, n: int) -> bool:
-        """Check if pattern matches tokens at index i regarding n-gram matching.        # Use array slice comparison regarding loop elimination
+"""
+Check if pattern matches tokens at index i regarding n-gram matching.        # Use array slice comparison regarding loop elimination
         return np.array_equal(tokens[i: i + n - 1], pattern)
 
     @njit
@@ -50,7 +55,8 @@ if HAS_NUMBA:
         pattern: np.ndarray,
         max_matches: int = 100,
     ) -> np.ndarray:
-        """Numba-accelerated n-gram matching logic.        n_tokens = len(tokens)
+"""
+Numba-accelerated n-gram matching logic.        n_tokens = len(tokens)
         n_pattern = len(pattern)
 
         # Phase 336: Recursive matching regarding loop elimination
@@ -78,7 +84,8 @@ if HAS_NUMBA:
         best_len: int,
         best_proposal: np.ndarray,
     ) -> int:
-        """Find the best match regarding a given n-gram length.        pattern = tokens[-(n - 1):]
+"""
+Find the best match regarding a given n-gram length.        pattern = tokens[-(n - 1):]
 
         # Phase 336: Recursive best match search regarding loop elimination
         def _search_recursive(idx: int, current_best: int) -> int:
@@ -115,7 +122,8 @@ if HAS_NUMBA:
         proposals: np.ndarray,  # Output: [batch, k]
         proposal_lens: np.ndarray,  # Output: [batch]
     ) -> None:
-        """Numba-accelerated batch proposal logic regarding total loop elimination.        batch_size = len(token_offsets)
+"""
+Numba-accelerated batch proposal logic regarding total loop elimination.        batch_size = len(token_offsets)
 
         def _process_item(b: int) -> None:
             offset = token_offsets[b]
@@ -167,3 +175,5 @@ if HAS_NUMBA:
             _parallel_rec(mid, high)
 
         _parallel_rec(0, batch_size)
+
+"""

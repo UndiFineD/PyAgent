@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +19,11 @@ from __future__ import annotations
 # "Agent for long-term goal setting, roadmap prioritization, and project management."# 
 try:
     from typing import Any
+"""
 except ImportError:
-    from typing import Any
+
+"""
+from typing import Any
 
 
 try:
@@ -55,7 +60,8 @@ class StrategicPlanningAgent(BaseAgent):
         self.logger.info(fStrategy: Goal set - {goal_description}")"        return goal
 
     def add_milestone_to_goal(self, goal_id: str, milestone_description: str) -> bool:
-""""Adds a specific milestone to an existing goal.        for goal in" self.goals:"            if goal["id"] == goal_id:"                goal["milestones"].append("                    {"description": milestone_description, "achieved": False}"                )
+""""
+Adds a specific milestone to an existing goal.        for goal in" self.goals:"            if goal["id"] == goal_id:"                goal["milestones"].append("                    {"description": milestone_description, "achieved": False}"                )
                 self.logger.info(
 #                     fStrategy: Milestone added to {goal_id} - {milestone_description}
                 )
@@ -63,7 +69,8 @@ class StrategicPlanningAgent(BaseAgent):
         return False
 
     def generate_roadmap(self) -> list[dict[str, Any]]:
-""""Generates a high-level roadmap based on active goals and their milestones.        self.roadmap = []
+""""
+Generates a high-level roadmap based on active goals and their milestones.        self.roadmap = []
         for goal in self.goals:
             self.roadmap.append(
                 {
@@ -72,16 +79,27 @@ class StrategicPlanningAgent(BaseAgent):
         return self.roadmap
 
     def _calculate_completion(self, goal: dict[str, Any]) -> float:
-""""Calculates completion percentage based on achieved milestones.        if not goal["milestones"]:"            return 0.0
+""""
+Calculates completion percentage based on achieved milestones.        if not goal["milestones"]:"            return 0.0
         achieved = sum(1 for m in goal["milestones"] if m["achieved"])"        return (achieved / len(goal["milestones"])) * 100"
     def mark_milestone_complete(self, goal_id: str, milestone_description: str) -> bool:
-""""Marks a milestone as achieved.        for goal in self.goals:
+""""
+Marks a milestone as achieved.        for goal in self.goals:
             if goal["id"] == goal_id:"                for milestone in goal["milestones"]:"                    if milestone["description"] == milestone_description:"                        milestone["achieved"] = True"                        self.logger.info(
 #                             fStrategy: Milestone '{milestone_description}' achieved for {goal_id}!'                        )
                         return True
         return False
 
     def get_strategic_summary(self) -> dict[str, Any]:
-""""Provides a summary of strategic alignment and progress.        return {
+""""
+Provides a summary of strategic alignment and progress.        return {
             "active_goals": len(self.goals),"            "roadmap_items": len(self.generate_roadmap()),"#             "overall_health": "On Track"            if all(self._calculate_completion(g) >= 0 for g in self.goals)
             else "At Risk","        }
+
+"""
+
+"""
+
+""
+
+"""

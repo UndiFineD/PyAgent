@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,11 +18,13 @@ from __future__ import annotations
 
 
 """
+"""
 Federated orchestrator.py module.
 """
-
 try:
-    import logging
+
+"""
+import logging
 except ImportError:
     import logging
 
@@ -61,14 +64,15 @@ class FederatedOrchestrator:
         self.trust_scores: dict[str, float] = {}  # swarm_id -> score (Phase 300)
 
     def register_peer_swarm(self, swarm_id: str, endpoint: str) -> bool:
-        """Registers an external swarm as a negotiation peer.        logging.info(f"FederatedOrchestrator: Registering peer swarm {swarm_id} at {endpoint}")"        self.peers[swarm_id] = endpoint
+"""
+Registers an external swarm as a negotiation peer.        logging.info(f"FederatedOrchestrator: Registering peer swarm {swarm_id} at {endpoint}")"        self.peers[swarm_id] = endpoint
         self.trust_scores[swarm_id] = 1.0  # Initial trust score
         return True
 
     def propose_federated_task(self, task_description: str, target_swarm_ids: list[str]) -> str:
                 Proposes a task to be shared across swarms.
                 proposal_id = str(uuid.uuid4())
-        logging.info(f"FederatedOrchestrator: Proposing task {proposal_id} to {target_swarm_ids}")"
+        logging.info(f"FederatedOrchestrator: Proposing task {proposal_id} to {target_swarm_ids}")
         proposal = {
             "proposal_id": proposal_id,"            "task": task_description,"            "status": "pending_negotiation","            "participants": target_swarm_ids,"            "orchestration_type": "federated","        }
         self.negotiation_history.append(proposal)
@@ -81,5 +85,6 @@ class FederatedOrchestrator:
         return False
 
     def finalize_federated_agreement(self, proposal_id: str) -> dict[str, Any]:
-        """Finalizes the negotiation and returns the agreed-upon execution plan.        logging.info(f"FederatedOrchestrator: Finalizing agreement for {proposal_id}")"        return {
+"""
+Finalizes the negotiation and returns the agreed-upon execution plan.        logging.info(f"FederatedOrchestrator: Finalizing agreement for {proposal_id}")"        return {
             "proposal_id": proposal_id,"            "agreement_status": "signed","            "execution_protocol": "distributed_swarm_v1","            "consensus_type": "sovereign_federation","        }

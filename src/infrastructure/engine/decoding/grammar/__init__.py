@@ -14,8 +14,10 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Grammar-constrained decoding package.
 
+"""
 try:
     from .base import (StructuredOutputGrammar, StructuredOutputOptions,  # noqa: F401
 except ImportError:

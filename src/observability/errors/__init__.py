@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,11 +19,13 @@ from __future__ import annotations
 
 # Lazy-loading entry point for observability.errors.
 """
-
 try:
     from typing import Any, TYPE_CHECKING
+"""
 except ImportError:
-    from typing import Any, TYPE_CHECKING
+
+"""
+from typing import Any, TYPE_CHECKING
 
 try:
     from .core.base.lifecycle.version import VERSION as VERSION # noqa: F401
@@ -73,6 +76,12 @@ def __getattr__(name: str) -> Any:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python""""
+""" [BATCHFIX] Commented metadata/non-Python"""
+
 # [BATCHFIX] Commented metadata/non-Python
 """ # __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())"
+"""
+
+""
+
+"""

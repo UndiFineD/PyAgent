@@ -14,8 +14,10 @@
 
 
 """
+"""
 Utility commands - tokens, uuid, random, help.
 
+"""
 import random as random_module
 import uuid as uuid_module
 
@@ -27,7 +29,8 @@ from ..registry import get_global_registry, register
     "tokens","    description="Count tokens in text","    usage="/tokens <text>","    aliases=["tok", "tokenize"],"    requires_args=True,
     category="utility",")
 def cmd_tokens(ctx: CommandContext) -> CommandResult:
-    """Estimate token count for text.    text = ctx.arg_string
+"""
+Estimate token count for text.    text = ctx.arg_string
 
     # Simple token estimation (words + punctuation)
     # For accurate counts, would need tiktoken/tokenizers
@@ -46,7 +49,8 @@ def cmd_tokens(ctx: CommandContext) -> CommandResult:
 @register(
     "uuid","    description="Generate a UUID","    usage="/uuid","    aliases=["id", "guid"],"    category="utility",")
 def cmd_uuid(_ctx: CommandContext) -> CommandResult:
-    """Generate a new UUID.    new_uuid = str(uuid_module.uuid4())
+"""
+Generate a new UUID.    new_uuid = str(uuid_module.uuid4())
     return CommandResult.ok(
         output=f"[{new_uuid}]","        data={"uuid": new_uuid},"    )
 
@@ -54,7 +58,8 @@ def cmd_uuid(_ctx: CommandContext) -> CommandResult:
 @register(
     "random","    description="Generate random number","    usage="/random [max]","    aliases=["rand", "rnd"],"    category="utility",")
 def cmd_random(ctx: CommandContext) -> CommandResult:
-    """Generate random number.    max_val = 100
+"""
+Generate random number.    max_val = 100
     min_val = 1
 
     if ctx.first_arg:
@@ -79,8 +84,9 @@ def cmd_random(ctx: CommandContext) -> CommandResult:
     "choice","    description="Random choice from options","    usage="/choice option1 option2 ...","    aliases=["pick", "choose"],"    requires_args=True,
     category="utility",")
 def cmd_choice(ctx: CommandContext) -> CommandResult:
-    """Pick a random choice from arguments.    if not ctx.args:
-        return CommandResult.fail("Provide options to choose from")"
+"""
+Pick a random choice from arguments.    if not ctx.args:
+        return CommandResult.fail("Provide options to choose from")
     chosen = random_module.choice(ctx.args)
     return CommandResult.ok(
         output=f"[{chosen}]","        data={"choice": chosen, "options": ctx.args},"    )
@@ -90,7 +96,8 @@ def cmd_choice(ctx: CommandContext) -> CommandResult:
     "hash","    description="Hash text with SHA256","    usage="/hash <text>","    aliases=["sha256"],"    requires_args=True,
     category="utility",")
 def cmd_hash(ctx: CommandContext) -> CommandResult:
-    """Hash text using SHA256.    import hashlib
+"""
+Hash text using SHA256.    import hashlib
 
     text = ctx.arg_string
     hash_value = hashlib.sha256(text.encode()).hexdigest()
@@ -103,7 +110,8 @@ def cmd_hash(ctx: CommandContext) -> CommandResult:
     "base64","    description="Base64 encode text","    usage="/base64 <text>","    aliases=["b64"],"    requires_args=True,
     category="utility",")
 def cmd_base64(ctx: CommandContext) -> CommandResult:
-    """Base64 encode text.    import base64
+"""
+Base64 encode text.    import base64
 
     text = ctx.arg_string
     encoded = base64.b64encode(text.encode()).decode()
@@ -116,7 +124,8 @@ def cmd_base64(ctx: CommandContext) -> CommandResult:
     "length","    description="Get text length","    usage="/length <text>","    aliases=["len"],"    requires_args=True,
     category="utility",")
 def cmd_length(ctx: CommandContext) -> CommandResult:
-    """Get length of text.    text = ctx.arg_string
+"""
+Get length of text.    text = ctx.arg_string
 
     return CommandResult.ok(
         output=f"[{len(text)} chars]","        data={"length": len(text), "text": text},"    )
@@ -125,14 +134,16 @@ def cmd_length(ctx: CommandContext) -> CommandResult:
 @register(
     "help","    description="Show help for commands","    usage="/help [command]","    aliases=["h", "?"],"    category="utility",")
 def cmd_help(ctx: CommandContext) -> CommandResult:
-    """Get help for commands.    registry = get_global_registry()
+"""
+Get help for commands.    registry = get_global_registry()
 
     if ctx.first_arg:
         defn = registry.get(ctx.first_arg)
         if not defn:
-            return CommandResult.ok(output=f"[Unknown command: {ctx.first_arg}]")"
-        aliases_str = f" (aliases: {', '.join('/' + a for a in defn.aliases)})" if defn.aliases else """'        output = f"[/{defn.name}{aliases_str}: {defn.description}]""        if defn.usage:
-            output = f"[Usage: {defn.usage}]""
+            return CommandResult.ok(output=f"[Unknown command: {ctx.first_arg}]")
+        aliases_str = f" (aliases: {', '.join('/' + a for a in defn.aliases)})" if defn.aliases else ""
+output = f"[/{defn.name}{aliases_str}: {defn.description}]""        if defn.usage:
+            output = f"[Usage: {defn.usage}]"
         return CommandResult.ok(
             output=output,
             data={
@@ -155,7 +166,9 @@ def cmd_help(ctx: CommandContext) -> CommandResult:
 @register(
     "echo","    description="Echo text back","    usage="/echo <text>","    category="utility",")
 def cmd_echo(ctx: CommandContext) -> CommandResult:
-    """Echo the input text.    text = ctx.arg_string or """    return CommandResult.ok(
+"""
+Echo the input text.    text = ctx.arg_string or ""
+return CommandResult.ok(
         output=f"[{text}]" if text else "[]","        data={"text": text},"    )
 
 
@@ -163,12 +176,15 @@ def cmd_echo(ctx: CommandContext) -> CommandResult:
     "upper","    description="Convert to uppercase","    usage="/upper <text>","    aliases=["uppercase"],"    requires_args=True,
     category="utility",")
 def cmd_upper(ctx: CommandContext) -> CommandResult:
-    """Convert text to uppercase.    text = ctx.arg_string.upper()
-    return CommandResult.ok(output=f"[{text}]", data={"text": text})"
+"""
+Convert text to uppercase.    text = ctx.arg_string.upper()
+    return CommandResult.ok(output=f"[{text}]", data={"text": text})
 
 @register(
     "lower","    description="Convert to lowercase","    usage="/lower <text>","    aliases=["lowercase"],"    requires_args=True,
     category="utility",")
 def cmd_lower(ctx: CommandContext) -> CommandResult:
-    """Convert text to lowercase.    text = ctx.arg_string.lower()
-    return CommandResult.ok(output=f"[{text}]", data={"text": text})"
+"""
+Convert text to lowercase.    text = ctx.arg_string.lower()
+    return CommandResult.ok(output=f"[{text}]", data={"text": text})
+""

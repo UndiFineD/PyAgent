@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.engine.scheduling.v2.scheduler_output import ScheduledSequence, SchedulerOutput

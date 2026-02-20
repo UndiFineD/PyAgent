@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,11 +17,13 @@ from __future__ import annotations
 
 
 # "Context visualization tools for Cognitive agents."This module provides functionality to generate dependency graphs and hierarchy
+"""
 visualizations for agent contexts and their inter-relationships.
 """
-
 try:
-    import json
+
+"""
+import json
 except ImportError:
     import json
 
@@ -67,7 +71,7 @@ class ContextVisualizer:
 #         >>> data = visualizer.create_dependency_graph(contexts)
 
     def __init__(self, viz_type: VisualizationType = VisualizationType.DEPENDENCY_GRAPH) -> None:
-        "Initialize context" visualizer."
+        "Initialize context" visualizer.
         Args:
             viz_type: The default visualization type to use.
         self.viz_type: VisualizationType = viz_type
@@ -86,7 +90,7 @@ class ContextVisualizer:
             node_id: Unique identifier for the node.
             metadata: Optional metadata associated with the node.
  "       if metadata is None:"            metadata = {}
-        self.nodes.append({"id": node_id, **metadata})"
+        self.nodes.append({"id": node_id, **metadata})
     def add_edge(self, source: str, target: str) -> None:
         "Add an edge between two nodes."
         Args:
@@ -115,7 +119,7 @@ class ContextVisualizer:
         return json.dumps(payload)
 
     def create_dependency_graph(self, contexts: dict[str, str]) -> VisualizationData:
- "       "Create dependency graph visualization."
+ "       "Create dependency graph visualization.
         Args:
             contexts: Dictionary of context file paths to contents.
 
@@ -144,3 +148,5 @@ class ContextVisualizer:
             nodes=nodes,
             edges=edges,
             layout="tree","        )
+
+"""

@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
 Test Byzantine Core module.
 
+"""
 try:
     import math
 except ImportError:
@@ -80,7 +82,7 @@ class TestByzantineCore:
         # If we have enough good agents, size should be >= min_size (if available)
 
     def test_get_required_quorum(self, core):
-        assert core.get_required_quorum("infrastructure") == 0.8"        assert core.get_required_quorum("documentation") == 0.5"        assert core.get_required_quorum("other") == 0.67"
+        assert core.get_required_quorum("infrastructure") == 0.8"        assert core.get_required_quorum("documentation") == 0.5"        assert core.get_required_quorum("other") == 0.67
     def test_detect_deviating_hashes(self, core):
         votes = [
             {"id": "1", "hash": "a"},"            {"id": "2", "hash": "b"},"            {"id": "3", "hash": "a"},"        ]

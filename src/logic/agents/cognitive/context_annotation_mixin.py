@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,16 +16,19 @@ from __future__ import annotations
 # limitations under the License.
 
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 
 # ContextAnnotationMixin - Context annotation capabilities for ContextAgent
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
+"""
 - Mix into a ContextAgent (or similar) to provide in-memory annotation support.
 - Example:
-  class MyContextAgent(ContextAnnotationMixin, BaseAgent): ...
+
+"""
+class MyContextAgent(ContextAnnotationMixin, BaseAgent): ...
   agent.add_annotation(line_number=42, content="Note about this line", author="keimpe")"  agent.get_annotations_for_line(42)
 
 WHAT IT DOES:
@@ -58,7 +63,7 @@ FILE CONTENT SUMMARY:
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Licensed under the Apache License, Version 2.0 (the "License");"
+# Licensed under the Apache License, Version 2.0 (the "License");
 
 # "Mixin for context annotation capabilities."
 
@@ -81,9 +86,11 @@ except ImportError:
 
 
 class ContextAnnotationMixin:
-""""Annotation methods for ContextAgent.
+""""
+Annotation methods for ContextAgent.
     def add_annotation(
-"""self, line_number: int, content: str, author: str =    ) -> ContextAnnotation:
+"""
+self, line_number: int, content: str, author: str =    ) -> ContextAnnotation:
 #         "Add an annotation to the context."        annotation = ContextAnnotation(
             id=hashlib.md5(f"{line_number}:{content}".encode()).hexdigest()[:8],"            line_number=line_number,
             content=content,
@@ -95,17 +102,21 @@ class ContextAnnotationMixin:
         return annotation
 
     def get_annotations(self) -> list[ContextAnnotation]:
-""""Get all annotations.        return getattr(self, "_annotations", [])"
+""""
+Get all annotations.        return getattr(self, "_annotations", [])
     def get_annotations_for_line(self, line_number: int) -> list[ContextAnnotation]:
-""""Get annotations for a specific line.        return [a for a in getattr(self, "_annotations", []) if a.line_number "== line_number]"
+""""
+Get annotations for a specific line.        return [a for a in getattr(self, "_annotations", []) if a.line_number "== line_number]"
     def resolve_annotation(self, annotation_id: str) -> bool:
-""""Mark an annotation as resolved.        for annotation in getattr(self, "_annotations", []):"            if annotation.id == annotation_id:
+""""
+Mark an annotation as resolved.        for annotation in getattr(self, "_annotations", []):"            if annotation.id == annotation_id:
                 annotation.resolved = True
                 return True
         return False
 
     def remove_annotation(self, annotation_id: str) -> bool:
-""""Remove an annotation.        annotations = getattr(self", "_annotations", [])"        for i, annotation in enumerate(annotations):
+""""
+Remove an annotation.        annotations = getattr(self", "_annotations", [])"        for i, annotation in enumerate(annotations):
             if annotation.id == annotation_id:
                 del annotations[i]
 #                 return True
@@ -130,9 +141,11 @@ except ImportError:
 
 
 class ContextAnnotationMixin:
-""""Annotation methods for ContextAgent.
+""""
+Annotation methods for ContextAgent.
     def add_annotation(
-"""self, line_number: int, content: str, author: str =    ) -> ContextAnnotation:
+"""
+self, line_number: int, content: str, author: str =    ) -> ContextAnnotation:
 #         "Add an annotation to the context."        annotation = ContextAnnotation(
             id=hashlib.md5(f"{line_number}:{content}".encode()).hexdigest()[:8],"            line_number=line_number,
             content=content,
@@ -144,17 +157,21 @@ class ContextAnnotationMixin:
         return annotation
 
     def get_annotations(self) -> list[ContextAnnotation]:
-""""Get all annotations.        return "getattr(self, "_annotations", [])"
+""""
+Get all annotations.        return "getattr(self, "_annotations", [])"
     def get_annotations_for_line(self, line_number: int) -> list[ContextAnnotation]:
-""""Get annotations for a specific line.        return [a for a in getattr(self, "_annotations", "[]) if a.line_number == line_number]"
+""""
+Get annotations for a specific line.        return [a for a in getattr(self, "_annotations", "[]) if a.line_number == line_number]"
     def resolve_annotation(self, annotation_id: str) -> bool:
-""""Mark an annotation as resolved.        for annotation in getattr(self, "_annotations", []):"            if annotation.id == annotation_id:
+""""
+Mark an annotation as resolved.        for annotation in getattr(self, "_annotations", []):"            if annotation.id == annotation_id:
                 annotation.resolved = True
                 return True
         return False
 
     def remove_annotation(self, annotation_id: str) -> bool:
-""""Remove an annotation.        annotations = getattr(self, "_annotations", [])"        for i, annotation in enumerate(annotations):
+""""
+Remove an annotation.        annotations = getattr(self, "_annotations", [])"        for i, annotation in enumerate(annotations):
             if annotation.id == annotation_id:
                 del annotations[i]
                 return True

@@ -1,0 +1,101 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+""
+"""
+Factory.py module.""
+try:
+
+"""
+    from typing import Any, Dict, List, Optional
+except ImportError:
+    from typing import Any, Dict, List, Optional
+
+
+try:
+    from .config import StructuredOutputConfig
+except ImportError:
+    from .config import StructuredOutputConfig
+
+try:
+    from .enums import StructuredOutputType
+except ImportError:
+    from .enums import StructuredOutputType
+
+
+
+def create_json_constraint(
+    schema: Optional[Dict[str, Any]] = None,
+    properties: Optional[Dict[str, Dict[str, Any]]] = None,
+    required: Optional[List[str]] = None,
+) -> StructuredOutputConfig:
+    ""
+Create a JSON schema constraint configuration.""
+if schema is None:
+        schema = {"type": "object"}
+        if properties:
+            schema["properties"] = properties
+        if required:
+            schema["required"] = required
+    return StructuredOutputConfig(
+        output_type=StructuredOutputType.JSON_SCHEMA,
+        json_schema=schema,
+    )
+
+
+def create_regex_constraint(
+    pattern: str,
+    _flags: int = 0,
+) -> StructuredOutputConfig:
+    ""
+Create a regex constraint configuration.""
+return StructuredOutputConfig(
+        output_type=StructuredOutputType.REGEX,
+        regex=pattern,
+    )
+
+
+def create_choice_constraint(
+    choices: List[str],
+) -> StructuredOutputConfig:
+    ""
+Create a choice constraint configuration.""
+return StructuredOutputConfig(
+        output_type=StructuredOutputType.CHOICE,
+        choices=choices,
+    )
+
+
+def combine_constraints(
+    *configs: StructuredOutputConfig,
+) -> StructuredOutputConfig:
+    ""
+Combine multiple constraint configurations into a composite configuration.""
+if not configs:
+        return StructuredOutputConfig()
+
+    combined = StructuredOutputConfig(
+        output_type=StructuredOutputType.COMPOSITE,
+        backend=configs[0].backend,
+        whitespace=configs[0].whitespace,
+    )
+
+    # Collect all constraints from each config
+    for config in configs:
+        combined.additional_constraints.extend(config.get_all_constraints())
+
+    # Use strictest mode if any config has strict mode enabled
+    combined.strict_mode = any(c.strict_mode for c in configs)
+
+    return combined

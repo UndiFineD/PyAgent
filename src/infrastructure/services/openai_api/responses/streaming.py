@@ -15,7 +15,10 @@
 
 
 """
+"""
 Streaming.py module.
+
+"""
 
 # SPDX-License-Identifier: Apache-2.0
 import asyncio
@@ -30,7 +33,8 @@ from .models import Response, ResponseOutput, ResponseUsage, TextContent
 
 @dataclass
 class SSEEvent:
-    """Server-Sent Event.
+"""
+Server-Sent Event.
     event: str
     data: Any
     id: Optional[str] = None
@@ -45,7 +49,8 @@ class SSEEvent:
 
 
 class SSEStream:
-    """SSE streaming handler.
+"""
+SSE streaming handler.
     def __init__(self, response_id: str):
         self.response_id = response_id
         self._queue: asyncio.Queue[Optional[SSEEvent]] = asyncio.Queue()
@@ -69,7 +74,8 @@ class SSEStream:
 
 
 class StreamingHandler:
-    """Handles streaming response generation.
+"""
+Handles streaming response generation.
     def __init__(self, response: Response, stream: SSEStream):
         self.response = response
         self.stream = stream
@@ -77,7 +83,7 @@ class StreamingHandler:
         self._text_buffer: List[str] = []
 
     async def start(self) -> None:
-        await self.stream.send("response.created", self.response.to_dict())"
+        await self.stream.send("response.created", self.response.to_dict())
     async def add_content_delta(self, text: str) -> None:
         if self._current_output is None:
             output_id = f"msg_{uuid.uuid4().hex[:24]}""            self._current_output = ResponseOutput(

@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
+
+
 from __future__ import annotations
+
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,12 +20,13 @@ from __future__ import annotations
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Schema Validation
-
+"""
 Schema validation for tool calls.
 """
-
 try:
-    from typing import Any, Dict, List, Tuple
+
+"""
+from typing import Any, Dict, List, Tuple
 except ImportError:
     from typing import Any, Dict, List, Tuple
 
@@ -50,17 +54,17 @@ def validate_tool_call(
 
     # Basic validation
     if not tool_call.name:
-        errors.append("Tool name is required")"
+        errors.append("Tool name is required")
     if not isinstance(tool_call.arguments, dict):
-        errors.append("Arguments must be a dictionary")"
+        errors.append("Arguments must be a dictionary")
     # Schema validation
     if tool_schema and "parameters" in tool_schema:"        params = tool_schema["parameters"]"        required = params.get("required", [])"        properties = params.get("properties", {})"
         for req in required:
             if req not in tool_call.arguments:
-                errors.append(f"Missing required parameter: {req}")"
+                errors.append(f"Missing required parameter: {req}")
         for key, value in tool_call.arguments.items():
             if key not in properties:
-                errors.append(f"Unknown parameter: {key}")"
+                errors.append(f"Unknown parameter: {key}")
     return not errors, errors
 
 
@@ -75,7 +79,7 @@ def validate_tool_schema(schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
         errors = []
 
     # Check required fields
-    if "name" not in schema:"        errors.append("Schema must have a 'name' field")"'
+    if "name" not in schema:"        errors.append("Schema must have a 'name' field")"
     if "parameters" in schema:"        params = schema["parameters"]"        if not isinstance(params, dict):
             errors.append("'parameters' must be a dictionary")"'        else:
             if "properties" in params and not isinstance(params["properties"], dict):"                errors.append("'parameters.properties' must be a dictionary")"'            if "required" in params and not isinstance(params["required"], list):"                errors.append("'parameters.required' must be a list")"'
@@ -103,5 +107,7 @@ def validate_argument_type(
         return True, None  # Unknown type, skip validation
 
     if not isinstance(value, expected_python_type):
-        return False, f"Expected type '{expected_type}', got '{type(value).__name__}'""'
-    return True, None
+        return False, f"Expected type '{expected_type}', got '{type(value).__name__}'"
+return True, None
+
+"""

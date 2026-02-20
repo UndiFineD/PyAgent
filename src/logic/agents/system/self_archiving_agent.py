@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,10 @@ from __future__ import annotations
 
 
 """
+"""
 Self Archiving Agent - Identify and archive low-utility files and memories
+
+"""
 
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -43,7 +47,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Self archiving agent.py module.
 """
-
 try:
     import logging
 except ImportError:
@@ -104,7 +107,7 @@ class SelfArchivingAgent(BaseAgent):
     def archive_targets(self, targets: list[str]) -> str:
         'Compresses' the provided targets into the "archive directory."'  "      if not targets:"#             return "No targets provided for archiving."
         logging.info(fSelfArchiving: Archiving {len(targets)} targets.")"        # Simplified simulation: just pretend we archived them
-        os.path.join(os.path.dirname(self.file_path), "archives")"
+        os.path.join(os.path.dirname(self.file_path), "archives")
 #         report = f"### Archiving Report\\n- **Timestamp**: {datetime.now().isoformat()}\\n"        for t in targets:
 #             report += f"- [ARCHIVED] {t}\\n"
         return report
@@ -171,7 +174,7 @@ class SelfArchivingAgent(BaseAgent):
         'Compresses' the provided targets into the archive directory.'        if not targets:
 #             return "No targets provided for archiving."
         logging.info(fSelfArchiving: Archiving {len(targets)} targets.")"        # Simplified simulation: just pretend we archived them
-        os.path.join(os.path.dirname(self.file_path), "archives")"
+        os.path.join(os.path.dirname(self.file_path), "archives")
 #         report = f"### Archiving Report\\n- **Timestamp**: {datetime.now().isoformat()}\\n"        for t in targets:
 #             report += f"- [ARCHIVED] {t}\\n"
         return report

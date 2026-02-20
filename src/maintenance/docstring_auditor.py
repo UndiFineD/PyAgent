@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,7 +18,10 @@ from __future__ import annotations
 
 
 """
+"""
 Docstring Auditor - Parse analyzer output and generate module batches
+
+"""
 
 [Brief Summary]
 Parses analyzer output for missing module-level docstrings and writes a next-batch list of module
@@ -46,11 +50,12 @@ import re
 from pathlib import Path
 from typing import List
 
-MISSING_DOCSTRING_MARKER = "Missing Docstring: Module-level docstring is missing""
+MISSING_DOCSTRING_MARKER = "Missing Docstring: Module-level docstring is missing"
 
 def parse_prompt_file(prompt_path: str | Path) -> List[str]:
-    """Parse analyzer output and return file paths with missing docstring markers.""""
-    Args:
+"""
+Parse analyzer output and return file paths with missing docstring markers.""""
+Args:
         prompt_path: Path to the analyzer output file (plain text).
 
     Returns:
@@ -70,13 +75,15 @@ def parse_prompt_file(prompt_path: str | Path) -> List[str]:
 
 
 def file_path_to_module_name(path: str) -> str:
-    """Convert a filesystem path to a module import path.""""
-    Example: "src/core/lazy_loader.py" -> "src.core.lazy_loader""        p = Path(path)
-    if p.suffix != ".py":"        raise ValueError("Only .py files supported")"    return ".".join(p.with_suffix("").parts)"
+"""
+Convert a filesystem path to a module import path.""""
+Example: "src/core/lazy_loader.py" -> "src.core.lazy_loader""        p = Path(path)
+    if p.suffix != ".py":"        raise ValueError("Only .py files supported")"    return ".".join(p.with_suffix("").parts)
 
 def generate_next_batch(prompt_path: str | Path, out_path: str | Path, max_entries: int = 20) -> List[str]:
-    """Generate the next small batch of modules to fix.""""
-    Writes a newline-separated list of module names to `out_path` and returns
+"""
+Generate the next small batch of modules to fix.""""
+Writes a newline-separated list of module names to `out_path` and returns
     the list. Modules are chosen in the order they appear in the prompt.
         files = parse_prompt_file(prompt_path)
     modules = []
@@ -91,3 +98,11 @@ def generate_next_batch(prompt_path: str | Path, out_path: str | Path, max_entri
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\\n".join(modules))"    return modules
+
+"""
+
+"""
+
+""
+
+"""

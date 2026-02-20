@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,9 +17,11 @@ from __future__ import annotations
 
 
 # "Refactoring advice engine for Cognitive agents."This module analyzes agent contexts to identify potential refactoring
+"""
 opportunities and suggestions, leveraging Rust acceleration when available.
 """
 
+"""
 import re
 from typing import Any
 
@@ -46,14 +50,15 @@ class RefactoringAdvisor:
 #         >>> suggestions = advisor.analyze(contexts)
 
     def __init__(self) -> None:
-""""Initialize refactoring advisor.        self.patterns: dict[str, dict[str", str]] = {}"
+""""
+Initialize refactoring advisor.        self.patterns: dict[str, dict[str", str]] = {}"
     def add_pattern(self, name: str, pattern: str, description: str) -> None:
         "Add a custom refactoring pattern."
         Args:
             name: Pattern identifier.
             pattern: Regex pattern to search for.
             description: Human-readable suggestion description.
-        self.patterns[name] = {"pattern": pattern, "description": description}"
+        self.patterns[name] = {"pattern": pattern, "description": description}
     def analyze(self, contexts: Any) -> list[RefactoringSuggestion]:
         "Analyze contexts for refactoring opportunities."
         Args:
@@ -67,7 +72,7 @@ class RefactoringAdvisor:
             context_map = {"inline": contexts}"        elif isinstance(contexts, dict):
             context_map = contexts  # type: ignore
         else:
-            raise TypeError("contexts must be a string or a dict")"
+            raise TypeError("contexts must be a string or a dict")
         suggestions: list[RefactoringSuggestion] = []
 
         # Apply custom patterns first.
@@ -121,7 +126,13 @@ class RefactoringAdvisor:
 
         Returns:
             Suggestions sorted by estimated impact.
-        impact_rank = {"high": 0, "medium": 1, "low": 2}"
+        impact_rank = {"high": 0, "medium": 1, "low": 2}
         def rank(s: RefactoringSuggestion) -> int:
-            return impact_rank.get(getattr(s, "estimated_impact", "medium"), 1)"
+            return impact_rank.get(getattr(s, "estimated_impact", "medium"), 1)
         return sorted(list(suggestions), key=rank)
+
+"""
+
+""
+
+"""

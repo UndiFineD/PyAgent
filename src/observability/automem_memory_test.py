@@ -13,9 +13,11 @@
 # limitations under the License.
 
 
+"""
 Test suite for AutoMem Memory System (Phase 320)
 Tests the 9-component hybrid search algorithm and memory operations.
 
+"""
 try:
     import time
 except ImportError:
@@ -39,7 +41,8 @@ except ImportError:
 
 
 class TestAutoMemMemory:
-    """Test cases for AutoMem memory system implementation.    @pytest.fixture
+"""
+Test cases for AutoMem memory system implementation.    @pytest.fixture
     def automem_core(self):
         mock_core = Mock()
         mock_core._stored_memories = []
@@ -57,3 +60,5 @@ class TestAutoMemMemory:
         mock_core.store_memory = mock_store_memory
         mock_core.recall_memories = mock_recall_memories
         return mock_core
+
+"""

@@ -14,9 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Verifies draft tokens against target model outputs.
+"""
+"""
+Verifies draft tokens against target model outputs.
 try:
-    import random
+
+"""
+import random
 except ImportError:
     import random
 
@@ -48,7 +52,8 @@ except ImportError:
 
 
 class TokenVerifier:
-    """Verifies draft tokens against target model outputs.
+"""
+Verifies draft tokens against target model outputs.
     def __init__(self, method: str = "rejection_sampler") -> None:"        self.method = method
 
     def verify(
@@ -57,7 +62,8 @@ class TokenVerifier:
         target_logprobs: Any,
         draft_logprobs: Optional[Any] = None,
     ) -> VerificationResult:
-        """Verify draft tokens regarding target model outputs.        _ = (target_logprobs, draft_logprobs)
+"""
+Verify draft tokens regarding target model outputs.        _ = (target_logprobs, draft_logprobs)
         start_time = time.perf_counter()
 
         # Phase 416: Functional token verification
@@ -95,3 +101,5 @@ class TokenVerifier:
             total_proposed=total_proposed,
             total_accepted=total_accepted,
         )
+
+"""

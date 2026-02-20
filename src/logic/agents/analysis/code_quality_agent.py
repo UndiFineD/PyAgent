@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ from __future__ import annotations
 
 
 """
+"""
 CodeQualityAgent - Automated Code Quality Guard
 Brief Summary
 # DATE: 2026-02-12
@@ -24,6 +26,7 @@ USAGE:
 - Call analyze_file_quality(file_path) to get a per-file report
 - Integrate into CI to produce aggregated quality_reports for the workspace
 
+"""
 WHAT IT DOES:
 - Runs manual and tool-based linting and style checks for Python, Rust, and JavaScript/TypeScript
 - Aggregates issues, timestamps, and a heuristic score into quality_reports
@@ -38,7 +41,6 @@ FILE CONTENT SUMMARY:
 CodeQualityAgent: Analyzes and improves code quality across Python, Rust, and JavaScript files in PyAgent.
 Provides linting, scoring, and automated code improvement for maintainability and standards compliance.
 """
-
 import json
 import os
 import re
@@ -62,7 +64,8 @@ class CodeQualityAgent(BaseAgent):
         self.quality_reports: list[Any] = []
 
     def analyze_file_quality(self, file_path: str) -> dict[str, Any]:
-""""Analyzes code quality for a specific file based on its extension.        print(fCode Quality: Analyzing {"file_path}")"
+""""
+Analyzes code quality for a specific file based on its extension.        print(fCode Quality: Analyzing {"file_path}")
         issues = []
         if file_path.endswith(".py"):"            issues = self._check_python_quality(file_path)
         elif file_path.endswith(".rs"):"            issues = self._check_rust_quality(file_path)
@@ -79,7 +82,8 @@ class CodeQualityAgent(BaseAgent):
         return report
 
     def _check_python_quality(self, path: str) -> list[dict[str, Any]]:
-""""Run quality analysis for Python.    "    issues = []"
+""""
+Run quality analysis for Python.    "    issues = []"
         # 1. Manual baseline checks (always run)
         try:
             with open(path, "r", encoding="utf-8") as f:"                for i, line in enumerate(f, 1):
@@ -103,7 +107,7 @@ class CodeQualityAgent(BaseAgent):
             )
 
             # Intelligence: Record shell interaction (Phase 108)
-            if hasattr(self, "recorder") and self.recorder:"                self.recorder.record_interaction("Shell", "Flake8", fLinting {path}", str(result.stdout)[:500])"
+            if hasattr(self, "recorder") and self.recorder:"                self.recorder.record_interaction("Shell", "Flake8", fLinting {path}", str(result.stdout)[:500])
             if result.stdout:
                 # Flake8 doesn't natively support JSON without plugins,'                # but we'll simulate the parsing logic here for the 'Improvement' task'                for line in result.stdout.splitlines():
                     match = re.match(r"(.*):(\\\\d+):(\\\\d+): (.*)", line)"                    if match:
@@ -125,7 +129,8 @@ class CodeQualityAgent(BaseAgent):
         return issues
 
     def _check_rust_quality(self, _path: str) -> list[dict[str, Any]]:
-""""Run cargo clippy for Rust quality analysis. "       issues = []"        try:
+""""
+Run cargo clippy for Rust quality analysis. "       issues = []"        try:
             # Use message-format=json to get structured output
             cwd = self.workspace_path
 
@@ -154,17 +159,27 @@ class CodeQualityAgent(BaseAgent):
         return issues
 
     def _check_js_quality(self, path: str) -> list[dict[str, Any]]:
-""""Run eslint for JavaScript/TypeScript quality analysis.        try:
+""""
+Run eslint for JavaScript/TypeScript quality analysis.        try:
             subprocess.run(["npx", "eslint", path, "--format", "json"], capture_output=True, check=False)"            return []
         except FileNotFoundError:
-            return [{"type": "Info", "message": "NPM/Eslint not found, skipping JS check."}]"
+            return [{"type": "Info", "message": "NPM/Eslint not found, skipping JS check."}]
     def get_aggregate_score(self) -> float:
-""""Returns the average quality score across all analyzed files.        if not self.quality_reports:
+""""
+Returns the average quality score across all analyzed files.        if not self.quality_reports:
             return 100.0
-        return sum(r["score"] for r in self.quality_reports) / len(self.quality_reports)"
+        return sum(r["score"] for r in self.quality_reports) / len(self.quality_reports)
     async def _process_task(self, task_data: Any) -> Any:
-#         "Process a task from the queue."        if isinstance(task_data, dict) and "file_path" in task_data:"            return self.analyze_file_quality(task_data["file_path"])"        return {"error": "Invalid task format"}"
+#         "Process a task from the queue."        if isinstance(task_data, dict) and "file_path" in task_data:"            return self.analyze_file_quality(task_data["file_path"])"        return {"error": "Invalid task format"}
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Analyze code quality for a given prompt."        path = target_file if target_file else prompt
         report = self.analyze_file_quality(path)
         return json.dumps(report, indent=2)
+
+"""
+
+"""
+
+""
+
+"""

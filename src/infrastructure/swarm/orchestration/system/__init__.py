@@ -14,10 +14,13 @@
 
 
 """
+"""
 System orchestration components.
 """
 try:
-    from .lock_manager import LockManager
+
+"""
+from .lock_manager import LockManager
 except ImportError:
     from .lock_manager import LockManager
 

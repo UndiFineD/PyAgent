@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from interface.slash_commands.commands.chat_decorator.suggested import cmd_human, cmd_ai, cmd_system_message, cmd_thinking, cmd_codeblock, cmd_chat, cmd_chat_theme, cmd_chat_preview

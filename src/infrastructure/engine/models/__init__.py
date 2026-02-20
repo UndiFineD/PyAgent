@@ -15,8 +15,10 @@
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Model Registry Package
 
+"""
 Model registry for architecture management.
 
+"""
 This package provides:
 - Model architecture registration
 - Capability detection

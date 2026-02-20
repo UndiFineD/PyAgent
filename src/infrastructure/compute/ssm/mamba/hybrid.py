@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +17,10 @@ from __future__ import annotations
 
 
 # SPDX-License-Identifier: Apache-2.0
+"""
 Hybrid Mamba Mixer - Combining SSM with Attention.
+
+"""
 
 # pylint: disable=invalid-name
 
@@ -86,7 +91,8 @@ class HybridMambaMixer:
         hidden_states: np.ndarray,
         state: MambaState | None = None,
     ) -> MambaOutput:
-        """Forward with hybrid SSM + attention.        batch_size, seq_len, _ = hidden_states.shape
+"""
+Forward with hybrid SSM + attention.        batch_size, seq_len, _ = hidden_states.shape
 
         # SSM path
         ssm_input = hidden_states[:, :, : self.ssm_dim]
@@ -113,7 +119,7 @@ class HybridMambaMixer:
 
         # Attention scores
         # scores = [batch, heads, seq_len, seq_len]
-        scores = np.einsum("bqhd,bkhd->bhqk", Q, K) * self.scale"
+        scores = np.einsum("bqhd,bkhd->bhqk", Q, K) * self.scale
         # Causal mask
         mask = np.triu(np.ones((seq_len, seq_len)), k=1) * -1e9
         scores = scores + mask
@@ -128,3 +134,5 @@ class HybridMambaMixer:
         output = combined @ self.o_proj.T
 
         return MambaOutput(output=output, state=ssm_output.state)
+
+"""

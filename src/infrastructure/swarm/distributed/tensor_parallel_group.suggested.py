@@ -15,8 +15,10 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 
+"""
 TensorParallelGroup - Tensor parallel coordination for distributed inference.
 
+"""
 This module is now a facade for the modular sub-package in ./tp/.
 
 try:

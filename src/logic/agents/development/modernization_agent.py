@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,12 +17,15 @@ from __future__ import annotations
 
 
 # Modernization Agent - Detect deprecated Python APIs and suggest modern replacements
+"""
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
 USAGE:
 try:
-    from modernization_agent import ModernizationAgent
+
+"""
+from modernization_agent import ModernizationAgent
 except ImportError:
     from modernization_agent import ModernizationAgent
 
@@ -67,7 +72,7 @@ __version__ = VERSION
 
 
 class ModernizationAgent:
-    "Advises on modernizing deprecated" APIs."
+    "Advises on modernizing deprecated" APIs.
     Tracks deprecated API usage and suggests modern replacements.
 
     Attributes:
@@ -75,7 +80,7 @@ class ModernizationAgent:
 
     Example:
         >>> advisor=ModernizationAgent()
-#         >>> suggestions=advisor.analyze("import urllib2")"
+#         >>> suggestions=advisor.analyze("import urllib2")
     DEPRECATIONS: list[tuple[str, str, str, str | None, str]] = [
         (
             rimport\\\\s+urllib2","            "urllib.request","            "2.7","            "3.0","            "https://docs.python.org/3/library/urllib.request.html","        ),
@@ -90,7 +95,8 @@ class ModernizationAgent:
     ]
 
     def __init__(self) -> None:
-""""Initialize the modernization advisor.        self.suggestions: list[ModernizationSuggestion] = []
+""""
+Initialize the modernization advisor.        self.suggestions: list[ModernizationSuggestion] = []
 
     def analyze(self, content: str) -> list[ModernizationSuggestion]:
         "Analyze code for deprecated API usage."
@@ -162,7 +168,8 @@ class ModernizationAgent:
     ]
 
     def __init__(self) -> None:
-""""Initialize the modernization advisor.        self.suggestions: list"[ModernizationSuggestion] = []"
+""""
+Initialize the modernization advisor.        self.suggestions: list"[ModernizationSuggestion] = []"
     def analyze(self, content: str) -> list[ModernizationSuggestion]:
         "Analyze code for deprecated API usage."
         Args:
@@ -185,3 +192,11 @@ class ModernizationAgent:
                 )
 
         return self.suggestions
+
+"""
+
+"""
+
+""
+
+"""

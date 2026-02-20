@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,12 @@ from __future__ import annotations
 
 """
 FleetExecutionCore
+"""
 Core logic for Fleet workflow execution and reliability.
 Fleet execution core.py module.
 """
 
+"""
 import asyncio
 import contextlib
 import inspect
@@ -40,17 +43,17 @@ if TYPE_CHECKING:
 
 
 class FleetExecutionCore:
-    """
-    Handles core workflow execution and task reliability logic for the Fleet.
-    """
-    def __init__(self, fleet: 'FleetManager') -> None:
+"""
+Handles core workflow execution and task reliability logic for the Fleet.
+"""
+def __init__(self, fleet: 'FleetManager') -> None:
         self.fleet = fleet
 
     def _check_ethics(self, task: str) -> dict[str, Any]:
-        """
-        Performs a mandatory ethics review on the task.
-        """
-        ethics_report = self.fleet.ethics_guardrail.review_task(task)
+"""
+Performs a mandatory ethics review on the task.
+"""
+ethics_report = self.fleet.ethics_guardrail.review_task(task)
         if ethics_report["status"] == "rejected":
             logging.error(f"Ethics Review REJECTED: {ethics_report['violations']}")
             # Fire-and-forget signal (it's sync but emit is usually async-safe or handled)
@@ -66,8 +69,9 @@ class FleetExecutionCore:
         return ethics_report
 
     async def execute_reliable_task(self, task: str, priority: AgentPriority = AgentPriority.NORMAL) -> str:
-        """Executes a task using the 7-phase inner loop and linguistic articulation."""
-        task_id = f"task_{int(time.time() * 1000)}"
+"""
+Executes a task using the 7-phase inner loop and linguistic articulation.""
+task_id = f"task_{int(time.time() * 1000)}"
         self.fleet.active_tasks[task_id] = {"priority": priority, "agents": []}
         # Check for preemption if high priority
         if priority.value < AgentPriority.NORMAL.value:
@@ -111,10 +115,10 @@ class FleetExecutionCore:
         workflow_steps: list[dict[str, Any]],
         priority: AgentPriority = AgentPriority.NORMAL,
     ) -> str:
-        """
-        Runs a sequence of agent actions with shared state and signals.
-        """
-        workflow_id = f"wf_{int(time.time() * 1000)}"
+"""
+Runs a sequence of agent actions with shared state and signals.
+"""
+workflow_id = f"wf_{int(time.time() * 1000)}"
         self.fleet.active_tasks[workflow_id] = {"priority": priority, "agents": []}
         if priority.value < AgentPriority.NORMAL.value:
             self.fleet.preempt_lower_priority_tasks(priority)
@@ -150,8 +154,9 @@ class FleetExecutionCore:
 
 
     async def _process_workflow_step(self, step: dict[str, Any], workflow_id: str, priority: AgentPriority) -> str:
-        """Processes a single step in a multi-agent workflow."""
-        agent_name = step.get("agent", "Unknown")
+"""
+Processes a single step in a multi-agent workflow.""
+agent_name = step.get("agent", "Unknown")
         action_name = step.get("action", "Unknown")
         args = step.get("args", [])
         # Process variables (e.g., $last_result)
@@ -212,7 +217,8 @@ class FleetExecutionCore:
 
         action_fn = getattr(agent, action_name, None)
         if not action_fn:
-            err = f"Action '{action_name}' not supported.""'            return f"### Error from {agent_name}\\n{err}\\n""
+            err = f"Action '{action_name}' not supported."
+return f"### Error from {agent_name}\\n{err}\\n"
         trace_id = f"{workflow_id}_{agent_name}_{action_name}"
         start_time = time.time()
         self.fleet.telemetry.start_trace(trace_id)
@@ -242,8 +248,9 @@ class FleetExecutionCore:
     async def _execute_with_retry(
         self, agent, action_fn, args, workflow_id, priority, trace_id, start_time
     ) -> tuple[bool, str, str]:
-        """Executes an action with a retry loop and loop detection."""
-        success = False
+"""
+Executes an action with a retry loop and loop detection.""
+success = False
         res = ""
         error_msg = ""
         max_retries = 2
@@ -328,6 +335,7 @@ class FleetExecutionCore:
 
 
     def make_variant_name(name):
-        """Generates a variant name for an agent (placeholder for Phase 105)."""
-        name = name + "_" + base64(datetime.now().isoformat())  # Simple variant logic using timestamp
+"""
+Generates a variant name for an agent (placeholder for Phase 105).""
+name = name + "_" + base64(datetime.now().isoformat())  # Simple variant logic using timestamp
         return name  # In Phase 105, this will implement logic to select agent variants based on context.

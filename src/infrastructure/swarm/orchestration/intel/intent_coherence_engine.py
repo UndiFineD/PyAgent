@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+
+
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,12 +16,13 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
 try:
     import logging
+"""
 except ImportError:
-    import logging
+
+"""
+import logging
 
 try:
     from datetime import datetime
@@ -71,7 +76,7 @@ class IntentCoherenceEngine:
                 Re-aligns an agent's local task with the global coherent intent.'                if not self.global_intent:
             return local_task
 
-        logging.info(f"IntentCoherenceEngine: Aligning {agent_name} with global intent.")"
+        logging.info(f"IntentCoherenceEngine: Aligning {agent_name} with global intent.")
         # In a real implementation, we'd use an LLM or vector similarity to'        # project the local task into the global intent space.
 
         # For simulation, we'll just prepend the global context'        aligned_task = f"[Aligned with: {self.global_intent}] {local_task}""        return aligned_task

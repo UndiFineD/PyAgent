@@ -15,9 +15,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
+"""
 Module: engine
 PyAgent engine package initialization.
 
+"""
 Engine infrastructure module.
 
 Provides request lifecycle management, engine state control,

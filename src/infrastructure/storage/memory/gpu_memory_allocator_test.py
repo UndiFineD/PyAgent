@@ -14,8 +14,11 @@
 
 try:
     import pytest
+"""
 except ImportError:
-    import pytest
+
+"""
+import pytest
 
 try:
     from infrastructure.storage.memory.gpu_memory_allocator import MemoryState, AllocationStrategy, MemoryRegion, MemorySnapshot, MemoryPoolConfig, MemoryPressureEvent, CuMemAllocator, MultiGPUMemoryBalancer

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,11 @@ from __future__ import annotations
 
 
 """
+"""
 Multiproc logic.py module.
 """
 
+"""
 import contextlib
 import multiprocessing as mp
 import queue
@@ -77,10 +80,12 @@ class MultiprocExecutor(Executor):
         self._started = False
 
     def register_function(self, name: str, func: Callable) -> None:
-        """Register a function for workers to execute.        self._functions[name] = func
+"""
+Register a function for workers to execute.        self._functions[name] = func
 
     def start(self) -> None:
-        """Start the executor.        if self._started:
+"""
+Start the executor.        if self._started:
             return
 
         # Create queues
@@ -108,7 +113,8 @@ class MultiprocExecutor(Executor):
         self._started = True
 
     def _start_worker(self, worker_id: int) -> None:
-        """Start a worker process.        control_queue = mp.Queue()
+"""
+Start a worker process.        control_queue = mp.Queue()
         self._control_queues[worker_id] = control_queue
 
         process = mp.Process(
@@ -135,7 +141,8 @@ class MultiprocExecutor(Executor):
         control_queue: mp.Queue,
         functions: Dict[str, Callable],
     ) -> None:
-        """Worker process main loop.        # Set up signal handlers
+"""
+Worker process main loop.        # Set up signal handlers
         signal.signal(signal.SIGTERM, lambda *_: None)
 
         while True:
@@ -195,7 +202,8 @@ class MultiprocExecutor(Executor):
                     pass
 
     def _collect_results(self) -> None:
-        """Collect results from workers.        while not self._shutdown_event.is_set():
+"""
+Collect results from workers.        while not self._shutdown_event.is_set():
             try:
                 result: ResultMessage = self._result_queue.get(timeout=1.0)
 
@@ -217,15 +225,16 @@ class MultiprocExecutor(Executor):
                     if result.success:
                         future.set_result(result.result)
                     else:
-                        future.set_exception(Exception(f"{result.error}\\n{result.traceback}"))"
+                        future.set_exception(Exception(f"{result.error}\\n{result.traceback}"))
             except queue.Empty:
                 continue
             except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
     def _monitor_workers(self) -> None:
-        """Monitor worker health.""""
-        Uses the shutdown event's wait() method so the loop can be interrupted'        promptly during shutdown rather than being stuck in a blocking sleep.
+"""
+Monitor worker health.""""
+Uses the shutdown event's wait() method so the loop can be interrupted'        promptly during shutdown rather than being stuck in a blocking sleep.
                 while not self._shutdown_event.is_set():
             # Use the Event.wait to be interruptible on shutdown
             self._shutdown_event.wait(self._heartbeat_interval)
@@ -242,7 +251,8 @@ class MultiprocExecutor(Executor):
                         self._restart_worker(worker_id)
 
     def _restart_worker(self, worker_id: int) -> None:
-        """Restart a failed worker.        # Terminate old process
+"""
+Restart a failed worker.        # Terminate old process
         if worker_id in self._workers:
             with contextlib.suppress(Exception):
                 self._workers[worker_id].terminate()
@@ -252,7 +262,8 @@ class MultiprocExecutor(Executor):
         self._start_worker(worker_id)
 
     def shutdown(self, graceful: bool = True) -> None:
-        """Shutdown the executor.        if not self._started:
+"""
+Shutdown the executor.        if not self._started:
             return
 
         self._shutdown_event.set()
@@ -260,7 +271,7 @@ class MultiprocExecutor(Executor):
         # Signal workers to stop
         for worker_id, control_queue in self._control_queues.items():
             with contextlib.suppress(Exception):
-                control_queue.put("shutdown")"
+                control_queue.put("shutdown")
         # Wait for workers
         if graceful:
             for worker_id, process in self._workers.items():
@@ -276,9 +287,10 @@ class MultiprocExecutor(Executor):
         self._started = False
 
     def submit(self, func_name: str, *args: Any, **kwargs: Any) -> FutureWrapper[Any]:
-        """Submit a task.        with self._lock:
+"""
+Submit a task.        with self._lock:
             self._task_counter += 1
-            task_id = f"task-{self._task_counter}""
+            task_id = f"task-{self._task_counter}"
             future: FutureWrapper[Any] = FutureWrapper(task_id)
             self._pending_tasks[task_id] = future
 
@@ -293,16 +305,19 @@ class MultiprocExecutor(Executor):
         return future
 
     def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
-        """Broadcast to all workers.        futures = []
+"""
+Broadcast to all workers.        futures = []
         for _ in range(self._num_workers):
             futures.append(self.submit(func_name, *args, **kwargs))
         return futures
 
     def get_num_workers(self) -> int:
-        """Get number of workers.        return self._num_workers
+"""
+Get number of workers.        return self._num_workers
 
     def get_worker_stats(self) -> Dict[int, WorkerInfo]:
-        """Get worker statistics.        with self._lock:
+"""
+Get worker statistics.        with self._lock:
             return {
                 wid: WorkerInfo(
                     worker_id=info.worker_id,
@@ -319,7 +334,8 @@ class MultiprocExecutor(Executor):
             }
 
     def is_healthy(self) -> bool:
-        """Check executor health.        if not self._started:
+"""
+Check executor health.        if not self._started:
             return False
 
         with self._lock:
@@ -327,3 +343,9 @@ class MultiprocExecutor(Executor):
                 1 for info in self._worker_info.values() if info.state in (WorkerState.READY, WorkerState.BUSY)
             )
             return healthy_workers >= self._num_workers // 2
+
+"""
+
+""
+
+"""

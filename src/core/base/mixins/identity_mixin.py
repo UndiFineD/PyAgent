@@ -12,9 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Identity Mixin for BaseAgent."""
+"""
+"""
+Identity Mixin for BaseAgent.""
 
-
+"""
 from asyncio import AbstractEventLoop
 import re
 from typing import Any
@@ -23,9 +25,9 @@ from src.core.base.common.models import AgentPriority
 
 
 class IdentityMixin:  # pylint: disable=too-few-public-methods
-    """Handles agent identity, configuration, and capabilities."""
-
-    def __init__(self, **kwargs: Any) -> None:
+"""
+Handles agent identity, configuration, and capabilities.""
+def __init__(self, **kwargs: Any) -> None:
         # Normalize class name to snake_case
         name = self.__class__.__name__
         if name.endswith("Agent"):
@@ -44,13 +46,15 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
 
 
     def get_capabilities(self) -> list[str]:
-        """Return the agent capabilities."""
-        return self.capabilities
+"""
+Return the agent capabilities.""
+return self.capabilities
 
 
     def _register_capabilities(self) -> None:
-        """Emits a signal with agent capabilities for discovery."""
-        try:
+"""
+Emits a signal with agent capabilities for discovery.""
+try:
             # pylint: disable=import-outside-toplevel
             import asyncio
 

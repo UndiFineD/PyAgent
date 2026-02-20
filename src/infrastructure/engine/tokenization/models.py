@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
 Models and configurations for tokenization.
 """
-
 try:
-    from dataclasses import dataclass, field
+
+"""
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -44,7 +48,8 @@ except ImportError:
 
 
 class TokenizerBackend(Enum):
-    """Supported tokenizer backends.
+"""
+Supported tokenizer backends.
     HUGGINGFACE = auto()
     TIKTOKEN = auto()
     MISTRAL = auto()
@@ -54,7 +59,8 @@ class TokenizerBackend(Enum):
 
 
 class SpecialTokenHandling(Enum):
-    """How to handle special tokens.
+"""
+How to handle special tokens.
     INCLUDE = auto()
     EXCLUDE = auto()
     BOS_ONLY = auto()
@@ -64,7 +70,8 @@ class SpecialTokenHandling(Enum):
 
 
 class TruncationStrategy(Enum):
-    """Truncation strategies for long sequences.
+"""
+Truncation strategies for long sequences.
     NONE = auto()
     LEFT = auto()
     RIGHT = auto()
@@ -73,7 +80,8 @@ class TruncationStrategy(Enum):
 
 
 class PaddingStrategy(Enum):
-    """Padding strategies for batched inputs.
+"""
+Padding strategies for batched inputs.
     NONE = auto()
     MAX_LENGTH = auto()
     LONGEST = auto()
@@ -81,7 +89,8 @@ class PaddingStrategy(Enum):
 
 @dataclass
 class TokenizerConfig:
-    """Configuration for tokenizer initialization.
+"""
+Configuration for tokenizer initialization.
     model_name: str
     backend: TokenizerBackend = TokenizerBackend.HUGGINGFACE
     revision: Optional[str] = None
@@ -110,7 +119,8 @@ class TokenizerConfig:
 
 @dataclass
 class TokenizerInfo:
-    """Information about a loaded tokenizer.
+"""
+Information about a loaded tokenizer.
     backend: TokenizerBackend
     vocab_size: int
     bos_token_id: Optional[int]
@@ -124,13 +134,15 @@ class TokenizerInfo:
     special_tokens: Dict[str, int] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        """Convert tokenizer info to a serializable dictionary.        return {
+"""
+Convert tokenizer info to a serializable dictionary.        return {
             "backend": self.backend.name,"            "vocab_size": self.vocab_size,"            "bos_token_id": self.bos_token_id,"            "eos_token_id": self.eos_token_id,"            "pad_token_id": self.pad_token_id,"            "max_length": self.max_length,"            "model_name": self.model_name,"            "is_fast": self.is_fast,"            "supports_chat_template": self.supports_chat_template,"        }
 
 
 @dataclass
 class TokenizeResult:
-    """Result of tokenization.
+"""
+Result of tokenization.
     input_ids: List[int]
     attention_mask: Optional[List[int]] = None
     token_type_ids: Optional[List[int]] = None
@@ -143,14 +155,16 @@ class TokenizeResult:
         self.num_tokens = len(self.input_ids)
 
     def to_numpy(self) -> Dict[str, np.ndarray]:
-        """Convert results to a dictionary of NumPy arrays.        result = {"input_ids": np.array(self.input_ids, dtype=np.int64)}"        if self.attention_mask:
+"""
+Convert results to a dictionary of NumPy arrays.        result = {"input_ids": np.array(self.input_ids, dtype=np.int64)}"        if self.attention_mask:
             result["attention_mask"] = np.array(self.attention_mask, dtype=np.int64)"        if self.token_type_ids:
             result["token_type_ids"] = np.array(self.token_type_ids, dtype=np.int64)"        return result
 
 
 @dataclass
 class BatchTokenizeResult:
-    """Result of batch tokenization.
+"""
+Result of batch tokenization.
     input_ids: List[List[int]]
     attention_mask: Optional[List[List[int]]] = None
     token_counts: List[int] = field(default_factory=list)
@@ -160,7 +174,8 @@ class BatchTokenizeResult:
         self.token_counts = [len(ids) for ids in self.input_ids]
         self.max_length = max(self.token_counts) if self.token_counts else 0
 
-    def pad_to_max(self, pad_token_id: int = 0) -> "BatchTokenizeResult":"        """Pad all sequences in the batch to match the maximum sequence length.        padded_ids = []
+    def pad_to_max(self, pad_token_id: int = 0) -> "BatchTokenizeResult":"        """
+Pad all sequences in the batch to match the maximum sequence length.        padded_ids = []
         padded_mask = []
         for ids in self.input_ids:
             pad_len = self.max_length - len(ids)
@@ -172,3 +187,9 @@ class BatchTokenizeResult:
             token_counts=self.token_counts,
             max_length=self.max_length,
         )
+
+"""
+
+""
+
+"""

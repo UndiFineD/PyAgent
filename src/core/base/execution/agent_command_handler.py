@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -14,9 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Execution handler for agent commands.
+"""
+"""
+Execution handler for agent commands.
 """
 
+"""
 import contextlib
 import logging
 import os
@@ -35,14 +39,14 @@ __version__ = VERSION
 
 
 class AgentCommandHandler:
-    """Minimal AgentCommandHandler used by tests.
+"""
+Minimal AgentCommandHandler used by tests.
 
     Provides a lightweight interface for running commands and preparing an
     environment. The real implementation is more featureful; tests only import
     and perform basic calls.
-    """
-
-    def __init__(
+"""
+def __init__(
         self,
         repo_root: Path,
         models_config: dict[str, Any] | None = None,

@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +18,13 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
 Execution engine regarding the sampling pipeline.
 """
-
 try:
-    from functools import reduce
+
+"""
+from functools import reduce
 except ImportError:
     from functools import reduce
 
@@ -56,11 +60,14 @@ except ImportError:
 
 
 class SamplingPipeline:
-    """Composable pipeline of samplers.
+"""
+Composable pipeline of samplers.
     def __init__(self, samplers: Optional[List[Sampler]] = None) -> None:
-        """Initialize the sampling pipeline.        self.samplers = samplers or []
+"""
+Initialize the sampling pipeline.        self.samplers = samplers or []
 
-    def add_sampler(self, sampler: Sampler) -> "SamplingPipeline":"        """Add a sampler to the pipeline.        self.samplers.append(sampler)
+    def add_sampler(self, sampler: Sampler) -> "SamplingPipeline":"        """
+Add a sampler to the pipeline.        self.samplers.append(sampler)
         return self
 
     def forward(
@@ -69,7 +76,8 @@ class SamplingPipeline:
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
-        """Process logits through all samplers.        return reduce(
+"""
+Process logits through all samplers.        return reduce(
             lambda res, sampler: sampler.forward(res, params, state),
             self.samplers,
             logits
@@ -81,7 +89,8 @@ class SamplingPipeline:
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
-        """Sample from processed logits.        if not self.samplers:
+"""
+Sample from processed logits.        if not self.samplers:
             return _sample_from_probs(_softmax(logits), state)
 
         # Apply all but last using reduce
@@ -99,7 +108,8 @@ def sample_logits(
     params: Optional[SamplingParams] = None,
     state: Optional[SamplingState] = None,
 ) -> np.ndarray:
-    """Convenience function to sample from logits.    params = params or SamplingParams()
+"""
+Convenience function to sample from logits.    params = params or SamplingParams()
     samplers: List[Sampler] = []
 
     if params.repetition_penalty != 1.0:
@@ -114,3 +124,11 @@ def sample_logits(
 
     pipeline = SamplingPipeline(samplers)
     return pipeline.sample(logits, params, state)
+
+"""
+
+"""
+
+""
+
+"""

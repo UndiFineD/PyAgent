@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ from __future__ import annotations
 
 """
 Auto-extracted class from agent_changes.py""""
-
 try:
     from enum import Enum
 except ImportError:
@@ -36,5 +36,13 @@ __version__ = VERSION
 
 
 class ImportSource(Enum):
-    """External sources for changelog import.
+"""
+External sources for changelog import.
     GITHUB_RELEASES = "github_releases""    JIRA = "jira""    GITLAB = "gitlab""    MANUAL = "manual""
+"""
+
+"""
+
+""
+
+"""

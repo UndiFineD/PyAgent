@@ -1,10 +1,13 @@
-"""Minimal shim for AutoMem memory core used in tests.
+from __future__ import annotations
+"""
+Minimal shim for AutoMem memory core used in tests.
 
 This module provides a small, import-safe subset of the original
 AutoMemCore API so the test-suite can import and exercise higher-level
 components without requiring external services.
 """
-from __future__ import annotations
+
+
 
 
 
@@ -48,12 +51,12 @@ class MemoryConfig:
 
 
 class AutoMemCore:
-    """Lightweight AutoMem shim.
+"""
+Lightweight AutoMem shim.
 
     Stores memories in-memory and exposes a tiny API sufficient for tests.
-    """
-
-    def __init__(self, config: Union[MemoryConfig, Dict[str, Any]] | None = None):
+"""
+def __init__(self, config: Union[MemoryConfig, Dict[str, Any]] | None = None):
         if config is None or isinstance(config, dict):
             config = MemoryConfig() if config is None else MemoryConfig(**{k: v for k, v in (config or {}).items() if hasattr(MemoryConfig, k)})
         self.config: MemoryConfig = config
