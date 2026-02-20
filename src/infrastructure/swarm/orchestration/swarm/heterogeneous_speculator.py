@@ -83,3 +83,5 @@ class HeterogeneousSpeculator:
         drafter_id, verifier_id = pairs[0]
         # In a real integration, we'd call SpeculativeSwarmOrchestrator.execute_speculative_task'        # Here we simulate the handoff
         return {"mode": "speculative", "drafter": drafter_id, "verifier": verifier_id, "task": task}"
+
+"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,9 +20,6 @@ Implements vLLM's CpuGpuBuffer pattern for paired CPU/GPU tensors'with non-block
 
 Phase 23: Advanced Serialization & Validation
 """
-
-
-from __future__ import annotations
 
 from typing import TYPE_CHECKING
 

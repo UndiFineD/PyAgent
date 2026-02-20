@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from __future__ import annotations
+
+
+"""Minimal crypto_core shim used for tests.
+
+This module provides a tiny, safe stand-in for the real Windows crypto
+helpers. It intentionally avoids ctypes and system calls so tests can run
+in non-Windows CI environments.
+"""
+
+import base64
+from typing import Optional
+
+
+class CryptoCore:
+    """Safe shim for cryptographic helpers used in tests."""
+
+    def __init__(self) -> None:
+        # real implementation would initialize ctypes handles; shim does nothing
+        pass
+
+    def decrypt_dpapi_blob(self, encrypted_data: bytes, entropy: Optional[bytes] = None) -> Optional[bytes]:
+        # DPAPI not available in tests; return None
+        return None
+
+    def decrypt_aes_cbc(self, key: bytes, iv: bytes, encrypted_data: bytes) -> Optional[bytes]:
+        # Real decryption is platform-specific; tests do not rely on actual bytes
+        return None
+
+    def base64_decode(self, encoded_data: str) -> Optional[bytes]:
+        try:
+            return base64.b64decode(encoded_data)
+        except Exception:
+            return None
+
+    def read_windows_credential(self, target_name: str) -> Optional[bytes]:
+        # Not supported in this shim
+        return None

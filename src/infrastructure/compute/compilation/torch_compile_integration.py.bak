@@ -1,0 +1,398 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from __future__ import annotations
+
+
+TorchCompileIntegration - Integration with torch.compile for model optimization.
+
+Implements vLLM's compilation patterns:'- CompilerInterface for backend abstraction
+- Compilation modes (default, reduce-overhead, max-autotune)
+- Counter-based dynamic recompilation
+- Backend selection (inductor, cudagraphs, onnxrt)
+
+Beyond vLLM:
+- Hybrid compilation strategies
+- Profile-guided compilation
+- Incremental compilation
+
+import functools
+import logging
+import os
+import threading
+import time
+import weakref
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, TypeVar
+
+logger = logging.getLogger(__name__)
+
+F = TypeVar("F", bound=Callable[..., Any])"
+
+
+class CompileMode(Enum):
+    """Compilation mode selection.
+    DEFAULT = "default"  # Standard optimization"    REDUCE_OVERHEAD = "reduce-overhead"  # Minimize CPU overhead"    MAX_AUTOTUNE = "max-autotune"  # Maximum tuning"    MAX_AUTOTUNE_NO_CUDAGRAPH = "max-autotune-no-cudagraphs""
+
+
+class CompileBackend(Enum):
+    """Torch compilation backends.
+    ONNXRT = "onnxrt"  # ONNX Runtime"    EAGER = "eager"  # No compilation (debug)"    INDUCTOR = "inductor"  # In-ductor backend (default)"    CUDAGRAPHS = "cudagraphs"  # CUDA Graphs backend"
+
+@dataclass
+class CompileConfig:
+    """Configuration for torch.compile integration.
+    mode: CompileMode = CompileMode.DEFAULT
+    backend: CompileBackend = CompileBackend.INDUCTOR
+    fullgraph: bool = False  # Require full graph compilation
+    dynamic: bool = True  # Enable dynamic shapes
+    disable: bool = False  # Disable compilation entirely
+    options: Dict[str, Any] = field(default_factory=dict)
+
+    @classmethod
+    def from_env(cls) -> "CompileConfig":"        """Create config from environment variables.        return cls(
+            mode=CompileMode(os.getenv("VLLM_TORCH_COMPILE_MODE", "default")),"            backend=CompileBackend(os.getenv("VLLM_TORCH_BACKEND", "inductor")),"            fullgraph=os.getenv("VLLM_TORCH_FULLGRAPH", "0") == "1","            dynamic=os.getenv("VLLM_TORCH_DYNAMIC", "1") == "1","            disable=os.getenv("VLLM_TORCH_COMPILE_DISABLE", "0") == "1","        )
+
+
+@dataclass
+class CompileStats:
+    """Statistics for compilation.
+    compile_count: int = 0
+    recompile_count: int = 0
+    cache_hits: int = 0
+    total_compile_time: float = 0.0
+    total_execution_time: float = 0.0
+    backend_failures: Dict[str, int] = field(default_factory=dict)
+
+    @property
+    def avg_compile_time(self) -> float:
+        """Average compilation time.        total = self.compile_count + self.recompile_count
+        if total == 0:
+            return 0.0
+        return self.total_compile_time / total
+
+
+
+class CompilerInterface(ABC):
+        Abstract interface for compilation backends.
+
+    Based on vLLM's CompilerInterface for backend abstraction.'    
+    @abstractmethod
+    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
+        """Compile a function.
+    @abstractmethod
+    def is_compiled(self, fn: Callable[..., Any]) -> bool:
+        """Check if function is compiled.
+    @abstractmethod
+    def invalidate(self, fn: Callable[..., Any]) -> None:
+        """Invalidate compilation cache for function.
+
+
+class TorchCompiler(CompilerInterface):
+        Standard torch.compile implementation.
+    
+    def __init__(self, config: Optional[CompileConfig] = None):
+        self.config = config or CompileConfig()
+        self._compiled_fns: Dict[int, weakref.ref] = {}
+        self._stats = CompileStats()
+        self._lock = threading.Lock()
+
+    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
+                Compile a function using torch.compile.
+
+        Args:
+            fn: Function to compile
+            example_inputs: Example inputs for tracing
+
+        Returns:
+            Compiled function
+                if self.config.disable:
+            return fn
+
+        fn_id = id(fn)
+
+        with self._lock:
+            if fn_id in self._compiled_fns:
+                ref = self._compiled_fns[fn_id]
+                compiled = ref()
+                if compiled is not None:
+                    self._stats.cache_hits += 1
+                    return compiled
+
+        start = time.perf_counter()
+
+        try:
+            # Try actual torch.compile if available
+            import torch
+
+            compiled = torch.compile(
+                fn,
+                mode=self.config.mode.value,
+                backend=self.config.backend.value,
+                fullgraph=self.config.fullgraph,
+                dynamic=self.config.dynamic,
+                options=self.config.options,
+            )
+
+        except (ImportError, RuntimeError) as e:
+            logger.warning(f"torch.compile unavailable: {e}, using eager mode")"            compiled = fn
+            self._stats.backend_failures[str(e)] = self._stats.backend_failures.get(str(e), 0) + 1
+
+        elapsed = time.perf_counter() - start
+
+        with self._lock:
+            self._compiled_fns[fn_id] = weakref.ref(compiled)
+            self._stats.compile_count += 1
+            self._stats.total_compile_time += elapsed
+
+        return compiled
+
+    def is_compiled(self, fn: Callable[..., Any]) -> bool:
+        """Check if function is compiled.        with self._lock:
+            return id(fn) in self._compiled_fns
+
+    def invalidate(self, fn: Callable[..., Any]) -> None:
+        """Invalidate cache for function.        fn_id = id(fn)
+        with self._lock:
+            if fn_id in self._compiled_fns:
+                del self._compiled_fns[fn_id]
+
+    @property
+    def stats(self) -> CompileStats:
+        """Get compilation statistics.        return self._stats
+
+
+
+class CompilationCounter:
+        Counter for triggering recompilation.
+
+    Based on vLLM's counter pattern for limiting recompiles.'    
+    def __init__(self, max_recompiles: int = 8, warmup_iters: int = 10):
+                Initialize counter.
+
+        Args:
+            max_recompiles: Maximum allowed recompiles
+            warmup_iters: Iterations before stable compilation
+                self.max_recompiles = max_recompiles
+        self.warmup_iters = warmup_iters
+        self._count = 0
+        self._recompiles = 0
+        self._shapes_seen: Set[Tuple[int, ...]] = set()
+        self._lock = threading.Lock()
+
+    def check_and_update(self, shape: Tuple[int, ...]) -> bool:
+                Check if recompilation should trigger.
+
+        Args:
+            shape: Input shape
+
+        Returns:
+            True if recompilation allowed
+                with self._lock:
+            self._count += 1
+
+            if shape in self._shapes_seen:
+                return False  # No recompile needed
+
+            self._shapes_seen.add(shape)
+
+            if self._count < self.warmup_iters:
+                return True  # Allow during warmup
+
+            if self._recompiles >= self.max_recompiles:
+                return False  # Hit limit
+
+            self._recompiles += 1
+            return True
+
+    def reset(self) -> None:
+        """Reset counter state.        with self._lock:
+            self._count = 0
+            self._recompiles = 0
+            self._shapes_seen.clear()
+
+    @property
+    def recompile_count(self) -> int:
+        """Get recompile count.        return self._recompiles
+
+
+
+class IncrementalCompiler(CompilerInterface):
+        Incremental compilation strategy.
+
+    Beyond vLLM:
+    - Compiles functions incrementally
+    - Tracks hot paths
+    - Prioritizes frequently used code
+    
+    def __init__(self, base_compiler: Optional[TorchCompiler] = None, threshold: int = 5):
+        self._base = base_compiler or TorchCompiler()
+        self._threshold = threshold
+        self._call_counts: Dict[int, int] = {}
+        self._lock = threading.Lock()
+
+    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
+        """Compile after threshold calls.        fn_id = id(fn)
+
+        with self._lock:
+            count = self._call_counts.get(fn_id, 0) + 1
+            self._call_counts[fn_id] = count
+
+            if count < self._threshold:
+                return fn  # Not hot enough yet
+
+        return self._base.compile(fn, example_inputs)
+
+    def is_compiled(self, fn: Callable[..., Any]) -> bool:
+        fn_id = id(fn)
+        with self._lock:
+            if self._call_counts.get(fn_id, 0) < self._threshold:
+                return False
+        return self._base.is_compiled(fn)
+
+    def invalidate(self, fn: Callable[..., Any]) -> None:
+        fn_id = id(fn)
+        with self._lock:
+            if fn_id in self._call_counts:
+                del self._call_counts[fn_id]
+        self._base.invalidate(fn)
+
+
+
+class ProfileGuidedCompiler(CompilerInterface):
+        Profile-guided compilation.
+
+    Beyond vLLM:
+    - Profiles execution to guide optimization
+    - Selects optimal backend per function
+    
+    def __init__(self):
+        self._profiles: Dict[int, List[float]] = {}
+        self._backend_scores: Dict[int, Dict[CompileBackend, float]] = {}
+        self._compiled: Dict[int, Callable] = {}
+        self._lock = threading.Lock()
+
+    def profile_execution(self, fn: Callable[..., Any], args: Tuple[Any, ...], kwargs: Dict[str, Any]) -> float:
+        """Profile a function execution.        start = time.perf_counter()
+        fn(*args, **kwargs)
+        elapsed = time.perf_counter() - start
+
+        fn_id = id(fn)
+        with self._lock:
+            if fn_id not in self._profiles:
+                self._profiles[fn_id] = []
+            self._profiles[fn_id].append(elapsed)
+
+        return elapsed
+
+    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
+        """Compile with best backend based on profile.        fn_id = id(fn)
+
+        # Check if already compiled
+        with self._lock:
+            if fn_id in self._compiled:
+                return self._compiled[fn_id]
+
+            # Select best backend from scores
+            scores = self._backend_scores.get(fn_id, {})
+
+        if not scores:
+            # Default to inductor
+            backend = CompileBackend.INDUCTOR
+        else:
+            # Select lowest latency backend
+            backend = min(scores, key=lambda b: scores[b])
+
+        config = CompileConfig(backend=backend)
+        compiler = TorchCompiler(config)
+        compiled = compiler.compile(fn, example_inputs)
+
+        with self._lock:
+            self._compiled[fn_id] = compiled
+
+        return compiled
+
+    def is_compiled(self, fn: Callable[..., Any]) -> bool:
+        with self._lock:
+            return id(fn) in self._compiled
+
+    def invalidate(self, fn: Callable[..., Any]) -> None:
+        fn_id = id(fn)
+        with self._lock:
+            if fn_id in self._compiled:
+                del self._compiled[fn_id]
+            if fn_id in self._profiles:
+                del self._profiles[fn_id]
+
+
+def compile_fn(
+    fn: Optional[F] = None,
+    *,
+    mode: CompileMode = CompileMode.DEFAULT,
+    backend: CompileBackend = CompileBackend.INDUCTOR,
+    fullgraph: bool = False,
+    dynamic: bool = True,
+) -> Callable[[F], F]:
+        Decorator for torch.compile with configuration.
+
+    Args:
+        fn: Function to compile
+        mode: Compilation mode
+        backend: Compilation backend
+        fullgraph: Require full graph
+        dynamic: Enable dynamic shapes
+
+    Returns:
+        Compiled function
+    
+    def decorator(func: F) -> F:
+        config = CompileConfig(mode=mode, backend=backend, fullgraph=fullgraph, dynamic=dynamic)
+        compiler = TorchCompiler(config)
+        compiled = compiler.compile(func)
+
+        @functools.wraps(func)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            return compiled(*args, **kwargs)
+
+        return wrapper  # type: ignore
+
+    if fn is not None:
+        return decorator(fn)
+    return decorator
+
+
+def set_compile_enabled(enabled: bool) -> None:
+    """Globally enable/disable torch.compile.    os.environ["VLLM_TORCH_COMPILE_DISABLE"] = "0" if enabled else "1""
+
+def get_compile_config() -> CompileConfig:
+    """Get current compile configuration from environment.    return CompileConfig.from_env()
+
+
+def with_compiler_context(mode: CompileMode = CompileMode.DEFAULT) -> Callable[[F], F]:
+        Context manager decorator for compilation mode.
+
+    Args:
+        mode: Compilation mode for this context
+    
+    def decorator(fn: F) -> F:
+        @functools.wraps(fn)
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            old_mode = os.getenv("VLLM_TORCH_COMPILE_MODE", "default")"            os.environ["VLLM_TORCH_COMPILE_MODE"] = mode.value"            try:
+                return fn(*args, **kwargs)
+            finally:
+                os.environ["VLLM_TORCH_COMPILE_MODE"] = old_mode"
+        return wrapper  # type: ignore
+
+    return decorator

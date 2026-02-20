@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -20,8 +21,6 @@ This module provides a few light helpers required by dataclasses and tests:
 - optional `tqdm` fallback
 - `_empty_plugin_config_list` default factory
 """
-
-from __future__ import annotations
 
 from collections.abc import Iterable
 from typing import TYPE_CHECKING, Any, Final, TypeVar

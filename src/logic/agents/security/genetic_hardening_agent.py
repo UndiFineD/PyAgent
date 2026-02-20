@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -31,9 +32,6 @@ Improve static analysis beyond naive string checks (use AST-based detection), ad
 FILE CONTENT SUMMARY:
 Genetic hardening agent.py module.
 """
-
-
-from __future__ import annotations
 
 import logging
 from typing import Any
@@ -112,7 +110,6 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             evolved_code,
             provider="GeneticHardening","            model="EvolutionaryRefactor","        )
       "  "return evolved_code"
-from __future__ import annotations
 
 import logging
 from typing import Any

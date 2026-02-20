@@ -23,7 +23,7 @@ try:
     import numpy
 except ImportError:
     import numpy
- as np
+import numpy as np
 try:
     from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 except ImportError:

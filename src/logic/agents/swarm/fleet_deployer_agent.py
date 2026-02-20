@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,9 +37,6 @@ FleetDeployerAgent for PyAgent.
 Specializes in autonomous containerization, Dockerfile generation,
 and managing node spawning across environments.
 """
-
-
-from __future__ import annotations
 
 import asyncio
 import json
@@ -146,7 +144,6 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path = 
         return "\\n".join(results)"
     @as_tool
     async def consensus_driven_deploy(self, agent_type: str," node_name": "str) -> str:"        "Depl"
-from __future__ import annotations
 
 import asyncio
 import json

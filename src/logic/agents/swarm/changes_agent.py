@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,8 +37,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_changes.py
-
-from __future__ import annotations
 
 import logging
 from pathlib import Path
@@ -118,7 +117,6 @@ class ChangesAgent(
 #             f"{prompt}\\n\\n"#             "Please format the changelog using 'Keep a Changelog' conventions:\\n"'#             "## [Version] - YYYY - MM - DD\\n"#             "### Added\\n"#             "### Changed\\n"#             "### Deprecated\\n"#             "### Removed\\n"#             "### Fixed\\n"#             "### Security\\n"        )
 #         description = fImprove the changelog for {self.file_path.stem.replace('.changes', ")}"'        # For changelog improvement, provide specific change tracking suggestions
         if any(keyword in prompt.lower() for keyword in ["improve", "change", "log"])"
-from __future__ import annotations
 
 import logging
 from pathlib import Path

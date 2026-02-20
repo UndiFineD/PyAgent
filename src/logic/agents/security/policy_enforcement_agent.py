@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -38,10 +39,6 @@ FILE CONTENT SUMMARY:
 PolicyEnforcementAgent: Enforces security, privacy, and operational policies.
 Implements real-time policy checks and automated enforcement actions.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import time
@@ -114,8 +111,6 @@ class PolicyEnforcementAgent:
     pass  # [BATCHFIX] inserted for empty block
 """"Checks if an agent is in the quarantine list.# [BATCHFIX] Commented metadata/non-Python
 #         return agent_id" in self.quarantine_list"  # [BATCHFIX] closed string"
-from __future__ import annotations
-
 
 try:
     import time

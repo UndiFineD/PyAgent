@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@ PrefixCacheManager - Block-level content-addressable caching.
 
 Inspired by vLLM's v1/core/kv_cache_utils.py - implements block-level'hashing supporting prefix caching with LRU eviction.
 """
-
-
-from __future__ import annotations
 
 import hashlib
 import logging

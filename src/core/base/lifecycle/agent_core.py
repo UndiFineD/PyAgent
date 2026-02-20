@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -23,9 +24,6 @@ Phase 15 Rust Optimizations:
 - process_text_rust: Vectorized text normalization
 - analyze_structure_rust: Fast line/word/token counting
 """
-
-
-from __future__ import annotations
 
 import difflib
 import fnmatch

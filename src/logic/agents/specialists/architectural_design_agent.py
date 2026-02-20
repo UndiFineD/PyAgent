@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -51,9 +52,6 @@ FILE CONTENT SUMMARY:
 Architectural design agent.py module.
 # ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
-
-from __future__ import annotations
-
 
 try:
     import asyncio
@@ -148,9 +146,6 @@ class ArchitecturalDesignAgent(BaseAgent):
 #         prompt = fPerform environmental simulation (sun/wind/terrain) for: {self.design_state['requirements']}'        analysis = await self.run_subagent("environmental simulation", prompt)"        self.design_state["environmental_analysis"] = analysis"        self.current_phase = DesignPhase.ENVIRONMENTAL_SIMULATION
         return {"phase": self.current_phase.value, "analys"# ArchitecturalDesignAgent: Implementation of Multi-Stage Architectural GenAI Framework
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
-
-from __future__ import annotations
-
 
 try:
     import asyncio

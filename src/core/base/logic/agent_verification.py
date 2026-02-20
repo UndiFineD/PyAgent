@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,10 +16,6 @@
 
 """Verification logic regarding agent outputs.
 Implements Stanford Reseach 'Anchoring Strength' and Keio University 'Self-Verification' paths.'"""
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION

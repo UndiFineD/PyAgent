@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,9 +18,6 @@
 StructuredCounter - Dataclass-based structured metric counters.Inspired by vLLM's CompilationCounter pattern for tracking detailed metrics'with snapshot/diff capabilities and testing support.
 
 Phase 24: Advanced Observability & Parsing
-
-from __future__ import annotations
-
 
 try:
     import copy

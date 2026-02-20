@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -41,9 +42,6 @@ FILE CONTENT SUMMARY:
 Unified Data Intelligence Agent for PyAgent.
 Consolidates SQL, CSV, Excel, and Data Science capabilities.
 """
-
-
-from __future__ import annotations
 
 import logging
 import sqlite3
@@ -123,7 +121,6 @@ class DataIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     @as_tool
     def parse_spreadsheet("self, path: str, mo"
-from __future__ import annotations
 
 import logging
 import sqlite3

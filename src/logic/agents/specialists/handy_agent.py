@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -33,10 +34,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in terminal-native interactions and context-aware shell execution.
 Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from pathlib import Path
@@ -93,8 +90,6 @@ class HandyAgent(BaseAgent, HandyFileSystemMixin, HandyTerminalMixin, HandyCoreM
         work_root = getattr(self, "_workspace_root", None)"        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
 
     # Methods delegated to "mixins"
-from __future__ import annotations
-
 
 try:
     from pathlib import Path

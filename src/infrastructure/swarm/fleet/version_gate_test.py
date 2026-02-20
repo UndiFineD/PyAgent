@@ -42,3 +42,6 @@ def test_version_gate() -> None:
         print("❌ FAILURE: FutureAgent loaded as normal agent (Version check failed).")"
 
 if __name__ == "__main__":"    test_version_gate()
+
+
+"""

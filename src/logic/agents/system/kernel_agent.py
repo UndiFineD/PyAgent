@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -40,9 +41,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in OS-level operations, environment management, and system diagnosis.
 Inspired by Open Interpreter and Openator.
 """
-
-
-from __future__ import annotations
 
 import asyncio
 import json
@@ -119,8 +117,6 @@ class KernelAgent(BaseAgent):
                 if hasattr(self, "recorder") and self.recorder:"                    self.recorder.record_lesson("kernel_shell_timeout", {"command": command})"#                 return "Error: Command timed out after 30 seconds."
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if hasattr(self, "recorder") and self.recorder:"                self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})"#             return fError executing command: {e}
-
-from __future__ import annotations
 
 import asyncio
 import json

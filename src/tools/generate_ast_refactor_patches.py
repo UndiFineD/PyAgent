@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -27,8 +28,6 @@ Notes:
 - This only writes patch proposals and does not modify source files.
 """
 
-
-from __future__ import annotations
 import json
 from pathlib import Path
 import ast

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -30,9 +31,6 @@ Persist and manage shard metadata and vector indices to durable storage rather t
 FILE CONTENT SUMMARY:
 Semantic search mesh agent.py module.
 """
-
-
-from __future__ import annotations
 
 import asyncio
 from typing import Any
@@ -115,9 +113,6 @@ class SemanticSearchMeshAgent:
                     {
                         "shard": shard_id,"                        "score": 0.85,"                        "content": fMatch from {shard_id} (Simulated Similarity)","                    }
                 ")"        # Sort combined res
-
-
-from __future__ import annotations
 
 import asyncio
 from typing import Any

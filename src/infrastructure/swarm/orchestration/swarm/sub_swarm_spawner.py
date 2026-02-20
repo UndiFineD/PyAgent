@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -17,9 +19,6 @@
 """
 Sub swarm spawner.py module.
 """
-
-
-from __future__ import annotations
 
 import logging
 import uuid
@@ -100,3 +99,6 @@ class SubSwarmSpawner:
 
     def get_sub_swarm(self, swarm_id: str) -> SubSwarm | None:
         return self.active_sub_swarms.get(swarm_id)
+
+
+"""

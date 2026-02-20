@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -41,9 +41,6 @@ Available lazy imports:
     - get_decode_worker() -> DecodeOnlyWorker class
     - get_pp_transfer() -> PipelineParallelTransfer class
     - get_tp_transfer() -> TensorParallelTransfer class
-
-from __future__ import annotations
-
 
 try:
     from typing import TYPE_CHECKING, Type

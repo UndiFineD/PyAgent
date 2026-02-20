@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from __future__ import annotations
+
+
+"""Priority queue for ordered agent execution with simple dependency support."""
+
+
+try:
+    import logging
+except ImportError:
+    import logging
+
+try:
+    from typing import Any, Dict, List
+except ImportError:
+    from typing import Any, Dict, List
+
+
+
+class AgentPriorityQueue:
+    """Simple priority queue for agents.
+
+    Lower numeric `priority` means higher execution priority. Dependencies are
+    honored: an agent will not be scheduled until all its dependencies have
+    been executed. Cycles are handled by placing remaining items in sorted
+    order with a warning.
+    """
+
+    def __init__(self) -> None:
+        self._agents: Dict[str, Dict[str, Any]] = {}
+
+    def add_agent(
+        self,
+        name: str,
+        priority: int = 5,
+        depends_on: List[str] | None = None,
+        metadata: Dict[str, Any] | None = None,
+    ) -> None:
+        self._agents[name] = {
+            "priority": priority,
+            "depends_on": depends_on or [],
+            "metadata": metadata or {},
+        }
+
+    def remove_agent(self, name: str) -> bool:
+        if name in self._agents:
+            del self._agents[name]
+            return True
+        return False
+
+    def get_execution_order(self) -> List[str]:
+        executed: set[str] = set()
+        order: List[str] = []
+
+        while len(order) < len(self._agents):
+            available: List[tuple[int, str]] = []
+            for name, info in self._agents.items():
+                if name in executed:
+                    continue
+                deps_met = all(d in executed for d in info["depends_on"])
+                if deps_met:
+                    available.append((info["priority"], name))
+
+            if not available:
+                remaining = [n for n in self._agents if n not in executed]
+                logging.warning("Dependency cycle detected, adding remaining: %s", remaining)
+                order.extend(sorted(remaining))
+                break
+
+            available.sort()
+            _, next_agent = available[0]
+            order.append(next_agent)
+            executed.add(next_agent)
+
+        return order

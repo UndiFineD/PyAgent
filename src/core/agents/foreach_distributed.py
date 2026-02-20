@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -20,9 +21,6 @@ Coordinator to claim shards, acquire per-file locks, and report status to the
 scratch area (or recorder). The implementation is intentionally small and
 synchronous to make dry-run and staged runs deterministic and easy to test.
 """
-
-
-from __future__ import annotations
 
 import json
 import logging

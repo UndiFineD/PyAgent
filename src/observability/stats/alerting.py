@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -31,9 +32,6 @@ WHAT IT SHOULD DO BETTER:
 - Add robust pattern matching and configurable retention schedules, unit tests for edge cases, type-safe interfaces, and async support for IO-bound operations. 
 - Improve observability (metrics, traces), error handling around Rust fallback, and configuration-driven thresholds/policies.
 """
-
-
-from __future__ import annotations
 
 import logging
 from datetime import datetime

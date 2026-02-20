@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -29,9 +30,6 @@ Use async file I/O for extraction, return structured locale metadata and plurali
 FILE CONTENT SUMMARY:
 Localization agent.py module.
 """
-
-
-from __future__ import annotations
 
 import logging
 import re
@@ -83,8 +81,6 @@ class LocalizationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     async def solve_translation_task(self, prompt: str) -> str:
 #         "Uses LLM to help with complex translation tasks."        return await self.improve_content(fTranslate the following content preserving formatting: {prompt}")"
-
-from __future__ import annotations
 
 import logging
 import re

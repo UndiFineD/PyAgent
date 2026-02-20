@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -34,9 +36,6 @@ The actual implementations have been split into:
 - parser/ - Base classes and parser implementations
 - validator/ - Schema validation
 - registry/ - Parser registry and streaming parser
-
-from __future__ import annotations
-
 
 # Re-export from parser module
 try:

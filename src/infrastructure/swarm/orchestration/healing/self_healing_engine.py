@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -17,10 +19,6 @@
 """
 Engine for automated self-repair of agent tools and modules.""""Detects runtime errors and orchestrates CoderAgents to apply fixes.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging

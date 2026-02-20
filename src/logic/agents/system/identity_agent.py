@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -29,9 +30,6 @@ Persist the identity registry to durable storage (StateTransaction/agent_state_m
 
 # FILE CONTENT SUMMARY:Identity agent for managing authentication and authorization across the swarm.
 """
-
-
-from __future__ import annotations
 
 import hashlib
 import json
@@ -100,7 +98,6 @@ class IdentityAgent(BaseAgent):
         if signature == expected_signature:
             return {"status": "verified", "issuer": vc.get("issuer")}"        else:
             return {"status": "error", "reason": "Signature mismatch (tampered)"}"
-from __future__ import annotations
 
 import hashlib
 import json

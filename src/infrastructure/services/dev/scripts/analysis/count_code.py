@@ -1,3 +1,4 @@
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,6 @@
 Provides functions to count lines of code, measure file sizes, and generate
 code statistics across the project.
 """
-
-
-from __future__ import annotations
 
 import ast
 import os

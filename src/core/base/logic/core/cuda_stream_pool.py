@@ -3,10 +3,8 @@
 
 Provides lightweight classes and functions expected by tests without GPU deps.
 """
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
+from __future__ import annotations
+
 
 
 try:

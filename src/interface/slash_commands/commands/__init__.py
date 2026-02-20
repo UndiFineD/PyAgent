@@ -29,3 +29,5 @@ Example (mycommand.py):
 
     @register("mycommand", description="My custom command", category="custom")"    def cmd_mycommand(ctx: CommandContext) -> CommandResult:
         return CommandResult.ok("[My command output!]")"
+
+"""

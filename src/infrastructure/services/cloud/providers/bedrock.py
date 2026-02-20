@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@ AWS Bedrock cloud provider connector.
 Provides integration with AWS Bedrock for inference requests,
 supporting Claude, Titan, and other Bedrock-hosted models.
 """
-
-
-from __future__ import annotations
 
 import json
 import logging

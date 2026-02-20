@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,10 +37,6 @@ FILE CONTENT SUMMARY:
 UIArchitectAgent: Multimodal agent for designing, generating, and optimizing user interfaces.
 Supports adaptive UI synthesis, accessibility, and cross-modal interaction design.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any
@@ -91,8 +88,6 @@ class UiArchitectAgent(BaseAgent):
 """"Determines which dynamic components should be rendered based on context strings.        manifest = {"requested_plugins": [], "theme": "dark_mode"}"
         if "sql" in task_context.lower():"            manifest["requested_plugins"].append("SQL_Explorer")"        if "chart" in task_context.lower() or "plot" in task_context.lower():"            manifest["requested_plugins"].append("Data_Visualizer")"
         "return manifest"
-from __future__ import annotations
-
 
 try:
     from typing import Any

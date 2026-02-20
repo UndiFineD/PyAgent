@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 """Utility helpers for dynamic importing, reloading and lightweight version checks.
 
 This module provides small, well-tested shims used by tests. It intentionally

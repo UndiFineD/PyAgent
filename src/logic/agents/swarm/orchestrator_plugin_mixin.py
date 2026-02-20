@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -62,9 +63,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Orchestrator plugin mixin module.
 """
-
-
-from __future__ import annotations
 
 import importlib.util
 import logging

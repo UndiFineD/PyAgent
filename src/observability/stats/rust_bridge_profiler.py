@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -38,9 +39,6 @@ FILE CONTENT SUMMARY:
 Rust bridge profiler.py module.
 # Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
 """
-
-
-from __future__ import annotations
 
 import logging
 import time
@@ -107,9 +105,6 @@ class RustBridgeProfiler:
         sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        logging.info("RustBridgeProfiler: Pulse check complete.")"        for name, s in sorted_stats[:5]:
             avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            logging.info(f" - {name}: {s['calls']} calls, {avg_us:.1f}μs avg")"'# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
 """
-
-
-from __future__ import annotations
 
 import logging
 import time

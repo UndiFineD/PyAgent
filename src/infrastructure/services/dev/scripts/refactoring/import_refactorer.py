@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,6 @@
 ImportRefactorer: A robust utility for workspace-wide import migrations and relative import fixing.
 Supports absolute path remapping, relative scoped replacement, and dry-run modes.
 """
-
-
-from __future__ import annotations
 
 import argparse
 import json

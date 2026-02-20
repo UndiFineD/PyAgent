@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -38,9 +39,6 @@ FILE CONTENT SUMMARY:
 Unified Web Intelligence Agent for PyAgent.
 Consolidates Search, Web Navigation, Browsing, and Self-Search.
 """
-
-
-from __future__ import annotations
 
 import logging
 import os
@@ -119,7 +117,6 @@ class WebIntelligenceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 #             return fDuckDuckGo search failed: {e}
 
     def" _search_bing(self"
-from __future__ import annotations
 
 import logging
 import os

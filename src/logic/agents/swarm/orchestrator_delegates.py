@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -29,10 +30,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 OrchestratorDelegates: Delegation methods for OrchestratorAgent.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging
@@ -88,8 +85,6 @@ class OrchestratorDelegates:
 #         "Delegates to ParallelProcessor."        return await getattr(self, "parallel_processor").async_process_files(files, getattr(self, "process_file"))"
     def process_files_threaded(self, files: list[Path]) -> list[Path]:
 """"Delegates to ParallelProcessor.        return getattr(self, "parallel_processor").process_files_threaded(files, getattr(self, "process_file"))"
-from __future__ import annotations
-
 
 try:
     import logging

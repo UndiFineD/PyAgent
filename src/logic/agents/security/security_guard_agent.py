@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -57,10 +58,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 # Agent specializing in security validation and safety checks.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.common.base_utilities import create_main_function
@@ -176,9 +173,6 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """         "Perform a security audit of the provided snippet or command."  # [BATCHFIX] closed string"        _ = target_file
-
-from __future__ import annotations
-
 
 try:
     from .core.base.common.base_utilities import create_main_function

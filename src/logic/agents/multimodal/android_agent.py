@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -44,9 +45,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Android agent.py module.
 """
-
-
-from __future__ import annotations
 
 import logging
 import time
@@ -114,8 +112,6 @@ class AndroidAgent(BaseAgent):
         if target:
             # Phase 3: Action
             coords =" target["bounds"][:2]"
-
-from __future__ import annotations
 
 import logging
 import time

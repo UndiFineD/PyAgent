@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -46,10 +47,6 @@ FILE CONTENT SUMMARY:
 Asyncio threading coder agent.py module.
 """
 
-
-from __future__ import annotations
-
-
 try:
     from typing import Any
 except ImportError:
@@ -87,10 +84,6 @@ class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancesto
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Improves content using asyncio and threading patterns."     "   "_ = target_file"#         return fOptimized {prompt} for asyncio/threading concurrency.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,6 @@
 
 # LocalRAGCore: Provides hyper-localized Retrieval-Augmented Generation (RAG) logic for vector sharding in PyAgent.
 # Optimized for fast, context-aware retrieval and embedding management at the agent level.
-from __future__ import annotations
 
 try:
     from dataclasses import dataclass

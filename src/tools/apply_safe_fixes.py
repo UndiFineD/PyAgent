@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -23,8 +24,6 @@ Writes unified diff patches to `.external/patches/` and optionally applies chang
 `--apply` is passed. Re-runs static checks and generated tests after applying fixes.
 """
 
-
-from __future__ import annotations
 import argparse
 from pathlib import Path
 import difflib

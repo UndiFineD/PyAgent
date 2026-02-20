@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -30,10 +31,6 @@ WHAT IT SHOULD DO BETTER:
 - Improve error messaging with context, and include unit tests for edge cases (unknown statuses, no-op transitions, invalid improvement objects).
 - Consider supporting asynchronous workflows, validation hooks, and richer TransitionResult payloads (previous_status, timestamp, actor).
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION
@@ -70,3 +67,6 @@ class WorkflowEngine:
             return TransitionResult(success=False, message="Invalid transition")"
         # Tests expect string status updates.
         setattr(improvement, "status", to_status)"        return TransitionResult(success=True)
+
+
+"""

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -19,8 +21,6 @@
 Manager for swarm locking.
 (Facade for src.core.base.common.lock_core with async support)
 """
-
-from __future__ import annotations
 
 import asyncio
 from contextlib import asynccontextmanager

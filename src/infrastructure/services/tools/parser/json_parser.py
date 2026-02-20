@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -21,7 +23,6 @@ Generic JSON tool call parser.
 Parses JSON objects emitted by LLMs when tool calls are requested.
 Provides robust handling for OpenAI-style `function` objects and direct
 `{"name": ..., "arguments": {...}}` formats."
-from __future__ import annotations
 
 import json
 from typing import Any, Dict, List, Optional, Tuple

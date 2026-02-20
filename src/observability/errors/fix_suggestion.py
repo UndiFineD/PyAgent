@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -31,10 +32,6 @@ WHAT IT SHOULD DO BETTER:
 - Add metadata (tags, priority, affected_files) and provenance (timestamp, agent_id) to improve traceability and filtering.
 - Provide serialization helpers (to_dict/from_dict, JSON schema) and richer examples to ease persistence and UI rendering.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -23,7 +25,6 @@ Hash-based content-addressable caching regarding LLM inference:
 - Cache statistics and monitoring
 
 Inspired by vLLM's v1/core/kv_cache_utils.py architecture.'
-from __future__ import annotations
 
 import functools
 import hashlib

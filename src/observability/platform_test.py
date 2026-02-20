@@ -29,3 +29,5 @@ def test_platform_module():
     s = platform.system()
     assert isinstance(s, str)
     assert s in ["Windows", "Linux", "Darwin"]"
+
+"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ Add configurable redaction strategies, retention policy, and secure persistent l
 
 # FILE CONTENT SUMMARY:Privacy guard agent for monitoring and enforcing privacy controls and data protection.
 """
-
-
-from __future__ import annotations
 
 import re
 from typing import Any
@@ -175,7 +173,6 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "total_redactions": len(self.redaction_logs),"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""
 #             "pii_types_captured": list"(set(t for log in self"  # [BATCHFIX] closed string"
-from __future__ import annotations
 
 import re
 from typing import Any

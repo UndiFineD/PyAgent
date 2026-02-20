@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -35,10 +36,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in UI generation and Dashboard management.
 Helps create Next.js or React interfaces for the fleet.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging
@@ -111,9 +108,6 @@ export default {name};
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(DashboardAgent, "Dashboard Agent", "Dashboard source path")"    main()
-
-from __future__ import annotations
-
 
 try:
     import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -29,10 +30,6 @@ Encapsulates the minimal schema for a scheduled improvement: an identifier, plan
 WHAT IT SHOULD DO BETTER:
 Use proper types for date/time (datetime with timezone) instead of plain strings; validate and normalize assigned_resources (use typing.List[str]); annotate optional fields with Optional[...] and enforce immutability or controlled mutation where appropriate. Add serialization/deserialization helpers (to/from dict/JSON), equality/hash methods if used as map keys, input validation (raise on invalid ranges), and integration with StateTransaction and CascadeContext for transactional filesystem or lineage safety per project conventions.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass, field

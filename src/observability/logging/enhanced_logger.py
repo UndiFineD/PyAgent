@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,8 +18,6 @@
 EnhancedLogger - Extended logging with deduplication and scope control.Inspired by vLLM's logger pattern with debug_once, info_once, warning_once'methods and scope-aware logging for distributed systems.
 
 Phase 24: Advanced Observability & Parsing
-
-from __future__ import annotations
 
 import logging
 from collections.abc import Hashable

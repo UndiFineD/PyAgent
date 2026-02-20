@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@ Streaming vLLM Engine Integration.
 Provides real-time token streaming for vLLM inference.
 Supports both callback-based and iterator-based streaming.
 """
-
-
-from __future__ import annotations
 
 import asyncio
 import gc

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -16,8 +18,6 @@
 
 """
 Data models for test agent functionality.
-from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass, field

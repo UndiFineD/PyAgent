@@ -4,11 +4,7 @@
 Provides minimal behavior for creating and verifying sessions.
 Real WebAuthn / OAuth flows are out of scope for unit tests.
 """
-
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
+from __future__ import annotations
 
 
 try:
@@ -26,6 +22,7 @@ try:
 except ImportError:
     import time
 
+
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -41,6 +38,7 @@ try:
     from .e2e_encryption_core import E2EEncryptionCore
 except ImportError:
     from .e2e_encryption_core import E2EEncryptionCore
+
 
 
 logger = logging.getLogger("pyagent.secure_auth")

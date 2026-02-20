@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -34,9 +35,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 # Agent that maps the codebase into a graph of relationships.
 """
-
-
-from __future__ import annotations
 
 import logging
 import os
@@ -105,8 +103,6 @@ class NetworkContextAgent(BaseAgent):
         report = [f"## Impact Analysis for {rel_path}"]"        if not impacted_nodes:
             report.append("No direct downstream dependencies found in the graph.")"        else:
             report.append(fFound {len(impacted_nodes)} potentially impacted entities within 3 hops:")"            for node in sorted(list(impacted_nodes)):
-
-from __future__ import annotations
 
 import logging
 import os

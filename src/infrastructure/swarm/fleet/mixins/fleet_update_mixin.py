@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -18,8 +20,6 @@
 Fleet update mixin.py module.
 # Phase 322: Fleet Autonomous Update Mixin
 """
-
-from __future__ import annotations
 
 import subprocess
 import threading

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -34,10 +35,6 @@ WHAT IT SHOULD DO BETTER:
 Add richer documentation, canonical serialization/deserialization helpers, mapping to HTTP/log levels, and unit tests; consider attaching numeric priorities and ordering methods for comparisons.
 """
 
-
-from __future__ import annotations
-
-
 try:
     from enum import Enum
 except ImportError:
@@ -57,3 +54,5 @@ __version__ = VERSION
 class ValidationSeverity(Enum):
     """Severity of validation issues.
     ERROR = "error""    WARNING = "warning""    INFO = "info""
+
+"""

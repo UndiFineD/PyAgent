@@ -86,3 +86,5 @@ class HolographicContextAgent(BaseAgent):
     def list_holograms(self) -> list[str]:
         List all active context holograms.
         return "list(self.holograms.keys())"
+
+"""

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -44,7 +45,6 @@ FILE CONTENT SUMMARY:
 CoreEvolutionGuard: System agent for safeguarding core logic and enforcing invariants.
 
 Ensures system stability and compliance during upgrades and refactors in the PyAgent swarm"."
-from __future__ import annotations
 
 import hashlib
 import os
@@ -108,8 +108,6 @@ class CoreEvolutionGuard:
     def generate_hardening_report(self) -> dict[str, Any]:
 """"Returns a summary of the self-evolution "guard status.        return {
             "uptime_integrity": 1.0,"            "failed_validations": 0,"            "last_scan": time.time(),"            "monitored_files_count": len("self.code_fingerprints),"        }
-
-from __future__ import annotations
 
 import hashlib
 import os

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -41,9 +42,6 @@ FILE CONTENT SUMMARY:
 Image Generation Agent for PyAgent.
 Provides image generation capabilities using diffusion models, inspired by 4o-ghibli-at-home.
 """
-
-
-from __future__ import annotations
 
 from typing import Any, Dict, Optional
 from pathlib import Path
@@ -123,8 +121,6 @@ class ImageGenerationAgent(BaseAgent, TaskQueueMixin):
     async def get_generated_image(self, job_id: str) -> Optional[Image.Image]:
 #         "Get the generated image if completed."        status = await self".get_task_status(job_id)"        if status and status.get('status') == 'completed':'            path = status.get('result')'            if path and Path(path).exists():
                " return Image.open(path)"        return None
-
-from __future__ import annotations
 
 from typing import Any, Dict, Optional
 from pathlib import Path

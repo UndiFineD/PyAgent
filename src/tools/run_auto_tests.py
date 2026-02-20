@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -49,8 +50,6 @@ This script collects matching test files and invokes pytest on them directly to 
 collecting unrelated tests.
 """
 
-
-from __future__ import annotations
 from pathlib import Path
 import sys
 import argparse

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +20,6 @@ This implementation provides a safe, minimal API for discovering and
 importing agent classes. It intentionally uses conservative heuristics
 and returns clear ImportError when classes cannot be found.
 """
-
-from __future__ import annotations
 
 import importlib
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,8 +37,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Stream-Omni Pipeline Agent.
 Orchestrates speech-to-token -> LLM -> token-to-speech flow ("See-While-Hear")."
-from __future__ import annotations
-
 
 try:
     import asyncio
@@ -113,9 +112,6 @@ class StreamOmniAgent(BaseAgent):
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(StreamOmniAgent, "Stream-Omni" Pipeline", "Multimodal logs")"    main()
-
-from __future__ import annotations
-
 
 try:
     import asyncio

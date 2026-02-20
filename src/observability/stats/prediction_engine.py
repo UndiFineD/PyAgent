@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -49,10 +50,6 @@ FILE CONTENT SUMMARY:
 Prediction engine.py module.
 # Forecasting and change detection engine.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import contextlib
@@ -182,10 +179,6 @@ class StatsForecaster:
             "predictions": preds,"            "confidence_lower": [p - margin for p in preds],"            "confidence_upper": [p + margin for p in preds],"        }
 # Forecasting and change detection engine.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import contextlib

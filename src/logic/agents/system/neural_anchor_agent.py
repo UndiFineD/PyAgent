@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -34,10 +35,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Neural anchor agent.py module.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import re
@@ -104,9 +101,6 @@ class NeuralAnchorAgent(BaseAgent):
     def anchor_reasoning_step(self, reasoning_chain: list[str], sources: list[str]) -> list[dict[str, Any]]:
         Iteratively validates a chain of reasoning steps.
         return [self.validate_claim(step, sources) for" step in reasoning_chain]"
-
-from __future__ import annotations
-
 
 try:
     import re

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,9 +13,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 # "Storage logic for GraphMemoryAgent."Handles the persistence and retrieval of graph data (entities, relationships)
 and 'bead' tasks from filesystem storage.'
-from __future__ import annotations
+
 import json
 import logging
 from typing import Any

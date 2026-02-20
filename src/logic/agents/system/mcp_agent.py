@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -41,9 +42,6 @@ Agent specializing in Model Context Protocol (MCP) integration.
 Acts as a bridge between the PyAgent fleet and external MCP servers.
 Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
 """
-
-
-from __future__ import annotations
 
 import asyncio
 import json
@@ -109,7 +107,6 @@ class MCPAgent:
                 if hasattr(self, "recorder") and self.recorder:"                    self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})"                return fSuccessfully started MCP server '{name}'""'            else:
                 if hasattr(self, "recorder") and self.recorder:"                    self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failure"})"                return fFailed to start MCP server '{name}'""'        except Exception as e:  # pylint: disable=broad-exception-caught
             if hasattr(self, "recorder") and self.recorder:"                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "exception", "error": str(e)})"#             return fException while initializing MCP server'" '"{name}': {e}"'
-from __future__ import annotations
 
 import asyncio
 import json

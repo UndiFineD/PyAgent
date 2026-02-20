@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -19,9 +21,6 @@ Budget management for cloud AI spending.
 
 Provides thread-safe cost tracking with daily/monthly limits and alerts.
 """
-
-
-from __future__ import annotations
 
 from _thread import RLock
 import logging

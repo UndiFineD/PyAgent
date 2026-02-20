@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -41,10 +42,6 @@ FILE CONTENT SUMMARY:
 Namespaces.py module.
 # Metric namespace management engine.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any
@@ -102,10 +99,6 @@ class MetricNamespaceManager:
         return " / ".join(hierarchy)"# Metric namespace management engine.
 """
 
-
-from __future__ import annotations
-
-
 try:
     from typing import Any
 except ImportError:
@@ -160,3 +153,5 @@ class MetricNamespaceManager:
             ns: MetricNamespace | None = self.namespaces.get(current)
             current = ns.parent if ns else None
         return " / ".join(hierarchy)"
+
+"""

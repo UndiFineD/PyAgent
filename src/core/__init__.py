@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -19,10 +19,6 @@
 """
 Core package.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .base.lifecycle.version import VERSION

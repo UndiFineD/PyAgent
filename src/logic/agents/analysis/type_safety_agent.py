@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -28,7 +29,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Agent specializing in Python type hint enforcement and 'Any' type elimination.'
-from __future__ import annotations
 
 import ast
 import logging
@@ -106,7 +106,6 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return "\\n".join(report)"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         "Perform "a type safety"
-from __future__ import annotations
 
 import ast
 import logging

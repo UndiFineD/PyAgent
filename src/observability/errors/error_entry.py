@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -27,9 +28,6 @@ Defines a dataclass ErrorEntry that stores common error metadata and, in __post_
 WHAT IT SHOULD DO BETTER:
 Use timezone-aware datetime types for timestamps, add validation and serialization helpers (to_dict/from_dict), accept Exception objects or richer stack trace parsing, improve category mapping, and consider a stable UUID-based id option and unit tests.
 """
-
-
-from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass, field

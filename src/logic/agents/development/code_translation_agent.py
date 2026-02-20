@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 # You may obtain a copy of the License at
 #
@@ -28,10 +30,6 @@ CodeTranslationAgent: Agent for translating code between languages, frameworks, 
 # Supports automated code migration, refactoring, and cross-language interoperability.
 
 # pylint: disable=too-many-ancestors
-
-
-from __future__ import annotations
-
 
 try:
     import logging

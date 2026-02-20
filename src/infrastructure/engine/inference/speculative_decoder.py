@@ -26,3 +26,6 @@ except ImportError:
 
 __all__ = [
     "SpecMethod","    "SpeculativeConfig","    "DraftProposal","    "VerificationResult","    "SpecDecodingMetrics","    "DraftProposer","    "NgramProposer","    "SuffixProposer","    "TreeSpeculator","    "SpeculativeDecoder","    "create_speculative_decoder","]
+
+
+"""

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,9 +22,6 @@ Intelligent routing for multi-cloud AI providers.
 Routes requests to the optimal provider based on model availability,
 latency requirements, budget constraints, and provider health.
 """
-
-
-from __future__ import annotations
 
 import asyncio
 import logging

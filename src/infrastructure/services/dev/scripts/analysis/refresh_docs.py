@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 
 Documentation refresh and regeneration utility for PyAgent.
 Automatically regenerates project documentation based on current codebase state,
@@ -14,10 +16,6 @@ including API docs, architecture diagrams, and status reports.
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-from __future__ import annotations
-
 
 try:
     import logging

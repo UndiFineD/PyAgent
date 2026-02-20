@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 # Recovered and standardized for Phase 317
 
 The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
@@ -22,10 +24,6 @@ For more information, visit:
 
 No commands will be executed.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -28,9 +29,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Network arch search agent.py module.
 """
-
-
-from __future__ import annotations
 
 import json
 import logging
@@ -67,8 +65,6 @@ class NetworkArchSearchAgent(BaseAgent):
         except (json.JSONDecodeError, TypeError, AttributeError):
             return {
                 "architecture_type": "LoRA","                "rank": 8,"                "alpha": 16,"                "target_modules": ["q_proj", "v_proj"],"                "estimated_improvement": "15% accuracy boost","                "estimated_latency_penalty": "2ms",""            }"
-
-from __future__ import annotations
 
 import json
 import logging

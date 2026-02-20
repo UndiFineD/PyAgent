@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -27,8 +28,6 @@ Example:
     >>> chunks = manager.create_chunks(request_id="req1", prompt_tokens=2048)"    >>> for chunk in manager.iterate_chunks("req1"):"    ...     result = model.prefill(chunk.tokens)
     ...     manager.complete_chunk(chunk.chunk_id, result)
     >>> final = manager.merge_chunks("req1")"
-from __future__ import annotations
-
 
 try:
     from _thread import LockType

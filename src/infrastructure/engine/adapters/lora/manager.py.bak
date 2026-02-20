@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from __future__ import annotations
+
+
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""High-level manager for multi-adapter serving.
+
+from typing import Any
+
+import numpy as np
+
+from .config import LoRAConfig
+from .model import LoRAModel
+from .registry import LoRARegistry
+from .weights import LoRALayerWeights
+
+try:
+    from numpy.typing import NDArray
+except ImportError:
+    NDArray = Any
+
+
+
+class LoRAManager:
+    """High-level manager for LoRA adapter serving.
+    def __init__(
+        self,
+        registry: LoRARegistry | None = None,
+        default_config: LoRAConfig | None = None,
+    ) -> None:
+        """Initialize LoRA manager.        self.registry = registry or LoRARegistry()
+        self.default_config = default_config or LoRAConfig()
+        self._active_adapters: dict[int, str] = {}  # request_id -> model_id
+
+    def load_adapter(
+        self,
+        model_id: str,
+        weights: dict[str, tuple[NDArray[np.float32], NDArray[np.float32]]],
+        config: LoRAConfig | None = None,
+        metadata: dict[str, Any] | None = None,
+    ) -> LoRAModel:
+        """Load a LoRA adapter.        config = config or self.default_config
+        model = LoRAModel(
+            model_id=model_id,
+            config=config,
+            metadata=metadata or {},
+        )
+
+        for module_name, (lora_a, lora_b) in weights.items():
+            layer = LoRALayerWeights(
+                lora_a=lora_a.astype(np.float32),
+                lora_b=lora_b.astype(np.float32),
+                scaling=config.scaling,
+                module_name=module_name,
+                dropout=config.dropout,
+            )
+            model.add_layer(layer)
+
+        if not self.registry.register(model):
+            raise RuntimeError(f"Failed to register LoRA model {model_id}")"
+        return model
+
+    def unload_adapter(self, model_id: str) -> bool:
+        """Unload a LoRA adapter.        self._active_adapters = {k: v for k, v in self._active_adapters.items() if v != model_id}
+        return self.registry.unregister(model_id)
+
+    def set_request_adapter(
+        self,
+        request_id: int,
+        model_id: str | None,
+    ) -> None:
+        """Set adapter for a request.        if model_id is None:
+            self._active_adapters.pop(request_id, None)
+        else:
+            self._active_adapters[request_id] = model_id
+
+    def get_request_adapter(self, request_id: int) -> str | None:
+        """Get adapter for a request.        return self._active_adapters.get(request_id)
+
+    def clear_request(self, request_id: int) -> None:
+        """Clear request's adapter binding.'        self._active_adapters.pop(request_id, None)
+
+    def apply_lora(
+        self,
+        request_id: int,
+        module_name: str,
+        base_output: NDArray[np.float32],
+        x: NDArray[np.float32],
+    ) -> NDArray[np.float32]:
+        """Apply LoRA to base model output.        model_id = self._active_adapters.get(request_id)
+        if model_id is None:
+            return base_output
+
+        model = self.registry.get(model_id)
+        if model is None:
+            return base_output
+
+        lora_output = model.forward(module_name, x)
+        if lora_output is None:
+            return base_output
+
+        return base_output + lora_output
+
+    def batched_apply_lora(
+        self,
+        request_ids: list[int],
+        module_name: str,
+        base_outputs: NDArray[np.float32],
+        inputs: NDArray[np.float32],
+    ) -> NDArray[np.float32]:
+        """Apply LoRA to batched outputs with different adapters.        outputs = base_outputs.copy()
+
+        adapter_groups: dict[str | None, list[int]] = {}
+        for i, req_id in enumerate(request_ids):
+            adapter_id = self._active_adapters.get(req_id)
+            if adapter_id not in adapter_groups:
+                adapter_groups[adapter_id] = []
+            adapter_groups[adapter_id].append(i)
+
+        for adapter_id, indices in adapter_groups.items():
+            if adapter_id is None:
+                continue
+
+            model = self.registry.get(adapter_id)
+            if model is None:
+                continue
+
+            layer = model.get_layer(module_name)
+            if layer is None:
+                continue
+
+            batch_inputs = inputs[indices]
+            lora_output = layer.forward(batch_inputs)
+            outputs[indices] += lora_output
+
+        return outputs
+
+    def list_adapters(self) -> list[str]:
+        """List all loaded adapters.        return self.registry.list_models()
+
+    def get_adapter_info(self, model_id: str) -> dict[str, Any] | None:
+        """Get adapter information.        model = self.registry.get(model_id)
+        if model is None:
+            return None
+
+        return {
+            "model_id": model.model_id,"            "config": {"                "rank": model.config.rank,"                "alpha": model.config.alpha,"                "dropout": model.config.dropout,"                "target_modules": list(model.config.target_modules),"            },
+            "num_layers": len(model.layers),"            "num_parameters": model.num_parameters,"            "memory_bytes": model.get_memory_bytes(),"            "metadata": model.metadata,"        }
+
+    def get_stats(self) -> dict[str, Any]:
+        """Get manager statistics.        return {
+            "registry": self.registry.get_stats(),"            "active_requests": len(self._active_adapters),"            "adapter_usage": dict("                (adapter, list(self._active_adapters.values()).count(adapter))
+                for adapter in set(self._active_adapters.values())
+            ),
+        }

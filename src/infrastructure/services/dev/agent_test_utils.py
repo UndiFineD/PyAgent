@@ -1,3 +1,4 @@
+from __future__ import annotations
     # No changes needed; docstrings and code are already on separate lines.
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
@@ -15,9 +16,6 @@
 
 
 """Import test utilities from src."""
-
-
-from __future__ import annotations
 
 try:
     from pathlib import Path

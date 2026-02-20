@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
@@ -52,10 +54,6 @@ WHAT IT SHOULD DO BETTER:
   (de)serialization, and add unit tests covering serialization,
   validation, and version compatibility.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass

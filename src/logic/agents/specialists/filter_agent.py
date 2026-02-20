@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -55,8 +56,6 @@ FILE CONTENT SUMMARY:
 
 
 FilterAgent: Specialist agent for real-time multimodal stream filtering (Audio/Video/Text)"."
-from __future__ import annotations
-
 
 try:
     import logging
@@ -124,9 +123,6 @@ class FilterAgent(BaseAgent):
     @as_tool
     async def list_active_filters(self) -> Dict[str, List[str]]:
 #         "Returns the currently active filters for the multimodel stream."        return self._active_filters
-
-from __future__ import annotations
-
 
 try:
     import logging

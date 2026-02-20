@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,6 @@
 # "Context sharing and synchronization for Cognitive agents."This module manages permissions and sharing of context objects across
 different users and agents within the team.
 """
-
-
-from __future__ import annotations
 
 try:
     from datetime import datetime

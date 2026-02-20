@@ -21,25 +21,40 @@ except ImportError:
 
 try:
     from core.base.common.utils.dynamic_importer import (
+        PlaceholderModule,
+        LazyModuleRegistry,
+        LazyAttribute,
+        import_from_path,
+        resolve_obj_by_qualname,
+        resolve_obj_by_qualname_parts,
+        lazy_import,
+        safe_import,
+        register_lazy_module,
+        get_lazy_module,
+        reload_module,
+        unload_module,
+        is_module_available,
+        get_module_version,
+        require_module,
+    )
 except ImportError:
-    from core.base.common.utils.dynamic_importer import (
-
-    PlaceholderModule,
-    LazyModuleRegistry,
-    LazyAttribute,
-    import_from_path,
-    resolve_obj_by_qualname,
-    resolve_obj_by_qualname_parts,
-    lazy_import,
-    safe_import,
-    register_lazy_module,
-    get_lazy_module,
-    reload_module,
-    unload_module,
-    is_module_available,
-    get_module_version,
-    require_module,
-)
+    from src.core.base.common.utils.dynamic_importer import (
+        PlaceholderModule,
+        LazyModuleRegistry,
+        LazyAttribute,
+        import_from_path,
+        resolve_obj_by_qualname,
+        resolve_obj_by_qualname_parts,
+        lazy_import,
+        safe_import,
+        register_lazy_module,
+        get_lazy_module,
+        reload_module,
+        unload_module,
+        is_module_available,
+        get_module_version,
+        require_module,
+    )
 
 
 def test_dynamic_importer_symbols_basic():

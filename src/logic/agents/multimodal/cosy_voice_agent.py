@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -39,9 +40,6 @@ FILE CONTENT SUMMARY:
 CosyVoice Orchestration Agent.
 Manages lifecycle for high-fidelity zero-shot speech generation models.
 """
-
-
-from __future__ import annotations
 
 import logging
 import time
@@ -112,8 +110,6 @@ class CosyVoiceAgent(BaseAgent):
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(CosyVoiceAgent, "CosyVoice Orchestrator", "Speech "generation logs")"    main()
-
-from __future__ import annotations
 
 import logging
 import time

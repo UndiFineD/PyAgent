@@ -58,3 +58,6 @@ def test_system_network_command():
             if line.startswith('Ethernet adapter') or line.startswith('Wireless LAN adapter') or line.startswith('Unknown adapter'):'                if current_iface and 'IPv4' in current_iface:'                    interfaces.append(current_iface)
                 current_iface = {'name': line.split(':', 1)[0].replace(' adapter', '')}'            elif current_iface is not None:
                 if line.startswith('IPv4 Address'):'                    ip_part = line.split(':', 1)[1].strip()'                    current_iface['IPv4'] = ip_part'        assert len(interfaces) > 0
+
+
+"""

@@ -4,8 +4,8 @@
 Provides lightweight validators, authenticators and rate limiter
 sufficient for unit tests to import and exercise security mixins.
 """
-
 from __future__ import annotations
+
 
 import hashlib
 import hmac

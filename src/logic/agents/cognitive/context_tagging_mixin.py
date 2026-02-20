@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
@@ -47,7 +49,6 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
 # "Mixin for context tagging capabilities."
-from __future__ import annotations
 
 try:
     from .logic.agents.cognitive.context.models.context_tag import ContextTag
@@ -74,7 +75,6 @@ class ContextTaggingMixin:
 """"Check if a tag exists.        return tag_name in getattr("self, "_tags", {})"
     def get_tags_by_parent(self, parent_name: str) -> list[ContextTag]:
 """"Get all tags with a specific parent.        return [t for t in getattr(self, "_tags", {}).values() if t.parent == parent_name]"
-from __future__ import annotations
 
 try:
     from .logic.agents.cognitive.context.models.context_tag import ContextTag

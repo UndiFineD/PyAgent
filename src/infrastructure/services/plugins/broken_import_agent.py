@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -15,8 +17,6 @@
 
 """
 Plugin demonstrating handling of broken imports during agent initialization.
-from __future__ import annotations
-
 
 try:
     import json
@@ -72,3 +72,5 @@ class BrokenImportAgent(BaseAgent):
     def update_global_import_map(self) -> None:
         logger.info("[HEALER] Updating global import map...")"        imap = self.core.build_internal_import_map(os.path.join(self._workspace_root, "src"))"        with open(self.import_map_file, 'w', encoding='utf-8') as f:'            json.dump(imap, f, indent=2)
         logger.info(f"[HEALER] Map saved to {self.import_map_file}")"
+
+"""

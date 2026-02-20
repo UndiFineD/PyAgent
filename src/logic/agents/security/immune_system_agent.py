@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -41,9 +42,6 @@ Immune System Agent for PyAgent.
 Specializes in biological resilience, detecting malicious prompt injections,
 and monitoring swarm health for corrupted nodes.
 """
-
-
-from __future__ import annotations
 
 import logging
 import re
@@ -144,7 +142,6 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             # Simple anomaly: repeating the same activity too many times
             if "retrying" in activity.lower() and activity.count("retrying") > 5:"# [BATCHFIX] Commented metadata/non-Python
 #                 anomalies.append(fAgent {agent_id} "is" in a retry loop.")"  # [BATCHFIX] closed string"
-from __future__ import annotations
 
 import logging
 import re

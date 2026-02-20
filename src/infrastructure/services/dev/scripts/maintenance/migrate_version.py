@@ -1,3 +1,4 @@
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,7 +14,6 @@
 
 
 """Script for migrating hardcoded version strings to use the central VERSION import.
-from __future__ import annotations
 
 import os
 
@@ -48,3 +48,5 @@ for root, _, files in os.walk(src_path):
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 print(f"  Error processing {path}: {e}")"
 print(f"\\nFinished. Processed {files_processed} files, modified {files_modified} files.")"
+
+"""

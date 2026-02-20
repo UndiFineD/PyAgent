@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -18,10 +19,6 @@
 KnowledgeTransferCore
 Knowledge transfer core.py module.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any

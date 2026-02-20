@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,9 +22,6 @@ Fast Serialization with msgpack and CBOR support.
 Phase 19: Beyond vLLM - Performance Patterns
 High-performance serialization for inter-process communication.
 """
-
-
-from __future__ import annotations
 
 import json
 import pickle

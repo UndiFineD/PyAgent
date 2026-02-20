@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -16,10 +18,6 @@
 # SPDX-License-Identifier: Apache-2.0
 LoRA Stats Manager - Collection of aggregate stats regarding LoRA adapters.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging

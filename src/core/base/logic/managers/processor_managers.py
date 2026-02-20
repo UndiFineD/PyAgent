@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,6 @@
 """Manager regarding response post-processing and multimodal inputs.
 (Facade regarding src.core.base.common.processor_core)
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any

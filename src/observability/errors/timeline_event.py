@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -31,10 +32,6 @@ Defines a minimal dataclass representing a point in an error timeline with field
 WHAT IT SHOULD DO BETTER:
 Use timezone-aware datetime objects instead of plain strings, validate and normalize timestamps, replace event_type strings with an Enum, add serialization/deserialization helpers, add unit tests and richer docstrings
 """
-
-
-from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass

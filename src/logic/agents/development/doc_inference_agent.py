@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -33,8 +34,6 @@ Agent specializing in layout-aware OCR and document reconstruction (Chandra Patt
 Converts images and PDFs into structured Markdown/JSON/HTML while preserving forms and tables.
 
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
 
 import json
 import logging
@@ -117,8 +116,6 @@ class DocInferenceAgent(BaseAgent):
     @as_tool
 
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
 
 import json
 import logging

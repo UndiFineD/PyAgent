@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 # Agent specializing in automated quality gates and release validation.
 """
-
-
-from __future__ import annotations
 
 import json
 import logging
@@ -105,7 +103,6 @@ class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         matches = [obj for obj in objectives if obj.lower() in result.lower()]
         if len(matches) == len(objectives):
             return "✅ Result successfully aligns with the logical blueprint objecti"
-from __future__ import annotations
 
 import json
 import logging

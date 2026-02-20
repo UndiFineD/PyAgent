@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -29,10 +30,6 @@ WHAT IT SHOULD DO BETTER:
 Expand dynamic discovery of checks (plugin or policy files), implement real verification logic instead of
 simulation, add configurable severity/risk scoring, surface recorder failures (don't silently swallow them),'and include richer telemetry and remediation tracking.
 """
-
-
-from __future__ import annotations
-
 
 from typing import Any
 from src.logic.agents.security.compliance_assist import ComplianceCheck, ComplianceStandard

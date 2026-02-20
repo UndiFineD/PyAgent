@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,10 +22,6 @@ In Tensor Parallelism (TP), KV heads (and thus KV cache blocks) are partitioned
 across multiple GPUs within a single node or across nodes. This module ensures
 that KV transfer logic correctly handles partitioned blocks.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging

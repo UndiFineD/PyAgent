@@ -189,3 +189,6 @@ class AttentionBufferAgent(BaseAgent):
             self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]"
         removed = initial_count - len(self.buffer)
 #         return fCleared {removed} stale attention points.
+
+
+"""

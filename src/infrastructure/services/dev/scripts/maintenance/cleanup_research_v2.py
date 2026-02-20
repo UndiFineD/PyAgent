@@ -1,3 +1,4 @@
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,6 @@
 
 
 """Script to clean up and deduplicate entries in the IMPROVEMENT_RESEARCH.md document.
-from __future__ import annotations
-
 
 try:
     import os

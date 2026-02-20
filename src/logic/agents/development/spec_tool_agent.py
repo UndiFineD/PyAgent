@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -38,8 +39,6 @@ FILE CONTENT SUMMARY:
 # Agent specializing in generating tools and code from specifications (OpenAPI, JSON Schema, MCP).
 
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
 
 import json
 import logging
@@ -96,8 +95,6 @@ class SpecToolAgent(BaseAgent):
     def archive_change(self, name: str) -> str:
 """"Merges a completed change back into the main specs and archives the folder.        change_dir = Path("openspec/changes") / name"
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
 
 import json
 import logging

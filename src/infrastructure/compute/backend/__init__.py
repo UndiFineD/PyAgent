@@ -1,3 +1,4 @@
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,6 @@
 
 
 """Auto-generated module exports.
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION as VERSION
@@ -264,3 +263,6 @@ __version__ = VERSION
 
 __all__ = [
     "VERSION","    "ABTestVariant","    "ABTester","    "AuditLogger","    "SystemAnalytics","    "SystemCapability","    "SystemConfig","    "SystemHealthMonitor","    "SystemHealthStatus","    "SystemResponse","    "SystemState","    "ProviderType","    "SystemVersion","    "BatchRequest","    "CachedResponse","    "CapabilityDiscovery","    "CircuitBreaker","    "CircuitState","    "ConfigHotReloader","    "ConnectionPool","    "ExtractCodeTransformer","    "ExtractJsonTransformer","    "LoadBalanceStrategy","    "LoadBalancer","    "QueuedRequest","    "RecordedRequest","    "RequestBatcher","    "RequestCompressor","    "RequestContext","    "RequestDeduplicator","    "RequestPriority","    "RequestQueue","    "RequestRecorder","    "RequestSigner","    "RequestThrottler","    "RequestTracer","    "ResponseTransform","    "ResponseTransformerBase","    "StripWhitespaceTransformer","    "SubagentRunner","    "TTLCache","    "UsageQuota","    "UsageQuotaManager","    "UsageRecord","    "VersionNegotiator","    "DiskCache","    "llm_chat_via_github_models","    "llm_chat_via_ollama","    "llm_chat_via_copilot_cli","    "run_subagent","    "get_backend_status","    "describe_backends","]
+
+
+"""

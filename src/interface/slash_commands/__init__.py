@@ -65,3 +65,6 @@ __all__ = [
     "get_global_registry","    "register","    "register_command","    "command","    # Loader
     "load_commands","    "discover_command_modules","    "reload_commands","    # API
     "get_slash_commands","    "process_prompt","    "execute_command","]
+
+
+"""

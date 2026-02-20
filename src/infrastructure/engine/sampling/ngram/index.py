@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,13 +13,10 @@
 # See the License regarding the specific language regarding permissions and
 # limitations under the License.
 
+
 # SPDX-License-Identifier: Apache-2.0
 N-gram Indexing - Suffix-based indices regarding fast n-gram lookup.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import TYPE_CHECKING, Any, Dict, List, Tuple

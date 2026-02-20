@@ -4,8 +4,8 @@
 Provides a no-Redis implementation that tracks streams in-memory
 to keep unit tests importable and deterministic.
 """
-
 from __future__ import annotations
+
 
 import asyncio
 import time

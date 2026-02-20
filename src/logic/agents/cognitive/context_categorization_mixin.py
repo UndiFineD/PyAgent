@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
@@ -45,7 +47,6 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
 # "Mixin for context categorization capabilities."
-from __future__ import annotations
 
 try:
     import re
@@ -141,7 +142,6 @@ class ContextCategorizationMixin:
 """"Get all metadata.        return dict(getattr(self, "_metadata", {}))"
     def export_metadata(self) -> str:
 """"Export metadata as JSON.        priority = getattr(self, "_priority", ContextPriority.MEDIUM)"        category = getattr(self, "_category", FileCategory.OTHER)"        tags = getattr(self, "_tags", {})"        versions = getattr(self, "_versions", [])"        annotations" =" getattr(self, "_annotations", [])"
-from __future__ import annotations
 
 try:
     import re

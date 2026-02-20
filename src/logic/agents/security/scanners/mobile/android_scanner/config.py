@@ -14,7 +14,7 @@
 
 # Instruction for the code scanner
 # [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis""""
+""" [BATCHFIX] Commented unmatched parenthesis"""
 # instruction = (
 # [BATCHFIX] Commented metadata/non-Python
 """     "You are a static analysis tool designed to perform a security review of Android application source code."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -51,6 +51,6 @@
 """     "If no vulnerability is found, clearly state that. Only focus on security, not code style or performance.\\n"  # [BATCHFIX] closed string")
 
 # API keys for different models
-api_keys = {"GENEAI": "AIzaSyCRpXcbN6_Kj6UW9GCapmVxAc_DFZ4kTeQ"}"
+api_keys = {"GENEAI": "AIzaSyCRpXcbN6_Kj6UW9GCapmVxAc_DFZ4kTeQ"}
 # Available models for each key
-Models = {"GENEAI": {"gemini-2.0-flash": "gemini-2.0-flash"}}"
+Models = {"GENEAI": {"gemini-2.0-flash": "gemini-2.0-flash"}}

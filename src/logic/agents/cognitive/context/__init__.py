@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -15,7 +16,6 @@
 
 
 """Context package for cognitive agents."""
-from __future__ import annotations
 
 try:
     from src.core.base.lifecycle.version import VERSION

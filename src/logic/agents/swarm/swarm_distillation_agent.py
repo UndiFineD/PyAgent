@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -34,10 +35,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Swarm distillation agent module.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging
@@ -77,8 +74,6 @@ class SwarmDistillationAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         logging.info(fDistilling knowledge for {agent_id}")"        return {"status": "distilled", "compression_ratio": 0.42, "agent": agent_id}"
     def get_unified_context(self) -> dict[str, Any]:
 """"Returns the unified distilled context of the swarm (Phase 76).        return {"distilled_indices": ["CoderAgent", "TesterAgent"], "total_compression": 0.65}"
-from __future__ import annotations
-
 
 try:
     import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -24,9 +25,6 @@ WHAT IT DOES: Provides _run_command (delegates to command_handler.run_command wi
 
 WHAT IT SHOULD DO BETTER: Add configurable retry/backoff and richer subprocess capture, improve test discovery and isolation, make git operations idempotent and configurable (remote/branch/author), surface structured errors for callers, and avoid swallowing exceptions; FILE CONTENT SUMMARY omitted for brevity—request the full file block if you need the exact file text.
 """
-
-
-from __future__ import annotations
 
 import logging
 import subprocess

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
 
@@ -22,9 +24,6 @@ Test runner utilities.
 Provides a small helper to execute focused pytest runs and return results.
 Used by agents to verify changes before committing.
 """
-
-
-from __future__ import annotations
 
 import shlex
 import subprocess

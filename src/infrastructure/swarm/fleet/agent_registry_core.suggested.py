@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -21,8 +22,6 @@ Phase 15 Rust Optimizations:
 - topological_sort_rust: O(V+E) topological ordering for agent load order
 - to_snake_case_rust: Fast CamelCase to snake_case conversion
 - detect_cycles_rust: DFS-based cycle detection in dependency graphs
-
-from __future__ import annotations
 
 import contextlib
 import logging

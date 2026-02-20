@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Validates improvements with automated testing.
 (Facade for src.core.base.common.validation_core)
-
-from __future__ import annotations
-
 
 try:
     from typing import Any, Callable
@@ -128,10 +126,6 @@ class ImprovementValidator(ValidationCore):
 
     def validate_all(self, improvements: list[Improvement]) -> list[ValidationResult]:
         """Validate multiple improvements.        return [self.va"""li"""date(imp) for imp in improvements]""""
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any, Callable

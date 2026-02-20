@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 # Licensed under the Apache License, Version 2.0 (the "License");"
 """MetricsCore - Pure calculation logic for metrics processing.This module contains all pure computational logic without I/O operations,
 making it a candidate for Rust conversion. It handles:
@@ -24,9 +26,6 @@ making it a candidate for Rust conversion. It handles:
 
 No I/O operations, no file access, no external calls.
 """
-
-
-from __future__ import annotations
 
 import contextlib
 import logging

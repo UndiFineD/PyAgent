@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -17,10 +18,6 @@
 Hardcoded bootstrap configurations for essential system components.
 These must remain static to ensure the system can boot up before dynamic discovery.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION
@@ -89,3 +86,6 @@ BOOTSTRAP_ORCHESTRATORS = {
     "fleet_telemetry": ("        "src.infrastructure.swarm.orchestration.swarm.fleet_telemetry_visualizer","        "FleetTelemetryVisualizer","    ),
     "consciousness": ("        "src.infrastructure.swarm.fleet.consciousness_registry","        "ConsciousnessRegistry","    ),
 }
+
+
+"""

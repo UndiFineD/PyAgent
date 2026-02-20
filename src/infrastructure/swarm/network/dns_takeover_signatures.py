@@ -50,3 +50,6 @@ DNS_TAKEOVER_SIGNATURES = {
 
 PRIVATE_DNS_SIGNATURES = {
     "Activision": "activision.com","    "Adobe": "adobe.com","    "Apple": "apple.com","    "Automattic": "automattic.com","    "Capital One": "capitalone.com","    "Disney": ["twdcns.com", "twdcns.info", "twdcns.co.uk"],"    "Google": "google.com","    "Lowe's": "lowes.com","'    "T-Mobile": ["tmobileus.com", "tmobileus.net"]"}
+
+
+"""

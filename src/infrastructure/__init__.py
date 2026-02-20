@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -33,8 +33,6 @@ Example:
     from src.infrastructure import EagleProposer  # Not loaded until accessed
     proposer = EagleProposer(config)  # Now the module is imported
 """
-
-from __future__ import annotations
 
 from typing import Any, List
 

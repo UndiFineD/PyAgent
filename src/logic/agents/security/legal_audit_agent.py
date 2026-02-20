@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -47,9 +48,6 @@ FILE CONTENT SUMMARY:
 LegalAuditAgent: Agent for auditing legal compliance, licensing, and intellectual property.
 Automates legal risk assessment and documentation.
 """
-
-
-from __future__ import annotations
 
 import re
 import time
@@ -169,7 +167,6 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""
 #         "Analy"  # [BATCHFIX] closed string"
-from __future__ import annotations
 
 import re
 import time

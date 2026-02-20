@@ -1,3 +1,5 @@
+# Put future import at module top
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -14,38 +16,28 @@
 # limitations under the License.
 
 
-"""
-Fleet package.
-"""
-
-
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
-
-
-
+"""Fleet package."""
 
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
-try:
-    from .infrastructure.swarm.fleet.async_fleet_manager import AsyncFleetManager
-except ImportError:
-    from src.infrastructure.swarm.fleet.async_fleet_manager import AsyncFleetManager
 
 try:
-    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from .async_fleet_manager import AsyncFleetManager
 except ImportError:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from .async_fleet_manager import AsyncFleetManager
 
 try:
-    from .infrastructure.swarm.fleet.workflow_state import WorkflowState
+    from .fleet_manager import FleetManager
 except ImportError:
-    from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
+    from .fleet_manager import FleetManager
+
+try:
+    from .workflow_state import WorkflowState
+except ImportError:
+    from .workflow_state import WorkflowState
 
 
 

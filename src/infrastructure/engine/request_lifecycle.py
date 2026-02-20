@@ -15,14 +15,27 @@
 """Request lifecycle management for PyAgent Engine."""
 
 
-try:
-    from .lifecycle import (
-except ImportError:
-    from .lifecycle import (
-
-    FINISH_REASON_STRINGS, FinishReason, Request, RequestEvent, RequestEventType, RequestQueue, RequestStatus, RequestTracker, is_valid_transition
+from .lifecycle import (
+    FINISH_REASON_STRINGS,
+    FinishReason,
+    Request,
+    RequestEvent,
+    RequestEventType,
+    RequestQueue,
+    RequestStatus,
+    RequestTracker,
+    is_valid_transition,
 )
 
+
 __all__ = [
-    "FinishReason", "RequestStatus", "RequestEventType", "is_valid_transition", "FINISH_REASON_STRINGS", "RequestEvent", "Request", "RequestQueue", "RequestTracker"
+    "FinishReason",
+    "RequestStatus",
+    "RequestEventType",
+    "is_valid_transition",
+    "FINISH_REASON_STRINGS",
+    "RequestEvent",
+    "Request",
+    "RequestQueue",
+    "RequestTracker",
 ]

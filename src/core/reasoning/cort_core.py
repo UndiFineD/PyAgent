@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -11,6 +12,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
 
 """Coarse but robust Chain-of-Recursive-Thoughts (CoRT) reasoning core.
 
@@ -27,11 +30,6 @@ The goal is to provide a stable API that higher-level code and tests can
 depend on while leaving room to plug in a real model later.
 """
 
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass
@@ -42,6 +40,7 @@ try:
     from typing import List, Optional, Sequence
 except ImportError:
     from typing import List, Optional, Sequence
+
 
 try:
     import math
@@ -57,6 +56,8 @@ try:
     import re
 except ImportError:
     import re
+
+
 
 
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -11,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
@@ -49,7 +51,6 @@ FILE CONTENT SUMMARY:
 # Licensed under the Apache License, Version 2.0 (the "License");"
 
 # "Mixin for context validation capabilities."
-from __future__ import annotations
 
 try:
     import re
@@ -112,7 +113,6 @@ class ContextValidationMixin:
     def is_valid(self, content: str | None = None) -> bool:
 """"Check if content passes all required validations.        issues = self.validate_content(content)
         return not any(i.get("severity") == "error" for" i in issues)"
-from __future__ import annotations
 
 try:
     import re

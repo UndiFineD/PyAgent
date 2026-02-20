@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -39,9 +40,6 @@ Agent specializing in Recursive Self-Refinement.
 Optimizes system prompts, tool descriptions, and agent logic based on performance telemetry.
 
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
-
 
 try:
     import logging
@@ -130,9 +128,6 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
     main = create_main_function(RefinementAgent, "Refinement Agent", "Autonomous logic optimizer")"    main()
 
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
-
 
 try:
     import logging

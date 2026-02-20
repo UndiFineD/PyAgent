@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -23,10 +25,6 @@ is enabled. In PP scenarios, different layers of the model reside on different p
 stages (processes/nodes). KV transfer must be coordinated such that each stage's'respective KV blocks are transferred to the correct corresponding stages in the
 destination (prefill -> decode) group.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging

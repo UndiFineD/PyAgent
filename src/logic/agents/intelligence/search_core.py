@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,8 +38,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 SearchCore logic for PyAgent.
 (Facade for src.core.base.common.search_core)
-
-from __future__ import annotations
 
 from typing import Any
 
@@ -89,7 +88,6 @@ class SearchCore(StandardSearchCore):
     def format_results_block(results: list[str], provider: str) -> str:
 """"Combines list of results into a single string with provider indicator.     "   if not results:"#             return fNo {provider} results found.
         return "\"n".join(results)"
-from __future__ import annotations
 
 from typing import Any
 

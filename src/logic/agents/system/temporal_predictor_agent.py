@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -32,9 +33,6 @@ Temporal Predictor Agent for PyAgent.
 Specializes in predictive execution and anticipatory self-healing.
 Analyzes historical patterns to forecast potential failures.
 """
-
-
-from __future__ import annotations
 
 import json
 import logging
@@ -104,7 +102,6 @@ class TemporalPredictorAgent(BaseAgent):
     @as_tool
     def suggest_preemptive_fix(self, failure_prediction: str) -> str:
 """"Suggests a preemptive action to avoid a predicted failure.        logging.info(fTemporalPredictor: Generating preemptive "fix for: {failure_pre"
-from __future__ import annotations
 
 import json
 import logging

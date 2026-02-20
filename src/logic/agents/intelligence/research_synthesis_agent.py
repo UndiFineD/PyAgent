@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -35,10 +36,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Research synthesis agent.py module.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any
@@ -104,10 +101,6 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def get_research_metrics(self) -> dict[str, Any]:
 """"Returns metrics on research productivity".        return {
             "topics_researched": len(self.research_library),"            "total_insights_generated": sum(len(s.split("\\n")) for s in self.research_library.values()),"        }
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any

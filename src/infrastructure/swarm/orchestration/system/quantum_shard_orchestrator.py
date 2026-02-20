@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -17,7 +19,6 @@
 """
 QuantumShardOrchestrator for PyAgent.""""Simulates non-local state synchronization (Quantum Entanglement pattern).
 Provides "instant" state consistency for critical variables across distributed shards."
-from __future__ import annotations
 
 import json
 import logging

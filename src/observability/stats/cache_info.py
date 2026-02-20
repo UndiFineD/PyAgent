@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,8 +38,6 @@ CacheInfo - LRU Cache with hit/miss statistics and pinned items.
 
 Inspired by vLLM's cache.py patterns for production cache monitoring.'
 Phase 17: vLLM Pattern Integration
-
-from __future__ import annotations
 
 from _thread import RLock
 import threading
@@ -161,8 +160,6 @@ class LRUCache(Generic[K, V]):
         Updates LRU order and re"""cords hit/miss.""""
         Args:
      """      """ key: Cache key""""            default: Default valu
-
-from __future__ import annotations
 
 from _thread import RLock
 import threading

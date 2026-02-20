@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,6 @@
 """Logic for distributing model shards, fleet agents, and workload across the swarm.
 Integrates with Project Voyager and Rust-accelerated distributed benchmarks.
 """
-
-
-from __future__ import annotations
-
-
 
 from typing import Any, Dict, List, Optional
 import numpy as np

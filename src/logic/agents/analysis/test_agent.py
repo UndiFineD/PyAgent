@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,9 +37,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in automated testing and coverage analysis.
 Inspired by SGI-Bench and py.test.
 """
-
-
-from __future__ import annotations
 
 import logging
 import subprocess
@@ -111,7 +109,6 @@ class TestAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             report = ["## 🧪 Test Execution Report\\n"]"            if result.returncode == 0:
                 report.append("✅ **"Status**: All t"
-from __future__ import annotations
 
 import logging
 import subprocess

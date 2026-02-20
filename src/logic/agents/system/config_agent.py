@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in configuration validation, secrets checking, and environment setup.
 Inspired by external-secrets and infrastructure-as-code patterns.
 """
-
-
-from __future__ import annotations
 
 import yaml
 
@@ -81,8 +79,6 @@ class ConfigAgent(BaseAgent):
 #             return f"❌ Error parsing `models.yaml`: {e}"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.validate_env()
-
-from __future__ import annotations
 
 import yaml
 

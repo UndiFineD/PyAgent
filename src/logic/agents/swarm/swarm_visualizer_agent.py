@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -51,8 +52,6 @@ FILE CONTENT SUMMARY:
 SwarmVisualizerAgent: Swarm agent for visualizing agent activity and system state.
 
 Provides dashboards and real-time observability for distributed workflows in the PyAgent swarm"."
-from __future__ import annotations
-
 
 try:
     import time
@@ -110,9 +109,6 @@ class SwarmVisualizerAgent:
     def get_visualization_data(self) -> dict[str, Any]:
 """"Returns all data needed for a real-time visualization dashboard.        return {
             "topology": self.generate_topology_map(),"            "positions": self.agent_positions,"            "metrics": {"                "total_interactions": len(self.interaction_log),"                "active_agents": len(self.agent_positions),"  "          },"        }
-
-from __future__ import annotations
-
 
 try:
     import time

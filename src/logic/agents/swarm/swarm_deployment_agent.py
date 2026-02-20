@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -56,8 +57,6 @@ FILE CONTENT SUMMARY:
 SwarmDeploymentAgent: Swarm agent for orchestrating deployment, scaling, and lifecycle management.
 
 Handles distributed deployment and rollout strategies for agents and services in the PyAgent swarm"."
-from __future__ import annotations
-
 
 try:
     import os
@@ -122,9 +121,6 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def get_deployment_inventory(self) -> dict[str, Any]:
 """"Returns the inventory of all provisioned nodes".        return {
             "total_nodes": len(self.active_deployments),"            "regions": list(set(d["region"] for d in self.active_deployments)),"            "nodes": self.active_deployments,"        }
-
-from __future__ import annotations
-
 
 try:
     import os

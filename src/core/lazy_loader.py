@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-
-
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -42,9 +41,6 @@ Example usage:
     def __getattr__(name: str):
         return _lazy_modules.load(name)
 """
-
-
-from __future__ import annotations
 
 import importlib
 import threading

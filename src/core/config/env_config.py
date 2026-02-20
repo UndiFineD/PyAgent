@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -25,9 +26,6 @@ Features:
 Module: env_config
 Handles environment configuration and variable management for PyAgent core.
 """
-
-
-from __future__ import annotations
 
 import json
 import logging

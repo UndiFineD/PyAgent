@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@
 Implements advanced Synaptic Decay, Neural Context Pruning, and Semantic Cache Invalidation.
 Phase 91-92: Sliding-window invalidation and attention-entropy maps for KV-cache landmarks.
 """
-
-
-from __future__ import annotations
 
 try:
     import time

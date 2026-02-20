@@ -22,9 +22,9 @@ except ImportError:
 
 
 def test_sleep_briefly_uses_injected_sleep():
-    called = {"t": 0}"
+    called = {"t": 0}
     def fake_sleep(t):
-        called["t"] += 1"
+        called["t"] += 1
     mgr = EngineLifecycleManager(sleep_fn=fake_sleep)
     mgr._sleep_briefly()
-    assert called["t"] == 1"
+    assert called["t"] == 1

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -34,9 +35,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
 
-from __future__ import annotations
-
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -62,3 +60,6 @@ class ProgressReport:
     blocked_count: int = 0
     velocity: float = 0.0
     burndown_data: list[tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]
+
+
+"""

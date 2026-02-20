@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -23,9 +25,6 @@ Implements vLLM's CUDA graph patterns regarding efficient GPU execution:'- CUDAG
 
 Beyond vLLM: LRU eviction regarding memory pressure management.
 """
-
-
-from __future__ import annotations
 
 import hashlib
 import logging

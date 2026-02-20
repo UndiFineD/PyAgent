@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -16,8 +18,6 @@
 
 """
 ParallelizationStrategy for test distribution.
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION

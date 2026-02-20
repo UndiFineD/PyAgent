@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -38,10 +39,6 @@ WHAT IT SHOULD DO BETTER:
 - Add convenience methods: remaining(), consume(amount), reset(period_start, period_end), percent_consumed(), and serialization/deserialization (to_dict/from_dict).  
 - Consider immutability or thread-safety guarantees if used concurrently and richer SLO metadata (window length, alert thresholds).
 """
-
-
-from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass

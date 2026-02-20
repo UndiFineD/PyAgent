@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -21,9 +23,6 @@ Inspired by vLLM's v1/worker/gpu/buffer_utils.py. Provides unified'buffer manage
 transfers.
 
 Phase 29: Execution Context, Batching & Async Streaming
-
-from __future__ import annotations
-
 
 try:
     import threading

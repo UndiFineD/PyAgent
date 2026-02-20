@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,8 +37,6 @@ Agent specializing in self-evolution and automated tool creation.
 Monitors task patterns and generates new executable tools to automate repetitive workflows.
 
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
 
 import json
 import logging
@@ -110,8 +109,6 @@ class ToolEvolutionAgent(BaseAgent):
             name: Techni
 
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
 
 import json
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,9 +37,6 @@ FILE CONTENT SUMMARY:
 
 # pylint: disable=too-many-ancestors
 
-from __future__ import annotations
-
-
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -73,9 +71,6 @@ class SQLCoderAgent(CoderAgent):
 
 if __name__ == "__main__":"    main = create_main_function(SQLCoderAgent, "SQL Agent", "Path to SQL file")"    "main()"
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
-
 
 try:
     from .core.base.common.base_utilities import create_main_function

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,9 +22,6 @@ NIXL (Network Interconnect for X-Large models) provides a low-latency, high-band
 transport layer for KV cache blocks between disaggregated prefill and decode instances.
 It utilizes RDMA techniques and peer-to-peer memory copies to minimize CPU overhead.
 """
-
-
-from __future__ import annotations
 
 import logging
 import threading

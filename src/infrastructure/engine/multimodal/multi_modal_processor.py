@@ -15,14 +15,19 @@
 
 # Multi modal processor.py module.
 
-try:
-    from .processor import (
-except ImportError:
-    from .processor import (
-
-    MULTIMODAL_REGISTRY, AudioProcessor, BaseMultiModalProcessor, ImageProcessor, ModalityType,
-    MultiModalConfig, MultiModalData, MultiModalInputs, MultiModalRegistry,
-    TextEmbedProcessor, VideoProcessor, process_multimodal_inputs
+from .processor import (
+    MULTIMODAL_REGISTRY,
+    AudioProcessor,
+    BaseMultiModalProcessor,
+    ImageProcessor,
+    ModalityType,
+    MultiModalConfig,
+    MultiModalData,
+    MultiModalInputs,
+    MultiModalRegistry,
+    TextEmbedProcessor,
+    VideoProcessor,
+    process_multimodal_inputs,
 )
 
 __all__ = [

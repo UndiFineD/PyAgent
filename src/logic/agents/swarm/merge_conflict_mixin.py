@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -43,8 +44,6 @@ FILE CONTENT SUMMARY:
 
 
 Merge conflict mixin.py module"."
-from __future__ import annotations
-
 
 try:
     from typing import Any
@@ -108,8 +107,6 @@ class MergeConflictMixin:
             else:
                 result.append(line)
         return "\"n".join(result)"
-from __future__ import annotations
-
 
 try:
     from typing import Any

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,6 @@
 # "Reinforcement Learning based priority and resource allocation agent."Uses RL techniques to dynamically prioritize tasks and allocate resources
 based on learned patterns of workload and system state.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION

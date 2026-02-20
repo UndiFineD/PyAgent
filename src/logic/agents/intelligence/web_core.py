@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -42,9 +43,6 @@ WebCore logic for PyAgent.
 Pure logic for cleaning and processing web content.
 No I/O or side effects.
 """
-
-
-from __future__ import annotations
 
 from bs4 import BeautifulSoup
 
@@ -103,8 +101,6 @@ class WebCore:
                 href = urllib.parse.urljoin(base_url, href)
             links.append(href)
         return list(set(links))
-
-from __future__ import annotations
 
 from bs4 import BeautifulSoup
 

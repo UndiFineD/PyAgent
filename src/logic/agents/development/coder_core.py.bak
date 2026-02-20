@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from __future__ import annotations
+
+
+# Computational core for code analysis, metrics, and quality assessment.
+# Designed for high-performance rule checking with future Rust integration.
+
+# pylint: disable=too-many-ancestors
+
+import ast
+
+from typing import List, Optional
+
+from src.core.base.common.base_interfaces import ContextRecorderInterface
+from src.core.base.common.types.code_language import CodeLanguage
+from src.core.base.common.types.code_metrics import CodeMetrics
+from src.core.base.common.types.style_rule import StyleRule
+from src.core.base.common.types.style_rule_severity import StyleRuleSeverity
+from src.core.base.lifecycle.agent_core import LogicCore
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.development.mixins.coder_doc_mixin import CoderDocMixin
+from src.logic.agents.development.mixins.coder_duplication_mixin import \
+    CoderDuplicationMixin
+from src.logic.agents.development.mixins.coder_metrics_mixin import \
+    CoderMetricsMixin
+from src.logic.agents.development.mixins.coder_quality_mixin import \
+    CoderQualityMixin
+from src.logic.agents.development.mixins.coder_smell_mixin import \
+    CoderSmellMixin
+from src.logic.agents.development.mixins.coder_style_mixin import \
+    CoderStyleMixin
+from src.logic.agents.development.mixins.coder_validation_mixin import \
+    CoderValidationMixin
+
+__version__ = VERSION
+
+# Logic extracted for future Rust migration (PyO3)
+# Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here."
+# Default style rules for Python (Re-declared here for Core access)
+DEFAULT_PYTHON_STYLE_RULES: list[StyleRule] = [
+    StyleRule(
+        name="line_length","        pattern=r"^.{89,}$","        message="Line exceeds 88 characters","        severity=StyleRuleSeverity.WARNING,
+        language=CodeLanguage.PYTHON,
+    ),
+    StyleRule(
+        name="trailing_whitespace","        pattern=r"[ \\t]+$","        message="Trailing whitespace detected","        severity=StyleRuleSeverity.WARNING,
+        language=CodeLanguage.PYTHON,
+    ),
+    StyleRule(
+        name="multiple_blank_lines","        pattern=r"\\n{4,}","        message="More than 2 consecutive blank lines","        severity=StyleRuleSeverity.INFO,
+        language=CodeLanguage.PYTHON,
+    ),
+    StyleRule(
+        name="missing_docstring","        pattern=r'^def\\\\s+\\w+\([^)]*\):\\\\s*\\n\\\\s+(?!")',"'        message="Function missing docstring","        severity=StyleRuleSeverity.WARNING,
+        language=CodeLanguage.PYTHON,
+    ),
+]
+
+
+
+class CoderCore(
+    LogicCore,
+    CoderMetricsMixin,
+    CoderStyleMixin,
+    CoderSmellMixin,
+    CoderDuplicationMixin,
+    CoderQualityMixin,
+    CoderDocMixin,
+    CoderValidationMixin,
+):
+#     "Core logic for CoderAgent, target for Rust conversion."
+    def __init__(
+        self,
+        language: CodeLanguage,
+        workspace_root: str | None = None,
+        recorder: Optional[ContextRecorderInterface] = None,
+    ) -> None:
+        LogicCore.__init__(self)  # Ensure proper base init
+        self.language = language
+        self.workspace_root = workspace_root
+        self.recorder = recorder
+        try:
+            import rust_core
+
+            self._rust_core = rust_core.CoderCore(str(language))  # type: ignore[attr-defined]
+        except (ImportError, AttributeError):
+            self._rust_core = None
+
+    def get_dependencies(self, content: str) -> List[str]:
+""""Extract code dependencies using high-speed scanning.        from src.core.rust_bridge import RustBridge
+        return RustBridge.get_imports(content)
+
+    def calculate_metrics(self, content: str) -> CodeMetrics:
+""""Analyze code structure and compute metrics.        from src.core.rust_bridge import RustBridge
+
+        raw_metrics = RustBridge.calculate_metrics(content)
+        if raw_metrics:
+            metrics = CodeMetrics()
+            metrics.lines_of_code = int(raw_metrics.get("lines_of_code", 0.0))"            metrics.lines_of_comments = int(raw_metrics.get("lines_of_comments", 0.0))"            metrics.blank_lines = int(raw_metrics.get("blank_lines", 0.0))"            metrics.cyclomatic_complexity = int(raw_metrics.get("cyclomatic_complexity", 1.0))"            metrics.function_count = int(raw_metrics.get("function_count", 0.0))"            metrics.class_count = int(raw_metrics.get("class_count", 0.0))"            metrics.import_count = int(raw_metrics.get("import_count", 0.0))"            metrics.maintainability_index = raw_metrics.get("maintainability_index", 100.0)"            return metrics
+
+        lines = content.split("\\n")"        metrics = CodeMetrics()
+
+        # Basic line counts
+        for line in lines:
+            stripped = line.strip()
+            if not stripped:
+                metrics.blank_lines += 1
+            elif stripped.startswith("#") or stripped.startswith("//"):"                metrics.lines_of_comments += 1
+            else:
+                metrics.lines_of_code += 1
+
+        # Language-specific deep analysis
+        if self.language == CodeLanguage.PYTHON:
+            try:
+                tree = ast.parse(content)
+                metrics = self._analyze_python_ast(tree, metrics)
+            except SyntaxError:
+                pass
+
+        # General Maintainability Index
+        metrics.maintainability_index = self.compute_maintainability_index(metrics)
+
+        return metrics
+
+    def _calculate_cyclomatic_complexity(self, node: ast.AST) -> int:
+""""Calculate cyclomatic complexity for a function node.        cc = 1
+        for child in ast.walk(node):
+            if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
+                cc += 1
+            elif isinstance(child, ast.BoolOp):
+                cc += len(child.values) - 1
+        return cc

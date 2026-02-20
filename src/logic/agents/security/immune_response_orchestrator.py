@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -42,9 +43,6 @@ FILE CONTENT SUMMARY:
 ImmuneResponseOrchestrator: Coordinates automated threat detection, response, and recovery.
 Implements bio-inspired defense and self-healing mechanisms.
 """
-
-
-from __future__ import annotations
 
 import time
 from typing import Any
@@ -133,8 +131,6 @@ class HoneypotAgent:
             "attempts_neutralized": len(self.trapped_attempts),"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string""""
 #           "  "attacker_profiles_identified": 0,"  # [BATCHFIX] closed string"        }
-
-from __future__ import annotations
 
 import time
 from typing import Any

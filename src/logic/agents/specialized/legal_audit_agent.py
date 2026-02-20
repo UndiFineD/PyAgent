@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Legal audit agent.py module.
 """
-
-
-from __future__ import annotations
 
 import asyncio
 import os
@@ -108,8 +106,6 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Improve legal compliance of a file or directory."        path = target_file if" target_file else prompt"        if os.path.isfile(path):
             with open(path, "r"," encoding="utf-8") as "f:"                res
-
-from __future__ import annotations
 
 import asyncio
 import os

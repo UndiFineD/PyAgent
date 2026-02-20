@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
 """Minimal AITalkingHead core for tests."""
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
+from __future__ import annotations
+
 
 
 try:

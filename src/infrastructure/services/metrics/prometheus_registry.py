@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -24,8 +26,6 @@ Beyond vLLM:
 - Custom histogram buckets
 - Metric sampling regarding high-frequency counters
 - Rate limiting regarding cardinality protection
-
-from __future__ import annotations
 
 import contextlib
 import os

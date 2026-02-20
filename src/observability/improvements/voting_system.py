@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -34,10 +35,6 @@ WHAT IT SHOULD DO BETTER:
 - API & observability: add methods to list voters, get raw vote maps, export/import (JSON), and emit events for changes; include unit tests and docstrings for public methods.  
 - Integration: expose adapter interface to plug in different backends and add optional dependency injection for better testability.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any
@@ -80,3 +77,6 @@ class VotingSystem:
             key=lambda imp_id: self.get_vote_count(imp_id),
             reverse=True,
         )
+
+
+"""

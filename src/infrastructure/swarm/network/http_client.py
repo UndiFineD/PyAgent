@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,10 +22,6 @@ HTTPClient - Unified sync/async HTTP client with session reuse.
 Refactored to modular package structure for Phase 317.
 Decomposed into mixins for sync, async, and retry logic.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any

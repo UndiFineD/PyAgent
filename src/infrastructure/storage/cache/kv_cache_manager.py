@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -21,9 +23,6 @@ GPU/CPU KV cache orchestration regarding transformer inference:
 - Paged attention memory layout
 - Block allocation and defragmentation
 - CPU-GPU tensor transfers
-
-from __future__ import annotations
-
 
 try:
     import threading

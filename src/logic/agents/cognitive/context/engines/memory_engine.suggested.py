@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,7 @@
 # limitations under the License.
 
 
-# "Engine for persistent episodic memory of agent actions and outcomes."# from __future__ import annotations
-try:
+# "Engine for persistent episodic memory of agent actions and outcomes."# try:
     from pathlib import Path
 except ImportError:
     from pathlib import Path

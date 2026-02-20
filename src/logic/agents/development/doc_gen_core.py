@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ FILE CONTENT SUMMARY:
 Core logic for extracting and formatting documentation from Python source code.
 No file I/O or side effects; designed for type safety and Rust FFI compatibility.
 """
-
-
-from __future__ import annotations
 
 import ast
 import os
@@ -101,7 +99,6 @@ class DocGenCore:
         Generates a standardized documentation filename from a relative path.
         Example: src/utils/helper.py -> src_utils_helper.md
         return rel_path.replace(os.sep," "_").replace(".py", ".md")"
-from __future__ import annotations
 
 import ast
 import os

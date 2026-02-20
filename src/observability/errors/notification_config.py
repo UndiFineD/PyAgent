@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -57,10 +58,6 @@ WHAT IT SHOULD DO BETTER:
   config UI) and provide unit tests for edge cases like disabled
   notification flow.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass

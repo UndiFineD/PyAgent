@@ -5,6 +5,7 @@ Provides lightweight enums and dataclasses matching test imports.
 """
 from __future__ import annotations
 
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

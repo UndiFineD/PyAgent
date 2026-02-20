@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -44,9 +45,6 @@ FILE CONTENT SUMMARY:
 
 Html accessibility mixin.py module"."
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
-
 
 try:
     import re
@@ -127,9 +125,6 @@ class HtmlAccessibilityMixin:
 """"Helper to check heading hierarchy.        heading_levels:" list[int] = []"        for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):"            heading_levels.append(i
 
 # pylint: disable=too-many-ancestors
-
-from __future__ import annotations
-
 
 try:
     import re

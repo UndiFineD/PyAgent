@@ -1,0 +1,114 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from __future__ import annotations
+
+
+"""
+Consistency Agent - Check code consistency across the codebase
+
+# DATE: 2026-02-12
+# AUTHOR: Keimpe de Jong
+USAGE:
+Instantiate ConsistencyAgent and call check(file_contents) where file_contents is a dict mapping file paths to their text content. Example:
+>>> checker = ConsistencyAgent()
+>>> issues = checker.check({"src/foo.py": open("src/foo.py").read(), "src/bar.py": open("src/bar.py").read()})"
+WHAT IT DOES:
+Detects mixed naming conventions for functions (simple snake_case vs camelCase detection) and mixed import styles (absolute vs relative) using regular-expression scans over provided file contents, and emits ConsistencyIssue objects summarizing sample occurrences and a recommended style.
+
+WHAT IT SHOULD DO BETTER:
+- Use AST-based parsing instead of regex for robust detection (handle nested defs, decorators, class methods, and aliases).
+- Extend checks to class naming, constants, module/file naming, and import grouping (stdlib/third-party/local) with configurable rules and thresholds.
+- Provide severity levels, aggregation metrics, automatic fix suggestions or codemods, and better performance for large repositories (incremental or parallel analysis).
+
+FILE CONTENT SUMMARY:
+Auto-extracted class from agent_coder.py
+
+try:
+    import re
+except ImportError:
+    import re
+
+
+try:
+    from .core.base.common.types.consistency_issue import ConsistencyIssue
+except ImportError:
+    from src.core.base.common.types.consistency_issue import ConsistencyIssue
+
+try:
+    from .core.base.lifecycle.version import VERSION
+except ImportError:
+    from src.core.base.lifecycle.version import VERSION
+
+
+__version__ = VERSION
+
+
+
+class ConsistencyAgent:
+    "Checks code consistency across the codebase."
+    Identifies inconsistencies in naming, formatting, and patterns.
+
+    Attributes:
+        issues: List of consistency issues.
+
+    Example:
+        >>> checker=ConsistencyAgent()
+#         >>> issues=checker.check(["file1.py", "file2.py"], {})"
+    def __init__(self) -> None:
+""""Initialize the consistency checker.        self.issues: list[ConsistencyIssue] = []
+
+    def check(self, file_contents: dict[str, str]) -> list[ConsistencyIssue]:
+        "Check for consistency issues across files."
+        Args:
+            file_contents: Dictionary mapping file paths to contents.
+
+        Returns:
+            List of consistency issues.
+      "  self.issues = []"        # Check naming conventions
+        self._check_naming_consistency(file_contents)
+        # Check import styles
+        self._check_import_consistency(file_contents)
+        return self.issues
+
+    def _check_naming_consistency(self, file_contents: dict[str, str]) -> None:
+        "Check naming convention consistency."
+        Args:
+            file_contents: Dictionary mapping file paths to contents.
+        snake_case_files: list[str] = []
+        camel_case_files: list[str] = []
+        for path, content in file_contents.items():
+            funcs = re.findall(rdef\\\\s+([a-zA-Z_]\\w*)", content)"            for func in funcs:
+                if "_" in func and func[0].islower():"                    snake_case_files.append(f"{path}:{func}")"                elif func[0].isupper() or (func[0].islower() and any(c.isupper() for c in func)):
+                    camel_case_files.append(f"{path}:{func}")"        if snake_case_files and camel_case_files:
+            self.issues.append(
+                ConsistencyIssue(
+                    issue_type="naming_convention","                    description="Mixed naming conventions detected","                    occurrences=snake_case_files[:3] + camel_case_files[:3],
+                    recommended_style="snake_case for functions (PEP 8)","                )
+            )
+
+    def _check_import_consistency(self, file_contents: dict[str, str]) -> None:
+        "Check import statement consistency."
+        Args:
+            file_contents: Dictionary mapping file paths to contents.
+        absolute_imports: list[str] = []
+        relative_imports: list[str] = []
+        for path, content in file_contents.items():
+            if re.search(r"^from\\\\s+\\.", content, re.M):"                relative_imports.append(path)
+            if re.search(r"^from\\\\s+[a-zA-Z]", content, re.M):"                absolute_imports.append(path)
+        if absolute_imports and relative_imports:
+            self.issues.append(
+                ConsistencyIssue(
+                    issue_type="import_style","                    description="Mixed import styles (absolute and relative)","                    occurrences=absolute_imports[:3] + relative_imports[:3],
+                    recommended_style="Prefer absolute imports (PEP 8)","                )
+            )

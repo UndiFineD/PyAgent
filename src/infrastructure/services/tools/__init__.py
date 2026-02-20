@@ -54,3 +54,6 @@ __all__ = [
     "ToolParserRegistry","    # Streaming
     "StreamingToolParser","    # Utilities
     "parse_tool_call","    "extract_json_from_text","    "validate_tool_call","    "validate_tool_schema","    "validate_argument_type","]
+
+
+"""

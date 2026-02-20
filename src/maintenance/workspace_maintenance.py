@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -53,9 +53,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Workspace maintenance module for auditing and cleanup.
 """
-
-
-from __future__ import annotations
 
 import logging
 import os

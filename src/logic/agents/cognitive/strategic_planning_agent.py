@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,7 @@
 # limitations under the License.
 
 
-# "Agent for long-term goal setting, roadmap prioritization, and project management."# from __future__ import annotations
-
+# "Agent for long-term goal setting, roadmap prioritization, and project management."# 
 try:
     from typing import Any
 except ImportError:

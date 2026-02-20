@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -44,8 +45,6 @@ FILE CONTENT SUMMARY:
 
 Obsidian code describer agent.py module.
 # ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
-
-from __future__ import annotations
 
 import contextlib
 import logging
@@ -146,8 +145,6 @@ class ObsidianCodeDescriberAgent(BaseAgent):
 
     @as_tool
 # ObsidianCodeDescriberAgent: Obsidian Vault Documentation Specialist - Phase 319 Enhanced
-
-from __future__ import annotations
 
 import contextlib
 import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,7 @@
 # limitations under the License.
 
 
-# "Agent capable of analyzing visual inputs to complement textual code analysis."# from __future__ import annotations
-
+# "Agent capable of analyzing visual inputs to complement textual code analysis."# 
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:

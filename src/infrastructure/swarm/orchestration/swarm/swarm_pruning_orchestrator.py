@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,9 +21,6 @@ SwarmPruningOrchestrator for PyAgent.
 Manages swarm-wide neural pruning based on agent performance and token costs.
 Implemented as part of Phase 40: Swarm-Wide Neural Pruning.
 """
-
-
-from __future__ import annotations
 
 import logging
 from typing import Any

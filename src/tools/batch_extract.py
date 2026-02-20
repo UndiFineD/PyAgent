@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -23,9 +24,6 @@ extract broadly. Use `--allow-top-level` and `--allow-no-defs` to be permissive.
 WARNING: this automates extraction at scale and may produce many files. Do not
 run on untrusted machines unless you understand the risks.
 """
-
-
-from __future__ import annotations
 
 try:
     import argparse

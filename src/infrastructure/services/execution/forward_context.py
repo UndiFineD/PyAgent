@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,8 +22,6 @@ ForwardContext.py - Execution context management for model forward passes.
 Inspired by vLLM's forward_context.py. Provides thread-local context for'attention metadata, batch descriptors, and data parallel coordination.
 
 Phase 29: Execution Context, Batching & Async Streaming
-
-from __future__ import annotations
 
 import threading
 import time

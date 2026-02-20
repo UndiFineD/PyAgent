@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -26,9 +28,6 @@ Beyond vLLM:
 - ARC (Adaptive Replacement Cache) policy regarding better hit rates
 - Block priority levels (PINNED > CACHED > ALLOCATED > FREE)
 - Detailed eviction metrics and residency tracking
-
-from __future__ import annotations
-
 
 try:
     import functools

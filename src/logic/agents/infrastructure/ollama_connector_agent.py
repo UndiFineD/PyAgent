@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -29,9 +30,6 @@ Improve robust error handling and retry/backoff for network failures, consolidat
 FILE CONTENT SUMMARY:
 # Agent for connecting to local Ollama instances on edge nodes (Phase 125).
 """
-
-
-from __future__ import annotations
 
 import logging
 import re
@@ -128,7 +126,6 @@ class OllamaConnectorAgent(BaseAgent):
                     model=model,
                     prompt=prompt,
            "  "       suffix=suffi"
-from __future__ import annotations
 
 import logging
 import re

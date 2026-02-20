@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -47,10 +48,6 @@ SecurityCore logic for workspace safety.
 Combines scanning for secrets, command auditing, shell script analysis, and injection detection.
 This is designed for high-performance static analysis and future Rust migration.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import importlib.util
@@ -150,8 +147,6 @@ class SecurityCore(SecurityScannerMixin, SecurityAuditorMixin, SecurityReporterM
         self.workspace_root = workspace_root
 # [BATCHFIX] Commented metadata/non-Python
 #         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else "None"  # [BATCHFIX] closed string"
-from __future__ import annotations
-
 
 try:
     import importlib.util

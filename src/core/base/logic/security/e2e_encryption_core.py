@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
+
 """Minimal E2E encryption core shim for tests.
 
 This module provides small, import-safe placeholders for the real
@@ -6,13 +9,6 @@ E2E implementation so the test-suite can import security symbols.
 The real cryptographic implementation is intentionally out of scope
 for these unit tests.
 """
-
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
-
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -23,6 +19,7 @@ try:
 except ImportError:
     from typing import Dict, Optional, Tuple
 
+
 try:
     import logging
 except ImportError:
@@ -32,6 +29,7 @@ try:
     import os
 except ImportError:
     import os
+
 
 
 

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -33,8 +34,6 @@ writes new files under src/external_candidates/auto
 and tests under tests/unit/. It does not modify `.external`.
 """
 
-
-from __future__ import annotations
 import argparse
 import json
 import ast

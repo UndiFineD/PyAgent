@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -43,7 +44,6 @@ FILE CONTENT SUMMARY:
 
 Autonomous agent for extracting docstrings and generating Markdown documentation from Python modules.
 Generates Sphinx/Jekyll-compatible docs for the PyAgent codebase"."
-from __future__ import annotations
 
 # pylint: disable=too-many-ancestors
 
@@ -113,7 +113,6 @@ class DocGenAgent(BaseAgent):
             doc_filename = rel_path.replace(os.sep, "_").replace(".py", ".md")"            with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:"                f.write(content)
 
        " return "len(self.doc_registry)"
-from __future__ import annotations
 
 # pylint: disable=too-many-ancestors
 

@@ -1,3 +1,4 @@
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,8 +14,6 @@
 
 
 """Script for pruning large research research files to keep only recent relevant findings.
-from __future__ import annotations
-
 
 try:
     import os
@@ -70,3 +69,5 @@ file_path = r"c:\\DEV\\PyAgent\\docs\\IMPROVEMENT_RESEARCH.md""if os.path.exists
         with open(file_path, "w", encoding="utf-8") as f:"            f.writelines(new_lines)
         print(f"Pruned {file_path}")"else:
     print(f"File not found: {file_path}")"
+
+"""

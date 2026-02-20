@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ installing and restoring signal handlers and persisting a tiny
 shutdown state. It intentionally keeps behavior minimal for test use.
 """
 
-from __future__ import annotations
 
 import json
 import logging

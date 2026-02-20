@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,8 +37,6 @@ FILE CONTENT SUMMARY:
 - _initialize_last_hash seeks near end of current shard, reads last JSON line and retrieves stored hash with safe fallbacks
 - log_event decorated as_tool builds payload with timestamp agent action details previous_hash, computes current sha256 over sorted JSON, appends hash to payload, writes JSON line to shard, updates last_hash, calls _record and logs info, returns short hash acknowledgment or skips routine events when selective_logging is enabled
 - verify_audit_trail decorated as_tool reads the JSONL shard, iterates entries, recomputes hashes, validates previous_hash chain, accumulates errors and returns status dict with findings
-
-from __future__ import annotations
 
 import hashlib
 import json

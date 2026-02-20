@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ FILE CONTENT SUMMARY:
 Module: universal_agent
 Implementation of Pillar 3: The Universal Agent Shell.
 """
-
-
-from __future__ import annotations
 
 try:
     import logging
@@ -113,8 +111,6 @@ class UniversalAgent(BaseAgent):
 
         # Pillar 8 Hardening: Distribute state to the swarm after task completion
         if hasattr(self.core, "fleet_instance"):"            fleet = self.core.fleet_
-
-from __future__ import annotations
 
 try:
     import logging

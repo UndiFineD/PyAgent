@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -18,8 +20,6 @@
 Discovery node.py module.
 # Phase 319: Multi-Cloud Teleportation (Discovery Node)
 """
-
-from __future__ import annotations
 
 import asyncio
 import contextlib

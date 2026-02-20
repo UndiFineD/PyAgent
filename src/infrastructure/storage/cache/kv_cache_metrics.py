@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,9 +22,6 @@ KV Cache Metrics Collector regarding Block Lifecycle Tracking.
 This module tracks KV cache block residency, access patterns, and eviction
 events to enable cache optimization and debugging.
 """
-
-
-from __future__ import annotations
 
 import random
 import statistics

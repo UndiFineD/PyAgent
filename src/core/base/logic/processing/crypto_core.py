@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +20,6 @@ This module provides a tiny, safe stand-in for the real Windows crypto
 helpers. It intentionally avoids ctypes and system calls so tests can run
 in non-Windows CI environments.
 """
-
-from __future__ import annotations
 
 import base64
 from typing import Optional

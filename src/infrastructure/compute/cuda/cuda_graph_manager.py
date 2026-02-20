@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
+
 Module: cuda_graph_manager
 Manages CUDA graph execution and lifecycle for GPU acceleration in PyAgent.
 
@@ -18,7 +21,6 @@ Manages CUDA graph execution and lifecycle for GPU acceleration in PyAgent.
 # CUDAGraphManager - CUDA graph capture and replay management.
 # Design notes condensed to avoid top-level string expressions that
 # can break the positioning of future imports in some environments.
-from __future__ import annotations
 
 import gc
 import logging

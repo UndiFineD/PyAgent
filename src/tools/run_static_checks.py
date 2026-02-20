@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -46,7 +47,6 @@ Tries to run `bandit` and `semgrep` if available. Writes JSON outputs under
 Usage:
   python src/tools/run_static_checks.py src/external_candidates/auto
 
-from __future__ import annotations
 import sys
 from pathlib import Path
 import subprocess

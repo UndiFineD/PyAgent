@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,10 +18,6 @@
 """
 Gui package.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION as VERSION

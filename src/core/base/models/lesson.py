@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
+from __future__ import annotations
 
 try:
     from dataclasses import dataclass
@@ -13,6 +10,7 @@ try:
     from typing import Any
 except ImportError:
     from typing import Any
+
 
 
 """Minimal Lesson model to satisfy imports during tests.
@@ -20,6 +18,7 @@ except ImportError:
 This provides small, well-typed placeholders used by mixins and
 other components during test collection.
 """
+
 
 @dataclass
 class Lesson:

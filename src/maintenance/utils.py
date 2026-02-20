@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -39,10 +40,6 @@ Standard maintenance utilities for the PyAgent ecosystem.
 Provides shared helper functions for filesystem cleanup, log rotation,
 and environment verification used by other maintenance components.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging

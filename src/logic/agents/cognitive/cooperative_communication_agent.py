@@ -204,3 +204,6 @@ class CooperativeCommunicationAgent(BaseAgent):
 #             fAnalyze the following active fleet tasks: {active_tasks}\\n\\n
 #             "Suggest an optimal peer-to-peer topology (e.g., Star, Ring, Mesh)"#             "to minimize cross-node latency while maximizing data throughput."        )
         return await self.think(prompt)
+
+
+"""

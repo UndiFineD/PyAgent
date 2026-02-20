@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
@@ -41,9 +43,6 @@ WHAT IT SHOULD DO BETTER:
       Subscript) for more complete inheritance detection and robustness to complex
       code patterns.
 """
-
-
-from __future__ import annotations
 
 import ast
 
@@ -119,8 +118,6 @@ class DependencyCore:
         Returns:
             List of dependency names not in the standard library.
                 return [name for name in nodes if name not in stdlib_list]
-
-from __future__ import annotations
 
 import ast
 

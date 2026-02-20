@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -34,10 +35,6 @@ add concurrency protection and validation, expose asynchronous APIs for integrat
 with asyncio-based agents, emit metrics/events on consumption and breaches, 
 and add tests for edge cases (zero budgets, negative consumes, missing budgets).
 """
-
-
-from __future__ import annotations
-
 
 try:
     from datetime import datetime, timedelta

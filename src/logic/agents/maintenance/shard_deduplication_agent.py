@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ Add robust unit tests and better error handling for partial failures and filesys
 FILE CONTENT SUMMARY:
 Agent for deduplicating redundant data in shards.
 """
-
-
-from __future__ import annotations
 
 import gzip
 import hashlib
@@ -129,7 +127,6 @@ class ShardDeduplicationAgent(BaseAgent):
 
         except Exception as e:
             logging.error(fFailed to process "{file_path}: {e}")"
-from __future__ import annotations
 
 import gzip
 import hashlib

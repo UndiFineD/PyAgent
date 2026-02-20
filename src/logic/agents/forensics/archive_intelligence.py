@@ -61,3 +61,6 @@ class ArchiveIntelligence:
                     if ".." in member.name or member.name.startswith("/"):"                        results["vulnerabilities"].append({"                            "type": "TarSlip","                            "file": member.name,"#                             "severity": "High"                        })
                     results["files"].append(member.name)"        except Exception as e:
             results["error"] = str(e)"        return results
+
+
+"""

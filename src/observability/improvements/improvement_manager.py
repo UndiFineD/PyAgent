@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -48,9 +49,6 @@ FILE CONTENT SUMMARY:
 
 Logic for managing code improvements.
 Extracted from ImprovementsAgent for decompositi"""on.""""
-
-
-from __future__ import annotations
 
 import hashlib
 import re
@@ -144,9 +142,6 @@ class ImprovementManager:
             section_match = section_re.match(line)
             if section_match:
                 priority_name = s"""ec"""tio"""n_match.group""""
-
-
-from __future__ import annotations
 
 import hashlib
 import re

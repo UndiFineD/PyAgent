@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -19,9 +21,6 @@ SelfHealingCore logic for fleet resilience.
 Contains pure logic for health threshold calculation, anomaly detection,
 and recovery strategy selection.
 """
-
-
-from __future__ import annotations
 
 from src.core.base.common import StabilityCore
 
@@ -49,3 +48,6 @@ class SelfHealingCore(StabilityCore):
             return p_parts[0] == r_parts[0] and p_parts[1] >= r_parts[1]
         except (ValueError, AttributeError):
             return False
+
+
+"""

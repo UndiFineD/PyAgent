@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,14 +38,6 @@ FILE CONTENT SUMMARY:
 RouterModelAgent: System agent responsible for routing tasks and messages to appropriate models or agents.
 Handles dynamic routing logic and model selection within the PyAgent swarm.
 """
-
-
-from __future__ import annotations
-
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any
@@ -117,13 +110,6 @@ class RouterModelAgent(BaseAgent):
     def get_routing_stats(self) -> dict[str, Any]:
         return {
             "total_routed_tasks": 150,"            "avg_latency": 0.85,"            "cost_saved_via_local": 12.50,"        }
-
-from __future__ import annotations
-
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any

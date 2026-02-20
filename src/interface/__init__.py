@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -21,10 +21,6 @@ Interface package - User Space Components
 This package provides backward compatibility imports for user space components
 that have been moved to src/userspace/ for better architectural separation.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION as VERSION

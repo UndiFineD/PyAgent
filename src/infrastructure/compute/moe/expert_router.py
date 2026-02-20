@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,6 @@ Beyond vLLM:
 - AdaptiveRouter with learned routing thresholds
 - SoftMoE with soft expert assignment
 - ExpertChoiceRouter for expert-centric routing
-
-from __future__ import annotations
 
 import math
 import threading

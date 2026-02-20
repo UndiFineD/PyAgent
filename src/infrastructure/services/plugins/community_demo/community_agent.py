@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -18,10 +20,6 @@
 CommunityAgent: A mock community-submitted agent.
 Demonstrates the Core/Shell pattern.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging

@@ -48,3 +48,5 @@ class TestCoRTReasoning:
         responses = ["response1", "response2", "response3"]"        evaluation = cort_core.evaluate_response(responses)
         assert "score" in evaluation"        assert evaluation["score"] >= 0.0"        assert evaluation["score"] <= 1.0"    def test_adaptive_thinking_rounds(self, cort_core):
         result = cort_core.think_recursively("test", complexity="high")"        assert result["rounds"] == 3"        assert result["final_answer"] == "solution""
+
+"""

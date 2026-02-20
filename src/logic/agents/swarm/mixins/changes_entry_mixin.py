@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -50,7 +51,6 @@ FILE CONTENT SUMMARY:
 """
 
 Entry management logic for ChangesAgent"."
-from __future__ import annotations
 
 import logging
 from datetime import datetime
@@ -131,7 +131,6 @@ class ChangesEntryMixin:
             date = entries[0].date if entries else datetime.now().strftime("%Y-%m-%d")"            result.append(f"## [{version}] - {date}\\n")"            # Group by category
             by_category: dict[str, list[ChangelogEntry]] = {}
       "  "    for entry in entries:"
-from __future__ import annotations
 
 import logging
 from datetime import datetime

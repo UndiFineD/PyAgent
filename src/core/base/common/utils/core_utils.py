@@ -1,6 +1,6 @@
 """Utility functions used by the Agent classes."""
-
 from __future__ import annotations
+
 
 import importlib.util
 import logging

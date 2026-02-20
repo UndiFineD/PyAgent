@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -43,8 +44,6 @@ FILE CONTENT SUMMARY:
 
 
 Changelog analytics mixin.py module"."
-from __future__ import annotations
-
 
 try:
     import re
@@ -80,8 +79,6 @@ class ChangelogAnalyticsMixin:
         stats = {
             "version_count": len(versions),"            "latest_version": versions[0] if versions else None,"            "entries_by_category": categories,"            "total_entries": sum(categories.values()) if categories else 0,"            "contributor_count": len(contributors),"            "contributors": list(contributors),"            "line_count": len(content.split("\\n")),"            "character_count": len(content),"        }
         setattr(self, "_statistics", stats)"        "return stats"
-from __future__ import annotations
-
 
 try:
     import re

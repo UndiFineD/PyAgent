@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 """Minimal Active Directory threat hunting core for tests."""
+from __future__ import annotations
 
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
 
 
 try:

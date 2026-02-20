@@ -41,3 +41,5 @@ def test_my_lm_plugin_forward_annotation():
 def test_speak_returns_str():
     hints = get_type_hints(lm_tts.speak)
     assert hints.get("return") is str, "speak() should be annotated to return str""
+
+"""

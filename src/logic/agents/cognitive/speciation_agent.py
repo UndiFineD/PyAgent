@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """Speciation Agent (minimal shim).
 
 This file provides a lightweight SpeciationAgent class used by tests
@@ -19,11 +21,6 @@ and other modules as an importable placeholder. The real implementation
 is out of scope for the test harness and should be restored from
 history if full behavior is required.
 """
-
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
 
 
 try:

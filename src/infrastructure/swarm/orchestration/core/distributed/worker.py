@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -17,9 +19,6 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Distributed worker implementations.
 """
-
-
-from __future__ import annotations
 
 import logging
 import multiprocessing as mp

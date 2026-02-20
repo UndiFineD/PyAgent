@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,8 +38,6 @@ Class ChangelogValidationMixin with methods:
   - collects merge_conflict issues via detect_merge_conflicts(content) and appends an error-type issue with count and message when conflicts found
   - if self has _template and it is truthy then iterates template.sections and appends warning-type missing_section issues when "### {section}" and "## {section}" are not present in content"
 END OF MODULE DESCRIPTION
-
-from __future__ import annotations
 
 import re
 from typing import TYPE_CHECKING, Any

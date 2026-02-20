@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -40,10 +41,6 @@ and support configurable timezones/ISO parsing, add validation and typed enums f
 make operations concurrency-safe (async or thread-safe), provide richer aggregation (rolling windows, rates), 
 and include unit tests and error handling for malformed timestamps.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from datetime import datetime

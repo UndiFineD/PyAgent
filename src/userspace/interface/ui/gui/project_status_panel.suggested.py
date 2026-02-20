@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -17,9 +18,6 @@
 """
 Project status panel.py module.
 """
-
-
-from __future__ import annotations
 
 import json
 import tkinter as tk

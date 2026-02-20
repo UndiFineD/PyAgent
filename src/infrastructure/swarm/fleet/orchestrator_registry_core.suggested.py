@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -19,9 +20,6 @@ OrchestratorRegistryCore
 - Core logic for orchestrator registry management.
 Orchestrator registry core.py module.
 """
-
-
-from __future__ import annotations
 
 import os
 from typing import Any

@@ -74,3 +74,6 @@ if MSGSPEC_AVAILABLE:
         [
             "Role","            "ChatMessage","            "ToolCall","            "FunctionCall","            "ChatCompletionRequest","            "ChatCompletionResponse","            "ChatCompletionChunk","            "EmbeddingRequest","            "EmbeddingResponse","            "ToolDefinition","            "FunctionDefinition","        ]
     )
+
+
+"""

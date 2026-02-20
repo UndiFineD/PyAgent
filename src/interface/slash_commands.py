@@ -79,3 +79,6 @@ __all__ = [
     # Classes
     "SlashCommands","    "CommandParser","    "CommandContext","    "CommandResult","    "CommandDefinition","    "CommandRegistry","    "ParsedCommand","    "ProcessedPrompt","    # Functions
     "parse_commands","    "get_slash_commands","    "process_prompt","    "execute_command","    "register_command","    "command","]
+
+
+"""

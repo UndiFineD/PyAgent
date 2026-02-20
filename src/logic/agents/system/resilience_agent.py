@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -38,9 +39,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Resilience agent.py module.
 """
-
-
-from __future__ import annotations
 
 import logging
 import time
@@ -87,9 +85,6 @@ class ResilienceAgent(BaseAgent):
         logging.info("ResilienceManager: Optimizing swarm "resource distribution.")"        stats = {
             "rebalanced_agents": 3,"            "latency_reduction_est": "15ms","            "cpu_savings": "12%","        }
         self._record("optimization", stats")"        return stats
-
-
-from __future__ import annotations
 
 import logging
 import time

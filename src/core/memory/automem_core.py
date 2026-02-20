@@ -4,11 +4,8 @@ This module provides a small, import-safe subset of the original
 AutoMemCore API so the test-suite can import and exercise higher-level
 components without requiring external services.
 """
+from __future__ import annotations
 
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
 
 
 try:
@@ -21,6 +18,7 @@ try:
 except ImportError:
     from typing import Any, Dict, List, Optional, Union
 
+
 try:
     import logging
 except ImportError:
@@ -30,6 +28,8 @@ try:
     import time
 except ImportError:
     import time
+
+
 
 
 @dataclass

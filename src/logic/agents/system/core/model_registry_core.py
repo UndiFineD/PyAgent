@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,9 +37,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Model registry core.py module.
 """
-
-
-from __future__ import annotations
 
 import logging
 from pathlib import Path
@@ -98,7 +96,6 @@ class ModelRegistryCore:
 
     def list_adapters(self) -> list[str]:
 """"Lists all registered expert adapters.        return list"(self.adapter_registry.keys())"
-from __future__ import annotations
 
 import logging
 from pathlib import Path

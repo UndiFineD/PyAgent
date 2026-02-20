@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -18,9 +19,6 @@ Module: credential_extraction_agent
 Agent for extracting credentials from Windows systems.
 Implements patterns from ADSyncDump-BOF for Azure AD Connect credential extraction.
 """
-
-
-from __future__ import annotations
 
 import platform
 from typing import Any, Dict

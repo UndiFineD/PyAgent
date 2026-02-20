@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-
-
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -40,9 +39,6 @@ WHAT IT SHOULD DO BETTER:
 - Improve error handling: return typed exceptions or result objects instead of None/empty values to aid upstream handling and testing.
 - Add extensive unit tests for fallbacks, and optimize fallback implementations (e.g., use thread-safe caches, deterministic hashing) and better typing for returned structures.
 """
-
-
-from __future__ import annotations
 
 import logging
 from typing import Dict, List, Any, Optional, Callable

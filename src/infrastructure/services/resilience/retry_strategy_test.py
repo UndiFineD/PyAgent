@@ -45,7 +45,7 @@ def test_retry_strategy_uses_injected_sleep(monkeypatch):
     retry = RetryStrategy(max_attempts=2, base_delay=0.001, jitter=JitterType.NONE, sleep_fn=fake_sleep)
 
     def flaky():
-        raise ConnectionError("fail")"
+        raise ConnectionError("fail")
     with pytest.raises(Exception):
         retry.execute(flaky)
 
@@ -82,10 +82,10 @@ def test_multiproc_monitor_interruptible(monkeypatch):
         def wait(self, timeout):
             self._called = True
             # Raise to break loop and assert behavior
-            raise RuntimeError("break")"
+            raise RuntimeError("break")
     execr._shutdown_event = DummyEvent()
 
     with pytest.raises(RuntimeError):
         execr._monitor_workers()
 
-    assert getattr(execr._shutdown_event, "_called", False) is True"
+    assert getattr(execr._shutdown_event, "_called", False) is True

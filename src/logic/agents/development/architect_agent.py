@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,6 @@
 """
 Architect agent.py module.
 # pylint: disable=too-many-ancestors
-
-
-from __future__ import annotations
-
 
 try:
     import logging
@@ -66,3 +63,6 @@ class ArchitectAgent(BaseAgent):
         Analyzes logs and suggests a structural change to the fleet or" base agent."        _ = performance_logs
         logging.info("ArchitectAgent: Analyzing logs for architectural pivot.")"        return {
             "component": "FleetManager.AgentRegistry","            "proposed_change": "Switch to Rust-based FFI bridge for registry scans","            "impact": "High (90% faster boot)","            "priority": 1,"        }
+
+
+"""

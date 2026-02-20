@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -28,9 +29,6 @@ WHAT IT SHOULD DO BETTER:
 - Remove the type: ignore by using typing.List or by ensuring runtime Python compatibility, and add unit tests covering edge cases and serialization/round-trip behaviour.
 """
 
-
-from __future__ import annotations
-
 from dataclasses import dataclass, field
 from datetime import datetime
 from src.core.base.lifecycle.version import VERSION
@@ -44,3 +42,6 @@ class ScheduledEntry:
     improvement_id: str
     start_date: datetime
     resources: list[str] = field(default_factory=list)  # type: ignore[assignment]
+
+
+"""

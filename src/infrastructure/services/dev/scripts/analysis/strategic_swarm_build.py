@@ -1,3 +1,4 @@
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,9 +17,6 @@
 Orchestrates the deployment and coordination of agent swarms for system-wide
 optimization and strategic execution of complex workflows.
 """
-
-
-from __future__ import annotations
 
 import logging
 import os

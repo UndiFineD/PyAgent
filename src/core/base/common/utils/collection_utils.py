@@ -4,11 +4,8 @@
 This file provides a small, well-tested subset of collection helpers used
 throughout the codebase. Implementations favor clarity and robustness.
 """
+from __future__ import annotations
 
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
 
 
 try:

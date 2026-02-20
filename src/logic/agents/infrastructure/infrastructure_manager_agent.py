@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,10 +37,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in infrastructure management, Proxmox orchestration, and HomeAssistant IoT control.
 Provides tools for remote system administration and automated environment scaling.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging
@@ -114,9 +111,6 @@ class InfrastructureManagerAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(InfrastructureManagerAgent, "Infra" Manager", "Infra logs")"    main()
-
-from __future__ import annotations
-
 
 try:
     import logging

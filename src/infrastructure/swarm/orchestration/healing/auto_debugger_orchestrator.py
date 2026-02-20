@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -18,9 +20,6 @@
 AutoDebuggerOrchestrator for PyAgent.""""Coordinates between ImmuneSystemAgent and CoderAgent to self-heal source code changes.
 Implemented as part of Phase 40: Recursive Self-Debugging.
 """
-
-
-from __future__ import annotations
 
 import logging
 import os

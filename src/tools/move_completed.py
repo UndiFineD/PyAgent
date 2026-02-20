@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -44,7 +45,6 @@ FILE CONTENT SUMMARY:Move completed rows from .external/tracking.md to .external
 Idempotent: will not duplicate entries already present in completed.md.
 It treats table rows where the second column (status) contains
 case-insensitive 'completed'|'done'|'finished' as completed.'
-from __future__ import annotations
 
 try:
     from pathlib import Path

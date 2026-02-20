@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -37,9 +38,6 @@ FILE CONTENT SUMMARY:
 Agent specializing in recording and consolidating knowledge from external AI sessions.
 Captures prompts, contexts, and responses provided to/from external systems like ChatGPT, Claude, etc.
 """
-
-
-from __future__ import annotations
 
 import json
 import time

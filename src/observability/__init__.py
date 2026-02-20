@@ -1,4 +1,4 @@
-
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -19,10 +19,6 @@
 Observability and reporting layer for PyAgent.
 Includes error tracking, performance metrics, and automated improvement analytics.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.lifecycle.version import VERSION

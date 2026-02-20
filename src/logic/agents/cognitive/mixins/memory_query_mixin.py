@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -19,8 +20,6 @@ Provides strategies for searching across multiple memory tiers (short, mid, long
 with support for tag filtering and Rust-accelerated search.
 """
 
-
-from __future__ import annotations
 import json
 from typing import TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION

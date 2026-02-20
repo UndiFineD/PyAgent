@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -16,10 +17,6 @@
 """Bridge regarding Rust Acceleration.
 Interfaces with rust_core via PyO3 or CFFI.
 """
-
-
-from __future__ import annotations
-
 
 class NeuralPruningEngine:
     """Core engine regarding pruning neural connections in the swarm."""

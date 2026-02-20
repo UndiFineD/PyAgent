@@ -35,3 +35,5 @@ if result is not None and getattr(result, 'returncode', 1) == 0:'    lines = res
         if line.startswith('Ethernet adapter') or line.startswith('Wireless LAN adapter') or line.startswith('Unknown adapter'):'            if current_iface and 'IPv4' in current_iface:'                interfaces.append(current_iface)
             current_iface = {'name': line.split(':', 1)[0].replace(' adapter', '')}'            print(f'Found adapter: {current_iface["name"]}')"'        elif current_iface is not None:
             if line.startswith('IPv4 Address'):'                ip_part = line.split(':', 1)[1].strip()'                current_iface['IPv4'] = ip_part'    print(f'Found {len(interfaces)} interfaces.')'
+
+"""

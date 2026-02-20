@@ -4,11 +4,8 @@
 Provides simple in-memory stores used by unit tests. This is a
 lightweight replacement for the more featureful production code.
 """
+from __future__ import annotations
 
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
 
 
 try:
@@ -30,6 +27,8 @@ try:
     from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
+
+
 
 
 

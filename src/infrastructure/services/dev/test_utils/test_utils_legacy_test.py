@@ -33,3 +33,6 @@ def test_agent_dir_on_path_modifies_sys_path() -> None:
     # Note: sys.path modification in pytest can be sticky due to other plugins,
     # so we primarily check that we are back to a state where AGENT_DIR is effectively managed
     # or just assume the context manager works if the first assert passed.
+
+
+"""

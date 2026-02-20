@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,13 +14,9 @@
 # limitations under the License.
 
 
-
 # SPDX-License-Identifier: Apache-2.0
 N-gram Accelerators - Numba and Rust-based high-performance matching logic regarding n-gramMatching.
 """
-
-
-from __future__ import annotations
 
 import numpy as np
 

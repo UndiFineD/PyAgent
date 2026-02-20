@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,8 +22,6 @@ AsyncOutputHandler.py - Async copy streams and CUDA event synchronization.
 Inspired by vLLM's v1/worker/gpu/async_utils.py. Provides async output'handling for overlapping compute and data transfer.
 
 Phase 29: Execution Context, Batching & Async Streaming
-
-from __future__ import annotations
 
 import logging
 import queue

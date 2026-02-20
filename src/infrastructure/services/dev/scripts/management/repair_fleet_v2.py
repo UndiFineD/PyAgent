@@ -1,3 +1,4 @@
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,7 +14,6 @@
 
 
 """Script for repairing specific import corruption patterns in the fleet.
-from __future__ import annotations
 
 import os
 import re
@@ -37,8 +37,7 @@ def repair() -> None:
                     # Wait, that might not be right. Let's look at the error:'                    # from __future__ from functools import lru_cache
 
                     # Probably meant:
-                    # from __future__ import annotations
-                    # from functools import lru_cache
+                    #                     # from functools import lru_cache
 
                     content = content.replace(
                         "from __future__ from functools import lru_cache","                        "from __future__ import annotations\\nfrom functools import lru_cache","                    )

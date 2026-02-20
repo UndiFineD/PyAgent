@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -35,10 +36,6 @@ InterFleetIdentityAgent: Swarm agent for managing identity, authentication, and 
 between PyAgent fleets. Supports secure federation, cross-fleet authorization, and distributed
 identity management.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import hashlib
@@ -124,9 +121,6 @@ class InterFleetIdentityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def get_identity_report(self) -> dict[str, Any]:
 """"Returns a summary of the federated identity" state.        return {
             "local_fleet_id": self.fleet_id,"            "remote_fleets_count": len(self.known_fleets),"            "authorized_agents_count": len(self.authorized_agents),"            "active_sessions_count": len(self.session_tokens),"        }
-
-from __future__ import annotations
-
 
 try:
     import hashlib

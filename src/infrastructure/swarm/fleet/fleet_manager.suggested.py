@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -35,9 +36,6 @@ WHAT IT SHOULD DO BETTER:
 - Enhance real-time performance metrics tracking for individual agents.
 - Support dynamic scaling of agent clusters based on workload complexity.
 """
-
-
-from __future__ import annotations
 
 import asyncio
 import contextlib

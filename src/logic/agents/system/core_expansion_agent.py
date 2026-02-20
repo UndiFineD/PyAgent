@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -47,8 +48,6 @@ FILE CONTENT SUMMARY:
 
 
 CoreExpansionAgent: System agent for autonomous environment expansion"."
-
-from __future__ import annotations
 
 import logging
 import subprocess
@@ -123,8 +122,6 @@ class CoreExpansionAgent(BaseAgent):
 
             return [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]"        except (ImportError, AttributeError, Exception):  # pylint: disable=broad-exception-caught
             return ["Error: Could not retrieve environment metadata."]"
-
-from __future__ import annotations
 
 import logging
 import subprocess

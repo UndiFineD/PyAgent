@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,14 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """Minimal SignalRegistry shim used for tests and importability.
 
 This file was replaced with a small, safe implementation that provides
 an API used by other modules. It is intentionally simple and thread-safe
 for the test environment.
 """
-
-from __future__ import annotations
 
 import logging
 from collections import defaultdict

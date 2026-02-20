@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -30,9 +31,6 @@ Persist entries to durable storage, add concurrency/thread-safety, validate and 
 FILE CONTENT SUMMARY:
 Defines module metadata and imports, sets __version__ from src.core.base.lifecycle.version, and implements AuditLogger with an entries list and three primary methods: __init__, log (creates AuditEntry with id, timestamp, action, user_id, report_id, details), get_history (filter by report_id), and get_user_activity (filter by user_id).
 """
-
-
-from __future__ import annotations
 
 import logging
 import time

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -33,10 +34,6 @@ WHAT IT DOES:
 FILE CONTENT SUMMARY:
 Agent specializing in moderation, review, and policy compliance.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from .core.base.common.base_utilities import create_main_function

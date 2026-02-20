@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,16 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
 """Simple file lock dataclass used in tests.
 
 This lightweight implementation avoids external dependencies and provides
 the minimal fields needed by the test-suite.
 """
-
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
 
 
 try:

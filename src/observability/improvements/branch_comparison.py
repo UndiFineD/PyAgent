@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -36,9 +37,6 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Auto-extracted class from agent_improvements.py
-
-from __future__ import annotations
-
 
 try:
     import time
@@ -94,10 +92,6 @@ class BranchComparison:
     removed_count: int = 0
     modified_count: int = 0
     compared_at: float = field(default_factory=t"""ime.time)""""
-
-
-from __future__ import annotations
-
 
 try:
     import time

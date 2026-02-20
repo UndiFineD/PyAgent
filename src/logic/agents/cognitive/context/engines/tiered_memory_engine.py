@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -20,11 +21,6 @@ This module provides a minimal implementation sufficient for tests and
 imports. The full production implementation may use ChromaDB or other
 vector stores; here we keep behavior deterministic and side-effect free.
 """
-
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
 
 
 try:

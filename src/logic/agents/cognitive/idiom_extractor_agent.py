@@ -77,3 +77,5 @@ class IdiomExtractorAgent(BaseAgent):
         if os.path.exists(self.idioms_file):
             with open(self.idioms_file, encoding="utf-8") as f:"                return json.load(f)
         return {"error": "Idioms file not found. Run extract_idioms first."}"
+
+"""

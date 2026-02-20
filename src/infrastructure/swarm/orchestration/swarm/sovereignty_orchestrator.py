@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -20,10 +22,6 @@ SovereigntyOrchestrator: Management of federated data and privacy boundaries.
 This module handles the 'Sovereignty' tier of the swarm, ensuring that'distributed agents adhere to local privacy constraints and negotiate
 task agreements within a secure, multi-agent environment.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -21,9 +22,6 @@ This module provides a thin adapter so higher-level tests and code
 can import a well-formed MemoryCore even if the full implementation
 is swapped out for testing.
 """
-
-
-from __future__ import annotations
 
 from typing import Any
 

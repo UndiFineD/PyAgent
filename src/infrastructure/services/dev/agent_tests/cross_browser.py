@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -15,7 +17,6 @@
 # -*- coding: utf-8 -*-
 
 """Cross-browser testing classes.
-from __future__ import annotations
 
 from collections.abc import Callable
 from typing import Any

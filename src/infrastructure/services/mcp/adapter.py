@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -17,10 +19,6 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 Tool schema adapter for MCP and OpenAI formats.
 """
-
-
-from __future__ import annotations
-
 
 try:
     from typing import Any, Dict, List

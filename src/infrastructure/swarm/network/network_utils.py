@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -32,8 +34,6 @@ Features:
 
 # AUTHOR: PyAgent Phase 20
 """
-
-from __future__ import annotations
 
 import contextlib
 import time  # noqa: F401  # pylint: disable=unused-import,reimported

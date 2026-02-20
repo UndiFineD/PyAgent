@@ -4,10 +4,8 @@
 Provides lightweight dataclasses and a simple core
 implementation sufficient for unit tests to import.
 """
-try:
-    from __future__ import annotations
-except ImportError:
-    from __future__ import annotations
+from __future__ import annotations
+
 
 
 try:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -50,9 +51,6 @@ FILE CONTENT SUMMARY:
 
 Voting agent.py module.
 # VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
-
-from __future__ import annotations
-
 
 try:
     import contextlib
@@ -194,9 +192,6 @@ class VotingAgent(BaseAgent):
         # Validate choice
         if session.method != Votin
 # VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
-
-from __future__ import annotations
-
 
 try:
     import contextlib

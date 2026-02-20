@@ -5,8 +5,8 @@ This module implements a compact subset of decorators and helpers so tests
 can import stable behavior without depending on the original project's
 complex and possibly-corrupted implementations.
 """
-
 from __future__ import annotations
+
 
 import functools
 import inspect

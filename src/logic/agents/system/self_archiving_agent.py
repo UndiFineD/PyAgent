@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -42,10 +43,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Self archiving agent.py module.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging
@@ -114,10 +111,6 @@ class SelfArchivingAgent(BaseAgent):
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.archive_targets(self.identify_archivable_targets())
-
-
-from __future__ import annotations
-
 
 try:
     import logging

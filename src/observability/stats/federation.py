@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -42,9 +43,6 @@ FILE CONTENT SUMMARY:
 Federation.py module.
 # Stats federation engine.
 """
-
-
-from __future__ import annotations
 
 import logging
 from datetime import datetime
@@ -144,9 +142,6 @@ class StatsFederation:
             status[name] = "healthy" if self.sources[name].enabled else "unhealthy""        return status
 # Stats federation engine.
 """
-
-
-from __future__ import annotations
 
 import logging
 from datetime import datetime

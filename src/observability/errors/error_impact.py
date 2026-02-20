@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -33,10 +34,6 @@ WHAT IT SHOULD DO BETTER:
 - Add serialization (to_dict/from_dict), merging utilities, human-readable repr, and convenience methods to aggregate multiple ErrorImpact instances.
 - Document intended semantics of impact_score and downstream_effects, add unit tests, and consider richer scoring (weighted by file criticality) and provenance metadata (timestamps, analyzer id).
 """
-
-
-from __future__ import annotations
-
 
 try:
     from dataclasses import dataclass, field

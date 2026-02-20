@@ -22,3 +22,6 @@ class DiscoveryService:
 
     async def register(self, node_id, addr):
         self.peers[node_id] = addr
+
+
+"""

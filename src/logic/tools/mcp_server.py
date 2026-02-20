@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -77,9 +79,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Mcp server.py module.
 """
-
-
-from __future__ import annotations
 
 from fastapi import FastAPI
 try:

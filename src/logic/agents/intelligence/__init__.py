@@ -1,3 +1,4 @@
+from __future__ import annotations
 
 
 # Copyright 2026 PyAgent Authors
@@ -28,4 +29,4 @@ except ImportError:
 
 
 __version__ = VERSION
-__all__ = ["SearchAgent"]"
+__all__ = ["SearchAgent"]

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -18,9 +20,6 @@
 SelfImprovementCore: Pure logic for fleet self-improvement analysis.
 Extracted from SelfImprovementOrchestrator for Rust-readiness.
 """
-
-
-from __future__ import annotations
 
 import re
 from typing import Any, Dict, List, Optional

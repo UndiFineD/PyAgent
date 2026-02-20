@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -51,8 +52,6 @@ TelemetryAgent: System agent for collecting, aggregating, and reporting telemetr
 
 Supports observability, monitoring, and health diagnostics across the PyAgent swarm"."
 
-from __future__ import annotations
-
 import json
 import time
 from pathlib import Path
@@ -101,9 +100,6 @@ class TelemetryAgent(BaseAgent):
 
     def get_recent_logs(self) -> list[dict[str, Any]]:
         return self.log_buffer
-
-
-from __future__ import annotations
 
 import json
 import time

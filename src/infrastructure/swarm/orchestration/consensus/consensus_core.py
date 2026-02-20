@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -19,10 +21,6 @@ ConsensusCore logic for multi-agent voting.
 Contains pure logic for tallying votes, handling ties, and selecting winners.
 """
 
-
-from __future__ import annotations
-
-
 try:
     from .core.base.common import ConsensusCore
 except ImportError:
@@ -34,3 +32,6 @@ except ImportError:
 class StandardConsensusCore(ConsensusCore):
     """Facade for ConsensusCore in the consensus tier.
     def __init__(self, mode: str = "plurality") -> None:"        super().__init__(name="ConsensusCore")"        self.mode = mode
+
+
+"""

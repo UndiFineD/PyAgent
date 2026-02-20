@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -30,9 +31,6 @@ FILE CONTENT SUMMARY:
 Model Forge Agent for PyAgent.
 Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
 """
-
-
-from __future__ import annotations
 
 import asyncio
 import json
@@ -115,8 +113,6 @@ class ModelForgeAgent(BaseAgent):
 
 #             job_id = fjob_{task_name}_{int(time.time())}
             # Save config to data/config (Phase 282": Dedicated config storage)"            confi
-
-from __future__ import annotations
 
 import asyncio
 import json

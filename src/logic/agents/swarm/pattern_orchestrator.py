@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -35,9 +36,6 @@ Agent specializing in structured multi-agent orchestration patterns.
 Supports Supervisor, Debate, Voting, Pipeline, and MapReduce patterns.
 Inspired by multi-agent-generator and LangGraph.
 """
-
-
-from __future__ import annotations
 
 import logging
 from pathlib import Path
@@ -104,7 +102,6 @@ class PatternOrchestrator(BaseAgent):  # pylint: disable=too-many-ancestors
             logging.info(fSupervisor: Delegating to {agent_type}")"            try:
                 # Recursive call (Phase 283)
 "  "              result ="
-from __future__ import annotations
 
 import logging
 from pathlib import Path

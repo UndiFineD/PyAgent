@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -18,9 +20,6 @@
 
 Tool parser registry for managing parser types and model mappings.
 """
-
-
-from __future__ import annotations
 
 import re
 import threading

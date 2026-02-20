@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -33,10 +34,6 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Template management logic for ChangesAgent.
 """
-
-
-from __future__ import annotations
-
 
 try:
     import logging
@@ -94,8 +91,6 @@ class ChangesTemplateMixin:
     def get_template_sections(self) -> List[str]:
 """"Get the sections for the current template.        if hasattr(self, "_template") and "self._template:"            return self._template.sections
         return ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]"
-from __future__ import annotations
-
 
 try:
     import logging

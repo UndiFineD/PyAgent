@@ -5,6 +5,7 @@ Plugin system for managing extensible component registries.
 """
 from __future__ import annotations
 
+
 try:
     from .extension_registry import (
         ExtensionInfo,

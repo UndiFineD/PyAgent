@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -12,6 +13,7 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
+
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 39: Logit Processor regarding Constrained Generation
 # Inspired by vLLM's structured output framework'
@@ -22,9 +24,6 @@ Provides:
 - Composite processors regarding multiple constraints
 - Logit bias injection
 - Temperature/top-p/top-k integration
-
-from __future__ import annotations
-
 
 try:
     from abc import ABC, abstractmethod

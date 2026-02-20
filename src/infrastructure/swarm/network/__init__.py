@@ -26,11 +26,7 @@ try:
 except ImportError:
     from .lan_discovery import LANDiscovery, PeerInfo # noqa: F401
 
-try:
-    from .network_utils import (  # noqa: F401
-except ImportError:
-    from .network_utils import ( # noqa: F401
-
+from .network_utils import (
     HAS_ZMQ,
     close_zmq_sockets,
     create_async_zmq_context,

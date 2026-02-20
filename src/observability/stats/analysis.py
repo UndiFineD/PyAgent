@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -31,8 +32,6 @@ Complete and harden the Rust integration boundary (clear fallbacks and unit test
 
 FILE CONTENT SUMMARY:Analysis and metrics processing logic for fleet observability.# Logic for metric analysis, profiling, stability, and forecasting.
 # Phase 14: Rust acceleration for variance, stasis detection, and forecasting
-
-from __future__ import annotations
 
 import ast
 import contextlib

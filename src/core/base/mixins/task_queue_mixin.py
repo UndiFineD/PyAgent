@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Task Queue Mixin providing simple async job queue for tests."""
-
 from __future__ import annotations
+
 
 import asyncio
 import time

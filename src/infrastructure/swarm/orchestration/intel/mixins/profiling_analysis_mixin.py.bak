@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""
+Profiling analysis mixin.py module.
+# Licensed under the Apache License, Version 2.0 (the "License");"
+from __future__ import annotations
+
+import logging
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import \
+        SelfImprovementAnalysis
+
+
+
+class ProfilingAnalysisMixin:
+    """Mixin for performance profiling in SelfImprovementAnalysis.
+    def add_profiling_findings(
+        self: SelfImprovementAnalysis,
+        findings: list[dict[str, Any]],
+        file_path: str,
+        rel_path: str,
+        content: str
+    ) -> None:
+                Analyzes a file for performance bottlenecks using the ProfilingAgent.
+        Only profiles if the file is likely to be a bottleneck (large, loops, etc).
+                # Heuristic: Only profile if file > 500 lines or has many loops/complex logic
+        if len(content.splitlines()) < 200:
+            return
+
+        loop_count = content.count("for ") + content.count("while ")"        if loop_count < 3:
+            return
+
+        logging.info(f"Self-Improvement: Triggering profiling for potential bottleneck: {rel_path}")"
+        # Access fleet through the orchestrator
+        if not hasattr(self, "profiling_agent") or self.profiling_agent is None:"            # Add a TODO Placeholder finding so IntelligenceOrchestrator can suggest profiling
+            findings.append({
+                "file": rel_path,"                "line": "0","                "type": "Profiling Candidate","                "message": f"File {rel_path} is complex ({loop_count} loops). Needs ProfilingAgent review.","                "fixed": False"            })
+            return
+
+        try:
+            # Phase 336: Use ProfilingAgent's static analysis during the scan'            performance_stats = []
+            if hasattr(self.profiling_agent, "static_profile"):"                logging.info(f"Self-Improvement: Calling static_profile for {file_path}")"                performance_stats = self.profiling_agent.static_profile(file_path)
+            else:
+                logging.info(f"Self-Improvement: profiling_agent missing static_profile: {type(self.profiling_agent)}")"
+            if performance_stats:
+                for stat in performance_stats:
+                    findings.append({
+                        "file": rel_path,"                        "line": str(stat.line_number),"                        "type": "Profiling","                        "message": ("                            f"Static analysis suggests bottleneck in '{stat.function_name}'. ""'                            f"High loop density detected. Recommend Rust port.""                        ),
+                        "fixed": False"                    })
+            else:
+                findings.append({
+                    "file": rel_path,"                    "line": "0","                    "type": "Profiling","                    "message": ("                        f"Detected compute-intensive patterns in {rel_path} ({loop_count} loops). ""                        f"Recommend Rust port.""                    ),
+                    "fixed": False"                })
+        except Exception as e:
+            logging.debug(f"Profiling analysis failed for {rel_path}: {e}")"

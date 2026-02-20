@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
@@ -15,8 +17,6 @@
 
 """
 Auto-generated module exports.
-from __future__ import annotations
-
 
 try:
     from collections.abc import Callable
@@ -58,3 +58,6 @@ except ImportError:
 BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
+
+
+"""
