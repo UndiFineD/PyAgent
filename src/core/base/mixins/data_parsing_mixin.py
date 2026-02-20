@@ -42,10 +42,13 @@ class DataParsingMixin:
         self.parsing_core = DataParsingCore()
 
     def html_unescape(self, text: str) -> str:
-        """Unescape HTML entities in text."""return self.parsing_core.html_unescape(text)
+        """Unescape HTML entities in text."""
+        return self.parsing_core.html_unescape(text)
 
     def extract_xml_value(self, xml: str, tag_pattern: str) -> Optional[str]:
-        """Extract value from XML using tag pattern."""return self.parsing_core.extract_xml_value(xml, tag_pattern)
+        """Extract value from XML using tag pattern."""
+        return self.parsing_core.extract_xml_value(xml, tag_pattern)
 
     def find_pattern(self, haystack: str, needle: str) -> Optional[str]:
-        """Find pattern in text using simple string scanning."""return self.parsing_core.find_pattern(haystack, needle)
+        """Find pattern in text using simple string scanning."""
+        return self.parsing_core.find_pattern(haystack, needle)

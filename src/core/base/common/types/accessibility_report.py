@@ -13,54 +13,33 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Accessibility report dataclass used by tests and tools."""
+
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+from typing import List
 
 try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-
-try:
-    from .core.base.common.types.accessibility_issue import AccessibilityIssue
-except ImportError:
+    from .accessibility_issue import AccessibilityIssue
+except Exception:
     from src.core.base.common.types.accessibility_issue import AccessibilityIssue
 
 try:
-    from .core.base.common.types.wcag_level import WCAGLevel
-except ImportError:
+    from .wcag_level import WCAGLevel
+except Exception:
     from src.core.base.common.types.wcag_level import WCAGLevel
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
 
 
 @dataclass
 class AccessibilityReport:
-    """Comprehensive accessibility report.""""
-    Attributes:
-        file_path: Path to analyzed file.
-        issues: List of accessibility issues.
-        total_elements: Total UI elements analyzed.
-        wcag_level: Target WCAG level.
-        compliance_score: Overall compliance score (0 - 100).
-        critical_count: Number of critical issues.
-        serious_count: Number of serious issues.
-        recommendations: High - level recommendations.
-    """
+    """A concise accessibility report structure for testing."""
+
     file_path: str
-    issues: list[AccessibilityIssue] = field(default_factory=lambda: [])
+    issues: List[AccessibilityIssue] = field(default_factory=list)
     total_elements: int = 0
     wcag_level: WCAGLevel = WCAGLevel.AA
     compliance_score: float = 100.0
     critical_count: int = 0
     serious_count: int = 0
-    recommendations: list[str] = field(default_factory=lambda: [])
+    recommendations: List[str] = field(default_factory=list)

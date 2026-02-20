@@ -22,4 +22,4 @@ except ImportError:
     from src.core.base.common.config_core import ConfigCore as ConfigLoader
 
 
-__all__ = ["ConfigLoader"]"
+__all__ = ["ConfigLoader"]

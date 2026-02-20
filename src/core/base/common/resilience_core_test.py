@@ -24,18 +24,25 @@ def test_retry_uses_injected_sleep(monkeypatch):
     @ResilienceCore.retry(retries=2, delay=0.01, backoff=1, exceptions=(RuntimeError,), sleep_fn=fake_sleep)
     def flaky():
         if calls:
-            return "ok""        raise RuntimeError("fail")"
-    assert flaky() == "ok""    assert any(c > 0 for c in calls)
+            return "ok"
+        raise RuntimeError("fail")
+
+    assert flaky() == "ok"
+    assert any(c > 0 for c in calls)
 
 
 def test_retry_fallback_wait(monkeypatch):
     # Ensure that providing None sleep_fn falls back to an Event.wait-based sleep
-    counts = {"attempts": 0}"
+    counts = {"attempts": 0}
+
     @ResilienceCore.retry(retries=1, delay=0.01, backoff=1, exceptions=(RuntimeError,), sleep_fn=None)
     def flaky2():
-        counts["attempts"] += 1"        raise RuntimeError("fail")"
+        counts["attempts"] += 1
+        raise RuntimeError("fail")
+
     try:
         flaky2()
     except RuntimeError:
         pass
-    assert counts["attempts"] == 2"
+
+    assert counts["attempts"] == 2

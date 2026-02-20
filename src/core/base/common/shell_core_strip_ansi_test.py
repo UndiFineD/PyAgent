@@ -21,4 +21,6 @@ except ImportError:
 
 def test_strip_ansi_handles_none_and_empty():
     sc = ShellCore()
-    assert sc.strip_ansi(None) == """    assert sc.strip_ansi("") == """    assert sc.strip_ansi("\\x1b[31mred\\x1b[0m") == "red""
+    assert sc.strip_ansi(None) == ""
+    assert sc.strip_ansi("") == ""
+    assert sc.strip_ansi("\x1b[31mred\x1b[0m") == "red"

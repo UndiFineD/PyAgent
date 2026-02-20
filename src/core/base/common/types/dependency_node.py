@@ -13,34 +13,29 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Types: DependencyNode dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 
 try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-
-try:
-    from .core.base.common.types.dependency_type import DependencyType
-except ImportError:
     from src.core.base.common.types.dependency_type import DependencyType
+except Exception:
+    class DependencyType:
+        """Fallback placeholder for DependencyType."""
 
 try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class DependencyNode:
-    """A node in the dependency graph.""""
+    """A node in the dependency graph.
+
     Attributes:
         name: Name of the module / class / function.
         type: Type of dependency.
@@ -50,6 +45,6 @@ class DependencyNode:
     """
     name: str
     type: DependencyType
-    depends_on: list[str] = field(default_factory=lambda: [])
-    depended_by: list[str] = field(default_factory=lambda: [])
-    file_path: str = """
+    depends_on: list[str] = field(default_factory=list)
+    depended_by: list[str] = field(default_factory=list)
+    file_path: str | None = None

@@ -21,4 +21,4 @@ except ImportError:
     from .config_manager import CoreConfigManager, config # noqa: F401
 
 
-__all__ = ["CoreConfigManager", "config"]"
+__all__ = ["CoreConfigManager", "config"]

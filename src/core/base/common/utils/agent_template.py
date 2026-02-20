@@ -13,48 +13,18 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent.py
 from __future__ import annotations
 
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
-
-try:
-    from .core.base.common.utils.helpers import (_empty_dict_str_any,
-except ImportError:
-    from src.core.base.common.utils.helpers import (_empty_dict_str_any,
-
-                                                _empty_list_str)
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
+from dataclasses import dataclass, field
+from typing import Any, Dict, List
 
 
 @dataclass
 class AgentTemplate:
-    """A template for creating agents.""""
-    Attributes:
-        name: Template name.
-        description: Template description.
-        agents: List of agents to execute.
-        config: Default configuration.
-        file_patterns: File patterns to process.
-    """
+    """A minimal agent template dataclass used by tests and code generation."""
+
     name: str
-    description: str = """    agents: list[str] = field(default_factory=_empty_list_str)
-    config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
-    file_patterns: list[str] = field(default_factory=lambda: ["*.py"])"
+    description: str = ""
+    agents: List[str] = field(default_factory=list)
+    config: Dict[str, Any] = field(default_factory=dict)
+    file_patterns: List[str] = field(default_factory=lambda: ["*.py"])

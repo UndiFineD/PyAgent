@@ -13,27 +13,22 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_changes.py
+"""Types: GroupingStrategy enum."""
 from __future__ import annotations
 
+from enum import Enum
 
 try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
-
 class GroupingStrategy(Enum):
     """Strategies for entry grouping."""
-    BY_DATE = "by_date""    BY_VERSION = "by_version""    BY_CATEGORY = "by_category""    BY_AUTHOR = "by_author""
+    BY_DATE = "by_date"
+    BY_VERSION = "by_version"
+    BY_CATEGORY = "by_category"
+    BY_AUTHOR = "by_author"

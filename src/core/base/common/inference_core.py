@@ -21,8 +21,8 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
-from ....infrastructure.tokenization.utils import (estimate_token_count,
-                                                    get_tokenizer)
+from src.infrastructure.tokenization.utils import (estimate_token_count,
+                                                   get_tokenizer)
 from .base_core import BaseCore
 from .models.communication_models import PromptTemplate
 

@@ -13,20 +13,15 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Code metrics dataclass used by tests and analysis tools."""
+
 from __future__ import annotations
 
-
-try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
+from dataclasses import dataclass
 
 try:
     from .core.base.lifecycle.version import VERSION
-except ImportError:
+except Exception:
     from src.core.base.lifecycle.version import VERSION
 
 
@@ -35,7 +30,6 @@ __version__ = VERSION
 
 @dataclass
 class CodeMetrics:
-    """Code quality metrics."""
     lines_of_code: int = 0
     lines_of_comments: int = 0
     blank_lines: int = 0

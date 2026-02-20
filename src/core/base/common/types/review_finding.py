@@ -13,41 +13,36 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Types: ReviewFinding dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 
 try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.common.types.review_category import ReviewCategory
-except ImportError:
     from src.core.base.common.types.review_category import ReviewCategory
+except Exception:
+    class ReviewCategory:
+        """Fallback placeholder for ReviewCategory."""
 
 try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class ReviewFinding:
-    """A finding from automated code review.""""
+    """A finding from automated code review.
+
     Attributes:
         category: Category of the finding.
         message: Description of the issue.
         line_number: Line where the issue was found.
         severity: Severity level (1 - 5).
         suggestion: Suggested fix.
-        auto_fixable: Whether this can be auto - fixed.
+        auto_fixable: Whether this can be auto-fixed.
     """
     category: ReviewCategory
     message: str

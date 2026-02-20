@@ -12,37 +12,46 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Lightweight LongTermMemory shim for tests.
 
-# Recovered and standardized for Phase 317
+Provides a minimal API so cognitive agents can import and use a
+placeholder long-term memory during unit tests.
+"""
+from __future__ import annotations
 
-# The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
-For more information, visit:
-- Copilot CLI: https://github.com/github/copilot-cli
-- Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
-
-No commands will be executed.
-
-try:
-    import logging
-except ImportError:
-    import logging
-
+import logging
+from typing import Any, Dict, List, Optional
 
 try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
-
 class LongTermMemory:
-    LongTermMemory recovered after Copilot CLI deprecation "event."#     Standardized TODO Placeholder for future re-implementation.
+    """Minimal long-term memory placeholder.
 
-    def __init__(self, *args, **kwargs) -> None:
-        _ = args
-        _ = kwargs
+    Stores simple dictionary records in memory for testing purposes.
+    """
+
+    def __init__(self) -> None:
         self.version = VERSION
-        logging.info("LongTermMemory initialized (TODO Placeholder).")"
+        self._store: List[Dict[str, Any]] = []
+        logging.getLogger(__name__).info("LongTermMemory initialized (shim)")
+
+    def add_record(self, record: Dict[str, Any]) -> None:
+        self._store.append(record)
+
+    def query(self, query_text: str) -> List[Dict[str, Any]]:
+        # naive substring match against stored 'text' fields
+        res: List[Dict[str, Any]] = []
+        for r in self._store:
+            text = str(r.get("text", ""))
+            if query_text.lower() in text.lower():
+                res.append(r)
+        return res
+
+    def clear(self) -> None:
+        self._store.clear()

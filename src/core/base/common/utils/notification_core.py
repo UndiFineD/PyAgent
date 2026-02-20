@@ -35,13 +35,18 @@ class NotificationCore:
     """Pure logic core for notification management."""
     @staticmethod
     def construct_payload(event_name: str, event_data: dict[str, Any]) -> dict[str, Any]:
-        """Formats the JSON payload for webhook delivery."""return {
-            "event": event_name,"            "timestamp": time.time(),"            "data": event_data,"            "version": "1.1.0","        }
+        """Formats the JSON payload for webhook delivery."""
+        return {
+            "event": event_name,
+            "timestamp": time.time(),
+            "data": event_data,
+            "version": "1.1.0",
+        }
 
     @staticmethod
     def get_domain_from_url(url: str) -> str:
         """Extracts the network location (domain) from a URL for connectivity tracking."""
-try:
+        try:
             domain = urllib.parse.urlparse(url).netloc
             return domain or url
         except Exception:  # pylint: disable=broad-exception-caught
@@ -50,4 +55,5 @@ try:
     @staticmethod
     def validate_event_data(data: dict[str, Any]) -> bool:
         """Basic validation for event data structures."""
-# Ensure it's a non-empty dictionary'        return isinstance(data, dict) and bool(data)
+        # Ensure it's a non-empty dictionary
+        return isinstance(data, dict) and bool(data)

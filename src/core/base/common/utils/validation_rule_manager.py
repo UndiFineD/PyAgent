@@ -44,7 +44,9 @@ except ImportError:
 
 
 class ValidationRuleManager:
-    """Manages validation rules for agent content."""def __init__(self, core: ValidationCore | None = None) -> None:
+    """Manages validation rules for agent content."""
+
+    def __init__(self, core: ValidationCore | None = None) -> None:
         self._core = core or ValidationCore()
         self._rules: dict[str, Any] = {}
         self.rules = self._rules
@@ -52,21 +54,31 @@ class ValidationRuleManager:
     def add_rule(
         self,
         name_or_rule: str | ValidationRule,
-        pattern: str = "","        message: str = "Validation failed","        severity: str = "error","        **kwargs
+        pattern: str = "",
+        message: str = "Validation failed",
+        severity: str = "error",
+        **kwargs,
     ) -> None:
-        """Add a validation rule. Supports both legacy signature and ValidationRule object."""if hasattr(name_or_rule, "name"):"            # It's a ValidationRule object'            rule = name_or_rule
+        """Add a validation rule. Supports both ValidationRule objects and legacy args."""
+        if hasattr(name_or_rule, "name"):
+            rule = name_or_rule
             self._core.add_rule(rule)
             self._rules[rule.name] = rule
             return
 
         # Legacy dict-based registration
         rule_obj = {
-            "name": name_or_rule,"            "pattern": pattern,"            "message": message,"            "severity": severity,"            **kwargs
+            "name": name_or_rule,
+            "pattern": pattern,
+            "message": message,
+            "severity": severity,
+            **kwargs,
         }
         self._rules[name_or_rule] = rule_obj
         self._core.register_rule(name_or_rule, rule_obj)
 
     def validate(self, file_path: Path | str, content: str) -> list[dict[str, Any]]:
-        """Validate content against rules. Legacy support."""if not isinstance(file_path, Path):
+        """Validate content against registered rules."""
+        if not isinstance(file_path, Path):
             file_path = Path(file_path)
         return self._core.validate_content_by_rules(file_path, content)

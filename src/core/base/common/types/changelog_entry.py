@@ -13,23 +13,29 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_changes.py
+"""Changelog entry type used by tests and reporting tools."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import List, Optional
 
-from src.core.base.lifecycle.version import VERSION
+try:
+    from src.core.base.lifecycle.version import VERSION
+except Exception:
+    VERSION = "0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class ChangelogEntry:
-    """A single changelog entry."""
     category: str
     description: str
-    version: str = """    date: str = """    priority: int = 0  # Higher=more important
-    severity: str = "normal"  # low, normal, high, critical"    tags: list[str] = field(default_factory=lambda: [])
-    linked_issues: list[str] = field(default_factory=lambda: [])
-    linked_commits: list[str] = field(default_factory=lambda: [])
+    version: Optional[str] = None
+    date: Optional[str] = None
+    priority: int = 0  # Higher=more important
+    severity: str = "normal"  # low, normal, high, critical
+    tags: List[str] = field(default_factory=list)
+    linked_issues: List[str] = field(default_factory=list)
+    linked_commits: List[str] = field(default_factory=list)

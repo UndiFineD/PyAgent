@@ -34,7 +34,8 @@ class StreamingMixin:
         callback: Optional[Callable[[Any], None]] = None
     ) -> AsyncGenerator[Any, None]:
         """Processes a stream from an LLM or process and optionally triggers a callback for each chunk.
-        """async for chunk in generator:
+        """
+        async for chunk in generator:
             if callback:
                 if asyncio.iscoroutinefunction(callback):
                     await callback(chunk)
@@ -43,8 +44,9 @@ class StreamingMixin:
             yield chunk
 
     def format_stream_chunk(self, chunk: Any) -> str:
-        """Normalizes various stream chunk formats into a standard string representation.
-        """if isinstance(chunk, str):
+        """Normalize various stream chunk formats into a string."""
+        if isinstance(chunk, str):
             return chunk
-        if hasattr(chunk, "content"):"            return str(chunk.content)
+        if hasattr(chunk, "content"):
+            return str(chunk.content)
         return str(chunk)

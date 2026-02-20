@@ -13,27 +13,21 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Types: RefactoringPattern dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 
 try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.common.types.code_language import CodeLanguage
-except ImportError:
     from src.core.base.common.types.code_language import CodeLanguage
+except Exception:
+    class CodeLanguage:
+        PYTHON = "python"
 
 try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 

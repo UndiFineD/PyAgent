@@ -13,27 +13,30 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Accessibility issue types used across tests and types modules."""
+
 from __future__ import annotations
 
-
-try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
+from enum import Enum
 
 try:
     from .core.base.lifecycle.version import VERSION
-except ImportError:
+except Exception:
     from src.core.base.lifecycle.version import VERSION
 
 
 __version__ = VERSION
 
 
-
 class AccessibilityIssueType(Enum):
     """Types of accessibility issues in UI code."""
-    MISSING_ALT_TEXT = "missing_alt_text""    LOW_COLOR_CONTRAST = "low_color_contrast""    MISSING_LABEL = "missing_label""    KEYBOARD_NAVIGATION = "keyboard_navigation""    FOCUS_MANAGEMENT = "focus_management""    ARIA_MISSING = "aria_missing""    ARIA_INVALID = "aria_invalid""    HEADING_HIERARCHY = "heading_hierarchy""    FORM_VALIDATION = "form_validation""    SEMANTIC_HTML = "semantic_html""
+    MISSING_ALT_TEXT = "missing_alt_text"
+    LOW_COLOR_CONTRAST = "low_color_contrast"
+    MISSING_LABEL = "missing_label"
+    KEYBOARD_NAVIGATION = "keyboard_navigation"
+    FOCUS_MANAGEMENT = "focus_management"
+    ARIA_MISSING = "aria_missing"
+    ARIA_INVALID = "aria_invalid"
+    HEADING_HIERARCHY = "heading_hierarchy"
+    FORM_VALIDATION = "form_validation"
+    SEMANTIC_HTML = "semantic_html"

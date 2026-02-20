@@ -35,4 +35,10 @@ except ImportError:
 
 
 __all__ = [
-    "E2EEncryptionCore","    "UserKeyPair","    "RatchetState","    "SecureAuthManager","    "UserSession","    "EncryptedMemoryStore","]
+    "E2EEncryptionCore",
+    "UserKeyPair",
+    "RatchetState",
+    "SecureAuthManager",
+    "UserSession",
+    "EncryptedMemoryStore",
+]

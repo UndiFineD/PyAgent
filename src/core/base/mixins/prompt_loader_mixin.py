@@ -26,6 +26,16 @@ except ImportError:
 
 class PromptLoaderMixin:
     """Supports loading async system prompts from data/prompts/."""
-    async def load_prompt(self, agent_type: str, name: str = "system") -> str:"        # Resolves to WorkspaceRoot/data/prompts/agent_type/name.md
-        path = Path("data/prompts") / agent_type / f"{name}.md""        if not path.exists():
-            return """        async with aiofiles.open(str(path), mode='r', encoding='utf-8') as f:'            return await f.read()
+
+    async def load_prompt(self, agent_type: str, name: str = "system") -> str:
+        """Resolve and return the prompt file contents for the given agent type/name.
+
+        If the file does not exist return an empty string. Files are expected at
+        `data/prompts/{agent_type}/{name}.md` relative to the repository root.
+        """
+        path = Path("data/prompts") / agent_type / f"{name}.md"
+        if not path.exists():
+            return ""
+
+        async with aiofiles.open(str(path), mode="r", encoding="utf-8") as f:
+            return await f.read()

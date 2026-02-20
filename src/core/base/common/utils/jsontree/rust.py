@@ -29,46 +29,32 @@ from src.core.base.common.utils.jsontree.types import _T, JSONTree
 
 logger = logging.getLogger(__name__)
 
-# Try to import Rust-accelerated versions
 try:
-    from rust_core import (json_count_leaves_rust, json_flatten_rust,
-                           json_iter_leaves_rust)
-
-    # Use Rust versions if available
-    _json_iter_leaves_native = json_iter_leaves
-    _json_count_leaves_native = json_count_leaves
-    _json_flatten_native = json_flatten
-
+    from rust_core import json_count_leaves_rust, json_flatten_rust, json_iter_leaves_rust  # type: ignore
 
     def json_iter_leaves_fast(value: JSONTree[_T]) -> Iterable[_T]:
-        """Rust-accelerated leaf iteration."""
-try:
+        try:
             return json_iter_leaves_rust(value)
-        except Exception:  # pylint: disable=broad-exception-caught
-            return _json_iter_leaves_native(value)
+        except Exception:  # pragma: no cover - fallback
+            return json_iter_leaves(value)
 
 
     def json_count_leaves_fast(value: JSONTree[_T]) -> int:
-        """Rust-accelerated leaf counting."""
-try:
+        try:
             return json_count_leaves_rust(value)
-        except Exception:  # pylint: disable=broad-exception-caught
-            return _json_count_leaves_native(value)
+        except Exception:  # pragma: no cover - fallback
+            return json_count_leaves(value)
 
 
-    def json_flatten_fast(
-        value: JSONTree[_T],
-        separator: str = ".","    ) -> dict[str, _T]:
-        """Rust-accelerated flattening."""
-try:
+    def json_flatten_fast(value: JSONTree[_T], separator: str = ".") -> dict[str, _T]:
+        try:
             return json_flatten_rust(value, separator)
-        except Exception:  # pylint: disable=broad-exception-caught
-            return _json_flatten_native(value, separator)
+        except Exception:  # pragma: no cover - fallback
+            return json_flatten(value, separator)
 
     RUST_ACCELERATION_AVAILABLE = True
     logger.debug("JSONTreeUtils: Rust acceleration available")
-except ImportError:
-    # Rust not available, use pure Python
+except Exception:
     json_iter_leaves_fast = json_iter_leaves
     json_count_leaves_fast = json_count_leaves
     json_flatten_fast = json_flatten

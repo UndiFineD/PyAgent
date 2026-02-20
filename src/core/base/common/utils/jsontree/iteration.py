@@ -13,37 +13,19 @@
 # limitations under the License.
 
 
-"""Iteration.py module.
-"""
-
+"""Iteration helpers for JSON-like trees."""
 
 from __future__ import annotations
 
+from typing import Generator, Iterable, Tuple, TypeVar, Any
 
-try:
-    from collections.abc import Iterable
-except ImportError:
-    from collections.abc import Iterable
-
-
-try:
-    from .core.base.common.utils.jsontree.types import _T, JSONTree
-except ImportError:
-    from src.core.base.common.utils.jsontree.types import _T, JSONTree
+_T = TypeVar("_T")
+JSONTree = Any
 
 
-
-def json_iter_leaves(value: JSONTree[_T]) -> Iterable[_T]:
-    """Iterate through each leaf in a nested JSON structure.
-
-    A leaf is any value that is not a dict, list, or tuple.
-
-    Args:
-        value: A nested JSON structure (dict, list, tuple, or leaf value).
-
-    Yields:
-        Each leaf value in depth-first order.
-    """if isinstance(value, dict):
+def json_iter_leaves(value: JSONTree) -> Iterable[Any]:
+    """Yield each leaf in a nested JSON structure (depth-first)."""
+    if isinstance(value, dict):
         for v in value.values():
             yield from json_iter_leaves(v)
     elif isinstance(value, (list, tuple)):
@@ -53,19 +35,16 @@ def json_iter_leaves(value: JSONTree[_T]) -> Iterable[_T]:
         yield value
 
 
-def json_iter_leaves_with_path(value: JSONTree[_T], prefix: str = "") -> Iterable[tuple[str, _T]]:"    """Iterate through each leaf with its dot-notation path.
-
-    Args:
-        value: A nested JSON structure.
-        prefix: Optional path prefix (used for recursion).
-
-    Yields:
-        Tuples of (path, leaf_value).
-    """if isinstance(value, dict):
+def json_iter_leaves_with_path(value: JSONTree, prefix: str = "") -> Generator[Tuple[str, Any], None, None]:
+    """Yield (path, leaf) pairs. Paths use dot/bracket notation for keys/indexes."""
+    if isinstance(value, dict):
         for k, v in value.items():
-            new_prefix = f"{prefix}.{k}" if prefix else k"            yield from json_iter_leaves_with_path(v, new_prefix)
+            new_prefix = f"{prefix}.{k}" if prefix else str(k)
+            yield from json_iter_leaves_with_path(v, new_prefix)
     elif isinstance(value, (list, tuple)):
         for i, v in enumerate(value):
-            new_prefix = f"{prefix}[{i}]""            yield from json_iter_leaves_with_path(v, new_prefix)
+            new_prefix = f"{prefix}[{i}]" if prefix else f"[{i}]"
+            yield from json_iter_leaves_with_path(v, new_prefix)
     else:
         yield (prefix, value)
+

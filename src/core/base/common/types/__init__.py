@@ -251,5 +251,8 @@ except ImportError:
 
 
 __version__ = VERSION
-__all__ = [
-    "AccessibilityIssue","    "AccessibilityIssueType","    "AccessibilityReport","    "AccessibilitySeverity","    "ARIAAttribute","    "ChangelogEntry","    "CodeLanguage","    "CodeMetrics","    "CodeSmell","    "ColorContrastResult","    "ComplianceCategory","    "ComplianceResult","    "ConsistencyIssue","    "DependencyNode","    "DependencyType","    "DiffResult","    "DiffViewMode","    "EntryTemplate","    "FeedFormat","    "GroupingStrategy","    "LinkedReference","    "LocalizationLanguage","    "LocalizedEntry","    "MigrationRule","    "MigrationStatus","    "ModernizationSuggestion","    "MonorepoEntry","    "OptimizationSuggestion","    "OptimizationType","    "ProfilingCategory","    "ProfilingSuggestion","    "QualityScore","    "RefactoringPattern","    "ReleaseNote","    "ReviewCategory","    "ReviewFinding","    "SearchResult","    "SecurityIssueType","    "SecurityVulnerability","    "StyleRule","    "StyleRuleSeverity","    "TemplateManager","    "TestGap","    "VersioningStrategy","    "WCAGLevel","]
+
+# Build a safe __all__ dynamically from the module globals to avoid
+# syntax issues caused by earlier corruption of this file. This will
+# export the public symbols imported above.
+__all__ = [name for name in globals().keys() if not name.startswith("_")]

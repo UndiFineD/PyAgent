@@ -12,95 +12,80 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-Auto-extracted class from agent.py
 from __future__ import annotations
 
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any
-
-from ..models.base_models import ExecutionCondition
-from ...lifecycle.version import VERSION
-
-__version__ = VERSION
-
+from typing import Any, Dict, List
 
 
 class ConditionalExecutor:
-    """Execute agents based on file content conditions.""""
-    Example:
-        executor=ConditionalExecutor()
-        executor.add_condition("has_todos", lambda p, c: "TODO" in c)"        executor.add_condition("is_large", lambda p, c: len(c) > 10000)"
-        if executor.should_execute("coder", file_path, content):"            run_coder(file_path)
+    """Execute agents based on file content conditions.
+
+    This is a small, import-safe implementation intended to be compatible with
+    the original API: add_condition(name, check, description),
+    set_agent_conditions(agent_name, conditions, require_all), and
+    should_execute(agent_name, file_path, content).
     """
+
     def __init__(self) -> None:
-        """Initialize executor."""self._conditions: dict[str, ExecutionCondition] = {}
-        self._agent_conditions: dict[str, dict[str, Any]] = {}
+        self._conditions: Dict[str, Dict[str, Any]] = {}
+        self._agent_conditions: Dict[str, Dict[str, Any]] = {}
 
     def add_condition(
-        self,
-        name: str,
-        check: Callable[[Path, str], bool],
-        description: str = "","    ) -> None:
-        """Add a condition.""""
+        self, name: str, check: Callable[[Path, str], bool], description: str = ""
+    ) -> None:
+        """Register a named condition.
+
         Args:
             name: Condition name.
-            check: Function taking (path, content) returning bool.
-            description: Human - readable description.
-        """self._conditions[name] = ExecutionCondition(
-            name=name,
-            check=check,
-            description=description,
-        )
+            check: Callable taking (path, content) and returning bool.
+            description: Optional human-readable description.
+        """
+        self._conditions[name] = {"check": check, "description": description}
 
     def set_agent_conditions(
-        self,
-        agent_name: str,
-        conditions: list[str],
-        require_all: bool = False,
+        self, agent_name: str, conditions: List[str], require_all: bool = False
     ) -> None:
-        """Set conditions for an agent.""""
+        """Assign conditions to an agent.
+
         Args:
-            agent_name: Name of the agent.
-            conditions: List of condition names.
-            require_all: If True, all conditions must pass.
-        """self._agent_conditions[agent_name] = {
-            "conditions": conditions,"            "require_all": require_all,"        }
+            agent_name: Agent identifier.
+            conditions: List of condition names previously registered.
+            require_all: If True, all conditions must be satisfied.
+        """
+        self._agent_conditions[agent_name] = {
+            "conditions": list(conditions),
+            "require_all": bool(require_all),
+        }
 
-    def should_execute(
-        self,
-        agent_name: str,
-        file_path: Path,
-        content: str,
-    ) -> bool:
-        """Check if agent should execute for file.""""
-        Args:
-            agent_name: Agent name.
-            file_path: File path.
-            content: File content.
+    def should_execute(self, agent_name: str, file_path: Path, content: str) -> bool:
+        """Return True if the agent should run for the given file content.
 
-        Returns:
-            True if agent should execute.
-        """if agent_name not in self._agent_conditions:
-            return True  # No conditions, always execute
+        If no conditions are configured for the agent, defaults to True.
+        Unknown condition names are ignored.
+        """
+        cfg = self._agent_conditions.get(agent_name)
+        if not cfg:
+            return True
 
-        config = self._agent_conditions[agent_name]
-        condition_names: list[str] = config["conditions"]  # type: ignore"        require_all = config["require_all"]"
-        results: list[bool] = []
-        for cond_name in condition_names:
-            if cond_name not in self._conditions:
+        names = cfg.get("conditions", [])
+        require_all = bool(cfg.get("require_all", False))
+
+        results: List[bool] = []
+        for n in names:
+            cond = self._conditions.get(n)
+            if not cond:
                 continue
-            condition = self._conditions[cond_name]
+            check = cond.get("check")
             try:
-                results.append(condition.check(file_path, content))
-            except Exception:  # pylint: disable=broad-exception-caught
+                results.append(bool(check(file_path, content)))
+            except Exception:
                 results.append(False)
 
         if not results:
             return True
+        return all(results) if require_all else any(results)
 
-        if require_all:
-            return all(results)
-        return any(results)
+
+__all__ = ["ConditionalExecutor"]

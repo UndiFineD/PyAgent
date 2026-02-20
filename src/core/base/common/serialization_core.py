@@ -54,13 +54,19 @@ class SerializationCore(BaseCore):
     Supports JSON, Pickle, and Base64 encoding.
     """
     def to_json(self, data: Any) -> str:
-        """Convert object to JSON string."""return json.dumps(data, default=str)
+        """Convert object to JSON string."""
+        return json.dumps(data, default=str)
 
     def from_json(self, data: str) -> Any:
-        """Parse JSON string to object."""return json.loads(data)
+        """Parse JSON string to object."""
+        return json.loads(data)
 
     def to_base64_pickle(self, obj: Any) -> str:
-        """Pickle object and encode as Base64 string."""pickled = pickle.dumps(obj)
-        return base64.b64encode(pickled).decode("utf-8")"
+        """Pickle object and encode as Base64 string."""
+        pickled = pickle.dumps(obj)
+        return base64.b64encode(pickled).decode("utf-8")
+
     def from_base64_pickle(self, data: str) -> Any:
-        """Decode Base64 string and unpickle to object."""decoded = base64.b64decode(data.encode("utf-8"))"        return pickle.loads(decoded)
+        """Decode Base64 string and unpickle to object."""
+        decoded = base64.b64decode(data.encode("utf-8"))
+        return pickle.loads(decoded)

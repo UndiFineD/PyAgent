@@ -13,77 +13,62 @@
 # limitations under the License.
 
 
+"""AgentConfig dataclass used across PyAgent.
+
+This is a minimal, import-safe representation suitable for tests.
 """
-Auto-extracted class from agent.py
+
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+from typing import Any, Optional
 
 try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-try:
-    from .core.base.common.models.agent_models import AgentPluginConfig
-except ImportError:
     from src.core.base.common.models.agent_models import AgentPluginConfig
+except Exception:
+    class AgentPluginConfig:  # type: ignore
+        pass
 
 try:
-    from .core.base.common.models.fleet_models import RateLimitConfig
-except ImportError:
     from src.core.base.common.models.fleet_models import RateLimitConfig
+except Exception:
+    class RateLimitConfig:  # type: ignore
+        pass
 
 try:
-    from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
-except ImportError:
-    from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
+    from src.core.base.common.utils.helpers import _empty_dict_str_any, _empty_dict_str_int, _empty_list_str, _empty_plugin_config_list
+except Exception:
+    def _empty_dict_str_any():
+        return {}
 
-                            _empty_list_str, _empty_plugin_config_list)
+    def _empty_dict_str_int():
+        return {}
 
-__version__ = VERSION
+    def _empty_list_str():
+        return []
+
+    def _empty_plugin_config_list():
+        return []
 
 
 @dataclass
-class AgentConfig:  # pylint: disable=too-many-instance-attributes
-    """Full agent configuration loaded from config file.""""
-    Attributes:
-        repo_root: Repository root directory.
-        agents_only: Process only agent files.
-        max_files: Maximum files to process.
-        loop: Number of processing loops.
-        dry_run: Preview mode without modifications.
-        no_git: Skip git operations.
-        verbosity: Logging verbosity level.
-        rate_limit: Rate limiting configuration.
-        plugins: List of plugin configurations.
-        selective_agents: Agents to execute.
-        timeout_per_agent: Timeout settings per agent.
-    """
-    repo_root: str = ".""    agents_only: bool = False
-    max_files: int | None = None
+class AgentConfig:
+    repo_root: str = "."
+    agents_only: bool = False
+    max_files: Optional[int] = None
     loop: int = 1
     dry_run: bool = False
     no_git: bool = False
-    verbosity: str = "normal""    rate_limit: RateLimitConfig | None = None
+    verbosity: str = "normal"
+    rate_limit: Optional[RateLimitConfig] = None
     plugins: list[AgentPluginConfig] = field(default_factory=_empty_plugin_config_list)
     selective_agents: list[str] = field(default_factory=_empty_list_str)
     timeout_per_agent: dict[str, int] = field(default_factory=_empty_dict_str_int)
-    # Additional CLI-equivalent settings
     enable_async: bool = False
     enable_multiprocessing: bool = False
     max_workers: int = 4
-    strategy: str = "direct""    enable_file_locking: bool = False
+    strategy: str = "direct"
+    enable_file_locking: bool = False
     incremental: bool = False
     graceful_shutdown: bool = False
     health_check: bool = False

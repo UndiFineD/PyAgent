@@ -13,8 +13,8 @@
 # limitations under the License.
 
 
-"""
-Memory storage mixin for persistent memory management.
+"""Memory storage mixin for persistent memory management."""
+
 import json
 import logging
 from typing import Any

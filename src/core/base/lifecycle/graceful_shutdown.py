@@ -11,113 +11,106 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""Graceful shutdown helper used by tests.
 
-
+This is a compact, robust implementation providing a clean API for
+installing and restoring signal handlers and persisting a tiny
+shutdown state. It intentionally keeps behavior minimal for test use.
 """
-Auto-extracted class from agent.py
+
 from __future__ import annotations
 
 import json
 import logging
 import signal
 import time
+from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, cast
+from typing import Any, Optional
 
 from src.core.base.common.models import ShutdownState
-from src.core.base.lifecycle.version import VERSION
 
-__version__ = VERSION
 
+__all__ = ["GracefulShutdown"]
 
 
 class GracefulShutdown:
-    """Handles graceful shutdown with state persistence.""""
-    Captures SIGINT / SIGTERM and allows current operation to complete
-    before stopping, saving state for resume.
-
-    Attributes:
-        state: Current shutdown state.
-        state_file: Path to state persistence file.
-    """
-    def __init__(self, repo_root: Path | str, state_file: str = ".agent_shutdown.json") -> None:"        """Initialize graceful shutdown handler.""""
-        Args:
-            repo_root: Repository root directory.
-            state_file: Name of state file.
-        """self.repo_root = Path(repo_root)
+    def __init__(self, repo_root: Path | str, state_file: str = ".agent_shutdown.json") -> None:
+        self.repo_root = Path(repo_root)
         self.state_file = self.repo_root / state_file
         self.state = ShutdownState()
-        self._original_sigint = None
-        self._original_sigterm = None
+        self._original_sigint: Optional[Any] = None
+        self._original_sigterm: Optional[Any] = None
 
     def install_handlers(self) -> None:
-        """Install signal handlers for graceful shutdown."""self._original_sigint = signal.signal(signal.SIGINT, self._handle_signal)
-        if hasattr(signal, "SIGTERM"):"            self._original_sigterm = signal.signal(signal.SIGTERM, self._handle_signal)
-        logging.debug("Installed graceful shutdown handlers")"
+        self._original_sigint = signal.signal(signal.SIGINT, self._handle_signal)
+        if hasattr(signal, "SIGTERM"):
+            self._original_sigterm = signal.signal(signal.SIGTERM, self._handle_signal)
+        logging.debug("Installed graceful shutdown handlers")
+
     def restore_handlers(self) -> None:
-        """Restore original signal handlers."""if self._original_sigint:
+        if self._original_sigint:
             signal.signal(signal.SIGINT, self._original_sigint)
-        if self._original_sigterm and hasattr(signal, "SIGTERM"):"            signal.signal(signal.SIGTERM, self._original_sigterm)
-        logging.debug("Restored original signal handlers")"
+        if self._original_sigterm and hasattr(signal, "SIGTERM"):
+            signal.signal(signal.SIGTERM, self._original_sigterm)
+        logging.debug("Restored original signal handlers")
+
     def _handle_signal(self, signum: int, _frame: Any) -> None:
-        """Handle shutdown signal."""signal_name = signal.Signals(signum).name
-        logging.warning("Received %s, initiating graceful shutdown...", signal_name)"        self.state.shutdown_requested = True
+        logging.warning("Received signal %s, initiating graceful shutdown...", signum)
+        self.state.shutdown_requested = True
         self._save_state()
 
     def should_continue(self) -> bool:
-        """Check if processing should continue.""""
-        Returns:
-            bool: True if should continue, False if shutdown requested.
-        """return not self.state.shutdown_requested
+        return not self.state.shutdown_requested
 
-    def set_current_file(self, file_path: Path | None) -> None:
-        """Set the currently processing file.""""
-        Args:
-            file_path: Path to current file, or None if not processing.
-        """self.state.current_file = str(file_path) if file_path else None
+    def set_current_file(self, file_path: Optional[Path]) -> None:
+        self.state.current_file = str(file_path) if file_path else None
 
     def mark_completed(self, file_path: Path) -> None:
-        """Mark a file as completed.""""
-        Args:
-            file_path: Path to completed file.
-        """self.state.completed_files.append(str(file_path))
+        self.state.completed_files.append(str(file_path))
         if str(file_path) in self.state.pending_files:
             self.state.pending_files.remove(str(file_path))
 
     def set_pending_files(self, files: list[Path]) -> None:
-        """Set the list of pending files.""""
-        Args:
-            files: List of pending file paths.
-        """self.state.pending_files = [str(f) for f in files]
+        self.state.pending_files = [str(f) for f in files]
 
     def _save_state(self) -> None:
-        """Save shutdown state to disk."""
-try:
-            data: dict[str, Any] = {
-                "shutdown_requested": self.state.shutdown_requested,"                "current_file": self.state.current_file,"                "completed_files": self.state.completed_files,"                "pending_files": self.state.pending_files,"                "start_time": self.state.start_time,"            }
+        try:
+            data = {
+                "shutdown_requested": self.state.shutdown_requested,
+                "current_file": self.state.current_file,
+                "completed_files": self.state.completed_files,
+                "pending_files": self.state.pending_files,
+                "start_time": getattr(self.state, "start_time", time.time()),
+            }
             self.state_file.write_text(json.dumps(data, indent=2))
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error("Failed to save shutdown state: %s", e)"
-    def load_resume_state(self) -> ShutdownState | None:
-        """Load state for resuming an interrupted run.""""
-        Returns:
-            ShutdownState if resume state exists, None otherwise.
-        """if not self.state_file.exists():
-            return None
+        except Exception as e:  # pragma: no cover - best-effort
+            logging.error("Failed to save shutdown state: %s", e)
 
+    def load_resume_state(self) -> Optional[ShutdownState]:
+        if not self.state_file.exists():
+            return None
         try:
             raw = json.loads(self.state_file.read_text())
-            data: dict[str, Any] = cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
+            data = raw if isinstance(raw, dict) else {}
             state = ShutdownState(
-                shutdown_requested=False,  # Reset for resume
-                current_file=data.get("current_file"),"                completed_files=data.get("completed_files", []),"                pending_files=data.get("pending_files", []),"                start_time=data.get("start_time", time.time()),"            )
-            logging.info(
-                "Loaded resume state: %s completed, %s pending", len(state.completed_files), len(state.pending_files)"            )
+                shutdown_requested=False,
+                current_file=data.get("current_file"),
+                completed_files=data.get("completed_files", []),
+                pending_files=data.get("pending_files", []),
+                start_time=data.get("start_time", time.time()),
+            )
+            logging.info("Loaded resume state: %s completed, %s pending", len(state.completed_files), len(state.pending_files))
             return state
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.warning("Failed to load resume state: %s", e)"            return None
+        except Exception as e:  # pragma: no cover - non-critical
+            logging.warning("Failed to load resume state: %s", e)
+            return None
 
     def cleanup(self) -> None:
-        """Clean up state file after successful completion."""if self.state_file.exists():
-            self.state_file.unlink()
+        if self.state_file.exists():
+            try:
+                self.state_file.unlink()
+            except Exception:
+                pass
+        self.restore_handlers()
         self.restore_handlers()

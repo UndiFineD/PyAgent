@@ -35,7 +35,8 @@ def test_sharding_core_assign_workload():
 
 def test_sharding_core_calculate_shard_id():
     core = ShardingCore(cluster_size=10)
-    key = "test_key""    shard_id = core.calculate_shard_id(key)
+    key = "test_key"
+    shard_id = core.calculate_shard_id(key)
     assert 0 <= shard_id < 10
     assert shard_id == core.calculate_shard_id(key)
 

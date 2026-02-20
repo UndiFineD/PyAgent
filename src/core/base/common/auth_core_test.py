@@ -27,28 +27,30 @@ class TestAuthCore:
         return AuthCore()
 
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
-    @given(st.text(min_size=1))
+    @given(agent_id=st.text(min_size=1))
     def test_generate_challenge(self, core, agent_id):
-        # We can't strictly test the output value due to time.time(),'        # but we can test structure and length.
+        # We can't strictly test the output value due to time.time(),
+        # but we can test structure and length.
         challenge = core.generate_challenge(agent_id)
         assert len(challenge) == 64
         try:
             int(challenge, 16)
         except ValueError:
-            pytest.fail("Challenge is not valid hex")"
+            pytest.fail("Challenge is not valid hex")
+
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
     @given(challenge=st.text(min_size=1), secret_key=st.text(min_size=1))
     def test_generate_proof(self, core, challenge, secret_key):
         proof = core.generate_proof(challenge, secret_key)
 
-        expected = hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()"        assert proof == expected
+        expected = hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
+        assert proof == expected
         assert len(proof) == 128  # sha512 is 128 chars hex
 
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
     @given(challenge=st.text(min_size=1), secret=st.text(min_size=1))
     def test_verify_proof_valid(self, core, challenge, secret):
         proof = core.generate_proof(challenge, secret)
-        # In current impl, verified against the secret itself
         is_valid = core.verify_proof(challenge, proof, secret)
         assert is_valid
 
@@ -71,7 +73,7 @@ class TestAuthCore:
     def test_is_proof_expired_logic(self, core, proof_time, ttl):
         # We need to control current time to test this purely.
         # But the method calls time.time().
-        # I will test the bounds relative to 'now'.'
+        # Test the bounds relative to 'now'.
         now = time.time()
 
         # expired case

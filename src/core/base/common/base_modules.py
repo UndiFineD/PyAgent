@@ -40,13 +40,20 @@ class BaseModule(ABC):
         self.config = config or {}
         self.initialized = False
 
+
     def initialize(self) -> bool:
-        """Sets up the module resources."""self.initialized = True
+        """Sets up the module resources."""
+        self.initialized = True
         return True
+
 
     @abstractmethod
     def execute(self, *args: Any, **kwargs: Any) -> Any:
         """Main entry point for module logic."""
+        raise NotImplementedError()
+
+
     def shutdown(self) -> bool:
-        """Cleans up the module resources."""self.initialized = False
+        """Cleans up the module resources."""
+        self.initialized = False
         return True

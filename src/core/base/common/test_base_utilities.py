@@ -15,7 +15,6 @@
 from src.core.base.common import base_utilities as bu
 
 
-
 class DummyRecorder:
     def __init__(self):
         self.calls = []
@@ -24,16 +23,24 @@ class DummyRecorder:
         self.calls.append(kwargs)
 
 
-
 class DummyAgent:
     def __init__(self):
-        self.__class__.__name__ = "DummyAgent""        self.fleet = type("X", (), {})()"        self.fleet.recorder = DummyRecorder()
+        self.__class__.__name__ = "DummyAgent"
+        self.fleet = type("X", (), {})()
+        self.fleet.recorder = DummyRecorder()
 
 
 def test_record_tool_execution_truncation_and_metadata():
     agent = DummyAgent()
-    long_result = "x" * 5000"    bu._record_tool_execution(agent, "my_tool", (1, 2), {"a": 1}, long_result)"    assert agent.fleet.recorder.calls, "Recorder should have been called""    call = agent.fleet.recorder.calls[-1]
-    assert "result" in call"    assert call["result"].endswith("... [TRUNCATED]")"    assert call["provider"] == "agent_tool""
+    long_result = "x" * 5000
+
+    bu._record_tool_execution(agent, "my_tool", (1, 2), {"a": 1}, long_result)
+    assert agent.fleet.recorder.calls, "Recorder should have been called"
+    call = agent.fleet.recorder.calls[-1]
+    assert "result" in call
+    assert call["result"].endswith("... [TRUNCATED]")
+    assert call["provider"] == "agent_tool"
+
 
 def test_record_tool_execution_raises_keyboardinterrupt():
     class BadRecorder(DummyRecorder):
@@ -44,5 +51,7 @@ def test_record_tool_execution_raises_keyboardinterrupt():
     agent.fleet.recorder = BadRecorder()
 
     try:
-        bu._record_tool_execution(agent, "t", (), {}, "ok")"        assert False, "KeyboardInterrupt should be re-raised""    except KeyboardInterrupt:
+        bu._record_tool_execution(agent, "t", (), {}, "ok")
+        assert False, "KeyboardInterrupt should be re-raised"
+    except KeyboardInterrupt:
         pass

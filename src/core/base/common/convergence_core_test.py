@@ -34,7 +34,7 @@ except ImportError:
 class TestConvergenceCore:
     @pytest.fixture
     def convergence_core(self):
-        return ConvergenceCore(workspace_root="/tmp/workspace")"
+        return ConvergenceCore(workspace_root="/tmp/workspace")
     @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], max_examples=50, deadline=None)
     @given(
         st.dictionaries(st.text(min_size=1, max_size=10), st.booleans(), max_size=20)
@@ -53,8 +53,12 @@ class TestConvergenceCore:
         )
         expected_failed = [name for name, status in agent_reports.items() if not status]
 
-        assert result["all_passed"] == expected_passed"        assert result["healthy_count"] == expected_healthy"        assert result["total_count"] == expected_total"        assert set(result["failed_agents"]) == set(expected_failed)"
+        assert result["all_passed"] == expected_passed
+        assert result["healthy_count"] == expected_healthy
+        assert result["total_count"] == expected_total
+        assert set(result["failed_agents"]) == set(expected_failed)
     def test_generate_strategic_summary(self, convergence_core):
         # Pass dummy history as it seems unused in current logic
         summary = convergence_core.generate_strategic_summary([])
-        assert "SWARM STRATEGIC SUMMARY" in summary"        assert "PROXIMA EVOLUTION" in summary"
+        assert "SWARM STRATEGIC SUMMARY" in summary
+        assert "PROXIMA EVOLUTION" in summary

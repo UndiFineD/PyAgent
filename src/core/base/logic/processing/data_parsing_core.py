@@ -25,17 +25,22 @@ import html
 from typing import Optional
 
 
-
 class DataParsingCore:
-    """Core class for data parsing operations."""
+    """Core class for data parsing operations (simple, deterministic)."""
+
     def html_unescape(self, text: str) -> str:
-        """Unescape HTML entities in text."""return html.unescape(text)
+        """Unescape HTML entities in text."""
+        return html.unescape(text)
 
     def extract_xml_value(self, xml: str, tag_pattern: str) -> Optional[str]:
-        """Extract value from XML using tag pattern."""
-try:
-            # Simple pattern-based extraction
-            start_pattern = f"<{tag_pattern}>""            end_pattern = f"</{tag_pattern}>""
+        """Extract a simple tag value from XML-like content.
+
+        This is a very small helper used by tests; it does not attempt
+        full XML parsing and uses simple string matching intentionally.
+        """
+        try:
+            start_pattern = f"<{tag_pattern}>"
+            end_pattern = f"</{tag_pattern}>"
             start_pos = xml.find(start_pattern)
             if start_pos == -1:
                 return None
@@ -47,13 +52,12 @@ try:
 
             value = xml[start_pos:end_pos]
             return self.html_unescape(value)
-
         except Exception:
             return None
 
     def find_pattern(self, haystack: str, needle: str) -> Optional[str]:
-        """Find pattern in text using simple string scanning."""
-try:
+        """Return substring starting at the found needle or None."""
+        try:
             pos = haystack.find(needle)
             if pos == -1:
                 return None

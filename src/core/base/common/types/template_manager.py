@@ -22,4 +22,4 @@ except ImportError:
     from src.core.base.common.template_core import TemplateCore as TemplateManager
 
 
-__all__ = ["TemplateManager"]"
+__all__ = ["TemplateManager"]

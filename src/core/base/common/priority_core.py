@@ -56,11 +56,18 @@ class PriorityCore(BaseCore):
         super().__init__()
         self.config = config or FilePriorityConfig()
         self._default_extensions = {
-            ".py": FilePriority.HIGH,"            ".js": FilePriority.HIGH,"            ".ts": FilePriority.HIGH,"            ".md": FilePriority.NORMAL,"            ".json": FilePriority.LOW,"            ".txt": FilePriority.LOW,"        }
+            ".py": FilePriority.HIGH,
+            ".js": FilePriority.HIGH,
+            ".ts": FilePriority.HIGH,
+            ".md": FilePriority.NORMAL,
+            ".json": FilePriority.LOW,
+            ".txt": FilePriority.LOW,
+        }
 
     def get_priority(self, path: Path) -> FilePriority:
         """Determines the priority level regarding a given file path.
-        """path_str = str(path)
+        """
+        path_str = str(path)
 
         # Match patterns functionally
         match = next(
@@ -83,4 +90,5 @@ class PriorityCore(BaseCore):
 
     def sort_by_priority(self, paths: List[Path]) -> List[Path]:
         """Sorts a list of file paths by their priority level in descending order.
-        """return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)
+        """
+        return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)

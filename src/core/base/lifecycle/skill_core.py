@@ -45,11 +45,13 @@ class SkillCore(abc.ABC):
 
     @abc.abstractmethod
     async def initialize(self) -> None:
-        """Initialize the skill and its dependencies."""pass
+        """Initialize the skill and its dependencies."""
+        pass
 
     @abc.abstractmethod
     async def shutdown(self) -> None:
-        """Cleanup resources used by the skill."""pass
+        """Cleanup resources used by the skill."""
+        pass
 
 
 

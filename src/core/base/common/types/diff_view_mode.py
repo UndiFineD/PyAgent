@@ -13,27 +13,21 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_changes.py
+"""Types: DiffViewMode enum."""
 from __future__ import annotations
 
+from enum import Enum
 
 try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
-
 class DiffViewMode(Enum):
     """Modes for changelog diff visualization."""
-    UNIFIED = "unified""    SIDE_BY_SIDE = "side_by_side""    INLINE = "inline""
+    UNIFIED = "unified"
+    SIDE_BY_SIDE = "side_by_side"
+    INLINE = "inline"

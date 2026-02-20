@@ -13,57 +13,34 @@
 # limitations under the License.
 
 
+"""Rate limiter utilities (token-bucket).
+
+Minimal, well-typed implementation used by tests. Config may be provided
+via a RateLimitConfig-like object with attributes `requests_per_second` and
+`burst_size`.
 """
-Auto-extracted class from agent.py
+
 from __future__ import annotations
 
+import threading
+import time
+from typing import Any
 
 try:
-    import threading
-except ImportError:
-    import threading
-
-try:
-    import time
-except ImportError:
-    import time
-
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
-
-try:
-    from .core.base.common.models import RateLimitConfig
-except ImportError:
     from src.core.base.common.models import RateLimitConfig
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
+except Exception:
+    # Fallback simple config dataclass for tests
+    class RateLimitConfig:  # type: ignore
+        def __init__(self, requests_per_second: float = 1.0, burst_size: int = 1) -> None:
+            self.requests_per_second = requests_per_second
+            self.burst_size = burst_size
 
 
 class RateLimiter:
-    """Rate limiter for API calls using token bucket algorithm.""""
-    Manages API call rate to prevent throttling and ensure fair usage.
-    Supports multiple strategies and configurable limits.
+    """A simple token-bucket rate limiter."""
 
-    Attributes:
-        config: Rate limiting configuration.
-        tokens: Current number of available tokens.
-        last_refill: Timestamp of last token refill.
-    """
     def __init__(self, config: RateLimitConfig | None = None) -> None:
-        """Initialize the rate limiter.""""
-        Args:
-            config: Rate limiting configuration. Uses defaults if not provided.
-        """self.config = config or RateLimitConfig()
+        self.config = config or RateLimitConfig()
         self.tokens = float(self.config.burst_size)
         self.last_refill = time.time()
         self._lock = threading.Lock()
@@ -71,22 +48,18 @@ class RateLimiter:
         self._request_timestamps: list[float] = []
 
     def _refill_tokens(self) -> None:
-        """Refill tokens based on elapsed time."""now = time.time()
+        now = time.time()
         elapsed = now - self.last_refill
         refill_amount = elapsed * self.config.requests_per_second
         self.tokens = min(float(self.config.burst_size), self.tokens + refill_amount)
         self.last_refill = now
 
     def acquire(self, timeout: float | None = None) -> bool:
-        """Acquire a token for making an API call.""""
+        """Acquire a token for making an API call.
+
         Blocks until a token is available or timeout expires.
-
-        Args:
-            timeout: Maximum time to wait for a token. None=wait forever.
-
-        Returns:
-            bool: True if token acquired, False if timeout.
-        """start_time = time.time()
+        """
+        start_time = time.time()
 
         with self._condition:
             while True:
@@ -95,13 +68,13 @@ class RateLimiter:
                 if self.tokens >= 1.0:
                     self.tokens -= 1.0
                     self._request_timestamps.append(time.time())
-                    # Clean old timestamps
+                    # Clean old timestamps (last minute)
                     cutoff = time.time() - 60
                     self._request_timestamps = [t for t in self._request_timestamps if t > cutoff]
                     return True
 
                 # Calculate wait time for at least 1 token
-                wait_time = (1.0 - self.tokens) / self.config.requests_per_second
+                wait_time = (1.0 - self.tokens) / max(self.config.requests_per_second, 1e-9)
 
                 # Check timeout
                 elapsed = time.time() - start_time
@@ -110,13 +83,15 @@ class RateLimiter:
                         return False
                     wait_time = min(wait_time, timeout - elapsed)
 
-                # Wait before retry using condition, avoiding blocking sleep
+                # Wait before retry using condition
                 self._condition.wait(timeout=max(wait_time, 0.01))
 
     def get_stats(self) -> dict[str, Any]:
-        """Get rate limiter statistics.""""
-        Returns:
-            Dict with current tokens, request count, etc.
-        """with self._lock:
+        """Return simple stats about the limiter."""
+        with self._lock:
             return {
-                "tokens_available": self.tokens,"                "requests_last_minute": len(self._request_timestamps),"                "requests_per_second": self.config.requests_per_second,"                "burst_size": self.config.burst_size,"            }
+                "tokens_available": self.tokens,
+                "requests_last_minute": len(self._request_timestamps),
+                "requests_per_second": self.config.requests_per_second,
+                "burst_size": self.config.burst_size,
+            }

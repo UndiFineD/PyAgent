@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -13,37 +12,52 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Recovered and standardized for Phase 317
+"""Minimal SignalRegistry shim used for tests and importability.
 
-The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
-
-For more information, visit:
-- Copilot CLI: https://github.com/github/copilot-cli
-- Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
-
-No commands will be executed.
+This file was replaced with a small, safe implementation that provides
+an API used by other modules. It is intentionally simple and thread-safe
+for the test environment.
 """
-
 
 from __future__ import annotations
 
 import logging
-from typing import Any
+from collections import defaultdict
+from typing import Any, Callable, DefaultDict, List
 
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-
 class SignalRegistry:
-        SignalRegistry recovered after Copilot CLI deprecation event.
-    Standardized TODO Placeholder for future re-implementation.
-    
-    def __init__(self, *args, **kwargs) -> None:
-        self.version = VERSION
-        logging.info("SignalRegistry initialized (TODO Placeholder).")"
-    async def emit(self, signal_name: str, payload: dict[str, Any], sender: str = "unknown") -> None:"        """Stub for signal emission.        logging.debug(f"Signal: {signal_name} from {sender} (Stubbed)")"        pass
+    """A minimal in-process signal registry.
 
-    def subscribe(self, signal_name: str, callback: Any) -> None:
-        """Stub for signal subscription.        logging.debug(f"Subscribed to {signal_name} (Stubbed)")"        pass
+    Methods are lightweight stubs suitable for unit tests.
+    """
+
+    def __init__(self) -> None:
+        self.version = VERSION
+        self._subscribers: DefaultDict[str, List[Callable[[str, dict], Any]]] = defaultdict(list)
+        logging.info("SignalRegistry initialized (shim)")
+
+    async def emit(self, signal_name: str, payload: dict[str, Any], sender: str = "unknown") -> None:
+        """Emit a signal to all subscribers (synchronously calls callbacks).
+
+        This is intentionally simple: subscribers are invoked and any
+        exceptions are logged but not re-raised.
+        """
+        logging.debug("Signal emit: %s from %s", signal_name, sender)
+        for cb in list(self._subscribers.get(signal_name, [])):
+            try:
+                cb(sender, payload)
+            except Exception:
+                logging.exception("Error in signal subscriber for %s", signal_name)
+
+    def subscribe(self, signal_name: str, callback: Callable[[str, dict], Any]) -> None:
+        """Subscribe a callback to a named signal.
+
+        The callback receives (sender, payload).
+        """
+        self._subscribers[signal_name].append(callback)
+

@@ -13,29 +13,24 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Severity levels for accessibility issues."""
+
 from __future__ import annotations
 
-
-try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
+from enum import Enum
 
 try:
     from .core.base.lifecycle.version import VERSION
-except ImportError:
+except Exception:
     from src.core.base.lifecycle.version import VERSION
 
 
 __version__ = VERSION
 
 
-
 class AccessibilitySeverity(Enum):
     """Severity levels for accessibility issues."""
+
     CRITICAL = 4  # Blocks access for users with disabilities
     SERIOUS = 3  # Significant barrier to access
     MODERATE = 2  # Some difficulty for users

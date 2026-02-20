@@ -48,13 +48,16 @@ class ConversationCore(BaseCore):
         self.max_messages = max_messages
 
     def add_message(self, role: MessageRole, content: str) -> None:
-        """Add a new message to the conversation history."""msg = ConversationMessage(role=role, content=content)
+        """Add a new message to the conversation history."""
+        msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
             self.messages = self.messages[-self.max_messages :]
 
     def get_history(self) -> List[ConversationMessage]:
-        """Return a copy of the conversation history."""return self.messages.copy()
+        """Return a copy of the conversation history."""
+        return self.messages.copy()
 
     def clear(self) -> None:
-        """Clear the conversation history."""self.messages.clear()
+        """Clear the conversation history."""
+        self.messages.clear()

@@ -13,29 +13,23 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_changes.py
+"""Types: SearchResult dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 
 try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class SearchResult:
-    """Result from changelog search.""""
+    """Result from changelog search.
+
     Attributes:
         version: Version where match was found.
         line_number: Line number of the match.

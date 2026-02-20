@@ -28,12 +28,19 @@ except ImportError:
 
 
 try:
-    from .core.base.logic.security.api_security_core import (
-except ImportError:
     from src.core.base.logic.security.api_security_core import (
-
-    APISecurityCore, AgentCredentials, RateLimitConfig, SecurityEvent
-)
+        APISecurityCore,
+        AgentCredentials,
+        RateLimitConfig,
+        SecurityEvent,
+    )
+except Exception:
+    from core.base.logic.security.api_security_core import (
+        APISecurityCore,
+        AgentCredentials,
+        RateLimitConfig,
+        SecurityEvent,
+    )
 
 
 
@@ -44,20 +51,25 @@ class SecurityMixin:
         self.agent_credentials: Dict[str, AgentCredentials] = {}
 
     def register_agent_credentials(self, creds: AgentCredentials) -> None:
-        """Register credentials for an agent."""self.api_security.authenticator.register_agent(creds)
+        """Register credentials for an agent."""
+        self.api_security.authenticator.register_agent(creds)
         self.agent_credentials[creds.agent_id] = creds
 
     def configure_rate_limiting(self, config: RateLimitConfig) -> None:
-        """Configure rate limiting."""self.api_security.rate_limiter = self.api_security.rate_limiter.__class__(config)
+        """Configure rate limiting."""
+        # Replace rate limiter instance with configured one
+        self.api_security.rate_limiter = self.api_security.rate_limiter.__class__(config)
 
     async def secure_agent_communication(
         self,
         sender_id: str,
         receiver_id: str,
         message: Dict[str, Any],
-        token: str
+        token: str,
     ) -> Dict[str, Any]:
-        """Secure communication between agents."""return await self.api_security.secure_communication(sender_id, receiver_id, message, token)
+        """Secure communication between agents."""
+        return await self.api_security.secure_communication(sender_id, receiver_id, message, token)
 
     def log_security_event(self, event: SecurityEvent) -> None:
-        """Log a security event."""self.api_security.error_handler.log_security_event(event)
+        """Log a security event."""
+        self.api_security.error_handler.log_security_event(event)

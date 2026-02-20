@@ -26,19 +26,21 @@ except ImportError:
 
 
 class JobManagerCore:
-    """Domain logic for managing asynchronous jobs and task lifecycles in the PyAgent system.
-    """def __init__(self):
+    """Simple job manager used by tests."""
+
+    def __init__(self) -> None:
         self.jobs: Dict[str, Dict[str, Any]] = {}
 
     async def submit_job(self, task_data: Dict[str, Any]) -> str:
         job_id = str(uuid.uuid4())
-        self.jobs[job_id] = {
-            "status": "pending","            "data": task_data,"            "result": None"        }
+        self.jobs[job_id] = {"status": "pending", "data": task_data, "result": None}
         return job_id
 
     async def get_job_status(self, job_id: str) -> Dict[str, Any]:
-        return self.jobs.get(job_id, {"status": "not_found"})"
-    async def update_job_progress(self, job_id: str, status: str, result: Any = None):
+        return self.jobs.get(job_id, {"status": "not_found"})
+
+    async def update_job_progress(self, job_id: str, status: str, result: Any | None = None) -> None:
         if job_id in self.jobs:
-            self.jobs[job_id]["status"] = status"            if result is not None:
-                self.jobs[job_id]["result"] = result"
+            self.jobs[job_id]["status"] = status
+            if result is not None:
+                self.jobs[job_id]["result"] = result

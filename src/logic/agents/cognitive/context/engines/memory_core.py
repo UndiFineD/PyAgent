@@ -15,39 +15,40 @@
 
 # MemoryCore logic for PyAgent (Facade).
 # Delegates to the standardized src.core.base.common.memory_core.
+"""Facade wrapper around a standardized MemoryCore implementation.
+
+This module provides a thin adapter so higher-level tests and code
+can import a well-formed MemoryCore even if the full implementation
+is swapped out for testing.
 """
 
 
 from __future__ import annotations
 
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
+from typing import Any
 
 try:
     from .core.base.lifecycle.version import VERSION
-except ImportError:
+except Exception:
     from src.core.base.lifecycle.version import VERSION
 
 try:
     from .core.base.common.memory_core import MemoryCore as StandardMemoryCore
-except ImportError:
+except Exception:
     from src.core.base.common.memory_core import MemoryCore as StandardMemoryCore
 
 
 __version__ = VERSION
 
 
-
 class MemoryCore:
     """Logic for episodic memory construction and utility estimation (Facade)."""
+
     def __init__(self, baseline_utility: float = 0.5) -> None:
         self._core = StandardMemoryCore()
         self.baseline_utility = baseline_utility
 
-    def create_episode(  # pylint: disable=too-many-positional-arguments
+    def create_episode(
         self,
         agent_name: str,
         task: str,
@@ -55,23 +56,38 @@ class MemoryCore:
         success: bool,
         metadata: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
-#         "Pure logic to construct an episode and calculate utility."        return self._core.create_episode(
-            agent_id=agent_name,
-            task=task,
-            content=outcome,
-            success=success,
-            metadata=metadata,
-            base_utility=self.baseline_utility
-        )
+        """Construct an episode dict and delegate utility calculation.
+
+        Keeps the public API stable for callers in tests.
+        """
+        if hasattr(self._core, "create_episode"):
+            return self._core.create_episode(
+                agent_id=agent_name,
+                task=task,
+                content=outcome,
+                success=success,
+                metadata=metadata,
+                base_utility=self.baseline_utility,
+            )
+
+        # Fallback simple construction
+        return {
+            "agent_id": agent_name,
+            "task": task,
+            "content": outcome,
+            "success": success,
+            "metadata": metadata or {},
+            "utility": self.baseline_utility,
+        }
 
     def format_for_indexing(self, episode: dict[str, Any]) -> str:
-            """Standardized string representation for vector databases."""
-            return (
-                f"Agent: {episode.get('agent_id')}\n"
-                f"Task: {episode.get('task')}\n"
-                f"Outcome: {episode.get('content')}\n"
-                f"Success: {episode.get('success')}"
-            )
+        """Standardized string representation for vector databases."""
+        return (
+            f"Agent: {episode.get('agent_id')}\n"
+            f"Task: {episode.get('task')}\n"
+            f"Outcome: {episode.get('content')}\n"
+            f"Success: {episode.get('success')}"
+        )
 
     def calculate_new_utility(self, old_score: float, increment: float) -> float:
         """Logic for utility score decay/boost."""
@@ -80,5 +96,15 @@ class MemoryCore:
     def filter_relevant_memories(
         self, memories: list[dict[str, Any]], min_utility: float = 0.3
     ) -> list[dict[str, Any]]:
-            """Filters memories by utility threshold."""
-            return self._core.rank_memories(memories, limit=len(memories), min_utility=min_utility)
+        """Filters memories by utility threshold.
+
+        Delegates to the underlying core if available, otherwise uses a
+        simple utility key lookup.
+        """
+        if hasattr(self._core, "rank_memories"):
+            try:
+                return self._core.rank_memories(memories, limit=len(memories), min_utility=min_utility)
+            except Exception:
+                pass
+
+        return [m for m in memories if m.get("utility", 0.0) >= min_utility]

@@ -13,34 +13,30 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_changes.py
+"""Types: LinkedReference dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 
 try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class LinkedReference:
-    """A linked reference to commit or issue.""""
+    """A linked reference to commit or issue.
+
     Attributes:
-        ref_type: Type of reference ('commit' or 'issue').'        ref_id: ID of the reference.
+        ref_type: Type of reference ('commit' or 'issue').
+        ref_id: ID of the reference.
         url: URL to the reference.
         title: Title / description of the reference.
     """
     ref_type: str
     ref_id: str
-    url: str = """    title: str = """
+    url: str | None = None
+    title: str | None = None

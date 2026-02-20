@@ -13,27 +13,24 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Types: ReviewCategory enum."""
 from __future__ import annotations
 
+from enum import Enum
 
 try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
-
 class ReviewCategory(Enum):
     """Categories for code review feedback."""
-    STYLE = "style""    PERFORMANCE = "performance""    SECURITY = "security""    MAINTAINABILITY = "maintainability""    CORRECTNESS = "correctness""    DOCUMENTATION = "documentation""
+    STYLE = "style"
+    PERFORMANCE = "performance"
+    SECURITY = "security"
+    MAINTAINABILITY = "maintainability"
+    CORRECTNESS = "correctness"
+    DOCUMENTATION = "documentation"

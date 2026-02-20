@@ -13,49 +13,28 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent.py
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+from typing import Any
 
 try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
-
-try:
-    from .core.base.common.utils.helpers import _empty_dict_str_any
-except ImportError:
     from src.core.base.common.utils.helpers import _empty_dict_str_any
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
+except Exception:
+    def _empty_dict_str_any() -> dict[str, Any]:
+        return {}
 
 
 @dataclass
 class ScheduledExecution:
-    """A scheduled agent execution.""""
-    Attributes:
-        name: Schedule name.
-        cron: Cron expression (simplified).
-        agent_config: Agent configuration.
-        enabled: Whether schedule is enabled.
-        last_run: Last run timestamp.
-        next_run: Next run timestamp.
+    """A scheduled agent execution.
+
+    Simple dataclass used in tests to represent scheduled runs.
     """
+
     name: str
-    cron: str  # Simplified: "hourly", "daily", "weekly", or HH:MM"    agent_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    cron: str  # Simplified: "hourly", "daily", "weekly", or HH:MM
+    agent_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     enabled: bool = True
     last_run: float | None = None
     next_run: float | None = None

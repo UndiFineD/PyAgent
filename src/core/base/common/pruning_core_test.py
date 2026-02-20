@@ -70,8 +70,10 @@ class TestPruningCore(unittest.TestCase):
     @given(refractory_until=st.floats(min_value=0, max_value=2000000000))
     def test_is_in_refractory(self, refractory_until):
         weight = SynapticWeight(
-            agent_id="test", weight=0.5, last_fired=0, refractory_until=refractory_until"        )
-        # We can't strictly control time.time(), so we test relative'        now = time.time()
+            agent_id="test", weight=0.5, last_fired=0, refractory_until=refractory_until
+        )
+        # We can't strictly control time.time(), so we test relative
+        now = time.time()
         result = self.core.is_in_refractory(weight)
 
         if now < refractory_until:
@@ -104,4 +106,5 @@ class TestPruningCore(unittest.TestCase):
         self.assertEqual(result, weight < threshold)
 
 
-if __name__ == "__main__":"    unittest.main()
+if __name__ == "__main__":
+    unittest.main()

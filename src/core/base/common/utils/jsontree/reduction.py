@@ -32,16 +32,14 @@ except ImportError:
 
 
 try:
-    from .core.base.common.utils.jsontree.iteration import json_iter_leaves
-except ImportError:
+    from .iteration import json_iter_leaves
+except Exception:
     from src.core.base.common.utils.jsontree.iteration import json_iter_leaves
 
 try:
-    from .core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
-except ImportError:
-    from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
-
-                                                       _JSONTree)
+    from .types import _T, _U, JSONTree, _JSONTree
+except Exception:
+    from src.core.base.common.utils.jsontree.types import _T, _U, JSONTree, _JSONTree
 
 
 @overload
@@ -102,7 +100,8 @@ def json_reduce_leaves(
 
     Returns:
         The reduced value.
-    """if initial is ...:
+    """
+    if initial is ...:
         return reduce(func, json_iter_leaves(value))  # type: ignore
 
     return reduce(func, json_iter_leaves(value), initial)  # type: ignore

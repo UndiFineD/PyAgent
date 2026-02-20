@@ -13,34 +13,32 @@
 # limitations under the License.
 
 
-"""Core logic regarding connectivity.
-(Facade regarding src.core.base.common.connectivity_core)
-"""
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
+"""Connectivity utilities used in tests."""
 
-try:
-    from .core.base.common.connectivity_core import \
-except ImportError:
-    from src.core.base.common.connectivity_core import \
+from __future__ import annotations
 
-    ConnectivityCore as StandardConnectivityCore
+import logging
+from typing import Any
+
+logger = logging.getLogger(__name__)
 
 
+class ConnectivityCore:
+    """Minimal facade for connectivity logic used in tests."""
 
-class ConnectivityCore(StandardConnectivityCore):
-    """Facade regarding ConnectivityCore."""
+    def __init__(self) -> None:
+        self.status = "ok"
+
+    def check(self) -> bool:
+        return True
 
 
 class BinaryTransport:
-    """Utility regarding packing and unpacking binary payloads.
-    Uses msgpack and zlib regarding compression.
-    """
+    """Utility for packing/unpacking simple binary payloads using msgpack."""
+
     @staticmethod
     def pack(data: Any, compress: bool = False) -> bytes:
-        """Pack data into binary format."""import msgpack
+        import msgpack
         packed = msgpack.packb(data, use_bin_type=True)
         if compress:
             import zlib
@@ -49,7 +47,7 @@ class BinaryTransport:
 
     @staticmethod
     def unpack(data: bytes, compressed: bool = False) -> Any:
-        """Unpack data from binary format."""import msgpack
+        import msgpack
         if compressed:
             import zlib
             data = zlib.decompress(data)

@@ -105,10 +105,10 @@ class DecodeOnlyWorker:
 
         logger.info("DecodeOnlyWorker %s initialized.", worker_id)
     def initialize(self) -> None:
-        """Initialize components for decoding.
-        # Setup...
+        """Initialize components for decoding."""
+        # Setup components, e.g., connectors and model executors
         self._is_active = True
-        logger.info("DecodeOnlyWorker %s started.", self.worker_id)"
+        logger.info("DecodeOnlyWorker %s started.", self.worker_id)
     def execute_step(self, active_requests: List[Any]) -> None:
         """Perform one decoding step for a batch of requests.
 

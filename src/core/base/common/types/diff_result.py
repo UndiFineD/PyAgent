@@ -13,29 +13,23 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_changes.py
+"""Types: DiffResult dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 
 try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class DiffResult:
-    """Result of a changelog diff comparison.""""
+    """Result of a changelog diff comparison.
+
     Attributes:
         additions: Lines added.
         deletions: Lines removed.
@@ -43,8 +37,8 @@ class DiffResult:
         unchanged: Lines unchanged.
         similarity_score: Percentage of similarity (0 - 100).
     """
-    additions: list[str] = field(default_factory=lambda: [])
-    deletions: list[str] = field(default_factory=lambda: [])
-    modifications: list[tuple[str, str]] = field(default_factory=lambda: [])
+    additions: list[str] = field(default_factory=list)
+    deletions: list[str] = field(default_factory=list)
+    modifications: list[tuple[str, str]] = field(default_factory=list)
     unchanged: int = 0
     similarity_score: float = 0.0

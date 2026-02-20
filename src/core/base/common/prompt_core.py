@@ -45,37 +45,38 @@ except ImportError:
 
 
 class PromptCore(BaseCore):
-    """Authoritative engine for prompt templates and A/B testing.
-    """
+    """Authoritative engine for prompt templates and A/B testing."""
+
     def __init__(self) -> None:
         super().__init__()
         self.templates: Dict[str, PromptTemplate] = {}
-        self.versions: Dict[str, PromptVersion] = {}
+        self.versions: Dict[str, "PromptVersion"] = {}
         self.active_version: Optional[str] = None
 
     def register_template(self, template: PromptTemplate) -> None:
-        """Registers a new prompt template.
-        """self.templates[template.name] = template
+        """Registers a new prompt template."""
+        self.templates[template.name] = template
 
-    def register_version(self, version: PromptVersion) -> None:
-        """Registers a new prompt version.
-        """self.versions[version.version_id] = version
+    def register_version(self, version: "PromptVersion") -> None:
+        """Registers a new prompt version."""
+        self.versions[version.version_id] = version
 
     def render_template(self, name: str, **kwargs: Any) -> str:
-        """Renders a registered template with the provided arguments.
-        """if name not in self.templates:
-            raise KeyError(f"Template '{name}' not found")"'        return self.templates[name].render(**kwargs)
-
+        """Renders a registered template with the provided arguments."""
+        if name not in self.templates:
+            raise KeyError(f"Template '{name}' not found")
+        return self.templates[name].render(**kwargs)
 
 
 class PromptVersion:
-    """Represents a specific version of a prompt for A/B testing and tracking.
-    """
+    """Represents a specific version of a prompt for A/B testing and tracking."""
+
     def __init__(
         self,
         version_id: str,
         content: str,
-        description: str = "","        weight: float = 1.0,
+        description: str = "",
+        weight: float = 1.0,
     ) -> None:
         self.version_id = version_id
         self.content = content
@@ -85,8 +86,13 @@ class PromptVersion:
         self.metrics: Dict[str, float] = {}
 
     def update_metrics(self, new_metrics: Dict[str, float]) -> None:
-        """Updates performance metrics for this version."""self.metrics.update(new_metrics)
+        """Updates performance metrics for this version."""
+        self.metrics.update(new_metrics)
 
     def get_info(self) -> Dict[str, Any]:
-        """Returns a dictionary containing version info."""return {
-            "version_id": self.version_id,"            "created_at": self.created_at.isoformat(),"            "weight": self.weight,"        }
+        """Returns a dictionary containing version info."""
+        return {
+            "version_id": self.version_id,
+            "created_at": self.created_at.isoformat(),
+            "weight": self.weight,
+        }

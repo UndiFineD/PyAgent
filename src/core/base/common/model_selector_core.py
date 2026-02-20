@@ -19,47 +19,33 @@
 
 from __future__ import annotations
 
+import logging
+from dataclasses import dataclass, field
+from typing import Dict
 
-try:
-    import logging
-except ImportError:
-    import logging
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import Dict
-except ImportError:
-    from typing import Dict
-
-
-try:
-    from .base_core import BaseCore
-except ImportError:
-    from .base_core import BaseCore
-
-try:
-    from .models import ModelConfig
-except ImportError:
-    from .models import ModelConfig
-
+from .base_core import BaseCore
+from .models import ModelConfig
 
 
 @dataclass
 class ModelSelectorCore(BaseCore):
-    """Authoritative engine for selecting models based on agent type and task size.
-    """
+    """Authoritative engine for selecting models based on agent type and task size."""
     models: Dict[str, ModelConfig] = field(
         default_factory=lambda: {
-            "default": ModelConfig(model_id="gpt-3.5-turbo"),"            "coding": ModelConfig(model_id="glm-4.7"),"            "reasoning": ModelConfig(model_id="deepseek-reasoner"),"        }
+            "default": ModelConfig(model_id="gpt-3.5-turbo"),
+            "coding": ModelConfig(model_id="glm-4.7"),
+            "reasoning": ModelConfig(model_id="deepseek-reasoner"),
+        }
     )
 
     def __post_init__(self) -> None:
         super().__init__()
-        if "default" not in self.models:"            self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")"
+        if "default" not in self.models:
+            self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")
+
     def select(self, agent_type: str, token_estimate: int = 0) -> ModelConfig:
-        """Selects the best model based on agent type and workload size.
-        """if agent_type == "coding" and token_estimate > 4000:"            logging.info("Routing high-token task (%d) to GLM-4.7.", token_estimate)"            return self.models.get("coding", self.models["default"])"        return self.models.get(agent_type, self.models["default"])"
+        """Selects the best model based on agent type and workload size."""
+        if agent_type == "coding" and token_estimate > 4000:
+            logging.info("Routing high-token task (%d) to GLM-4.7.", token_estimate)
+            return self.models.get("coding", self.models["default"])
+        return self.models.get(agent_type, self.models["default"])

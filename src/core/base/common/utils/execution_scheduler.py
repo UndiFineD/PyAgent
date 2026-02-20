@@ -13,107 +13,79 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent.py
 from __future__ import annotations
 
 import time
-from typing import Any
+from dataclasses import dataclass, field
+from typing import Any, Dict
 
-from .scheduled_execution import ScheduledExecution
-from ...lifecycle.version import VERSION
 
-__version__ = VERSION
-
+@dataclass
+class _Schedule:
+    name: str
+    cron: str
+    agent_config: Dict[str, Any] = field(default_factory=dict)
+    enabled: bool = True
+    last_run: float | None = None
+    next_run: float | None = None
 
 
 class ExecutionScheduler:
-    """Schedule agent executions.""""
-    Example:
-        scheduler=ExecutionScheduler()
-        scheduler.add_schedule("nightly", "daily", {"dry_run": True})"
-        # In a loop
-        while True:
-            if scheduler.is_due("nightly"):"                run_agent(scheduler.get_config("nightly"))"                scheduler.mark_complete("nightly")"            # Avoid blocking sleep in production; using wait for example
-            # threading.Event().wait(60)
-    """
-    def __init__(self) -> None:
-        """Initialize scheduler."""self._schedules: dict[str, ScheduledExecution] = {}
+    """A small scheduler for testing purposes.
 
-    def add_schedule(
-        self,
-        name: str,
-        cron: str,
-        agent_config: dict[str, Any] | None = None,
-    ) -> None:
-        """Add a schedule.""""
-        Args:
-            name: Schedule name.
-            cron: Timing (hourly, daily, weekly, or HH:MM).
-            agent_config: Agent configuration.
-        """schedule = ScheduledExecution(
-            name=name,
-            cron=cron,
-            agent_config=agent_config or {},
-        )
-        schedule.next_run = self._calculate_next_run(cron)
-        self._schedules[name] = schedule
+    It supports simplified crons: 'hourly', 'daily', 'weekly', or 'HH:MM'.
+    """
+
+    def __init__(self) -> None:
+        self._schedules: dict[str, _Schedule] = {}
+
+    def add_schedule(self, name: str, cron: str, agent_config: dict | None = None) -> None:
+        sched = _Schedule(name=name, cron=cron, agent_config=agent_config or {})
+        sched.next_run = self._calculate_next_run(cron)
+        self._schedules[name] = sched
 
     def _calculate_next_run(self, cron: str) -> float:
-        """Calculate next run time."""now = time.time()
-
-        if cron == "hourly":"            return now + 3600
-        if cron == "daily":"            return now + 86400
-        if cron == "weekly":"            return now + 604800
-        if ":" in cron:"            # HH:MM format
+        now = time.time()
+        if cron == "hourly":
+            return now + 3600
+        if cron == "daily":
+            return now + 86400
+        if cron == "weekly":
+            return now + 604800
+        if ":" in cron:
             try:
-                hour, minute = map(int, cron.split(":"))"                import datetime
+                hour, minute = map(int, cron.split(":"))
+                import datetime
 
                 today = datetime.date.today()
                 target = datetime.datetime.combine(today, datetime.time(hour, minute))
                 if target.timestamp() <= now:
                     target += datetime.timedelta(days=1)
                 return target.timestamp()
-            except (ValueError, TypeError, AttributeError):
+            except Exception:
                 return now + 86400
-
-        return now + 86400  # Default to daily
+        return now + 86400
 
     def is_due(self, name: str) -> bool:
-        """Check if schedule is due.""""
-        Args:
-            name: Schedule name.
-
-        Returns:
-            True if due for execution.
-        """if name not in self._schedules:
+        if name not in self._schedules:
             return False
-
-        schedule = self._schedules[name]
-        if not schedule.enabled:
+        sched = self._schedules[name]
+        if not sched.enabled:
             return False
-
-        if schedule.next_run is None:
+        if sched.next_run is None:
             return True
-
-        return time.time() >= schedule.next_run
+        return time.time() >= sched.next_run
 
     def mark_complete(self, name: str) -> None:
-        """Mark schedule as completed.""""
-        Args:
-            name: Schedule name.
-        """if name in self._schedules:
-            schedule = self._schedules[name]
-            schedule.last_run = time.time()
-            schedule.next_run = self._calculate_next_run(schedule.cron)
+        if name in self._schedules:
+            sched = self._schedules[name]
+            sched.last_run = time.time()
+            sched.next_run = self._calculate_next_run(sched.cron)
 
     def get_config(self, name: str) -> dict[str, Any]:
-        """Get agent configuration for schedule.""""
-        Args:
-            name: Schedule name.
-
-        Returns:
-            Agent configuration dict.
-        """if name in self._schedules:
+        if name in self._schedules:
             return self._schedules[name].agent_config
         return {}
+
+
+__all__ = ["ExecutionScheduler"]

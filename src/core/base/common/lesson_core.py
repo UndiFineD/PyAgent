@@ -44,7 +44,8 @@ class LessonCore(BaseCore):
     Inherits from BaseCore for standardized persistence.
     """
     def __init__(self, persistence_path: Optional[str] = None, repo_root: Optional[str] = None) -> None:
-        super().__init__(name="Lesson", repo_root=repo_root)"        self.known_failures: Set[str] = set()
+        super().__init__(name="Lesson", repo_root=repo_root)
+        self.known_failures: Set[str] = set()
         self.lessons: List[Lesson] = []
         if persistence_path:
             self.persistence_path = Path(persistence_path)
@@ -53,7 +54,8 @@ class LessonCore(BaseCore):
         self.load_lessons()
 
     def generate_failure_hash(self, error_msg: str) -> str:
-        """Generates a stable hash for an error message."""if HAS_RUST:
+        """Generates a stable hash for an error message."""
+        if HAS_RUST:
             try:
                 # pylint: disable=no-member
                 return rc.generate_failure_hash(error_msg)  # type: ignore
@@ -61,13 +63,16 @@ class LessonCore(BaseCore):
                 pass
 
         # Filter non-digits functionally
-        normalized = "".join(filter(lambda c: not c.isdigit(), error_msg.lower()))"        return hashlib.sha256(normalized.encode()).hexdigest()
+        normalized = "".join(filter(lambda c: not c.isdigit(), error_msg.lower()))
+        return hashlib.sha256(normalized.encode()).hexdigest()
 
     def is_known_failure(self, error_msg: str) -> bool:
-        """Checks if the failure mode has been encountered before."""return self.generate_failure_hash(error_msg) in self.known_failures
+        """Checks if the failure mode has been encountered before."""
+        return self.generate_failure_hash(error_msg) in self.known_failures
 
     def record_lesson(self, lesson: Lesson) -> str:
-        """Records a new lesson and returns the failure hash."""f_hash = self.generate_failure_hash(lesson.error_pattern)
+        """Records a new lesson and returns the failure hash."""
+        f_hash = self.generate_failure_hash(lesson.error_pattern)
         if f_hash not in self.known_failures:
             self.known_failures.add(f_hash)
             self.lessons.append(lesson)
@@ -75,11 +80,16 @@ class LessonCore(BaseCore):
         return f_hash
 
     def save_lessons(self) -> None:
-        """Persists lessons to disk."""data = {
-            "known_failures": list(self.known_failures),"            "lessons": list(map(asdict, self.lessons))"        }
+        """Persists lessons to disk."""
+        data = {
+            "known_failures": list(self.known_failures),
+            "lessons": list(map(asdict, self.lessons)),
+        }
         self._storage.save_json(self.persistence_path, data)
 
     def load_lessons(self) -> None:
-        """Loads lessons from disk."""data = self._storage.load_json(self.persistence_path)
+        """Loads lessons from disk."""
+        data = self._storage.load_json(self.persistence_path)
         if data:
-            self.known_failures = set(data.get("known_failures", []))"            self.lessons = list(map(lambda lesson_data: Lesson(**lesson_data), data.get("lessons", [])))"
+            self.known_failures = set(data.get("known_failures", []))
+            self.lessons = list(map(lambda lesson_data: Lesson(**lesson_data), data.get("lessons", [])))

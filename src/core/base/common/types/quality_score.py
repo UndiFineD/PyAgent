@@ -13,15 +13,10 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Types: QualityScore dataclass."""
 from __future__ import annotations
 
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 
 
 try:
@@ -47,7 +42,8 @@ class QualityScore:
 
     @property
     def score(self) -> float:
-        """Compatibility alias for overall_score."""return self.overall_score
+        """Compatibility alias for overall_score."""
+        return self.overall_score
 
     @score.setter
     def score(self, value: float) -> None:

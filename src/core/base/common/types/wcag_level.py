@@ -13,27 +13,24 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""WCAG conformance levels used in types and tests."""
+
 from __future__ import annotations
 
-
-try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
+from enum import Enum
 
 try:
     from .core.base.lifecycle.version import VERSION
-except ImportError:
+except Exception:
     from src.core.base.lifecycle.version import VERSION
 
 
 __version__ = VERSION
 
 
-
 class WCAGLevel(Enum):
     """WCAG conformance levels."""
-    A = "A"  # Minimum level"    AA = "AA"  # Mid - range level (legal requirement in many jurisdictions)"    AAA = "AAA"  # Highest level"
+
+    A = "A"  # Minimum level
+    AA = "AA"  # Mid-range level (legal requirement in many jurisdictions)
+    AAA = "AAA"  # Highest level

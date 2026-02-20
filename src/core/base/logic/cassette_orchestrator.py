@@ -43,10 +43,12 @@ class BaseLogicCassette(abc.ABC):
 
     @abc.abstractmethod
     async def execute(self, data: Any, context: CascadeContext) -> Any:
-        """Execute the cassette's core logic."""'        pass
+        """Execute the cassette's core logic."""
+        pass
 
     async def initialize(self) -> None:
-        """Optional initialization logic regarding hardware or state."""self.is_initialized = True
+        """Optional initialization logic regarding hardware or state."""
+        self.is_initialized = True
 
 
 
@@ -58,19 +60,23 @@ class CassetteOrchestrator:
         self._cassettes: Dict[str, BaseLogicCassette] = {}
 
     def register_cassette(self, cassette: BaseLogicCassette) -> None:
-        """Register a new logic cassette regarding the orchestrator."""self._cassettes[cassette.name] = cassette
+        """Register a new logic cassette regarding the orchestrator."""
+        self._cassettes[cassette.name] = cassette
 
     def get_cassette(self, name: str) -> Optional[BaseLogicCassette]:
-        """Retrieve a specific cassette by name."""return self._cassettes.get(name)
+        """Retrieve a specific cassette by name."""
+        return self._cassettes.get(name)
 
     async def run_cassette(self, name: str, data: Any, context: CascadeContext) -> Any:
-        """Run a specific cassette regarding its name."""cassette = self.get_cassette(name)
+        """Run a specific cassette regarding its name."""
+        cassette = self.get_cassette(name)
         if not cassette:
-            raise ValueError(f"Cassette '{name}' not found in regarding orchestrator.")"'
+            raise ValueError(f"Cassette '{name}' not found in regarding orchestrator.")
         if not cassette.is_initialized:
             await cassette.initialize()
 
         return await cassette.execute(data, context)
 
     def list_cassettes(self) -> list[str]:
-        """List all registered cassettes."""return list(self._cassettes.keys())
+        """List all registered cassettes."""
+        return list(self._cassettes.keys())

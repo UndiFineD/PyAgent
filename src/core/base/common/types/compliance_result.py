@@ -13,35 +13,28 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_changes.py
+"""Types: ComplianceResult dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 
 try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 try:
     from .compliance_category import ComplianceCategory
-except ImportError:
-    from .compliance_category import ComplianceCategory
-
+except Exception:
+    from src.core.base.common.types.compliance_category import ComplianceCategory
 
 __version__ = VERSION
 
 
 @dataclass
 class ComplianceResult:
-    """Result of compliance checking.""""
+    """Result of compliance checking.
+
     Attributes:
         category: Compliance category checked.
         passed: Whether the check passed.
@@ -50,5 +43,5 @@ class ComplianceResult:
     """
     category: ComplianceCategory
     passed: bool
-    issues: list[str] = field(default_factory=lambda: [])
-    recommendations: list[str] = field(default_factory=lambda: [])
+    issues: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)

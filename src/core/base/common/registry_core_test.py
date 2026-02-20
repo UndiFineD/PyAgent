@@ -27,19 +27,26 @@ except ImportError:
 
 
 def test_hook_failure_logged(caplog):
-    r = RegistryCore("test")"
+    r = RegistryCore("test")
+
     def bad_hook(key, item):
-        raise ValueError("bad")"
-    r.add_hook("on_register", bad_hook)"    with caplog.at_level(logging.ERROR):
-        r.register("k", "v")"        assert "Registry hook 'on_register' failed" in caplog.text"'
+        raise ValueError("bad")
+
+    r.add_hook("on_register", bad_hook)
+    with caplog.at_level(logging.ERROR):
+        r.register("k", "v")
+
+    assert "Registry hook 'on_register' failed" in caplog.text
 
 def test_rust_detect_cycles_fallback(monkeypatch):
     import src.core.base.common.registry_core as mod
 
     class BadRC:
         def detect_cycles_rust(self, *args, **kwargs):
-            raise RuntimeError("boom")"
-    orig = getattr(mod, "rc", None)"    mod.rc = BadRC()
+            raise RuntimeError("boom")
+
+    orig = getattr(mod, "rc", None)
+    mod.rc = BadRC()
 
     r = RegistryCore()
     # Should not raise and return None so Python fallback kicks in

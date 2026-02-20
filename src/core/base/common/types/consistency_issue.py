@@ -13,29 +13,23 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Types: ConsistencyIssue dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 
 try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class ConsistencyIssue:
-    """A code consistency issue across the codebase.""""
+    """A code consistency issue across the codebase.
+
     Attributes:
         issue_type: Type of inconsistency.
         description: Description of the issue.

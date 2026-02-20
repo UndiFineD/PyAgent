@@ -50,24 +50,33 @@ class DiscoveryCore(BaseCore):
         super().__init__()
         self.peers: Dict[str, Any] = {}
         self.is_active = False
-
         # Load settings from config
-        self.auto_discovery = config.get("voyager.auto_discovery", True)"        self.discovery_interval = config.get("voyager.discovery_interval", 5.0)"
+        self.auto_discovery = config.get("voyager.auto_discovery", True)
+        self.discovery_interval = config.get("voyager.discovery_interval", 5.0)
+
     async def get_cluster_status(self) -> Dict[str, Any]:
-        """Returns the overall health and connectivity of the current swarm cluster.
-        """return {
-            "node_id": self.id,"            "peer_count": len(self.peers),"            "is_active": self.is_active,"            "topology": "mesh","            "protocol": "voyager-p2p""        }
+        """Returns the overall health and connectivity of the current swarm cluster."""
+        return {
+            "node_id": self.id,
+            "peer_count": len(self.peers),
+            "is_active": self.is_active,
+            "topology": "mesh",
+            "protocol": "voyager-p2p",
+        }
 
     async def update_peer(self, peer_id: str, data: Dict[str, Any]) -> None:
-        """Adds or updates a peer in the local topology map.
-        """self.peers[peer_id] = {
+        """Adds or updates a peer in the local topology map."""
+        self.peers[peer_id] = {
             **data,
-            "last_seen": asyncio.get_event_loop().time()"        }
-        self.logger.info("DiscoveryCore: Updated peer %s", peer_id)"
+            "last_seen": asyncio.get_event_loop().time(),
+        }
+        self.logger.info("DiscoveryCore: Updated peer %s", peer_id)
+
     def get_nearest_peers(self, limit: int = 5) -> List[str]:
-        """Returns a list of peer IDs based on proximity or latency (simulated).
-        """return list(self.peers.keys())[:limit]
+        """Returns a list of peer IDs based on proximity or latency (simulated)."""
+        return list(self.peers.keys())[:limit]
 
     def reset(self) -> None:
-        """Clears local peer knowledge."""self.peers.clear()
-        self.logger.info("DiscoveryCore: Peer list reset.")"
+        """Clears local peer knowledge."""
+        self.peers.clear()
+        self.logger.info("DiscoveryCore: Peer list reset.")

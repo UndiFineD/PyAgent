@@ -31,15 +31,19 @@ except ImportError:
 
 
 def test_retry_uses_threading_event_wait(monkeypatch):
-    called = {"wait": False}"
+    called = {"wait": False}
+
     def fake_wait(self, timeout):
-        called["wait"] = True"
+        called["wait"] = True
+
     # Patch Event.wait so the default _wait uses our fake
-    monkeypatch.setattr(threading.Event, "wait", fake_wait, raising=False)"
+    monkeypatch.setattr(threading.Event, "wait", fake_wait, raising=False)
+
     @ResilienceCore.retry(retries=1, delay=0.001, backoff=2.0)
     def flaky():
-        raise ValueError("fail")"
+        raise ValueError("fail")
+
     with pytest.raises(ValueError):
         flaky()
 
-    assert called["wait"] is True"
+    assert called["wait"] is True

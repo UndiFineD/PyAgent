@@ -13,99 +13,64 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent.py
+"""Priority queue for ordered agent execution with simple dependency support."""
+
 from __future__ import annotations
 
-
-try:
-    import logging
-except ImportError:
-    import logging
-
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
+import logging
+from typing import Any, Dict, List
 
 
 class AgentPriorityQueue:
-    """Priority queue for ordered agent execution.""""
-    Executes agents in priority order with support for dependencies.
+    """Simple priority queue for agents.
 
-    Example:
-        queue=AgentPriorityQueue()
-        queue.add_agent("critical_fix", priority=1)"        queue.add_agent("tests", priority=5, depends_on=["critical_fix"])"        queue.add_agent("docs", priority=10)"
-        for agent in queue.get_execution_order():
-            execute(agent)
+    Lower numeric `priority` means higher execution priority. Dependencies are
+    honored: an agent will not be scheduled until all its dependencies have
+    been executed. Cycles are handled by placing remaining items in sorted
+    order with a warning.
     """
+
     def __init__(self) -> None:
-        """Initialize priority queue."""self._agents: dict[str, dict[str, Any]] = {}
+        self._agents: Dict[str, Dict[str, Any]] = {}
 
     def add_agent(
         self,
         name: str,
         priority: int = 5,
-        depends_on: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        depends_on: List[str] | None = None,
+        metadata: Dict[str, Any] | None = None,
     ) -> None:
-        """Add agent to queue.""""
-        Args:
-            name: Agent name.
-            priority: Priority (lower=higher priority).
-            depends_on: List of agents this depends on.
-            metadata: Optional metadata.
-        """self._agents[name] = {
-            "priority": priority,"            "depends_on": depends_on or [],"            "metadata": metadata or {},"        }
+        self._agents[name] = {
+            "priority": priority,
+            "depends_on": depends_on or [],
+            "metadata": metadata or {},
+        }
 
     def remove_agent(self, name: str) -> bool:
-        """Remove agent from queue.""""
-        Args:
-            name: Agent name.
-
-        Returns:
-            True if removed, False if not found.
-        """if name in self._agents:
+        if name in self._agents:
             del self._agents[name]
             return True
         return False
 
-    def get_execution_order(self) -> list[str]:
-        """Get agents in execution order.""""
-        Returns:
-            List of agent names in order.
-        """
-# Topological sort with priority
+    def get_execution_order(self) -> List[str]:
         executed: set[str] = set()
-        order: list[str] = []
+        order: List[str] = []
 
         while len(order) < len(self._agents):
-            available: list[tuple[int, str]] = []
-
+            available: List[tuple[int, str]] = []
             for name, info in self._agents.items():
                 if name in executed:
                     continue
+                deps_met = all(d in executed for d in info["depends_on"])
+                if deps_met:
+                    available.append((info["priority"], name))
 
-                # Check if all dependencies are met
-                deps_met = all(d in executed for d in info["depends_on"])"                if deps_met:
-                    available.append((info["priority"], name))"
             if not available:
-                # Cycle detected or error
                 remaining = [n for n in self._agents if n not in executed]
-                logging.warning(f"Dependency cycle detected, adding remaining: {remaining}")"                order.extend(sorted(remaining))
+                logging.warning("Dependency cycle detected, adding remaining: %s", remaining)
+                order.extend(sorted(remaining))
                 break
 
-            # Sort by priority and take the highest priority
             available.sort()
             _, next_agent = available[0]
             order.append(next_agent)

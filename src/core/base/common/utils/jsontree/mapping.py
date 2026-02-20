@@ -19,19 +19,12 @@
 
 from __future__ import annotations
 
+from typing import Any, Callable, overload
 
 try:
-    from typing import Any, Callable, overload
-except ImportError:
-    from typing import Any, Callable, overload
-
-
-try:
-    from .core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
-except ImportError:
-    from src.core.base.common.utils.jsontree.types import (_T, _U, JSONTree,
-
-                                                       _JSONTree)
+    from .types import _T, _U, JSONTree, _JSONTree
+except Exception:
+    from src.core.base.common.utils.jsontree.types import _T, _U, JSONTree, _JSONTree
 
 
 @overload
@@ -77,7 +70,8 @@ def json_map_leaves(
 
     Returns:
         A new structure with the same shape, but with transformed leaves.
-    """if isinstance(value, dict):
+    """
+    if isinstance(value, dict):
         return {k: json_map_leaves(func, v) for k, v in value.items()}  # type: ignore
     if isinstance(value, list):
         return [json_map_leaves(func, v) for v in value]  # type: ignore
@@ -102,4 +96,5 @@ def json_map_leaves_async(
 
     Returns:
         A new structure with transformed leaves.
-    """return json_map_leaves(func, value)
+    """
+    return json_map_leaves(func, value)

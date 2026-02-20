@@ -13,22 +13,15 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Types: CodeSmell dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 
 try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - best-effort fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
@@ -39,6 +32,6 @@ class CodeSmell:
     name: str
     description: str
     severity: str
-    line_number: int
-    suggestion: str
-    category: str = "general""
+    line_number: int | None = None
+    suggestion: str | None = None
+    category: str = "general"

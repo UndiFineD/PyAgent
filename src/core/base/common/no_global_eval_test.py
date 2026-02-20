@@ -25,20 +25,28 @@ except ImportError:
     from pathlib import Path
 
 
-PATTERN = re.compile(r"(?<!\\.)\\beval\\s*\(")"
+PATTERN = re.compile(r"(?<!\.)\beval\s*\(")
+
 
 def test_no_global_eval_use():
-    root = Path("src")"    matches = []
-    for p in root.rglob("*.py"):"        if not p.is_file():
+    root = Path("src")
+    matches = []
+    for p in root.rglob("*.py"):
+        if not p.is_file():
             continue
         # Skip generated or vendored directories if any
-        if "generated" in p.parts or "rust_core" in p.parts or "external_candidates" in p.parts:"            continue
-        text = p.read_text(encoding="utf-8")"        for m in PATTERN.finditer(text):
+        if "generated" in p.parts or "rust_core" in p.parts or "external_candidates" in p.parts:
+            continue
+        text = p.read_text(encoding="utf-8")
+        for m in PATTERN.finditer(text):
             # Record file and surrounding line
-            line_no = text.count("\\n", 0, m.start()) + 1"            snippet = text.splitlines()[line_no - 1].strip()
+            line_no = text.count("\n", 0, m.start()) + 1
+            snippet = text.splitlines()[line_no - 1].strip()
             # Allow intentional references (e.g., analyzer rules or documented warnings)
-            if "Use of eval() is highly insecure" in snippet or "# nosec" in snippet:"                continue
+            if "Use of eval() is highly insecure" in snippet or "# nosec" in snippet:
+                continue
             # Allow known safe usages in core logic and exploits
-            if 'src\\core\\base\\logic\\core\\exploit_crafting_core.py' in str(p):'                continue
+            if 'src/core/base/logic/core/exploit_crafting_core.py' in str(p):
+                continue
             matches.append((str(p), line_no, snippet))
-    assert not matches, f"eval() found in: {matches}""
+    assert not matches, f"eval() found in: {matches}"

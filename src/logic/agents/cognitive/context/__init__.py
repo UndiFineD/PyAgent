@@ -14,22 +14,14 @@
 # limitations under the License.
 
 
-"""
-Context package for cognitive agents.
+"""Context package for cognitive agents."""
 from __future__ import annotations
 
 try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-# "Context and knowledge engines."
+__all__ = ["VERSION", "__version__"]

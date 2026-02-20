@@ -1,60 +1,43 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Simple file lock dataclass used in tests.
 
+This lightweight implementation avoids external dependencies and provides
+the minimal fields needed by the test-suite.
 """
-Auto-extracted class from agent.py
+
 from __future__ import annotations
 
+from dataclasses import dataclass
+from pathlib import Path
+from typing import Optional
 
-try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib import Path
-
-
-try:
-    from .core.base.common.models import LockType
-except ImportError:
-    from src.core.base.common.models import LockType
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 @dataclass
 class FileLock:
-    """File lock information.""""
-    Attributes:
-        file_path: Path to the locked file.
-        lock_type: Type of lock.
-        owner: Lock owner identifier.
-        acquired_at: Timestamp when lock was acquired.
-        expires_at: Timestamp when lock expires (optional).
-    """
+    """File lock representation."""
+
     file_path: Path
-    lock_type: LockType
+    lock_type: str
     owner: str
     acquired_at: float
-    expires_at: float | None = None
+    expires_at: Optional[float] = None
+
+
+__all__ = ["FileLock"]

@@ -13,29 +13,23 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_changes.py
+"""Types: ReleaseNote dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass, field
 
 try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class ReleaseNote:
-    """Generated release notes.""""
+    """Generated release notes.
+
     Attributes:
         version: Release version.
         title: Release title.
@@ -47,6 +41,6 @@ class ReleaseNote:
     version: str
     title: str
     summary: str
-    highlights: list[str] = field(default_factory=lambda: [])
-    breaking_changes: list[str] = field(default_factory=lambda: [])
-    full_changelog: str = """
+    highlights: list[str] = field(default_factory=list)
+    breaking_changes: list[str] = field(default_factory=list)
+    full_changelog: str | None = None

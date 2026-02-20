@@ -13,62 +13,43 @@
 # limitations under the License.
 
 
+"""AccessibilityIssue dataclass for test imports and type coverage.
+
+This file was partially corrupted; provide a minimal, well-typed
+dataclass so tests and imports succeed. The production implementation
+may include richer validation and helpers.
 """
-Auto-extracted class from agent_coder.py
+
 from __future__ import annotations
 
+from dataclasses import dataclass
+from typing import Optional
 
 try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
+    from .accessibility_issue_type import AccessibilityIssueType
+except Exception:
+    from src.core.base.common.types.accessibility_issue_type import AccessibilityIssueType
 
 try:
-    from .core.base.common.types.accessibility_issue_type import \
-except ImportError:
-    from src.core.base.common.types.accessibility_issue_type import \
+    from .accessibility_severity import AccessibilitySeverity
+except Exception:
+    from src.core.base.common.types.accessibility_severity import AccessibilitySeverity
 
-    AccessibilityIssueType
 try:
-    from .core.base.common.types.accessibility_severity import \
-except ImportError:
-    from src.core.base.common.types.accessibility_severity import \
-
-    AccessibilitySeverity
-try:
-    from .core.base.common.types.wcag_level import WCAGLevel
-except ImportError:
+    from .wcag_level import WCAGLevel
+except Exception:
     from src.core.base.common.types.wcag_level import WCAGLevel
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
 
 @dataclass
 class AccessibilityIssue:
-    """An accessibility issue found in UI code.""""
-    Attributes:
-        issue_type: Type of accessibility issue.
-        severity: Severity level.
-        wcag_level: WCAG conformance level affected.
-        wcag_criterion: Specific WCAG criterion (e.g., "1.1.1")."        description: Human - readable description.
-        element: UI element identifier or selector.
-        line_number: Line number in source file.
-        suggested_fix: Suggested fix for the issue.
-        auto_fixable: Whether the issue can be auto - fixed.
-    """
+    """A concise representation of an accessibility issue in source/UI code."""
+
     issue_type: AccessibilityIssueType
     severity: AccessibilitySeverity
     wcag_level: WCAGLevel
     wcag_criterion: str
     description: str
     element: str
-    line_number: int | None = None
-    suggested_fix: str | None = None
+    line_number: Optional[int] = None
+    suggested_fix: Optional[str] = None
     auto_fixable: bool = False

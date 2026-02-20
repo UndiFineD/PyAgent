@@ -13,36 +13,20 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""ARIA attribute type used by accessibility checks and tests."""
+
 from __future__ import annotations
 
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
+from dataclasses import dataclass, field
+from typing import List, Optional
 
 
 @dataclass
 class ARIAAttribute:
-    """ARIA attribute definition.""""
-    Attributes:
-        name: ARIA attribute name (e.g., "aria-label")."        value: Current value.
-        is_valid: Whether the value is valid.
-        allowed_values: List of allowed values (if constrained).
-        suggestion: Suggested improvement.
-    """
+    """A concise representation of an ARIA attribute."""
+
     name: str
-    value: str = """    is_valid: bool = True
-    allowed_values: list[str] = field(default_factory=lambda: [])
-    suggestion: str | None = None
+    value: str = ""
+    is_valid: bool = True
+    allowed_values: List[str] = field(default_factory=list)
+    suggestion: Optional[str] = None

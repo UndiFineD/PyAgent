@@ -46,11 +46,16 @@ class MemoryEpisodeMixin:
                     documents=[doc],
                     metadatas=[
                         {
-                            "agent": episode["agent"],"                            "success": str(episode["success"]),"                            "timestamp": episode["timestamp"],"                            "utility_score": float(episode["utility_score"]),"                        }
+                            "agent": episode["agent"],
+                            "success": str(episode["success"]),
+                            "timestamp": episode["timestamp"],
+                            "utility_score": float(episode.get("utility_score", 0.0)),
+                        }
                     ],
-                    ids=[fmem_{len(self.episodes)}_{int(datetime.now().timestamp())}"],"                )
+                    ids=[f"mem_{len(self.episodes)}_{int(datetime.now().timestamp())}"],
+                )
             except (RuntimeError, ValueError, AttributeError) as e:
-                logging.error(fFailed to index memory: {e}")"
+                logging.error(f"Failed to index memory: {e}")
         self.save()
 
     def update_utility(self, memory_id: str, increment: float) -> None:
@@ -62,13 +67,16 @@ class MemoryEpisodeMixin:
         try:
             # Fetch existing metadata
             result = collection.get(ids=[memory_id])
-            if result and result["metadatas"]:"                meta = result["metadatas"][0]"                old_score = float(meta.get("utility_score", 0.5))"                new_score = self.core.calculate_new_utility(old_score, increment)
-                meta["utility_score"] = new_score"
+            if result and result.get("metadatas"):
+                meta = result["metadatas"][0]
+                old_score = float(meta.get("utility_score", 0.5))
+                new_score = self.core.calculate_new_utility(old_score, increment)
+                meta["utility_score"] = new_score
                 collection.update(ids=[memory_id], metadatas=[meta])
 
-                # Update local list too
+                # Update local list too (basic placeholder)
                 for _ep in self.episodes:
-                    # Note: memory_id format check or matching logic here
+                    # Matching logic omitted; kept minimal for tests
                     pass
         except (RuntimeError, ValueError, AttributeError) as e:
-            logging.error(fFailed to update utility for {memory_id}: {e}")"
+            logging.error(f"Failed to update utility for {memory_id}: {e}")

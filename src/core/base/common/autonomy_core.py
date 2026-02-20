@@ -24,38 +24,46 @@ except ImportError:
     rc = None
 
 
-
 class AutonomyCore(BaseCore):
     """Standard implementation for Agent Autonomy and Self-Model.
     Provides logic for identifying blind spots and calculating evolution sleep intervals.
     """
+
     def __init__(self, agent_id: str, repo_root: Optional[str] = None) -> None:
-        super().__init__(name=f"Autonomy-{agent_id}", repo_root=repo_root)"        self.agent_id = agent_id
+        super().__init__(name=f"Autonomy-{agent_id}", repo_root=repo_root)
+        self.agent_id = agent_id
         self.performance_history: List[float] = []
 
     def evaluate_autonomy_score(self, agent_id: str, stats: dict) -> float:
-        """Rust-accelerated autonomy evaluation."""if rc and hasattr(rc, "evaluate_autonomy_score"):  # pylint: disable=no-member"            try:
-                # pylint: disable=no-member
+        """Rust-accelerated autonomy evaluation when available."""
+        if rc and hasattr(rc, "evaluate_autonomy_score"):
+            try:
                 return rc.evaluate_autonomy_score(agent_id, stats)  # type: ignore
-            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-                # pylint: disable=broad-exception-caught
+            except Exception:
                 pass
         return 0.5  # Default fallback
 
     def identify_blind_spots(self, success_rate: float, task_diversity: float) -> List[str]:
-        """Analyzes performance stats to find 'Blind Spots'."""'        blind_spots = []
+        """Analyzes performance stats to find blind spots."""
+        blind_spots: List[str] = []
         if success_rate < 0.7:
-            blind_spots.append("GENERAL_REASONING_RELIABILITY")"        if task_diversity < 0.3:
-            blind_spots.append("DOMAIN_SPECIFIC_RIGIDITY")"        return blind_spots
+            blind_spots.append("GENERAL_REASONING_RELIABILITY")
+        if task_diversity < 0.3:
+            blind_spots.append("DOMAIN_SPECIFIC_RIGIDITY")
+        return blind_spots
 
     def calculate_daemon_sleep_interval(self, optimization_score: float) -> int:
-        """Returns sleep seconds for the Background Evolution Daemon."""if optimization_score >= 1.0:
+        """Returns sleep seconds for the Background Evolution Daemon."""
+        if optimization_score >= 1.0:
             return 3600  # 1 hour
         if optimization_score > 0.8:
             return 600  # 10 minutes
         return 60  # 1 minute (high activity)
 
     def generate_self_improvement_plan(self, blind_spots: List[str]) -> str:
-        """Constructs a directive regarding the agent to use in its next improvement cycle."""plan = f"AGENT SELF-MODEL UPDATE regarding {self.agent_id}:\\n""        if not blind_spots:
-            return f"{plan}Status: Optimal. No immediate changes required.""
-        plan += "Action: Expand training data for identified blind spots: " + ", ".join(blind_spots)"        return plan
+        """Constructs a directive regarding the agent to use in its next improvement cycle."""
+        plan = f"AGENT SELF-MODEL UPDATE regarding {self.agent_id}:\n"
+        if not blind_spots:
+            return f"{plan}Status: Optimal. No immediate changes required."
+        plan += "Action: Expand training data for identified blind spots: " + ", ".join(blind_spots)
+        return plan

@@ -13,22 +13,22 @@
 # limitations under the License.
 
 
+"""Indexing assistant: prepare documents, metadatas and ids for vector stores.
+
+Minimal, import-safe implementation used in tests.
 """
-        return [], [], []
-"""
-Assistant for indexing the workspace for vector search.
-"""
-try:
-    from typing import List, Dict, Any, Tuple
-except ImportError:
-    from typing import List, Dict, Any, Tuple
+
+from __future__ import annotations
+
+from typing import Any, Dict, List, Tuple
+
 
 class KnowledgeIndexingAssistant:
-    """Handles workspace traversal and data preparation for the TieredMemoryEngine."""
+    """Handles workspace traversal and data preparation for vector indexing."""
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
 
     def build_vector_data(self, target_path: Any) -> Tuple[List[str], List[Dict[str, Any]], List[str]]:
-        """Scans the path and returns documents, metadatas, and IDs for vector indexing."""
-        _ = target_path
+        """Return empty lists (stub) for tests and imports."""
         return [], [], []

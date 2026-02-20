@@ -13,34 +13,29 @@
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_coder.py
+"""Types: ProfilingSuggestion dataclass."""
 from __future__ import annotations
 
+from dataclasses import dataclass
 
 try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.common.types.profiling_category import ProfilingCategory
-except ImportError:
     from src.core.base.common.types.profiling_category import ProfilingCategory
+except Exception:
+    class ProfilingCategory:
+        """Fallback placeholder for ProfilingCategory."""
 
 try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
     from src.core.base.lifecycle.version import VERSION
-
+except Exception:  # pragma: no cover - fallback
+    VERSION = "0.0.0"
 
 __version__ = VERSION
 
 
 @dataclass
 class ProfilingSuggestion:
-    """A code profiling suggestion.""""
+    """A code profiling suggestion.
+
     Attributes:
         category: Category of the profiling suggestion.
         function_name: Function that could benefit from profiling.

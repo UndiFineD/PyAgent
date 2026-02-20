@@ -23,32 +23,27 @@ filtering leaves by predicate, and validating leaf values.
 
 from __future__ import annotations
 
+"""JSON Tree Meta Utilities.
 
-try:
-    from typing import Callable
-except ImportError:
-    from typing import Callable
+Helper utilities for analyzing and transforming nested JSON-like trees used
+across the codebase. Functions include counting leaves, computing depth,
+filtering leaves by predicate, and validating leaf values.
+"""
 
+from typing import Callable, Any, TypeVar
 
-try:
-    from .core.base.common.utils.jsontree.iteration import (
-except ImportError:
-    from src.core.base.common.utils.jsontree.iteration import (
-
-    json_iter_leaves, json_iter_leaves_with_path)
-try:
-    from .core.base.common.utils.jsontree.types import _T, JSONTree
-except ImportError:
-    from src.core.base.common.utils.jsontree.types import _T, JSONTree
-
+from .iteration import json_iter_leaves, json_iter_leaves_with_path
+from .types import _T, JSONTree
 
 
 def json_count_leaves(value: JSONTree[_T]) -> int:
-    """Count the number of leaves in a nested JSON structure."""return sum(1 for _ in json_iter_leaves(value))
+    """Count the number of leaves in a nested JSON structure."""
+    return sum(1 for _ in json_iter_leaves(value))
 
 
 def json_depth(value: JSONTree[_T]) -> int:
-    """Calculate the maximum depth of a nested JSON structure."""if isinstance(value, dict):
+    """Calculate the maximum depth of a nested JSON structure."""
+    if isinstance(value, dict):
         if not value:
             return 1
         return 1 + max(json_depth(v) for v in value.values())
@@ -64,7 +59,8 @@ def json_filter_leaves(
     predicate: Callable[[_T], bool],
     value: JSONTree[_T],
 ) -> JSONTree[_T]:
-    """Filter leaves in a nested structure, keeping only those matching predicate."""if isinstance(value, dict):
+    """Filter leaves in a nested structure, keeping only those matching predicate."""
+    if isinstance(value, dict):
         result = {}
         for k, v in value.items():
             filtered = json_filter_leaves(predicate, v)
@@ -102,11 +98,13 @@ def json_validate_leaves(
     validator: Callable[[_T], bool],
     value: JSONTree[_T],
 ) -> bool:
-    """Check if all leaves in a structure satisfy a predicate."""return all(validator(leaf) for leaf in json_iter_leaves(value))
+    """Check if all leaves in a structure satisfy a predicate."""
+    return all(validator(leaf) for leaf in json_iter_leaves(value))
 
 
 def json_find_leaves(
     predicate: Callable[[_T], bool],
     value: JSONTree[_T],
 ) -> list[tuple[str, _T]]:
-    """Find all leaves matching a predicate, with their paths."""return [(path, leaf) for path, leaf in json_iter_leaves_with_path(value) if predicate(leaf)]
+    """Find all leaves matching a predicate, with their paths."""
+    return [(path, leaf) for path, leaf in json_iter_leaves_with_path(value) if predicate(leaf)]

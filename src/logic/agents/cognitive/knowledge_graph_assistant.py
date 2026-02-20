@@ -13,10 +13,7 @@
 # limitations under the License.
 
 
-"""
-"""
-Assistant for managing the knowledge graph and impact radius.
-"""
+"""Assistant for managing the knowledge graph and impact radius."""
 try:
     from typing import Set
 except ImportError:
@@ -57,5 +54,7 @@ class KnowledgeGraphAssistant:
                     lines.append(edge)
                     edges.add(edge)
         return "\n".join(lines)
+
     def generate_mermaid_graph(self) -> str:
-""""Compatibility wrapper.        return self.generate_mermaid({})
+        """Compatibility wrapper returning an empty graph."""
+        return self.generate_mermaid({})

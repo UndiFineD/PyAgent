@@ -46,14 +46,14 @@ except ImportError:
 
 
 try:
-    from ....core.base.lifecycle.version import VERSION
+    from src.core.base.lifecycle.version import VERSION
 except ImportError:
-    from ....core.base.lifecycle.version import VERSION
+    from src.core.base.lifecycle.version import VERSION
 
 try:
-    from ...knowledge_agent import KnowledgeAgent
+    from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 except ImportError:
-    from ...knowledge_agent import KnowledgeAgent
+    from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 
 __version__ = VERSION
