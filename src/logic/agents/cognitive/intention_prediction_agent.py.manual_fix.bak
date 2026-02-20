@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Intention Prediction Agent for predicting peer actions and goals.
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -102,4 +102,4 @@ class IntentionPredictionAgent:
             "origin": sender_id,"            "targets": receivers,"            "payload_size": len(str(thought_payload)),"            "protocol": "NeuroLink-v3","            "latency_ms": random.uniform(0.1, 0.9),"        }
 
 
-""
+"""

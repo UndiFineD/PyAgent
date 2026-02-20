@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 ChunkedPrefillManager - Chunked prefill orchestration for long prompts.""""
 This module implements chunked prefill for processing long prompts across
 multiple forward passes, enabling better memory utilization and latency.
@@ -85,7 +85,7 @@ T = TypeVar("T")
 
 
 class ChunkedPrefillManager:
-    ""
+"""
 Manager for chunked prefill operations.""""
 This class handles splitting long prompts into chunks and
     orchestrating their execution across multiple forward passes.
@@ -99,7 +99,7 @@ This class handles splitting long prompts into chunks and
         config: Optional[ChunkedPrefillConfig] = None,
         tokenize_fn: Optional[Callable[[str], list[int]]] = None,
     ) -> None:
-        ""
+"""
 Initialize the manager.""""
 Args:
             config: Manager configuration
@@ -119,7 +119,7 @@ Args:
         self._total_tokens_processed = 0
 
     def should_chunk(self, token_count: int) -> bool:
-        ""
+"""
 Determine if prompt should be chunked.""""
 Args:
             token_count: Number of tokens in prompt
@@ -134,7 +134,7 @@ Args:
         chunk_size: Optional[int] = None,
         memory_pressure: float = 0.0,
     ) -> list[tuple[int, int]]:
-        ""
+"""
 Compute optimal chunk boundaries.""""
 Args:
             total_tokens: Total number of tokens
@@ -184,7 +184,7 @@ Args:
         chunk_size: Optional[int] = None,
         memory_pressure: float = 0.0,
     ) -> list[PrefillChunk]:
-        ""
+"""
 Create chunks for a request.""""
 Args:
             request_id: Unique request identifier
@@ -259,7 +259,7 @@ Args:
         priority: ChunkPriority = ChunkPriority.NORMAL,
         chunk_size: Optional[int] = None,
     ) -> list[PrefillChunk]:
-        ""
+"""
 Create chunks from text prompt.""""
 Args:
             request_id: Unique request identifier
@@ -279,7 +279,7 @@ Args:
         return self.create_chunks(request_id, tokens, priority, chunk_size)
 
     def _sort_pending(self) -> None:
-        ""
+"""
 Sort pending chunks by priority.
         def chunk_priority(chunk_id: str) -> tuple[int, int, float]:
             chunk: PrefillChunk | None = self._chunks.get(chunk_id)
@@ -294,7 +294,7 @@ Sort pending chunks by priority.
         self._pending_chunks.sort(key=chunk_priority)
 
     def schedule_chunk(self) -> Optional[PrefillChunk]:
-        ""
+"""
 Get next chunk to execute.""""
 Returns:
             Next chunk or None if no chunks available
@@ -325,7 +325,7 @@ Returns:
             return None
 
     def start_chunk(self, chunk_id: str) -> bool:
-        ""
+"""
 Mark chunk as started.""""
 Args:
             chunk_id: Chunk to start
@@ -347,7 +347,7 @@ Args:
         output: Optional[Any] = None,
         kv_cache: Optional[Any] = None,
     ) -> bool:
-        ""
+"""
 Mark chunk as completed.""""
 Args:
             chunk_id: Chunk to complete
@@ -377,7 +377,7 @@ Args:
             return True
 
     def fail_chunk(self, chunk_id: str, _error: Optional[str] = None) -> bool:
-        ""
+"""
 Mark chunk as failed.""""
 Args:
             chunk_id: Chunk that failed
@@ -395,7 +395,7 @@ Args:
             return True
 
     def iterate_chunks(self, request_id: str) -> Iterator[PrefillChunk]:
-        ""
+"""
 Iterate over chunks for a request in order.""""
 Args:
             request_id: Request to iterate
@@ -412,7 +412,7 @@ Args:
         yield from chunks
 
     def get_next_chunk(self, request_id: str) -> Optional[PrefillChunk]:
-        ""
+"""
 Get next pending chunk for a request.""""
 Args:
             request_id: Request to get chunk for
@@ -430,7 +430,7 @@ Args:
         request_id: str,
         merge_fn: Optional[Callable[[list[Any]], Any]] = None,
     ) -> Optional[Any]:
-        ""
+"""
 Merge chunk outputs for a completed request.""""
 Args:
             request_id: Request to merge
@@ -461,7 +461,7 @@ Args:
         return outputs
 
     def get_kv_caches(self, request_id: str) -> list[Any]:
-        ""
+"""
 Get KV caches from all chunks.""""
 Args:
             request_id: Request to get caches for
@@ -476,7 +476,7 @@ Args:
             return [c.kv_cache for c in request.chunks if c.kv_cache is not None]
 
     def cancel_request(self, request_id: str) -> bool:
-        ""
+"""
 Cancel all chunks for a request.""""
 Args:
             request_id: Request to cancel
@@ -497,7 +497,7 @@ Args:
             return True
 
     def cleanup_request(self, request_id: str) -> bool:
-        ""
+"""
 Remove request and its chunks from tracking.""""
 Args:
             request_id: Request to cleanup
@@ -517,7 +517,7 @@ Args:
             return True
 
     def get_request_progress(self, request_id: str) -> dict[str, Any]:
-        ""
+"""
 Get progress information for a request.""""
 Args:
             request_id: Request to check
@@ -533,7 +533,7 @@ Args:
 
     @property
     def stats(self) -> dict[str, Any]:
-        ""
+"""
 Get manager statistics.        with self._lock:
             return {
                 "active_requests": len(self._active_chunk_reqs),"                "pending_chunks": len(self._pending_chunks),"                "total_chunks_created": self._total_chunks_created,"                "total_chunks_completed": self._total_chunks_completed,"                "total_tokens_processed": self._total_tokens_processed,"                "avg_tokens_per_chunk": ("                    self._total_tokens_processed / self._total_chunks_completed
@@ -549,7 +549,7 @@ def create_prefill_manager(
     threshold: int = 256,
     dynamic: bool = True,
 ) -> ChunkedPrefillManager:
-    ""
+"""
 Create a chunked prefill manager.    config = ChunkedPrefillConfig(
         default_chunk_size=chunk_size,
         long_prompt_threshold=threshold,
@@ -562,7 +562,7 @@ def chunk_prompt(
     tokens: list[int],
     chunk_size: int = 512,
 ) -> list[list[int]]:
-    ""
+"""
 Simple utility to chunk tokens.""""
 Args:
         tokens: Token list to chunk
@@ -575,7 +575,25 @@ Args:
         chunks.append(tokens[i : i + chunk_size])
     return chunks
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -13,15 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 MicroBatchContext - Context manager for micro-batch execution state.
 
 """
-
 Provides a robust interface for managing micro-batch execution, supporting context variables,
 batch state, and nested batch scopes. Useful for distributed and pipelined GPU workloads.
-""
+"""
 try:
     import threading
 except ImportError:
@@ -36,10 +35,10 @@ except ImportError:
 
 
 class MicroBatchContext:
-    ""
+"""
 Context manager for micro-batch execution state.
     Supports context variables, batch id, and nested batch scopes.
-    ""
+"""
 _local = threading.local()
 
     def __init__(self, batch_id: Optional[int] = None, variables: Optional[Dict[str, Any]] = None):
@@ -54,7 +53,7 @@ _local = threading.local()
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._local.current = self._prev_context
 
-    @classmethod
+        @classmethod
     def current(cls) -> Optional["MicroBatchContext"]:"        """
 Get the current active micro-batch context, if any.""
 return getattr(cls._local, 'current', None)
@@ -66,6 +65,24 @@ return getattr(cls._local, 'current', None)
 
 
 __all__ = ["MicroBatchContext"]
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 
 try:
     from .core.base.lifecycle.version import VERSION
@@ -35,7 +35,7 @@ __version__ = VERSION
 
 @dataclass
 class ChangelogTemplate:
-    ""
+"""
 Template for changelog entries.    name: str    project_type: str
     sections: list[str] = field(
         default_factory=lambda: [
@@ -45,4 +45,4 @@ Template for changelog entries.    name: str    project_type: str
     include_contributors: bool = False
 
 
-""
+"""

@@ -26,12 +26,11 @@ Safe scanner for `.external` repository snapshots.
 - Produces `.external/refactor_report.md` and `.external/refactor_report.json`.
 
 """
-
 Usage (PowerShell):
 python -m src.tools.external_refactor_scan
 
 Run only after reviewing and ensuring safety.
-""
+"""
 import os
 import re
 import json
@@ -52,11 +51,11 @@ EXCLUDE_DIRS = (
 
 
 def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
-    ""
+"""
 Extracts completed/integrated rows from tracking.md for move to completed.md.    return ["| Dummy | Integrated |"]
 
 def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
-    ""
+"""
 Scans a directory for candidate files and extracts definitions.    report: Dict[str, Any] = {"path": str(dirpath.relative_to(EXTERNAL)), "files": []}"    if VERBOSE:
         print(f"Scanning directory: {dirpath.relative_to(EXTERNAL)}")"    if not dirpath.is_dir():
         return report
@@ -108,7 +107,7 @@ Scans a directory for candidate files and extracts definitions.    report: Dict[
 
 
 def is_definition_in_src(name: str, src_root: Path) -> bool:
-    ""
+"""
 Checks if a definition (function or class) exists in the src directory.    # Fast grep-like search without importing; searches for 'def name(' or 'class name''    pattern = re.compile(rf"\\b(def|class)\\s+{re.escape(name)}\\b")"    for p in src_root.rglob("*.py"):"        try:
             txt = p.read_text(encoding="utf-8", errors="ignore")"        except Exception:
             continue
@@ -132,7 +131,7 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
 
 
 def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
-    ""
+"""
 Writes the report to both markdown and JSON files.""""
 json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")"    lines: List[str] = [
         "# External Refactor Report\\n","        "This report is auto-generated. Do not run any code found here without manual review.\\n\\n""    ]
@@ -140,7 +139,7 @@ json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")"    lines: 
             lines.append(f"- {f_path} ({f_suffix}) — defs: {f_defs}; missing in src: {f_missing}\\n")"        lines.append("\\n")"    md_path.write_text("\\n".join(lines), encoding="utf-8")
 
 def main() -> int:
-    ""
+"""
 Main function to execute the scan and report generation.""""
 tracking = EXTERNAL / "tracking.md""    completed = EXTERNAL / "completed.md""    completed_rows = extract_completed_from_tracking(tracking)
     if completed_rows:

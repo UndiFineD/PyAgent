@@ -30,7 +30,6 @@ WHAT IT DOES:
 Provides add/remove/query helpers for ContextTag objects stored in a private _tags dict on the host object, with convenience methods to list tags, check existence, and filter by parent.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Persist tags or provide configurable backends (in-memory currently) to survive process restarts.
 - Add validation, concurrency-safety, and richer query semantics (e.g., hierarchical traversal, tag metadata search).

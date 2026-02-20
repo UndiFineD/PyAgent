@@ -62,7 +62,7 @@ class SwarmTrainingCoordinator:
 
     def broadcast_adapter(self, adapter: Dict[str, Any]):
 """
-Notifies peers of a newly converged local adapter.        adapter_id = f"{self.node_id}_{adapter['domain']}"
-self.adapter_registry[adapter_id] = adapter
+        Notifies peers of a newly converged local adapter.        adapter_id = f"{self.node_id}_{adapter['domain']}"
+        self.adapter_registry[adapter_id] = adapter
         logger.info(f"SwarmLearning: Broadcasted adapter {adapter_id} to swarm.")
 """

@@ -30,7 +30,6 @@ WHAT IT DOES:
 - Exposes a synchronous generate_reference() method and an async improve_content() facade to trigger maintenance operations.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Add robust error handling and logging around file system operations and KnowledgeAgent calls (currently assumes directories and agent calls succeed).
 - Make workspace paths, output filename, and file selection configurable (not hardcoded); support incremental updates and larger codebases (currently limits to top 10 files).
@@ -82,7 +81,7 @@ Generates technical references and project OVERVIEW documents.
 #             "You are the Documentation Agent."#             "Your role is to maintain clear, accurate technical documentation."#             "You summarize code structures, explain module relationships, and ensure READMEs are current."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
 """"
@@ -151,7 +150,7 @@ Generates technical references and project OVERVIEW documents.
 #             "You are the Documentation Agent."#             "Your role is to maintain clear, accurate technical documentation."#             "You summarize code structures, explain module relationships, and ensure READMEs are current."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Documentation Log\\n\\n## Summary\\nWaiting for update...\\n
     def generate_reference(self) -> str:
 """"

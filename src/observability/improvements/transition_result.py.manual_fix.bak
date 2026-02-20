@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 transition_result - TransitionResult dataclass
 
@@ -77,4 +77,4 @@ class TransitionResult:
     success: bool
     message: str = ""
 
-""
+"""

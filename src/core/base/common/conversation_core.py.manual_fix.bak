@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for conversation history and message management.
-""
+"""
 try:
 
 """
-    from typing import List
+from typing import List
 except ImportError:
     from typing import List
 
@@ -41,16 +41,16 @@ except ImportError:
 
 
 class ConversationCore(BaseCore):
-    ""
+"""
 Authoritative engine for conversation state.
-    ""
+"""
 def __init__(self, max_messages: int = 100) -> None:
         super().__init__()
         self.messages: List[ConversationMessage] = []
         self.max_messages = max_messages
 
     def add_message(self, role: MessageRole, content: str) -> None:
-        ""
+"""
 Add a new message to the conversation history.""
 msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
@@ -58,7 +58,7 @@ msg = ConversationMessage(role=role, content=content)
             self.messages = self.messages[-self.max_messages :]
 
     def get_history(self) -> List[ConversationMessage]:
-        ""
+"""
 Return a copy of the conversation history.""
 return self.messages.copy()
 

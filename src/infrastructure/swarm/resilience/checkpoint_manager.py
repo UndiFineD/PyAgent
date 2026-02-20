@@ -54,38 +54,38 @@ Manages high-speed state checkpoints using RDMA teleportation.
         # Determine peer for mirroring (circular buddies)
         self.peer_rank = (self.rank + 1) % self.world_size if self.world_size > 1 else self.rank
         logger.info(f"CheckpointManager initialized. Rank {rank} buddies with {self.peer_rank}")
-    async def create_checkpoint(self, state_buffer: bytes) -> str:
-                Creates a checkpoint by 'teleporting' it to a peer rank via RDMA.'        This is a non-blocking operation for the main reasoning loop if backgrounded.
-                checkpoint_id = f"ckpt-{uuid.uuid4().hex[:8]}""        start_time = time.perf_counter()
+        async def create_checkpoint(self, state_buffer: bytes) -> str:
+        Creates a checkpoint by 'teleporting' it to a peer rank via RDMA.'        This is a non-blocking operation for the main reasoning loop if backgrounded.
+        checkpoint_id = f"ckpt-{uuid.uuid4().hex[:8]}""        start_time = time.perf_counter()
 
         # Phase 93: Basic RDMA Write logic
         # In a real RDMA env, we would have pre-registered memory regions.
         # Here we simulate the command dispatch to the Rust NIXL backend.
 
         try:
-            # We wrap the state into a teleportation request
-            # nixl_rdma_write_rust handle the high-speed transfer
-            result = self.rust_bridge.execute(
-                "nixl_rdma_write_rust","                {
-                    "target_rank": self.peer_rank,"                    "id": checkpoint_id,"                    "buffer_size": len(state_buffer),"                    "priority": "HIGH","                    "payload_hint": "AGENT_STATE""                }
-            )
+        # We wrap the state into a teleportation request
+        # nixl_rdma_write_rust handle the high-speed transfer
+        result = self.rust_bridge.execute(
+        "nixl_rdma_write_rust","                {
+        "target_rank": self.peer_rank,"                    "id": checkpoint_id,"                    "buffer_size": len(state_buffer),"                    "priority": "HIGH","                    "payload_hint": "AGENT_STATE""                }
+        )
 
-            if result.get("success"):"                metadata = CheckpointMetadata(
-                    id=checkpoint_id,
-                    timestamp=time.time(),
-                    rank=self.rank,
-                    data_size=len(state_buffer),
-                    checksum=hash(state_buffer),  # Simple checksum for stub
-                    peer_rank=self.peer_rank
-                )
-                self.checkpoints.append(metadata)
+        if result.get("success"):"                metadata = CheckpointMetadata(
+        id=checkpoint_id,
+        timestamp=time.time(),
+        rank=self.rank,
+        data_size=len(state_buffer),
+        checksum=hash(state_buffer),  # Simple checksum for stub
+        peer_rank=self.peer_rank
+        )
+        self.checkpoints.append(metadata)
 
-                latency = (time.perf_counter() - start_time) * 1000
-                logger.info(f"Checkpoint {checkpoint_id} teleported to rank {self.peer_rank} in {latency:.2f}ms")"                return checkpoint_id
-            else:
-                logger.error(f"RDMA Checkpoint failed: {result.get('error', 'Unknown error')}")"'                return """
-except Exception as e:
-            logger.error(f"Failed to execute RDMA checkpoint: {e}")"            return """
+        latency = (time.perf_counter() - start_time) * 1000
+        logger.info(f"Checkpoint {checkpoint_id} teleported to rank {self.peer_rank} in {latency:.2f}ms")"                return checkpoint_id
+        else:
+        logger.error(f"RDMA Checkpoint failed: {result.get('error', 'Unknown error')}")"'                return """
+        except Exception as e:
+        logger.error(f"Failed to execute RDMA checkpoint: {e}")"            return """
 def get_latest_checkpoint(self) -> Optional[CheckpointMetadata]:
 """
 Returns the most recent successful checkpoint.        return self.checkpoints[-1] if self.checkpoints else None

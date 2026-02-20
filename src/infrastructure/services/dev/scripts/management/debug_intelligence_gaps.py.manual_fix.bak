@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Debug script to identify intelligence gaps where IO/Shell operations are not recorded.
-""
+"""
 
 """
 import os
@@ -56,4 +56,4 @@ def main() -> None:
 
 if __name__ == "__main__":"    main()
 
-""
+"""

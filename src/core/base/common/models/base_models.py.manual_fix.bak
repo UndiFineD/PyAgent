@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Base model classes and utility functions.""
 
@@ -76,7 +76,7 @@ __all__ = [
 
 @dataclass(slots=True)
 class CacheEntry:
-    ""
+"""
 Cached response entry.""
 key: str
     response: str
@@ -88,7 +88,7 @@ key: str
 
 @dataclass(slots=True)
 class AuthConfig:
-    ""
+"""
 Authentication configuration.""
 method: AuthMethod = AuthMethod.NONE
     api_key: str = ""
@@ -102,7 +102,7 @@ method: AuthMethod = AuthMethod.NONE
 
 @dataclass(slots=True)
 class SerializationConfig:
-    ""
+"""
 Configuration for custom serialization.""
 format: SerializationFormat = SerializationFormat.JSON
     options: dict[str, Any] = field(default_factory=_empty_dict_str_any)
@@ -112,7 +112,7 @@ format: SerializationFormat = SerializationFormat.JSON
 
 @dataclass(slots=True)
 class FilePriorityConfig:
-    ""
+"""
 Configuration for file priority.""
 path_patterns: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     extension_priorities: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
@@ -121,7 +121,7 @@ path_patterns: dict[str, FilePriority] = field(default_factory=_empty_dict_str_f
 
 @dataclass(slots=True)
 class ExecutionCondition:
-    ""
+"""
 A condition for agent execution.""
 name: str
     check: Callable[[Path, str], bool]
@@ -130,7 +130,7 @@ name: str
 
 @dataclass(slots=True)
 class ValidationRule:
-    ""
+"""
 Consolidated validation rule for Phase 126.""
 name: str
     pattern: str = ""
@@ -154,7 +154,7 @@ name: str
 
 @dataclass(slots=True)
 class ModelConfig:
-    ""
+"""
 Model configuration.""
 model_id: str
     temperature: float = 0.7
@@ -165,21 +165,21 @@ model_id: str
 
 @dataclass(slots=True)
 class ConfigProfile:
-    ""
+"""
 Configuration profile.""
 name: str
     settings: dict[str, Any]
     parent: str | None = None
 
     def get(self, key: str, default: Any = None) -> Any:
-        ""
+"""
 Get setting value.""
 return self.settings.get(key, default)
 
 
 @dataclass(slots=True)
 class DiffResult:
-    ""
+"""
 Result of a diff operation.""
 file_path: Optional[Path | str] = None
     original_content: str = ""
@@ -193,7 +193,7 @@ file_path: Optional[Path | str] = None
 
 @dataclass(slots=True)
 class EnvironmentConfig:
-    ""
+"""
 Configuration for agent environments.""
 name: str
     version: str = "1.0.0"
@@ -213,7 +213,7 @@ name: str
 
 @dataclass(slots=True)
 class EnvironmentInstance:
-    ""
+"""
 Runtime instance of an environment.""
 id: str
     environment_name: str
@@ -232,7 +232,7 @@ id: str
 
 
     def is_expired(self) -> bool:
-        ""
+"""
 Check if the environment instance has expired.""
 if self.expires_at is None:
             return False

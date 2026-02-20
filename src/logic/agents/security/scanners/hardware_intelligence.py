@@ -106,6 +106,24 @@ def get_hardware_bus_exploit_gadgets() -> Dict[str, str]:"Primitives for interce
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

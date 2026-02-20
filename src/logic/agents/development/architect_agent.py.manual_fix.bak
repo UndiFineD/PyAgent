@@ -15,13 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Architect agent.py module.
 # pylint: disable=too-many-ancestors
 
 """
-
 try:
     import logging
 except ImportError:
@@ -69,5 +68,5 @@ class ArchitectAgent(BaseAgent):
             "component": "FleetManager.AgentRegistry","            "proposed_change": "Switch to Rust-based FFI bridge for registry scans","            "impact": "High (90% faster boot)","            "priority": 1,"        }
 
 
-""
+"""
 

@@ -13,16 +13,16 @@
 # limitations under the License.
 
 
-""
+"""
 """"
 """
 MCP-based tool registration using official mcp library.
 Provides register_tool decorator compatible with mcp.mcp_tool.
-""
+"""
 try:
 
 """
-    import inspect
+import inspect
 except ImportError:
     import inspect
 
@@ -49,14 +49,14 @@ def register_tool(
     name: Optional[str] = None,
     description: Optional[str] = None,
 ):
-    ""
+"""
 Decorator to register a function as a tool using MCP format.
     Compatible with mcp.mcp_tool descriptor.
 
     Args:
         name: Optional custom tool name
         description: Optional custom description
-    ""
+"""
 def decorator(func: Callable) -> Callable:
         tool_name = name or func.__name__
         tool_description = description or func.__doc__ or f"Tool {tool_name}"
@@ -74,7 +74,7 @@ def decorator(func: Callable) -> Callable:
 
 
 def _generate_mcp_schema(func: Callable) -> Dict[str, Any]:
-    ""
+"""
 Generate MCP-compatible JSON schema from function signature.""
 sig = inspect.signature(func)
     type_hints = get_type_hints(func)
@@ -112,7 +112,7 @@ Create MCP server with registered tools.
 
     Returns:
         MCP server instance
-    ""
+"""
 registry = get_registry()
 
     # Create MCP server

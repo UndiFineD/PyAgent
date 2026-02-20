@@ -30,10 +30,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 """
-
-
 class AuditLogger:
-    ""
+"""
 Logs backend requests for audit and compliance.
     Records request metadata, responses, and timing for
     audit trail and compliance requirements.
@@ -41,13 +39,13 @@ Logs backend requests for audit and compliance.
     Example:
         audit = AuditLogger()
         audit.log_request("github-models", "prompt", "response", 150)
-    ""
+"""
 def __init__(self, log_file: Path | None = None) -> None:
-        ""
+"""
 Initialize audit logger.
         Args:
             log_file: Path to audit log file.
-        ""
+"""
 self.log_file = log_file
         self._lock = threading.Lock()
 
@@ -62,7 +60,7 @@ self.log_file = log_file
         request_id: str | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> None:
-        ""
+"""
 Log a request for audit.
         Args:
             backend: Backend used.
@@ -72,7 +70,7 @@ Log a request for audit.
             success: Whether request succeeded.
             request_id: Optional request ID.
             metadata: Additional metadata.
-        ""
+"""
 entry: dict[str, Any] = {
             "timestamp": datetime.now(UTC).isoformat(),
             "request_id": request_id or str(uuid.uuid4()),
@@ -95,7 +93,7 @@ entry: dict[str, Any] = {
 
 
     def get_recent_entries(self, count: int = 100) -> list[dict[str, Any]]:
-        ""
+"""
 Get recent audit log entries.
         
         Args:
@@ -103,7 +101,7 @@ Get recent audit log entries.
 
         Returns:
             List[Dict]: Recent audit entries.
-        ""
+"""
 if not self.log_file or not self.log_file.exists():
             return []
 

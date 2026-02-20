@@ -17,16 +17,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Minimal parser-safe MockAgent shim used during repository repair.
 
 """
-
 This file provides a tiny, well-typed MockAgent class exposing the
 basic API expected by consumers. It intentionally avoids heavy
 dependencies and defers to `mock_core` where available.
-""
+"""
 from typing import Any, Dict
 
 try:
@@ -35,11 +34,11 @@ except Exception:
     class _Logger:
         def info(self, *a, **k):
             pass
-    logging = _Logger()
+            logging = _Logger()
 
-try:
-    from .mock_core import MockCore
-except Exception:
+            try:
+            from .mock_core import MockCore
+            except Exception:
     class MockCore:
         def __init__(self, multiplier: float = 1.0) -> None:
             self.multiplier = multiplier

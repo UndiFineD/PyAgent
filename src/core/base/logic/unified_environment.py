@@ -136,13 +136,13 @@ pass
 
     def _update_status(self, status: EnvironmentStatus):
 """
-Update environment status""
-logger.info(f"Environment {self.name} status: {self._status.value} -> {status.value}")"        self._status = status
+        Update environment status""
+        logger.info(f"Environment {self.name} status: {self._status.value} -> {status.value}")"        self._status = status
 
     def _record_execution(self):
 """
-Record execution for metrics""
-self._execution_count += 1
+        Record execution for metrics""
+        self._execution_count += 1
 
 
 
@@ -354,8 +354,8 @@ def __init__(self):
 
     def register_environment_type(self, env_type: str, env_class: type):
 """
-Register an environment type""
-self.environment_types[env_type] = env_class
+        Register an environment type""
+        self.environment_types[env_type] = env_class
 
     def create_environment(self, env_type: str, name: str, **kwargs) -> BaseEnvironment:
 """
@@ -407,6 +407,24 @@ environment_registry = EnvironmentRegistry()
 environment_registry.register_environment_type('tool', ToolEnvironment)'environment_registry.register_environment_type('agent', AgentEnvironment)'environment_registry.register_environment_type('composite', CompositeEnvironment)
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

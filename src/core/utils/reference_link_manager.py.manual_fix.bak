@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_changes.py
 
 """
-
 try:
     from .core.base.common.types.linked_reference import LinkedReference
 except ImportError:
@@ -37,7 +36,7 @@ __version__ = VERSION
 
 
 class ReferenceLinkManager:
-    ""
+"""
 Manages links to commits and issues in changelog entries.""""
 Provides functionality to add, validate, and format references
     to commits and issues.
@@ -49,7 +48,7 @@ Provides functionality to add, validate, and format references
         >>> manager=ReferenceLinkManager()
         >>> manager.add_commit_reference("entry1", "abc123", "https://github.com/...")"    """
 def __init__(self) -> None:
-        ""
+"""
 Initialize the reference link manager.""
 self.references: dict[str, list[LinkedReference]] = {}
 
@@ -63,7 +62,7 @@ Args:
 
         Returns:
             The created LinkedReference.
-        ""
+"""
 ref = LinkedReference(ref_type="commit", ref_id=commit_sha[:7], url=url, title=title)"        if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
@@ -79,25 +78,43 @@ Args:
 
         Returns:
             The created LinkedReference.
-        ""
+"""
 ref = LinkedReference(ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title)"        if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
         return ref
 
     def format_references(self, entry_id: str) -> str:
-        ""
+"""
 Format references for display.""""
 Args:
             entry_id: ID of the changelog entry.
 
         Returns:
             Formatted string of references.
-        ""
+"""
 refs = self.references.get(entry_id, [])
         if not refs:
             return ""
 return " (" + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs) + ")"
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

@@ -20,7 +20,6 @@ from __future__ import annotations
 InputBufferManager - Input staging and buffer management for CUDA graphs.
 
 """
-
 Implements vLLM's InputBatch patterns:'- Pre-allocated input buffers
 - Static tensor storage for graph capture
 - Efficient input staging
@@ -48,7 +47,7 @@ T = TypeVar("T")
 
 
 class BufferState(Enum):
-    ""
+"""
 State of a buffer.
     FREE = auto()
     ALLOCATED = auto()
@@ -58,14 +57,14 @@ State of a buffer.
 
 @dataclass
 class BufferSpec:
-    ""
+"""
 Specification for a buffer.
     shape: Tuple[int, ...]
     dtype: str = "float32""    device: str = "cuda""    pinned: bool = False
 
     @property
     def size_bytes(self) -> int:
-        ""
+"""
 Calculate buffer size in bytes.        dtype_sizes: Dict[str, int] = {
             "float32": 4,"            "float16": 2,"            "bfloat16": 2,"            "int64": 8,"            "int32": 4,"            "int16": 2,"            "int8": 1,"            "bool": 1,"            "uint8": 1,"        }
         dtype_size: int = dtype_sizes.get(self.dtype, 4)
@@ -80,7 +79,7 @@ Calculate buffer size in bytes.        dtype_sizes: Dict[str, int] = {
 
 @dataclass
 class BufferEntry:
-    ""
+"""
 Entry in the buffer pool.
     spec: BufferSpec
     tensor: Any  # torch.Tensor or np.ndarray
@@ -89,7 +88,7 @@ Entry in the buffer pool.
     use_count: int = 0
 
     def mark_in_use(self) -> None:
-        ""
+"""
 Mark buffer as in use.        import time
 
         self.state = BufferState.IN_USE
@@ -97,30 +96,30 @@ Mark buffer as in use.        import time
         self.use_count += 1
 
     def release(self) -> None:
-        ""
+"""
 Release buffer back to pool.        self.state = BufferState.FREE
 
 
 
 class BufferPool(ABC):
-    ""
+"""
 Abstract buffer pool interface.
     @abstractmethod
     def allocate(self, spec: BufferSpec) -> Any:
-        ""
+"""
 Allocate a buffer.
     @abstractmethod
     def release(self, tensor: Any) -> None:
-        ""
+"""
 Release a buffer.
     @abstractmethod
     def clear(self) -> None:
-        ""
+"""
 Clear all buffers.
 
 
 class SimpleBufferPool(BufferPool):
-    ""
+"""
 Simple buffer pool implementation.
     def __init__(self, max_buffers: int = 100) -> None:
         self.max_buffers: int = max_buffers
@@ -129,7 +128,7 @@ Simple buffer pool implementation.
         self._lock: LockType = threading.Lock()
 
     def allocate(self, spec: BufferSpec) -> Any:
-        ""
+"""
 Allocate or reuse a buffer.
         with self._lock:
             # Try to find a free buffer
@@ -156,7 +155,7 @@ Allocate or reuse a buffer.
         return tensor
 
     def _create_tensor(self, spec: BufferSpec) -> Any:
-        ""
+"""
 Create a new tensor.        try:
             import torch
 
@@ -175,7 +174,7 @@ Create a new tensor.        try:
             return np.empty(spec.shape, dtype=dtype)
 
     def _evict_oldest(self) -> None:
-        ""
+"""
 Evict oldest free buffer.        oldest_entry: Optional[BufferEntry] = None
         oldest_spec: Optional[BufferSpec] = None
 
@@ -192,14 +191,14 @@ Evict oldest free buffer.        oldest_entry: Optional[BufferEntry] = None
                 del self._tensor_to_entry[id(oldest_entry.tensor)]
 
     def release(self, tensor: Any) -> None:
-        ""
+"""
 Release tensor back to pool.        with self._lock:
             tensor_id: int = id(tensor)
             if tensor_id in self._tensor_to_entry:
                 self._tensor_to_entry[tensor_id].release()
 
     def clear(self) -> None:
-        ""
+"""
 Clear all buffers.        with self._lock:
             self._buffers.clear()
             self._tensor_to_entry.clear()
@@ -207,7 +206,7 @@ Clear all buffers.        with self._lock:
 
 @dataclass
 class InputSlot:
-    ""
+"""
 A slot for input data in the buffer.
     name: str
     spec: BufferSpec
@@ -215,7 +214,7 @@ A slot for input data in the buffer.
     is_static: bool = True  # Static for CUDA graphs
 
     def set_data(self, data: Any) -> None:
-        ""
+"""
 Set data in slot, copying to tensor.        if self.tensor is None:
             raise RuntimeError(f"Slot {self.name} not allocated")
         if hasattr(self.tensor, "copy_"):"            self.tensor.copy_(data)
@@ -256,7 +255,7 @@ class InputBufferManager:
         self._init_default_slots()
 
     def _init_default_slots(self) -> None:
-        ""
+"""
 Initialize default input slots.        # Input IDs: (batch, seq_len) -> int64
         self.register_slot(
             "input_ids","            BufferSpec(shape=(self.max_batch_size * self.max_seq_len,), dtype="int64", device="cuda"),"            is_static=True,
@@ -279,7 +278,7 @@ Initialize default input slots.        # Input IDs: (batch, seq_len) -> int64
             self._slots[name] = InputSlot(name=name, spec=spec, tensor=tensor, is_static=is_static)
 
     def get_slot(self, name: str) -> Optional[InputSlot]:
-        ""
+"""
 Get a slot by name.        with self._lock:
             return self._slots.get(name)
 
@@ -320,14 +319,14 @@ Get a slot by name.        with self._lock:
         return staged
 
     def get_static_tensors(self) -> Dict[str, Any]:
-        ""
+"""
 Get all static tensors for graph capture.        with self._lock:
             return {
                 name: slot.tensor for name, slot in self._slots.items() if slot.is_static and slot.tensor is not None
             }
 
     def release_all(self) -> None:
-        ""
+"""
 Release all buffers.        with self._lock:
             for slot in self._slots.values():
                 if slot.tensor is not None:
@@ -349,7 +348,7 @@ class HierarchicalBufferPool(BufferPool):
         self._pinned_pool = SimpleBufferPool()
 
     def allocate(self, spec: BufferSpec) -> Any:
-        ""
+"""
 Allocate from appropriate tier.        if spec.device == "cuda":"            return self._gpu_pool.allocate(spec)
         if spec.pinned:
             return self._pinned_pool.allocate(spec)
@@ -357,14 +356,14 @@ Allocate from appropriate tier.        if spec.device == "cuda":"            ret
         return self._cpu_pool.allocate(spec)
 
     def release(self, tensor: Any) -> None:
-        ""
+"""
 Release to appropriate pool.        # Try all pools
         self._gpu_pool.release(tensor)
         self._cpu_pool.release(tensor)
         self._pinned_pool.release(tensor)
 
     def clear(self) -> None:
-        ""
+"""
 Clear all pools.        self._gpu_pool.clear()
         self._cpu_pool.clear()
         self._pinned_pool.clear()
@@ -384,13 +383,13 @@ class PredictiveBufferManager(InputBufferManager):
         self._prewarmed: Set[BufferSpec] = set()
 
     def record_usage(self, num_tokens: int) -> None:
-        ""
+"""
 Record usage for prediction.        self._size_history.append(num_tokens)
         if len(self._size_history) > 1000:
             self._size_history = self._size_history[-1000:]
 
     def predict_next_sizes(self, n: int = 3) -> List[int]:
-        ""
+"""
 Predict next N sizes.        if not self._size_history:
             return [self.max_batch_size]
 
@@ -404,7 +403,7 @@ Predict next N sizes.        if not self._size_history:
         return [size for size, _ in counter.most_common(n)]
 
     def prewarm(self) -> None:
-        ""
+"""
 Pre-warm predicted buffers.        sizes: List[int] = self.predict_next_sizes()
 
         for size in sizes:

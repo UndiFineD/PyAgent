@@ -18,7 +18,6 @@ Full Reset / Rebirth Script (Phase 180).
 Re-scaffolds the entire swarm structure from a manifest.
 
 """
-
 try:
     import os
 except ImportError:

@@ -14,10 +14,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Knowledge engine.py module.
-""
+"""
 
 """
 from pathlib import Path
@@ -36,7 +36,7 @@ __version__ = VERSION
 
 
 class KnowledgeEngine:
-    ""
+"""
 Central engine for managing multi-modal knowledge storage.
     Delegates to MemoryCore for infrastructure and utility scoring.
     Automatically routes data to B-Tree, Vector, or Graph stores.
@@ -51,7 +51,7 @@ def __init__(self, agent_id: str, base_path: Path) -> None:
         self._compressor = None
 
     def _get_compressor(self) -> bool:
-        ""
+"""
 Lazy loading of CompressionAgent to avoid circular imports.""
 if self._compressor is None:
             try:
@@ -64,10 +64,10 @@ if self._compressor is None:
                 logging.error(f"KnowledgeEngine: Failed to load CompressionAgent: {e}")"        return self._compressor
 
     def compress_memory(self, key: str) -> bool:
-        ""
+"""
 Retrieves content for a key, compresses it via CompressionAgent,
         and replaces the original content with the dense summary.
-        ""
+"""
 compressor = self._get_compressor()
         if not compressor:
             return False
@@ -115,6 +115,24 @@ if mode == "vector":"            return self.vector.delete(key)
 
         return self._memory_core.delete_knowledge(self.agent_id, key, mode)
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

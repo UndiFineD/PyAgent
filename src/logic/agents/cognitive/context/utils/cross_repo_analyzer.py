@@ -88,6 +88,24 @@ Find common patterns across repos.        return []
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

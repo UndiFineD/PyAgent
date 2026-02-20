@@ -17,14 +17,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Minimal parser-safe MockOrchestrator shim used during repository repair.
 
 """
-
 Provides a small, dependency-free class used by plugins and tests.
-""
+"""
 from typing import Any, Dict
 
 try:
@@ -33,7 +32,7 @@ except Exception:
     class _Logger:
         def info(self, *a, **k):
             pass
-    logging = _Logger()
+            logging = _Logger()
 
 
 class MockOrchestrator:

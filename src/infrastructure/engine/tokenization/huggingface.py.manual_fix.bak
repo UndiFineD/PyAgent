@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 HuggingFace tokenizer implementation.
-""
+"""
 
 """
 from typing import Dict, List, Optional, Sequence
@@ -31,7 +31,7 @@ from .models import TokenizerBackend, TokenizerConfig, TokenizerInfo
 
 
 class HuggingFaceTokenizer(BaseTokenizer):
-    ""
+"""
 HuggingFace transformers tokenizer wrapper.
     def __init__(self, config: TokenizerConfig) -> None:
         super().__init__(config)
@@ -39,7 +39,7 @@ HuggingFace transformers tokenizer wrapper.
         self._load_tokenizer()
 
     def _load_tokenizer(self) -> None:
-        ""
+"""
 Load the HuggingFace tokenizer.        try:
             from transformers import AutoTokenizer
 
@@ -102,7 +102,7 @@ Load the HuggingFace tokenizer.        try:
         messages: List[Dict[str, str]],
         add_generation_prompt: bool = True,
     ) -> str:
-        ""
+"""
 Apply chat template to messages.        if hasattr(self._tokenizer, "apply_chat_template"):"            return self._tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,

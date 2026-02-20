@@ -114,3 +114,21 @@ Generate all fixture code.        fixtures: list[str] = []
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
+
+"""

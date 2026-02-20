@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Neural Anchor Agent - Anchoring reasoning to verified external sources
 [Brief Summary]
@@ -30,7 +30,6 @@ WHAT IT DOES:
 - Exposes methods as tools via as_tool decorator for integration in the agent toolset.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Replace token-overlap with semantic search / embeddings and dense retrieval for robust grounding over large documents.
 - Add provenance, source snippet highlights, and granular confidence calibration instead of coarse "High"/"Low"."- Support indexed anchors (e.g., vector DB), asynchronous loading/validation, and chunking for large sources.
@@ -38,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Neural anchor agent.py module.
-""
+"""
 try:
     import re
 except ImportError:

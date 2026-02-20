@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Interface sync core.py module.
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -39,7 +39,7 @@ class InterfaceSyncCore:
         }
         self.current_theme = "dark"
     def get_theme_payload(self, theme_name: str | None = None) -> dict[str, str]:
-        ""
+"""
 Returns the color palette for a given theme.        name = theme_name or self.current_theme
         return self.themes.get(name, self.themes["dark"])
     def broadcast_action(self, action_type: str, payload: Any) -> dict[str, Any]:
@@ -54,4 +54,4 @@ Returns the color palette for a given theme.        name = theme_name or self.cu
                 return {
             "nodes": agents,"            "edges": [{"from": c[0], "to": c[1]} for c in connections],"            "sync_version": "v2.0","        }
 
-""
+"""

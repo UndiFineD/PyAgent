@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Transmutation.py module.
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -41,7 +41,7 @@ except Exception:
 
 
 def json_flatten(value: JSONTree[_T], separator: str = ".", list_separator: str = "") -> dict[str, _T]:
-    ""
+"""
 Flatten a nested JSON structure to a single-level dict with dot-notation keys.""
 result: dict[str, _T] = {}
 
@@ -65,7 +65,7 @@ result: dict[str, _T] = {}
 
 
 def json_unflatten(flat: dict[str, _T], separator: str = ".") -> dict[str, Any]:
-    ""
+"""
 Reconstruct a nested JSON structure from a flattened dict.""
 result: dict[str, Any] = {}
 

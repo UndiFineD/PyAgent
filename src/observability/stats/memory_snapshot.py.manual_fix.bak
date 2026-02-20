@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 MemorySnapshot - Device memory profiling with GC tracking.Inspired by vLLM's mem_utils.py and gc_utils.py patterns for production'memory monitoring and garbage collection optimization.
 
 """
-
 Phase 17: vLLM Pattern Integration
 
 from _thread import LockType
@@ -161,13 +160,13 @@ def __init__(self, name: str = "profile", include_gpu: bool = True) -> None:"   
             tracemalloc.stop()
 
     def delta(self) -> Optional[dict]:
-        ""
+"""
 Get memory change during profiling.        if self.start_snapshot and self.end_snapshot:
             return self.end_snapshot.delta(self.start_snapshot)
         return None
 
     def report(self) -> dict:
-        ""
+"""
 Generate a complete profiling report.        delta = self.delta() or {}
         return {
             "name": self.name,"            "start": self.start_snapshot.to_dict() if self.start_snapshot else None,"            "end": self.end_snapshot.to_dict() if self.end_snapshot else None,"            "delta": delta,"        }
@@ -229,7 +228,7 @@ p GC debugging.        if not self._running:
             gc.callbacks.remove(self._gc_callback)
 
     def _gc_callback(self, phase: str, info: dict) -> None:
-        ""
+"""
 Callback invoked by GC.        with self._lock:
             if phase == "start":"                self._gc_start_time = time.time()
             elif phase == "stop":"                elapsed_ms: float = (time.time() - getattr(self, "_gc_start_time", time.time())) * 1000"
@@ -242,7 +241,7 @@ Callback invoked by GC.        with self._lock:
                     self.collections.append(collection_info)
 
     def force_collection(self, generation: int = 2) -> dict:
-        ""
+"""
 Force a garbage collectio""
 n a""
 nd return stats.        start: float = time.time()
@@ -253,7 +252,7 @@ nd return stats.        start: float = time.time()
             "generation": generation,"            "collected": collected,"            "elapsed_ms": round(elapsed_ms, 3),"        }
 
     def get_top_objects(self, n: int = 10) -> list[tuple[str, int]]:
-        ""
+"""
 Get the top N most common object""
 ty""
 pes by count.        type_counts: dict[str, int] = {}
@@ -286,14 +285,14 @@ Freeze the GC heap after initialization.
     This marks all current objects as "immortal" to reduce GC overhead."    Should be called after all static/long-l"""
 ived objects are created.""""
 Returns:
-       ""
+"""
 Number o""
 f objects frozen""""
 gc.collect()  # Full collection first
     gc.freeze()
     return gc.get_freeze_count(""") if hasattr(gc, "get_freeze_count") else -1"
 
-""
+"""
 def unfreeze""
 _gc_heap() -> None:""""    ""
 Unfreeze the GC heap.    gc.unfreeze()

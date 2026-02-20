@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 High-level API functions for SlashCommands.
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -41,7 +41,7 @@ _DEFAULT_SLASH_COMMANDS: SlashCommands | None = None
 
 
 def get_slash_commands() -> SlashCommands:
-    ""
+"""
 Get the default SlashCommands instance.    global _DEFAULT_SLASH_COMMANDS  # pylint: disable=global-statement
     if _DEFAULT_SLASH_COMMANDS is None:
         _DEFAULT_SLASH_COMMANDS = SlashCommands()
@@ -49,7 +49,7 @@ Get the default SlashCommands instance.    global _DEFAULT_SLASH_COMMANDS  # pyl
 
 
 def reset_slash_commands() -> None:
-    ""
+"""
 Reset the default instance (for testing).    global _DEFAULT_SLASH_COMMANDS  # pylint: disable=global-statement
     _DEFAULT_SLASH_COMMANDS = None
 

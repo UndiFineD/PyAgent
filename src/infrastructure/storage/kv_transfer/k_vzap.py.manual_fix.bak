@@ -19,7 +19,6 @@ KVzap: Surrogate-model-based KV cache pruning.
 Implemented based on arXiv:2601.07891 (NVIDIA research, Jan 2026).
 
 """
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -45,7 +44,7 @@ except ImportError:
 
 @dataclass
 class KVzapConfig:
-    ""
+"""
 Configuration for KVzap pruning.
     hidden_dim: int
     num_heads: int
@@ -64,16 +63,16 @@ class KVzapSurrogate(nn.Module):
         super().__init__()
         self.config = config
         if config.use_mlp:
-            self.model = nn.Sequential(
-                nn.Linear(config.hidden_dim, config.hidden_dim // 8),
-                nn.GELU(),
-                nn.Linear(config.hidden_dim // 8, config.num_heads),
-            )
+        self.model = nn.Sequential(
+        nn.Linear(config.hidden_dim, config.hidden_dim // 8),
+        nn.GELU(),
+        nn.Linear(config.hidden_dim // 8, config.num_heads),
+        )
         else:
-            self.model = nn.Linear(config.hidden_dim, config.num_heads)
+        self.model = nn.Linear(config.hidden_dim, config.num_heads)
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        ""
+"""
 Forward pass for the KV cache pruning surrogate model.        # hidden_states: [batch, seq_len, hidden_dim]
         # output: [batch, seq_len, num_heads]
         return self.model(hidden_states)
@@ -91,7 +90,7 @@ class KVzapPruner:
         self.surrogate.eval()  # set model to evaluation mode — no builtin eval used  # nosec
 
     def get_importance_scores(self, hidden_states: torch.Tensor) -> torch.Tensor:
-        ""
+"""
 Calculate importance scores for each token/head.        with torch.no_grad():
             scores = self.surrogate(hidden_states.to(self.device))
 
@@ -102,7 +101,7 @@ Calculate importance scores for each token/head.        with torch.no_grad():
             return scores
 
     def create_pruning_mask(self, scores: torch.Tensor) -> torch.Tensor:
-        ""
+"""
 Create a boolean mask where True means KEEP.        return scores >= self.config.threshold
 
     def prune_kv(

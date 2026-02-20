@@ -28,7 +28,6 @@ WHAT IT DOES:
 Provides a small orchestration agent that runs multiple Python linters (ruff, pylint, flake8) via LinterCore, consolidates results into human-readable reports or JSON, and exposes these actions as tools for other agents or CLI usage.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Add directory-level linting and parallel execution of linters for performance.
 - Respect and load project linter configurations (pyproject.toml, .pylintrc, etc.) and virtualenv interpreter contexts.

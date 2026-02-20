@@ -11,14 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-""
+"""
 """
 Test Convergence Core module.
-""
+"""
 try:
 
 """
-    import pytest
+import pytest
 except ImportError:
     import pytest
 
@@ -39,10 +39,10 @@ class TestConvergenceCore:
     @pytest.fixture
     def convergence_core(self):
         return ConvergenceCore(workspace_root="/tmp/workspace")
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], max_examples=50, deadline=None)
-    @given(
+        @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], max_examples=50, deadline=None)
+        @given(
         st.dictionaries(st.text(min_size=1, max_size=10), st.booleans(), max_size=20)
-    )
+        )
     def test_verify_fleet_health_hypothesis(self, convergence_core, agent_reports):
         # We can reuse the fixture or create a new one inside.
         # The test logic uses the passed fixture but re-instantiates inside the original test.
@@ -53,7 +53,7 @@ class TestConvergenceCore:
         expected_healthy = sum(1 for status in agent_reports.values() if status)
         expected_total = len(agent_reports)
         expected_passed = (
-            expected_healthy == expected_total if expected_total > 0 else False
+        expected_healthy == expected_total if expected_total > 0 else False
         )
         expected_failed = [name for name, status in agent_reports.items() if not status]
 

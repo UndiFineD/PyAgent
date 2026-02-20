@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Multi-Channel MUXer for high-speed (120fps) multimodal I/O.
 Synchronizes separate channels for video, audio, and text.
-""
+"""
 
 """
 import logging
@@ -37,7 +37,7 @@ logger = logging.getLogger("pyagent.multimodal.muxer")
 
 
 class ChannelType(Enum):
-    ""
+"""
 Enumeration of supported modality channel types.""
 TEXT = 0x01
     AUDIO = 0x02
@@ -47,7 +47,7 @@ TEXT = 0x01
 
 @dataclass
 class ModalityChannel:
-    ""
+"""
 Configuration for a specific modality streaming channel.""
 name: str
     modality_type: str
@@ -56,7 +56,7 @@ name: str
 
 
 class Muxer:
-    ""
+"""
 Coordinates multiple high-speed modality channels.
     Supports "DVD-style" separate streams for video, audio, and text.""
 def __init__(self, target_fps: float = 120.0) -> None:
@@ -66,7 +66,7 @@ def __init__(self, target_fps: float = 120.0) -> None:
 
 
     def synchronize_tick(self, audio: bytes, video: bytes, text: str) -> bytes:
-        ""
+"""
 Packs separate modalities into a single sync-packet for 120fps DVD-like streaming.
         Uses 0xDEADBEEF binary muxer.""
 packets = [
@@ -78,14 +78,14 @@ packets = [
 
 
     def add_channel(self, name: str, m_type: str, fps: Optional[float] = None) -> None:
-        ""
+"""
 Register a new modality channel.""
 self.channels[name] = ModalityChannel(name=name, modality_type=m_type, fps=fps or self.target_fps)
         logger.info(f"Registered channel: {name} ({m_type}) at {fps or self.target_fps} fps")
 
 
     def mux(self, raw_packets: List[Dict[str, Any]]) -> bytes:
-        ""
+"""
 Mux multiple inputs into a binary stream.""
 if rc and hasattr(rc, "mux_channels_rust") and hasattr(rc, "ModalityPacket"):
             packets = []
@@ -104,7 +104,7 @@ if rc and hasattr(rc, "mux_channels_rust") and hasattr(rc, "ModalityPacket"):
 
 
     def demux(self, stream_data: bytes) -> List[Dict[str, Any]]:
-        ""
+"""
 Demux a binary stream into individual channel packets.""
 if rc and hasattr(rc, "demux_channels_rust"):
             packets = rc.demux_channels_rust(list(stream_data))
@@ -122,7 +122,7 @@ if rc and hasattr(rc, "demux_channels_rust"):
 
 
     def synchronize(self, packets: List[Dict[str, Any]], jitter_ms: float = 8.33) -> Dict[int, List[Dict[str, Any]]]:
-        ""
+"""
 Synchronize packets across channels using a jitter window.""
         # 8.33ms = 1 frame at 120fps.
         if rc and hasattr(rc, "synchronize_channels_rust") and hasattr(rc, "ModalityPacket"):

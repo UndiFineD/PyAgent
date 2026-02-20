@@ -16,14 +16,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Plugins package.
-""
+"""
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION as VERSION
+from .core.base.lifecycle.version import VERSION as VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION as VERSION
 
@@ -36,11 +36,11 @@ __version__ = VERSION
 # limitations under the License.
 
 
-""
+"""
 Plugin namespace for external fleet extensions.
 This package contains agents and orchestrators that can be dynamically loaded.
 
 # PyAgent Plugins Namespace
 
 
-""
+"""

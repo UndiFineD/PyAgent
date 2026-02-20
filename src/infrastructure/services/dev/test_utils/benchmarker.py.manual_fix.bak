@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from collections.abc import Callable
@@ -42,14 +42,14 @@ __version__ = VERSION
 
 
 class Benchmarker:
-    ""
+"""
 Runs benchmarks and collects statistics.
     def __init__(self) -> None:
-        ""
+"""
 Initialize benchmarker.        self.timings: list[float] = []
 
     def run(self, fn: Callable[[], None], iterations: int = 5) -> dict[str, float]:
-        ""
+"""
 Run a function multiple times and collect timing statistics.""""
 Args:
             fn: Function to benchmark.

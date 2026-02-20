@@ -30,7 +30,6 @@ Provides a small utility class, GitBranchProcessor, that:
 - Filters changed files by extension when requested and returns pathlib.Path objects; gracefully returns empty lists or None on failures and logs errors/warnings.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Avoid shelling out to git with subprocess.run for easier testing and better error handling; introduce an injectable Git interface or use GitPython to decouple from the CLI.
 - Improve error reporting: propagate exceptions or return richer result objects (status, stderr, stdout) instead of silent empty lists, and include retry/backoff for transient git timeouts.

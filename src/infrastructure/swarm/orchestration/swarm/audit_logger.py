@@ -66,15 +66,15 @@ Records a specific step in a swarm task.        trail = SwarmAuditTrail(
 
     def _persist_event(self, event: SwarmAuditTrail):
 """
-Appends a single audit event to the JSONL log file.        try:
-            with open(self.storage_path, 'a', encoding='utf-8') as f:'                f.write(
-                    json.dumps(
-                        {
-                            "task_id": event.request_id,"                            "event_type": event.step,"                            "description": event.decision_summary,"                            "data": event.raw_data,"                            "timestamp": event.timestamp,"                            "duration_ms": event.duration_ms,"                        }
-                    )
-                    + "\\n""                )
+        Appends a single audit event to the JSONL log file.        try:
+        with open(self.storage_path, 'a', encoding='utf-8') as f:'                f.write(
+        json.dumps(
+        {
+        "task_id": event.request_id,"                            "event_type": event.step,"                            "description": event.decision_summary,"                            "data": event.raw_data,"                            "timestamp": event.timestamp,"                            "duration_ms": event.duration_ms,"                        }
+        )
+        + "\\n""                )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"Failed to persist audit event: {e}")
+        logger.error(f"Failed to persist audit event: {e}")
     def get_trail(self, task_id: str) -> List[SwarmAuditTrail]:
 """
 Retrieves the full decision trail for a specific task.        return self.trails.get(task_id, [])

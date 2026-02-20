@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 OTel Manager - Distributed tracing and span lifecycle.Distributed tracing for the PyAgent fleet using OpenTelemetry standards.
 Allows visualization of agent chains and request propagation across nodes.
@@ -46,7 +46,7 @@ WHAT IT SHOULD DO BETTER:
      handling/validation of SDK vs mock spans.
   3) Record and expose latency breakdowns via TracingCore and include tests
      for end-to-end propagation and exporter behavior.
-""
+"""
 import logging
 import time
 import uuid
@@ -88,7 +88,7 @@ class Span:
 
 
 class OTelManager:
-    ""
+"""
 Manages OTel-compatible spans and traces for cross-fleet observability.""""
 Integrated with TracingCore for latency analysis and OTel formatting.
     
@@ -107,7 +107,7 @@ Integrated with TracingCore for latency analysis and OTel formatting.
         parent_id: str | None = None,
         attributes: dict[str, Any] | None = None,
     ) -> str:
-        ""
+"""
 Starts a new tracing span and returns its ID.        span_id = str(uuid.uuid4())
 
         if HAS_OTEL and self.tracer:
@@ -135,7 +135,7 @@ Starts a new tracing span and returns its ID.        span_id = str(uuid.uuid4())
         status: str = "ok","        network_latency_sec: float = 0.0,
         attributes: dict[str, Any] | None = None,
     ) -> None:
-        ""
+"""
 Ends a span and calculates latency breakdown via Core.
         raw_span = self.active_spans.pop(span_id, None)
         if not raw_span:
@@ -159,7 +159,7 @@ Ends a span and calculates latency breakdown via Core.
 
         logging.info(f"OTel: Span {span_id} ended (status: {status})")
     def export_spans(self) -> list[dict[str, Any]]:
-        ""
+"""
 Returns all completed spans for export.""""
 Note: Real OTel spans are exported via their own processors.
                 batch = [vars(s) for s in self.completed_spans if isinstance(s, Span)]
@@ -167,7 +167,7 @@ Note: Real OTel spans are exported via their own processors.
         return batch
 
     def get_trace_context(self, span_id: str) -> dict[str, str]:
-        ""
+"""
 Generates headers for propagation across HTTP/RPC calls.        if span_id in self.active_spans:
             span = self.active_spans[span_id]
             return {"traceparent": f"00-{span.trace_id}-{span.span_id}-01"}"        return {}
@@ -177,4 +177,4 @@ if __name__ == "__main__":"    otel = OTelManager()
 
     threading.Event().wait(timeout=0.1)
     otel.end_span(child, status="ok")"    otel.end_span(root, status="ok")"    print(f"Exported {len(otel.export_spans())} spans.")
-""
+"""

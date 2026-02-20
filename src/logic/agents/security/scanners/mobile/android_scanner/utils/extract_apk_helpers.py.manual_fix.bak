@@ -20,7 +20,7 @@ import sys
 
 def extract_apk_with_jadx(apk_path, output_dir, target_package):
 """
-    if not os.path.isfile(apk_path):
+if not os.path.isfile(apk_path):
 # [BATCHFIX] Commented metadata/non-Python
 #         raise FileNotFoundError(fAPK file not found: {apk_path}")"  # [BATCHFIX] closed string
     if not os.path.exists(output_dir):
@@ -32,7 +32,7 @@ def extract_apk_with_jadx(apk_path, output_dir, target_package):
 #     print(fDecompiling APK: {apk_path} to {output_dir}")"  # [BATCHFIX] closed string
     try:
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 jadx_executable = "jadx.bat" if platform.system() == "Windows" else "jadx"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         jadx_path = os.path.join(
@@ -46,7 +46,7 @@ jadx_executable = "jadx.bat" if platform.system() == "Windows" else "jadx"  # [B
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 command = [jadx_path, "-d", output_dir, apk_path]"        subprocess.run(command, check=True)
 # [BATCHFIX] Commented metadata/non-Python
 #         print(fDecompilation complete. Files saved to: {output_dir}")"  # [BATCHFIX] closed string"    except subprocess.CalledProcessError as e:
@@ -57,7 +57,7 @@ command = [jadx_path, "-d", output_dir, apk_path]"        subprocess.run(command
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 target_classes = []""""
 for root, _, files in os.walk(output_dir):
         for file in files:
@@ -65,6 +65,24 @@ for root, _, files in os.walk(output_dir):
                     target_classes.append(os.path.join(root, file))
 
     return manifest_path, strings_path, target_classes
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

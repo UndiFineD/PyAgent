@@ -73,16 +73,16 @@ class GroqConnector(CloudProviderBase):
 
     def _get_client(self):
 """
-Lazy initialization of the OpenAI async client.        if self._client is None:
-            from openai import AsyncOpenAI
-            self._client = AsyncOpenAI(
-                api_key=self._api_key,
-                base_url=self._base_url,
-                timeout=self._timeout
-            )
+        Lazy initialization of the OpenAI async client.        if self._client is None:
+        from openai import AsyncOpenAI
+        self._client = AsyncOpenAI(
+        api_key=self._api_key,
+        base_url=self._base_url,
+        timeout=self._timeout
+        )
         return self._client
 
-    @property
+        @property
     def name(self) -> str:
 """
 Return provider name.        return "Groq"

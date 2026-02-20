@@ -21,7 +21,7 @@ Now modularized into the 'params' subpackage.
 try:
 
 """
-    from .params import (ChoiceConstraint, ConstraintBuilder, ConstraintType,
+from .params import (ChoiceConstraint, ConstraintBuilder, ConstraintType,
 except ImportError:
     from .params import (ChoiceConstraint, ConstraintBuilder, ConstraintType,
 

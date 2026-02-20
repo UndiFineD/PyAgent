@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from enum import Enum
+from enum import Enum
 
 try:
     from .core.base.lifecycle.version import VERSION

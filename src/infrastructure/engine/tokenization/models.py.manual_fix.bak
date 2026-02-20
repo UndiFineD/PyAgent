@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Models and configurations for tokenization.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -48,7 +48,7 @@ except ImportError:
 
 
 class TokenizerBackend(Enum):
-    ""
+"""
 Supported tokenizer backends.
     HUGGINGFACE = auto()
     TIKTOKEN = auto()
@@ -59,7 +59,7 @@ Supported tokenizer backends.
 
 
 class SpecialTokenHandling(Enum):
-    ""
+"""
 How to handle special tokens.
     INCLUDE = auto()
     EXCLUDE = auto()
@@ -70,7 +70,7 @@ How to handle special tokens.
 
 
 class TruncationStrategy(Enum):
-    ""
+"""
 Truncation strategies for long sequences.
     NONE = auto()
     LEFT = auto()
@@ -80,7 +80,7 @@ Truncation strategies for long sequences.
 
 
 class PaddingStrategy(Enum):
-    ""
+"""
 Padding strategies for batched inputs.
     NONE = auto()
     MAX_LENGTH = auto()
@@ -89,7 +89,7 @@ Padding strategies for batched inputs.
 
 @dataclass
 class TokenizerConfig:
-    ""
+"""
 Configuration for tokenizer initialization.
     model_name: str
     backend: TokenizerBackend = TokenizerBackend.HUGGINGFACE
@@ -119,7 +119,7 @@ Configuration for tokenizer initialization.
 
 @dataclass
 class TokenizerInfo:
-    ""
+"""
 Information about a loaded tokenizer.
     backend: TokenizerBackend
     vocab_size: int
@@ -134,14 +134,14 @@ Information about a loaded tokenizer.
     special_tokens: Dict[str, int] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        ""
+"""
 Convert tokenizer info to a serializable dictionary.        return {
             "backend": self.backend.name,"            "vocab_size": self.vocab_size,"            "bos_token_id": self.bos_token_id,"            "eos_token_id": self.eos_token_id,"            "pad_token_id": self.pad_token_id,"            "max_length": self.max_length,"            "model_name": self.model_name,"            "is_fast": self.is_fast,"            "supports_chat_template": self.supports_chat_template,"        }
 
 
 @dataclass
 class TokenizeResult:
-    ""
+"""
 Result of tokenization.
     input_ids: List[int]
     attention_mask: Optional[List[int]] = None
@@ -155,7 +155,7 @@ Result of tokenization.
         self.num_tokens = len(self.input_ids)
 
     def to_numpy(self) -> Dict[str, np.ndarray]:
-        ""
+"""
 Convert results to a dictionary of NumPy arrays.        result = {"input_ids": np.array(self.input_ids, dtype=np.int64)}"        if self.attention_mask:
             result["attention_mask"] = np.array(self.attention_mask, dtype=np.int64)"        if self.token_type_ids:
             result["token_type_ids"] = np.array(self.token_type_ids, dtype=np.int64)"        return result
@@ -163,7 +163,7 @@ Convert results to a dictionary of NumPy arrays.        result = {"input_ids": n
 
 @dataclass
 class BatchTokenizeResult:
-    ""
+"""
 Result of batch tokenization.
     input_ids: List[List[int]]
     attention_mask: Optional[List[List[int]]] = None
@@ -187,6 +187,24 @@ Pad all sequences in the batch to match the maximum sequence length.        padd
             token_counts=self.token_counts,
             max_length=self.max_length,
         )
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

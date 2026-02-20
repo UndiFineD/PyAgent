@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Command loader - discovers and loads command modules.
-""
+"""
 
 """
 import importlib
@@ -35,7 +35,7 @@ _COMMANDS_LOADED = False
 
 
 def get_commands_dir() -> Path:
-    ""
+"""
 Get the commands directory path.    return Path(__file__).parent / "commands"
 
 def discover_command_modules() -> list[str]:
@@ -133,11 +133,11 @@ def reload_commands() -> int:
 
 
 def is_loaded(module_name: str) -> bool:
-    ""
+"""
 Check if a module is loaded.    full_module_name = f"src.interface.slash_commands.commands.{module_name}""    return full_module_name in _loaded_modules
 
 
 def get_loaded_modules() -> list[str]:
-    ""
+"""
 Get list of loaded module names.    prefix = "src.interface.slash_commands.commands.""    return [m.replace(prefix, "") for m in _loaded_modules]"
-""
+"""

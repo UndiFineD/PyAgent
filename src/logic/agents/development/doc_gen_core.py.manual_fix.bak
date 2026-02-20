@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 DocGen Core - Extract and format Python source documentation
 Brief Summary
@@ -31,7 +31,6 @@ WHAT IT DOES:
 - Provides helpers to format classes and functions and to convert file paths to documentation filenames.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Include function signatures, parameters, return types, and decorators in the Markdown instead of only names and docstrings.
 - Support async functions (ast.AsyncFunctionDef), properties, dataclass fields, and nested functions; preserve and document type hints and default values.
@@ -41,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Core logic for extracting and formatting documentation from Python source code.
 No file I/O or side effects; designed for type safety and Rust FFI compatibility.
-""
+"""
 import ast
 import os
 

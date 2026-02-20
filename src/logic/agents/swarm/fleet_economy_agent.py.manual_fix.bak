@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Fleet Economy Agent - Manage Agent Wallets and Resource Bidding
 
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Fleet economy agent.py module.
-""
+"""
 import logging
 import sqlite3
 from pathlib import Path

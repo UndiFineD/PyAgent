@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 InterFleetIdentityAgent - Inter-fleet identity orchestration
 
@@ -39,7 +39,7 @@ FILE CONTENT SUMMARY:
 InterFleetIdentityAgent: Swarm agent for managing identity, authentication, and trust relationships
 between PyAgent fleets. Supports secure federation, cross-fleet authorization, and distributed
 identity management.
-""
+"""
 try:
     import hashlib
 except ImportError:

@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Manager for file locking.
 (Facade for src.core.base.common.lock_core)
-""
+"""
 
 """
 from typing import Any, Dict, Optional
@@ -27,7 +27,7 @@ from typing import Any, Dict, Optional
 
 
 class LockProxy:
-    ""
+"""
 A proxy object for a held lock.""
 def __init__(self, lock_id: str, lock_type: Any) -> None:
         self.lock_id = lock_id
@@ -37,10 +37,10 @@ def __init__(self, lock_id: str, lock_type: Any) -> None:
 
 
 class FileLockManager:
-    ""
+"""
 Manager for coordinating file-system level locks.
     Delegates to LockCore for the underlying synchronization logic.
-    ""
+"""
 def __init__(self, core: Optional[Any] = None) -> None:
         try:
             from .lock_core import LockCore
@@ -52,13 +52,13 @@ def __init__(self, core: Optional[Any] = None) -> None:
 
 
     def acquire(self, lock_id: str, timeout: float = 10.0, lock_type: Any = None) -> bool:
-        ""
+"""
 Acquire a file lock.""
 return self._core.acquire_lock(str(lock_id), timeout, lock_type)
 
 
     def acquire_lock(self, lock_id: str, lock_type: Any = None, timeout: float = None) -> Optional[LockProxy]:
-        ""
+"""
 Alias for acquire to match expectations of some core modules.""
 t = timeout if timeout is not None else self.lock_timeout
 
@@ -81,7 +81,7 @@ t = timeout if timeout is not None else self.lock_timeout
 
 
     def release(self, lock_id: str) -> bool:
-        ""
+"""
 Release a file lock.""
 self._core.release_lock(str(lock_id))
         if str(lock_id) in self.locks:
@@ -90,12 +90,12 @@ self._core.release_lock(str(lock_id))
 
 
     def release_lock(self, lock_id: str) -> bool:
-        ""
+"""
 Alias for release to match expectations of some core modules.""
 return self.release(lock_id)
 
 
     def is_locked(self, lock_id: str) -> bool:
-        ""
+"""
 Check if a file is locked.""
 return self._core.is_locked(lock_id)

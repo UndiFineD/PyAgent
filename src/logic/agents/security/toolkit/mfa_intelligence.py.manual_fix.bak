@@ -23,19 +23,18 @@ from urllib.parse import quote
 class MFAIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""
+"""
 """
 Intelligence module for MFA detection and identity service profiling.#     Ported from MFASweep and other O365/Azure tools.
 
 """
-
-    O365_ENDPOINTS = {
+O365_ENDPOINTS = {
         "GraphAPI": "https://graph.microsoft.com","        "AzureManagement": "https://management.core.windows.net","        "ExchangeServices": "https://outlook.office365.com/EWS/Exchange.asmx","        "ActiveSync": "https://outlook.office365.com/Microsoft-Server-ActiveSync","        "WebPortal": "https://portal.office.com","    }
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
 self.session = session
         self._own_session = False
@@ -49,7 +48,7 @@ self.session = session
     async def get_user_realm(self, username: str) -> Dict:
 # [BATCHFIX] Commented metadata/non-Python
 """         "Checks the authentication realm for a user (ADFS vs Managed)."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 url = fhttps://login.microsoftonline.com/getuserrealm.srf?login={quote(username)}&"xml=1"  # [BATCHFIX] closed string"        try:
             session = await self.get_session()
             async with session.get(url) as response:
@@ -79,7 +78,7 @@ url = fhttps://login.microsoftonline.com/getuserrealm.srf?login={quote(username)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 results[name] = {""""                        "status_code": response.status,"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #                         "mfa_indicator": "WAuth=wsignin1.0" in response.headers.get("WWW-Authenticate", "),"  # [BATCHFIX] closed string"                    }
@@ -87,10 +86,28 @@ results[name] = {""""                        "status_code": response.status,"# [
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 results[name] = {"error": str(e)}
         await asyncio.gather(*(check_endpoint(n, u) for n, u in self.O365_ENDPOINTS.items()))
         return results
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -24,7 +24,7 @@ Provides logic for image hashing, glitch detection, and visual signature extract
 
 """
 from GUI screenshots and other visual data sources.
-""
+"""
 try:
     import hashlib
 except ImportError:
@@ -92,4 +92,4 @@ class VisionCore:
 
         return False
 
-""
+"""

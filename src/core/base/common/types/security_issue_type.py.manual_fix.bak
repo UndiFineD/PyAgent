@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_coder.py
-""
+"""
 try:
 
 """
-    from enum import Enum
+from enum import Enum
 except ImportError:
     from enum import Enum
 
@@ -37,9 +37,9 @@ __version__ = VERSION
 
 
 class SecurityIssueType(Enum):
-    ""
+"""
 Types of security vulnerabilities.
-    ""
+"""
 SQL_INJECTION = "sql_injection"
     XSS = "xss"
     HARDCODED_SECRET = "hardcoded_secret"

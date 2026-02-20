@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from typing import List, Dict
+from typing import List, Dict
 
 
 
@@ -31,7 +31,7 @@ Intelligence engine for macOS-specific enumeration and post-exploitation.#     @
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_phishing_scripts() -> Dict[str, str]:"AppleScript snippets for credential phishing.        return {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -46,7 +46,7 @@ def get_phishing_scripts() -> Dict[str, str]:"AppleScript snippets for credentia
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_persistence_paths() -> List[str]:"Common macOS persistence locations.        return [
             "~/Library/LaunchAgents","            "/Library/LaunchAgents","            "/Library/LaunchDaemons","            "/System/Library/LaunchAgents","            "/System/Library/LaunchDaemons","            "~/.zshrc","            "~/.bash_profile","            "~/Library/Application Support/com.apple.backgroundtaskmanagementagent","        ]
 
@@ -54,9 +54,9 @@ def get_persistence_paths() -> List[str]:"Common macOS persistence locations.   
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_sensitive_files() -> List[str]:"Paths to sensitive data on macOS.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #        " return ["  # [BATCHFIX] closed string"            "~/Library/Keychains/login.keychain-db","            "~/Library/Application Support/com.apple.spotlight/index.db","            "~/Library/Safari/History.db","            "~/Library/Safari/Bookmarks.plist","            "~/Library/Messages/chat.db","        ]
 
-""
+"""

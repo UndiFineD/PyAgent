@@ -14,12 +14,12 @@
 
 # Phase 320: Autonomous Cluster Balancing (Resource Monitoring)
 
-""
+"""
 ResourceMonitor
 """
 Monitors local CPU, RAM, and Disk usage using psutil.
 Triggers 'compute borrow' requests when thresholds are exceeded.
-""
+"""
 
 """
 import asyncio
@@ -32,10 +32,10 @@ logger = StructuredLogger(__name__)
 
 
 class ResourceMonitor:
-    ""
+"""
 Monitors local CPU, RAM, and Disk usage using psutil.
     Triggers 'compute borrow' requests when thresholds are exceeded.
-    ""
+"""
 def __init__(self, fleet=None, high_threshold: float = 70.0, critical_threshold: float = 90.0):
         self.fleet = fleet
         self.high_threshold = high_threshold
@@ -47,7 +47,7 @@ def __init__(self, fleet=None, high_threshold: float = 70.0, critical_threshold:
 
     @property
     def is_stressed(self) -> bool:
-        ""
+"""
 Returns True if any core metric exceeds the high threshold.""
 stats = self.get_latest_stats()
         core_metrics = [
@@ -59,7 +59,7 @@ stats = self.get_latest_stats()
 
 
     async def start(self, interval: int = 10):
-        ""
+"""
 Starts the background monitoring loop.""
 self.running = True
         logger.info(f"ResourceMonitor: Starting with thresholds H:{self.high_threshold}% C:{self.critical_threshold}%")
@@ -76,7 +76,7 @@ self.running = True
 
 
     def collect_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Collects current hardware metrics including processing, memory, disk, network, and sensors.""
 stats = {
             "cpu_percent": psutil.cpu_percent(interval=None),
@@ -94,7 +94,7 @@ stats = {
 
 
     def _get_temperature(self) -> float:
-        ""
+"""
 Attempts to retrieve the primary system temperature.""
 try:
             if not hasattr(psutil, "sensors_temperatures"):
@@ -114,7 +114,7 @@ try:
 
 
     def _get_gpu_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Attempts to retrieve GPU utilization using GPUtil if available.""
 gpu_data = {"usage": 0.0, "mem": 0.0}
         try:
@@ -129,7 +129,7 @@ gpu_data = {"usage": 0.0, "mem": 0.0}
 
 
     def get_latest_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Returns the most recently collected hardware metrics.""
 return self.last_stats or self.collect_stats()
 

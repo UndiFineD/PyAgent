@@ -7,13 +7,13 @@ from __future__ import annotations
 # you may not use this file except in compliance with the License.
 
 
-""
+"""
 """
 Minimal Active Directory Analysis Core used in tests.""
 try:
 
-"""
-    import logging
+""
+import logging
 except ImportError:
     import logging
 

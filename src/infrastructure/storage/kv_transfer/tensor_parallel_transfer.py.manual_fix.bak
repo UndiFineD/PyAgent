@@ -22,11 +22,10 @@ from __future__ import annotations
 Tensor-Parallel Aware KV Transfer.
 
 """
-
 In Tensor Parallelism (TP), KV heads (and thus KV cache blocks) are partitioned
 across multiple GPUs within a single node or across nodes. This module ensures
 that KV transfer logic correctly handles partitioned blocks.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -71,7 +70,7 @@ class TensorParallelTransfer:
 
         logger.info("TensorParallelTransfer initialized for rank %d/%d", tp_rank, tp_size)
     def _aggregate_tp_metadata_rust(self, metadata_shards: List[bytes]) -> bytes:
-        ""
+"""
 Rust-accelerated aggregation of TP rank metadata.        # return RustBridge.aggregate_tp_metadata_rust(metadata_shards)
         return metadata_shards[0] if metadata_shards else b""
 def shard_aware_push(self, layer_name: str, kv_shard: Any, attn_metadata: Any):
@@ -82,8 +81,8 @@ def shard_aware_push(self, layer_name: str, kv_shard: Any, attn_metadata: Any):
         self.local_connector.save_kv_layer(layer_name, kv_shard, attn_metadata)
 
     def shard_aware_pull(self, layer_name: str, request_id: str):
-                Pull a shard of the KV cache from the remote consumer group.
-                # The connector handles the actual transport
+        Pull a shard of the KV cache from the remote consumer group.
+        # The connector handles the actual transport
         self.local_connector.wait_for_layer_load(layer_name)
 
     def verify_tp_consistency(self, request_id: str) -> bool:

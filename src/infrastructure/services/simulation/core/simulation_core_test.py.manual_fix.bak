@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.services.simulation.core.simulation_core import SimulationCore

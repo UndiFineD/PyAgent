@@ -1,4 +1,3 @@
-from __future__ import annotations
 """
 EffortEstimate enum - parser-safe stub for repairs.
 
@@ -6,6 +5,7 @@ This module provides a small Fibonacci-like effort enum used for compatibility
 with other modules during test repair. It intentionally keeps implementation
 minimal to avoid importing heavy dependencies while tests are being repaired.
 """
+from __future__ import annotations
 
 
 

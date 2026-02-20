@@ -216,19 +216,19 @@ Test PerformanceMeasurer functionality""
     def measurer(self):
         return PerformanceMeasurer([OptimizationMetric.ACCURACY, OptimizationMetric.LATENCY])
 
-    @pytest.mark.asyncio
-    async def test_performance_measurement(self, measurer):
+        @pytest.mark.asyncio
+        async def test_performance_measurement(self, measurer):
 """
-Test basic performance measurement""
-strategy = MockStrategy("test", {"accuracy": 0.9}, delay=0.05)
+        Test basic performance measurement""
+        strategy = MockStrategy("test", {"accuracy": 0.9}, delay=0.05)
         result = await measurer.measure_performance(strategy, "input", "expected_output")
         assert result.strategy_name == "test""        assert result.execution_time >= 0.05  # At least the delay
         assert not result.error
         assert "accuracy" in result.metrics
-    @pytest.mark.asyncio
-    async def test_error_measurement(self, measurer):
+        @pytest.mark.asyncio
+        async def test_error_measurement(self, measurer):
 """
-Test error handling in performance measurement""
+        Test error handling in performance measurement""
 class FailingStrategy(Strategy):
             async def execute(self, input_data: Any, **kwargs) -> Any:
                 raise ValueError("Test error")
@@ -259,11 +259,11 @@ filter = ThresholdFilter({"accuracy": 0.8, "latency": 0.3})
         assert filtered[0].strategy_name == "good"
     def test_threshold_updates(self):
         ""
-Test threshold updates""
-filter = ThresholdFilter({"accuracy": 0.8})
+        Test threshold updates""
+        filter = ThresholdFilter({"accuracy": 0.8})
         # Update thresholds
         filter.update_thresholds({"latency": 0.2})
         assert filter.thresholds["accuracy"] == 0.8"        assert filter.thresholds["latency"] == 0.2"
 
-if __name__ == "__main__":"    # Run tests
-    pytest.main([__file__, "-v"])
+        if __name__ == "__main__":"    # Run tests
+        pytest.main([__file__, "-v"])

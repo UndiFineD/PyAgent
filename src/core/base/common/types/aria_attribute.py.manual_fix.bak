@@ -14,13 +14,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 ARIA attribute type used by accessibility checks and tests.""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -33,7 +33,7 @@ except ImportError:
 
 @dataclass
 class ARIAAttribute:
-    ""
+"""
 Parser-safe ARIAAttribute dataclass.""
 name: str
     value: str = ""

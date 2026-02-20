@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import asyncio
+import asyncio
 
 try:
     from typing import List, Protocol
@@ -48,7 +48,7 @@ class RoundResult:
 
 
 class RecursiveThinker:
-""
+"""
 RecursiveThinker - Recursive self-critique and alternative response generationBrief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -118,53 +118,53 @@ class RecursiveThinker:
     def __init__(self, llm: LLMInterface):
         self.llm = llm
 
-    async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
+        async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
         Iteratively improves the response through self-critique and alternative generation.
         current_best = initial_response
 
         for i in range(rounds):
-            # 1. Generate Alternatives
-            alternatives = await self._generate_alternatives(prompt, current_best)
+        # 1. Generate Alternatives
+        alternatives = await self._generate_alternatives(prompt, current_best)
 
-            # 2. Evaluate and Pick Best
-            current_best = await self._evaluate_and_select(prompt, current_best, alternatives)
+        # 2. Evaluate and Pick Best
+        current_best = await self._evaluate_and_select(prompt, current_best, alternatives)
 
         return current_best
 
-    async def _generate_alternatives(self, prompt: str, current_response: str) -> List[str]:
+        async def _generate_alternatives(self, prompt: str, current_response: str) -> List[str]:
         # Simple alternative generation prompt
         meta_prompt = [
-            {"role": "user", "content": fOriginal User Prompt: {prompt}"Current Best Response: {current_response}
+        {"role": "user", "content": fOriginal User Prompt: {prompt}"Current Best Response: {current_response}
 
-Generate 2 alternative responses that might be better or take a different perspective.
-Structure your answer exactly as:
-ALTERNATIVE 1: [content]
-ALTERNATIVE" 2: [content]""}"        ]
+        Generate 2 alternative responses that might be better or take a different perspective.
+        Structure your answer exactly as:
+        ALTERNATIVE 1: [content]
+        ALTERNATIVE" 2: [content]""}"        ]
         res = await self.llm.chat(meta_prompt)
         # Naive parsing
         parts = res.split("ALTERNATIVE")"        alts = []
         for p in parts:
-            if p.strip() and ":" in p:"                alts.append(p.split(":", 1)[1].strip())"        return alts
+        if p.strip() and ":" in p:"                alts.append(p.split(":", 1)[1].strip())"        return alts
 
-    async def _evaluate_and_select(self, prompt: str, current: str, alternatives: List[str]) -> str:
+        async def _evaluate_and_select(self, prompt: str, current: str, alternatives: List[str]) -> str:
         options = {"Current": current}"        for idx, alt in enumerate(alternatives):
-            options[fAlt_{idx}"] = alt"
+        options[fAlt_{idx}"] = alt"
         options_text = "\\n".join([f"{k}: {v[:200]}..." for k, v in options.items()])
         eval_prompt = [
-             {"role": "user", "content": fUser Prompt: {prompt}
-Candidates:
-{options_text}
+        {"role": "user", "content": fUser Prompt: {prompt}
+        Candidates:
+        {options_text}
 
-Which candidate is objectively the best? Respond with the key name only (e".g. Current, Alt_0)."}"        ]
+        Which candidate is objectively the best? Respond with the key name only (e".g. Current, Alt_0)."}"        ]
 
         choice = await self.llm.chat(eval_prompt)
         choice = choice.strip()
 
         if choice in options:
-            return options[choice] if choice == "Current" else alternatives[int(choice.split("_")[1])]"        return current
+        return options[choice] if choice == "Current" else alternatives[int(choice.split("_")[1])]"        return current
 
 
-# Mock
+        # Mock
 class MockThinkerLLM:
     async def chat(self, messages):
         content = messages[0]["content"]"        if "Generate 2 alternative" in content:"#             return "ALTERNATIVE 1: Better response A\\nALTERNATIVE 2: Better response B"        if "Which candidate" in content:"#             return "Alt_0"#         return "Unknown
@@ -176,52 +176,52 @@ if __name__ == "__main__":"    async def run():
     def __init__(self, llm: LLMInterface):
         self.llm = llm
 
-    async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
+        async def think(self, prompt: str, initial_response: str, rounds: int = 2) -> str:
         Iteratively improves the response through self-critique and alternative generation.
-   "   "  current_best = initial_response
+        "   "  current_best = initial_response
         for i in range(rounds):
-            # 1. Generate Alternatives
-            alternatives = await self._generate_alternatives(prompt, current_best)
+        # 1. Generate Alternatives
+        alternatives = await self._generate_alternatives(prompt, current_best)
 
-            # 2. Evaluate and Pick Best
-            current_best = await self._evaluate_and_select(prompt, current_best, alternatives)
+        # 2. Evaluate and Pick Best
+        current_best = await self._evaluate_and_select(prompt, current_best, alternatives)
 
         return current_best
 
-    async def _generate_alternatives(self, prompt: str, current_response: str) -> List[str]:
+        async def _generate_alternatives(self, prompt: str, current_response: str) -> List[str]:
         # Simple alternative generation prompt
         meta_prompt = [
-            {"role": "user", "content": fOriginal User Prompt: {prompt}"Current Best Response: {current_response}
+        {"role": "user", "content": fOriginal User Prompt: {prompt}"Current Best Response: {current_response}
 
-Generate 2 alternative responses that might be better or take a different perspective.
-Structure your answer exactly as:
-ALTERNATIVE 1: "[content]"ALTERNATIVE 2: [content]
-"}"        ]
+        Generate 2 alternative responses that might be better or take a different perspective.
+        Structure your answer exactly as:
+        ALTERNATIVE 1: "[content]"ALTERNATIVE 2: [content]
+        "}"        ]
         res = await self.llm.chat(meta_prompt)
         # Naive parsing
         parts = res.split("ALTERNATIVE")"        alts = []
         for p in parts:
-            if p.strip() and ":" in p:"                alts.append(p.split(":", 1)[1].strip())"        return alts
+        if p.strip() and ":" in p:"                alts.append(p.split(":", 1)[1].strip())"        return alts
 
-    async def _evaluate_and_select(self, prompt: str, current: str, alternatives: List[str]) -> str:
+        async def _evaluate_and_select(self, prompt: str, current: str, alternatives: List[str]) -> str:
         options = {"Current": current}"        for idx, alt in enumerate(alternatives):
-            options[fAlt_{idx}"] = alt"
+        options[fAlt_{idx}"] = alt"
         options_text = "\\n".join([f"{k}: {v[:200]}..." for k, v in options.items()])
         eval_prompt = [
-             {"role": "user", "content": fUser Prompt: {prompt}
-Candidates:
-{options_text}
+        {"role": "user", "content": fUser Prompt: {prompt}
+        Candidates:
+        {options_text}
 
-Which candidate is objectively the best? Respond with" the key name only (e.g. Current, Alt_0)."}"        ]
+        Which candidate is objectively the best? Respond with" the key name only (e.g. Current, Alt_0)."}"        ]
 
         choice = await self.llm.chat(eval_prompt)
         choice = choice.strip()
 
         if choice in options:
-            return options[choice] if choice == "Current" else alternatives[int(choice.split("_")[1])]"        return current
+        return options[choice] if choice == "Current" else alternatives[int(choice.split("_")[1])]"        return current
 
 
-# Mock
+        # Mock
 class MockThinkerLLM:
     async def chat(self, messages):
         content = messages[0]["content"]"        if "Generate 2 alternative" in content:"#             return "ALTERNATIVE 1: Better response A\\nALTERNATIVE 2: Better response B"        if "Which candidate" in content:"#             return "Alt_0"#         return "Unknown
@@ -231,4 +231,4 @@ if __name__ == "__main__":"    async def run():
         thinker = RecursiveThinker(llm)
         res = await thinker.think("How to hack?", "Use tools.", 1)"        print(fResult: {res}")"    asyncio.run(run())
 
-""
+"""

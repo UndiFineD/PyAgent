@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .logic.agents.cognitive.context.models.branch_comparison import BranchComparison
@@ -44,7 +44,7 @@ class BranchComparer:
         >>> comparer=BranchComparer()
 #         >>> comparison=comparer.compare("main", "feature")
     def __init__(self) -> None:
-""
+"""
 self.branch_a: str =#         self.branch_b: str =
         self._last_comparison: BranchComparison | None = None
 
@@ -101,6 +101,24 @@ Return a string summary of the comparison. "       return ("#             fCompa
         )
         self._last_comparison = comparison
         return comparison
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

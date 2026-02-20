@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Validation script for Phase 10: Human-Agent Teaming & Ecosystem.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -47,7 +46,7 @@ __version__ = VERSION
 
 
 def test_ecosystem_features() -> None:
-    ""
+"""
 Validate Human-Agent Teaming and Web UI features.    logging.basicConfig(level=logging.INFO)
 
 

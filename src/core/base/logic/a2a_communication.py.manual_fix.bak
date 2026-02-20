@@ -6,7 +6,7 @@ from __future__ import annotations
 # you may not use this file except in compliance with the License.
 
 
-""
+"""
 """
 Minimal A2A communication primitives used in tests.""
 
@@ -53,7 +53,7 @@ class A2AResponse:
 
 
 class MessageRouter:
-    ""
+"""
 Simple in-memory router for testing.""
 def __init__(self) -> None:
         self.agents: Dict[str, Any] = {}
@@ -92,7 +92,7 @@ class A2ACommunicationMixin:
         self._agent_card = agent_card
         self._router = router
 
-    @property
+        @property
     def agent_card(self) -> AgentCard:
         return self._agent_card
 

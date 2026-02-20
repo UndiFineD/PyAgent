@@ -15,12 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: environment_manager
 Provides environment management for PyAgent multi-agent architecture.
 Inspired by AEnvironment patterns for isolation and resource management.
-""
+"""
 
 """
 import asyncio
@@ -45,13 +45,13 @@ logger = logging.getLogger(__name__)
 
 
 class EnvironmentManager:
-    ""
+"""
 Manages agent environments with isolation, resource limits, 
     and lifecycle management.
     Inspired by AEnvironment's containerized environment approach.
-    ""
+"""
 def __init__(self, base_dir: Optional[Path] = None):
-        ""
+"""
 Initialize the EnvironmentManager.""
 self.base_dir = base_dir or Path("data/environments")
         self.base_dir.mkdir(parents=True, exist_ok=True)
@@ -61,7 +61,7 @@ self.base_dir = base_dir or Path("data/environments")
 
 
     async def initialize(self) -> None:
-        ""
+"""
 Initialize the environment manager.""
 await self._load_environments()
         await self._load_instances()
@@ -69,7 +69,7 @@ await self._load_environments()
 
 
     async def shutdown(self) -> None:
-        ""
+"""
 Shutdown the environment manager.""
 if self._cleanup_task:
             self._cleanup_task.cancel()
@@ -81,13 +81,13 @@ if self._cleanup_task:
 
 
     def _start_cleanup_task(self) -> None:
-        ""
+"""
 Start the background cleanup task.""
 self._cleanup_task = asyncio.create_task(self._cleanup_loop())
 
 
     async def _cleanup_loop(self) -> None:
-        ""
+"""
 Background task to cleanup expired environments.""
 while True:
             try:
@@ -100,7 +100,7 @@ while True:
 
 
     async def _cleanup_expired_instances(self) -> None:
-        ""
+"""
 Cleanup expired environment instances.""
 expired_instances = [
             instance_id for instance_id, instance in self.instances.items()
@@ -113,7 +113,7 @@ expired_instances = [
 
 
     async def register_environment(self, config: EnvironmentConfig) -> None:
-        ""
+"""
 Register a new environment configuration.""
 env_key = f"{config.name}@{config.version}"
         self.environments[env_key] = config
@@ -121,7 +121,7 @@ env_key = f"{config.name}@{config.version}"
 
 
     async def unregister_environment(self, name: str, version: str) -> None:
-        ""
+"""
 Unregister an environment configuration.""
 env_key = f"{name}@{version}"
         if env_key in self.environments:
@@ -130,14 +130,14 @@ env_key = f"{name}@{version}"
 
 
     async def get_environment(self, name: str, version: str) -> Optional[EnvironmentConfig]:
-        ""
+"""
 Get environment configuration.""
 env_key = f"{name}@{version}"
         return self.environments.get(env_key)
 
 
     async def list_environments(self) -> List[EnvironmentConfig]:
-        ""
+"""
 List all registered environments.""
 return list(self.environments.values())
 
@@ -149,7 +149,7 @@ return list(self.environments.values())
         env_version: str = "1.0.0",
         custom_config: Optional[Dict[str, Any]] = None
     ):
-        ""
+"""
 Create and manage an environment instance with context manager.""
 instance = await self._create_instance(env_name, env_version, custom_config)
         try:
@@ -164,7 +164,7 @@ instance = await self._create_instance(env_name, env_version, custom_config)
         env_version: str,
         custom_config: Optional[Dict[str, Any]] = None
     ) -> EnvironmentInstance:
-        ""
+"""
 Create a new environment instance.""
 config = await self.get_environment(env_name, env_version)
         if not config:
@@ -198,7 +198,7 @@ config = await self.get_environment(env_name, env_version)
         instance: EnvironmentInstance,
         config: EnvironmentConfig
     ) -> None:
-        ""
+"""
 Initialize the environment instance based on isolation level.""
 try:
             instance.update_status(EnvironmentStatus.CREATING)
@@ -233,7 +233,7 @@ try:
 
 
     async def _terminate_instance(self, instance_id: str) -> None:
-        ""
+"""
 Terminate an environment instance.""
 instance = self.instances.get(instance_id)
         if not instance:
@@ -269,19 +269,19 @@ instance = self.instances.get(instance_id)
 
 
     async def get_instance(self, instance_id: str) -> Optional[EnvironmentInstance]:
-        ""
+"""
 Get environment instance by ID.""
 return self.instances.get(instance_id)
 
 
     async def list_instances(self) -> List[EnvironmentInstance]:
-        ""
+"""
 List all active environment instances.""
 return list(self.instances.values())
 
 
     async def _load_environments(self) -> None:
-        ""
+"""
 Load environment configurations from disk.""
 env_file = self.base_dir / "environments.json"
         if env_file.exists():
@@ -299,7 +299,7 @@ env_file = self.base_dir / "environments.json"
 
 
     async def _save_environments(self) -> None:
-        ""
+"""
 Save environment configurations to disk.""
 env_file = self.base_dir / "environments.json"
         try:
@@ -317,7 +317,7 @@ env_file = self.base_dir / "environments.json"
 
 
     async def _load_instances(self) -> None:
-        ""
+"""
 Load environment instances from disk.""
 instances_file = self.base_dir / "instances.json"
         if instances_file.exists():
@@ -332,7 +332,7 @@ instances_file = self.base_dir / "instances.json"
             except Exception as e:
                 logger.error(f"Failed to load instances: {e}")
     async def _save_instances(self) -> None:
-        ""
+"""
 Save environment instances to disk.""
 instances_file = self.base_dir / "instances.json"
         try:

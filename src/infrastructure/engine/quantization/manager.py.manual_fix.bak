@@ -18,7 +18,6 @@ Quantization Manager (Phase 56).
 Enables dynamic quantization switching (FP8, BitNet, AWQ) for high-efficiency inference.
 
 """
-
 import logging
 from enum import Enum
 from typing import Any, Dict, List, Optional
@@ -47,7 +46,7 @@ class QuantizationManager:
         self._detect_hardware_support()
 
     def _detect_hardware_support(self) -> None:
-        ""
+"""
 Detects available quantization support on current HW.        # Simulation for Phase 56/57
         self.supported_modes.append(QuantizationMode.FP8)
         self.supported_modes.append(QuantizationMode.BITNET_158)
@@ -72,7 +71,7 @@ Detects available quantization support on current HW.        # Simulation for Ph
         return tensor  # Fallback: return as is
 
     def switch_mode(self, new_mode: QuantizationMode) -> bool:
-        ""
+"""
 Dynamic hot-switching of quantization mode.        if new_mode in self.supported_modes:
             logger.info(f"QuantizationManager: Switching from {self.current_mode.value} to {new_mode.value}")"            self.current_mode = new_mode
             return True

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 OrchestratorDelegates - Delegation methods for OrchestratorAgent
 
@@ -33,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 OrchestratorDelegates: Delegation methods for OrchestratorAgent.
-""
+"""
 try:
     import logging
 except ImportError:

@@ -185,11 +185,11 @@ if self._size == 0:
 
         def _gen(idx, count):
             if count <= 0:
-                return
+            return
             yield self._buffer[idx]  # type: ignore
             yield from _gen((idx + 1) % self._capacity, count - 1)
 
-        yield from _gen(self._tail, self._size)
+            yield from _gen(self._tail, self._size)
 
     def __getitem__(self, index: int) -> T:
 """
@@ -437,14 +437,14 @@ now = time.time()
 
         def _rotate(count):
             if count <= 0:
-                return
+            return
             self._current_bucket_idx = (self._current_bucket_idx + 1) % self._num_buckets
             self._buckets[self._current_bucket_idx] = self._empty_bucket()
             _rotate(count - 1)
 
-        _rotate(min(buckets_to_rotate, self._num_buckets))
+            _rotate(min(buckets_to_rotate, self._num_buckets))
 
-        self._current_bucket_start = now
+            self._current_bucket_start = now
 
     def add(self, value: float) -> None:
 """

@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Factory.py module for quantization orchestration.
-""
+"""
 try:
 
 """
-    from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 except ImportError:
     from typing import TYPE_CHECKING
 
@@ -50,7 +50,7 @@ def quantize_tensor(
     group_size: int = 128,
     symmetric: bool = True,
     scheme: str = "linear",") -> QuantizedTensor:
-    ""
+"""
 Quantizes a float tensor into a QuantizedTensor object using the specified scheme.    config = QuantConfig(
         bits=bits,
         scheme=QuantScheme[scheme.upper()] if scheme.upper() in QuantScheme.__members__ else QuantScheme.INT8,

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 SlashCommands - Modular command system for chat prompts.
 
 """
-
 Commands are organized in the `commands/` subdirectory and auto-discovered.
 Each command module should use the @register decorator to register handlers.
 
@@ -70,4 +69,4 @@ __all__ = [
     "get_slash_commands","    "process_prompt","    "execute_command","]
 
 
-""
+"""

@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Validation script for Phase 14: Autonomous Evolution & Self-Repair.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -58,7 +57,7 @@ __version__ = VERSION
 
 
 def test_evolution_and_repair() -> None:
-    ""
+"""
 Validate self-generation and self-repair features.    logging.basicConfig(level=logging.INFO)
 
     root = Path(str(Path(__file__).resolve().parents[5]) + "")"    fleet = FleetManager(str(root))

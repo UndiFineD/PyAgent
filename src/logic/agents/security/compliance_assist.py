@@ -34,7 +34,7 @@ A simple recorder mock for capturing agent interactions during compliance audit 
 
     def record_interaction(self, provider, model, prompt, result):
         self.interactions.append({
-            "provider": provider,"            "model": model,"            "prompt": prompt,"            "result": result,"        })
+        "provider": provider,"            "model": model,"            "prompt": prompt,"            "result": result,"        })
 
 
 class ComplianceCheck:

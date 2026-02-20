@@ -18,7 +18,6 @@
 Structured output grammar exports.
 
 """
-
 Phase 26: Grammar-constrained decoding infrastructure.
 
 try:

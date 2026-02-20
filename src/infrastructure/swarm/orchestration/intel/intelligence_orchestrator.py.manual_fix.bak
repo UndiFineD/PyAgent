@@ -28,7 +28,7 @@ from src.infrastructure.swarm.orchestration.intel.intelligence_core import Intel
 if TYPE_CHECKING:
 
 """
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
@@ -52,14 +52,14 @@ class IntelligenceOrchestrator:
         self.ai = LLMClient(requests, workspace_root=self.workspace_root)
 
     def contribute_insight(self, agent_name: str, insight: str, confidence: float) -> None:
-        ""
+"""
 Contributes a single agent's insight to the swarm pool.'        self.insight_pool.append(
             {
                 "agent": agent_name,"                "insight": insight,"                "confidence": confidence,"                "timestamp": time.time(),"            }
         )
 
     def synthesize_collective_intelligence(self) -> list[dict[str, Any]]:
-        ""
+"""
 Analyzes the pool and recent SQL lessons using local AI to find shared patterns.        # Delegate filtering to Core
         sql_lessons = []
         if self.fleet_manager is not None and hasattr(self.fleet_manager, "sql_metadata"):"            try:
@@ -111,7 +111,7 @@ Analyzes the pool and recent SQL lessons using local AI to find shared patterns.
         return []
 
     def get_intelligence_report(self) -> dict[str, Any]:
-        ""
+"""
 Summarizes the current state of collective knowledge.        return {
             "insights_collected": len(self.insight_pool),"            "patterns_identified": len(self.patterns),"            "top_patterns": self.patterns[:3],"        }
 
@@ -134,4 +134,4 @@ Summarizes the current state of collective knowledge.        return {
                     )
         return tasks
 
-""
+"""

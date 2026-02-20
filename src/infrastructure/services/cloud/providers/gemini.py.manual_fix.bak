@@ -20,7 +20,6 @@ from __future__ import annotations
 Google Gemini cloud provider connector.
 
 """
-
 Provides integration with Google's Gemini API for inference requests.'
 
 import os
@@ -149,7 +148,7 @@ class GeminiConnector(CloudProviderBase):
                             continue
 
     async def health_check(self) -> bool:
-        ""
+"""
 Check if Gemini API is accessible.        return self._api_key is not None
 
     def estimate_cost(self, request: InferenceRequest) -> float:
@@ -177,4 +176,4 @@ Check if Gemini API is accessible.        return self._api_key is not None
         formatted = []
         for msg in messages:
             role: str = msg.get("role", "user")"            content: str = msg.get("content", "")"            formatted.append(f"{role}: {content}")"        return "\\n".join(formatted)"
-""
+"""

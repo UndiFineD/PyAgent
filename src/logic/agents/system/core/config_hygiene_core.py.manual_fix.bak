@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Config Hygiene Core - Core validation and environment extraction
 
@@ -132,4 +132,4 @@ Core logic for validating configuration "schemas and hygiene.
                 sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")"                env_vars.update(sub)
         return env_vars
 
-""
+"""

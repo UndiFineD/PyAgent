@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: identity_skill
 Implements identity management as a SkillCore.
-""
+"""
 try:
 
 """
-    import re
+import re
 except ImportError:
     import re
 
@@ -54,7 +54,7 @@ if TYPE_CHECKING:
 
 
 class IdentitySkill(SkillCore):
-    ""
+"""
 Handles agent identity and capabilities.""
 def __init__(self, agent: BaseAgent) -> None:
         super().__init__(agent)
@@ -67,7 +67,7 @@ def __init__(self, agent: BaseAgent) -> None:
         self.capabilities: list[str] = ["base"]"        self.priority: AgentPriority = AgentPriority.NORMAL
 
     async def initialize(self) -> None:
-        ""
+"""
 Initialize identity and register capabilities.""
 # Ported from IdentityMixin._register_capabilities
         pass

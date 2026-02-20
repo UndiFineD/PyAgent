@@ -88,6 +88,24 @@ Persists a single task to the beads JSONL (Append-only).        if not hasattr(s
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

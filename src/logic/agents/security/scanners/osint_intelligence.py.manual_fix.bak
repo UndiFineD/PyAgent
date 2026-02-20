@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from typing import List, Dict
+from typing import List, Dict
 
 
 
@@ -26,7 +26,7 @@ except ImportError:
 class OsintIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""
+"""
 Consolidates Google, Shodan, and GitHub dorks for reconnaissance.#     Ported logic from OneDorkForAll, Shodan-Dorks, and Github-Dorks.
 
     # High-value Google Dorks
@@ -43,13 +43,13 @@ Consolidates Google, Shodan, and GitHub dorks for reconnaissance.#     Ported lo
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 GITHUB_DORKS = ['"target.com" password', '"target.com" api_key', '"target.com" token', "filename:.env target.com"]
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def generate_dorks(domain: str) -> Dict[str, List[str]]:"Generates domain-specific dorks.        results = {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -67,6 +67,24 @@ def generate_dorks(domain: str) -> Dict[str, List[str]]:"Generates domain-specif
     pass  # [BATCHFIX] inserted for empty block
 """"
 Returns the URL for fetching dorks from CXSecurity.#         return fhttps://cxsecurity.com/dorks/{page}
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

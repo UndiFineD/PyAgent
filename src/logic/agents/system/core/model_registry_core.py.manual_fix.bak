@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Model Registry Core - Manages PEFT adapter registry and self-healing
 Brief Summary
@@ -27,7 +27,6 @@ USAGE:
 - Periodically call self_heal() or invoke should_trigger_finetuning(quality_history, threshold) from monitoring hooks to prune broken entries and decide fine-tuning actions.
 
 """
-
 WHAT IT DOES:
 - Maintains a mapping of task intent names to filesystem paths for PEFT adapters and exposes listing, registration, lookup, and self-healing logic.
 - Detects missing adapter files and removes unhealthy registry entries, marking them for inspection.
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Model registry core.py module.
-""
+"""
 import logging
 from pathlib import Path
 

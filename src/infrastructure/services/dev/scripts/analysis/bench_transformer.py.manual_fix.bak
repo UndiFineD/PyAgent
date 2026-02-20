@@ -17,7 +17,6 @@
 Bench Transformer: Performance benchmarking utility for transformer models in PyAgent.
 
 """
-
 try:
     import statistics
 except ImportError:

@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Unified Git Core for PyAgent.
 Standardizes branch management, commits, and status retrieval.
-""
+"""
 
 """
 from pathlib import Path
@@ -36,10 +36,10 @@ except ImportError:
 
 
 class GitCore(BaseCore):
-    ""
+"""
 Standard implementation for Git operations.
     If rc is available, delegates to native libgit2 hooks for speed.
-    ""
+"""
 def __init__(self, repo_root: Path, no_git: bool = False) -> None:
         super().__init__()
         self.repo_root = repo_root
@@ -48,7 +48,7 @@ def __init__(self, repo_root: Path, no_git: bool = False) -> None:
 
 
     def commit(self, message: str, files: Optional[List[str]] = None) -> bool:
-        ""
+"""
 Commits changes to the repository.""
 if self.no_git:
             return False
@@ -69,7 +69,7 @@ if self.no_git:
 
 
     def get_status(self) -> str:
-        ""
+"""
 Retrieves the current git status.""
 if self.no_git:
             return ""

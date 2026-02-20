@@ -47,16 +47,16 @@ Test cases for AutoMem memory system implementation.    @pytest.fixture
         mock_core = Mock()
         mock_core._stored_memories = []
         def mock_store_memory(content, tags=None, importance=0.5):
-            memory_id = f"mem_{len(mock_core._stored_memories)}""            mock_core._stored_memories.append({
-                "content": content,"                "tags": tags or [],"                "importance": importance,"                "id": memory_id"            })
-            return memory_id
+        memory_id = f"mem_{len(mock_core._stored_memories)}""            mock_core._stored_memories.append({
+        "content": content,"                "tags": tags or [],"                "importance": importance,"                "id": memory_id"            })
+        return memory_id
         def mock_recall_memories(query, limit=5, **kwargs):
-            results = []
-            for mem in mock_core._stored_memories:
-                content_match = query.lower() in mem["content"].lower()"                tag_match = any(query.lower() in tag.lower() for tag in mem["tags"])"                if content_match or tag_match:
-                    results.append({
-                        "content": mem["content"],"                        "score": 0.9,"                        "components": {"vector": 0.5, "graph": 0.3, "temporal": 0.1}"                    })
-            return results[:limit]
+        results = []
+        for mem in mock_core._stored_memories:
+        content_match = query.lower() in mem["content"].lower()"                tag_match = any(query.lower() in tag.lower() for tag in mem["tags"])"                if content_match or tag_match:
+        results.append({
+        "content": mem["content"],"                        "score": 0.9,"                        "components": {"vector": 0.5, "graph": 0.3, "temporal": 0.1}"                    })
+        return results[:limit]
         mock_core.store_memory = mock_store_memory
         mock_core.recall_memories = mock_recall_memories
         return mock_core

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     from dataclasses import dataclass, field
@@ -26,14 +26,32 @@ except ImportError:
 
 @dataclass
 class SystemVersion:
-    ""
+"""
 Version information for a system component.
     component: str
     version: str
     capabilities: list[str] = field(default_factory=lambda: [])
     api_version: str = "v1""    deprecated_features: list[str] = field(default_factory=lambda: [])
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

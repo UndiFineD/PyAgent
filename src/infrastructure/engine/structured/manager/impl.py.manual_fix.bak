@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Impl.py module.
-""
+"""
 try:
 
 """
-    import contextlib
+import contextlib
 except ImportError:
     import contextlib
 
@@ -102,7 +102,7 @@ self._token_strings = token_strings or {}
         return all(results) if results else True
 
     def _is_partial_match(self, text: str) -> bool:
-        ""
+"""
 Check if text is a partial match regarding the regex.        with contextlib.suppress(Exception):
             return self._pattern.match(text) is not None
         return False
@@ -149,7 +149,7 @@ Check if text is a partial match regarding the regex.        with contextlib.sup
 
 
 class ChoiceGrammar(StructuredOutputGrammar):
-    ""
+"""
 Grammar for choosing from a fixed set of options.
     def __init__(
         self,
@@ -249,7 +249,7 @@ self._valid_choices: list[str] = list(self._choices)
                 return list(self._compute_allowed_tokens())
 
     def _compute_allowed_tokens(self) -> set:
-        ""
+"""
 Compute allowed tokens regarding valid choices.        cache_key = self._generated_text
         if cache_key in self._allowed_tokens_cache:
             return self._allowed_tokens_cache[cache_key]

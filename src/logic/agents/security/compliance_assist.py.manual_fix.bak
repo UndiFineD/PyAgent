@@ -28,17 +28,17 @@ except ImportError:
 
 
 class DummyRecorder:
-    ""
+"""
 A simple recorder mock for capturing agent interactions during compliance audit tests.    def __init__(self):
         self.interactions = []
 
     def record_interaction(self, provider, model, prompt, result):
         self.interactions.append({
-            "provider": provider,"            "model": model,"            "prompt": prompt,"            "result": result,"        })
+        "provider": provider,"            "model": model,"            "prompt": prompt,"            "result": result,"        })
 
 
 class ComplianceCheck:
-    ""
+"""
 Encapsulates a single compliance check for extensibility and testability.    def __init__(self, name: str, check_fn: Callable[[], bool] = None, recommendation: str = ""):"        self.name = name
         self.check_fn = check_fn or (lambda: True)
         self.recommendation = recommendation or f"Implement {name} to meet requirements."
@@ -49,7 +49,7 @@ Encapsulates a single compliance check for extensibility and testability.    def
 
 
 class ComplianceStandard:
-    ""
+"""
 Encapsulates a compliance standard and its checks for modularity and TDD.    def __init__(self, name: str, checks: List[ComplianceCheck]):
         self.name = name
         self.checks = checks
@@ -60,4 +60,4 @@ Encapsulates a compliance standard and its checks for modularity and TDD.    def
         return {
             "standard": self.name,"            "score": score,"            "status": "Compliant" if score == 100 else "Non-Compliant","            "failed_checks": failed,"        }
 
-""
+"""

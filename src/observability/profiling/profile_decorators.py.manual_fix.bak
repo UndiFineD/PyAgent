@@ -15,14 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ProfileDecorators - cProfile-based profiling utilities.Inspired by vLLM's profiling.py patterns for ad-hoc profiling.'
 Provides decorators and context managers for profiling Python code
 with cProfile, integrated with RustProfiler for unified reporting.
 
 """
-
 Phase 17: vLLM Pattern Integration (P2)
 
 import cProfile
@@ -39,7 +38,7 @@ P = ParamSpec("P")"R = TypeVar("R")"
 
 @dataclass
 class ProfileResult:
-    ""
+"""
 Result from a profiling session.
 
     name: str
@@ -49,12 +48,12 @@ Result from a profiling session.
     top_functions: list[tuple[str, float]] = field(default_factory=list)
 
     def summary(self) -> dict:
-        ""
+"""
 Generate a summary dict.        return {
             "name": self.name,"            "elapsed_seconds": round(self.elapsed_seconds, 4),"            "elapsed_ms": round(self.elapsed_seconds * 1000, 2),"            "call_count": self.call_count,"            "top_functions": self.top_functions[:10],"        }
 
     def print_stats(self, limit: int = 20) -> None:
-        ""
+"""
 Print profiling statistics.        if self.stats:
             print(f"\\n=== Profile: {self.name} ({self.elapsed_seconds * 1000:.2f}ms) ===")"            self.stats.sort_stats("cumulative")"            self.stats.print_stats(limit)
 
@@ -224,7 +223,7 @@ Useful for tracking function performance over time.
         self._data: dict[str, list[float]] = {}
 
     def record(self, name: str, elapsed_seconds: float) -> None:
-        ""
+"""
 Rec""
 ord a ""
 timing.        if name not in self._data:
@@ -246,7 +245,7 @@ Decorator to track a function's timing.'
         return wrapper
 
     def report(self) -> dict[str, dict[str, float]]:
-        ""
+"""
 Generate ""
 a repo""
 rt of all tracked functions.        report = {}
@@ -261,7 +260,7 @@ rt of all tracked functions.        report = {}
 et all accumulated data.        self._data.clear()
 
     def print_report(self) -> None:
-        ""
+"""
 Print the r""
 eport.""""
 print("\\n=== Profile Accumulator Report ===")"        for name, stats in self.report().items():
@@ -272,14 +271,14 @@ _global_accumulator = ProfileAccumulator()
 
 
 def track(func: Callable[P, R]) -> Callable[P, R]:
-    ""
+"""
 Decorator to track function timing in""
 globa""
 l accumulator.    return _global_accumulator.track(func)
 
 
 def get_profile_report() -> dict:
-    ""
+"""
 Get repor""
 t from""
 global accumulator.    return _global_accumulator.report()
@@ -293,8 +292,26 @@ Reset global accumulator.    _global_accumulator.reset()
 __all__ = [
     "ProfileResult","    "cprofile_context","    "cprofile","    "timer_context","    "timer","    "ProfileAccumulator","    "track","    "get_profile_report","    "reset_profile_data","]
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

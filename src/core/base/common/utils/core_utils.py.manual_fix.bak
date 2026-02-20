@@ -1,5 +1,4 @@
-from __future__ import annotations
-""
+"""
 Utility functions used by the Agent classes.""
 import importlib.util
 import logging
@@ -15,12 +14,13 @@ _CODEIGNORE_CACHE_TIME: dict[str, float] = {}
 
 
 def load_codeignore(root: Path) -> set[str]:
-    ""
+"""
+from __future__ import annotations
 Load and parse ignore patterns from a .codeignore file.
 
 
     Returns a set of patterns. Empty set if file doesn't exist or can't be read.
-    ""
+"""
 codeignore_path = root / ".codeignore"
     cache_key = str(codeignore_path)
 
@@ -55,11 +55,11 @@ codeignore_path = root / ".codeignore"
 
 
 def setup_logging(verbosity: str | None = None) -> None:
-    ""
+"""
 Configure logging based on verbosity level.
 
     Accepts friendly verbosity names or numeric levels as strings.
-    ""
+"""
 levels = {
         "quiet": logging.ERROR,
         "minimal": logging.WARNING,
@@ -79,11 +79,11 @@ levels = {
 
 
 def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None:
-    ""
+"""
 Worker function for multiprocessing file processing.
 
     This function must be at module level to be pickleable for multiprocessing.
-    ""
+"""
 try:
         logging.debug("[worker] Processing %s", file_path.name)
         agent_instance.process_file(file_path)
@@ -95,7 +95,7 @@ try:
 
 
 def _load_fix_markdown_content() -> Callable[[str], str]:
-    ""
+"""
 Load the markdown fixer module dynamically, return a callable.
 
     Falls back to an identity function if the module is not present.

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     from dataclasses import dataclass, field
@@ -39,14 +39,32 @@ __version__ = VERSION
 
 @dataclass
 class SystemCapability:
-    ""
+"""
 A capability supported by a backend.
     name: str
     description: str
     enabled: bool = True
     parameters: dict[str, Any] = field(default_factory=lambda: {})
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

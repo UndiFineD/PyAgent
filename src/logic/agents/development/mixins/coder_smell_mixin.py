@@ -124,6 +124,24 @@ Language-agnostic smell detection (e.g. nesting).        smells:" List[CodeSmell
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

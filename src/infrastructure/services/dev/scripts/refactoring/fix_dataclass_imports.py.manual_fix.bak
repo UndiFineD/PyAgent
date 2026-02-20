@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for automatically injecting missing dataclass imports where decorators are used.
 
 """
-
 try:
     import os
 except ImportError:
@@ -41,7 +40,7 @@ __version__ = VERSION
 
 
 def fix_dataclass_imports(root_dir: str) -> None:
-    ""
+"""
 Inject dataclass and field imports into files missing them.    for root, _, files in os.walk(root_dir):
 
         for file in files:

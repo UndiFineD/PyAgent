@@ -17,14 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Broken agent.py module.
-""
+"""
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -37,9 +37,9 @@ __version__ = VERSION
 # limitations under the License.
 
 
-""
+"""
 
-""
+"""
 Plugin containing intentional syntax errors for resilience testing.
 # DANGER: Intentional syntax error to test resilience
 

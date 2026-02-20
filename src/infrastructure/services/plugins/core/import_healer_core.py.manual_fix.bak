@@ -14,13 +14,12 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for Broken Import Self-Healing (Phase 186).
 Suggests fixes for ModuleNotFound errors and builds import maps.
 
 """
-
 try:
     import os
 except ImportError:
@@ -35,7 +34,7 @@ except ImportError:
 
 
 class ImportHealerCore:
-    ""
+"""
 Core logic for diagnosing and fixing import errors.
     @staticmethod
     def suggest_fix(error_message: str) -> str:

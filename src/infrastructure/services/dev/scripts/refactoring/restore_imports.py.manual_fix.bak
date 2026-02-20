@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for restoring imports that were incorrectly commented out as unused.
 
 """
-
 import os
 import re
 
@@ -73,5 +72,5 @@ for root, _, files in os.walk(src_path):
                 print(f"  Error processing {path}: {e}")
 print(f"\\nFinished. Processed {files_processed} files, modified {files_modified} files.")
 
-""
+"""
 

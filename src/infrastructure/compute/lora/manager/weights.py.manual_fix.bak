@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Weights.py module.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -44,7 +44,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class LoRAWeights:
-    ""
+"""
 LoRA weight matrices.
     lora_a: Dict[str, np.ndarray] = field(default_factory=dict)
     lora_b: Dict[str, np.ndarray] = field(default_factory=dict)

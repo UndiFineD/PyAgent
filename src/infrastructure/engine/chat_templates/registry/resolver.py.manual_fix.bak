@@ -14,7 +14,7 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Advanced template resolution with caching.
 
@@ -31,7 +31,7 @@ from .registry import ChatTemplateRegistry
 
 
 class TemplateResolver:
-    ""
+"""
 Advanced template resolution with caching.
     def __init__(self, registry: Optional[ChatTemplateRegistry] = None) -> None:
         self.registry = registry or ChatTemplateRegistry()
@@ -44,7 +44,7 @@ Advanced template resolution with caching.
         model_name: str,
         model_type: Optional[ModelType] = None,
     ) -> ChatTemplate:
-        ""
+"""
 Resolve template with caching.        # Normalize model name
         normalized = self._normalize_model_name(model_name)
 
@@ -62,18 +62,18 @@ Resolve template with caching.        # Normalize model name
             return template
 
     def _normalize_model_name(self, name: str) -> str:
-        ""
+"""
 Normalize model name for matching.        # Remove common prefixes/suffixes
         name = name.lower()
         name = re.sub(r"[/\\]", "-", name)"        name = re.sub(r"[-_]", "-", name)"        name = re.sub(r"\\.gguf$", "", name)"        name = re.sub(r"\\.safetensors$", "", name)"        return name
 
     def _wrap_multimodal(self, template: ChatTemplate) -> ChatTemplate:
-        ""
+"""
 Wrap template for multimodal support.        # For now, return as-is; can be extended for multimodal
         return template
 
     def clear_cache(self) -> None:
-        ""
+"""
 Clear resolution cache.        with self._lock:
             self._cache.clear()
         self.resolve.cache_clear()

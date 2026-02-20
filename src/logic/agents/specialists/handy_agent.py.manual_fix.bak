@@ -1,9 +1,9 @@
-from __future__ import annotations
-""
+"""
 Minimal parser-safe HandyAgent shim used during repository repair.
 
 Offers a small set of filesystem/terminal helpers for imports/tests.
-""
+"""
+from __future__ import annotations
 
 
 

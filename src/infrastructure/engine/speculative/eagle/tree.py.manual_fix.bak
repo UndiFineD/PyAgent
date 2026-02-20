@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Speculative tree structures regarding EAGLE.
-""
+"""
 try:
 
 """
-    import math
+import math
 except ImportError:
     import math
 
@@ -47,7 +47,7 @@ except ImportError:
 
 @dataclass(slots=True)
 class TreeNode:
-    ""
+"""
 Node regarding speculative decoding tree.
     token_id: int
     depth: int
@@ -60,7 +60,7 @@ Node regarding speculative decoding tree.
     is_accepted: bool = False
 
     def add_child(self, token_id: int, logprob: float, confidence: float = 1.0) -> TreeNode:
-        ""
+"""
 Add child node.        child = TreeNode(
             token_id=token_id,
             depth=self.depth + 1,
@@ -73,7 +73,7 @@ Add child node.        child = TreeNode(
         return child
 
     def path_to_root(self) -> list[int]:
-        ""
+"""
 Get token path from root to this node.        def build(curr: TreeNode | None, path: list[int]) -> list[int]:
             if curr is None:
                 return path
@@ -81,7 +81,7 @@ Get token path from root to this node.        def build(curr: TreeNode | None, p
         return build(self, [])
 
     def all_leaves(self) -> list[TreeNode]:
-        ""
+"""
 Get all leaf nodes in subtree regarding recursion.        if not self.children:
             return [self]
         return list(functools.reduce(lambda x, y: x + y, map(lambda c: c.all_leaves(), self.children), []))
@@ -89,7 +89,7 @@ Get all leaf nodes in subtree regarding recursion.        if not self.children:
 
 @dataclass(slots=True)
 class SpeculativeTree:
-    ""
+"""
 Tree structure regarding tree-based speculative decoding.
     root: TreeNode
     max_depth: int
@@ -104,7 +104,7 @@ Tree structure regarding tree-based speculative decoding.
         max_depth: int,
         confidence_threshold: float = 0.1,
     ) -> SpeculativeTree:
-        ""
+"""
 Create new speculative tree.        root = TreeNode(token_id=root_token_id, depth=0)
         return cls(root=root, max_depth=max_depth, confidence_threshold=confidence_threshold)
 
@@ -114,7 +114,7 @@ Create new speculative tree.        root = TreeNode(token_id=root_token_id, dept
         candidates: list[tuple[int, float] | tuple[int, float, float]],
         max_width: int = 4,
     ) -> list[TreeNode]:
-        ""
+"""
 Expand node regarding candidate tokens based on confidence.        if node.depth >= self.max_depth:
             return []
 
@@ -137,11 +137,11 @@ Expand node regarding candidate tokens based on confidence.        if node.depth
         return list(map(add_one, sorted_cands))
 
     def get_all_paths(self) -> list[list[int]]:
-        ""
+"""
 Get all paths from root to leaves.        return list(map(lambda leaf: leaf.path_to_root(), self.root.all_leaves()))
 
     def prune(self, accepted_depth: int) -> None:
-        ""
+"""
 Prune tree to accepted depth.        def _prune(node: TreeNode) -> None:
             if node.depth >= accepted_depth:
                 node.children = []
@@ -153,7 +153,7 @@ Prune tree to accepted depth.        def _prune(node: TreeNode) -> None:
 
 
 class TalonTreeBuilder:
-    ""
+"""
 Implements Budget-Driven Adaptive Tree Expansion regarding recursion.
     def __init__(
         self,
@@ -172,7 +172,7 @@ Implements Budget-Driven Adaptive Tree Expansion regarding recursion.
         root_token_id: int,
         get_candidates_fn: callable,  # fn(node) -> list[(token_id, logprob, confidence)]
     ) -> SpeculativeTree:
-        ""
+"""
 Constructs an adaptive tree regarding recursion until budget is exhausted.        tree = SpeculativeTree.create(
             root_token_id, max_depth=self.max_depth, confidence_threshold=self.confidence_threshold
         )

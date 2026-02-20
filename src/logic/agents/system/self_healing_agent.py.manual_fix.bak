@@ -25,7 +25,7 @@ USAGE:
 - Instantiate inside a project workspace and let it analyze telemetry and coordinate with remote peers:
 
 """
-  from src.maintenance.self_healing_agent import SelfHealingAgent
+from src.maintenance.self_healing_agent import SelfHealingAgent
   agent = SelfHealingAgent(__file__)
   # call async tools from an asyncio loop, e.g.:
   # await agent.discover_peers_and_budget()
@@ -47,7 +47,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Agent specializing in self-healing through telemetry analysis and error correction.
-""
+"""
 from typing import Any
 
 from src.core.base.common.base_utilities import as_tool, create_main_function
@@ -194,7 +194,7 @@ Loads self-healing goals and context from project documentation.        self._sy
         if res.get("status") == "success":"#             return f" Remote healing task dispatched to {target_peer}. Task ID: {res.get('task_id', 'unknown')}"'        else:
             error_msg = res.get("error", "Unknown error")"#             return f" Failed to dispatch to {target_peer}: {error_msg}
     def _get_default_content(self) -> str:
-""
+"""
 return "# Self-Healing Log\\n\\n## Status\\nMonitoring fleet health...\\n
     @as_tool
     def scan_for_failures(self) -> str:
@@ -227,7 +227,25 @@ Analyzes telemetry for errors and suggests fixes.      "  self._track_tokens(200
 
 if __name__ == "__main__":"    main = create_main_function(SelfHealingAgent, "SelfHealing Agent", "Task")"    main()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

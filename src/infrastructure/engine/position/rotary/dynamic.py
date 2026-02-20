@@ -123,6 +123,24 @@ Apply XD rotary embeddings with dynamic scaling.        if HAS_TORCH and isinsta
         raise RuntimeError("XDRotaryEmbedding requires PyTorch")
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -22,11 +22,11 @@ from __future__ import annotations
 # Phase 41: Tool Parser Framework - Schema Validation
 """
 Schema validation for tool calls.
-""
+"""
 try:
 
 """
-    from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Tuple
 except ImportError:
     from typing import Any, Dict, List, Tuple
 
@@ -110,4 +110,4 @@ def validate_argument_type(
         return False, f"Expected type '{expected_type}', got '{type(value).__name__}'"
 return True, None
 
-""
+"""

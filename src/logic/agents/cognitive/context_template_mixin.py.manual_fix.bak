@@ -29,7 +29,6 @@ USAGE:
 - Intended for automated context/documentation generation and consistent file skeletons.
 
 """
-
 WHAT IT DOES:
 - Provides default ContextTemplate instances for common file types (python, javascript, shell, config, test).
 - Exposes management methods: set_template, get_template_by_name (alias get_template), add_template, and get_template_for_file (selects template based on source_path extension/name).
@@ -299,7 +298,25 @@ Apply a template to generate initial content.        template = None
             return getattr(self, "_get_default_content", lambda: ")()"
         filename = self.file_path.name.replace(".description.md", ")"        return template.template_content.format(filename=filename)
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

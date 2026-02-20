@@ -49,10 +49,28 @@ Agent for C++ code improvement and auditing.
 #             "You are a C++ Expert."#             "Focus on modern C++ (C++11/14/17/20/23) features,"#             "RAII, smart pointers, template metaprogramming, and performance optimization."#             "Ensure low-latency and memory-efficient patterns are used."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "#include <iostream>\\n\\nint main() {\\n    std::cout << 'Hello, C++!' << std::endl;\\n    return 0;\\n}\\n
 
 if __name__ == "__main__":"    main = create_main_function(CPlusPlusAgent, "C++ Agent", "Path to C++ file (.cpp, .hpp, .cc)")"    main()
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -17,12 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Test agent functionality - extracted classes.
 
 """
-
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -151,5 +150,5 @@ __all__ = [
     "TestsAgent","]
 
 
-""
+"""
 

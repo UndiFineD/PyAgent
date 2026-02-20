@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     from collections.abc import Callable
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 
 class CircuitBreaker:
-    ""
+"""
 Circuit breaker pattern for failing backends.""""
 Tracks failures per backend and temporarily disables them if they exceed
     a failure threshold. Prevents cascading failures and wasted retries.
@@ -61,7 +61,7 @@ Tracks failures per backend and temporarily disables them if they exceed
         name: str = "default","        failure_threshold: int = 5,
         recovery_timeout: int = 60,
     ) -> None:
-        ""
+"""
 Initialize circuit breaker.        self.name = name
         self.failure_threshold = failure_threshold
         self.recovery_timeout = recovery_timeout
@@ -75,7 +75,7 @@ Initialize circuit breaker.        self.name = name
         )
 
     def is_open(self) -> bool:
-        ""
+"""
 Checks if the circuit is currently open.        if self.impl.state == "OPEN":"            # Check if recovery timeout has passed (Lazy evaluation)
             if self.impl.last_failure_time:
                 import time
@@ -85,20 +85,20 @@ Checks if the circuit is currently open.        if self.impl.state == "OPEN":"  
                     return False
         return self.impl.state == "OPEN"
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
-        ""
+"""
 Executes the function if the circuit is closed.        return self.impl.call(func, *args, **kwargs)
 
     def on_success(self) -> None:
-        ""
+"""
 Records a successful call.        self.impl.on_success()
         self.state = self.impl.state
         self.failure_count = self.impl.failure_count
 
     def on_failure(self) -> None:
-        ""
+"""
 Records a failed call.        self.impl.on_failure()
         self.state = self.impl.state
         self.failure_count = self.impl.failure_count
         self.last_failure_time = self.impl.last_failure_time
 
-""
+"""

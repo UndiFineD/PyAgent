@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Audio Reasoning Agent - Simulated audio transcription, intent analysis, and telemetry correlation
 
@@ -125,4 +125,4 @@ Analyzes the intent and entities in transcribed" audio.        _ = transcription
 #         "Correlates audio findings with" numerical sensor data."        if (
             "engine" in audio_analysis["entities"]"            and sensor_data.get("vibration_level", 0) > 0.8"        ):
 #             return "Audio finding confirmed by high vibration sensors."#         return "Audio finding remains unconfirmed by numerical telemetry."
-""
+"""

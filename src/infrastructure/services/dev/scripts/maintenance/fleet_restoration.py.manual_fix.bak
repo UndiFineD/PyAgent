@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for restoring codebase state by fixing common automated editing errors.
 
 """
-
 import os
 import re
 
@@ -29,7 +28,7 @@ __version__ = VERSION
 
 
 def restoration() -> None:
-    ""
+"""
 Recover from common import and string formatting breakages.    for root, _, files in os.walk("src"):"        for file in files:
 
             if file.endswith(".py"):"                path = os.path.join(root, file)

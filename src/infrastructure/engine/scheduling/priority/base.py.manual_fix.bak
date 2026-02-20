@@ -13,14 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Base scheduler implementation for priority-based task execution.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 """
-
 from _thread import LockType
 import heapq
 import threading
@@ -128,7 +127,7 @@ class PriorityScheduler:
         return future
 
     def _worker_loop(self, _worker_id: int) -> None:
-        ""
+"""
 Worker thread main loop.        while self._running:
             task = self._get_next_task()
             if task is None:
@@ -137,7 +136,7 @@ Worker thread main loop.        while self._running:
             self._execute_task(task)
 
     def _get_next_task(self) -> Optional[ScheduledTask]:
-        ""
+"""
 Get the next task to execute.        with self._not_empty:
             # Wait for work
             while self._running and self._pending_count == 0:
@@ -163,7 +162,7 @@ Get the next task to execute.        with self._not_empty:
             return None
 
     def _execute_task(self, task: ScheduledTask) -> None:
-        ""
+"""
 Execute a single task.        start_time: float = time.monotonic()
         wait_time: float = (start_time - task.created_at) * 1000  # ms
 
@@ -207,7 +206,7 @@ Execute a single task.        start_time: float = time.monotonic()
         func: Callable[[], R],
         timeout: float,
     ) -> R:
-        ""
+"""
 Execute function with timeout.        result_container: List[Any] = []
         error_container: List[Exception] = []
         completed = threading.Event()
@@ -233,7 +232,7 @@ Execute function with timeout.        result_container: List[Any] = []
         return result_container[0]
 
     def _handle_timeout(self, task: ScheduledTask) -> None:
-        ""
+"""
 Handle task timeout.        task.state = TaskState.TIMEOUT
 
         if task.future:
@@ -242,7 +241,7 @@ Handle task timeout.        task.state = TaskState.TIMEOUT
             self._stats.timeouts += 1
 
     def cancel(self, task_id: str) -> bool:
-        ""
+"""
 Cancel a pending task.        with self._lock:
             for priority in TaskPriority:
                 queue = self._queues[priority]
@@ -256,7 +255,7 @@ Cancel a pending task.        with self._lock:
         return False
 
     def shutdown(self, wait: bool = True, _timeout: Optional[float] = None) -> None:
-        ""
+"""
 Shutdown the scheduler.        self._running = False
         with self._not_empty:
             self._not_empty.notify_all()
@@ -264,17 +263,17 @@ Shutdown the scheduler.        self._running = False
 
     @property
     def pending_count(self) -> int:
-        ""
+"""
 Number of pending tasks.        return self._pending_count
 
     @property
     def stats(self) -> TaskStats:
-        ""
+"""
 Scheduler statistics.        return self._stats
 
     def get_queue_sizes(self) -> Dict[TaskPriority, int]:
-        ""
+"""
 Get current queue sizes by priority.        with self._lock:
             return {p: len(q) for p, q in self._queues.items()}
 
-""
+"""

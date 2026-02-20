@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Adapter.py module.
-""
+"""
 
 """
 import time
@@ -33,7 +33,7 @@ from .weights import LoRAWeights
 
 
 class LoRAAdapter:
-    ""
+"""
 Represents a loaded LoRA adapter.
     def __init__(self, config: LoRAConfig) -> None:
         self.config: LoRAConfig = config

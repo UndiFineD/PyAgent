@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from dataclasses import dataclass, field
@@ -36,7 +36,7 @@ __version__ = VERSION
 
 @dataclass
 class FlakinessReport:
-    ""
+"""
 Report of test flakiness analysis.""""
 Attributes:
         test_name: Name of the test.

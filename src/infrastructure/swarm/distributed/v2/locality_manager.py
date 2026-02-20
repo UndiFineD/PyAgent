@@ -61,11 +61,11 @@ class LocalityManager:
 
     def register_rank(self, rank_id: int, locality_tag: Optional[str] = None):
 """
-registers a rank with an optional locality tag (e.g. 'rack-1').'        if not locality_tag:
-            # Fallback: simple heuristic based on hostname/IP if possible
-            locality_tag = self.local_hostname if rank_id == 0 else "remote-cluster"
+        registers a rank with an optional locality tag (e.g. 'rack-1').'        if not locality_tag:
+        # Fallback: simple heuristic based on hostname/IP if possible
+        locality_tag = self.local_hostname if rank_id == 0 else "remote-cluster"
         if locality_tag not in self.groups:
-            self.groups[locality_tag] = LocalityGroup(locality_tag)
+        self.groups[locality_tag] = LocalityGroup(locality_tag)
 
         self.groups[locality_tag].ranks.add(rank_id)
         self.rank_to_group[rank_id] = locality_tag

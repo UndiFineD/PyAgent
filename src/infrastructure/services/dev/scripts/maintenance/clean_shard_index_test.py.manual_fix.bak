@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.services.dev.scripts.maintenance.clean_shard_index import *

@@ -233,6 +233,24 @@ Returns the internal buffer logs. (Sync for test" access)        return self._in
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -48,8 +48,8 @@ mixin = DatabaseAccessMixin()
 
     def test_connect_invalid_string(self):
 """
-Test connecting with invalid connection string.""
-mixin = DatabaseAccessMixin()
+        Test connecting with invalid connection string.""
+        mixin = DatabaseAccessMixin()
         result = mixin.connect_odbc("invalid_connection_string")"        assert result is False
         assert mixin.get_last_error() != ""
 def test_execute_query_without_connection(self):
@@ -60,8 +60,8 @@ mixin = DatabaseAccessMixin()
         assert "Not connected" in mixin.get_last_error()
     def test_disconnect_without_connection(self):
 """
-Test disconnecting without active connection.""
-mixin = DatabaseAccessMixin()
+        Test disconnecting without active connection.""
+        mixin = DatabaseAccessMixin()
         # Should not crash
         mixin.disconnect()
 

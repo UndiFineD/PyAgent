@@ -29,7 +29,6 @@ WHAT IT DOES:
 - Provides an impact analysis method that loads the saved graph and computes downstream impact within a hop depth (used to report potentially affected entities).
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Use an AST-based parser (ast module) for robust import and class-resolution instead of regex heuristics to avoid false positives/negatives and to properly resolve relative imports and aliasing.
 - Resolve package/module-to-file mapping and runtime import resolution (consider __init__.py packages, namespace packages, and installed dependencies) rather than simple path heuristics.
@@ -39,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Agent that maps the codebase into a graph of relationships.
-""
+"""
 import logging
 import os
 import re
@@ -64,7 +63,7 @@ Scans the codebase to build a graph of imports and class hierarchies.
 #             "You are the Network Context Agent (Graph Specialist)."#             "Internalize the codebase as a graph where nodes are files/classes and edges are relationships."#             "You identify tightly coupled clusters and suggest separation of concerns."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Codebase Network Analysis\\n\\n## Clusters\\nPending scan...\\n
     def scan_project(self) -> str:
 """"
@@ -136,7 +135,7 @@ Scans the codebase to build a graph of imports and class hierarchies.
 #             "You are the Network Context Agent (Graph Specialist)."#             "Internalize the codebase as a graph where nodes are files/classes and edges are relationships."#             "You identify tightly coupled clusters and suggest separation of concerns."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Codebase Network Analysis\\n\\n## Clusters\\nPending scan...\\n
     def scan_project(self) -> str:
 """"
@@ -186,4 +185,4 @@ Analyze the impact of changing a specific file.        self.engine.load(str(self
                 meta = self.engine.metadata.get(node, {})
                 node_type = meta.get("type", "unknown")"                report.append(f"- **{node}** ({node_type})")"
         return "\\n".join(report)
-""
+"""

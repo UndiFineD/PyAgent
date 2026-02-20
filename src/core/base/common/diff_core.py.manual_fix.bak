@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Unified Diff Generation Core for PyAgent.
 Standardizes text comparison and patch generation.
-""
+"""
 
 """
 import difflib
@@ -37,10 +37,10 @@ except ImportError:
 
 
 class DiffCore(BaseCore):
-    ""
+"""
 Standard implementation for text comparison.
     Supports unified diff format and structured JSON diffs.
-    ""
+"""
 def __init__(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED, context_lines: int = 3) -> None:
         super().__init__()
         self.output_format = output_format
@@ -48,7 +48,7 @@ def __init__(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED, c
 
 
     def generate_diff(self, old_text: str | Path, new_text: str, file_path: Optional[str | Path] = None) -> DiffResult:
-        ""
+"""
 Generates a diff between two strings.""
         # Handle legacy calls where file_path was passed as first argument
         actual_old = old_text
@@ -113,7 +113,7 @@ Generates a diff between two strings.""
 
 
     def format_diff(self, result: DiffResult, fmt: Optional[DiffOutputFormat] = None) -> str:
-        ""
+"""
 Formats a DiffResult into a string.""
 target_fmt = fmt or self.output_format
         if hasattr(target_fmt, "name") and target_fmt.name == "HTML":

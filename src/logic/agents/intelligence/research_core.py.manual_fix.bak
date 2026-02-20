@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Research Core - DCAP Cycle Executor
 
@@ -40,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Research core.py module.
-""
+"""
 from src.core.base.lifecycle.version import VERSION
 
 try:

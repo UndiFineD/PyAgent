@@ -25,9 +25,8 @@ For more information, visit:
 - Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
 
 """
-
 No commands will be executed.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -50,4 +49,4 @@ class MultiModalContextAgent:
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("MultiModalContextAgent initialized (TODO Placeholder).")
-""
+"""

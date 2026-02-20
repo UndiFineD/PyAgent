@@ -76,6 +76,24 @@ tools = [types.Tool(google_search=types.GoogleSearch())]""""
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

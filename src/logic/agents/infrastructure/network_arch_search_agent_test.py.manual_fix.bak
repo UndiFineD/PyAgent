@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from logic.agents.infrastructure.network_arch_search_agent import *

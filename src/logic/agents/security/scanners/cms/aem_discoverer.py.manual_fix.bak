@@ -31,7 +31,7 @@ requests.packages.urllib3.disable_warnings()
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 registered = []""""
 lock = Lock()
 semaphore = None
@@ -42,7 +42,7 @@ def error(message, **kwargs):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 print("[{}] {}".format(datetime.datetime.now().time(), message), file=sys.stderr)"    for n, a in kwargs.items():
         print("\\t{}={}".format(n, a), file=sys.stderr)
     exc_type, exc_value, exc_traceback = sys.exc_info()
@@ -60,11 +60,11 @@ def normalize_url(base_url, path):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 if base_url[-1] == "/" and (path[0] == "/" or path[0] == "\\"):"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 url = base_url[:-1] + path""""
 else:
         url = base_url + path
@@ -101,13 +101,13 @@ def content_type(ct):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 return ct.split(";")[0].lower().strip()
 
 @register
 def by_login_page(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
-""
+"""
 LOGIN_PAGE = "/libs/granite/core/content/login.html    url = normalize_url(base_url, LOGIN_PAGE)
 
     try:
@@ -121,7 +121,7 @@ LOGIN_PAGE = "/libs/granite/core/content/login.html    url = normalize_url(base_
 @register
 def by_csrf_token(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
-""
+"""
 CSRF_TOKEN = "/libs/granite/csrf/token.json    url = normalize_url(base_url, CSRF_TOKEN)
 
     try:
@@ -136,7 +136,7 @@ CSRF_TOKEN = "/libs/granite/csrf/token.json    url = normalize_url(base_url, CSR
 @register
 def by_geometrixx_page(base_url, debug, proxy=None):
     pass  # [BATCHFIX] inserted for empty block
-""
+"""
 GEOMETRIXX = "/content/geometrixx/en.html    url = normalize_url(base_url, GEOMETRIXX)
 
     try:
@@ -174,7 +174,7 @@ def by_get_servlet(base_url, debug, proxy=None):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 json.loads(resp.content.decode())["jcr:primaryType"]"                except Exception:
                     pass
                 else:
@@ -184,7 +184,7 @@ json.loads(resp.content.decode())["jcr:primaryType"]"                except Exce
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 json.loads(resp.content.decode())["parent"]["resourceType"]"                except Exception:
                     pass
                 else:
@@ -194,7 +194,7 @@ json.loads(resp.content.decode())["parent"]["resourceType"]"                exce
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 json.loads(resp.content.decode())[0]["type"]"                except Exception:
                     pass
                 else:
@@ -333,7 +333,7 @@ def by_gql_servlet(base_url, debug, proxy=None):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 json.loads(resp.content.decode())["hits"]"                except Exception:
                     pass
                 else:
@@ -412,7 +412,7 @@ def by_post_servlet(base_url, debug, proxy=None):
         url = normalize_url(base_url, path)
         try:
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 data = ":operation=nop"  # [BATCHFIX] closed string"            headers = {"Content-Type": "application/x-www-form-urlencoded", "Referer": base_url}"            resp = http_request(url, "POST", data=data, additional_headers=headers, proxy=proxy)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -484,7 +484,7 @@ def parse_args():
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 return parser.parse_args(sys.argv[1:])""""
 def main():
     global semaphore
@@ -522,7 +522,25 @@ if __name__ == "__main__":"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 #     main()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

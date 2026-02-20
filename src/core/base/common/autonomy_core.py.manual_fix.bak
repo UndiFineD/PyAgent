@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Unified Autonomy and Self-Model core.""
 
@@ -29,17 +29,17 @@ except ImportError:
 
 
 class AutonomyCore(BaseCore):
-    ""
+"""
 Standard implementation for Agent Autonomy and Self-Model.
     Provides logic for identifying blind spots and calculating evolution sleep intervals.
-    ""
+"""
 def __init__(self, agent_id: str, repo_root: Optional[str] = None) -> None:
         super().__init__(name=f"Autonomy-{agent_id}", repo_root=repo_root)
         self.agent_id = agent_id
         self.performance_history: List[float] = []
 
     def evaluate_autonomy_score(self, agent_id: str, stats: dict) -> float:
-        ""
+"""
 Rust-accelerated autonomy evaluation when available.""
 if rc and hasattr(rc, "evaluate_autonomy_score"):
             try:
@@ -49,7 +49,7 @@ if rc and hasattr(rc, "evaluate_autonomy_score"):
         return 0.5  # Default fallback
 
     def identify_blind_spots(self, success_rate: float, task_diversity: float) -> List[str]:
-        ""
+"""
 Analyzes performance stats to find blind spots.""
 blind_spots: List[str] = []
         if success_rate < 0.7:
@@ -59,7 +59,7 @@ blind_spots: List[str] = []
         return blind_spots
 
     def calculate_daemon_sleep_interval(self, optimization_score: float) -> int:
-        ""
+"""
 Returns sleep seconds for the Background Evolution Daemon.""
 if optimization_score >= 1.0:
             return 3600  # 1 hour

@@ -53,43 +53,43 @@ class DPCoordinatorV2:
         self.locality = LocalityManager()
 
         if not is_master:
-            self.socket.setsockopt(zmq.SUBSCRIBE, b"")
-    async def connect(self, host: str = "localhost"):"        """
-Connects or binds the ZMQ socket.        addr = f"tcp://{host}:{self.port}""        if self.is_master:
-            self.socket.bind(addr)
-            logger.info(f"DP Master bound to {addr}")"        else:
-            self.socket.connect(addr)
-            logger.info(f"DP Worker connected to {addr}")
-    async def publish_wave(self, request_ids: List[int]):
-                Publishes a new request wave to all active workers.
-                if not self.is_master:
-            return
+        self.socket.setsockopt(zmq.SUBSCRIBE, b"")
+        async def connect(self, host: str = "localhost"):"        """
+        Connects or binds the ZMQ socket.        addr = f"tcp://{host}:{self.port}""        if self.is_master:
+        self.socket.bind(addr)
+        logger.info(f"DP Master bound to {addr}")"        else:
+        self.socket.connect(addr)
+        logger.info(f"DP Worker connected to {addr}")
+        async def publish_wave(self, request_ids: List[int]):
+        Publishes a new request wave to all active workers.
+        if not self.is_master:
+        return
 
         self.current_wave += 1
         message = {
-            "type": "NEW_WAVE","            "wave_id": self.current_wave,"            "request_ids": request_ids,"            "timestamp": time.time(),"        }
+        "type": "NEW_WAVE","            "wave_id": self.current_wave,"            "request_ids": request_ids,"            "timestamp": time.time(),"        }
         await self.socket.send_json(message)
         logger.debug(f"Published Wave {self.current_wave} with {len(request_ids)} requests")
-    async def publish_wave_to_locality(self, request_ids: List[int], locality_tag: str):
-                Phase 59: Targets a specific locality for a wave to reduce inter-rack traffic.
-                if not self.is_master:
-            return
+        async def publish_wave_to_locality(self, request_ids: List[int], locality_tag: str):
+        Phase 59: Targets a specific locality for a wave to reduce inter-rack traffic.
+        if not self.is_master:
+        return
 
         self.current_wave += 1
         message = {
-            "type": "LOCALITY_WAVE","            "wave_id": self.current_wave,"            "request_ids": request_ids,"            "locality": locality_tag,"            "timestamp": time.time(),"        }
+        "type": "LOCALITY_WAVE","            "wave_id": self.current_wave,"            "request_ids": request_ids,"            "locality": locality_tag,"            "timestamp": time.time(),"        }
         await self.socket.send_json(message)
         logger.info(f"Published Locality Wave {self.current_wave} to {locality_tag}")
-    async def receive_update(self) -> Optional[Dict[str, Any]]:
+        async def receive_update(self) -> Optional[Dict[str, Any]]:
 """
-Receives a wave update or status message.        if self.is_master:
-            return None
+        Receives a wave update or status message.        if self.is_master:
+        return None
 
         try:
-            msg = await self.socket.recv_json()
-            if msg.get("type") == "NEW_WAVE":"                self.current_wave = msg["wave_id"]"            return msg
+        msg = await self.socket.recv_json()
+        if msg.get("type") == "NEW_WAVE":"                self.current_wave = msg["wave_id"]"            return msg
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"ZMQ Receive failed: {e}")"            return None
+        logger.error(f"ZMQ Receive failed: {e}")"            return None
 
     def aggregate_stats(self) -> Dict[str, Any]:
                 Aggregates performance stats across all ranks using Rust for speed.
@@ -109,6 +109,24 @@ Closes the socket and context.        self.socket.close()
         logger.info("DPCoordinator ZMQ context terminated")
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

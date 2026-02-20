@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import time
+import time
 
 try:
     from dataclasses import dataclass, field
@@ -41,14 +41,14 @@ except ImportError:
 
 @dataclass
 class RequestEvent:
-    ""
+"""
 A timestamped event in the request lifecycle.
 
     Attributes:
         event_type: Type of the event
         timestamp: Unix timestamp when the event occurred
         details: Optional additional information about the event
-    ""
+"""
 event_type: RequestEventType
     timestamp: float = field(default_factory=time.time)
     details: Optional[Dict[str, Any]] = None

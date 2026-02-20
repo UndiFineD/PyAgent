@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Phase 312: Autonomous Dependency Cleanup.
 Uses curate_dependencies logic to comment out unused requirements.
-""
+"""
 try:
 
 """
-    from pathlib import Path
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 

@@ -17,15 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 HTTPClient - Unified sync/async HTTP client with session reuse.
 
 """
-
 Refactored to modular package structure for Phase 317.
 Decomposed into mixins for sync, async, and retry logic.
-""
+"""
 try:
     from typing import Any
 except ImportError:
@@ -81,32 +80,32 @@ global_http_connection = HTTPConnection()
 
 
 def get_bytes(url: str, **kwargs: Any) -> bytes:
-    ""
+"""
 Convenience function using global HTTP connection.    return global_http_connection.get_bytes(url, **kwargs)
 
 
 def get_text(url: str, **kwargs: Any) -> str:
-    ""
+"""
 Convenience function using global HTTP connection.    return global_http_connection.get_text(url, **kwargs)
 
 
 def get_json(url: str, **kwargs: Any) -> Any:
-    ""
+"""
 Convenience function using global HTTP connection.    return global_http_connection.get_json(url, **kwargs)
 
 
 async def async_get_bytes(url: str, **kwargs: Any) -> bytes:
-    ""
+"""
 Async convenience function using global HTTP connection.    return await global_http_connection.async_get_bytes(url, **kwargs)
 
 
 async def async_get_text(url: str, **kwargs: Any) -> str:
-    ""
+"""
 Async convenience function using global HTTP connection.    return await global_http_connection.async_get_text(url, **kwargs)
 
 
 async def async_get_json(url: str, **kwargs: Any) -> Any:
-    ""
+"""
 Async convenience function using global HTTP connection.    return await global_http_connection.async_get_json(url, **kwargs)
 
 

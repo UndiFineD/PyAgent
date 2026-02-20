@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from .pyagent_cli.suggested import check_server, list_agents, run_task, main

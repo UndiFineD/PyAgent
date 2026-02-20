@@ -27,7 +27,6 @@ Instantiate MigrationManager, add MigrationRule instances describing regex-based
 >>> manager.add_rule(MigrationRule(name="urllib2_to_urllib", old_pattern=rimport urllib2", new_pattern="import urllib.request", description="Migrate urllib2"))">>> new_code, applied = manager.apply_migrations(old_code)
 
 """
-
 WHAT IT DOES:
 - Holds and manages a list of MigrationRule objects.
 - Applies regex-based substitutions (old_pattern -> new_pattern) across provided source content.

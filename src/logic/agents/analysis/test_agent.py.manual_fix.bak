@@ -30,7 +30,6 @@ WHAT IT DOES:
 - Produces a concise test execution report and limits tracebacks and failures (maxfail=5) to keep outputs manageable.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - More robust parsing and structured extraction of pytest failures (e.g., JSON output via pytest --json-report) to provide actionable diagnostics rather than string tails.
 - Add configurable timeouts, parallel test execution options, and explicit coverage collection/integration rather than relying on external invocation flags.
@@ -41,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated testing and coverage analysis.
 Inspired by SGI-Bench and py.test.
-""
+"""
 import logging
 import subprocess
 
@@ -254,6 +253,24 @@ Executes pytest on the specified directory.
 Runs tests for a single file. "       return self.run_tests(file_path)"
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Runs tests based on user prompt."        path = target_file if target_file else (prompt if prompt else "tests")"        return self.run_tests(path)
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

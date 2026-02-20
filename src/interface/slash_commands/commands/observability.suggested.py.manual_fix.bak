@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Cache and observability commands.
 
 """
-
 from ..core import CommandContext, CommandResult
 from ..registry import register
 
@@ -26,7 +25,7 @@ from ..registry import register
 @register(
     "cache","    description="Cache statistics","    usage="/cache","    aliases=["caches"],"    category="observability",")
 def cmd_cache(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get cache statistics.    cache_stats = {}
 
     # Check for common caches
@@ -46,7 +45,7 @@ Get cache statistics.    cache_stats = {}
 @register(
     "counters","    description="Show structured counters","    usage="/counters","    aliases=["metrics"],"    category="observability",")
 def cmd_counters(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get structured counter statistics.    # This would typically access global counter instances
     # For now, show available counter types
     counter_types = ["RequestCounter", "CacheCounter", "PoolCounter", "QueueCounter"]
@@ -57,7 +56,7 @@ Get structured counter statistics.    # This would typically access global count
 @register(
     "telemetry","    description="Show telemetry info","    usage="/telemetry","    aliases=["usage"],"    category="observability",")
 def cmd_telemetry(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get telemetry/usage information.    try:
         from src.observability.telemetry.usage_message import (
             detect_cloud_provider,
@@ -81,7 +80,7 @@ Get telemetry/usage information.    try:
 @register(
     "logs","    description="Show log deduplication stats","    usage="/logs","    aliases=["logstats"],"    category="observability",")
 def cmd_logs(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get log deduplication statistics.    try:
         from src.observability.logging.enhanced_logger import get_dedup_cache_info
 
@@ -93,4 +92,4 @@ Get log deduplication statistics.    try:
         return CommandResult.ok(
             output="[Logs: Enhanced logger not available]","            data={"available": False},"        )
 
-""
+"""

@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
 Core sampling kernels and strategies regarding production inference.
-""
+"""
 
 """
 from typing import Optional
@@ -39,7 +39,7 @@ except ImportError:
 
 
 class TemperatureSampler(Sampler):
-    ""
+"""
 Temperature scaling sampler.
     def forward(
         self,
@@ -58,7 +58,7 @@ Temperature scaling sampler.
 
 
 class TopKSampler(Sampler):
-    ""
+"""
 Top-K filtering sampler.
     def forward(
         self,
@@ -79,7 +79,7 @@ Top-K filtering sampler.
 
 
 class TopPSampler(Sampler):
-    ""
+"""
 Top-P (nucleus) sampling.
     def forward(
         self,
@@ -116,7 +116,7 @@ Top-P (nucleus) sampling.
 
 
 class TopKTopPSampler(Sampler):
-    ""
+"""
 Combined top-k and top-p filtering.
     def forward(
         self,
@@ -165,7 +165,7 @@ Combined top-k and top-p filtering.
 
 
 class GumbelSampler(Sampler):
-    ""
+"""
 Gumbel-max trick sampler.
     def forward(
         self,
@@ -198,7 +198,7 @@ Gumbel-max trick sampler.
 
 
 class RepetitionPenaltySampler(Sampler):
-    ""
+"""
 Repetition penalty sampler.
     def forward(
         self,
@@ -227,7 +227,7 @@ Repetition penalty sampler.
 
 
 class PenaltySampler(Sampler):
-    ""
+"""
 Presence and frequency penalty sampler.
     def forward(
         self,

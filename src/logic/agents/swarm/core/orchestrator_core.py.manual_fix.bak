@@ -25,7 +25,6 @@ USAGE:
 Instantiate OrchestratorCore(workspace_root) to centralize decision-making for agent execution, timeouts, file readiness checks, improvement scoring, and delegating consensus validation to a ByzantineConsensusAgent.
 
 """
-
 WHAT IT DOES:
 - Decides whether a given agent should run based on a selective set.
 - Computes per-agent timeouts from a mapping with a default fallback.
@@ -183,7 +182,25 @@ Calculates a global improvement score.
         consensus_agent = ByzantineConsensusAgent(str(log_path))
         return await consensus_agent.run_committee_vote(task, proposals)
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

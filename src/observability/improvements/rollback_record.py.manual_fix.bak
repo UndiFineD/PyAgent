@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 RollbackRecord - Data container for improvement rollback records
 
@@ -54,7 +54,7 @@ __version__ = VERSION
 
 @dataclass
 class RollbackRecord:
-    ""
+"""
 Record of an improvement rollback.""""
 Attributes:
         improvement_id: ID of the rolled back improvement.
@@ -67,7 +67,25 @@ Attributes:
 reason: str = ""
 previous_state: str = ""
 rollback_commit: str = ""
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

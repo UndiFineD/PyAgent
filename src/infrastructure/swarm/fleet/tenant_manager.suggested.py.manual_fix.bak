@@ -15,17 +15,17 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 TenantManager
 
 """
 Manager for multi-tenant workspace isolation.
 Simulates Docker-based environment isolation by managing restricted root paths.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -63,7 +63,7 @@ class TenantManager:
         self.active_tenants: dict[str, str] = {}
 
     def create_tenant(self, tenant_id: str) -> str:
-        ""
+"""
 Creates an isolated workspace for a new tenant.        tenant_path = os.path.join(self.tenants_dir, tenant_id)
         if not os.path.exists(tenant_path):
             os.makedirs(tenant_path)
@@ -75,13 +75,13 @@ Creates an isolated workspace for a new tenant.        tenant_path = os.path.joi
         return tenant_path
 
     def get_isolated_path(self, tenant_id: str, relative_path: str) -> str:
-        ""
+"""
 Translates a relative path into the tenant's isolated absolute path.'        tenant_root = self.active_tenants.get(tenant_id)
         if not tenant_root:
             raise ValueError(f"Tenant {tenant_id} not active.")
         return self.core.validate_and_translate_path(tenant_root, relative_path)
 
     def get_tenancy_report(self) -> str:
-        ""
+"""
 Summary of active isolated environments.        return f"Tenant Manager: {len(self.active_tenants)} isolated environments established."
-""
+"""

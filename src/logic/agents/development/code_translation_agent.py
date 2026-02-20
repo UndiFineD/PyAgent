@@ -108,6 +108,24 @@ Returns statistics on translation activities.        return {
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

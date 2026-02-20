@@ -187,3 +187,21 @@ Logs a summary of the top 5 most expensive functions.        if not self.stats:
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
+
+"""

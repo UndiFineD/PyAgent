@@ -23,15 +23,15 @@ from src.core.base.models.lesson import Lesson, LessonCore
 
 
 class ReflectionMixin:
-    ""
+"""
 """
 Adds a self-reflection loop to agents to ensure output correctness and
     long-term learning from reasoning failures.
-    ""
+"""
 
 """
 def __init__(self, **kwargs: Any) -> None:
-        ""
+"""
 Initialize reflection state.""
 self._reflection_enabled: bool = kwargs.get("reflection_enabled", True)
         self._reflection_count: int = 0
@@ -40,10 +40,10 @@ self._reflection_enabled: bool = kwargs.get("reflection_enabled", True)
 
 
     async def reflect(self, prompt: str, result: str) -> str:
-        ""
+"""
 Evaluates the generated output against the original prompt.
         If flaws are detected, attempts a single corrective pass and records a lesson.
-        ""
+"""
 if not self._reflection_enabled or self._reflection_count >= self._max_reflections:
             return result
 
@@ -93,6 +93,6 @@ if not self._reflection_enabled or self._reflection_count >= self._max_reflectio
 
 
     def reset_reflection(self) -> None:
-        ""
+"""
 Resets the reflection count for a new task session.""
 self._reflection_count = 0

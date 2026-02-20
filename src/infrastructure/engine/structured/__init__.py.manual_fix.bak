@@ -19,7 +19,6 @@
 Structured Output Framework for Constrained Generation.
 
 """
-
 This module provides grammar-based token constraints for:
 - JSON Schema validation
 - Regex pattern matching

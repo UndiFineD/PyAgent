@@ -15,16 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Tool orchestrator for conversation engine (minimal, parser-safe).
 
 """
-
 Provides a small, well-typed orchestrator used by tests to queue and run
 tool executions. The real implementation is more feature-rich; this stub
 preserves the public API sufficient for imports and basic unit tests.
-""
+"""
 import asyncio
 import time
 from typing import Any, Callable, Dict, List, Optional

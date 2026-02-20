@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Graph Relational Agent - Manage entities and relations with hybrid vector/graph indexing
 
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Graph relational agent.py module.
-""
+"""
 try:
     from typing import Any
 except ImportError:

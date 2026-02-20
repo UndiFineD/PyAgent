@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import logging
+import logging
 
 try:
     import os
@@ -66,7 +66,7 @@ class ReportingAgent(BaseAgent):
         self.workspace_root = self._workspace_root
 
     async def generate_dashboard(self) -> str:
-        ""
+"""
 Runs a workflow to gather data and build a markdown dashboard.        logging.info("ReportingAgent: Initiating dashboard generation workflow...")
         # Load required agents if not present
         from src.logic.agents.analysis.test_agent import TestAgent
@@ -141,7 +141,7 @@ Runs a workflow to gather data and build a markdown dashboard.        logging.in
 
         return "\\n".join(dashboard)
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        ""
+"""
 Alias for dashboard generation or refinement.        return await self.generate_dashboard()
 
 

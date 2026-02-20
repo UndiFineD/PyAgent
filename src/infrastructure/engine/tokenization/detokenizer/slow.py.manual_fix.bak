@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
 Fallback incremental detokenization for non-fast tokenizers.
-""
+"""
 try:
 
 """
-    from typing import List, Optional, Tuple
+from typing import List, Optional, Tuple
 except ImportError:
     from typing import List, Optional, Tuple
 
@@ -68,7 +68,7 @@ class SlowIncrementalDetokenizer(IncrementalDetokenizer):
         )
         self._prev_text: str = ""
 def reset(self) -> None:
-        ""
+"""
 Reset state.        super().reset()
         self._prev_text = ""
 def _decode_tokens(

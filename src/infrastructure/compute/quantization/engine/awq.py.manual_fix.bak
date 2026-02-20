@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Awq.py module.
-""
+"""
 try:
 
 """
-    from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING
 except ImportError:
     from typing import TYPE_CHECKING
 
@@ -60,7 +60,7 @@ if TYPE_CHECKING:
 
 
 class AWQQuantizer(Quantizer):
-    ""
+"""
 Activation-Aware Weight Quantization (AWQ).
     def __init__(
         self,
@@ -76,7 +76,7 @@ Activation-Aware Weight Quantization (AWQ).
         weight: NDArray[np.float32],
         activations: NDArray[np.float32] | None = None,
     ) -> QuantizedTensor:
-        ""
+"""
 Quantizes weights using activation-aware scaling to protect salient weights.        activations = activations if activations is not None else self.calibration_data
 
         if activations is not None:
@@ -99,7 +99,7 @@ Quantizes weights using activation-aware scaling to protect salient weights.    
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
-        ""
+"""
 Dequantizes the tensor and reverses AWQ scaling if applicable.        result: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = qtensor.dequantize()
         if qtensor.shape in self._importance_cache:
             importance = self._importance_cache[qtensor.shape]
@@ -111,7 +111,7 @@ Dequantizes the tensor and reverses AWQ scaling if applicable.        result: np
         activations: NDArray[np.float32],
         weight: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        ""
+"""
 Calculates weight importance scores from calibration activations.        act_importance = np.mean(np.abs(activations), axis=0)
         weight_importance = np.max(np.abs(weight), axis=0)
         importance = act_importance * weight_importance
@@ -119,4 +119,4 @@ Calculates weight importance scores from calibration activations.        act_imp
         scales = 1.0 + importance * 0.5
         return scales.astype(np.float32)
 
-""
+"""

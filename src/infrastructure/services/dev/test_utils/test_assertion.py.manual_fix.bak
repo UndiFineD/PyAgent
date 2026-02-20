@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 
 try:
     from typing import Any
@@ -41,7 +41,7 @@ __version__ = VERSION
 
 @dataclass
 class TestAssertion:
-    ""
+"""
 Custom assertion for agent testing.
 
     Attributes:
@@ -50,7 +50,7 @@ Custom assertion for agent testing.
         actual: Actual value.
         passed: Whether assertion passed.
         message: Assertion message.
-    ""
+"""
 __test__ = False
     name: str
     expected: Any

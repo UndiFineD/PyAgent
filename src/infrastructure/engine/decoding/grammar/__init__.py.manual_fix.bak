@@ -18,7 +18,6 @@
 Grammar-constrained decoding package.
 
 """
-
 try:
     from .base import (StructuredOutputGrammar, StructuredOutputOptions,  # noqa: F401
 except ImportError:

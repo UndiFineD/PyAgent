@@ -47,14 +47,14 @@ def test_update_file_runs_tests_and_rolls_back(monkeypatch, tmp_path):
     def fake_run(files, timeout=120):
         return False, "failing tests"
 
-    monkeypatch.setattr("src.core.base.common.utils.test_runner.run_focused_tests_for_files", fake_run)
+        monkeypatch.setattr("src.core.base.common.utils.test_runner.run_focused_tests_for_files", fake_run)
 
-    # Agent config enforces tests by default; update_file should return False and not persist change
-    agent._config = {}
-    ok = agent.update_file()
-    assert ok is False
-    # Original content should remain
-    assert agent.file_path.read_text() == "print(1)\n"
+        # Agent config enforces tests by default; update_file should return False and not persist change
+        agent._config = {}
+        ok = agent.update_file()
+        assert ok is False
+        # Original content should remain
+        assert agent.file_path.read_text() == "print(1)\n"
 
 
 def test_update_file_succeeds_when_tests_pass(monkeypatch, tmp_path):
@@ -66,8 +66,8 @@ def test_update_file_succeeds_when_tests_pass(monkeypatch, tmp_path):
     def fake_run(files, timeout=120):
         return True, "ok"
 
-    monkeypatch.setattr("src.core.base.common.utils.test_runner.run_focused_tests_for_files", fake_run)
-    agent._config = {}
-    ok = agent.update_file()
-    assert ok is True
-    assert agent.file_path.read_text() == "print(2)\n"
+        monkeypatch.setattr("src.core.base.common.utils.test_runner.run_focused_tests_for_files", fake_run)
+        agent._config = {}
+        ok = agent.update_file()
+        assert ok is True
+        assert agent.file_path.read_text() == "print(2)\n"

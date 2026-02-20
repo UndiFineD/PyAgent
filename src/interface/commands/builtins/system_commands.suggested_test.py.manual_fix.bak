@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from interface.commands.builtins.system_commands.suggested import register_system_commands

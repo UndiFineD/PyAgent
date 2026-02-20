@@ -17,11 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Llm backends package.
-""
+"""
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION as VERSION
+from .core.base.lifecycle.version import VERSION as VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION as VERSION
 
@@ -35,5 +35,5 @@ __version__ = VERSION
 # limitations under the License.
 
 
-""
+"""
 Package initialization.

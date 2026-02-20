@@ -38,15 +38,15 @@ class TestModelFallbackCore:
     def core(self):
         return ModelFallbackCore()
 
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
-    @given(
+        @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
+        @given(
         max_cost=st.floats(min_value=0.0, max_value=1.0),
         req_speed=st.floats(min_value=0.0, max_value=1.0),
         req_quality=st.floats(min_value=0.0, max_value=1.0),
-    )
+        )
     def test_select_best_model(self, core, max_cost, req_speed, req_quality):
         constraints = {
-            "max_cost": max_cost,"            "required_speed": req_speed,"            "required_quality": req_quality,"        }
+        "max_cost": max_cost,"            "required_speed": req_speed,"            "required_quality": req_quality,"        }
         model = core.select_best_model(constraints)
         assert isinstance(model, str)
         assert model in core.model_capabilities

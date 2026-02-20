@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Types: ComplianceCategory enum.""
 
@@ -30,7 +30,7 @@ __version__ = VERSION
 
 
 class ComplianceCategory(Enum):
-    ""
+"""
 Parser-safe ComplianceCategory enum.""
 SECURITY = "security"
     LEGAL = "legal"

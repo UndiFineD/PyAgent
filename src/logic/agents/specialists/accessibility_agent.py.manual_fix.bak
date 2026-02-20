@@ -24,13 +24,12 @@ USAGE:
 Example:
     from src.logic.agents.specialists.accessibility_agent import AccessibilityAgent
 """
-    analyzer = AccessibilityAgent(target_level=WCAGLevel.AA, file_path="src/components")"    report = analyzer.analyze_file("component.py")"    for issue in report.issues:
+analyzer = AccessibilityAgent(target_level=WCAGLevel.AA, file_path="src/components")"    report = analyzer.analyze_file("component.py")"    for issue in report.issues:
         print(f"{issue.severity.name}: {issue.description}")
 WHAT IT DOES:
 Detects accessibility problems across HTML, JavaScript and Python source using mixin-provided analyzers, maps WCAG criteria to internal issue types, collects issues and produces reports aimed at guiding WCAG conformance improvements.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Expose configurable rule severity and rule sets beyond a simple enabled/disabled mapping.
 - Provide richer context (source snippets, automated fixes, traceable locations) and integration hooks for CI pipelines.

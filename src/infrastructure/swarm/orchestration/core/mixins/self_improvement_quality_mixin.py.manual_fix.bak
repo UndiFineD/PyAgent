@@ -17,10 +17,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Quality and robustness analysis logic for SelfImprovementCore.
-""
+"""
 
 """
 import ast
@@ -30,10 +30,10 @@ from typing import Any, Dict, List
 
 
 class SelfImprovementQualityMixin:
-    ""
+"""
 Mixin for quality, complexity, and robustness analysis.
     def _analyze_complexity(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        ""
+"""
 Checks for high cyclomatic complexity.        rust_accel = getattr(self, "_RUST_ACCEL", False)"        rc = getattr(self, "rc", None)"
         if rust_accel and rc is not None:
             try:
@@ -49,7 +49,7 @@ Checks for high cyclomatic complexity.        rust_accel = getattr(self, "_RUST_
         return []
 
     def _analyze_documentation(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        ""
+"""
 Checks for missing or insufficient docstrings.        findings = []
         # Phase 337: Increased search window to 3000 to accommodate long license headers
         if not re.search(r'""
@@ -61,7 +61,7 @@ findings.append(
         return findings
 
     def _analyze_typing(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        ""
+"""
 Checks for missing type hints to ensure Rust FFI readiness.        findings = []
         try:
             tree = ast.parse(content)

@@ -19,7 +19,6 @@
 Input Processing for unified prompt handling.
 
 """
-
 This package provides:
 - Type-safe prompt schemas (text, tokens, embeddings)
 - Encoder-decoder prompt separation

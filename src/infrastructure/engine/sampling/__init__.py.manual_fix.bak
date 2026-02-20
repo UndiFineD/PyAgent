@@ -1,9 +1,9 @@
-""
+"""
 Sampling package (minimal stub).
 
 Provides a safe, minimal package surface so tests can import sampling
 submodules while deeper implementations are being repaired.
-""
+"""
 __all__ = [
     "SamplingParams",
     "SamplingState",

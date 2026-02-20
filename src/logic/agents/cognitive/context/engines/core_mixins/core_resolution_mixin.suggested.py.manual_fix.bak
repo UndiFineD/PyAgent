@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Core resolution mixin for conflict management.
 
@@ -72,4 +72,4 @@ Helper for merge strategy.        if isinstance(existing, dict) and isinstance(i
 Helper for accumulate strategy.        if isinstance(existing, (int, float)) and isinstance("incoming, (int, float)):"            return existing + incoming
         return incoming
 
-""
+"""

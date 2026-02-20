@@ -54,9 +54,9 @@ AMD ROCm platform implementation.
 
     def _get_torch(self):
         if self._torch is None:
-            import torch
+        import torch
 
-            self._torch = torch
+        self._torch = torch
         return self._torch
 
     def get_device_count(self) -> int:

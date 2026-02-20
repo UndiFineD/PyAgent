@@ -96,12 +96,12 @@ class CpuGpuBuffer:
 
     def __post_init__(self):
 """
-Initialize buffers.        if self.cpu is None:
-            self.cpu = np.zeros(self.shape, dtype=self.dtype)
+        Initialize buffers.        if self.cpu is None:
+        self.cpu = np.zeros(self.shape, dtype=self.dtype)
         if self.gpu is None:
-            self.gpu = np.zeros(self.shape, dtype=self.dtype)
+        self.gpu = np.zeros(self.shape, dtype=self.dtype)
 
-    @classmethod
+        @classmethod
     def allocate(
         cls,
         name: str,
@@ -424,6 +424,24 @@ Split an array by offset boundaries.    result = []
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

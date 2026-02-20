@@ -43,14 +43,14 @@ except ImportError:
 
 @dataclass
 class StatsBackup:
-    ""
+"""
 A persisted backup entry for StatsBackupManager.    name: str    path: Path
     timestamp: str
 
 
 
 class StatsBackupManager:
-    ""
+"""
 Manages backups of stats.
     def __init__(self, backup_dir: str | Path | None = None) -> None:
         self.backup_dir: Path | None = Path(backup_dir) if backup_dir is not None else None
@@ -61,7 +61,7 @@ Manages backups of stats.
     def _safe_name(self, name: str) -> str:
         return "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in name) or "backup"
     def create_backup(self, name: str, data: dict[str, Any]) -> StatsBackup:
-        ""
+"""
 Create a named backup of stats data and persist to disk if configured.""""
 Args:
             name: The name of the backup.
@@ -79,7 +79,7 @@ Args:
         return StatsBackup(name=name, path=path, timestamp=timestamp)
 
     def list_backups(self) -> list[StatsBackup]:
-        ""
+"""
 List all available backups.        def make_backup(item: tuple[str, dict[str, Any]]) -> StatsBackup:
             name, data = item
             path_obj = (
@@ -91,7 +91,7 @@ List all available backups.        def make_backup(item: tuple[str, dict[str, An
         return backups
 
     def _load_backups_from_disk(self) -> list[StatsBackup]:
-        ""
+"""
 Helper to load backups from disk not already in memory.        if not self.backup_dir or not self.backup_dir.exists():
             return []
 
@@ -105,7 +105,7 @@ Helper to load backups from disk not already in memory.        if not self.backu
 
         return list(filter(None, map(process_file, self.backup_dir.glob("*.json"))))
     def restore(self, name: str) -> dict[str, Any] | None:
-        ""
+"""
 Restore backup data by name from memory or disk.""""
 Args:
             name: The name of the backup to restore.
@@ -123,7 +123,7 @@ Args:
 
 
 class StatsSnapshotManager:
-    ""
+"""
 Manages snapshots of stats state.
     def __init__(self, snapshot_dir: str | Path | None = None) -> None:
         self.snapshot_dir: Path | None = Path(snapshot_dir) if snapshot_dir is not None else None
@@ -132,7 +132,7 @@ Manages snapshots of stats state.
         self.snapshots: dict[str, StatsSnapshot] = {}
 
     def create_snapshot(self, name: str, data: dict[str, Any]) -> StatsSnapshot:
-        ""
+"""
 Create a named snapshot of stats data.""""
 Args:
             name: The name of the snapshot.
@@ -151,7 +151,7 @@ Args:
         return snapshot
 
     def list_snapshots(self) -> list[StatsSnapshot]:
-        ""
+"""
 List all available snapshots from memory and disk.        snapshots = list(self.snapshots.values())
         snapshots.extend(self._load_snapshots_from_disk())
         return snapshots
@@ -172,7 +172,7 @@ List all available snapshots from memory and disk.        snapshots = list(self.
 
         return list(filter(None, map(process_snap, self.snapshot_dir.glob("*.json"))))
     def restore_snapshot(self, name: str) -> dict[str, Any] | None:
-        ""
+"""
 Restore snapshot data by name from memory or disk.""""
 Args:
             name: The name of the snapshot to restore.
@@ -196,13 +196,13 @@ Args:
 
 
 class StatsCompressor:
-    ""
+"""
 Compresses and decompresses stats data using JSON serialization and zlib compression.""""
 Attempts to use rust_core acceleration when available, falling back to pure Python
     implementatio""
 ns for JSON encoding and zlib compression.""""
 def compress(self, data: Any) -> bytes:
-        ""
+"""
 Compress data using JSON serialization and zlib compression.""""
 Attempts to use rust_core acceleration when available, falling back to
         pure Python JSON encoding and zlib compression.

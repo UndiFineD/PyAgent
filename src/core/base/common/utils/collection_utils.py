@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Collection utilities for tests and lightweight usage.
 
 This file provides a small, well-tested subset of collection helpers used
 throughout the codebase. Implementations favor clarity and robustness.
 """
+from __future__ import annotations
 
 
 

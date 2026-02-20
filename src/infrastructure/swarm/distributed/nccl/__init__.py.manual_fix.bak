@@ -19,7 +19,6 @@
 NCCL communication for distributed operations.
 
 """
-
 try:
     from .communicator import CustomAllReduce, NCCLCommunicator  # noqa: F401
 except ImportError:

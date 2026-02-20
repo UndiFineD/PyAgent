@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Naive reference implementation for testing.
-""
+"""
 
 """
 import logging
@@ -80,7 +80,7 @@ class NaiveAttentionBackend(AttentionBackend[None]):
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-        ""
+"""
 Naive attention implementation.        if not HAS_TORCH:
             raise RuntimeError("PyTorch required for NaiveAttentionBackend")
         # Get dimensions

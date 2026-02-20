@@ -51,29 +51,29 @@ class ToolSelector:
         self._initialize_default_tools()
 
     def _initialize_default_tools(self):
-""""
-Initialize default tool catalog.        # Database tools
+        """"
+        Initialize default tool catalog.        # Database tools
         self._tools.extend([
-            Tool("sql_executor", "database", "Execute SQL queries", ["query", "database", "sql"]),"            Tool("nosql_scanner", "database", "Scan NoSQL databases", ["scan", "nosql", "mongodb"]),"            Tool("data_migrator", "database", "Migrate data between databases", ["migrate", "etl", "transfer"]),"        ])
+        Tool("sql_executor", "database", "Execute SQL queries", ["query", "database", "sql"]),"            Tool("nosql_scanner", "database", "Scan NoSQL databases", ["scan", "nosql", "mongodb"]),"            Tool("data_migrator", "database", "Migrate data between databases", ["migrate", "etl", "transfer"]),"        ])
 
         # API tools
         self._tools.extend([
-            Tool("rest_client", "api", "Make REST API calls", ["rest", "http", "api"]),"            Tool("graphql_client", "api", "Execute GraphQL queries", ["graphql", "api"]),"            Tool("webhook_handler", "api", "Handle webhook events", ["webhook", "event", "callback"]),"        ])
+        Tool("rest_client", "api", "Make REST API calls", ["rest", "http", "api"]),"            Tool("graphql_client", "api", "Execute GraphQL queries", ["graphql", "api"]),"            Tool("webhook_handler", "api", "Handle webhook events", ["webhook", "event", "callback"]),"        ])
 
         # Cloud tools
         self._tools.extend([
-            Tool("s3_manager", "cloud", "Manage AWS S3 buckets", ["aws", "s3", "storage"], "python"),"            Tool("gcp_storage", "cloud", "Google Cloud Storage operations", ["gcp", "storage"], "python"),"            Tool("azure_blob", "cloud", "Azure Blob Storage operations", ["azure", "storage"], "python"),"        ])
+        Tool("s3_manager", "cloud", "Manage AWS S3 buckets", ["aws", "s3", "storage"], "python"),"            Tool("gcp_storage", "cloud", "Google Cloud Storage operations", ["gcp", "storage"], "python"),"            Tool("azure_blob", "cloud", "Azure Blob Storage operations", ["azure", "storage"], "python"),"        ])
 
         # Development tools
         self._tools.extend([
-            Tool("code_formatter", "development", "Format and lint code", ["format", "lint", "code"], "python"),"            Tool("test_runner", "development", "Run automated tests", ["test", "ci", "automation"], "python"),"            Tool("dependency_scanner", "development", "Scan for security vulnerabilities", ["security", "scan"], "python"),"        ])
+        Tool("code_formatter", "development", "Format and lint code", ["format", "lint", "code"], "python"),"            Tool("test_runner", "development", "Run automated tests", ["test", "ci", "automation"], "python"),"            Tool("dependency_scanner", "development", "Scan for security vulnerabilities", ["security", "scan"], "python"),"        ])
 
         # Language-specific tools
         languages = ["python", "typescript", "javascript", "go", "rust", "java"]"        for lang in languages:
-            self._tools.append(
-                Tool(f"{lang}_compiler", "language", fCompile {lang} code","                     ["compile", "build", lang], lang)"            )
-            self._tools.append(
-                Tool(f"{lang}_interpreter", "language", fExecute {lang} code","                     ["execute", "run", "interpret", lang], lang)"            )
+        self._tools.append(
+        Tool(f"{lang}_compiler", "language", fCompile {lang} code","                     ["compile", "build", lang], lang)"            )
+        self._tools.append(
+        Tool(f"{lang}_interpreter", "language", fExecute {lang} code","                     ["execute", "run", "interpret", lang], lang)"            )
 
     def register_tool(self, tool: Tool) -> None:
 """"

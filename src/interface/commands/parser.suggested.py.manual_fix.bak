@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Slash command parser and executor.
-""
+"""
 
 """
 import logging
@@ -98,7 +98,7 @@ class CommandParser:
             CommandParser._builtins_registered = True
 
     def parse(self, prompt: str) -> list[ParsedCommand]:
-        ""
+"""
 Parse commands from prompt without executing.        return parse_commands(prompt)
 
     def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
@@ -183,7 +183,7 @@ processed = processed[: cmd.start] + replacement + processed[cmd.end :]
         )
 
     def get_help(self, command: str | None = None) -> str:
-        ""
+"""
 Get help text for a command or all commands.        if command:
             defn = self.registry.get(command)
             if not defn:

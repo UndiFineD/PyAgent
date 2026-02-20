@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Fix Headers CLI - Command-line entry point for fixing Apache 2.0 license headers
 
@@ -61,7 +61,7 @@ except ImportError:
 
 
 def main():
-    ""
+"""
 CLI entry point for the Fix Headers Tool.    parser = argparse.ArgumentParser(
         description="Fix Apache 2.0 headers in Python files","        formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=Examples:

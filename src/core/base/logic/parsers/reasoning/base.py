@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: base reasoning parser interface.""
 from abc import ABC, abstractmethod
@@ -16,6 +15,7 @@ class StreamingReasoningState:
 
 class ReasoningParser(ABC):
 """
+from __future__ import annotations
 Conservative abstract parser preserving API.""
     name: ClassVar[str] = "base"
 

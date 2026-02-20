@@ -22,11 +22,11 @@ from __future__ import annotations
 """
 Facade for Platform Abstraction.
 Delegates to modularized sub-packages in src/infrastructure/platform/.
-""
+"""
 try:
 
 """
-    from typing import Optional
+from typing import Optional
 except ImportError:
     from typing import Optional
 
@@ -118,4 +118,4 @@ def select_attention_backend(capability: Optional[DeviceCapability] = None) -> A
         capability = get_device_capability()
     return get_current_platform().select_attention_backend(capability)
 
-""
+"""

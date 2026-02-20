@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Basic module docstring.
 
 """
-
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -30,5 +29,5 @@ except ImportError:
 __version__ = VERSION
 
 
-""
+"""
 

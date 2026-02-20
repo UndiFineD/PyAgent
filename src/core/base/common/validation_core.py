@@ -101,26 +101,26 @@ Validate content against applicable rules. Rust-accelerated for large files.""
 
         def _apply_rule(rule: ValidationRule):
 """
-Evaluates regarding a single rule functionally."""    
+            Evaluates regarding a single rule functionally."""    
             # Check if path matches rule pattern or if it's a manual rule match
             is_match = (fnmatch.fnmatch(actual_path.name, rule.file_pattern) or
-                        (actual_path == Path("manual_input") and rule.name in str(file_path)))
+            (actual_path == Path("manual_input") and rule.name in str(file_path)))
             if is_match:
-                try:
-                    passed = rule.validator(actual_content, actual_path)
-                    return {
-                        "rule": rule.name,
-                        "passed": passed,
-                        "severity": rule.severity,
-                        "message": None if passed else rule.message,
-                    }
-                except Exception as err:  # pylint: disable=broad-exception-caught
-                    return {"rule": rule.name, "passed": False, "severity": "error", "message": str(err)}
+            try:
+            passed = rule.validator(actual_content, actual_path)
+            return {
+            "rule": rule.name,
+            "passed": passed,
+            "severity": rule.severity,
+            "message": None if passed else rule.message,
+            }
+            except Exception as err:  # pylint: disable=broad-exception-caught
+            return {"rule": rule.name, "passed": False, "severity": "error", "message": str(err)}
             return None
 
-        # Process all rules regarding the content functionally
-        results.extend(filter(None, map(_apply_rule, self._rules.values())))
-        return results
+            # Process all rules regarding the content functionally
+            results.extend(filter(None, map(_apply_rule, self._rules.values())))
+            return results
 
     def validate_json_schema(self, data: Any, schema: Dict[str, Any]) -> Tuple[bool, List[str]]:
 """
@@ -147,5 +147,23 @@ if rc and hasattr(rc, "json_schema_validate_rust"):
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
 
 """

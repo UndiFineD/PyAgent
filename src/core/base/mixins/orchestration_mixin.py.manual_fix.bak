@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Orchestration Mixin for BaseAgent.""
 
@@ -29,7 +29,7 @@ from src.infrastructure.swarm.fleet.agent_registry import LazyAgentMap
 
 
 class OrchestrationMixin:
-    ""
+"""
 Handles registry, tools, strategies, and distributed logging.""
 def __init__(self, **_kwargs: Any) -> None:
         self.fleet: Any = None
@@ -43,13 +43,13 @@ def __init__(self, **_kwargs: Any) -> None:
 
     @property
     def strategy(self) -> Any:
-        ""
+"""
 Access the execution strategy.""
 return self._strategy
 
     @property
     def strategy(self) -> Any:
-        ""
+"""
 Access the execution strategy.""
 if hasattr(self, "fleet") and getattr(self, "fleet"):
             try:
@@ -63,17 +63,17 @@ if hasattr(self, "fleet") and getattr(self, "fleet"):
 
     @strategy.setter
     def strategy(self, value: Any) -> None:
-        ""
+"""
 Set the execution strategy.""
 self._strategy = value
 
     def set_strategy(self, strategy: Any) -> None:
-        ""
+"""
 Sets the execution strategy for the agent.""
 self._strategy = strategy
 
     def register_tools(self, registry: Any) -> None:
-        ""
+"""
 Register agent tools with a registry.""
 if not registry:
             return
@@ -83,7 +83,7 @@ if not registry:
                 registry.register_tool(self.__class__.__name__, method, cat, prio)
 
     def log_distributed(self, level: str, message: str, **kwargs: Any) -> None:
-        ""
+"""
 Publishes a log to the distributed logging system.""
 if hasattr(self, "fleet") and getattr(self, "fleet"):
             logging_agent = getattr(self, "fleet").agents.get("Logging")
@@ -96,7 +96,7 @@ if hasattr(self, "fleet") and getattr(self, "fleet"):
 
 
     async def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:
-        ""
+"""
 Run a subagent to handle a task.""
 if hasattr(self, "quotas"):
             exceeded, reason = getattr(self, "quotas").check_quotas()
@@ -128,11 +128,11 @@ if hasattr(self, "quotas"):
         return result
 
     async def execute_logic_manifest(self, manifest: list[dict[str, Any]]) -> dict[str, Any]:
-        ""
+"""
 Logic-Sequenced Task Handling (Phase 325).
         Executes a sequence of multi-disciplinary steps without agent hand-overs.
         Steps: [{'action': 'code', 'params': {...}}, {'action': 'test', 'params': {...}}]
-        ""
+"""
 logging.info(f"Orchestration: Executing Logic Manifest with {len(manifest)} steps.")
         results = []
 
@@ -152,7 +152,7 @@ logging.info(f"Orchestration: Executing Logic Manifest with {len(manifest)} step
             results.append({"action": action, "output": res})
         return {"status": "completed", "results": results}
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        ""
+"""
 Improve content using a subagent (respected strategy if set).""
 actual_path = None
         if target_file:
@@ -185,7 +185,7 @@ actual_path = None
 
     @staticmethod
     def get_backend_status() -> dict[str, Any]:
-        ""
+"""
 Get the status of the execution backend.""
 try:
             # pylint: disable=import-outside-toplevel
@@ -197,7 +197,7 @@ try:
 
     @staticmethod
     def describe_backends() -> str:
-        ""
+"""
 Return a description of available backends.""
 try:
             # pylint: disable=import-outside-toplevel
@@ -207,10 +207,10 @@ try:
         return ab.describe_backends()
 
     async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
-        ""
+"""
 Synaptic Delegation: Hands off a sub-task to a specialized agent.
         Supports both fleet-managed agents and dynamic on-demand instantiation.
-        ""
+"""
 logging.info("[%s] Delegating task to %s (Target: %s)", self.__class__.__name__, agent_type, target_file)
         # Prepare context for delegation (Phase 259)
         next_context = self._prepare_delegation_context()
@@ -227,7 +227,7 @@ logging.info("[%s] Delegating task to %s (Target: %s)", self.__class__.__name__,
 
         return f"Error: Agent {agent_type} not found in system catalogs."
     def _prepare_delegation_context(self) -> Any | None:
-        ""
+"""
 Prepare context for delegation propagation.""
 if not hasattr(self, "context") or not self.context:
             return None
@@ -248,7 +248,7 @@ if not hasattr(self, "context") or not self.context:
         target_file: str | None,
         context: Any | None
     ) -> str | None:
-        ""
+"""
 Attempt delegation via Fleet Manager.""
 if not hasattr(self, "fleet") or not getattr(self, "fleet"):
             return None
@@ -276,9 +276,9 @@ if not hasattr(self, "fleet") or not getattr(self, "fleet"):
         self, agent_type: str, prompt: str,
         target_file: str | None, context: Any | None
         ) -> str | None:
-        ""
+"""
 Attempt delegation via AgentRegistry fallback.
-        ""
+"""
 try:
             # pylint: disable=import-outside-toplevel
             from src.core.base.lifecycle.agent_core import BaseCore

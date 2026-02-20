@@ -25,10 +25,10 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Simple validation script for StrategyOptimizer
-""
+"""
 
 """
 from src.core.base.logic.strategy_optimizer import (
@@ -44,7 +44,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 
 class SimpleStrategy(Strategy):
-    ""
+"""
 Simple test strategy""
 def __init__(self, name: str, accuracy: float, latency: float):
         self._name = name
@@ -52,7 +52,7 @@ def __init__(self, name: str, accuracy: float, latency: float):
         self._latency = latency
 
     async def execute(self, input_data: Any, **kwargs) -> str:
-        ""
+"""
 Execute strategy with simulated performance""
 await asyncio.sleep(self._latency)
         # Return a result that simulates the accuracy level
@@ -71,7 +71,7 @@ await asyncio.sleep(self._latency)
 
 
 async def test_basic_optimization():
-    ""
+"""
 Test basic StrategyOptimizer functionality""
 print("Testing StrategyOptimizer...")
     # Create optimizer
@@ -93,7 +93,7 @@ print("Testing StrategyOptimizer...")
     print(" Basic optimization test passed")
 
 async def test_threshold_filtering():
-    ""
+"""
 Test threshold-based filtering""
 print("\\nTesting threshold filtering...")
     optimizer = StrategyOptimizer()
@@ -131,7 +131,7 @@ print("\\nTesting threshold filtering...")
         "excellent", "too_slow"], f"Unexpected best strategy: {"        trial.best_strategy.name}""    print(" Threshold filtering test passed")
 
 async def test_pipeline_optimization():
-    ""
+"""
 Test pipeline configuration optimization""
 print("\\nTesting pipeline optimization...")
     optimizer = StrategyOptimizer()
@@ -157,7 +157,7 @@ print("\\nTesting pipeline optimization...")
     print(" Pipeline optimization test passed")
 
 async def test_performance_statistics():
-    ""
+"""
 Test performance statistics tracking""
 print("\\nTesting performance statistics...")
     optimizer = StrategyOptimizer()

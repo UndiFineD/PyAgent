@@ -87,6 +87,24 @@ findings.append("SC2039: [[ .. ]] is a bash/zsh extension. Use [ .. ] for standa
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

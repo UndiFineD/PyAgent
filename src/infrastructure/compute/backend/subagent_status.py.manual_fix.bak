@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Diagnostic and status logic for SubagentRunner.
 
 """
-
 import os
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
@@ -35,14 +34,14 @@ if TYPE_CHECKING:
 
 
 class SubagentStatus:
-    ""
+"""
 Delegated status/diagnostic manager for SubagentRunner.
 
     def __init__(self, runner: SubagentRunner) -> None:
         self.runner = runner
 
     def get_backend_status(self) -> dict[str, Any]:
-        ""
+"""
 Return diagnostic snapshot of backend availability.        backend = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()"        repo_root = str(self.runner._resolve_repo_root())
         try:
             max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))"        except ValueError:
@@ -67,7 +66,7 @@ Return diagnostic snapshot of backend availability.        backend = os.environ.
         }
 
     def describe_backends(self) -> str:
-        ""
+"""
 Return human-readable backend diagnostics.        status = self.get_backend_status()
         cmd = status["commands"]"        models = status["github_models"]"
         def yn(v: bool) -> str:

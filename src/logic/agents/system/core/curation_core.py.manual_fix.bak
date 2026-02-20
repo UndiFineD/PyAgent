@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Curation Core - Resource Curation (Prune & Pycache Cleanup)
 
@@ -150,4 +150,4 @@ Core logic for pruning and managing filesystem resources.
             if "__pycache__" in dirs:"                shutil.rmtree(os.path.join(root, "__pycache__"))"                count += 1
                 dirs.remove("__pycache__")"        return count
 
-""
+"""

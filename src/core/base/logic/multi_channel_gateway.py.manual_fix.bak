@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-""
+"""
 Parser-safe stub: Multi-Channel Gateway Core (conservative).
 
 Minimal stubbed gateway types to preserve imports during batch fixes.
-""
+"""
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
@@ -23,11 +23,11 @@ class MultiChannelGatewayCore:
         self.port = port
         self.running = False
 
-    async def start(self):
+        async def start(self):
         self.running = True
 
-    async def stop(self):
+        async def stop(self):
         self.running = False
 
 
-__all__ = ["GatewayPresence", "MultiChannelGatewayCore"]
+        __all__ = ["GatewayPresence", "MultiChannelGatewayCore"]

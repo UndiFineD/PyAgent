@@ -17,16 +17,13 @@ from ctypes import wintypes
 import ctypes
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 """
 SYMBOL_FOLDER = "srv*c:\\symbols\\*http://msdl.microsoft.com/download/symbols"  # [BATCHFIX] closed string"MAX_SYM_NAME = 2000
 DWORD64 = ctypes.c_ulonglong
 NULL_PTR = ctypes.POINTER(DWORD64)()
 
 """
-
-
-
 class CantInitializeDebugHelperException(Exception):
     pass
 
@@ -62,30 +59,30 @@ class MODULE_INFO(ctypes.Structure):
 class PESymbolMatcher(object):
     def __init__(self):
         # self._dbghelp = ctypes.windll.Dbghelp
-# [BATCHFIX] Commented metadata/non-Python
-#         self._dbghelp = ctypes.CDLL(rC:\\Program Files (x86)\\Windows Kits\\10\\\\Debuggers\\x64\\\\dbghelp.dll")"  # [BATCHFIX] closed string"        self._define_dbghelp_funcs()
+        # [BATCHFIX] Commented metadata/non-Python
+        #         self._dbghelp = ctypes.CDLL(rC:\\Program Files (x86)\\Windows Kits\\10\\\\Debuggers\\x64\\\\dbghelp.dll")"  # [BATCHFIX] closed string"        self._define_dbghelp_funcs()
 
         # self._hproc = ctypes.windll.kernel32.GetCurrentProcess()
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#         self._hproc = ctypes.windll.kernel32.OpenProcess(
-            0x000F0000, False, ctypes.windll.kernel32.GetCurrentProcessId()
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented unmatched parenthesis"""
+        #         self._hproc = ctypes.windll.kernel32.OpenProcess(
+        0x000F0000, False, ctypes.windll.kernel32.GetCurrentProcessId()
         )
         self.loaded_pe = None
         self._loaded_pe_base_addr = 0
 
-# [BATCHFIX] Commented metadata/non-Python
-#         ctypes.windll.kernel32.LoadLibraryW(rC:\\Program Files (x86)\\Windows Kits\\10\\\\Debuggers\\x64\\\\symsrv.dll")"  # [BATCHFIX] closed string
+        # [BATCHFIX] Commented metadata/non-Python
+        #         ctypes.windll.kernel32.LoadLibraryW(rC:\\Program Files (x86)\\Windows Kits\\10\\\\Debuggers\\x64\\\\symsrv.dll")"  # [BATCHFIX] closed string
         if not self._dbghelp.SymInitializeW(self._hproc, SYMBOL_FOLDER, False):
-            raise CantLoadDebugSymbolsException()
+        raise CantLoadDebugSymbolsException()
 
     def __del__(self):
         if self.loaded_pe:
-            self.unload_pe()
+        self.unload_pe()
         self._dbghelp.SymCleanup(self._hproc)
 
-    # This is a trick to be able to use the class in a `with` statement without recreating the object everytime.
-    # Not really sure if it is a recommended Python solution, but oh well - I'm a researcher not a developer."  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'    @contextmanager
+        # This is a trick to be able to use the class in a `with` statement without recreating the object everytime.
+        # Not really sure if it is a recommended Python solution, but oh well - I'm a researcher not a developer."  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'    @contextmanager
     def __call__(self, pe_path: str) -> None:
         self.load_pe(pe_path)
         try:
@@ -95,48 +92,48 @@ class PESymbolMatcher(object):
                 self.unload_pe()
 
     def _define_dbghelp_funcs(self):
-    pass  # [BATCHFIX] inserted for empty block
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-self._dbghelp.SymInitializeW.argtypes = [wintypes.HANDLE, wintypes.LPWSTR, wintypes.BOOL]""""
-self._dbghelp.SymInitializeW.restype = wintypes.BOOL
+        pass  # [BATCHFIX] inserted for empty block
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        self._dbghelp.SymInitializeW.argtypes = [wintypes.HANDLE, wintypes.LPWSTR, wintypes.BOOL]""""
+        self._dbghelp.SymInitializeW.restype = wintypes.BOOL
         self._dbghelp.SymLoadModuleExW.argtypes = [
-            wintypes.HANDLE,
-            wintypes.HANDLE,
-            wintypes.LPWSTR,
-            wintypes.LPWSTR,
-            DWORD64,
-            wintypes.DWORD,
-            wintypes.LPVOID,
-            wintypes.DWORD,
+        wintypes.HANDLE,
+        wintypes.HANDLE,
+        wintypes.LPWSTR,
+        wintypes.LPWSTR,
+        DWORD64,
+        wintypes.DWORD,
+        wintypes.LPVOID,
+        wintypes.DWORD,
         ]
         self._dbghelp.SymLoadModuleExW.restype = DWORD64
         self._dbghelp.SymFromAddr.argtypes = [
-            wintypes.HANDLE,
-            DWORD64,
-            ctypes.POINTER(DWORD64),
-            ctypes.POINTER(SYMBOL_INFO),
+        wintypes.HANDLE,
+        DWORD64,
+        ctypes.POINTER(DWORD64),
+        ctypes.POINTER(SYMBOL_INFO),
         ]
         self._dbghelp.SymFromAddr.restype = wintypes.BOOL
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-self._dbghelp.SymUnloadModule64.argtypes = [wintypes.HANDLE, DWORD64]""""
-self._dbghelp.SymUnloadModule64.restype = wintypes.BOOL
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]""""
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-self._dbghelp.SymGetModuleInfo.argtypes = [wintypes.HANDLE, DWORD64, ctypes.POINTER(MODULE_INFO)]""""
-ctypes.windll.kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        self._dbghelp.SymUnloadModule64.argtypes = [wintypes.HANDLE, DWORD64]""""
+        self._dbghelp.SymUnloadModule64.restype = wintypes.BOOL
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        self._dbghelp.SymCleanup.argtypes = [wintypes.HANDLE]""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        self._dbghelp.SymGetModuleInfo.argtypes = [wintypes.HANDLE, DWORD64, ctypes.POINTER(MODULE_INFO)]""""
+        ctypes.windll.kernel32.GetCurrentProcess.restype = wintypes.HANDLE
 
     def load_pe(self, pe_path: str) -> None:
         if self.loaded_pe:
@@ -172,6 +169,6 @@ ctypes.windll.kernel32.GetCurrentProcess.restype = wintypes.HANDLE
 #             print(ffailed getting symbol for addr {hex(addr)}: {ctypes.windll.kernel32.GetLastError()}")"  # [BATCHFIX] closed string"        return sym_info.Name.decode("ascii")"
     def assert_loaded_pe(self):
         if not self.loaded_pe:
-            raise PeNotLoadedException()
+        raise PeNotLoadedException()
 
-""
+"""

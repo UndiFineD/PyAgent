@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Manager for validation rules.
 (Facade for src.core.base.common.validation_core)
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -46,7 +46,7 @@ except ImportError:
 
 
 class ValidationRuleManager:
-    ""
+"""
 Manages validation rules for agent content.""
 def __init__(self, core: ValidationCore | None = None) -> None:
         self._core = core or ValidationCore()
@@ -61,7 +61,7 @@ def __init__(self, core: ValidationCore | None = None) -> None:
         severity: str = "error",
         **kwargs,
     ) -> None:
-        ""
+"""
 Add a validation rule. Supports both ValidationRule objects and legacy args.""
 if hasattr(name_or_rule, "name"):
             rule = name_or_rule

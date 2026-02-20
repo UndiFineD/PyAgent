@@ -15,14 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 OutputProcessor - Request output management and state tracking.
 
 """
-
 Inspired by vLLM's v1/engine/output_processor.py - manages per-request state,'detokenization, and output batching.
-""
+"""
 import asyncio
 import contextlib
 import logging
@@ -37,7 +36,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class EventType(Enum):
-    ""
+"""
 Types of request events.
     QUEUED = auto()
     STARTED = auto()
@@ -49,7 +48,7 @@ Types of request events.
 
 @dataclass
 class RequestEvent:
-    ""
+"""
 An event in request lifecycle.
     event_type: EventType
     timestamp: float = field(default_factory=time.time)
@@ -58,7 +57,7 @@ An event in request lifecycle.
 
 @dataclass
 class LoRARequest:
-    ""
+"""
 LoRA adapter request information.
     lora_id: int
     lora_name: str
@@ -67,7 +66,7 @@ LoRA adapter request information.
 
 @dataclass
 class ParentRequest:
-    ""
+"""
 Parent request for multi-turn conversations.
     request_id: str
     child_request_ids: List[str] = field(default_factory=list)
@@ -75,7 +74,7 @@ Parent request for multi-turn conversations.
 
 @dataclass
 class SamplingParams:
-    ""
+"""
 Parameters for token sampling.
     max_tokens: int = 256
     temperature: float = 1.0
@@ -89,7 +88,7 @@ Parameters for token sampling.
 
 @dataclass
 class EngineCoreRequest:
-    ""
+"""
 Request to be processed by engine core.
     request_id: str
     external_req_id: Optional[str] = None
@@ -107,7 +106,7 @@ Request to be processed by engine core.
 
 @dataclass
 class EngineCoreOutput:
-    ""
+"""
 Output from engine core for a single request.
     request_id: str
     new_token_ids: List[int] = field(default_factory=list)
@@ -121,7 +120,7 @@ Output from engine core for a single request.
 
 @dataclass
 class EngineCoreOutputs:
-    ""
+"""
 Batch of outputs from engine core.
     outputs: List[EngineCoreOutput] = field(default_factory=list)
     scheduler_stats: Optional[Any] = None
@@ -130,7 +129,7 @@ Batch of outputs from engine core.
 
 @dataclass
 class RequestOutput:
-    ""
+"""
 Final output for a request (to be returned to client).
     request_id: str
     prompt: Optional[str] = None
@@ -142,7 +141,7 @@ Final output for a request (to be returned to client).
 
 @dataclass
 class OutputProcessorOutput:
-    ""
+"""
 Output from OutputProcessor.process_outputs().
     request_outputs: List[RequestOutput] = field(default_factory=list)
     finished_request_ids: Set[str] = field(default_factory=set)
@@ -150,23 +149,23 @@ Output from OutputProcessor.process_outputs().
 
 
 class RequestOutputCollector:
-    ""
+"""
 Queue for collecting request outputs.
     def __init__(self) -> None:
         self._queue: asyncio.Queue = asyncio.Queue()
 
     def put(self, output: RequestOutput) -> None:
-        ""
+"""
 Put output into queue (non-async).        try:
             self._queue.put_nowait(output)
         except asyncio.QueueFull:
             logger.warning(f"Output queue full for request {output.request_id}")
     async def get(self) -> RequestOutput:
-        ""
+"""
 Get output from queue.        return await self._queue.get()
 
     def empty(self) -> bool:
-        ""
+"""
 Check if queue is empty.        return self._queue.empty()
 
 
@@ -237,7 +236,7 @@ Create RequestState from a new request.        return cls(
         )
 
     def add_event(self, event_type: EventType, details: Optional[Dict[str, Any]] = None) -> None:
-        ""
+"""
 Add an event to the request.        self.events.append(RequestEvent(event_type=event_type, details=details))
 
     def update(
@@ -245,7 +244,7 @@ Add an event to the request.        self.events.append(RequestEvent(event_type=e
         new_token_ids: List[int],
         new_text: str = "","        finish_reason: Optional[str] = None,
     ) -> None:
-        ""
+"""
 Update state with new output.        now: float = time.time()
 
         if new_token_ids:
@@ -263,14 +262,14 @@ Update state with new output.        now: float = time.time()
             self.finish_reason = finish_reason
             self.add_event(EventType.FINISHED, {"reason": finish_reason})
     def should_emit_output(self) -> bool:
-        ""
+"""
 Check if we should emit output based on stream interval.        self._output_count += 1
         if self.finished:
             return True
         return self._output_count % self.stream_interval == 0
 
     def get_output(self, delta: bool = False) -> RequestOutput:
-        ""
+"""
 Get current output.        if delta:
             # Return only new tokens since last output
             token_ids: List[int] = self.output_token_ids[self._last_output_index :]
@@ -291,7 +290,7 @@ Get current output.        if delta:
         )
 
     def _get_metrics(self) -> Dict[str, Any]:
-        ""
+"""
 Get request metrics.        metrics = {
             "num_prompt_tokens": len(self.prompt_token_ids),"            "num_output_tokens": self.num_output_tokens,"            "arrival_time": self.arrival_time,"        }
         if self.first_token_time:
@@ -301,7 +300,7 @@ Get request metrics.        metrics = {
 
 
 class LoRARequestStates:
-    ""
+"""
 Track LoRA request states.
     def __init__(self, log_stats: bool = False) -> None:
         self.log_stats: bool = log_stats
@@ -309,19 +308,19 @@ Track LoRA request states.
         self.lora_stats: Dict[int, Dict[str, Any]] = {}
 
     def add_request(self, request_id: str, lora_request: Optional[LoRARequest]) -> None:
-        ""
+"""
 Track a new request with LoRA.        if lora_request:
             self.active_loras[lora_request.lora_id].add(request_id)
 
     def remove_request(self, request_id: str, lora_request: Optional[LoRARequest]) -> None:
-        ""
+"""
 Remove request from LoRA tracking.        if lora_request and lora_request.lora_id in self.active_loras:
             self.active_loras[lora_request.lora_id].discard(request_id)
             if not self.active_loras[lora_request.lora_id]:
                 del self.active_loras[lora_request.lora_id]
 
     def get_active_lora_ids(self) -> Set[int]:
-        ""
+"""
 Get currently active LoRA IDs.        return set(self.active_loras.keys())
 
 
@@ -354,21 +353,21 @@ class OutputProcessor:
         self._requests_drained.set()
 
     def get_num_unfinished_requests(self) -> int:
-        ""
+"""
 Get count of unfinished requests.        return len(self.request_states)
 
     def has_unfinished_requests(self) -> bool:
-        ""
+"""
 Check if there are unfinished requests.        return bool(self.request_states)
 
     async def wait_for_requests_to_drain(self) -> None:
-        ""
+"""
 Wait for all requests to complete.        if not self.request_states:
             return
         await self._requests_drained.wait()
 
     def propagate_error(self, e: Exception) -> None:
-        ""
+"""
 Propagate error to all request queues.        for _, state in self.request_states.items():
             if state.queue is not None:
                 state.queue.put(e)  # type: ignore
@@ -381,7 +380,7 @@ Propagate error to all request queues.        for _, state in self.request_state
         request_index: int = 0,
         queue: Optional[RequestOutputCollector] = None,
     ) -> None:
-        ""
+"""
 Add a new request to track.        request_id: str = request.request_id
 
         if request_id in self.request_states:
@@ -421,7 +420,7 @@ Add a new request to track.        request_id: str = request.request_id
         request_ids: List[str],
         _internal: bool = False,
     ) -> List[str]:
-        ""
+"""
 Abort requests and return list of aborted IDs.        aborted = []
 
         for request_id in request_ids:
@@ -501,13 +500,13 @@ if self.tokenizer and output.new_token_ids:
         return result
 
     def get_request_state(self, request_id: str) -> Optional[RequestState]:
-        ""
+"""
 Get state for a request.        return self.request_states.get(request_id)
 
 
 
 class IterationStats:
-    ""
+"""
 Statistics for a single iteration.
     def __init__(self) -> None:
         self.num_prompt_tokens: int = 0
@@ -518,7 +517,7 @@ Statistics for a single iteration.
         self.time_in_output_proc_ms: float = 0.0
 
     def to_dict(self) -> Dict[str, Any]:
-        ""
+"""
 Convert to dictionary.        return {
             "num_prompt_tokens": self.num_prompt_tokens,"            "num_generation_tokens": self.num_generation_tokens,"            "num_requests": self.num_requests,"            "time_in_scheduler_ms": self.time_in_scheduler_ms,"            "time_in_model_ms": self.time_in_model_ms,"            "time_in_output_proc_ms": self.time_in_output_proc_ms,"        }
 
@@ -526,7 +525,25 @@ Convert to dictionary.        return {
 __all__: List[str] = [
     "EventType","    "RequestEvent","    "LoRARequest","    "ParentRequest","    "SamplingParams","    "EngineCoreRequest","    "EngineCoreOutput","    "EngineCoreOutputs","    "RequestOutput","    "OutputProcessorOutput","    "RequestOutputCollector","    "RequestState","    "LoRARequestStates","    "OutputProcessor","    "IterationStats","]
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

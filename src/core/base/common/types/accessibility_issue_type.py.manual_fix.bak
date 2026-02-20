@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Accessibility issue types used across tests and types modules.""
 
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 
 class AccessibilityIssueType(Enum):
-    ""
+"""
 Parser-safe AccessibilityIssueType enum.""
 MISSING_ALT_TEXT = "missing_alt_text"
     LOW_COLOR_CONTRAST = "low_color_contrast"

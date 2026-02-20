@@ -1,10 +1,10 @@
-from __future__ import annotations
 """
 Parser-safe TemplateManager stub.
 
 Provides minimal Template and TemplateManager classes so imports succeed
 while template subsystem is being repaired.
 """
+from __future__ import annotations
 
 
 

@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-License-Identifier: Apache-2.0
 """
 LoRA Request Lifecycle - Detailed tracking of per-request events and timing.
-""
+"""
 try:
 
 """
-    import threading
+import threading
 except ImportError:
     import threading
 
@@ -78,17 +78,17 @@ class RequestLifecycle:
         )
 
     def _record_event(self, event_type: str, data: Any = None) -> None:
-        ""
+"""
 Record an event.        self._events.append((time.time(), event_type, data))
 
     @property
     def status(self) -> RequestStatus:
-        ""
+"""
 Get current status.        with self._lock:
             return self._status
 
     def transition_to(self, new_status: RequestStatus) -> None:
-        ""
+"""
 Transition to a new status.        with self._lock:
             now = time.time()
             old_status = self._status
@@ -107,7 +107,7 @@ Transition to a new status.        with self._lock:
             )
 
     def record_token(self) -> None:
-        ""
+"""
 Record a generated token.        with self._lock:
             now = time.time()
             self._tokens_generated += 1
@@ -133,7 +133,7 @@ Mark request as finished.        with self._lock:
 
     @property
     def time_to_first_token(self) -> Optional[float]:
-        ""
+"""
 Get TTFT in seconds.        with self._lock:
             if self._first_token_time:
                 return self._first_token_time - self._created_time
@@ -141,7 +141,7 @@ Get TTFT in seconds.        with self._lock:
 
     @property
     def total_latency(self) -> Optional[float]:
-        ""
+"""
 Get total latency in seconds.        with self._lock:
             if self._finish_time:
                 return self._finish_time - self._created_time
@@ -149,13 +149,13 @@ Get total latency in seconds.        with self._lock:
 
     @property
     def tokens_generated(self) -> int:
-        ""
+"""
 Get tokens generated.        with self._lock:
             return self._tokens_generated
 
     @property
     def inter_token_latency(self) -> Optional[float]:
-        ""
+"""
 Get average inter-token latency.        with self._lock:
             if self._tokens_generated <= 1 or not self._finish_time:
                 return None
@@ -166,19 +166,19 @@ Get average inter-token latency.        with self._lock:
 
     @property
     def throughput(self) -> Optional[float]:
-        ""
+"""
 Get tokens per second.        latency = self.total_latency
         if latency and latency > 0:
             return self._tokens_generated / latency
         return None
 
     def get_events(self) -> List[Tuple[float, str, Any]]:
-        ""
+"""
 Get all events.        with self._lock:
             return list(self._events)
 
     def get_timing_breakdown(self) -> Dict[str, float]:
-        ""
+"""
 Get timing breakdown by state.        # Phase 336: Functional transformation regarding timing breakdown
         with self._lock:
             result = dict(map(
@@ -194,7 +194,7 @@ Get timing breakdown by state.        # Phase 336: Functional transformation reg
 
 
 class RequestLifecycleManager:
-    ""
+"""
 Manager regarding request lifecycles.
     def __init__(self, max_completed: int = 1000):
         self._active: Dict[str, RequestLifecycle] = {}
@@ -209,7 +209,7 @@ Manager regarding request lifecycles.
         max_tokens: int = 0,
         lora_adapter: Optional[str] = None,
     ) -> RequestLifecycle:
-        ""
+"""
 Create a new request lifecycle.        lifecycle = RequestLifecycle(
             request_id=request_id,
             prompt_tokens=prompt_tokens,
@@ -221,7 +221,7 @@ Create a new request lifecycle.        lifecycle = RequestLifecycle(
         return lifecycle
 
     def get(self, request_id: str) -> Optional[RequestLifecycle]:
-        ""
+"""
 Get a request lifecycle.        with self._lock:
             return self._active.get(request_id)
 
@@ -235,17 +235,17 @@ Finish a request.        with self._lock:
                     self._completed.pop(0)
 
     def get_active_count(self) -> int:
-        ""
+"""
 Get number of active requests.        with self._lock:
             return len(self._active)
 
     def get_completed_count(self) -> int:
-        ""
+"""
 Get number of completed requests.        with self._lock:
             return len(self._completed)
 
     def get_aggregate_stats(self) -> Dict[str, float]:
-        ""
+"""
 Get aggregate statistics regarding completed requests.        # Phase 336: Functional aggregation regarding statistics
         with self._lock:
             if not self._completed:

@@ -12,21 +12,21 @@ class SkillManagerCore:
         self.skills_dir = skills_dir
         self.active_skills: Dict[str, Any] = {}
 
-    async def discover_skills(self) -> List[str]:
+        async def discover_skills(self) -> List[str]:
         discovered: List[str] = []
         if not os.path.exists(self.skills_dir):
-            return discovered
+        return discovered
         for root, _, files in os.walk(self.skills_dir):
-            if "mcp.json" in files:
-                manifest_path = os.path.join(root, "mcp.json")
-                try:
-                    with open(manifest_path, 'r', encoding='utf-8') as f:
-                        manifest = json.load(f)
-                    skill_name = manifest.get("name", os.path.basename(root))
-                    self.active_skills[skill_name] = manifest
-                    discovered.append(skill_name)
-                except Exception:
-                    continue
+        if "mcp.json" in files:
+        manifest_path = os.path.join(root, "mcp.json")
+        try:
+        with open(manifest_path, 'r', encoding='utf-8') as f:
+        manifest = json.load(f)
+        skill_name = manifest.get("name", os.path.basename(root))
+        self.active_skills[skill_name] = manifest
+        discovered.append(skill_name)
+        except Exception:
+        continue
         return discovered
 
     def get_skill_manifest(self, skill_name: str) -> Optional[Dict[str, Any]]:

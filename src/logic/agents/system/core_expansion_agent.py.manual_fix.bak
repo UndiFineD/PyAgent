@@ -26,7 +26,6 @@ USAGE:
 - Call install_missing_dependency("package-name") to attempt pip installation of a missing package."- Call audit_environment() to retrieve a list of installed packages for environment inspection.
 
 """
-
 WHAT IT DOES:
 - Provides a small, focused agent that detects and remedies missing Python dependencies by invoking pip in the active interpreter, and records outcomes for later learning.
 - Offers an environment audit using importlib.metadata with a pkg_resources fallback to enumerate installed distributions.

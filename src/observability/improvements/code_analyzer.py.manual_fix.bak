@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Code Analyzer - Suggests analysis tools based on improvement content
 
@@ -56,7 +56,7 @@ __version__ = VERSION
 
 
 class CodeAnalyzer:
-    ""
+"""
 Suggests analysis tools based on improvement content.
 
     def __init__(self) -> None:

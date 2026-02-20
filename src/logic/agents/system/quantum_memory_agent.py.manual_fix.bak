@@ -25,7 +25,6 @@ USAGE:
 Used as a specialized BaseAgent to compress large text/code contexts into dense semantic blocks, run relevance queries across those compressed blocks (optionally using rust acceleration), export a JSON knowledge graph, and provide an async hook for memory optimization; intended to be invoked programmatically (as an as_tool-enabled agent) or via an agent CLI integration.
 
 """
-
 WHAT IT DOES:
 Manages and caches hierarchical compressed context blocks to enable million-token reasoning by (1) compressing raw text into dense summaries and tracking them in an in-memory pool, (2) searching and selectively hydrating only relevant compressed blocks for downstream reasoning, (3) exporting the compressed pool as a JSON knowledge graph, and (4) offering a TODO Placeholder async optimization method for further memory quantization and retrieval tuning.
 
@@ -38,7 +37,7 @@ FILE CONTENT SUMMARY:
 - export_context_knowledge_graph() -> str: as_tool-wrapped, writes active_context_blocks to data/logs/quantum_context/knowledge_graph.json and returns the export path.
 - async improve_content(prompt: str, target_file: str | None = None) -> str: stub that returns an optimization-status string.
 Module ends with an incomplete __main__ guard that imports create_main_function and begins to construct a main for QuantumMemoryAgent (truncated in file).
-""
+"""
 import json
 import logging
 from typing import Any
@@ -115,4 +114,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool")"    main()
 
-""
+"""

@@ -401,13 +401,13 @@ class DoubleBuffer:
         self.shape = shape
         self.dtype = dtype
         self._buffers = [
-            np.zeros(shape, dtype=dtype),
-            np.zeros(shape, dtype=dtype),
+        np.zeros(shape, dtype=dtype),
+        np.zeros(shape, dtype=dtype),
         ]
         self._current_idx = 0
         self._lock = threading.Lock()
 
-    @property
+        @property
     def current(self) -> np.ndarray:
 """
 Get current compute buffer.        return self._buffers[self._current_idx]
@@ -432,5 +432,23 @@ Reset both buffers.        self._buffers[0].fill(0)
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
 
 """

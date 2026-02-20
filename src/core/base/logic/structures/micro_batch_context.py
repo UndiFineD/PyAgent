@@ -53,7 +53,7 @@ _local = threading.local()
     def __exit__(self, exc_type, exc_val, exc_tb):
         self._local.current = self._prev_context
 
-    @classmethod
+        @classmethod
     def current(cls) -> Optional["MicroBatchContext"]:"        """
 Get the current active micro-batch context, if any.""
 return getattr(cls._local, 'current', None)
@@ -68,5 +68,23 @@ __all__ = ["MicroBatchContext"]
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
 
 """

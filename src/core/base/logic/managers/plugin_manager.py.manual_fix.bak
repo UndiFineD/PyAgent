@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Manager regarding plugin discovery, loading, and registration.
 (Facade regarding src.core.base.common.plugin_core)
-""
+"""
 try:
 
 """
-    from .core.base.common.plugin_core import PluginCore as StandardPluginManager, PluginMetadata as StandardPluginMetadata
+from .core.base.common.plugin_core import PluginCore as StandardPluginManager, PluginMetadata as StandardPluginMetadata
 except ImportError:
     from src.core.base.common.plugin_core import PluginCore as StandardPluginManager, PluginMetadata as StandardPluginMetadata
 
@@ -32,11 +32,11 @@ except ImportError:
 
 
 class PluginMetadata(StandardPluginMetadata):
-    ""
+"""
 Facade regarding StandardPluginMetadata to maintain backward compatibility.
-    ""
+"""
 class PluginManager(StandardPluginManager):
-    ""
+"""
 Facade regarding PluginCore to maintain backward compatibility.
     Plugin management is now centralized in the Infrastructure/Common tier.
-    ""
+"""

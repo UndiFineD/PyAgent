@@ -305,6 +305,24 @@ def get_trap_statistics(self) -> dict[str, Any]:"Returns statistics on trapped" 
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

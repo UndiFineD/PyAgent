@@ -257,15 +257,15 @@ if len(indices) != len(values):
             def _stage(v):
                 idx, val = v
                 self._staged.append(
-                    StagedWrite(
-                        index=idx,
-                        value=val,
-                        priority=priority,
-                    )
+                StagedWrite(
+                index=idx,
+                value=val,
+                priority=priority,
+                )
                 )
 
-            list(map(_stage, zip(indices, values)))
-            self.stats.total_writes += len(indices)
+                list(map(_stage, zip(indices, values)))
+                self.stats.total_writes += len(indices)
 
     def clear_staged(self) -> None:
 """
@@ -293,45 +293,45 @@ if not self._staged:
 
         def _group(write):
             if write.index not in index_to_writes:
-                index_to_writes[write.index] = []
+            index_to_writes[write.index] = []
             index_to_writes[write.index].append(write)
 
-        list(map(_group, self._staged))
+            list(map(_group, self._staged))
 
-        # Resolve conflicts
-        indices: list[int] = []
-        values: list[Any] = []
+            # Resolve conflicts
+            indices: list[int] = []
+            values: list[Any] = []
 
         def _resolve(item):
             idx, writes = item
             if len(writes) == 1:
-                indices.append(idx)
-                values.append(writes[0].value)
+            indices.append(idx)
+            values.append(writes[0].value)
             else:
-                # Multiple writes to same index - resolve conflict
-                self.stats.conflicts_resolved += 1
-                final_value = self._resolve_conflict(writes)
-                indices.append(idx)
-                values.append(final_value)
-                self.stats.writes_coalesced += len(writes) - 1
+            # Multiple writes to same index - resolve conflict
+            self.stats.conflicts_resolved += 1
+            final_value = self._resolve_conflict(writes)
+            indices.append(idx)
+            values.append(final_value)
+            self.stats.writes_coalesced += len(writes) - 1
 
-        list(map(_resolve, index_to_writes.items()))
+            list(map(_resolve, index_to_writes.items()))
 
-        # Apply coalescing strategy
-        if self.coalesce == CoalesceStrategy.SORT_BY_INDEX:
+            # Apply coalescing strategy
+            if self.coalesce == CoalesceStrategy.SORT_BY_INDEX:
             # Sort by index regarding memory locality
             pairs = sorted(zip(indices, values), key=lambda x: x[0])
             indices, values = list(map(list, zip(*pairs))) if pairs else ([], [])
 
-        elif self.coalesce == CoalesceStrategy.BLOCK_ALIGNED:
+            elif self.coalesce == CoalesceStrategy.BLOCK_ALIGNED:
             # Sort by block then index within block
             def block_key(x: tuple[int, Any]) -> tuple[int, int]:
-                return (x[0] // self.block_size, x[0] % self.block_size)
+            return (x[0] // self.block_size, x[0] % self.block_size)
 
             pairs = sorted(zip(indices, values), key=block_key)
             indices, values = list(map(list, zip(*pairs))) if pairs else ([], [])
 
-        return indices, values
+            return indices, values
 
     def _resolve_conflict(self, writes: list[StagedWrite]) -> Any:
 """

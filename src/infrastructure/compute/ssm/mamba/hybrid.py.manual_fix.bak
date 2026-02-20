@@ -91,7 +91,7 @@ class HybridMambaMixer:
         hidden_states: np.ndarray,
         state: MambaState | None = None,
     ) -> MambaOutput:
-        ""
+"""
 Forward with hybrid SSM + attention.        batch_size, seq_len, _ = hidden_states.shape
 
         # SSM path
@@ -135,4 +135,4 @@ Forward with hybrid SSM + attention.        batch_size, seq_len, _ = hidden_stat
 
         return MambaOutput(output=output, state=ssm_output.state)
 
-""
+"""

@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import re
+import re
 
 try:
     from typing import Dict, List
@@ -87,9 +87,9 @@ class WAFIntelligence:
 
     def __init__(self):
         self.signatures = [
-            WAFSignature(
-                waf_name=s["WAF_NAME"],"                keyword=s["KEYWORD"],"                regex=s["REGEX"],"                header_only=s["HEADER_ONLY"],"                description=s["DESCRIPTION"]"            )
-            for s in self.SIGNATURES_DATA
+        WAFSignature(
+        waf_name=s["WAF_NAME"],"                keyword=s["KEYWORD"],"                regex=s["REGEX"],"                header_only=s["HEADER_ONLY"],"                description=s["DESCRIPTION"]"            )
+        for s in self.SIGNATURES_DATA
         ]
 
     def detect_waf(self, headers: Dict[str, str], content: str = "") -> List[str]:"                Detect WAFs based on headers and content.

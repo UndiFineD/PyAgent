@@ -22,7 +22,7 @@ from __future__ import annotations
 # Phase 41: Tool Parser Framework - Llama 3 Parser
 """
 Llama 3 tool call parser.
-""
+"""
 
 """
 import contextlib
@@ -72,7 +72,7 @@ class Llama3ToolParser(ToolParser):
         text: str,
         index: int,
     ) -> Optional[ToolCall]:
-        ""
+"""
 Parse Python-style function call.        # Match function_name(args)
         pattern = re.compile(r"^(\\w+)\((.*)\)$", re.DOTALL)"        match = pattern.match(text.strip())
 
@@ -93,7 +93,7 @@ Parse Python-style function call.        # Match function_name(args)
         )
 
     def _parse_kwargs(self, args_str: str) -> Dict[str, Any]:
-        ""
+"""
 Parse keyword arguments.        args = {}
 
         if not args_str:
@@ -116,7 +116,7 @@ Parse keyword arguments.        args = {}
         return args
 
     def _split_args(self, args_str: str) -> List[str]:
-        ""
+"""
 Split arguments respecting quotes and brackets.        parts = []
         current = ""
 depth = 0
@@ -144,7 +144,7 @@ continue
         return parts
 
     def _parse_value(self, value: str) -> Any:
-        ""
+"""
 Parse a value string.        # Try JSON
         try:
             return json.loads(value)
@@ -210,4 +210,4 @@ Parse a value string.        # Try JSON
 
         return state, completed_tool
 
-""
+"""

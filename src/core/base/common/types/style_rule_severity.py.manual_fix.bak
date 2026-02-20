@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_coder.py
-""
+"""
 
 """
 from enum import Enum
@@ -32,9 +32,9 @@ __version__ = VERSION
 
 
 class StyleRuleSeverity(Enum):
-    ""
+"""
 Severity levels for style rules.
-    ""
+"""
 ERROR = "error"
     WARNING = "warning"
     INFO = "info"

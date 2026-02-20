@@ -15,17 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Speciation Agent (minimal shim).
 
 """
-
 This file provides a lightweight SpeciationAgent class used by tests
 and other modules as an importable placeholder. The real implementation
 is out of scope for the test harness and should be restored from
 history if full behavior is required.
-""
+"""
 try:
     import logging
 except ImportError:

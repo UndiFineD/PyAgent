@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 MCPAgent - MCP Server Integration
 [Brief Summary]
@@ -28,7 +28,6 @@ USAGE:
 - Start/connect a server: await agent.initialize_mcp_server("name", ["command", "args"])"- Call a tool on a connected MCP server: await agent.call_mcp_tool("name", "tool", {"arg": "value"})"- Intended to be registered with the fleet so other agents can call its as_tool-decorated methods.
 
 """
-
 WHAT IT DOES:
 - Discovers local mcp.json configurations across the workspace to report available MCP servers and commands.
 - Starts and manages MCPConnector instances, tracking running connectors in self.connectors.
@@ -45,7 +44,7 @@ FILE CONTENT SUMMARY:
 Agent specializing in Model Context Protocol (MCP) integration.
 Acts as a bridge between the PyAgent fleet and external MCP servers.
 Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
-""
+"""
 import asyncio
 import json
 from pathlib import Path

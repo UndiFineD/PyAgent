@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Ollama backend.py module.
-""
+"""
 
 """
 import logging
@@ -32,7 +32,7 @@ __version__ = VERSION
 
 
 class OllamaBackend(LLMBackend):
-    ""
+"""
 Ollama LLM Backend.
     def chat(
         self,

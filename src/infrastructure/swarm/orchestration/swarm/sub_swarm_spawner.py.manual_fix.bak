@@ -17,10 +17,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Sub swarm spawner.py module.
-""
+"""
 
 """
 import logging
@@ -37,7 +37,7 @@ if TYPE_CHECKING:
 
 
 class SubSwarm:
-    ""
+"""
 A lightweight sub-swarm with a subset of capabilities.
     def __init__(self, swarm_id: str, agents: list[str], parent_fleet: FleetManager) -> None:
         self.swarm_id = swarm_id
@@ -105,4 +105,4 @@ class SubSwarmSpawner:
         return self.active_sub_swarms.get(swarm_id)
 
 
-""
+"""

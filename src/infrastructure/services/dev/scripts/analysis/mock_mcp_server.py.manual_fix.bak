@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Mock MCP server implementation for testing Agentic capabilities.
 
 """
-
 import json
 import sys
 
@@ -30,7 +29,7 @@ __version__ = VERSION
 
 
 def main() -> None:
-    ""
+"""
 Run a basic JSON-RPC server loop for MCP tool mocking.    while True:
 
         line = sys.stdin.readline()

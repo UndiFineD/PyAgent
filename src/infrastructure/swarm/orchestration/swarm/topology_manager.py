@@ -56,35 +56,35 @@ class TopologyManager:
 
     def record_usage(self, agent_id: str):
 """
-Increments usage counter and triggers cloning if threshold met.        self.request_counts[agent_id] = self.request_counts.get(agent_id, 0) + 1
+        Increments usage counter and triggers cloning if threshold met.        self.request_counts[agent_id] = self.request_counts.get(agent_id, 0) + 1
         logger.debug(f"TopologyManager: Usage for {agent_id} is {self.request_counts[agent_id]}")
         if self.request_counts[agent_id] >= self.clone_threshold:
-            logger.info(f"TopologyManager: Triggering clone for {agent_id}")"            asyncio.create_task(self.clone_expert(agent_id))
-            self.request_counts[agent_id] = 0  # Reset counter after cloning
+        logger.info(f"TopologyManager: Triggering clone for {agent_id}")"            asyncio.create_task(self.clone_expert(agent_id))
+        self.request_counts[agent_id] = 0  # Reset counter after cloning
 
-    async def clone_expert(self, agent_id: str):
-                Creates a virtual replica of an expert to distribute load.
+        async def clone_expert(self, agent_id: str):
+        Creates a virtual replica of an expert to distribute load.
         In a real system, this might involve spawning a new container or process.
         Here we register a virtual 'replica' in the gatekeeper.'                if agent_id not in self.gatekeeper.experts:
-            return
+        return
 
         master_profile = self.gatekeeper.experts[agent_id]
         replica_id = f"{agent_id}_replica_{len(self.replicas.get(agent_id, [])) + 1}"
         logger.info(f"Cloning expert {agent_id} to {replica_id} due to high demand.")
         # Create replica profile
         replica_profile = ExpertProfile(
-            agent_id=replica_id,
-            domains=master_profile.domains,
-            performance_score=master_profile.performance_score,
-            specialization_vector=master_profile.specialization_vector,
-            is_replica=True,
-            parent_id=agent_id,
+        agent_id=replica_id,
+        domains=master_profile.domains,
+        performance_score=master_profile.performance_score,
+        specialization_vector=master_profile.specialization_vector,
+        is_replica=True,
+        parent_id=agent_id,
         )
 
         self.gatekeeper.register_expert(replica_profile)
 
         if agent_id not in self.replicas:
-            self.replicas[agent_id] = []
+        self.replicas[agent_id] = []
         self.replicas[agent_id].append(replica_id)
 
     def get_topology_stats(self) -> Dict[str, Any]:

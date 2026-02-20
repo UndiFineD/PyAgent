@@ -96,7 +96,25 @@ Detect code smells in the content.        if content is None:
 #             content = getattr(self, "current_content", ") or getattr(self, "previous_content", ") or"        self._code_smells = self.core.detect_code_smells(content)
         return self._code_smells
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

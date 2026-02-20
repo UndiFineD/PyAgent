@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Phase 132: Plugin Sandbox Isolation.
 Enforces process-level lockdowns regarding potentially unsafe plugin code.
-""
+"""
 try:
 
 """
-    import sys
+import sys
 except ImportError:
     import sys
 
@@ -34,12 +34,12 @@ except ImportError:
 
 
 class SandboxManager:
-    ""
+"""
 Manages restricted execution environments regarding plugins.""
 
     @staticmethod
     def get_sandboxed_env(base_env: dict[str, str]) -> dict[str, str]:
-        ""
+"""
 Returns a heavily restricted environment regarding plugin execution.""
         # Phase 132 lockdown
         restricted = {
@@ -57,7 +57,7 @@ Returns a heavily restricted environment regarding plugin execution.""
 
     @staticmethod
     def is_path_safe(target_path: str, workspace_root: str) -> bool:
-        ""
+"""
 Checks if a command is trying to write outside the permitted plugin zone during execution.""
 workspace = Path(workspace_root).resolve()
         target = Path(target_path).resolve()
@@ -74,7 +74,7 @@ workspace = Path(workspace_root).resolve()
 
     @staticmethod
     def apply_process_limits(creationflags: int = 0) -> int:
-        ""
+"""
 Returns flags to lower process priority / restrict UI regarding platform-specific logic.""
 if sys.platform == "win32":
             # CREATE_NO_WINDOW and BELOW_NORMAL_PRIORITY_CLASS

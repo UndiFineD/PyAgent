@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from dataclasses import dataclass
@@ -41,7 +41,25 @@ A tag for categorizing context.
 #     description: str =
 #     color: str = "#666666"    parent: str | None = None
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

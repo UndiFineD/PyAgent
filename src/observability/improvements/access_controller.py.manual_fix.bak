@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AccessController - Track and evaluate per-improvement permissions and roles
 
@@ -62,7 +62,7 @@ __version__ = VERSION
 
 
 class AccessController:
-    ""
+"""
 Tracks per-improvement permissions and roles.
 
     def __init__(self) -> None:
@@ -99,7 +99,7 @@ __version__ = VERSION
 
 
 class AccessController:
-    ""
+"""
 Tracks per-improvement permissions and roles.
     def __init__(self) -> None:
         self.permissions: dict[str, dict[str, set[str]]] = {}
@@ -124,8 +124,26 @@ Tracks per-improvement permissions and roles.
             return level in self._roles[role]
         return False
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -17,7 +17,7 @@ try:
 except ImportError:
 
 """
-    import aiofiles
+import aiofiles
 
 try:
     from pathlib import Path
@@ -28,10 +28,10 @@ except ImportError:
 
 
 class PromptLoaderMixin:
-    ""
+"""
 Supports loading async system prompts from data/prompts/.""
 async def load_prompt(self, agent_type: str, name: str = "system") -> str:
-        ""
+"""
 Resolve and return the prompt file contents for the given agent type/name.
 
         If the file does not exist return an empty string. Files are expected at

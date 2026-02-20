@@ -104,20 +104,20 @@ Wrapper that profiles all rust_core function calls.
                 def profiled_func(*args, **kwargs):
                     start_time_ns = time.perf_counter_ns()
                     try:
-                        return original(*args, **kwargs)
+                    return original(*args, **kwargs)
                     finally:
-                        elapsed_ns = time.perf_counter_ns() - start_time_ns
-                        rust_profiler.record_call(name, elapsed_ns)
+                    elapsed_ns = time.perf_counter_ns() - start_time_ns
+                    rust_profiler.record_call(name, elapsed_ns)
 
-                return profiled_func
-            return original
+                    return profiled_func
+                    return original
 
-    sys.modules["rust_core"] = ProfiledRustCore()  # type: ignore[assignment]"    print(" Rust profiling enabled")"except ImportError:
-    print("️ rust_core not available")
+                    sys.modules["rust_core"] = ProfiledRustCore()  # type: ignore[assignment]"    print(" Rust profiling enabled")"except ImportError:
+                    print("️ rust_core not available")
 
-# =============================================================================
-# COMPREHENSIVE PROFILE ANALYZER
-# =============================================================================
+                    # =============================================================================
+                    # COMPREHENSIVE PROFILE ANALYZER
+                    # =============================================================================
 
 
 

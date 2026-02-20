@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 LoRA layer weight implementations.""
 
@@ -39,7 +39,7 @@ except ImportError:
 
 @dataclass
 class LoRALayerWeights:
-    ""
+"""
 LoRA weights for a single layer.""
 lora_a: NDArray[np.float32]  # [rank, in_features]
     lora_b: NDArray[np.float32]  # [out_features, rank]
@@ -49,19 +49,19 @@ lora_a: NDArray[np.float32]  # [rank, in_features]
 
     @property
     def rank(self) -> int:
-        ""
+"""
 LoRA rank.""
 return self.lora_a.shape[0]
 
     @property
     def in_features(self) -> int:
-        ""
+"""
 Input dimension.""
 return self.lora_a.shape[1]
 
     @property
     def out_features(self) -> int:
-        ""
+"""
 Output dimension.""
 return self.lora_b.shape[0]
 
@@ -70,7 +70,7 @@ return self.lora_b.shape[0]
         x: NDArray[np.float32],
         apply_dropout: bool = False,
     ) -> NDArray[np.float32]:
-        ""
+"""
 Compute LoRA output.""
         # Try Rust acceleration for inference
         if rc and not apply_dropout and hasattr(rc, "lora_forward_rust"):
@@ -111,7 +111,7 @@ Compute LoRA output.""
         self,
         base_weight: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        ""
+"""
 Merge LoRA weights into base weight.""
         # Try Rust acceleration
         if rc and hasattr(rc, "lora_merge_rust"):
@@ -134,14 +134,14 @@ Merge LoRA weights into base weight.""
         return base_weight + delta
 
     def get_memory_bytes(self) -> int:
-        ""
+"""
 Memory usage in bytes.""
 return self.lora_a.nbytes + self.lora_b.nbytes
 
 
 @dataclass
 class IA3LayerWeights:
-    ""
+"""
 IA3 (Input-Activation-Attention Scaling) weights for a single layer.""
 scaling_vector: NDArray[np.float32]  # [features]
     module_name: str
@@ -150,7 +150,7 @@ scaling_vector: NDArray[np.float32]  # [features]
         self,
         x: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        ""
+"""
 Apply IA3 scaling.""
 if rc and hasattr(rc, "apply_ia3_scaling_rust"):
             try:
@@ -162,14 +162,14 @@ if rc and hasattr(rc, "apply_ia3_scaling_rust"):
         return x * self.scaling_vector
 
     def get_memory_bytes(self) -> int:
-        ""
+"""
 Memory usage in bytes.""
 return self.scaling_vector.nbytes
 
 
 @dataclass
 class PackedLoRAWeights:
-    ""
+"""
 Packed LoRA weights for fused QKV or gate+up projections.""
 lora_a: NDArray[np.float32]  # [num_layers, rank, in_features]
     lora_b: NDArray[np.float32]  # [num_layers, out_features, rank]
@@ -181,7 +181,7 @@ lora_a: NDArray[np.float32]  # [num_layers, rank, in_features]
         cls,
         layer_weights: list[LoRALayerWeights],
     ) -> "PackedLoRAWeights":
-        ""
+"""
 Create packed weights from individual layer weights.""
 if not layer_weights:
             raise ValueError("layer_weights cannot be empty")
@@ -193,7 +193,7 @@ if not layer_weights:
         return cls(lora_a, lora_b, scalings, module_names)
 
     def unpack(self) -> list[LoRALayerWeights]:
-        ""
+"""
 Unpack into individual layer weights.""
 return [
             LoRALayerWeights(

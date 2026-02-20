@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Improvement Dashboard - Renders a lightweight improvements dashboard and emits update callbacks
 
@@ -66,7 +66,7 @@ __version__ = VERSION
 
 
 class ImprovementDashboard:
-    ""
+"""
 Renders a lightweight dashboard and emits update callbacks.
 
     def __init__(self) -> None:

@@ -93,6 +93,24 @@ This function is robust to different SDK shapes for `client.llm`.
         logger.error(f"lmstudio_chat_async error: {e}")"        return """
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

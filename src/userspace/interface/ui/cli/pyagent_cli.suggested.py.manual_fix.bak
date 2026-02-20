@@ -19,7 +19,7 @@ from __future__ import annotations
 """
 PyAgent CLI Interface.
 Connects to the Fleet Load Balancer via the Agent API Server.
-""
+"""
 
 """
 import argparse
@@ -53,7 +53,7 @@ WORKSPACE_ROOT = Path(str(Path(__file__).resolve().parents[4]) + "")"conn_manage
 recorder = LocalContextRecorder(WORKSPACE_ROOT, "CLI_System")
 
 def check_server() -> bool:
-    ""
+"""
 Verify that the API server is running with 15m TTL caching.    if not conn_manager.is_endpoint_available("AgentAPIServer"):"        return False
 
     try:
@@ -69,7 +69,7 @@ Verify that the API server is running with 15m TTL caching.    if not conn_manag
 
 
 def list_agents() -> None:
-    ""
+"""
 Get list of active agents and shard distribution from the fleet (Phase 235).    try:
         response = session.get(f"{API_BASE_URL}/agents")"        if response.status_code == 200:
             data = response.json()
@@ -99,7 +99,7 @@ Get list of active agents and shard distribution from the fleet (Phase 235).    
         console.print(f"[red]Connection failed: {e}[/red]")
 
 def run_task(agent_id: str, task: str) -> None:
-    ""
+"""
 Dispatch a task with intelligent state spinners (Phase 235).    payload = {"agent_id": agent_id, "task": task, "interface": "CLI", "context": {}}
     # Progress/Spinner management for Phase 235
     with Progress(

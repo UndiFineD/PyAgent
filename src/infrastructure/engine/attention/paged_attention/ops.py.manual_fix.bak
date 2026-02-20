@@ -17,7 +17,6 @@
 Ops.py module.
 
 """
-
 try:
     import numpy
 except ImportError:
@@ -38,7 +37,7 @@ except ImportError:
 
 
 class PagedAttentionOps:
-    ""
+"""
 Pure NumPy implementation of paged attention operations.
     @staticmethod
     def scaled_dot_product_attention(
@@ -49,7 +48,7 @@ Pure NumPy implementation of paged attention operations.
         causal: bool = True,
         sliding_window: int | None = None,
     ) -> np.ndarray:
-        ""
+"""
 Standard scaled dot-product attention.        scores = np.einsum("bhqd,bhkd->bhqk", query, key) * scale"        sq, sk = query.shape[2], key.shape[2]
         if causal:
             mask = np.triu(np.ones((sq, sk), dtype=bool), k=1)
@@ -70,7 +69,7 @@ Standard scaled dot-product attention.        scores = np.einsum("bhqd,bhkd->bhq
         seq_lens: np.ndarray,
         config: AttentionConfig,
     ) -> np.ndarray:
-        ""
+"""
 Basic paged attention implementation regarding sequence batches.        num_seqs, num_heads, head_size = query.shape
         output = np.zeros((num_seqs, num_heads, head_size), dtype=query.dtype)
 
@@ -105,7 +104,7 @@ Basic paged attention implementation regarding sequence batches.        num_seqs
         config: AttentionConfig,
         partition_size: int = 512,
     ) -> np.ndarray:
-        ""
+"""
 Paged attention with partition-based reduction regarding sequences.        ns, nh, hs = query.shape
         out_buf = np.zeros((ns, nh, hs), dtype=query.dtype)
 
@@ -140,7 +139,7 @@ Paged attention with partition-based reduction regarding sequences.        ns, n
 
     @staticmethod
     def expand_kv_for_gqa(kv: np.ndarray, num_queries_per_kv: int) -> np.ndarray:
-        ""
+"""
 Expands KV heads for Grouped Query Attention (GQA).        return kv if num_queries_per_kv == 1 else np.repeat(kv, num_queries_per_kv, axis=1)
 
-""
+"""

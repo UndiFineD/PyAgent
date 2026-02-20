@@ -19,7 +19,6 @@
 Distributed infrastructure for parallel inference.
 
 """
-
 Phase 33 modules:
 - TensorParallelGroup: Tensor parallel coordination
 - NCCLCommunicator: NCCL collective operations

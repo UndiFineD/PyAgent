@@ -97,7 +97,7 @@ class CausalConv1d:
         x: np.ndarray,
         conv_state: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray]:
-        ""
+"""
 Single-step update for decoding.        new_state = np.roll(conv_state, -1, axis=-1)
         new_state[:, :, -1] = x
 
@@ -131,7 +131,7 @@ class SelectiveScan:
         C: np.ndarray,
         ssm_state: np.ndarray | None = None,
     ) -> tuple[np.ndarray, np.ndarray]:
-        ""
+"""
 Selective scan forward pass.        batch_size, seq_len, d_inner = x.shape
         if ssm_state is None:
             ssm_state = np.zeros(
@@ -165,7 +165,7 @@ Selective scan forward pass.        batch_size, seq_len, d_inner = x.shape
         C: np.ndarray,
         ssm_state: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray]:
-        ""
+"""
 Single-step update for decoding.        dA = np.exp(dt[:, :, None] * self.A)
         dB = dt[:, :, None] * B[:, None, :]
         new_state = dA * ssm_state + dB * x[:, :, None]
@@ -173,4 +173,4 @@ Single-step update for decoding.        dA = np.exp(dt[:, :, None] * self.A)
 
         return output, new_state
 
-""
+"""

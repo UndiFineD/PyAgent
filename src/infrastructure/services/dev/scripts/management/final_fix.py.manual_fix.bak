@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for final namespace correction and import migration.
 
 """
-
 import os
 import re
 
@@ -29,7 +28,7 @@ __version__ = VERSION
 
 
 def fix_imports(content: str) -> str:
-    ""
+"""
 Migrate legacy module names to the src namespace.
 
     modules = [

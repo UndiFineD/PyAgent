@@ -66,25 +66,25 @@ Handles mDNS registration and discovery for PyAgent nodes.
         self.browser: Optional[ServiceBrowser] = None
         self.discovered_nodes: Set[str] = set()
 
-    async def start(self):
+        async def start(self):
 """
-Initializes Zeroconf and registers the local node.        self.zc = Zeroconf(ip_version=IPVersion.V4Only)
+        Initializes Zeroconf and registers the local node.        self.zc = Zeroconf(ip_version=IPVersion.V4Only)
 
         # Determine local IP
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
-            # doesn't even have to be reachable'            s.connect(('10.255.255.255', 1))'            IP = s.getsockname()[0]
+        # doesn't even have to be reachable'            s.connect(('10.255.255.255', 1))'            IP = s.getsockname()[0]
         except Exception:
-            IP = '127.0.0.1''        finally:
-            s.close()
+        IP = '127.0.0.1''        finally:
+        s.close()
 
         # Register local service
         info = ServiceInfo(
-            self.SERVICE_TYPE,
-            f"{self.node_id}.{self.SERVICE_TYPE}","            addresses=[socket.inet_aton(IP)],
-            port=self.port,
-            properties=self.properties,
-            server=f"{self.node_id}.local.""        )
+        self.SERVICE_TYPE,
+        f"{self.node_id}.{self.SERVICE_TYPE}","            addresses=[socket.inet_aton(IP)],
+        port=self.port,
+        properties=self.properties,
+        server=f"{self.node_id}.local.""        )
 
         loop = asyncio.get_running_loop()
         await loop.run_in_executor(None, self.zc.register_service, info)
@@ -95,11 +95,11 @@ Initializes Zeroconf and registers the local node.        self.zc = Zeroconf(ip_
 
     def _on_node_discovered(self, node_data: Dict[str, Any]):
         self.discovered_nodes.add(node_data["name"])
-    async def stop(self):
+        async def stop(self):
 """
-Cleans up mDNS resources.        if self.zc:
-            loop = asyncio.get_running_loop()
-            await loop.run_in_executor(None, self.zc.unregister_all_services)
-            await loop.run_in_executor(None, self.zc.close)
-            logger.info("mDNS service stopped")
+        Cleans up mDNS resources.        if self.zc:
+        loop = asyncio.get_running_loop()
+        await loop.run_in_executor(None, self.zc.unregister_all_services)
+        await loop.run_in_executor(None, self.zc.close)
+        logger.info("mDNS service stopped")
 """

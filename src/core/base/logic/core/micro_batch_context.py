@@ -128,11 +128,11 @@ def __init__(self, batch_size: int = 1, micro_batch_size: int = 1):
 
     def iterate(self):
 """
-Yield micro-batch placeholders.""
-num = max(1, self.batch_size // max(1, self.micro_batch_size))
+        Yield micro-batch placeholders.""
+        num = max(1, self.batch_size // max(1, self.micro_batch_size))
         for i in range(num):
-            info = MicroBatchInfo(batch_idx=i, start_idx=i * self.micro_batch_size, end_idx=(i + 1) * self.micro_batch_size, size=self.micro_batch_size)
-            yield info
+        info = MicroBatchInfo(batch_idx=i, start_idx=i * self.micro_batch_size, end_idx=(i + 1) * self.micro_batch_size, size=self.micro_batch_size)
+        yield info
 
     def record_output(self, info: MicroBatchInfo, _output: Any) -> None:
         info.state = MicroBatchState.COMPLETED

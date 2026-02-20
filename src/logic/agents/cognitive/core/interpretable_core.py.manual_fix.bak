@@ -23,7 +23,6 @@ This module simulates the decomposition of LLM activations into human-interpreta
 features, leveraging Rust for high-throughput vectorized operations.
 
 """
-
 import logging
 from typing import Any
 

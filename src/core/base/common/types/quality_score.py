@@ -37,6 +37,6 @@ class QualityScore:
     def score(self):
         return self.overall_score
 
-    @score.setter
+        @score.setter
     def score(self, value):
         self.overall_score = float(value)

@@ -19,7 +19,6 @@ Parses Ruff JSON output to extract and rank cyclomatic complexity violations.
 Ported from temp/check_complexity.py for re-use in the PyAgent analysis suite.
 
 """
-
 import argparse
 import json
 import os
@@ -27,7 +26,7 @@ import re
 
 
 def parse_ruff_complexity(json_file: str, threshold: int = 25):
-    ""
+"""
 Reads ruff_output.json and prints ranked complexity issues.    if not os.path.exists(json_file):
         print(f"Error: {json_file} not found")"        return
 
@@ -58,4 +57,4 @@ if __name__ == "__main__":"    parser = argparse.ArgumentParser(description="Par
     args = parser.parse_args()
     parse_ruff_complexity(args.input, args.threshold)
 
-""
+"""

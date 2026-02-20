@@ -36,27 +36,27 @@ Example usage:
         from some.heavy.module import HeavyClass
         return HeavyClass
 
-    # Using ModuleLazyLoader for __getattr__ pattern
-    _lazy_modules = ModuleLazyLoader({
+        # Using ModuleLazyLoader for __getattr__ pattern
+        _lazy_modules = ModuleLazyLoader({
         "HeavyClass": ("some.heavy.module", "HeavyClass"),
         "AnotherClass": ("another.module", "AnotherClass"),
-    })
+        })
 
     def __getattr__(name: str):
         return _lazy_modules.load(name)
 """
-import importlib
-import threading
-from functools import lru_cache, wraps
-from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
+        import importlib
+        import threading
+        from functools import lru_cache, wraps
+        from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
 
-__all__ = [
-    "LazyLoader",
-    "lazy_import",
-    "ModuleLazyLoader",
-]
+        __all__ = [
+        "LazyLoader",
+        "lazy_import",
+        "ModuleLazyLoader",
+        ]
 
-T = TypeVar("T")
+        T = TypeVar("T")
 
 
 
@@ -159,19 +159,19 @@ Decorator that wraps a function with lru_cache for lazy, cached imports.
         @lazy_import
         def get_numpy():
             ''
-Lazily import numpy.''
-import numpy as np
+            Lazily import numpy.''
+            import numpy as np
             return np
 
-        # First call imports numpy
-        np = get_numpy()
+            # First call imports numpy
+            np = get_numpy()
 
-        # Subsequent calls return cached module
-        np2 = get_numpy()  # Same object, no re-import
+            # Subsequent calls return cached module
+            np2 = get_numpy()  # Same object, no re-import
 """
-cached_func = lru_cache(maxsize=1)(func)
+            cached_func = lru_cache(maxsize=1)(func)
 
-    @wraps(func)
+            @wraps(func)
     def wrapper() -> T:
         return cached_func()
 

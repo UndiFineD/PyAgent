@@ -16,14 +16,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Blackboard core.py module.
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -47,7 +47,7 @@ class BlackboardCore:
         self.history: list[dict[str, Any]] = []
 
     def process_post(self, key: str, value: Any, agent_name: str) -> dict[str, Any]:
-        ""
+"""
 Core logic for posting data.        self.data[key] = value
         entry = {"agent": agent_name, "key": key, "value": value}"        self.history.append(entry)
         return entry
@@ -58,4 +58,4 @@ Core logic for posting data.        self.data[key] = value
     def get_all_keys(self) -> list[str]:
         return list(self.data.keys())
 
-""
+"""

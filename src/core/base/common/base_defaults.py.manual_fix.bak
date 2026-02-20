@@ -16,13 +16,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Standard default configurations and templates for BaseAgent.""
 try:
 
-"""
-    from .core.base.common.models import PromptTemplate
+""
+from .core.base.common.models import PromptTemplate
 except ImportError:
     from src.core.base.common.models import PromptTemplate
 

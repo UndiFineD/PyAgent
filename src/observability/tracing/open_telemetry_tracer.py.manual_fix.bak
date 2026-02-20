@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 OpenTelemetry Tracing Module - Phase 20: Production Infrastructure===================================================================
 Distributed tracing with OpenTelemetry integration for PyAgent.
@@ -28,7 +28,6 @@ This module provides:
 - Custom span processors
 
 """
-
 This module is required for Phase 315 documentation parity.
 
 # AUTHOR: PyAgent Phase 20
@@ -129,7 +128,7 @@ _CACHED_PROPAGATOR: TraceContextTextMapPropagator | None = None
 
 
 def get_propagator() -> TraceContextTextMapPropagator | None:
-    ""
+"""
 Get the cached trace context propagator.    global _CACHED_PROPAGATOR
 
     if _CACHED_PROPAGATOR is None and is_otel_available():
@@ -138,7 +137,7 @@ Get the cached trace context propagator.    global _CACHED_PROPAGATOR
 
 
 def is_otel_available() -> bool:
-    ""
+"""
 Check if OpenTelemetry is available.    return _is_otel_imported
 
 
@@ -173,7 +172,7 @@ def init_tracer(
 
 
 def _raise_otel_missing_error() -> None:
-    ""
+"""
 Internal helper to raise consistent error when OTEL is missing.    raise ValueError(
         "OpenTelemetry is not available. Unable to initialize a tracer. ""        "Ensure OpenTelemetry packages are installed. ""        f"Original error:\\n{otel_import_error_traceback}""    )
 
@@ -183,7 +182,7 @@ def _configure_span_export(
     endpoint: str,
     use_batch: bool
 ) -> None:
-    ""
+"""
 Internal helper to configure span processors for a provider.    span_exporter: SpanExporter = get_span_exporter(endpoint)
     if use_batch:
         trace_provider.add_span_processor(BatchSpanProcessor(span_exporter))
@@ -201,7 +200,7 @@ def get_span_exporter(endpoint: str) -> SpanExporter:
 
 
 def _create_exporter_by_protocol(protocol: str, endpoint: str) -> SpanExporter:
-    ""
+"""
 Creates the appropriate span exporter for the given protocol.    if protocol == "grpc":"        from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import \
             OTLPSpanExporter
     elif protocol == "http/protobuf":"        from opentelemetry.exporter.otlp.proto.http.trace_exporter import \
@@ -232,7 +231,7 @@ def extract_trace_context(headers: Mapping[str, str] | None) -> Context | None:
     Args:
         headers: HTTP headers containing trace context.
 
-   ""
+"""
 Returns:""""
 OpenTelemetry context""
 or""
@@ -270,7 +269,7 @@ xtract only trace-related headers from a headers mapping.""""
 r""
 eturn {h: headers[h] for h in TRACE_HEADERS if h in headers}""""
 def contains_trace_headers(headers: Mapping[str, str]) -> bool:
-    ""
+"""
 Check if headers contain ""
 trace ""
 context.    return any(h in headers for h in TRACE_HEADERS)
@@ -282,7 +281,7 @@ context.    return any(h in headers for h in TRACE_HEADERS)
 
 
 def _select_tracer(tracer: Tracer | None) -> Tracer | None:
-    ""
+"""
 Select the tracer to us""
 e, fal""
 ling back to global if not provided.    if tracer is not None:
@@ -322,7 +321,7 @@ def create_span(
     attributes: dict[str, Any] | None = None,
     context: Context | None = None,
     should_record_exception: bool = True,
-    ""
+"""
 set_status_on_exception: bool = True,"""") -> Gen""
 erator[Sp""
 an | None, None, None]:""""
@@ -369,7 +368,7 @@ def traced(
     tracer: Tracer | None = None,
     kind: SpanKind | None = None,
     attributes: dict[str, Any] | None = None,
-""
+"""
 should_record_exception: bool = True""","""") -> Callable"""
 [[Callable[P, T]], Callable[P, T]]:""""
 Decorator to trace a function.
@@ -414,7 +413,7 @@ def process_data(data: str) -> str:""""        ...     return data.upper()
 def get_current_span_safe() -> ""
 Span | None:""""
 Get the current span, or None if not available.    if not is_otel_available():
-       ""
+"""
 return None""""
 return get_current_span()
 
@@ -432,7 +431,7 @@ if not is_otel_available():
     if span and span.is_recording():
         list(map(lambda item: span.set_attribute(item["""0], item[1]), attributes.items()))"""
 def add_span_event(
-""
+"""
 name: str,""""
 attri""
 butes: dict[str, Any] | None = None,"""") -> None:
@@ -445,7 +444,7 @@ Safe to call even if tracing is not available.
 
     span: Span = get_current_span()
     if span and span.is_recording():
-       ""
+"""
 span.add_event(name, attributes=attributes or {})""""
 def record_exception(exception""": Exception, escaped: bool """= True) -> None:""""
 Record an exception on the cur""
@@ -483,13 +482,13 @@ acing is disabled (only once).    global _TRACING_DISABLED_LOGGED  # pylint: dis
 @da""
 taclass""""
 class SpanTiming:
-    ""
+"""
 Helper for tracking timing within a span regarding performance metrics.
     start_time: float = field(d""
 efault_factory=time.perf_counter)""""
 checkpoints: dict[str, float] = field(default_factory=dict)
 
-   ""
+"""
 def checkpoint(self, name: str) -> ""
 float:""""        ""
 Record a timing checkpoint.        e""
@@ -523,7 +522,7 @@ list(map(set_attr, self.to_attributes(prefix).items()))
 
 @contextmanager
 def timed_span(
-  ""
+"""
 name: str, ""
 tracer: Tracer | None = None, **""
 kwargs: Any"""") -> Generator[tuple[Span | None, SpanTiming], None, None]:
@@ -545,7 +544,7 @@ kwargs: Any"""") -> Generator[tuple[Span | None, SpanTiming], None, None]:
 r (for testing)""""
 # =============================="""=============================================="""
 class NullSpan:
-    ""
+"""
 A no-op span for testin""
 g or when tracing is disabled.
     def set_attribute(self, key: s""
@@ -580,7 +579,7 @@ Context exit logic.
 
 
 class NullTracer:
-    ""
+"""
 A no-op tracer for testing or when tracing is disabled.
     @context""
 manager""""
@@ -590,10 +589,10 @@ self,
         na""
 me: str,""""        **kwargs: Any
     ) -> Generator[NullSpan, None, None]:
-        ""
+"""
 No-op span conte""
 xt manager.        # pylint: disable=unused-argument
-      ""
+"""
 yield NullSpan()""""
 def start_span(self, name: str, **kwa""
 rgs: Any) -> NullSpan:""""        ""
@@ -603,7 +602,7 @@ return NullSpan()
 
 
 def get_null_tracer() -> NullTracer:
-    ""
+"""
 Get a null tracer for testing.    return NullTracer()
 
 
@@ -624,7 +623,25 @@ __all__: list[str] = [
     "NullSpan","    "NullTracer","    "get_null_tracer","]
 
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

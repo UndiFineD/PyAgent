@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import os
+import os
 
 try:
     from colorama import init, Fore, Style
@@ -32,7 +32,7 @@ init(autoreset=True)
 
 def generate_index_html(output_dir):
     pass  # [BATCHFIX] inserted for empty block
-""
+"""
 Generates an index.html file that links to all the HTML reports in the output directory#     with a table structure to display the folder and file hierarchy.
     # Create an index.html file
     index_file_path = os.path.join(output_dir, "index.html")"    with open(index_file_path, "w", encoding="utf-8") as index_file:"        # Start the HTML structure
@@ -102,4 +102,4 @@ Generates an index.html file that links to all the HTML reports in the output di
 """ [BATCHFIX] Commented unterminated string"""
 #         ")"  # [BATCHFIX] closed string
     print(f"{Fore.GREEN}Index file created at {index_file_path}{Style.RESET_ALL}")
-""
+"""

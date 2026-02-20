@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import unittest
+import unittest
 
 try:
     import logging
@@ -37,7 +37,7 @@ logging.basicConfig(level=logging.INFO)
 
 class TestCheckpointRDMA(unittest.IsolatedAsyncioTestCase):
     async def test_checkpoint_lifecycle(self):
-        ""
+"""
 Verify the RDMA checkpoint and recovery lifecycle (Phase 330).        manager = CheckpointManager(rank=0, world_size=2)
 
         # 1. Create Checkpoint
@@ -54,7 +54,7 @@ Verify the RDMA checkpoint and recovery lifecycle (Phase 330).        manager = 
         self.assertIsNotNone(recovered, "Recovery should return state stub")"        self.assertEqual(recovered, b"RECOVERED_STATE_STUB")"
         logging.info(f"RDMA Checkpoint lifecycle verified for ID: {checkpoint_id}")
     async def test_multi_rank_config(self):
-        ""
+"""
 Verify peer rank calculation for ring buddy system.        mgr0 = CheckpointManager(rank=0, world_size=4)
         mgr3 = CheckpointManager(rank=3, world_size=4)
 

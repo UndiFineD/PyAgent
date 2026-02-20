@@ -61,3 +61,21 @@ To wrap an agent's LLM call:""""'# ai.llm_chat_via_ollama = optimizer.wrap_agent
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
+
+"""

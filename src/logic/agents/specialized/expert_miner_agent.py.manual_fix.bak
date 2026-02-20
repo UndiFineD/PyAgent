@@ -22,7 +22,6 @@ USAGE:
 As an asynchronous BaseAgent subclass used by the fleet manager: collect failed reasoning traces and call await agent.mine_expertise(failed_traces) to get a specialist definition, then await agent.spawn_expert(specialist_def) to register it. Intended to run inside the PyAgent lifecycle with StateTransaction for safe file/registry writes.
 
 """
-
 WHAT IT DOES:
 Analyzes collections of failed or sub-optimal task traces to extract common missing skills, synthesizes a lightweight specialist definition (name, base_class, primary_directive, recommended_tools, hobbyist flag), and returns trace lineage for auditing. Provides simple pattern extraction (_extract_skills), tool recommendations (_recommend_tools), and stubs for spawning/registration (spawn_expert) while logging key events.
 

@@ -16,7 +16,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 SlashCommands - Chat prompt slash command parser and executor
 
@@ -84,4 +84,4 @@ __all__ = [
     "parse_commands","    "get_slash_commands","    "process_prompt","    "execute_command","    "register_command","    "command","]
 
 
-""
+"""

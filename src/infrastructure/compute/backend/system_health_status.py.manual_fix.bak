@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     import time
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 @dataclass
 class SystemHealthStatus:
-    ""
+"""
 Health status for a backend.""""
 Attributes:
         backend: Backend identifier.

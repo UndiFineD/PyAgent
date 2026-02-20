@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Types: ComplianceResult dataclass.""
 
@@ -37,7 +37,7 @@ __version__ = VERSION
 
 @dataclass
 class ComplianceResult:
-    ""
+"""
 Result of compliance checking.
 
 

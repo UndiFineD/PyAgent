@@ -13,13 +13,12 @@
 # limitations under the License.
 
 
-""
+"""
 """
 DNS Takeover Signatures
 Source: 0xSojalSec-can-i-take-over-dns (https://github.com/indianajson/can-i-take-over-dns)
 
 """
-
 DNS_TAKEOVER_SIGNATURES = {
     "000Domains": {"        "status": "Vulnerable (w/ purchase)","        "fingerprints": ["ns1.000domains.com", "ns2.000domains.com", "fwns1.000domains.com", "fwns2.000domains.com"]"    },
     "AWS Route 53": {"        "status": "Not Vulnerable","        "fingerprints": ["awsdns-"]"    },
@@ -55,4 +54,4 @@ PRIVATE_DNS_SIGNATURES = {
     "Activision": "activision.com","    "Adobe": "adobe.com","    "Apple": "apple.com","    "Automattic": "automattic.com","    "Capital One": "capitalone.com","    "Disney": ["twdcns.com", "twdcns.info", "twdcns.co.uk"],"    "Google": "google.com","    "Lowe's": "lowes.com","'    "T-Mobile": ["tmobileus.com", "tmobileus.net"]"}
 
 
-""
+"""

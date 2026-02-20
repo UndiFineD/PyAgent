@@ -15,7 +15,6 @@
 Test Privacy Core module.
 
 """
-
 try:
     from hypothesis import given, strategies as st
 except ImportError:
@@ -43,13 +42,13 @@ class TestPrivacyCore:
         # Simple API key sim
         key_text = "secret=abcde12345abcde12345""        redacted = PrivacyCore.redact_text(key_text)
         assert "[REDACTED]" in redacted"        assert "abcde" not in redacted"
-    @given(
+        @given(
         st.recursive(
-            st.text(),
-            lambda children: st.lists(children) | st.dictionaries(st.text(), children),
-            max_leaves=10,
+        st.text(),
+        lambda children: st.lists(children) | st.dictionaries(st.text(), children),
+        max_leaves=10,
         )
-    )
+        )
     def test_scan_log_entry(self, data):
         # Just ensure it doesn't crash and returns same structure type'        result = PrivacyCore.scan_log_entry(data)
         assert isinstance(result, type(data))

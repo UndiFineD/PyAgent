@@ -64,33 +64,33 @@ class SubprocessTransformer(ast.NodeTransformer):
 """
 AST transformer that replaces subprocess calls with a safe wrapper.    DANGEROUS_ATTRS = {'Popen', 'call', 'run', 'check_output'}
     def visit_Call(self, node):
-                Transforms calls to subprocess.<attr>(...) or direct Popen(...) 
+        Transforms calls to subprocess.<attr>(...) or direct Popen(...) 
         into safe_subprocess_run(...).
-                # transform subprocess.<attr>(...) -> safe_subprocess_run(...)
+        # transform subprocess.<attr>(...) -> safe_subprocess_run(...)
         func = node.func
         if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
-            if func.value.id == 'subprocess' and func.attr in self.DANGEROUS_ATTRS:'                new = ast.copy_location(
-                    ast.Call(
-                        func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()),'                        args=node.args,
-                        keywords=node.keywords
-                    ),
-                    node
-                )
-                return ast.fix_missing_locations(new)
+        if func.value.id == 'subprocess' and func.attr in self.DANGEROUS_ATTRS:'                new = ast.copy_location(
+        ast.Call(
+        func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()),'                        args=node.args,
+        keywords=node.keywords
+        ),
+        node
+        )
+        return ast.fix_missing_locations(new)
         # direct Popen(...) or run(...) when imported directly
         if isinstance(func, ast.Name) and func.id in self.DANGEROUS_ATTRS:
-            new = ast.copy_location(
-                ast.Call(
-                    func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()),'                    args=node.args,
-                    keywords=node.keywords
-                ),
-                node
-            )
-            return ast.fix_missing_locations(new)
+        new = ast.copy_location(
+        ast.Call(
+        func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()),'                    args=node.args,
+        keywords=node.keywords
+        ),
+        node
+        )
+        return ast.fix_missing_locations(new)
         return self.generic_visit(node)
 
 
-SAFE_WRAPPER_SRC = ''
+        SAFE_WRAPPER_SRC = ''
 def safe_subprocess_run(*args, **kwargs):''''    ""
 Conservative TODO Placeholder: replace with secure implementation.""""
 This wrapper intentionally raises at runtime to force human review before enabling.
@@ -152,6 +152,42 @@ if __name__ == '__main__':'    raise SystemExit(main())
 ''
 
 """
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+""
 
 ''
 

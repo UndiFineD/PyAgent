@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Dispatcher.py module.
-""
+"""
 try:
 
 """
-    from typing import Callable
+from typing import Callable
 except ImportError:
     from typing import Callable
 
@@ -36,7 +36,7 @@ except ImportError:
 
 
 class SparseDispatcher:
-    ""
+"""
 Sparse dispatcher for token-to-expert assignment.
     def __init__(
         self,
@@ -108,7 +108,7 @@ Sparse dispatcher for token-to-expert assignment.
 
 
 class DenseDispatcher:
-    ""
+"""
 Dense dispatcher using matrix operations.
     def __init__(self, num_experts: int, top_k: int) -> None:
         self.num_experts = num_experts
@@ -133,4 +133,4 @@ Dense dispatcher using matrix operations.
 
         return output
 
-""
+"""

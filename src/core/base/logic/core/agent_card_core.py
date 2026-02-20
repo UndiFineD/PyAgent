@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: Agent Card core (conservative).
 
 Minimal, side-effect free stub preserving exported symbols for tests.
 Backups are saved as `.manual_fix.bak`.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import List, Dict, Any

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Compliance Checker Agent - Validate changelog entries for security and legal compliance
 
@@ -70,7 +70,7 @@ __version__ = VERSION
 
 
 class ComplianceChecker:
-    ""
+"""
 Checks changelog compliance with various requirements.""""
 Verifies changelog entries meet security, legal, and
     other compliance requirements.
@@ -83,18 +83,18 @@ Verifies changelog entries meet security, legal, and
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]"    LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]"
     def __init__(self):
         self.standards = {
-            "Security": ComplianceStandard("                "Security","                [
-                    ComplianceCheck(
-                        "Security Category Check","                        check_fn=self._security_category_check,
-                        recommendation="Move security-related entries to the Security section","                    ),
-                ],
-            ),
-            "Legal": ComplianceStandard("                "Legal","                [
-                    ComplianceCheck(
-                        "Legal Review Check","                        check_fn=self._legal_review_check,
-                        recommendation="Have legal team review license / copyright changes","                    ),
-                ],
-            ),
+        "Security": ComplianceStandard("                "Security","                [
+        ComplianceCheck(
+        "Security Category Check","                        check_fn=self._security_category_check,
+        recommendation="Move security-related entries to the Security section","                    ),
+        ],
+        ),
+        "Legal": ComplianceStandard("                "Legal","                [
+        ComplianceCheck(
+        "Legal Review Check","                        check_fn=self._legal_review_check,
+        recommendation="Have legal team review license / copyright changes","                    ),
+        ],
+        ),
         }
 
     def _security_category_check(self) -> bool:
@@ -105,7 +105,7 @@ Verifies changelog entries meet security, legal, and
         return not self._legal_issues
 
     def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
-        ""
+"""
 Check security compliance.""""
 Args:
             entries: Changelog entries to check.
@@ -124,7 +124,7 @@ Args:
         )
 
     def check_legal_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
-        ""
+"""
 Check legal compliance.""""
 Args:
             entries: Changelog entries to check.
@@ -142,7 +142,7 @@ Args:
         )
 
     def check_all(self, entries: list[ChangelogEntry]) -> list[ComplianceResult]:
-        ""
+"""
 Run all compliance checks.""""
 Args:
             entries: Changelog entries to check.
@@ -154,4 +154,4 @@ Args:
             self.check_legal_compliance(entries),
         ]
 
-""
+"""

@@ -53,7 +53,7 @@ class DPEngineSync:
 
     def mark_ready(self, rank_id: int):
 """
-Marks a rank as ready for the next wave.        self.ready_map[rank_id] = True
+        Marks a rank as ready for the next wave.        self.ready_map[rank_id] = True
 
     def all_ready(self) -> bool:
 """
@@ -64,16 +64,16 @@ Checks if all ranks in the world have signaled readiness.        if rc and hasat
 
     def reset_ready(self):
 """
-Resets readiness for the next synchronization point.        for i in range(self.world_size):
-            self.ready_map[i] = False
+        Resets readiness for the next synchronization point.        for i in range(self.world_size):
+        self.ready_map[i] = False
         self.state = SyncState.READY
 
-    async def wait_for_barrier(self, timeout: float = 5.0):
-                Non-blocking barrier wait. In a real system, this would involve
+        async def wait_for_barrier(self, timeout: float = 5.0):
+        Non-blocking barrier wait. In a real system, this would involve
         nccl/zmq communication.
-                start_time = asyncio.get_event_loop().time()
+        start_time = asyncio.get_event_loop().time()
         while not self.all_ready():
-            if asyncio.get_event_loop().time() - start_time > timeout:
-                logger.warning(f"Rank {self.rank} timed out waiting for barrier")"                return False
-            await asyncio.sleep(0.01)
+        if asyncio.get_event_loop().time() - start_time > timeout:
+        logger.warning(f"Rank {self.rank} timed out waiting for barrier")"                return False
+        await asyncio.sleep(0.01)
         return True

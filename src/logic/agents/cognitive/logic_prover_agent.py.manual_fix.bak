@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Logic Prover Agent for formal verification of reasoning chains.
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -75,4 +75,4 @@ class LogicProverAgent:
             "chain_id": "logic_v1_001","            "steps_verified": len(reasoning_chain),"            "timestamp": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),"        }
 
 
-""
+"""

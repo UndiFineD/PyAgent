@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Analyzer.py module.
-""
+"""
 try:
 
 """
-    from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union
 except ImportError:
     from typing import Any, Dict, List, Tuple, Union
 
@@ -47,13 +47,13 @@ except ImportError:
 
 
 class LogprobsAnalyzer:
-    ""
+"""
 Analyze logprobs for insights.
     @staticmethod
     def rank_token_importance(
         logprobs: Union[FlatLogprobs, List[LogprobEntry]], threshold: float = -5.0
     ) -> List[Tuple[int, float]]:
-        ""
+"""
 Rank tokens by their importance (based on logprob threshold).        lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
         importance = -lps
         positions = np.where(lps < threshold)[0]
@@ -79,7 +79,7 @@ Compute aggregate confidence across token sequence.        lps = logprobs.logpro
         raise ValueError(f"Unknown method: {method}")
     @staticmethod
     def detect_anomalies(logprobs: Union[FlatLogprobs, List[LogprobEntry]], z_threshold: float = 2.5) -> List[int]:
-        ""
+"""
 Detect anomalous tokens based on statistical distribution.        lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
         if len(lps) < 3:
             return []
@@ -90,7 +90,7 @@ Detect anomalous tokens based on statistical distribution.        lps = logprobs
 
     @staticmethod
     def compute_calibration(logprobs: Union[FlatLogprobs, List[LogprobEntry]], num_bins: int = 10) -> Dict[str, Any]:
-        ""
+"""
 Compute calibration metrics for confidence scores.        lps_source = (
             logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.probability for e in logprobs])
         )
@@ -104,6 +104,24 @@ Compute calibration metrics for confidence scores.        lps_source = (
                 means[i] = np.mean(probs[mask])
         return {
             "bin_edges": bins.tolist(),"            "bin_counts": np.bincount(indices, minlength=num_bins).tolist(),"            "bin_means": means.tolist(),"            "mean_confidence": float(np.mean(probs)),"        }
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

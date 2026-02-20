@@ -17,10 +17,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Meta orchestrator agent.py module.
-""
+"""
 
 """
 import json
@@ -64,7 +64,7 @@ class MetaOrchestratorAgent(BaseAgent):
 
         return f"# Objective Resolution Report (Depth {depth})\\n\\n" + "\\n".join(results)
     async def _decompose_objective(self, objective: str) -> list[dict[str, Any]]:
-        ""
+"""
 Uses a LLM to break down the objective into discrete steps.        prompt = f        Break down the following high-level objective into a JSON list of steps.
         Objective: {objective}
 
@@ -84,7 +84,7 @@ Uses a LLM to break down the objective into discrete steps.        prompt = f   
             ]
 
     def _enrich_args(self, args: list[Any]) -> list[Any]:
-        ""
+"""
 Injects global context into agent arguments.        enriched = []
         context_brief = self.global_context.get_summary()
 
@@ -94,7 +94,7 @@ Injects global context into agent arguments.        enriched = []
         return enriched
 
     async def run(self, objective: str) -> str:
-        ""
+"""
 Entry point for the MetaOrchestrator agent.        return await self.solve_complex_objective(objective)
 
-""
+"""

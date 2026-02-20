@@ -81,44 +81,44 @@ class ToolVersionManager:
 
     def _load_registry(self):
 """
-Load version registry from file.        if self.registry_path.exists():
-            try:
-                with open(self.registry_path, 'r') as f:'                    data = json.load(f)
+        Load version registry from file.        if self.registry_path.exists():
+        try:
+        with open(self.registry_path, 'r') as f:'                    data = json.load(f)
 
-                # Load tool versions
-                for tool_name, versions_data in data.get("versions", {}).items():"                    self._tool_versions[tool_name] = [
-                        ToolVersion(**version_data) for version_data in versions_data
-                    ]
+        # Load tool versions
+        for tool_name, versions_data in data.get("versions", {}).items():"                    self._tool_versions[tool_name] = [
+        ToolVersion(**version_data) for version_data in versions_data
+        ]
 
-                # Load compatibility rules
-                self._compatibility_rules = [
-                    CompatibilityRule(**rule_data)
-                    for rule_data in data.get("compatibility_rules", [])"                ]
+        # Load compatibility rules
+        self._compatibility_rules = [
+        CompatibilityRule(**rule_data)
+        for rule_data in data.get("compatibility_rules", [])"                ]
 
-                logger.info(f"Loaded {len(self._tool_versions)} tools with version info")"            except Exception as e:
-                logger.error(f"Failed to load version registry: {e}")"                self._create_default_registry()
+        logger.info(f"Loaded {len(self._tool_versions)} tools with version info")"            except Exception as e:
+        logger.error(f"Failed to load version registry: {e}")"                self._create_default_registry()
         else:
-            self._create_default_registry()
+        self._create_default_registry()
 
     def _create_default_registry(self):
 """
-Create default version registry.        # Initialize with common MCP tools
+        Create default version registry.        # Initialize with common MCP tools
         default_versions = {
-            "filesystem": ["                ToolVersion(
-                    name="filesystem","                    version="1.0.0","                    hash_sha256=self._calculate_hash("filesystem_v1"),"                    capabilities=["read", "write", "list", "search"],"                    release_date=time.time()
-                ),
-                ToolVersion(
-                    name="filesystem","                    version="1.1.0","                    hash_sha256=self._calculate_hash("filesystem_v1.1"),"                    capabilities=["read", "write", "list", "search", "permissions"],"                    release_date=time.time()
-                )
-            ],
-            "git": ["                ToolVersion(
-                    name="git","                    version="1.0.0","                    hash_sha256=self._calculate_hash("git_v1"),"                    capabilities=["status", "commit", "push", "pull"],"                    release_date=time.time()
-                )
-            ],
-            "database": ["                ToolVersion(
-                    name="database","                    version="1.0.0","                    hash_sha256=self._calculate_hash("database_v1"),"                    capabilities=["query", "connect", "migrate"],"                    release_date=time.time()
-                )
-            ]
+        "filesystem": ["                ToolVersion(
+        name="filesystem","                    version="1.0.0","                    hash_sha256=self._calculate_hash("filesystem_v1"),"                    capabilities=["read", "write", "list", "search"],"                    release_date=time.time()
+        ),
+        ToolVersion(
+        name="filesystem","                    version="1.1.0","                    hash_sha256=self._calculate_hash("filesystem_v1.1"),"                    capabilities=["read", "write", "list", "search", "permissions"],"                    release_date=time.time()
+        )
+        ],
+        "git": ["                ToolVersion(
+        name="git","                    version="1.0.0","                    hash_sha256=self._calculate_hash("git_v1"),"                    capabilities=["status", "commit", "push", "pull"],"                    release_date=time.time()
+        )
+        ],
+        "database": ["                ToolVersion(
+        name="database","                    version="1.0.0","                    hash_sha256=self._calculate_hash("database_v1"),"                    capabilities=["query", "connect", "migrate"],"                    release_date=time.time()
+        )
+        ]
         }
 
         self._tool_versions = default_versions
@@ -126,16 +126,16 @@ Create default version registry.        # Initialize with common MCP tools
 
     def _save_registry(self):
 """
-Save version registry to file.        try:
-            data = {
-                "versions": {"                    name: [vars(version) for version in versions]
-                    for name, versions in self._tool_versions.items()
-                },
-                "compatibility_rules": [vars(rule) for rule in self._compatibility_rules]"            }
+        Save version registry to file.        try:
+        data = {
+        "versions": {"                    name: [vars(version) for version in versions]
+        for name, versions in self._tool_versions.items()
+        },
+        "compatibility_rules": [vars(rule) for rule in self._compatibility_rules]"            }
 
-            with open(self.registry_path, 'w') as f:'                json.dump(data, f, indent=2, default=str)
+        with open(self.registry_path, 'w') as f:'                json.dump(data, f, indent=2, default=str)
         except Exception as e:
-            logger.error(f"Failed to save version registry: {e}")
+        logger.error(f"Failed to save version registry: {e}")
     def _calculate_hash(self, content: str) -> str:
 """
 Calculate SHA256 hash of content.        return hashlib.sha256(content.encode()).hexdigest()

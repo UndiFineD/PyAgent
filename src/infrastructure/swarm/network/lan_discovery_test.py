@@ -23,7 +23,7 @@ from src.infrastructure.swarm.network.lan_discovery import LANDiscovery
 class DummySocket:
     def __init__(self, *args, **kwargs):
 """
-self.sent = []
+        self.sent = []
 
 """
 def setsockopt(self, *_, **__):
@@ -38,9 +38,9 @@ def setsockopt(self, *_, **__):
     def sendto(self, msg, addr):
         # record the message for inspection
         try:
-            self.sent.append(json.loads(msg.decode()))
+        self.sent.append(json.loads(msg.decode()))
         except Exception:
-            self.sent.append(msg)
+        self.sent.append(msg)
 
     def bind(self, *_, **__):
         pass
@@ -53,7 +53,7 @@ def test_announce_loop_uses_sleep_and_sends(monkeypatch):
     def fake_socket(*args, **kwargs):
         return DummySocket()
 
-    monkeypatch.setattr(socket, "socket", fake_socket)
+        monkeypatch.setattr(socket, "socket", fake_socket)
     def sleep_fn(secs: float) -> None:
         # run loop once then stop
         sent["count"] += 1"        # make sure loop progresses

@@ -336,6 +336,6 @@ success = False
 
     def make_variant_name(name):
 """
-Generates a variant name for an agent (placeholder for Phase 105).""
-name = name + "_" + base64(datetime.now().isoformat())  # Simple variant logic using timestamp
+        Generates a variant name for an agent (placeholder for Phase 105).""
+        name = name + "_" + base64(datetime.now().isoformat())  # Simple variant logic using timestamp
         return name  # In Phase 105, this will implement logic to select agent variants based on context.

@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Standard scheduler implementations.""
 try:
 
 """
-    from .base import Scheduler
+from .base import Scheduler
 except ImportError:
     from .base import Scheduler
 
@@ -31,10 +31,10 @@ except ImportError:
 
 
 class SimpleScheduler(Scheduler):
-    ""
+"""
 Simple FCFS scheduler implementation.""
 def __init__(self, max_batch_size: int = 32, max_tokens: int = 4096) -> None:
-        ""
+"""
 Initialize the scheduler.""
 super().__init__()
         self.max_batch_size = max_batch_size
@@ -42,7 +42,7 @@ super().__init__()
 
 
     def schedule(self) -> SchedulerOutput:
-        ""
+"""
 Schedule waiting requests for execution.""
 output = SchedulerOutput()
 

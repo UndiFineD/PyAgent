@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 UsageMessage - Structured telemetry for platform detection and async reporting.Inspired by vLLM's UsageMessage pattern for collecting environment information'and reporting usage statistics with privacy-respecting opt-out support.
 
 """
-
 Phase 24: Advanced Observability & Parsing
 
 import contextlib
@@ -51,7 +50,7 @@ _GLOBAL_RUNTIME_DATA: dict[str, str | int | bool] = {}
 
 
 class UsageContext(str, Enum):
-    ""
+"""
 Context in which PyAgent is being used.
 
     UNKNOWN = "UNKNOWN""    CLI = "CLI""    API_SERVER = "API_SERVER""    FLEET_ORCHESTRATION = "FLEET_ORCHESTRATION""    AGENT_TASK = "AGENT_TASK""    TESTING = "TESTING""
@@ -71,12 +70,12 @@ def set_runtime_usage_data(key: str, value: str | int | bool) -> None:
 
 
 def get_runtime_usage_data() -> dict[str, str | int | bool]:
-    ""
+"""
 Get all global runtime usage data.    return _GLOBAL_RUNTIME_DATA.copy()
 
 
 def clear_runtime_usage_data() -> None:
-    ""
+"""
 Clear all global runtime usage data.    _GLOBAL_RUNTIME_DATA.clear()
 
 
@@ -108,13 +107,13 @@ def is_usage_stats_enabled() -> bool:
 
 
 def disable_usage_stats() -> None:
-    ""
+"""
 Programmatically disable usage stats collection.    global _USAGE_STATS_ENABLED
     _USAGE_STATS_ENABLED = False
 
 
 def enable_usage_stats() -> None:
-    ""
+"""
 Programmatically enable usage stats collection.    global _USAGE_STATS_ENABLED
     _USAGE_STATS_ENABLED = True
 
@@ -354,7 +353,7 @@ app_version: str """= "unknown","    **extra_kvs: Any,
         Report usage telemetry.
 
     This is a convenience function that creates a UsageMessage
-   ""
+"""
 and reports it asynchronously.""""
 Args:
         context: Usage context        app_version: Application""
@@ -374,8 +373,26 @@ Dictionary with platform information
     msg.collect_environment_info()
     return msg.to_dict()
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Utility script to rename the project from DebVisor to PyAgent across the workspace.
-""
+"""
 
 """
 import os
@@ -49,4 +49,4 @@ def main() -> None:
 
 if __name__ == "__main__":"    main()
 
-""
+"""

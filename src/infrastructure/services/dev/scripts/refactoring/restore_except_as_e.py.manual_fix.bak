@@ -15,7 +15,6 @@
 Restore Except As E module.
 
 """
-
 from pathlib import Path
 
 

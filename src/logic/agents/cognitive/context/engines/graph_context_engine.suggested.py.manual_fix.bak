@@ -28,9 +28,6 @@ from src.logic.agents.cognitive.context.engines.graph_core import GraphCore
 __version__ = VERSION
 
 """
-
-
-
 class GraphContextEngine:
 """"
 Manages an adjacency list of file and class dependencies.
@@ -119,7 +116,25 @@ Load graph from disk.        target = Path(file_path) if file_path else self.per
                 with open(target, "r", encoding="utf-8") as f:"                    data = json.load(f)
                 self.graph = {k: set(v) for k, v in data.get("graph", {}).items()}"                self.metadata = data.get("metadata", {})"                self.symbols = data.get("symbols", {})"            except (json.JSONDecodeError, IOError, OSError) as e:
                 logging.error(fError loading graph from {target}: {e}")"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

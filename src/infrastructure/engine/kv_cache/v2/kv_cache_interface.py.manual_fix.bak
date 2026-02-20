@@ -18,7 +18,6 @@ Hierarchical KV-Cache Interface (V2) for Phase 53.
 Manages multi-group block allocation and dynamic layer-aware caching.
 
 """
-
 import logging
 from typing import List, Optional
 
@@ -58,7 +57,7 @@ Allocates the physical KV tensors on the specified device.        shape = (self.
         self.v_cache = torch.zeros(shape, device=device, dtype=dtype)
         logger.info(f"Allocated KV-Cache storage on {device} (Shape: {shape})")
     def get_layer_blocks(self, seq_id: int) -> Optional[List[int]]:
-        ""
+"""
 Returns physical block indices for a sequence.        return self.block_table.get_block_table(seq_id)
 
     def allocate_for_sequence(self, seq_id: int, num_tokens: int) -> bool:
@@ -73,12 +72,30 @@ Returns physical block indices for a sequence.        return self.block_table.ge
         else:
             logger.debug(f"Multi-GPU sync simulated for rank {rank}")
     def purge(self) -> None:
-        ""
+"""
 Clears all cached data and resets metadata.        self.block_table.free_blocks = list(range(self.block_table.num_blocks))
         self.block_table.mapping.clear()
         self.block_table.ref_counts.fill(0)
         logger.info("KVCacheInterfaceV2 purged")
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

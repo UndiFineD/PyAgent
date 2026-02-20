@@ -32,7 +32,6 @@ WHAT IT SHOULD DO BETTER:
 - Improve CLI argument parsing (support workspaces, multiple files, verbosity, dry-run), richer logging, and extensible crate-suggestion heuristics (context-aware, version-aware, with security vetting).
 
 """
-
 FILE CONTENT SUMMARY:
 # Agent specializing in Rust programming.
 

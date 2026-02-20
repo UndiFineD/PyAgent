@@ -14,13 +14,12 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Speculative Swarm Orchestrator (Phase 56).
 Enables cross-agent speculative execution where fast agents draft for accurate agents.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -112,7 +111,7 @@ class SpeculativeSwarmOrchestrator:
         return outcome
 
     def get_efficiency_metrics(self) -> Dict[str, Any]:
-        ""
+"""
 Returns performance metrics for the speculative swarm.        acceptance_rate = (
             self.stats["accepted_proposals"] / self.stats["total_speculations"]"            if self.stats["total_speculations"] > 0"            else 0
         )

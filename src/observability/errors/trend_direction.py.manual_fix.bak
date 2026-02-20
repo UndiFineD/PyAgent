@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 trend_direction.py - TrendDirection Enum
 
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 - Provide helper constructors/parsers (e.g., from_delta, from_string, and a normalization function) to map numeric changes or free-form text into these enum values.
 - Add explicit __all__ export, unit tests covering string round-trips and parsing, and richer member docstrings or comments explaining when to use VOLATILE vs STABLE.
 - Consider making it pluggable/configurable (thresholds for STABLE vs VOLATILE) rather than fixed labels, and include typing stubs or pydantic models when used in public APIs.
-""
+"""
 try:
     from enum import Enum
 except ImportError:
@@ -53,9 +53,9 @@ except ImportError:
 __version__ = VERSION
 
 class TrendDirection(Enum):
-    ""
+"""
 Trend direction indicators.
-    ""
+"""
 INCREASING = "increasing"
     DECREASING = "decreasing"
     STABLE = "stable"

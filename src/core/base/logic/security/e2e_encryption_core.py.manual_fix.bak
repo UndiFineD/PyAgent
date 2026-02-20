@@ -3,14 +3,14 @@ from __future__ import annotations
 
 
 
-""
+"""
 Minimal E2E encryption core shim for tests.
 
 This module provides small, import-safe placeholders for the real
 E2E implementation so the test-suite can import security symbols.
 The real cryptographic implementation is intentionally out of scope
 for these unit tests.
-""
+"""
 try:
     from dataclasses import dataclass, field
 except ImportError:

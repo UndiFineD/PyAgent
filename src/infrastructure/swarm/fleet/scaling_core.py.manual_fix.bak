@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 ScalingCore
 
 """
@@ -23,7 +23,6 @@ Core logic for scaling.
 (Facade for src.core.base.common.scaling_core)
 
 """
-
 import time
 
 from src.core.base.common.scaling_core import \
@@ -112,5 +111,5 @@ Returns the average for a specific metric type.        recent = self.load_metric
         return sum(recent) / len(recent) if recent else 0.0
 
     def get_avg_latency(self, key: str) -> float:
-        ""
+"""
 Helper to get average latency for a specific workflow.        return self.get_avg(key, "latency")

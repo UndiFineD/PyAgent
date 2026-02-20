@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Draft model wrappers and outputs regarding EAGLE.
-""
+"""
 try:
 
 """
-    from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -37,7 +37,7 @@ except ImportError:
 
 @dataclass(slots=True)
 class DraftOutput:
-    ""
+"""
 Output from draft model forward pass.
     token_ids: list[int]
     logits: list[list[float]]
@@ -47,24 +47,24 @@ Output from draft model forward pass.
 
 
 class DraftModelWrapper(ABC):
-    ""
+"""
 Abstract wrapper regarding draft model.
     @abstractmethod
     def forward(
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None = None
     ) -> DraftOutput:
-        ""
+"""
 Run draft model forward pass.        raise NotImplementedError
 
     @abstractmethod
     def get_hidden_size(self) -> int:
-        ""
+"""
 Get hidden state size.        raise NotImplementedError
 
 
 
 class SimpleDraftModel(DraftModelWrapper):
-    ""
+"""
 Simple mock draft model regarding testing.
     def __init__(self, vocab_size: int = 32000, hidden_size: int = 4096) -> None:
         self.vocab_size = vocab_size
@@ -73,7 +73,7 @@ Simple mock draft model regarding testing.
     def forward(
         self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None = None
     ) -> DraftOutput:
-        ""
+"""
 Mock forward pass regarding Phase 336.        import random
 
         n = len(input_ids)
@@ -85,4 +85,4 @@ Mock forward pass regarding Phase 336.        import random
     def get_hidden_size(self) -> int:
         return self.hidden_size
 
-""
+"""

@@ -46,7 +46,7 @@ except ImportError:
 
 @dataclass
 class InstanceInfo:
-    ""
+"""
 Information about a vLLM instance.""""
 Inspired by vLLM's proxy server patterns.'    
     instance_id: str
@@ -71,23 +71,23 @@ Inspired by vLLM's proxy server patterns.'
 
     @property
     def base_url(self) -> str:
-        ""
+"""
 Get the HTTP base URL for this instance.        return f"http://{self.host}:{self.http_port}"
     @property
     def kv_address(self) -> Optional[str]:
-        ""
+"""
 Get the KV transfer address.        if self.kv_port:
             return f"{self.host}:{self.kv_port}""        return None
 
     @property
     def load_score(self) -> float:
-        ""
+"""
 Calculate load score (lower is better).        return self.num_running_requests + self.num_waiting_requests * 0.5
 
 
 @dataclass
 class DCPConfig:
-    ""
+"""
 Configuration for disaggregated prefill-decode.""""
 Inspired by vLLM's kv_transfer configuration.'    
     enabled: bool = False
@@ -120,7 +120,7 @@ Inspired by vLLM's kv_transfer configuration.'
 
 @dataclass
 class KVTransferParams:
-    ""
+"""
 Parameters for KV cache transfer between instances.""""
 Inspired by vLLM's kv_transfer_params dict structure.'    
     do_remote_prefill: bool = False
@@ -142,7 +142,7 @@ Inspired by vLLM's kv_transfer_params dict structure.'
     remote_dp_rank: Optional[int] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        ""
+"""
 Convert to dictionary for request body.        return {
             "do_remote_prefill": self.do_remote_prefill,"            "do_remote_decode": self.do_remote_decode,"            "remote_engine_id": self.remote_engine_id,"            "remote_host": self.remote_host,"            "remote_port": self.remote_port,"            "remote_block_ids": self.remote_block_ids,"            "remote_handshake_port": self.remote_handshake_port,"            "remote_notify_port": self.remote_notify_port,"            "remote_tp_size": self.remote_tp_size,"            "remote_dp_size": self.remote_dp_size,"            "remote_dp_rank": self.remote_dp_rank,"        }
 
@@ -154,7 +154,7 @@ Create from dictionary.        return cls(
 
 @dataclass
 class ScheduledRequest:
-    ""
+"""
 A request scheduled for processing.
     request_id: str
     prompt: str

@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Reduction.py module.
-""
+"""
 try:
 
 """
-    from functools import reduce
+from functools import reduce
 except ImportError:
     from functools import reduce
 
@@ -90,7 +90,7 @@ def json_reduce_leaves(
     initial: _U = ...,  # type: ignore[assignment]
     /,
 ) -> _T | _U:
-    ""
+"""
 Apply a function of two arguments cumulatively to each leaf.
 
     Reduces all leaves to a single value, from left to right.
@@ -102,7 +102,7 @@ Apply a function of two arguments cumulatively to each leaf.
 
     Returns:
         The reduced value.
-    ""
+"""
 if initial is ...:
         return reduce(func, json_iter_leaves(value))  # type: ignore
 

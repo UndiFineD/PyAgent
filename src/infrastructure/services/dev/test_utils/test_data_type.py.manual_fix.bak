@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from enum import Enum
@@ -34,12 +34,30 @@ __version__ = VERSION
 
 
 class TestDataType(Enum):
-    ""
+"""
 Types of test data.
     __test__ = False
 
     PYTHON_CODE = "python_code""    MARKDOWN = "markdown""    JSON = "json""    YAML = "yaml""    TEXT = "text"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

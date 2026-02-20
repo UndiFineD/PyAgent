@@ -19,7 +19,6 @@ Tensorizer Package
 High-performance tensor serialization and streaming system.
 
 """
-
 try:
     from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,  # noqa: F401
 except ImportError:

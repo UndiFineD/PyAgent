@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Types: ReleaseNote dataclass.""
 
@@ -32,7 +32,7 @@ __version__ = VERSION
 
 @dataclass
 class ReleaseNote:
-    ""
+"""
 Generated release notes.
 
 

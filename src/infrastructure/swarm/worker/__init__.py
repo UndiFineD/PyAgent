@@ -26,11 +26,11 @@ except Exception:
         def __init__(self, *args, **kwargs):
             pass
 
-try:
-    from .disaggregated_prefill_worker import DisaggregatedPrefillWorker
-except Exception:
+            try:
+            from .disaggregated_prefill_worker import DisaggregatedPrefillWorker
+            except Exception:
     class DisaggregatedPrefillWorker:  # fallback placeholder for tests
         def __init__(self, *args, **kwargs):
             pass
 
-__all__ = ["DecodeOnlyWorker", "DisaggregatedPrefillWorker"]
+            __all__ = ["DecodeOnlyWorker", "DisaggregatedPrefillWorker"]

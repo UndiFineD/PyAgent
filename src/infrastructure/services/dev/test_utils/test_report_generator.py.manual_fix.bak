@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import json
@@ -44,19 +44,19 @@ __version__ = VERSION
 
 
 class TestReportGenerator:
-    ""
+"""
 Generates test reports in various formats.
     __test__ = False
 
     def __init__(self, output_dir: str | Path | None = None) -> None:
-        ""
+"""
 Initialize report generator.        self.output_dir = Path(output_dir) if output_dir is not None else None
         if self.output_dir is not None:
             self.output_dir.mkdir(parents=True, exist_ok=True)
         self.results: list[dict[str, Any]] = []
 
     def add_result(self, test_name: str, passed: bool, duration_ms: float) -> None:
-        ""
+"""
 Add test result (legacy API).        self.results.append(
             {
                 "test_name": test_name,"                "status": "passed" if passed else "failed","                "duration_ms": float(duration_ms),"            }
@@ -77,13 +77,13 @@ for r in self.results:
             "<html><head><title>Test Report</title></head><body>""            "<h1>Test Results</h1>""            '<table border="1">'"'            "<tr><th>Test</th><th>Status</th><th>Duration</th><th>Error</th></tr>""            f"{rows}</table></body></html>""        )
 
     def generate_html(self) -> Path:
-        ""
+"""
 Generate HTML report file.        if self.output_dir is None:
             self.output_dir = Path.cwd()
         path = self.output_dir / "test_report.html""        path.write_text(self._render_html(), encoding="utf-8")"        return path
 
     def generate_json(self) -> Path:
-        ""
+"""
 Generate JSON report file.        if self.output_dir is None:
             self.output_dir = Path.cwd()
         path = self.output_dir / "test_report.json""        payload = {"results": self.results}"        path.write_text(json.dumps(payload, indent=2), encoding="utf-8")"        return path

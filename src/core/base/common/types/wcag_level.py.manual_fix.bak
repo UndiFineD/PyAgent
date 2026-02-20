@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 WCAG conformance levels used in types and tests.""
 
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 
 class WCAGLevel(Enum):
-    ""
+"""
 Parser-safe WCAGLevel enum.""
 A = "A"
     AA = "AA"

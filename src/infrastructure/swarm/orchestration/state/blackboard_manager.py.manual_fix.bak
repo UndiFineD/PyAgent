@@ -17,12 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Shared central memory for opportunistic agent collaboration (Blackboard Pattern).
 
 """
-
 try:
     import logging
 except ImportError:
@@ -58,14 +57,14 @@ class BlackboardManager:
         self.core = BlackboardCore()
 
     def post(self, key: str, value: Any, agent_name: str) -> None:
-        ""
+"""
 Post data to the blackboard.        logging.info(f"Blackboard: Agent {agent_name} posted to {key}")"        self.core.process_post(key, value, agent_name)
 
 
     def get(self, key: str) -> Any:
-        ""
+"""
 Retrieve data from the blackboard.        return self.core.get_value(key)
 
     def list_keys(self) -> list[str]:
-        ""
+"""
 List all available keys on the blackboard.        return self.core.get_all_keys()

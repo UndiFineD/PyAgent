@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: manifest_repository
 Manages the storage and retrieval of Logic Manifests for the swarm.
-""
+"""
 
 """
 import json
@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 
 class ManifestRepository:
-    ""
+"""
 Repository for managing cognitive shards (Logic Manifests).""
 def __init__(self, storage_path: str = "data/manifests") -> None:
         self.storage_path = Path(storage_path)
@@ -42,7 +42,7 @@ def __init__(self, storage_path: str = "data/manifests") -> None:
         self._cache: Dict[str, LogicManifest] = {}
 
     def save_manifest(self, role: str, manifest: LogicManifest) -> None:
-        ""
+"""
 Save a manifest to disk.""
 file_path = self.storage_path / f"{role}.json"
         with open(file_path, "w", encoding="utf-8") as f:
@@ -50,7 +50,7 @@ file_path = self.storage_path / f"{role}.json"
         self._cache[role] = manifest
 
     def get_manifest(self, role: str) -> LogicManifest | None:
-        ""
+"""
 Retrieve a manifest by role name.""
 if role in self._cache:
             return self._cache[role]
@@ -70,6 +70,6 @@ if role in self._cache:
             return None
 
     def list_roles(self) -> list[str]:
-        ""
+"""
 List all available roles in the repository.""
 return [p.stem for p in self.storage_path.glob("*.json")]

@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Centralized LLM client for various backends.
 
 """
-
 import logging
 import os
 import time
@@ -42,7 +41,7 @@ from .local_context_recorder import LocalContextRecorder
 
 
 class LLMClient:
-    ""
+"""
 Handles direct HTTP calls to LLM providers.""""
 Enhanced with PoolingCore for prompt compression and connection optimization.
 
@@ -83,7 +82,7 @@ Enhanced with PoolingCore for prompt compression and connection optimization.
             "lmstudio": LMStudioBackend(self.session, self.connectivity, self.recorder),"        }
 
     def _is_backend_disabled(self, backend_name: str) -> bool:
-        ""
+"""
 Check if a backend is disabled via environment variables.        disabled_backends = os.environ.get("DV_DISABLED_BACKENDS", "").strip()"        if not disabled_backends:
             return False
 
@@ -111,11 +110,11 @@ Central entry point for chat completion. Compresses prompt before sending.      
         pass
 
     def _is_connection_working(self, provider_id: str) -> bool:
-        ""
+"""
 Checks if the connection is known to be working via central ConnectivityManager.        return self.connectivity.is_endpoint_available(provider_id)
 
     def _update_connection_status(self, provider_id: str, working: bool) -> None:
-        ""
+"""
 Updates the connection status via central ConnectivityManager.        self.connectivity.update_status(provider_id, working)
 
     def _record(
@@ -141,7 +140,7 @@ Updates the connection status via central ConnectivityManager.        self.conne
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        ""
+"""
 Call a GitHub Models OpenAI-compatible chat endpoint.        return self.backends["github_models"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_ollama(
         self,
@@ -149,7 +148,7 @@ Call a GitHub Models OpenAI-compatible chat endpoint.        return self.backend
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        ""
+"""
 Call a local Ollama instance.        return self.backends["ollama"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_vllm(
         self,
@@ -157,21 +156,21 @@ Call a local Ollama instance.        return self.backends["ollama"].chat(prompt,
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        ""
+"""
 Call a local vLLM instance (OpenAI-compatible).        return self.backends["vllm"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_vllm_native(
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.","        model: str = "vllm-native","        **kwargs,
     ) -> str:
-        ""
+"""
 Uses the locally installed vLLM library (Native Engine) for maximum performance.        return self.backends["vllm_native"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_copilot_cli(
         self,
         prompt: str,
         system_prompt: str = "You are a helpful assistant.","        model: str = "copilot-cli","        **kwargs,
     ) -> str:
-        ""
+"""
 Calls the GitHub Copilot CLI (copilot).        return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)
     def llm_chat_via_lmstudio(
         self,
@@ -278,6 +277,24 @@ used_provider = "none"
 
 __version__ = VERSION
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

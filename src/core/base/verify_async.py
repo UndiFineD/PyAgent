@@ -36,32 +36,32 @@ except ImportError:
             self.repo_root = Path(repo_root)
             self.enable_async = False
 
-        async def async_process_files(self, files: list[Any]):
+            async def async_process_files(self, files: list[Any]):
             # Emulate logic
             if self.enable_async:
-                # Mock parallel
-                await asyncio.sleep(1)  # Total expected if parallel
+            # Mock parallel
+            await asyncio.sleep(1)  # Total expected if parallel
             else:
-                for _ in files:
-                    await asyncio.sleep(1)
+            for _ in files:
+            await asyncio.sleep(1)
 
 
-@pytest.mark.anyio
-async def test_async_concurrency() -> None:
-    agent = Agent(repo_root=".")"    agent.enable_async = True
+            @pytest.mark.anyio
+            async def test_async_concurrency() -> None:
+            agent = Agent(repo_root=".")"    agent.enable_async = True
 
-    # Mock process_file to sleep for 1 second
-    agent.process_file = MagicMock(side_effect=lambda x: time.sleep(1))
+            # Mock process_file to sleep for 1 second
+            agent.process_file = MagicMock(side_effect=lambda x: time.sleep(1))
 
-    files = [Path("file1"), Path("file2"), Path("file3")]
-    start_time = time.time()
-    await agent.async_process_files(files)
-    end_time = time.time()
+            files = [Path("file1"), Path("file2"), Path("file3")]
+            start_time = time.time()
+            await agent.async_process_files(files)
+            end_time = time.time()
 
-    duration = end_time - start_time
-    print(f"Processed {len(files)} files in {duration:.2f} seconds")
-    if duration < 2.0:
-        print("SUCCESS: Execution was concurrent")"    else:
-        print("FAILURE: Execution was sequential")
+            duration = end_time - start_time
+            print(f"Processed {len(files)} files in {duration:.2f} seconds")
+            if duration < 2.0:
+            print("SUCCESS: Execution was concurrent")"    else:
+            print("FAILURE: Execution was sequential")
 
-if __name__ == "__main__":"    asyncio.run(test_async_concurrency())
+            if __name__ == "__main__":"    asyncio.run(test_async_concurrency())

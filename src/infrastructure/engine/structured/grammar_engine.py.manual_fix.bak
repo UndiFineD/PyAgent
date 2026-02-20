@@ -19,7 +19,6 @@ Facade for Grammar Engine.
 Delegates to modularized sub-packages in src.infrastructure.engine.structured/.
 
 """
-
 try:
     from .base import GrammarEngine
 except ImportError:

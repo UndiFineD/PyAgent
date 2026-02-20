@@ -20,11 +20,10 @@ from __future__ import annotations
 Reverse Proxy Application Firewall.
 
 """
-
 Serves as the centralized gateway for all incoming and outgoing network traffic.
 Enforces security rules, manages connection resilience, and logs traffic patterns.
 Replaces direct usage of HTTP clients (requests, httpx) throughout the swarm.
-""
+"""
 import json
 import logging
 import ipaddress
@@ -84,12 +83,12 @@ class ReverseProxyFirewall:
         self._initialized = True
 
     def _log_violation(self, url: str, reason: str) -> None:
-        ""
+"""
 Logs a security violation for audit trail.        entry = {
             "timestamp": time.time(),"            "url": url,"            "reason": reason,"            "version": VERSION"        }
         with open(self.violation_log, "a", encoding="utf-8") as f:"            f.write(json.dumps(entry) + "\\n")"
     def _is_ip_allowed(self, hostname: str) -> bool:
-        ""
+"""
 Checks if a hostname (if it's an IP) is within allowed CIDR ranges.'        try:
             ip = ipaddress.ip_address(hostname)
             for network in self.allowed_networks:
@@ -179,13 +178,13 @@ if self.local_only and domain not in ["localhost", "127.0.0.1"]:"               
 
     # Convenience wrappers mimicking requests API
     def get(self, url: str, **kwargs: Any) -> requests.Response:
-        ""
+"""
 Wrapper for GET requests.        return self.request("GET", url, **kwargs)
     def post(self, url: str, **kwargs: Any) -> requests.Response:
-        ""
+"""
 Wrapper for POST requests.        return self.request("POST", url, **kwargs)
     def put(self, url: str, **kwargs: Any) -> requests.Response:
-        ""
+"""
 Wrapper for PUT requests.        return self.request("PUT", url, **kwargs)
     def delete(self, url: str, **kwargs: Any) -> requests.Response:
         ""

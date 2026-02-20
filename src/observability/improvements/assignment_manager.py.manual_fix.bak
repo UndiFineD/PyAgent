@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Assignment Manager - Tracks assignees and ownership history
 
@@ -68,7 +68,7 @@ __version__ = VERSION
 
 
 class AssignmentManager:
-    ""
+"""
 Tracks assignees and ownership history.
 
     def __init__(self) -> None:

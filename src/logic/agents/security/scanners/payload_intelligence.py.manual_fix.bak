@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from typing import List
+from typing import List
 
 
 
@@ -43,18 +43,18 @@ Consolidated registry of high-impact security payloads.#     LFI_PAYLOADS = [
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_payloads(category: str) -> List[str]:"Retrieve payloads for a specific category.        category = category.upper()
         if hasattr(PayloadIntelligence, f"{category}_PAYLOADS"):"            return getattr(PayloadIntelligence, f"{category}_PAYLOADS")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 return []""""
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_xss_polyglots() -> List[str]:"Polyglot payloads that work in multiple contexts.        return [
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -65,4 +65,4 @@ def get_xss_polyglots() -> List[str]:"Polyglot payloads that work in multiple co
 """ [BATCHFIX] Commented unterminated string"""
 #             "'\"><svg/onload=alert(1)>","  # [BATCHFIX] closed string"'            "javascript:alert(1)//","        ]
 
-""
+"""

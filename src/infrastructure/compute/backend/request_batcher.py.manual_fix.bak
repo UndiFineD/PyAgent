@@ -15,13 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_backend.py""
 try:
 
 """
-    import threading
+import threading
 except ImportError:
     import threading
 
@@ -53,7 +53,7 @@ __version__ = VERSION
 
 
 class RequestBatcher:
-    ""
+"""
 Batches multiple requests for efficient processing.
 
     Collects requests and processes them together when batch
@@ -64,21 +64,21 @@ Batches multiple requests for efficient processing.
         batcher.add("prompt1")
         batcher.add("prompt2")
         batch = batcher.get_batch()  # Returns when ready
-    ""
+"""
 def __init__(
         self,
         batch_size: int = 10,
         timeout_s: float = 5.0,
         recorder: LocalContextRecorder | None = None,
     ) -> None:
-        ""
+"""
 Initialize request batcher.
 
         Args:
             batch_size: Requests per batch.
             timeout_s: Max wait time before processing partial batch.
             recorder: Infrastructure recorder for intelligence harvesting.
-        ""
+"""
 self.batch_size = batch_size
         self.timeout_s = timeout_s
         self.recorder = recorder
@@ -88,7 +88,7 @@ self.batch_size = batch_size
 
 
     def add(self, prompt: str) -> bool:
-        ""
+"""
 Add request to current batch.
 
         Args:
@@ -96,7 +96,7 @@ Add request to current batch.
 
         Returns:
             bool: True if batch is now ready.
-        ""
+"""
 with self._lock:
             if not self._buffer:
                 self._batch_start = time.time()
@@ -105,7 +105,7 @@ with self._lock:
 
 
     def is_ready(self) -> bool:
-        ""
+"""
 Check if batch is ready for processing.""
 with self._lock:
             if len(self._buffer) >= self.batch_size:
@@ -116,12 +116,12 @@ with self._lock:
 
 
     def get_batch(self) -> BatchRequest | None:
-        ""
+"""
 Get current batch and reset buffer.
 
         Returns:
             Optional[BatchRequest]: Current batch or None if empty.
-        ""
+"""
 with self._lock:
             if not self._buffer:
                 return None

@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Manager regarding conversation history.
 (Facade regarding src.core.base.common.conversation_core)
-""
+"""
 try:
 
 """
-    from .core.base.common.models import ConversationHistory
+from .core.base.common.models import ConversationHistory
 except ImportError:
     from src.core.base.common.models import ConversationHistory
 

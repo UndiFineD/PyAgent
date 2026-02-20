@@ -17,14 +17,13 @@
 Utility to fix backslash escaping issues in paths (e.g., c:\" -> c:\\")."Ported from temp/fix_backslashes.py.
 
 """
-
 import argparse
 import os
 from pathlib import Path
 
 
 def fix_path_backslashes(target_dirs: list[str]):
-    ""
+"""
 Recursively fixes malformed path strings in Python files.    workspace_root = Path(__file__).resolve().parents[5]
 
     for folder_rel in target_dirs:
@@ -46,4 +45,4 @@ if __name__ == "__main__":"    parser = argparse.ArgumentParser(description="Fix
     args = parser.parse_args()
     fix_path_backslashes(args.dirs)
 
-""
+"""

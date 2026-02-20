@@ -519,7 +519,25 @@ Quadratic voting (weight = sqrt of votes).        import math
         winner = max(scores, key=scores.get) if scores else None
 
         return {"scores": {k: round(v, 3) for k, v in scores.items()}, "winner": winner}
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

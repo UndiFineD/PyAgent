@@ -19,7 +19,6 @@
 Facade for InputBatchOrchestrator.
 
 """
-
 try:
     from .batch import (BatchUpdateBuilder, CachedRequestState, InputBatch,
 except ImportError:

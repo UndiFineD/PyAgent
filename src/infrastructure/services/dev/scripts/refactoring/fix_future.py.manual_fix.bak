@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for standardizing the position of __future__ imports at the top of files.
 
-"""
-
+""
 try:
     import os
 except ImportError:

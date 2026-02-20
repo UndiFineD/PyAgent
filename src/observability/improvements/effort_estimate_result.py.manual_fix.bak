@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 
 try:
     from .core.base.lifecycle.version import VERSION

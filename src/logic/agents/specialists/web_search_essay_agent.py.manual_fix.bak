@@ -366,7 +366,25 @@ class WebSearchEssayAgent(SearchAgent):
     def _format_sources(self, sources: List[Source]) -> str:
 """"
 Formats sources for prompts.   "     return "\\n\\n".join([f"**{s.title}**\\nURL: {s.url}\\n{s.snippet}" for s in sources])"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

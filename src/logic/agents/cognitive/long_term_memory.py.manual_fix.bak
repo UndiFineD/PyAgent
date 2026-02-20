@@ -15,15 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Lightweight LongTermMemory shim for tests.
 
 """
-
 Provides a minimal API so cognitive agents can import and use a
 placeholder long-term memory during unit tests.
-""
+"""
 import logging
 from typing import Any, Dict, List, Optional
 
@@ -36,11 +35,11 @@ __version__ = VERSION
 
 
 class LongTermMemory:
-    ""
+"""
 Minimal long-term memory placeholder.
 
     Stores simple dictionary records in memory for testing purposes.
-    ""
+"""
 def __init__(self) -> None:
         self.version = VERSION
         self._store: List[Dict[str, Any]] = []

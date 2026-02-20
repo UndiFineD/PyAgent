@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from interface.slash_commands.commands.datetime_cmds.suggested import cmd_datetime, cmd_date, cmd_time, cmd_uptime, cmd_timestamp

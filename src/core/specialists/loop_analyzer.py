@@ -58,9 +58,9 @@ min_loc_threshold: int = 200
 
     def __post_init__(self):
         if self.exclude_dirs is None:
-            self.exclude_dirs = {'.venv', '__pycache__', 'node_modules', '.git'}'        if self.include_patterns is None:
-            self.include_patterns = ['*.py']'        if self.exclude_patterns is None:
-            self.exclude_patterns = []
+        self.exclude_dirs = {'.venv', '__pycache__', 'node_modules', '.git'}'        if self.include_patterns is None:
+        self.include_patterns = ['*.py']'        if self.exclude_patterns is None:
+        self.exclude_patterns = []
 
 
 
@@ -332,6 +332,24 @@ if __name__ == "__main__":"    import argparse
         print_analysis_report(results, "Loop Analysis Summary")
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

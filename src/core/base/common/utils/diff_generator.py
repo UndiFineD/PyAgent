@@ -32,4 +32,4 @@ except Exception:
                 pass
 
 
-__all__ = ["DiffGenerator"]
+                __all__ = ["DiffGenerator"]

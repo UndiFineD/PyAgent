@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 versioning_strategy.py - Define supported versioning schemes
 
@@ -65,4 +65,4 @@ except ImportError:
 class VersioningStrategy(Enum):
 """"
 Supported versioning schemes for the fleet.#     SEMVER = "semver"#     CALVER = "calver"
-""
+"""

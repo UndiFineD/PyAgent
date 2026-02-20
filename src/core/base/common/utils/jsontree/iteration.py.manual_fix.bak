@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Parser-safe JSON tree iteration helpers (minimal).""
 
@@ -26,7 +26,7 @@ JSONTree = Any
 
 
 def json_iter_leaves(value: JSONTree) -> Iterable[Any]:
-    ""
+"""
 Yield each leaf in a nested JSON structure (depth-first).""
 if isinstance(value, dict):
         for v in value.values():

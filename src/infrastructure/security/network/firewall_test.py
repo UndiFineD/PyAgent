@@ -38,10 +38,10 @@ def mock_config(tmp_path):
 
         def side_effect(key, default=None):
             data = {
-                "firewall.blocked_domains": ["malicious.com"],"                "voyager.allowed_networks": ["127.0.0.1/32", "192.168.1.0/24", "8.8.8.8/32"],"                "firewall.local_only": False"            }
+            "firewall.blocked_domains": ["malicious.com"],"                "voyager.allowed_networks": ["127.0.0.1/32", "192.168.1.0/24", "8.8.8.8/32"],"                "firewall.local_only": False"            }
             return data.get(key, default)
-        m.get.side_effect = side_effect
-        yield m
+            m.get.side_effect = side_effect
+            yield m
 
 
 def test_firewall_blocks_blocked_domain(mock_config):

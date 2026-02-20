@@ -20,7 +20,6 @@ from __future__ import annotations
 Refactoring tool to standardize file headers across the PyAgent codebase.
 
 """
-
 import os
 import re
 

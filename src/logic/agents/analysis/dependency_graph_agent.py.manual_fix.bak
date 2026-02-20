@@ -37,7 +37,6 @@ WHAT IT DOES:
 - Computes simple graph statistics (node/edge counts and density) and exposes an async improve_content method that reports impact for a target module in a human-readable form.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Resolve imports to canonical module names (package-relative resolution) and map file paths to Python package import paths to avoid false positives from simple substring matching.
 - Handle and index from-import members and dynamic imports, and normalize aliasing and __init__.py package boundaries for more accurate dependency graphs.

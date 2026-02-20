@@ -26,7 +26,6 @@ USAGE:
 - CLI: run refinement_agent.py as a script to launch the agent's simple main() entry (create_main_function wrapper).'- Recommended integration: wire this agent to the telemetry pipeline and to an orchestrator that vets and applies proposed code/prompts.
 
 """
-
 WHAT IT DOES:
 - Provides a dedicated agent class (RefinementAgent) whose declared purpose is iterative improvement of other agents via analysis of failures, prompt optimization, and suggested source edits.
 - Exposes three synchronous "tools" (analyze_performance_gaps, propose_prompt_update, update_agent_source) decorated with as_tool for use by the swarm, plus an async improve_content helper."- Persists proposed code changes as human-reviewable artifacts under data/logs/self_refinement rather than applying edits automatically.

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for fleet sharding and partitioning.""
 
@@ -25,11 +25,11 @@ from .sharding_core import ShardingCore
 
 
 class ShardCore(ShardingCore):
-    ""
+"""
 Authoritative engine for agent and data partitioning.
 
     Handles shard assignment, rebalancing, and cross-shard routing.
-    ""
+"""
 def __init__(self) -> None:
         from src.core.config_manager import config
         shard_count = config.get("sharding.default_count", 4)
@@ -38,7 +38,7 @@ def __init__(self) -> None:
 
 
     def verify_integrity(self) -> bool:
-        ""
+"""
 Verifies that shard calculation is deterministic and functional.
         Acts as a circuit breaker for shard-dependent operations.
         ""

@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 High-performance native vLLM engine for PyAgent's 'Own AI'.'Optimized for local inference and future trillion-parameter context handling.
-""
+"""
 
 """
 import logging
@@ -61,7 +61,7 @@ Get the singleton instance of the native engine.        if cls._instance is None
         return cls._instance
 
     def _init_llm(self) -> bool:
-        ""
+"""
 Lazily initialize the vLLM engine to save VRAM until needed.        if not self.enabled:
             return False
 
@@ -112,13 +112,13 @@ Build sampling parameters with optional guided decoding.        sampling_kwargs 
         return SamplingParams(**sampling_kwargs)
 
     def _build_generate_kwargs(self, lora_request: Optional[Any] = None) -> dict[str, Any]:
-        ""
+"""
 Build generate kwargs with optional LoRA request.        generate_kwargs = {}
         if lora_request is not None:
             generate_kwargs["lora_request"] = lora_request"        return generate_kwargs
 
     def _extract_generated_text(self, outputs: list) -> str:
-        ""
+"""
 Extract the generated text from vLLM outputs.        if outputs:
             return outputs[0].outputs[0].text
         return ""
@@ -166,7 +166,7 @@ def generate_json(
         system_prompt: str = "","        temperature: float = 0.3,
         max_tokens: int = 1024,
     ) -> str:
-        ""
+"""
 Generate JSON output constrained by schema.        json_system = "You must respond with valid JSON only.""        if system_prompt:
             json_system = f"{system_prompt}\\n\\n{json_system}"
         return self.generate(
@@ -182,7 +182,7 @@ Generate JSON output constrained by schema.        json_system = "You must respo
         prompt: str,
         choices: list[str],
         system_prompt: str = "","    ) -> str:
-        ""
+"""
 Generate output constrained to specific choices.        return self.generate(
             prompt,
             system_prompt=system_prompt,
@@ -197,7 +197,7 @@ Generate output constrained to specific choices.        return self.generate(
         pattern: str,
         system_prompt: str = "","        max_tokens: int = 256,
     ) -> str:
-        ""
+"""
 Generate output matching a regex pattern.        return self.generate(
             prompt,
             system_prompt=system_prompt,
@@ -207,7 +207,7 @@ Generate output matching a regex pattern.        return self.generate(
         )
 
     def shutdown(self) -> None:
-        ""
+"""
 Clears the vLLM instance and frees VRAM (Phase 108).        if self._llm:
             # vLLM doesn't have a simple 'off' but we can delete reference'            # and try to trigger GC or rely on process exit.
             # pylint: disable=import-outside-toplevel

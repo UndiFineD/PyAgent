@@ -19,7 +19,7 @@ from __future__ import annotations
 # "MetacognitiveCore logic for PyAgent."Pure logic for evaluating reasoning certainty and consistency. Provides tools
 """
 for confidence calibration and intent prediction using Rust acceleration.
-""
+"""
 
 """
 import logging
@@ -95,4 +95,4 @@ Calculates average confidence and totals.        if not uncertainty_log:
         return {
             "avg_confidence": round(avg, 2),"            "total_evaluations": len(uncertainty_log),"        }
 
-""
+"""

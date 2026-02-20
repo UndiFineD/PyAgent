@@ -19,7 +19,6 @@
 Models and configuration for NCCL communication.
 
 """
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -34,7 +33,7 @@ except ImportError:
 
 
 class ReduceOp(Enum):
-    ""
+"""
 NCCL reduction operations.
     SUM = auto()
     PROD = auto()
@@ -70,7 +69,7 @@ class NCCLConfig:
 
 @dataclass
 class NCCLStats:
-    ""
+"""
 Statistics for NCCL operations.
     all_reduce_count: int = 0
     all_gather_count: int = 0

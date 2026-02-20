@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 CosyVoice Agent - Orchestrates CosyVoice model lifecycle and speech generation
 Brief Summary
@@ -27,7 +27,6 @@ USAGE:
 - Speaker cloning is simulated via an optional speaker_embedding_path parameter to generate_speech.
 
 """
-
 WHAT IT DOES:
 - Provides a lightweight orchestration wrapper around a CosyVoice speech-generation model: configuration (CosyVoiceConfig), model load/unload, simple zero-shot style speaker cloning support, and idle-time unloading.
 - Exposes key operations as tools (using as_tool) so the agent integrates with the PyAgent tool dispatch system.
@@ -43,7 +42,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 CosyVoice Orchestration Agent.
 Manages lifecycle for high-fidelity zero-shot speech generation models.
-""
+"""
 import logging
 import time
 from dataclasses import dataclass

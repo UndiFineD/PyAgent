@@ -25,11 +25,11 @@ try:
     import rust_core
 
 """
-    _RUST_ACCEL = True
+_RUST_ACCEL = True
 except ImportError:
 
 """
-    import rust_core  # type: ignore[no-redef]
+import rust_core  # type: ignore[no-redef]
 
     _RUST_ACCEL = False
 
@@ -137,7 +137,25 @@ Parses Python code and returns extracted symbols and relationships.        if _R
                 edges.append((f"{rel_path}::{cls}", base, "inherits"))
         return edges
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

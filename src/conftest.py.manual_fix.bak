@@ -13,10 +13,8 @@
 # limitations under the License.
 
 
-""
 """
-Pytest configuration for PyAgent tests.""
-
+Pytest configuration for PyAgent tests.
 """
 import types
 import tempfile
@@ -32,7 +30,7 @@ _repo_root = Path(__file__).resolve().parents[1]
 
 
 def _spec_from_file_location(name, location, *args, **kwargs):
-    ""
+"""
 Custom importlib hook to rewrite Windows absolute paths in test modules to point to the correct location in the repo.""
 try:
         loc = str(location)
@@ -55,7 +53,7 @@ importlib.util.spec_from_file_location = _spec_from_file_location
 
 
 def pytest_ignore_collect(collection_path, config):
-    ""
+"""
 Ignore auto-generated tests that reference Windows absolute paths or external_candidates.""
     # Many auto-generated tests include hard-coded Windows-style paths (C:\\Dev\\...) which
     # cause collection errors on non-Windows CI runners. Skip these tests during collection.
@@ -81,7 +79,7 @@ Ignore auto-generated tests that reference Windows absolute paths or external_ca
 
 @pytest.fixture
 def agent_module():
-    ""
+"""
 Provides a mock module with Agent and CircuitBreaker classes.""
     # Lazy imports to avoid circular dependencies
     try:
@@ -111,7 +109,7 @@ Provides a mock module with Agent and CircuitBreaker classes.""
 
 @pytest.fixture
 def agent_backend_module():
-    ""
+"""
 Provides backend infrastructure classes.""
 mod = types.SimpleNamespace()
     # Lazy imports to avoid circular dependencies
@@ -159,7 +157,7 @@ mod = types.SimpleNamespace()
 
 @pytest.fixture
 def base_agent_module():
-    ""
+"""
 Provides core base agent classes including BatchManagers.""
 mod = types.SimpleNamespace()
     try:
@@ -177,7 +175,7 @@ mod = types.SimpleNamespace()
 
 @pytest.fixture
 def agent_sandbox():
-    ""
+"""
 Provides a clean, temporary src/ and data/ environment for agent tests.""
 with tempfile.TemporaryDirectory() as temp_dir:
         temp_path = Path(temp_dir)
@@ -193,10 +191,10 @@ with tempfile.TemporaryDirectory() as temp_dir:
 
 @pytest.fixture
 def transactional_test_env(agent_sandbox):
-    ""
+"""
 Provides a transactional wrapper around the sandbox.
     Ensures that file modifications are tracked and can be rolled back on failure.
-    ""
+"""
     # Lazy import to avoid circular dependencies
     try:
         from .core.base.state.agent_state_manager import StateTransaction

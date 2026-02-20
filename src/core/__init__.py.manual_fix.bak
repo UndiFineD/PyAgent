@@ -17,14 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core package.
-""
+"""
 try:
 
 """
-    from .base.lifecycle.version import VERSION
+from .base.lifecycle.version import VERSION
 except ImportError:
     from .base.lifecycle.version import VERSION
 

@@ -523,6 +523,24 @@ Quadratic voting (weight = sqrt of votes).        import math
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

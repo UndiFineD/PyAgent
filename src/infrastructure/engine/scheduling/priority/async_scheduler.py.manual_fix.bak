@@ -94,7 +94,7 @@ class AsyncPriorityScheduler:
 
     @property
     def stats(self) -> TaskStats:
-        ""
+"""
 Scheduler statistics.        return self._stats
 
-""
+"""

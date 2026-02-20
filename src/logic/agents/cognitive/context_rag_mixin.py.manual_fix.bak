@@ -31,7 +31,6 @@ WHAT IT DOES:
 - Encapsulates RAG shard routing logic so agents can map a query (and the agent's active file path) to a subset of vector shards.'- Delegates routing to rag_core.route_query_to_shards and logs the routing decision for observability.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Validate inputs and surface clear errors when rag_core, rag_shards, or file_path are missing or mis-typed.
 - Expose async variants and caching to reduce repeated routing cost for similar queries.

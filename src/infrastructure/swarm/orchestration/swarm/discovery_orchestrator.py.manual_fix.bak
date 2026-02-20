@@ -17,10 +17,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Discovery orchestrator.py module.
-""
+"""
 
 """
 import contextlib
@@ -43,7 +43,7 @@ if TYPE_CHECKING:
 
 
 class DiscoveryOrchestrator:
-    ""
+"""
 Handles peer-to-peer discovery of fleet nodes using mDNS/Zeroconf.
     SERVICE_TYPE = "_pyagent._tcp.local."
     def __init__(self, fleet: FleetManager) -> None:
@@ -64,14 +64,14 @@ Handles peer-to-peer discovery of fleet nodes using mDNS/Zeroconf.
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Discovery: Initialization failed: {e}")
     def _on_failure(self, error: Exception) -> None:
-        ""
+"""
 Handles internal discovery failures with a circuit breaker mechanism.        self._failure_count += 1
         if self._failure_count > 5:
             logging.error(f"Discovery: Circuit breaker OPEN due to multiple failures: {error}")"            self._circuit_open = True
             self._last_retry = time.time()
 
     def _check_circuit(self) -> bool:
-        ""
+"""
 Checks if the circuit is closed or if a retry is allowed.        if self._circuit_open:
             if time.time() - self._last_retry > 60:
                 # 1 minute cooldown
@@ -82,7 +82,7 @@ Checks if the circuit is closed or if a retry is allowed.        if self._circui
         return True
 
     def get_local_ip(self) -> str:
-        ""
+"""
 Utility to get the primary local IP address.        try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect(("8.8.8.8", 80))"            ip = s.getsockname()[0]
@@ -91,7 +91,7 @@ Utility to get the primary local IP address.        try:
         except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             return "127.0.0.1"
     def start_advertising(self, port: int = 8000) -> None:
-        ""
+"""
 Advertises the local fleet node to the network.        # 1. Check Circuit & Rate Limiting (Phase 123/124 Hardening)
         if self._is_advertising:
             return
@@ -128,14 +128,14 @@ Advertises the local fleet node to the network.        # 1. Check Circuit & Rate
             logging.error(f"Discovery: Failed to register service: {e}")"            self._on_failure(e)
 
     def shutdown(self) -> None:
-        ""
+"""
 Gracefully shuts down discovery.        if hasattr(self, "zeroconf"):"            self.zeroconf.unregister_all_services()
             self.zeroconf.close()
 
 
 
 class FleetServiceListener(ServiceListener):
-    ""
+"""
 Listens for other PyAgent fleet nodes and registers them.
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
@@ -190,4 +190,4 @@ Listens for other PyAgent fleet nodes and registers them.
             self.fleet.register_remote_node(url, agents, version)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Discovery: Failed to register remote node {url}: {e}")
-""
+"""

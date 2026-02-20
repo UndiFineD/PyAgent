@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ToolSuggestion - Data container for analysis tool recommendations
 
@@ -60,7 +60,7 @@ __version__ = VERSION
 
 @dataclass
 class ToolSuggestion:
-    ""
+"""
 Suggestion from a code analysis tool.""""
 Attributes:
         tool_type: Type of analysis tool.
@@ -100,7 +100,7 @@ __version__ = VERSION
 
 @dataclass
 class ToolSuggestion:
-    ""
+"""
 Suggestion from a code analysis tool.""""
 Attributes:
         tool_type: Type of analysis tool.
@@ -118,6 +118,24 @@ tool_type: AnalysisToolType
     line_number: int
     message: str
     suggested_fix: str = ""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

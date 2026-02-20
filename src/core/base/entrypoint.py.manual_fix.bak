@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Legacy entrypoint facade for agent CLI bootstrapping.
 Delegates to src.core.base.common.base_utilities.
-""
+"""
 try:
 
 """
-    from .common.base_utilities import create_main_function
+from .common.base_utilities import create_main_function
 except ImportError:
     from .common.base_utilities import create_main_function
 

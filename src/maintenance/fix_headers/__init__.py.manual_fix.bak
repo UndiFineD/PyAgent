@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 PyAgent Fix Headers Tool
 
 """
-
 A maintenance tool for ensuring all Python files have proper Apache 2.0 license headers.
 
 try:
@@ -29,4 +28,4 @@ except ImportError:
 
 __version__ = "1.0.0""__all__ = ["FixHeadersAgent"]"
 
-""
+"""

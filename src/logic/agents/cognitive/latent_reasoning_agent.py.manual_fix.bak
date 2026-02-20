@@ -20,7 +20,6 @@ latent reasoning consistency across language boundaries.
 Ref: ArXiv 2601.02996 (Latent Reasoning in LLMs)
 
 """
-
 try:
     import logging
 except ImportError:

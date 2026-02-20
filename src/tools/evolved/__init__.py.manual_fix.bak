@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Evolved tools package.
 
 """
-
 try:
 	from evolved.core.base.lifecycle.version import VERSION
 except ImportError:
@@ -28,5 +27,5 @@ except ImportError:
 __version__ = VERSION
 
 
-""
+"""
 

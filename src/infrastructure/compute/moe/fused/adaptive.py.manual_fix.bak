@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Adaptive.py module.
-""
+"""
 
 """
 import numpy as np
@@ -29,7 +29,7 @@ from .layer import FusedMoELayer
 
 
 class AdaptiveMoELayer(FusedMoELayer):
-    ""
+"""
 Adaptive MoE layer with dynamic top-k selection and capacity management.
     def __init__(
         self,
@@ -67,7 +67,7 @@ Adaptive MoE layer with dynamic top-k selection and capacity management.
 
 
 class HierarchicalMoELayer:
-    ""
+"""
 Two-level hierarchical MoE for extreme scale.
     def __init__(
         self,
@@ -129,4 +129,4 @@ Two-level hierarchical MoE for extreme scale.
         e_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
         return e_x / e_x.sum(axis=-1, keepdims=True)
 
-""
+"""

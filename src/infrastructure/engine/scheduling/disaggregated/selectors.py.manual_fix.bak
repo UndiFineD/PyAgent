@@ -46,7 +46,7 @@ except ImportError:
 
 
 class InstanceSelector(ABC):
-    ""
+"""
 Abstract base for instance selection strategies.
     @abstractmethod
     def select(
@@ -54,13 +54,13 @@ Abstract base for instance selection strategies.
         instances: List[InstanceInfo],
         request: ScheduledRequest,
     ) -> Optional[InstanceInfo]:
-        ""
+"""
 Select an instance for the request.        raise NotImplementedError
 
 
 
 class RoundRobinSelector(InstanceSelector):
-    ""
+"""
 Round-robin instance selection.
     def __init__(self) -> None:
         self._counter = 0
@@ -84,7 +84,7 @@ Round-robin instance selection.
 
 
 class LeastLoadedSelector(InstanceSelector):
-    ""
+"""
 Select least loaded instance.
     def select(
         self,
@@ -100,7 +100,7 @@ Select least loaded instance.
 
 
 class RandomSelector(InstanceSelector):
-    ""
+"""
 Random instance selection.
     def select(
         self,
@@ -116,7 +116,7 @@ Random instance selection.
 
 
 class HashSelector(InstanceSelector):
-    ""
+"""
 Hash-based consistent instance selection.
     def select(
         self,

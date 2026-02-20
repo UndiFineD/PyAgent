@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Accessibility report dataclass used by tests and tools.""
 
@@ -35,7 +35,7 @@ except Exception:
 
 @dataclass
 class AccessibilityReport:
-    ""
+"""
 Parser-safe AccessibilityReport dataclass.""
 file_path: str
     issues: list = field(default_factory=list)

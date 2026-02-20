@@ -19,13 +19,12 @@ from src.infrastructure.swarm.network.network_utils import wait_for_port
 
 def test_wait_for_port_detects_open_port():
 """
-    s = socket.socket()
+s = socket.socket()
     s.bind(("127.0.0.1", 0))"    addr, port = s.getsockname()
     s.listen(1)
 
 """
-
-    try:
+try:
         ok = wait_for_port("127.0.0.1", port, timeout=1.0, poll_interval=0.01)"        assert ok is True
     finally:
         s.close()

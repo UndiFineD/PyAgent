@@ -204,38 +204,38 @@ cert_path = self.cert_dir / cert_filename
 
     def _certificate_monitor_loop(self):
 """
-Background thread to monitor certificate expiration and rotate as needed.        while True:
-            try:
-                self._check_and_rotate_certificates()
-            except Exception as e:
-                self.logger.error(f"Certificate monitor error: {e}")
-            time.sleep(self.rotation_check_interval)
+        Background thread to monitor certificate expiration and rotate as needed.        while True:
+        try:
+        self._check_and_rotate_certificates()
+        except Exception as e:
+        self.logger.error(f"Certificate monitor error: {e}")
+        time.sleep(self.rotation_check_interval)
 
     def _check_and_rotate_certificates(self):
 """
-Check all certificates and rotate expired or expiring ones.        for common_name in list(self.certificates.keys()):
-            if self.should_rotate_certificate(common_name):
-                self.logger.info(f"Certificate for {common_name} needs rotation")"                self.rotate_certificate(common_name)
+        Check all certificates and rotate expired or expiring ones.        for common_name in list(self.certificates.keys()):
+        if self.should_rotate_certificate(common_name):
+        self.logger.info(f"Certificate for {common_name} needs rotation")"                self.rotate_certificate(common_name)
 
     def cleanup_expired_certificates(self, max_age_days: int = 365):
-                Clean up old certificate files that are no longer needed.
+        Clean up old certificate files that are no longer needed.
 
         Args:
-            max_age_days: Maximum age of certificate files to keep
-                try:
-            cutoff_date = datetime.now(timezone.utc) - timedelta(days=max_age_days)
+        max_age_days: Maximum age of certificate files to keep
+        try:
+        cutoff_date = datetime.now(timezone.utc) - timedelta(days=max_age_days)
 
-            for cert_file in self.cert_dir.glob("*.pem"):"                if cert_file.stat().st_mtime < cutoff_date.timestamp():
-                    cert_file.unlink()
-                    self.logger.info(f"Cleaned up old certificate: {cert_file}")
-            for key_file in self.cert_dir.glob("*.key"):"                if key_file.stat().st_mtime < cutoff_date.timestamp():
-                    key_file.unlink()
-                    self.logger.info(f"Cleaned up old key file: {key_file}")
+        for cert_file in self.cert_dir.glob("*.pem"):"                if cert_file.stat().st_mtime < cutoff_date.timestamp():
+        cert_file.unlink()
+        self.logger.info(f"Cleaned up old certificate: {cert_file}")
+        for key_file in self.cert_dir.glob("*.key"):"                if key_file.stat().st_mtime < cutoff_date.timestamp():
+        key_file.unlink()
+        self.logger.info(f"Cleaned up old key file: {key_file}")
         except Exception as e:
-            self.logger.error(f"Failed to cleanup certificates: {e}")
+        self.logger.error(f"Failed to cleanup certificates: {e}")
 
-# Global certificate manager instance
-cert_manager = CertificateManager()
+        # Global certificate manager instance
+        cert_manager = CertificateManager()
 
 
 def get_certificate_manager() -> CertificateManager:

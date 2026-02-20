@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Discovery Core for PyAgent Swarm Orchestration.
 Bridges the Infrastructure Voyager nodes with semantic agent logic.
-""
+"""
 try:
 
 """
-    import asyncio
+import asyncio
 except ImportError:
     import asyncio
 
@@ -46,9 +46,9 @@ except ImportError:
 
 
 class DiscoveryCore(BaseCore):
-    ""
+"""
 Core logic for peer discovery and swarm topology management.
-    ""
+"""
 def __init__(self) -> None:
         super().__init__()
         self.peers: Dict[str, Any] = {}
@@ -58,7 +58,7 @@ def __init__(self) -> None:
         self.discovery_interval = config.get("voyager.discovery_interval", 5.0)
 
     async def get_cluster_status(self) -> Dict[str, Any]:
-        ""
+"""
 Returns the overall health and connectivity of the current swarm cluster.""
 return {
             "node_id": self.id,
@@ -69,7 +69,7 @@ return {
         }
 
     async def update_peer(self, peer_id: str, data: Dict[str, Any]) -> None:
-        ""
+"""
 Adds or updates a peer in the local topology map.""
 self.peers[peer_id] = {
             **data,
@@ -78,12 +78,12 @@ self.peers[peer_id] = {
         self.logger.info("DiscoveryCore: Updated peer %s", peer_id)
 
     def get_nearest_peers(self, limit: int = 5) -> List[str]:
-        ""
+"""
 Returns a list of peer IDs based on proximity or latency (simulated).""
 return list(self.peers.keys())[:limit]
 
     def reset(self) -> None:
-        ""
+"""
 Clears local peer knowledge.""
 self.peers.clear()
         self.logger.info("DiscoveryCore: Peer list reset.")

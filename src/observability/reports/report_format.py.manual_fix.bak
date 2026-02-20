@@ -69,7 +69,7 @@ __version__ = VERSION
 
 
 class ReportFormat(Enum):
-    ""
+"""
 Output format for reports.
     MARKDOWN = "markdown""    JSON = "json""    HTML = "html"
-""
+"""

@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import os
@@ -41,7 +41,7 @@ __version__ = VERSION
 
 
 class EnvironmentIsolator:
-    ""
+"""
 Context manager that restores environment variables on exit.
     def __init__(self) -> None:
         self._original: dict[str, str] = {}
@@ -57,7 +57,25 @@ Context manager that restores environment variables on exit.
     def set_env(self, key: str, value: str) -> None:
         os.environ[str(key)] = str(value)
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

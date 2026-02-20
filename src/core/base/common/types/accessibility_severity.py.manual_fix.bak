@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Severity levels for accessibility issues.""
 
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 
 class AccessibilitySeverity(Enum):
-    ""
+"""
 Parser-safe AccessibilitySeverity enum.""
 CRITICAL = 4
     SERIOUS = 3

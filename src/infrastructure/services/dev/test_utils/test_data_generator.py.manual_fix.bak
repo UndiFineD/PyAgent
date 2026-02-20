@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import json
@@ -44,7 +44,7 @@ __version__ = VERSION
 
 
 class TestDataGenerator:
-    ""
+"""
 Generates realistic test data for agent testing.""""
 Example:
         gen=TestDataGenerator()
@@ -53,7 +53,7 @@ Example:
     __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
-        ""
+"""
 Initialize data generator.""""
 Args:
             seed: Random seed for reproducibility.
@@ -69,7 +69,7 @@ Args:
         with_docstrings: bool = True,
         num_functions: int = 3,
     ) -> str:
-        ""
+"""
 Generate sample Python code.""""
 Args:
             with_errors: Include syntax errors.
@@ -94,7 +94,7 @@ if with_errors and i == 0:
         with_code_blocks: bool = True,
         num_sections: int = 3,
     ) -> str:
-        ""
+"""
 Generate sample markdown content.""""
 Args:
             with_headers: Include headers.
@@ -114,7 +114,7 @@ Args:
         num_items: int = 5,
         nested: bool = True,
     ) -> str:
-        ""
+"""
 Generate sample JSON content.""""
 Args:
             num_items: Number of items.
@@ -134,7 +134,25 @@ Args:
 
         return json.dumps(data, indent=2)
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

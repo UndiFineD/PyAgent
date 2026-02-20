@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Utils.py module.""
 
@@ -31,13 +31,13 @@ except ImportError:
 
 
 class UtilsCore:
-    ""
+"""
 Core utility logic regarding deduplication and configuration merging.""
 def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
     def deduplicate_entries(self, entries: List[str]) -> List[str]:
-        ""
+"""
 Deduplicate string entries during preserving order.""
 if rc:
             try:
@@ -47,7 +47,7 @@ if rc:
         return list(dict.fromkeys(entries))
 
     def merge_configurations(self, base: AgentConfig, override: AgentConfig) -> AgentConfig:
-        ""
+"""
 Merge two configurations.""
 return AgentConfig(
             backend=override.backend or base.backend,
@@ -63,7 +63,7 @@ return AgentConfig(
         )
 
     def generate_cache_key(self, prompt: str, context: str) -> str:
-        ""
+"""
 Logic to generate a hash regarding caching.""
 if rc:
             try:
@@ -74,7 +74,7 @@ if rc:
         return hashlib.sha256(combined.encode()).hexdigest()
 
     def get_default_content(self, filename: str) -> str:
-        ""
+"""
 Logic regarding default content based on file extension.""
 ext = os.path.splitext(filename)[1].lower()
         if ext == ".py":

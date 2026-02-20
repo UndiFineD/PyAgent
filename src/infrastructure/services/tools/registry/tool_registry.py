@@ -53,16 +53,16 @@ class ToolParserRegistry:
 
     def _init_registry(self):
         self._parsers: Dict[ToolParserType, Type[ToolParser]] = {
-            ToolParserType.GENERIC_JSON: JsonToolParser,
-            ToolParserType.HERMES: HermesToolParser,
-            ToolParserType.LLAMA3: Llama3ToolParser,
-            ToolParserType.MISTRAL: MistralToolParser,
-            ToolParserType.GRANITE: GraniteToolParser,
+        ToolParserType.GENERIC_JSON: JsonToolParser,
+        ToolParserType.HERMES: HermesToolParser,
+        ToolParserType.LLAMA3: Llama3ToolParser,
+        ToolParserType.MISTRAL: MistralToolParser,
+        ToolParserType.GRANITE: GraniteToolParser,
         }
 
         # Model name patterns to parser types
         self._model_patterns: List[Tuple[Pattern, ToolParserType]] = [
-            (re.compile(r"hermes", re.I), ToolParserType.HERMES),"            (re.compile(r"llama.*3", re.I), ToolParserType.LLAMA3),"            (re.compile(r"mistral", re.I), ToolParserType.MISTRAL),"            (re.compile(r"granite", re.I), ToolParserType.GRANITE),"            (re.compile(r"qwen", re.I), ToolParserType.GENERIC_JSON),"        ]
+        (re.compile(r"hermes", re.I), ToolParserType.HERMES),"            (re.compile(r"llama.*3", re.I), ToolParserType.LLAMA3),"            (re.compile(r"mistral", re.I), ToolParserType.MISTRAL),"            (re.compile(r"granite", re.I), ToolParserType.GRANITE),"            (re.compile(r"qwen", re.I), ToolParserType.GENERIC_JSON),"        ]
 
     def get_parser(
         self,
@@ -167,9 +167,9 @@ class StreamingToolParser:
 
     def reset(self):
 """
-Reset parser state.        self._state = StreamingToolState()
+        Reset parser state.        self._state = StreamingToolState()
 
-    @property
+        @property
     def completed_tools(self) -> List[ToolCall]:
 """
 Get all completed tool calls so far.        return self._state.completed_tools.copy()

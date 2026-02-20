@@ -148,30 +148,30 @@ with self._not_full:
 
             def _wait_for_space():
                 if self._closed:
-                    return False
+                return False
                 if len(self._buffer) < self._capacity:
-                    return True
+                return True
 
                 if deadline:
-                    remaining = deadline - time.monotonic()
-                    if remaining <= 0:
-                        self._stats.failed_enqueue += 1
-                        raise Full()
-                    self._not_full.wait(remaining)
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                self._stats.failed_enqueue += 1
+                raise Full()
+                self._not_full.wait(remaining)
                 else:
-                    self._not_full.wait()
+                self._not_full.wait()
 
                 return _wait_for_space()
 
-            if not _wait_for_space():
+                if not _wait_for_space():
                 return False
 
-            self._buffer.append(item)
-            self._stats.enqueued += 1
-            self._stats.peak_size = max(self._stats.peak_size, len(self._buffer))
+                self._buffer.append(item)
+                self._stats.enqueued += 1
+                self._stats.peak_size = max(self._stats.peak_size, len(self._buffer))
 
-            self._not_empty.notify()
-            return True
+                self._not_empty.notify()
+                return True
 
     def try_put(self, item: T) -> bool:
 """
@@ -213,28 +213,28 @@ with self._not_empty:
 
             def _wait_for_items():
                 if not self._buffer:
-                    if self._closed:
-                        raise Empty()
+                if self._closed:
+                raise Empty()
 
-                    if deadline:
-                        remaining = deadline - time.monotonic()
-                        if remaining <= 0:
-                            self._stats.failed_dequeue += 1
-                            raise Empty()
-                        self._not_empty.wait(remaining)
-                    else:
-                        self._not_empty.wait()
+                if deadline:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                self._stats.failed_dequeue += 1
+                raise Empty()
+                self._not_empty.wait(remaining)
+                else:
+                self._not_empty.wait()
 
-                    return _wait_for_items()
+                return _wait_for_items()
                 return True
 
-            _wait_for_items()
+                _wait_for_items()
 
-            item = self._buffer.popleft()
-            self._stats.dequeued += 1
+                item = self._buffer.popleft()
+                self._stats.dequeued += 1
 
-            self._not_full.notify()
-            return item
+                self._not_full.notify()
+                return item
 
     def try_get(self) -> Optional[T]:
 """
@@ -486,23 +486,23 @@ with self._not_empty:
 
             def _wait_for_heap():
                 if not self._heap:
-                    if deadline:
-                        remaining = deadline - time.monotonic()
-                        if remaining <= 0:
-                            self._stats.failed_dequeue += 1
-                            raise Empty()
-                        self._not_empty.wait(remaining)
-                    else:
-                        self._not_empty.wait()
+                if deadline:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                self._stats.failed_dequeue += 1
+                raise Empty()
+                self._not_empty.wait(remaining)
+                else:
+                self._not_empty.wait()
 
-                    return _wait_for_heap()
+                return _wait_for_heap()
                 return True
 
-            _wait_for_heap()
+                _wait_for_heap()
 
-            entry = heapq.heappop(self._heap)
-            self._stats.dequeued += 1
-            return entry.item
+                entry = heapq.heappop(self._heap)
+                self._stats.dequeued += 1
+                return entry.item
 
     def try_get(self) -> Optional[T]:
 """
@@ -695,27 +695,27 @@ with self._batch_ready:
 
             def _wait_for_batch():
                 if len(self._pending) < self._batch_size:
-                    remaining = deadline - time.monotonic()
-                    if remaining > 0:
-                        self._batch_ready.wait(remaining)
-                        return _wait_for_batch()
+                remaining = deadline - time.monotonic()
+                if remaining > 0:
+                self._batch_ready.wait(remaining)
+                return _wait_for_batch()
                 return True
 
-            _wait_for_batch()
+                _wait_for_batch()
 
-            if not self._pending:
+                if not self._pending:
                 return []
 
-            # Take up to batch_size items
-            batch = self._pending[: self._batch_size]
-            self._pending = self._pending[self._batch_size :]
+                # Take up to batch_size items
+                batch = self._pending[: self._batch_size]
+                self._pending = self._pending[self._batch_size :]
 
-            self._stats.dequeued += len(batch)
-            self._last_batch_time = time.monotonic()
+                self._stats.dequeued += len(batch)
+                self._last_batch_time = time.monotonic()
 
-            return batch
+                return batch
 
-    @property
+                @property
     def pending_count(self) -> int:
 """
 Number of pending items.""

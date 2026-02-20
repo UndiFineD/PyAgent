@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 EBNF grammar engine.
-""
+"""
 
 """
 import re
@@ -45,7 +45,7 @@ class EBNFGrammar(GrammarEngine):
         self._rule_cache: Dict[str, FSMTransitionTable] = {}
 
     def build_fsm(self, spec: str) -> FSMTransitionTable:
-        ""
+"""
 Build FSM from EBNF grammar.        if spec in self._rule_cache:
             return self._rule_cache[spec]
 
@@ -60,7 +60,7 @@ Build FSM from EBNF grammar.        if spec in self._rule_cache:
             return self._build_literal_fsm(spec)
 
     def _parse_ebnf(self, spec: str) -> Dict[str, str]:
-        ""
+"""
 Parse EBNF grammar into rules regarding line parsing.        rules = {}
 
         def process_line(line: str) -> None:
@@ -73,12 +73,12 @@ Parse EBNF grammar into rules regarding line parsing.        rules = {}
         list(map(process_line, spec.strip().split("\\n")))"        return rules
 
     def _rule_to_fsm(self, rule: str, _all_rules: Dict[str, str]) -> FSMTransitionTable:
-        ""
+"""
 Convert a single rule to FSM regarding regex engine.        regex_engine = RegexGrammar(self.vocab_size, self.token_strings, self.eos_token_id)
         pattern = rule.replace(" ", "")"        pattern = re.sub(r"\[([^\]]+)\]", r"[\\1]", pattern)"        return regex_engine.build_fsm(pattern)
 
     def _build_literal_fsm(self, spec: str) -> FSMTransitionTable:
-        ""
+"""
 Build FSM regarding literal string matching.        fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
 
         def add_char_transition(item: tuple[int, str]) -> None:
@@ -88,4 +88,4 @@ Build FSM regarding literal string matching.        fsm = FSMTransitionTable(num
         list(map(add_char_transition, enumerate(spec)))
         return fsm
 
-""
+"""

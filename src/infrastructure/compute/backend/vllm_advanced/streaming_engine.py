@@ -216,10 +216,10 @@ class StreamingVllmEngine:
         # Callback mode
         def on_token(token, token_id, is_finished, finish_reason):
             print(token, end="", flush=True)
-        engine.generate_with_callback("Tell me a story", on_token)
-        # Iterator mode
-        async for token in engine.generate_stream("Hello"):"            print(token.text, end="")"    
-    _instance: Optional["StreamingVllmEngine"] = None
+            engine.generate_with_callback("Tell me a story", on_token)
+            # Iterator mode
+            async for token in engine.generate_stream("Hello"):"            print(token.text, end="")"    
+            _instance: Optional["StreamingVllmEngine"] = None
     def __init__(self, config: Optional[StreamingConfig] = None) -> None:
         self.config = config or StreamingConfig()
         self._llm: Optional[LLM] = None

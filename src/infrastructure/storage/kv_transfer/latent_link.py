@@ -59,9 +59,9 @@ class LatentLinkManager:
 
     def register_connection(self, source_id: str, target_id: str, source_dim: int, target_dim: int):
 """
-Register a synaptic adapter between two agents.        key = (source_id, target_id)
+        Register a synaptic adapter between two agents.        key = (source_id, target_id)
         if key not in self.adapters:
-            self.adapters[key] = SynapticAdapter(source_dim, target_dim)
+        self.adapters[key] = SynapticAdapter(source_dim, target_dim)
 
     def transfer_latent(self, source_id: str, target_id: str, source_kv: torch.Tensor) -> torch.Tensor:
 """
@@ -82,6 +82,6 @@ class SynapticLink:
 
     def transmit(self, target_agent_id: str, context_kv: torch.Tensor):
 """
-Transmit context to another agent via the synaptic link.        return self.manager.transfer_latent(self.agent_id, target_agent_id, context_kv)
+        Transmit context to another agent via the synaptic link.        return self.manager.transfer_latent(self.agent_id, target_agent_id, context_kv)
 
 """

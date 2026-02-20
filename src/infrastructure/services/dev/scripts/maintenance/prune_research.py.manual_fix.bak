@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for pruning large research research files to keep only recent relevant findings.
 
 """
-
 try:
     import os
 except ImportError:
@@ -75,5 +74,5 @@ file_path = r"c:\\DEV\\PyAgent\\docs\\IMPROVEMENT_RESEARCH.md""if os.path.exists
         print(f"Pruned {file_path}")"else:
     print(f"File not found: {file_path}")
 
-""
+"""
 

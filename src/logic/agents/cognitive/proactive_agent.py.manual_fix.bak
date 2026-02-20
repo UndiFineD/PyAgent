@@ -96,7 +96,25 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(ProactiveAgent, "ProactiveAgent: Specialist Agent", "Context for analysis")"    main()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

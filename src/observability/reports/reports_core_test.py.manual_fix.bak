@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core test classes for observability reports - Enums and Dataclasses.
 
 """
-
 try:
     from typing import Any, List
 except ImportError:
@@ -35,22 +34,22 @@ except ImportError:
 try:
     from .observability.reports import (
 except ImportError:
-    ""
+"""
 Lightweight report tests (parser-safe stubs).
 
 
     These tests are placeholders to allow pytest to collect the tests
     while the repository is repaired. They exercise minimal expectations
     around enums/dataclasses used by reporting.
-    ""
+"""
 def test_smoke() -> None:
         assert True
     def test_creation_minimal(self) -> None:
-        ""
+"""
 Test creating with minimal fields.        sub = ReportSubscription(subscriber_id="user1", email="user@example.com")"        assert sub.subscriber_id == "user1""        assert sub.email == "user@example.com""        assert sub.enabled is True
 
     def test_creation_full(self) -> None:
-        ""
+"""
 Test creating with all fields.        sub = ReportSubscription(
             subscriber_id="user1","            email="user@example.com","            frequency=SubscriptionFrequency.WEEKLY,
             report_types=[ReportType.ERRORS],
@@ -63,10 +62,10 @@ Test creating with all fields.        sub = ReportSubscription(
 
 
 class TestArchivedReportDataclass:
-    ""
+"""
 Tests for ArchivedReport dataclass.
     def test_creation(self) -> None:
-        ""
+"""
 Test creating ArchivedReport.        archive = ArchivedReport(
             report_id="report_123", file_path="test.py", content="Report content""        )
         assert archive.report_id == "report_123""        assert archive.file_path == "test.py""        assert archive.retention_days == 90
@@ -74,10 +73,10 @@ Test creating ArchivedReport.        archive = ArchivedReport(
 
 
 class TestReportAnnotationDataclass:
-    ""
+"""
 Tests for ReportAnnotation dataclass.
     def test_creation(self) -> None:
-        ""
+"""
 Test creating ReportAnnotation.        annotation = ReportAnnotation(
             annotation_id="ann_1","            report_id="report_1","            author="user1","            content="Important note","            line_number=42,
         )
@@ -86,10 +85,10 @@ Test creating ReportAnnotation.        annotation = ReportAnnotation(
 
 
 class TestReportSearchResultDataclass:
-    ""
+"""
 Tests for ReportSearchResult dataclass.
     def test_creation(self) -> None:
-        ""
+"""
 Test creating ReportSearchResult.        result = ReportSearchResult(
             file_path="test.py","            report_type=ReportType.ERRORS,
             match_text="Syntax error","            line_number=10,
@@ -100,10 +99,10 @@ Test creating ReportSearchResult.        result = ReportSearchResult(
 
 
 class TestReportMetricDataclass:
-    ""
+"""
 Tests for ReportMetric dataclass.
     def test_creation(self) -> None:
-        ""
+"""
 Test creating ReportMetric.        metric = ReportMetric(
             name="issues_count", value=42.0, unit="count", threshold=100.0, trend="+""        )
         assert metric.name == "issues_count""        assert metric.value == 42.0
@@ -111,10 +110,10 @@ Test creating ReportMetric.        metric = ReportMetric(
 
 
 class TestReportPermissionDataclass:
-    ""
+"""
 Tests for ReportPermission dataclass.
     def test_creation(self) -> None:
-        ""
+"""
 Test creating ReportPermission.        perm = ReportPermission(
             user_id="user1","            report_pattern="*.md","            level=PermissionLevel.WRITE,
             granted_by="admin","        )
@@ -123,10 +122,10 @@ Test creating ReportPermission.        perm = ReportPermission(
 
 
 class TestAuditEntryDataclass:
-    ""
+"""
 Tests for AuditEntry dataclass.
     def test_creation(self) -> None:
-        ""
+"""
 Test creating AuditEntry.        entry = AuditEntry(
             entry_id="audit_1","            timestamp=1000.0,
             action=AuditAction.READ,
@@ -136,20 +135,20 @@ Test creating AuditEntry.        entry = AuditEntry(
 
 
 class TestLocalizedStringDataclass:
-    ""
+"""
 Tests for LocalizedString dataclass.
     def test_creation(self) -> None:
-        ""
+"""
 Test creating LocalizedString.        localized = LocalizedString(
             key="error.syntax","            translations={"en-US": "Syntax Error", "de-DE": "Syntaxfehler"},"            default="Syntax Error","        )
         assert localized.key == "error.syntax""        assert localized.translations["de-DE"] == "Syntaxfehler""
 
 
 class TestValidationResultDataclass:
-    ""
+"""
 Tests for ValidationResult dataclass.
     def test_creation_valid(self) -> None:
-        ""
+"""
 Test creating valid ValidationResult.        result = ValidationResult(
             valid=True, errors=[], warnings=["Minor issue"], checksum="abc123""        )
         assert result.valid is True
@@ -157,7 +156,7 @@ Test creating valid ValidationResult.        result = ValidationResult(
         assert len(result.warnings) == 1
 
     def test_creation_invalid(self) -> None:
-        ""
+"""
 Test creating invalid ValidationResult.        result = ValidationResult(
             valid=False, errors=["Missing heading"], checksum="def456""        )
         assert result.valid is False
@@ -165,10 +164,10 @@ Test creating invalid ValidationResult.        result = ValidationResult(
 
 
 class TestAggregatedReportDataclass:
-    ""
+"""
 Tests for AggregatedReport dataclass.
     def test_creation(self) -> None:
-        ""
+"""
 Test creating AggregatedReport.        issue = CodeIssue(
             message="Test error","            category=IssueCategory.SYNTAX,
             severity=SeverityLevel.ERROR,

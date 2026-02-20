@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     import threading
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 
 class ABTester:
-    ""
+"""
 Conducts A / B tests across backends.""""
 Enables comparing performance between different backends or configurations.
 
@@ -58,7 +58,7 @@ Enables comparing performance between different backends or configurations.
         # Record result:
         tester.record_result("latency_test", variant.name, latency_ms=150)"    
     def __init__(self) -> None:
-        ""
+"""
 Initialize A / B tester.        self._tests: dict[str, dict[str, ABTestVariant]] = {}
         self._assignments: dict[str, dict[str, str]] = {}  # test -> user -> variant
         self._lock = threading.Lock()
@@ -70,7 +70,7 @@ Initialize A / B tester.        self._tests: dict[str, dict[str, ABTestVariant]]
         backend_b: str,
         weight_a: float = 0.5,
     ) -> tuple[ABTestVariant, ABTestVariant]:
-        ""
+"""
 Create an A / B test.""""
 Args:
             test_name: Test identifier.
@@ -101,7 +101,7 @@ Args:
         test_name: str,
         user_id: str,
     ) -> ABTestVariant | None:
-        ""
+"""
 Assign user to a variant.""""
 Args:
             test_name: Test identifier.
@@ -134,7 +134,7 @@ Args:
         variant_name: str,
         **metrics: float,
     ) -> None:
-        ""
+"""
 Record test result for a variant.""""
 Args:
             test_name: Test identifier.
@@ -156,7 +156,7 @@ Args:
                     variant.metrics[metric] = (variant.metrics[metric] * (n - 1) + value) / n
 
     def get_results(self, test_name: str) -> dict[str, Any] | None:
-        ""
+"""
 Get test results.""""
 Args:
             test_name: Test identifier.
@@ -181,7 +181,7 @@ Args:
         metric: str,
         higher_is_better: bool = True,
     ) -> str | None:
-        ""
+"""
 Determine winning variant.""""
 Args:
             test_name: Test identifier.
@@ -215,7 +215,25 @@ Args:
 
             return best_name
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

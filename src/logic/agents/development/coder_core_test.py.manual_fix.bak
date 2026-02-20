@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from src.logic.agents.development.coder_core import CoderCore
+from src.logic.agents.development.coder_core import CoderCore
 
 try:
     from .core.base.common.types.code_language import CodeLanguage

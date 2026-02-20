@@ -20,7 +20,6 @@ from __future__ import annotations
 Searching the repository for plan_executor.py to read its contents and produce the module description.
 
 """
-
 Reading the located plan_executor.py to extract its contents for the module description.
 
 plan_executor.py - Plan Execution Strategy Interface
@@ -52,7 +51,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Strategies Module: Unified interface for agent decision-making strategies.
-""
+"""
 try:
     import sys
 except ImportError:
@@ -86,4 +85,4 @@ __version__ = VERSION
 # Type alias for functional compatibility
 BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], Awaitable[str]]
 
-""
+"""

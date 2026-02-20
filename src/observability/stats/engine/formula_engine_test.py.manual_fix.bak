@@ -15,7 +15,6 @@
 Test Formula Engine Core module.
 
 """
-
 try:
     import math
 except ImportError:

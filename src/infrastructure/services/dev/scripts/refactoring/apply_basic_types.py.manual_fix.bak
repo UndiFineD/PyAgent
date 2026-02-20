@@ -17,11 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Apply basic types.py module.
-""
+"""
 try:
 
 """
-    import os
+import os
 except ImportError:
     import os
 
@@ -87,4 +87,4 @@ def apply_basic_types(target_dir="src") -> bool:"        Applies basic return ty
 
 if __name__ == "__main__":"    apply_basic_types()
 
-""
+"""

@@ -25,7 +25,6 @@ USAGE:
 Instantiate ModelForgeAgent(path) inside the PyAgent environment and call its @as_tool methods (prepare_dataset, start_finetuning, trigger_autonomous_tuning) or use monitor_agent_quality to trigger autonomous tuning workflows; datasets and adapters are stored under data/forge. Intended to be used by orchestration layers that schedule tuning jobs and manage model adapters.
 
 """
-
 WHAT IT DOES:
 Provides a lightweight orchestration layer for preparing JSONL datasets, simulating LoRA-style fine-tuning job starts, managing on-disk directories for adapters/datasets, and triggering autonomous tuning when agent quality metrics fall below thresholds driven by ModelRegistryCore.
 
@@ -35,7 +34,7 @@ Integrate with a real training backend (e.g., Hugging Face Transformers + bitsan
 FILE CONTENT SUMMARY:
 Model Forge Agent for PyAgent.
 Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
-""
+"""
 import asyncio
 import json
 import logging
@@ -229,4 +228,4 @@ Orchestrates local model fine-tuning and adapter management.
 
         return await asyncio.to_thread(read_config)
 
-""
+"""

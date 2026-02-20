@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_coder.py
-""
+"""
 
 """
 from enum import Enum
@@ -32,9 +32,9 @@ __version__ = VERSION
 
 
 class MigrationStatus(Enum):
-    ""
+"""
 Status of a code migration operation.
-    ""
+"""
 PENDING = "pending"
     IN_PROGRESS = "in_progress"
     COMPLETED = "completed"

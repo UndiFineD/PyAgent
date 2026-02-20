@@ -15,13 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Quality scoring and refactoring suggestion logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
 """
-
 try:
     from typing import Any, Dict, List
 except ImportError:
@@ -132,4 +131,4 @@ Suggest possible refactorings based on code analysis.        suggestions: List[D
             )
         return suggestions
 
-""
+"""

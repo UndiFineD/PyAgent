@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 FederationMixin - Index and merge external project graphs
 
@@ -99,4 +99,4 @@ Mixin for multi-project federation in TopologicalNavigator.
         finally:
             self.root_dir = original_root
 
-""
+"""

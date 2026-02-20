@@ -1,8 +1,8 @@
-""
+"""
 Manager for git operations.
 
 Facade for a thin git operation layer used by higher-level code.
-""
+"""
 import logging
 from pathlib import Path
 from typing import Any
@@ -11,7 +11,7 @@ from src.core.base.common.shell_core import ShellCore
 
 
 class AgentGitHandler:
-    ""
+"""
 Facade for Git operations with recording support.""
 def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) -> None:
         self.repo_root: Path = repo_root
@@ -20,7 +20,7 @@ def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) 
         self.shell = ShellCore(repo_root=repo_root)
 
     def _record(self, action: str, result: str, meta: dict[str, Any] | None = None) -> None:
-        ""
+"""
 Internal helper to record git operations if recorder is available.""
 if self.recorder:
             try:
@@ -30,7 +30,7 @@ if self.recorder:
                 logging.debug("Recorder failed during _record")
 
     def commit_changes(self, message: str, files: list[str] | None = None, *, enforce_tests: bool = False) -> bool:
-        ""
+"""
 Commit changes to the repository.
 
         Args:
@@ -40,7 +40,7 @@ Commit changes to the repository.
 
         Returns:
             True if commit succeeded, False otherwise.
-        ""
+"""
 if self.no_git:
             logging.info("Skipping git commit: no_git=True. Message: %s", message)
             return False

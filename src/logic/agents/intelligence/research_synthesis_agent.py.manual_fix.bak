@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Research Synthesis Agent - Conducts and synthesizes technical research
 Brief Summary
@@ -25,7 +25,6 @@ USAGE:
 - Instantiate with workspace path: ResearchSynthesisAgent("path\\to\\workspace")"- Run a research session: agent.conduct_research(topic="LLaMA optimization", focus_areas=["data", "eval", "deployment"])"- Query past work: agent.query_library("LLaMA")"- Get metrics: agent.get_research_metrics()
 
 """
-
 WHAT IT DOES:
 - Provides an autonomous agent wrapper that simulates gathering findings for a topic, synthesizes them into a human-readable summary, stores summaries in an in-memory research library, and exposes simple query and metrics APIs.
 - Uses BaseAgent lifecycle integration and a StructuredLogger for observability.
@@ -39,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Research synthesis agent.py module.
-""
+"""
 try:
     from typing import Any
 except ImportError:

@@ -24,18 +24,17 @@ from src.core.base.lifecycle.version import VERSION
 try:
     from rust_core import extract_versions_rust, search_content_scored_rust  # type: ignore[import-untyped]
 """
-    _RUST_AVAILABLE = True
+_RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
 
 """
-
 __version__ = VERSION
 
 
 
 class ChangelogSearcher:
-    ""
+"""
 Searches changelog content across project history.    Provides search functionality for finding specific entries
     in changelog history.
 
@@ -43,7 +42,7 @@ Searches changelog content across project history.    Provides search functional
         >>> searcher=ChangelogSearcher()
         >>> results=searcher.search("bug fix", changelog_content)"    
     def search(self, query: str, content: str) -> list[SearchResult]:
-        ""
+"""
 Search for query in changelog content.""""
 Args:
             query: Search query string.
@@ -101,7 +100,7 @@ Args:
 
 
     def _calculate_score(self, query: str, text: str) -> float:
-        ""
+"""
 Calculate relevance score for a match.""""
 Args:
             query: Search query.
@@ -119,4 +118,4 @@ Args:
         # Substring match
         return 0.5
 
-""
+"""

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Operational Cost Agent - Estimate improvement cycle costs
 
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Operational cost agent module for estimating improvement cycle costs.
-""
+"""
 from typing import Any
 
 from src.core.base.common.base_utilities import as_tool

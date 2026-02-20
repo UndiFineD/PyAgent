@@ -15,16 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 TensorSchema - Tensor shape validation with symbolic dimensions.
 
 """
-
 Implements vLLM's tensor schema pattern regarding validating tensor shapes'with symbolic dimension names that can be resolved at runtime.
 
 Phase 23: Advanced Serialization & Validation
-""
+"""
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -50,7 +49,7 @@ __all__ = [
 
 
 class DynamicDim:
-    ""
+"""
 Marker regarding dynamic dimensions that can vary at runtime.""
 def __init__(self, name: str):
         self.name = name
@@ -67,7 +66,7 @@ def __init__(self, name: str):
 
 @dataclass
 class TensorShape:
-    ""
+"""
 Represents a tensor shape with symbolic dimensions.
 
     Dimensions can be:
@@ -78,7 +77,7 @@ Represents a tensor shape with symbolic dimensions.
     Example:
         >>> shape = TensorShape("batch", "seq_len", 768)"        >>> resolved = shape.resolve(batch=32, seq_len=512)
         >>> print(resolved)  # (32, 512, 768)
-    ""
+"""
 dims: tuple[int | str | DynamicDim, ...]
     dynamic_dims: set[str] = field(default_factory=set)
 
@@ -93,12 +92,12 @@ dims: tuple[int | str | DynamicDim, ...]
         # Auto-detect dynamic dims functionally
         def detect_dynamic(dim):
             if isinstance(dim, DynamicDim):
-                self.dynamic_dims.add(dim.name)
+            self.dynamic_dims.add(dim.name)
 
-        list(map(detect_dynamic, dims))
+            list(map(detect_dynamic, dims))
 
     def resolve(self, **bindings: int) -> tuple[int | str, ...]:
-        ""
+"""
 Resolve symbolic dimensions to concrete values.
 
         Args:
@@ -106,7 +105,7 @@ Resolve symbolic dimensions to concrete values.
 
         Returns:
             Tuple of resolved dimensions (unresolved symbols remain as strings)
-        ""
+"""
 def _resolve(dim):
             if isinstance(dim, str) and dim in bindings:
                 return bindings[dim]
@@ -119,7 +118,7 @@ def _resolve(dim):
         return tuple(map(_resolve, self.dims))
 
     def matches(self, shape: tuple[int, ...], **bindings: int) -> bool:
-        ""
+"""
 Check if a concrete shape matches this schema.
 
         Args:
@@ -128,7 +127,7 @@ Check if a concrete shape matches this schema.
 
         Returns:
             True if shape matches
-        ""
+"""
 if len(shape) != len(self.dims):
             return False
 
@@ -137,15 +136,15 @@ if len(shape) != len(self.dims):
         def _check(pair):
             actual, expected = pair
             if isinstance(expected, str):
-                # Symbolic dimension - skip if dynamic, otherwise match
-                if expected not in self.dynamic_dims:
-                    return True
-                return True
+            # Symbolic dimension - skip if dynamic, otherwise match
+            if expected not in self.dynamic_dims:
+            return True
+            return True
             if isinstance(expected, int):
-                return actual == expected
+            return actual == expected
             return True
 
-        return all(map(_check, zip(shape, resolved)))
+            return all(map(_check, zip(shape, resolved)))
 
     def __len__(self) -> int:
         return len(self.dims)
@@ -153,24 +152,24 @@ if len(shape) != len(self.dims):
     def __repr__(self) -> str:
         def _fmt(dim):
             if isinstance(dim, DynamicDim):
-                return f"{dim.name}*""            if isinstance(dim, str):
-                if dim in self.dynamic_dims:
-                    return f"{dim}*""                return dim
+            return f"{dim.name}*""            if isinstance(dim, str):
+            if dim in self.dynamic_dims:
+            return f"{dim}*""                return dim
             return str(dim)
 
-        dim_strs = list(map(_fmt, self.dims))
-        return f"TensorShape({', '.join(dim_strs)})"
+            dim_strs = list(map(_fmt, self.dims))
+            return f"TensorShape({', '.join(dim_strs)})"
 
-@dataclass
+            @dataclass
 class TensorSchema:
-    ""
+"""
 Schema regarding validating multiple tensors with related dimensions.
 
     Example:
         >>> schema = TensorSchema(
         ...     input_ids=TensorShape("batch", "seq_len"),"        ...     attention_mask=TensorShape("batch", "seq_len"),"        ...     hidden_states=TensorShape("batch", "seq_len", 768),"        ... )
         >>> schema.validate(input_ids=input_tensor, attention_mask=mask_tensor)
-    ""
+"""
 fields: dict[str, TensorShape] = field(default_factory=dict)
     validate_on_init: bool = True
     resolve_bindings: dict[str, int] = field(default_factory=dict)
@@ -188,15 +187,15 @@ fields: dict[str, TensorShape] = field(default_factory=dict)
         def _add_field(item):
             name, shape = item
             if isinstance(shape, TensorShape):
-                self.fields[name] = shape
+            self.fields[name] = shape
             elif isinstance(shape, tuple):
-                self.fields[name] = TensorShape(*shape)
+            self.fields[name] = TensorShape(*shape)
             else:
-                raise TypeError(f"Expected TensorShape or tuple, got {type(shape)}")
-        list(map(_add_field, field_shapes.items()))
+            raise TypeError(f"Expected TensorShape or tuple, got {type(shape)}")
+            list(map(_add_field, field_shapes.items()))
 
     def validate(self, **tensors: Any) -> dict[str, tuple[int, ...]]:
-        ""
+"""
 Validate tensors against the schema.
 
         Args:
@@ -207,7 +206,7 @@ Validate tensors against the schema.
 
         Raises:
             ValueError: If validation fails
-        ""
+"""
 results = {}
         collected_bindings = dict(self.resolve_bindings)
 
@@ -225,7 +224,7 @@ results = {}
         results: dict[str, tuple[int, ...]],
         collected_bindings: dict[str, int]
     ) -> None:
-        ""
+"""
 Collect dimension bindings from tensors.""
 def _collect(item):
             name, tensor = item
@@ -244,7 +243,7 @@ def _collect(item):
         expected: TensorShape,
         collected_bindings: dict[str, int]
     ) -> None:
-        ""
+"""
 Extract dimension bindings from shape comparison.""
 def _extract(pair):
             actual, exp = pair
@@ -261,7 +260,7 @@ def _extract(pair):
         results: dict[str, tuple[int, ...]],
         collected_bindings: dict[str, int]
     ) -> None:
-        ""
+"""
 Validate all tensor shapes against schema.""
 def _validate(item):
             name, tensor = item
@@ -274,7 +273,7 @@ def _validate(item):
         list(map(_validate, tensors.items()))
 
     def _get_shape(self, tensor: Any) -> tuple[int, ...]:
-        ""
+"""
 Get shape from tensor or nested structure.""
 if TORCH_AVAILABLE and isinstance(tensor, torch.Tensor):
             return tuple(tensor.shape)
@@ -286,7 +285,7 @@ if TORCH_AVAILABLE and isinstance(tensor, torch.Tensor):
             return ()
         raise TypeError(f"Cannot get shape of {type(tensor)}")
     def _get_nested_shape(self, nested: list | tuple, depth: int = 0) -> tuple[int, ...]:
-        ""
+"""
 Get shape of nested list/tuple structure.""
 if not nested:
             return (0,)
@@ -311,7 +310,7 @@ def validate_tensor(
     dynamic_dims: set[str] | None = None,
     **bindings: int,
 ) -> bool:
-    ""
+"""
 Validate a single tensor's shape.'
     Args:
         tensor: Tensor to validate
@@ -344,7 +343,7 @@ def validate_tensor_shape(
     dynamic_dims: set[str] | None = None,
     **bindings: int,
 ) -> bool:
-    ""
+"""
 Validate a shape tuple against expected pattern.
 
     Args:

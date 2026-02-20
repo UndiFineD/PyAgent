@@ -25,7 +25,6 @@ USAGE:
 Instantiate ProfilingAgent and call profile_file(file_path) to execute an instrumented run (executes the target file in a controlled namespace) or static_profile(file_path) to perform AST-based heuristics when execution is risky or unavailable.
 
 """
-
 WHAT IT DOES:
 Provides runtime profiling via cProfile, parses pstats through ProfilingCore to produce ProfileStats, detects slow functions (heuristic threshold >1.0s), logs and hands off heavy hotspots for further action (e.g., Rust conversion), and offers a static AST-based fallback estimating costly functions by counting loops and comprehensions.
 
@@ -34,7 +33,7 @@ Improve sandboxing of exec to avoid side effects (use subprocessed interpreter o
 
 FILE CONTENT SUMMARY:
 # Agent specializing in profiling and performance analysis.
-""
+"""
 import ast
 import cProfile
 import logging
@@ -298,6 +297,24 @@ Analyzes a binary pstats file and returns optimization priorities.        stats 
                     function_name=node.name,
                     reason="Contains network operations","                    estimated_impact="high","                    profiling_approach="Monitor network latency and throughput","                )
             )
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.transport.rtp_server_core import RTPSession, RTPServerCore

@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 
 
 try:
@@ -46,9 +46,9 @@ __version__ = VERSION
 
 @dataclass
 class ErrorPattern:
-    ""
+"""
 A recognized error pattern.
-    ""
+"""
 name: str
     regex: str
     severity: ErrorSeverity

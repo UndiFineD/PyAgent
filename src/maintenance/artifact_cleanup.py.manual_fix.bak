@@ -16,7 +16,7 @@
 # limitations under the License.
 
 
-""
+"""
 src.maintenance.artifact_cleanup""""
 Provides the ArtifactCleanupCore which runs background cleanup cycles to
 remove temporary/generated artifacts from disk based on configurable TTLs.
@@ -69,7 +69,7 @@ class ArtifactCleanupCore:
         self._cleanup_count = 0
 
     async def start_cleanup_worker(self) -> None:
-        ""
+"""
 Start the background cleanup worker.        if self._running:
             logger.warning("Cleanup worker already running")"            return
 
@@ -77,7 +77,7 @@ Start the background cleanup worker.        if self._running:
         self._task = asyncio.create_task(self._cleanup_loop())
         logger.info(f"Started artifact cleanup worker (interval: {self.cleanup_interval}s)")
     async def stop_cleanup_worker(self) -> None:
-        ""
+"""
 Stop the background cleanup worker.        if not self._running:
             return
 
@@ -90,7 +90,7 @@ Stop the background cleanup worker.        if not self._running:
                 pass
         logger.info("Stopped artifact cleanup worker")
     async def _cleanup_loop(self) -> None:
-        ""
+"""
 Main cleanup loop.        while self._running:
             try:
                 await self._run_cleanup_cycle()
@@ -99,7 +99,7 @@ Main cleanup loop.        while self._running:
             await asyncio.sleep(self.cleanup_interval)
 
     async def _run_cleanup_cycle(self) -> None:
-        ""
+"""
 Run one cycle of cleanup.        current_time = time.time()
         removed = await self._cleanup_all_dirs_once(current_time)
         if removed > 0:
@@ -108,12 +108,12 @@ Run one cycle of cleanup.        current_time = time.time()
                 f"Cleanup cycle completed: removed {removed} artifacts (total: {self._cleanup_count})""            )
 
     async def _cleanup_directory(self, dir_path: str, current_time: float) -> int:
-        ""
+"""
 Clean up artifacts in a specific directory.        # Keep for backward compatibility; delegate to consolidated cleanup
         return await self._cleanup_all_dirs_once(current_time, target_dir=dir_path)
 
     async def _cleanup_all_dirs_once(self, current_time: float, target_dir: Optional[str] = None) -> int:
-        ""
+"""
 Run a single pass over configured cleanup directories (or a single target dir).""""
 This consolidates file iteration into a single loop to reduce duplicated
         traversal logic and lower measured loop complexity.
@@ -139,7 +139,7 @@ This consolidates file iteration into a single loop to reduce duplicated
         return removed
 
     def _should_cleanup_file(self, file_path: Path, current_time: float) -> bool:
-        ""
+"""
 Determine if a file should be cleaned up based on TTL.        try:
             # Get file modification time
             mtime = file_path.stat().st_mtime
@@ -153,12 +153,12 @@ Determine if a file should be cleaned up based on TTL.        try:
             logger.error(f"Error checking file {file_path}: {e}")"            return False
 
     def _get_ttl_for_file(self, file_path: Path) -> int:
-        ""
+"""
 Get the TTL for a specific file based on extension.        suffix = file_path.suffix.lower()
         return self.max_age_overrides.get(suffix, self.default_ttl)
 
     async def force_cleanup_now(self) -> int:
-        ""
+"""
 Force an immediate cleanup cycle and return number of files removed.        logger.info("Forcing immediate cleanup cycle")"        current_time = time.time()
         removed = await self._cleanup_all_dirs_once(current_time)
         if removed > 0:
@@ -167,7 +167,7 @@ Force an immediate cleanup cycle and return number of files removed.        logg
         return removed
 
     def get_stats(self) -> Dict:
-        ""
+"""
 Get cleanup statistics.        return {
             "running": self._running,"            "cleanup_interval": self.cleanup_interval,"            "default_ttl": self.default_ttl,"            "cleanup_dirs": self.cleanup_dirs,"            "total_cleaned": self._cleanup_count,"            "dry_run": self.dry_run"        }
 
@@ -177,7 +177,7 @@ _artifact_cleanup_core: Optional[ArtifactCleanupCore] = None
 
 
 def get_artifact_cleanup_core() -> ArtifactCleanupCore:
-    ""
+"""
 Get the global artifact cleanup core instance.    global _artifact_cleanup_core
     if _artifact_cleanup_core is None:
         _artifact_cleanup_core = ArtifactCleanupCore()
@@ -185,12 +185,12 @@ Get the global artifact cleanup core instance.    global _artifact_cleanup_core
 
 
 async def start_fleet_cleanup() -> None:
-    ""
+"""
 Start the fleet-wide artifact cleanup worker.    core = get_artifact_cleanup_core()
     await core.start_cleanup_worker()
 
 
 async def stop_fleet_cleanup() -> None:
-    ""
+"""
 Stop the fleet-wide artifact cleanup worker.    core = get_artifact_cleanup_core()
     await core.stop_cleanup_worker()

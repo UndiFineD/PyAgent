@@ -1,9 +1,9 @@
-from __future__ import annotations
 """
 Minimal parser-safe MathAgent shim used during repository repair.
 
 Provides safe, simple math helpers to satisfy imports and basic tests.
 """
+from __future__ import annotations
 
 
 

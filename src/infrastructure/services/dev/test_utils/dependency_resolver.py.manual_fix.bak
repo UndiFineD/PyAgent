@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from .core.base.lifecycle.version import VERSION
@@ -30,24 +30,24 @@ __version__ = VERSION
 
 
 class DependencyResolver:
-    ""
+"""
 Resolves dependencies between tests.
     def __init__(self) -> None:
-        ""
+"""
 Initialize resolver.        self.dependencies: dict[str, list[str]] = {}
 
     def add_test(self, name: str, depends_on: list[str]) -> None:
-        ""
+"""
 Register a test and its dependencies (test compatibility API).        self.dependencies[name] = list(depends_on)
 
     def add_dependency(self, test: str, depends_on: str) -> None:
-        ""
+"""
 Add dependency.        if test not in self.dependencies:
             self.dependencies[test] = []
         self.dependencies[test].append(depends_on)
 
     def resolve(self) -> list[str]:
-        ""
+"""
 Resolve execution order or raise on circular dependencies.        visiting: set[str] = set()
         visited: set[str] = set()
         order: list[str] = []
@@ -71,7 +71,7 @@ Resolve execution order or raise on circular dependencies.        visiting: set[
         return order
 
     def resolve_order(self) -> list[str]:
-        ""
+"""
 Resolve execution order (topological sort).        visited: set[str] = set()
         order: list[str] = []
 
@@ -88,7 +88,7 @@ Resolve execution order (topological sort).        visited: set[str] = set()
         return order
 
     def detect_cycle(self) -> bool:
-        ""
+"""
 Detect circular dependencies.        visited: set[str] = set()
         rec_stack: set[str] = set()
 
@@ -110,7 +110,25 @@ Detect circular dependencies.        visited: set[str] = set()
                     return True
         return False
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

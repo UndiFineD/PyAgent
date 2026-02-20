@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 PyTorch Scaled Dot-Product Attention backend.
-""
+"""
 
 """
 import logging
@@ -80,7 +80,7 @@ class TorchSDPABackend(AttentionBackend[None]):
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-        ""
+"""
 SDPA attention implementation.        if not HAS_TORCH:
             raise RuntimeError("PyTorch required for TorchSDPABackend")
         import torch.nn.functional as F

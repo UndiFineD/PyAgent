@@ -17,7 +17,6 @@
 Mamba SSM Package - Implementation of State Space Models.
 
 """
-
 try:
     from typing import TYPE_CHECKING, Any
 except ImportError:

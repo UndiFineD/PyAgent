@@ -135,6 +135,141 @@ def fix_double_quote_docstring_pairs(text: str) -> Tuple[str, bool]:
     return ''.join(out), changed
 
 
+def collapse_duplicate_triple_lines(text: str) -> Tuple[str, bool]:
+    """Collapse consecutive identical triple-quote-only lines.
+
+    Handles corruption patterns where multiple triple-quote delimiters
+    appear consecutively (e.g. four triple-quote lines surrounding a
+    docstring), by collapsing runs of identical standalone triple-quote
+    lines into a single delimiter. This preserves intended docstrings
+    while removing redundant empty delimiters that break parsing.
+    """
+    lines = text.splitlines(True)
+    out = []
+    changed = False
+    prev_strip = None
+    for ln in lines:
+        s = ln.strip()
+        if s in ('"""', "'''") and prev_strip == s:
+            # skip this duplicate triple-quote-only line
+            changed = True
+            continue
+        out.append(ln)
+        prev_strip = s if s in ('"""', "'''") else None
+    return ''.join(out), changed
+
+
+def normalize_docstring_blocks(text: str) -> Tuple[str, bool]:
+    """Normalize docstring blocks: ensure a single opening and closing delimiter
+    and clean stray quote characters around the content.
+
+    This scans for standalone triple-quote delimiters and the matching
+    closing delimiter, extracts the content, strips accidental leading/trailing
+    quote characters, and rewrites the block as a clean multi-line docstring.
+    """
+    lines = text.splitlines(True)
+    n = len(lines)
+    i = 0
+    out = []
+    changed = False
+    while i < n:
+        ln = lines[i]
+        stripped = ln.strip()
+        if stripped in ('"""', "'''"):
+            delim = stripped
+            # find closing
+            j = i + 1
+            while j < n and delim not in lines[j]:
+                j += 1
+            if j >= n:
+                # no closing found; leave as-is
+                out.append(ln)
+                i += 1
+                continue
+            # If the closing delimiter is immediately adjacent (empty block),
+            # it's possible the file has duplicated triple-quote lines before
+            # the real docstring content/closing. Look further ahead for a
+            # non-empty content region followed by a closing delimiter and
+            # prefer that as the closing boundary.
+            if j == i + 1:
+                k = j + 1
+                while k < min(n, j + 200):
+                    if delim in lines[k]:
+                        # ensure there's non-empty content between j and k
+                        mid_content = ''.join(lines[j+1:k]).strip()
+                        if mid_content:
+                            j = k
+                            break
+                    k += 1
+            # Extract and clean content between i and j
+            content = ''.join(lines[i+1:j])
+            cleaned = content.strip()
+            # Remove accidental leading/trailing quote characters
+            cleaned = re.sub(r'^[\'\"]+', '', cleaned)
+            cleaned = re.sub(r'[\'\"]+$', '', cleaned)
+            # Reconstruct a clean docstring block
+            out.append(delim + "\n")
+            if cleaned:
+                for cl in cleaned.splitlines():
+                    out.append(cl.rstrip() + "\n")
+            out.append(delim + "\n")
+            changed = True
+            i = j + 1
+            continue
+        out.append(ln)
+        i += 1
+    return ''.join(out), changed
+
+
+def fix_method_indentation(text: str) -> Tuple[str, bool]:
+    """Normalize indentation for method blocks inside classes.
+
+    Conservative heuristic: when a `def` line appears indented (i.e. inside a
+    class) but the following lines (docstring and body) are not indented to the
+    expected method indent level, this function will indent those lines to be
+    four spaces deeper than the `def` line. It stops at the next top-level
+    `def`/`class` or an unindented line that signals the method block end.
+    """
+    lines = text.splitlines(True)
+    n = len(lines)
+    i = 0
+    changed = False
+    out = []
+    while i < n:
+        ln = lines[i]
+        m = re.match(r"^(\s+)(def\s+[A-Za-z_][A-Za-z0-9_]*\s*\(.*\)\s*:\s*)$", ln)
+        if m:
+            base_indent = m.group(1)
+            req = base_indent + " " * 4
+            out.append(ln)
+            i += 1
+            # adjust subsequent lines until we hit a line that is at or
+            # left of base_indent and looks like a new def/class or file-level
+            # boundary.
+            while i < n:
+                nxt = lines[i]
+                # if next line is blank, keep it (but indent if needed)
+                if nxt.strip() == "":
+                    out.append(nxt)
+                    i += 1
+                    continue
+                # detect new block at same or lesser indent that looks like def/class
+                leading = re.match(r"^(\s*)", nxt).group(1)
+                if len(leading) <= len(base_indent) and re.match(r"^\s*(def |class )", nxt):
+                    break
+                # make sure the line is indented at least to req
+                content = nxt.lstrip()
+                new_ln = req + content
+                if new_ln != nxt:
+                    changed = True
+                out.append(new_ln)
+                i += 1
+            continue
+        out.append(ln)
+        i += 1
+    return ''.join(out), changed
+
+
 def apply_heuristics(path: Path, text: str) -> Tuple[str, list[str]]:
     changes = []
     t, ok = move_future_imports(text)
@@ -155,6 +290,21 @@ def apply_heuristics(path: Path, text: str) -> Tuple[str, list[str]]:
     t, ok = remove_trailing_quote_after_paren(text)
     if ok:
         changes.append('remove_trailing_quote_after_paren')
+        text = t
+
+    t, ok = normalize_docstring_blocks(text)
+    if ok:
+        changes.append('normalize_docstring_blocks')
+        text = t
+
+    t, ok = collapse_duplicate_triple_lines(text)
+    if ok:
+        changes.append('collapse_duplicate_triple_lines')
+        text = t
+
+    t, ok = fix_method_indentation(text)
+    if ok:
+        changes.append('fix_method_indentation')
         text = t
 
     t, ok = balance_triple_quotes(text)

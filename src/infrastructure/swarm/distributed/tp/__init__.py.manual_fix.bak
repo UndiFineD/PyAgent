@@ -19,7 +19,6 @@
 Tensor parallel coordination for distributed inference.
 
 """
-
 try:
     import os
 except ImportError:
@@ -85,21 +84,21 @@ def init_distributed(
 
 
 def get_tp_group() -> Optional[TensorParallelGroup]:
-    ""
+"""
 Get the global tensor parallel group.    return _TP_GROUP
 
 
 def get_tp_size() -> int:
-    ""
+"""
 Get tensor parallel world size.    if _TP_GROUP is None:
         return 1
     return _TP_GROUP.tp_size
 
 
 def get_tp_rank() -> int:
-    ""
+"""
 Get tensor parallel rank.    if _TP_GROUP is None:
         return 0
     return _TP_GROUP.tp_rank
 
-""
+"""

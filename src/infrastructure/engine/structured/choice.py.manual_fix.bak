@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Choice-based grammar engine.
-""
+"""
 try:
 
 """
-    import json
+import json
 except ImportError:
     import json
 
@@ -51,12 +51,12 @@ class ChoiceGrammar(GrammarEngine):
         Grammar engine regarding fixed choice selection.
     
     def build_fsm(self, spec: str) -> FSMTransitionTable:
-        ""
+"""
 Build FSM from choice list (JSON array).        choices = json.loads(spec)
         return self._build_trie_fsm(choices)
 
     def _build_trie_fsm(self, choices: List[str]) -> FSMTransitionTable:
-        ""
+"""
 Build trie-based FSM regarding choices.        trie: Dict[int, Dict[str, int]] = {0: {}}
         accepting = set()
         state_counter = [1]
@@ -95,4 +95,4 @@ Build trie-based FSM regarding choices.        trie: Dict[int, Dict[str, int]] =
         list(map(register_trie_node, trie.items()))
         return fsm
 
-""
+"""

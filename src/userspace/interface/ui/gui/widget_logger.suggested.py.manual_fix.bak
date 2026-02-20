@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Custom logging handler for redirecing output to Tkinter widgets.
 
 """
-
 import logging
 import tkinter as tk
 from typing import Any
@@ -32,7 +31,7 @@ __version__ = VERSION
 
 
 class WidgetLogger(logging.Handler):
-    ""
+"""
 Logging handler that redirects formatted log records to a Tkinter Text widget.
 
     def __init__(self, widget: tk.Text, thread_id: int | None = None) -> None:

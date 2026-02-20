@@ -27,7 +27,6 @@ USAGE:
 - CLI: run the module directly (if packaged) to start the agent main() helper created at module bottom
 
 """
-
 WHAT IT DOES:
 - Provides a focused Agent subclass (SandboxAgent) that simulates executing untrusted Python code in an isolated environment and records intent via _record while offering a dry-run prediction utility to flag destructive patterns.
 - Exposes two decorated tools: run_python_sandboxed (simulated execution) and dry_run_prediction (static heuristic analysis), plus an async improve_content stub for integration with orchestration flows.
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in secure code execution and sandboxed prototyping.
 Prevents side effects on the host system by using containerized or WASM environments.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -155,4 +154,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")"    main()
 
-""
+"""

@@ -17,12 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Mutation testing functionality.
 
 """
-
 try:
     import hashlib
 except ImportError:
@@ -51,16 +50,16 @@ __version__ = VERSION
 
 
 class MutationTester:
-    ""
+"""
 Test mutation analysis.
 
     def __init__(self) -> None:
-        ""
+"""
 Initialize mutation tester.        self.mutations: list[Mutation] = []
         self.results: dict[str, bool] = {}
 
     def generate_mutations(self, source_code: str, file_path: str) -> list[Mutation]:
-        ""
+"""
 Generate mutations for source code.        mutations: list[Mutation] = []
         lines = source_code.split("\\n")"        for i, line in enumerate(lines, 1):
             if "+" in line:"                mut_id = hashlib.md5(f"{file_path}:{i}:+->-".encode()).hexdigest()[:8]"                mutations.append(
@@ -94,7 +93,7 @@ Generate mutations for source code.        mutations: list[Mutation] = []
         return mutations
 
     def record_kill(self, mutation_id: str, killed: bool) -> None:
-        ""
+"""
 Record whether a mutation was killed.        self.results[mutation_id] = killed
         for mut in self.mutations:
             if mut.id == mutation_id:
@@ -102,7 +101,7 @@ Record whether a mutation was killed.        self.results[mutation_id] = killed
                 break
 
     def get_mutation_score(self) -> float:
-        ""
+"""
 Calculate mutation score.        if not self.mutations:
             return 0.0
 
@@ -110,12 +109,12 @@ Calculate mutation score.        if not self.mutations:
         return (killed / len(self.mutations)) * 100
 
     def get_surviving_mutations(self) -> list[Mutation]:
-        ""
+"""
 Get mutations that survived (not killed).
         return [m for m in self.mutations if not m.killed]
 
     def generate_report(self) -> str:
-        ""
+"""
 Generate mutation testing report.
         report = ["# Mutation Testing Report\\n"]"        report.append(f"Total mutations: {len(self.mutations)}")"        report.append(f"Mutation score: {self.get_mutation_score():.1f}%\\n")
         surviving = self.get_surviving_mutations()
@@ -129,19 +128,19 @@ Generate mutation testing report.
 
 
 class MutationRunner:
-    ""
+"""
 Run mutation testing analysis.
     def __init__(self) -> None:
-        ""
+"""
 Initialize mutation runner.        self.tester = MutationTester()
         self.mutation_counter = 0
 
     def generate_mutations(self, source_code: str) -> list[str]:
-        ""
+"""
 Generate mutations for source code.        mutations = self.tester.generate_mutations(source_code, "test.py")"        return [m.mutated_code for m in mutations]
 
     def add_result(self, mutation_id: str, killed: bool) -> None:
-        ""
+"""
 Record mutation test result.        if not any(m.id == mutation_id for m in self.tester.mutations):
             self.mutation_counter += 1
             mut = Mutation(
@@ -155,7 +154,7 @@ Record mutation test result.        if not any(m.id == mutation_id for m in self
         self.tester.record_kill(mutation_id, killed)
 
     def get_mutation_score(self) -> float:
-        ""
+"""
 Get mutation score.        return self.tester.get_mutation_score()
 
-""
+"""

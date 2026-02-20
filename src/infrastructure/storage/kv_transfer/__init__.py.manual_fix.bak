@@ -19,7 +19,6 @@
 KV Transfer module for disaggregated prefill-decode inference.
 
 """
-
 Provides connectors for transferring KV cache between prefill and decode instances.
 Inspired by vLLM's distributed/kv_transfer/ architecture.'
 try:

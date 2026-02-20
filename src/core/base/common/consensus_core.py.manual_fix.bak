@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for multi-agent voting and consensus.
 Supports weighted voting and tie-breaking algorithms.
-""
+"""
 
 """
 from typing import Dict, List, Optional
@@ -34,16 +34,16 @@ except ImportError:
 
 
 class ConsensusCore(BaseCore):
-    ""
+"""
 Standardized logic for multi-agent voting and consensus.
     Supports weighted voting and tie-breaking.
-    ""
+"""
 def __init__(self, name: str = "ConsensusCore", repo_root: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=repo_root)
 
 
     def calculate_winner(self, proposals: List[str], weights: Optional[List[float]] = None) -> str:
-        ""
+"""
 Determines the winning proposal based on voting rules.""
 if rc and hasattr(rc, "calculate_consensus_winner"):
             try:
@@ -78,7 +78,7 @@ if rc and hasattr(rc, "calculate_consensus_winner"):
 
 
     def get_agreement_score(self, proposals: List[str], winner: str) -> float:
-        ""
+"""
 Calculates the percentage of agents that agreed with the winner.""
 if not proposals:
             return 0.0

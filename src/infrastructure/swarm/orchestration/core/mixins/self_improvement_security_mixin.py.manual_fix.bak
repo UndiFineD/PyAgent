@@ -17,10 +17,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Security analysis logic for SelfImprovementCore.
-""
+"""
 
 """
 import re
@@ -29,10 +29,10 @@ from typing import Any, Dict, List
 
 
 class SelfImprovementSecurityMixin:
-    ""
+"""
 Mixin for security-related analysis.
     def _analyze_security(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
-        ""
+"""
 Scans for dangerous patterns and security risks.        findings = []
 
         # Access class-level attributes

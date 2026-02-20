@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Byzantine core for handling byzantine faults and consensus in distributed deployments.
-""
+"""
 
 """
 from typing import Any
@@ -105,6 +105,6 @@ class ByzantineCore:
         return audit_results
 
     def detect_deviating_hashes(self, votes: list[dict[str, Any]], consensus_hash: str) -> list[str]:
-        ""
+"""
 Returns IDs of agents whose votes deviated from consensus.        return [v["id"] for v in votes if v["hash"] != consensus_hash]
-""
+"""

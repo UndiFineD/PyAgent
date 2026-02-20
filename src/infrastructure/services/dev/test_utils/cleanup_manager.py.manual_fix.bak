@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 import logging
 from collections.abc import Callable
@@ -29,28 +29,46 @@ __version__ = VERSION
 
 
 class CleanupManager:
-    ""
+"""
 Manages cleanup hooks for tests.
     def __init__(self) -> None:
-        ""
+"""
 Initialize cleanup manager.        self.hooks: list[Callable[[], None]] = []
 
     def add_hook(self, hook: Callable[[], None]) -> None:
-        ""
+"""
 Add cleanup hook.        self.hooks.append(hook)
 
     def register(self, hook: Callable[[], None]) -> None:
-        ""
+"""
 Compatibility alias for add_hook.        self.add_hook(hook)
 
     def cleanup(self) -> None:
-        ""
+"""
 Execute all cleanup hooks.        for hook in reversed(self.hooks):
             try:
                 hook()
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug("Cleanup hook execution failed.")
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

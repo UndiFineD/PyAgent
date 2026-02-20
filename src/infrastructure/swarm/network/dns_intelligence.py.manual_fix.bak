@@ -32,12 +32,12 @@ from dataclasses import dataclass
 @dataclass
 class DNSScanResult:
 """
-    hostname: str
+hostname: str
     ip: str
     record_type: str = "A"
 
 """
-    def __repr__(self):
+def __repr__(self):
         return f"<DNSScanResult {self.hostname} -> {self.ip}>"
 
 
@@ -45,48 +45,48 @@ class DNSIntelligence:
         Async DNS scanning and intelligence gathering.
     Refactored from subbrute logic.
         def __init__(self, resolvers: Optional[List[str]] = None):
-        self.resolvers = resolvers or ["8.8.8.8", "1.1.1.1"]
-    async def resolve_host(self, hostname: str) -> Optional[DNSScanResult]:
-                Resolve a single hostname to IP asynchronously.
-        Currently uses system resolver.
-                loop = asyncio.get_running_loop()
-        try:
+            self.resolvers = resolvers or ["8.8.8.8", "1.1.1.1"]
+            async def resolve_host(self, hostname: str) -> Optional[DNSScanResult]:
+            Resolve a single hostname to IP asynchronously.
+            Currently uses system resolver.
+            loop = asyncio.get_running_loop()
+            try:
             # simple A record lookup for now
             # TODO: Integrate aiodns for custom resolver support
             addr_info = await loop.getaddrinfo(hostname, None, family=socket.AF_INET)
             if addr_info:
-                ip = addr_info[0][4][0]
-                return DNSScanResult(hostname=hostname, ip=ip)
-        except socket.gaierror:
+            ip = addr_info[0][4][0]
+            return DNSScanResult(hostname=hostname, ip=ip)
+            except socket.gaierror:
             # Host not found
             return None
-        except Exception:
+            except Exception:
             # Log error properly in real impl
             # print(f"Error resolving {hostname}: {e}")"            return None
-        return None
+            return None
 
-    async def brute_force_subdomains(
-        self, domain: str, wordlist: List[str], concurrency: int = 50
-    ) -> List[DNSScanResult]:
-                Brute force subdomains using a wordlist with controlled concurrency.
-                results = []
-        semaphore = asyncio.Semaphore(concurrency)
+            async def brute_force_subdomains(
+            self, domain: str, wordlist: List[str], concurrency: int = 50
+            ) -> List[DNSScanResult]:
+            Brute force subdomains using a wordlist with controlled concurrency.
+            results = []
+            semaphore = asyncio.Semaphore(concurrency)
 
-        async def worker(word: str):
+            async def worker(word: str):
             async with semaphore:
-                subdomain = f"{word}.{domain}""                return await self.resolve_host(subdomain)
+            subdomain = f"{word}.{domain}""                return await self.resolve_host(subdomain)
 
-        tasks = [worker(word) for word in wordlist]
-        scan_results = await asyncio.gather(*tasks)
+            tasks = [worker(word) for word in wordlist]
+            scan_results = await asyncio.gather(*tasks)
 
-        for res in scan_results:
+            for res in scan_results:
             if res:
-                results.append(res)
-        return results
+            results.append(res)
+            return results
 
-    async def check_wildcard(self, domain: str) -> bool:
-                Check if a domain has a wildcard DNS record.
-                # Generate a random non-existent subdomain
-        import uuid
-        random_sub = f"{uuid.uuid4().hex[:8]}.{domain}""        result = await self.resolve_host(random_sub)
-        return result is not None
+            async def check_wildcard(self, domain: str) -> bool:
+            Check if a domain has a wildcard DNS record.
+            # Generate a random non-existent subdomain
+            import uuid
+            random_sub = f"{uuid.uuid4().hex[:8]}.{domain}""        result = await self.resolve_host(random_sub)
+            return result is not None

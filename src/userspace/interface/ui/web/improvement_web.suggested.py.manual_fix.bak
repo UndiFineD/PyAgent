@@ -13,12 +13,12 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Self-Improvement Manager Web Interface.
 Monitor CoRT thoughts and steer the fleet's autonomous evolution.'
 
-"""
+""
 import streamlit as st
 import json
 import time

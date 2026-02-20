@@ -38,7 +38,7 @@ class StructuredOutputValidator:
         self._constraints = config.get_all_constraints()
 
     def validate(self, text: str) -> ValidationResult:
-        ""
+"""
 Validate complete output regarding constraints.        errors: list[str] = []
         warnings: list[str] = []
         parsed_value = None
@@ -70,7 +70,7 @@ Validate complete output regarding constraints.        errors: list[str] = []
         )
 
     def validate_partial(self, text: str) -> ValidationResult:
-        ""
+"""
 Validate partial/streaming output regarding constraints.        errors: list[str] = []
         warnings: list[str] = []
 
@@ -94,7 +94,7 @@ Validate partial/streaming output regarding constraints.        errors: list[str
         )
 
     def _could_be_json(self, text: str) -> bool:
-        ""
+"""
 Check if text could be a JSON prefix.        stripped = text.strip()
 
         if not stripped:
@@ -106,5 +106,5 @@ Check if text could be a JSON prefix.        stripped = text.strip()
         return False
 
     def _could_match_regex(self, _text: str, _pattern: str) -> bool:
-        ""
+"""
 Check if text could still match regex.        return True

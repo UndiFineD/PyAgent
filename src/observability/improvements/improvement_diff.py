@@ -107,8 +107,8 @@ Deserialize from a dictionary.        diff_type = ImprovementDiffType[d["diff_ty
 
     def __lt__(self, other):
         if not isinstance(other, ImprovementDiff):
-            return NotImplemented
+        return NotImplemented
         # Deterministic comparison: by improvement_id, then diff_type name
         return (self.improvement_id, str(self.diff_type)) < (other.improvement_id, str(other.diff_type))
 
-""
+        ""

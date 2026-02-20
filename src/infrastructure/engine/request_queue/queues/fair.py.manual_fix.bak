@@ -41,7 +41,7 @@ class FairQueue(RequestQueue):
         self._total_requests = 0
 
     def add(self, request: T) -> None:
-        ""
+"""
 Add request to appropriate client queue.        client_id = request.client_id or "default"
         if client_id not in self._client_queues:
             self._client_queues[client_id] = deque()
@@ -52,7 +52,7 @@ Add request to appropriate client queue.        client_id = request.client_id or
         self._total_requests += 1
 
     def pop(self) -> T:
-        ""
+"""
 Pop using weighted fair sharing.        if self._total_requests == 0:
             raise IndexError("pop from empty fair queue")
         best_client = None
@@ -77,7 +77,7 @@ Pop using weighted fair sharing.        if self._total_requests == 0:
         return request
 
     def peek(self) -> T:
-        ""
+"""
 Peek at next fair request.        for client_id in sorted(
             self._client_queues.keys(), key=lambda c: self._client_served.get(c, 0) / self._client_weights.get(c, 1.0)
         ):
@@ -85,7 +85,7 @@ Peek at next fair request.        for client_id in sorted(
                 return self._client_queues[client_id][0]
         raise IndexError("peek from empty fair queue")
     def prepend(self, request: T) -> None:
-        ""
+"""
 Prepend to client queue.        client_id = request.client_id or "default"
         if client_id not in self._client_queues:
             self._client_queues[client_id] = deque()
@@ -96,7 +96,7 @@ Prepend to client queue.        client_id = request.client_id or "default"
         self._total_requests += 1
 
     def remove(self, value: T) -> bool:
-        ""
+"""
 Remove specific request.        client_id = value.client_id or "default"
         if client_id in self._client_queues:
             try:
@@ -108,7 +108,7 @@ Remove specific request.        client_id = value.client_id or "default"
         return False
 
     def set_client_weight(self, client_id: str, weight: float) -> None:
-        ""
+"""
 Set weight for a client.        self._client_weights[client_id] = max(0.1, weight)
 
     def __len__(self) -> int:

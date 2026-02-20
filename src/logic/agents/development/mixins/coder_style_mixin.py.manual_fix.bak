@@ -15,13 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Style checking and auto-fixing logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
 """
-
 import logging
 import re
 from typing import Any, Dict, List, Tuple
@@ -113,4 +112,4 @@ Apply rules that have auto-fix capabilities.        fixed_content = content
             fixed_content = "\\n".join(cleaned)
         return fixed_content, fix_count
 
-""
+"""

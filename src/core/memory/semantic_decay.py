@@ -206,17 +206,17 @@ def __init__(self, window_size: int = 100, invalidation_threshold: float = 0.7):
         
     def track_access(self, key: str, semantic_fingerprint: Optional[str] = None):
 """
-Track memory access for sliding window analysis.""
-current_time = time.time()
+        Track memory access for sliding window analysis.""
+        current_time = time.time()
         self.access_window.append((key, current_time))
         
         # Maintain window size
         if len(self.access_window) > self.window_size:
-            self.access_window.pop(0)
+        self.access_window.pop(0)
             
         # Update semantic clustering
         if semantic_fingerprint:
-            self.semantic_clusters[semantic_fingerprint].add(key)
+        self.semantic_clusters[semantic_fingerprint].add(key)
     
     def get_invalidated_keys(self, current_context: List[str]) -> Set[str]:
 """
@@ -282,28 +282,28 @@ def __init__(self, decay_rate: float = 0.05, relevance_threshold: float = 0.2):
 
     def track_access(self, key_id: str, semantic_fingerprint: Optional[str] = None):
 """
-Update access timestamp and boost relevance score.""
-self.last_access[key_id] = time.time()
+        Update access timestamp and boost relevance score.""
+        self.last_access[key_id] = time.time()
         current_score = self.knowledge_scores.get(key_id, 1.0)
         self.knowledge_scores[key_id] = min(1.0, current_score + 0.1)
         
         # Update memory block if it exists
         if key_id in self.memory_blocks:
-            block = self.memory_blocks[key_id]
-            block.access_count += 1
-            block.last_access = time.time()
-            block.relevance_score = self.knowledge_scores[key_id]
+        block = self.memory_blocks[key_id]
+        block.access_count += 1
+        block.last_access = time.time()
+        block.relevance_score = self.knowledge_scores[key_id]
             
         # Track in semantic invalidator
         self.semantic_invalidator.track_access(key_id, semantic_fingerprint)
 
     def add_memory_block(self, key: str, content: Any, semantic_fingerprint: Optional[str] = None):
 """
-Add a new memory block to the system.""
-block = MemoryBlock(
-            key=key,
-            content=content,
-            semantic_fingerprint=semantic_fingerprint
+        Add a new memory block to the system.""
+        block = MemoryBlock(
+        key=key,
+        content=content,
+        semantic_fingerprint=semantic_fingerprint
         )
         self.memory_blocks[key] = block
         self.knowledge_scores[key] = 1.0
@@ -381,8 +381,8 @@ total_blocks = len(self.memory_blocks)
 
     def prune_low_utility(self, cache_manager: Any):
 """
-Actively prunes low-utility items from a provided cache manager.""
-# Concept: get all keys from cache_manager.kv_cache
+        Actively prunes low-utility items from a provided cache manager.""
+        # Concept: get all keys from cache_manager.kv_cache
         # keys = cache_manager.get_all_keys()
         # dead_keys = self.process_decay(keys)
         # for k in dead_keys: cache_manager.delete(k)
@@ -392,6 +392,24 @@ Actively prunes low-utility items from a provided cache manager.""
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -16,11 +16,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Unified Benchmark Suite for PyAgent.
 Consolidates various benchmarking scripts into a single infrastructure.
-""
+"""
 
 """
 import inspect
@@ -41,7 +41,7 @@ from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 
 class BenchmarkSuite:
-    ""
+"""
 Unified suite for running performance benchmarks on PyAgent components.
     def __init__(self, logger: Optional[logging.Logger] = None) -> None:
         self.logger: logging.Logger = logger or logging.getLogger(__name__)
@@ -50,7 +50,7 @@ Unified suite for running performance benchmarks on PyAgent components.
     def benchmark_tokenization(
         self, test_texts: Dict[str, str], iterations: int = 1000, compare_rust: bool = True
     ) -> List[BenchmarkResult]:
-        ""
+"""
 Benchmarks token estimation speed across different text samples.        self.logger.info(f"Starting tokenization benchmark ({iterations} iterations)")
         results = []
         for name, text in test_texts.items():
@@ -96,7 +96,7 @@ Benchmarks token estimation speed across different text samples.        self.log
 
     async def benchmark_agent_performance(
         self, agent: Any, prompt: str, label: str = "Agent Performance", method_name: str = "chat""    ) -> BenchmarkResult:
-        ""
+"""
 Benchmarks an agent's generation performance.'        self.logger.info(f"Benchmarking agent {label} using method {method_name}")
         input_tokens: int = estimate_token_count(prompt)
         start: float = time.perf_counter()
@@ -138,7 +138,7 @@ Benchmarks an agent's generation performance.'        self.logger.info(f"Benchma
         duration_seconds: int = 60,
         progress_callback: Optional[Callable[[float, int, int], None]] = None,
     ) -> BenchmarkResult:
-        ""
+"""
 Runs a sustained throughput test for token estimation.        self.logger.info(f"Starting sustained throughput test for {duration_seconds}s")
         start_time: float = time.perf_counter()
         iterations = 0
@@ -168,7 +168,7 @@ Runs a sustained throughput test for token estimation.        self.logger.info(f
         return res
 
     def print_summary(self) -> None:
-        ""
+"""
 Prints a formatted summary of all benchmark results.        if not self.results:
             print("\\nEmpty benchmark suite results.")"            return
 
@@ -179,4 +179,4 @@ Prints a formatted summary of all benchmark results.        if not self.results:
 
             print(f"{res.name[:34]:<35} {res.duration:<10.3f} {res.total_tokens:<10,} {res.tokens_per_sec:<15,.2f}")
         print("-" * 80)"        print("End of results.\\n")"
-""
+"""

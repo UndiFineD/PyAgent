@@ -18,7 +18,6 @@
 LM Studio LLM backend implementation with modular architecture.
 
 """
-
 Separates concerns into:
 - api.py: REST API client with HTTP fallback
 - chat.py: Non-streaming chat operations
@@ -63,7 +62,7 @@ class LMStudioBackend(LLMBackend):
         recorder: Any = None,
         config: LMStudioConfig | None = None,
     ) -> None:
-        ""
+"""
 Initialize LM Studio backend.        super().__init__(session, connectivity_manager, recorder)
 
         self.config = config or LMStudioConfig()
@@ -80,7 +79,7 @@ Initialize LM Studio backend.        super().__init__(session, connectivity_mana
         self._client: Any = None  # Initialize _client
 
     def _check_sdk(self) -> bool:
-        ""
+"""
 Check if LM Studio SDK is available.        if self._sdk_available is not None:
             return self._sdk_available
 
@@ -94,7 +93,7 @@ Check if LM Studio SDK is available.        if self._sdk_available is not None:
             logger.warning("LM Studio SDK not available. Install with: pip install lmstudio")"            return False
 
     def disconnect(self) -> None:
-        ""
+"""
 Disconnect clients.        # Close the client if it exists
         if hasattr(self, "_client") and self._client is not None:"            self._client.close()
         self._mcp_client.close()
@@ -102,7 +101,7 @@ Disconnect clients.        # Close the client if it exists
         self._client = None  # Clear the client reference
 
     def _get_client(self) -> Any:
-        ""
+"""
 Get or create an LM Studio client.        try:
             import lmstudio
 
@@ -116,7 +115,7 @@ Get or create an LM Studio client.        try:
             logger.warning(f"Failed to create LM Studio client: {e}")"            raise
 
     def list_loaded_models(self) -> list[str]:
-        ""
+"""
 List currently loaded models in LM Studio.""""
 Prefer SDK helpers but fall back to HTTP when SDK is unavailable.
                 try:
@@ -137,7 +136,7 @@ Prefer SDK helpers but fall back to HTTP when SDK is unavailable.
         return self._api_client.list_models()
 
     def list_downloaded_models(self) -> list[str]:
-        ""
+"""
 List downloaded models available in LM Studio.""""
 Use the same fallback strategy as `list_loaded_models`.
                 try:
@@ -186,32 +185,32 @@ Use MCPClient to manage SDK connections and accessor styles.
             logger.debug(f"HTTP fallback returned models sample: {models[:10]}")"            if models and (model in models or any(model in m for m in models)):
                 logger.info(f"Using HTTP fallback LLM for model '{model}'")
                 class _HTTPFallbackLLM:
-                    ""
+"""
 Internal shim for HTTP-based LLM access when SDK is unavailable.
                     def __init__(self, backend: "LMStudioBackend", model_id: str):"                        self._backend = backend
                         self._model_id = model_id
 
                     def respond(self, chat, _config=None):
-                        ""
-Respond using HTTP fallback.                        # Use the backend's _http_chat_request method'                        return self._backend._http_chat_request(
-                            chat, self._model_id)  # pylint: disable=protected-access
+"""
+                        Respond using HTTP fallback.                        # Use the backend's _http_chat_request method'                        return self._backend._http_chat_request(
+                        chat, self._model_id)  # pylint: disable=protected-access
 
-                fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
-                if self.config.cache_models:
-                    self._model_cache.set(cache_key, fallback_llm)
+                        fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
+                        if self.config.cache_models:
+                        self._model_cache.set(cache_key, fallback_llm)
 
-                try:
-                    self._update_status(self.PROVIDER_ID, True)
-                except Exception:  # pylint: disable=broad-exception-caught
-                    pass
+                        try:
+                        self._update_status(self.PROVIDER_ID, True)
+                        except Exception:  # pylint: disable=broad-exception-caught
+                        pass
 
-                return fallback_llm
-        except Exception:  # pylint: disable=broad-exception-caught
-            pass
+                        return fallback_llm
+                        except Exception:  # pylint: disable=broad-exception-caught
+                        pass
 
-        raise RuntimeError(f"Failed to get model '{model}'")
+                        raise RuntimeError(f"Failed to get model '{model}'")
     def _extract_prompt_from_chat(self, chat: Any) -> str:
-        ""
+"""
 Extract prompt string from Chat object.""""
 Args:
             chat: Chat object from SDK or dict-like.
@@ -232,7 +231,7 @@ Args:
         prompt: str,
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        ""
+"""
 Execute a chat completion via LM Studio, with robust HTTP fallback.        if not self._is_working(self.PROVIDER_ID):
             logger.debug("LM Studio skipped due to connection cache.")"            return """
 try:
@@ -267,7 +266,7 @@ def chat_stream(
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        on_fragment: Callable[[str], None] | None = None,
         **kwargs,
     ) -> Iterator[str]:
-        ""
+"""
 Stream chat completion tokens, with HTTP fallback using REST API SSE.        try:
             full_response: list[str] = []
             llm = None
@@ -300,7 +299,7 @@ Fetch an llm object from an async SDK client.        return await self._mcp_clie
         prompt: str,
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        ""
+"""
 Async chat completion via LM Studio.        if not self._check_sdk():
             return ""
 import lmstudio
@@ -334,7 +333,7 @@ def embed(
         self,
         texts: str | Sequence[str],
         model: str = "","    ) -> list[list[float]]:
-        ""
+"""
 Generate embeddings for text(s).        if not self._check_sdk():
             return []
 
@@ -360,7 +359,7 @@ Generate embeddings for text(s).        if not self._check_sdk():
         tools: list[dict[str, Any]],
         model: str = "","        system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> dict[str, Any]:
-        ""
+"""
 Chat with tool/function calling support.        if not self._check_sdk():
             return {"content": "", "tool_calls": []}
         import lmstudio
@@ -391,7 +390,7 @@ Chat with tool/function calling support.        if not self._check_sdk():
         except (RuntimeError, ValueError, AttributeError, httpx.HTTPError) as e:
             logger.error(f"LM Studio tool calling error: {e}")"            return {"content": "", "tool_calls": []}"
     def health_check(self) -> bool:
-        ""
+"""
 Check if LM Studio is reachable and has models loaded.        try:
             models = self.list_loaded_models()
             is_healthy = bool(models)
@@ -402,7 +401,7 @@ Check if LM Studio is reachable and has models loaded.        try:
             return False
 
     def get_info(self) -> dict[str, Any]:
-        ""
+"""
 Get backend information, including REST API version and server details.        loaded = self.list_loaded_models()
         downloaded = self.list_downloaded_models()
 
@@ -412,6 +411,24 @@ Get backend information, including REST API version and server details.        l
         return {
             "provider": self.PROVIDER_ID,"            "host": self.config.api_host,"            "base_url": self.config.base_url,"            "api_base_url": api_info.get("api_base_url"),"            "sdk_available": self._check_sdk(),"            "api_version": api_info.get("api_version"),"            "loaded_models": loaded,"            "downloaded_models": downloaded,"            "is_healthy": bool(loaded),"        }
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

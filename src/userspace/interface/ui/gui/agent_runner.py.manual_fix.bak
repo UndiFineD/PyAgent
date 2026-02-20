@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Background Agent Execution Manager for the PyAgent GUI.
 
 """
-
 import logging
 import threading
 import tkinter as tk
@@ -34,7 +33,7 @@ __version__ = VERSION
 
 
 class AgentRunner:
-    ""
+"""
 Manages background threads and execution lifecycle for agents.
 
     def __init__(self, callbacks) -> None:
@@ -102,11 +101,11 @@ if "get_global_context" in self.callbacks:"            global_ctx = self.callbac
                 self.history[agent_id] = []
 
     def get_history(self, column: Any) -> list[dict[str, Any]]:
-        ""
+"""
 Returns the conversation history for a specific agent column.        return self.history.get(id(column), [])
 
     def set_history(self, column, new_history) -> None:
-        ""
+"""
 Updates the conversation history for a specific agent column.        self.history[id(column)] = new_history
 
     def optimize_memory(self, agent_id, token_limit) -> None:

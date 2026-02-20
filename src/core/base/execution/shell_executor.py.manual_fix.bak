@@ -14,11 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Shell execution core for agents.
 Handles subprocess spawning, environment propagation, and interaction recording.
-""
+"""
 
 """
 import json
@@ -34,10 +34,10 @@ __version__ = VERSION
 
 
 class ShellExecutor:
-    ""
+"""
 Safely executes shell commands and records outcomes.
     Standardized Facade over ShellCore (Phase 317).
-    ""
+"""
 _core: Optional[ShellCore] = None
 
     @classmethod
@@ -56,7 +56,7 @@ _core: Optional[ShellCore] = None
         recorder: Optional[Any] = None,
         timeout: int = 120,
     ) -> subprocess.CompletedProcess[str]:
-        ""
+"""
 Phase 266: Asynchronous subprocess execution via ShellCore.""
 _ = agent_name
         core: ShellCore = ShellExecutor._get_core()
@@ -90,7 +90,7 @@ _ = agent_name
         timeout: int = 120,
         max_retries: int = 1,
     ) -> subprocess.CompletedProcess[str]:
-        ""
+"""
 Run a command via core synchronous execution.""
 _ = agent_name
         core: ShellCore = ShellExecutor._get_core()

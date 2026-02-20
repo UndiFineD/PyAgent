@@ -78,13 +78,13 @@ class ZeroCopyEncoder:
         >>> # buffers[1:] are tensor data references
     
     def __init__(self, size_threshold: int = 256):
-                Initialize the encoder.
+        Initialize the encoder.
 
         Args:
-            size_threshold: Tensors/arrays smaller than this are inlined.
-                          Larger ones use auxiliary buffers. Default 256 bytes.
-                if not MSGSPEC_AVAILABLE:
-            raise ImportError("msgspec is required for ZeroCopyEncoder")
+        size_threshold: Tensors/arrays smaller than this are inlined.
+        Larger ones use auxiliary buffers. Default 256 bytes.
+        if not MSGSPEC_AVAILABLE:
+        raise ImportError("msgspec is required for ZeroCopyEncoder")
         self.size_threshold = size_threshold
         self._encoder = msgpack.Encoder(enc_hook=self._enc_hook)
         self._aux_buffers: list[bytes | memoryview] | None = None
@@ -199,21 +199,21 @@ class ZeroCopyDecoder:
         >>> obj = decoder.decode(buffers)
     
     def __init__(self, expected_type: type | None = None, share_memory: bool = True):
-                Initialize the decoder.
+        Initialize the decoder.
 
         Args:
-            expected_type: Optional type hint for decoding
-            share_memory: If True, tensors share memory with buffers
-                if not MSGSPEC_AVAILABLE:
-            raise ImportError("msgspec is required for ZeroCopyDecoder")
+        expected_type: Optional type hint for decoding
+        share_memory: If True, tensors share memory with buffers
+        if not MSGSPEC_AVAILABLE:
+        raise ImportError("msgspec is required for ZeroCopyDecoder")
         self.share_memory = share_memory
         self._aux_buffers: Sequence[bytes | memoryview] = ()
 
         args = () if expected_type is None else (expected_type,)
         self._decoder = msgpack.Decoder(
-            *args,
-            ext_hook=self._ext_hook,
-            dec_hook=self._dec_hook,
+        *args,
+        ext_hook=self._ext_hook,
+        dec_hook=self._dec_hook,
         )
 
     def decode(self, bufs: bytes | Sequence[bytes | memoryview]) -> Any:

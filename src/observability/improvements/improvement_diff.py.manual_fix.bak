@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ImprovementDiff - Represent a single improvement difference between branches
 
@@ -68,7 +68,7 @@ __version__ = VERSION
 
 @dataclass(order=True)
 class ImprovementDiff:
-    ""
+"""
 Difference in a single improvement between branches.""""
 Attributes:
         improvement_id: Unique improvement identifier.
@@ -88,12 +88,12 @@ def __post_init__(self):
         if self.source_version is None and self.target_version is None:
             raise ValueError("At least one of source_version or target_version must be provided.")
     def pretty_print(self) -> str:
-        ""
+"""
 Return a human-readable summary of the improvement diff.        src = f"source: {self.source_version}" if self.source_version else "source: None""        tgt = f"target: {self.target_version}" if self.target_version else "target: None""        return (
             f"ImprovementDiff(id={self.improvement_id}, type={self.diff_type},\\n  {src},\\n  {tgt},\\n  summary={self.change_summary})""        )
 
     def to_dict(self) -> dict:
-        ""
+"""
 Serialize to a dictionary.        return {
             "improvement_id": self.improvement_id,"            "diff_type": self.diff_type.name if hasattr(self.diff_type, "name") else str(self.diff_type),"            "source_version": self.source_version.to_dict() if self.source_version and hasattr(self.source_version, "to_dict") else None,"            "target_version": self.target_version.to_dict() if self.target_version and hasattr(self.target_version, "to_dict") else None,"            "change_summary": self.change_summary,"        }
 
@@ -107,8 +107,8 @@ Deserialize from a dictionary.        diff_type = ImprovementDiffType[d["diff_ty
 
     def __lt__(self, other):
         if not isinstance(other, ImprovementDiff):
-            return NotImplemented
+        return NotImplemented
         # Deterministic comparison: by improvement_id, then diff_type name
         return (self.improvement_id, str(self.diff_type)) < (other.improvement_id, str(other.diff_type))
 
-""
+        ""

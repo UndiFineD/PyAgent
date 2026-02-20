@@ -32,7 +32,7 @@ try:
 except ImportError:
 
 """
-    import idaapi
+import idaapi
 
 try:
     import idc
@@ -47,20 +47,20 @@ except ImportError:
 
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 TEMP_OUTPUT_FILE = "ida_pro_rpc_reg_info.tmp"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 PARSING_ERROR = "argument_parsing_error"  # [BATCHFIX] closed string
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def find_rpc_server_registration_funcs() -> List[Tuple[str, int]]:""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 rpc_reg_imports = []""""
 def imp_cb(ea: int, name: str, ord: int) -> bool:
         if name and name.startswith("RpcServerRegisterIf"):"            rpc_reg_imports.append((name, ea))
@@ -77,12 +77,12 @@ def imp_cb(ea: int, name: str, ord: int) -> bool:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def find_all_func_xrefs(func_ea: int) -> List[int]:""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 xref_eas = []""""
 func_xref = idaapi.get_first_cref_to(func_ea)
     while func_xref != idaapi.BADADDR:
@@ -95,7 +95,7 @@ func_xref = idaapi.get_first_cref_to(func_ea)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_reg_value(arg_ea: int):  # -> Union[str, int]""""
 reg = idc.get_operand_value(arg_ea, 1)
     reg_name = idaapi.get_reg_name(reg, 8)
@@ -113,7 +113,7 @@ reg = idc.get_operand_value(arg_ea, 1)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def parse_argument(arg_ea: int):  # -> Union[str, int]""""
 if arg_ea != idaapi.BADADDR:
         mnemonic = idaapi.ua_mnem(arg_ea)
@@ -131,7 +131,7 @@ if arg_ea != idaapi.BADADDR:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_func_call_args(func_ea: int, arg_count: int):  # -> Union[str, int]""""
 xref_args = {}
     for xref_ea in find_all_func_xrefs(func_ea):
@@ -141,12 +141,12 @@ xref_args = {}
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 args_addrs += [idaapi.BADADDR] * (arg_count - len(args_addrs))""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 xref_args[hex(xref_ea)] = [parse_argument(arg_ea) for arg_ea in args_addrs] if args_addrs else []""""
 return xref_args
 
@@ -154,14 +154,14 @@ return xref_args
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_call_args_manually(call_ea: int, max_look_behind: int = 20, max_args: int = 8) -> List[int]:""""
 func_start_ea = idaapi.get_func(call_ea).start_ea
     stack_params = {}
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 args = []""""
 ins_ea = call_ea
     for _ in range(max_look_behind):
@@ -179,7 +179,7 @@ ins_ea = call_ea
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 stack_params[idc.get_operand_value(ins_ea, 0)] = ins_ea""""
 elif op_type == idc.o_reg:
             reg_name = idaapi.get_reg_name(idc.get_operand_value(ins_ea, 0), 8)
@@ -192,13 +192,13 @@ elif op_type == idc.o_reg:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 return args + [stack_params[off] for off in sorted(stack_params, key=stack_params.get, reverse=True)]""""
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_rpc_server_registration_info() -> Dict[str, List[Dict[int, Tuple]]]:""""
 return {
         func_name: get_func_call_args(func_ea, get_arg_count_for_function_name(func_name))

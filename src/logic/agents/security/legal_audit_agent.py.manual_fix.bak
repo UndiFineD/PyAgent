@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 LegalAuditAgent - Legal compliance and smart contract auditing
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -49,7 +49,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 LegalAuditAgent: Agent for auditing legal compliance, licensing, and intellectual property.
 Automates legal risk assessment and documentation.
-""
+"""
 import re
 import time
 from typing import Any, TypedDict
@@ -69,7 +69,7 @@ Structured report for license auditing.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 detected_licenses: list[str]""""
 risk_level: str
 # [BATCHFIX] Commented metadata/non-Python
@@ -79,7 +79,7 @@ risk_level: str
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 violations: list[str]""""
 action_required: str
     risk_summary: str
@@ -129,7 +129,7 @@ Internal helper to record interactions to the swarm context.# [BATCHFIX] Comment
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 license_name for license_name in scan.get("detected_licenses", []) if license_name in self.license_blacklist"        ]
 
         is_compliant = not violations
@@ -146,7 +146,7 @@ license_name for license_name in scan.get("detected_licenses", []) if license_na
 Identifies licenses and flags copyleft risks.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 detected = []""""
 for name, pattern in self.license_patterns.items():
             if re.search(pattern, content, re.IGNORECASE):
@@ -163,13 +163,13 @@ for name, pattern in self.license_patterns.items():
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 self._record(content[:1000], str(res), provider="LegalAudit", model="LicenseScanner")"        return res
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def verify_smart_contract(self, logic: str) -> dict[str, Any]:"Simulates auditing a smart contract for common vulnerabilities.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #  "       vulnerabilities = []"  # [BATCHFIX] closed string"        if "reentrancy" in logic.lower() or ".call{value:" in logic:"            vulnerabilities.append("Potential Reentrancy Vulnerability")"        if "tx.origin" in logic:"            vulnerabilities.append("Insecure use of tx.origin")"        if "selfdestruct" in logic:"            vulnerabilities.append("Critical: selfdestruct found")
@@ -200,7 +200,7 @@ Structured report for license auditing.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 detected_licenses: list[str]""""
 risk_level: str
 # [BATCHFIX] Commented metadata/non-Python
@@ -210,7 +210,7 @@ risk_level: str
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 violations: list[str]""""
 action_required: str
     risk_summary: str
@@ -258,7 +258,7 @@ Internal helper to record interactions to the swarm context.    "    if" hasattr
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 license_name for license_name in scan.get("detected_licenses", []) if license_name in self.license_blacklist"        ]
 
         is_compliant = not violations
@@ -275,7 +275,7 @@ license_name for license_name in scan.get("detected_licenses", []) if license_na
 Identifies licenses and flags copyleft risks.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 detected = []""""
 for name, pattern in self.license_patterns.items():
             if re.search(pattern, content, re.IGNORECASE):
@@ -292,17 +292,17 @@ for name, pattern in self.license_patterns.items():
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 self._record(content[:1000], str(res), provider="LegalAudit", model="LicenseScanner")"        return res
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def verify_smart_contract(self, logic: str) -> dict[str, Any]:"Simulates auditing a smart contract for common vulnerabilities.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 vulnerabilities = []""""
 if "reentrancy" in logic.lower() or ".call{value:" in logic:"            vulnerabilities.append("Potential Reentrancy Vulnerability")"        if "tx.origin" in logic:"            vulnerabilities.append("Insecure use of tx.origin")"        if "selfdestruct" in logic:"            vulnerabilities.append("Critical: selfdestruct found")"
         return {
@@ -316,7 +316,7 @@ Analyzes agent output for language that might imply legal liability.# [BATCHFIX]
 #         "liability_keywords = ["guarantee", "perfect", "100% safe", "no risk"]"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 flags = [w for w in liability_keywords if w in task_output.lower()]""""
 if flags:
 # [BATCHFIX] Commented metadata/non-Python
@@ -325,6 +325,6 @@ if flags:
 #                 fWARNING: Potential liability flags detected in output: {', '.join(flags)}.'# [BATCHFIX] Commented metadata/non-Python
 """                 "Recommend adding disclaimers."  # [BATCHFIX] closed string"            )
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 return "No significant liability language detected."  # [BATCHFIX] closed string
-""
+"""

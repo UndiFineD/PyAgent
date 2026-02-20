@@ -52,7 +52,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Chain of thought strategy.py module.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -84,7 +84,7 @@ __version__ = VERSION
 
 
 class ChainOfThoughtStrategy(AgentStrategy):
-    ""
+"""
 Chain-of-Thought strategy: Prompt -> Reasoning -> Response.
     async def execute(
         self,

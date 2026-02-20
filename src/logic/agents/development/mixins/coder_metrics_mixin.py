@@ -95,6 +95,24 @@ Computes the Maintainability Index (MI) based on Halstead and CC.        if metr
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

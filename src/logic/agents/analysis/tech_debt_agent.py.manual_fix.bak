@@ -34,7 +34,6 @@ USAGE:
 - Integrate in CI: run analyze_workspace and fail or annotate PRs when high-severity hotspots are detected.
 
 """
-
 WHAT IT DOES:
 - Walks the workspace directory tree and analyzes Python files for simple technical-debt signals.
 - Detects missing module/class/function docstrings and reports them as "Missing Docstring" issues."- Computes a crude complexity heuristic by counting AST nodes and flags files with over 1000 nodes as "High Complexity"."- Returns per-file reports (issues and issue counts), aggregates total issues, and lists top hotspots.

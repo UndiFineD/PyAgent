@@ -247,14 +247,14 @@ def __init__(self, penalty: float):
 
         def apply_pen(tid):
             if tid < logits.shape[-1]:
-                if logits[tid] > 0:
-                    logits[tid] /= self.penalty
-                else:
-                    logits[tid] *= self.penalty
+            if logits[tid] > 0:
+            logits[tid] /= self.penalty
+            else:
+            logits[tid] *= self.penalty
 
-        list(map(apply_pen, set(input_ids)))
+            list(map(apply_pen, set(input_ids)))
 
-        return logits
+            return logits
 
 
 
@@ -268,10 +268,10 @@ _SMALLEST_LOGIT = float("-inf")"    _NEUTRAL_LOGIT = 0.0
 
     def __init__(self, bad_words_ids: list[list[int]]):
 """
-Args:
-            bad_words_ids: List of token ID sequences to block
+        Args:
+        bad_words_ids: List of token ID sequences to block
 """
-self.bad_words_ids = bad_words_ids
+        self.bad_words_ids = bad_words_ids
         self._word_bias: "torch.Tensor | None" = None
     def __call__(
         self,
@@ -288,21 +288,21 @@ self.bad_words_ids = bad_words_ids
 
         def _check_bad_word(bad_ids):
             if len(bad_ids) == 1:
-                # Single-token words handled by static bias
-                return
+            # Single-token words handled by static bias
+            return
 
             if len(bad_ids) > len(input_ids) + 1:
-                # Not enough context yet
-                return
+            # Not enough context yet
+            return
 
             prefix_len = len(bad_ids) - 1
             last_tid = bad_ids[-1]
             if list(input_ids[-prefix_len:]) == bad_ids[:prefix_len]:
-                last_token_bias[last_tid] = self._SMALLEST_LOGIT
+            last_token_bias[last_tid] = self._SMALLEST_LOGIT
 
-        list(map(_check_bad_word, self.bad_words_ids))
+            list(map(_check_bad_word, self.bad_words_ids))
 
-        return logits + self._word_bias + last_token_bias
+            return logits + self._word_bias + last_token_bias
 
     def _init_word_bias(self, logits: "torch.Tensor") -> None:"        """
 Initialize static bias regarding single-token bad words.""
@@ -312,11 +312,11 @@ vocab_size = logits.shape[-1]
 
         def _set_bias(bad_ids):
             if len(bad_ids) == 1:
-                tid = bad_ids[0]
-                if 0 <= tid < vocab_size:
-                    self._word_bias[tid] = self._SMALLEST_LOGIT
+            tid = bad_ids[0]
+            if 0 <= tid < vocab_size:
+            self._word_bias[tid] = self._SMALLEST_LOGIT
 
-        list(map(_set_bias, self.bad_words_ids))
+            list(map(_set_bias, self.bad_words_ids))
 
 
 
@@ -378,11 +378,11 @@ def __init__(self, penalty: float):
 
         def _apply_presence(tid):
             if 0 <= tid < logits.shape[-1]:
-                logits[tid] -= self.penalty
+            logits[tid] -= self.penalty
 
-        list(map(_apply_presence, seen_tokens))
+            list(map(_apply_presence, seen_tokens))
 
-        return logits
+            return logits
 
 
 
@@ -411,11 +411,11 @@ def __init__(self, penalty: float):
         def _apply_freq(item):
             tid, count = item
             if 0 <= tid < logits.shape[-1]:
-                logits[tid] -= self.penalty * count
+            logits[tid] -= self.penalty * count
 
-        list(map(_apply_freq, freq.items()))
+            list(map(_apply_freq, freq.items()))
 
-        return logits
+            return logits
 
 
 def apply_processors(

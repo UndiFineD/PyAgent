@@ -63,63 +63,63 @@ pattern = DebateWorkPattern()
 
     def test_validate_agents_valid(self):
 """
-Test validating valid debate agents.""
-pattern = DebateWorkPattern()
+        Test validating valid debate agents.""
+        pattern = DebateWorkPattern()
 
         agents = [
-            MockDebateAgent("agent1", "Advocate"),"            MockDebateAgent("agent2", "Critic")"        ]
+        MockDebateAgent("agent1", "Advocate"),"            MockDebateAgent("agent2", "Critic")"        ]
 
         assert pattern.validate_agents(agents) is True
 
     def test_validate_agents_insufficient_count(self):
 """
-Test validating with insufficient agents.""
-pattern = DebateWorkPattern()
+        Test validating with insufficient agents.""
+        pattern = DebateWorkPattern()
 
         agents = [MockDebateAgent("agent1", "Advocate")]
         assert pattern.validate_agents(agents) is False
 
     def test_validate_agents_duplicate_roles(self):
 """
-Test validating agents with duplicate roles.""
-pattern = DebateWorkPattern()
+        Test validating agents with duplicate roles.""
+        pattern = DebateWorkPattern()
 
         agents = [
-            MockDebateAgent("agent1", "Advocate"),"            MockDebateAgent("agent2", "Advocate")  # Duplicate role"        ]
+        MockDebateAgent("agent1", "Advocate"),"            MockDebateAgent("agent2", "Advocate")  # Duplicate role"        ]
 
         assert pattern.validate_agents(agents) is False
 
     def test_validate_agents_missing_role(self):
 """
-Test validating agents without role attribute.""
-pattern = DebateWorkPattern()
+        Test validating agents without role attribute.""
+        pattern = DebateWorkPattern()
 
         # Create an agent without role attribute
         agent_without_role = MagicMock()
         del agent_without_role.role  # Ensure no role attribute
 
         agents = [
-            MockDebateAgent("agent1", "Advocate"),"            agent_without_role
+        MockDebateAgent("agent1", "Advocate"),"            agent_without_role
         ]
 
         assert pattern.validate_agents(agents) is False
 
-    @pytest.mark.asyncio
-    async def test_execute_debate_success(self):
+        @pytest.mark.asyncio
+        async def test_execute_debate_success(self):
 """
-Test successful debate execution.""
-advocate = MockDebateAgent("advocate", "Advocate", "Maximize user benefit")"        auditor = MockDebateAgent("auditor", "Auditor", "Minimize risk")"
+        Test successful debate execution.""
+        advocate = MockDebateAgent("advocate", "Advocate", "Maximize user benefit")"        auditor = MockDebateAgent("auditor", "Auditor", "Minimize risk")"
         pattern = DebateWorkPattern(advocate_agent=advocate, auditor_agent=auditor)
 
         context = CascadeContext(task_id="test_debate")
         result = await pattern.execute(context)
 
         assert result["pattern"] == "Debate""        assert "debate_history" in result"        assert "final_decision" in result"        assert result["participants"] == 2"        assert result["rounds_completed"] >= 1
-    @pytest.mark.asyncio
-    async def test_execute_debate_insufficient_agents(self):
+        @pytest.mark.asyncio
+        async def test_execute_debate_insufficient_agents(self):
 """
-Test debate execution with insufficient agents.""
-advocate = MockDebateAgent("advocate", "Advocate")
+        Test debate execution with insufficient agents.""
+        advocate = MockDebateAgent("advocate", "Advocate")
         pattern = DebateWorkPattern(advocate_agent=advocate)  # Only one agent
 
         context = CascadeContext(task_id="test_debate")
@@ -127,68 +127,68 @@ advocate = MockDebateAgent("advocate", "Advocate")
 
     def test_check_consensus_high_confidence(self):
 """
-Test consensus detection with high confidence.""
-pattern = DebateWorkPattern()
+        Test consensus detection with high confidence.""
+        pattern = DebateWorkPattern()
 
         round_results = {
-            "arguments": ["                {"position": {"confidence": 0.9}},"                {"position": {"confidence": 0.85}}"            ]
+        "arguments": ["                {"position": {"confidence": 0.9}},"                {"position": {"confidence": 0.85}}"            ]
         }
 
         assert pattern._check_consensus(round_results) is True
 
     def test_check_consensus_low_confidence(self):
 """
-Test consensus detection with low confidence.""
-pattern = DebateWorkPattern()
+        Test consensus detection with low confidence.""
+        pattern = DebateWorkPattern()
 
         round_results = {
-            "arguments": ["                {"position": {"confidence": 0.6}},"                {"position": {"confidence": 0.7}}"            ]
+        "arguments": ["                {"position": {"confidence": 0.6}},"                {"position": {"confidence": 0.7}}"            ]
         }
 
         assert pattern._check_consensus(round_results) is False
 
     def test_check_consensus_insufficient_agents(self):
 """
-Test consensus detection with insufficient agents.""
-pattern = DebateWorkPattern()
+        Test consensus detection with insufficient agents.""
+        pattern = DebateWorkPattern()
 
         round_results = {
-            "arguments": [{"position": {"confidence": 0.9}}]"        }
+        "arguments": [{"position": {"confidence": 0.9}}]"        }
 
         assert pattern._check_consensus(round_results) is False
 
-    @pytest.mark.asyncio
-    async def test_auto_synthesis(self):
+        @pytest.mark.asyncio
+        async def test_auto_synthesis(self):
 """
-Test automatic decision synthesis.""
-pattern = DebateWorkPattern()
+        Test automatic decision synthesis.""
+        pattern = DebateWorkPattern()
 
         debate_history = [{
-            "arguments": ["                {
-                    "role": "Advocate","                    "position": {"confidence": 0.8, "decision": "Implement"}"                },
-                {
-                    "role": "Auditor","                    "position": {"confidence": 0.9, "decision": "Review carefully"}"                }
-            ]
+        "arguments": ["                {
+        "role": "Advocate","                    "position": {"confidence": 0.8, "decision": "Implement"}"                },
+        {
+        "role": "Auditor","                    "position": {"confidence": 0.9, "decision": "Review carefully"}"                }
+        ]
         }]
 
         participants = [
-            MockDebateAgent("agent1", "Advocate"),"            MockDebateAgent("agent2", "Auditor")"        ]
+        MockDebateAgent("agent1", "Advocate"),"            MockDebateAgent("agent2", "Auditor")"        ]
 
         result = await pattern._auto_synthesis(debate_history, participants)
 
         assert result["method"] == "auto""        assert result["winning_role"] == "Auditor""        assert result["confidence"] == 0.9
-    @pytest.mark.asyncio
-    async def test_weighted_vote_synthesis(self):
+        @pytest.mark.asyncio
+        async def test_weighted_vote_synthesis(self):
         ""
-Test weighted vote decision synthesis.""
-pattern = DebateWorkPattern()
+        Test weighted vote decision synthesis.""
+        pattern = DebateWorkPattern()
 
         debate_history = [{
-            "arguments": ["                {"role": "Advocate", "position": {"decision": "Implement"}},"                {"role": "Auditor", "position": {"decision": "Review"}}"            ]
+        "arguments": ["                {"role": "Advocate", "position": {"decision": "Implement"}},"                {"role": "Auditor", "position": {"decision": "Review"}}"            ]
         }]
 
         participants = [
-            MockDebateAgent("agent1", "Advocate"),"            MockDebateAgent("agent2", "Auditor")"        ]
+        MockDebateAgent("agent1", "Advocate"),"            MockDebateAgent("agent2", "Auditor")"        ]
 
         result = await pattern._weighted_vote_synthesis(debate_history, participants)
 

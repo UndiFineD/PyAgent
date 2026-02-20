@@ -73,50 +73,50 @@ class Detector(BaseHTTPRequestHandler):
 
     def serve(self):
         try:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-token, key, value = self.path.split("/")[1:4]"        except Exception:
-            self.send_response(200)
-            return
+        token, key, value = self.path.split("/")[1:4]"        except Exception:
+        self.send_response(200)
+        return
 
         if self.token != token:
-            self.send_response(200)
-            return
+        self.send_response(200)
+        return
 
         if key in self.d:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-self.d[key].append(value)""""
-else:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        self.d[key].append(value)""""
+        else:
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-self.d[key] = [""""
-value,
-            ]
+        self.d[key] = [""""
+        value,
+        ]
 
         self.send_response(200)
 
 
 def register(name):
     def decorator(func):
-    pass  # [BATCHFIX] inserted for empty block
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        pass  # [BATCHFIX] inserted for empty block
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-registered[name] = func""""
-return func
+        registered[name] = func""""
+        return func
 
-    return decorator
+        return decorator
 
 
-Finding = namedtuple("Finding", "name, url, description")
+        Finding = namedtuple("Finding", "name, url, description")
 
 def normalize_url(base_url, path):
     pass  # [BATCHFIX] inserted for empty block
@@ -1872,13 +1872,13 @@ def run_detector(port):  # Run SSRF detector in separate thread
     def handler_factory(*args):
         return Detector(token, d, *args)
 
-# [BATCHFIX] Commented metadata/non-Python
-#     httpd = HTTPServer((", port), handler_factory)"  # [BATCHFIX] closed string
-    t = Thread(target=httpd.serve_forever)
-    t.daemon = True
-    t.start()
+        # [BATCHFIX] Commented metadata/non-Python
+        #     httpd = HTTPServer((", port), handler_factory)"  # [BATCHFIX] closed string
+        t = Thread(target=httpd.serve_forever)
+        t.daemon = True
+        t.start()
 
-    return httpd
+        return httpd
 
 
 def main():

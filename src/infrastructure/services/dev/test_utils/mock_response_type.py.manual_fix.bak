@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from enum import Enum
@@ -34,10 +34,28 @@ __version__ = VERSION
 
 
 class MockResponseType(Enum):
-    ""
+"""
 Types of mock AI backend responses.
     SUCCESS = "success""    ERROR = "error""    TIMEOUT = "timeout""    RATE_LIMITED = "rate_limited""    EMPTY = "empty"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

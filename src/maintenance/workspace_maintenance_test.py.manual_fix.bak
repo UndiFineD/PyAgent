@@ -17,7 +17,6 @@
 Test Workspace Maintenance module.
 
 """
-
 try:
     import unittest
 except ImportError:
@@ -71,4 +70,4 @@ class TestWorkspaceMaintenance(unittest.TestCase):
         with open(file_path, "r", encoding="utf-8") as f:"            content = f.read()
         self.assertIn("Copyright 2026 PyAgent Authors", content)
 
-if __name__ == "__main__":"    unittest.main()
+        if __name__ == "__main__":"    unittest.main()

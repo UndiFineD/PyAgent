@@ -93,11 +93,11 @@ class MambaMixer:
         self.c_layernorm_weight = np.ones(config.ssm_state_size, dtype=np.float32)
 
     def _silu(self, x: np.ndarray) -> np.ndarray:
-        ""
+"""
 SiLU activation.        return x * (1 / (1 + np.exp(-x)))
 
     def _rms_norm(self, x: np.ndarray, weight: np.ndarray) -> np.ndarray:
-        ""
+"""
 RMS normalization.        variance = np.mean(x**2, axis=-1, keepdims=True)
         x_normed = x / np.sqrt(variance + self.config.rms_norm_eps)
         return x_normed * weight
@@ -107,7 +107,7 @@ RMS normalization.        variance = np.mean(x**2, axis=-1, keepdims=True)
         hidden_states: np.ndarray,
         state: MambaState | None = None,
     ) -> MambaOutput:
-        ""
+"""
 Forward pass through Mamba mixer.        batch_size, _, _ = hidden_states.shape
         if state is None:
             state = MambaState.zeros(batch_size, self.config, hidden_states.dtype)
@@ -156,7 +156,7 @@ Forward pass through Mamba mixer.        batch_size, _, _ = hidden_states.shape
         hidden_states: np.ndarray,
         state: MambaState,
     ) -> MambaOutput:
-        ""
+"""
 Single-step update for decoding.        projected = hidden_states @ self.in_proj_weight.T
         if self.in_proj_bias is not None:
             projected = projected + self.in_proj_bias

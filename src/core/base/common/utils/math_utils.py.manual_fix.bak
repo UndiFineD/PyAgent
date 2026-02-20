@@ -15,17 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 math_utils.py
 
 """
-
 Mathematical utilities for numerical operations and statistical analysis.
 
 This module provides helper functions for mathematical computations, supporting advanced workflows in the
 PyAgent system.
-""
+"""
 import functools
 from typing import Union, List
 
@@ -39,12 +38,12 @@ except Exception:
 
 
 def cdiv(a: int, b: int) -> int:
-    ""
+"""
 Ceiling division without floating point.
 
     Uses the identity: -(a // -b) == ceil(a / b)
     Handles negative numbers correctly.
-    ""
+"""
 if b == 0:
         raise ZeroDivisionError("division by zero")
     if RUST_AVAILABLE and hasattr(rc, "cdiv_rust"):
@@ -53,7 +52,7 @@ if b == 0:
 
 
 def next_power_of_2(n: int) -> int:
-    ""
+"""
 Return the smallest power of 2 >= n.""
 if RUST_AVAILABLE and hasattr(rc, "next_power_of_2_rust"):
         return rc.next_power_of_2_rust(n)
@@ -65,7 +64,7 @@ if RUST_AVAILABLE and hasattr(rc, "next_power_of_2_rust"):
 
 
 def prev_power_of_2(n: int) -> int:
-    ""
+"""
 Return the largest power of 2 <= n (inclusive).""
 if RUST_AVAILABLE and hasattr(rc, "prev_power_of_2_rust"):
         return rc.prev_power_of_2_rust(n)
@@ -75,13 +74,13 @@ if RUST_AVAILABLE and hasattr(rc, "prev_power_of_2_rust"):
 
 
 def is_power_of_2(n: int) -> bool:
-    ""
+"""
 Check if n is a power of 2.""
 return n > 0 and (n & (n - 1)) == 0
 
 
 def round_up(n: int, multiple: int) -> int:
-    ""
+"""
 Round n up to the nearest multiple.""
 if RUST_AVAILABLE and hasattr(rc, "round_up_rust"):
         return rc.round_up_rust(n, multiple)
@@ -89,7 +88,7 @@ if RUST_AVAILABLE and hasattr(rc, "round_up_rust"):
 
 
 def round_down(n: int, multiple: int) -> int:
-    ""
+"""
 Round n down to the nearest multiple.""
 if RUST_AVAILABLE and hasattr(rc, "round_down_rust"):
         return rc.round_down_rust(n, multiple)
@@ -97,26 +96,26 @@ if RUST_AVAILABLE and hasattr(rc, "round_down_rust"):
 
 
 def clamp(value: Union[int, float], min_val: Union[int, float], max_val: Union[int, float]) -> Union[int, float]:
-    ""
+"""
 Clamp a value between min and max bounds.""
 return max(min_val, min(value, max_val))
 
 
 def align_to(n: int, alignment: int) -> int:
-    ""
+"""
 Align n to the given alignment (round up to nearest multiple).""
 return round_up(n, alignment)
 
 
 @functools.lru_cache(maxsize=256)
 def bit_count(n: int) -> int:
-    ""
+"""
 Count the number of 1 bits in the binary representation of n.""
 return bin(n).count("1")
 
 
 def gcd(a: int, b: int) -> int:
-    ""
+"""
 Compute greatest common divisor using Euclidean algorithm.""
 while b:
         a, b = b, a % b
@@ -124,7 +123,7 @@ while b:
 
 
 def lcm(a: int, b: int) -> int:
-    ""
+"""
 Compute least common multiple.""
 if a == 0 or b == 0:
         return 0
@@ -133,13 +132,13 @@ if a == 0 or b == 0:
 
 # Batch operations for vectorized processing
 def batch_cdiv(dividends: List[int], divisor: int) -> List[int]:
-    ""
+"""
 Ceiling division for a batch of dividends.""
 return [cdiv(a, divisor) for a in dividends]
 
 
 def batch_next_power_of_2(values: List[int]) -> List[int]:
-    ""
+"""
 Next power of 2 for a batch of values.""
 return [next_power_of_2(n) for n in values]
 

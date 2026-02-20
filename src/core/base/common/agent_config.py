@@ -53,7 +53,7 @@ except Exception:
         return []
 
 
-@dataclass
+        @dataclass
 class AgentConfig:
     repo_root: str = "."
     agents_only: bool = False

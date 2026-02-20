@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 FleetDelegationMixin
 """
 Fleet delegation mixin.py module.
-""
+"""
 try:
 
 """
-    import asyncio
+import asyncio
 except ImportError:
     import asyncio
 
@@ -49,7 +49,7 @@ if TYPE_CHECKING:
 
 
 class FleetDelegationMixin:
-    ""
+"""
 Mixin for agent delegation logic in FleetManager.""
 resource_monitor: ResourceMonitor
     borrowed_helpers: dict
@@ -61,7 +61,7 @@ resource_monitor: ResourceMonitor
 
 
     async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
-        ""
+"""
 Synaptic Delegation: Hands off a sub-task to a specialized agent or Universal Shard.""
         # Phase 320: Python MPI - Check for compute borrowing
         if self.resource_monitor.is_stressed and self.borrowed_helpers:
@@ -112,10 +112,10 @@ Synaptic Delegation: Hands off a sub-task to a specialized agent or Universal Sh
 
 
     async def request_compute_borrow(self, stats: dict) -> bool:
-        ""
+"""
 Broadcasts a 'compute_borrow_request' to neighbors (Pillar 8).
         Nodes with <50% load will respond to take over the next task.
-        ""
+"""
 peers = self.voyager_discovery.get_active_peers()
         if not peers:
             logging.warning("Fleet: No peers available for compute borrowing.")

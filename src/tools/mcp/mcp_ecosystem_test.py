@@ -45,10 +45,10 @@ Test cases for MCP server ecosystem implementation.    @pytest.fixture
         success = mcp_core.register_tool("test_tool", {"description": "test"})"        assert success is True
         result = mcp_core.execute_tool("test_tool", {"param": "value"})"        assert result["result"] == "success""    def test_multi_category_connectors(self, mcp_core):
         categories = ["database", "api", "cloud"]"        for category in categories:
-            connector = mcp_core.get_connector(category)
-            assert connector is not None
-            if category == "database":"                result = connector.query("SELECT * FROM test")"                assert result is not None
-            elif category == "api":"                result = connector.call_endpoint("/test")"                assert result is not None
-            elif category == "cloud":"                result = connector.upload_file("test.txt")"                assert result is not None
+        connector = mcp_core.get_connector(category)
+        assert connector is not None
+        if category == "database":"                result = connector.query("SELECT * FROM test")"                assert result is not None
+        elif category == "api":"                result = connector.call_endpoint("/test")"                assert result is not None
+        elif category == "cloud":"                result = connector.upload_file("test.txt")"                assert result is not None
 
 """

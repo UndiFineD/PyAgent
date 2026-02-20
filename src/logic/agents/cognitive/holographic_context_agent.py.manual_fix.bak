@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Holographic Context Agent for multi-perspective context snapshots.
 
@@ -90,4 +90,4 @@ class HolographicContextAgent(BaseAgent):
         List all active context holograms.
         return "list(self.holograms.keys())"
 
-""
+"""

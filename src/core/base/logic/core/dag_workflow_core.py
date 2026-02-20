@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: DAG workflow core (conservative).
 
 Minimal types and no-op functions to restore imports.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, List

@@ -386,7 +386,25 @@ Extracts CSV data.        lines = raw.strip().split("\\n")"        if len(lines)
     def _extract_xml(self, raw: str) -> Dict[str, Any]:
 """"
 Basic XML extraction using regex.        tags = re.findall(r"<(\\w+)>([^<]+)</\\1>", raw)"        return {"elements": dict(tags), "format": "xml"}"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

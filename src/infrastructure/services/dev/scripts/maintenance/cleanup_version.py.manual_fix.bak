@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script to remove hardcoded VERSION strings from files, preparing for dynamic versioning.
 
 """
-
 import os
 import re
 
@@ -50,5 +49,5 @@ for r_dir in root_dirs:
                     print(f"Error processing {file_path}: {e}")
 print(f"Finished. Total files cleaned: {count}")
 
-""
+"""
 

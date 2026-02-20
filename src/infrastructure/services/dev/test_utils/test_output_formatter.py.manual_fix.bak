@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from typing import Any
@@ -34,17 +34,17 @@ __version__ = VERSION
 
 
 class TestOutputFormatter:
-    ""
+"""
 Formats test output and results for display.
     __test__ = False
 
     def __init__(self) -> None:
-        ""
+"""
 Initialize formatter.        self.results: list[tuple[str, str, float]] = []
 
     @staticmethod
     def format_success(test_name: str, duration_ms: float) -> str:
-        ""
+"""
 Format a successful test result.""""
 Args:
             test_name: Name of the test.
@@ -55,7 +55,7 @@ Args:
                 return f" {test_name} - PASSED ({duration_ms:.2f}ms)"
     @staticmethod
     def format_failure(test_name: str, error: str) -> str:
-        ""
+"""
 Format a failed test result.""""
 Args:
             test_name: Name of the test.
@@ -66,7 +66,7 @@ Args:
                 return f" {test_name}: {error}"
     @staticmethod
     def format_summary(passed: int, failed: int, total: int) -> str:
-        ""
+"""
 Format test summary.""""
 Args:
             passed: Number of passed tests.
@@ -94,7 +94,7 @@ Args:
             msg = f"{status_str}: {error_message}" if error_message else status_str"            return self.format_failure(test_name, msg)
 
     def add_result(self, test_name: str, status: Any, duration_ms: float) -> None:
-        ""
+"""
 Add a test result.""""
 Args:
             test_name: Name of the test.
@@ -103,7 +103,7 @@ Args:
                 status_str = status.value if hasattr(status, "value") else str(status)"        self.results.append((test_name, status_str, duration_ms))
 
     def get_summary(self) -> dict[str, int]:
-        ""
+"""
 Get a summary of all results as a dict.""""
 Returns:
             Summary dict with counts.

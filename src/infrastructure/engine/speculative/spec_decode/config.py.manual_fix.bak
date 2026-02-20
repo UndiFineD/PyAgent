@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Configuration regarding speculative decoding verification.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -37,7 +37,7 @@ except ImportError:
 
 
 class VerificationStrategy(Enum):
-    ""
+"""
 Verification strategy regarding speculative decoding.
     REJECTION_SAMPLING = auto()  # Standard rejection sampling
     TYPICAL_ACCEPTANCE = auto()  # Typical acceptance sampling
@@ -47,7 +47,7 @@ Verification strategy regarding speculative decoding.
 
 
 class AcceptancePolicy(Enum):
-    ""
+"""
 Policy regarding accepting draft tokens.
     GREEDY = auto()  # Accept if draft == target argmax
     STOCHASTIC = auto()  # Probabilistic acceptance
@@ -57,7 +57,7 @@ Policy regarding accepting draft tokens.
 
 @dataclass(frozen=True, slots=True)
 class SpecDecodeConfig:
-    ""
+"""
 Configuration regarding speculative decoding verification.
     strategy: VerificationStrategy = VerificationStrategy.REJECTION_SAMPLING
     policy: AcceptancePolicy = AcceptancePolicy.STOCHASTIC

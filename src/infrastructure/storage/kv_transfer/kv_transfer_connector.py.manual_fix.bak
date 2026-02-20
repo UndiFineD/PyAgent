@@ -14,12 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 KV Transfer Connector - Base framework for disaggregated prefill-decode inference.
 
 """
-
 Refactored to modular package structure for Phase 317.
 Decomposed into types, base, implementations, and factory modules.
 
@@ -53,4 +52,4 @@ __all__ = [
     "KVConnectorRole","    "KVTransferMode","    "KVTransferConfig","    "KVConnectorMetadata","    "KVCacheBlocks","    "ForwardContext","    "Request","    "KVConnectorBase","    "DecodeBenchConnector","    "register_kv_connector","    "get_kv_connector","    "list_kv_connectors","]
 
 
-""
+"""

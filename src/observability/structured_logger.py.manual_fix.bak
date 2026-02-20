@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 StructuredLogger - JSON-based structured logging for PyAgent swarm observability
 
@@ -45,7 +45,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 StructuredLogger: JSON-based logging for Phase 144 observability.
 Ensures machine-readable logs with mandatory AgentID and TraceID fields.
-""
+"""
 import contextlib
 import gzip
 import json
@@ -73,10 +73,10 @@ __version__: str = VERSION
 
 
 class StructuredLogger:
-    ""
+"""
 JSON logger for PyAgent swarm observability.
     Phase 277: Added log hygiene with automated GZIP compression.
-    ""
+"""
     # regex for sensitive data masking (Phase 227)
     SENSITIVE_PATTERNS: list[Pattern[str]] = [
         re.compile(r"sk-[a-zA-Z0-9]{32,}"),  # OpenAI Keys
@@ -91,7 +91,7 @@ JSON logger for PyAgent swarm observability.
         trace_id: str | None = None,
         log_file: str = "data/logs/structured.json",
     ) -> None:
-        ""
+"""
 Initialize the StructuredLogger.""
 self.agent_id: str = agent_id
         self.trace_id: str = trace_id or f"trace_{int(time.time())}"
@@ -101,7 +101,7 @@ self.agent_id: str = agent_id
 
 
     def _ensure_log_dir(self) -> None:
-        ""
+"""
 Ensures the log directory exists and handles log rotation if needed (Phase 277).""
 self._fs.ensure_directory(self.log_file.parent)
         # Phase 277: Compress if > 100MB
@@ -110,7 +110,7 @@ self._fs.ensure_directory(self.log_file.parent)
 
 
     def _compress_logs(self) -> None:
-        ""
+"""
 Compresses current log file to .json.gz (Phase 277).""
 timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")
         compressed_file: Path = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
@@ -127,7 +127,7 @@ timestamp: str = datetime.now().strftime("%Y%m%d_%H%M%S")
 
 
     def _mask_sensitive(self, text: str) -> str:
-        ""
+"""
 Automated masking for API keys and tokens (Phase 227).""
         # Python fallback (Rust acceleration for masking not yet implemented)
         masked: str = text
@@ -137,7 +137,7 @@ Automated masking for API keys and tokens (Phase 227).""
 
 
     def log(self, level: str, message: str, **kwargs: Any) -> None:
-        ""
+"""
 Log a structured entry.""
 timestamp: str = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
         std_logger: logging.Logger = logging.getLogger(f"PyAgent.{self.agent_id}")
@@ -168,30 +168,30 @@ timestamp: str = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
 
     # Convenience level helpers (kept for backwards compatibility)
     def info(self, message: str, **kwargs: Any) -> None:
-        ""
+"""
 Log an info-level message.""
 self.log("info", message, **kwargs)
 
 
     def warning(self, message: str, **kwargs: Any) -> None:
-        ""
+"""
 Log a warning-level message.""
 self.log("warning", message, **kwargs)
 
 
     def error(self, message: str, **kwargs: Any) -> None:
-        ""
+"""
 Log an error-level message.""
 self.log("error", message, **kwargs)
 
 
     def debug(self, message: str, **kwargs: Any) -> None:
-        ""
+"""
 Log a debug-level message.""
 self.log("debug", message, **kwargs)
 
 
     def success(self, message: str, **kwargs: Any) -> None:
-        ""
+"""
 Log a success/info-level message.""
 self.log("info", message, **kwargs)

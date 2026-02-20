@@ -17,15 +17,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Hopper Architecture Matrix Multiplication Simulator for H100 performance estimation.
 Part of the Phase 130 performance optimization suite.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -58,7 +58,7 @@ logger = StructuredLogger("HopperSim")
 
 
 class Precision(Enum):
-    ""
+"""
 Floating point precision modes for simulation.
     FP8 = auto()
     FP16 = auto()
@@ -68,7 +68,7 @@ Floating point precision modes for simulation.
 
 @dataclass
 class HopperConfig:
-    ""
+"""
 NVIDIA H100 SXM5 specifications.
     sm_count: int = 132
     tensor_core_per_sm: int = 4
@@ -79,7 +79,7 @@ NVIDIA H100 SXM5 specifications.
 
 
 class HopperSim:
-    ""
+"""
 Simulates Hopper architecture performance for GEMM operations.
     def __init__(self, config: HopperConfig = HopperConfig()):
         self.config = config
@@ -132,7 +132,7 @@ Simulates Hopper architecture performance for GEMM operations.
             "qkv_latency_ms": latency_qkv,"            "m_params": (d_model * d_model * 12) / 1e6,  # Parameter count estimate"            "est_step_ms": total_ms,"            "tflops_utilization": 0.45 * 100,  # Typical real-world efficiency"        }
 
     def run_swarm_stress_test(self, agent_count: int, steps: int = 10) -> None:
-        ""
+"""
 Runs a swarm stress test with stochastic failures (Phase 181).
         logger.info(f"=== SWARM STRESS TEST: {agent_count} AGENTS ===")
         core = SimulationCore()

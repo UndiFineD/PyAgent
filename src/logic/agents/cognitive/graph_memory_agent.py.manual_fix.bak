@@ -23,7 +23,6 @@ USAGE:
 - Call improve_content for a brief graph reasoning summary or use mixin methods to read/write the graph store
 
 """
-
 WHAT IT DOES:
 - Implements a MIRIX 6-component memory architecture (Core, Episodic, Semantic, Procedural, Resource, Knowledge).
 - Maintains a persistent FalkorDB-style triple store and a Beads directory for dependency-aware task tracking.

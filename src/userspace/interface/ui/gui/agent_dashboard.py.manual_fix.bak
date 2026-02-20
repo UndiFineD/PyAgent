@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Dashboard component for managing multiple agent columns.
 
 """
-
 try:
     import tkinter
 except ImportError:
@@ -48,7 +47,7 @@ __version__ = VERSION
 
 
 class AgentDashboard:
-    ""
+"""
 Manages the agent columns container and provides controls to add agents.
 
     def __init__(self, parent, callbacks) -> None:

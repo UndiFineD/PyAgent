@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Semantic Search Mesh Agent - Federated semantic search coordinator
 
@@ -34,7 +34,7 @@ Persist and manage shard metadata and vector indices to durable storage rather t
 
 FILE CONTENT SUMMARY:
 Semantic search mesh agent.py module.
-""
+"""
 import asyncio
 from typing import Any
 

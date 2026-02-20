@@ -14,14 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Storage base.py module.
-""
+"""
 try:
 
 """
-    from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -52,7 +52,7 @@ __version__ = VERSION
 
 
 class KnowledgeStore(ABC):
-    ""
+"""
 Base interface for all knowledge storage types.""
 def __init__(self, agent_id: str, storage_path: Path) -> None:
         self.agent_id = agent_id
@@ -63,18 +63,18 @@ def __init__(self, agent_id: str, storage_path: Path) -> None:
 
     @abstractmethod
     def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
-        ""
+"""
 Store a piece of knowledge.""
 raise NotImplementedError()
 
     @abstractmethod
     def retrieve(self, query: Any, limit: int = 5) -> list[Any]:
-        ""
+"""
 Retrieve knowledge based on a query.""
 raise NotImplementedError()
 
     @abstractmethod
     def delete(self, key: str) -> bool:
-        ""
+"""
 Delete a piece of knowledge by key.""
 raise NotImplementedError()

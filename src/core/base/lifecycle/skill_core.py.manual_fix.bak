@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: skill_core
 Base classes for the Universal Shard (Skill Core) architecture.
-""
+"""
 try:
 
 """
-    import abc
+import abc
 except ImportError:
     import abc
 
@@ -39,22 +39,22 @@ if TYPE_CHECKING:
 
 
 class SkillCore(abc.ABC):
-    ""
+"""
 Abstract base for all agent skills.
     Replaces the mixin architecture with a composition-based approach.
-    ""
+"""
 def __init__(self, agent: BaseAgent) -> None:
         self.agent = agent
 
     @abc.abstractmethod
     async def initialize(self) -> None:
-        ""
+"""
 Initialize the skill and its dependencies.""
 pass
 
     @abc.abstractmethod
     async def shutdown(self) -> None:
-        ""
+"""
 Cleanup resources used by the skill.""
 pass
 

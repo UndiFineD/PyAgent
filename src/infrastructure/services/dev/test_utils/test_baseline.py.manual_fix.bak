@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import time
@@ -44,7 +44,7 @@ __version__ = VERSION
 
 @dataclass
 class TestBaseline:
-    ""
+"""
 A test baseline for comparison.""""
 Attributes:
         name: Baseline name.

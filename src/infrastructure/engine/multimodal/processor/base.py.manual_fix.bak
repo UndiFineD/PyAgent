@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Base.py module.""
 
@@ -41,7 +41,7 @@ logger = logging.getLogger(__name__)
 
 
 class ModalityType(Enum):
-    ""
+"""
 Supported modality types for multimodal inputs.""
 IMAGE = auto()
     VIDEO = auto()
@@ -52,7 +52,7 @@ IMAGE = auto()
 
 @dataclass
 class MultiModalConfig:
-    ""
+"""
 Configuration for multimodal processing.""
 limit_per_prompt: Dict[str, int] = field(
         default_factory=lambda: {
@@ -73,20 +73,20 @@ limit_per_prompt: Dict[str, int] = field(
     embed_token: str = "<embed>"
 
     def get_limit(self, modality: str) -> int:
-        ""
+"""
 Get the maximum number of items allowed for a modality.""
 return self.limit_per_prompt.get(modality, 1)
 
 
     def get_media_kwargs(self, modality: str) -> Dict[str, Any]:
-        ""
+"""
 Get media I/O keyword arguments for a modality.""
 return self.media_io_kwargs.get(modality, {})
 
 
 @dataclass
 class PlaceholderInfo:
-    ""
+"""
 Information about a placeholder in the token sequence.""
 modality: ModalityType
     item_idx: int
@@ -96,14 +96,14 @@ modality: ModalityType
 
     @property
     def end_idx(self) -> int:
-        ""
+"""
 Calculate the ending index of the placeholder.""
 return self.start_idx + self.length
 
 
 @dataclass
 class MultiModalData:
-    ""
+"""
 Raw multimodal data before processing.""
 images: List[Any] = field(default_factory=list)  # PIL.Image or np.ndarray
     videos: List[Tuple[np.ndarray, Dict[str, Any]]] = field(default_factory=list)
@@ -111,12 +111,12 @@ images: List[Any] = field(default_factory=list)  # PIL.Image or np.ndarray
     embeds: List[np.ndarray] = field(default_factory=list)
 
     def is_empty(self) -> bool:
-        ""
+"""
 Check if there is no multimodal data at all.""
 return not self.images and not self.videos and not self.audios and not self.embeds
 
     def get_modality_count(self, modality: ModalityType) -> int:
-        ""
+"""
 Get the number of items for a specific modality.""
 if modality == ModalityType.IMAGE:
             return len(self.images)
@@ -131,7 +131,7 @@ if modality == ModalityType.IMAGE:
 
 @dataclass
 class MultiModalInputs:
-    ""
+"""
 Processed multimodal inputs ready for model consumption.""
 prompt_token_ids: List[int] = field(default_factory=list)
     mm_embeddings: Dict[str, List[np.ndarray]] = field(default_factory=dict)
@@ -139,12 +139,12 @@ prompt_token_ids: List[int] = field(default_factory=list)
     mm_kwargs: Dict[str, Any] = field(default_factory=dict)
 
     def has_multimodal(self) -> bool:
-        ""
+"""
 Check if any multimodal embeddings are present.""
 return any(bool(embeds) for embeds in self.mm_embeddings.values())
 
     def get_placeholder_count(self) -> int:
-        ""
+"""
 Get total number of placeholder tokens across all modalities.""
 return sum(sum(p.length for p in placeholders) for placeholders in self.mm_placeholders.values())
 
@@ -153,7 +153,7 @@ T = TypeVar("T")
 
 
 class BaseMultiModalProcessor(ABC, Generic[T]):
-    ""
+"""
 Abstract base class for modality-specific processors.""
 def __init__(self, config: Optional[MultiModalConfig] = None) -> None:
         self.config = config or MultiModalConfig()
@@ -164,12 +164,12 @@ def __init__(self, config: Optional[MultiModalConfig] = None) -> None:
         data: T,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        ""
+"""
 Process raw modality data into a tensor and metadata.""
 
     @abstractmethod
     def get_placeholder_count(self, data: T, **kwargs: Any) -> int:
-        ""
+"""
 Calculate the number of placeholder tokens needed for this data.""
 def compute_hash(self, data: T) -> str:
         ""

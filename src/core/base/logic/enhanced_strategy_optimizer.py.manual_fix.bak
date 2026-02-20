@@ -13,14 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Enhanced Strategy Optimizer - AutoRAG-inspired optimization algorithms
 Based on AutoRAG's sophisticated strategy selection for multi-metric optimization'""
 try:
 
 """
-    from typing import List, Dict, Any, Optional, Tuple
+from typing import List, Dict, Any, Optional, Tuple
 except ImportError:
     from typing import List, Dict, Any, Optional, Tuple
 
@@ -45,13 +45,13 @@ logger = logging.getLogger(__name__)
 
 
 class OptimizationStrategy(Enum):
-    ""
+"""
 Strategy selection algorithms""
 MEAN = "mean"  # Simple average across metrics"    RECIPROCAL_RANK = "rank"  # Reciprocal Rank fusion"    NORMALIZE_MEAN = "normalize_mean"  # Normalized mean combination"    WEIGHTED_SUM = "weighted_sum"  # Weighted combination"    PARETO_DOMINANCE = "pareto"  # Multi-objective optimization
 
 @dataclass
 class OptimizationResult:
-    ""
+"""
 Result of strategy optimization""
 best_strategy_index: int
     best_score: float
@@ -62,7 +62,7 @@ best_strategy_index: int
 
 @dataclass
 class StrategyTrial:
-    ""
+"""
 Single strategy trial result""
 strategy_id: str
     metrics: Dict[str, float]
@@ -71,24 +71,24 @@ strategy_id: str
 
 
 class EnhancedStrategyOptimizer:
-    ""
+"""
 Enhanced strategy optimizer using AutoRAG-inspired algorithms
     Supports multiple optimization strategies for multi-metric evaluation
-    ""
+"""
 def __init__(self):
         self.trial_history: List[StrategyTrial] = []
 
     def add_trial(self, trial: StrategyTrial):
-        ""
-Add a strategy trial result""
-self.trial_history.append(trial)
+"""
+        Add a strategy trial result""
+        self.trial_history.append(trial)
 
     def optimize_strategies(
         self,
         strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK,
         weights: Optional[Dict[str, float]] = None
     ) -> OptimizationResult:
-        ""
+"""
 Optimize strategies using specified algorithm
 
         Args:
@@ -97,7 +97,7 @@ Optimize strategies using specified algorithm
 
         Returns:
             OptimizationResult with best strategy and scores
-        ""
+"""
 if not self.trial_history:
             raise ValueError("No strategy trials available for optimization")
         # Convert trials to data structures
@@ -116,7 +116,7 @@ if not self.trial_history:
         else:
             raise ValueError(f"Unknown optimization strategy: {strategy}")
     def _trials_to_data(self) -> Tuple[List[str], List[Dict[str, float]]]:
-        ""
+"""
 Convert trial history to data structures""
 strategy_ids = []
         metrics_data = []
@@ -128,7 +128,7 @@ strategy_ids = []
         return strategy_ids, metrics_data
 
     def _get_metric_columns(self, metrics_data: List[Dict[str, float]]) -> List[str]:
-        ""
+"""
 Get all metric column names""
 all_keys = set()
         for metrics in metrics_data:
@@ -136,7 +136,7 @@ all_keys = set()
         return sorted(list(all_keys))
 
     def _optimize_mean(self, strategy_ids: List[str], metrics_data: List[Dict[str, float]]) -> OptimizationResult:
-        ""
+"""
 Simple mean-based optimization""
 metric_cols = self._get_metric_columns(metrics_data)
 
@@ -160,7 +160,7 @@ metric_cols = self._get_metric_columns(metrics_data)
         strategy_ids: List[str],
         metrics_data: List[Dict[str, float]]
     ) -> OptimizationResult:
-        ""
+"""
 Reciprocal Rank fusion optimization""
 metric_cols = self._get_metric_columns(metrics_data)
 
@@ -197,7 +197,7 @@ metric_cols = self._get_metric_columns(metrics_data)
         strategy_ids: List[str],
         metrics_data: List[Dict[str, float]]
     ) -> OptimizationResult:
-        ""
+"""
 Normalized mean optimization""
 metric_cols = self._get_metric_columns(metrics_data)
 
@@ -241,7 +241,7 @@ metric_cols = self._get_metric_columns(metrics_data)
         metrics_data: List[Dict[str, float]],
         weights: Dict[str, float]
     ) -> OptimizationResult:
-        ""
+"""
 Weighted sum optimization""
 metric_cols = self._get_metric_columns(metrics_data)
 
@@ -283,85 +283,85 @@ metric_cols = self._get_metric_columns(metrics_data)
         strategy_ids: List[str],
         metrics_data: List[Dict[str, float]]
     ) -> OptimizationResult:
-        ""
+"""
 Pareto dominance-based multi-objective optimization""
 metric_cols = self._get_metric_columns(metrics_data)
 
         def dominates(idx_a, idx_b):
-            ""
-Check if strategy A dominates strategy B (higher is better)""
-metrics_a = metrics_data[idx_a]
+"""
+            Check if strategy A dominates strategy B (higher is better)""
+            metrics_a = metrics_data[idx_a]
             metrics_b = metrics_data[idx_b]
             at_least_one_better = False
 
             for col in metric_cols:
-                val_a = metrics_a.get(col, 0.0)
-                val_b = metrics_b.get(col, 0.0)
-                if val_a < val_b:  # A worse in this metric
-                    return False
-                if val_a > val_b:  # A better in this metric
-                    at_least_one_better = True
+            val_a = metrics_a.get(col, 0.0)
+            val_b = metrics_b.get(col, 0.0)
+            if val_a < val_b:  # A worse in this metric
+            return False
+            if val_a > val_b:  # A better in this metric
+            at_least_one_better = True
             return at_least_one_better
 
-        # Find Pareto front (non-dominated solutions)
-        pareto_front = []
-        for i in range(len(metrics_data)):
+            # Find Pareto front (non-dominated solutions)
+            pareto_front = []
+            for i in range(len(metrics_data)):
             is_dominated = False
             for j in range(len(metrics_data)):
-                if i != j and dominates(j, i):
-                    is_dominated = True
-                    break
+            if i != j and dominates(j, i):
+            is_dominated = True
+            break
             if not is_dominated:
-                pareto_front.append(i)
+            pareto_front.append(i)
 
-        # Among Pareto front, select one with best average performance
-        if pareto_front:
+            # Among Pareto front, select one with best average performance
+            if pareto_front:
             pareto_scores = []
             for idx in pareto_front:
-                metric_values = [metrics_data[idx].get(col, 0.0) for col in metric_cols]
-                avg_score = sum(metric_values) / len(metric_values) if metric_values else 0.0
-                pareto_scores.append((idx, avg_score))
+            metric_values = [metrics_data[idx].get(col, 0.0) for col in metric_cols]
+            avg_score = sum(metric_values) / len(metric_values) if metric_values else 0.0
+            pareto_scores.append((idx, avg_score))
 
             best_idx, best_score = max(pareto_scores, key=lambda x: x[1])
-        else:
+            else:
             # Fallback to mean optimization
             mean_scores = []
             for i, metrics in enumerate(metrics_data):
-                metric_values = [metrics.get(col, 0.0) for col in metric_cols]
-                mean_score = sum(metric_values) / len(metric_values) if metric_values else 0.0
-                mean_scores.append(mean_score)
+            metric_values = [metrics.get(col, 0.0) for col in metric_cols]
+            mean_score = sum(metric_values) / len(metric_values) if metric_values else 0.0
+            mean_scores.append(mean_score)
             best_idx = mean_scores.index(max(mean_scores))
             best_score = mean_scores[best_idx]
 
-        # Calculate scores for all strategies (distance to Pareto front)
-        scores = []
-        for i in range(len(metrics_data)):
+            # Calculate scores for all strategies (distance to Pareto front)
+            scores = []
+            for i in range(len(metrics_data)):
             if i in pareto_front:
-                # On Pareto front - use average score
-                metric_values = [metrics_data[i].get(col, 0.0) for col in metric_cols]
-                scores.append(sum(metric_values) / len(metric_values) if metric_values else 0.0)
+            # On Pareto front - use average score
+            metric_values = [metrics_data[i].get(col, 0.0) for col in metric_cols]
+            scores.append(sum(metric_values) / len(metric_values) if metric_values else 0.0)
             else:
-                # Calculate minimum distance to Pareto front
-                min_distance = float('inf')'                for p_idx in pareto_front:
-                    distance = 0
-                    for col in metric_cols:
-                        val_i = metrics_data[i].get(col, 0.0)
-                        val_p = metrics_data[p_idx].get(col, 0.0)
-                        distance += (val_i - val_p) ** 2
-                    distance = distance ** 0.5
-                    min_distance = min(min_distance, distance)
-                scores.append(-min_distance)  # Negative distance as score
+            # Calculate minimum distance to Pareto front
+            min_distance = float('inf')'                for p_idx in pareto_front:
+            distance = 0
+            for col in metric_cols:
+            val_i = metrics_data[i].get(col, 0.0)
+            val_p = metrics_data[p_idx].get(col, 0.0)
+            distance += (val_i - val_p) ** 2
+            distance = distance ** 0.5
+            min_distance = min(min_distance, distance)
+            scores.append(-min_distance)  # Negative distance as score
 
-        return OptimizationResult(
+            return OptimizationResult(
             best_strategy_index=best_idx,
             best_score=best_score,
             scores=scores,
             metadata={
-                'pareto_front_indices': pareto_front,'                'pareto_front_size': len(pareto_front),'                'dominance_analysis': True'            },
+            'pareto_front_indices': pareto_front,'                'pareto_front_size': len(pareto_front),'                'dominance_analysis': True'            },
             strategy_name='pareto_dominance''        )
 
     def get_optimization_history(self) -> List[Dict[str, Any]]:
-        ""
+"""
 Get history of all optimization runs""
 return [
             {
@@ -370,16 +370,16 @@ return [
         ]
 
     def clear_history(self):
-        ""
-Clear trial history""
-self.trial_history.clear()
+"""
+        Clear trial history""
+        self.trial_history.clear()
 
     def get_best_strategies(
         self,
         top_k: int = 5,
         strategy: OptimizationStrategy = OptimizationStrategy.RECIPROCAL_RANK
     ) -> List[Dict[str, Any]]:
-        ""
+"""
 Get top-k best strategies""
 if not self.trial_history:
             return []

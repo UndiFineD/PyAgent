@@ -18,7 +18,6 @@ Advanced Asynchronous Request Queue (V2) for Phase 54.
 Supports priority, deadlines, and fair-share policies with Rust acceleration.
 
 """
-
 import heapq
 import logging
 import time
@@ -82,11 +81,11 @@ class RequestQueueV2:
         return batch
 
     def get_queue_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Returns statistics on queue depth and urgency.        if not self._waiting:
             return {"depth": 0, "max_urgency": 0.0}
         max_urgency = 0.0
         if rc and hasattr(rc, "deadline_urgency_rust"):"            deadlines = [getattr(r[2], "deadline", 0) for r in self._waiting]"            max_urgency = rc.deadline_urgency_rust(deadlines)
 
         return {"depth": len(self._waiting), "max_urgency": max_urgency, "running_count": len(self._running)}
-""
+"""

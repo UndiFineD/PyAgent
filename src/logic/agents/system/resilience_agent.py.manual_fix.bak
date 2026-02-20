@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Resilience Agent - Autonomous compute resource management
 
@@ -42,7 +42,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Resilience agent.py module.
-""
+"""
 import logging
 import time
 from pathlib import Path

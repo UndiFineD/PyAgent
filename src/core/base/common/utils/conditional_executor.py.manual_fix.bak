@@ -22,17 +22,16 @@ from typing import Any, Dict, List
 
 
 class ConditionalExecutor:
-    ""
+"""
 """
 Execute agents based on file content conditions.
 
 """
-
-    This is a small, import-safe implementation intended to be compatible with
+This is a small, import-safe implementation intended to be compatible with
     the original API: add_condition(name, check, description),
     set_agent_conditions(agent_name, conditions, require_all), and
     should_execute(agent_name, file_path, content).
-    ""
+"""
 def __init__(self) -> None:
         self._conditions: Dict[str, Dict[str, Any]] = {}
         self._agent_conditions: Dict[str, Dict[str, Any]] = {}
@@ -40,39 +39,39 @@ def __init__(self) -> None:
     def add_condition(
         self, name: str, check: Callable[[Path, str], bool], description: str = ""
     ) -> None:
-        ""
+"""
 Register a named condition.
 
         Args:
             name: Condition name.
             check: Callable taking (path, content) and returning bool.
             description: Optional human-readable description.
-        ""
+"""
 self._conditions[name] = {"check": check, "description": description}
 
     def set_agent_conditions(
         self, agent_name: str, conditions: List[str], require_all: bool = False
     ) -> None:
-        ""
+"""
 Assign conditions to an agent.
 
         Args:
             agent_name: Agent identifier.
             conditions: List of condition names previously registered.
             require_all: If True, all conditions must be satisfied.
-        ""
+"""
 self._agent_conditions[agent_name] = {
             "conditions": list(conditions),
             "require_all": bool(require_all),
         }
 
     def should_execute(self, agent_name: str, file_path: Path, content: str) -> bool:
-        ""
+"""
 Return True if the agent should run for the given file content.
 
         If no conditions are configured for the agent, defaults to True.
         Unknown condition names are ignored.
-        ""
+"""
 cfg = self._agent_conditions.get(agent_name)
         if not cfg:
             return True

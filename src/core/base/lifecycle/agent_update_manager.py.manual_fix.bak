@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Specialized manager for handling agent improvement iterations.""
 
@@ -34,11 +34,11 @@ __version__ = VERSION
 
 
 class AgentUpdateManager:
-    ""
+"""
 Handles the update logic for code files, including errors, improvements, and tests.
 
     Implements Version Gatekeeping to prevent unstable mutations.
-    ""
+"""
 def __init__(  # pylint: disable=too-many-arguments, too-many-positional-arguments
         self,
         repo_root: Path,
@@ -57,7 +57,7 @@ def __init__(  # pylint: disable=too-many-arguments, too-many-positional-argumen
         self.min_gate_phase = 105  # Minimum phase required for autonomous updates
 
     def _check_gate(self) -> bool:
-        ""
+"""
 Internal version gate check.""
 if not is_gate_open(self.min_gate_phase):
             logging.warning(
@@ -69,18 +69,18 @@ if not is_gate_open(self.min_gate_phase):
         return True
 
     def update_errors_improvements(self, code_file: Path) -> bool:
-        ""
+"""
 Stub method: returns False unless gate is closed.
 
         Real implementation runs external agent commands; tests only import and
         call this method in some cases. Keep it minimal and deterministic.
-        ""
+"""
 if not self._check_gate():
             return False
         return False
 
     def _get_pending_improvements(self, improvements_file: Path) -> list[str]:
-        ""
+"""
 Extract pending improvements using core logic.""
 if not improvements_file.exists():
             return []
@@ -93,7 +93,7 @@ if not improvements_file.exists():
             return []
 
     def _mark_improvements_fixed(self, improvements_file: Path, fixed_items: list[str]) -> None:
-        ""
+"""
 Mark items as fixed in the improvements file.""
 if not improvements_file.exists() or not fixed_items:
             return
@@ -105,7 +105,7 @@ if not improvements_file.exists() or not fixed_items:
             logging.warning("[Robustness] AgentUpdateManager: Failed to update improvements file: %s", e, exc_info=True)
 
     def _log_changes(self, changes_file: Path, fixed_items: list[str]) -> None:
-        ""
+"""
 Log fixed improvements to the changes file.""
 if not changes_file.exists() or not fixed_items:
             return
@@ -118,7 +118,7 @@ if not changes_file.exists() or not fixed_items:
             logging.warning("[Robustness] AgentUpdateManager: Failed to update changes file: %s", e, exc_info=True)
 
     def update_changelog_context_tests(self, code_file: Path) -> bool:
-        ""
+"""
 Update changelog, context, and tests for a file.""
 if not self._check_gate():
             return False
@@ -139,10 +139,10 @@ if not self._check_gate():
         return changes_made
 
     def update_code(self, code_file: Path) -> bool:
-        ""
+"""
 Update the code file based on improvements.
         Returns True if changes were written.
-        ""
+"""
 if not self._check_gate():
             return False
 

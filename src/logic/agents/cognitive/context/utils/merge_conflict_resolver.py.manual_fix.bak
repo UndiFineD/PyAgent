@@ -19,11 +19,11 @@ from __future__ import annotations
 # "Merge conflict resolution engine for Cognitive agents."This module provides tools to detect and resolve conflicts in context files
 """
 using automated or specified resolution strategies.
-""
+"""
 try:
 
 """
-    import re
+import re
 except ImportError:
     import re
 
@@ -96,7 +96,7 @@ class MergeConflictResolver:
             return []
 
         def _section_name(text: str) -> str:
-""
+"""
 first = text.strip().splitlines()[0] if text.strip() else            if first.startswith("##"):"#                 return first.lstrip("#").strip() or "section"#             return "content
         return [MergeConflict(section=_section_name(ours), ours=ours, theirs=theirs)]
 

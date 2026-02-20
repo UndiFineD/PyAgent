@@ -26,7 +26,6 @@ USAGE:
 - Intended for automation pipelines or higher-level orchestrators that coordinate agent swarms and deployments.
 
 """
-
 WHAT IT DOES:
 - Provides async tool-wrapped methods to generate simple Dockerfiles for specific agent types, append provisioning logs, and read active nodes from those logs.
 - Simulates node provisioning via spawn_node and supports bulk scaling via scale_up by invoking spawn_node repeatedly.
@@ -41,7 +40,7 @@ FILE CONTENT SUMMARY:
 FleetDeployerAgent for PyAgent.
 Specializes in autonomous containerization, Dockerfile generation,
 and managing node spawning across environments.
-""
+"""
 import asyncio
 import json
 import logging
@@ -259,4 +258,4 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]"#         path ="
 #         "Deploys an agent, but only after reaching consensus (Mock)."        logging.info(fFleetDeployer: Requesting consensus for deployment of {node_name}...")"        # Mock approval
         return await self.spawn_node(node_name, agent_type)
 
-""
+"""

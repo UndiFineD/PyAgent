@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    import logging
+import logging
 
 try:
     import time
@@ -81,7 +81,7 @@ logger = logging.getLogger(__name__)
 
 
 class ObservabilityCore:
-    ""
+"""
 Pure logic for processing agent telemetry data.    def __init__(self) -> None:        self.metrics_history: list[AgentMetric] = []
 
     def process_metric(self, metric: AgentMetric) -> None:
@@ -107,7 +107,7 @@ Pure logic for processing agent telemetry data.    def __init__(self) -> None:  
 
 
 class ObservabilityEngine:
-    ""
+"""
 Provides telemetry and performance tracking for the agent fleet.
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = Path(workspace_root or ".")"        self.telemetry_file = self.workspace_root / ".agent_telemetry.json""        self.core = ObservabilityCore()
@@ -171,7 +171,7 @@ Provides telemetry and performance tracking for the agent fleet.
 
 
 class StatsCore:
-    ""
+"""
 Core logic for statistics processing.
     def __init__(self) -> None:
         self.namespaces: dict[str, list[Metric]] = {}
@@ -195,7 +195,7 @@ Core logic for statistics processing.
 
 
 class StatsNamespaceManager:
-    ""
+"""
 Manages multiple namespaces (backward compat).
     def __init__(self) -> None:
         self.namespaces: dict[str, Any] = {}

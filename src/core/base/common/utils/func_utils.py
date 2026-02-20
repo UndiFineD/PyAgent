@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Small collection of function utilities used by tests.
 
@@ -7,6 +6,7 @@ This module implements a compact subset of decorators and helpers so tests
 can import stable behavior without depending on the original project's
 complex and possibly-corrupted implementations.
 """
+from __future__ import annotations
 
 
 
@@ -187,15 +187,15 @@ def deco(fn: Callable[..., Any]) -> Callable[..., Any]:
             def _call():
                 fn(*args, **kwargs)
 
-            if timer is not None:
+                if timer is not None:
                 timer.cancel()  # type: ignore[attr-defined]
-            timer_obj = threading.Timer(wait, _call)
-            timer_obj.daemon = True
-            timer_obj.start()
+                timer_obj = threading.Timer(wait, _call)
+                timer_obj.daemon = True
+                timer_obj.start()
 
-        return wrapper
+                return wrapper
 
-    return deco
+                return deco
 
 
 def retry_on_exception(retries: int = 3, delay: float = 0.0):

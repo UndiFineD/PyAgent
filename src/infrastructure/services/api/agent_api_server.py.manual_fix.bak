@@ -16,10 +16,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 FastAPI-based API gateway for the PyAgent fleet.
-""
+"""
 
 """
 import sys
@@ -59,7 +59,7 @@ load_balancer = FleetLoadBalancer(fleet)
 
 
 class TaskRequest(BaseModel):
-    ""
+"""
 Schema for incoming task requests via the REST API.
     agent_id: str
 
@@ -70,7 +70,7 @@ Schema for incoming task requests via the REST API.
 
 
 class TelemetryManager:
-    ""
+"""
 Manages WebSocket connections for real-time fleet telemetry.
     def __init__(self) -> None:
         self.active_connections: list[WebSocket] = []
@@ -103,11 +103,11 @@ telemetry = TelemetryManager()
     return {"agents": [{"id": k, "type": v["type"]} for k, v in metadata.items()]}
 
 @app.get("/discovery/peers")"async def list_discovery_peers() -> dict[str, Any]:
-    ""
+"""
 Returns the list of peers discovered on the LAN.    return {"peers": [p.to_dict() for p in fleet.get_lan_peers()]}
 
 @app.get("/discovery/peers/fastest")"async def list_fastest_peers() -> dict[str, Any]:
-    ""
+"""
 Returns the top 5 lowest-latency peers discovered.    return {"peers": [p.to_dict() for p in fleet.get_fastest_peers()]}
 
 @app.post("/task")"async def dispatch_task(request: TaskRequest) -> dict[str, Any]:

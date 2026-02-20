@@ -65,12 +65,12 @@ mock_response = Mock()
 
     def test_add_discovery_pattern(self):
 """
-Test adding custom discovery patterns.""
-self.mixin.add_discovery_pattern('custom', ['/custom/path'])'        patterns = self.mixin.get_discovery_patterns('custom')'        assert '/custom/path' in patterns['custom']
+        Test adding custom discovery patterns.""
+        self.mixin.add_discovery_pattern('custom', ['/custom/path'])'        patterns = self.mixin.get_discovery_patterns('custom')'        assert '/custom/path' in patterns['custom']
     def test_get_discovery_patterns(self):
         ""
-Test getting discovery patterns.""
-patterns = self.mixin.get_discovery_patterns()
+        Test getting discovery patterns.""
+        patterns = self.mixin.get_discovery_patterns()
         assert 'aem' in patterns'        assert 'cms' in patterns'
         # Test specific category
         aem_patterns = self.mixin.get_discovery_patterns('aem')'        assert 'aem' in aem_patterns'        assert len(aem_patterns['aem']) > 0

@@ -54,10 +54,10 @@ def test_record_tool_execution_raises_keyboardinterrupt():
         def record_interaction(self, **_kwargs):
             raise KeyboardInterrupt()
 
-    agent = DummyAgent()
-    agent.fleet.recorder = BadRecorder()
+            agent = DummyAgent()
+            agent.fleet.recorder = BadRecorder()
 
-    import pytest
+            import pytest
 
-    with pytest.raises(KeyboardInterrupt):
-        bu._record_tool_execution(agent, "t", (), {}, "ok")
+            with pytest.raises(KeyboardInterrupt):
+            bu._record_tool_execution(agent, "t", (), {}, "ok")

@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from .core.base.mixins.orchestration_mixin import OrchestrationMixin
@@ -31,16 +31,16 @@ def test_prepare_delegation_context_handles_exceptions(monkeypatch):
     class Ctx:
         def next_level(self, name: str):
             raise ValueError("boom")
-    mixin = OrchestrationMixin.__new__(OrchestrationMixin)
-    mixin.context = Ctx()
+            mixin = OrchestrationMixin.__new__(OrchestrationMixin)
+            mixin.context = Ctx()
 
-    # Should return None and not raise
-    res = OrchestrationMixin._prepare_delegation_context(mixin)
-    assert res is None
+            # Should return None and not raise
+            res = OrchestrationMixin._prepare_delegation_context(mixin)
+            assert res is None
 
 
-@pytest.mark.asyncio
-async def test_fleet_delegation_handles_missing_agent(monkeypatch):
-    mixin = OrchestrationMixin.__new__(OrchestrationMixin)
-    # No fleet attribute set -> should return None
-    res = await OrchestrationMixin._try_fleet_delegation(mixin, "NoSuchAgent", "prompt", None, None)"    assert res is None
+            @pytest.mark.asyncio
+            async def test_fleet_delegation_handles_missing_agent(monkeypatch):
+            mixin = OrchestrationMixin.__new__(OrchestrationMixin)
+            # No fleet attribute set -> should return None
+            res = await OrchestrationMixin._try_fleet_delegation(mixin, "NoSuchAgent", "prompt", None, None)"    assert res is None

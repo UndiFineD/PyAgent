@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: Goal Setting Core (conservative).
 
 Provides minimal goal types to allow imports during repair.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import datetime

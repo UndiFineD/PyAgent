@@ -92,19 +92,19 @@ Allocates a port and creates a new RTP session.        # Port allocation logic h
 
     def handle_packet(self, data: bytes, addr: Tuple[str, int]):
 """
-Parses and processes an incoming RTP packet.        if len(data) < self.RTP_HEADER_SIZE:
-            return
+        Parses and processes an incoming RTP packet.        if len(data) < self.RTP_HEADER_SIZE:
+        return
 
         # Simple RTP header parsing
         first_byte = data[0]
         version = (first_byte & 0xC0) >> 6
         if version != self.RTP_VERSION:
-            return
+        return
 
         payload_type = data[1] & 0x7F
         seq_num = struct.unpack("!H", data[2:4])[0]"        timestamp = struct.unpack("!I", data[4:8])[0]"        ssrc = struct.unpack("!I", data[8:12])[0]"        payload = data[self.RTP_HEADER_SIZE:]
 
         return {
-            "payload_type": payload_type,"            "seq_num": seq_num,"            "timestamp": timestamp,"            "ssrc": ssrc,"            "payload": payload"        }
+        "payload_type": payload_type,"            "seq_num": seq_num,"            "timestamp": timestamp,"            "ssrc": ssrc,"            "payload": payload"        }
 
 """

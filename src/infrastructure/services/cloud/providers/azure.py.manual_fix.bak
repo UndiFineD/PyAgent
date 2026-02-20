@@ -20,9 +20,8 @@ from __future__ import annotations
 Azure AI Foundry cloud provider connector.
 
 """
-
 Provides integration with Azure AI Foundry (formerly Azure ML) for inference requests.
-""
+"""
 import logging
 import os
 import time
@@ -120,4 +119,4 @@ headers: dict[str, str] = {
 
     def _calculate_cost(self, model: str, input_tokens: int, output_tokens: int) -> float:
         pricing: dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 1.0})"        return (input_tokens / 1_000_000 * pricing["input"]) + (output_tokens / 1_000_000 * pricing["output"])"
-""
+"""

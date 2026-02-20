@@ -17,7 +17,6 @@
 Test Metrics Core module.
 
 """
-
 try:
     from hypothesis import given, strategies as st, settings, HealthCheck
 except ImportError:
@@ -71,7 +70,7 @@ class TestTokenCostCore:
         assert math.isclose(result.total_cost, 0.09)
 
 
-# === ModelFallbackCore Tests ===
+        # === ModelFallbackCore Tests ===
 
 
 
@@ -85,7 +84,7 @@ class TestModelFallbackCore:
         core = ModelFallbackCore()
 
         constraints = {
-            "max_cost": max_cost,"            "required_speed": speed,"            "required_quality": quality,"        }
+        "max_cost": max_cost,"            "required_speed": speed,"            "required_quality": quality,"        }
         model = core.select_best_model(constraints)
         assert isinstance(model, str)
 
@@ -96,7 +95,7 @@ class TestModelFallbackCore:
         chain = core.get_fallback_chain("gpt-4")"        assert isinstance(chain, list)
         assert "gpt-4-turbo" in chain
 
-# === StatsRollupCore Tests ===
+        # === StatsRollupCore Tests ===
 
 
 
@@ -113,7 +112,7 @@ class TestStatsRollupCore:
         core = StatsRollupCore()
         assert math.isclose(core.rollup_sum(values), sum(values), rel_tol=1e-9)
         assert math.isclose(
-            core.rollup_avg(values), sum(values) / len(values), rel_tol=1e-9
+        core.rollup_avg(values), sum(values) / len(values), rel_tol=1e-9
         )
 
         assert core.rollup_min(values) == min(values)
@@ -125,14 +124,14 @@ class TestStatsRollupCore:
         assert core.rollup_sum([]) == 0.0
         assert core.rollup_avg([]) == 0.0
 
-    @given(
+        @given(
         st.lists(
-            st.floats(
-                allow_nan=False, allow_infinity=False, min_value=-1e6, max_value=1e6
-            ),
-            min_size=20,
+        st.floats(
+        allow_nan=False, allow_infinity=False, min_value=-1e6, max_value=1e6
+        ),
+        min_size=20,
         )
-    )
+        )
     def test_percentiles(self, values):
         core = StatsRollupCore()
         p50 = core.rollup_p50(values)
@@ -141,12 +140,12 @@ class TestStatsRollupCore:
 
         assert core.rollup_min(values) <= p50 <= core.rollup_max(values)
         if len(values) >= 20:
-            # p95 should generally be higher than p50 for typical distributions,
-            # but not strictly guaranteed for all random sets
-            pass
+        # p95 should generally be higher than p50 for typical distributions,
+        # but not strictly guaranteed for all random sets
+        pass
 
 
-# === DerivedMetricCalculator Tests ===
+        # === DerivedMetricCalculator Tests ===
 
 
 
@@ -156,7 +155,7 @@ class TestDerivedMetricCalculator:
 
         assert core.evaluate_formula("1 + 1", {}) == 2.0"        assert core.evaluate_formula("x * 2", {"x": 5}) == 10.0"
 
-# === CorrelationCore Tests ===
+        # === CorrelationCore Tests ===
 
 
 
@@ -174,7 +173,7 @@ class TestCorrelationCore:
         assert math.isclose(core.calculate_correlation(s1, s2), -1.0)
 
 
-# === ABTestCore Tests ===
+        # === ABTestCore Tests ===
 
 
 

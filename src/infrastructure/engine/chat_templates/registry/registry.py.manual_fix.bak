@@ -14,7 +14,7 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Central template registry.
 
@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 
 class ChatTemplateRegistry:
-    ""
+"""
 Registry for chat templates with dynamic resolution.
     _instance: Optional["ChatTemplateRegistry"] = None"    _lock = threading.Lock()
 
@@ -47,7 +47,7 @@ Registry for chat templates with dynamic resolution.
             return cls._instance
 
     def _initialize_builtins(self) -> None:
-        ""
+"""
 Initialize built-in templates.        for template_type, template_string in BUILTIN_TEMPLATES.items():
             config = TemplateConfig(
                 template_type=template_type,
@@ -58,7 +58,7 @@ Initialize built-in templates.        for template_type, template_string in BUIL
 
     @property
     def templates(self) -> Dict[str, ChatTemplate]:
-        ""
+"""
 Get all registered templates.        return self._templates
 
     def register(
@@ -67,7 +67,7 @@ Get all registered templates.        return self._templates
         template: ChatTemplate,
         model_patterns: Optional[List[str]] = None,
     ) -> None:
-        ""
+"""
 Register a template.        self._templates[name] = template
 
         if model_patterns:
@@ -80,7 +80,7 @@ Register a template.        self._templates[name] = template
         config: TemplateConfig,
         model_patterns: Optional[List[str]] = None,
     ) -> ChatTemplate:
-        ""
+"""
 Register a template from config.        template = JinjaTemplate(config)
         self.register(name, template, model_patterns)
         return template
@@ -89,7 +89,7 @@ Register a template from config.        template = JinjaTemplate(config)
         self,
         resolver: Callable[[str], Optional[ChatTemplate]],
     ) -> None:
-        ""
+"""
 Register a custom template resolver.        self._resolvers.append(resolver)
 
     def get(
@@ -97,7 +97,7 @@ Register a custom template resolver.        self._resolvers.append(resolver)
         name: str,
         default: Optional[ChatTemplate] = None,
     ) -> Optional[ChatTemplate]:
-        ""
+"""
 Get template by name.        return self._templates.get(name, default)
 
     def resolve(
@@ -105,7 +105,7 @@ Get template by name.        return self._templates.get(name, default)
         model_name: str,
         tokenizer: Optional[Any] = None,
     ) -> ChatTemplate:
-        ""
+"""
 Resolve template for a model.        # Check tokenizer first
         if tokenizer and hasattr(tokenizer, "chat_template"):"            template_str = tokenizer.chat_template
             if template_str:
@@ -138,11 +138,11 @@ Resolve template for a model.        # Check tokenizer first
         )
 
     def list_templates(self) -> List[TemplateInfo]:
-        ""
+"""
 List all registered templates.        return [t.get_info() for t in self._templates.values()]
 
     def unregister(self, name: str) -> bool:
-        ""
+"""
 Unregister a template.        return self._templates.pop(name, None) is not None
 
-""
+"""

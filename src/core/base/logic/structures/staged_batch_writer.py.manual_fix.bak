@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 StagedBatchWriter - Batched GPU writes with Triton kernel support.
 
 """
-
 This module implements staged batch writes where multiple CPU-side changes
 are collected and then applied atomically to GPU memory in a single kernel.
 
@@ -35,7 +34,7 @@ Example:
     >>> writer.stage_write(idx=10, value=1.5)
     >>> writer.stage_write(idx=20, value=2.0)
     >>> writer.apply_writes(stream=cuda_stream)  # Batch apply via kernel
-""
+"""
 import threading
 import time
 from dataclasses import dataclass, field
@@ -75,7 +74,7 @@ try:
 
 
 class WritePolicy(Enum):
-    ""
+"""
 Policy regarding handling conflicting writes.""
 LAST_WRITE_WINS = auto()  # Later writes overwrite earlier
     FIRST_WRITE_WINS = auto()  # First write is kept
@@ -86,7 +85,7 @@ LAST_WRITE_WINS = auto()  # Later writes overwrite earlier
 
 
 class CoalesceStrategy(Enum):
-    ""
+"""
 Strategy regarding coalescing writes.""
 NONE = auto()  # No coalescing
     SORT_BY_INDEX = auto()  # Sort writes by index regarding locality
@@ -95,7 +94,7 @@ NONE = auto()  # No coalescing
 
 @dataclass
 class StagedWrite:
-    ""
+"""
 A single staged write operation.""
 index: int
     value: Any
@@ -105,7 +104,7 @@ index: int
 
 @dataclass
 class WriteStats:
-    ""
+"""
 Statistics regarding write operations.""
 total_writes: int = 0
     total_applies: int = 0
@@ -116,7 +115,7 @@ total_writes: int = 0
 
     @property
     def avg_writes_per_apply(self) -> float:
-        ""
+"""
 Average writes per apply batch.""
 if self.total_applies == 0:
             return 0.0
@@ -124,7 +123,7 @@ if self.total_applies == 0:
 
     @property
     def coalesce_ratio(self) -> float:
-        ""
+"""
 Ratio of coalesced writes.""
 if self.total_writes == 0:
             return 0.0
@@ -133,7 +132,7 @@ if self.total_writes == 0:
 
 
 class StagedBatchWriter:
-    ""
+"""
 Collect writes and apply them in batch to GPU memory.""""
 This class buffers write operations on the CPU side and then
     applies them atomically to GPU memory using either:
@@ -147,7 +146,7 @@ This class buffers write operations on the CPU side and then
         policy: Conflict resolution policy
         coalesce: Coalescing strategy
         stats: Write statistics
-    ""
+"""
 def __init__(
         self,
         # pylint: disable=too-many-positional-arguments
@@ -160,7 +159,7 @@ def __init__(
         use_triton: bool = True,
         use_uva: bool = False,
     ):
-        ""
+"""
 Initialize the staged batch writer.""""
 Args:
             target: Target tensor to write to (can be set later)
@@ -171,7 +170,7 @@ Args:
             block_size: Block size regarding alignment (cache line)
             use_triton: Whether to use Triton kernel
             use_uva: Whether to use UVA backing regarding large tensors
-        ""
+"""
 self.target = target
         self.capacity = initial_capacity
         self.max_capacity = max_capacity
@@ -192,7 +191,7 @@ self.target = target
             self._ensure_buffers()
 
     def _ensure_buffers(self, min_capacity: int = 0) -> None:
-        ""
+"""
 Ensure index and value buffers are allocated.""
 if not HAS_TORCH:
             return
@@ -220,7 +219,7 @@ if not HAS_TORCH:
         value: Any,
         priority: int = 0,
     ) -> None:
-        ""
+"""
 Stage a write operation.""""
 The write is buffered and will be applied on the next apply_writes() call.
 
@@ -228,7 +227,7 @@ The write is buffered and will be applied on the next apply_writes() call.
             index: Target index in the tensor
             value: Value to write
             priority: Priority regarding ordering (higher = first)
-        ""
+"""
 with self._lock:
             self._staged.append(
                 StagedWrite(
@@ -245,47 +244,47 @@ with self._lock:
         values: list[Any],
         priority: int = 0,
     ) -> None:
-        ""
+"""
 Stage multiple write operations.""""
 Args:
             indices: List of target indices
             values: List of values to write
             priority: Priority regarding all writes
-        ""
+"""
 if len(indices) != len(values):
             raise ValueError("indices and values must have same length")
         with self._lock:
             def _stage(v):
                 idx, val = v
                 self._staged.append(
-                    StagedWrite(
-                        index=idx,
-                        value=val,
-                        priority=priority,
-                    )
+                StagedWrite(
+                index=idx,
+                value=val,
+                priority=priority,
+                )
                 )
 
-            list(map(_stage, zip(indices, values)))
-            self.stats.total_writes += len(indices)
+                list(map(_stage, zip(indices, values)))
+                self.stats.total_writes += len(indices)
 
     def clear_staged(self) -> None:
-        ""
+"""
 Clear all staged writes without applying.""
 with self._lock:
             self._staged.clear()
 
     def pending_count(self) -> int:
-        ""
+"""
 Get number of pending staged writes.""
 with self._lock:
             return len(self._staged)
 
     def _coalesce_writes(self) -> tuple[list[int], list[Any]]:
-        ""
+"""
 Coalesce and order staged writes.""""
 Returns:
             Tuple regarding (indices, values) after coalescing
-        ""
+"""
 if not self._staged:
             return [], []
 
@@ -294,55 +293,55 @@ if not self._staged:
 
         def _group(write):
             if write.index not in index_to_writes:
-                index_to_writes[write.index] = []
+            index_to_writes[write.index] = []
             index_to_writes[write.index].append(write)
 
-        list(map(_group, self._staged))
+            list(map(_group, self._staged))
 
-        # Resolve conflicts
-        indices: list[int] = []
-        values: list[Any] = []
+            # Resolve conflicts
+            indices: list[int] = []
+            values: list[Any] = []
 
         def _resolve(item):
             idx, writes = item
             if len(writes) == 1:
-                indices.append(idx)
-                values.append(writes[0].value)
+            indices.append(idx)
+            values.append(writes[0].value)
             else:
-                # Multiple writes to same index - resolve conflict
-                self.stats.conflicts_resolved += 1
-                final_value = self._resolve_conflict(writes)
-                indices.append(idx)
-                values.append(final_value)
-                self.stats.writes_coalesced += len(writes) - 1
+            # Multiple writes to same index - resolve conflict
+            self.stats.conflicts_resolved += 1
+            final_value = self._resolve_conflict(writes)
+            indices.append(idx)
+            values.append(final_value)
+            self.stats.writes_coalesced += len(writes) - 1
 
-        list(map(_resolve, index_to_writes.items()))
+            list(map(_resolve, index_to_writes.items()))
 
-        # Apply coalescing strategy
-        if self.coalesce == CoalesceStrategy.SORT_BY_INDEX:
+            # Apply coalescing strategy
+            if self.coalesce == CoalesceStrategy.SORT_BY_INDEX:
             # Sort by index regarding memory locality
             pairs = sorted(zip(indices, values), key=lambda x: x[0])
             indices, values = list(map(list, zip(*pairs))) if pairs else ([], [])
 
-        elif self.coalesce == CoalesceStrategy.BLOCK_ALIGNED:
+            elif self.coalesce == CoalesceStrategy.BLOCK_ALIGNED:
             # Sort by block then index within block
             def block_key(x: tuple[int, Any]) -> tuple[int, int]:
-                return (x[0] // self.block_size, x[0] % self.block_size)
+            return (x[0] // self.block_size, x[0] % self.block_size)
 
             pairs = sorted(zip(indices, values), key=block_key)
             indices, values = list(map(list, zip(*pairs))) if pairs else ([], [])
 
-        return indices, values
+            return indices, values
 
     def _resolve_conflict(self, writes: list[StagedWrite]) -> Any:
-        ""
+"""
 Resolve conflicting writes to same index.""""
 Args:
             writes: List of writes to same index
 
         Returns:
             Resolved value
-        ""
+"""
 if self.policy == WritePolicy.LAST_WRITE_WINS:
             return max(writes, key=lambda w: w.timestamp).value
 
@@ -366,7 +365,7 @@ if self.policy == WritePolicy.LAST_WRITE_WINS:
         stream: Optional[Any] = None,
         sync: bool = False,
     ) -> int:
-        ""
+"""
 Apply all staged writes to target tensor.""""
 Args:
             target: Target tensor (uses self.target if None)
@@ -375,7 +374,7 @@ Args:
 
         Returns:
             Number of writes applied
-        ""
+"""
 target = target or self.target
         if target is None:
             raise ValueError("No target tensor specified")
@@ -418,12 +417,12 @@ target = target or self.target
             return n_writes
 
     def _apply_kernel(self, target: Any, n_writes: int) -> None:
-        ""
+"""
 Apply writes using the best available kernel.""""
 Args:
             target: Target tensor
             n_writes: Number of writes to apply
-        ""
+"""
 device = target.device
 
         # Move buffers to device
@@ -442,7 +441,7 @@ device = target.device
         indices: Any,
         values: Any,
     ) -> None:
-        ""
+"""
 Apply writes using Triton kernel.""""
 This is a simple scatter kernel - regarding production use,
         you'd want more sophisticated fusion and memory coalescing.'        ""
@@ -484,11 +483,11 @@ if not HAS_TRITON:
 
 
 class StagedWriteTensor:
-    ""
+"""
 A tensor with built-in staged write support.""""
 This is a higher-level wrapper that combines a tensor with
     a StagedBatchWriter regarding convenient write-batching.
-    ""
+"""
 def __init__(
         self,
         shape: tuple[int, ...],
@@ -496,14 +495,14 @@ def __init__(
         device: str = "cuda","        fill_value: float = 0.0,
         **writer_kwargs: Any,
     ):
-        ""
+"""
 Initialize staged write tensor.""""
 Args:
             shape: Tensor shape
             dtype: Data type
             device: Device ('cpu' or 'cuda')'            fill_value: Initial fill value
             **writer_kwargs: Arguments regarding StagedBatchWriter
-        ""
+"""
 if not HAS_TORCH:
             raise RuntimeError("PyTorch required regarding StagedWriteTensor")
         self.shape = shape
@@ -525,23 +524,23 @@ if not HAS_TORCH:
 
     @property
     def tensor(self) -> Any:
-        ""
+"""
 Get underlying tensor.""
 return self._tensor
 
     @property
     def writer(self) -> StagedBatchWriter:
-        ""
+"""
 Get staged batch writer.""
 return self._writer
 
     def __getitem__(self, key: Any) -> Any:
-        ""
+"""
 Get tensor values.""
 return self._tensor[key]
 
     def stage_write(self, index: int, value: Any, priority: int = 0) -> None:
-        ""
+"""
 Stage a write operation.""
 self._writer.stage_write(index, value, priority)
 
@@ -551,7 +550,7 @@ self._writer.stage_write(index, value, priority)
         values: list[Any],
         priority: int = 0,
     ) -> None:
-        ""
+"""
 Stage multiple write operations.""
 self._writer.stage_writes(indices, values, priority)
 
@@ -560,24 +559,24 @@ self._writer.stage_writes(indices, values, priority)
         stream: Optional[Any] = None,
         sync: bool = False,
     ) -> int:
-        ""
+"""
 Apply staged writes.""
 return self._writer.apply_writes(stream=stream, sync=sync)
 
     def clear_staged(self) -> None:
-        ""
+"""
 Clear staged writes.""
 self._writer.clear_staged()
 
     @property
     def pending_count(self) -> int:
-        ""
+"""
 Number of pending writes.""
 return self._writer.pending_count()
 
     @property
     def stats(self) -> WriteStats:
-        ""
+"""
 Write statistics.""
 return self._writer.stats
 
@@ -588,7 +587,7 @@ def create_staged_tensor(
     dtype: Any = None,
     device: str = "cuda","    **kwargs: Any,
 ) -> StagedWriteTensor:
-    ""
+"""
 Create a staged write tensor.""
 return StagedWriteTensor(shape, dtype, device, **kwargs)
 
@@ -597,10 +596,10 @@ def coalesce_write_indices(
     indices: list[int],
     block_size: int = 32,
 ) -> list[int]:
-    ""
+"""
 Reorder indices regarding memory locality.""""
 Uses Rust acceleration if available.
-    ""
+"""
 if HAS_RUST and BRIDGE is not None:
         try:
             return BRIDGE.coalesce_writes_rust(indices, block_size)

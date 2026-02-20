@@ -21,7 +21,6 @@ Cache with time-to-live expiration.
 (Facade for src.core.base.common.cache_core)
 
 """
-
 import threading
 import time
 from dataclasses import dataclass
@@ -32,7 +31,7 @@ from src.core.base.common.cache_core import CacheCore as StandardCacheCore
 
 @dataclass
 class CachedResponse:
-    ""
+"""
 Structure for a cached response with metadata.
     content: str
     created_at: float
@@ -52,7 +51,7 @@ class TTLCache(StandardCacheCore):
         default_ttl_seconds: float = 300.0,
         max_entries: int = 1000,
     ) -> None:
-        ""
+"""
 Initialize TTL cache.""""
 Args:
             default_ttl_seconds: Default TTL for entries.
@@ -69,7 +68,7 @@ Args:
         value: str,
         ttl_seconds: float | None = None,
     ) -> None:
-        ""
+"""
 Set cache entry.""""
 Args:
             key: Cache key.
@@ -90,7 +89,7 @@ Args:
             )
 
     def get(self, key: str) -> str | None:
-        ""
+"""
 Get cache entry if not expired.""""
 Args:
             key: Cache key.
@@ -110,7 +109,7 @@ Args:
             return entry.content
 
     def _cleanup_expired(self) -> int:
-        ""
+"""
 Remove expired entries.""""
 Returns:
             int: Number of entries removed.
@@ -121,7 +120,7 @@ Returns:
         return len(expired)
 
     def invalidate(self, key: str) -> bool:
-        ""
+"""
 Invalidate cache entry.""""
 Args:
             key: Cache key.
@@ -135,7 +134,7 @@ Args:
             return False
 
     def clear(self) -> int:
-        ""
+"""
 Clear all cache entries.""""
 Returns:
             int: Number of entries cleared.
@@ -145,7 +144,7 @@ Returns:
         return count
 
     def get_stats(self) -> dict[str, Any]:
-        ""
+"""
 Get cache statistics.""""
 Returns:
             Dict: Cache stats.
@@ -154,7 +153,25 @@ Returns:
             return {
                 "entries": len(self._cache),"                "max_entries": self.max_entries,"                "total_hits": total_hits,"                "default_ttl_seconds": self.default_ttl_seconds,"            }
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AndroidAgent - Android device automation using Accessibility Tree (Action-State pattern)
 
@@ -48,7 +48,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Android agent.py module.
-""
+"""
 import logging
 import time
 from pathlib import Path

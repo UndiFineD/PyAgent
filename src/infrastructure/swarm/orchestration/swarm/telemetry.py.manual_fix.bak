@@ -19,7 +19,6 @@ Swarm Telemetry Service (Phase 77).
 Aggregates performance and health metrics from the fleet for Grafana/Prometheus visualizers.
 
 """
-
 try:
     import logging
 except ImportError:

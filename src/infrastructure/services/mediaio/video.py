@@ -46,12 +46,12 @@ Load and process videos.
     def __init__(self):
         self._cv2_available = False
         try:
-            import cv2
+        import cv2
 
-            self._cv2_available = True
-            self._cv2 = cv2
+        self._cv2_available = True
+        self._cv2 = cv2
         except ImportError:
-            pass
+        pass
 
     def supports(self, media_type: MediaType) -> bool:
         return media_type == MediaType.VIDEO

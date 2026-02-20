@@ -41,11 +41,11 @@ lines = content.splitlines()
 
         def fix_line(line):
             if line.startswith("#") and not line.startswith("# "):
-                return re.sub(r"^(#+)", r"\1 ", line)
+            return re.sub(r"^(#+)", r"\1 ", line)
             return line
 
-        fixed_lines = list(map(fix_line, lines))
-        return "\n".join(fixed_lines)
+            fixed_lines = list(map(fix_line, lines))
+            return "\n".join(fixed_lines)
 
 
     def normalize_response(self, response: str) -> str:

@@ -63,13 +63,13 @@ class KVzapSurrogate(nn.Module):
         super().__init__()
         self.config = config
         if config.use_mlp:
-            self.model = nn.Sequential(
-                nn.Linear(config.hidden_dim, config.hidden_dim // 8),
-                nn.GELU(),
-                nn.Linear(config.hidden_dim // 8, config.num_heads),
-            )
+        self.model = nn.Sequential(
+        nn.Linear(config.hidden_dim, config.hidden_dim // 8),
+        nn.GELU(),
+        nn.Linear(config.hidden_dim // 8, config.num_heads),
+        )
         else:
-            self.model = nn.Linear(config.hidden_dim, config.num_heads)
+        self.model = nn.Linear(config.hidden_dim, config.num_heads)
 
     def forward(self, hidden_states: torch.Tensor) -> torch.Tensor:
 """

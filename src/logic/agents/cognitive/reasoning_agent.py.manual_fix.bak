@@ -23,7 +23,7 @@ try:
 except ImportError:
 
 """
-    import logging
+import logging
 
 try:
     from typing import Any
@@ -42,10 +42,10 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class ReasoningAgent(BaseAgent):
-    ""
+"""
 Tier 2 (Cognitive Logic) - Reasoning Agent: Analyzes complex problems
     and provides a logical blueprint before action using Chain-of-Thought reasoning.
-    ""
+"""
 def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = ("You are the Reasoning Agent, specializing in logical analysis of technical problems.")
@@ -57,7 +57,7 @@ def __init__(self, file_path: str) -> None:
 
     @as_tool
     def analyze(self, problem: str, context: str | None = None) -> str:
-        ""
+"""
 Performs a structured analysis of a technical problem.""
 self._track_tokens(len(problem) // 4 + 100)
         analysis = [
@@ -87,7 +87,7 @@ self._track_tokens(len(problem) // 4 + 100)
 
     @as_tool
     def analyze_tot(self, problem: str) -> str:
-        ""
+"""
 Performs Tree-of-Thought reasoning by exploring multiple solution paths.""
 analysis = [
             f"## Tree-of-Thought Analysis: {problem}",
@@ -104,11 +104,11 @@ analysis = [
         self, problem: str, 
         language: str = "english"
         ) -> dict[str, Any]:
-        ""
+"""
 Validates reasoning across language boundaries (Latent Reasoning Guardrail).
         
         Checks if the internal reasoning steps align when translated to low-resource languages.
-        ""
+"""
 logging.info(f"ReasoningAgent: Checking latent consistency for {language}")  # Simulation of Cross-Lingual consistency check (ArXiv 2601.02996)
 
         is_consistent = language.lower() in ["english", "chinese", "spanish"]

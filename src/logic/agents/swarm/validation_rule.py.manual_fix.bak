@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 validation_rule.py - ValidationRule dataclass for changelog validation
 
@@ -69,4 +69,4 @@ Rule used by ChangesAgent to validate changelog entries against standards. "   n
     message: str
     severity: str
 
-""
+"""

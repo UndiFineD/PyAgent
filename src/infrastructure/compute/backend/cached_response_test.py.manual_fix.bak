@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.compute.backend.cached_response import CachedResponse

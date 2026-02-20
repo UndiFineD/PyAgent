@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 notification_config.py - Defines NotificationConfig dataclass
 for error notification settings
@@ -61,7 +61,7 @@ WHAT IT SHOULD DO BETTER:
 - Emit introspection or schema metadata (e.g., to integrate with a
   config UI) and provide unit tests for edge cases like disabled
   notification flow.
-""
+"""
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -90,7 +90,7 @@ __version__ = VERSION
 
 @dataclass
 class NotificationConfig:
-    ""
+"""
 Configuration for error notifications.
 
     Attributes:
@@ -99,7 +99,7 @@ Configuration for error notifications.
         min_severity: Minimum severity to notify.
         enabled: Whether notifications are enabled.
         template: Message template.
-    ""
+"""
 channel: NotificationChannel
     endpoint: str
     min_severity: ErrorSeverity = ErrorSeverity.HIGH

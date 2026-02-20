@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Localization Agent - Localization and i18n orchestration
 
@@ -33,7 +33,7 @@ Use async file I/O for extraction, return structured locale metadata and plurali
 
 FILE CONTENT SUMMARY:
 Localization agent.py module.
-""
+"""
 import logging
 import re
 from typing import Any

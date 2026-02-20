@@ -21,7 +21,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Main orchestrator for GPU-resident batch management.
-""
+"""
 
 """
 import logging
@@ -117,7 +117,7 @@ class InputBatchOrchestrator:
             f"InputBatchOrchestrator initialized: max_reqs={max_num_reqs}, ""            f"max_tokens={max_num_batched_tokens}, device={device}""        )
 
     def _init_token_storage(self) -> None:
-        ""
+"""
 Initialize CPU token storage.        if HAS_TORCH:
             self.token_ids_cpu_tensor = torch.zeros(
                 (self.max_num_reqs, self.max_model_len),
@@ -133,7 +133,7 @@ Initialize CPU token storage.        if HAS_TORCH:
         self.num_computed_tokens_cpu = np.zeros(self.max_num_reqs, dtype=np.int32)
 
     def _init_sampling_storage(self) -> None:
-        ""
+"""
 Initialize CPU sampling parameter storage.        if HAS_TORCH:
             # Temperature
             self.temperature_cpu_tensor = torch.empty(
@@ -173,12 +173,12 @@ Initialize CPU sampling parameter storage.        if HAS_TORCH:
 
     @property
     def num_reqs(self) -> int:
-        ""
+"""
 Current number of active requests.        return len(self.req_id_to_index)
 
     @property
     def req_ids(self) -> List[str]:
-        ""
+"""
 List of active request IDs in order.        return [rid for rid in self._req_ids[: self.num_reqs] if rid is not None]
 
     def add_request(
@@ -232,7 +232,7 @@ List of active request IDs in order.        return [rid for rid in self._req_ids
         logger.debug(f"Added request {req_id} at index {index}")"        return index
 
     def _store_sampling_params(self, index: int, params: dict[str, Any]) -> None:
-        ""
+"""
 Store sampling parameters at index.        temperature = params.get("temperature", 1.0)"        self.temperature_cpu[index] = temperature
 
         if temperature != 0.0:
@@ -255,7 +255,7 @@ Store sampling parameters at index.        temperature = params.get("temperature
             self.no_penalties = False
 
     def _set_default_sampling_params(self, index: int) -> None:
-        ""
+"""
 Set default sampling parameters at index.        self.temperature_cpu[index] = 1.0
         self.top_p_cpu[index] = 1.0
         self.top_k_cpu[index] = -1
@@ -264,7 +264,7 @@ Set default sampling parameters at index.        self.temperature_cpu[index] = 1
         self.repetition_penalties_cpu[index] = 1.0
 
     def remove_request(self, req_id: str) -> None:
-        ""
+"""
 Remove a request from the batch.        if req_id not in self.req_id_to_index:
             logger.warning(f"Request {req_id} not in batch")"            return
 
@@ -280,7 +280,7 @@ Remove a request from the batch.        if req_id not in self.req_id_to_index:
 
         logger.debug(f"Removed request {req_id} from index {index}")
     def swap_states(self, i1: int, i2: int) -> None:
-        ""
+"""
 Swap two request slots.        # Swap req_ids
         self._req_ids[i1], self._req_ids[i2] = self._req_ids[i2], self._req_ids[i1]
 
@@ -310,16 +310,16 @@ Swap two request slots.        # Swap req_ids
         self.batch_update_builder.record_swap(i1, i2)
 
     def _swap_array_values(self, arr: np.ndarray, i1: int, i2: int) -> None:
-        ""
+"""
 Swap rows in a 2D array.        arr[i1].copy(), arr[i2].copy()
         arr[i1], arr[i2] = arr[i2].copy(), arr[i1].copy()
 
     def _swap_value(self, arr: np.ndarray, i1: int, i2: int) -> None:
-        ""
+"""
 Swap values in a 1D array.        arr[i1], arr[i2] = arr[i2], arr[i1]
 
     def compact(self) -> None:
-        ""
+"""
 Compact the batch by removing gaps from removed requests.        write_idx = 0
         for read_idx in range(self.max_num_reqs):
             req_id = self._req_ids[read_idx]
@@ -427,7 +427,7 @@ Compact the batch by removing gaps from removed requests.        write_idx = 0
         )
 
     def _make_sampling_metadata(self, idx_mapping: np.ndarray, num_reqs: int) -> SamplingMetadata:
-        ""
+"""
 Construct GPU sampling metadata from CPU arrays.        if not HAS_TORCH:
             return SamplingMetadata(
                 temperature=self.temperature_cpu[idx_mapping[:num_reqs]].copy(),
@@ -490,11 +490,11 @@ Construct GPU sampling metadata from CPU arrays.        if not HAS_TORCH:
         )
 
     def get_state(self, req_id: str) -> Optional[CachedRequestState]:
-        ""
+"""
 Get cached state for a request.        return self._request_states.get(req_id)
 
     def update_computed_tokens(self, req_id: str, num_tokens: int) -> None:
-        ""
+"""
 Update computed token count for a request.        if req_id in self.req_id_to_index:
             index = self.req_id_to_index[req_id]
             self.num_computed_tokens_cpu[index] = num_tokens
@@ -502,7 +502,7 @@ Update computed token count for a request.        if req_id in self.req_id_to_in
                 self._request_states[req_id].num_computed_tokens = num_tokens
 
     def append_output_token(self, req_id: str, token_id: int) -> None:
-        ""
+"""
 Append an output token to a request.        if req_id in self.req_id_to_index:
             index = self.req_id_to_index[req_id]
             seq_len = self.num_tokens_no_spec[index]
@@ -514,10 +514,10 @@ Append an output token to a request.        if req_id in self.req_id_to_index:
                 self._request_states[req_id].output_token_ids.append(token_id)
 
     def reset_step(self) -> None:
-        ""
+"""
 Reset per-step tracking.        self.batch_update_builder.reset()
 
     def get_stats(self) -> dict[str, Any]:
-        ""
+"""
 Get orchestrator statistics.        return {
             "num_reqs": self.num_reqs,"            "max_num_reqs": self.max_num_reqs,"            "peak_batch_size": self._peak_batch_size,"            "resize_count": self._resize_count,"            "all_greedy": self.all_greedy,"            "no_top_p": self.no_top_p,"            "no_top_k": self.no_top_k,"            "no_penalties": self.no_penalties,"        }

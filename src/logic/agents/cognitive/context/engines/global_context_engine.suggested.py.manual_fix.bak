@@ -19,11 +19,11 @@ from __future__ import annotations
 # "Advanced Long-Term Memory (LTM) for agents."# Consolidates episodic memories into semantic knowledge and persistent preferences.
 """
 Inspired by mem0 and BabyAGI patterns.
-""
+"""
 try:
 
 """
-    from pathlib import Path
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -86,4 +86,4 @@ class GlobalContextEngine(ContextShardMixin, ContextDataMixin, ContextEntityMixi
         self._loaded_shards: set[Any] = set()
         self.load()
 
-""
+"""

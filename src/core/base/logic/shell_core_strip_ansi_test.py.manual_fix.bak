@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    from src.core.base.common.shell_core import ShellCore
+from src.core.base.common.shell_core import ShellCore
 
 
 

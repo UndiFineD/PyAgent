@@ -88,39 +88,39 @@ Unified media loading engine.
 
     def register_loader(self, media_type: MediaType, loader: MediaLoader):
 """
-Register custom loader for media type.        self._loaders[media_type] = loader
+        Register custom loader for media type.        self._loaders[media_type] = loader
 
-    async def load(
+        async def load(
         self,
         source: Union[str, bytes, BinaryIO],
         media_type: Optional[MediaType] = None,
         config: Optional[MediaLoadConfig] = None,
-    ) -> Union[ImageData, VideoData, AudioData]:
+        ) -> Union[ImageData, VideoData, AudioData]:
 """
-Load media from source.        cfg = config or self.config
+        Load media from source.        cfg = config or self.config
         if media_type is None:
-            media_type = self._detect_media_type(source)
+        media_type = self._detect_media_type(source)
 
         cache_key = self._compute_cache_key(source, media_type)
         if cfg.enable_cache and cache_key in self._cache:
-            return self._cache[cache_key]
+        return self._cache[cache_key]
 
         loader = self._loaders.get(media_type)
         if loader is None:
-            raise ValueError(f"No loader for media type: {media_type}")
+        raise ValueError(f"No loader for media type: {media_type}")
         result = await loader.load(source, cfg)
         if cfg.enable_cache:
-            self._cache[cache_key] = result
+        self._cache[cache_key] = result
         return result
 
-    async def load_batch(
+        async def load_batch(
         self,
         sources: List[Union[str, bytes]],
         media_type: Optional[MediaType] = None,
         config: Optional[MediaLoadConfig] = None,
-    ) -> List[Union[ImageData, VideoData, AudioData]]:
+        ) -> List[Union[ImageData, VideoData, AudioData]]:
 """
-Load multiple media files concurrently.        tasks = [self.load(source, media_type, config) for source in sources]
+        Load multiple media files concurrently.        tasks = [self.load(source, media_type, config) for source in sources]
         return await asyncio.gather(*tasks)
 
     def _detect_media_type(self, source: Union[str, bytes, BinaryIO]) -> MediaType:
@@ -199,6 +199,24 @@ Convenience function to load audio.    config = MediaLoadConfig(
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

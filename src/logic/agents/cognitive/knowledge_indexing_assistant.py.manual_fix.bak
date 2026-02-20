@@ -15,14 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Indexing assistant: prepare documents, metadatas and ids for vector stores.
 
 """
-
 Minimal, import-safe implementation used in tests.
-""
+"""
 try:
     from typing import Any, Dict, List, Tuple
 except ImportError:
@@ -31,12 +30,12 @@ except ImportError:
 
 
 class KnowledgeIndexingAssistant:
-    ""
+"""
 Handles workspace traversal and data preparation for vector indexing.""
 def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
 
     def build_vector_data(self, target_path: Any) -> Tuple[List[str], List[Dict[str, Any]], List[str]]:
-        ""
+"""
 Return empty lists (stub) for tests and imports.""
 return [], [], []

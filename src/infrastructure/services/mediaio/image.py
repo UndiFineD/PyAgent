@@ -43,17 +43,17 @@ Load and process images.
         self._pil_available = False
         self._cv2_available = False
         try:
-            from PIL import Image
-            self._pil_available = True
-            self._image_lib = Image
+        from PIL import Image
+        self._pil_available = True
+        self._image_lib = Image
         except ImportError:
-            pass
+        pass
         try:
-            import cv2
-            self._cv2_available = True
-            self._cv2 = cv2
+        import cv2
+        self._cv2_available = True
+        self._cv2 = cv2
         except ImportError:
-            pass
+        pass
 
     def supports(self, media_type: MediaType) -> bool:
         return media_type == MediaType.IMAGE
@@ -135,53 +135,53 @@ Load using PIL.        img = self._image_lib.open(io.BytesIO(data))
 
     def _resize_pil(self, img, target: Tuple[int, int], mode: ResizeMode):
 """
-Resize image using PIL.        w, h = img.size
+        Resize image using PIL.        w, h = img.size
         tw, th = target
 
         if mode == ResizeMode.STRETCH:
-            return img.resize((tw, th), self._image_lib.Resampling.BICUBIC)
+        return img.resize((tw, th), self._image_lib.Resampling.BICUBIC)
 
         if mode == ResizeMode.CROP:
-            scale = max(tw / w, th / h)
-            new_w, new_h = int(w * scale), int(h * scale)
-            img = img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
-            left = (new_w - tw) // 2
-            top = (new_h - th) // 2
-            return img.crop((left, top, left + tw, top + th))
+        scale = max(tw / w, th / h)
+        new_w, new_h = int(w * scale), int(h * scale)
+        img = img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
+        left = (new_w - tw) // 2
+        top = (new_h - th) // 2
+        return img.crop((left, top, left + tw, top + th))
 
         if mode == ResizeMode.PAD:
-            scale = min(tw / w, th / h)
-            new_w, new_h = int(w * scale), int(h * scale)
-            img = img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
-            result = self._image_lib.new("RGB", (tw, th), (0, 0, 0))"            left = (tw - new_w) // 2
-            top = (th - new_h) // 2
-            result.paste(img, (left, top))
-            return result
+        scale = min(tw / w, th / h)
+        new_w, new_h = int(w * scale), int(h * scale)
+        img = img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
+        result = self._image_lib.new("RGB", (tw, th), (0, 0, 0))"            left = (tw - new_w) // 2
+        top = (th - new_h) // 2
+        result.paste(img, (left, top))
+        return result
 
         if mode == ResizeMode.SHORTEST:
-            scale = min(tw / w, th / h)
-            new_w, new_h = int(w * scale), int(h * scale)
-            return img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
+        scale = min(tw / w, th / h)
+        new_w, new_h = int(w * scale), int(h * scale)
+        return img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
 
         scale = max(tw / w, th / h)
         new_w, new_h = int(w * scale), int(h * scale)
         return img.resize((new_w, new_h), self._image_lib.Resampling.BICUBIC)
 
-    async def _load_cv2(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
+        async def _load_cv2(self, data: bytes, config: MediaLoadConfig) -> np.ndarray:
 """
-Load using OpenCV.        arr = np.frombuffer(data, dtype=np.uint8)
+        Load using OpenCV.        arr = np.frombuffer(data, dtype=np.uint8)
         img = self._cv2.imdecode(arr, self._cv2.IMREAD_COLOR)
         img = self._cv2.cvtColor(img, self._cv2.COLOR_BGR2RGB)
 
         if config.target_size:
-            img = self._resize_cv2(img, config.target_size, config.resize_mode)
+        img = self._resize_cv2(img, config.target_size, config.resize_mode)
 
         img = img.astype(np.float32)
         if config.normalize:
-            img = img / 255.0
-            mean = np.array(config.mean, dtype=np.float32).reshape(1, 1, 3)
-            std = np.array(config.std, dtype=np.float32).reshape(1, 1, 3)
-            img = (img - mean) / std
+        img = img / 255.0
+        mean = np.array(config.mean, dtype=np.float32).reshape(1, 1, 3)
+        std = np.array(config.std, dtype=np.float32).reshape(1, 1, 3)
+        img = (img - mean) / std
         return img
 
     def _resize_cv2(self, img: np.ndarray, target: Tuple[int, int], mode: ResizeMode) -> np.ndarray:

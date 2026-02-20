@@ -30,7 +30,7 @@ Instantiate SecurityCore with an optional workspace root and run scanning/auditi
 try:
 
 """
-    from .logic.agents.security.security_core import SecurityCore
+from .logic.agents.security.security_core import SecurityCore
 except ImportError:
     from src.logic.agents.security.security_core import SecurityCore
 
@@ -52,7 +52,7 @@ FILE CONTENT SUMMARY:
 SecurityCore logic for workspace safety.
 Combines scanning for secrets, command auditing, shell script analysis, and injection detection.
 This is designed for high-performance static analysis and future Rust migration.
-""
+"""
 try:
     import importlib.util
 except ImportError:
@@ -107,7 +107,7 @@ Pure logic core for security and safety validation.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -120,7 +120,7 @@ SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 r'(?i)(api[_-]?key|access[_-]?key)\\\\s*[:=]\\\\s*[\'"][A-Za-z0-9/+=]{16,}[\'"]',"'            SecurityIssueType.HARDCODED_SECRET,
             "high","            "Hardcoded API key detected","            "Rotate the key and move it to a secure configuration provider.","        ),
 # [BATCHFIX] Commented metadata/non-Python
@@ -209,7 +209,7 @@ Pure logic core for security and safety validation.
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -222,7 +222,7 @@ SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 r'(?i)(api[_-]?key|access[_-]?key)\\\\s*[:=]\\\\s*[\'"][A-Za-z0-9/+=]{16,}[\'"]',"'            SecurityIssueType.HARDCODED_SECRET,
             "high","            "Hardcoded API key detected","            "Rotate the key and move it to a secure configuration provider.","        ),
 # [BATCHFIX] Commented metadata/non-Python
@@ -256,4 +256,4 @@ r'(?i)(api[_-]?key|access[_-]?key)\\\\s*[:=]\\\\s*[\'"][A-Za-z0-9/+=]{16,}[\'"]'
         self.workspace_root = workspace_root
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
 
-""
+"""

@@ -51,8 +51,8 @@ class LoadBalancerClient:
 
     def update_rank_stats(self, rank_id: int, load: float, latency: float):
 """
-Updates internal statistics for a specific rank.        if rank_id in self.stats:
-            self.stats[rank_id]["load"] = load"            self.stats[rank_id]["latency"] = (self.stats[rank_id]["latency"] * 0.9) + (latency * 0.1)"
+        Updates internal statistics for a specific rank.        if rank_id in self.stats:
+        self.stats[rank_id]["load"] = load"            self.stats[rank_id]["latency"] = (self.stats[rank_id]["latency"] * 0.9) + (latency * 0.1)"
     def get_health_map(self) -> Dict[int, str]:
 """
 Returns the health status of all ranks.        health = {}

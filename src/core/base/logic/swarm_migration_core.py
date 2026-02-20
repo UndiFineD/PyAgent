@@ -104,19 +104,19 @@ def __init__(self,
 
     def register_strategy(self, task_type: MigrationTask, strategy: MigrationStrategy):
 """
-Register a migration strategy for a specific task type""
-self.migration_strategies[task_type] = strategy
+        Register a migration strategy for a specific task type""
+        self.migration_strategies[task_type] = strategy
         logger.info(f"Registered migration strategy for {task_type.value}")
-    async def execute_swarm_migration(
+        async def execute_swarm_migration(
         self, targets: List[MigrationTarget], task_type: MigrationTask,
         context: CascadeContext, progress_callback: Optional[Callable] = None
-    ) -> OptimizationTrial:
+        ) -> OptimizationTrial:
 """
-Execute a swarm migration across multiple targets
+        Execute a swarm migration across multiple targets
         Based on the Swarm Migration Pattern from agentic-patterns
 """
-if task_type not in self.migration_strategies:
-            raise ValueError(f"No migration strategy registered for {task_type.value}")
+        if task_type not in self.migration_strategies:
+        raise ValueError(f"No migration strategy registered for {task_type.value}")
         strategy = self.migration_strategies[task_type]
 
         # Create migration batches
@@ -128,32 +128,32 @@ if task_type not in self.migration_strategies:
         tasks = []
 
         async def execute_batch_with_semaphore(batch: MigrationBatch) -> MigrationResult:
-            async with semaphore:
-                try:
-                    return await asyncio.wait_for(
-                        strategy.execute_migration(batch, context),
-                        timeout=self.timeout_seconds
-                    )
-                except asyncio.TimeoutError:
-                    return MigrationResult(
-                        batch_id=batch.batch_id,
-                        success=False,
-                        changes_made=0,
-                        errors=[f"Timeout after {self.timeout_seconds} seconds"],"                        execution_time=self.timeout_seconds
-                    )
-                except Exception as e:
-                    return MigrationResult(
-                        batch_id=batch.batch_id,
-                        success=False,
-                        changes_made=0,
-                        errors=[str(e)],
-                        execution_time=0.0
-                    )
+        async with semaphore:
+        try:
+        return await asyncio.wait_for(
+        strategy.execute_migration(batch, context),
+        timeout=self.timeout_seconds
+        )
+        except asyncio.TimeoutError:
+        return MigrationResult(
+        batch_id=batch.batch_id,
+        success=False,
+        changes_made=0,
+        errors=[f"Timeout after {self.timeout_seconds} seconds"],"                        execution_time=self.timeout_seconds
+        )
+        except Exception as e:
+        return MigrationResult(
+        batch_id=batch.batch_id,
+        success=False,
+        changes_made=0,
+        errors=[str(e)],
+        execution_time=0.0
+        )
 
         # Start all batch executions
         for batch in batches:
-            task = asyncio.create_task(execute_batch_with_semaphore(batch))
-            tasks.append(task)
+        task = asyncio.create_task(execute_batch_with_semaphore(batch))
+        tasks.append(task)
 
         # Wait for all batches to complete
         results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -163,32 +163,32 @@ if task_type not in self.migration_strategies:
         failed_results = []
 
         for result in results:
-            if isinstance(result, Exception):
-                failed_results.append(MigrationResult(
-                    batch_id="unknown","                    success=False,
-                    changes_made=0,
-                    errors=[str(result)]
-                ))
-            elif result.success:
-                successful_results.append(result)
-            else:
-                failed_results.append(result)
+        if isinstance(result, Exception):
+        failed_results.append(MigrationResult(
+        batch_id="unknown","                    success=False,
+        changes_made=0,
+        errors=[str(result)]
+        ))
+        elif result.success:
+        successful_results.append(result)
+        else:
+        failed_results.append(result)
 
         # Create optimization trial result
         trial = OptimizationTrial(
-            trial_id=f"swarm_migration_{int(asyncio.get_event_loop().time())}","            strategy_configs=[{"type": task_type.value, "batch_count": len(batches)}]"        )
+        trial_id=f"swarm_migration_{int(asyncio.get_event_loop().time())}","            strategy_configs=[{"type": task_type.value, "batch_count": len(batches)}]"        )
 
         trial.performance_results = [
-            {
-                "batch_id": r.batch_id,"                "success": r.success,"                "changes_made": r.changes_made,"                "errors": r.errors,"                "execution_time": r.execution_time"            }
-            for r in successful_results + failed_results
+        {
+        "batch_id": r.batch_id,"                "success": r.success,"                "changes_made": r.changes_made,"                "errors": r.errors,"                "execution_time": r.execution_time"            }
+        for r in successful_results + failed_results
         ]
 
         total_changes = sum(r.changes_made for r in successful_results)
         trial.best_strategy = {"total_changes": total_changes, "successful_batches": len(successful_results)}"        trial.optimization_score = len(successful_results) / len(batches) if batches else 0
 
         logger.info(
-            f"Swarm migration completed: {len(successful_results)}/{len(batches)} ""            f"successful batches, {total_changes} total changes""        )
+        f"Swarm migration completed: {len(successful_results)}/{len(batches)} ""            f"successful batches, {total_changes} total changes""        )
 
         return trial
 

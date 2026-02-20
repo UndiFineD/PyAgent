@@ -21,7 +21,6 @@ Tool drafting core module.
 # pylint: disable=too-many-ancestors
 
 """
-
 import json
 from dataclasses import dataclass
 from typing import Any
@@ -75,7 +74,25 @@ Generates a Python function stub for the drafted tool.        params = tool.para
 def {tool.name}({args}) -> Any:
 """\"\"\"{tool.description}\"\"\    # Auto-generated stub for" dynamic tool"    pass
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

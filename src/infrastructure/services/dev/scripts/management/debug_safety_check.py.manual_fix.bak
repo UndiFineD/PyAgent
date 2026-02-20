@@ -56,7 +56,7 @@ __version__ = VERSION
 
 
 def main() -> None:
-    ""
+"""
 Perform a comprehensive safety and compliance audit.    root = os.getcwd()
     fleet = FleetManager(root)
 
@@ -88,4 +88,4 @@ Perform a comprehensive safety and compliance audit.    root = os.getcwd()
 
 if __name__ == "__main__":"    main()
 
-""
+"""

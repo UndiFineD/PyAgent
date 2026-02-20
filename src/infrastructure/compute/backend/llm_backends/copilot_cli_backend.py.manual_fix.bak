@@ -20,7 +20,6 @@ from __future__ import annotations
 Copilot CLI LLM Backend - Local AI Execution
 
 """
-
 Native interface for the GitHub Copilot CLI to provide local-first AI capabilities.
 DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Improve output streaming for faster response processing in real-time interfaces.
 - Standardize multi-turn conversation context handling within the CLI wrapper.
 - Enhance error detection for specific CLI authentication or rate-limit states.
-""
+"""
 import logging
 import subprocess
 
@@ -48,7 +47,7 @@ __version__ = VERSION
 
 
 class CopilotCliBackend(LLMBackend):
-    ""
+"""
 GitHub Copilot CLI LLM Backend.
     def chat(
         self,

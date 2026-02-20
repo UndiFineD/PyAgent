@@ -18,7 +18,6 @@
 Conversation context management package.
 
 """
-
 try:
     from .core import AgenticContext, ConversationContext  # noqa: F401
 except ImportError:

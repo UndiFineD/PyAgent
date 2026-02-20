@@ -69,45 +69,45 @@ class ScenarioEngine:
     def __init__(self, fleet: FleetManager):
         self.fleet = fleet
 
-    async def run_scenario(self, scenario_path: str) -> bool:
+        async def run_scenario(self, scenario_path: str) -> bool:
 """
-Loads and executes a YAML scenario.        path = Path(scenario_path)
+        Loads and executes a YAML scenario.        path = Path(scenario_path)
         if not path.exists():
-            logger.error("Scenario file not found: %s", scenario_path)"            return False
+        logger.error("Scenario file not found: %s", scenario_path)"            return False
 
         with open(path, "r", encoding="utf-8") as f:"            scenario = yaml.safe_load(f)
 
         logger.info("Running scenario: %s", scenario.get("name", "Unnamed"))
         steps = scenario.get("steps", [])"        for i, step in enumerate(steps):
-            logger.info("Step %d: %s", i + 1, step.get("description", "No description"))"            success = await self._execute_step(step)
-            if not success:
-                logger.error("Scenario failed at step %d", i + 1)"                return False
+        logger.info("Step %d: %s", i + 1, step.get("description", "No description"))"            success = await self._execute_step(step)
+        if not success:
+        logger.error("Scenario failed at step %d", i + 1)"                return False
 
         logger.info("Scenario completed successfully!")"        return True
 
-    async def _execute_step(self, step: Dict[str, Any]) -> bool:
+        async def _execute_step(self, step: Dict[str, Any]) -> bool:
 """
-Executes a single step in a scenario.        action = step.get("action")"        params = step.get("params", {})"
+        Executes a single step in a scenario.        action = step.get("action")"        params = step.get("params", {})"
         if action == "delegate":"            agent_role = params.get("role")"            prompt = params.get("prompt")"            try:
-                # Store result in state for future verification
-                result = await self.fleet.delegate_to(agent_role, prompt)
-                step["last_result"] = result"                return True
-            except Exception as e:
-                logger.error("Delegation failed: %s", e)"                return False
+        # Store result in state for future verification
+        result = await self.fleet.delegate_to(agent_role, prompt)
+        step["last_result"] = result"                return True
+        except Exception as e:
+        logger.error("Delegation failed: %s", e)"                return False
 
         elif action == "verify_state":"            # Logic to verify agent or fleet state
-            condition = params.get("condition")"            if condition == "source_clean":"                # Check for common lint markers
-                return True
-            return True
+        condition = params.get("condition")"            if condition == "source_clean":"                # Check for common lint markers
+        return True
+        return True
 
         elif action == "verify_file":"            path = Path(params.get("path", ""))"            contains = params.get("contains")"            if not path.exists():
-                logger.error("File not found for verification: %s", path)"                return False
-            if contains:
-                content = path.read_text(encoding="utf-8")"                if contains not in content:
-                    logger.error("File %s does not contain expected string: %s", path, contains)"                    return False
-            return True
+        logger.error("File not found for verification: %s", path)"                return False
+        if contains:
+        content = path.read_text(encoding="utf-8")"                if contains not in content:
+        logger.error("File %s does not contain expected string: %s", path, contains)"                    return False
+        return True
 
         elif action == "wait":"            seconds = params.get("seconds", 1)"            await asyncio.sleep(seconds)
-            return True
+        return True
 
         logger.warning("Unknown scenario action: %s", action)"        return False

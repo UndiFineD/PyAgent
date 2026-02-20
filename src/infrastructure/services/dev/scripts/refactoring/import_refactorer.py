@@ -46,23 +46,23 @@ Handles migration of imports across Python files in a workspace.
 
     def load_mappings(self, config_path: str):
 """
-Loads absolute and relative mappings from a JSON file.        path = Path(config_path)
+        Loads absolute and relative mappings from a JSON file.        path = Path(config_path)
         if not path.is_absolute():
-            path = self.workspace_root / path
+        path = self.workspace_root / path
 
         if not path.exists():
-            print(f"Config mapping file not found: {path}")"            return
+        print(f"Config mapping file not found: {path}")"            return
 
         with open(path, "r", encoding="utf-8") as f:"            data = json.load(f)
-            self.absolute_mappings = data.get("absolute", {})"            self.relative_mappings = data.get("relative", {})"
+        self.absolute_mappings = data.get("absolute", {})"            self.relative_mappings = data.get("relative", {})"
     def add_absolute_mapping(self, old_path: str, new_path: str):
 """
-Adds a single absolute import mapping (e.g., 'src.core.old' -> 'src.core.new').'        self.absolute_mappings[old_path.replace("\\", ".")] = new_path.replace("\\", ".")
+        Adds a single absolute import mapping (e.g., 'src.core.old' -> 'src.core.new').'        self.absolute_mappings[old_path.replace("\\", ".")] = new_path.replace("\\", ".")
     def add_relative_mapping(self, directory: str, old_ref: str, new_ref: str):
 """
-Adds a relative mapping scoped to a specific directory (e.g., '.enums' -> '.CoreEnums').'        dir_path = str(Path(directory).resolve())
+        Adds a relative mapping scoped to a specific directory (e.g., '.enums' -> '.CoreEnums').'        dir_path = str(Path(directory).resolve())
         if dir_path not in self.relative_mappings:
-            self.relative_mappings[dir_path] = {}
+        self.relative_mappings[dir_path] = {}
         self.relative_mappings[dir_path][old_ref] = new_ref
 
     def refactor_file(self, file_path: Path) -> bool:
@@ -98,22 +98,22 @@ Processes a single file to apply absolute and scoped relative mappings.        w
 
     def run(self, search_paths: Optional[List[str]] = None):
 """
-Walks through search paths and refactors all Python files found.        if not search_paths:
-            search_paths = [str(self.workspace_root / "src"), str(self.workspace_root / "tests")]
+        Walks through search paths and refactors all Python files found.        if not search_paths:
+        search_paths = [str(self.workspace_root / "src"), str(self.workspace_root / "tests")]
         files_processed = 0
         files_updated = 0
 
         for path_str in search_paths:
-            path = Path(path_str)
-            if not path.exists():
-                print(f"Skipping non-existent path: {path}")"                continue
+        path = Path(path_str)
+        if not path.exists():
+        print(f"Skipping non-existent path: {path}")"                continue
 
-            for root, _, files in os.walk(path):
-                for file in files:
-                    if file.endswith(".py"):"                        files_processed += 1
-                        if self.refactor_file(Path(root) / file):
-                            files_updated += 1
-                            action = "Updated" if not self.dry_run else "[DRY RUN] Would update""                            print(f"{action}: {Path(root) / file}")"
+        for root, _, files in os.walk(path):
+        for file in files:
+        if file.endswith(".py"):"                        files_processed += 1
+        if self.refactor_file(Path(root) / file):
+        files_updated += 1
+        action = "Updated" if not self.dry_run else "[DRY RUN] Would update""                            print(f"{action}: {Path(root) / file}")"
         print(f"Finished. Processed {files_processed} files, updated {files_updated}.")
 
 def main():

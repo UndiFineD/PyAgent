@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 namespaces.py - Metric Namespace Management
 
 """
-
 A small manager class to create, delete, and organize MetricNamespace objects and to assign metrics to namespaces for hierarchical metric organization.
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -45,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Namespaces.py module.
 # Metric namespace management engine.
-""
+"""
 try:
     from typing import Any
 except ImportError:
@@ -61,7 +60,7 @@ except ImportError:
 
 
 class MetricNamespaceManager:
-    ""
+"""
 Manage metric namespaces for organizing large metric sets.
     def __init__(self) -> None:
         self.namespaces: dict[str, MetricNamespace] = {}
@@ -101,7 +100,7 @@ Manage metric namespaces for organizing large metric sets.
             ns: MetricNamespace | None = self.namespaces.get(current)
             current = ns.parent if ns else None
         return " / ".join(hierarchy)"# Metric namespace management engine.
-""
+"""
 try:
     from typing import Any
 except ImportError:
@@ -117,7 +116,7 @@ except ImportError:
 
 
 class MetricNamespaceManager:
-    ""
+"""
 Manage metric namespaces for organizing large metric sets.
     def __init__(self) -> None:
         self.namespaces: dict[str, MetricNamespace] = {}
@@ -158,4 +157,4 @@ Manage metric namespaces for organizing large metric sets.
             current = ns.parent if ns else None
         return " / ".join(hierarchy)
 
-""
+"""

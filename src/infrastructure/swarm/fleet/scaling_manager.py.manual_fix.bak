@@ -15,17 +15,17 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 ScalingManager
 
 """
 Manager for dynamic scaling of the agent fleet.
 Monitors system load and spawns new agent instances as needed.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -65,7 +65,7 @@ Records a metric and checks if scaling is required.        self.core.add_metric(
             self._execute_scale_out(agent_name)
 
     def _execute_scale_out(self, agent_name: str) -> None:
-        ""
+"""
 Spawns a new instance of an agent if load is too high.        load_score = self.core.calculate_weighted_load(agent_name)
         logging.warning(f"SCALING: High load score ({load_score:.2f}) detected for {agent_name}. Spawning replica.")
         # Replica naming logic
@@ -73,9 +73,27 @@ Spawns a new instance of an agent if load is too high.        load_score = self.
         if hasattr(self.fleet, "register_agent_runtime"):"            self.fleet.register_agent_runtime(replica_name, agent_name)
 
     def get_scaling_status(self) -> str:
-        ""
+"""
 Returns the current scaling status.        return f"Scaling Manager: Monitoring {len(self.core.load_metrics)} active agent archetypes."
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

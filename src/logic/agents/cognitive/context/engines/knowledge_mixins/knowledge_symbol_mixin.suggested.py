@@ -70,6 +70,24 @@ Scans a directory for symbols according to provided patterns.        from pathli
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

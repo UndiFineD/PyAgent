@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_backend.py
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -44,7 +44,7 @@ __version__ = VERSION
 
 @dataclass
 class SystemConfig:
-    ""
+"""
 Configuration for a single backend.
     Attributes:
         name: Backend identifier.
@@ -54,7 +54,7 @@ Configuration for a single backend.
         timeout_s: Request timeout in seconds.
         max_retries: Maximum retry attempts.
         rate_limit_rpm: Requests per minute limit.
-    ""
+"""
 name: str
     backend_type: ProviderType
     enabled: bool = True

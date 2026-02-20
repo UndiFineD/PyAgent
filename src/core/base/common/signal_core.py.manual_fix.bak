@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for signal broadcasting and pub-sub messaging.""
 
@@ -32,11 +32,11 @@ logger = logging.getLogger("pyagent.signal")
 
 
 class SignalCore(BaseCore):
-    ""
+"""
 Authoritative engine for agent signals and inter-process events.
 
     Standardizes subscription and broadcast logic across the swarm.
-    ""
+"""
 def __init__(self) -> None:
         super().__init__()
         self._subscribers: Dict[str, List[Callable[[Any, str], None]]] = {}
@@ -47,7 +47,7 @@ def __init__(self) -> None:
 
 
     def subscribe(self, signal_type: str, callback: Callable[[Any, str], None]) -> None:
-        ""
+"""
 Subscribe to a specific signal type.""
 if signal_type not in self._subscribers:
             self._subscribers[signal_type] = []
@@ -55,12 +55,12 @@ if signal_type not in self._subscribers:
 
 
     def publish(self, signal_type: str, payload: Any, sender: str = "System") -> None:
-        ""
+"""
 Publish a signal to the bus.""
 self._queue.put({"type": signal_type, "payload": payload, "sender": sender})
 
     def _process_bus(self) -> None:
-        ""
+"""
 Background thread process for handling the signal queue.""
 while self._running:
             try:

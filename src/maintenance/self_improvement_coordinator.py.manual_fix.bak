@@ -16,12 +16,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 SelfImprovementCoordinator module.
 
 """
-
 This module defines the SelfImprovementCoordinator class, which automates the monitoring,
 parsing, and implementation of improvements, healing, and research synthesis for the PyAgent fleet.
 It loads strategic directives from context.txt and prompt.txt, manages cloud and LAN peer discovery,
@@ -62,7 +61,7 @@ class SelfImprovementCoordinator:
         )
 
     def _init_discovery(self) -> None:
-        ""
+"""
 Initializes LANDiscovery for peer finding.        try:
             from src.infrastructure.swarm.network.lan_discovery import \
                 LANDiscovery
@@ -75,7 +74,7 @@ Initializes LANDiscovery for peer finding.        try:
         except ImportError:
             self.logger.warning("LANDiscovery not available.")
     async def load_strategic_context(self) -> None:
-        ""
+"""
 Loads and parses context.txt and prompt.txt for strategic directives.        self.directives = {
             "fixed_prompts": [],"            "research_links": [],"            "cloud_providers": [],"            "healing_metrics": {},"            "target_peers": [],"        }
 
@@ -236,7 +235,7 @@ f"{len(self.directives['target_peers'])} target peers.""'        )
             "status": "success","            "peer": target_peer,"            "task_id": f"rem_{int(time.time())}","            "result": "Task accepted by remote coordinator","            "metadata": {"peer_addr": target.get("address")}"        }
 
     async def run_discovery_cycle(self) -> list[dict[str, str]]:
-        ""
+"""
 Discovers new improvement ideas from the tracking file.        if not self.improvements_file.exists():
             self.logger.error(f"Improvements file not found: {self.improvements_file}")"            return []
 
@@ -253,7 +252,7 @@ Discovers new improvement ideas from the tracking file.        if not self.impro
         return active_ideas
 
     async def scan_for_research(self) -> List[str]:
-        ""
+"""
 Scans improvements.md for new research links (arXiv/ScienceDirect).        if not self.improvements_file.exists():
             return []
 
@@ -263,7 +262,7 @@ Scans improvements.md for new research links (arXiv/ScienceDirect).        if no
         links: List[str] = [f"https://arxiv.org/abs/{link}" for link in arxiv_links]"        links.extend([f"https://www.sciencedirect.com/science/article/pii/{link}" for link in sciencedirect_links])"        return list(set(links))
 
     async def sync_with_roadmap(self, active_ideas: list[dict[str, Any]]) -> None:
-        ""
+"""
 Cross-references improvements with the strategic roadmap.        if not self.roadmap_file.exists():
             return
 
@@ -271,7 +270,7 @@ Cross-references improvements with the strategic roadmap.        if not self.roa
             if idea["title"] in roadmap_content:"                idea["on_roadmap"] = True"            else:
                 idea["on_roadmap"] = False
     async def generate_action_plan(self, active_ideas: list[dict[str, Any]]) -> None:
-        ""
+"""
 Simulates triggering implementations for high-priority ideas.        for idea in active_ideas:
             print(f"[ACTION] Processing Improvement: {idea['title']} (Status: {idea['status']})")"'            await self.trigger_agent_execution(idea)
 
@@ -320,4 +319,4 @@ async def main() -> None:
 
 if __name__ == "__main__":"    asyncio.run(main())
 
-""
+"""

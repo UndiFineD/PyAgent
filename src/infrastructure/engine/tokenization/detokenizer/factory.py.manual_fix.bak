@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
 Factory for incremental detokenizers.
-""
+"""
 try:
 
 """
-    from typing import List, Optional, Set, Tuple
+from typing import List, Optional, Set, Tuple
 except ImportError:
     from typing import List, Optional, Set, Tuple
 
@@ -122,4 +122,4 @@ def detokenize_incrementally(
     result = detokenizer.finalize()
     return result.full_text, result.stop_reason
 
-""
+"""

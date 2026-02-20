@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
 Fast incremental detokenization for HuggingFace fast tokenizers.
-""
+"""
 
 """
 from typing import List, Optional, Set, Tuple
@@ -62,7 +62,7 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
 
     @property
     def special_token_ids(self) -> Set[int]:
-        ""
+"""
 Get special token IDs (cached).        if self._special_token_ids is None:
             self._special_token_ids = set()
             if hasattr(self.tokenizer, "all_special_ids"):"                self._special_token_ids = set(self.tokenizer.all_special_ids)
@@ -79,7 +79,7 @@ Get special token IDs (cached).        if self._special_token_ids is None:
         prefix_offset: int,
         read_offset: int,
     ) -> Tuple[str, int, int]:
-        ""
+"""
 Decode tokens using fast tokenizer approach.        if not token_ids:
             return "", prefix_offset, read_offset
         if HAS_RUST:
@@ -110,4 +110,4 @@ full_text = self.tokenizer.decode(
             new_text = ""
 return new_text, new_prefix, new_read
 
-""
+"""

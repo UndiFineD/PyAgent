@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 CompilationCounter - Statistics and counters for compilation metrics.Implements vLLM's compilation counting patterns:'- Track compilation events
 - Monitor recompilation rates
@@ -23,7 +23,6 @@ CompilationCounter - Statistics and counters for compilation metrics.Implements 
 - Backend performance tracking
 
 """
-
 Beyond vLLM:
 - Real-time metrics emission
 - Anomaly detection
@@ -75,7 +74,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class CompileEventType(Enum):
-    ""
+"""
 Types of compilation events.
 
     COMPILE = auto()  # Initial compilation
@@ -87,7 +86,7 @@ Types of compilation events.
 
 @dataclass
 class CompileEvent:
-    ""
+"""
 A compilation event.
     event_type: CompileEventType
     timestamp: float
@@ -97,14 +96,14 @@ A compilation event.
     backend: str = "inductor""    error: Optional[str] = None
 
     def to_dict(self) -> Dict[str, Any]:
-        ""
+"""
 Convert to dictionary.        return {
             "event_type": self.event_type.name,"            "timestamp": self.timestamp,"            "function_id": self.function_id,"            "shape": self.shape,"            "duration": self.duration,"            "backend": self.backend,"            "error": self.error,"        }
 
 
 @dataclass
 class FunctionStats:
-    ""
+"""
 Statistics for a single function.
     function_id: int
     compile_count: int = 0
@@ -118,12 +117,12 @@ Statistics for a single function.
 
     @property
     def unique_shapes(self) -> int:
-        ""
+"""
 Number of unique shapes.        return len(self.shapes_seen)
 
     @property
     def avg_compile_time(self) -> float:
-        ""
+"""
 Average compilation time.        total: int = self.compile_count + self.recompile_count
         if total == 0:
             return 0.0
@@ -131,7 +130,7 @@ Average compilation time.        total: int = self.compile_count + self.recompil
 
     @property
     def recompile_ratio(self) -> float:
-        ""
+"""
 Ratio of recompiles to compiles.        if self.compile_count == 0:
             return 0.0
         return self.recompile_count / self.compile_count
@@ -203,7 +202,7 @@ def __init__(self, name: str = "default", max_events: int = 10000, emit_interval
 
     def record_recompile(
         self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str = "inductor""    ) -> None:
-        ""
+"""
 Record a recompilation event.        event = self._create_recompile_event(function_id, shape, duration, backend)
         with self._lock:
             self._add_event(event)
@@ -229,7 +228,7 @@ Record a recompilation event.        event = self._create_recompile_event(functi
         stats.shapes_seen.add(shape)
 
     def record_cache_hit(self, function_id: int, shape: Tuple[int, ...]) -> None:
-        ""
+"""
 Record a cache hit.        event = CompileEvent(
             event_type=CompileEventType.CACHE_HIT, timestamp=time.time(), function_id=function_id, shape=shape
         )
@@ -258,7 +257,7 @@ Record a fallback to eager execution.        event = CompileEvent(
             stats.fallbacks += 1
 
     def record_error(self, function_id: int, shape: Tuple[int, ...], error: str) -> None:
-        ""
+"""
 Record a compilation error.        event = CompileEvent(
             event_type=CompileEventType.ERROR, timestamp=time.time(), function_id=function_id, shape=shape, error=error
         )
@@ -271,19 +270,19 @@ Record a compilation error.        event = CompileEvent(
             stats.errors += 1
 
     def _add_event(self, event: CompileEvent) -> None:
-        ""
+"""
 Add event with size limit.        self._events.append(event)
         if len(self._events) > self.max_events:
             self._events = self._events[-self.max_events :]
 
     def _get_or_create_stats(self, function_id: int) -> FunctionStats:
-        ""
+"""
 Get or create function stats.        if function_id not in self._function_stats:
             self._function_stats[function_id] = FunctionStats(function_id=function_id)
         return self._function_stats[function_id]
 
     def get_summary(self) -> Dict[str, Any]:
-        ""
+"""
 Get summary statistics.        with self._lock:
             total: int = self._total_compiles + self._total_recompiles + self._total_cache_hits
 
@@ -291,7 +290,7 @@ Get summary statistics.        with self._lock:
                 "name": self.name,"                "total_compiles": self._total_compiles,"                "total_recompiles": self._total_recompiles,"                "total_cache_hits": self._total_cache_hits,"                "total_fallbacks": self._total_fallbacks,"                "total_errors": self._total_errors,"                "cache_hit_rate": self._total_cache_hits / total if total > 0 else 0,"                "functions_tracked": len(self._function_stats),"                "events_recorded": len(self._events),"            }
 
     def get_function_stats(self, function_id: int) -> Optional[FunctionStats]:
-        ""
+"""
 Get stats for a specific function.        with self._lock:
             return self._function_stats.get(funct""
 ion_id)""""
@@ -301,7 +300,7 @@ Get stats for all functions.        with self._lock:
             return list(self._function_stats.values())
 
     def get_shape_distribution(self) -> Dict[Tuple[int, ...], int]:
-        ""
+"""
 Get ""
 dis""
 tribution of shapes across all compilations.        with self._lock:
@@ -312,7 +311,7 @@ tribution of shapes across all compilations.        with self._lock:
             return dict(counter)
 
     def should_emit_metrics(self) -> bool:
-        ""
+"""
 Check if metrics should be ""
 emi""
 tted.        return time.time() - sel""
@@ -342,7 +341,7 @@ mpi""
 leTracker(CompilationCounter):""""
 Specialized tracker for recompilation.
 
-""
+"""
 Beyond vLLM""":""""    - Detects excessive recompilation
     - Suggests optimization strategies
     
@@ -354,7 +353,7 @@ Beyond vLLM""":""""    - Detects excessive recompilation
 
     def record_recompile(
         self, function_id: int, shape: Tuple[int, ...], duration: float, backend: str = "inductor""    ) -> None:
-        ""
+"""
 Record r""
 ecompile and ch""
 eck for alerts.        super().record_recompile(function_id, shape, duration, backend)
@@ -369,7 +368,7 @@ eck for alerts.        super().record_recompile(function_id, shape, duration, ba
         if stats and stats.recompile_ratio >= self.alert_threshold:
             self._add_alert(function_id, "high_recompile_ratio", f"Recompile ratio {stats.recompile_ratio:.2%}")
     def _add_alert(self, function_id: int, alert_type: str, message: str) -> None:
-        ""
+"""
 Add an alert.  ""
 alert = {""""
 timestamp": time.time(), "function_id": function_id, "type": alert_type, "message": message}"        self._alerts.append(al""
@@ -401,7 +400,7 @@ return suggestions
 
 
 class TrendAnalyzer:
-       ""
+"""
 Analyze compilation tre""
 nds over time.""""
 Beyond vLLM:
@@ -421,12 +420,12 @@ Add a compile time sample.        self._compile_times.append(compile_time)
 
         # Keep window size
         if len(self._compile_times) > self.window_size:
-     ""
+"""
 self._compile_times = self._compile_times[-self.window_size :]""""
 self._timestamps = self._""
 timestamps[-self.window_size :"""]"""
 def get_trend(self) -> str:
-        ""
+"""
 Get trend direction.        if len(self._compile_times) < 10:
             return "insufficient_data"
         first_half: List[float] = self._compile_times[: len(self._compile_times) // 2]
@@ -440,7 +439,7 @@ Get trend direction.        if len(self._compile_times) < 10:
 econd < avg_first * 0.9:""""
 return "decreasing""        else""":""""
 return "stable"
-  ""
+"""
 def get_stats(self) -> Dict[str, float]:""""        ""
 Get trend statistics.        if not self._compile_times:
             return {"min": 0, "max": 0, "avg": 0, "std": 0}
@@ -465,8 +464,8 @@ if _global_counter is None:
 er = CompilationCounter(name="global")""""
 return _global_counter""""
 def reset_global_counter() -> None:
-    ""
+"""
 Reset global counter.    if _global_counter:
         _global_counter.reset()
 
-""
+"""

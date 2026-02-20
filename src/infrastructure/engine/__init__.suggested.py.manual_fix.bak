@@ -20,7 +20,6 @@ Module: engine
 PyAgent engine package initialization.
 
 """
-
 Engine infrastructure module.
 
 Provides request lifecycle management, engine state control,

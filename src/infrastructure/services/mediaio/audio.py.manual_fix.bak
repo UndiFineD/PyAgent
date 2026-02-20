@@ -21,7 +21,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Audio loader implementation.
-""
+"""
 
 """
 import io
@@ -43,25 +43,25 @@ from .models import (AudioData, AudioFormat, MediaLoadConfig, MediaMetadata,
 
 
 class AudioLoader(MediaLoader):
-    ""
+"""
 Load and process audio.
     def __init__(self):
         self._scipy_available = False
         self._librosa_available = False
         try:
-            from scipy.io import wavfile
+        from scipy.io import wavfile
 
-            self._scipy_available = True
-            self._wavfile = wavfile
+        self._scipy_available = True
+        self._wavfile = wavfile
         except ImportError:
-            pass
+        pass
         try:
-            import librosa
+        import librosa
 
-            self._librosa_available = True
-            self._librosa = librosa
+        self._librosa_available = True
+        self._librosa = librosa
         except ImportError:
-            pass
+        pass
 
     def supports(self, media_type: MediaType) -> bool:
         return media_type == MediaType.AUDIO
@@ -71,7 +71,7 @@ Load and process audio.
         source: Union[str, bytes, BinaryIO],
         config: MediaLoadConfig,
     ) -> AudioData:
-        ""
+"""
 Load audio from source.        if isinstance(source, bytes):
             data = source
             source_str = "<bytes>""        elif isinstance(source, (str, Path)):
@@ -116,7 +116,7 @@ Load audio from source.        if isinstance(source, bytes):
         return AudioData(waveform=waveform, metadata=metadata, source=source_str)
 
     def _detect_format(self, data: bytes) -> AudioFormat:
-        ""
+"""
 Detect audio format from magic bytes.        if data[:4] == b"RIFF" and data[8:12] == b"WAVE":"            return AudioFormat.WAV
         elif data[:3] == b"ID3" or data[:2] == b"\\xff\\xfb":"            return AudioFormat.MP3
         elif data[:4] == b"fLaC":"            return AudioFormat.FLAC
@@ -124,7 +124,7 @@ Detect audio format from magic bytes.        if data[:4] == b"RIFF" and data[8:1
         return AudioFormat.WAV
 
     async def _load_wav(self, data: bytes) -> Tuple[np.ndarray, int]:
-        ""
+"""
 Load WAV using scipy.        sample_rate, waveform = self._wavfile.read(io.BytesIO(data))
         waveform = waveform.astype(np.float32)
         if waveform.dtype == np.int16:
@@ -134,7 +134,7 @@ Load WAV using scipy.        sample_rate, waveform = self._wavfile.read(io.Bytes
         return waveform, sample_rate
 
     async def _load_librosa(self, data: bytes, source: str) -> Tuple[np.ndarray, int]:
-        ""
+"""
 Load audio using librosa.        import tempfile
 
         if source == "<bytes>" or source == "<stream>":"            with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as f:"                f.write(data)
@@ -145,7 +145,7 @@ Load audio using librosa.        import tempfile
         return waveform, sample_rate
 
     def _resample(self, waveform: np.ndarray, orig_sr: int, target_sr: int) -> np.ndarray:
-        ""
+"""
 Resample audio.        if rc and hasattr(rc, "resample_audio_rust"):"            if waveform.ndim == 1:
                 return np.array(rc.resample_audio_rust(waveform.tolist(), orig_sr, target_sr), dtype=np.float32)
             else:
@@ -162,4 +162,4 @@ Resample audio.        if rc and hasattr(rc, "resample_audio_rust"):"           
         indices = np.linspace(0, len(waveform) - 1, new_length)
         return np.interp(indices, np.arange(len(waveform)), waveform)
 
-""
+"""

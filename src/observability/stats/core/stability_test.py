@@ -43,14 +43,14 @@ class TestStabilityCore:
     def core(self):
         return StabilityCore()
 
-    @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture], deadline=None)
-    @given(
+        @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture], deadline=None)
+        @given(
         avg_error_rate=st.floats(min_value=0.0, max_value=1.0),
         total_token_out=st.integers(min_value=0),
         active_agent_count=st.integers(min_value=0),
         latency_p95=st.floats(min_value=0.0, max_value=10000.0),
         sae_anomalies=st.integers(min_value=0, max_value=100),
-    )
+        )
     def test_calculate_stability_score_bounds(
         self,
         core,
@@ -99,11 +99,11 @@ class TestStabilityCore:
         score = core.calculate_stability_score(metrics, 0)
         assert math.isclose(score, 0.9)
 
-    @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture], deadline=None)
-    @given(st.lists(st.floats(min_value=0.0, max_value=1.0), min_size=0, max_size=20))
+        @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture], deadline=None)
+        @given(st.lists(st.floats(min_value=0.0, max_value=1.0), min_size=0, max_size=20))
     def test_is_in_stasis_short_history(self, core, history):
         if len(history) < 10:
-            assert not core.is_in_stasis(history)
+        assert not core.is_in_stasis(history)
 
     def test_is_in_stasis_true(self, core):
         # 10 items, identical -> variance 0 < 0.0001
@@ -115,12 +115,12 @@ class TestStabilityCore:
         history = [0.0, 1.0] * 5
         assert not core.is_in_stasis(history)
 
-    @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture], deadline=None)
-    @given(st.floats(min_value=0.0, max_value=1.0))
+        @settings(suppress_health_check=[HealthCheck.too_slow, HealthCheck.function_scoped_fixture], deadline=None)
+        @given(st.floats(min_value=0.0, max_value=1.0))
     def test_get_healing_threshold(self, core, score):
         threshold = core.get_healing_threshold(score)
 
         if score < 0.3:
-            assert threshold == 0.9
+        assert threshold == 0.9
         else:
-            assert threshold == 0.5
+        assert threshold == 0.5

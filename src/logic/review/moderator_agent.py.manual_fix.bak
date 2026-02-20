@@ -38,7 +38,7 @@ WHAT IT DOES:
 
 FILE CONTENT SUMMARY:
 Agent specializing in moderation, review, and policy compliance.
-""
+"""
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class ModeratorAgent(BaseAgent):
-    ""
+"""
 Agent for reviewing content for safety, tone, and policy compliance.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -71,9 +71,9 @@ Agent for reviewing content for safety, tone, and policy compliance.
     def _get_default_content(self) -> str:
         return "# Moderation Review\\n\\n- No content provided for review yet.\\n"
     async def _process_task(self, task_data: dict) -> dict:
-        ""
+"""
 Process a moderation review task asynchronously.        review_result = self.run(task_data.get("content", self._get_default_content()))"        return {"review": review_result}"
 
 if __name__ == "__main__":"    main = create_main_function(ModeratorAgent, "Moderator Agent", "File to review for moderation")"    main()
 
-""
+"""

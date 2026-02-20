@@ -14,13 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Advanced request scheduler coordinator.
 try:
 
 """
-    import threading
+import threading
 except ImportError:
     import threading
 
@@ -60,10 +60,10 @@ except ImportError:
 
 
 class AdvancedRequestScheduler:
-    ""
+"""
 Advanced request scheduler with priority and preemption.
     def __init__(self, config: SchedulerConfig | None = None) -> None:
-        ""
+"""
 Initialize scheduler.        self.config = config or SchedulerConfig()
 
         # Request queues
@@ -91,7 +91,7 @@ Initialize scheduler.        self.config = config or SchedulerConfig()
         request_id: str | None = None,
         prompt_tokens: int | None = None,
     ) -> ScheduledRequest:
-        ""
+"""
 Add a new request to the scheduler.        if request_id is None:
             request_id = str(uuid.uuid4())[:8]
 
@@ -116,7 +116,7 @@ Add a new request to the scheduler.        if request_id is None:
         return request
 
     def schedule(self) -> list[ScheduledRequest]:
-        ""
+"""
 Select requests for the next execution batch.        with self._lock:
             batch: list[ScheduledRequest] = []
             token_budget = self.config.max_tokens_per_batch - self._running_tokens
@@ -130,7 +130,7 @@ Select requests for the next execution batch.        with self._lock:
             return batch
 
     def _resume_preempted(self, batch: list[ScheduledRequest], token_budget: int) -> int:
-        ""
+"""
 Resume preempted requests if budget allows.        preempted_ids = list(self.preempted.keys())
         for req_id in preempted_ids:
             if len(batch) >= self.config.max_running_requests - len(self.running):
@@ -148,7 +148,7 @@ Resume preempted requests if budget allows.        preempted_ids = list(self.pre
         return token_budget
 
     def _schedule_waiting(self, batch: list[ScheduledRequest], token_budget: int) -> int:
-        ""
+"""
 Schedule waiting requests based on priority and budget.        initial_running = len(self.running)
         while len(batch) + initial_running < self.config.max_running_requests:
             if token_budget <= 0:
@@ -183,7 +183,7 @@ Schedule waiting requests based on priority and budget.        initial_running =
         incoming: ScheduledRequest,
         available_budget: int,
     ) -> bool:
-        ""
+"""
 Decide whether to preempt running requests.        if not self.config.preemption_enabled:
             return False
 
@@ -210,7 +210,7 @@ Decide whether to preempt running requests.        if not self.config.preemption
         return False
 
     def _preempt_for_request(self, incoming: ScheduledRequest) -> int:
-        ""
+"""
 Preempt running requests to make room.        preemptible = [
             r for r in self.running.values() if r.is_preemptible and r.priority.value > incoming.priority.value
         ]
@@ -239,7 +239,7 @@ Preempt running requests to make room.        preemptible = [
         reason: PreemptionReason,
         saved_state: Any | None = None,
     ) -> bool:
-        ""
+"""
 Preempt a specific request.        if request_id not in self.running:
             return False
 
@@ -256,12 +256,12 @@ Preempt a specific request.        if request_id not in self.running:
         reason: PreemptionReason = PreemptionReason.MEMORY_PRESSURE,
         saved_state: Any | None = None,
     ) -> bool:
-        ""
+"""
 Public API for preempting a request.        with self._lock:
             return self._preempt_request(request_id, reason, saved_state)
 
     def resume_request(self, request_id: str) -> bool:
-        ""
+"""
 Resume a preempted request.        with self._lock:
             if request_id not in self.preempted:
                 return False
@@ -276,7 +276,7 @@ Resume a preempted request.        with self._lock:
         request_id: str,
         generated_tokens: int = 0,
     ) -> bool:
-        ""
+"""
 Mark a request as completed.        with self._lock:
             if request_id not in self.running:
                 return False
@@ -293,7 +293,7 @@ Mark a request as completed.        with self._lock:
             return True
 
     def abort_request(self, request_id: str) -> bool:
-        ""
+"""
 Abort a request.        with self._lock:
             if request_id in self.running:
                 request = self.running.pop(request_id)
@@ -314,7 +314,7 @@ Abort a request.        with self._lock:
             return False
 
     def get_request(self, request_id: str) -> ScheduledRequest | None:
-        ""
+"""
 Get request by ID.        with self._lock:
             if request_id in self.running:
                 return self.running[request_id]
@@ -326,13 +326,13 @@ Get request by ID.        with self._lock:
 
     @property
     def stats(self) -> dict:
-        ""
+"""
 Get scheduler statistics.        with self._lock:
             return {
                 "waiting": len(self.waiting),"                "running": len(self.running),"                "preempted": len(self.preempted),"                "completed": len(self.completed),"                "running_tokens": self._running_tokens,"                "total_scheduled": self._total_scheduled,"                "total_completed": self._total_completed,"                "total_preemptions": self._total_preemptions,"                "token_budget_used": self._running_tokens / self.config.max_tokens_per_batch,"            }
 
     def clear_completed(self, older_than: float = 0) -> int:
-        ""
+"""
 Clear completed requests older than threshold.        with self._lock:
             if older_than <= 0:
                 count = len(self.completed)
@@ -353,7 +353,7 @@ def create_scheduler(
     max_requests: int = 32,
     preemption: bool = True,
 ) -> AdvancedRequestScheduler:
-    ""
+"""
 Create a scheduler with common settings.    config = SchedulerConfig(
         max_running_requests=max_requests,
         max_tokens_per_batch=max_tokens,
@@ -363,9 +363,9 @@ Create a scheduler with common settings.    config = SchedulerConfig(
 
 
 def priority_from_string(s: str) -> RequestPriority:
-    ""
+"""
 Convert string to RequestPriority.    mapping = {
         "critical": RequestPriority.CRITICAL,"        "high": RequestPriority.HIGH,"        "normal": RequestPriority.NORMAL,"        "low": RequestPriority.LOW,"        "background": RequestPriority.BACKGROUND,"    }
     return mapping.get(s.lower(), RequestPriority.NORMAL)
 
-""
+"""

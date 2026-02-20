@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Method.py module.
-""
+"""
 
 """
 from abc import ABC, abstractmethod
@@ -40,7 +40,7 @@ except ImportError:
 
 
 class FusedMoEMethodBase(ABC):
-    ""
+"""
 Base class for MoE computation methods.
     @abstractmethod
     def create_weights(
@@ -64,7 +64,7 @@ Base class for MoE computation methods.
 
 
 class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
-    ""
+"""
 Unquantized MoE computation method.
     def create_weights(
         self,
@@ -156,4 +156,4 @@ Unquantized MoE computation method.
 
         return output
 
-""
+"""

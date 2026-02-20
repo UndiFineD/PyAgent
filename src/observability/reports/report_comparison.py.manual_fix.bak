@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ReportComparison - Data model for comparing two reports
 
@@ -41,7 +41,7 @@ WHAT IT DOES:
 
 WHAT IT SHOULD DO BETTER:
     Add methods for generating diff summaries, calculating change percentages, and serializing to/from JSON.
-""
+"""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -64,7 +64,7 @@ __version__ = VERSION
 
 @dataclass
 class ReportComparison:
-    ""
+"""
 Comparison between two reports.
     Attributes:
         old_path: Path to the old report.
@@ -73,7 +73,7 @@ Comparison between two reports.
         removed: List of removed content.
         changed: List of changed content pairs (old, new).
         unchanged_count: Number of unchanged items.
-    ""
+"""
 old_path: str
     new_path: str
     added: list[str] = field(default_factory=list)

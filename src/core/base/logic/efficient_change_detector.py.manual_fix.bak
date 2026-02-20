@@ -14,11 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Efficient Change Detection Core - USN-inspired change tracking for file systems
 Provides a small, well-tested implementation used by tests and tools.
-""
+"""
 
 """
 import asyncio
@@ -52,13 +52,13 @@ class FileMetadata:
     last_checked: float = field(default_factory=time.time)
 
 
-""
+"""
 Efficient change detector - parser-safe stub replacement.
 
 Original implementation was replaced with a minimal version that preserves
 the public API surface for other modules/tests while repairs continue.
 Backups of the original file are saved as `.manual_fix.bak`.
-""
+"""
 from dataclasses import dataclass
 from typing import List, Dict, Any, Optional
 from pathlib import Path

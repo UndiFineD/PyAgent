@@ -24,7 +24,6 @@ from __future__ import annotations
 Generic JSON tool call parser.
 
 """
-
 Parses JSON objects emitted by LLMs when tool calls are requested.
 Provides robust handling for OpenAI-style `function` objects and direct
 `{"name": ..., "arguments": {...}}` formats.
@@ -60,7 +59,7 @@ class JsonToolParser(ToolParser):
         return result
 
     def _process_json_matches(self, json_matches: List[str], result: ToolParseResult) -> None:
-        ""
+"""
 Process a list of JSON matches and add valid tool calls to the result.        for i, json_str in enumerate(json_matches):
             try:
                 data = json.loads(json_str)
@@ -74,7 +73,7 @@ Process a list of JSON matches and add valid tool calls to the result.        fo
         data: Dict[str, Any],
         index: int,
     ) -> Optional[ToolCall]:
-        ""
+"""
 Parse a JSON object as a tool call.        # OpenAI format
         if "function" in data and isinstance(data["function"], dict):"            func = data["function"]"            name = func.get("name", "")"            args_raw = func.get("arguments", "{}")"
             if isinstance(args_raw, str):
@@ -106,7 +105,7 @@ Parse a JSON object as a tool call.        # OpenAI format
         text: str,
         json_matches: List[str],
     ) -> str:
-        ""
+"""
 Extract non-JSON content.        content = text
         for match in json_matches:
             content = content.replace(match, "", 1)"        return content.strip()
@@ -146,7 +145,7 @@ and (len(state.buffer) < 2 or state.buffer[-2] != "\\"):"'                state.
         return state, completed_tool
 
     def _extract_last_json(self, text: str) -> Optional[str]:
-        ""
+"""
 Extract the last complete JSON object.        brace_depth = 0
         start = -1
         in_string = False

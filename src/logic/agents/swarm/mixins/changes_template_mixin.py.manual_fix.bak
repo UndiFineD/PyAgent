@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ChangesTemplateMixin - Changelog template management
 
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Template management logic for ChangesAgent.
-""
+"""
 try:
     import logging
 except ImportError:

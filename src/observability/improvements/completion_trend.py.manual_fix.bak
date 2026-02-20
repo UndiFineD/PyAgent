@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 CompletionTrend - Aggregated completion metric dataclass
 
@@ -81,8 +81,26 @@ __version__ = VERSION
 class CompletionTrend:
     total_completed: int
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

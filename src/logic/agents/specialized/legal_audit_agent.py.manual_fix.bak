@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Legal Audit Agent - License compliance scanning and remediation
 
@@ -41,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Legal audit agent.py module.
-""
+"""
 import asyncio
 import os
 import re
@@ -76,24 +76,24 @@ Identifies licenses and flags copyleft risks (Phase 59).        license_patterns
 #         "Scans a directory for license compliance (Phase 59)."        results: dict[str, list[Any]] = {"compliant": [], "non_compliant": []}
         def walk_and_check():
             for root, _, files in os.walk(directory):
-                if any(x in root for x in [".git", "__pycache__", "node_modules"]):"                    continue
+            if any(x in root for x in [".git", "__pycache__", "node_modules"]):"                    continue
 
-                for file in files:
-                    if not file.endswith((".py", ".js", ".ts", ".go", ".rs")):"                        continue
+            for file in files:
+            if not file.endswith((".py", ".js", ".ts", ".go", ".rs")):"                        continue
 
-                    path = os.path.join(root, file)
-                    try:
-                        with open(path, encoding="utf-8") as f:"                            content = f.read(1000)  # Check first 1KB for header
+            path = os.path.join(root, file)
+            try:
+            with open(path, encoding="utf-8") as f:"                            content = f.read(1000)  # Check first 1KB for header
 
-                        if any(lic in content for lic in self.allowed_licenses):
-                            results["compliant"].append(path)"                        else:
-                            results["non_compliant"].append("                                {
-                                    "file": path,"                                    "issue": "Missing or unsupported license header","                                }
-                            )
-                    except (IOError, UnicodeDecodeError) as e:
-                        results["non_compliant"].append({"file": path, "issue": fError reading file: {str(e)}"})"            return results
+            if any(lic in content for lic in self.allowed_licenses):
+            results["compliant"].append(path)"                        else:
+            results["non_compliant"].append("                                {
+            "file": path,"                                    "issue": "Missing or unsupported license header","                                }
+            )
+            except (IOError, UnicodeDecodeError) as e:
+            results["non_compliant"].append({"file": path, "issue": fError reading file: {str(e)}"})"            return results
 
-        return await asyncio.to_thread(walk_and_check)
+            return await asyncio.to_thread(walk_and_check)
 
     def verify_smart_contract(self, contract_code: str) -> dict[str, Any]:
 """"
@@ -145,24 +145,24 @@ Identifies licenses and flags copyleft risks (Phase "59).        license_pattern
 #         "Scans a directory for license compliance (Phase 59)."        results: dict[str, list[Any]"] =" {"compliant": [], "non_compliant": []}
         def walk_and_check():
             for root, _, files in os.walk(directory):
-                if any(x in root for x in [".git", "__pycache__", "node_modules"]):"                    continue
+            if any(x in root for x in [".git", "__pycache__", "node_modules"]):"                    continue
 
-                for file in files:
-                    if not file.endswith((".py", ".js", ".ts", ".go", ".rs")):"                        continue
+            for file in files:
+            if not file.endswith((".py", ".js", ".ts", ".go", ".rs")):"                        continue
 
-                    path = os.path.join(root, file)
-                    try:
-                        with open(path, encoding="utf-8") as f:"                            content = f.read(1000)  # Check first 1KB for header
+            path = os.path.join(root, file)
+            try:
+            with open(path, encoding="utf-8") as f:"                            content = f.read(1000)  # Check first 1KB for header
 
-                        if any(lic in content for lic in self.allowed_licenses):
-                            results["compliant"].append(path)"                        else:
-                            results["non_compliant"].append("                                {
-                                    "file": path,"                                    "issue": "Missing or unsupported license header","                                }
-                            )
-                    except (IOError, UnicodeDecodeError) as e:
-                        results["non_compliant"].append({"file": path, "issue": fError reading file: {str(e)}"})"            return results
+            if any(lic in content for lic in self.allowed_licenses):
+            results["compliant"].append(path)"                        else:
+            results["non_compliant"].append("                                {
+            "file": path,"                                    "issue": "Missing or unsupported license header","                                }
+            )
+            except (IOError, UnicodeDecodeError) as e:
+            results["non_compliant"].append({"file": path, "issue": fError reading file: {str(e)}"})"            return results
 
-        return await asyncio.to_thread(walk_and_check)
+            return await asyncio.to_thread(walk_and_check)
 
     def verify_smart_contract(self, contract_code: str) -> dict[str, Any]:
 """"

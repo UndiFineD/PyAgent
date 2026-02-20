@@ -25,7 +25,7 @@ try:
 except ImportError:
 
 """
-    import logging
+import logging
 
 try:
     import os

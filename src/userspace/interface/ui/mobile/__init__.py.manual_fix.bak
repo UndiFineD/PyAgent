@@ -1,9 +1,9 @@
-from __future__ import annotations
-""
+"""
 userspace.interface.ui.mobile package initialization (parser-safe stub).
 
 Minimal safe package init to restore importability during repository repair.
-""
+"""
+from __future__ import annotations
 
 
 

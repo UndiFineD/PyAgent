@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    import re
+import re
 
 
 try:

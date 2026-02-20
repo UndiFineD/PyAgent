@@ -14,11 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Code metrics and line counting utilities for analyzing PyAgent codebase.""""
 Provides functions to count lines of code, measure file sizes, and generate
 code statistics across the project.
-""
+"""
 import ast
 import os
 from pathlib import Path
@@ -69,7 +69,25 @@ for root, dirs, files in os.walk(src_path):
 
 for path, count in sorted(stubs, key=lambda x: x[1]):
     print(f"{count}: {path}")
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

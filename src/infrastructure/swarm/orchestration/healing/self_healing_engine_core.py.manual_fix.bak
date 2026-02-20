@@ -16,10 +16,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Self healing engine core.py module.
-""
+"""
 
 """
 from typing import Any
@@ -38,7 +38,7 @@ __version__ = VERSION
 
 
 class FailureType:
-    ""
+"""
 Enumeration of swarm failure types.    SYNTAX_ERROR = "fix_syntax""    DEPENDENCY_ERROR = "install_dependency""    CONFIG_ERROR = "check_config""    API_MISMATCH = "verify_api_compatibility""    STATE_CORRUPTION = "fix_state_corruption""    CONTEXT_LOSS = "restore_context""    UNKNOWN = "manual_review"
 
 
@@ -47,7 +47,7 @@ class SelfHealingEngineCore:
     Decides what kind of fix is needed based on the traceback.
     
     def analyze_failure(self, agent_name: str, tool_name: str, error_msg: str, tb: str) -> dict[str, Any]:
-        ""
+"""
 Analyzes a failure and suggests a strategy.        # Rust-accelerated strategy detection
         if HAS_RUST:
             try:
@@ -71,6 +71,6 @@ Analyzes a failure and suggests a strategy.        # Rust-accelerated strategy d
             "agent": agent_name,"            "tool": tool_name,"            "error": error_msg,"            "strategy": strategy,"            "is_critical": "Registry" in agent_name or "Fleet" in agent_name,"        }
 
     def format_healing_report(self, history: list[dict[str, Any]]) -> str:
-        ""
+"""
 Standardized reporting logic.        return f"Self-Healing Engine: {len(history)} failures detected and queued for repair."
-""
+"""

@@ -69,26 +69,26 @@ Test comprehensive security scan.""
 
     def test_generate_exploit_payload(self):
         async def run():
-            payload = await self.agent.generate_exploit_payload('ssrf_rce', fake_aem_host='evil.com')
-            assert 'evil%2Ecom' in payload
-            payload = await self.agent.generate_exploit_payload('xss', payload_type='reflected')
-            assert '<script>' in payload or '<img' in payload
+        payload = await self.agent.generate_exploit_payload('ssrf_rce', fake_aem_host='evil.com')
+        assert 'evil%2Ecom' in payload
+        payload = await self.agent.generate_exploit_payload('xss', payload_type='reflected')
+        assert '<script>' in payload or '<img' in payload
         import asyncio
         asyncio.run(run())
 
     def test_invalid_exploit_type(self):
         async def run():
-            with pytest.raises(ValueError):
-                await self.agent.generate_exploit_payload('invalid_type')
-            import asyncio
+        with pytest.raises(ValueError):
+        await self.agent.generate_exploit_payload('invalid_type')
+        import asyncio
         asyncio.run(run())
 
     def test_add_custom_check(self):
         def custom_check(base_url, my_host, debug, proxy):
-            return []
+        return []
         async def run():
-            await self.agent.add_custom_vulnerability_check('custom', custom_check)
-            checks = self.agent.get_registered_checks()
-            assert 'custom' in checks
+        await self.agent.add_custom_vulnerability_check('custom', custom_check)
+        checks = self.agent.get_registered_checks()
+        assert 'custom' in checks
         import asyncio
         asyncio.run(run())

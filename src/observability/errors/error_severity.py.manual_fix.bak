@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ErrorSeverity - Enumeration of error severity levels
 
@@ -34,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 - Add rich-comparison helpers or a utility wrapper to make ordinal comparisons and threshold checks more ergonomic and type-safe.
 - Provide mappings to logging levels, human-readable labels, and JSON (de)serialization methods for configuration and transport.
 - Include unit tests and examples showing intended comparison semantics and integration with the project's logging and alerting subsystems.
-""
+"""
 try:
     from enum import Enum
 except ImportError:

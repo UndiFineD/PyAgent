@@ -20,7 +20,6 @@ Supports hierarchical storage, retrieval, and promotion of agent memory fragment
 short, mid, long, and archival tiers.
 
 """
-
 try:
     import logging
 except ImportError:

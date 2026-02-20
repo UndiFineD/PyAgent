@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_coder.py
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -43,7 +43,7 @@ __version__ = VERSION
 
 @dataclass
 class MigrationRule:
-    ""
+"""
 A rule for code migration from old to new API.
 
     Attributes:
@@ -53,7 +53,7 @@ A rule for code migration from old to new API.
         description: Human-readable description of the migration.
         status: Current status of this migration rule.
         breaking_change: Whether this is a breaking change.
-    ""
+"""
 name: str
     old_pattern: str
     new_pattern: str

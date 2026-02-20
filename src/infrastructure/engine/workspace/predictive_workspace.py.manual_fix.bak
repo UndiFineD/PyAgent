@@ -1,9 +1,9 @@
-""
+"""
 Predictive workspace helpers (parser-safe stub).
 
 Provides a minimal PredictiveWorkspace used by higher-level modules during
 tests. The real implementation includes advanced caching and prefetching.
-""
+"""
 from typing import Any, Dict
 
 
@@ -36,7 +36,6 @@ Predictive Workspace Manager (Phase 58).
 Predicts upcoming batch memory requirements and pre-allocates resources.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -83,7 +82,7 @@ class PredictiveWorkspace:
         self.cache_misses = 0
 
     def record_allocation(self, size: int) -> None:
-        ""
+"""
 Records a successful allocation to refine future predictions.        self.history.append(size)
 
     def predict_next_batch_requirement(self) -> int:
@@ -118,7 +117,7 @@ Records a successful allocation to refine future predictions.        self.histor
         return None
 
     def analyze_patterns(self) -> Dict[str, Any]:
-        ""
+"""
 Analyzes recent traffic to identify recurring batch sizes.        if not self.history:
             return {}
 

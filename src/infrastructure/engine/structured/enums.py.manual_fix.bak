@@ -17,7 +17,6 @@
 Enums for structured output engine.
 
 """
-
 try:
     from enum import Enum, auto
 except ImportError:
@@ -27,7 +26,7 @@ except ImportError:
 
 
 class GrammarType(Enum):
-    ""
+"""
 Types of grammar specifications.
     JSON_SCHEMA = auto()
     JSON_OBJECT = auto()
@@ -40,7 +39,7 @@ Types of grammar specifications.
 
 
 class VocabType(Enum):
-    ""
+"""
 Vocabulary encoding types.
     RAW = auto()
     BYTE_FALLBACK = auto()

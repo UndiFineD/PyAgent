@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 FlashInfer backend for decode-focused attention.
-""
+"""
 
 """
 import logging
@@ -72,7 +72,7 @@ class FlashInferBackend(AttentionBackend[None]):
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-        ""
+"""
 FlashInfer implementation.        try:
             import flashinfer  # pylint: disable=unused-import # noqa: F401
         except ImportError:

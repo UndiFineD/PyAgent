@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     import json
@@ -60,7 +60,7 @@ __version__ = VERSION
 
 
 class RequestRecorder:
-    ""
+"""
 Records and replays requests for debugging and testing.""""
 Captures request / response pairs for later replay, enabling
     offline testing and debugging.
@@ -72,7 +72,7 @@ Captures request / response pairs for later replay, enabling
         for req in recorder.get_recordings():
             print(f"{req.prompt} -> {req.response}")"    
     def __init__(self, max_recordings: int = 1000) -> None:
-        ""
+"""
 Initialize request recorder.""""
 Args:
             max_recordings: Maximum recordings to keep.
@@ -89,7 +89,7 @@ Args:
         success: bool = True,
         metadata: dict[str, Any] | None = None,
     ) -> RecordedRequest:
-        ""
+"""
 Record a request.""""
 Args:
             prompt: Request prompt.
@@ -125,7 +125,7 @@ Args:
         backend: str | None = None,
         success_only: bool = False,
     ) -> list[RecordedRequest]:
-        ""
+"""
 Get recorded requests.""""
 Args:
             backend: Filter by backend.
@@ -144,7 +144,7 @@ Args:
         return recordings
 
     def replay(self, request_id: str) -> RecordedRequest | None:
-        ""
+"""
 Get recording by ID for replay.""""
 Args:
             request_id: Recording ID.
@@ -158,7 +158,7 @@ Args:
         return None
 
     def export_recordings(self) -> str:
-        ""
+"""
 Export recordings as JSON.""""
 Returns:
             str: JSON string of recordings.
@@ -171,7 +171,7 @@ Returns:
         return json.dumps(data, indent=2)
 
     def clear(self) -> int:
-        ""
+"""
 Clear all recordings.""""
 Returns:
             int: Number of recordings cleared.

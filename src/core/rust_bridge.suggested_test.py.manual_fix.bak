@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from .rust_bridge.suggested import RustBridge, get_bridge

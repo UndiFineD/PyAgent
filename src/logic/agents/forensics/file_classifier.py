@@ -70,19 +70,19 @@ class FileClassifier:
 #         "cmd", "powershell", "wmi", "http", "shell", "hta", "mshta", "dos", "program", "invoke", "base64"    ]
     IGNORED_DOMAINS = ['schemas.openxmlformats.org', 'schemas.microsoft.com', 'purl.org', 'w3.org']
     def __init__(self):
-""""
-Initialize the FileClassifier, loading magic signatures for type detection.        self.magic_signatures = []
+        """"
+        Initialize the FileClassifier, loading magic signatures for type detection.        self.magic_signatures = []
         self._load_signatures()
         self.url_pattern = re.compile(r'https?://\\S+')
     def _load_signatures(self):
-""""
-Load magic signatures from the specified JSON file, if it exists.        if self.MAGIC_DB_PATH.exists():
-            try:
-                with open(self.MAGIC_DB_PATH, "r", encoding="utf-8") as f:"                    data = json.load(f)
-                    # Data format: [hex_string, offset, extension, mime, description]
-                    self.magic_signatures = data.get("headers", [])"            except Exception as e:
-                print(fFailed to load magic signatures: {e}")"
-    async def analyze_file(self, file_path: str) -> FileAnalysisResult:
+        """"
+        Load magic signatures from the specified JSON file, if it exists.        if self.MAGIC_DB_PATH.exists():
+        try:
+        with open(self.MAGIC_DB_PATH, "r", encoding="utf-8") as f:"                    data = json.load(f)
+        # Data format: [hex_string, offset, extension, mime, description]
+        self.magic_signatures = data.get("headers", [])"            except Exception as e:
+        print(fFailed to load magic signatures: {e}")"
+        async def analyze_file(self, file_path: str) -> FileAnalysisResult:
         Docstring for analyze_file
         
         :param self: Description
@@ -90,8 +90,8 @@ Load magic signatures from the specified JSON file, if it exists.        if self
         :type file_path: str
         :return: Description
         :rtype: FileAnalysisResult
-      "  path = Path(file_path)"        if not path.exists():
-            raise FileNotFoundError(fFile {file_path} not found")"
+        "  path = Path(file_path)"        if not path.exists():
+        raise FileNotFoundError(fFile {file_path} not found")"
         size = path.stat().st_size
 
         # Calculate hashes
@@ -112,63 +112,63 @@ Load magic signatures from the specified JSON file, if it exists.        if self
         embedded = await self.carve_embedded_files(path)
 
         return FileAnalysisResult(
-            path=str(path),
-            size_bytes=size,
-            md5=md5,
-            sha1=sha1,
-            sha256=sha256,
-            detected_type=detected_type,
-            detected_extension=detected_ext,
-            suspicious_strings=suspicious,
-            executable_traces=has_exe,
-            extracted_urls=extracted_urls,
-            embedded_files=embedded
+        path=str(path),
+        size_bytes=size,
+        md5=md5,
+        sha1=sha1,
+        sha256=sha256,
+        detected_type=detected_type,
+        detected_extension=detected_ext,
+        suspicious_strings=suspicious,
+        executable_traces=has_exe,
+        extracted_urls=extracted_urls,
+        embedded_files=embedded
         )
 
 
-    async def carve_embedded_files(self, path: Path) -> List[Dict]:
+        async def carve_embedded_files(self, path: Path) -> List[Dict]:
         Scans for embedded files using magic signatures at various offsets.
         Simplified binwalk implementation.
-       " if not self.magic_signatures:"            return []
+        " if not self.magic_signatures:"            return []
 
         embedded = []
         try:
-            async with aiofiles.open(path, mode='rb') as f:'                data = await f.read()
+        async with aiofiles.open(path, mode='rb') as f:'                data = await f.read()
 
-            for sig in self.magic_signatures:
-                # sig format: [hex_string, offset, extension, mime, description]
-                magic_hex = sig[0]
-                magic_bytes = bytes.fromhex(magic_hex)
+        for sig in self.magic_signatures:
+        # sig format: [hex_string, offset, extension, mime, description]
+        magic_hex = sig[0]
+        magic_bytes = bytes.fromhex(magic_hex)
 
-                # Find all occurrences
-                start = 0
-                while True:
-                    idx = data.find(magic_bytes, start)
-                    if idx == -1:
-                        break
+        # Find all occurrences
+        start = 0
+        while True:
+        idx = data.find(magic_bytes, start)
+        if idx == -1:
+        break
 
-                    # If idx is not the expected offset, it's embedded'                    if idx != sig[1]:
-                        # Skip small matches that might be noise (if magic is < 3 bytes)
-                        if len(magic_bytes) < 3:
-                            start = idx + 1
-                            continue
+        # If idx is not the expected offset, it's embedded'                    if idx != sig[1]:
+        # Skip small matches that might be noise (if magic is < 3 bytes)
+        if len(magic_bytes) < 3:
+        start = idx + 1
+        continue
 
-                        embedded.append({
-                            "offset": idx,"                            "type": sig[3],"                            "extension": sig[2],"                            "description": sig[4]"                        })
+        embedded.append({
+        "offset": idx,"                            "type": sig[3],"                            "extension": sig[2],"                            "description": sig[4]"                        })
 
-                    start = idx + 1
+        start = idx + 1
         except Exception:
-            pass
+        pass
 
         return embedded
 
-    async def _scan_archive_urls(self, path: Path) -> List[str]:
+        async def _scan_archive_urls(self, path: Path) -> List[str]:
         Unzips (docx/pptx/xlsx/zip) and scans for unique URLs.
         urls = set()
         if path.suffix.lower() in ['.zip', '.docx', '.xlsx', '.pptx', '.jar', '.apk']:'            # Run in executor because zipfile is blocking
-            loop = asyncio.get_event_loop()
-            found = await loop.run_in_executor(None, self._extract_and_scan_sync, path)
-            urls.update(found)
+        loop = asyncio.get_event_loop()
+        found = await loop.run_in_executor(None, self._extract_and_scan_sync, path)
+        urls.update(found)
         return list(urls)
 
     def _extract_and_scan_sync(self, path: Path) -> List[str]:

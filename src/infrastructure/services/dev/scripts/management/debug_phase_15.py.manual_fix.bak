@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Validation script for Phase 15: Ethics & Safety Governance.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -52,7 +51,7 @@ __version__ = VERSION
 
 
 def test_ethics_and_safety() -> None:
-    ""
+"""
 Validate ethics guardrails and kill switch features.    logging.basicConfig(level=logging.INFO)
 
     root = Path(str(Path(__file__).resolve().parents[5]) + "")"    fleet = FleetManager(str(root))

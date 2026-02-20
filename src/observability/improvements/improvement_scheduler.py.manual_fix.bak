@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Improvement Scheduler - Manage improvement scheduling and resource allocation
 
@@ -105,7 +105,7 @@ __version__ = VERSION
 
 
 class ImprovementScheduler:
-    ""
+"""
 Manages improvement scheduling with resource allocation.""""
 Schedules improvements into sprints and tracks resource availability.
 
@@ -240,7 +240,7 @@ __version__ = VERSION
 
 
 class ImprovementScheduler:
-    ""
+"""
 Manages improvement scheduling with resource allocation.""""
 Schedules improvements into sprints and tracks resource availability.
 
@@ -325,8 +325,26 @@ def __init__(self) -> None:
             ResourceAllocation(improvement_id=improvement_id, resources=[]),
         )
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

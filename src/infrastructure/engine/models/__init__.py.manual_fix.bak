@@ -19,7 +19,6 @@
 Model registry for architecture management.
 
 """
-
 This package provides:
 - Model architecture registration
 - Capability detection

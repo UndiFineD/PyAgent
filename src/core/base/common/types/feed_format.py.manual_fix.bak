@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_changes.py
-""
+"""
 try:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 except ImportError:
     from ..lifecycle.version import VERSION
 
@@ -32,9 +32,9 @@ __version__ = VERSION
 
 
 class FeedFormat(Enum):
-    ""
+"""
 Feed format types for RSS / Atom generation.
-    ""
+"""
 RSS_20 = "rss_20"
     ATOM_10 = "atom_10"
     JSON_FEED = "json_feed"

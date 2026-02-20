@@ -28,7 +28,7 @@ except ImportError:
 
 
 class CacheGroupType(Enum):
-    ""
+"""
 Type of KV cache group.
     FULL_ATTENTION = auto()
     SLIDING_WINDOW = auto()
@@ -40,7 +40,7 @@ Type of KV cache group.
 
 
 class AllocationStrategy(Enum):
-    ""
+"""
 Block allocation strategy.
     GREEDY = auto()  # Allocate as needed
     PREDICTIVE = auto()  # Pre-allocate based on expected length
@@ -50,11 +50,11 @@ Block allocation strategy.
 
 
 class EvictionPolicy(Enum):
-    ""
+"""
 Block eviction policy.
     LRU = auto()  # Least recently used
     ARC = auto()  # Adaptive replacement cache
     PRIORITY = auto()  # Priority-based eviction
     FREQUENCY = auto()  # Least frequently used
 
-""
+"""

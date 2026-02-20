@@ -58,12 +58,12 @@ card = AgentCard(
 
     def test_message_creation(self):
 """
-Test message creation and serialization.""
-message = Message(
-            content=[
-                TextPart(text="Hello, agent!"),
-            ],
-            role=Role.USER,
+        Test message creation and serialization.""
+        message = Message(
+        content=[
+        TextPart(text="Hello, agent!"),
+        ],
+        role=Role.USER,
         )
 
         assert len(message.content) == 1
@@ -71,16 +71,16 @@ message = Message(
         assert message.content[0].text == "Hello, agent!"
         assert message.role == Role.USER
 
-    @pytest.mark.asyncio
-    async def test_core_initialization(self):
+        @pytest.mark.asyncio
+        async def test_core_initialization(self):
 """
-Test core initialization.""
-comm_core = InterAgentCommunicationCore()
+        Test core initialization.""
+        comm_core = InterAgentCommunicationCore()
         try:
-            assert comm_core.registered_agents == {}
-            assert comm_core.active_tasks == {}
-            assert comm_core.message_handlers == {}
-            assert comm_core.security_schemes == {}
-            assert comm_core.http_client is not None
+        assert comm_core.registered_agents == {}
+        assert comm_core.active_tasks == {}
+        assert comm_core.message_handlers == {}
+        assert comm_core.security_schemes == {}
+        assert comm_core.http_client is not None
         finally:
-            await comm_core.cleanup()
+        await comm_core.cleanup()

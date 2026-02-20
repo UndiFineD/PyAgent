@@ -14,10 +14,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Btree store.py module.
-""
+"""
 
 """
 import hashlib
@@ -36,20 +36,20 @@ __version__ = VERSION
 
 
 class BTreeKnowledgeStore(KnowledgeStore):
-    ""
+"""
 Sharded B-Tree style storage for structured key-value data.
     Designed to scale to trillions of parameters by sharding across filesystem.
     Phase 141: Hierarchical Persistence via SQLite per-bucket aggregation.
     Phase 144: Telemetry-Ready Access Patterns.
-    ""
+"""
 def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.logger = StructuredLogger(agent_id="BTreeStore")
     def _hash_key(self, key: str) -> str:
-        ""
+"""
 Fast hashing for shard lookup.
         PHASE 131: Uses PyO3 Rust extension for sub-millisecond page access.
-        ""
+"""
 try:
             from rust_core import fast_hash  # type: ignore[attr-defined]
 

@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Multi-Tenant Agent Core
 
 """
-
 Implements multi-tenant agent orchestration patterns from AgentCloud.
 Provides database-driven agent, task, and crew management with resource controls.
 Based on AgentCloud's CrewAI platform architecture.'""
@@ -35,31 +34,31 @@ from src.core.base.common.base_core import BaseCore
 
 
 class ProcessType(str, Enum):
-    ""
+"""
 Crew process types.""
 SEQUENTIAL = "sequential""    HIERARCHICAL = "hierarchical""    CONSENSUAL = "consensual"
 
 
 class ToolType(str, Enum):
-    ""
+"""
 Tool types supported.""
 BUILTIN = "builtin""    FUNCTION = "function""    RAG = "rag"
 
 
 class AgentStatus(str, Enum):
-    ""
+"""
 Agent status states.""
 ACTIVE = "active""    INACTIVE = "inactive""    ERROR = "error"
 
 
 class TaskStatus(str, Enum):
-    ""
+"""
 Task execution status.""
 PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled"
 
 @dataclass
 class TenantConfig:
-    ""
+"""
 Configuration for a tenant.""
 tenant_id: str
     name: str
@@ -72,7 +71,7 @@ tenant_id: str
 
 @dataclass
 class AgentDefinition:
-    ""
+"""
 Agent definition with role and capabilities.""
 agent_id: str
     tenant_id: str
@@ -92,7 +91,7 @@ agent_id: str
 
 @dataclass
 class TaskDefinition:
-    ""
+"""
 Task definition with requirements and outputs.""
 task_id: str
     tenant_id: str
@@ -110,7 +109,7 @@ task_id: str
 
 @dataclass
 class CrewDefinition:
-    ""
+"""
 Crew definition for multi-agent orchestration.""
 crew_id: str
     tenant_id: str
@@ -128,7 +127,7 @@ crew_id: str
 
 @dataclass
 class ToolDefinition:
-    ""
+"""
 Tool definition with capabilities.""
 tool_id: str
     tenant_id: str
@@ -141,7 +140,7 @@ tool_id: str
 
 @dataclass
 class ExecutionResult:
-    ""
+"""
 Result of task/crew execution.""
 execution_id: str
     status: TaskStatus
@@ -154,7 +153,7 @@ execution_id: str
 
 
 class MultiTenantAgentCore(BaseCore):
-    ""
+"""
 Multi-tenant agent orchestration core based on AgentCloud patterns.
 
     Features:
@@ -164,7 +163,7 @@ Multi-tenant agent orchestration core based on AgentCloud patterns.
     - Tool management and assignment
     - Rate limiting and resource controls
     - Execution tracking and monitoring
-    ""
+"""
 def __init__(self):
         super().__init__()
         self.tenants: Dict[str, TenantConfig] = {}
@@ -189,7 +188,7 @@ def __init__(self):
         max_rpm: int = 100,
         allowed_models: Optional[List[str]] = None
     ) -> TenantConfig:
-        ""
+"""
 Create a new tenant with resource limits.
 
         Args:
@@ -202,7 +201,7 @@ Create a new tenant with resource limits.
 
         Returns:
             Created tenant configuration
-        ""
+"""
 if tenant_id in self.tenants:
             raise ValueError(f"Tenant {tenant_id} already exists")
         tenant = TenantConfig(
@@ -229,7 +228,7 @@ if tenant_id in self.tenants:
         model_name: str,
         **kwargs
     ) -> AgentDefinition:
-        ""
+"""
 Create an agent for a tenant.
 
         Args:
@@ -244,7 +243,7 @@ Create an agent for a tenant.
 
         Returns:
             Created agent definition
-        ""
+"""
 if tenant_id not in self.tenants:
             raise ValueError(f"Tenant {tenant_id} not found")
         if agent_id in self.agents:
@@ -282,7 +281,7 @@ if tenant_id not in self.tenants:
         agent_id: str,
         **kwargs
     ) -> TaskDefinition:
-        ""
+"""
 Create a task for a tenant.
 
         Args:
@@ -296,7 +295,7 @@ Create a task for a tenant.
 
         Returns:
             Created task definition
-        ""
+"""
 if tenant_id not in self.tenants:
             raise ValueError(f"Tenant {tenant_id} not found")
         if agent_id not in self.agents or self.agents[agent_id].tenant_id != tenant_id:
@@ -326,7 +325,7 @@ if tenant_id not in self.tenants:
         process_type: ProcessType = ProcessType.SEQUENTIAL,
         **kwargs
     ) -> CrewDefinition:
-        ""
+"""
 Create a crew for multi-agent orchestration.
 
         Args:
@@ -340,7 +339,7 @@ Create a crew for multi-agent orchestration.
 
         Returns:
             Created crew definition
-        ""
+"""
 if tenant_id not in self.tenants:
             raise ValueError(f"Tenant {tenant_id} not found")
         # Validate all agents belong to tenant
@@ -367,7 +366,7 @@ if tenant_id not in self.tenants:
         self.logger.info(f"Created crew {crew_id} for tenant {tenant_id}")"        return crew
 
     async def check_rate_limits(self, tenant_id: str, agent_id: Optional[str] = None) -> bool:
-        ""
+"""
 Check if rate limits are exceeded.
 
         Args:
@@ -376,7 +375,7 @@ Check if rate limits are exceeded.
 
         Returns:
             True if within limits, False if exceeded
-        ""
+"""
 current_time = datetime.now().replace(second=0, microsecond=0)
 
         # Check tenant RPM
@@ -399,7 +398,7 @@ current_time = datetime.now().replace(second=0, microsecond=0)
         return True
 
     async def execute_task(self, task_id: str) -> ExecutionResult:
-        ""
+"""
 Execute a single task.
 
         Args:
@@ -407,7 +406,7 @@ Execute a single task.
 
         Returns:
             Execution result
-        ""
+"""
 if task_id not in self.tasks:
             raise ValueError(f"Task {task_id} not found")
         task = self.tasks[task_id]
@@ -454,7 +453,7 @@ if task_id not in self.tasks:
         return result
 
     async def execute_crew(self, crew_id: str) -> List[ExecutionResult]:
-        ""
+"""
 Execute a crew with multiple tasks.
 
         Args:
@@ -462,7 +461,7 @@ Execute a crew with multiple tasks.
 
         Returns:
             List of execution results
-        ""
+"""
 if crew_id not in self.crews:
             raise ValueError(f"Crew {crew_id} not found")
         crew = self.crews[crew_id]
@@ -490,7 +489,7 @@ if crew_id not in self.crews:
         return results
 
     async def get_tenant_stats(self, tenant_id: str) -> Dict[str, Any]:
-        ""
+"""
 Get statistics for a tenant.""
 if tenant_id not in self.tenants:
             raise ValueError(f"Tenant {tenant_id} not found")
@@ -502,7 +501,7 @@ if tenant_id not in self.tenants:
             "tenant_id": tenant_id,"            "agent_count": len(tenant_agents),"            "task_count": len(tenant_tasks),"            "crew_count": len(tenant_crews),"            "active_agents": len([a for a in tenant_agents if a.status == AgentStatus.ACTIVE])"        }
 
     async def cleanup_tenant(self, tenant_id: str):
-        ""
+"""
 Clean up all resources for a tenant.""
 if tenant_id not in self.tenants:
             return
@@ -526,7 +525,7 @@ if tenant_id not in self.tenants:
         del self.tenants[tenant_id]
         self.logger.info(f"Cleaned up tenant {tenant_id}")
     async def cleanup(self):
-        ""
+"""
 Cleanup all resources.""
 self.tenants.clear()
         self.agents.clear()

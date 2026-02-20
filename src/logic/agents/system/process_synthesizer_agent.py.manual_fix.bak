@@ -41,7 +41,6 @@ WHAT IT DOES:
 - Merges multiple agent outputs into a single synthesized response with a simple merger protocol and timestamp.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Persist workflows to durable storage (StateTransaction) and support recovery across restarts instead of only in-memory tracking.
 - Replace hash-based ephemeral workflow IDs with UUIDs and include stronger uniqueness/namespace guarantees.

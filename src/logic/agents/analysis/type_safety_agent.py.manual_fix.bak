@@ -24,7 +24,6 @@ USAGE:
 - Instantiate the agent with a path to a file or directory: TypeSafetyAgent("path/to/file_or_dir")"- Run a targeted audit: agent.run_audit("src") or audit a single file via analyze_file(Path("..."))"- Use improve_content(prompt, target_file) (async) to request AI-assisted improvements for flagged locations
 
 """
-
 WHAT IT DOES:
 Scans Python source for missing parameter annotations, missing return type hints, and explicit uses of typing.Any, reporting each finding with filename, line number, and severity so maintainers can prioritize fixes.
 
@@ -57,7 +56,7 @@ Identifies missing type annotations and 'Any' usage to improve codebase robustne
 #             "You are the Type Safety Agent."#             "Your role is to enforce strict type hinting across the codebase."#             "Scan for: Function parameters without types, missing return types, and 'Any' type usage."'#             "Provide specific suggestions to replace 'Any' with more descriptive types."'        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
 """"
@@ -138,7 +137,7 @@ Identifies missing type annotations and 'Any' usage to improve codebase robustne
 #             "You are the Type Safety Agent."#             "Your role is to enforce strict type hinting across the codebase."#             "Scan for: Function parameters without types, missing return types, and 'Any' type usage."'#             "Provide specific suggestions to replace 'Any' with more descriptive types."'        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Type Safety Audit\\n\\n## Summary\\nWaiting for analysis...\\n
     def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
 """"

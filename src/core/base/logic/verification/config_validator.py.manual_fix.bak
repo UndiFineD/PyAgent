@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Config validator.py module.
-""
+"""
 
 """
 import json
@@ -26,12 +26,12 @@ from pathlib import Path
 
 
 class ConfigValidator:
-    ""
+"""
 Phase 278: Validates configuration files and detects orphaned references.""
     @staticmethod
     def validate_shard_mapping(
         mapping_path: Path = Path("data/config/shard_mapping.json"),"    ) -> list[str]:
-        ""
+"""
 Checks shard_mapping.json regarding orphaned AgentIDs functionally.""
 if not mapping_path.exists():
             logging.warning(f"ConfigValidator: {mapping_path} not found. Skipping validation.")"            return []

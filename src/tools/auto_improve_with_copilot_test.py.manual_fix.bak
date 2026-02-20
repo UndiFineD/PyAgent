@@ -75,7 +75,25 @@ def fake_run(cmd, capture_output, text, timeout, shell):
     bak = f.with_suffix(f.suffix + ".bak")"    assert bak.exists()
     content = f.read_text()
     assert 'hello' in content
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

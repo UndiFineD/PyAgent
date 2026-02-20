@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Monitoring.py - System resource monitoring engine
 
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Monitoring.py module.
 # System resource monitoring engine.
-""
+"""
 import logging
 import platform
 from pathlib import Path
@@ -57,7 +57,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    ""
+"""
 Monitors local system load to inform agent execution strategies.
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
@@ -80,7 +80,7 @@ Monitors local system load to inform agent execution strategies.
         elif stats["status"] == "WARNING":"            mult = 1.5
         return mult
 # System resource monitoring engine.
-""
+"""
 import logging
 import platform
 from pathlib import Path
@@ -100,7 +100,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ResourceMonitor:
-    ""
+"""
 Monitors local system load to inform agent execution strategies.
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
@@ -124,4 +124,4 @@ Monitors local system load to inform agent execution strategies.
         return mult
 
 
-""
+"""

@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: logic_manifest
 Defines the cognitive structure and capability set for a Universal Agent.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -36,10 +36,10 @@ except ImportError:
 
 @dataclass
 class LogicManifest:
-    ""
+"""
 The 'Logic Shard' that defines how an agent thinks and what it can do.
     This replaces hard-coded specialist logic.
-    ""
+"""
 version: str = "1.0.0"
     role: str = "generalist"
     description: str = "A universal autonomous agent"

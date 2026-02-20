@@ -17,15 +17,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Phase 45: Decode Bench KV Connector
 KV Connector for decode instance benchmarking.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -57,7 +57,7 @@ logger = logging.getLogger(__name__)
 
 
 class DecodeBenchConnector(KVConnectorBase):
-    ""
+"""
 KV Connector for decode instance benchmarking.
     def __init__(
         self,
@@ -77,7 +77,7 @@ KV Connector for decode instance benchmarking.
         self.group_to_layers: Optional[Dict[int, List[str]]] = None
 
     def _init_group_mapping(self) -> None:
-        ""
+"""
 Initialize mapping from KV cache groups to layer names.        if self._kv_caches and self.group_to_layers is None:
             # For standard attention, all layers are in group 0
             self.group_to_layers = {0: list(self._kv_caches.keys())}
@@ -89,12 +89,12 @@ Initialize mapping from KV cache groups to layer names.        if self._kv_cache
         forward_context: ForwardContext,
         **kwargs: Any,
     ) -> None:
-        ""
+"""
 Start filling KV cache with dummy values.        metadata = kwargs.get("metadata")"        if metadata is not None and isinstance(metadata, KVConnectorMetadata):
             self._start_fill_kv(metadata)
 
     def _start_fill_kv(self, metadata: KVConnectorMetadata) -> None:
-        ""
+"""
 Fill the allocated KV cache blocks with dummy values.        if not metadata.reqs_to_fill:
             return
 
@@ -119,7 +119,7 @@ Fill the allocated KV cache blocks with dummy values.        if not metadata.req
         block_ids: List[int],
         num_tokens: int,
     ) -> None:
-        ""
+"""
 Fill specific blocks with dummy values.        if self.group_to_layers is None:
             return
 
@@ -138,7 +138,7 @@ Fill specific blocks with dummy values.        if self.group_to_layers is None:
             )
 
     def wait_for_layer_load(self, layer_name: str) -> None:
-        ""
+"""
 No-op for benchmark connector - fills are synchronous.        pass
 
     def save_kv_layer(
@@ -148,7 +148,7 @@ No-op for benchmark connector - fills are synchronous.        pass
         attn_metadata: Any,
         **kwargs: Any,
     ) -> None:
-        ""
+"""
 No-op for benchmark connector - no actual saving.        pass
 
     # Scheduler-side methods
@@ -158,7 +158,7 @@ No-op for benchmark connector - no actual saving.        pass
         request: Request,
         num_computed_tokens: int,
     ) -> Tuple[int, bool]:
-        ""
+"""
 Return number of tokens to fill with dummy KV cache.        req_id = request.request_id
 
         # Only fill once per request on first scheduling
@@ -181,7 +181,7 @@ Return number of tokens to fill with dummy KV cache.        req_id = request.req
         blocks: KVCacheBlocks,
         num_external_tokens: int,
     ) -> None:
-        ""
+"""
 Track blocks to fill for the request.        if num_external_tokens <= 0:
             return
 
@@ -197,7 +197,7 @@ Track blocks to fill for the request.        if num_external_tokens <= 0:
         self,
         scheduler_output: Any,
     ) -> KVConnectorMetadata:
-        ""
+"""
 Build metadata with pending fills.        metadata = KVConnectorMetadata()
 
         # Move pending fills to metadata and clear
@@ -215,10 +215,10 @@ Build metadata with pending fills.        metadata = KVConnectorMetadata()
         request: Request,
         block_ids: List[int],
     ) -> Tuple[bool, Optional[Dict[str, Any]]]:
-        ""
+"""
 Clean up state when request finishes.        req_id = request.request_id
         self._filled_requests.discard(req_id)
         self._pending_fills.pop(req_id, None)
         return True, None
 
-""
+"""

@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.engine.structured.bad_words_processor_v2 import BadWordsPenaltyMode, TrieNode, BadWordsProcessorV2, BadPhrasesProcessor, apply_bad_words, apply_bad_words_with_drafts

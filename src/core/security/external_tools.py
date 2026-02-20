@@ -102,63 +102,63 @@ def __init__(self):
 
     def _initialize_security_policies(self):
 """
-Initialize default security policies.""
-# High security for sensitive operations
+        Initialize default security policies.""
+        # High security for sensitive operations
         self._security_policies["database"] = SecurityPolicy("            allowed_domains={"localhost", "127.0.0.1"},"            blocked_patterns={"DROP", "DELETE", "TRUNCATE", "ALTER"},"            max_execution_time=30,
-            max_memory_usage=100,
-            network_access=False,
-            file_access=False,
-            security_level=SecurityLevel.HIGH
+        max_memory_usage=100,
+        network_access=False,
+        file_access=False,
+        security_level=SecurityLevel.HIGH
         )
 
         # Medium security for API operations
         self._security_policies["api"] = SecurityPolicy("            allowed_domains={"api.github.com", "api.openai.com", "localhost"},"            blocked_patterns=set(),
-            max_execution_time=60,
-            max_memory_usage=200,
-            network_access=True,
-            file_access=False,
-            security_level=SecurityLevel.MEDIUM
+        max_execution_time=60,
+        max_memory_usage=200,
+        network_access=True,
+        file_access=False,
+        security_level=SecurityLevel.MEDIUM
         )
 
         # Low security for test operations
         self._security_policies["test"] = SecurityPolicy("            allowed_domains={"localhost", "127.0.0.1"},"            blocked_patterns=set(),
-            max_execution_time=30,
-            max_memory_usage=100,
-            network_access=False,
-            file_access=False,
-            security_level=SecurityLevel.LOW
+        max_execution_time=30,
+        max_memory_usage=100,
+        network_access=False,
+        file_access=False,
+        security_level=SecurityLevel.LOW
         )
 
         # Low security for development tools
         self._security_policies["development"] = SecurityPolicy("            allowed_domains={"localhost", "127.0.0.1"},"            blocked_patterns=set(),
-            max_execution_time=300,
-            max_memory_usage=500,
-            network_access=True,
-            file_access=True,
-            security_level=SecurityLevel.LOW
+        max_execution_time=300,
+        max_memory_usage=500,
+        network_access=True,
+        file_access=True,
+        security_level=SecurityLevel.LOW
         )
 
     def _initialize_threat_patterns(self):
 """
-Initialize threat detection patterns.""
-self._threat_patterns = {
-            ThreatCategory.MALWARE: [
-                r"import\\s+os\\s*;?\\s*os\\.system","                r"subprocess\\.call.*shell\\s*=\\s*True","                r"eval\\s*\(","                r"exec\\s*\(""            ],
-            ThreatCategory.DATA_EXFILTRATION: [
-                r"requests\\.post.*http","                r"urllib.*urlopen","                r"socket\\.connect","                r"ftp://","                r"smtp://""            ],
-            ThreatCategory.CODE_INJECTION: [
-                r"input\\s*\(\\s*\)","                r"raw_input\\s*\(\\s*\)","                r"eval\\s*\(.*input","                r"exec\\s*\(.*input""            ],
-            ThreatCategory.PRIVILEGE_ESCALATION: [
-                r"sudo\\s+","                r"su\\s+","                r"chmod\\s+777","                r"chown\\s+root""            ],
-            ThreatCategory.DENIAL_OF_SERVICE: [
-                r"while\\s+True","                r"for\\s+i\\s+in\\s+range\\s*\(\\s*0","                r"fork\\s*\(\\s*\)","                r"threading\\.Thread.*target.*while""            ]
+        Initialize threat detection patterns.""
+        self._threat_patterns = {
+        ThreatCategory.MALWARE: [
+        r"import\\s+os\\s*;?\\s*os\\.system","                r"subprocess\\.call.*shell\\s*=\\s*True","                r"eval\\s*\(","                r"exec\\s*\(""            ],
+        ThreatCategory.DATA_EXFILTRATION: [
+        r"requests\\.post.*http","                r"urllib.*urlopen","                r"socket\\.connect","                r"ftp://","                r"smtp://""            ],
+        ThreatCategory.CODE_INJECTION: [
+        r"input\\s*\(\\s*\)","                r"raw_input\\s*\(\\s*\)","                r"eval\\s*\(.*input","                r"exec\\s*\(.*input""            ],
+        ThreatCategory.PRIVILEGE_ESCALATION: [
+        r"sudo\\s+","                r"su\\s+","                r"chmod\\s+777","                r"chown\\s+root""            ],
+        ThreatCategory.DENIAL_OF_SERVICE: [
+        r"while\\s+True","                r"for\\s+i\\s+in\\s+range\\s*\(\\s*0","                r"fork\\s*\(\\s*\)","                r"threading\\.Thread.*target.*while""            ]
         }
 
     def _initialize_trusted_tools(self):
 """
-Initialize list of trusted tools.""
-self._trusted_tools.update([
-            "python_compiler", "python_interpreter","            "typescript_compiler", "typescript_interpreter","            "javascript_compiler", "javascript_interpreter","            "go_compiler", "go_interpreter","            "rust_compiler", "rust_interpreter","            "sql_executor", "rest_client","            "code_formatter", "test_runner","            "trusted_tool"  # For testing"        ])
+        Initialize list of trusted tools.""
+        self._trusted_tools.update([
+        "python_compiler", "python_interpreter","            "typescript_compiler", "typescript_interpreter","            "javascript_compiler", "javascript_interpreter","            "go_compiler", "go_interpreter","            "rust_compiler", "rust_interpreter","            "sql_executor", "rest_client","            "code_formatter", "test_runner","            "trusted_tool"  # For testing"        ])
 
     def approve_tool(self, tool_name: str, context: Optional[Dict[str, Any]] = None) -> bool:
 """

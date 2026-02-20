@@ -13,15 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 PyAgent Security Module - End-to-End Encryption
 
 """
-
 This module provides Signal Protocol-based E2EE for PyAgent,
 enabling zero-knowledge user data storage and secure user-to-user communication.
-""
+"""
 try:
     from .e2e_encryption_core import E2EEncryptionCore, UserKeyPair, RatchetState
 except ImportError:

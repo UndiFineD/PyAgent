@@ -40,7 +40,7 @@ class DeadlineScheduler:
     Always executes the task with the nearest deadline first.
     
     def __init__(self, workers: int = 4) -> None:
-        ""
+"""
 Initialize EDF scheduler.        self._workers: int = workers
         self._queue: List[Tuple[float, int, ScheduledTask]] = []
         self._lock: LockType = threading.Lock()
@@ -96,7 +96,7 @@ Initialize EDF scheduler.        self._workers: int = workers
         return future
 
     def _worker_loop(self) -> None:
-        ""
+"""
 Worker thread loop.        while self._running:
             with self._not_empty:
                 while self._running and not self._queue:
@@ -126,7 +126,7 @@ Worker thread loop.        while self._running:
                     self._stats.failed += 1
 
     def shutdown(self, wait: bool = True) -> None:
-        ""
+"""
 Shutdown scheduler.        self._running = False
         with self._not_empty:
             self._not_empty.notify_all()
@@ -134,5 +134,5 @@ Shutdown scheduler.        self._running = False
 
     @property
     def stats(self) -> TaskStats:
-        ""
+"""
 Scheduler statistics.        return self._stats

@@ -19,11 +19,11 @@ try:
 except ImportError:
 
 """
-    from src.infrastructure.engine.structured.params.enums import StructuredOutputType, ConstraintType
+from src.infrastructure.engine.structured.params.enums import StructuredOutputType, ConstraintType
 
 
 def test_structured_output_type_enum():
-    ""
+"""
 Test the StructuredOutputType enum values and names.""
 assert StructuredOutputType.JSON_SCHEMA.name == "JSON_SCHEMA"
     assert StructuredOutputType.REGEX.name == "REGEX"
@@ -34,7 +34,7 @@ assert StructuredOutputType.JSON_SCHEMA.name == "JSON_SCHEMA"
 
 
 def test_constraint_type_enum():
-    ""
+"""
 Test the ConstraintType enum values and names.""
 assert ConstraintType.INCLUDE.name == "INCLUDE"
     assert ConstraintType.EXCLUDE.name == "EXCLUDE"
@@ -43,7 +43,7 @@ assert ConstraintType.INCLUDE.name == "INCLUDE"
 
 
 def test_schema_format_enum():
-    ""
+"""
 Test the SchemaFormat enum values and names.""
 assert SchemaFormat.DRAFT_07.value == "draft-07"
     assert SchemaFormat.DRAFT_2020_12.value == "draft-2020-12"
@@ -52,7 +52,7 @@ assert SchemaFormat.DRAFT_07.value == "draft-07"
 
 
 def test_guided_decoding_backend_enum():
-    ""
+"""
 Test the GuidedDecodingBackend enum values and names.""
 assert GuidedDecodingBackend.AUTO.name == "AUTO"
     assert GuidedDecodingBackend.OUTLINES.name == "OUTLINES"

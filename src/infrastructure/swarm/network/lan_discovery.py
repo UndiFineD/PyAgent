@@ -164,15 +164,15 @@ for port in range(start_port, start_port + max_attempts):
 
     def _detect_network_config(self):
 """
-Detects local IP and broadcast address.""
-self._local_ip = get_local_network_ip()
+        Detects local IP and broadcast address.""
+        self._local_ip = get_local_network_ip()
         if self._local_ip and self._local_ip != "127.0.0.1":
-            # Simple assumption for /24 subnet broadcast
-            parts = self._local_ip.split(".")
-            parts[-1] = "255"
-            self._subnet_broadcast = ".".join(parts)
+        # Simple assumption for /24 subnet broadcast
+        parts = self._local_ip.split(".")
+        parts[-1] = "255"
+        self._subnet_broadcast = ".".join(parts)
         else:
-            self._subnet_broadcast = "255.255.255.255"
+        self._subnet_broadcast = "255.255.255.255"
     def _detect_subnet_broadcast(self) -> Optional[str]:
 """
 Detect the proper subnet broadcast address for the local network.
@@ -265,60 +265,60 @@ if not self.enable_broadcast:
 
     def start(self):
 """
-Starts the discovery threads.""
-if self._running:
-            logger.warning("LANDiscovery: Already running")
-            return
+        Starts the discovery threads.""
+        if self._running:
+        logger.warning("LANDiscovery: Already running")
+        return
 
         try:
-            # Detect network configuration
-            # Backwards-compatible helper: ensure network config is detected.
-            if not hasattr(self, '_detect_network_config'):
-                # create a simple detector if missing
-                def _detect_network_config():
-                    if not self._local_ip:
-                        self._local_ip = self._detect_local_network_ip()
-                    if not self._subnet_broadcast:
-                        self._subnet_broadcast = self._detect_subnet_broadcast()
+        # Detect network configuration
+        # Backwards-compatible helper: ensure network config is detected.
+        if not hasattr(self, '_detect_network_config'):
+        # create a simple detector if missing
+        def _detect_network_config():
+        if not self._local_ip:
+        self._local_ip = self._detect_local_network_ip()
+        if not self._subnet_broadcast:
+        self._subnet_broadcast = self._detect_subnet_broadcast()
 
-                self._detect_network_config = _detect_network_config
+        self._detect_network_config = _detect_network_config
 
-            self._detect_network_config()
+        self._detect_network_config()
 
-            # Test if we can bind to the discovery port. Don't abort startup'            # if the port is unavailable; we can still announce (send-only).
-            if not self._test_port_available(self.discovery_port):
-                if self.auto_find_port:
-                    available_port = self.find_available_port(self.discovery_port + 1)
-                    if available_port:
-                        logger.info(f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}")
-                        self.discovery_port = available_port
-                    else:
-                        logger.warning("LANDiscovery: No available ports found; continuing in send-only mode")
-                else:
-                    logger.warning("LANDiscovery: Port %d unavailable; continuing in send-only mode", self.discovery_port)
+        # Test if we can bind to the discovery port. Don't abort startup'            # if the port is unavailable; we can still announce (send-only).
+        if not self._test_port_available(self.discovery_port):
+        if self.auto_find_port:
+        available_port = self.find_available_port(self.discovery_port + 1)
+        if available_port:
+        logger.info(f"LANDiscovery: Port {self.discovery_port} unavailable, using {available_port}")
+        self.discovery_port = available_port
+        else:
+        logger.warning("LANDiscovery: No available ports found; continuing in send-only mode")
+        else:
+        logger.warning("LANDiscovery: Port %d unavailable; continuing in send-only mode", self.discovery_port)
 
-            self._running = True
-            self._listen_thread = threading.Thread(
-                target=self._listen_loop,
-                daemon=True,
-                name=f"LANDiscovery-Listen-{self.agent_id[:8]}"
-                )
-            self._listen_thread.start()
+        self._running = True
+        self._listen_thread = threading.Thread(
+        target=self._listen_loop,
+        daemon=True,
+        name=f"LANDiscovery-Listen-{self.agent_id[:8]}"
+        )
+        self._listen_thread.start()
 
-            if self.enable_broadcast:
-                self._announce_thread = threading.Thread(
-                    target=self._announce_loop,
-                    daemon=True,
-                    name=f"LANDiscovery-Announce-{self.agent_id[:8]}"
-                )
-                self._announce_thread.start()
+        if self.enable_broadcast:
+        self._announce_thread = threading.Thread(
+        target=self._announce_loop,
+        daemon=True,
+        name=f"LANDiscovery-Announce-{self.agent_id[:8]}"
+        )
+        self._announce_thread.start()
 
-            logger.info("LANDiscovery: Started on port %d (broadcast: %s)", self.discovery_port, self.enable_broadcast)
+        logger.info("LANDiscovery: Started on port %d (broadcast: %s)", self.discovery_port, self.enable_broadcast)
 
         except Exception as e:
-            logger.error(f"LANDiscovery: Failed to start: {e}")
-            self._running = False
-            raise
+        logger.error(f"LANDiscovery: Failed to start: {e}")
+        self._running = False
+        raise
 
 
     def get_network_info(self) -> Dict[str, Any]:
@@ -391,14 +391,14 @@ results = {
 
     def stop(self):
 """
-Stops the discovery threads.""
-self._running = False
+        Stops the discovery threads.""
+        self._running = False
 
 
     def _announce_loop(self):
         if not self.enable_broadcast:
-            logger.info("LANDiscovery: Broadcasting disabled, announce loop skipping")
-            return
+        logger.info("LANDiscovery: Broadcasting disabled, announce loop skipping")
+        return
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
@@ -407,33 +407,33 @@ self._running = False
 
         # Initial announcement
         try:
-            msg = self._create_message("ANNOUNCE")
-            sock.sendto(msg, (broadcast_addr, self.discovery_port))
-            logger.debug(f"LANDiscovery: Sent initial announcement to {broadcast_addr}:{self.discovery_port}")
+        msg = self._create_message("ANNOUNCE")
+        sock.sendto(msg, (broadcast_addr, self.discovery_port))
+        logger.debug(f"LANDiscovery: Sent initial announcement to {broadcast_addr}:{self.discovery_port}")
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            logger.error(f"LANDiscovery: Initial announcement failed: {exc}")
+        logger.error(f"LANDiscovery: Initial announcement failed: {exc}")
         while self._running:
-            try:
-                # Periodic Heartbeat
-                msg = self._create_message("HEARTBEAT")
-                sock.sendto(msg, (broadcast_addr, self.discovery_port))
+        try:
+        # Periodic Heartbeat
+        msg = self._create_message("HEARTBEAT")
+        sock.sendto(msg, (broadcast_addr, self.discovery_port))
 
-                # Registry Sync (Gossip)
-                if self.registry:
-                    self._sync_registry(sock)
+        # Registry Sync (Gossip)
+        if self.registry:
+        self._sync_registry(sock)
 
-            except Exception as exc:  # pylint: disable=broad-exception-caught
-                logger.debug(f"LANDiscovery: Background loop error: {exc}")
-            # Use the instance sleep function so the loop is interruptible and testable
-            self._sleep_fn(30)  # Announce every 30 seconds
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+        logger.debug(f"LANDiscovery: Background loop error: {exc}")
+        # Use the instance sleep function so the loop is interruptible and testable
+        self._sleep_fn(30)  # Announce every 30 seconds
 
 
     def _sync_registry(self, sock: socket.socket):
         with self._lock:
-            # Send top 10 most recent peers
-            peers_list = sorted(
-                [p.to_dict() for p in self.registry.values()], key=lambda x: x["last_seen"], reverse=True
-                )[:10]
+        # Send top 10 most recent peers
+        peers_list = sorted(
+        [p.to_dict() for p in self.registry.values()], key=lambda x: x["last_seen"], reverse=True
+        )[:10]
 
         msg = self._create_message("SYNC", {"peers": peers_list})
         broadcast_addr = self.broadcast_addr
@@ -444,100 +444,100 @@ self._running = False
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         try:
-            # Bind to all interfaces on discovery port
-            sock.bind(("", self.discovery_port))
-            logger.info(f"LANDiscovery: Listening on port {self.discovery_port}")
+        # Bind to all interfaces on discovery port
+        sock.bind(("", self.discovery_port))
+        logger.info(f"LANDiscovery: Listening on port {self.discovery_port}")
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            logger.error(f"LANDiscovery: Failed to bind to port {self.discovery_port}: {exc}")
-            return
+        logger.error(f"LANDiscovery: Failed to bind to port {self.discovery_port}: {exc}")
+        return
 
         while self._running:
-            try:
-                data, addr = sock.recvfrom(65535)
-                self._handle_packet(data, addr)
-            except Exception as exc:  # pylint: disable=broad-exception-caught
-                if self._running:
-                    logger.debug(f"LANDiscovery: Listen loop error: {exc}")
+        try:
+        data, addr = sock.recvfrom(65535)
+        self._handle_packet(data, addr)
+        except Exception as exc:  # pylint: disable=broad-exception-caught
+        if self._running:
+        logger.debug(f"LANDiscovery: Listen loop error: {exc}")
 
 
     def _handle_packet(self, data: bytes, addr: tuple):
         try:
-            envelope = json.loads(data.decode())
-            payload = envelope.get("data")
-            sig = envelope.get("sig")
-            if not payload or not sig:
-                return
+        envelope = json.loads(data.decode())
+        payload = envelope.get("data")
+        sig = envelope.get("sig")
+        if not payload or not sig:
+        return
 
-            # 1. Validation & Security
-            data_str = json.dumps(payload, sort_keys=True)
-            if not self._verify(data_str, sig):
-                logger.warning(f"LANDiscovery: Invalid signature from {addr}")
-                return
+        # 1. Validation & Security
+        data_str = json.dumps(payload, sort_keys=True)
+        if not self._verify(data_str, sig):
+        logger.warning(f"LANDiscovery: Invalid signature from {addr}")
+        return
 
-            remote_agent_id = payload.get("agent_id")
-            if remote_agent_id == self.agent_id:
-                return  # Self ignore
+        remote_agent_id = payload.get("agent_id")
+        if remote_agent_id == self.agent_id:
+        return  # Self ignore
 
-            msg_timestamp = payload.get("timestamp", 0)
-            now = time.time()
+        msg_timestamp = payload.get("timestamp", 0)
+        now = time.time()
 
-            # Anti-Replay & Clock Skew Protection
-            if abs(now - msg_timestamp) > self.MAX_CLOCK_SKEW:
-                logger.debug(
-                    f"LANDiscovery: Dropping message from {remote_agent_id} (Clock skew: {now - msg_timestamp:.2f}s)"
-                )
-                return
+        # Anti-Replay & Clock Skew Protection
+        if abs(now - msg_timestamp) > self.MAX_CLOCK_SKEW:
+        logger.debug(
+        f"LANDiscovery: Dropping message from {remote_agent_id} (Clock skew: {now - msg_timestamp:.2f}s)"
+        )
+        return
 
-            if self._nonces.get(remote_agent_id, 0) >= msg_timestamp:
-                return  # Replay or old message
-            self._nonces[remote_agent_id] = msg_timestamp
+        if self._nonces.get(remote_agent_id, 0) >= msg_timestamp:
+        return  # Replay or old message
+        self._nonces[remote_agent_id] = msg_timestamp
 
-            msg_type = payload.get("type")
-            # 2. Registration
-            self.update_peer(payload)
+        msg_type = payload.get("type")
+        # 2. Registration
+        self.update_peer(payload)
 
-            # 3. Message Handling
-            if msg_type == "ANNOUNCE":
-                # Direct respond to announcer
-                resp = self._create_message("ACK")
-                self._ping_times[remote_agent_id] = now
-                socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(resp, (addr[0], self.discovery_port))
-                logger.info(f"LANDiscovery: New peer announced: {remote_agent_id} at {addr[0]}")
-            elif msg_type == "ACK":
-                # Calculate latency if we sent the request
-                if remote_agent_id in self._ping_times:
-                    latency = (now - self._ping_times.pop(remote_agent_id)) * 1000  # ms
-                    with self._lock:
-                        if remote_agent_id in self.registry:
-                            self.registry[remote_agent_id].latency = latency
+        # 3. Message Handling
+        if msg_type == "ANNOUNCE":
+        # Direct respond to announcer
+        resp = self._create_message("ACK")
+        self._ping_times[remote_agent_id] = now
+        socket.socket(socket.AF_INET, socket.SOCK_DGRAM).sendto(resp, (addr[0], self.discovery_port))
+        logger.info(f"LANDiscovery: New peer announced: {remote_agent_id} at {addr[0]}")
+        elif msg_type == "ACK":
+        # Calculate latency if we sent the request
+        if remote_agent_id in self._ping_times:
+        latency = (now - self._ping_times.pop(remote_agent_id)) * 1000  # ms
+        with self._lock:
+        if remote_agent_id in self.registry:
+        self.registry[remote_agent_id].latency = latency
 
-            elif msg_type == "SYNC":
-                for peer_data in payload.get("peers", []):
-                    self.update_peer(peer_data)
+        elif msg_type == "SYNC":
+        for peer_data in payload.get("peers", []):
+        self.update_peer(peer_data)
 
         except Exception as exc:  # pylint: disable=broad-exception-caught
-            logger.debug(f"LANDiscovery: Malformed packet from {addr}: {exc}")
+        logger.debug(f"LANDiscovery: Malformed packet from {addr}: {exc}")
 
     def update_peer(self, data: Dict[str, Any]):
 """
-Registers or updates a peer in the local registry.""
-agent_id = data.get("agent_id")
+        Registers or updates a peer in the local registry.""
+        agent_id = data.get("agent_id")
         if not agent_id or agent_id == self.agent_id:
-            return
+        return
 
         with self._lock:
-            existing = self.registry.get(agent_id)
-            latency = existing.latency if existing else data.get("latency", 0.0)
-            # Update or Register
-            self.registry[agent_id] = PeerInfo(
-                agent_id=str(agent_id),
-                ip=str(data.get("ip", "")),
-                port=int(data.get("port", 0)),
-                last_seen=time.time(),
-                metadata=data.get("metadata", {}),
-                trust_score=float(data.get("trust_score", 1.0)),
-                latency=float(latency),
-            )
+        existing = self.registry.get(agent_id)
+        latency = existing.latency if existing else data.get("latency", 0.0)
+        # Update or Register
+        self.registry[agent_id] = PeerInfo(
+        agent_id=str(agent_id),
+        ip=str(data.get("ip", "")),
+        port=int(data.get("port", 0)),
+        last_seen=time.time(),
+        metadata=data.get("metadata", {}),
+        trust_score=float(data.get("trust_score", 1.0)),
+        latency=float(latency),
+        )
 
 
     def get_active_peers(self, max_age: int = 300) -> List[PeerInfo]:
@@ -550,9 +550,9 @@ now = time.time()
 
     def clear_stale_peers(self, max_age: int = 3600):
         ""
-Removes peers not seen for an hour.""
-now = time.time()
+        Removes peers not seen for an hour.""
+        now = time.time()
         with self._lock:
-            stale = [k for k, v in self.registry.items() if now - v.last_seen > max_age]
-            for k in stale:
-                del self.registry[k]
+        stale = [k for k, v in self.registry.items() if now - v.last_seen > max_age]
+        for k in stale:
+        del self.registry[k]

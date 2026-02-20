@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple
 
 try:
     import numpy
@@ -37,7 +37,7 @@ except ImportError:
 
 
 class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):
-    ""
+"""
 Processor for pre-computed text embeddings.""
 modality = ModalityType.EMBEDS
 
@@ -46,7 +46,7 @@ modality = ModalityType.EMBEDS
         data: np.ndarray,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        ""
+"""
 Process pre-computed text embeddings. Expects a 1D or 2D numpy array where rows correspond to token embeddings.""
 if data.ndim == 1:
             data = data.reshape(1, -1)

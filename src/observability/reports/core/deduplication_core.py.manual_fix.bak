@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Deduplication Core - Similarity-based report deduplication and JSONL export
 
@@ -75,7 +75,7 @@ except ImportError:
 
 
 class DeduplicationCore:
-    ""
+"""
 Core functionality for deduplicating items based on similarity.
     @staticmethod
     def jaccard_similarity(s1: str, s2: str) -> float:

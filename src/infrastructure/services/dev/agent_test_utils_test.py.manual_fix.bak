@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.services.dev.agent_test_utils import agent_dir_on_path, agent_sys_path, load_agent_module

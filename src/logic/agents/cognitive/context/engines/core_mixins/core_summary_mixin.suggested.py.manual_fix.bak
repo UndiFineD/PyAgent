@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Core summary mixin for cognitive agents.
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -41,6 +41,24 @@ Logic for formatting the cognitive summary.        summary = ["#  Long-Term Memo
         if memory.get("insights"):"            summary.append("\\n##  Key Insights")"            for i in memory["insights"][-5:]:  # Show last 5"                summary.append(f"- {i['text']} (via {i['source']})")"
         if memory.get("lessons_learned"):"            summary.append("\\n##  Lessons Learned")"            for lesson in memory["lessons_learned"][-3:]:"                summary.append(f"- **Issue**: {lesson['failure']} | **Fix**: {lesson['correction']}")"
         return "\\n".join(summary)
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

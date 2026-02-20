@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 ShardManager
 
 """
@@ -21,7 +21,6 @@ Sharding and partitioning logic.
 (Facade for src.core.base.common.shard_core)
 
 """
-
 try:
     import logging
 except ImportError:
@@ -49,7 +48,7 @@ logger = logging.getLogger(__name__)
 
 
 class ShardManager(StandardShardCore):
-    ""
+"""
 Facade for ShardCore.
     def __init__(self, workspace_root: str):
         super().__init__()
@@ -59,17 +58,17 @@ Facade for ShardCore.
         self.communication_log: dict[frozenset[str], int] = {}  # Pairs of agents to frequency
 
     def log_communication(self, agent_a: str, agent_b: str) -> None:
-        ""
+"""
 Records a communication event between two agents.        pair = frozenset([agent_a, agent_b])
         self.communication_log[pair] = self.communication_log.get(pair, 0) + 1
 
     def create_shard(self, shard_name: str, capacity: int = 100) -> None:
-        ""
+"""
 Initializes a new shard.        if shard_name not in self.shard_assignments:
             self.shard_assignments[shard_name] = set()
             logger.info(f"ShardManager: Created shard '{shard_name}' with capacity {capacity}")
     def assign_agent(self, agent_name: str, shard_name: str) -> bool:
-        ""
+"""
 Assigns an agent to a specific shard.        if shard_name not in self.shard_assignments:
             self.create_shard(shard_name)
 
@@ -112,11 +111,11 @@ Assigns an agent to a specific shard.        if shard_name not in self.shard_ass
         return True
 
     def get_shard_members(self, shard_name: str) -> list[str]:
-        ""
+"""
 Returns all agents in a shard.        return list(self.shard_assignments.get(shard_name, set()))
 
     def get_agent_shard(self, agent_name: str) -> str | None:
-        ""
+"""
 Gets the shard containing the specified agent.        return self.agent_to_shard.get(agent_name)
 
     def optimize_sharding(self, threshold: int = 5) -> None:
@@ -143,4 +142,4 @@ Gets the shard containing the specified agent.        return self.agent_to_shard
                 self.assign_agent(agent, shard_name)
 
         logging.info(f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards.")
-""
+"""

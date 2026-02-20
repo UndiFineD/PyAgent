@@ -20,7 +20,6 @@ from __future__ import annotations
 CudagraphDispatcher - Dispatch logic for CUDA graph execution.
 
 """
-
 Implements vLLM's CudagraphDispatcher patterns for:'- Graph selection based on batch descriptors
 - Fallback to eager execution
 - Piecewise vs full graph dispatch
@@ -45,7 +44,7 @@ T = TypeVar("T")
 
 
 class DispatchMode(Enum):
-    ""
+"""
 Mode of execution dispatch.
     EAGER = auto()  # Direct execution
     CUDAGRAPH = auto()  # Full CUDA graph
@@ -74,7 +73,7 @@ class DispatchKey:
 
 @dataclass
 class DispatchStats:
-    ""
+"""
 Statistics for dispatch decisions.
     eager_count: int = 0
     graph_count: int = 0
@@ -84,7 +83,7 @@ Statistics for dispatch decisions.
 
     @property
     def graph_ratio(self) -> float:
-        ""
+"""
 Ratio of graph executions.        total = self.eager_count + self.graph_count + self.piecewise_count
         if total == 0:
             return 0.0
@@ -93,20 +92,20 @@ Ratio of graph executions.        total = self.eager_count + self.graph_count + 
 
 
 class DispatchPolicy(ABC):
-    ""
+"""
 Abstract dispatch policy.
     @abstractmethod
     def should_use_graph(self, key: DispatchKey, graph_available: bool) -> bool:
-        ""
+"""
 Determine if graph should be used.
     @abstractmethod
     def select_mode(self, key: DispatchKey, available_modes: Set[DispatchMode]) -> DispatchMode:
-        ""
+"""
 Select execution mode.
 
 
 class DefaultDispatchPolicy(DispatchPolicy):
-    ""
+"""
 Default policy preferring graphs when available.
     def __init__(
         self,
@@ -150,7 +149,7 @@ class AdaptiveDispatchPolicy(DispatchPolicy):
         self._lock = threading.Lock()
 
     def record(self, key: DispatchKey, mode: DispatchMode, latency: float) -> None:
-        ""
+"""
 Record dispatch decision and result.        with self._lock:
             self._history.append((key, mode, latency))
             if len(self._history) > self._history_size:
@@ -190,7 +189,7 @@ Record dispatch decision and result.        with self._lock:
 
 @dataclass
 class GraphEntry:
-    ""
+"""
 Entry in the graph cache.
     graph: Any  # CUDAGraph or compiled function
     input_ptrs: List[int] = field(default_factory=list)
@@ -249,12 +248,12 @@ class CudagraphDispatcher:
             self._graphs[key] = GraphEntry(graph=graph, input_ptrs=input_ptrs or [], capture_time=time.time())
 
     def has_graph(self, key: DispatchKey) -> bool:
-        ""
+"""
 Check if graph exists for key.        with self._lock:
             return key in self._graphs
 
     def get_graph(self, key: DispatchKey) -> Optional[GraphEntry]:
-        ""
+"""
 Get graph for key, updating LRU order.        import time
 
         with self._lock:
@@ -309,7 +308,7 @@ Get graph for key, updating LRU order.        import time
         return result
 
     def _replay_graph(self, entry: GraphEntry, *args: Any, **kwargs: Any) -> Any:
-        ""
+"""
 Replay a full CUDA graph.        graph = entry.graph
 
         # Copy inputs (simulated)
@@ -320,26 +319,26 @@ Replay a full CUDA graph.        graph = entry.graph
         return self.eager_runner(*args, **kwargs)
 
     def _replay_piecewise(self, entry: GraphEntry, *args: Any, **kwargs: Any) -> Any:
-        ""
+"""
 Replay piecewise graphs.        # Piecewise would iterate through graph segments
         return self._replay_graph(entry, *args, **kwargs)
 
     @property
     def stats(self) -> DispatchStats:
-        ""
+"""
 Get dispatch statistics.        return self._stats
 
     def clear_cache(self) -> None:
-        ""
+"""
 Clear all cached graphs.        with self._lock:
             self._graphs.clear()
 
     def enable_mode(self, mode: DispatchMode) -> None:
-        ""
+"""
 Enable a dispatch mode.        self._available_modes.add(mode)
 
     def disable_mode(self, mode: DispatchMode) -> None:
-        ""
+"""
 Disable a dispatch mode.        self._available_modes.discard(mode)
 
 
@@ -357,13 +356,13 @@ class CompositeDispatcher:
         self._lock = threading.Lock()
 
     def add_dispatcher(self, name: str, dispatcher: CudagraphDispatcher, priority: int = 0) -> None:
-        ""
+"""
 Add a dispatcher with priority.        with self._lock:
             self._dispatchers.append((priority, name, dispatcher))
             self._dispatchers.sort(key=lambda x: -x[0])  # Higher first
 
     def dispatch(self, key: DispatchKey, *args: Any, **kwargs: Any) -> Any:
-        ""
+"""
 Dispatch through chain until success.        with self._lock:
             dispatchers = list(self._dispatchers)
 
@@ -393,13 +392,13 @@ class StreamDispatcher(CudagraphDispatcher):
         self._current_stream = 0
 
     def _select_stream(self, key: DispatchKey) -> int:
-        ""
+"""
 Select stream for key.        # Round-robin or hash-based selection
         stream = hash(key) % self.num_streams
         return stream
 
     def dispatch(self, key: DispatchKey, *args: Any, **kwargs: Any) -> Any:
-        ""
+"""
 Dispatch to selected stream.        stream = self._select_stream(key)
 
         # Check stream-local cache
@@ -413,12 +412,12 @@ Dispatch to selected stream.        stream = self._select_stream(key)
 
 
 def create_dispatch_key(num_tokens: int, num_reqs: int, max_seq_len: int = 0, is_prefill: bool = False) -> DispatchKey:
-    ""
+"""
 Factory function for dispatch keys.    return DispatchKey(num_tokens=num_tokens, num_reqs=num_reqs, max_seq_len=max_seq_len, is_prefill=is_prefill)
 
 
 def get_padded_key(key: DispatchKey, pad_to: int = 8) -> DispatchKey:
-    ""
+"""
 Get padded key for graph cache alignment.    padded_tokens = ((key.num_tokens + pad_to - 1) // pad_to) * pad_to
     padded_reqs = ((key.num_reqs + pad_to - 1) // pad_to) * pad_to
 
@@ -426,4 +425,4 @@ Get padded key for graph cache alignment.    padded_tokens = ((key.num_tokens + 
         num_tokens=padded_tokens, num_reqs=padded_reqs, max_seq_len=key.max_seq_len, is_prefill=key.is_prefill
     )
 
-""
+"""

@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Guided decoding engine for structured output generation.
-""
+"""
 
 """
 import gc
@@ -91,11 +91,11 @@ Get singleton instance.        if cls._instance is None:
 
     @property
     def is_available(self) -> bool:
-        ""
+"""
 Check if guided decoding is available.        return HAS_VLLM
 
     def _ensure_initialized(self) -> bool:
-        ""
+"""
 Lazily initialize the LLM.        if not HAS_VLLM:
             logger.warning("vLLM not available for guided decoding")"            return False
 
@@ -130,7 +130,7 @@ Lazily initialize the LLM.        if not HAS_VLLM:
         system_prompt: Optional[str] = None,
         **kwargs: Any,
     ) -> str:
-        ""
+"""
 Generate with guided decoding configuration.        if not self._ensure_initialized():
             return ""
 full_prompt = prompt
@@ -159,12 +159,12 @@ full_prompt = prompt
 except (RuntimeError, ValueError) as e:
             logger.error("Guided generation failed: %s", e)"            return """
 def _prepare_json_system_prompt(self, system_prompt: Optional[str]) -> str:
-        ""
+"""
 Prepare system prompt for JSON generation.        json_instruction = "You must respond with valid JSON only. No explanations.""        if system_prompt:
             return f"{system_prompt}\\n\\n{json_instruction}""        return json_instruction
 
     def _parse_json_result(self, result: str) -> Union[Dict[str, Any], str]:
-        ""
+"""
 Parse JSON result if possible.        if not result:
             return result
 
@@ -183,7 +183,7 @@ Parse JSON result if possible.        if not result:
         parse: bool = True,
         **kwargs,
     ) -> Union[Dict[str, Any], str]:
-        ""
+"""
 Generate JSON output constrained by schema.        if isinstance(schema, JsonSchema):
             schema = schema.build()
 
@@ -220,7 +220,7 @@ Generate JSON output constrained by schema.        if isinstance(schema, JsonSch
         validate: bool = True,
         **kwargs,
     ) -> str:
-        ""
+"""
 Generate output matching a regex pattern.        if isinstance(pattern, RegexPattern):
             pattern_str = pattern.pattern
         else:
@@ -254,7 +254,7 @@ Generate output matching a regex pattern.        if isinstance(pattern, RegexPat
         system_prompt: Optional[str] = None,
         **kwargs,
     ) -> str:
-        ""
+"""
 Generate output constrained to specific choices.        if isinstance(choices, ChoiceConstraint):
             choice_list = choices.choices
         else:
@@ -288,7 +288,7 @@ result = self.generate(
         system_prompt: Optional[str] = None,
         **kwargs,
     ) -> str:
-        ""
+"""
 Generate output following a grammar specification.        config = GuidedConfig(
             mode=GuidedMode.GRAMMAR,
             grammar=grammar,
@@ -307,13 +307,13 @@ Generate output following a grammar specification.        config = GuidedConfig(
         return result
 
     def get_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Get decoder statistics.        return {
             **self._stats,
             "is_initialized": self._initialized,"            "has_outlines": HAS_OUTLINES,"        }
 
     def shutdown(self) -> None:
-        ""
+"""
 Shutdown and free resources.        if self._llm:
             del self._llm
             self._llm = None
@@ -330,7 +330,7 @@ def generate_json(
     schema: Union[Dict[str, Any], JsonSchema],
     model: str = "meta-llama/Llama-3-8B-Instruct","    **kwargs,
 ) -> Dict[str, Any]:
-    ""
+"""
 Convenience function for JSON generation.    decoder = GuidedDecoder.get_instance(model=model)
     return decoder.generate_json(prompt, schema, **kwargs)
 
@@ -340,6 +340,6 @@ def generate_choice(
     choices: List[str],
     model: str = "meta-llama/Llama-3-8B-Instruct","    **kwargs,
 ) -> str:
-    ""
+"""
 Convenience function for choice generation.    decoder = GuidedDecoder.get_instance(model=model)
     return decoder.generate_choice(prompt, choices, **kwargs)

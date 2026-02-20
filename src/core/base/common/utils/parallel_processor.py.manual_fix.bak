@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Manager for parallel execution.
 (Facade for src.core.base.common.execution_core)
-""
+"""
 
 """
 import logging
@@ -39,18 +39,18 @@ from src.core.base.common.execution_core import ExecutionCore
 
 
 class ParallelProcessor:
-    ""
+"""
 Facade for parallel execution utilities.
 
     Uses ExecutionCore for underlying orchestration. This class provides a small
     compatibility layer so tests can exercise threaded and async execution.
-    ""
+"""
 def __init__(self, max_workers: int = 4) -> None:
         self.max_workers = max_workers
         self._execution_core = ExecutionCore(max_workers=max_workers)
 
     def process_files_threaded(self, files: List[Path], worker_func: Callable[[Path], Any]) -> List[Any]:
-        ""
+"""
 Process files using worker threads and return non-None results.""
 with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             if HAS_TQDM:
@@ -60,7 +60,7 @@ with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
         return [r for r in results if r is not None]
 
     async def async_process_files(self, files: List[Path], worker_func: Callable[[Path], Any]) -> List[Any]:
-        ""
+"""
 Process files using ExecutionCore's async API.""
 def _wrapped_task(file_path: Path) -> Any:
             try:

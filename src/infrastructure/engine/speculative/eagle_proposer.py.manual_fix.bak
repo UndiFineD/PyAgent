@@ -18,7 +18,6 @@
 EagleProposer: Wrapper regarding modular EAGLE-style speculative decoding components.
 
 """
-
 try:
     from .eagle.base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,
 except ImportError:

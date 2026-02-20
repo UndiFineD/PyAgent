@@ -70,7 +70,7 @@ CHECKS = [
 
 
 def run_python_only_checks(target: Path) -> dict:
-    ""
+"""
 Run fast AST-based checks for banned imports/names and dangerous calls.""""
 Returns a mapping of file -> list of findings.
         findings: dict[str, list[str]] = {}
@@ -145,6 +145,24 @@ def main(argv: list[str] | None = None) -> int:
 
 
 if __name__ == '__main__':'    raise SystemExit(main())
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

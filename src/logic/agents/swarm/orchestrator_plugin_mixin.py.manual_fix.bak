@@ -15,13 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Orchestrator Plugin Mixin - Plugin management for
 # OrchestratorAgent
 
 """
-
 Brief Summary
 # DATE: 2026-02-13
 # AUTHOR: Keimpe de Jong
@@ -66,7 +65,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Orchestrator plugin mixin module.
-""
+"""
 import importlib.util
 import logging
 from concurrent.futures import ThreadPoolExecutor

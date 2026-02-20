@@ -14,9 +14,7 @@
 
 
 """
-"""
-Pytest configuration for PyAgent tests.""
-
+Pytest configuration for PyAgent tests.
 """
 import types
 import tempfile
@@ -196,7 +194,7 @@ def transactional_test_env(agent_sandbox):
 """
 Provides a transactional wrapper around the sandbox.
     Ensures that file modifications are tracked and can be rolled back on failure.
-    ""
+"""
     # Lazy import to avoid circular dependencies
     try:
         from .core.base.state.agent_state_manager import StateTransaction

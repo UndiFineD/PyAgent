@@ -14,12 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Logging config.py module.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -62,4 +61,4 @@ def setup_fleet_logging(log_dir: str = "data/logs", health_score: float = 1.0) -
 if __name__ == "__main__":"    setup_fleet_logging(health_score=0.5)
 
 
-""
+"""

@@ -26,7 +26,6 @@ USAGE:
 - As a library: from financial_agent import FinancialAgent; agent = FinancialAgent(file_path); agent.plan_research("query")"- Designed to be registered as a tool within the PyAgent mixin/agent ecosystem via as_tool decorators.
 
 """
-
 WHAT IT DOES:
 - Provides an orchestration-focused Agent (FinancialAgent) that scaffolds autonomous financial research using the "Dexter Pattern": planning, execution, validation, synthesis."- Offers three tool-wrapped entry points: plan_research (creates a structured research plan), validate_sufficiency (checks data completeness), and analyze_market_trend (produces a high-level trend summary).
 - Supplies a minimal default report template and integrates with the project's BaseAgent lifecycle and create_main_function for CLI usage.'
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Agent specializing in financial analysis and advice.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -100,7 +99,7 @@ Executes a trend analysis across multiple financial tickers.        logging.info
 #         return fTrend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy.
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Financial Analysis Report\\n\\n## Overview\\nPending autonomous research...\\n
 
 if __name__ == "__main__":"    main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial "data or topic")"    main()
@@ -167,9 +166,9 @@ Executes a trend analysis across multiple financial tickers.        logging.info
 #         return fTrend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy.
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Financial Analysis Report\\n\\n## Overview\\nPending autonomous research...\\n
 
 if __name__ == "__main__":"    main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial data or topic")"    main()
 
-""
+"""

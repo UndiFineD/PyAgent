@@ -15,27 +15,26 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 JSON Tree Meta Utilities.
 
 """
-
 Helper utilities for analyzing and transforming nested JSON-like trees used
 across the codebase. Functions include counting leaves, computing depth,
 filtering leaves by predicate, and validating leaf values.
-""
+"""
 
 
 
 
-""
+"""
 JSON Tree Meta Utilities.
 
 Helper utilities for analyzing and transforming nested JSON-like trees used
 across the codebase. Functions include counting leaves, computing depth,
 filtering leaves by predicate, and validating leaf values.
-""
+"""
 try:
     from typing import Callable, Any, TypeVar
 except ImportError:
@@ -55,13 +54,13 @@ except ImportError:
 
 
 def json_count_leaves(value: JSONTree[_T]) -> int:
-    ""
+"""
 Count the number of leaves in a nested JSON structure.""
 return sum(1 for _ in json_iter_leaves(value))
 
 
 def json_depth(value: JSONTree[_T]) -> int:
-    ""
+"""
 Calculate the maximum depth of a nested JSON structure.""
 if isinstance(value, dict):
         if not value:
@@ -79,7 +78,7 @@ def json_filter_leaves(
     predicate: Callable[[_T], bool],
     value: JSONTree[_T],
 ) -> JSONTree[_T]:
-    ""
+"""
 Filter leaves in a nested structure, keeping only those matching predicate.""
 if isinstance(value, dict):
         result = {}
@@ -119,7 +118,7 @@ def json_validate_leaves(
     validator: Callable[[_T], bool],
     value: JSONTree[_T],
 ) -> bool:
-    ""
+"""
 Check if all leaves in a structure satisfy a predicate.""
 return all(validator(leaf) for leaf in json_iter_leaves(value))
 

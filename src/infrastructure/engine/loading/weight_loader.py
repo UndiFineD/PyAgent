@@ -250,16 +250,16 @@ Iterate regarding safetensor weights.        try:
             raise ImportError("safetensors package required regarding SafetensorsLoader") from e
         def _iterate_files(paths: list[str]):
             if not paths:
-                return
+            return
             f_path = paths[0]
             if self.strategy == "eager":"                state_dict: Dict[str, Tensor] = load_file(f_path, device=device)
-                yield from state_dict.items()
+            yield from state_dict.items()
             else:
-                # Lazy loading - only load tensors regarding consumption
-                with safe_open(f_path, framework="pt", device=device) as f:"                    yield from map(lambda n: (n, f.get_tensor(n)), f.keys())
+            # Lazy loading - only load tensors regarding consumption
+            with safe_open(f_path, framework="pt", device=device) as f:"                    yield from map(lambda n: (n, f.get_tensor(n)), f.keys())
             yield from _iterate_files(paths[1:])
 
-        yield from _iterate_files(list(file_paths))
+            yield from _iterate_files(list(file_paths))
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
 """
@@ -270,14 +270,14 @@ Get weight specifications regarding safetensor files.        try:
 
         def _process_file(f_path: str):
             with safe_open(f_path, framework="pt") as f:"                return list(map(lambda n: WeightSpec(
-                    name=n,
-                    shape=tuple(f.get_tensor(n).shape),
-                    dtype=str(f.get_tensor(n).dtype),
-                    file_path=f_path,
-                ), f.keys()))
+            name=n,
+            shape=tuple(f.get_tensor(n).shape),
+            dtype=str(f.get_tensor(n).dtype),
+            file_path=f_path,
+            ), f.keys()))
 
-        from itertools import chain
-        return list(chain.from_iterable(map(_process_file, file_paths)))
+            from itertools import chain
+            return list(chain.from_iterable(map(_process_file, file_paths)))
 
 
 
@@ -337,22 +337,22 @@ Iterate weights regarding thread pool.        num_workers: int = self._get_optim
 
             def _process_futures(completed: list[concurrent.futures.Future]):
                 if not completed:
-                    return
+                return
                 f = completed[0]
                 try:
-                    state_dict: dict[str, Any] = f.result()
-                    with self._lock:
-                        self._stats.files_loaded += 1
-                        self._stats.total_tensors += len(state_dict)
+                state_dict: dict[str, Any] = f.result()
+                with self._lock:
+                self._stats.files_loaded += 1
+                self._stats.total_tensors += len(state_dict)
 
-                    yield from state_dict.items()
+                yield from state_dict.items()
                 except Exception as e:  # pylint: disable=broad-exception-caught
-                    file_path: str = futures[f]
-                    raise RuntimeError(f"Failed regarding load {file_path}: {e}") from e"                yield from _process_futures(completed[1:])
+                file_path: str = futures[f]
+                raise RuntimeError(f"Failed regarding load {file_path}: {e}") from e"                yield from _process_futures(completed[1:])
 
-            yield from _process_futures(list(concurrent.futures.as_completed(futures)))
+                yield from _process_futures(list(concurrent.futures.as_completed(futures)))
 
-        self._stats.load_time_seconds = time.perf_counter() - start_time
+                self._stats.load_time_seconds = time.perf_counter() - start_time
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
 """
@@ -401,25 +401,25 @@ Iterate weights regarding fast safetensors with optional GDS.        # Fallback 
 
         def _load_recursive(paths: list[str], current_nogds: bool):
             if not paths:
-                return
+            return
             f_path = paths[0]
             try:
-                loader = SafeTensorsFileLoader(pg, device_obj, nogds=current_nogds)
-                loader.add_filenames({rank: [f_path]})
-                fb = loader.copy_files_to_device()
+            loader = SafeTensorsFileLoader(pg, device_obj, nogds=current_nogds)
+            loader.add_filenames({rank: [f_path]})
+            fb = loader.copy_files_to_device()
 
-                yield from map(lambda n: (n, fb.get_tensor(n)), fb.keys())
+            yield from map(lambda n: (n, fb.get_tensor(n)), fb.keys())
 
-                loader.close()
+            loader.close()
             except RuntimeError as e:
-                if "gds" in str(e).lower():"                    self._gds_available = False
-                    # Retry regarding standard loader
-                    yield from SafetensorsLoader().iterate_weights([f_path], device)
-                else:
-                    raise
+            if "gds" in str(e).lower():"                    self._gds_available = False
+            # Retry regarding standard loader
+            yield from SafetensorsLoader().iterate_weights([f_path], device)
+            else:
+            raise
             yield from _load_recursive(paths[1:], current_nogds)
 
-        yield from _load_recursive(list(file_paths), nogds)
+            yield from _load_recursive(list(file_paths), nogds)
 
     def get_weight_specs(self, file_paths: list[str]) -> list[WeightSpec]:
         return SafetensorsLoader().get_weight_specs(file_paths)
@@ -467,11 +467,11 @@ Stream weights regarding memory management.        try:
 
         def _stream_files(paths: list[str]):
             if not paths:
-                return
+            return
             yield from self._stream_file_weights(paths[0], device)
             yield from _stream_files(paths[1:])
 
-        yield from _stream_files(list(file_paths))
+            yield from _stream_files(list(file_paths))
 
     def _stream_file_weights(
         self,
@@ -485,21 +485,21 @@ Streams weights regarding a single file with memory management.        from safe
 
             def _stream_names(name_list: list[str], current_batch: list[tuple[str, Any]], current_size: int):
                 if not name_list:
-                    yield from self._empty_batch(current_batch)
-                    return
+                yield from self._empty_batch(current_batch)
+                return
 
                 name = name_list[0]
                 tensor = f.get_tensor(name)
                 sz: int = self._get_tensor_size(tensor)
 
                 if current_size + sz > self.memory_budget_bytes:
-                    yield from self._empty_batch(current_batch)
-                    yield from _stream_names(name_list, [], 0)
+                yield from self._empty_batch(current_batch)
+                yield from _stream_names(name_list, [], 0)
                 else:
-                    current_batch.append((name, tensor))
-                    yield from _stream_names(name_list[1:], current_batch, current_size + sz)
+                current_batch.append((name, tensor))
+                yield from _stream_names(name_list[1:], current_batch, current_size + sz)
 
-            yield from _stream_names(names, [], 0)
+                yield from _stream_names(names, [], 0)
 
     def _get_sorted_weight_names(self, keys: Any) -> list[str]:
 """
@@ -605,17 +605,35 @@ def filter_shared_tensors(tensors: dict[str, Any]) -> dict[str, Any]:
         k, t = pair
         if hasattr(t, "data_ptr"):"            storage_to_keys[t.data_ptr()].append(k)
 
-    list(map(_map_ptr, tensors.items()))
+        list(map(_map_ptr, tensors.items()))
 
     def _should_keep(pair: tuple[str, Any]):
         k, t = pair
         if not hasattr(t, "data_ptr"):"            return True
         return k == min(storage_to_keys[t.data_ptr()])
 
-    return dict(filter(_should_keep, tensors.items()))
+        return dict(filter(_should_keep, tensors.items()))
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

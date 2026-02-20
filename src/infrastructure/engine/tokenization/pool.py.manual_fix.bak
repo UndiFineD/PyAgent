@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Tokenizer pool for parallel processing.
-""
+"""
 try:
 
 """
-    import threading
+import threading
 except ImportError:
     import threading
 
@@ -58,7 +58,7 @@ except ImportError:
 
 
 class TokenizerPool:
-    ""
+"""
 Thread-safe pool of tokenizers.
     def __init__(self, config: TokenizerConfig, pool_size: int = 4) -> None:
         self.config = config
@@ -71,7 +71,7 @@ Thread-safe pool of tokenizers.
         self._init_pool()
 
     def _init_pool(self) -> None:
-        ""
+"""
 Initialize the tokenizer pool.        registry = TokenizerRegistry()
         for _ in range(self.pool_size):
             tokenizer = registry.get_tokenizer(self.config)
@@ -79,7 +79,7 @@ Initialize the tokenizer pool.        registry = TokenizerRegistry()
             self._available.append(True)
 
     def acquire(self, timeout: Optional[float] = None) -> Optional[BaseTokenizer]:
-        ""
+"""
 Acquire a tokenizer from the pool.        with self._condition:
             start = time.monotonic()
             while True:
@@ -96,7 +96,7 @@ Acquire a tokenizer from the pool.        with self._condition:
                     self._condition.wait()
 
     def release(self, tokenizer: BaseTokenizer) -> None:
-        ""
+"""
 Release a tokenizer back into the pool.        with self._condition:
             for i, t in enumerate(self._pool):
                 if t is tokenizer:
@@ -113,4 +113,4 @@ Release a tokenizer back into the pool.        with self._condition:
     def __exit__(self, *args) -> None:
         self.release(self._current)
 
-""
+"""

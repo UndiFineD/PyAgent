@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ImageGenerationAgent - Image generation via diffusion models
 
@@ -45,7 +45,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Image Generation Agent for PyAgent.
 Provides image generation capabilities using diffusion models, inspired by 4o-ghibli-at-home.
-""
+"""
 from typing import Any, Dict, Optional
 from pathlib import Path
 
@@ -145,7 +145,25 @@ from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
 
 
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

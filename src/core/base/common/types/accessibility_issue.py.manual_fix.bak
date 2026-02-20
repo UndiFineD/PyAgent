@@ -15,16 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AccessibilityIssue dataclass for test imports and type coverage.
 
 """
-
 This file was partially corrupted; provide a minimal, well-typed
 dataclass so tests and imports succeed. The production implementation
 may include richer validation and helpers.
-""
+"""
 from dataclasses import dataclass
 from typing import Optional
 

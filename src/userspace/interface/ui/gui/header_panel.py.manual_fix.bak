@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Header Panel component for the PyAgent GUI.
 
 """
-
 try:
     import tkinter
 except ImportError:
@@ -54,7 +53,7 @@ __version__ = VERSION
 
 
 class HeaderPanel:
-    ""
+"""
 Handles project root selection and global context input.
 
     def __init__(self, parent, project_root_var, callbacks) -> None:

@@ -26,7 +26,6 @@ USAGE:
 - Intended to be called by orchestration code that requests UI components or layout updates for the Fleet Dashboard.
 
 """
-
 WHAT IT DOES:
 - Provides an Agent specialized in designing and generating frontend UI artifacts (prefers Next.js, Tailwind CSS, and Lucide icons).
 - Exposes two tools: generate_component(name, description) which returns a React/Next.js component boilerplate string, and update_dashboard_layout(active_agents) which returns a short status message and is intended to update layout configuration.
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in UI generation and Dashboard management.
 Helps create Next.js or React interfaces for the fleet.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -190,4 +189,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(DashboardAgent, "Dashboard Agent", "Dashboard source path")"    main()
 
-""
+"""

@@ -19,7 +19,6 @@
 Logprobs processing with GC-optimized storage.
 
 """
-
 Exports:
     - LogprobFormat: Format enum
     - LogprobEntry: Single token logprob

@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 AB Engine - A/B comparison and significance calculationLightweight, synchronous A/B comparison helpers and a fallback significance routine.
-""
+"""
 
 """
 import contextlib
@@ -43,7 +43,7 @@ except Exception:
 
 @dataclass
 class ABComparisonResult:
-    ""
+"""
 Result of comparing two metric groups.
     metrics_compared: int
     differences: dict[str, float] = field(default_factory=dict)
@@ -51,7 +51,7 @@ Result of comparing two metric groups.
 
 @dataclass
 class ABSignificanceResult:
-    ""
+"""
 Result of A/B statistical significance calculation.
     p_value: float
     is_significant: bool
@@ -60,7 +60,7 @@ Result of A/B statistical significance calculation.
 
 @dataclass
 class ABComparison:
-    ""
+"""
 A / B comparison between code versions.
     id: str
     version_a: str
@@ -73,7 +73,7 @@ confidence: float = 0.0
 
 
 class ABComparisonEngine:
-    ""
+"""
 Compare stats between different code versions (A / B testing).
     def __init__(self) -> None:
         self.comparisons: dict[str, ABComparison] = {}
@@ -120,7 +120,7 @@ Compare stats between different code versions (A / B testing).
 
 
 class ABComparator:
-    ""
+"""
 Compares A/B test metrics and computes simple significance.
     def compare(self, a_data: dict[str, float], b_data: dict[str, float]) -> ABComparisonResult:
         common = sorted(set(a_data.keys()) & set(b_data.keys()))

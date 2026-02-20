@@ -26,7 +26,6 @@ USAGE:
 - Analyze content: nodes = agent.analyze(source_code_str, file_path="src/module.py")"- Get external packages: externals = agent.get_external_dependencies()
 
 """
-
 WHAT IT DOES:
 - Parses source content into DependencyNode objects via DependencyCore and stores them in self.nodes
 - Provides a convenience method to list external (non-stdlib) imports based on a builtin stdlib set

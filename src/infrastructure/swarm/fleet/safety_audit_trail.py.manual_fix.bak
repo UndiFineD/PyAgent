@@ -15,12 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 SafetyAuditTrail
 
 """
 Persistent audit log for safety violations and adversarial attempts.
-""
+"""
 
 """
 import json
@@ -36,7 +36,7 @@ __version__ = VERSION
 
 
 class SafetyAuditTrail:
-    ""
+"""
 Logs security violations for later forensic analysis and training.
     def __init__(self, log_path: str) -> None:
         self.log_path = Path(log_path)
@@ -61,14 +61,32 @@ Records a new safety violation.        entry = {
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"SafetyAuditTrail: Error saving log: {e}")
     def get_summary(self) -> str:
-        ""
+"""
 Returns a human-readable summary of recently logged threats.        if not self.violations:
             return "No safety violations recorded.""        latest = self.violations[-1]
         msg = (
             f"Safety Audit: {len(self.violations)} threats recorded. ""            f"Latest: {latest['level']} at {latest['timestamp']}""'        )
         return msg
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

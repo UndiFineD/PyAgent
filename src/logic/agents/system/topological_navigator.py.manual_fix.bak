@@ -26,7 +26,6 @@ USAGE:
 - Integrate into larger agent workflows via FederationMixin for distributed coordination and cross-repo federation.
 
 """
-
 WHAT IT DOES:
 - Creates and holds an in-memory directed graph (graph) and reverse graph (reverse_graph) mapping code entity relationships for dependency and impact analysis.
 - Sets a root working directory and initializes a system prompt describing its role as the Topological Context Navigator.
@@ -41,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in Topological Context Navigation.
 Builds a semantic map of the codebase for graph-based dependency exploration.
-""
+"""
 try:
     import os
 except ImportError:
@@ -153,4 +152,4 @@ class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, Feder
 
     # Logic delegated to mixins
 
-""
+"""

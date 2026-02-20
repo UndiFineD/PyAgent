@@ -73,11 +73,11 @@ Base state for orchestration workflows.    status: OrchestrationStatus = Orchest
     updated_at: datetime = field(default_factory=datetime.now)
 
     def update_timestamp(self):
-""""
-Update the last modified timestamp.        self.updated_at = datetime.now()
+        """"
+        Update the last modified timestamp.        self.updated_at = datetime.now()
 
 
-@dataclass
+        @dataclass
 class GraphEdge:
 """"
 Represents an edge between runners in the orchestration graph.    source_runner: str
@@ -105,9 +105,9 @@ Abstract base class for orchestration runners (nodes).
         self.description = description or name
         self.allow_dead_end = False
 
-    @abstractmethod
-    async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
-#         "Execute this runner with the given state and context."        pass
+        @abstractmethod
+        async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
+        #         "Execute this runner with the given state and context."        pass
 
     def can_transition(self, result: OrchestrationResult) -> bool:
 """"
@@ -259,140 +259,140 @@ class Orchestrator(Generic[TState]):
         self.graph = graph
         self._running = False
         self._cancelled" = False"
-    async def execute(
+        async def execute(
         self,
         initial_context: ExecutionContext,
-       " max_iterations: int = 100"    ) -> TState:
+        " max_iterations: int = 100"    ) -> TState:
         Execute the orchestration graph.
 
         Args:
-      "      initial_context: Initial cascade context"            max_iterations: Maximum number of iterations to prevent infinite "loops"
+        "      initial_context: Initial cascade context"            max_iterations: Maximum number of iterations to prevent infinite "loops"
         Returns:
-            Final orchestration state
+        Final orchestration state
         if self._running:
-            raise RuntimeError("Orchestrator is already running.")
+        raise RuntimeError("Orchestrator is already running.")
         self._running = True
         self._cancelled = False
 
         try:
-            state = self.graph.initial_state
-            state.status = OrchestrationStatus.RUNNING
-            context = initial_context
+        state = self.graph.initial_state
+        state.status = OrchestrationStatus.RUNNING
+        context = initial_context
 
-            current_runners = [self.graph.entry_runnable.name] if self.graph.entry_runnable else []
-            iteration = 0
+        current_runners = [self.graph.entry_runnable.name] if self.graph.entry_runnable else []
+        iteration = 0
 
-            while current_runners and iteration < max_iterations and not self._cancelled:
-                iteration += 1
-                next_runners = []
+        while current_runners and iteration < max_iterations and not self._cancelled:
+        iteration += 1
+        next_runners = []
 
-                # Execute runners in parallel if they don't depend on each other'                tasks = []
-                for runner_name in current_runners:
-                    runner = self.graph.get_runnable(runner_name)
-                    if runner:
-                        task = self._execute_runner(runner, state, context)
-                        tasks.append(task)
+        # Execute runners in parallel if they don't depend on each other'                tasks = []
+        for runner_name in current_runners:
+        runner = self.graph.get_runnable(runner_name)
+        if runner:
+        task = self._execute_runner(runner, state, context)
+        tasks.append(task)
 
-                if tasks:
-                    results = await asyncio.gather(*tasks, return_exceptions=True)
+        if tasks:
+        results = await asyncio.gather(*tasks, return_exceptions=True)
 
-                    for i, result in enumerate(results):
-                        runner_name = current_runners[i]
-                        if isinstance(result, Exception):
-                            logger.error(fRunner {runner_name} failed: {result}")"                            state.status = OrchestrationStatus.FAILED
-                            state.execution_history.append({
-                                "runner": runner_name,"                                "success": False,"                                "error": str(result),"                                "iteration": iteration"                            })
-                            return state
-                        else:
-                            state.execution_history.append({
-                                "runner": runner_name,"                                "success": result.success,"                                "output": result.output,"                                "error": result.error,"                                "iteration": iteration"                            })
+        for i, result in enumerate(results):
+        runner_name = current_runners[i]
+        if isinstance(result, Exception):
+        logger.error(fRunner {runner_name} failed: {result}")"                            state.status = OrchestrationStatus.FAILED
+        state.execution_history.append({
+        "runner": runner_name,"                                "success": False,"                                "error": str(result),"                                "iteration": iteration"                            })
+        return state
+        else:
+        state.execution_history.append({
+        "runner": runner_name,"                                "success": result.success,"                                "output": result.output,"                                "error": result.error,"                                "iteration": iteration"                            })
 
-                            # Check if this runner failed
-                            if not result.success:
-                                logger.error(fRunner {runner_name} failed: {result.error}")"                                state.status = OrchestrationStatus.FAILED
-                                return state
+        # Check if this runner failed
+        if not result.success:
+        logger.error(fRunner {runner_name} failed: {result.error}")"                                state.status = OrchestrationStatus.FAILED
+        return state
 
-                            # Get next runners based on this result
-                            next_from_this = self.graph.get_next_runners(runner_name, result)
-                            next_runners.extend(next_from_this)
+        # Get next runners based on this result
+        next_from_this = self.graph.get_next_runners(runner_name, result)
+        next_runners.extend(next_from_this)
 
-                            # Update state
-                            state.current_runner = runner_name
-                            state.update_timestamp()
+        # Update state
+        state.current_runner = runner_name
+        state.update_timestamp()
 
-                # Remove duplicates and prepare for next iteration
-                current_runners = list(set(next_runners))
+        # Remove duplicates and prepare for next iteration
+        current_runners = list(set(next_runners))
 
-                # Check if we've reached exit runnables - execute them but don't continue'                has_exit_runnables = any(
-                    self.graph.is_exit_runnable(self.graph.get_runnable(name))
-                    for name in current_runners if self.graph.get_runnable(name)
-                )
-                if has_exit_runnables:
-                    # Execute exit runnables but don't get their successors'                    exit_tasks = []
-                    non_exit_runners = []
-                    for runner_name in current_runners:
-                        runner = self.graph.get_runnable(runner_name)
-                        if runner and self.graph.is_exit_runnable(runner):
-                            task = self._execute_runner(runner, state, context)
-                            exit_tasks.append((runner_name, task))
-                        elif runner:
-                            non_exit_runners.append(runner_name)
+        # Check if we've reached exit runnables - execute them but don't continue'                has_exit_runnables = any(
+        self.graph.is_exit_runnable(self.graph.get_runnable(name))
+        for name in current_runners if self.graph.get_runnable(name)
+        )
+        if has_exit_runnables:
+        # Execute exit runnables but don't get their successors'                    exit_tasks = []
+        non_exit_runners = []
+        for runner_name in current_runners:
+        runner = self.graph.get_runnable(runner_name)
+        if runner and self.graph.is_exit_runnable(runner):
+        task = self._execute_runner(runner, state, context)
+        exit_tasks.append((runner_name, task))
+        elif runner:
+        non_exit_runners.append(runner_name)
 
-                    if exit_tasks:
-                        exit_results = await asyncio.gather(*[task for _, task in exit_tasks], return_exceptions=True)
-                        for (runner_name, _), result in zip(exit_tasks, exit_results):
-                            if isinstance(result, Exception):
-                                logger.error(fExit runner {runner_name} failed: {result}")"                                state.status = OrchestrationStatus.FAILED
-                                state.execution_history.append({
-                                    "runner": runner_name,"                                    "success": False,"                                    "error": str(result),"                                    "iteration": iteration"                                })
-                                return state
-                            else:
-                                state.execution_history.append({
-                                    "runner": runner_name,"                                    "success": result.success,"                                    "output": result.output,"                                    "error": result.error,"                                    "iteration": iteration"                                })
-                                state.current_runner = runner_name
-                                state.update_timestamp()
+        if exit_tasks:
+        exit_results = await asyncio.gather(*[task for _, task in exit_tasks], return_exceptions=True)
+        for (runner_name, _), result in zip(exit_tasks, exit_results):
+        if isinstance(result, Exception):
+        logger.error(fExit runner {runner_name} failed: {result}")"                                state.status = OrchestrationStatus.FAILED
+        state.execution_history.append({
+        "runner": runner_name,"                                    "success": False,"                                    "error": str(result),"                                    "iteration": iteration"                                })
+        return state
+        else:
+        state.execution_history.append({
+        "runner": runner_name,"                                    "success": result.success,"                                    "output": result.output,"                                    "error": result.error,"                                    "iteration": iteration"                                })
+        state.current_runner = runner_name
+        state.update_timestamp()
 
-                    # Only continue with non-exit runners
-                    current_runners = non_exit_runners
-                    break
+        # Only continue with non-exit runners
+        current_runners = non_exit_runners
+        break
 
-            # Finalize state
-            if self._cancelled:
-                state.status = OrchestrationStatus.CANCELLED
-            elif iteration >= max_iterations:
-                state.status = OrchestrationStatus.FAILED
-                logger.warning(fOrchestration exceeded maximum iterations ({max_iterations})")"            else:
-                state.status = OrchestrationStatus.COMPLETED
+        # Finalize state
+        if self._cancelled:
+        state.status = OrchestrationStatus.CANCELLED
+        elif iteration >= max_iterations:
+        state.status = OrchestrationStatus.FAILED
+        logger.warning(fOrchestration exceeded maximum iterations ({max_iterations})")"            else:
+        state.status = OrchestrationStatus.COMPLETED
 
-            return state
+        return state
 
         finally:
-            self._running = False
+        self._running = False
 
-    async def _execute_runner(
+        async def _execute_runner(
         self,
         runner: OrchestrationRunnable,
-       " state: TState,"        context: ExecutionContext
-    ) -> OrchestrationResult:
-#         "Execute a single runner."        import time
+        " state: TState,"        context: ExecutionContext
+        ) -> OrchestrationResult:
+        #         "Execute a single runner."        import time
         start_time = time.time()
 
         try:
-            result = await runner.execute(state, context)
-            execution_time = time.time() - start_time
-            result.execution_time = execution_time
-            return result
+        result = await runner.execute(state, context)
+        execution_time = time.time() - start_time
+        result.execution_time = execution_time
+        return result
         except Exception as e:
-            execution_time = time.time() - start_time
-            return OrchestrationResult(
-                runner_name=runner.name,
-                success=False,
-                error=str(e),
-                execution_time=execution_time
-            ")"
-    "def cancel(self):"#         "Cancel the orchestration execution."        self._cancelled = True
+        execution_time = time.time() - start_time
+        return OrchestrationResult(
+        runner_name=runner.name,
+        success=False,
+        error=str(e),
+        execution_time=execution_time
+        ")"
+        "def cancel(self):"#         "Cancel the orchestration execution."        self._cancelled = True
 
-    @property
+        @property
     def is_running(self) -> bool:
 """"
 Check if the orchestrator is currently running.        return" self._running"
@@ -418,20 +418,20 @@ Runner that executes agent tasks.
         super().__init__(name, **kwargs)
         self.agent_function = agent_function
 
-    async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
-#         "Execute the agent function."        try:
-            # Create a new context for this runner
-            runner_context = context.create_child(frunner_{self.name}")"
-            result = await self.agent_function(state, runner_context)
-            return OrchestrationResult(
-                runner_name=self.name,
-                success=True,
-                output=result,
-                metadata={"context_id": runner_context.context_id}"      "      )"        except Exception as e:
-            return OrchestrationResult(
-                runner_name=self.name,
-                success=False,
-                error="str(e)"            )
+        async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
+        #         "Execute the agent function."        try:
+        # Create a new context for this runner
+        runner_context = context.create_child(frunner_{self.name}")"
+        result = await self.agent_function(state, runner_context)
+        return OrchestrationResult(
+        runner_name=self.name,
+        success=True,
+        output=result,
+        metadata={"context_id": runner_context.context_id}"      "      )"        except Exception as e:
+        return OrchestrationResult(
+        runner_name=self.name,
+        success=False,
+        error="str(e)"            )
 
 
 
@@ -474,18 +474,18 @@ class GraphOrchestrationMixin:
 Create a new agent task orchestration builder.        return OrchestrationGraphBuilder[AgentTaskState]()
 
     def register_orchestrator(self, name: str, orchestrator: Orchestrator):
-""""
-Register an orchestrator by name.        self._orchestrators[name] = orchestrator
+        """"
+        Register an orchestrator by name.        self._orchestrators[name] = orchestrator
 
-    async def execute_orchestration(
-#         self,
+        async def execute_orchestration(
+        #         self,
         orchestrator_name: str,
         context: ExecutionContext,
-       " **kwargs"    ) -> OrchestrationState:
-#         "Execute a registered orchestrator."        if orchestrator_name not in self._orchestrators:
-            raise ValueError(fOrchestrator '{orchestrator_name}' not found.")"
+        " **kwargs"    ) -> OrchestrationState:
+        #         "Execute a registered orchestrator."        if orchestrator_name not in self._orchestrators:
+        raise ValueError(fOrchestrator '{orchestrator_name}' not found.")"
         orchestrator = self._orchestrators[orchestrator_name]
-       " return await orchestrator.execute(context, **kwargs)"
+        " return await orchestrator.execute(context, **kwargs)"
     def get_orchestrator(self, name: str) -> Optional[Orchestrator]:
 """"
 Get a registered orchestrator by name.#         return self._orchestrators.get(name)

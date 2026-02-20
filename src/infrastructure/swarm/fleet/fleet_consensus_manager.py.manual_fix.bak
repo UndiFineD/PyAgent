@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 FleetConsensusManager
 """
 Consensus management for the FleetManager.
-""
+"""
 
 """
 import asyncio
@@ -34,9 +34,9 @@ if TYPE_CHECKING:
 
 
 class FleetConsensusManager:
-    ""
+"""
 Manages multi-agent consensus workflows.
-    ""
+"""
 def __init__(self, fleet: 'FleetManager') -> None:
         self.fleet = fleet
 
@@ -47,11 +47,11 @@ def __init__(self, fleet: 'FleetManager') -> None:
         primary_agent: str | None = None,
         secondary_agents: list[str] | None = None,
     ) -> dict[str, Any]:
-        ""
+"""
                 [Pillar 1: Swarm Consensus]
         Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
         Fully asynchronous implementation for v4.0.0.
-        ""
+"""
 logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")
         # 1. Committee Formation
         judge = self.fleet.agents.get("ByzantineConsensusAgent") or self.fleet.agents.get("byzantine_judge")

@@ -24,7 +24,6 @@ from __future__ import annotations
 Tool/function call parsing with model-specific parsers.
 
 """
-
 Inspired by vLLM's tool_parsers patterns, this module provides:'- Model-specific tool call parsing (Hermes, Llama3, Mistral, etc.)
 - Streaming tool call extraction
 - JSON schema validation

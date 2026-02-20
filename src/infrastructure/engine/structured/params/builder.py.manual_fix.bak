@@ -123,12 +123,30 @@ Allow partial completion.        self._config.allow_partial_completion = allow
         return self
 
     def build(self) -> StructuredOutputConfig:
-        ""
+"""
 Build the configuration.        self._config.additional_constraints = self._constraints
         return self._config
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 JSON Schema builder for guided decoding.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -131,7 +131,7 @@ Add an enum property.        if values:
         return self.add_property(name, prop_type, required=required, enum=values, **kwargs)
 
     def build(self) -> Dict[str, Any]:
-        ""
+"""
 Build the JSON schema dictionary.        schema: Dict[str, Any] = {
             "type": "object","            "properties": self.properties,"        }
 
@@ -143,11 +143,29 @@ Build the JSON schema dictionary.        schema: Dict[str, Any] = {
         return schema
 
     def to_guided_config(self) -> GuidedConfig:
-        ""
+"""
 Convert to GuidedConfig for use with decoder.        return GuidedConfig(
             mode=GuidedMode.JSON,
             json_schema=self.build(),
         )
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

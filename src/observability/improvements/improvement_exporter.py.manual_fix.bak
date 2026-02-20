@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 improvement_exporter.py - Export improvements to JSON/CSV
 
@@ -73,7 +73,7 @@ __version__ = VERSION
 
 
 class ImprovementExporter:
-    ""
+"""
 Exports improvements to json/csv.
 
     def __init__(self) -> None:

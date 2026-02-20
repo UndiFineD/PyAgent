@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import asyncio
+import asyncio
 
 try:
     import pytest
@@ -44,7 +44,7 @@ except ImportError:
 
 
 class MockNode(FleetBackupMixin):
-    ""
+"""
 Mock node for testing distributed RAID-10 recovery.    def __init__(self, node_id):
         self.node_id = node_id
         self.config = {"resilience": {"shard_parts": 4, "mirror_factor": 2}}"        self.voyager_transport = AsyncMock()
@@ -124,4 +124,4 @@ async def test_raid10_sharding_and_recovery():
 if __name__ == "__main__":"    asyncio.run(test_raid10_sharding_and_recovery())
 
 
-""
+"""

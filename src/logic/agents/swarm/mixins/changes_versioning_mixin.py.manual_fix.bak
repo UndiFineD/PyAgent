@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ChangesVersioningMixin - Manage version generation for ChangesAgent
 
@@ -51,7 +51,7 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-""
+"""
 Versioning logic for ChangesAgent"."
 
 import logging

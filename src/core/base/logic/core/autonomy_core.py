@@ -1,9 +1,9 @@
-from __future__ import annotations
 """
 Parser-safe AutonomyCore facade stub.
 
 Minimal placeholder used while the real autonomy core is repaired.
 """
+from __future__ import annotations
 
 
 

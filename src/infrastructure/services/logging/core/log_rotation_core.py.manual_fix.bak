@@ -17,14 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Log rotation core.py module.
-""
+"""
 try:
 
 """
-    import contextlib
+import contextlib
 except ImportError:
     import contextlib
 
@@ -67,7 +67,7 @@ class LogRotationCore:
         self._fs = FileSystemCore()
 
     def should_rotate(self, file_path: str) -> bool:
-        ""
+"""
 Checks if a log file exceeds the size limit.        if not os.path.exists(file_path):
             return False
         return os.path.getsize(file_path) > self.max_size_bytes
@@ -101,4 +101,4 @@ Checks if a log file exceeds the size limit.        if not os.path.exists(file_p
             return "INFO""        elif fleet_health_score < 0.8:
             return "WARNING""        else:
             return "ERROR"
-""
+"""

@@ -20,10 +20,9 @@ from __future__ import annotations
 Streaming vLLM Engine Integration.
 
 """
-
 Provides real-time token streaming for vLLM inference.
 Supports both callback-based and iterator-based streaming.
-""
+"""
 import asyncio
 import gc
 import logging
@@ -56,7 +55,7 @@ except ImportError:
 
 
 class StreamCallback(Protocol):
-    ""
+"""
 Protocol for stream callbacks.
     def __call__(
         self,
@@ -65,12 +64,12 @@ Protocol for stream callbacks.
         is_finished: bool,
         finish_reason: Optional[str] = None,
     ) -> None:
-        ""
+"""
 Called for each generated token.
 
 @dataclass
 class StreamingConfig:
-    ""
+"""
 Configuration for streaming engine.
     model: str = "meta-llama/Llama-3-8B-Instruct""    gpu_memory_utilization: float = 0.85
     tensor_parallel_size: int = 1
@@ -88,7 +87,7 @@ Configuration for streaming engine.
 
 @dataclass
 class StreamToken:
-    ""
+"""
 A streamed token.
     text: str
     token_id: int
@@ -126,7 +125,7 @@ class TokenStreamIterator:
         self.finish_reason: Optional[str] = None
 
     async def put(self, token: StreamToken) -> None:
-        ""
+"""
 Add a token to the stream.        async with self._lock:
             if self.start_time is None:
                 self.start_time = time.time()
@@ -143,14 +142,14 @@ Mark stream as finished.        async with self._lock:
             self._event.set()
 
     async def error(self, exc: Exception) -> None:
-        ""
+"""
 Mark stream as errored.        async with self._lock:
             self._error = exc
             self._finished = True
             self._event.set()
 
     def __iter__(self) -> Iterator[StreamToken]:
-        ""
+"""
 Sync iterator (blocking).        loop = asyncio.new_event_loop()
         try:
             while True:
@@ -162,7 +161,7 @@ Sync iterator (blocking).        loop = asyncio.new_event_loop()
             loop.close()
 
     async def __aiter__(self) -> AsyncIterator[StreamToken]:
-        ""
+"""
 Async iterator.        while True:
             token = await self._get_next()
             if token is None:
@@ -170,7 +169,7 @@ Async iterator.        while True:
             yield token
 
     async def _get_next(self) -> Optional[StreamToken]:
-        ""
+"""
 Get next token from stream.        while True:
             async with self._lock:
                 if self._error:
@@ -190,7 +189,7 @@ Get next token from stream.        while True:
 
     @property
     def tokens_per_second(self) -> Optional[float]:
-        ""
+"""
 Calculate tokens per second.        if self.start_time and self.total_tokens > 0:
             end = self.end_time or time.time()
             duration = end - self.start_time
@@ -199,7 +198,7 @@ Calculate tokens per second.        if self.start_time and self.total_tokens > 0
         return None
 
     def get_full_text(self) -> str:
-        ""
+"""
 Get all generated text so far.        return "".join(t.text for t in self._buffer)
 
 
@@ -217,10 +216,10 @@ class StreamingVllmEngine:
         # Callback mode
         def on_token(token, token_id, is_finished, finish_reason):
             print(token, end="", flush=True)
-        engine.generate_with_callback("Tell me a story", on_token)
-        # Iterator mode
-        async for token in engine.generate_stream("Hello"):"            print(token.text, end="")"    
-    _instance: Optional["StreamingVllmEngine"] = None
+            engine.generate_with_callback("Tell me a story", on_token)
+            # Iterator mode
+            async for token in engine.generate_stream("Hello"):"            print(token.text, end="")"    
+            _instance: Optional["StreamingVllmEngine"] = None
     def __init__(self, config: Optional[StreamingConfig] = None) -> None:
         self.config = config or StreamingConfig()
         self._llm: Optional[LLM] = None
@@ -237,11 +236,11 @@ Get singleton instance.        if cls._instance is None:
 
     @property
     def is_available(self) -> bool:
-        ""
+"""
 Check if vLLM is available.        return HAS_VLLM
 
     def _detect_device(self) -> str:
-        ""
+"""
 Auto-detect the target device for vLLM.        if "VLLM_TARGET_DEVICE" in os.environ:"            return os.environ["VLLM_TARGET_DEVICE"]"
         if HAS_TORCH and torch.cuda.is_available():
             device = "cuda""        else:
@@ -249,7 +248,7 @@ Auto-detect the target device for vLLM.        if "VLLM_TARGET_DEVICE" in os.env
         os.environ["VLLM_TARGET_DEVICE"] = device"        return device
 
     def _build_llm_kwargs(self, device: str) -> dict[str, Any]:
-        ""
+"""
 Build kwargs for LLM initialization.        kwargs = {
             "model": self.config.model,"            "trust_remote_code": self.config.trust_remote_code,"        }
 
@@ -258,7 +257,7 @@ Build kwargs for LLM initialization.        kwargs = {
         return kwargs
 
     def _initialize_llm(self) -> bool:
-        ""
+"""
 Initialize the vLLM engine.        try:
             device = self._detect_device()
             logger.info("Initializing StreamingVllmEngine: %s", self.config.model)
@@ -272,7 +271,7 @@ Initialize the vLLM engine.        try:
             logger.error("Failed to initialize StreamingVllmEngine: %s", e)"            return False
 
     def _ensure_initialized(self) -> bool:
-        ""
+"""
 Lazily initialize the engine.        if not HAS_VLLM:
             logger.warning("vLLM not available for streaming")"            return False
 
@@ -368,7 +367,7 @@ async def generate_stream(
         system_prompt: Optional[str],
         **kwargs: Any,
     ) -> None:
-        ""
+"""
 Background task to generate and push to iterator.        try:
             if not self._ensure_initialized():
                 await iterator.error(RuntimeError("Engine not available"))"                return
@@ -452,13 +451,13 @@ Background task to generate and push to iterator.        try:
         except (RuntimeError, ValueError) as e:
             logger.error("Buffered generation failed: %s", e)
     def get_stats(self) -> dict:
-        ""
+"""
 Get streaming statistics.        return {
             **self._stats,
             "is_initialized": self._initialized,"        }
 
     def shutdown(self) -> None:
-        ""
+"""
 Shutdown and free resources.        if self._llm:
             del self._llm
             self._llm = None

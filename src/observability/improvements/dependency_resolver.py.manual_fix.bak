@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 DependencyResolver - Resolve improvement dependencies
 
@@ -53,7 +53,7 @@ __version__ = VERSION
 
 
 class DependencyResolver:
-    ""
+"""
 Resolves improvement dependencies.
 
 # [AUTO-FIXED F821]     def __init__(self) -> None:
@@ -66,7 +66,7 @@ Resolves improvement dependencies.
 # [AUTO-FIXED F821]         return list(self.dependencies.get(improvement_id, []))
 
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]     def resolve_order(self, improvement_ids: list[str]) -> list[str]:
-        ""
+"""
 Topologically sort the given ids so dependencies come first.# [AUTO-FIXED F821] # [AUTO-FIXED F821]         visited: set[str] = set()
 # [AUTO-FIXED F821] # [AUTO-FIXED F821] # [AUTO-FIXED F821]         temp: set[str] = set()
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]         ordered: list[str] = []
@@ -87,4 +87,4 @@ Topologically sort the given ids so dependencies come first.# [AUTO-FIXED F821] 
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]             visit(node)
 # [AUTO-FIXED F821] # [AUTO-FIXED F821]         return ordered
 
-""
+"""

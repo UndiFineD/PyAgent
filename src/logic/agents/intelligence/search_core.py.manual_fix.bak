@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 SearchCore - Search result parsing facade
 
@@ -154,4 +154,4 @@ Parses DuckDuckGo results from ddg_search library format.        if HAS_RUST and
 Combines list of results into a single string with provider indicator.        if not results:
 #             return fNo {provider} results found.
         return "\\n".join(results)
-""
+"""

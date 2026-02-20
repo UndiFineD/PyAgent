@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for reconciling workspace-wide module imports and missing __init__.py files.
 
 """
-
 import os
 import re
 
@@ -29,7 +28,7 @@ __version__ = VERSION
 
 
 def fix_imports(content: str) -> str:
-    ""
+"""
 Correct legacy module imports to use the src prefix.
 
     modules = [

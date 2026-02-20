@@ -17,12 +17,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 WeightOrchestrator for PyAgent.""""
 Manages the lifecycle of neural weights (LoRA/QLoRA adapters) across the fleet.
 
 Coordinates between the ModelForgeAgent and individual agents to hot-swap capabilities.
-""
+"""
 import json
 import logging
 from pathlib import Path
@@ -36,7 +36,7 @@ __version__ = VERSION
 
 # pylint: disable=too-many-ancestors
 class WeightOrchestrator(BaseAgent):
-    ""
+"""
 Orchestrates the distribution and activation of model weights across the fleet.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -58,20 +58,20 @@ Orchestrates the distribution and activation of model weights across the fleet.
             logging.error(f"WeightOrchestrator: Failed to save registry: {e}")
     @as_tool
     def activate_adapter(self, agent_name: str, adapter_name: str) -> bool:
-        ""
+"""
 Assigns an adapter to an agent and triggers a 'weights_updated' signal.'        logging.info(f"WeightOrchestrator: Activating adapter '{adapter_name}' for agent '{agent_name}'")"'        self.active_adapters[agent_name] = adapter_name
         self._save_registry()
         # In a real system, this would trigger a signal that the agent's Proxy or Backend listens to'        return True
 
     @as_tool
     def get_active_adapter(self, agent_name: str) -> str | None:
-        ""
+"""
 Returns the currently active adapter for an agent.
         return self.active_adapters.get(agent_name)
 
     @as_tool
     def deactivate_adapter(self, agent_name: str) -> bool:
-        ""
+"""
 Removes the active adapter from an agent.        if agent_name in self.active_adapters:
             del self.active_adapters[agent_name]
             self._save_registry()
@@ -81,18 +81,36 @@ Removes the active adapter from an agent.        if agent_name in self.active_ad
 
     @as_tool
     def list_registrations(self) -> dict[str, str]:
-        ""
+"""
 Returns all current agent-to-adapter mappings.
         return self.active_adapters
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        ""
+"""
 Synchronizes and improves content based on weight distribution.        _ = prompt, target_file
         return f"Current fleet weight distribution: {len(self.active_adapters)} active adapters."
 
 if __name__ == "__main__":"    # Internal test
     orchestrator = WeightOrchestrator(".")"    orchestrator.activate_adapter("LinguisticAgent", "poetry_v1")"    print(f"Active adapters: {orchestrator.list_registrations()}")
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
 Execution engine regarding the sampling pipeline.
-""
+"""
 try:
 
 """
-    from functools import reduce
+from functools import reduce
 except ImportError:
     from functools import reduce
 
@@ -60,10 +60,10 @@ except ImportError:
 
 
 class SamplingPipeline:
-    ""
+"""
 Composable pipeline of samplers.
     def __init__(self, samplers: Optional[List[Sampler]] = None) -> None:
-        ""
+"""
 Initialize the sampling pipeline.        self.samplers = samplers or []
 
     def add_sampler(self, sampler: Sampler) -> "SamplingPipeline":"        """
@@ -76,7 +76,7 @@ Add a sampler to the pipeline.        self.samplers.append(sampler)
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
-        ""
+"""
 Process logits through all samplers.        return reduce(
             lambda res, sampler: sampler.forward(res, params, state),
             self.samplers,
@@ -89,7 +89,7 @@ Process logits through all samplers.        return reduce(
         params: SamplingParams,
         state: Optional[SamplingState] = None,
     ) -> np.ndarray:
-        ""
+"""
 Sample from processed logits.        if not self.samplers:
             return _sample_from_probs(_softmax(logits), state)
 
@@ -108,7 +108,7 @@ def sample_logits(
     params: Optional[SamplingParams] = None,
     state: Optional[SamplingState] = None,
 ) -> np.ndarray:
-    ""
+"""
 Convenience function to sample from logits.    params = params or SamplingParams()
     samplers: List[Sampler] = []
 
@@ -125,7 +125,25 @@ Convenience function to sample from logits.    params = params or SamplingParams
     pipeline = SamplingPipeline(samplers)
     return pipeline.sample(logits, params, state)
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

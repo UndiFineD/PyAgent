@@ -79,6 +79,24 @@ delay_imports = getattr(pe, "DIRECTORY_ENTRY_DELAY_IMPORT", [])"    if not impor
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: Advanced web scanning core (conservative).
 
@@ -7,6 +6,7 @@ This file is a minimal, side-effect free stub created to restore
 importability while preserving exported symbols for tests.
 Backups are saved alongside the original with the suffix `.manual_fix.bak`.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Optional

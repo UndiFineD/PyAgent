@@ -170,43 +170,43 @@ try:
             # Try to find matching end bracket
             def _find_matching_bracket(text, curr_idx, count):
                 if curr_idx >= len(text):
-                    return -1, count
+                return -1, count
                 val = text[curr_idx]
                 new_count = count + (1 if val == "[" else -1 if val == "]" else 0)"                if new_count == 0:
-                    return curr_idx + 1, 0
+                return curr_idx + 1, 0
                 return _find_matching_bracket(text, curr_idx + 1, new_count)
 
-            end_idx, bracket_count = _find_matching_bracket(model_output, start_idx, 0)
+                end_idx, bracket_count = _find_matching_bracket(model_output, start_idx, 0)
 
-            if bracket_count != 0:
+                if bracket_count != 0:
                 return ExtractedToolCalls(
-                    content=model_output,
-                    is_complete=False,
-                    error="Incomplete JSON array","                )
+                content=model_output,
+                is_complete=False,
+                error="Incomplete JSON array","                )
 
-            json_str = model_output[start_idx:end_idx]
-            parsed = json.loads(json_str)
+                json_str = model_output[start_idx:end_idx]
+                parsed = json.loads(json_str)
 
-            if not isinstance(parsed, list):
+                if not isinstance(parsed, list):
                 parsed = [parsed]
 
             def transform_item(indexed_item):
                 i, item = indexed_item
                 if isinstance(item, dict) and "name" in item:"                    return ToolCall(
-                        name=item["name"],"                        arguments=item.get("arguments", item.get("parameters", {})),"                        id=item.get("id", f"call_{i}"),"                    )
+                name=item["name"],"                        arguments=item.get("arguments", item.get("parameters", {})),"                        id=item.get("id", f"call_{i}"),"                    )
                 return None
 
-            tool_calls = list(filter(None, map(transform_item, enumerate(parsed))))
+                tool_calls = list(filter(None, map(transform_item, enumerate(parsed))))
 
-            content = model_output[:start_idx].strip() or None
+                content = model_output[:start_idx].strip() or None
 
-            return ExtractedToolCalls(
+                return ExtractedToolCalls(
                 tool_calls=tool_calls,
                 content=content,
-            )
+                )
 
-        except json.JSONDecodeError as e:
-            return ExtractedToolCalls(
+                except json.JSONDecodeError as e:
+                return ExtractedToolCalls(
                 content=model_output,
                 is_complete=False,
                 error=f"JSON decode error: {e}","            )
@@ -243,28 +243,28 @@ Extract tool calls from streaming JSON output.""
 
                 def try_attempts(att_list):
                     if not att_list:
-                        return None
+                    return None
                     try:
-                        return json.loads(att_list[0])
+                    return json.loads(att_list[0])
                     except json.JSONDecodeError:
-                        return try_attempts(att_list[1:])
+                    return try_attempts(att_list[1:])
 
-                parsed = try_attempts(attempts)
+                    parsed = try_attempts(attempts)
 
-                if parsed is None:
+                    if parsed is None:
                     return None
 
-            if isinstance(parsed, list) and parsed:
-                current_call = parsed[-1]
-                if isinstance(current_call, dict):
+                    if isinstance(parsed, list) and parsed:
+                    current_call = parsed[-1]
+                    if isinstance(current_call, dict):
                     return StreamingToolCallDelta(
-                        tool_call_index=len(parsed) - 1,
-                        name_delta=current_call.get("name"),"                        arguments_delta=json.dumps(current_call.get("arguments", {})),"                        is_complete=self.tool_call_end in current_text,
+                    tool_call_index=len(parsed) - 1,
+                    name_delta=current_call.get("name"),"                        arguments_delta=json.dumps(current_call.get("arguments", {})),"                        is_complete=self.tool_call_end in current_text,
                     )
-        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-            pass
+                    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                    pass
 
-        return None
+                    return None
 
 
 
@@ -292,8 +292,8 @@ matches = list(self.TOOL_CALL_PATTERN.finditer(model_output))
 
         def process_matches(curr_matches, current_last_end, idx):
             if not curr_matches:
-                remaining = model_output[current_last_end:]
-                return [], [remaining] if remaining else []
+            remaining = model_output[current_last_end:]
+            return [], [remaining] if remaining else []
 
             match = curr_matches[0]
             pre_content = model_output[current_last_end : match.start()]
@@ -302,23 +302,23 @@ matches = list(self.TOOL_CALL_PATTERN.finditer(model_output))
             args_str = match.group(2).strip()
 
             try:
-                arguments = json.loads(args_str)
+            arguments = json.loads(args_str)
             except json.JSONDecodeError:
-                arguments = {"raw": args_str}
+            arguments = {"raw": args_str}
             call = ToolCall(
-                name=name,
-                arguments=arguments,
-                id=f"call_{idx}","            )
+            name=name,
+            arguments=arguments,
+            id=f"call_{idx}","            )
 
             next_calls, next_contents = process_matches(curr_matches[1:], match.end(), idx + 1)
             return [call] + next_calls, ([pre_content] if pre_content else []) + next_contents
 
-        tool_calls, content_parts = process_matches(matches, 0, 0)
-        content = "".join(content_parts).strip() or None
-        return ExtractedToolCalls(
+            tool_calls, content_parts = process_matches(matches, 0, 0)
+            content = "".join(content_parts).strip() or None
+            return ExtractedToolCalls(
             tool_calls=tool_calls,
             content=content,
-        )
+            )
 
     def extract_tool_calls_streaming(
         self,

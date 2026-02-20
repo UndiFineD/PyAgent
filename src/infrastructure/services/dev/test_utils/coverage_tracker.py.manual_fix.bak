@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from .core.base.lifecycle.version import VERSION
@@ -30,7 +30,7 @@ __version__ = VERSION
 
 
 class CoverageTracker:
-    ""
+"""
 Lightweight coverage hit tracker used by tests.
     def __init__(self) -> None:
         self._hits: dict[str, int] = {}
@@ -51,7 +51,25 @@ Lightweight coverage hit tracker used by tests.
         covered = sum(1 for t in self._targets if self._hits.get(t, 0) > 0)
         return (covered / len(self._targets)) * 100.0
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 BaseAgent Interface - Principal PyAgent Abstract Base.
 
 """
-
 Principal agent interface for PyAgent, supporting mixin-based architecture.
 
 DATE: 2026-02-12
@@ -42,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 - Further decoupling of specialized logic into standalone mixins to prevent class bloat.
 - Implementation of more granular tracing for complex multi-agent execution spans.
 - Optimization of state serialization for high-frequency environment updates.
-""
+"""
 import asyncio
 import collections.abc
 import logging
@@ -125,10 +124,10 @@ class BaseAgent(
     PromptLoaderMixin,
     StreamingMixin,
 ):
-    ""
+"""
 Core AI Agent Shell (Synaptic modularization Phase 317).
     Inherits domain logic from specialized Mixins to maintain low complexity.
-    ""
+"""
     # Class-level attributes for shared state
     _prompt_templates: dict[str, PromptTemplate] = {}
     _response_cache: dict[str, CacheEntry] = {}
@@ -138,7 +137,7 @@ Core AI Agent Shell (Synaptic modularization Phase 317).
 
     @classmethod
     def register_plugin(cls, name_or_plugin: Any, plugin: Any | None = None) -> None:
-        ""
+"""
 Register a plugin with the agent.""
 if plugin is None:
             # Called with one arg: register_plugin(plugin)
@@ -153,7 +152,7 @@ if plugin is None:
 
     @classmethod
     def unregister_plugin(cls, name: str) -> bool:
-        ""
+"""
 Unregister a plugin.""
 if name in cls._plugins:
             del cls._plugins[name]
@@ -163,13 +162,13 @@ if name in cls._plugins:
 
     @classmethod
     def get_plugin(cls, name: str) -> Any:
-        ""
+"""
 Get a registered plugin.""
 return cls._plugins.get(name)
 
 
     def __init__(self, file_path: str = ".", memory_core: Any = None, inference_engine: Any = None, reasoning_core: Any = None, test_mode: bool = False, **kwargs: Any) -> None:
-        ""
+"""
 Initialize the BaseAgent with decentralized initialization.""
         # Extract arguments consumed by BaseAgent to prevent leaking them to object.__init__
         inference_engine = kwargs.pop("inference_engine", "gemini-3-flash")
@@ -278,7 +277,7 @@ Initialize the BaseAgent with decentralized initialization.""
 
 
     async def setup(self) -> None:
-        ""
+"""
 Asynchronous setup for the Universal Agent shell.""
 logger.info("Initializing Universal Agent [%s]", self.manifest.role)
         # Load skills defined in logic manifest
@@ -289,10 +288,10 @@ logger.info("Initializing Universal Agent [%s]", self.manifest.role)
 
 
     async def run_task(self, task_manifest: dict[str, Any]) -> Any:
-        ""
+"""
 Executes a task based on a Logic Manifest.
         This is the entry point for the Universal Agent's cognitive loop.
-        ""
+"""
 start_time = time.time()
         # Load any task-specific skills dynamically
         required_skills = task_manifest.get("required_skills", [])
@@ -327,7 +326,7 @@ start_time = time.time()
 
 
     async def initialize_persona(self) -> None:
-        ""
+"""
 Asynchronously load the system prompt and initialize cognitive context.""
         # Using PromptLoaderMixin to load the persona from the library
         agent_type = getattr(self, "agent_type", "base")
@@ -338,7 +337,7 @@ Asynchronously load the system prompt and initialize cognitive context.""
 
 
     def _load_system_prompt(self) -> str:
-        ""
+"""
 Load system prompt from file if available, otherwise use class-defined or minimal fallback.""
 try:
             # If workspace root detection failed, fall back to minimal prompt
@@ -378,7 +377,7 @@ try:
 
 
     def _run_command(self, cmd: list[str], timeout: int = 120) -> subprocess.CompletedProcess[str]:
-        ""
+"""
 Run a shell command.""
 return ShellExecutor.run_command(
             cmd,
@@ -390,9 +389,9 @@ return ShellExecutor.run_command(
 
 
     def run(self, prompt: str | None = None) -> str:
-        ""
+"""
 Synchronous execution entry point for legacy support.
-        ""
+"""
 if prompt is None:
             # Default behavior for no prompt (usually legacy loop)
             # In Phase 5/6, this triggers an 'agent_complete' event
@@ -429,7 +428,7 @@ if prompt is None:
 
 
     def _notify_webhooks(self, event: str, data: dict[str, Any]) -> None:
-        ""
+"""
 Helper to notify registered webhooks.""
 if not hasattr(self, "_webhooks") or not self._webhooks:
             return
@@ -461,10 +460,10 @@ if not hasattr(self, "_webhooks") or not self._webhooks:
 
 
     def _classify_exception(self, e: Exception) -> str:
-        ""
+"""
 Classify exception into FailureClassification enum.
         Phase 336: Standardized failure taxonomy implementation.
-        ""
+"""
 exc_str = str(e).lower()
         if isinstance(e, RecursionError) or "recursion" in exc_str:
             return FailureClassification.RECURSION_LIMIT.value
@@ -481,7 +480,7 @@ exc_str = str(e).lower()
 
 
     async def run_async(self, prompt: str) -> str:
-        ""
+"""
 Main execution entry point (formerly run).""
 self.previous_content = self.current_content
 
@@ -498,10 +497,10 @@ self.previous_content = self.current_content
 
 
     async def think(self, prompt: str) -> str:
-        ""
+"""
 The core synaptic processing method.
         Decomposes the prompt, consults knowledge, and produces a reasoning-based response.
-        ""
+"""
 logging.info("[%s] Reasoning on prompt: %s...", self.__class__.__name__, prompt[:50])
         # 1. Governance & Quota Checks
         if hasattr(self, "_check_preemption"):
@@ -575,24 +574,24 @@ logging.info("[%s] Reasoning on prompt: %s...", self.__class__.__name__, prompt[
 
 
     def get_model(self) -> str:
-        ""
+"""
 Get the current model name.""
 return self._model or "gemini-3-flash"
 
 
     def __enter__(self) -> BaseAgent:
-        ""
+"""
 Enter context.""
 return self
 
 
     def verify_self(self, result: str) -> tuple[bool, str]:
-        ""
+"""
 Verify the integrity of a generated result.""
 return self.agent_logic_core.verify_self(result, 1.0)
 
 
     def _get_fallback_response(self) -> str:
-        ""
+"""
 Return a standardized fallback response.""
 return self.agent_logic_core.get_fallback_response()

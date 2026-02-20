@@ -17,13 +17,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Profiling analysis mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 """
-
 import logging
 from typing import TYPE_CHECKING, Any
 
@@ -34,7 +33,7 @@ if TYPE_CHECKING:
 
 
 class ProfilingAnalysisMixin:
-    ""
+"""
 Mixin for performance profiling in SelfImprovementAnalysis.
 
     def add_profiling_findings(

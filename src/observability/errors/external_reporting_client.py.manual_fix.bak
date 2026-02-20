@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ExternalReportingClient - Report errors to external monitoring services
 
@@ -52,7 +52,7 @@ WHAT IT SHOULD DO BETTER:
   and unit/integration tests for provider integrations.
 - Validate input ErrorEntry fields and handle partial failures in batch
   reporting (currently treats all as succeed on logging).
-""
+"""
 try:
     import logging
 except ImportError:
@@ -85,35 +85,35 @@ __version__ = VERSION
 
 
 class ExternalReportingClient:
-    ""
+"""
 Reports errors to external systems.
     Supports Sentry, Rollbar, Bugsnag, Datadog, and NewRelic integrations.
 
     Attributes:
         system: The external system to report to.
         dsn: Data source name or API key.
-    ""
+"""
 def __init__(self, system: ExternalReporter, dsn: str = "") -> None:
-        ""
+"""
 Initialize the external reporting client.
         Args:
             system: The external system type.
             dsn: Data source name or API key.
-        ""
+"""
 self.system = system
         self.dsn = dsn
         self.enabled = bool(dsn)
 
 
     def report(self, error: ErrorEntry) -> bool:
-        ""
+"""
 Report an error to the external system.
         Args:
             error: The error to report.
 
         Returns:
             True if reported successfully.
-        ""
+"""
 if not self.enabled:
             return False
         payload = self._build_payload(error)

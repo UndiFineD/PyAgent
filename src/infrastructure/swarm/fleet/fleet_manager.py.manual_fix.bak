@@ -107,15 +107,15 @@ class FleetManager(
     FleetUpdateMixin,
     FleetBackupMixin,
 ):  # pylint: disable=too-many-ancestors
-    ""
+"""
 The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
     agents to complete complex workflows, manages resource scaling, and ensures
     system-wide stability through various orchestrators.
-    ""
+"""
 def __init__(self, workspace_root: str) -> None:
-        ""
+"""
 Initializes the FleetManager with necessary components and starts background services.
-        ""
+"""
 self.workspace_root = Path(workspace_root)
         self.manifest_repo = ManifestRepository()
         self.backup_node = DistributedBackup(node_id=f"node-{self.workspace_root.name}")
@@ -335,7 +335,7 @@ self.workspace_root = Path(workspace_root)
 
 
     def _safe_start_task(self, coro) -> None:
-        ""
+"""
 Starts a task if an event loop is running, otherwise logs a warning.""
 try:
             asyncio.create_task(coro)
@@ -348,9 +348,9 @@ try:
 
     # Logic delegated to mixins
     async def _on_voyager_peer_added(self, peer_data: Dict[str, Any]) -> None:
-        ""
+"""
 P2P Handshake & Consensus setup for newly discovered Voyager peers.
-        ""
+"""
 peer_id = peer_data["properties"].get("node_id", peer_data["name"])
         addrs = peer_data["addresses"]
         if not addrs:
@@ -386,7 +386,7 @@ peer_id = peer_data["properties"].get("node_id", peer_data["name"])
 
 
     async def _handle_voyager_message(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        ""
+"""
 Handles incoming P2P messages from the Voyager transport layer.""
         # Phase 324: Zero-Trust Validation (Pillar 7)
         signature = message.get("signature", "unsigned")

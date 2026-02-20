@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Sanitizes imports by ensuring proper spacing and structure.
-""
+"""
 try:
 
 """
-    import os
+import os
 except ImportError:
     import os
 
@@ -89,4 +89,4 @@ for root, _, files in os.walk(src_path):
                 files_fixed += 1
 
 print(f"Finished. Processed {files_processed} files, fixed {files_fixed} files.")
-""
+"""

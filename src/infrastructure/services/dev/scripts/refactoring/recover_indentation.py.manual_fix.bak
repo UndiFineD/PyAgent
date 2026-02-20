@@ -15,7 +15,6 @@
 Recover Indentation module.
 
 """
-
 import re
 from pathlib import Path
 
@@ -69,7 +68,25 @@ if __name__ == "__main__":"    # Robustly find the repository root
     if project_root.name == 'src':'        project_root = project_root.parent
 
     fix_broken_indentation(project_root / "src")"    fix_broken_indentation(project_root / "tests")"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

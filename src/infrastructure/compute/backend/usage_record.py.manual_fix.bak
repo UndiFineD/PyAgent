@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     from dataclasses import dataclass
@@ -34,7 +34,7 @@ __version__ = VERSION
 
 @dataclass
 class UsageRecord:
-    ""
+"""
 A usage record for analytics.
     timestamp: float
     backend: str
@@ -43,7 +43,25 @@ A usage record for analytics.
     success: bool
     cost_estimate: float = 0.0
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

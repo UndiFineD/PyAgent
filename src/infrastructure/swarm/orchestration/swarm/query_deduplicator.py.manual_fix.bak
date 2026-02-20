@@ -14,12 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Query deduplicator.py module.
 
 """
-
 try:
     import asyncio
 except ImportError:
@@ -83,14 +82,14 @@ class SwarmQueryDeduplicator:
         self.inflight_queries[task_id] = {"prompt": prompt, "future": future, "start_time": time.time()}"        return None
 
     def complete_query(self, task_id: str, result: Any) -> None:
-        ""
+"""
 Marks a query as done and notifies all joiners.        if task_id in self.inflight_queries:
             data: Dict[str, Any] = self.inflight_queries.pop(task_id)
             data["future"].set_result(result)"            # Cache for immediate future exact repeats
             self.recent_results[hash(data["prompt"])] = result"            logger.debug(f"[Phase 86] Deduplicator: Completed task {task_id} and notified joiners.")"
     def cleanup(self) -> None:
-        ""
+"""
 Prunes stale entries.        # Cleanup recent_results could be added here
         pass
 
-""
+"""

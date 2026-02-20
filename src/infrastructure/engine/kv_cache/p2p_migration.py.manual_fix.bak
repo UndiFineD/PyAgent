@@ -19,7 +19,6 @@ Enables zero-copy (simulated RDMA) migration of context shards between DP-ranks.
 Reduces CPU overhead during swarm rebalancing.
 
 """
-
 try:
     import asyncio
 except ImportError:
@@ -85,8 +84,8 @@ class P2PMigrationEngine:
 
         logger.info(f"P2P Migration: {shard.shard_id} successfully moved in {duration:.2f}ms.")
     def get_migration_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Returns cumulative migration metrics.        history = self.migration_history
         count = max(1, len(history))
         return {"total_migrations": len(history), "avg_duration_ms": sum(m["duration_ms"] for m in history) / count}
-""
+"""

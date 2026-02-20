@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_changes.py""""
 try:
     from enum import Enum
@@ -36,10 +36,28 @@ __version__ = VERSION
 
 
 class ImportSource(Enum):
-    ""
+"""
 External sources for changelog import.
     GITHUB_RELEASES = "github_releases""    JIRA = "jira""    GITLAB = "gitlab""    MANUAL = "manual""
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

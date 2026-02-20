@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.services.dev.scripts.management.debug_phase_15 import test_ethics_and_safety

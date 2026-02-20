@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import contextlib
+import contextlib
 
 try:
     import hashlib
@@ -58,7 +58,7 @@ logger = logging.getLogger(__name__)
 
 
 class AnnotationManager:
-    ""
+"""
 Manage metric annotations and comments.    def __init__(self) -> None:        self.annotations: dict[str, list[MetricAnnotation]] = {}
 
     def add_annotation(
@@ -100,7 +100,7 @@ Manage metric annotations and comments.    def __init__(self) -> None:        se
 
 
 class StatsAnnotationManager:
-    ""
+"""
 Manages annotations on metrics (backward compat).
     def __init__(self) -> None:
         self.annotations: dict[str, list[MetricAnnotation]] = {}

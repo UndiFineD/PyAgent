@@ -25,7 +25,6 @@ USAGE:
 Used as a specialized agent to send and receive messages via external platforms (WhatsApp, Slack, Discord) and to format brief mobile-friendly reports for fleet notifications; can be run as a standalone tool by providing a messaging history path to the created main function.
 
 """
-
 WHAT IT DOES:
 Provides a lightweight, skeleton MessagingAgent built on BaseAgent that:
 - Defines a system prompt tailored to messaging responsibilities.
@@ -41,7 +40,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in messaging platform integration (WhatsApp, Slack, Discord).
 Provides a unified interface for external communications.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -164,4 +163,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")"    main()
 
-""
+"""

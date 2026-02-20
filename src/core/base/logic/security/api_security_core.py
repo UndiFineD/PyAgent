@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Minimal API security core shim for tests.
 
 Provides lightweight validators, authenticators and rate limiter
 sufficient for unit tests to import and exercise security mixins.
 """
+from __future__ import annotations
 
 
 
@@ -114,21 +114,21 @@ class APISecurityCore:
         self.error_handler = ErrorHandler()
         self.logger = logging.getLogger(self.__class__.__name__)
 
-    async def secure_communication(self, sender_id: str, receiver_id: str, message: Dict[str, Any], token: str) -> Dict[str, Any]:
+        async def secure_communication(self, sender_id: str, receiver_id: str, message: Dict[str, Any], token: str) -> Dict[str, Any]:
         try:
-            creds = self.authenticator.authenticate(sender_id, token)
-            if not creds:
-                raise ValueError("Authentication failed")
-            if not self.rate_limiter.is_allowed(sender_id):
-                raise ValueError("Rate limit exceeded")
-            sanitized = self.validator.sanitize_input(message)
-            if "resource_id" in sanitized and not self.validator.validate_resource_access(sender_id, sanitized["resource_id"], creds):
-                raise ValueError("Access denied")
-            action = sanitized.get("action", "")
-            if not self.authenticator.authorize(creds, action):
-                raise ValueError("Authorization failed")
-            return sanitized
+        creds = self.authenticator.authenticate(sender_id, token)
+        if not creds:
+        raise ValueError("Authentication failed")
+        if not self.rate_limiter.is_allowed(sender_id):
+        raise ValueError("Rate limit exceeded")
+        sanitized = self.validator.sanitize_input(message)
+        if "resource_id" in sanitized and not self.validator.validate_resource_access(sender_id, sanitized["resource_id"], creds):
+        raise ValueError("Access denied")
+        action = sanitized.get("action", "")
+        if not self.authenticator.authorize(creds, action):
+        raise ValueError("Authorization failed")
+        return sanitized
         except Exception as e:
-            masked = self.error_handler.mask_error(e)
-            self.logger.error(f"Security violation: {masked}")
-            raise
+        masked = self.error_handler.mask_error(e)
+        self.logger.error(f"Security violation: {masked}")
+        raise

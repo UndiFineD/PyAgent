@@ -14,13 +14,12 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Routing engine for task distribution.
 (Facade for src.core.base.common.routing_core)
 
 """
-
 try:
     import os
 except ImportError:
@@ -49,7 +48,7 @@ except ImportError:
 
 
 class RoutingEngine(StandardRoutingCore):
-    ""
+"""
 Facade for RoutingCore.
     def select_provider(self, task_type="general", priority="balanced", federated=False):"        """
 Legacy compatibility wrapper.        if federated:
@@ -71,9 +70,27 @@ Legacy compatibility wrapper.        if federated:
 
     @staticmethod
     def get_routing_stats() -> dict[str, Any]:
-        ""
+"""
 Returns statistics on routing decisions and provider health.        return {
             "active_metrics": BackendHandlers.get_performance_report(),"            "default_backend": os.environ.get("DV_AGENT_BACKEND", "github_models"),"        }
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

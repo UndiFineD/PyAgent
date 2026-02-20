@@ -1,4 +1,3 @@
-from __future__ import annotations
 """
 CLI helpers for report generation (parser-safe stub).
 
@@ -6,6 +5,7 @@ This stub provides minimal symbols expected by other modules/tests while
 the repository is being repaired. Backups of the original file are stored
 as `.manual_fix.bak` alongside the original.
 """
+from __future__ import annotations
 
 
 

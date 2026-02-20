@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 import random
 import time
@@ -33,12 +33,12 @@ except ImportError:
 
 
 class TestDataSeeder:
-    ""
+"""
 Generates reproducible test data with optional seeding.
     __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
-        ""
+"""
 Initialize test data seeder.""""
 Args:
             seed: Random seed for reproducibility.
@@ -49,7 +49,7 @@ Args:
             np.random.seed(seed)
 
     def generate_metric_data(self, count: int = 10) -> list[dict[str, str | float]]:
-        ""
+"""
 Generate metric data for testing.""""
 Args:
             count: Number of metrics to generate.
@@ -63,7 +63,7 @@ Args:
         ]
 
     def generate_test_results(self, count: int = 10, pass_rate: float = 0.8) -> list[dict[str, Any]]:
-        ""
+"""
 Generate test results for testing.""""
 Args:
             count: Number of test results to generate.
@@ -89,7 +89,7 @@ Args:
         if language == "python":"            return f"# Python file\\ndef func_{func_id}():\\n    return {return_val}\\n""        elif language == "javascript":"            return f"// JavaScript file\\nfunction func_{func_id}() {{\\n  return {return_val};\\n}}\\n""        else:
             return f"// Generic content\\nval_{func_id} = {return_val}\\n"
     def generate_unique_id(self) -> str:
-        ""
+"""
 Generate a unique ID.""""
 Returns:
             Unique ID string.
@@ -105,7 +105,25 @@ Args:
                 if data_type == "python_code":"            return [f"def func_{i}():\\n    return {i}\\n" for i in range(count)]"        elif data_type == "ids":"            return [self.generate_unique_id() for _ in range(count)]
         else:
             return [f"item_{i}_{self.generate_unique_id()}" for i in range(count)]
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

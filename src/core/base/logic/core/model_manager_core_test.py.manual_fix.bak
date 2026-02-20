@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from core.base.logic.core.model_manager_core import ModelManagerCore

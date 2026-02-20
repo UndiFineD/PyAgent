@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.swarm.distributed.v2.load_balancer_client import LoadBalancerClient

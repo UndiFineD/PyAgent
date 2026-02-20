@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Connector failover scenario tests for MCP ecosystem expansion.
 
@@ -27,11 +27,11 @@ import logging
 
 logger = logging.getLogger("pyagent.tests.failover")
 class TestConnectorFailover:
-    ""
+"""
 Test cases for connector failover scenarios.    @pytest.fixture
     def mock_connectors(self):
         from src.infrastructure.connectors.enhanced_connectors import (
-            DatabaseConnector, APIConnector, CloudStorageConnector
+        DatabaseConnector, APIConnector, CloudStorageConnector
         )
         db_connector = DatabaseConnector()
         db_connector.query = Mock()
@@ -40,9 +40,9 @@ Test cases for connector failover scenarios.    @pytest.fixture
         cloud_connector = CloudStorageConnector()
         cloud_connector.upload_file = Mock()
         return {
-            "database": db_connector,"            "api": api_connector,"            "cloud": cloud_connector"        }
+        "database": db_connector,"            "api": api_connector,"            "cloud": cloud_connector"        }
     def test_database_connector_basic_failover(self, mock_connectors):
         db_connector = mock_connectors["database"]"        db_connector.query.side_effect = [Exception("fail"), "success"]"        result = None
         try:
-            db_connector.query("SELECT 1")"        except Exception:
-            result = db_connector.query("SELECT 1")"        assert result == "success""
+        db_connector.query("SELECT 1")"        except Exception:
+        result = db_connector.query("SELECT 1")"        assert result == "success""

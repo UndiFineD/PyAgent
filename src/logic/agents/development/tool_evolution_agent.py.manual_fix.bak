@@ -27,7 +27,6 @@ USAGE:
 - Use its outputs (generated code, explanations, OpenAPI contracts) to review, validate, and persist new evolved tools into src/tools/evolved for immediate import.
 
 """
-
 WHAT IT DOES:
 - Monitors and analyzes recorded interactions (GUI event recordings), tool failures, and task patterns to identify repeatable workflows worth automating.
 - Drafts executable Python implementations following the project's as_tool decorator pattern and writes them into an "evolved tools" package."'- Produces human-readable explanations and artifacts (implementation snippets and OpenAPI-style contracts) to support review and integration.

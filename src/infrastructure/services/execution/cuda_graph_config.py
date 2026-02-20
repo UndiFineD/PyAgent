@@ -335,7 +335,7 @@ class CUDAGraphManager:
         self._mode = CUDAGraphMode.NONE
         self._lock = threading.Lock()
 
-    @property
+        @property
     def mode(self) -> CUDAGraphMode:
 """
 Current CUDA graph mode.        return self._mode
@@ -451,19 +451,19 @@ Get the appropriate mode for a batch.        if not self.is_enabled():
             def capture_fn():
                 return execute_fn(inputs)
 
-            self.capture_graph(
+                self.capture_graph(
                 batch_size=batch_size,
                 seq_len=seq_len,
                 capture_fn=capture_fn,
                 input_shapes=input_shapes,
                 output_shapes=output_shapes,
-            )
+                )
 
-            # Replay the newly captured graph
-            return self.replay_graph(batch_size, seq_len, inputs) or execute_fn(inputs)
+                # Replay the newly captured graph
+                return self.replay_graph(batch_size, seq_len, inputs) or execute_fn(inputs)
 
-        # Eager execution
-        return execute_fn(inputs)
+                # Eager execution
+                return execute_fn(inputs)
 
     def stats(self) -> Dict[str, Any]:
 """

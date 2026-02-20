@@ -28,7 +28,7 @@ USAGE:
 - Example:
 
 """
-  class MyContextAgent(ContextAnnotationMixin, BaseAgent): ...
+class MyContextAgent(ContextAnnotationMixin, BaseAgent): ...
   agent.add_annotation(line_number=42, content="Note about this line", author="keimpe")"  agent.get_annotations_for_line(42)
 
 WHAT IT DOES:
@@ -89,7 +89,7 @@ class ContextAnnotationMixin:
 """"
 Annotation methods for ContextAgent.
     def add_annotation(
-""
+"""
 self, line_number: int, content: str, author: str =    ) -> ContextAnnotation:
 #         "Add an annotation to the context."        annotation = ContextAnnotation(
             id=hashlib.md5(f"{line_number}:{content}".encode()).hexdigest()[:8],"            line_number=line_number,
@@ -144,7 +144,7 @@ class ContextAnnotationMixin:
 """"
 Annotation methods for ContextAgent.
     def add_annotation(
-""
+"""
 self, line_number: int, content: str, author: str =    ) -> ContextAnnotation:
 #         "Add an annotation to the context."        annotation = ContextAnnotation(
             id=hashlib.md5(f"{line_number}:{content}".encode()).hexdigest()[:8],"            line_number=line_number,

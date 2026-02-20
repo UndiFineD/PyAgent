@@ -13,15 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Workspace utilities for the engine (parser-safe stub).
 
 """
-
 This package provides minimal stubs for workspace components used by
 tests and higher-level modules while the repository is being repaired.
-""
+"""
 from .buffer_recycler import BufferRecycler
 from .memory_profiler import MemoryProfiler
 from .predictive_workspace import PredictiveWorkspace

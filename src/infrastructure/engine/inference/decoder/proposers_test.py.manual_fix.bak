@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.engine.inference.decoder.proposers import DraftProposer, NgramProposer, SuffixNode, SuffixProposer, ngram_match

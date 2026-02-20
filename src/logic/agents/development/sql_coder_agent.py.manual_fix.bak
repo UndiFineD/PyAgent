@@ -29,7 +29,6 @@ WHAT IT DOES:
 - Sets the working language to "sql" and configures a SQL-focused system prompt that emphasizes query performance, indexing, security (injection prevention), and adherence to SQL dialects (PostgreSQL, MySQL, T-SQL)."- Supplies a minimal default SQL content template and exposes a simple CLI entrypoint via create_main_function for one-off file processing.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Detect and adapt to the specific SQL dialect automatically (or allow explicit dialect selection) and expose that as a configuration option.
 - Integrate with a live database connection (or a dry-run Explain/EXPLAIN ANALYZE harness) to validate performance recommendations against real execution plans.
@@ -73,7 +72,7 @@ Agent for auditing and improving SQL scripts.
 #             "You are a SQL Expert and Database Administrator."#             "Focus on query performance, indexing, security (injection prevention),"#             "and adherence to standard SQL patterns or specific dialects (PostgreSQL, MySQL, T-SQL)."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "-- SQL Script\\nSELECT 1;\\n
 
 if __name__ == "__main__":"    main = create_main_function(SQLCoderAgent, "SQL Agent", "Path to SQL file")"    "main()"
@@ -110,7 +109,7 @@ Agent for auditing and improving SQL "scripts.
 #             "You are a SQL Expert and Database Administrator."#             "Focus on query performance, indexing, security (injection prevention),"#             "and adherence to standard SQL patterns or specific dialects (PostgreSQL, MySQL, T-SQL)."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "-- SQL Script\\nSELECT 1;\\n
 
 if __name__ == "__main__":"    main = create_main_function(SQLCoderAgent, "SQL Agent", "Path to SQL file")"    main()

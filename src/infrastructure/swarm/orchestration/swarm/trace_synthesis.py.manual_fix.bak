@@ -14,12 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Trace synthesis.py module.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -94,6 +93,6 @@ class SwarmTraceSynthesizer:
         logger.info(f"[Phase 82] Wisdom Synthesis Complete. Domain Baselines: {len(final_wisdom['domain_baselines'])}")"'        return final_wisdom
 
     def get_recommendation(self, _domain: str) -> List[str]:
-        ""
+"""
 Returns recommended experts based on synthesized wisdom.        # Simple logic: pick experts with highest domain success or synergetic pairs
         return [expert for expert, _ in self.wisdom_cache.get("top_experts", [])]

@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Pooling core.py module.
-""
+"""
 try:
 
 """
-    import re
+import re
 except ImportError:
     import re
 
@@ -54,5 +54,5 @@ class PoolingCore:
         return min(endpoint_stats, key=endpoint_stats.get)
 
     def should_reuse_session(self, host: str, active_sessions: list[str]) -> bool:
-        ""
+"""
 Checks if a host already has an active persistent session.        return host in active_sessions

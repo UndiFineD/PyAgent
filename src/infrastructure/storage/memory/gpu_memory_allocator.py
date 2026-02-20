@@ -562,8 +562,8 @@ class MultiGPUMemoryBalancer:
         self.num_devices = num_devices
 
         def _create_allocator(device_id: int) -> tuple[int, CuMemAllocator]:
-            config = MemoryPoolConfig(device_id=device_id)
-            return (device_id, CuMemAllocator(config))
+        config = MemoryPoolConfig(device_id=device_id)
+        return (device_id, CuMemAllocator(config))
 
         self._allocators: dict[int, CuMemAllocator] = dict(map(_create_allocator, range(num_devices)))
 

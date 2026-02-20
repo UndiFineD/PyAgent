@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Base.py module.
-""
+"""
 try:
 
 """
-    from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -55,7 +55,7 @@ if TYPE_CHECKING:
 
 
 class Quantizer(ABC):
-    ""
+"""
 Base class for quantization algorithms.
     def __init__(self, config: QuantConfig) -> None:
         self.config: QuantConfig = config
@@ -65,12 +65,12 @@ Base class for quantization algorithms.
         self,
         weight: NDArray[np.float32],
     ) -> QuantizedTensor:
-        ""
+"""
 Converts a floating-point weight matrix into a quantized representation.
     @abstractmethod
     def dequantize(
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
-        ""
+"""
 Restores a float matrix from the quantized representation.

@@ -27,7 +27,6 @@ WHAT IT DOES:
 Provides an agent class (SvgAgent) specialized for producing and optimizing 2D SVG markup; it sets XML language context, supplies an SVG-focused system prompt for the underlying CoderAgent, and returns a small default SVG template.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Expose CLI options for viewport, precision, and optimization level.
 - Implement concrete SVG optimization routines (path simplification, precision trimming, ID deduplication) rather than relying solely on LLM guidance.
@@ -35,7 +34,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Agent specializing in 2D SVG image generation and optimization.
-""
+"""
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -108,4 +107,4 @@ Agent for generating and optimizing 2D SVG vector graphics.
 
 if __name__ == "__main__":"    main = create_main_function(SvgAgent, "SVG Agent", "Path to SVG file (.svg)")"    main()
 
-""
+"""

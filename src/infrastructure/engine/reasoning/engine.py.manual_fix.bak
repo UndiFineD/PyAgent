@@ -17,7 +17,6 @@
 Engine.py module.
 
 """
-
 try:
     import json
 except ImportError:
@@ -109,7 +108,7 @@ class ReasoningEngine:
             "total_parsed": 0,"            "thinking_blocks_extracted": 0,"            "tool_calls_parsed": 0,"            "cache_hits": 0,"        }
 
     def parse(self, text: str) -> ParseResult:
-        ""
+"""
 Parse text for reasoning and tool calls.        start_time = time.time()
         content = text
         thinking_blocks = []
@@ -140,7 +139,7 @@ Parse text for reasoning and tool calls.        start_time = time.time()
     def parse_streaming(
         self, token_stream: Iterator[str]
     ) -> Generator[Tuple[str, bool, Optional[ToolCall]], None, ParseResult]:
-        ""
+"""
 Parse streaming tokens for reasoning and tool calls.        buffer = ""
 for token in token_stream:
             buffer += token
@@ -156,7 +155,7 @@ for token in token_stream:
         return self.parse(buffer)
 
     def detect_format(self, text: str) -> ReasoningFormat:
-        ""
+"""
 Detect reasoning format from text.        if "<think>" in text and "</think>" in text:"            return ReasoningFormat.DEEPSEEK_R1
         if "<thinking>" in text:"            return ReasoningFormat.CLAUDE
         if "[THINK]" in text:"            return ReasoningFormat.MISTRAL
@@ -164,7 +163,7 @@ Detect reasoning format from text.        if "<think>" in text and "</think>" in
         return ReasoningFormat.NONE
 
     def score_reasoning(self, block: ThinkingBlock) -> float:
-        ""
+"""
 Score reasoning block quality.        score = 0.0
         content = block.content
         if len(content) > 100:
@@ -184,7 +183,7 @@ Score reasoning block quality.        score = 0.0
         return min(score, 1.0)
 
     def visualize_reasoning(self, result: ParseResult) -> str:
-        ""
+"""
 Generate text visualization of reasoning chain.        lines = ["=" * 60, "REASONING CHAIN VISUALIZATION", "=" * 60]"        for i, block in enumerate(result.thinking_blocks):
             lines.append(f"\\n Thinking Block {i + 1}")"            lines.append("-" * 40)"            steps = block.get_steps()
             for j, step in enumerate(steps):
@@ -193,11 +192,11 @@ Generate text visualization of reasoning chain.        lines = ["=" * 60, "REASO
             lines.append(f"\\n Tool Calls: {len(result.tool_calls)}")"            for tc in result.tool_calls:
                 lines.append(f"  - {tc.name}({json.dumps(tc.arguments)[:50]}...)")"        return "\\n".join(lines)"
     def get_stats(self) -> Dict[str, int]:
-        ""
+"""
 Get reasoning engine stats.        return self._stats.copy()
 
     def reset(self) -> None:
-        ""
+"""
 Reset reasoning engine state.        if self._reasoning_parser:
             self._reasoning_parser.reset()
         if self._tool_parser:
@@ -208,7 +207,7 @@ Reset reasoning engine state.        if self._reasoning_parser:
 
 def create_reasoning_engine(
     model_name: str = "", enable_thinking: bool = True, tool_format: ToolCallFormat = ToolCallFormat.NONE") -> ReasoningEngine:
-    ""
+"""
 Create a reasoning engine based on model name.    reasoning_format = ReasoningFormat.GENERIC
     model_lower = model_name.lower()
     if "deepseek" in model_lower or "r1" in model_lower:"        reasoning_format = ReasoningFormat.DEEPSEEK_R1

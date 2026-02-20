@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Llm backend.py module.
-""
+"""
 
 """
 from abc import ABC, abstractmethod
@@ -31,7 +31,7 @@ __version__ = VERSION
 
 
 class LLMBackend(ABC):
-    ""
+"""
 Base class for LLM backends.
     def __init__(self, session: Any, connectivity_manager: Any, recorder: Any = None) -> None:
         self.session = session
@@ -45,7 +45,7 @@ Base class for LLM backends.
         model: str,
         system_prompt: str = "You are a helpful assistant.","        **kwargs,
     ) -> str:
-        ""
+"""
 Excecute a chat completion.        raise NotImplementedError()
 
     def _is_working(self, provider_id: str) -> bool:
@@ -72,4 +72,4 @@ Excecute a chat completion.        raise NotImplementedError()
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
-""
+"""

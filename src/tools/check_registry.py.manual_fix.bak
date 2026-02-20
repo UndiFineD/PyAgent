@@ -64,7 +64,7 @@ sys.path.append(os.getcwd())
 
 
 def run_diagnostic() -> None:
-    ""
+"""
 Run diagnostic checks on PyAgent registries.    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")"    root = Path(os.getcwd())
 
     print("=== PyAgent Registry Diagnostic ===")
@@ -91,4 +91,4 @@ Run diagnostic checks on PyAgent registries.    logging.basicConfig(level=loggin
 
 if __name__ == "__main__":"    run_diagnostic()
 
-""
+"""

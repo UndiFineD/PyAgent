@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Multimodal session management.""
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -45,10 +45,10 @@ if TYPE_CHECKING:
 
 
 class MultimodalStreamSession:
-    ""
+"""
 High-level manager for a single multimodal interaction session.
     Orchestrates live input processing and compressed output generation.
-    ""
+"""
 def __init__(self, core: "MultimodalCore") -> None:
         self.core = core
         self.audio_proc = StreamingAudioProcessor()
@@ -62,16 +62,16 @@ def __init__(self, core: "MultimodalCore") -> None:
 
 
     def add_modificator(self, mod: Callable[[List[Dict[str, Any]]], List[Dict[str, Any]]]) -> None:
-        ""
+"""
 Add a hook to modify fragments before they reach the channel filter.""
 self.modificators.append(mod)
 
 
     def process_120fps_pulse(self, audio: bytes, video: bytes, text: str) -> bytes:
-        ""
+"""
 Specialized 120fps pulse handler for Phase 51 Multimedia & Attention.
         Muxes separate modalities and prepares for hardware-accelerated delivery.
-        ""
+"""
 packet = self.core.mux_dvd_channels(audio, video, text)
         return packet
 
@@ -79,10 +79,10 @@ packet = self.core.mux_dvd_channels(audio, video, text)
     def process_input_frame(
         self, audio: List[float], image: Optional[bytes] = None, width: int = 640, height: int = 480
     ) -> Dict[str, Any]:
-        ""
+"""
 Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame).
         Includes smart dynamic focus and adaptive bandwidth.
-        ""
+"""
         # Update temporal memory
         timestamp = time.time()
 
@@ -125,16 +125,16 @@ Process a single clock-tick of multimodal data (e.g. 32ms audio + optional frame
 
 
     def set_output_channel(self, modality: str, channel_id: str) -> None:
-        ""
+"""
 Switch the tracked channel (e.g. swap audio to 'FR').""
 self.channels[modality] = channel_id
 
 
     def filter_response(self, raw_stream: str) -> List[Dict[str, Any]]:
-        ""
+"""
 Parses an LLM response chunk and filters it according to current DVD-style channels.
         Example: Hides <Thought> tags if directed.
-        ""
+"""
 fragments = self.core.parse_stream(raw_stream)
 
         # Feedback loop for channel modifications
@@ -159,7 +159,7 @@ fragments = self.core.parse_stream(raw_stream)
 
 
     def _reparse_if_needed(self, fragments: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        ""
+"""
 Scans for text fragments that might contain newly injected tags.""
 new_list = []
         for f in fragments:

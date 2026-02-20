@@ -1,10 +1,10 @@
-from __future__ import annotations
-""
+"""
 Minimal parser-safe FilterAgent shim used during repository repair.
 
 Provides simple methods to satisfy imports/tests; real logic is intentionally
 omitted until the codebase is repaired.
-""
+"""
+from __future__ import annotations
 
 
 

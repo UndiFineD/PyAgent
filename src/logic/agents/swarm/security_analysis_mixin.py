@@ -280,13 +280,13 @@ class WorkflowASTAnalyzer(ast.NodeVisitor):
         self.imports = set()
 
     def visit_Import(self, node):
-""""
-Track imports for external tool detection.        for alias in node.names:
-            self.imports.add(alias.name)
+        """"
+        Track imports for external tool detection.        for alias in node.names:
+        self.imports.add(alias.name)
 
-    def" visit_ImportFrom("self, node):"#         "Track from imports."#         module = node.module or
+        def" visit_ImportFrom("self, node):"#         "Track from imports."#         module = node.module or
         for alias in node.names:
-            self.imports.add(f"{module}.{alias.name}")
+        self.imports.add(f"{module}.{alias.name}")
     def "visit_ClassDef(self, "node):""""
 Extract agent classes.        # Look for agent-related classes
         if any(keyword in node.name.lower() for keyword in ["agent", "orchestrator", "coordinator"]):"            agent_info = {
@@ -294,17 +294,17 @@ Extract agent classes.        # Look for agent-related classes
             self.agents.append(agent_info)
 
     def visit_FunctionDef(self, node):
-""""     "Extract agent functions and tools.        self.current_function = node.name
+        """"     "Extract agent functions and tools.        self.current_function = node.name
 
         # Check if this looks like an agent function
         if any(keyword in node.name.lower() for keyword in ["agent", "workflow", "orchestrate"]):"            agent_info = {
-                "name": node.name,"                "type": "function","                "args": [arg.arg for arg in node.args.args],"                "docstring": self._get_docstring(node)"            }
-            self.agents.append(agent_info)
+        "name": node.name,"                "type": "function","                "args": [arg.arg for arg in node.args.args],"                "docstring": self._get_docstring(node)"            }
+        self.agents.append(agent_info)
 
         # Check for tool definitions
         if any(keyword in node.name.lower() for keyword in ["tool", "function", "call"]):"            tool_info = {
-                "name": node.name,"                "type": "function","#                 "source": "internal" if not self._is_external_tool(node) else "external"            }
-            self.tools.append(tool_info)
+        "name": node.name,"                "type": "function","#                 "source": "internal" if not self._is_external_tool(node) else "external"            }
+        self.tools.append(tool_info)
 
         self.generic_visit(node)
         self.current_function = None

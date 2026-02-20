@@ -39,14 +39,14 @@ Intelligence engine for CMS identification and version detection.#     FINGERPRI
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
 self.session = session
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 async def identify_cms(self, url: str) -> Dict[str, str]:""""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Identify CMS and version from a URL."  # [BATCHFIX] closed string"        if not self.session:
@@ -60,31 +60,31 @@ async def identify_cms(self, url: str) -> Dict[str, str]:""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 if data["indicator"] in text:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 results["name"] = cms
                     # Try version detection
                     try:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 async with self.session.get(f"{url.rstrip('/')}{data['path']}", timeout=10) as vresp:"'                            vtext = await vresp.text()
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 match = re.search(data["regex"], vtext)"                            if match:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 results["version"] = match.group(1)"                    except (asyncio.TimeoutError, aiohttp.ClientError):
                         pass
                     break
         return results
 
-""
+"""

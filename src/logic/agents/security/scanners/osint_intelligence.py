@@ -70,6 +70,24 @@ Returns the URL for fetching dorks from CXSecurity.#         return fhttps://cxs
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

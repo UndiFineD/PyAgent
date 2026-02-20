@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 error_category.py - ErrorCategory Enum
 
@@ -36,7 +36,7 @@ Defines a compact Enum, ErrorCategory, enumerating common error classifications 
 
 WHAT IT SHOULD DO BETTER:
 Add richer documentation for each category, provide mappings to severity/HTTP codes or remediation guidance, include unit tests and type hints for consumers, and consider localization or extensibility (custom categories) and conversion helpers (from string, to human-friendly label).
-""
+"""
 try:
     from enum import Enum
 except ImportError:

@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Benchmark core.py module.
 
 """
-
 from typing import Any
 
 from src.infrastructure.services.benchmarks.models import BenchmarkResult
@@ -76,6 +75,24 @@ Scores efficiency based on duration per token.        if rc:
         if result.total_tokens <= 0:
             return 0.0
         return result.duration / result.total_tokens
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

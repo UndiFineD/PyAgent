@@ -58,7 +58,7 @@ self.token = token
 
         def log_message(self, fmt, *args):
 """
-Override to suppress default logging.""
+            Override to suppress default logging.""
             # Suppress default logging
             return
 
@@ -83,24 +83,24 @@ self._handle_request()
 
         def _handle_request(self):
 """
-Handle incoming HTTP requests.""
-try:
-                # Parse path: /token/key/value
-                parts = self.path.strip('/').split('/')
-                if len(parts) >= 3:
-                    token, key, value = parts[0], parts[1], '/'.join(parts[2:])
-                    if token == self.token:
-                        if key in self.data_dict:
-                            self.data_dict[key].append(value)
-                        else:
-                            self.data_dict[key] = [value]
+            Handle incoming HTTP requests.""
+            try:
+            # Parse path: /token/key/value
+            parts = self.path.strip('/').split('/')
+            if len(parts) >= 3:
+            token, key, value = parts[0], parts[1], '/'.join(parts[2:])
+            if token == self.token:
+            if key in self.data_dict:
+            self.data_dict[key].append(value)
+            else:
+            self.data_dict[key] = [value]
 
-                self.send_response(200)
-                self.end_headers()
+            self.send_response(200)
+            self.end_headers()
 
             except (ValueError, KeyError):
-                self.send_response(400)
-                self.end_headers()
+            self.send_response(400)
+            self.end_headers()
 
 
     def start_ssrf_detector(self, host: str = '0.0.0.0', port: int = 8080) -> bool:
@@ -121,19 +121,19 @@ if self._server_running:
             # Create handler class with current token and data dict
             def handler_class(*args, **kwargs):
 """
-Create a new handler instance with the current token and data dictionary.""
-return self._DetectorHandler(self._ssrf_token, self._ssrf_data, *args, **kwargs)
+                Create a new handler instance with the current token and data dictionary.""
+                return self._DetectorHandler(self._ssrf_token, self._ssrf_data, *args, **kwargs)
 
-            self._server = HTTPServer((host, port), handler_class)
-            self._server_thread = threading.Thread(target=self._server.serve_forever, daemon=True)
-            self._server_thread.start()
-            self._server_running = True
+                self._server = HTTPServer((host, port), handler_class)
+                self._server_thread = threading.Thread(target=self._server.serve_forever, daemon=True)
+                self._server_thread.start()
+                self._server_running = True
 
-            return True
+                return True
 
-        except Exception as e:
-            print(f"Failed to start SSRF detector: {e}")
-            return False
+                except Exception as e:
+                print(f"Failed to start SSRF detector: {e}")
+                return False
 
 
     def stop_ssrf_detector(self) -> None:

@@ -74,9 +74,9 @@ Converts an embedding into a bitstring hash via random projections.        if le
 
     def index_shard(self, shard_id: str, embedding: np.ndarray):
 """
-Adds a shard to the semantic hash table.        h = self.compute_hash(embedding)
+        Adds a shard to the semantic hash table.        h = self.compute_hash(embedding)
         if h not in self.buckets:
-            self.buckets[h] = set()
+        self.buckets[h] = set()
         self.buckets[h].add(shard_id)
         logger.debug(f"[Phase 88] SemanticHashing: Indexed {shard_id} in bucket {h:016b}")
     def find_nearest_shards(self, query_emb: np.ndarray) -> List[str]:
@@ -88,8 +88,8 @@ Finds shards in the same semantic bucket.        h = self.compute_hash(query_emb
 
     def remove_shard(self, shard_id: str):
 """
-Removes a shard from all buckets.        for bucket in self.buckets.values():
-            if shard_id in bucket:
-                bucket.remove(shard_id)
+        Removes a shard from all buckets.        for bucket in self.buckets.values():
+        if shard_id in bucket:
+        bucket.remove(shard_id)
 
 """

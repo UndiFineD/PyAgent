@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for applying final import formatting fixes across the workspace.
 
 """
-
 import os
 import re
 
@@ -29,7 +28,7 @@ __version__ = VERSION
 
 
 def fix() -> None:
-    ""
+"""
 Correct import indentation and leading whitespace errors.    for root, dirs, files in os.walk(os.getcwd()):
 
         if "__pycache__" in root or ".git" in root:"            continue
@@ -89,6 +88,24 @@ for j in range(i + 1, len(lines)):
 
 if __name__ == "__main__":"    fix()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

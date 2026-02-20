@@ -20,7 +20,7 @@ from __future__ import annotations
 Module: double_ratchet
 Python implementation of the Signal Protocol (Double Ratchet) for swarm E2EE.
 Accelerated by rust_core for KDF steps.
-""
+"""
 
 """
 import logging
@@ -50,7 +50,7 @@ class DoubleRatchet:
         self.pn = 0  # Previous chain length
 
     def _ratchet_step(self, key: bytes, data: bytes) -> Tuple[bytes, bytes]:
-        ""
+"""
 KDF step, using Rust acceleration if available.        if RUST_AVAILABLE and hasattr(rc, "ratchet_step_rust"):"            try:
                 # Returns (new_chain_key, message_key)
                 return rc.ratchet_step_rust(key, data)
@@ -66,7 +66,7 @@ KDF step, using Rust acceleration if available.        if RUST_AVAILABLE and has
         return ck_mac, mk_mac
 
     def get_sending_key(self) -> bytes:
-        ""
+"""
 Derive the next symmetric key for sending.        if not self.ck_send:
             # First time initialization
             self.rk, self.ck_send = self._ratchet_step(self.rk, b"send_init")
@@ -74,7 +74,7 @@ Derive the next symmetric key for sending.        if not self.ck_send:
         return mk
 
     def get_receiving_key(self) -> bytes:
-        ""
+"""
 Derive the next symmetric key for receiving.        if not self.ck_recv:
             self.rk, self.ck_recv = self._ratchet_step(self.rk, b"recv_init")
         self.ck_recv, mk = self._ratchet_step(self.ck_recv, b"msg_key")"        self.nr += 1

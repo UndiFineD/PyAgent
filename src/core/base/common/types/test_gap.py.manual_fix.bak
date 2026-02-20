@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_coder.py
-""
+"""
 
 """
 from dataclasses import dataclass, field
@@ -33,7 +33,7 @@ __version__ = VERSION
 
 @dataclass
 class TestGap:
-    ""
+"""
 An identified gap in test coverage.
 
     Attributes:
@@ -43,7 +43,7 @@ An identified gap in test coverage.
 
         complexity: Cyclomatic complexity of the function.
         suggested_tests: List of suggested test cases.
-    ""
+"""
 function_name: str
     file_path: str
     line_number: int

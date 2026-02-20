@@ -25,7 +25,6 @@ USAGE:
 Instantiate BenchmarkAgent(file_path) and invoke tools exposed as methods (decorated with @as_tool): run_sgi_benchmark(agent_name, scientific_task), validate_scientific_hypothesis(hypothesis, dataset_path), evaluate_model_on_benchmark(model_name, benchmark_suite), run_benchmark(agent_name, task, expected_output=None). Intended to be called by orchestration code or a FleetManager to run automated regressions and baseline comparisons.
 
 """
-
 WHAT IT DOES:
 Implements a BenchmarkAgent subclass of BaseAgent that wraps a BenchmarkCore and provides tool methods to simulate SGI-Bench evaluations, hypothesis validation reports, model-suite evaluation summaries, and single-task runtime measurements; stores lightweight in-memory results and returns structured dictionaries/reports. Uses as_tool to expose methods as callable tools and embeds a system prompt describing SGI-Bench scoring dimensions; many results are current mocks/skeletons.
 
@@ -37,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated benchmarking of other agents.
 Measures latency, accuracy, and cost.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -182,6 +181,24 @@ Generates a summary report of all benchmark runs.        if not self.results:
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(BenchmarkAgent, "Benchmark Agent", "Benchmark history path")"    main()
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

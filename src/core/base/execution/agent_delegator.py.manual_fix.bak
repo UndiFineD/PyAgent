@@ -14,15 +14,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Delegation management for agent cascading.
 Enables agents to launch sub-tasks by spawning other specialized agents.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -58,10 +58,10 @@ __version__ = VERSION
 
 # pylint: disable=too-few-public-methods
 class AgentDelegator:
-    ""
+"""
 Handles cascading sub-tasks to other agents.""
 def __init__(self, parent_agent: Any) -> None:
-        ""
+"""
 Initialize with parent agent for context.""
 self.parent_agent = parent_agent
 

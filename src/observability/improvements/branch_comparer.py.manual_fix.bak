@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Branch Comparer - Compare improvements between Git branches
 
@@ -56,7 +56,7 @@ __version__ = VERSION
 
 
 class BranchComparer:
-    ""
+"""
 Comparer for improvements across git branches.""""
 Enables comparison of improvement files between branches
     to identify additions, removals, and modifications.
@@ -69,7 +69,7 @@ Enables comparison of improvement files between branches
         comparer=BranchComparer("/path / to / repo")"        result=comparer.compare("main", "feature / improvements")"        for diff in result.diffs:
             print(f"{diff.diff_type.value}: {diff.improvement_id}")"    
     def __init__(self, repo_path: str | None = None, recorder: Any = None) -> None:
-        ""
+"""
 Initialize branch comparer.""""
 Args:
             repo_path: Path to git repository. Defaults to current directory.
@@ -79,11 +79,11 @@ Args:
         self.comparisons: list[BranchComparison] = []
 
     def _record(self, action: str, result: str) -> None:
-        ""
+"""
 Record branch comparison activities.        if self.recorder:
             self.recorder.record_interaction("Git", "BranchComparer", action, result)"        logging.debug(f"BranchComparer initialized for {self.repo_path}")"
     def compare(self, source_branch: str, target_branch: str, file_path: str) -> BranchComparison:
-        ""
+"""
 Compare improvements between branches.""""
 Args:
             source_branch: Source branch name.
@@ -125,14 +125,14 @@ Args:
         return comparison
 
     def _get_file_from_branch(self, branch: str, file_path: str) -> str:
-        ""
+"""
 Get file content from a specific branch.""""
 Args:
             branch: Branch name.
             file_path: Path to file.
 
         Returns:
-     ""
+"""
 File content string.""""
 try:
             result = subprocess.run(
@@ -166,7 +166,7 @@ __version__ = VERSION
 
 
 class BranchComparer:
-    ""
+"""
 Compare""
 r f""
 or improvements across git branches.""""
@@ -197,7 +197,7 @@ self.recorder = recorder
         self.comparisons: list[BranchComparison] = []
 
     def _record(self, action: str, result: str) -> None:
-        ""
+"""
 Record b""
 ranch com""
 parison activities.        if self.recorder:
@@ -247,13 +247,13 @@ comparison = BranchComparison(
         self.comparisons.append(comparison)
         return comparison
 
-""
+"""
 def _get_file_from_branch(self, branch: str, ""
 file_path: str) ->""
 str:""""        ""
 Get file content from a specific branch.""""
 Args:
-         ""
+"""
 branch: Branch name.""""
 file_path: Path to ""
 file.""""
@@ -300,7 +300,7 @@ Diff]:""""        ""
 Calculate differences between two improvement sets.""""
 Args:
             source: Source branch improvements.
-        ""
+"""
 target: Target branch improvements.""""
 Re""
 turns:""""
@@ -348,16 +348,16 @@ diffs: list[ImprovementDiff] = []
                         change_summary="No changes","                    )
                 )
 
-  ""
+"""
 return diffs""""
 def get_added_improvement""
 s(self, comparison: BranchComparison""") -> list[Improvement]:""""        """
 Ge""
 t improvements added in target branch.""""
 Args:
-            ""
+"""
 comparison: Comparison result.""""
-       ""
+"""
 Returns:""""
 List of added improvements.
                 return [
@@ -369,9 +369,9 @@ mprovements(self, comparison: BranchCompar""
 ison) -> list[Improvement]:""""   """     """
 Get improvements removed in target branch.""""
 Args:
-  ""
+"""
 comparison: Comparison result.""""
-   ""
+"""
 Returns:""""
 List of removed improvements.
                 return [
@@ -386,7 +386,7 @@ uple[Improvement, Improve""
 ment]]:""""        ""
 Get improvements modified between branches.""""
 Args:
-     ""
+"""
 comparison: Comparison result.""""
 Retu""
 rns:""""
@@ -404,7 +404,7 @@ Detect conflicting changes in a three-way comparison.""""
 Args:
             base_branch: Common ancestor branch.
             branch1: First branch.
-    ""
+"""
 branch2: Second branch.""""
 file_path: Path to improvem""
 ents file.""""
@@ -445,7 +445,7 @@ Returns:
                 diff.target_version.title
                 if diff.target_version
                 else diff.source_version.title
-     ""
+"""
 if diff.source_version""""
 else diff.improvement_id
             )
@@ -460,11 +460,29 @@ Returns:
 ast comparisons.""""
 return list(self.comparisons)
     def clear_history(self) -> None:
-        ""
+"""
 Clear comparison history.        self.comparisons.clear()
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

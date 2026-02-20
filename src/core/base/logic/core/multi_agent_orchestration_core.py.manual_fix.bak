@@ -15,12 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Multi-Agent Orchestration Core
 Implements structured multi-agent coordination patterns inspired by CrewAI and OpenAI Agents SDK.
 Provides deterministic agent interactions with Pydantic-based structured outputs.
-""
+"""
 
 """
 import asyncio
@@ -39,46 +39,46 @@ T = TypeVar('T', bound=BaseModel)
 
 
 class AgentTask(BaseModel):
-    ""
+"""
 Represents a task to be executed by an agent.""
 description: str = Field(..., description="Human-readable task description")"    priority: int = Field(default=1, ge=1, le=10, description="Task priority (1-10)")"    context: Dict[str, Any] = Field(default_factory=dict, description="Additional context data")"    dependencies: List[str] = Field(default_factory=list, description="Task IDs this task depends on")"
 
 
 class AgentResult(BaseModel):
-    ""
+"""
 Standardized result format from agent execution.""
 task_id: str = Field(..., description="ID of the completed task")"    success: bool = Field(..., description="Whether the task completed successfully")"    output: Any = Field(..., description="The agent's output/result")"'    metadata: Dict[str, Any] = Field(default_factory=dict, description="Additional metadata")"    error_message: Optional[str] = Field(default=None, description="Error message if task failed")
 
 
 class OrchestrationPlan(BaseModel):
-    ""
+"""
 Plan for multi-agent task execution.""
 tasks: List[AgentTask] = Field(..., description="List of tasks to execute")"    execution_order: List[str] = Field(..., description="Order of task execution by task ID")"    parallel_groups: List[List[str]] = Field(default_factory=list,
                                              description="Groups of tasks that can run in parallel")
 
 
 class AgentCoordinator(ABC):
-    ""
+"""
 Abstract base class for agent coordinators.""
     @abstractmethod
     async def execute_task(self, task: AgentTask, context: CascadeContext) -> AgentResult:
-        ""
+"""
 Execute a single task using appropriate agents.""
 pass
 
     @abstractmethod
     async def plan_orchestration(self, objective: str, context: CascadeContext) -> OrchestrationPlan:
-        ""
+"""
 Create an orchestration plan for achieving an objective.""
 pass
 
 
 
 class MultiAgentOrchestrationCore(BaseCore):
-    ""
+"""
 Core for coordinating multiple agents in structured workflows.
     Inspired by CrewAI patterns and OpenAI Agents SDK structured outputs.
-    ""
+"""
 def __init__(self, coordinator: AgentCoordinator):
         super().__init__()
         self.coordinator = coordinator
@@ -91,7 +91,7 @@ def __init__(self, coordinator: AgentCoordinator):
         context: CascadeContext,
         max_parallel: int = 3
     ) -> AsyncGenerator[str, None]:
-        ""
+"""
 Execute a multi-agent workflow to achieve an objective.
 
         Args:
@@ -101,7 +101,7 @@ Execute a multi-agent workflow to achieve an objective.
 
         Yields:
             Status updates during execution
-        ""
+"""
 logger.info(f"Starting orchestration for objective: {objective}")
         # Plan the orchestration
         yield "Planning orchestration...""        plan = await self.coordinator.plan_orchestration(objective, context)
@@ -136,7 +136,7 @@ logger.info(f"Starting orchestration for objective: {objective}")
         context: CascadeContext,
         semaphore: asyncio.Semaphore
     ) -> None:
-        ""
+"""
 Execute a single task with semaphore control.""
 async with semaphore:
             try:
@@ -156,17 +156,17 @@ async with semaphore:
                 self.task_results[task.description] = error_result
 
     def get_task_results(self) -> Dict[str, AgentResult]:
-        ""
+"""
 Get results of all executed tasks.""
 return self.task_results.copy()
 
     async def validate_orchestration_plan(self, plan: OrchestrationPlan) -> List[str]:
-        ""
+"""
 Validate an orchestration plan for consistency and feasibility.
 
         Returns:
             List of validation error messages (empty if valid)
-        ""
+"""
 errors = []
 
         # Check that all task IDs in execution order exist

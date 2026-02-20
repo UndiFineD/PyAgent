@@ -129,6 +129,24 @@ Generate suggestions for multiple errors.        suggestions: list[FixSuggestion
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

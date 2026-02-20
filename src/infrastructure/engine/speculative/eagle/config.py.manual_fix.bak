@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Configuration regarding EAGLE speculative decoding.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -37,7 +37,7 @@ except ImportError:
 
 
 class EagleMethod(Enum):
-    ""
+"""
 EAGLE method variants.
     EAGLE_1 = auto()  # Original EAGLE
     EAGLE_2 = auto()  # EAGLE-2 with tree attention
@@ -47,7 +47,7 @@ EAGLE method variants.
 
 
 class AttentionBackend(Enum):
-    ""
+"""
 Attention backend types.
     FLASH_ATTENTION = auto()
     TREE_ATTENTION = auto()
@@ -57,7 +57,7 @@ Attention backend types.
 
 @dataclass(frozen=True, slots=True)
 class EagleConfig:
-    ""
+"""
 Configuration regarding EAGLE proposer.
     num_speculative_tokens: int = 5
     max_model_len: int = 4096

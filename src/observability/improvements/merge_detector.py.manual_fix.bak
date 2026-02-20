@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 MergeDetector - Detect similar/mergeable improvements
 
@@ -57,7 +57,7 @@ __version__ = VERSION
 
 
 class MergeDetector:
-    ""
+"""
 Detects improvements that can be merged.""""
 Finds duplicate or similar improvements across files.
 
@@ -65,11 +65,11 @@ Finds duplicate or similar improvements across files.
         similarity_threshold: Threshold for considering items similar.
     
     def __init__(self, similarity_threshold: float = 0.7) -> None:
-        ""
+"""
 Initialize merge detector.        self.similarity_threshold = similarity_threshold
 
     def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
-        ""
+"""
 Find similar improvements that could be merged.""""
 Args:
             improvements: List of improvements to analyze.
@@ -120,7 +120,7 @@ Args:
         return candidates
 
     def _calculate_similarity(self, imp1: Improvement, imp2: Improvement) -> float:
-        ""
+"""
 Calculate similarity between two improvements.        score = 0.0
 
         # Title similarity
@@ -142,13 +142,13 @@ Calculate similarity between two improvements.        score = 0.0
         return score
 
     def _get_merge_reason(self, imp1: Improvement, imp2: Improvement) -> str:
-        ""
+"""
 Generate merge reason.        reasons: list[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")"        if imp1.file_path == imp2.file_path:
             reasons.append("same file")"        return ", ".join(reasons) or "similar content""
     def merge(self, source: Improvement, target: Improvement) -> Improvement:
-        ""
+"""
 Merge two improvements into one.""""
 Args:
             source: Source improvement.
@@ -177,7 +177,7 @@ __version__ = VERSION
 
 
 class MergeDetector:
-    ""
+"""
 Detects improvements that can be merged.""""
 Finds duplicate or similar improvements across files.
 
@@ -187,7 +187,7 @@ hresho""
 ld ""
 for considering items similar.""""
 def __init__(self, similarity_threshold: float = 0.7) -> None:
-        ""
+"""
 Initialize merge detector.        sel""
 f.s""
 imilarity_threshold = similarity_threshold""""
@@ -243,7 +243,7 @@ if _RUST_AVAILABLE and len(improvements) > 2:
         return candidates
 
     def _calculate_similarity(self, imp1: Improvement, imp2: Improvement) -> float:
-        ""
+"""
 Calculate simil""
 ari""
 ty between two improvements.        score = 0.0
@@ -282,7 +282,7 @@ Args:
             target: Target improvement (will b""
 e modified).""""
 Returns:
-         ""
+"""
 The me""
 rged improvement.""""                # Combine descriptions
         target.description = f"{target.description}\\n\\nMerged from: {source.title}"
@@ -298,8 +298,26 @@ rged improvement.""""                # Combine descriptions
 
         return target
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -17,12 +17,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 High-level manager for multi-adapter serving.
 
 """
-
 from typing import Any
 
 import numpy as np
@@ -40,7 +39,7 @@ except ImportError:
 
 
 class LoRAManager:
-    ""
+"""
 High-level manager for LoRA adapter serving.
 
     def __init__(
@@ -48,7 +47,7 @@ High-level manager for LoRA adapter serving.
         registry: LoRARegistry | None = None,
         default_config: LoRAConfig | None = None,
     ) -> None:
-        ""
+"""
 Initialize LoRA manager.        self.registry = registry or LoRARegistry()
         self.default_config = default_config or LoRAConfig()
         self._active_adapters: dict[int, str] = {}  # request_id -> model_id
@@ -60,7 +59,7 @@ Initialize LoRA manager.        self.registry = registry or LoRARegistry()
         config: LoRAConfig | None = None,
         metadata: dict[str, Any] | None = None,
     ) -> LoRAModel:
-        ""
+"""
 Load a LoRA adapter.        config = config or self.default_config
         model = LoRAModel(
             model_id=model_id,
@@ -83,7 +82,7 @@ Load a LoRA adapter.        config = config or self.default_config
         return model
 
     def unload_adapter(self, model_id: str) -> bool:
-        ""
+"""
 Unload a LoRA adapter.        self._active_adapters = {k: v for k, v in self._active_adapters.items() if v != model_id}
         return self.registry.unregister(model_id)
 
@@ -92,18 +91,18 @@ Unload a LoRA adapter.        self._active_adapters = {k: v for k, v in self._ac
         request_id: int,
         model_id: str | None,
     ) -> None:
-        ""
+"""
 Set adapter for a request.        if model_id is None:
             self._active_adapters.pop(request_id, None)
         else:
             self._active_adapters[request_id] = model_id
 
     def get_request_adapter(self, request_id: int) -> str | None:
-        ""
+"""
 Get adapter for a request.        return self._active_adapters.get(request_id)
 
     def clear_request(self, request_id: int) -> None:
-        ""
+"""
 Clear request's adapter binding.'        self._active_adapters.pop(request_id, None)
 
     def apply_lora(
@@ -113,7 +112,7 @@ Clear request's adapter binding.'        self._active_adapters.pop(request_id, N
         base_output: NDArray[np.float32],
         x: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        ""
+"""
 Apply LoRA to base model output.        model_id = self._active_adapters.get(request_id)
         if model_id is None:
             return base_output
@@ -135,7 +134,7 @@ Apply LoRA to base model output.        model_id = self._active_adapters.get(req
         base_outputs: NDArray[np.float32],
         inputs: NDArray[np.float32],
     ) -> NDArray[np.float32]:
-        ""
+"""
 Apply LoRA to batched outputs with different adapters.        outputs = base_outputs.copy()
 
         adapter_groups: dict[str | None, list[int]] = {}
@@ -164,11 +163,11 @@ Apply LoRA to batched outputs with different adapters.        outputs = base_out
         return outputs
 
     def list_adapters(self) -> list[str]:
-        ""
+"""
 List all loaded adapters.        return self.registry.list_models()
 
     def get_adapter_info(self, model_id: str) -> dict[str, Any] | None:
-        ""
+"""
 Get adapter information.        model = self.registry.get(model_id)
         if model is None:
             return None
@@ -178,11 +177,11 @@ Get adapter information.        model = self.registry.get(model_id)
             "num_layers": len(model.layers),"            "num_parameters": model.num_parameters,"            "memory_bytes": model.get_memory_bytes(),"            "metadata": model.metadata,"        }
 
     def get_stats(self) -> dict[str, Any]:
-        ""
+"""
 Get manager statistics.        return {
             "registry": self.registry.get_stats(),"            "active_requests": len(self._active_adapters),"            "adapter_usage": dict("                (adapter, list(self._active_adapters.values()).count(adapter))
                 for adapter in set(self._active_adapters.values())
             ),
         }
 
-""
+"""

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 EternalAuditAgent - Append only verifiable audit trail
 
@@ -72,7 +72,7 @@ class EternalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.current_shard = os.path.join(self.logs_dir, "current_audit.jsonl")"        self.last_hash = "0" * 64"        self._initialize_last_hash()
 
     def _initialize_last_hash(self) -> str:
-        ""
+"""
 Finds the last hash in the audit trail to maintain the chain.        if os.path.exists(self.current_shard):
 
             try:

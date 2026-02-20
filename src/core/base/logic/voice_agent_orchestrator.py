@@ -55,12 +55,12 @@ session_id: str
 
     def __post_init__(self):
         if self.conversation_history is None:
-            self.conversation_history = []
+        self.conversation_history = []
         if self.active_agents is None:
-            self.active_agents = []
+        self.active_agents = []
         if self.audio_stats is None:
-            self.audio_stats = {
-                "input_tokens": 0,"                "output_tokens": 0,"                "audio_duration": 0.0,"                "cost_usd": 0.0"            }
+        self.audio_stats = {
+        "input_tokens": 0,"                "output_tokens": 0,"                "audio_duration": 0.0,"                "cost_usd": 0.0"            }
 
 
 
@@ -317,17 +317,17 @@ Simulate audio transcription (TODO Placeholder for real OpenAI API).""
         # For now, return a simulated transcription that doesn't trigger actions'        return "Hello, how can you help me with my agents?"
     def _audio_processing_loop(self):
 """
-Background audio processing loop.""
-while self.running:
-            try:
-                # Process audio queue (simplified)
-                if self.audio_queue:
-                    _ = self.audio_queue.pop(0)
-                    # Process audio data
-                    pass
-                time.sleep(0.1)
-            except Exception as e:
-                print(f"Audio processing error: {e}")"                break
+        Background audio processing loop.""
+        while self.running:
+        try:
+        # Process audio queue (simplified)
+        if self.audio_queue:
+        _ = self.audio_queue.pop(0)
+        # Process audio data
+        pass
+        time.sleep(0.1)
+        except Exception as e:
+        print(f"Audio processing error: {e}")"                break
 
     def _calculate_session_duration(self, session: VoiceSession) -> float:
 """
@@ -338,7 +338,7 @@ start = datetime.fromisoformat(session.started_at)
 
     def shutdown(self):
         ""
-Shutdown the voice orchestrator.""
-self.end_voice_session()
+        Shutdown the voice orchestrator.""
+        self.end_voice_session()
         self.orchestrator.shutdown()
 

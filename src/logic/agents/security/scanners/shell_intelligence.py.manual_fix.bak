@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Shell Intelligence Module
 # -------------------------
@@ -22,7 +22,6 @@ It is explicitly NOT a background monitor or keylogger. It does not persistent-h
 the OS input stack and only processes commands explicitly passed to its execution methods.
 
 """
-
 try:
     import asyncio
 except ImportError:
@@ -95,7 +94,7 @@ stdout, stderr, _ = await self.execute_command(ps_command)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 async def execute_command(self, command: str) -> Tuple[str, str, int]:""""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Executes a command asynchronously without background listeners."  # [BATCHFIX] closed string"        # The command is scrubbed here if logging were to be added
@@ -109,7 +108,7 @@ async def execute_command(self, command: str) -> Tuple[str, str, int]:""""
         stdout_bytes, stderr_bytes = await process.communicate()
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 encoding = sys.stdout.encoding or "utf-8"  # [BATCHFIX] closed string"        stdout = stdout_bytes.decode(encoding, errors="replace")"        stderr = stderr_bytes.decode(encoding, errors="replace")"        return stdout, stderr, process.returncode or 0
 
-""
+"""

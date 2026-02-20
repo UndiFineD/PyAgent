@@ -30,7 +30,6 @@ WHAT IT DOES:
 Analyzes Python source by parsing its AST, finds top-level and nested function definitions (skipping ordinary private helpers), computes a simple cyclomatic-complexity-like score, and returns TestGap records with suggested test case descriptions.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Differentiate public/private/dunder behavior more precisely and respect module-level __all__ or exported API.
 - Improve complexity metric by recognizing more control-flow constructs and weighting nested structures/boolean ops more accurately (and avoid counting With/Assert as complexity without nuance).

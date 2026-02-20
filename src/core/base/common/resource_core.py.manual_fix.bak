@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for Resource Quotas and budget enforcement.
-""
+"""
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -46,7 +46,7 @@ except ImportError:
 
 @dataclass
 class QuotaConfig:
-    ""
+"""
 Configuration for agent resource quotas.""
 max_tokens: Optional[int] = None
     max_time_seconds: Optional[int] = None
@@ -55,7 +55,7 @@ max_tokens: Optional[int] = None
 
 @dataclass
 class ResourceUsage:
-    ""
+"""
 Current resource usage for an agent session.""
 tokens_input: int = 0
     tokens_output: int = 0
@@ -65,22 +65,22 @@ tokens_input: int = 0
 
     @property
     def total_tokens(self) -> int:
-        ""
+"""
 Calculate total tokens consumed.""
 return self.tokens_input + self.tokens_output
 
 
     @property
     def elapsed_time(self) -> float:
-        ""
+"""
 Calculate elapsed time in seconds.""
 return time.time() - self.start_time
 
 
 class ResourceCore(BaseCore):
-    ""
+"""
 Authoritative engine for resource quota enforcement.
-    ""
+"""
 def __init__(self, config: Optional[QuotaConfig] = None) -> None:
         super().__init__()
         self.config = config or QuotaConfig()
@@ -89,7 +89,7 @@ def __init__(self, config: Optional[QuotaConfig] = None) -> None:
         self._interrupt_reason: Optional[str] = None
 
     def update_usage(self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0) -> bool:
-        ""
+"""
 Update current usage metrics.""
 self.usage.tokens_input += tokens_input
         self.usage.tokens_output += tokens_output
@@ -97,7 +97,7 @@ self.usage.tokens_input += tokens_input
         return True
 
     def check_quotas(self) -> Tuple[bool, Optional[str]]:
-        ""
+"""
 Check if any quotas have been exceeded.""
 if self.config.max_tokens and self.usage.total_tokens >= self.config.max_tokens:
             self._is_interrupted = True
@@ -120,13 +120,13 @@ if self.config.max_tokens and self.usage.total_tokens >= self.config.max_tokens:
 
     @property
     def is_interrupted(self) -> bool:
-        ""
+"""
 Check if the session has been interrupted.""
 return self._is_interrupted
 
     @property
     def interrupt_reason(self) -> Optional[str]:
-        ""
+"""
 Get the reason for interruption, if any.""
 return self._interrupt_reason
 

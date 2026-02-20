@@ -32,7 +32,7 @@ except Exception:
     class _Logger:
         def info(self, *a, **k):
             pass
-    logging = _Logger()
+            logging = _Logger()
 
 
 class MockOrchestrator:

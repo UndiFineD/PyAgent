@@ -2,14 +2,14 @@
 from __future__ import annotations
 
 
-""
+"""
 Baseline manager used by tests (lightweight implementation).
 
 This simplified BaselineManager provides just enough functionality for
 tests to save/load simple JSON baselines. It is intentionally small and
 robust to avoid import-time failures while the repository is being
 repaired.
-""
+"""
 from pathlib import Path
 import json
 from dataclasses import dataclass

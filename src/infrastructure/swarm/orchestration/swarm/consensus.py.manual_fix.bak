@@ -14,12 +14,12 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Swarm Consensus Protocol (Phase 73).
 Implements a lightweight async-Raft simplified state machine for swarm-wide consistency.
 Ensures every node agrees on the routing table and topology state.
-""
+"""
 
 """
 import asyncio
@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class SwarmState:
-    ""
+"""
 The synchronized state of the swarm.""
 routing_table: Dict[str, str] = field(default_factory=dict)
     mcp_registry_version: int = 0
@@ -43,7 +43,7 @@ routing_table: Dict[str, str] = field(default_factory=dict)
 
 @dataclass
 class LogEntry:
-    ""
+"""
 Represents a log entry in the consensus protocol.""
 index: int
     term: int
@@ -53,10 +53,10 @@ index: int
 
 
 class SwarmConsensus:
-    ""
+"""
 SwarmConsensus (Phase 3.0): Replicated state machine using BFT-weighted Raft Lite.
     Ensures every node agrees on the routing table, MCP tool availability, and shard ownership.
-    ""
+"""
 def __init__(self, node_id: str, transport: Any = None) -> None:
         self.node_id = node_id
         self.transport = transport  # VoyagerTransport instance
@@ -73,25 +73,25 @@ def __init__(self, node_id: str, transport: Any = None) -> None:
 
 
     def set_peers(self, peers: List[str]):
-        ""
-Updates the list of known peers.""
-self.peers = peers
+"""
+        Updates the list of known peers.""
+        self.peers = peers
 
 
-    async def propose_change(self, action: str, data: Any):
-        ""
-Proposes a change to the global swarm state (e.g., 'ADD_MCP_SERVER').""
-if not self.is_leader:
-            logger.info(f"Node {self.node_id} initiating leader election to propose change.")
-            await self._start_election()
-            if not self.is_leader:
-                logger.warning("Election failed. Change cannot be proposed locally.")
-                return False
+        async def propose_change(self, action: str, data: Any):
+"""
+        Proposes a change to the global swarm state (e.g., 'ADD_MCP_SERVER').""
+        if not self.is_leader:
+        logger.info(f"Node {self.node_id} initiating leader election to propose change.")
+        await self._start_election()
+        if not self.is_leader:
+        logger.warning("Election failed. Change cannot be proposed locally.")
+        return False
 
         new_entry = LogEntry(
-            index=len(self.log),
-            term=self.term,
-            command={"action": action, "data": data}
+        index=len(self.log),
+        term=self.term,
+        command={"action": action, "data": data}
         )
         self.log.append(new_entry)
 
@@ -101,76 +101,76 @@ if not self.is_leader:
         required_weight = sum(self.node_weights.values()) * 0.51
 
         if self.transport:
-            for peer in self.peers:
-                try:
-                    # Send REPLICATE_LOG message
+        for peer in self.peers:
+        try:
+        # Send REPLICATE_LOG message
 
-                    response = await self.transport.send_message(peer, {
-                        "type": "CONSENSUS_REPLICATE",
-                        "term": self.term,
-                        "entry": {
-                            "index": new_entry.index,
-                            "term": new_entry.term,
-                            "command": new_entry.command
-                        }
-                    })
-                    if response and response.get("status") == "ACK":
-                        successful_replications += 1
-                        total_weight += self.node_weights.get(peer, 1.0)
-                except (ConnectionError, ValueError) as e:
-                    logger.debug(f"Failed to replicate to {peer}: {e}")
+        response = await self.transport.send_message(peer, {
+        "type": "CONSENSUS_REPLICATE",
+        "term": self.term,
+        "entry": {
+        "index": new_entry.index,
+        "term": new_entry.term,
+        "command": new_entry.command
+        }
+        })
+        if response and response.get("status") == "ACK":
+        successful_replications += 1
+        total_weight += self.node_weights.get(peer, 1.0)
+        except (ConnectionError, ValueError) as e:
+        logger.debug(f"Failed to replicate to {peer}: {e}")
         if total_weight >= required_weight:
-            self._apply_entry(new_entry)
-            logger.info(f"Swarm state changed: {action} committed.")
-            return True
+        self._apply_entry(new_entry)
+        logger.info(f"Swarm state changed: {action} committed.")
+        return True
 
         return False
 
 
-    async def _start_election(self):
-        ""
-Phase 3.0: Leader election with BFT weights.""
-self.term += 1
+        async def _start_election(self):
+"""
+        Phase 3.0: Leader election with BFT weights.""
+        self.term += 1
         self.votes_received[self.term] = {self.node_id}
 
         if not self.transport:
-            self.is_leader = True
-            return
+        self.is_leader = True
+        return
 
         election_tasks = []
         for peer in self.peers:
-            election_tasks.append(self.transport.send_message(peer, {
-                "type": "CONSENSUS_VOTE_REQUEST",
-                "term": self.term,
-                "candidate_id": self.node_id,
-                "last_log_index": len(self.log) - 1
-            }))
+        election_tasks.append(self.transport.send_message(peer, {
+        "type": "CONSENSUS_VOTE_REQUEST",
+        "term": self.term,
+        "candidate_id": self.node_id,
+        "last_log_index": len(self.log) - 1
+        }))
 
         results = await asyncio.gather(*election_tasks, return_exceptions=True)
 
         total_vote_weight = self.node_weights.get(self.node_id, 1.0)
         for res in results:
-            if isinstance(res, dict) and res.get("vote_granted"):
-                voter_id = res.get("voter_id")
-                total_vote_weight += self.node_weights.get(voter_id, 1.0)
+        if isinstance(res, dict) and res.get("vote_granted"):
+        voter_id = res.get("voter_id")
+        total_vote_weight += self.node_weights.get(voter_id, 1.0)
 
         if total_vote_weight > (sum(self.node_weights.values()) / 2):
-            self.is_leader = True
-            logger.info(f"Node {self.node_id} elected as Swarm Leader for Term {self.term}")
+        self.is_leader = True
+        logger.info(f"Node {self.node_id} elected as Swarm Leader for Term {self.term}")
 
 
     def _apply_entry(self, entry: LogEntry):
-        ""
-Applies a committed log entry to the state machine.""
-action = entry.command["action"]
+"""
+        Applies a committed log entry to the state machine.""
+        action = entry.command["action"]
         data = entry.command["data"]
         if action == "UPDATE_ROUTING":
-            self.state.routing_table.update(data)
+        self.state.routing_table.update(data)
         elif action == "ADD_MCP_SERVER":
-            self.state.mcp_registry_version += 1
+        self.state.mcp_registry_version += 1
         elif action == "ASSIGN_SHARD":
-            if data not in self.state.active_shards:
-                self.state.active_shards.append(data)
+        if data not in self.state.active_shards:
+        self.state.active_shards.append(data)
 
         self.commit_index = entry.index
         # Propagate to local services if needed

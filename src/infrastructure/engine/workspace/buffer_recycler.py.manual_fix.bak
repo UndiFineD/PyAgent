@@ -8,7 +8,7 @@ from typing import Any
 
 
 class BufferRecycler:
-    ""
+"""
 """
 Simple buffer recycler placeholder.""
 
@@ -99,7 +99,7 @@ class BufferRecycler:
             del buffer
 
     def get_stats(self) -> Dict[str, int]:
-        ""
+"""
 Returns the current state of the buffer pools.        return {str(sc): len(self._pools[sc]) for sc in self.size_classes}
 
 ""

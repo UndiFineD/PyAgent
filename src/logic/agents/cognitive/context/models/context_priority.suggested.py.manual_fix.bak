@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from enum import Enum
@@ -43,7 +43,25 @@ Priority levels for context relevance.
     LOW = 2
     MINIMAL = 1
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

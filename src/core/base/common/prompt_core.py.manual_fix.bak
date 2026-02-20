@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for prompt template management and versioning.
-""
+"""
 try:
 
 """
-    from datetime import datetime
+from datetime import datetime
 except ImportError:
     from datetime import datetime
 
@@ -46,7 +46,7 @@ except ImportError:
 
 
 class PromptCore(BaseCore):
-    ""
+"""
 Authoritative engine for prompt templates and A/B testing.""
 def __init__(self) -> None:
         super().__init__()
@@ -55,17 +55,17 @@ def __init__(self) -> None:
         self.active_version: Optional[str] = None
 
     def register_template(self, template: PromptTemplate) -> None:
-        ""
+"""
 Registers a new prompt template.""
 self.templates[template.name] = template
 
     def register_version(self, version: "PromptVersion") -> None:
-        ""
+"""
 Registers a new prompt version.""
 self.versions[version.version_id] = version
 
     def render_template(self, name: str, **kwargs: Any) -> str:
-        ""
+"""
 Renders a registered template with the provided arguments.""
 if name not in self.templates:
             raise KeyError(f"Template '{name}' not found")
@@ -73,7 +73,7 @@ if name not in self.templates:
 
 
 class PromptVersion:
-    ""
+"""
 Represents a specific version of a prompt for A/B testing and tracking.""
 def __init__(
         self,
@@ -90,7 +90,7 @@ def __init__(
         self.metrics: Dict[str, float] = {}
 
     def update_metrics(self, new_metrics: Dict[str, float]) -> None:
-        ""
+"""
 Updates performance metrics for this version.""
 self.metrics.update(new_metrics)
 

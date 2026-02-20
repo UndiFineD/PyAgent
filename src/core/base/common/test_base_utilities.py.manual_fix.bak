@@ -21,8 +21,7 @@ class DummyRecorder:
         self.calls = []
 
 """
-
-    def record_interaction(self, **kwargs):
+def record_interaction(self, **kwargs):
         self.calls.append(kwargs)
 
 
@@ -50,11 +49,11 @@ def test_record_tool_execution_raises_keyboardinterrupt():
         def record_interaction(self, **_kwargs):
             raise KeyboardInterrupt()
 
-    agent = DummyAgent()
-    agent.fleet.recorder = BadRecorder()
+            agent = DummyAgent()
+            agent.fleet.recorder = BadRecorder()
 
-    try:
-        bu._record_tool_execution(agent, "t", (), {}, "ok")
-        assert False, "KeyboardInterrupt should be re-raised"
-    except KeyboardInterrupt:
-        pass
+            try:
+            bu._record_tool_execution(agent, "t", (), {}, "ok")
+            assert False, "KeyboardInterrupt should be re-raised"
+            except KeyboardInterrupt:
+            pass

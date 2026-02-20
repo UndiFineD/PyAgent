@@ -78,3 +78,21 @@ assigned_resources: list[str] = field(default_factory=list)  # type: ignore[assi
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
+
+"""

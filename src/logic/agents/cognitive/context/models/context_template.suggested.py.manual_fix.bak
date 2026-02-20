@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from dataclasses import dataclass, field
@@ -43,7 +43,25 @@ Template for context documentation.
     template_content: str
     required_fields: list[str] = field(default_factory=lambda: [])
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

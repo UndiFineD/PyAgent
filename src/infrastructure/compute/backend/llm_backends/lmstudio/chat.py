@@ -36,10 +36,10 @@ class ChatHandler:
 Handler for chat operations with SDK-first and HTTP fallback support.
     def __init__(self, api_client: LMStudioAPIClient):
 """
-Initialize chat handler.""""
-Args:
-            api_client: LMStudioAPIClient instance for HTTP fallback.
-                self.api_client = api_client
+        Initialize chat handler.""""
+        Args:
+        api_client: LMStudioAPIClient instance for HTTP fallback.
+        self.api_client = api_client
 
     def _build_prediction_config(self, sdk_available: bool, **kwargs) -> Optional[Any]:
 """
@@ -173,6 +173,24 @@ Args:
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

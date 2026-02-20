@@ -17,15 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Minimal notification helper functions used during repair.
 
 """
-
 These functions are intentionally small and dependency-light so that
 imports succeed while the repository is being repaired.
-""
+"""
 from typing import Any
 
 try:
@@ -38,7 +37,7 @@ except Exception:
             pass
         def error(self, *a, **k):
             pass
-    logging = _Logger()
+            logging = _Logger()
 
 
 def send_slack_notification(webhook_url: str, message: str) -> bool:

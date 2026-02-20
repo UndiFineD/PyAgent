@@ -14,12 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Tool discovery.py module.
 
 """
-
 import logging
 from typing import Any, Dict, Optional
 
@@ -40,7 +39,7 @@ class AutonomousToolDiscovery:
         self.tool_index: Dict[str, Dict[str, Any]] = {}
 
     async def refresh_tool_index(self):
-        ""
+"""
 Fetches all tools from all MCP servers and indexes them semantically.        # 1. Get server list
         await self.mcp_agent.list_mcp_servers()
         # Mocking parsing for now - in production, MCPAgent should return structured data
@@ -59,7 +58,7 @@ emb = await self.similarity_service.get_embedding(tool["desc"])"                
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Failed to index tools for MCP server {server}: {e}")
     async def find_external_tool(self, task_prompt: str, threshold: float = 0.7) -> Optional[Dict[str, Any]]:
-        ""
+"""
 Finds an MCP tool that matches the semantic requirements of a task.        if not self.tool_index:
             await self.refresh_tool_index()
 
@@ -79,4 +78,4 @@ Finds an MCP tool that matches the semantic requirements of a task.        if no
             return {"tool_id": best_tool["name"], "server": best_tool["server"], "score": best_score}
         return None
 
-""
+"""

@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 EvolutionCore logic for agent fleet adaptation.
 Contains pure logic for template generation and hyperparameter optimization.
-""
+"""
 
 """
 class EvolutionCore:
@@ -49,7 +49,7 @@ class {name}Agent(BaseAgent):
         super().__init__(path)
         self.name = "{name}"
     def perform_specialized_task(self, *args: Any, **kwargs: Any) -> str:
-        ""
+"""
 Specialize this method based on: {capabilities}        logging.info(f"Generated agent {name} performing task with args: {{args}}")"        return f"Result from generated agent {name} for task: {{capabilities}}""''''''
 def compute_mutations(self, fleet_stats: dict[str, dict[str, float]]) -> dict[str, dict[str, float]]:
                 Pure logic for evolutionary mutations of hyperparameters.
@@ -67,6 +67,24 @@ def compute_mutations(self, fleet_stats: dict[str, dict[str, float]]) -> dict[st
             new_temp = max(0.1, min(1.0, self.default_temp + mutation))
             refined_params[agent_id] = {"temperature": new_temp}
         return refined_params
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

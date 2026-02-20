@@ -92,9 +92,9 @@ dims: tuple[int | str | DynamicDim, ...]
         # Auto-detect dynamic dims functionally
         def detect_dynamic(dim):
             if isinstance(dim, DynamicDim):
-                self.dynamic_dims.add(dim.name)
+            self.dynamic_dims.add(dim.name)
 
-        list(map(detect_dynamic, dims))
+            list(map(detect_dynamic, dims))
 
     def resolve(self, **bindings: int) -> tuple[int | str, ...]:
 """
@@ -136,15 +136,15 @@ if len(shape) != len(self.dims):
         def _check(pair):
             actual, expected = pair
             if isinstance(expected, str):
-                # Symbolic dimension - skip if dynamic, otherwise match
-                if expected not in self.dynamic_dims:
-                    return True
-                return True
+            # Symbolic dimension - skip if dynamic, otherwise match
+            if expected not in self.dynamic_dims:
+            return True
+            return True
             if isinstance(expected, int):
-                return actual == expected
+            return actual == expected
             return True
 
-        return all(map(_check, zip(shape, resolved)))
+            return all(map(_check, zip(shape, resolved)))
 
     def __len__(self) -> int:
         return len(self.dims)
@@ -152,15 +152,15 @@ if len(shape) != len(self.dims):
     def __repr__(self) -> str:
         def _fmt(dim):
             if isinstance(dim, DynamicDim):
-                return f"{dim.name}*""            if isinstance(dim, str):
-                if dim in self.dynamic_dims:
-                    return f"{dim}*""                return dim
+            return f"{dim.name}*""            if isinstance(dim, str):
+            if dim in self.dynamic_dims:
+            return f"{dim}*""                return dim
             return str(dim)
 
-        dim_strs = list(map(_fmt, self.dims))
-        return f"TensorShape({', '.join(dim_strs)})"
+            dim_strs = list(map(_fmt, self.dims))
+            return f"TensorShape({', '.join(dim_strs)})"
 
-@dataclass
+            @dataclass
 class TensorSchema:
 """
 Schema regarding validating multiple tensors with related dimensions.
@@ -187,12 +187,12 @@ fields: dict[str, TensorShape] = field(default_factory=dict)
         def _add_field(item):
             name, shape = item
             if isinstance(shape, TensorShape):
-                self.fields[name] = shape
+            self.fields[name] = shape
             elif isinstance(shape, tuple):
-                self.fields[name] = TensorShape(*shape)
+            self.fields[name] = TensorShape(*shape)
             else:
-                raise TypeError(f"Expected TensorShape or tuple, got {type(shape)}")
-        list(map(_add_field, field_shapes.items()))
+            raise TypeError(f"Expected TensorShape or tuple, got {type(shape)}")
+            list(map(_add_field, field_shapes.items()))
 
     def validate(self, **tensors: Any) -> dict[str, tuple[int, ...]]:
 """

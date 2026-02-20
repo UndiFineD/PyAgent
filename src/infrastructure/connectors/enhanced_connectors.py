@@ -41,7 +41,7 @@ Base class for all infrastructure connectors.
         self._health_check_interval = 60
         self._last_health_check = 0
 
-    @abstractmethod
+        @abstractmethod
     def connect(self) -> bool:
 """
 Establish connection to the service.        pass
@@ -58,14 +58,14 @@ Perform health check on the connector.        pass
 
     def _retry_operation(self, operation, *args, **kwargs):
 """
-Retry an operation with exponential backoff.        for attempt in range(self._max_retries):
-            try:
-                return operation(*args, **kwargs)
-            except Exception as e:
-                if attempt == self._max_retries - 1:
-                    raise e
-                wait_time = 2 ** attempt
-                logger.warning(f"Operation failed, retrying in {wait_time}s: {e}")"                time.sleep(wait_time)
+        Retry an operation with exponential backoff.        for attempt in range(self._max_retries):
+        try:
+        return operation(*args, **kwargs)
+        except Exception as e:
+        if attempt == self._max_retries - 1:
+        raise e
+        wait_time = 2 ** attempt
+        logger.warning(f"Operation failed, retrying in {wait_time}s: {e}")"                time.sleep(wait_time)
 
 
 
@@ -232,7 +232,7 @@ class CloudStorageConnector(BaseConnector):
 Enhanced cloud storage connector with multi-provider support.
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         super().__init__("cloud_storage", config)"        self._provider_classes = {
-            "aws_s3": AWS3Connector,"            "gcp_storage": GCPStorageConnector,"            "azure_blob": AzureBlobConnector"        }
+        "aws_s3": AWS3Connector,"            "gcp_storage": GCPStorageConnector,"            "azure_blob": AzureBlobConnector"        }
         self._providers = {}
         self._failover_enabled = True
 
@@ -419,6 +419,24 @@ Async message consumption.    while True:
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

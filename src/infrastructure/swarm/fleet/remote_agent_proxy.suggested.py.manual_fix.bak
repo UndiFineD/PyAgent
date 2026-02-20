@@ -15,12 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 RemoteAgentProxy
 """
 - Proxy for agents running on remote nodes.
 - Allows FleetManager to transparently call tools on other machines.
-""
+"""
 
 """
 import logging
@@ -39,7 +39,7 @@ __version__ = VERSION
 
 
 class RemoteAgentProxy(BaseAgent):
-    ""
+"""
 Encapsulates a remote agent accessible via HTTP/JSON-RPC.""""
 Resilience (Phase 108): Implements a 15-minute TTL status cache for remote nodes.
     Intelligence (Phase 108): Records remote interactions to local shards.
@@ -52,15 +52,15 @@ Resilience (Phase 108): Implements a 15-minute TTL status cache for remote nodes
         work_root = getattr(self, "_workspace_root", os.getcwd())"        self.connectivity = ConnectivityManager(work_root)
 
     def _is_node_working(self) -> bool:
-        ""
+"""
 Checks if the remote node is known to be working via cache (Phase 108).        return self.connectivity.is_endpoint_available(self.node_url)
 
     def _update_node_status(self, is_up: bool) -> None:
-        ""
+"""
 Updates the node status in the persistent cache (Phase 108).        self.connectivity.update_status(self.node_url, is_up)
 
     def call_remote_tool(self, tool_name: str, **kwargs) -> str:
-        ""
+"""
 Calls a tool on the remote node with resilience and intelligence (Phase 108).        if not self._is_node_working():
             return f"Skipping call: Remote node {self.node_url} is currently unreachable (cached)."
         endpoint = f"{self.node_url}/call""        payload = {"agent": self.agent_name, "tool": tool_name, "args": kwargs}"
@@ -98,7 +98,7 @@ Calls a tool on the remote node with resilience and intelligence (Phase 108).   
             return None
 
     def _record_interaction(self, tool_name: str, payload: dict[str, Any], response: str) -> None:
-        ""
+"""
 Records the interaction to a local shard for later intelligence harvesting (Phase 108).        try:
             from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
@@ -111,9 +111,27 @@ Records the interaction to a local shard for later intelligence harvesting (Phas
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug(f"Failed to record remote interaction: {e}")
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        ""
+"""
 Proxies the improvement request to the remote agent.        return self.call_remote_tool("improve_content", prompt=prompt, target_file=target_file)
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

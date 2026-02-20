@@ -169,9 +169,9 @@ Get the singleton instance of the async engine.        if cls._instance is None:
     @property
     def _requests(self):
 """
-Alias for test compatibility (legacy).        return self._req_tracker
+        Alias for test compatibility (legacy).        return self._req_tracker
 
-    @property
+        @property
     def is_running(self) -> bool:
 """
 Check if engine is running.        return self._running and self._engine is not None
@@ -460,6 +460,24 @@ async def async_generate(
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

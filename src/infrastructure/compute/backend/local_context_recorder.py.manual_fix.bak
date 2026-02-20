@@ -14,7 +14,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Local context recorder module.""
 
@@ -32,25 +32,25 @@ __version__ = VERSION
 
 
 class LocalContextRecorder(ContextRecorderInterface):
-    ""
+"""
 Records LLM prompts and results for future training/fine-tuning.
 
     Stores data in JSONL format with monthly and hash-based sharding.
     Optimized for trillion-parameter data harvesting (Phase 105).
-    ""
+"""
 def __init__(
         self,
         workspace_root: Path | None = None,
         user_context: str = "System",
         fleet: Any = None,
     ) -> None:
-        ""
+"""
 Initialize the local context recorder.
         Args:
             workspace_root: Optional path to the workspace root.
             user_context: Context identifier for the user.
             fleet: Optional fleet object containing workspace information.
-        ""
+"""
 if fleet and hasattr(fleet, "workspace_root"):
             self.workspace_root = Path(fleet.workspace_root)
         elif workspace_root:
@@ -128,7 +128,7 @@ if fleet and hasattr(fleet, "workspace_root"):
 
 
     def record_lesson(self, tag: str, data: dict[str, Any]) -> None:
-        ""
+"""
 Alias for general logic harvesting to satisfy intelligence scanners.""
 self.record_interaction(
             provider="Internal",

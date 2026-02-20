@@ -77,14 +77,14 @@ Rust-accelerated calculation of layer-to-stage distribution.        # return Rus
 
     def coordinate_transfer_start(self, request_id: str, metadata: Any):
 """
-Coordinate the start of a multi-stage KV transfer.        # Only rank 0 typically coordinates the global metadata
+        Coordinate the start of a multi-stage KV transfer.        # Only rank 0 typically coordinates the global metadata
         if self.pp_rank == 0:
-            logger.debug("PP Rank 0 coordinating transfer for %s", request_id)"            # Broadcast or register metadata
-            pass
+        logger.debug("PP Rank 0 coordinating transfer for %s", request_id)"            # Broadcast or register metadata
+        pass
 
     def sync_stage_transfer(self, layer_idx: int):
 """
-Barrier or sync point for a specific layer's transfer across stages.'        # Ensure that previous stages in the pipeline have flushed their data
+        Barrier or sync point for a specific layer's transfer across stages.'        # Ensure that previous stages in the pipeline have flushed their data
         # if there are dependencies.
         pass
 

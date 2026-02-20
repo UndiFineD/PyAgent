@@ -69,13 +69,13 @@ Emit an event to all registered handlers.""
 if event in self.handlers:
             def invoke_handler(handler):
                 if data is not None:
-                    handler(data)
+                handler(data)
                 else:
-                    handler()
-            list(map(invoke_handler, self.handlers[event]))
+                handler()
+                list(map(invoke_handler, self.handlers[event]))
 
 
-@dataclass
+                @dataclass
 class StatePersistence:
 """
 Persists agent state. (Facade)""
@@ -182,11 +182,11 @@ results = self._core.results
             status_str = "OK" if check.status.name == "HEALTHY" else "FAIL"
             print(f"[{status_str}] {name}: {check.response_time_ms:.1f}ms")
             if check.error_message:
-                print(f"      Error: {check.error_message}")
-        list(map(report_check, results.items()))
-        print("=============================\n")
+            print(f"      Error: {check.error_message}")
+            list(map(report_check, results.items()))
+            print("=============================\n")
 
-@dataclass
+            @dataclass
 class ProfileManager:
 """
 Manages execution profiles. (Facade)""

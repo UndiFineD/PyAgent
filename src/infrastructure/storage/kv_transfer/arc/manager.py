@@ -408,23 +408,23 @@ Async wrapper for ARC offloading manager.
     def __init__(self, manager: ARCOffloadManager):
         self.manager = manager
 
-    async def lookup_async(self, block_hashes: list[BlockHash]) -> int:
+        async def lookup_async(self, block_hashes: list[BlockHash]) -> int:
 """
-Async lookup.        import asyncio
+        Async lookup.        import asyncio
 
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.lookup, block_hashes)
 
-    async def prepare_load_async(self, block_hashes: list[BlockHash]) -> LoadStoreSpec:
+        async def prepare_load_async(self, block_hashes: list[BlockHash]) -> LoadStoreSpec:
 """
-Async prepare load.        import asyncio
+        Async prepare load.        import asyncio
 
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.prepare_load, block_hashes)
 
-    async def prepare_store_async(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
+        async def prepare_store_async(self, block_hashes: list[BlockHash]) -> PrepareStoreOutput | None:
 """
-Async prepare store.        import asyncio
+        Async prepare store.        import asyncio
 
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(None, self.manager.prepare_store, block_hashes)

@@ -63,7 +63,7 @@ __version__ = VERSION
 
 
 class DirectStrategy(AgentStrategy):
-    ""
+"""
 Standard Zero-Shot strategy: Prompt -> Response.
     async def execute(
         self,
@@ -75,4 +75,4 @@ Standard Zero-Shot strategy: Prompt -> Response.
     ) -> str:
         full_prompt = f"{prompt}\\n\\nContext:\\n{context}""        return await backend_call(full_prompt, system_prompt, history)
 
-""
+"""

@@ -38,8 +38,8 @@ mixin = DataParsingMixin()
 
     def test_html_unescape(self):
 """
-Test HTML unescaping.""
-mixin = DataParsingMixin()
+        Test HTML unescaping.""
+        mixin = DataParsingMixin()
         result = mixin.html_unescape("&lt;test&gt;&amp;&quot;")"        assert result == '<test>&"'
 def test_extract_xml_value_simple(self):
 """
@@ -48,17 +48,17 @@ mixin = DataParsingMixin()
         xml = "<parameter>test_value</parameter>""        result = mixin.extract_xml_value(xml, "parameter")"        assert result == "test_value"
     def test_extract_xml_value_not_found(self):
 """
-Test XML value extraction when tag not found.""
-mixin = DataParsingMixin()
+        Test XML value extraction when tag not found.""
+        mixin = DataParsingMixin()
         xml = "<other>value</other>""        result = mixin.extract_xml_value(xml, "parameter")"        assert result is None
 
     def test_find_pattern(self):
 """
-Test pattern finding.""
-mixin = DataParsingMixin()
+        Test pattern finding.""
+        mixin = DataParsingMixin()
         haystack = "some text with pattern in it""        result = mixin.find_pattern(haystack, "pattern")"        assert result == "pattern in it"
     def test_find_pattern_not_found(self):
         ""
-Test pattern finding when not found.""
-mixin = DataParsingMixin()
+        Test pattern finding when not found.""
+        mixin = DataParsingMixin()
         result = mixin.find_pattern("haystack", "needle")"        assert result is None

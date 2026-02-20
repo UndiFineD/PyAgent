@@ -52,7 +52,7 @@ def __init__(self, num_streams: int = 4, device: Optional[int] = None):
 
     def synchronize_all(self):
         ""
-Synchronize all streams in the pool.""
+        Synchronize all streams in the pool.""
 def _sync(s):
             s.synchronize()
         list(map(_sync, self.streams))

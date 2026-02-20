@@ -201,32 +201,32 @@ result = self._try_rust_aggregate()
 
                 def group_record(r):
                     if r.name not in grouped:
-                        grouped[r.name] = []
+                    grouped[r.name] = []
                     grouped[r.name].append(r.value)
 
-                list(map(group_record, self.records))
+                    list(map(group_record, self.records))
 
-                # pylint: disable=no-member
-                return rc.aggregate_metrics_rust(grouped)  # type: ignore
-            except (RuntimeError, AttributeError) as e:
-                logger.debug("Rust metrics aggregation failed: %s", e)
-        return None
+                    # pylint: disable=no-member
+                    return rc.aggregate_metrics_rust(grouped)  # type: ignore
+                    except (RuntimeError, AttributeError) as e:
+                    logger.debug("Rust metrics aggregation failed: %s", e)
+                    return None
 
     def _python_aggregate(self) -> Dict[str, float]:
         grouped_py: Dict[str, List[float]] = {}
 
         def group_record(rec):
             if rec.name not in grouped_py:
-                grouped_py[rec.name] = []
+            grouped_py[rec.name] = []
             grouped_py[rec.name].append(rec.value)
 
-        list(map(group_record, self.records))
+            list(map(group_record, self.records))
 
         def calc_avg(item):
             name, vals = item
             return name, sum(vals) / len(vals)
 
-        return dict(map(calc_avg, grouped_py.items()))
+            return dict(map(calc_avg, grouped_py.items()))
 
     def get_rolling_avg(self, metric_name: str, window: int = 10) -> List[float]:
         ""
@@ -255,4 +255,4 @@ values = list(map(lambda r: r.value, filter(lambda r: r.name == metric_name, sel
             slice_vals = values[start : i + 1]
             return sum(slice_vals) / len(slice_vals)
 
-        return list(map(calc_step_avg, range(len(values))))
+            return list(map(calc_step_avg, range(len(values))))

@@ -17,14 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Fleet load balancer.py module.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -80,8 +80,8 @@ class FleetLoadBalancer:
             "status": "ACCEPTED","            "interface": interface,"            "assigned_model": assigned_model,"            "estimated_wait_ms": len(self.request_queue) * 10,"        }
 
     def get_stats(self) -> dict[str, Any]:
-        ""
+"""
 Get current load balancer statistics.        return {
             "queue_depth": len(self.request_queue),"            "interface_diversity": list(set(r["interface"] for r in self.request_queue)),"        }
 
-""
+"""

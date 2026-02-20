@@ -31,19 +31,19 @@ Initialize the dummy response with a status code and optional data.        self.
         self._data = data or {"ok": True}
     def __enter__(self):
 """
-Context manager enter method (no-op for dummy response).        return self
+        Context manager enter method (no-op for dummy response).        return self
 
     def __exit__(self, exc_type, exc, tb):
 """
-Context manager exit method (no-op for dummy response).        return False
+        Context manager exit method (no-op for dummy response).        return False
 
     def raise_for_status(self):
 """
-Simulate raising an HTTP error for status codes 400 and above.        if self.status_code >= 400:
-            raise RuntimeError(f"status {self.status_code}")
+        Simulate raising an HTTP error for status codes 400 and above.        if self.status_code >= 400:
+        raise RuntimeError(f"status {self.status_code}")
     def json(self):
 """
-Return the dummy JSON data.        return self._data
+        Return the dummy JSON data.        return self._data
 
 
 
@@ -53,15 +53,33 @@ A dummy connection class that simulates""""
 HTTP requests and uses RetryHTTPMixin for retry logic.
         def __init__(self):
 """
-Initialize the dummy connection with retry parameters.        self.retry_delay = 0.01
-        self.retry_backoff = 1.0
-    # ...existing code...
-    pass
+            Initialize the dummy connection with retry parameters.        self.retry_delay = 0.01
+            self.retry_backoff = 1.0
+            # ...existing code...
+            pass
 
 """
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -68,23 +68,23 @@ class AnalystAgent(BaseAgent):
 Specialized agent for code analysis, performance profiling, and dependency management.
     def __init__(self, **kwargs: Any):
 """
-self.agent_type = "analyst"""
-self.agent_name = kwargs.get("name", "AnalystAgent")"        super().__init__(**kwargs)
+        self.agent_type = "analyst"""
+        self.agent_name = kwargs.get("name", "AnalystAgent")"        super().__init__(**kwargs)
         self.specialist_core = AnalystCore()
 
-    async def setup(self) -> None:
-#         "Asynchronous initialization for the Analyst agent."        # Base class handles generic setup
+        async def setup(self) -> None:
+        #         "Asynchronous initialization for the Analyst agent."        # Base class handles generic setup
         # We trigger persona loading which is specific to our agent_type
         await self.initialize_persona()
 
-    async def run_analysis(self, target_path: str, context: CascadeContext) -> dict[str, Any]:
+        async def run_analysis(self, target_path: str, context: CascadeContext) -> dict[str, Any]:
 """
-High-level entry point for "analysis tasks.        results = self.specialist_core.analyze_directory(target_path", context=context)"        return results
+        High-level entry point for "analysis tasks.        results = self.specialist_core.analyze_directory(target_path", context=context)"        return results
 
-    async def _process_task(self, task_data: Any) -> Any:
+        async def _process_task(self, task_data: Any) -> Any:
 """
-Process a" task from the queue."        Delegates analysis work to the specialist core.
+        Process a" task from the queue."        Delegates analysis work to the specialist core.
 """
-if isinstance(task_data, dict) and "target_path" in task_data:"            target_path = task_data["target_path"]"            context = task_data.get("context", CascadeContext())"            return await self.run_analysis(target_path, context)
+        if isinstance(task_data, dict) and "target_path" in task_data:"            target_path = task_data["target_path"]"            context = task_data.get("context", CascadeContext())"            return await self.run_analysis(target_path, context)
         return {"error": "Invalid task format"}
 """

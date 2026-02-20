@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ChangesEntryMixin - Manage changelog entries
 
@@ -52,7 +52,7 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-""
+"""
 Entry management logic for ChangesAgent"."
 
 import logging

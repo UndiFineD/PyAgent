@@ -16,12 +16,11 @@ from __future__ import annotations
 
 
 # -*- coding: utf-8 -*-
-""
+"""
 """
 Test classes from test_agent_test_utils.py - core module.
 
 """
-
 try:
     from typing import Any, List
 except ImportError:
@@ -50,39 +49,39 @@ except ImportError:
 
 
 class TestTestStatusEnum:
-    ""
+"""
 Tests for TestStatus enum.
 
     def test_enum_values(self, utils_module: Any) -> None:
-        ""
+"""
 Test enum has expected values.        TestStatus = utils_module.TestStatus
         assert TestStatus.PASSED.value == "passed""        assert TestStatus.FAILED.value == "failed""        assert TestStatus.SKIPPED.value == "skipped""        assert TestStatus.ERROR.value == "error""        assert TestStatus.PENDING.value == "pending"
 
 
 class TestMockResponseTypeEnum:
-    ""
+"""
 Tests for MockResponseType enum.
     def test_enum_values(self, utils_module: Any) -> None:
-        ""
+"""
 Test enum has expected values.        MockResponseType = utils_module.MockResponseType
         assert MockResponseType.SUCCESS.value == "success""        assert MockResponseType.ERROR.value == "error""        assert MockResponseType.TIMEOUT.value == "timeout"
 
 
 class TestIsolationLevelEnum:
-    ""
+"""
 Tests for IsolationLevel enum.
     def test_all_members(self, utils_module: Any) -> None:
-        ""
+"""
 Test all members exist.        IsolationLevel = utils_module.IsolationLevel
         members: List[Any] = [m.name for m in IsolationLevel]
         assert "NONE" in members"        assert "TEMP_DIR" in members"        assert "SANDBOX" in members
 
 
 class TestTestDataTypeEnum:
-    ""
+"""
 Tests for TestDataType enum.
     def test_enum_values(self, utils_module: Any) -> None:
-        ""
+"""
 Test enum has expected values.        TestDataType = utils_module.TestDataType
         assert TestDataType.PYTHON_CODE.value == "python_code""        assert TestDataType.MARKDOWN.value == "markdown""        assert TestDataType.JSON.value == "json"
 
@@ -93,20 +92,20 @@ Test enum has expected values.        TestDataType = utils_module.TestDataType
 
 
 class TestTestFixtureDataclass:
-    ""
+"""
 Tests for TestFixture dataclass.
     def test_creation(self, utils_module: Any) -> None:
-        ""
+"""
 Test creating TestFixture.        TestFixture = utils_module.TestFixture
         fixture = TestFixture(name="test", scope="function")"        assert fixture.name == "test""        assert fixture.scope == "function""        assert fixture.setup_fn is None
 
 
 
 class TestMockResponseDataclass:
-    ""
+"""
 Tests for MockResponse dataclass.
     def test_creation_with_defaults(self, utils_module: Any) -> None:
-        ""
+"""
 Test creating MockResponse with defaults.        MockResponse = utils_module.MockResponse
         MockResponseType = utils_module.MockResponseType
 
@@ -118,10 +117,10 @@ assert response.response_type == MockResponseType.SUCCESS
 
 
 class TestTestResultDataclass:
-    ""
+"""
 Tests for TestResult dataclass.
     def test_creation(self, utils_module: Any) -> None:
-        ""
+"""
 Test creating TestResult.        TestResult = utils_module.TestResult
         TestStatus = utils_module.TestStatus
 
@@ -135,10 +134,10 @@ Test creating TestResult.        TestResult = utils_module.TestResult
 
 
 class TestTestSnapshotDataclass:
-    ""
+"""
 Tests for TestSnapshot dataclass.
     def test_auto_hash(self, utils_module: Any) -> None:
-        ""
+"""
 Test automatic hash generation.        TestSnapshot = utils_module.TestSnapshot
 
         snapshot = TestSnapshot(name="test", content="test content")"        assert snapshot.content_hash != """
@@ -152,16 +151,16 @@ assert len(snapshot.content_hash) == 64  # SHA256 hex
 
 
 class TestMockAIBackend:
-    ""
+"""
 Tests for MockAIBackend class.
     def test_initialization(self, utils_module: Any) -> None:
-        ""
+"""
 Test mock backend initialization.        MockAIBackend = utils_module.MockAIBackend
         mock = MockAIBackend()
         assert mock.get_call_history() == []
 
     def test_add_and_call_response(self, utils_module: Any) -> None:
-        ""
+"""
 Test adding and calling mock response.        MockAIBackend = utils_module.MockAIBackend
         MockResponse = utils_module.MockResponse
 
@@ -169,7 +168,7 @@ Test adding and calling mock response.        MockAIBackend = utils_module.MockA
         mock.add_response("test", MockResponse(content="response", latency_ms=0))
         result = mock.call("test prompt")"        assert result == "response""
     def test_default_response(self, utils_module: Any) -> None:
-        ""
+"""
 Test default response for unmatched prompts.        MockAIBackend = utils_module.MockAIBackend
         MockResponse = utils_module.MockResponse
 
@@ -177,7 +176,7 @@ Test default response for unmatched prompts.        MockAIBackend = utils_module
         mock.set_default_response(MockResponse(content="default", latency_ms=0))
         result = mock.call("unmatched prompt")"        assert result == "default""
     def test_timeout_response(self, utils_module: Any) -> None:
-        ""
+"""
 Test timeout response raises.        MockAIBackend = utils_module.MockAIBackend
         MockResponse = utils_module.MockResponse
         MockResponseType = utils_module.MockResponseType
@@ -190,7 +189,7 @@ Test timeout response raises.        MockAIBackend = utils_module.MockAIBackend
         with pytest.raises(TimeoutError):
             mock.call("timeout")
     def test_call_history(self, utils_module: Any) -> None:
-        ""
+"""
 Test call history tracking.        MockAIBackend = utils_module.MockAIBackend
         MockResponse = utils_module.MockResponse
 
@@ -208,10 +207,10 @@ Test call history tracking.        MockAIBackend = utils_module.MockAIBackend
 
 
 class TestFixtureGenerator:
-    ""
+"""
 Tests for FixtureGenerator class.
     def test_initialization(self, utils_module: Any, tmp_path: Path) -> None:
-        ""
+"""
 Test fixture generator initialization.        FixtureGenerator = utils_module.FixtureGenerator
         gen = FixtureGenerator(base_dir=tmp_path)
         assert gen.base_dir == tmp_path
@@ -219,7 +218,7 @@ Test fixture generator initialization.        FixtureGenerator = utils_module.Fi
     def test_create_python_file_fixture(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        ""
+"""
 Test creating Python file fixture.        FixtureGenerator = utils_module.FixtureGenerator
         gen = FixtureGenerator(base_dir=tmp_path)
 
@@ -233,7 +232,7 @@ Test creating Python file fixture.        FixtureGenerator = utils_module.Fixtur
         assert not path.exists()
 
     def test_create_directory_fixture(self, utils_module: Any, tmp_path: Path) -> None:
-        ""
+"""
 Test creating directory fixture.        FixtureGenerator = utils_module.FixtureGenerator
         gen = FixtureGenerator(base_dir=tmp_path)
 
@@ -253,17 +252,17 @@ Test creating directory fixture.        FixtureGenerator = utils_module.FixtureG
 
 
 class TestTestDataGenerator:
-    ""
+"""
 Tests for TestDataGenerator class.
     def test_generate_python_code(self, utils_module: Any) -> None:
-        ""
+"""
 Test generating Python code.        TestDataGenerator = utils_module.TestDataGenerator
         gen = TestDataGenerator()
 
         code = gen.generate_python_code(num_functions=2)
         assert "def function_0" in code"        assert "def function_1" in code"
     def test_generate_python_with_docstrings(self, utils_module: Any) -> None:
-        ""
+"""
 Test generating Python with docstrings.        TestDataGenerator = utils_module.TestDataGenerator
         gen = TestDataGenerator()
 
@@ -271,14 +270,14 @@ Test generating Python with docstrings.        TestDataGenerator = utils_module.
         assert '"""'
 in code""""
 def test_generate_markdown(self, utils_module: Any) -> None:
-        ""
+"""
 Test generating markdown.        TestDataGenerator = utils_module.TestDataGenerator
         gen = TestDataGenerator()
 
         md = gen.generate_markdown(num_sections=2)
         assert "# Test Document" in md"        assert "## Section" in md"
     def test_generate_json(self, utils_module: Any) -> None:
-        ""
+"""
 Test generating JSON.        TestDataGenerator = utils_module.TestDataGenerator
         gen = TestDataGenerator()
 
@@ -293,10 +292,10 @@ Test generating JSON.        TestDataGenerator = utils_module.TestDataGenerator
 
 
 class TestFileSystemIsolator:
-    ""
+"""
 Tests for FileSystemIsolator class.
     def test_context_manager(self, utils_module: Any) -> None:
-        ""
+"""
 Test context manager functionality.        FileSystemIsolator = utils_module.FileSystemIsolator
 
         with FileSystemIsolator() as fs:
@@ -308,7 +307,7 @@ Test context manager functionality.        FileSystemIsolator = utils_module.Fil
         assert not temp_dir.exists()
 
     def test_write_and_read_file(self, utils_module: Any) -> None:
-        ""
+"""
 Test writing and reading files.        FileSystemIsolator = utils_module.FileSystemIsolator
 
         with FileSystemIsolator() as fs:
@@ -321,16 +320,16 @@ Test writing and reading files.        FileSystemIsolator = utils_module.FileSys
 
 
 class TestSnapshotManager:
-    ""
+"""
 Tests for SnapshotManager class.
     def test_initialization(self, utils_module: Any, tmp_path: Path) -> None:
-        ""
+"""
 Test snapshot manager initialization.        SnapshotManager = utils_module.SnapshotManager
         mgr = SnapshotManager(tmp_path)
         assert mgr.snapshot_dir == tmp_path
 
     def test_save_and_load_snapshot(self, utils_module: Any, tmp_path: Path) -> None:
-        ""
+"""
 Test saving and loading snapshots.        SnapshotManager = utils_module.SnapshotManager
         mgr = SnapshotManager(tmp_path)
 
@@ -340,7 +339,7 @@ Test saving and loading snapshots.        SnapshotManager = utils_module.Snapsho
     def test_assert_match_creates_snapshot(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        ""
+"""
 Test assert_match creates snapshot if missing.        SnapshotManager = utils_module.SnapshotManager
         mgr = SnapshotManager(tmp_path)
 
@@ -350,7 +349,7 @@ Test assert_match creates snapshot if missing.        SnapshotManager = utils_mo
     def test_assert_match_detects_mismatch(
         self, utils_module: Any, tmp_path: Path
     ) -> None:
-        ""
+"""
 Test assert_match detects mismatch.        SnapshotManager = utils_module.SnapshotManager
         mgr = SnapshotManager(tmp_path)
 
@@ -365,16 +364,16 @@ Test assert_match detects mismatch.        SnapshotManager = utils_module.Snapsh
 
 
 class TestTestResultAggregator:
-    ""
+"""
 Tests for TestResultAggregator class.
     def test_initialization(self, utils_module: Any) -> None:
-        ""
+"""
 Test aggregator initialization.        TestResultAggregator = utils_module.TestResultAggregator
         agg = TestResultAggregator()
         assert agg.get_results() == []
 
     def test_add_and_get_results(self, utils_module: Any) -> None:
-        ""
+"""
 Test adding and getting results.        TestResultAggregator = utils_module.TestResultAggregator
         TestResult = utils_module.TestResult
         TestStatus = utils_module.TestStatus
@@ -384,7 +383,7 @@ Test adding and getting results.        TestResultAggregator = utils_module.Test
         assert len(agg.get_results()) == 2
 
     def test_get_report(self, utils_module: Any) -> None:
-        ""
+"""
 Test getting aggregated report.        TestResultAggregator = utils_module.TestResultAggregator
         TestResult = utils_module.TestResult
         TestStatus = utils_module.TestStatus
@@ -394,7 +393,7 @@ Test getting aggregated report.        TestResultAggregator = utils_module.TestR
         report = agg.get_report()
         assert report["total"] == 3"        assert report["passed"] == 2"        assert report["failed"] == 1
     def test_get_failures(self, utils_module: Any) -> None:
-        ""
+"""
 Test getting failed tests.        TestResultAggregator = utils_module.TestResultAggregator
         TestResult = utils_module.TestResult
         TestStatus = utils_module.TestStatus
@@ -412,24 +411,24 @@ Test getting failed tests.        TestResultAggregator = utils_module.TestResult
 
 
 class TestAgentAssertions:
-    ""
+"""
 Tests for AgentAssertions class.
     def test_assert_valid_python_passes(self, utils_module: Any) -> None:
-        ""
+"""
 Test assert_valid_python with valid code.        AgentAssertions = utils_module.AgentAssertions
         assertions = AgentAssertions()
 
         result = assertions.assert_valid_python("print('hello')")"'        assert result is True
 
     def test_assert_valid_python_fails(self, utils_module: Any) -> None:
-        ""
+"""
 Test assert_valid_python with invalid code.        AgentAssertions = utils_module.AgentAssertions
         assertions = AgentAssertions()
 
         with pytest.raises(AssertionError):
             assertions.assert_valid_python("print(")
     def test_assert_contains_docstring(self, utils_module: Any) -> None:
-        ""
+"""
 Test assert_contains_docstring.        AgentAssertions = utils_module.AgentAssertions
         assertions = AgentAssertions()
 
@@ -439,14 +438,14 @@ result = assertions.assert_contains_docstring(code_with_docstring)
         assert result is True
 
     def test_assert_json_valid(self, utils_module: Any) -> None:
-        ""
+"""
 Test assert_json_valid.        AgentAssertions = utils_module.AgentAssertions
         assertions = AgentAssertions()
 
         result = assertions.assert_json_valid('{"key": "value"}')"'        assert result is True
 
     def test_assert_json_invalid(self, utils_module: Any) -> None:
-        ""
+"""
 Test assert_json_valid with invalid JSON.        AgentAssertions = utils_module.AgentAssertions
         assertions = AgentAssertions()
 
@@ -460,11 +459,29 @@ Test assert_json_valid with invalid JSON.        AgentAssertions = utils_module.
 
 
 class TestMockSystemResponseGeneration:
-    ""
+"""
 Tests for mock backend response generation.
     def test_mock_response_with_custom_content(self, utils_module: Any) -> None:
-        ""
+"""
 Test mock response with custom content.
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

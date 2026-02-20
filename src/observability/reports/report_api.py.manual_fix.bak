@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ReportApi - Provide API access to error reports.
-""
+"""
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 

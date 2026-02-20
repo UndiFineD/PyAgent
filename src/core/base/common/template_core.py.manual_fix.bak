@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Unified Template Core for PyAgent.
 Handles variable substitution, template registration, and versioning.
-""
+"""
 
 """
 from typing import Any, Dict, List
@@ -33,12 +33,12 @@ from .base_core import BaseCore
 
 
 class TemplateCore(BaseCore):
-    ""
+"""
 Standard implementation for manage structured templates.
     Supports variable substitution using {{variable}} or [variable] syntax.
-    ""
+"""
 def __init__(self) -> None:
-        ""
+"""
 Initialize the template registry.""
 super().__init__()
         self.templates: Dict[str, str] = {
@@ -49,19 +49,19 @@ super().__init__()
 
 
     def register_template(self, name: str, content: str) -> None:
-        ""
+"""
 Adds a new template to the registry.""
 self.templates[name] = content
 
 
     def get_template(self, name: str) -> str | None:
-        ""
+"""
 Retrieves a template by name.""
 return self.templates.get(name)
 
 
     def apply_template(self, name: str, context: Dict[str, Any]) -> str:
-        ""
+"""
 Applies context variables to a template.""
 if name not in self.templates:
             return ""

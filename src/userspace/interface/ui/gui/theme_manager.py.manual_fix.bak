@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Theme Management logic for the PyAgent GUI.
 
 """
-
 import tkinter as tk
 from tkinter import ttk
 from typing import Any
@@ -32,7 +31,7 @@ __version__ = VERSION
 
 
 class ThemeManager:
-    ""
+"""
 Handles switching between light and dark themes for the GUI.
 
     def __init__(self, root: tk.Tk) -> None:

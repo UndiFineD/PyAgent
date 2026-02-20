@@ -1,10 +1,10 @@
-from __future__ import annotations
 """
 Parser-safe NotificationManager stub.
 
 Minimal, importable implementation used while repairing codebase.
 Avoids external side effects and optional heavy dependencies.
 """
+from __future__ import annotations
 
 
 

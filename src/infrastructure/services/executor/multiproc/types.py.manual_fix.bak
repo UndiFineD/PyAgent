@@ -17,14 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Types.py module.
-""
+"""
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -47,7 +47,7 @@ except ImportError:
 
 
 class ExecutorBackend(Enum):
-    ""
+"""
 Executor backend types.
     MULTIPROC = auto()
     RAY = auto()
@@ -57,7 +57,7 @@ Executor backend types.
 
 
 class WorkerState(Enum):
-    ""
+"""
 Worker process states.
     STARTING = auto()
     READY = auto()
@@ -68,7 +68,7 @@ Worker process states.
 
 @dataclass
 class WorkerInfo:
-    ""
+"""
 Information about a worker process.
     worker_id: int
     pid: Optional[int] = None
@@ -83,7 +83,7 @@ Information about a worker process.
 
 @dataclass
 class TaskMessage:
-    ""
+"""
 Message for task execution.
     task_id: str
     func_name: str
@@ -95,7 +95,7 @@ Message for task execution.
 
 @dataclass
 class ResultMessage:
-    ""
+"""
 Message for task result.
     task_id: str
     worker_id: int
@@ -105,4 +105,4 @@ Message for task result.
     traceback: Optional[str] = None
     execution_time_ns: int = 0
 
-""
+"""

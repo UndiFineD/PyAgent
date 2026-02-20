@@ -41,14 +41,14 @@ class SandboxManager:
         self.active_sandboxes: Dict[str, Any] = {}
         self.logger = logging.getLogger(__name__)
 
-    async def create_sandbox(self, sandbox_id: str) -> bool:
-                Initializes a new isolated container or process.
-                self.logger.info(f"Creating sandbox environment: {sandbox_id}")"        self.active_sandboxes[sandbox_id] = {"status": "ready"}"        return True
+        async def create_sandbox(self, sandbox_id: str) -> bool:
+        Initializes a new isolated container or process.
+        self.logger.info(f"Creating sandbox environment: {sandbox_id}")"        self.active_sandboxes[sandbox_id] = {"status": "ready"}"        return True
 
-    async def execute_in_sandbox(self, sandbox_id: str, command: str) -> Dict[str, Any]:
-                Runs a command within the specified sandbox context.
-                if sandbox_id not in self.active_sandboxes:
-            raise ValueError(f"Sandbox {sandbox_id} does not exist.")
+        async def execute_in_sandbox(self, sandbox_id: str, command: str) -> Dict[str, Any]:
+        Runs a command within the specified sandbox context.
+        if sandbox_id not in self.active_sandboxes:
+        raise ValueError(f"Sandbox {sandbox_id} does not exist.")
         self.logger.info(f"Executing command in {sandbox_id}: {command}")"        return {"stdout": "Execution successful", "stderr": "", "exit_code": 0}"
 
 """

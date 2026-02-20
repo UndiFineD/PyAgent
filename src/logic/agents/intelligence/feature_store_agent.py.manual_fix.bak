@@ -39,12 +39,11 @@ WHAT IT SHOULD DO BETTER:
 - Integrate with external vector stores (FAISS/Pinecone/RedisVector) for scalable similarity search and better production readiness.
 
 """
-
 FILE CONTENT SUMMARY:
 FeatureStoreAgent for PyAgent.
 Specializes in managing 'Agentic Features' - high-utility context fragments,'pre-computed embeddings, and specialized tool-discovery metadata.
 Inspired by MLOps best practices.
-""
+"""
 import json
 import logging
 from pathlib import Path
@@ -181,4 +180,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management")"    main()
 
-""
+"""

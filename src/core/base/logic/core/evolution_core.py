@@ -1,10 +1,10 @@
-from __future__ import annotations
 """
 Parser-safe EvolutionCore stub.
 
 Provides a lightweight EvolutionCore and AgentMetadata dataclass so
 other modules can import and run basic tests during repair.
 """
+from __future__ import annotations
 
 
 

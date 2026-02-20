@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Project Explorer component for the PyAgent GUI.
 
 """
-
 import logging
 import os
 import tkinter as tk
@@ -33,7 +32,7 @@ __version__ = VERSION
 
 
 class ProjectExplorer:
-    ""
+"""
 A tree-view based file explorer for the PyAgent workspace.
 
     def __init__(self, parent, project_root_var, on_double_click_callback) -> None:
@@ -124,7 +123,7 @@ A tree-view based file explorer for the PyAgent workspace.
         abspath = self.tree.item(item_id, "values")[0]"        self.on_double_click_callback(abspath)
 
     def get_selected_path(self) -> str | None:
-        ""
+"""
 Returns the absolute path of the currently selected item in the tree.        selected = self.tree.selection()
         if not selected:
             return None
@@ -164,4 +163,4 @@ Returns the absolute path of the currently selected item in the tree.        sel
             if count > 100:
                 break
 
-""
+"""

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Cooperative Communication Agent - Orchestrates high-speed signal synchronization
 
@@ -209,4 +209,4 @@ class CooperativeCommunicationAgent(BaseAgent):
         return await self.think(prompt)
 
 
-""
+"""

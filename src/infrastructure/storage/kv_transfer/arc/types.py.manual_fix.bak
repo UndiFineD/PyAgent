@@ -17,15 +17,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Phase 45: ARC Offload Types
 Data structures and enums for ARC offloading.
-""
+"""
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -51,7 +51,7 @@ BlockHash = Union[bytes, str, int]
 
 
 class OffloadMedium(Enum):
-    ""
+"""
 Storage medium for offloaded blocks.
     GPU = auto()
     CPU = auto()
@@ -61,7 +61,7 @@ Storage medium for offloaded blocks.
 
 
 class BlockState(Enum):
-    ""
+"""
 State of an offloaded block.
     PENDING = auto()  # Store/load in progress
     READY = auto()  # Available for use
@@ -71,7 +71,7 @@ State of an offloaded block.
 
 @dataclass(slots=True)
 class BlockStatus:
-    ""
+"""
 Status of a cached block.
     block_id: int
     medium: OffloadMedium = OffloadMedium.GPU
@@ -84,18 +84,18 @@ Status of a cached block.
 
     @property
     def is_ready(self) -> bool:
-        ""
+"""
 Check if block is ready for reading.        return self.state == BlockState.READY
 
     @property
     def can_evict(self) -> bool:
-        ""
+"""
 Check if block can be evicted.        return self.ref_cnt == 0 and self.state == BlockState.READY
 
 
 @dataclass(frozen=True, slots=True)
 class LoadStoreSpec:
-    ""
+"""
 Specification for load/store operation.
     block_hashes: list[BlockHash]
     blocks: list[BlockStatus]
@@ -105,7 +105,7 @@ Specification for load/store operation.
 
 @dataclass(frozen=True, slots=True)
 class OffloadingEvent:
-    ""
+"""
 Event representing offloading operation.
     block_hashes: list[BlockHash]
     block_size: int
@@ -116,7 +116,7 @@ Event representing offloading operation.
 
 @dataclass(slots=True)
 class PrepareStoreOutput:
-    ""
+"""
 Output from prepare_store operation.
     block_hashes_to_store: list[BlockHash]
     store_spec: LoadStoreSpec

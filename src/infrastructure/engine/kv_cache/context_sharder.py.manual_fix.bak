@@ -19,7 +19,6 @@ Orchestrates long-context (1M+ tokens) by sharding the KV cache across the agent
 Allows multiple experts to share access to the same sharded context.
 
 """
-
 import logging
 import time
 from dataclasses import dataclass, field
@@ -30,7 +29,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class ContextShard:
-    ""
+"""
 Metadata for a sharded slice of a long context.
     shard_id: str
     tenant_id: str  # Phase 71: Multi-tenant isolation
@@ -55,7 +54,7 @@ class ContextShardManager:
         self.dead_ranks: set[int] = set()
 
     def mark_rank_dead(self, rank_id: int) -> None:
-        ""
+"""
 Phase 75: Simulates hardware failure.        self.dead_ranks.add(rank_id)
         logger.warning(f"Rank {rank_id} marked as DEAD. Triggering failover lookup.")
     def shard_context(
@@ -127,11 +126,11 @@ Phase 75: Simulates hardware failure.        self.dead_ranks.add(rank_id)
         return None
 
     def delete_context(self, context_id: str) -> bool:
-        ""
+"""
 Phase 80: Explicitly removes a context and its shards from the registry.        if context_id in self.context_registry:
             num_shards = len(self.context_registry[context_id])
             del self.context_registry[context_id]
             logger.info(f"FleetCleanup: Decommissioned context {context_id} ({num_shards} shards freed).")"            return True
         return False
 
-""
+"""

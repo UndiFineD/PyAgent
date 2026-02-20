@@ -18,7 +18,6 @@
 Attention infrastructure for efficient attention computation.
 
 """
-
 Phase 33 modules:
 - AttentionBackendRegistry: Dynamic backend selection
 

@@ -19,7 +19,6 @@ Disaggregated Scheduler Facade.
 Redirects to the modular implementation in .disaggregated
 
 """
-
 try:
     from .disaggregated import (DCPConfig, DisaggregatedScheduler, HashSelector,
 except ImportError:

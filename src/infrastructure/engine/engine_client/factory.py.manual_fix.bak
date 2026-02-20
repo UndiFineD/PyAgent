@@ -19,11 +19,11 @@ from __future__ import annotations
 """
 Phase 45: Engine Client Factory
 Factory functions for creating engine clients.
-""
+"""
 try:
 
 """
-    from typing import TYPE_CHECKING, Callable, Optional
+from typing import TYPE_CHECKING, Callable, Optional
 except ImportError:
     from typing import TYPE_CHECKING, Callable, Optional
 
@@ -104,4 +104,4 @@ def create_engine_client(
         raise ValueError(f"Unknown client mode: {config.mode}")
     return client
 
-""
+"""

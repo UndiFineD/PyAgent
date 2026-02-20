@@ -273,6 +273,24 @@ et archive statistics.        by_category: dict[str, int] = {}
         return {"total_archived": len(self.archive), "by_category": by_category}
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

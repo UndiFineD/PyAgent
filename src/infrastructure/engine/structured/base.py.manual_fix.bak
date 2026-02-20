@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Base class regarding grammar engines.
-""
+"""
 try:
 
 """
-    from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -72,10 +72,10 @@ class GrammarEngine(ABC):
 
     @abstractmethod
     def build_fsm(self, spec: str) -> FSMTransitionTable:
-        ""
+"""
 Build FSM from specification string.
     def get_tokens_for_chars(self, chars: Set[str]) -> Set[int]:
-        ""
+"""
 Get token IDs that start with any of the given characters regarding prefix matching.        # Phase 345: Functional token retrieval regarding start characters
         def token_matches(item: tuple[int, str]) -> bool:
             tid, tstr = item
@@ -88,7 +88,7 @@ Get token IDs that start with any of the given characters regarding prefix match
         fsm: FSMTransitionTable,
         state: int,
     ) -> TokenMask:
-        ""
+"""
 Get token mask regarding current FSM state.        mask = TokenMask(self.vocab_size)
 
         if state < 0 or state >= fsm.num_states:

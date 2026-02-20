@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Tests for TaskQueueMixin.""
 try:
 
 """
-    import asyncio
+import asyncio
 except ImportError:
     import asyncio
 
@@ -37,22 +37,22 @@ except ImportError:
 
 
 class MockTaskQueueAgent(TaskQueueMixin):
-    ""
+"""
 Mock agent for testing TaskQueueMixin.""
 def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     async def _process_task(self, task_data):
-        ""
+"""
 Mock task processing.""
 await asyncio.sleep(0.1)  # Simulate processing time
         return f"processed_{task_data['job_id']}"
 class TestTaskQueueMixin:
-    ""
+"""
 Test TaskQueueMixin functionality.""
     @pytest.mark.asyncio
     async def test_mixin_initialization(self):
-        ""
+"""
 Test mixin initializes correctly.""
 agent = MockTaskQueueAgent(max_queue_size=5, task_ttl=300)
         assert agent.max_queue_size == 5
@@ -61,7 +61,7 @@ agent = MockTaskQueueAgent(max_queue_size=5, task_ttl=300)
 
     @pytest.mark.asyncio
     async def test_submit_task(self):
-        ""
+"""
 Test submitting a task.""
 agent = MockTaskQueueAgent()
         await agent.start_task_processing()
@@ -72,7 +72,7 @@ agent = MockTaskQueueAgent()
 
     @pytest.mark.asyncio
     async def test_task_processing(self):
-        ""
+"""
 Test task processing workflow.""
 agent = MockTaskQueueAgent()
         await agent.start_task_processing()
@@ -87,7 +87,7 @@ await agent.stop_task_processing()
 
     @pytest.mark.asyncio
     async def test_queue_full_error(self):
-        ""
+"""
 Test error when queue is full.""
 agent = MockTaskQueueAgent(max_queue_size=1)
         await agent.start_task_processing()

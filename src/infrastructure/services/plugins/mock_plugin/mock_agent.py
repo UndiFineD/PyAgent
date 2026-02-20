@@ -34,11 +34,11 @@ except Exception:
     class _Logger:
         def info(self, *a, **k):
             pass
-    logging = _Logger()
+            logging = _Logger()
 
-try:
-    from .mock_core import MockCore
-except Exception:
+            try:
+            from .mock_core import MockCore
+            except Exception:
     class MockCore:
         def __init__(self, multiplier: float = 1.0) -> None:
             self.multiplier = multiplier

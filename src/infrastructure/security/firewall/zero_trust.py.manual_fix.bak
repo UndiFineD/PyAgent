@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: zero_trust
 Implements a swarm-wide Zero-Trust Firewall for agent communication.
-""
+"""
 
 """
 import logging
@@ -38,16 +38,16 @@ logger = logging.getLogger(__name__)
 
 
 class ZeroTrustFirewall:
-    ""
+"""
 Enforces 'Never Trust, Always Verify' across the Voyager P2P mesh.
     Every message must be authenticated against the owner's public key.
-    ""
+"""
 def __init__(self, owner_key: str):
         self.owner_key = owner_key
         self.verified_peers: set[str] = set()
 
     def validate_message(self, message: Dict[str, Any], signature: str, sender_id: str) -> bool:
-        ""
+"""
 Validates the authenticity and authorization of an incoming message.""
         # Phase 1: Verify cryptographic signature (using Double Ratchet later)
         if not self._verify_signature(message, signature, sender_id):
@@ -63,7 +63,7 @@ Validates the authenticity and authorization of an incoming message.""
         return True
 
     def _verify_signature(self, message: Dict[str, Any], signature: str, sender_id: str) -> bool:
-        ""
+"""
 Internal signature check logic (Rust accelerated).""
 if RUST_AVAILABLE and hasattr(rc, "verify_message_signature_rust"):
             try:

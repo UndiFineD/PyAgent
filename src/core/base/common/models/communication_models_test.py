@@ -49,21 +49,21 @@ ctx = CascadeContext(task_id="test-task")
 
     def test_depth_limit_validation(self):
 """
-Test that exceeding the depth limit raises an error.
+        Test that exceeding the depth limit raises an error.
 """
-with pytest.raises(RecursionError):
-            CascadeContext(task_id="test", cascade_depth=11, depth_limit=10)
+        with pytest.raises(RecursionError):
+        CascadeContext(task_id="test", cascade_depth=11, depth_limit=10)
 
 
     def test_failure_history_validation_schema(self):
 """
-Test that invalid entries in failure history are filtered out.
+        Test that invalid entries in failure history are filtered out.
 """
         # Pass invalid types in failure history
         bad_history = ["not-a-dict", 123, {"valid": "mostly"}]
         ctx = CascadeContext(
-            task_id="test",
-            failure_history=bad_history
+        task_id="test",
+        failure_history=bad_history
         )
         # Should be filtered to just the dict, and keys added
         assert len(ctx.failure_history) == 1
@@ -74,25 +74,25 @@ Test that invalid entries in failure history are filtered out.
 
     def test_recursive_improvement_blocking(self):
 """
-Test that recursive improvement loops are blocked.
+        Test that recursive improvement loops are blocked.
 """
-ctx = CascadeContext(task_id="root")
+        ctx = CascadeContext(task_id="root")
         # Simulate failure history with recursive improvement loops
         ctx.failure_history = [
-            {"error": "e1", "failure_type": FailureClassification.RECURSIVE_IMPROVEMENT.value},
-            {"error": "e2", "failure_type": FailureClassification.RECURSIVE_IMPROVEMENT.value}
+        {"error": "e1", "failure_type": FailureClassification.RECURSIVE_IMPROVEMENT.value},
+        {"error": "e2", "failure_type": FailureClassification.RECURSIVE_IMPROVEMENT.value}
         ]
         # Should raise RecursionError on next_level
         with pytest.raises(RecursionError) as exc:
-            ctx.next_level("agent-child")
+        ctx.next_level("agent-child")
         assert "Recursive Improvement Loop" in str(exc.value)
 
 
     def test_repeating_error_circuit_breaker(self):
 """
-Test that the circuit breaker triggers on repeating errors.
+        Test that the circuit breaker triggers on repeating errors.
 """
-ctx = CascadeContext(task_id="root")
+        ctx = CascadeContext(task_id="root")
         ctx.log_failure(stage="test", error="Same Error")
         ctx.log_failure(stage="test", error="Same Error")
         # Third time should trigger breaker

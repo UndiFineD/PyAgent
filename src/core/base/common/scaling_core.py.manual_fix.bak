@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Unified Scaling Core for PyAgent.
 Handles resource calculation, fleet expansion logic, and anti-flapping protocols.
-""
+"""
 
 """
 import math
@@ -35,19 +35,19 @@ except ImportError:
 
 
 class ScalingCore(BaseCore):
-    ""
+"""
 Core implementation for computing scaling decisions.
     Optimized for high-frequency resource monitoring.
-    ""
+"""
 def __init__(self) -> None:
-        ""
+"""
 Initialize the ScalingCore with load history.""
 super().__init__()
         self.load_history: List[float] = []
 
 
     def compute_moving_average(self, current_load: float, window_size: int = 10) -> float:
-        ""
+"""
 Compute the SMA for load balancing.""
 if rc and hasattr(rc, "compute_ma_rust"):  # pylint: disable=no-member
             return rc.compute_ma_rust(self.load_history, current_load, window_size)  # pylint: disable=no-member

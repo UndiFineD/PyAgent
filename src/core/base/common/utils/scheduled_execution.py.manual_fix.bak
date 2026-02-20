@@ -25,17 +25,17 @@ try:
 except Exception:
 
 """
-    def _empty_dict_str_any() -> dict[str, Any]:
+def _empty_dict_str_any() -> dict[str, Any]:
         return {}
 
 
 @dataclass
 class ScheduledExecution:
-    ""
+"""
 A scheduled agent execution.
 
     Simple dataclass used in tests to represent scheduled runs.
-    ""
+"""
 name: str
     cron: str  # Simplified: "hourly", "daily", "weekly", or HH:MM
     agent_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)

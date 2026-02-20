@@ -16,15 +16,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 KnowledgeTransferCore
 """
 Knowledge transfer core.py module.
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -44,7 +44,7 @@ class KnowledgeTransferCore:
     Handles merging of lesson datasets.
     
     def merge_lessons(self, current_lessons: list[Any], imported_lessons: list[Any]) -> list[Any]:
-        ""
+"""
 Merges imported lessons into the current set, avoiding duplicates.        # Normalize to dicts only
         valid_current = [lesson for lesson in current_lessons if isinstance(lesson, dict)]
         valid_imported = [lesson for lesson in imported_lessons if isinstance(lesson, dict)]
@@ -67,4 +67,4 @@ if sig not in seen_signatures:
 
         return merged
 
-""
+"""

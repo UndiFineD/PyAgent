@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import socket
+import socket
 
 try:
     import struct
@@ -39,7 +39,7 @@ except ImportError:
 
 @dataclass
 class RTPSession:
-    ""
+"""
 Represents an active RTP session for a call.    call_id: str
     local_port: int
     socket: socket.socket
@@ -73,38 +73,38 @@ class RTPServerCore:
         self.running = False
 
     async def start(self):
-        ""
+"""
 Starts the RTP listener.        self.running = True
         # Logic to listen for incoming RTP packets
         pass
 
     async def stop(self):
-        ""
+"""
 Stops the RTP listener.        self.running = False
         for session in self.sessions.values():
             session.socket.close()
         self.sessions.clear()
 
     def allocate_session(self, call_id: str) -> int:
-        ""
+"""
 Allocates a port and creates a new RTP session.        # Port allocation logic here
         return 10000  # TODO Placeholder
 
     def handle_packet(self, data: bytes, addr: Tuple[str, int]):
-        ""
-Parses and processes an incoming RTP packet.        if len(data) < self.RTP_HEADER_SIZE:
-            return
+"""
+        Parses and processes an incoming RTP packet.        if len(data) < self.RTP_HEADER_SIZE:
+        return
 
         # Simple RTP header parsing
         first_byte = data[0]
         version = (first_byte & 0xC0) >> 6
         if version != self.RTP_VERSION:
-            return
+        return
 
         payload_type = data[1] & 0x7F
         seq_num = struct.unpack("!H", data[2:4])[0]"        timestamp = struct.unpack("!I", data[4:8])[0]"        ssrc = struct.unpack("!I", data[8:12])[0]"        payload = data[self.RTP_HEADER_SIZE:]
 
         return {
-            "payload_type": payload_type,"            "seq_num": seq_num,"            "timestamp": timestamp,"            "ssrc": ssrc,"            "payload": payload"        }
+        "payload_type": payload_type,"            "seq_num": seq_num,"            "timestamp": timestamp,"            "ssrc": ssrc,"            "payload": payload"        }
 
-""
+"""

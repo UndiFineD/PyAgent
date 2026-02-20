@@ -66,6 +66,24 @@ Performs a deep grep fallback search across the workspace.        snippets = []
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

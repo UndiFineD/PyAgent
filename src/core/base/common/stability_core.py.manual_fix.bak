@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for fleet stability, health monitoring, and anomaly detection.""
 
@@ -35,7 +35,7 @@ from .base_core import BaseCore
 
 @dataclass
 class HealthStatus:
-    ""
+"""
 Status tracking for individual agents or components.""
 component_id: str
     is_alive: bool = True
@@ -47,10 +47,10 @@ component_id: str
 
 
 class StabilityCore(BaseCore):
-    ""
+"""
 Standardized logic for fleet stability, health monitoring, and anomaly detection.
     Inherits from BaseCore for lifecycle and persistence.
-    ""
+"""
 def __init__(self, name: str = "StabilityCore", repo_root: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=repo_root)
         self.timeout_seconds: float = 30.0
@@ -58,7 +58,7 @@ def __init__(self, name: str = "StabilityCore", repo_root: Optional[str] = None)
         self.health_registry: Dict[str, HealthStatus] = {}
 
     def update_status(self, component_id: str, latency: float = 0.0, error: bool = False, **metrics) -> bool:
-        ""
+"""
 Updates internal status for a component.""
 now = time.time()
         if component_id not in self.health_registry:
@@ -79,7 +79,7 @@ now = time.time()
 
 
     def detect_failures(self) -> List[str]:
-        ""
+"""
 Returns a list of IDs that are considered failed.""
 now = time.time()
 

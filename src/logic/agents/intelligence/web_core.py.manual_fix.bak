@@ -28,7 +28,6 @@ links = WebCore.extract_links(html_string, base_url="https://example.com")"# bac
 cleaned_static = WebCore.clean_html_static(html_string)
 
 """
-
 WHAT IT DOES:
 - Provides a pure-logic WebCore class that strips scripts, styles, navigation/header/footer elements and collapses whitespace to produce cleaned text.
 - Extracts anchor hrefs and resolves them to absolute URLs when a base_url is provided.
@@ -47,7 +46,7 @@ FILE CONTENT SUMMARY:
 WebCore logic for PyAgent.
 Pure logic for cleaning and processing web content.
 No I/O or side effects.
-""
+"""
 from bs4 import BeautifulSoup
 
 from src.core.base.lifecycle.version import VERSION
@@ -171,4 +170,4 @@ Extracts all absolute links from HTML content.        import urllib.parse
             links.append(href)
         return list(set(links))
 
-""
+"""

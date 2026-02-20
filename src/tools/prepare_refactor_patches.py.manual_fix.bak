@@ -20,13 +20,12 @@ from __future__ import annotations
 Generate prioritized bandit report and prepare AST-based refactor patch proposals.
 
 """
-
 Produces:
 - .external/static_checks/bandit_report.md  (summary, prioritized)
 - .external/patches/<sanitized_filename>.patch  (human-review patch proposals)
 
 This script does NOT apply patches; it only writes suggestions for reviewers.
-""
+"""
 import json
 from pathlib import Path
 import re
@@ -36,23 +35,23 @@ BANDIT_JSON = ROOT / '.external' / 'static_checks' / 'bandit.json''OUT_DIR = ROO
 SEVERITY_WEIGHT = {'LOW': 1, 'MEDIUM': 5, 'HIGH': 10}
 
 def sanitize_name(p: Path) -> str:
-    ""
+"""
 Sanitize a path to be a valid filename.    s = str(p).replace(':', '').replace('\\', '_').replace('/', '_')'    s = re.sub(r'[^0-9A-Za-z_.-]', '_', s)'    return s
 
 
 def load_bandit() -> dict:
-    ""
+"""
 Load the Bandit JSON report.    if not BANDIT_JSON.exists():
         raise FileNotFoundError(f"{BANDIT_JSON} not found")"    return json.loads(BANDIT_JSON.read_text(encoding='utf-8'))
 
 def aggregate(results: dict) -> dict:
-    ""
+"""
 Aggregate Bandit results by file.    files: dict[str, dict] = {}
     for r in results.get('results', []):'        fn = r.get('filename')'        sev = r.get('issue_severity', 'LOW').upper()'        test = r.get('test_name')'        lineno = r.get('line_number')'        text = r.get('issue_text')'        files.setdefault(fn, {'count': 0, 'score': 0, 'findings': []})'        files[fn]['count'] += 1'        files[fn]['score'] += SEVERITY_WEIGHT.get(sev, 1)'        files[fn]['findings'].append({'severity': sev, 'test': test, 'line': lineno, 'text': text})'    return files
 
 
 def make_report(agg: dict, top_n: int = 50) -> None:
-    ""
+"""
 Generate a Markdown report from aggregated Bandit results.    OUT_DIR.mkdir(parents=True, exist_ok=True)
     PATCH_DIR.mkdir(parents=True, exist_ok=True)
     entries = sorted(agg.items(), key=lambda kv: kv[1]['score'], reverse=True)'    report = ["# Bandit Prioritized Report\\n"]"    report.append(f"Generated patches directory: {PATCH_DIR}\\n")"    report.append("\\n## Top files by score\\n")"    for i, (fn, meta) in enumerate(entries[:top_n], 1):
@@ -62,7 +61,7 @@ Generate a Markdown report from aggregated Bandit results.    OUT_DIR.mkdir(pare
             report.append(f"- Patch creation failed: {e}\\n")"    out = OUT_DIR / 'bandit_report.md''    out.write_text('\\n'.join(report), encoding='utf-8')
 
 def create_patch_proposal(filename: str, findings: list[dict]) -> None:
-    ""
+"""
 Create a patch proposal for the given file based on Bandit findings.    p = Path(filename)
     if not p.exists():
         # skip if file not present in workspace (bandit referenced external path)
@@ -84,7 +83,7 @@ Create a patch proposal for the given file based on Bandit findings.    p = Path
                 patches.append(f" {orig}")"    outp = PATCH_DIR / f"{sanitize_name(p)}.patch""    outp.write_text('\\n'.join(patches), encoding='utf-8')
 
 def suggest_replacement(line: str) -> str:
-    ""
+"""
 Suggest a conservative replacement for a potentially unsafe line of code.    # naive heuristics: detect eval/exec/compile or import of banned modules
     s = line.strip()
     if re.search(r"\\beval\\s*\(", s) or re.search(r"\\bexec\\s*\(", s):"        return "raise RuntimeError('Refactor required: remove eval/exec; see .external/patches')""
@@ -93,7 +92,7 @@ if re.match(r"from\\s+\\w+\\s+import|import\\s+\\w+", s):"        # comment out 
     return s + "  # TODO: review this line for safety"
 
 def main() -> int:
-    ""
+"""
 Main entry point for preparing refactor patches.    data = load_bandit()
     agg = aggregate(data)
     make_report(agg)

@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import os
+import os
 
 try:
     import sys
@@ -75,12 +75,12 @@ def process_file(file_path, code_content, model_key, model_variant, input_dir, o
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 print(colored(f"[+] Scanning {file_path} with model {model_key}...", "cyan"))
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 result = scan_code(api_keys[model_key], model_variant, instruction, code_content)""""
 html_result = markdown.markdown(result)
 
@@ -90,9 +90,9 @@ html_result = markdown.markdown(result)
     os.makedirs(output_file_dir, exist_ok=True)
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 markdown_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}.md"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 html_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}.html"  # [BATCHFIX] closed string
     markdown_path = os.path.join(output_file_dir, markdown_filename)
     html_path = os.path.join(output_file_dir, html_filename)
@@ -104,7 +104,7 @@ html_filename = f"{os.path.splitext(os.path.basename(file_path))[0]}.html"  # [B
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 print(colored(f"[] Report saved to {markdown_path} and {html_path}", "green"))"    return file_path, markdown_path, html_path
 
 
@@ -113,7 +113,7 @@ def process_and_generate_reports(all_pathes, model_key, model_variant, input_dir
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 files_to_process = []""""
 for path in all_pathes:
         if os.path.exists(path):
@@ -123,7 +123,7 @@ for path in all_pathes:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 futures = []""""
 for file_path, code_content in files_to_process:
 # [BATCHFIX] Commented metadata/non-Python
@@ -139,7 +139,7 @@ for file_path, code_content in files_to_process:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 print(colored(f"[] Index file created at {os.path.join(output_dir, 'index.html')}", "green"))
 
 def main():
@@ -167,11 +167,11 @@ def main():
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 print(colored(f"[!] Invalid model key: {model_key}", "red"))"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 print(colored(f"[!] Available model keys are: {get_available_models()}", "yellow"))"        sys.exit(1)
 
     os.makedirs(output_dir, exist_ok=True)
@@ -179,7 +179,7 @@ print(colored(f"[!] Available model keys are: {get_available_models()}", "yellow
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 model_variant = list(Models[model_key].values())[0]""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -189,7 +189,7 @@ model_variant = list(Models[model_key].values())[0]""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 all_pathes = []""""
 all_pathes.append(manifest_path)
     all_pathes.append(strings_path)

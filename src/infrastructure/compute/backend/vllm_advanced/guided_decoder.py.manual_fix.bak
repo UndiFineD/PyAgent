@@ -18,7 +18,6 @@
 Facade for GuidedDecoder.
 
 """
-
 try:
     from .guided import (ChoiceConstraint, GuidedConfig, GuidedDecoder, GuidedMode,
 except ImportError:

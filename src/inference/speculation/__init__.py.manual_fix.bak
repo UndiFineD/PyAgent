@@ -18,7 +18,6 @@
 Speculation module for accelerated LLM inference.
 
 """
-
 Provides speculative decoding implementations for faster token generation.
 
 try:

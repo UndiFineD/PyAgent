@@ -13,14 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Individual KV cache managers for different attention types.
 # SPDX-License-Identifier: Apache-2.0
 try:
 
 """
-    from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -49,7 +49,7 @@ except ImportError:
 
 
 class SingleTypeKVCacheManager(ABC):
-    ""
+"""
 Abstract base for single-type KV cache management.
     def __init__(self, spec: CacheGroupSpec, block_pool: BlockPool) -> None:
         self.spec = spec
@@ -58,10 +58,10 @@ Abstract base for single-type KV cache management.
 
     @abstractmethod
     def get_num_blocks_needed(self, num_tokens: int) -> int:
-        ""
+"""
 Calculate number of blocks needed for a given sequence length.
     def allocate(self, request_id: str, num_tokens: int) -> List[KVCacheBlock]:
-        ""
+"""
 Allocate new blocks if needed for a specific request.        num_blocks = self.get_num_blocks_needed(num_tokens)
         current = len(self.request_blocks.get(request_id, []))
         needed = num_blocks - current
@@ -74,31 +74,31 @@ Allocate new blocks if needed for a specific request.        num_blocks = self.g
         return new_blocks
 
     def free(self, request_id: str) -> None:
-        ""
+"""
 Release all blocks associated with a request back to the pool.        blocks = self.request_blocks.pop(request_id, [])
         for block in blocks:
             self.block_pool.free(block)
 
     def get_blocks(self, request_id: str) -> List[KVCacheBlock]:
-        ""
+"""
 Get the list of blocks allocated for a request.        return self.request_blocks.get(request_id, [])
 
 
 
 class FullAttentionManager(SingleTypeKVCacheManager):
-    ""
+"""
 Manager for full (standard) causal attention KV cache.
     def get_num_blocks_needed(self, num_tokens: int) -> int:
-        ""
+"""
 Blocks needed for standard linear sequence length.        return ceil(num_tokens / self.spec.block_size)
 
 
 
 class SlidingWindowManager(SingleTypeKVCacheManager):
-    ""
+"""
 Manager for sliding window attention KV cache.
     def get_num_blocks_needed(self, num_tokens: int) -> int:
-        ""
+"""
 Blocks needed considering the sliding window constraint.        window = self.spec.sliding_window or num_tokens
         effective_tokens = min(num_tokens, window)
         return ceil(effective_tokens / self.spec.block_size)
@@ -106,8 +106,8 @@ Blocks needed considering the sliding window constraint.        window = self.sp
 
 
 class CrossAttentionManager(SingleTypeKVCacheManager):
-    ""
+"""
 Manager for cross-attention KV cache (fixed length prompt/encoder).
     def get_num_blocks_needed(self, num_tokens: int) -> int:
-        ""
+"""
 Blocks needed for encoder sequence length.        return ceil(num_tokens / self.spec.block_size)

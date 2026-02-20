@@ -78,23 +78,23 @@ def __init__(self, config: Optional[Dict[str, Any]] = None):
 
     def _ensure_initialized(self):
 """
-Lazy initialization of TTS model.""
-if self._initialized:
-            return
+        Lazy initialization of TTS model.""
+        if self._initialized:
+        return
 
         try:
-            # Import Coqui TTS (inspired by their API)
-            from TTS.api import TTS as CoquiTTS
+        # Import Coqui TTS (inspired by their API)
+        from TTS.api import TTS as CoquiTTS
 
-            model_name = self.config.get("model_name", "tts_models/en/ljspeech/tacotron2-DDC")"            self._tts = CoquiTTS(model_name)
+        model_name = self.config.get("model_name", "tts_models/en/ljspeech/tacotron2-DDC")"            self._tts = CoquiTTS(model_name)
 
-            self._initialized = True
-            self.logger.info(f"Initialized Coqui TTS with model: {model_name}")
+        self._initialized = True
+        self.logger.info(f"Initialized Coqui TTS with model: {model_name}")
         except ImportError:
-            self.logger.warning("Coqui TTS not available. Install with: pip install coqui-tts")"            # Fallback to mock implementation
-            self._tts = None
+        self.logger.warning("Coqui TTS not available. Install with: pip install coqui-tts")"            # Fallback to mock implementation
+        self._tts = None
         except Exception as e:
-            self.logger.error(f"Failed to initialize Coqui TTS: {e}")"            self._tts = None
+        self.logger.error(f"Failed to initialize Coqui TTS: {e}")"            self._tts = None
 
     def synthesize(
         self,
@@ -191,8 +191,8 @@ def __init__(self, default_engine: str = "coqui"):"        self.engines: Dict[st
         self.register_engine("coqui", CoquiTTSEngine())
     def register_engine(self, name: str, engine: TTSEngine):
 """
-Register a TTS engine.""
-self.engines[name] = engine
+        Register a TTS engine.""
+        self.engines[name] = engine
         self.logger.info(f"Registered TTS engine: {name}")
     def synthesize(
         self,
@@ -293,5 +293,23 @@ service = TTSService()
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
 
 """

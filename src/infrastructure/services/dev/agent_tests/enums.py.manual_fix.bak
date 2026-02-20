@@ -17,12 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Enums for test agent functionality.
 
 """
-
 try:
     from enum import Enum
 except ImportError:
@@ -40,7 +39,7 @@ __version__ = VERSION
 
 
 class TestPriority(Enum):
-    ""
+"""
 Test priority levels.
 
     __test__ = False
@@ -57,7 +56,7 @@ Test priority levels.
 
 
 class TestStatus(Enum):
-    ""
+"""
 Test execution status.
     __test__ = False
 
@@ -66,32 +65,32 @@ Test execution status.
 
 
 class CoverageType(Enum):
-    ""
+"""
 Types of coverage to track.
     LINE = "line""    BRANCH = "branch""    FUNCTION = "function""    CLASS = "class""
 
 
 class BrowserType(Enum):
-    ""
+"""
 Browser types for cross-browser testing.
     CHROME = "chrome""    FIREFOX = "firefox""    SAFARI = "safari"
     EDGE = "edge""    IE = "ie""
 
 
 class TestSourceType(Enum):
-    ""
+"""
 Types of test result sources for aggregation.
     __test__ = False
     PYTEST = "pytest""    UNITTEST = "unittest""    JEST = "jest""    MOCHA = "mocha""    JUNIT = "junit"
 
 
 class MutationOperator(Enum):
-    ""
+"""
 Mutation operators for mutation testing.
     ARITHMETIC = "arithmetic""    RELATIONAL = "relational""    LOGICAL = "logical""    ASSIGNMENT = "assignment""    RETURN_VALUE = "return_value"
 
 
 class ExecutionMode(Enum):
-    ""
+"""
 Test execution replay modes.
     STEP_BY_STEP = "step_by_step""    FULL_REPLAY = "full_replay""    BREAKPOINT = "breakpoint"

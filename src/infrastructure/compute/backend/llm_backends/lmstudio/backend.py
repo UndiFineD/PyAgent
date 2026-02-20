@@ -192,23 +192,23 @@ Internal shim for HTTP-based LLM access when SDK is unavailable.
 
                     def respond(self, chat, _config=None):
 """
-Respond using HTTP fallback.                        # Use the backend's _http_chat_request method'                        return self._backend._http_chat_request(
-                            chat, self._model_id)  # pylint: disable=protected-access
+                        Respond using HTTP fallback.                        # Use the backend's _http_chat_request method'                        return self._backend._http_chat_request(
+                        chat, self._model_id)  # pylint: disable=protected-access
 
-                fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
-                if self.config.cache_models:
-                    self._model_cache.set(cache_key, fallback_llm)
+                        fallback_llm = _HTTPFallbackLLM(self, model or self.config.default_model)
+                        if self.config.cache_models:
+                        self._model_cache.set(cache_key, fallback_llm)
 
-                try:
-                    self._update_status(self.PROVIDER_ID, True)
-                except Exception:  # pylint: disable=broad-exception-caught
-                    pass
+                        try:
+                        self._update_status(self.PROVIDER_ID, True)
+                        except Exception:  # pylint: disable=broad-exception-caught
+                        pass
 
-                return fallback_llm
-        except Exception:  # pylint: disable=broad-exception-caught
-            pass
+                        return fallback_llm
+                        except Exception:  # pylint: disable=broad-exception-caught
+                        pass
 
-        raise RuntimeError(f"Failed to get model '{model}'")
+                        raise RuntimeError(f"Failed to get model '{model}'")
     def _extract_prompt_from_chat(self, chat: Any) -> str:
 """
 Extract prompt string from Chat object.""""
@@ -414,5 +414,23 @@ Get backend information, including REST API version and server details.        l
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
 
 """

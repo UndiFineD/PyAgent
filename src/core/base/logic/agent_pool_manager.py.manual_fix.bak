@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Minimal Agent Pool Manager used by tests.""
 
@@ -85,7 +85,7 @@ class AgentPoolManager:
             logger.exception("Failed to save manifest")
 
     def get_pool_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Get statistics about the agent pool""
 success_rates = [m.success_rate for m in self.agent_pool.values()]
         avg_success = sum(success_rates) / len(success_rates) if success_rates else 0.0

@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from typing import Dict, Any
+from typing import Dict, Any
 
 
 
@@ -26,7 +26,7 @@ except ImportError:
 class MessengerIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""
+"""
 Handles discovery and OSINT for messenger platforms (Telegram, Discord, etc.).#     Ported logic from various Telegram OSINT tools.
 
 # [BATCHFIX] Commented metadata/non-Python
@@ -34,12 +34,12 @@ Handles discovery and OSINT for messenger platforms (Telegram, Discord, etc.).# 
 # [BATCHFIX] Commented metadata/non-Python
 """ #     TELEGRAM_URL_PATTERN = rhttps?://t\\.me/([a-zA-Z0-9_]{5,})"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 TELEGRAM_BOT_TOKEN_PATTERN = r"\\\\d{7,10}:[a-zA-Z0-9_-]{35}"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_telegram_recon_endpoints(self, username: str) -> Dict[str, str]:"Returns public Telegram endpoints for OSINT.        return {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -48,7 +48,7 @@ def get_telegram_recon_endpoints(self, username: str) -> Dict[str, str]:"Returns
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_discord_patterns(self) -> Dict[str, str]:"Returns patterns for Discord OSINT.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #        " return {"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -63,7 +63,7 @@ def get_discord_patterns(self) -> Dict[str, str]:"Returns patterns for Discord O
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_telegram_nearby_params(self) -> Dict[str, Any]:"Parameters for Telegram 'People Nearby' exploitation (trilateration).'# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #     "    return {"  # [BATCHFIX] closed string"            "method": "messages.getNearbyUsers","# [BATCHFIX] Commented metadata/non-Python
@@ -80,4 +80,4 @@ def get_telegram_nearby_params(self) -> Dict[str, Any]:"Parameters for Telegram 
 """"
 Generates a command to verify a Telegram bot token.#         return fcurl -s https://api.telegram.org/bot{token}/getMe
 
-""
+"""

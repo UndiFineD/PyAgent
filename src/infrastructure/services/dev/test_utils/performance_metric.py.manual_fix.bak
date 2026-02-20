@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import time
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 @dataclass
 class PerformanceMetric:
-    ""
+"""
 Performance metric from test execution.""""
 Attributes:
         metric_type: Type of metric.

@@ -37,4 +37,4 @@ class DummyTokenizer:
             return text.split()
         def decode(self, tokens):
             return " ".join(tokens)
-    return DummyTokenizer()
+            return DummyTokenizer()

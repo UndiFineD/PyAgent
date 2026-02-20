@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-""
+"""
 Minimal C2 framework core used by tests.
 
 Provides lightweight enums and dataclasses matching test imports.
-""
+"""
+from __future__ import annotations
 
 
 

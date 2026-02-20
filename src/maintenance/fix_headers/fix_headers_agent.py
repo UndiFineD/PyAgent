@@ -29,7 +29,7 @@ Agent for fixing and standardizing license headers in Python files.
 
     def __init__(self, dry_run: bool = False, verbose: bool = False):
 """
-self.dry_run = dry_run
+        self.dry_run = dry_run
         self.verbose = verbose
         self.files_processed = 0
         self.files_updated = 0

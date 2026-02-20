@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Menu Bar component for the PyAgent GUI.
 
 """
-
 try:
     import tkinter
 except ImportError:
@@ -49,7 +48,7 @@ __version__ = VERSION
 
 
 class AppMenu:
-    ""
+"""
 Handles the creation and command routing for the application menu bar.
 
     def __init__(self, master, callbacks) -> None:

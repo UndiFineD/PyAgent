@@ -13,11 +13,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Unified Model Provider Registry.
 Simple, minimal provider registry used for tests and bootstrapping.
-""
+"""
 
 """
 from typing import Dict, List, TypedDict
@@ -33,7 +33,7 @@ class ModelSpec(TypedDict):
 
 
 class ProviderRegistry:
-    ""
+"""
 Central repository for model provider identifiers and simple catalog.""
 OPENAI = "openai"
     ANTHROPIC = "anthropic"
@@ -50,7 +50,7 @@ OPENAI = "openai"
 
     @staticmethod
     def get_all_models() -> Dict[str, ModelSpec]:
-        ""
+"""
 Return a small sample catalog of models for tests.""
 return {
             "gpt-4-turbo": {

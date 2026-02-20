@@ -20,9 +20,8 @@ from __future__ import annotations
 Groq cloud provider connector.
 
 """
-
 Provides integration with Groq's ultra-fast inference API,'optimized for low-latency LLM inference.
-""
+"""
 import logging
 import os
 import time
@@ -73,23 +72,23 @@ class GroqConnector(CloudProviderBase):
         self._client = None
 
     def _get_client(self):
-        ""
-Lazy initialization of the OpenAI async client.        if self._client is None:
-            from openai import AsyncOpenAI
-            self._client = AsyncOpenAI(
-                api_key=self._api_key,
-                base_url=self._base_url,
-                timeout=self._timeout
-            )
+"""
+        Lazy initialization of the OpenAI async client.        if self._client is None:
+        from openai import AsyncOpenAI
+        self._client = AsyncOpenAI(
+        api_key=self._api_key,
+        base_url=self._base_url,
+        timeout=self._timeout
+        )
         return self._client
 
-    @property
+        @property
     def name(self) -> str:
-        ""
+"""
 Return provider name.        return "Groq"
     @property
     def available_models(self) -> List[str]:
-        ""
+"""
 Return list of available Groq models.        return [
             # Llama 3.1 models
             "llama-3.1-405b-reasoning","            "llama-3.1-70b-versatile","            "llama-3.1-8b-instant","            # Llama 3 Groq tool use models

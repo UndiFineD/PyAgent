@@ -26,7 +26,6 @@ USAGE:
 - Intended to be used interactively by other agents or via CLI wrappers that orchestrate git operations and generate review reports.
 
 """
-
 WHAT IT DOES:
 - Analyzes git diffs vs a target branch and builds a concise Markdown PR summary including impacted files and stats.
 - Summarizes recent commit history into a readable block and exposes tools for branch creation while respecting agent config.
@@ -162,7 +161,25 @@ Self-Review: Analyzes staged changes for security, style, and" logic issues.    
 #         "Analyzes specific changes if provided in the prompt."        _ = prompt, target_file
         return self.get_diff_summary()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

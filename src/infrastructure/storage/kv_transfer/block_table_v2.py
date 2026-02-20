@@ -178,16 +178,16 @@ class BlockTable:
 
         # Handle hybrid block sizes
         if config.kernel_block_size == config.block_size:
-            self.block_size = config.block_size
-            self.blocks_per_kv_block = 1
-            self.use_hybrid_blocks = False
+        self.block_size = config.block_size
+        self.blocks_per_kv_block = 1
+        self.use_hybrid_blocks = False
         else:
-            if config.block_size % config.kernel_block_size != 0:
-                raise ValueError(
-                    f"kernel_block_size {config.kernel_block_size} must divide block_size {config.block_size} evenly""                )
-            self.block_size = config.kernel_block_size
-            self.blocks_per_kv_block = config.block_size // config.kernel_block_size
-            self.use_hybrid_blocks = True
+        if config.block_size % config.kernel_block_size != 0:
+        raise ValueError(
+        f"kernel_block_size {config.kernel_block_size} must divide block_size {config.block_size} evenly""                )
+        self.block_size = config.kernel_block_size
+        self.blocks_per_kv_block = config.block_size // config.kernel_block_size
+        self.use_hybrid_blocks = True
 
         self.max_num_blocks_per_req = config.max_num_blocks_per_req * self.blocks_per_kv_block
 
@@ -200,9 +200,9 @@ class BlockTable:
         self.slot_mapping = CpuGpuBuffer((config.max_num_batched_tokens,), dtype="int64")
         # Kernel block arange regarding hybrid blocks
         if self.use_hybrid_blocks:
-            self._kernel_block_arange = list(range(self.blocks_per_kv_block))
+        self._kernel_block_arange = list(range(self.blocks_per_kv_block))
         else:
-            self._kernel_block_arange = None
+        self._kernel_block_arange = None
 
         # Parallel processing state
         self.pcp_world_size = 1
@@ -226,19 +226,19 @@ class BlockTable:
             def _append_block(item):
                 i, block_id = item
                 if current_num + i >= self.max_num_blocks_per_req:
-                    return
+                return
 
                 if self.use_hybrid_blocks:
-                    def set_inner(j: int) -> None:
-                        val = block_id * self.blocks_per_kv_block + j
-                        self.block_table.set(row_idx, current_num + i, val)
+                def set_inner(j: int) -> None:
+                val = block_id * self.blocks_per_kv_block + j
+                self.block_table.set(row_idx, current_num + i, val)
 
-                    list(map(set_inner, range(self.blocks_per_kv_block)))
+                list(map(set_inner, range(self.blocks_per_kv_block)))
                 else:
-                    self.block_table.set(row_idx, current_num + i, block_id)
+                self.block_table.set(row_idx, current_num + i, block_id)
 
-            list(map(_append_block, enumerate(block_ids)))
-            self._num_blocks_per_row[row_idx] = current_num + len(block_ids)
+                list(map(_append_block, enumerate(block_ids)))
+                self._num_blocks_per_row[row_idx] = current_num + len(block_ids)
 
     def get_row(self, row_idx: int) -> list[int]:
 """
@@ -268,7 +268,7 @@ Clear a row.        with self._lock:
             off = pos % self.block_size
             return blocks[b_idx] * self.block_size + off if b_idx < len(blocks) else -1
 
-        return list(map(_get_slot, range(num_tokens)))
+            return list(map(_get_slot, range(num_tokens)))
 
     def update_slot_mapping(self, token_positions: list[tuple[int, int, int]]) -> None:
                 Update slot mapping regarding multiple tokens.
@@ -279,7 +279,7 @@ Clear a row.        with self._lock:
             def _update_single(item):
                 t_idx, r_idx, pos = item
                 self.slot_mapping.set(0, t_idx, self._compute_single_slot(r_idx, pos))
-            list(map(_update_single, token_positions))
+                list(map(_update_single, token_positions))
 
     def _compute_single_slot(self, row_idx: int, position: int) -> int:
 """
@@ -359,10 +359,10 @@ Convert row to dense representation.        with self._lock:
             def _fill_dense(item):
                 idx, bid = item
                 if idx < max_blocks:
-                    result[idx] = bid
+                result[idx] = bid
 
-            list(map(_fill_dense, row_data.items()))
-            return result
+                list(map(_fill_dense, row_data.items()))
+                return result
 
 
 
@@ -404,14 +404,14 @@ Allocate blocks with optional prediction.        with self._lock:
             def _mark_allocated(bid):
                 self._allocated[bid] = BlockInfo(block_id=bid, ref_count=1, is_allocated=True)
 
-            list(map(_mark_allocated, allocated))
+                list(map(_mark_allocated, allocated))
 
-            # Track regarding prediction
-            if request_id not in self._last_allocations:
+                # Track regarding prediction
+                if request_id not in self._last_allocations:
                 self._last_allocations[request_id] = []
-            self._last_allocations[request_id].append(num_blocks)
+                self._last_allocations[request_id].append(num_blocks)
 
-            return allocated
+                return allocated
 
     def free(self, block_ids: list[int]) -> None:
 """
@@ -419,10 +419,10 @@ Free blocks.        with self._lock:
 
             def _do_free(bid):
                 if bid in self._allocated:
-                    del self._allocated[bid]
-                    self._free_blocks.append(bid)
+                del self._allocated[bid]
+                self._free_blocks.append(bid)
 
-            list(map(_do_free, block_ids))
+                list(map(_do_free, block_ids))
 
     def _predict_future_need(self, request_id: str) -> int:
 """
@@ -492,12 +492,12 @@ class BlockTableV2:
 
         # Predictive allocator
         self.allocator = (
-            PredictiveBlockAllocator(
-                total_blocks=1000,  # Default
-                block_size=config.block_size,
-            )
-            if use_prediction
-            else None
+        PredictiveBlockAllocator(
+        total_blocks=1000,  # Default
+        block_size=config.block_size,
+        )
+        if use_prediction
+        else None
         )
 
         # Statistics

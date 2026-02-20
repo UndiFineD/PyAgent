@@ -1,9 +1,9 @@
-from __future__ import annotations
 """
 Parser-safe ConvergenceCore stub.
 
 Minimal compatibility facade while the convergence core is repaired.
 """
+from __future__ import annotations
 
 
 

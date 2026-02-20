@@ -17,17 +17,17 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 FleetRoutingMixin 
 """
 - Mixin for task routing and remote node registration in FleetManager.
 Fleet routing mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -67,12 +67,12 @@ class FleetRoutingMixin:
 
 
     async def call_by_capability(self: FleetManager, goal: str, **kwargs: Any) -> str:
-        ""
+"""
 Finds an agent with the required capability and executes it with RL optimization.""
 return await self.routing_core.call_by_capability(goal, **kwargs)
 
 
     def route_task(self: FleetManager, task_type: str, task_data: Any) -> str:
-        ""
+"""
 Routes tasks based on system load and hardware availability (Phase 126).""
 return self.routing_core.route_task(task_type, task_data)

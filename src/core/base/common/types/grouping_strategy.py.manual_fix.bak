@@ -14,11 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Parser-safe stub for GroupingStrategy.""
 
-"""
+""
 from enum import Enum
 
 

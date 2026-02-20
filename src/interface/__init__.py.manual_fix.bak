@@ -16,15 +16,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Interface package - User Space Components
 
 """
-
 This package provides backward compatibility imports for user space components
 that have been moved to src/userspace/ for better architectural separation.
-""
+"""
 try:
     from .core.base.lifecycle.version import VERSION as VERSION
 except ImportError:

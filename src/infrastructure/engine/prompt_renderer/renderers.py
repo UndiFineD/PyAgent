@@ -201,6 +201,24 @@ Find image TODO Placeholder positions in text.        patterns = ["<image>", "[I
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

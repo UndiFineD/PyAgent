@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_coder.py
-""
+"""
 
 """
 from dataclasses import dataclass
@@ -36,7 +36,7 @@ __version__ = VERSION
 
 @dataclass
 class ColorContrastResult:
-    ""
+"""
 Result of color contrast analysis.
     Attributes:
         foreground: Foreground color (hex).
@@ -46,7 +46,7 @@ Result of color contrast analysis.
         passes_aaa: Whether it passes WCAG AAA.
         min_ratio_aa: Minimum required ratio for AA.
         min_ratio_aaa: Minimum required ratio for AAA.
-    ""
+"""
 foreground: str
     background: str
     contrast_ratio: float

@@ -14,14 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Graph store.py module.
-""
+"""
 try:
 
 """
-    import hashlib
+import hashlib
 except ImportError:
     import hashlib
 
@@ -53,11 +53,11 @@ __version__ = VERSION
 
 
 class GraphKnowledgeStore(KnowledgeStore):
-    ""
+"""
 Sharded Graph storage for relational and ontological knowledge.
     Scales to trillions of triples by sharding nodes across the filesystem.
     Utilization of MemoryCore for standardized backend.
-    ""
+"""
 def _hash_node(self, node_id: str) -> str:
         return hashlib.md5(node_id.encode()).hexdigest()
 

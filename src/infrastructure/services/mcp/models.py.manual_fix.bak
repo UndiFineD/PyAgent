@@ -21,11 +21,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 MCP-related data models and enums.
-""
+"""
 try:
 
 """
-    import json
+import json
 except ImportError:
     import json
 
@@ -58,25 +58,25 @@ except ImportError:
 
 
 class MCPServerType(Enum):
-    ""
+"""
 MCP server connection types.
     SSE = "sse"  # Server-Sent Events"    STDIO = "stdio"  # Standard I/O"    WEBSOCKET = "websocket""    HTTP = "http""    LOCAL = "local"  # In-process
 
 
 class ToolStatus(Enum):
-    ""
+"""
 Tool execution status.
     PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""    TIMEOUT = "timeout""
 
 
 class SessionState(Enum):
-    ""
+"""
 MCP session state.
     DISCONNECTED = "disconnected""    CONNECTING = "connecting""    CONNECTED = "connected""    READY = "ready""    ERROR = "error""    CLOSING = "closing""
 
 @dataclass
 class MCPServerConfig:
-    ""
+"""
 MCP server configuration.
     name: str
     server_type: MCPServerType
@@ -97,7 +97,7 @@ MCP server configuration.
 
 @dataclass
 class ToolSchema:
-    ""
+"""
 Tool schema definition.
     name: str
     description: str
@@ -110,7 +110,7 @@ Tool schema definition.
     is_async: bool = True
 
     def to_openai_format(self) -> Dict[str, Any]:
-        ""
+"""
 Convert to OpenAI tool format.        return {
             "type": "function","            "function": {"                "name": self.full_name,"                "description": self.description,"                "parameters": {"                    "type": "object","                    "properties": self.parameters,"                    "required": self.required,"                },
             },
@@ -118,7 +118,7 @@ Convert to OpenAI tool format.        return {
 
     @property
     def full_name(self) -> str:
-        ""
+"""
 Get namespaced tool name.        if self.namespace:
             return f"{self.namespace}__{self.name}""        return self.name
 
@@ -129,7 +129,7 @@ Get namespaced tool name.        if self.namespace:
 
 @dataclass
 class ToolCall:
-    ""
+"""
 Tool call request.
     id: str
     name: str
@@ -150,7 +150,7 @@ Parse from OpenAI format.        func = data.get("function", {})"        args = 
 
 @dataclass
 class ToolResult:
-    ""
+"""
 Tool execution result.
     call_id: str
     name: str
@@ -161,7 +161,7 @@ Tool execution result.
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_openai_format(self) -> Dict[str, Any]:
-        ""
+"""
 Convert to OpenAI tool result format.        content = ""
 if self.status == ToolStatus.COMPLETED:
             if isinstance(self.result, str):
@@ -180,7 +180,7 @@ if self.status == ToolStatus.COMPLETED:
 
 @dataclass
 class MCPSession:
-    ""
+"""
 MCP session information.
     session_id: str
     server_name: str
@@ -202,6 +202,24 @@ MCP session information.
             return 0.0
         return time.time() - self.connected_at
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

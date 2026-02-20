@@ -34,17 +34,17 @@ Allow configurable max_iterations (currently fixed to 1), improve fine-grained e
 
 FILE CONTENT SUMMARY:
 ExecIterationMixin module.
-""
+"""
 import logging
 from pathlib import Path
 
 
 
 class ExecIterationMixin:
-    ""
+"""
 Mixin for processing individual files and iterations.
     def _perform_iteration(self, code_file: Path) -> bool:
-        ""
+"""
 Perform one iteration of improvements on the code file.        changes_made = False
         if not getattr(self, "skip_code_update", False):"            if hasattr(self, "run_tests"):"                self.run_tests(code_file)
         # Update Errors, Improvements
@@ -57,7 +57,7 @@ Perform one iteration of improvements on the code file.        changes_made = Fa
 
 
     def process_file(self, code_file: Path) -> None:
-        ""
+"""
 Process a single code file through the improvement loop.        if hasattr(self, "shutdown_handler") and not self.shutdown_handler.should_continue():"            logging.info(f"Skipping {code_file.name} due to shutdown request")"            return
 
         if hasattr(self, "lock_manager"):"            lock = self.lock_manager.acquire_lock(code_file)

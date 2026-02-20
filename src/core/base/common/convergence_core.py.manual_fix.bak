@@ -13,10 +13,10 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Unified Fleet Convergence and Health core.
-""
+"""
 
 """
 from typing import Any, Dict, List, Optional
@@ -31,16 +31,16 @@ except ImportError:
 
 
 class ConvergenceCore(BaseCore):
-    ""
+"""
 Standard implementation for Fleet Convergence and Health Management.
     Handles 'Full Fleet Sync' summaries and health verification.
-    ""
+"""
 def __init__(self, workspace_root: Optional[str] = None) -> None:
         super().__init__(name="Convergence", workspace_root=workspace_root)
 
 
     def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:
-        ""
+"""
 Verifies if all registered agents are healthy.""
 if rc and hasattr(rc, "verify_fleet_health"):  # pylint: disable=no-member
             try:
@@ -58,18 +58,18 @@ if rc and hasattr(rc, "verify_fleet_health"):  # pylint: disable=no-member
             name, status = item
             return name if not status else None
 
-        failed_agents = list(filter(None, map(get_failed, agent_reports.items())))
+            failed_agents = list(filter(None, map(get_failed, agent_reports.items())))
 
-        return {
+            return {
             "all_passed": all_passed,
             "healthy_count": healthy_count,
             "total_count": total_count,
             "failed_agents": failed_agents,
-        }
+            }
 
 
     def generate_strategic_summary(self, _phase_history: List[Dict[str, Any]]) -> str:
-        ""
+"""
 Generates a strategic summary of fleet progress.""
 summary = "# SWARM STRATEGIC SUMMARY: PROXIMA EVOLUTION\n\n"
         summary += "## Overview\n"

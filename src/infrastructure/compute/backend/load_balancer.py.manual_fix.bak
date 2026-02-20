@@ -15,13 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_backend.py""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -62,7 +62,7 @@ __version__ = VERSION
 
 
 class LoadBalancer:
-    ""
+"""
 Load balancer for multiple backend endpoints.
 
     Distributes requests across backends using configurable strategies.
@@ -72,17 +72,17 @@ Load balancer for multiple backend endpoints.
         lb.add_backend("backend1", weight=2)
         lb.add_backend("backend2", weight=1)
         backend = lb.next()
-    ""
+"""
 def __init__(
         self,
         strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN,
     ) -> None:
-        ""
+"""
 Initialize load balancer.
         
         Args:
             strategy: Load balancing strategy to use.
-        ""
+"""
 self.strategy = strategy
         self._backends: list[SystemConfig] = []
         self._index = 0
@@ -97,7 +97,7 @@ self.strategy = strategy
         weight: int = 1,
         **kwargs: Any,
     ) -> None:
-        ""
+"""
 Add backend to load balancer.
         
         Args:
@@ -105,7 +105,7 @@ Add backend to load balancer.
             backend_type: Type of backend.
             weight: Weight for weighted strategy.
             **kwargs: Additional backend config.
-        ""
+"""
 config = SystemConfig(
             name=name,
             backend_type=backend_type,
@@ -119,7 +119,7 @@ config = SystemConfig(
 
 
     def remove_backend(self, name: str) -> bool:
-        ""
+"""
 Remove backend from load balancer.
         
         Args:
@@ -127,7 +127,7 @@ Remove backend from load balancer.
 
         Returns:
             bool: True if removed, False if not found.
-        ""
+"""
 with self._lock:
             for i, backend in enumerate(self._backends):
                 if backend.name == name:
@@ -139,12 +139,12 @@ with self._lock:
 
 
     def next(self) -> SystemConfig | None:
-        ""
+"""
 Get next backend to use.
         
         Returns:
             Optional[SystemConfig]: Next backend or None if empty.
-        ""
+"""
 with self._lock:
             enabled = [b for b in self._backends if b.enabled]
             if not enabled:
@@ -175,7 +175,7 @@ with self._lock:
 
 
     def mark_connection_start(self, name: str) -> None:
-        ""
+"""
 Mark connection started for backend.""
 with self._lock:
             self._connections[name] = self._connections.get(name, 0) + 1

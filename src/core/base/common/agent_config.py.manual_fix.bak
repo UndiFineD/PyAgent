@@ -15,14 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AgentConfig dataclass used across PyAgent.
 
 """
-
 This is a minimal, import-safe representation suitable for tests.
-""
+"""
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
@@ -54,7 +53,7 @@ except Exception:
         return []
 
 
-@dataclass
+        @dataclass
 class AgentConfig:
     repo_root: str = "."
     agents_only: bool = False

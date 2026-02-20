@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 GraphAnalysisMixin - Graph impact assessment and topological ordering
 [Brief Summary]
@@ -29,7 +29,6 @@ USAGE:
 - The mixin expects self.graph to be a mapping of node -> set/iterable of dependencies and will populate self.reverse_graph when needed.
 
 """
-
 WHAT IT DOES:
 - Builds a reverse dependency graph on demand and performs breadth-limited dependent traversal to compute an impact zone for a target entity.
 - Provides a depth-first based topological ordering limited to nodes present in self.graph.
@@ -197,4 +196,4 @@ Returns nodes in topological order (safe initialization/build sequence).        
 
         return stack[::-1]
 
-""
+"""

@@ -120,3 +120,21 @@ if mode == "vector":"            return self.vector.delete(key)
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
+
+"""

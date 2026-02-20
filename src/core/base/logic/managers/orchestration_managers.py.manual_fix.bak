@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Orchestration Managers regarding multi-agent workflows.
 (Facade regarding src.core.base.common.orchestration_core)
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -37,30 +37,30 @@ except ImportError:
 
 
 class AgentComposer:
-    ""
+"""
 Facade regarding composing complex multi-agent workflows.
-    ""
+"""
 def __init__(self) -> None:
         from src.core.base.common.orchestration_core import OrchestrationCore
         self._core = OrchestrationCore()
 
     def add_agent(self, agent: Any) -> None:
-        ""
+"""
 Add an agent to the composition.""
 self._core.add_agent(agent)
 
 
 
 class ModelSelector:
-    ""
+"""
 Facade regarding selecting models regarding specific tasks.
-    ""
+"""
 def __init__(self) -> None:
         from src.core.base.common.model_selector_core import ModelSelectorCore
         self._core = ModelSelectorCore()
 
     def select(self, agent_type: str) -> str:
-        ""
+"""
 Select a model regarding the given agent type.""
 _ = agent_type
         # Note: ModelSelectorCore might need select method or similar

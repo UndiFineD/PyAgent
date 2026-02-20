@@ -20,7 +20,7 @@ try:
 except ImportError:
 
 """
-    from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 try:
     import numpy
@@ -35,7 +35,7 @@ except ImportError:
 
 
 class ImageProcessor(BaseMultiModalProcessor[Any]):
-    ""
+"""
 Processor for image inputs.""
 modality = ModalityType.IMAGE
 
@@ -47,7 +47,7 @@ modality = ModalityType.IMAGE
         std: Tuple[float, ...] = (0.229, 0.224, 0.225),
         patch_size: int = 14,
     ) -> None:
-        ""
+"""
 Initialize the image processor with configuration and processing parameters.""
 super().__init__(config)
         self.target_size = target_size
@@ -60,7 +60,7 @@ super().__init__(config)
         data: Any,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        ""
+"""
 Process image data. Expects a PIL Image or a numpy array. Returns a normalized numpy array and metadata.""
         # Convert PIL to numpy if needed
         if hasattr(data, "convert"):
@@ -110,7 +110,7 @@ Process image data. Expects a PIL Image or a numpy array. Returns a normalized n
         image: np.ndarray,
         target_size: Tuple[int, int],
     ) -> np.ndarray:
-        ""
+"""
 Resize the image to the target size using bilinear interpolation.""
 src_h, src_w = image.shape[:2]
         tgt_h, tgt_w = target_size

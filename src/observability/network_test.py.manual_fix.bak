@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Test network utility functionality.
 try:
 
 """
-    import sys
+import sys
 except ImportError:
     import sys
 
@@ -64,4 +64,4 @@ def test_system_network_command():
                 if line.startswith('IPv4 Address'):'                    ip_part = line.split(':', 1)[1].strip()'                    current_iface['IPv4'] = ip_part'        assert len(interfaces) > 0
 
 
-""
+"""

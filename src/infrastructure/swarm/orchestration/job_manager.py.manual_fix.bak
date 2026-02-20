@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import asyncio
+import asyncio
 
 try:
     import logging
@@ -56,40 +56,40 @@ class JobStatus(Enum):
 
 
 class JobManager:
-    ""
+"""
 Manages distributed job states and emits telemetry events.
     def __init__(self):
         self.jobs: Dict[str, Dict[str, Any]] = {}
 
-    async def submit_job(self, task_name: str, payload: Dict[str, Any]) -> str:
-        ""
-Submits a new job to the swarm state.        job_id = str(uuid.uuid4())
+        async def submit_job(self, task_name: str, payload: Dict[str, Any]) -> str:
+"""
+        Submits a new job to the swarm state.        job_id = str(uuid.uuid4())
         job_info = {
-            "job_id": job_id,"            "task_name": task_name,"            "payload": payload,"            "status": JobStatus.PENDING,"            "created_at": datetime.utcnow().isoformat(),"            "updated_at": datetime.utcnow().isoformat()"        }
+        "job_id": job_id,"            "task_name": task_name,"            "payload": payload,"            "status": JobStatus.PENDING,"            "created_at": datetime.utcnow().isoformat(),"            "updated_at": datetime.utcnow().isoformat()"        }
         self.jobs[job_id] = job_info
 
         await self._emit_telemetry("job_created", job_info)"        return job_id
 
-    async def update_status(self, job_id: str, status: JobStatus, result: Optional[Any] = None):
-        ""
-Updates the state of a job and emits telemetry.        if job_id not in self.jobs:
-            logger.error(f"Attempted to update non-existent job: {job_id}")"            return
+        async def update_status(self, job_id: str, status: JobStatus, result: Optional[Any] = None):
+"""
+        Updates the state of a job and emits telemetry.        if job_id not in self.jobs:
+        logger.error(f"Attempted to update non-existent job: {job_id}")"            return
 
         job = self.jobs[job_id]
         old_status = job["status"]"        job["status"] = status"        job["updated_at"] = datetime.utcnow().isoformat()
         if result is not None:
-            job["result"] = result
+        job["result"] = result
         logger.info(f"Job {job_id} transitioned from {old_status} to {status}")
         await self._emit_telemetry("job_status_change", {"            "job_id": job_id,"            "old_status": old_status.value,"            "new_status": status.value,"            "timestamp": job["updated_at"]"        })
 
-    async def get_job(self, job_id: str) -> Optional[Dict[str, Any]]:
-        ""
-Retrieves current information for a specific job.        return self.jobs.get(job_id)
+        async def get_job(self, job_id: str) -> Optional[Dict[str, Any]]:
+"""
+        Retrieves current information for a specific job.        return self.jobs.get(job_id)
 
-    async def _emit_telemetry(self, event_type: str, data: Dict[str, Any]):
-        ""
-Place holder for the PyAgent Telemetry system integration.        payload = {
-            "event": event_type,"            "data": data,"            "service": "JobManager""        }
+        async def _emit_telemetry(self, event_type: str, data: Dict[str, Any]):
+"""
+        Place holder for the PyAgent Telemetry system integration.        payload = {
+        "event": event_type,"            "data": data,"            "service": "JobManager""        }
         logger.debug(f"Telemetry Event: {payload}")"        await asyncio.sleep(0)
 
-""
+"""

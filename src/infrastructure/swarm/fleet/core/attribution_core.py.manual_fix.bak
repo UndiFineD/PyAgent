@@ -14,14 +14,13 @@
 # limitations under the License.
 
 
-""
+"""
 AttributionCore
 """
 Core logic for Code Attribution and Licensing (Phase 185).
 Handles SPDX header generation and contribution tagging.
 
 """
-
 try:
     import time
 except ImportError:
@@ -36,7 +35,7 @@ except ImportError:
 
 
 class AttributionCore:
-    ""
+"""
 Handles logic for code attribution and SPDX licensing.
     SPDX_TEMPLATE = ""
 # Copyright 2026 PyAgent Authors""""
@@ -63,6 +62,24 @@ Handles logic for code attribution and SPDX licensing.
                 Appends the SPDX header if not already present.
                 if "SPDX-License-Identifier" in content or "Copyright 2026 PyAgent Authors" in content:"            return content
         return AttributionCore.SPDX_TEMPLATE + "\\n" + content
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

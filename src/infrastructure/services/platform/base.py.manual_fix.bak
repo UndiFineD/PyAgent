@@ -21,11 +21,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Base platform abstraction.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -62,7 +62,7 @@ class Platform(ABC):
     _instances: Dict[PlatformType, "Platform"] = {}"    _lock = threading.Lock()
 
     def __new__(cls, *_args: Any, **_kwargs: Any) -> Platform:
-        ""
+"""
 Singleton pattern for platform instances.        platform_type = cls.get_platform_type()
         with cls._lock:
             if platform_type not in cls._instances:
@@ -91,7 +91,7 @@ Singleton pattern for platform instances.        platform_type = cls.get_platfor
     def get_memory_info(self, device_id: int = 0) -> MemoryInfo: ...
 
     def get_device_info(self, device_id: int = 0) -> DeviceInfo:
-        ""
+"""
 Get summarized device information.        return DeviceInfo(
             device_id=device_id,
             name=self.get_device_name(device_id),
@@ -102,28 +102,28 @@ Get summarized device information.        return DeviceInfo(
         )
 
     def get_device_features(self, _device_id: int = 0) -> DeviceFeature:
-        ""
+"""
 Get hardware features supported by the device.        return DeviceFeature.NONE
 
     def get_supported_quantizations(self) -> Set[QuantizationType]:
-        ""
+"""
 Get supported quantization types on this platform.        return {QuantizationType.NONE}
 
     def get_attention_backends(self) -> List[AttentionBackend]:
-        ""
+"""
 Get available attention backends on this platform.        return [AttentionBackend.DEFAULT]
 
     def select_attention_backend(self, _capability: DeviceCapability) -> AttentionBackend:
-        ""
+"""
 Select the best attention backend for the given capability.        backends = self.get_attention_backends()
         return backends[0] if backends else AttentionBackend.DEFAULT
 
     def is_quantization_supported(self, quant_type: QuantizationType) -> bool:
-        ""
+"""
 Check if a quantization type is supported on this platform.        return quant_type in self.get_supported_quantizations()
 
     def get_all_device_info(self) -> List[DeviceInfo]:
-        ""
+"""
 Get info for all devices on this platform.        return [self.get_device_info(idx) for idx in range(self.get_device_count())]
 
-""
+"""

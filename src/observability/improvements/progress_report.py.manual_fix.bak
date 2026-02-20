@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Progress Report - ProgressReport dataclass for improvements dashboard
 
@@ -66,5 +66,5 @@ class ProgressReport:
     burndown_data: list[tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]
 
 
-""
+"""
 

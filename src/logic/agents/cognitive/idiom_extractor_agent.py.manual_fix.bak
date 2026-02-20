@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Idiom Extractor Agent for project-specific coding patterns.
 
@@ -82,4 +82,4 @@ in content and '":" in content:"'                                if "Args:" in c
             with open(self.idioms_file, encoding="utf-8") as f:"                return json.load(f)
         return {"error": "Idioms file not found. Run extract_idioms first."}
 
-""
+"""

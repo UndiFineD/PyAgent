@@ -84,6 +84,24 @@ Dynamically loads and registers the generated agent into the fleet.        # For
         return f"Agent {name} registered."
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

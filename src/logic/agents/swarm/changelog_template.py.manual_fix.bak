@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Changelog Template - Template configuration dataclass
 [Brief Summary]
@@ -33,7 +33,6 @@ FILE CONTENT SUMMARY:
 Changelog template.py module.
 
 """
-
 try:
     from dataclasses import dataclass
 except ImportError:
@@ -74,4 +73,4 @@ Template configuration for generating human-readable changelogs. "   name: str" 
 #     header_format: str = "## [{version}] - {date}"    include_links: bool = True
     include_contributors: bool = False
 
-""
+"""

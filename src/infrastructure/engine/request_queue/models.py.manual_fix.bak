@@ -63,7 +63,7 @@ Compare for heap ordering.        # Priority first (lower is better)
         return self.arrival_time < other.arrival_time
 
     def effective_priority(self) -> float:
-        ""
+"""
 Get effective priority with boost applied.        return self.priority / self.boost_factor
 
 
@@ -102,14 +102,14 @@ Compare for heap ordering.        return self.priority < other.priority
 
     @property
     def wait_time(self) -> float:
-        ""
+"""
 Time spent waiting in queue.        return time.time() - self.queue_time
 
     @property
     def is_deadline_critical(self) -> bool:
-        ""
+"""
 Check if deadline is approaching.        if self.priority.deadline is None:
             return False
         return time.time() > self.priority.deadline * 0.9
 
-""
+"""

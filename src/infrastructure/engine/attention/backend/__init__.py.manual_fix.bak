@@ -18,7 +18,6 @@
 Attention backend module.
 
 """
-
 try:
     from .base import AttentionBackend  # noqa: F401
 except ImportError:

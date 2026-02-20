@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from interface.slash_commands.core.suggested import CommandContext, CommandResult, CommandDefinition, CommandRegistry, ParsedCommand, ProcessedPrompt, SlashCommands, parse_commands

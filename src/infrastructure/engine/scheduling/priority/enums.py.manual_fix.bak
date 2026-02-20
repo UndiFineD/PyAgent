@@ -30,7 +30,7 @@ except ImportError:
 
 
 class TaskPriority(Enum):
-    ""
+"""
 Task priority levels.
     CRITICAL = 0  # Immediate execution
     HIGH = 1  # Low latency
@@ -41,7 +41,7 @@ Task priority levels.
 
 
 class TaskState(Enum):
-    ""
+"""
 Task execution state.
     PENDING = auto()
     RUNNING = auto()

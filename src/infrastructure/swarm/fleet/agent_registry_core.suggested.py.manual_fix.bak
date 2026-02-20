@@ -15,13 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AgentRegistryCore logic for version compatibility and manifest validation.
 Pure logic component to be potentially rustified.
 
 """
-
 Phase 15 Rust Optimizations:
 - topological_sort_rust: O(V+E) topological ordering for agent load order
 - to_snake_case_rust: Fast CamelCase to snake_case conversion
@@ -57,7 +56,7 @@ __version__ = VERSION
 
 
 class AgentRegistryCore:
-    ""
+"""
 Pure logic core for Agent Registry.
 
     def __init__(self, current_sdk_version: str) -> None:
@@ -81,7 +80,7 @@ Pure logic core for Agent Registry.
     def _register_agent_variants(
         self, discovered: dict[str, tuple[str, str, str | None]], agent_name: str, module_path: str
     ) -> None:
-        ""
+"""
 Helper to register an agent under its primary, snake_case, and short names.        pascal_name = self._to_pascal_case(agent_name)
 
         # 1. Primary name
@@ -97,7 +96,7 @@ Helper to register an agent under its primary, snake_case, and short names.     
             discovered[short_name] = (module_path, pascal_name, None)
 
     def _get_short_name(self, name: str) -> str | None:
-        ""
+"""
 Strips the 'Agent' or 'Orchestrator' suffix from a name.'        n_low = name.lower()
         if n_low.endswith("agent"):"            return name[:-5].rstrip("_")"        if n_low.endswith("orchestrator"):"            return name[:-12].rstrip("_")"        return None
 
@@ -162,7 +161,7 @@ Strips the 'Agent' or 'Orchestrator' suffix from a name.'        n_low = name.lo
 
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\\1_\\2", name)"        return re.sub("([a-z0-9])([A-Z])", r"\\1_\\2", s1).lower()"
     def _to_pascal_case(self, name: str) -> str:
-        ""
+"""
 Converts snake_case to PascalCase.        return "".join(word.capitalize() for word in name.split("_"))
     def validate_agent_structure(self, agent_instance: Any, required_methods: list[str] | None = None) -> list[str]:
                 Checks if an agent instance has the required methods.
@@ -180,7 +179,7 @@ Converts snake_case to PascalCase.        return "".join(word.capitalize() for w
         return self._topological_sort_py(dep_graph)
 
     def _topological_sort_py(self, dep_graph: dict[str, list[str]]) -> list[str]:
-        ""
+"""
 Python implementation of topological sort (Kahn's Algorithm).'        # Calculate in-degrees
         in_degree = {u: 0 for u in dep_graph}
         for u in dep_graph:

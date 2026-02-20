@@ -23,7 +23,6 @@ from __future__ import annotations
 InputPreprocessor: Unified input processing with schema validation.
 
 """
-
 Provides:
 - Type-safe prompt schemas (text, tokens, embeddings)
 - Encoder-decoder prompt separation
@@ -70,7 +69,7 @@ except ImportError:
 
 
 class PromptType(Enum):
-    ""
+"""
 Types of prompt input.
     TEXT = auto()  # Raw text string
     TOKENS = auto()  # Pre-tokenized token IDs
@@ -82,7 +81,7 @@ Types of prompt input.
 
 
 class InputFormat(Enum):
-    ""
+"""
 Input format specifications.
     RAW = auto()  # Raw input as-is
     OPENAI = auto()  # OpenAI chat format
@@ -99,7 +98,7 @@ Input format specifications.
 
 @dataclass
 class TextPrompt:
-    ""
+"""
 Text-based prompt.
     prompt: str
     cache_salt: Optional[str] = None  # Custom salt for prefix caching
@@ -107,17 +106,17 @@ Text-based prompt.
 
     @property
     def type(self) -> PromptType:
-        ""
+"""
 Get prompt type.        return PromptType.TEXT
 
     def __len__(self) -> int:
-        ""
+"""
 Get length of prompt.        return len(self.prompt)
 
 
 @dataclass
 class TokensPrompt:
-    ""
+"""
 Pre-tokenized prompt.
     prompt_token_ids: List[int]
     token_type_ids: Optional[List[int]] = None  # For cross-encoders
@@ -126,47 +125,47 @@ Pre-tokenized prompt.
 
     @property
     def type(self) -> PromptType:
-        ""
+"""
 Get the prompt type.        return PromptType.TOKENS
 
     def __len__(self) -> int:
-        ""
+"""
 Return the number of tokens.        return len(self.prompt_token_ids)
 
 
 @dataclass
 class EmbedsPrompt:
-    ""
+"""
 Pre-computed embeddings prompt.
     prompt_embeds: np.ndarray  # Shape: (seq_len, hidden_dim)
     cache_salt: Optional[str] = None
 
     @property
     def type(self) -> PromptType:
-        ""
+"""
 Get the prompt type.        return PromptType.EMBEDS
 
     def __len__(self) -> int:
-        ""
+"""
 Return the sequence length of the embeddings.        return self.prompt_embeds.shape[0]
 
 
 @dataclass
 class EncoderDecoderPrompt:
-    ""
+"""
 Prompt for encoder-decoder models (T5, BART, etc.).
     encoder_prompt: Union[TextPrompt, TokensPrompt, EmbedsPrompt]
     decoder_prompt: Optional[Union[TextPrompt, TokensPrompt]] = None
 
     @property
     def type(self) -> PromptType:
-        ""
+"""
 Get the prompt type.        return PromptType.ENCODER_DECODER
 
 
 @dataclass
 class ChatMessage:
-    ""
+"""
 Single message in a conversation.
     role: str  # system, user, assistant, tool
     content: str
@@ -175,7 +174,7 @@ Single message in a conversation.
     tool_call_id: Optional[str] = None  # For tool responses
 
     def to_dict(self) -> Dict[str, Any]:
-        ""
+"""
 Convert message to dictionary.        result = {"role": self.role, "content": self.content}"        if self.name:
             result["name"] = self.name"        if self.tool_calls:
             result["tool_calls"] = self.tool_calls"        if self.tool_call_id:
@@ -184,18 +183,18 @@ Convert message to dictionary.        result = {"role": self.role, "content": se
 
 @dataclass
 class ChatPrompt:
-    ""
+"""
 Multi-turn conversation prompt.
     messages: List[ChatMessage]
     system_prompt: Optional[str] = None
 
     @property
     def type(self) -> PromptType:
-        ""
+"""
 Get prompt type.        return PromptType.CHAT
 
     def __len__(self) -> int:
-        ""
+"""
 Get total character length of messages.        return sum(len(m.content) for m in self.messages)
 
 
@@ -210,7 +209,7 @@ SingletonPrompt = Union[TextPrompt, TokensPrompt, EmbedsPrompt, EncoderDecoderPr
 
 @dataclass
 class InputMetadata:
-    ""
+"""
 Metadata about processed input.
     prompt_type: PromptType
     estimated_tokens: int
@@ -224,7 +223,7 @@ Metadata about processed input.
 
 @dataclass
 class ProcessedInput:
-    ""
+"""
 Fully processed input ready for model.
     prompt: str  # Linearized text prompt
     token_ids: Optional[List[int]] = None  # Tokenized if available
@@ -237,7 +236,7 @@ Fully processed input ready for model.
 
     @property
     def length(self) -> int:
-        ""
+"""
 Get best-effort length (tokens if available, else chars).        if self.token_ids:
             return len(self.token_ids)
         return len(self.prompt)
@@ -250,7 +249,7 @@ Get best-effort length (tokens if available, else chars).        if self.token_i
 
 
 class PromptTemplate:
-    ""
+"""
 Template for formatting prompts.
     # Common templates
     CHATML = {
@@ -267,7 +266,7 @@ Template for formatting prompts.
 
     @classmethod
     def get_template(cls, input_format: InputFormat) -> Dict[str, str]:
-        ""
+"""
 Get template for format.        templates = {
             InputFormat.CHATML: cls.CHATML,
             InputFormat.LLAMA: cls.LLAMA3,
@@ -283,7 +282,7 @@ Get template for format.        templates = {
 
 
 class PromptValidator:
-    ""
+"""
 Validates prompt inputs.
     def __init__(
         self,
@@ -296,7 +295,7 @@ Validates prompt inputs.
         self.require_user_message = require_user_message
 
     def validate(self, prompt: SingletonPrompt) -> Tuple[bool, Optional[str]]:
-        ""
+"""
 Validate prompt, return (is_valid, error_message).        if isinstance(prompt, TextPrompt):
             return self._validate_text(prompt)
         if isinstance(prompt, TokensPrompt):
@@ -367,7 +366,7 @@ class ConversationLinearizer:
         self.template = PromptTemplate.get_template(self.format)
 
     def linearize(self, chat: ChatPrompt) -> str:
-        ""
+"""
 Convert chat to linear prompt string.        parts = []
 
         # System prompt
@@ -385,7 +384,7 @@ Convert chat to linear prompt string.        parts = []
             parts.append(self.template["assistant_start"])
         return "".join(parts)
     def parse_messages(self, text: str) -> List[ChatMessage]:
-        ""
+"""
 Parse linearized text back to messages (if possible).        messages = []
 
         if self.format == InputFormat.CHATML:
@@ -434,7 +433,7 @@ class InputPreprocessor:
             "total_processed": 0,"            "text_prompts": 0,"            "token_prompts": 0,"            "chat_prompts": 0,"            "embed_prompts": 0,"            "validation_errors": 0,"        }
 
     def process(self, prompt: SingletonPrompt) -> ProcessedInput:
-        ""
+"""
 Process any prompt type to unified format.        start_time = time.time()
 
         # Validate
@@ -460,7 +459,7 @@ Process any prompt type to unified format.        start_time = time.time()
         self._stats["total_processed"] += 1"        return result
 
     def _process_text(self, prompt: TextPrompt) -> ProcessedInput:
-        ""
+"""
 Process text prompt.        text = prompt.prompt
 
         # Tokenize if tokenizer available
@@ -485,7 +484,7 @@ Process text prompt.        text = prompt.prompt
         )
 
     def _process_tokens(self, prompt: TokensPrompt) -> ProcessedInput:
-        ""
+"""
 Process pre-tokenized prompt.        # Decode if tokenizer available
         text = ""
 if self.tokenizer:
@@ -504,7 +503,7 @@ if self.tokenizer:
         )
 
     def _process_embeds(self, prompt: EmbedsPrompt) -> ProcessedInput:
-        ""
+"""
 Process pre-computed embeddings.        return ProcessedInput(
             prompt="",  # No text for embedding prompts"            embeddings=prompt.prompt_embeds,
             metadata=InputMetadata(
@@ -516,7 +515,7 @@ Process pre-computed embeddings.        return ProcessedInput(
         )
 
     def _process_chat(self, prompt: ChatPrompt) -> ProcessedInput:
-        ""
+"""
 Process multi-turn conversation.        # Linearize to text
         text = self.linearizer.linearize(prompt)
 
@@ -542,7 +541,7 @@ Process multi-turn conversation.        # Linearize to text
         )
 
     def _process_encoder_decoder(self, prompt: EncoderDecoderPrompt) -> ProcessedInput:
-        ""
+"""
 Process encoder-decoder prompt.        encoder_result = self.process(prompt.encoder_prompt)
 
         decoder_result = None
@@ -560,13 +559,13 @@ Process encoder-decoder prompt.        encoder_result = self.process(prompt.enco
         )
 
     def _estimate_tokens(self, text: str) -> int:
-        ""
+"""
 Estimate token count from text.        if self.tokenizer:
             return len(self.tokenizer.encode(text))
         return int(len(text) / self.estimate_chars_per_token)
 
     def detect_format(self, text: str) -> InputFormat:
-        ""
+"""
 Auto-detect chat format from text.        if "<|im_start|>" in text:"            return InputFormat.CHATML
         if "<|start_header_id|>" in text:"            return InputFormat.LLAMA
         if "[INST]" in text:"            return InputFormat.RAW  # Mistral
@@ -574,11 +573,11 @@ Auto-detect chat format from text.        if "<|im_start|>" in text:"           
         return InputFormat.RAW
 
     def batch_process(self, prompts: List[SingletonPrompt]) -> List[ProcessedInput]:
-        ""
+"""
 Process multiple prompts.        return [self.process(p) for p in prompts]
 
     def get_stats(self) -> Dict[str, int]:
-        ""
+"""
 Return processing statistics.        return self._stats.copy()
 
 
@@ -588,7 +587,7 @@ Return processing statistics.        return self._stats.copy()
 
 
 def parse_prompt(prompt: Union[str, List[int], np.ndarray, Dict, List[Dict]]) -> SingletonPrompt:
-    ""
+"""
 Parse various input formats to typed prompt.    if isinstance(prompt, str):
         return TextPrompt(prompt=prompt)
 

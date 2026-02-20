@@ -17,7 +17,6 @@
 Maintenance utility to fix missing type hints in engine components.
 
 """
-
 import ast
 import os
 

@@ -236,72 +236,72 @@ Identify which blocks belong to this sequence but are not local.        needed =
 Fire off an asynchronous pull request.
         def pull_task():
             transfer_id = f"pull-{request_id}-{block_id}""            with self._lock:
-                self._transfer_futures[transfer_id] = MooncakeTransferStatus.IN_PROGRESS
+            self._transfer_futures[transfer_id] = MooncakeTransferStatus.IN_PROGRESS
 
             try:
-                # Simulate network latency
-                target = self._remote_nodes.get(node_id)
-                if target:
-                    time.sleep(target.latency_ms / 1000.0)  # nosec
+            # Simulate network latency
+            target = self._remote_nodes.get(node_id)
+            if target:
+            time.sleep(target.latency_ms / 1000.0)  # nosec
 
-                success = self._mooncake_transfer_rust(block_id, node_id, "PULL")
-                with self._lock:
-                    if success:
-                        self._transfer_futures[transfer_id] = MooncakeTransferStatus.COMPLETED
-                        self.bytes_transferred += 1024 * 64  # Simulated block size (64KB)
-                        self.transfer_count += 1
-                    else:
-                        self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
-                        self.failed_transferred += 1
+            success = self._mooncake_transfer_rust(block_id, node_id, "PULL")
+            with self._lock:
+            if success:
+            self._transfer_futures[transfer_id] = MooncakeTransferStatus.COMPLETED
+            self.bytes_transferred += 1024 * 64  # Simulated block size (64KB)
+            self.transfer_count += 1
+            else:
+            self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
+            self.failed_transferred += 1
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error("Mooncake pull failed: %s", e)"                with self._lock:
-                    self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
-                    self.failed_transferred += 1
+            logger.error("Mooncake pull failed: %s", e)"                with self._lock:
+            self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
+            self.failed_transferred += 1
             finally:
-                with self._lock:
-                    if str(block_id) in self._pending_loads[request_id]:
-                        self._pending_loads[request_id].remove(str(block_id))
-                    if not self._pending_loads[request_id]:
-                        del self._pending_loads[request_id]
+            with self._lock:
+            if str(block_id) in self._pending_loads[request_id]:
+            self._pending_loads[request_id].remove(str(block_id))
+            if not self._pending_loads[request_id]:
+            del self._pending_loads[request_id]
 
-        threading.Thread(target=pull_task, daemon=True).start()
+            threading.Thread(target=pull_task, daemon=True).start()
 
     def _initiate_async_push(self, request_id: str, layer_name: str, kv_layer: Any, attn_metadata: Any) -> None:
 """
 Fire off an asynchronous push request to the Mooncake pool.
         def push_task():
             try:
-                # Extract block IDs for this request from metadata
-                if hasattr(attn_metadata, "block_tables"):"                    # Finding which blocks correspond to this layer
-                    # This is complex in vLLM; simplified here
-                    pass
+            # Extract block IDs for this request from metadata
+            if hasattr(attn_metadata, "block_tables"):"                    # Finding which blocks correspond to this layer
+            # This is complex in vLLM; simplified here
+            pass
 
-                # Push logic
-                success = self._mooncake_transfer_rust(kv_layer, "MOONCAKE_POOL", "PUSH")"                if success:
-                    with self._lock:
-                        self.transfer_count += 1
-                        self.bytes_transferred += 1024 * 1024  # Dummy 1MB push
-                        # Update registry that we (this node) have these blocks
-                        # Or if we pushed to a specific buffer node, update accordingly.
-                        # self._block_registry[block_id] = self.node_id
+            # Push logic
+            success = self._mooncake_transfer_rust(kv_layer, "MOONCAKE_POOL", "PUSH")"                if success:
+            with self._lock:
+            self.transfer_count += 1
+            self.bytes_transferred += 1024 * 1024  # Dummy 1MB push
+            # Update registry that we (this node) have these blocks
+            # Or if we pushed to a specific buffer node, update accordingly.
+            # self._block_registry[block_id] = self.node_id
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error("Mooncake push failed for layer %s: %s", layer_name, e)"                with self._lock:
-                    self.failed_transferred += 1
+            logger.error("Mooncake push failed for layer %s: %s", layer_name, e)"                with self._lock:
+            self.failed_transferred += 1
             finally:
-                with self._lock:
-                    if layer_name in self._pending_saves[request_id]:
-                        self._pending_saves[request_id].remove(layer_name)
-                    if not self._pending_saves[request_id]:
-                        del self._pending_saves[request_id]
+            with self._lock:
+            if layer_name in self._pending_saves[request_id]:
+            self._pending_saves[request_id].remove(layer_name)
+            if not self._pending_saves[request_id]:
+            del self._pending_saves[request_id]
 
-        with self._lock:
+            with self._lock:
             self._pending_saves[request_id].add(layer_name)
 
-        threading.Thread(target=push_task, daemon=True).start()
+            threading.Thread(target=push_task, daemon=True).start()
 
-    # ==============================
-    # Scheduler-side methods
-    # ==============================
+            # ==============================
+            # Scheduler-side methods
+            # ==============================
 
     def register_remote_node(self, node: MooncakeRemoteTarget) -> None:
 """

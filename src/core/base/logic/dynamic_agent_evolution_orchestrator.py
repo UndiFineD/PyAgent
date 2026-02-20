@@ -112,25 +112,25 @@ self.base_dir = base_dir or Path.cwd() / "dynamic_agents""        self.base_dir.
 
     def _load_skill_sheets(self):
 """
-Load all skill sheets from disk.""
-for yaml_file in self.skill_sheets_dir.glob("*.yaml"):"            try:
-                with open(yaml_file, 'r', encoding='utf-8') as f:'                    data = yaml.safe_load(f)
-                    if data:
-                        # Convert tier string back to enum
-                        data['tier'] = AgentTier(data['tier'])'                        sheet = AgentSkillSheet(**data)
-                        self.skill_sheets[sheet.name] = sheet
-            except Exception as e:
-                print(f"Warning: Failed to load skill sheet {yaml_file}: {e}")
+        Load all skill sheets from disk.""
+        for yaml_file in self.skill_sheets_dir.glob("*.yaml"):"            try:
+        with open(yaml_file, 'r', encoding='utf-8') as f:'                    data = yaml.safe_load(f)
+        if data:
+        # Convert tier string back to enum
+        data['tier'] = AgentTier(data['tier'])'                        sheet = AgentSkillSheet(**data)
+        self.skill_sheets[sheet.name] = sheet
+        except Exception as e:
+        print(f"Warning: Failed to load skill sheet {yaml_file}: {e}")
     def _save_skill_sheet(self, sheet: AgentSkillSheet):
 """
-Save skill sheet to disk.""
-sheet_file = self.skill_sheets_dir / f"{sheet.name}.yaml"
+        Save skill sheet to disk.""
+        sheet_file = self.skill_sheets_dir / f"{sheet.name}.yaml"
         # Convert to dict for YAML serialization
         data = {
-            'name': sheet.name,'            'version': sheet.version,'            'created': sheet.created,'            'tier': sheet.tier.value,  # Convert enum to string'            'domain': sheet.domain,'            'capabilities': sheet.capabilities,'            'constraints': sheet.constraints,'            'parent_agents': sheet.parent_agents,'            'synergy_hints': sheet.synergy_hints,'            'usage_count': sheet.usage_count,'            'success_rate': sheet.success_rate,'            'last_used': sheet.last_used,'            'promotion_candidate': sheet.promotion_candidate,'            'task_history': sheet.task_history,'        }
+        'name': sheet.name,'            'version': sheet.version,'            'created': sheet.created,'            'tier': sheet.tier.value,  # Convert enum to string'            'domain': sheet.domain,'            'capabilities': sheet.capabilities,'            'constraints': sheet.constraints,'            'parent_agents': sheet.parent_agents,'            'synergy_hints': sheet.synergy_hints,'            'usage_count': sheet.usage_count,'            'success_rate': sheet.success_rate,'            'last_used': sheet.last_used,'            'promotion_candidate': sheet.promotion_candidate,'            'task_history': sheet.task_history,'        }
 
         with StateTransaction([sheet_file]) as _:
-            with open(sheet_file, 'w', encoding='utf-8') as f:'                yaml.dump(data, f, default_flow_style=False, sort_keys=False)
+        with open(sheet_file, 'w', encoding='utf-8') as f:'                yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
     def analyze_task(self, task_description: str) -> TaskAnalysis:
 """
@@ -503,6 +503,24 @@ if __name__ == "__main__":"    # Example usage
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

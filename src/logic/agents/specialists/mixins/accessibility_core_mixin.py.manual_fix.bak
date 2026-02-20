@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Accessibility Core Mixin - Core accessibility calculations and filtering
 
@@ -48,7 +48,7 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-""
+"""
 Accessibility core mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");
 

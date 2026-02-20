@@ -80,7 +80,7 @@ __version__ = VERSION
 
 
 class AgentStrategy(ABC):
-    ""
+"""
 Abstract base class for agent execution strategies.
     @abstractmethod
     async def execute(
@@ -91,7 +91,7 @@ Abstract base class for agent execution strategies.
         system_prompt: str | None = None,
         history: list[dict[str, str]] | None = None,
     ) -> str:
-        ""
+"""
 Execute the strategy to generate a response.""""
 Args:
             prompt: The user's request or instruction.'            context: The current file content or context.
@@ -102,7 +102,25 @@ Args:
         Returns:
             The final generated content.
         
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

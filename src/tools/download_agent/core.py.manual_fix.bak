@@ -74,23 +74,23 @@ from .classifiers import URLClassifier
 
 
 class DownloadAgent:
-    ""
+"""
 Main download agent that handles different URL types.
     def __init__(self, config: DownloadConfig):
         self.config = config
         self.classifier = URLClassifier()
         self.session = requests.Session()
         self.session.headers.update({
-            'User-Agent': 'PyAgent-DownloadAgent/1.0 (https://github.com/UndiFineD/PyAgent)''        })
+        'User-Agent': 'PyAgent-DownloadAgent/1.0 (https://github.com/UndiFineD/PyAgent)''        })
 
     def ensure_directory(self, path: str) -> Path:
-        ""
+"""
 Ensure directory exists.        full_path = Path(self.config.base_dir) / path
         full_path.mkdir(parents=True, exist_ok=True)
         return full_path
 
     def download_github_repo(self, url: str, metadata: Dict) -> DownloadResult:
-        ""
+"""
 Download GitHub repository using git clone.        owner = metadata['owner']'        repo = metadata['repo']'        dest_dir = self.ensure_directory(metadata['destination'])'        repo_path = dest_dir / f"{owner}-{repo}"
         if self.config.skip_existing and repo_path.exists():
             return DownloadResult(
@@ -139,7 +139,7 @@ Download GitHub repository using git clone.        owner = metadata['owner']'   
             )
 
     def download_github_gist(self, url: str, metadata: Dict) -> DownloadResult:
-        ""
+"""
 Download GitHub Gist using git clone.        owner = metadata['owner']'        gist_id = metadata['gist_id']'        dest_dir = self.ensure_directory(metadata['destination'])'        gist_path = dest_dir / f"gist-{owner}-{gist_id}"
         if self.config.skip_existing and gist_path.exists():
             return DownloadResult(
@@ -187,7 +187,7 @@ Download GitHub Gist using git clone.        owner = metadata['owner']'        g
             )
 
     def download_file(self, url: str, metadata: Dict, filename: Optional[str] = None) -> DownloadResult:
-        ""
+"""
 Download file using HTTP requests.        dest_dir = self.ensure_directory(metadata['destination'])
         if not filename:
             # Extract filename from URL
@@ -236,7 +236,7 @@ Download file using HTTP requests.        dest_dir = self.ensure_directory(metad
             )
 
     def download_arxiv_paper(self, url: str, metadata: Dict) -> DownloadResult:
-        ""
+"""
 Download ArXiv paper.        paper_id = metadata['paper_id']'        paper_format = metadata.get('format', 'pdf')
         if paper_format == 'pdf':'            # Convert abs URL to PDF URL if needed
             if '/abs/' in url:'                pdf_url = url.replace('/abs/', '/pdf/')'            else:
@@ -247,7 +247,7 @@ Download ArXiv paper.        paper_id = metadata['paper_id']'        paper_forma
         return self.download_file(pdf_url, metadata, filename)
 
     def download_hf_model(self, url: str, metadata: Dict) -> DownloadResult:
-        ""
+"""
 Download a full Hugging Face model repository.        repo_id = metadata['repo_id']'        dest_dir = self.ensure_directory(metadata['destination'])'        repo_path = dest_dir / repo_id.replace("/", "--")
         if self.config.skip_existing and repo_path.exists():
             return DownloadResult(
@@ -283,7 +283,7 @@ Download a full Hugging Face model repository.        repo_id = metadata['repo_i
             )
 
     def download_hf_file(self, url: str, metadata: Dict) -> DownloadResult:
-        ""
+"""
 Download a single file from Hugging Face.        repo_id = metadata['repo_id']'        filename = metadata['filename']'        dest_dir = self.ensure_directory(metadata['destination'])'        dest_path = dest_dir / filename
 
         if self.config.skip_existing and dest_path.exists():
@@ -321,14 +321,14 @@ Download a single file from Hugging Face.        repo_id = metadata['repo_id']' 
             )
 
     def open_webpage(self, url: str, metadata: Dict) -> DownloadResult:
-        ""
+"""
 Open webpage in browser or download HTML.        # For now, just download the HTML content
         parsed = urllib.parse.urlparse(url)
         domain = parsed.netloc.replace('.', '_')'        filename = f"{domain}_{int(time.time())}.html"
         return self.download_file(url, metadata, filename)
 
     def process_url(self, url: str) -> DownloadResult:
-        ""
+"""
 Process a single URL based on its type.        url_type, metadata = self.classifier.classify_url(url)
 
         if self.config.verbose:
@@ -343,7 +343,7 @@ Process a single URL based on its type.        url_type, metadata = self.classif
             return self.open_webpage(url, metadata)
 
     def process_urls_file(self) -> List[DownloadResult]:
-        ""
+"""
 Process all URLs from the configured file.        urls_file = Path(self.config.base_dir) / self.config.urls_file
 
         if not urls_file.exists():
@@ -372,15 +372,15 @@ Process all URLs from the configured file.        urls_file = Path(self.config.b
         return results
 
     def save_results(self, results: List[DownloadResult], output_file: str):
-        ""
-Save results to JSON file.        output_path = Path(self.config.base_dir) / output_file
+"""
+        Save results to JSON file.        output_path = Path(self.config.base_dir) / output_file
 
         data = {
-            'timestamp': datetime.now().isoformat(),'            'config': {'                'urls_file': self.config.urls_file,'                'max_retries': self.config.max_retries,'                'timeout_seconds': self.config.timeout_seconds,'                'dry_run': self.config.dry_run'            },
-            'results': ['                {
-                    'url': r.url,'                    'success': r.success,'                    'destination': r.destination,'                    'file_type': r.file_type,'                    'size_bytes': r.size_bytes,'                    'error_message': r.error_message,'                    'metadata': r.metadata or {}'                } for r in results
-            ],
-            'summary': {'                'total': len(results),'                'successful': len([r for r in results if r.success]),'                'failed': len([r for r in results if not r.success]),'                'skipped': len([r for r in results if r.metadata and r.metadata.get('skipped')]),'                'dry_run': len([r for r in results if r.metadata and r.metadata.get('dry_run')]),'                'total_size_bytes': sum(r.size_bytes for r in results if r.success)'            }
+        'timestamp': datetime.now().isoformat(),'            'config': {'                'urls_file': self.config.urls_file,'                'max_retries': self.config.max_retries,'                'timeout_seconds': self.config.timeout_seconds,'                'dry_run': self.config.dry_run'            },
+        'results': ['                {
+        'url': r.url,'                    'success': r.success,'                    'destination': r.destination,'                    'file_type': r.file_type,'                    'size_bytes': r.size_bytes,'                    'error_message': r.error_message,'                    'metadata': r.metadata or {}'                } for r in results
+        ],
+        'summary': {'                'total': len(results),'                'successful': len([r for r in results if r.success]),'                'failed': len([r for r in results if not r.success]),'                'skipped': len([r for r in results if r.metadata and r.metadata.get('skipped')]),'                'dry_run': len([r for r in results if r.metadata and r.metadata.get('dry_run')]),'                'total_size_bytes': sum(r.size_bytes for r in results if r.success)'            }
         }
 
         with open(output_path, 'w', encoding='utf-8') as f:'            json.dump(data, f, indent=2, ensure_ascii=False)

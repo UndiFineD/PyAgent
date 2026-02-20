@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 PrivacyCore
 """
 Provides high-speed text redaction and log scanning for PII.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -58,7 +58,7 @@ class PrivacyCore:
         logging.info("PrivacyCore initialized.")
     @staticmethod
     def redact_text(text: str) -> str:
-        ""
+"""
 Redacts PII from text using regex patterns.        if not text:
             return text
 
@@ -72,7 +72,7 @@ Redacts PII from text using regex patterns.        if not text:
 
     @staticmethod
     def scan_log_entry(data: Any) -> Any:
-        ""
+"""
 Recursively scan and redact data structures.        if isinstance(data, str):
             return PrivacyCore.redact_text(data)
         if isinstance(data, list):

@@ -29,7 +29,6 @@ USAGE:
 - Defaults work without configuration; pass explicit content to validate other strings.
 
 """
-
 WHAT IT DOES:
 - Provides a set of default ValidationRule objects and three methods: add_validation_rule (append new rules), validate_content (run regex-based rules against content and return structured issues), and is_valid (returns False if any error-severity issues are found).
 - Uses simple regex matching to enforce presence of required sections (e.g., "Purpose"), detect empty sections, and inspect code blocks for language identifiers.

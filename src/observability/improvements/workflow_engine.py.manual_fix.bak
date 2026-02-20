@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Workflow Engine - Manages improvement workflow transitions# DATE: 2026-02-12# AUTHOR: Keimpe de Jong
 USAGE:
@@ -24,7 +24,6 @@ USAGE:
 - Designed for simple in-memory status transitions of Improvement objects where tests expect the improvement.status attribute to be set to a plain string.
 
 """
-
 WHAT IT DOES:
 - Encapsulates a small finite-state machine for improvement objects with four states: pending, in_progress, completed, blocked.
 - Validates requested transitions against a hard-coded transition map and sets the improvement.status attribute when allowed; returns TransitionResult(success=True) or TransitionResult(success=False, message="Invalid transition").
@@ -34,7 +33,7 @@ WHAT IT SHOULD DO BETTER:
 - Add concurrency and transactional safety for multi-threaded or multi-process environments and persist transitions to a durable store when used in production.
 - Improve error messaging with context, and include unit tests for edge cases (unknown statuses, no-op transitions, invalid improvement objects).
 - Consider supporting asynchronous workflows, validation hooks, and richer TransitionResult payloads (previous_status, timestamp, actor).
-""
+"""
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -57,7 +56,7 @@ __version__ = VERSION
 
 
 class WorkflowEngine:
-    ""
+"""
 Manages improvement workflow transitions.
     def __init__(self) -> None:
         self.states: list[str] = [
@@ -73,4 +72,4 @@ Manages improvement workflow transitions.
         setattr(improvement, "status", to_status)"        return TransitionResult(success=True)
 
 
-""
+"""

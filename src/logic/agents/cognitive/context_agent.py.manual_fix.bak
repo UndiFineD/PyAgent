@@ -31,7 +31,6 @@ WHAT IT SHOULD DO BETTER:
 - Persist and load compressed content/metadata using the transactional StateTransaction API and add configurability for the LocalRAGCore (persistence, shard limits, routing heuristics).
 
 """
-
 FILE CONTENT SUMMARY:
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors

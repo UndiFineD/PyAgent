@@ -17,7 +17,6 @@
 Engine.py module.
 
 """
-
 try:
     from typing import Any, Dict, List, Optional, Tuple, Union
 except ImportError:
@@ -58,7 +57,7 @@ except ImportError:
 
 
 class RotaryEmbeddingEngine:
-    ""
+"""
 Unified engine for rotary position embeddings.""""
 Provides automatic variant detection and unified interface
     for all RoPE implementations.
@@ -71,14 +70,14 @@ Provides automatic variant detection and unified interface
     }
 
     def __init__(self, config: Optional[RoPEConfig] = None) -> None:
-        ""
+"""
 Initialize the RoPE engine.        self.config = config or RoPEConfig()
         self._embeddings: Dict[RoPEVariant, RotaryEmbeddingBase] = {}
         self._current_variant = self.config.variant
         self._current_embedding: Optional[RotaryEmbeddingBase] = None
 
     def _get_or_create_embedding(self, variant: RoPEVariant) -> RotaryEmbeddingBase:
-        ""
+"""
 Get or create an embedding instance for the variant.        if variant not in self._embeddings:
             if variant not in self._VARIANT_MAP:
                 raise ValueError(f"Unsupported RoPE variant: {variant}")
@@ -88,13 +87,13 @@ Get or create an embedding instance for the variant.        if variant not in se
         return self._embeddings[variant]
 
     def set_variant(self, variant: RoPEVariant) -> None:
-        ""
+"""
 Set the current RoPE variant.        self._current_variant = variant
         self._current_embedding = self._get_or_create_embedding(variant)
 
     @property
     def embedding(self) -> RotaryEmbeddingBase:
-        ""
+"""
 Get the current embedding instance.        if self._current_embedding is None:
             self._current_embedding = self._get_or_create_embedding(self._current_variant)
         return self._current_embedding
@@ -106,7 +105,7 @@ Get the current embedding instance.        if self._current_embedding is None:
         key: Any,
         use_cuda: bool = True,
     ) -> Tuple[Any, Any]:
-        ""
+"""
 Apply rotary embeddings.        return self.embedding.forward(positions, query, key, use_cuda)
 
     @classmethod
@@ -129,7 +128,7 @@ Create engine from model configuration.        config = RoPEConfig(
 
     @classmethod
     def list_variants(cls) -> List[str]:
-        ""
+"""
 List all supported RoPE variants.        return [v.name for v in RoPEVariant]
 
 
@@ -140,7 +139,7 @@ def create_rope_embedding(
     variant: Union[str, RoPEVariant] = RoPEVariant.NEOX,
     **kwargs: Any,
 ) -> RotaryEmbeddingBase:
-    ""
+"""
 Create a RoPE embedding instance.    if isinstance(variant, str):
         variant = RoPEVariant[variant.upper()]
 

@@ -15,12 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: web_security_scanner_core
 Core logic for web security scanning, refactored from aem-eye patterns.
 Implements asynchronous web application scanning with pattern matching for vulnerability detection.
-""
+"""
 
 """
 import asyncio
@@ -39,7 +39,7 @@ except ImportError:
 
 
 class WebSecurityScannerCore:
-    ""
+"""
 Core logic for web security scanning operations.""
 def __init__(self, timeout: int = 10, concurrency: int = 10, rate_limit: int = 100):
         if not HAS_AIOHTTP:
@@ -52,7 +52,7 @@ def __init__(self, timeout: int = 10, concurrency: int = 10, rate_limit: int = 1
         self.min_interval = 1.0 / rate_limit if rate_limit > 0 else 0.0
 
     async def scan_hosts(self, hosts: List[str], patterns: Dict[str, str]) -> Dict[str, List[str]]:
-        ""
+"""
 Scan a list of hosts for security patterns.
 
         Args:
@@ -61,7 +61,7 @@ Scan a list of hosts for security patterns.
 
         Returns:
             Dict of host -> list of matched pattern names
-        ""
+"""
 results = {}
         tasks = []
 
@@ -84,7 +84,7 @@ results = {}
         return results
 
     def _normalize_url(self, host: str) -> Optional[str]:
-        ""
+"""
 Normalize host string to full URL.""
 if not host.startswith(('http://', 'https://')):'            host = f'http://{host}''        try:
             parsed = urlparse(host)
@@ -95,7 +95,7 @@ if not host.startswith(('http://', 'https://')):'            host = f'http://{ho
         return None
 
     async def _scan_single_host(self, url: str, patterns: Dict[str, str]) -> List[str]:
-        ""
+"""
 Scan a single host for patterns.""
 async with self.semaphore:
             # Rate limiting
@@ -163,7 +163,7 @@ async with self.semaphore:
             return matches
 
     async def detect_cms_fingerprints(self, hosts: List[str]) -> Dict[str, List[str]]:
-        ""
+"""
 Detect CMS fingerprints using common patterns.
 
         Args:

@@ -143,27 +143,27 @@ token_hash = get_bridge().get_token_hash(tokens)
 
     def prune_context(self, prefix_hash: str, attention_weights: np.ndarray):
 """
-Triggers Phase 92: Neural Context Pruning for a specific reasoning stream.
+        Triggers Phase 92: Neural Context Pruning for a specific reasoning stream.
         Identifies and frees blocks with high attention entropy.
 """
-if prefix_hash not in self.active_blocks:
-            return
+        if prefix_hash not in self.active_blocks:
+        return
 
         blocks = self.active_blocks[prefix_hash]
         to_prune = self.pruner.identify_prunable_blocks(attention_weights, blocks)
 
         if to_prune:
-            logger.info(f"KVCache: Pruning {len(to_prune)} blocks from context {prefix_hash}")"            remaining = [b for b in blocks if b not in to_prune]
-            self.active_blocks[prefix_hash] = remaining
+        logger.info(f"KVCache: Pruning {len(to_prune)} blocks from context {prefix_hash}")"            remaining = [b for b in blocks if b not in to_prune]
+        self.active_blocks[prefix_hash] = remaining
 
-            for b_idx in to_prune:
-                self.free_blocks.append(b_idx)
-                if b_idx in self.block_timestamps:
-                    del self.block_timestamps[b_idx]
+        for b_idx in to_prune:
+        self.free_blocks.append(b_idx)
+        if b_idx in self.block_timestamps:
+        del self.block_timestamps[b_idx]
 
     def clear(self):
 """
-Emergency purge of the KV cache.""
-self.free_blocks = get_bridge().manage_kv_blocks(self.num_blocks, self.block_size)
+        Emergency purge of the KV cache.""
+        self.free_blocks = get_bridge().manage_kv_blocks(self.num_blocks, self.block_size)
         self.active_blocks.clear()
         logger.info("KVCache: Purged all blocks")

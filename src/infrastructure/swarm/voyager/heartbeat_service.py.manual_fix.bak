@@ -14,13 +14,12 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Heartbeat Service for Voyager Swarm.
 Bridges TelemetryCore with P2P transport to provide real-time cluster observability.
 
 """
-
 import asyncio
 import psutil
 import time
@@ -45,14 +44,14 @@ class SwarmHeartbeatService:
         self._task: Optional[asyncio.Task] = None
 
     async def start(self) -> None:
-        ""
+"""
 Starts the heartbeat loop.        if self.is_running:
             return
         self.is_running = True
         self._task = asyncio.create_task(self._run_loop())
         logger.info("HeartbeatService: Started local metrics broadcasting.")
     async def stop(self) -> None:
-        ""
+"""
 Stops the heartbeat loop.        self.is_running = False
         if self._task:
             self._task.cancel()
@@ -82,6 +81,6 @@ Stops the heartbeat loop.        self.is_running = False
             await asyncio.sleep(self.interval)
 
     def _get_local_stats(self) -> Dict[str, float]:
-        ""
+"""
 Gathers system-level statistics.        return {
             "cpu_percent": psutil.cpu_percent(),"            "memory_percent": psutil.virtual_memory().percent,"            "tasks_active": len(asyncio.all_tasks())"        }

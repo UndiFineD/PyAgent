@@ -19,7 +19,7 @@ from __future__ import annotations
 """
 Phase 45: Synchronous Multi-process Engine Client
 ZMQ-based synchronous client.
-""
+"""
 
 """
 import logging
@@ -49,7 +49,7 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"     
         self._pending: dict[str, EngineOutput] = {}
 
     def _init_zmq(self) -> None:
-        ""
+"""
 Initialize ZMQ socket.        try:
             import zmq
 
@@ -61,7 +61,7 @@ Initialize ZMQ socket.        try:
         except ImportError:
             logger.warning("ZMQ not available, using mock mode")
     def send_request(self, request: SchedulerOutput) -> str:
-        ""
+"""
 Send request via ZMQ.        request_id = self._generate_request_id()
 
         if self._socket is None:
@@ -90,24 +90,24 @@ Send request via ZMQ.        request_id = self._generate_request_id()
         return request_id
 
     def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        ""
+"""
 Get output synchronously.        return self._pending.pop(request_id, None)
 
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        ""
+"""
 Get output (sync wrapper for async interface).        return self.get_output(request_id, timeout_ms)
 
     def start(self) -> None:
-        ""
+"""
 Start client.        self._init_zmq()
         self._running = True
         logger.info("SyncMPClient started")
     def shutdown(self) -> None:
-        ""
+"""
 Shutdown client.        self._running = False
         if self._socket:
             self._socket.close()
         if self._context:
             self._context.term()
         logger.info("SyncMPClient shutdown")
-""
+"""

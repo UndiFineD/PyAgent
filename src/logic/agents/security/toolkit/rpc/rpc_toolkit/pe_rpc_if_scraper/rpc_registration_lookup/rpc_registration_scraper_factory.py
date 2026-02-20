@@ -70,6 +70,24 @@ def rpc_registration_scraper_factory(disassembler: str) -> BaseRpcRegistrationEx
 return _factory[disassembler]""""
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

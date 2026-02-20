@@ -68,12 +68,12 @@ Utilizes zero-copy memory mapping for low-latency synchronization.
 
         # Initialize NIXL RDMA stubs in Rust
         try:
-            self.rust_bridge.execute(
-                "nixl_zero_copy_map_rust","                {
-                    "rank": rank,"                    "world_size": world_size,"                    "map_size": 1024 * 1024,  # 1MB for control state"                },
-            )
+        self.rust_bridge.execute(
+        "nixl_zero_copy_map_rust","                {
+        "rank": rank,"                    "world_size": world_size,"                    "map_size": 1024 * 1024,  # 1MB for control state"                },
+        )
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.warning("Failed to initialize Nixl RDMA sync: %s. Falling back to TCP.", e)
+        logger.warning("Failed to initialize Nixl RDMA sync: %s. Falling back to TCP.", e)
     def barrier(self, name: str, timeout: float = 30.0) -> bool:
 """
 RDMA-accelerated barrier.        try:
@@ -122,6 +122,24 @@ Fallback TCP-based synchronization.
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

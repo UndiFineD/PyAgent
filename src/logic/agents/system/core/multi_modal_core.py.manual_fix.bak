@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Multi-Modal Core - Vision/Image Core
 
@@ -111,4 +111,4 @@ Core logic for multi-modal interactions (Vision/Image).
         Simplifies "vision response into a structured bug report."        # Heuristic parsing - in reality, we'd use JSON mode if supported'        is_bug = "bug" in vision_response.lower() or "error" in vision_response.lower()"        return {
             "potential_bug": is_bug,"            "description": vision_response,"            "confidence": 0.85 if is_bug else 0.5,"        }
 
-""
+"""

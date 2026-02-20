@@ -23,7 +23,6 @@ Brief Summary
 # AUTHOR: Keimpe de Jong
 
 """
-
 USAGE:
 Instantiate OllamaConnectorAgent(file_path, endpoint=None) and use await agent.check_availability() to probe the service or await agent.generate_local(prompt, model="llama3", system=None, suffix=None, reasoning=False, json_schema=None) to run edge/local inference.
 WHAT IT DOES:
@@ -34,7 +33,7 @@ Improve robust error handling and retry/backoff for network failures, consolidat
 
 FILE CONTENT SUMMARY:
 # Agent for connecting to local Ollama instances on edge nodes (Phase 125).
-""
+"""
 import logging
 import re
 from typing import Optional, Dict, Any
@@ -267,4 +266,4 @@ class OllamaConnectorAgent(BaseAgent):
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
     main = create_main_function(OllamaConnectorAgent, "Ollama Edge Connector", "Edge Intelligence logs")"    main()
 
-""
+"""

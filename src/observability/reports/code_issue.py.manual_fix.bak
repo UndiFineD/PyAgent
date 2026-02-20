@@ -74,7 +74,7 @@ __version__ = VERSION
 
 @dataclass
 class CodeIssue:
-    ""
+"""
 Represents a code issue or improvement suggestion.""""
 Attributes:
         message: Issue description.
@@ -90,6 +90,24 @@ Attributes:
     line_number: int | None = None
     file_path: str | None = None
     function_name: str | None = None
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

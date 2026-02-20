@@ -32,7 +32,6 @@ USAGE:
 - If rust_core is available, the module will delegate heavy analysis to rc.analyze_tech_debt_rust for performance.
 
 """
-
 WHAT IT DOES:
 - Scans a Python AST to detect simple technical-debt indicators (missing docstrings, AST node count complexity) and returns structured issue reports.
 - Counts docstring omissions across functions, classes and modules and uses node-count as a complexity proxy.

@@ -97,11 +97,11 @@ class AsyncPipelineCore:
         self.task_handlers: Dict[str, Callable[[PipelineTask], Awaitable[Any]]] = {}
         self._shutdown = False
 
-    async def start(self) -> None:
+        async def start(self) -> None:
         if self._shutdown:
-            self._shutdown = False
+        self._shutdown = False
 
-    async def stop(self) -> None:
+        async def stop(self) -> None:
         self._shutdown = True
 
     def register_handler(self, task_type: str, handler: Callable[[PipelineTask], Awaitable[Any]]) -> None:

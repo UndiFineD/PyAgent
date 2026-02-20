@@ -151,7 +151,25 @@ Calculate cyclomatic complexity for a function node.        cc = 1
                 cc += len(child.values) - 1
         return cc
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

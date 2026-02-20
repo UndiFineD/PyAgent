@@ -15,12 +15,12 @@ except ImportError:
 
 
 
-""
+"""
 Minimal Lesson model to satisfy imports during tests.
 
 This provides small, well-typed placeholders used by mixins and
 other components during test collection.
-""
+"""
 
 
 @dataclass

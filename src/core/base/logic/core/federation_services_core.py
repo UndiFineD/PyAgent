@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: Federation Services Core (conservative).
 
 Minimal non-actionable types to restore imports during repair.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime

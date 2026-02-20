@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Implementation of subagent running logic.""""
 Phase 15 Rust Optimizations:
 - estimate_tokens_rust: Fast BPE-approximated token counting
@@ -54,14 +54,14 @@ except ImportError:
 
 
 class SubagentRunner:
-    ""
+"""
 Handles running subagents with multiple backend support and fallback logic.
 
     _command_cache: dict[str, bool] = {}
 
     @staticmethod
     def _resolve_repo_root() -> Path:
-        ""
+"""
 Resolve the repository root directory (Phase 108).        if env_root := os.environ.get("DV_AGENT_REPO_ROOT"):"            return Path(env_root).expanduser().resolve()
         here = Path(__file__).resolve()
         for parent in [here.parent, *here.parents]:
@@ -70,7 +70,7 @@ Resolve the repository root directory (Phase 108).        if env_root := os.envi
 
     @staticmethod
     def _command_available(command: str) -> bool:
-        ""
+"""
 Check if a command is available in PATH with result caching (Phase 108).        if command in SubagentRunner._command_cache:
             return SubagentRunner._command_cache[command]
 
@@ -92,7 +92,7 @@ Check if a command is available in PATH with result caching (Phase 108).        
             return False
 
     def __init__(self) -> None:
-        ""
+"""
 Initialize the subagent runner with empty cache and metrics.        self._response_cache: dict[str, str] = {}
 
         # Disk cache initialization
@@ -110,7 +110,7 @@ Initialize the subagent runner with empty cache and metrics.        self._respon
 
     @property
     def requests(self) -> bool:
-        ""
+"""
 Get the requests session or flag.        return self._requests
 
     @requests.setter
@@ -121,7 +121,7 @@ Get the requests session or flag.        return self._requests
 
     @property
     def llm_client(self) -> LLMClient:
-        ""
+"""
 Get the LLM client instance.        return self._llm_client
 
     @llm_client.setter
@@ -136,32 +136,32 @@ Get the LLM client instance.        return self._llm_client
         result: str,
         meta: dict[str, Any] | None = None,
     ) -> None:
-        ""
+"""
 Record an interaction for intelligence harvesting (Phase 108).        if self.recorder:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
 
     def clear_response_cache(self) -> None:
-        ""
+"""
 Clear the response cache.        self._response_cache.clear()
         if hasattr(self, "disk_cache"):"            self.disk_cache.clear()
         logging.debug("Response cache cleared")
     def get_metrics(self) -> dict[str, Any]:
-        ""
+"""
 Get current metrics snapshot.        return dict(self._metrics)
 
     def reset_metrics(self) -> None:
-        ""
+"""
 Reset metrics to zero.        self._metrics.update(
             {
                 "requests": 0,"                "errors": 0,"                "timeouts": 0,"                "cache_hits": 0,"                "total_latency_ms": 0,"            }
         )
         logging.debug("Metrics reset")
     def _get_cache_key(self, prompt: str, model: str) -> str:
-        ""
+"""
 Generate a cache key for a prompt-model combination.        content = f"{prompt}:{model}".encode()"        return hashlib.sha256(content).hexdigest()
 
     def validate_response_content(self, response: str, content_types: list[str] | None = None) -> bool:
-        ""
+"""
 Validate that AI response contains expected content types.        if not response:
             return False
         response_lower = response.lower()
@@ -173,7 +173,7 @@ Validate that AI response contains expected content types.        if not respons
         logging.warning("Response validation failed: expected %s, got partial match", content_types)"        return True
 
     def estimate_tokens(self, text: str) -> int:
-        ""
+"""
 Estimate token count for text.""""
 Uses Rust-accelerated BPE approximation when available.
                 if not text:
@@ -199,24 +199,24 @@ Estimate cost for API-based backends.        cost = (tokens / 1000.0) * rate_per
         logging.debug("Estimated cost for %d tokens: $%s", tokens, f"{cost:.6f}")"        return cost
 
     def configure_timeout_per_backend(self, backend: str, timeout_s: int) -> None:
-        ""
+"""
 Configure timeout for specific backend type.        env_key = f"DV_AGENT_TIMEOUT_{backend.upper()}""        os.environ[env_key] = str(timeout_s)
         logging.debug("Configured %s timeout to %ds", backend, timeout_s)
     def llm_chat_via_github_models(self, prompt: str, model: str, **kwargs: Any) -> str:
-        ""
+"""
 Call a GitHub Models OpenAI-compatible chat endpoint with caching.        return self._core.llm_chat_via_github_models(prompt, model, **kwargs)
 
     def _has_command_operators(self, text: str) -> bool:
-        ""
+"""
 Check if text contains command operators.        return any(op in text for op in ("|", "&&", ";"))
     def _starts_with_command_prefix(self, text: str) -> bool:
-        ""
+"""
 Check if text starts with common command prefixes.        starters = (
             "git ","            "gh ","            "docker ","            "kubectl ","            "pip ","            "python ","            "npm ","            "node ","            "pwsh ","            "powershell ","            "Get-","            "Set-","            "New-","        )
         return text.startswith(starters)
 
     def _looks_like_command(self, text: str) -> bool:
-        ""
+"""
 Helper to decide if a prompt is command-like.        t = (text or "").strip()"        if not t:
             return False
         if "\\n" in t:"            return False
@@ -228,21 +228,21 @@ Helper to decide if a prompt is command-like.        t = (text or "").strip()"  
 Run a subagent using available backends.        return self._core.run_subagent(description, prompt, original_content)
 
     def llm_chat_via_ollama(self, *args, **kwargs) -> str:
-        ""
+"""
 Proxy to LLMClient.        return self.llm_client.llm_chat_via_ollama(*args, **kwargs)
 
     def llm_chat_via_vllm(self, *args, **kwargs) -> str:
-        ""
+"""
 Proxy to LLMClient.        return self.llm_client.llm_chat_via_vllm(*args, **kwargs)
 
     def llm_chat_via_copilot_cli(self, *args, **kwargs) -> str:
-        ""
+"""
 Proxy to LLMClient.        return self.llm_client.llm_chat_via_copilot_cli(*args, **kwargs)
 
     def get_backend_status(self) -> dict[str, Any]:
-        ""
+"""
 Return diagnostic snapshot of backend availability.        return self._status_manager.get_backend_status()
 
     def describe_backends(self) -> str:
-        ""
+"""
 Return human-readable backend diagnostics.        return self._status_manager.describe_backends()

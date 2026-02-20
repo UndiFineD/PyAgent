@@ -37,11 +37,11 @@ class DummyShell:
     def execute(self, cmd: list[str], check: bool = False):
         self.commands.append(cmd)
         if cmd[:2] == ["git", "status"]:
-            return SimpleNamespace(stdout=self._status_stdout)
+        return SimpleNamespace(stdout=self._status_stdout)
         if cmd[:2] == ["git", "commit"]:
-            if self._commit_ok:
-                return SimpleNamespace(stdout="Committed")
-            raise RuntimeError("commit failed")
+        if self._commit_ok:
+        return SimpleNamespace(stdout="Committed")
+        raise RuntimeError("commit failed")
         return SimpleNamespace(stdout="")
 
 

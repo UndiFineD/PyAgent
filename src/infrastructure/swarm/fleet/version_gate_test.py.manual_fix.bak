@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Unit test for verifying version gatekeeping in agent loading.
 
@@ -48,4 +48,4 @@ def test_version_gate() -> None:
 if __name__ == "__main__":"    test_version_gate()
 
 
-""
+"""

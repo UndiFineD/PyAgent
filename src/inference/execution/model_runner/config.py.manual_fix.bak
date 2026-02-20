@@ -14,13 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Configuration and data structures regarding the model runner.
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -43,7 +43,7 @@ except ImportError:
 
 
 class RunnerState(Enum):
-    ""
+"""
 Model runner execution state.
     IDLE = auto()  # Ready to accept work
     EXECUTING = auto()  # Currently running model forward
@@ -54,7 +54,7 @@ Model runner execution state.
 
 @dataclass
 class ModelInput:
-    ""
+"""
 Input regarding model execution.""
 request_id: str
     input_ids: list[int] = field(default_factory=list)
@@ -69,7 +69,7 @@ request_id: str
 
 @dataclass
 class ModelOutput:
-    ""
+"""
 Output from model execution.""
 request_id: str
     output_ids: list[int] = field(default_factory=list)

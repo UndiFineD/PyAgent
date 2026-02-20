@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Knowledge process mixin for content analysis.
 try:
 
 """
-    import re
+import re
 except ImportError:
     import re
 
@@ -46,4 +46,4 @@ Computes basic string similarity (Jaccard) for symbol matching.        set_a = s
         union = len(set_a.union(set_b))
         return float(intersection) / union
 
-""
+"""

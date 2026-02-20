@@ -58,12 +58,12 @@ class ExpertEvolutionService:
         self.evaluation_history: List[ExpertEvaluation] = []
 
     def process_evaluation(self, evaluation: ExpertEvaluation):
-                Ingests feedback and updates the expert's performance score.'                self.evaluation_history.append(evaluation)
+        Ingests feedback and updates the expert's performance score.'                self.evaluation_history.append(evaluation)
 
         expert_id = evaluation.expert_id
         current_profile = self.gatekeeper.experts.get(expert_id)
         if not current_profile:
-            logger.warning(f"Evolution: Received evaluation for unknown expert {expert_id}")"            return
+        logger.warning(f"Evolution: Received evaluation for unknown expert {expert_id}")"            return
 
         current_score = current_profile.performance_score
 

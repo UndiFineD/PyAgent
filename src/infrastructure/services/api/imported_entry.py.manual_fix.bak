@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_changes.py""""
 from dataclasses import dataclass, field
 
@@ -30,7 +30,7 @@ __version__ = VERSION
 
 @dataclass
 class ImportedEntry:
-    ""
+"""
 An entry imported from external source.""""
 Attributes:
         source: Where the entry was imported from.

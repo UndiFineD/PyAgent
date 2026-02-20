@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 CodeReviewerAgent - Automated code review
 
@@ -211,4 +211,4 @@ Python fallback for pattern scanning.        for i, line in" enumerate(lines, 1)
 
 if __name__ == "__main__":"    main = create_main_function(CodeReviewerAgent, "Code Reviewer", "Content to review")"    main()
 
-""
+"""

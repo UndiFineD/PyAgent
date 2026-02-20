@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Attention Buffer Agent - Manage shared attention context
 
@@ -194,4 +194,4 @@ class AttentionBufferAgent(BaseAgent):
 #         return fCleared {removed} stale attention points.
 
 
-""
+"""

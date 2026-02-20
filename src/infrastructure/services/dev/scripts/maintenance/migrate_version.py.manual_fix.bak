@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for migrating hardcoded version strings to use the central VERSION import.
 
 """
-
 import os
 
 src_path = r"c:\\DEV\\PyAgent\\src""version_import = "from src.core.base.lifecycle.version import VERSION""target_version = 'VERSION = "2.1.2-stable"'
@@ -54,5 +53,5 @@ for root, _, files in os.walk(src_path):
                 print(f"  Error processing {path}: {e}")
 print(f"\\nFinished. Processed {files_processed} files, modified {files_modified} files.")
 
-""
+"""
 

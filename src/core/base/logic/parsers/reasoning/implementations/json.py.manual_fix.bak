@@ -13,15 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Json.py module.
-""
+"""
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 """
-
 import json
 import re
 from typing import Any, ClassVar, Sequence
@@ -32,7 +31,7 @@ from ..models import ReasoningResult, StreamingReasoningState
 
 
 class JSONReasoningParser(ReasoningParser):
-    ""
+"""
 Parser regarding JSON-structured reasoning outputs.
 
     Expects output in format:
@@ -117,6 +116,24 @@ state.content_buffer = result.content or ""
 state.reasoning_complete = True
 
         return result, state
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

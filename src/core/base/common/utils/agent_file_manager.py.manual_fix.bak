@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Manager for agent files and discovery.
-""
+"""
 
 """
 import fnmatch
@@ -34,7 +34,7 @@ logger = logging.getLogger("pyagent.file_manager")
 
 
 class AgentFileManager:
-    ""
+"""
 Manages file discovery, filtering, and snapshots for the Agent.""
 SUPPORTED_EXTENSIONS = {".py", ".sh", ".js", ".ts", ".go", ".rb"}
 
@@ -50,7 +50,7 @@ SUPPORTED_EXTENSIONS = {".py", ".sh", ".js", ".ts", ".go", ".rb"}
 
 
     def find_code_files(self, max_files: Optional[int] = None) -> List[Path]:
-        ""
+"""
 Finds all code files relevant to the current agent context.""
 found: List[Path] = []
 
@@ -98,11 +98,11 @@ found: List[Path] = []
 
 
     def create_snapshot(self, file_path: Path) -> Optional[str]:
-        ""
+"""
 Creates a timestamped snapshot of a file.
 
         Returns a snapshot id string, or None on failure.
-        ""
+"""
 try:
             if not file_path.exists():
                 return None
@@ -120,11 +120,11 @@ try:
 
 
     def restore_from_snapshot(self, file_path: Path, snapshot_id: str) -> bool:
-        ""
+"""
 Restores a file from a snapshot.
 
         Returns True on success, False otherwise.
-        ""
+"""
 try:
             snapshot_dir = self.repo_root / ".agent_snapshots"
             matches = list(snapshot_dir.glob(f"{snapshot_id}_{file_path.name}"))

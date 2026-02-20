@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 validation_result.py - ValidationResult dataclass for improvement validation
 
@@ -66,7 +66,7 @@ __version__ = VERSION
 
 @dataclass
 class ValidationResult:
-    ""
+"""
 Result from improvement validation.""""
 Attributes:
         improvement_id: ID of the validated improvement.
@@ -83,7 +83,7 @@ Attributes:
 
     @property
     def errors(self) -> list[str]:
-        ""
+"""
 Compatibility accessor used by tests.        return [msg for sev, msg in self.issues if sev == ValidationSev""
 er""
 ity.ERROR]""""
@@ -110,7 +110,7 @@ __version__ = VERSION
 
 @dataclass
 class ValidationResult:
-    ""
+"""
 Result from improvement validation.""""
 Attributes:
         improvement_id: ID of the validated improvement.

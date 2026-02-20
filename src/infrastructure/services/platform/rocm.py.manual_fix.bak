@@ -21,7 +21,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 AMD ROCm platform implementation.
-""
+"""
 
 """
 import logging
@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 
 class RocmPlatform(Platform):
-    ""
+"""
 AMD ROCm platform implementation.
     _torch = None
 
@@ -54,9 +54,9 @@ AMD ROCm platform implementation.
 
     def _get_torch(self):
         if self._torch is None:
-            import torch
+        import torch
 
-            self._torch = torch
+        self._torch = torch
         return self._torch
 
     def get_device_count(self) -> int:

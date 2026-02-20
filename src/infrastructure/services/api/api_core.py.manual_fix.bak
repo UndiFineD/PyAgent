@@ -17,11 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 APICore logic for fleet communication.
 Pure logic for OpenAPI spec generation and tool contract validation.
-""
+"""
 
 """
 import json
@@ -39,13 +39,13 @@ except ImportError:
 
 
 class APICore:
-    ""
+"""
 Logic for API-related operations, including OpenAPI schema generation.
     def __init__(self, version: str = SDK_VERSION) -> None:
         self.version = version
 
     def build_openapi_json(self, tool_definitions: list[dict[str, Any]]) -> str:
-        ""
+"""
 Constructs an OpenAPI 3.0 string from tool metadata.        if rc:
             try:
                 return rc.generate_openapi_spec(tool_definitions, self.version)  # type: ignore[attr-defined]
@@ -66,6 +66,6 @@ Constructs an OpenAPI 3.0 string from tool metadata.        if rc:
         return json.dumps(spec, indent=2)
 
     def validate_tool_contract(self, spec: dict[str, Any]) -> bool:
-        ""
+"""
 Checks if an external tool definition is valid.        return "name" in spec and ("endpoint" in spec or "implementation" in spec)
-""
+"""

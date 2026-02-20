@@ -87,10 +87,10 @@ class Serializer(ABC):
 Abstract base class for serializers.
     def __init__(self):
 """
-Initialize serializer.        self._stats = SerializerStats()
+        Initialize serializer.        self._stats = SerializerStats()
         self._lock = threading.Lock()
 
-    @abstractmethod
+        @abstractmethod
     def _serialize(self, obj: Any) -> bytes:
 """
 Internal serialization implementation.        ...
@@ -315,19 +315,19 @@ class CBORSerializer(Serializer):
     
     def __init__(self):
 """
-Initialize CBOR serializer.        super().__init__()
+        Initialize CBOR serializer.        super().__init__()
 
         # Try to import cbor2
         try:
-            import cbor2
+        import cbor2
 
-            self._cbor2 = cbor2
-            self._available = True
+        self._cbor2 = cbor2
+        self._available = True
         except ImportError:
-            self._cbor2 = None
-            self._available = False
+        self._cbor2 = None
+        self._available = False
 
-    @property
+        @property
     def format(self) -> SerializationFormat:
 """
 Get serialization format.        return SerializationFormat.CBOR
@@ -368,9 +368,9 @@ class BinarySerializer(Serializer):
 
     def __init__(self):
 """
-Initialize binary serializer.        super().__init__()
+        Initialize binary serializer.        super().__init__()
 
-    @property
+        @property
     def format(self) -> SerializationFormat:
 """
 Get serialization format.        return SerializationFormat.BINARY
@@ -461,12 +461,12 @@ class SerializerRegistry:
     
     def __init__(self):
 """
-Initialize registry with default serializers.        self._serializers: Dict[SerializationFormat, Serializer] = {
-            SerializationFormat.JSON: JSONSerializer(),
-            SerializationFormat.PICKLE: PickleSerializer(),
-            SerializationFormat.MSGPACK: MsgPackSerializer(),
-            SerializationFormat.CBOR: CBORSerializer(),
-            SerializationFormat.BINARY: BinarySerializer(),
+        Initialize registry with default serializers.        self._serializers: Dict[SerializationFormat, Serializer] = {
+        SerializationFormat.JSON: JSONSerializer(),
+        SerializationFormat.PICKLE: PickleSerializer(),
+        SerializationFormat.MSGPACK: MsgPackSerializer(),
+        SerializationFormat.CBOR: CBORSerializer(),
+        SerializationFormat.BINARY: BinarySerializer(),
         }
         self._default = SerializationFormat.JSON
 

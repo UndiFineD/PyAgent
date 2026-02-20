@@ -102,20 +102,20 @@ class SafeLocalInterpreter:
         # Allow standard builtins but block dangerous ones like eval, exec, open (maybe?)
         # For now, we block 'eval', 'exec', 'compile', '__import__' (we handle import separately)'        unsafe = {'eval', 'exec', 'compile', 'open', 'input', '__import__'}'        safe = {}
         for name in dir(builtins):
-            if name not in unsafe and not name.startswith('_'):'                safe[name] = getattr(builtins, name)
+        if name not in unsafe and not name.startswith('_'):'                safe[name] = getattr(builtins, name)
 
         # Override print to capture output? Or we can just let it print to stdout which we capture
         return safe
 
     def _setup_allowed_modules(self):
         for mod_name in self.ALLOWED_MODULES:
-            try:
-                mod = __import__(mod_name)
-                self.safe_globals[mod_name] = mod
-            except ImportError:
-                pass
+        try:
+        mod = __import__(mod_name)
+        self.safe_globals[mod_name] = mod
+        except ImportError:
+        pass
 
-    async def execute(self, code: str) -> ExecutionResult:
+        async def execute(self, code: str) -> ExecutionResult:
         Executes code string in the safe" context."        loop = asyncio.get_event_loop()
         # Run blocking execution in thread
         return await loop.run_in_executor(None, self._execute_sync, code)
@@ -203,20 +203,20 @@ if __name__ == "__main__":"    async def main():
         # Allow standard builtins but block dangerous ones like eval, exec, open (maybe?)
         # For now, we block 'eval', 'exec', 'compile', '__import__' (we handle import separately)'        unsafe = {'eval', 'exec', 'compile', 'open', 'input', '__import__'}'        safe = {}
         for name in dir(builtins):
-            if name not in unsafe and not name.startswith('_'):'                safe[name] = getattr(builtins, name)
+        if name not in unsafe and not name.startswith('_'):'                safe[name] = getattr(builtins, name)
 
         # Override print to capture output? Or we can just let it print to stdout which we capture
         return safe
 
     def _setup_allowed_modules(self):
         for mod_name in self.ALLOWED_MODULES:
-            try:
-                mod = __import__(mod_name)
-                self.safe_globals[mod_name] = mod
-            except ImportError:
-                pass
+        try:
+        mod = __import__(mod_name)
+        self.safe_globals[mod_name] = mod
+        except ImportError:
+        pass
 
-    async def execute(self, code: str) -> ExecutionResult:
+        async def execute(self, code: str) -> ExecutionResult:
         Executes code string in" the safe context."        loop = asyncio.get_event_loop()
         # Run blocking execution in thread
         return await loop.run_in_executor(None, self._execute_sync, code)

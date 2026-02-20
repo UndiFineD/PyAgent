@@ -59,7 +59,7 @@ from .models import DownloadConfig, DownloadResult
 
 
 def print_results_summary(results: List[DownloadResult]):
-    ""
+"""
 Print a summary of download results.    if not results:
         print("No URLs processed.")"        return
 
@@ -82,7 +82,7 @@ Print a summary of download results.    if not results:
         print(f"  - {file_type}: {count}")
 
 def main():
-    ""
+"""
 Main CLI entry point.    parser = argparse.ArgumentParser(
         description="PyAgent Download Agent - Handle different URL types with appropriate mechanisms","        formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=Examples:

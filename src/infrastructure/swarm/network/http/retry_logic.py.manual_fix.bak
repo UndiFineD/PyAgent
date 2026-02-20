@@ -17,10 +17,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Retry logic.py module.
-""
+"""
 
 """
 import asyncio
@@ -36,7 +36,7 @@ logger = logging.getLogger(__name__)
 
 
 class RetryHTTPMixin:
-    ""
+"""
 Mixin providing retry logic for HTTP requests.
     def get_json_with_retry(
         self: HTTPConnection,
@@ -44,7 +44,7 @@ Mixin providing retry logic for HTTP requests.
         *,
         timeout: float | None = None,
     ) -> Any:
-        ""
+"""
 GET JSON with automatic retry on failure.
         last_error: Exception | None = None
         delay = self.retry_delay
@@ -70,7 +70,7 @@ GET JSON with automatic retry on failure.
         *,
         timeout: float | None = None,
     ) -> Any:
-        ""
+"""
 Async GET JSON with automatic retry on failure.        import aiohttp
 
         last_error: Exception | None = None
@@ -92,4 +92,4 @@ Async GET JSON with automatic retry on failure.        import aiohttp
                     delay *= self.retry_backoff
 
         raise last_error or RuntimeError("Max retries exceeded")
-""
+"""

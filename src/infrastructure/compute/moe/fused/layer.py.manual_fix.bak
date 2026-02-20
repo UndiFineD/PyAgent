@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Layer.py module.
-""
+"""
 try:
 
 """
-    import threading
+import threading
 except ImportError:
     import threading
 
@@ -62,7 +62,7 @@ except ImportError:
 
 
 class FusedMoELayer:
-    ""
+"""
 Fused Mixture of Experts layer.
     def __init__(
         self,

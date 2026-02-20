@@ -56,12 +56,12 @@ class TableCacheManager:
 
     def insert(self, table_name: str, columns: List[str]):
 """
-Insert schema metadata into the trie.        node = self.root
+        Insert schema metadata into the trie.        node = self.root
         # Index table name and column names for fast lookup
         for char in table_name.lower():
-            if char not in node.children:
-                node.children[char] = TableTrieNode()
-            node = node.children[char]
+        if char not in node.children:
+        node.children[char] = TableTrieNode()
+        node = node.children[char]
 
         node.metadata = TableMetadata(table_name=table_name, columns=columns)
         self.table_count += 1
@@ -81,9 +81,9 @@ Search for tables matching a prefix.        node = self.root
 
     def _collect_metadata(self, node: TableTrieNode, results: List[TableMetadata]):
         if node.metadata:
-            results.append(node.metadata)
+        results.append(node.metadata)
         for child in node.children.values():
-            self._collect_metadata(child, results)
+        self._collect_metadata(child, results)
 
     def prune_schema(self, query: str) -> List[TableMetadata]:
                 Heuristically prune schema based on query keywords.

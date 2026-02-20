@@ -14,12 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Heterogeneous speculator.py module.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -87,4 +86,4 @@ class HeterogeneousSpeculator:
         # In a real integration, we'd call SpeculativeSwarmOrchestrator.execute_speculative_task'        # Here we simulate the handoff
         return {"mode": "speculative", "drafter": drafter_id, "verifier": verifier_id, "task": task}
 
-""
+"""

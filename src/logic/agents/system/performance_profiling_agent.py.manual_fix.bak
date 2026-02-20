@@ -38,7 +38,7 @@ Example:
 try:
 
 """
-    from .tools.performance_profiling_agent import PerformanceProfilingAgent
+from .tools.performance_profiling_agent import PerformanceProfilingAgent
 except ImportError:
     from src.tools.performance_profiling_agent import PerformanceProfilingAgent
 

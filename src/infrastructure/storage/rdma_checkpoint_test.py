@@ -41,18 +41,18 @@ except ImportError:
 class TestRdmaCheckpoint(unittest.TestCase):
     def setUp(self):
         self.config = KVTransferConfig(
-            kv_rank=0,
-            kv_parallel_size=2,
-            is_producer=True,
-            is_consumer=True
+        kv_rank=0,
+        kv_parallel_size=2,
+        is_producer=True,
+        is_consumer=True
         )
         # Mock RustBridge to avoid FFI errors in tests
         with patch("src.infrastructure.storage.kv_transfer.nixl_connector.RustBridge") as mock_bridge:"            self.connector = NixlConnector(self.config)
-            self.connector.rust_bridge = mock_bridge.return_value
+        self.connector.rust_bridge = mock_bridge.return_value
 
     def test_create_checkpoint(self):
 """
-Test creating an RDMA-based checkpoint (Phase 93).        mock_tensor = MagicMock()
+        Test creating an RDMA-based checkpoint (Phase 93).        mock_tensor = MagicMock()
         mock_tensor.data_ptr.return_value = 0x12345678
         mock_tensor.numel.return_value = 1024
         mock_tensor.element_size.return_value = 4
@@ -62,11 +62,11 @@ Test creating an RDMA-based checkpoint (Phase 93).        mock_tensor = MagicMoc
         self.assertTrue(success)
         # Verify RustBridge was called with the checkpoint function
         self.connector.rust_bridge.execute.assert_any_call(
-            "nixl_rdma_checkpoint_rust","            {
-                "checkpoint_id": "cp_test_01","                "target_rank": 1,"                "local_ptr": 0x12345678,"                "length": 4096,"                "lkey": 1,"            }
+        "nixl_rdma_checkpoint_rust","            {
+        "checkpoint_id": "cp_test_01","                "target_rank": 1,"                "local_ptr": 0x12345678,"                "length": 4096,"                "lkey": 1,"            }
         )
 
 
-if __name__ == "__main__":"    unittest.main()
+        if __name__ == "__main__":"    unittest.main()
 
 """

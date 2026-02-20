@@ -118,6 +118,24 @@ return ["db.adminCommand('listDatabases')", "db.getUsers()", "db.getCollectionNa
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

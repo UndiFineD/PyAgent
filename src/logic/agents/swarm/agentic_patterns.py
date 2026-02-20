@@ -93,14 +93,14 @@ Fallback stub for WorkState which stores results in a dict.    def __init__(self
 
     def update(self, key, value):
 """
-Update the internal results mapping.        self.results[key] = value
+        Update the internal results mapping.        self.results[key] = value
 
-from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
+        from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
-logger = logging.getLogger(__name__)
+        logger = logging.getLogger(__name__)
 
 
-@dataclass
+        @dataclass
 class SequentialAgentConfig:
 """
 Configuration for sequential agent execution.
@@ -296,6 +296,24 @@ Initialize the sequential agent pattern.    self.orchestrator = orchestrator
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

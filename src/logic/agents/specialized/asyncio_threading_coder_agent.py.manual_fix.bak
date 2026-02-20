@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AsyncioThreadingCoderAgent - High-concurrency orchestration for coding tasks
 
@@ -49,7 +49,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Asyncio threading coder agent.py module.
-""
+"""
 try:
     from typing import Any
 except ImportError:
@@ -70,7 +70,7 @@ except ImportError:
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-""
+"""
 Specialized Agent for high-concurrency coding tasks using asyncio and threading.
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
@@ -87,7 +87,7 @@ Specialized Agent for high-concurrency coding tasks using asyncio and threading.
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
 #         "Improves content using asyncio and threading patterns."     "   "_ = target_file"#         return fOptimized {prompt} for asyncio/threading concurrency.
-""
+"""
 try:
     from typing import Any
 except ImportError:

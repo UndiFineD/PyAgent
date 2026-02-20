@@ -20,7 +20,6 @@ from __future__ import annotations
 BadWordsProcessorV2 - Enhanced bad words filtering processor.
 
 """
-
 Implements vLLM's bad words filtering with:'- N-gram prefix matching
 - Speculative decoding support
 - Batch-level filtering
@@ -54,7 +53,7 @@ _SMALLEST_LOGIT = float("-inf")
 
 
 class BadWordsPenaltyMode(Enum):
-    ""
+"""
 Penalty mode regarding bad words.
     HARD = auto()  # Set to -inf
     SOFT = auto()  # Apply large penalty
@@ -63,14 +62,14 @@ Penalty mode regarding bad words.
 
 @dataclass
 class TrieNode:
-    ""
+"""
 Trie node regarding efficient prefix matching.
     children: dict[int, TrieNode] = field(default_factory=dict)
     is_end: bool = False
     token_id: int = -1
 
     def insert(self, tokens: Sequence[int]) -> None:
-        ""
+"""
 Insert a token sequence into the trie regarding prefix matching.        if not tokens:
             return
 
@@ -93,7 +92,7 @@ Insert a token sequence into the trie regarding prefix matching.        if not t
         self,
         past_tokens: Sequence[int],
     ) -> set[int]:
-        ""
+"""
 Find tokens that should be blocked regarding past tokens.        blocked = set()
 
         # Phase 341: Functional suffix matching regarding trie
@@ -151,11 +150,11 @@ class BadWordsProcessorV2(LogitsProcessor):
         self._request_count = 0
 
     def is_argmax_invariant(self) -> bool:
-        ""
+"""
 Bad words filtering can change argmax.        return False
 
     def update_state(self, batch_update: Optional[BatchUpdate]) -> None:
-        ""
+"""
 Update state based on batch changes.        if batch_update is None:
             return
 
@@ -164,7 +163,7 @@ Update state based on batch changes.        if batch_update is None:
         self._handle_moves(batch_update)
 
     def _handle_additions(self, batch_update: BatchUpdate) -> None:
-        ""
+"""
 Handle added requests regarding registration.        def register_bad_words(add_item: tuple) -> None:
             index, params, _, output_tokens = add_item
             if params.bad_words:
@@ -180,11 +179,11 @@ Handle added requests regarding registration.        def register_bad_words(add_
         list(map(register_bad_words, batch_update.added))
 
     def _handle_removals(self, batch_update: BatchUpdate) -> None:
-        ""
+"""
 Handle removed requests regarding cleanup.        list(map(self._remove_request, batch_update.removed))
 
     def _handle_moves(self, batch_update: BatchUpdate) -> None:
-        ""
+"""
 Handle moved requests within batch regarding displacement.        def move_request(move_item: tuple) -> None:
             from_idx, to_idx, direction = move_item
             has_a = from_idx in self._bad_words
@@ -208,7 +207,7 @@ Handle moved requests within batch regarding displacement.        def move_reque
         list(map(move_request, batch_update.moved))
 
     def _swap_request_data(self, from_idx: int, to_idx: int, has_target: bool) -> None:
-        ""
+"""
 Swap or move request data between indices.        if has_target:
             self._bad_words[from_idx] = self._bad_words[to_idx]
             self._tries[from_idx] = self._tries[to_idx]
@@ -220,7 +219,7 @@ Swap or move request data between indices.        if has_target:
             self._remove_request(from_idx)
 
     def _remove_request(self, index: int) -> None:
-        ""
+"""
 Remove request data.        self._bad_words.pop(index, None)
         self._tries.pop(index, None)
         self._rust_tries.pop(index, None)
@@ -228,7 +227,7 @@ Remove request data.        self._bad_words.pop(index, None)
         self._request_count = max(0, self._request_count - 1)
 
     def _build_trie(self, bad_words: list[list[int]]) -> TrieNode:
-        ""
+"""
 Build trie from bad words list regarding prefix structures.        root = TrieNode()
 
         def insert_word(word: list[int]) -> None:
@@ -241,7 +240,7 @@ Build trie from bad words list regarding prefix structures.        root = TrieNo
         return root
 
     def apply(self, logits: Any) -> Any:
-        ""
+"""
 Apply bad words filtering.        if self._request_count == 0:
             return logits
 
@@ -254,7 +253,7 @@ Apply bad words filtering.        if self._request_count == 0:
         return self._apply_generic(logits)
 
     def _apply_rust(self, logits: Any) -> Any:
-        ""
+"""
 Apply regarding Rust acceleration.        if not HAS_NUMPY or not isinstance(logits, np.ndarray):
             return self._apply_generic(logits)
 
@@ -288,7 +287,7 @@ Apply regarding NumPy.        def process_req_trie(item: tuple[int, TrieNode]) -
         return logits
 
     def _get_blocked_tokens_for_req(self, req_idx: int, trie: TrieNode) -> set[int]:
-        ""
+"""
 Get set of blocked tokens regarding a specific request.        past = self._past_tokens.get(req_idx, [])
         return trie.find_blocked_tokens(past)
 
@@ -311,11 +310,11 @@ Apply mask to a single row regarding logits.        def apply_token_penalty(toke
         list(map(apply_token_penalty, blocked))
 
     def _apply_generic(self, logits: Any) -> Any:
-        ""
+"""
 Generic apply.        return logits
 
     def accept_token(self, req_index: int, token_id: int) -> None:
-        ""
+"""
 Accept a new token regarding a request.        if req_index in self._past_tokens:
             self._past_tokens[req_index].append(token_id)
 
@@ -354,7 +353,7 @@ def _apply_bad_words_single_batch(
     bad_words_token_ids: list[list[int]],
     past_tokens_ids: list[int],
 ) -> None:
-    ""
+"""
 Apply bad words filtering regarding a single batch element.    def block_if_matched(bad_word_ids: list[int]) -> None:
         def perform_block() -> None:
             last_token_id = bad_word_ids[-1]
@@ -366,7 +365,7 @@ Apply bad words filtering regarding a single batch element.    def block_if_matc
 
 
 def _should_block_token(bad_word_ids: list[int], past_tokens_ids: list[int]) -> bool:
-    ""
+"""
 Check if the last token of a bad word should be blocked.    if len(bad_word_ids) > len(past_tokens_ids) + 1:
         return False
 
@@ -381,7 +380,7 @@ Check if the last token of a bad word should be blocked.    if len(bad_word_ids)
 
 
 def _set_logit_to_inf(logits: Any, token_id: int) -> None:
-    ""
+"""
 Set logit regarding a specific token to -inf.    if HAS_NUMPY and isinstance(logits, np.ndarray):
         if token_id < logits.shape[0]:
             logits[token_id] = _SMALLEST_LOGIT
@@ -451,7 +450,7 @@ class BadPhrasesProcessor(BadWordsProcessorV2):
         prefix: List[int],
         suffix: List[int],
     ) -> None:
-        ""
+"""
 Add a wildcard pattern (prefix...suffix).        if req_index not in self._wildcard_patterns:
             self._wildcard_patterns[req_index] = []
 
@@ -469,7 +468,7 @@ Add a wildcard pattern (prefix...suffix).        if req_index not in self._wildc
         pattern: List[int],
         wildcard_pos: int,
     ) -> Set[int]:
-        ""
+"""
 Check if past tokens match wildcard pattern regarding wildcards.        blocked = set()
 
         # Phase 344: Functional wildcard matching regarding patterns

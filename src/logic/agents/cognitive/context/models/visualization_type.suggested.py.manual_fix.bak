@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from enum import Enum
@@ -38,7 +38,25 @@ class VisualizationType(Enum):
 """"
 Types of context visualization.
 #     DEPENDENCY_GRAPH = "dependency_graph"#     CALL_HIERARCHY = "call_hierarchy"#     FILE_TREE = "file_tree"#     MIND_MAP = "mind_map"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

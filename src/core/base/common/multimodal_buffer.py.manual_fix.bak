@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Multimodal buffer management.""
 
@@ -27,17 +27,17 @@ except ImportError:
 
 
 class TemporalModalityBuffer:
-    ""
+"""
 Rolling buffer for multimodal sequences (Short-term memory).
     Stores recent frames/audio to allow temporal reasoning.
-    ""
+"""
 def __init__(self, max_size: int = 10) -> None:
         self.max_size = max_size
         self.frames: List[bytes] = []
         self.timestamps: List[float] = []
 
     def push(self, frame: bytes, timestamp: float) -> None:
-        ""
+"""
 Add a frame and timestamp to the buffer.""
 self.frames.append(frame)
         self.timestamps.append(timestamp)

@@ -50,7 +50,7 @@ Workers receive requests, process them, and return results.
         self._total_processed = 0
         self._error_count = 0
 
-    @abstractmethod
+        @abstractmethod
     def initialize(self) -> None:
 """
 Initialize the worker (load models, etc.).        ...
@@ -217,6 +217,24 @@ Check if the worker process is alive.        return self._process is not None an
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

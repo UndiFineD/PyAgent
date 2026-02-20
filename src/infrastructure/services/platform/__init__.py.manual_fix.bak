@@ -19,7 +19,6 @@
 Platform abstraction package.
 
 """
-
 try:
     from .base import Platform  # noqa: F401
 except ImportError:

@@ -21,11 +21,11 @@ from __future__ import annotations
 """
 PackKV Attention Backend.
 Implements register-level decompression during attention matmul.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -96,4 +96,4 @@ class PackKVAttentionBackend(AttentionBackend[None]):
         # In production: rust_core.fused_packkv_attention(...)
         return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)
 
-""
+"""

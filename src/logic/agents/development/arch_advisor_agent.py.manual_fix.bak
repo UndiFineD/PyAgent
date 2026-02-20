@@ -62,7 +62,7 @@ Analyzes codebase coupling and suggests architectural refactors.
 #             "You are the Architectural Advisor Agent."#             "Your role is to identify 'God Classes', circular dependencies, and high-coupling hotspots."'#             "Suggest where to apply design patterns (Factory, Strategy, Observer) to improve modularity."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Architectural Analysis\\n\\n## Summary\\nWaiting for scan...\\n
     def analyze_coupling(self) -> str:
 """"
@@ -89,4 +89,4 @@ Identifies modules with too many outgoing or incoming dependencies.        self.
 
 if __name__ == "__main__":"    main = create_main_function(ArchAdvisorAgent, "ArchAdvisor Agent", "Task")"    main()
 
-""
+"""

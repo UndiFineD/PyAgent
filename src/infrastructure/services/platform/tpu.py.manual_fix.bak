@@ -21,7 +21,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Google TPU platform implementation.
-""
+"""
 
 """
 import contextlib
@@ -34,7 +34,7 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 
 
 class TpuPlatform(Platform):
-    ""
+"""
 Google TPU platform implementation.
     @classmethod
     def get_platform_type(cls) -> PlatformType:

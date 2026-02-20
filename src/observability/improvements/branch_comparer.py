@@ -470,3 +470,21 @@ Clear comparison history.        self.comparisons.clear()
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
+
+"""

@@ -15,13 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Coder metrics mixin.py module.
 # pylint: disable=too-many-ancestors
 
 """
-
 try:
     import ast
 except ImportError:
@@ -93,6 +92,24 @@ Computes the Maintainability Index (MI) based on Halstead and CC.        if metr
             + 50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
         )
         return max(0, min(100, mi))
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

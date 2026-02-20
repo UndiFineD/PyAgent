@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal, parser-safe Skill Manager Core used for tests."""
-
+""
+Minimal, parser-safe Skill Manager Core used for tests.""
 import json
 import os
 import asyncio

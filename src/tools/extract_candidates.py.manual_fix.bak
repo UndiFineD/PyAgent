@@ -23,7 +23,6 @@ Also generates minimal tests in `tests/unit/` that import the extracted file via
 importlib and assert presence of top-level defs.
 
 """
-
 Safety checks (static-only):
 - file suffix must be .py
 - file size and line count under configurable limits
@@ -37,7 +36,7 @@ Usage:
 This script makes small, reversible changes: 
 writes new files under src/external_candidates/auto
 and tests under tests/unit/. It does not modify `.external`.
-""
+"""
 import argparse
 import json
 import ast
@@ -54,7 +53,7 @@ BANNED_IMPORTS = {'ctypes', 'cffi', 'subprocess', 'multiprocessing', 'socket', '
 
 def safe_module(ast_mod: ast.Module, allow_top_level: bool = False, allow_no_defs: bool = False,
                 allow_banned_imports: bool = False) -> tuple[bool, list[str]]:
-    ""
+"""
 Return (is_safe, list_of_defs)""""
 allow_top_level: when True, permit assignments and other top-level statements
     allow_no_defs: when True, accept modules with no defs (useful for data or constants)
@@ -103,13 +102,13 @@ def sanitize_filename(s: str) -> str:
         return re.sub(r'[^0-9A-Za-z_]+', '_', s).strip('_')[:120]
 
 def write_extracted(source_path: Path, dest_path: Path, provenance: str, content: str):
-    ""
+"""
 Write the extracted content to dest_path with a provenance header.    header = f""
 # Extracted from: {provenance}\\n# NOTE: extracted with static-only rules; review before use\\n\\n    dest_path.parent.mkdir(parents=True, exist_ok=True)
     dest_path.write_text(header + content, encoding='utf-8')
 
 def make_test(module_path: Path, defs: list[str], test_path: Path):
-    ""
+"""
 Generate a test that imports the module at module_path and asserts presence of defs.    # test will load module by path and assert defs exist
     mod_load = textwrap.dedent(f    import importlib.util
     from pathlib import Path
@@ -132,7 +131,7 @@ def extract_candidates(
     allow_no_defs: bool = False,
     allow_banned_imports: bool = False
 ):
-    ""
+"""
 Extract candidate Python files from the refactor report, applying safety checks.    if not report_file.exists():
         print('report missing at', report_file)'        return 1
     data = json.loads(report_file.read_text(encoding='utf-8', errors='ignore'))'    found = 0
@@ -189,7 +188,7 @@ Extract candidate Python files from the refactor report, applying safety checks.
 
 
 def main():
-    ""
+"""
 Main entry point for candidate extraction.    p = argparse.ArgumentParser()
     p.add_argument('--report', type=Path, default=REPORT_PATH)'    p.add_argument('--limit', type=int, default=10)'    p.add_argument('--skip', type=int, default=0)'    p.add_argument('--max-lines', type=int, default=MAX_LINES)'    p.add_argument('--max-bytes', type=int, default=MAX_BYTES)'    p.add_argument('--allow-top-level', action='store_true', help='Allow top-level assignments and other statements')'    p.add_argument('--allow-no-defs', action='store_true', help='Allow modules with no defs (constants-only)')'    p.add_argument('--allow-banned-imports', action='store_true', help='Skip banned-imports checks (risky)')'    args = p.parse_args()
     return extract_candidates(
@@ -206,6 +205,24 @@ Main entry point for candidate extraction.    p = argparse.ArgumentParser()
 
 if __name__ == '__main__':'    raise SystemExit(main())
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

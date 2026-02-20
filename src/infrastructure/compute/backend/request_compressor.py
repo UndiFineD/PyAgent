@@ -95,3 +95,21 @@ Get compression statistics.        return dict(self._stats)
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
+
+"""

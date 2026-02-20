@@ -29,7 +29,6 @@ WHAT IT DOES:
 Provides a lightweight agent that records execution events to a local JSON history, performs simple temporal analysis to surface short-term failure risk, and exposes tools for recording events, predicting likely next failures, and recommending preemptive fixes. Designed as a specialized BaseAgent with a system prompt tailored for predictive execution and anticipatory self-healing. Persistence is handled via a workspace-local data/logs/temporal_history.json file with a capped retention strategy.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 Replace the mocked/simple heuristics with a configurable predictive model (statistical time-series or ML) and support model training/validation pipelines. Improve error handling and observability (structured logging, metrics, and telemetry), make I/O asynchronous to avoid blocking, and surface configuration for retention size, prediction windows, and data sources. Add tests, schema validation for history entries, secure handling for sensitive metadata, and integration points for external metrics (Prometheus, tracing) and alerting systems.
 
@@ -37,7 +36,7 @@ FILE CONTENT SUMMARY:
 Temporal Predictor Agent for PyAgent.
 Specializes in predictive execution and anticipatory self-healing.
 Analyzes historical patterns to forecast potential failures.
-""
+"""
 import json
 import logging
 from datetime import datetime
@@ -198,4 +197,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(TemporalPredictorAgent, "Temporal Predictor Agent", "Predictive execution tool")"    main()
 
-""
+"""

@@ -94,6 +94,24 @@ Clear all cache entries.        try:
             logging.error("Failed to clear disk cache")
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

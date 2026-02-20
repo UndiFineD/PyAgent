@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 AuctionCore - Facade for AuctionCore
 Brief Summary
@@ -23,7 +23,7 @@ USAGE:
 try:
 
 """
-    from .core.base.common.auction_core import AuctionCore
+from .core.base.common.auction_core import AuctionCore
 except ImportError:
     from src.core.base.common.auction_core import AuctionCore
 
@@ -52,7 +52,7 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-""
+"""
 Auction core.py module"."
 # Facade for AuctionCore
 try:

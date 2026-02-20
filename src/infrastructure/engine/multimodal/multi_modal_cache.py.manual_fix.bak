@@ -21,11 +21,11 @@ from __future__ import annotations
 """
 Facade for Multimodal Cache.
 Delegates to modularized sub-packages in src/infrastructure/multimodal/cache/.
-""
+"""
 try:
 
 """
-    from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
+from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
 except ImportError:
     from .cache import (CacheBackend, CacheEntry, CacheStats, HashAlgorithm,
 
@@ -37,4 +37,4 @@ except ImportError:
 __all__ = [
     "MediaType","    "CacheBackend","    "HashAlgorithm","    "MediaHash","    "CacheEntry","    "CacheStats","    "TODO PlaceholderRange","    "MultiModalHasher","    "MultiModalCache","    "MemoryMultiModalCache","    "PerceptualCache","    "PrefetchMultiModalCache","    "IPCMultiModalCache","    "compute_media_hash","    "create_cache","]
 
-""
+"""

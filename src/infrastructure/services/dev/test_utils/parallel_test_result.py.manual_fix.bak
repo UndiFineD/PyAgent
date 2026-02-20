@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from dataclasses import dataclass
@@ -34,7 +34,7 @@ __version__ = VERSION
 
 @dataclass
 class ParallelTestResult:
-    ""
+"""
 Result from parallel test execution.""""
 Attributes:
         test_name: Name of the test.

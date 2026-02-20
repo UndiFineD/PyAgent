@@ -21,11 +21,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
 Types and configuration for data parallel coordination.
-""
+"""
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -48,7 +48,7 @@ except ImportError:
 
 
 class DPRole(Enum):
-    ""
+"""
 Data parallel role.
     MASTER = auto()  # Coordinates workers
     WORKER = auto()  # Executes work
@@ -57,7 +57,7 @@ Data parallel role.
 
 
 class WorkerHealth(Enum):
-    ""
+"""
 Worker health status.
     HEALTHY = auto()
     DEGRADED = auto()
@@ -67,7 +67,7 @@ Worker health status.
 
 
 class LoadBalanceStrategy(Enum):
-    ""
+"""
 Load balancing strategy.
     ROUND_ROBIN = auto()
     LEAST_LOADED = auto()
@@ -77,7 +77,7 @@ Load balancing strategy.
 
 @dataclass
 class DPConfig:
-    ""
+"""
 Configuration for data parallel coordinator.
     num_workers: int = 1
     dp_rank: int = 0
@@ -93,7 +93,7 @@ Configuration for data parallel coordinator.
 
 @dataclass
 class WorkerState:
-    ""
+"""
 State of a DP worker.
     worker_id: int
     dp_rank: int
@@ -107,13 +107,13 @@ State of a DP worker.
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def update_latency(self, latency_ms: float) -> None:
-        ""
+"""
 Update average latency with EMA.        self.avg_latency_ms = 0.9 * self.avg_latency_ms + 0.1 * latency_ms
 
 
 @dataclass
 class StepState:
-    ""
+"""
 State for a single step.
     step_id: int
     wave_id: int
@@ -134,7 +134,7 @@ State for a single step.
 
 @dataclass
 class WaveState:
-    ""
+"""
 State for an execution wave.
     wave_id: int
     num_steps: int = 0
@@ -146,4 +146,4 @@ State for an execution wave.
     def is_complete(self) -> bool:
         return self.completed_steps >= self.num_steps
 
-""
+"""

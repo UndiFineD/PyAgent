@@ -35,31 +35,31 @@ class WorkflowExecutor:
         self.agent = agent_instance
         self.results: Dict[str, Any] = {}
 
-    async def execute(self, flow_nodes: List[Dict[str, Any]], connectors: List[Dict[str, Any]]) -> Any:
+        async def execute(self, flow_nodes: List[Dict[str, Any]], connectors: List[Dict[str, Any]]) -> Any:
         if not flow_nodes:
-            return "Empty workflow"
+        return "Empty workflow"
 
         # Execute nodes sequentially for simplicity
         for node in flow_nodes:
-            node_id = node.get("id")
-            node_type = node.get("type", "task")
-            prompt = self._resolve_variables(node.get("prompt", ""))
+        node_id = node.get("id")
+        node_type = node.get("type", "task")
+        prompt = self._resolve_variables(node.get("prompt", ""))
 
-            logger.info("WorkflowExecutor: Executing node %s of type %s", node_id, node_type)
-            if node_type == "task":
-                # Delegate to agent if available
-                if hasattr(self.agent, "run_task"):
-                    result = await self.agent.run_task({"context": prompt})
-                else:
-                    result = None
-                self.results[node_id] = result
-            elif node_type == "condition":
-                try:
-                    cond = str(node.get("logic", "True"))
-                    res = bool(eval(cond, {"results": self.results, "node": node}))
-                except Exception:
-                    res = False
-                self.results[node_id] = res
+        logger.info("WorkflowExecutor: Executing node %s of type %s", node_id, node_type)
+        if node_type == "task":
+        # Delegate to agent if available
+        if hasattr(self.agent, "run_task"):
+        result = await self.agent.run_task({"context": prompt})
+        else:
+        result = None
+        self.results[node_id] = result
+        elif node_type == "condition":
+        try:
+        cond = str(node.get("logic", "True"))
+        res = bool(eval(cond, {"results": self.results, "node": node}))
+        except Exception:
+        res = False
+        self.results[node_id] = res
 
         return self.results
 

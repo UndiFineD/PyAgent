@@ -15,16 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 WorkflowState
 
 """
 Container for shared state and context between agents in a workflow.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 @dataclass
 class WorkflowState:
-    ""
+"""
 Maintains context, variables, and history for a multi-agent session.""
 task_id: str
     original_request: str
@@ -55,7 +55,7 @@ task_id: str
     errors: list[str] = field(default_factory=list)
 
     def set(self, key: str, value: Any) -> None:
-        ""
+"""
 Sets a workflow variable.""
 self.variables[key] = value
 

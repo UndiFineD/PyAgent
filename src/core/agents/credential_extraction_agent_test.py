@@ -49,8 +49,8 @@ agent = CredentialExtractionAgent()
 
     def test_extract_adsync_credentials_no_adsync(self):
         ""
-Test credential extraction when ADSync is not installed.""
-agent = CredentialExtractionAgent()
+        Test credential extraction when ADSync is not installed.""
+        agent = CredentialExtractionAgent()
         result = agent.extract_adsync_credentials()
 
         # Should fail gracefully if ADSync not present

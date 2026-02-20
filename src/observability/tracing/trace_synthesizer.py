@@ -99,24 +99,24 @@ return {"nodes": [], "links": []}
             logger.error(f"TraceSynthesizer: Synthesis failed: {e}")"            return {"error": str(e)}"
     def record_trace(self, agent_name: str, status: str, context: Any, metadata: Dict[str, Any] = None):
 """
-Records a reasoning step into the syn""
-the""
-sis log.        {
-            "agent_name": agent_name,"            "status": status,"            "context": context.to_dict() if hasattr(context, "to_dict") else context,"            "metadata": metadata or {},"            "timestamp": logger.timestamp if hasattr(logger, "timestamp") else None"            # Usually handled by structured logger
+        Records a reasoning step into the syn""
+        the""
+        sis log.        {
+        "agent_name": agent_name,"            "status": status,"            "context": context.to_dict() if hasattr(context, "to_dict") else context,"            "metadata": metadata or {},"            "timestamp": logger.timestamp if hasattr(logger, "timestamp") else None"            # Usually handled by structured logger
         }
 
         # In practice, this delegatesto the FleetInteractionR""
-ecorder or Stru""
-ctured""
-Logger""""
-pass
+        ecorder or Stru""
+        ctured""
+        Logger""""
+        pass
 
-import json
-import logging
-from typing import Dict, Any
-from pathlib import Path
+        import json
+        import logging
+        from typing import Dict, Any
+        from pathlib import Path
 
-logger = logging.getLogger(__name__)
+        logger = logging.getLogger(__name__)
 
 
 
@@ -161,10 +161,10 @@ return {"nodes": [], "links": []}
             logger.error(f"TraceSynthesizer: Synthesis failed: {e}")"            return {"error": str(e)}"
     def record_trace(self, agent_name: str, status: str, context: Any, metadata: Dict[str, Any] = None):
 """
-Records a rea""
-soning st""
-ep into the synthesis log.        {
-            "agent_name": agent_name,"            "status": status,"            "context": context.to_dict() if hasattr(context, "to_dict") else context,"            "metadata": metadata or {},"            "timestamp": logger.timestamp if hasattr(logger, "timestamp") else None"            # Usually handled by structured logger
+        Records a rea""
+        soning st""
+        ep into the synthesis log.        {
+        "agent_name": agent_name,"            "status": status,"            "context": context.to_dict() if hasattr(context, "to_dict") else context,"            "metadata": metadata or {},"            "timestamp": logger.timestamp if hasattr(logger, "timestamp") else None"            # Usually handled by structured logger
         }
 
         # In practice, this delegatesto the FleetInteractionRecorder or StructuredLogger
@@ -174,6 +174,24 @@ ep into the synthesis log.        {
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

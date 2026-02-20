@@ -13,15 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Xml.py module.
-""
+"""
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
 """
-
 try:
     import re
 except ImportError:
@@ -47,11 +46,11 @@ except ImportError:
 
 
 class XMLReasoningParser(ReasoningParser):
-    ""
+"""
 Parser regarding XML-style think blocks.
 
     Extracts reasoning from <think>...</think> or <reasoning>...</reasoning> tags.
-    ""
+"""
 name: ClassVar[str] = "xml"
     def __init__(
         self,

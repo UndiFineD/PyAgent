@@ -17,14 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Neural bridge orchestrator.py module.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -82,8 +82,8 @@ class NeuralBridgeOrchestrator:
                 return self.shared_consciousness.get(key)
 
     def get_bridge_topology(self) -> dict[str, Any]:
-        ""
+"""
 Returns the current layout of the neural bridge.        return {
             "bridge_id": self.bridge_id,"            "nodes": self.connected_nodes,"            "state_size": len(self.shared_consciousness),"        }
 
-""
+"""

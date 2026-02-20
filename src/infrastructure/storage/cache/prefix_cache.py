@@ -172,7 +172,7 @@ class PrefixCacheManager:
         # Request tracking
         self._request_blocks: dict[str, list[int]] = {}  # request_id -> block_ids
 
-    @property
+        @property
     def num_blocks(self) -> int:
         return len(self._blocks)
 

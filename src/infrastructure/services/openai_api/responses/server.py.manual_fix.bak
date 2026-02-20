@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Server.py module.
 
@@ -145,4 +145,4 @@ class ResponsesAPIServer:
         return response
 
 
-""
+"""

@@ -14,13 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Writer for tensorizer file format.
 try:
 
 """
-    import hashlib
+import hashlib
 except ImportError:
     import hashlib
 
@@ -90,18 +90,18 @@ class TensorizerWriter:
         self.close()
 
     def open(self) -> None:
-        ""
+"""
 Open file for writing.        self._file = open(self.path, 'wb')'        self._write_header()
 
     def close(self) -> None:
-        ""
+"""
 Close file and finalize.        if self._file:
             self._finalize()
             self._file.close()
             self._file = None
 
     def _write_header(self) -> None:
-        ""
+"""
 Write file header.        if self._file is None:
             return
 
@@ -116,7 +116,7 @@ Write file header.        if self._file is None:
         self._header_written = True
 
     def _finalize(self) -> None:
-        ""
+"""
 Finalize file with metadata index.        if self._file is None:
             return
 
@@ -137,7 +137,7 @@ Finalize file with metadata index.        if self._file is None:
         name: str,
         tensor: np.ndarray,
     ) -> TensorMetadata:
-        ""
+"""
 Write a tensor to the file.        if self._file is None:
             raise RuntimeError("Writer not opened")
         # Determine dtype
@@ -186,7 +186,7 @@ Write a tensor to the file.        if self._file is None:
         tensors: Dict[str, np.ndarray],
         progress_callback: Optional[Callable[[str, int, int], None]] = None,
     ) -> List[TensorMetadata]:
-        ""
+"""
 Write multiple tensors (a model) to the file.        results = []
         total: int = len(tensors)
 
@@ -199,4 +199,4 @@ Write multiple tensors (a model) to the file.        results = []
 
         return results
 
-""
+"""

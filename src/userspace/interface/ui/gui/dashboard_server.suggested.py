@@ -54,112 +54,112 @@ class ConnectionManager:
     def __init__(self):
         self.active_connections: list[WebSocket] = []
 
-    async def connect(self, ws: WebSocket):
+        async def connect(self, ws: WebSocket):
         await ws.accept()
         self.active_connections.append(ws)
 
     def disconnect(self, ws: WebSocket):
         if ws in self.active_connections:
-            self.active_connections.remove(ws)
+        self.active_connections.remove(ws)
 
-    async def broadcast(self, message: dict):
+        async def broadcast(self, message: dict):
         for connection in self.active_connections:
-            try:
-                await connection.send_json(message)
-            except Exception:
-                pass
-
-
-manager = ConnectionManager()
-
-# Swarm Singletons
-fleet_balancer = FleetLoadBalancer()
-job_manager = JobManagerCore()
-discovery_service = DiscoveryService()
-
-
-async def telemetry_loop():
-"""
-Background task to broadcast system vitals.    while True:
         try:
-            await manager.broadcast(
-                {
-                    "event": "telemetry","                    "data": {"                        "cpu": psutil.cpu_percent(),"                        "mem": psutil.virtual_memory().percent,"                        "network": psutil.net_io_counters().bytes_sent % 100,"                        "timestamp": datetime.now().timestamp(),"                    },
-                }
-            )
+        await connection.send_json(message)
         except Exception:
-            pass
+        pass
+
+
+        manager = ConnectionManager()
+
+        # Swarm Singletons
+        fleet_balancer = FleetLoadBalancer()
+        job_manager = JobManagerCore()
+        discovery_service = DiscoveryService()
+
+
+        async def telemetry_loop():
+"""
+        Background task to broadcast system vitals.    while True:
+        try:
+        await manager.broadcast(
+        {
+        "event": "telemetry","                    "data": {"                        "cpu": psutil.cpu_percent(),"                        "mem": psutil.virtual_memory().percent,"                        "network": psutil.net_io_counters().bytes_sent % 100,"                        "timestamp": datetime.now().timestamp(),"                    },
+        }
+        )
+        except Exception:
+        pass
         await asyncio.sleep(1.0)
 
 
-@app.on_event("startup")"async def startup_event():
-    asyncio.create_task(telemetry_loop())
-    # Initialize Swarm Components
-    try:
+        @app.on_event("startup")"async def startup_event():
+        asyncio.create_task(telemetry_loop())
+        # Initialize Swarm Components
+        try:
         # Discovery node registration (Zeroconf)
         await discovery_service.register_node(
-            name="pyagent-main-node", properties={"version": "1.5.0", "roles": "orchestrator,gateway"}"        )
+        name="pyagent-main-node", properties={"version": "1.5.0", "roles": "orchestrator,gateway"}"        )
         print("Swarm Discovery Service Registered.")"    except Exception as e:
         print(f"Discovery Registration Failed: {e}")
 
-# --- PRIMARY NAVIGATION (Prioritized Routes) ---
+        # --- PRIMARY NAVIGATION (Prioritized Routes) ---
 
 
-@app.get("/stream")"async def serve_stream():
+        @app.get("/stream")"async def serve_stream():
 """
-PRIORITY: Serves the draggable Multi-Channel Stream Console.    path = WEB_UI_DIR / "stream_console.html""    if path.exists():
+        PRIORITY: Serves the draggable Multi-Channel Stream Console.    path = WEB_UI_DIR / "stream_console.html""    if path.exists():
         return FileResponse(str(path), media_type="text/html")"    return JSONResponse(status_code=404, content={"error": f"Console not found at {path}"})"
 
-@app.get("/topology")"async def serve_topology():
-    path = WEB_UI_DIR / "topology_viewer.html""    if path.exists():
+        @app.get("/topology")"async def serve_topology():
+        path = WEB_UI_DIR / "topology_viewer.html""    if path.exists():
         return FileResponse(str(path), media_type="text/html")"    return {"error": "404"}"
 
-@app.get("/")"async def serve_index():
-    path = WEB_UI_DIR / "index.html""    if path.exists():
+        @app.get("/")"async def serve_index():
+        path = WEB_UI_DIR / "index.html""    if path.exists():
         return FileResponse(str(path), media_type="text/html")"    return {"status": "Dashboard Active (No index.html found)"}"
 
-# --- SWARM API ---
+        # --- SWARM API ---
 
 
-@app.get("/swarm/status")"async def get_swarm_status():
+        @app.get("/swarm/status")"async def get_swarm_status():
 """
-Returns the current state of the agent fleet.    return {
+        Returns the current state of the agent fleet.    return {
         "status": "online","        "nodes": discovery_service.peers if hasattr(discovery_service, "peers") else [],"        "load": ("            fleet_balancer.get_optimal_node()
-            if hasattr(fleet_balancer, "nodes") and fleet_balancer.nodes"            else "No nodes""        ),
-    }
+        if hasattr(fleet_balancer, "nodes") and fleet_balancer.nodes"            else "No nodes""        ),
+        }
 
 
-@app.post("/jobs/create")"async def create_job(payload: Dict[str, Any] = Body(...)):
+        @app.post("/jobs/create")"async def create_job(payload: Dict[str, Any] = Body(...)):
 """
-Submits a new task to the global job manager.    job_id = await job_manager.submit_job(payload)
-    return {"status": "queued", "job_id": job_id}
+        Submits a new task to the global job manager.    job_id = await job_manager.submit_job(payload)
+        return {"status": "queued", "job_id": job_id}
 
-# --- TERMINAL / SHELL BRIDGE ---
+        # --- TERMINAL / SHELL BRIDGE ---
 
 
-@app.get("/api/thoughts")"async def get_thoughts():
-    if not EPISODIC_LOG_FILE.exists():
+        @app.get("/api/thoughts")"async def get_thoughts():
+        if not EPISODIC_LOG_FILE.exists():
         return []
 
-    try:
+        try:
         with open(EPISODIC_LOG_FILE, "r", encoding="utf-8") as f:"            return [json.loads(line) for line in f.readlines()[-50:][::-1]]
-    except Exception:
+        except Exception:
         return []
 
 
-@app.websocket("/ws/telemetry")"async def websocket_telemetry(websocket: WebSocket):
-    await manager.connect(websocket)
-    try:
+        @app.websocket("/ws/telemetry")"async def websocket_telemetry(websocket: WebSocket):
+        await manager.connect(websocket)
+        try:
         while True:
-            await websocket.receive_text()
-    except WebSocketDisconnect:
+        await websocket.receive_text()
+        except WebSocketDisconnect:
         manager.disconnect(websocket)
 
 
-# --- MOUNTS (MUST COME LAST) ---
-if WEB_UI_DIR.exists():
-    app.mount("/web", StaticFiles(directory=str(WEB_UI_DIR)), name="web")
-if __name__ == "__main__":"    import uvicorn
+        # --- MOUNTS (MUST COME LAST) ---
+        if WEB_UI_DIR.exists():
+        app.mount("/web", StaticFiles(directory=str(WEB_UI_DIR)), name="web")
+        if __name__ == "__main__":"    import uvicorn
 
-    # Using 0.0.0.0 to ensure accessibility across the LAN if needed
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+        # Using 0.0.0.0 to ensure accessibility across the LAN if needed
+        uvicorn.run(app, host="0.0.0.0", port=8000)

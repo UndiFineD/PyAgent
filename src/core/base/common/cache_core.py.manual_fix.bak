@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for response caching and prompt prefix mapping.
-""
+"""
 
 """
 import hashlib
@@ -38,10 +38,10 @@ except ImportError:
 
 
 class CacheCore(BaseCore):
-    ""
+"""
 Authoritative engine for result caching.
     Includes hooks for Rust-accelerated hashing.
-    ""
+"""
 def __init__(self, cache_dir: Optional[Path] = None) -> None:
         super().__init__()
         self.cache_dir = cache_dir or Path("data/cache")
@@ -60,11 +60,11 @@ def __init__(self, cache_dir: Optional[Path] = None) -> None:
         return hashlib.md5(content.encode()).hexdigest()
 
     def _make_complex_key(self, file_path: str, agent_name: str, content_hash: str) -> str:
-        ""
+"""
 Constructs a unique cache key from multiple dimensions.""
 return f"{file_path}:{agent_name}:{content_hash}"
     def set(self, prompt: str, response: Any, ttl_seconds: int = 3600) -> None:
-        ""
+"""
 Stores a result in memory and disk cache.""
 key = self._get_cache_key(prompt)
         self.cache_data[key] = {"result": response, "timestamp": time.time(), "ttl": ttl_seconds}

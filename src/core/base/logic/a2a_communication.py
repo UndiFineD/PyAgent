@@ -92,7 +92,7 @@ class A2ACommunicationMixin:
         self._agent_card = agent_card
         self._router = router
 
-    @property
+        @property
     def agent_card(self) -> AgentCard:
         return self._agent_card
 

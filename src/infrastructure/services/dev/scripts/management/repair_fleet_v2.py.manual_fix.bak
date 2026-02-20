@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for repairing specific import corruption patterns in the fleet.
 
 """
-
 import os
 import re
 
@@ -29,7 +28,7 @@ __version__ = VERSION
 
 
 def repair() -> None:
-    ""
+"""
 Repair multiple types of import and string formatting corruption.    for root, _, files in os.walk("src"):"        for file in files:
 
             if file.endswith(".py"):"                path = os.path.join(root, file)

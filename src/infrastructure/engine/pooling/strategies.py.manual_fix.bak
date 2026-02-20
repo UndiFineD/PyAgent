@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Strategy-based poolers for sequence representations.
-""
+"""
 try:
 
 """
-    import math
+import math
 except ImportError:
     import math
 
@@ -57,13 +57,13 @@ __all__ = [
 
 
 class BasePooler(ABC):
-    ""
+"""
 Abstract base for pooling operations.
     def __init__(self, config: PoolingConfig) -> None:
         self.config = config
 
     def pool_and_process(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        ""
+"""
 Pool inputs and apply normalization/truncation based on config.        emb = self.pool(hidden_states, attention_mask)
         if self.config.truncate_dim:
             emb = self.truncate(emb, self.config.truncate_dim)
@@ -73,15 +73,15 @@ Pool inputs and apply normalization/truncation based on config.        emb = sel
 
     @abstractmethod
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        ""
+"""
 Pool hidden states to fixed representation.        raise NotImplementedError("Subclasses must implement pool()")
     def normalize(self, embeddings: np.ndarray) -> np.ndarray:
-        ""
+"""
 L2 normalize embeddings.        norm = np.linalg.norm(embeddings, axis=-1, keepdims=True)
         return embeddings / (norm + 1e-9)
 
     def truncate(self, embeddings: np.ndarray, dim: int) -> np.ndarray:
-        ""
+"""
 Truncate embeddings to specified dimension (Matryoshka).        if dim >= embeddings.shape[-1]:
             return embeddings
         return embeddings[..., :dim]
@@ -89,10 +89,10 @@ Truncate embeddings to specified dimension (Matryoshka).        if dim >= embedd
 
 
 class MeanPooler(BasePooler):
-    ""
+"""
 Mean pooling over sequence.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
-        ""
+"""
 Compute mean of hidden states with optional masking.        if attention_mask is None:
             return hidden_states.mean(axis=1)
 
@@ -104,7 +104,7 @@ Compute mean of hidden states with optional masking.        if attention_mask is
 
 
 class CLSPooler(BasePooler):
-    ""
+"""
 First token ([CLS]) pooling.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         return hidden_states[:, 0, :]
@@ -112,7 +112,7 @@ First token ([CLS]) pooling.
 
 
 class LastTokenPooler(BasePooler):
-    ""
+"""
 Last token pooling.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         if attention_mask is None:
@@ -126,7 +126,7 @@ Last token pooling.
 
 
 class MaxPooler(BasePooler):
-    ""
+"""
 Max pooling over sequence.
     def pool(self, hidden_states: np.ndarray, attention_mask: Optional[np.ndarray] = None) -> np.ndarray:
         if attention_mask is None:
@@ -139,7 +139,7 @@ Max pooling over sequence.
 
 
 class AttentionPooler(BasePooler):
-    ""
+"""
 Attention-weighted pooling.
     def __init__(self, config: PoolingConfig, hidden_dim: int = 768) -> None:
         super().__init__(config)
@@ -157,7 +157,7 @@ Attention-weighted pooling.
 
 
 class WeightedMeanPooler(BasePooler):
-    ""
+"""
 IDF-weighted mean pooling.
     def __init__(self, config: PoolingConfig, token_weights: Optional[Dict[int, float]] = None) -> None:
         super().__init__(config)
@@ -200,7 +200,7 @@ class MatryoshkaPooler(BasePooler):
         return self.fallback_pooler.pool(hidden_states, attention_mask)
 
     def get_dimension(self, dim: int) -> int:
-        ""
+"""
 Returns the nearest supported dimension.        return min(self.supported_dims, key=lambda x: abs(x - dim))
 
 
@@ -221,7 +221,7 @@ class MultiVectorPooler(BasePooler):
         return hidden_states
 
     def maxsim_score(self, query_vectors: np.ndarray, doc_vectors: np.ndarray) -> float:
-        ""
+"""
 MaxSim score between query and document vectors.        # query: (q_len, dim), doc: (d_len, dim)
         scores = np.dot(query_vectors, doc_vectors.T)  # (q_len, d_len)
         return float(np.sum(np.max(scores, axis=1)))
@@ -246,4 +246,4 @@ class StepPooler(BasePooler):
         # Identity for now to satisfy tests
         return MeanPooler(self.config).pool(hidden_states, attention_mask)
 
-""
+"""

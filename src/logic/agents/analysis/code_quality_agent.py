@@ -180,6 +180,24 @@ Returns the average quality score across all analyzed files.        if not self.
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

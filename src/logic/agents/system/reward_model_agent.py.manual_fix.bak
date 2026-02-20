@@ -25,7 +25,6 @@ USAGE:
 Instantiate RewardModelAgent with a file path representing agent state/configuration and call await rank_proposals(task, proposals) where proposals is a dict[str, str] mapping agent names to outputs.
 
 """
-
 WHAT IT DOES:
 Provides a simple LLM-driven (via BaseAgent.improve_content) ranking of candidate outputs, attempts to parse a JSON-formatted ranking and scores, records a lesson for telemetry, and falls back to a heuristic scorer when parsing or model output fails.
 
@@ -36,7 +35,7 @@ FILE CONTENT SUMMARY:
 RewardModelAgent for PyAgent.
 Specializes in ranking multiple agent outputs to facilitate Reinforcement Learning from AI Feedback (RLAIF).
 Used in Phase 42 for model distillation and fine-tuning loops.
-""
+"""
 import logging
 from typing import Any
 
@@ -175,4 +174,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")"    main()
 
-""
+"""

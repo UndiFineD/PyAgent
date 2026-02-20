@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from dataclasses import dataclass, field
@@ -50,7 +50,7 @@ __version__ = VERSION
 
 @dataclass
 class TestEnvironment:
-    ""
+"""
 Test environment configuration.""""
 Attributes:
         name: Environment name.

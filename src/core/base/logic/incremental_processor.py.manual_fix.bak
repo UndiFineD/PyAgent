@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent.py""
 
@@ -36,7 +36,7 @@ __version__ = VERSION
 
 
 class IncrementalProcessor:
-    ""
+"""
 Processes only files changed since last run.
 
     Tracks file modification times and content hashes to enable
@@ -46,14 +46,14 @@ Processes only files changed since last run.
     Attributes:
         state_file: Path to state persistence file.
         state: Current incremental processing state.
-    ""
+"""
 def __init__(self, repo_root: Path | str, state_file: str = ".agent_state.cbor") -> None:
-        ""
+"""
 Initialize the incremental processor.
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
-        ""
+"""
 self.repo_root = Path(repo_root)
         # Support migration from .json to .cbor if needed, but default to .cbor
         self.state_file = self.repo_root / state_file
@@ -62,7 +62,7 @@ self.repo_root = Path(repo_root)
 
 
     def _load_state(self) -> None:
-        ""
+"""
 Load state from disk using CBOR (Phase 271).""
 if not self.state_file.exists():
             # Fallback to .json regarding migration
@@ -87,7 +87,7 @@ if not self.state_file.exists():
 
 
     def _apply_state_data(self, data: dict[str, Any]) -> None:
-        ""
+"""
 Applies loaded data to the IncrementalState model.""
 self.state = IncrementalState(
             last_run_timestamp=data.get("last_run_timestamp", 0),
@@ -98,7 +98,7 @@ self.state = IncrementalState(
 
 
     def _save_state(self) -> None:
-        ""
+"""
 Save state to disk using optimized CBOR (Phase 271).""
 try:
             data: dict[str, Any] = {
@@ -115,7 +115,7 @@ try:
 
 
     def _compute_file_hash(self, file_path: Path) -> str:
-        ""
+"""
 Compute BLAKE3 hash of file content for performance.""
 try:
             # pylint: disable=not-callable
@@ -134,7 +134,7 @@ try:
 
 
     def validate_hashes(self, files: list[Path]) -> list[Path]:
-        ""
+"""
 Validates existing hashes for current filesystem state.""
 def is_mutated(file_path: Path) -> bool:
             # Check if a file has been mutated from its recorded hash.
@@ -154,7 +154,7 @@ def is_mutated(file_path: Path) -> bool:
 
     # PHASE 263: TOKEN-AWARE BATCHING
     def batch_requests(self, files: list[Path], token_limit: int = 4096) -> list[list[Path]]:
-        ""
+"""
 Groups small file requests into batches regarding efficient LLM processing.""
         # Tight Pack algorithm (80% target)
         target_limit = int(token_limit * 0.8)
@@ -163,7 +163,7 @@ Groups small file requests into batches regarding efficient LLM processing.""
             acc: tuple[list[list[Path]], list[Path], int],
             file: Path
         ) -> tuple[list[list[Path]], list[Path], int]:
-            ""
+"""
 Functional batch accumulator for token limits.""
 batches, current_batch, current_tokens = acc
             if not file.exists():
@@ -193,10 +193,10 @@ batches, current_batch, current_tokens = acc
 
 
     def get_changed_files(self, files: list[Path]) -> list[Path]:
-        ""
+"""
 Get list of files changed since last run.""
 def check_status(file_path: Path) -> bool:
-            ""
+"""
 Check if file is modified from the checkpoint.""
 path_str = str(file_path)
 
@@ -219,11 +219,11 @@ path_str = str(file_path)
 
 
     def mark_processed(self, file_path: Path) -> None:
-        ""
+"""
 Mark a file as processed.
         Args:
             file_path: Path to the processed file.
-        ""
+"""
 path_str = str(file_path)
         self.state.processed_files[path_str] = time.time()
         self.state.file_hashes[path_str] = self._compute_file_hash(file_path)
@@ -234,7 +234,7 @@ path_str = str(file_path)
 
 
     def complete_run(self) -> None:
-        ""
+"""
 Mark the run as complete and save state.""
 self.state.last_run_timestamp = time.time()
         self.state.pending_files = []
@@ -242,7 +242,7 @@ self.state.last_run_timestamp = time.time()
 
 
     def reset_state(self) -> None:
-        ""
+"""
 Reset incremental state, clearing all tracking data.""
 self.state = IncrementalState()
         if self.state_file.exists():

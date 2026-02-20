@@ -34,25 +34,25 @@ class FCFSQueue(deque, RequestQueue):
         First-Come-First-Served queue using deque.
     
     def add(self, request: T) -> None:
-        ""
+"""
 Add request to end of queue.        self.append(request)
 
     def pop(self) -> T:
-        ""
+"""
 Pop from front of queue.        if not self:
             raise IndexError("pop from empty queue")"        return self.popleft()
 
     def peek(self) -> T:
-        ""
+"""
 Peek at front of queue.        if not self:
             raise IndexError("peek from empty queue")"        return self[0]
 
     def prepend(self, request: T) -> None:
-        ""
+"""
 Add request to front of queue.        self.appendleft(request)
 
     def remove(self, value: T) -> bool:
-        ""
+"""
 Remove a specific request.        try:
             deque.remove(self, value)
             return True
@@ -60,7 +60,7 @@ Remove a specific request.        try:
             return False
 
     def remove_batch(self, requests: Set[T]) -> int:
-        ""
+"""
 Remove multiple requests efficiently.        if not requests:
             return 0
 

@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Config.py module.
-""
+"""
 try:
 
 """
-    import hashlib
+import hashlib
 except ImportError:
     import hashlib
 
@@ -49,7 +49,7 @@ if TYPE_CHECKING:
 
 
 class GrammarType(Enum):
-    ""
+"""
 Types of grammar constraints supported.
     NONE = auto()
     JSON = auto()  # JSON Schema validation
@@ -63,7 +63,7 @@ Types of grammar constraints supported.
 
 
 class CompilationStatus(Enum):
-    ""
+"""
 Status of grammar compilation.
     PENDING = auto()
     COMPILING = auto()
@@ -99,12 +99,12 @@ class CompilationResult:
 
     @property
     def is_ready(self) -> bool:
-        ""
+"""
 Check if compilation finished successfully.        return self.status == CompilationStatus.READY
 
     @property
     def is_failed(self) -> bool:
-        ""
+"""
 Check if compilation failed.        return self.status == CompilationStatus.FAILED
 
 
@@ -120,7 +120,7 @@ class ValidationResult:
 
 @dataclass
 class BackendStats:
-    ""
+"""
 Statistics for a structured output backend.
     grammars_compiled: int = 0
     grammars_cached: int = 0

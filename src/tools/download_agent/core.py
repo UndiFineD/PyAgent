@@ -81,7 +81,7 @@ Main download agent that handles different URL types.
         self.classifier = URLClassifier()
         self.session = requests.Session()
         self.session.headers.update({
-            'User-Agent': 'PyAgent-DownloadAgent/1.0 (https://github.com/UndiFineD/PyAgent)''        })
+        'User-Agent': 'PyAgent-DownloadAgent/1.0 (https://github.com/UndiFineD/PyAgent)''        })
 
     def ensure_directory(self, path: str) -> Path:
 """
@@ -373,14 +373,14 @@ Process all URLs from the configured file.        urls_file = Path(self.config.b
 
     def save_results(self, results: List[DownloadResult], output_file: str):
 """
-Save results to JSON file.        output_path = Path(self.config.base_dir) / output_file
+        Save results to JSON file.        output_path = Path(self.config.base_dir) / output_file
 
         data = {
-            'timestamp': datetime.now().isoformat(),'            'config': {'                'urls_file': self.config.urls_file,'                'max_retries': self.config.max_retries,'                'timeout_seconds': self.config.timeout_seconds,'                'dry_run': self.config.dry_run'            },
-            'results': ['                {
-                    'url': r.url,'                    'success': r.success,'                    'destination': r.destination,'                    'file_type': r.file_type,'                    'size_bytes': r.size_bytes,'                    'error_message': r.error_message,'                    'metadata': r.metadata or {}'                } for r in results
-            ],
-            'summary': {'                'total': len(results),'                'successful': len([r for r in results if r.success]),'                'failed': len([r for r in results if not r.success]),'                'skipped': len([r for r in results if r.metadata and r.metadata.get('skipped')]),'                'dry_run': len([r for r in results if r.metadata and r.metadata.get('dry_run')]),'                'total_size_bytes': sum(r.size_bytes for r in results if r.success)'            }
+        'timestamp': datetime.now().isoformat(),'            'config': {'                'urls_file': self.config.urls_file,'                'max_retries': self.config.max_retries,'                'timeout_seconds': self.config.timeout_seconds,'                'dry_run': self.config.dry_run'            },
+        'results': ['                {
+        'url': r.url,'                    'success': r.success,'                    'destination': r.destination,'                    'file_type': r.file_type,'                    'size_bytes': r.size_bytes,'                    'error_message': r.error_message,'                    'metadata': r.metadata or {}'                } for r in results
+        ],
+        'summary': {'                'total': len(results),'                'successful': len([r for r in results if r.success]),'                'failed': len([r for r in results if not r.success]),'                'skipped': len([r for r in results if r.metadata and r.metadata.get('skipped')]),'                'dry_run': len([r for r in results if r.metadata and r.metadata.get('dry_run')]),'                'total_size_bytes': sum(r.size_bytes for r in results if r.success)'            }
         }
 
         with open(output_path, 'w', encoding='utf-8') as f:'            json.dump(data, f, indent=2, ensure_ascii=False)

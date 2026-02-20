@@ -138,20 +138,20 @@ class AnomalyDetectionAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self._detector = AnomalyDetector()
         self._anomalies: List[Dict[str, Any]] = []
         self._system_prompt = (
-            "You are the Anomaly Detection Agent. Your purpose is to monitor ""            "agent interactions and detect anomalous behavior that may indicate ""            "security threats or system issues.""        )
+        "You are the Anomaly Detection Agent. Your purpose is to monitor ""            "agent interactions and detect anomalous behavior that may indicate ""            "security threats or system issues.""        )
         self._privacy_enforced = True
         self._rate_limit = 10  # stub: max 10 anomaly checks per minute
 
         # Viral enforcement: use ComplianceStandard/Check for anomaly checks
         self.anomaly_standard = ComplianceStandard(
-            "Agent Anomaly Detection","            [
-                ComplianceCheck(
-                    "Interaction Frequency Anomaly","                    check_fn=self._check_interaction_frequency,
-                    recommendation="Investigate agent for abnormal interaction frequency.","                ),
-                ComplianceCheck(
-                    "Unknown Interaction Type","                    check_fn=self._check_unknown_type,
-                    recommendation="Review new or unknown interaction types for risk.","                ),
-            ],
+        "Agent Anomaly Detection","            [
+        ComplianceCheck(
+        "Interaction Frequency Anomaly","                    check_fn=self._check_interaction_frequency,
+        recommendation="Investigate agent for abnormal interaction frequency.","                ),
+        ComplianceCheck(
+        "Unknown Interaction Type","                    check_fn=self._check_unknown_type,
+        recommendation="Review new or unknown interaction types for risk.","                ),
+        ],
         )
 
     def _check_interaction_frequency(self) -> bool:

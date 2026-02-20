@@ -17,7 +17,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import os
@@ -62,7 +62,7 @@ __version__ = VERSION
 
 
 class FileSystemIsolator:
-    ""
+"""
 Isolates file system operations for testing.""""
 Example:
         with FileSystemIsolator() as fs:
@@ -71,7 +71,7 @@ Example:
         self,
         isolation_level: IsolationLevel = IsolationLevel.TEMP_DIR,
     ) -> None:
-        ""
+"""
 Initialize file system isolator.""""
 Args:
             isolation_level: Level of isolation.
@@ -81,7 +81,7 @@ Args:
         self._created_files: list[Path] = []
 
     def __enter__(self) -> FileSystemIsolator:
-        ""
+"""
 Enter context and set up isolation.        if self.isolation_level == IsolationLevel.TEMP_DIR:
             self._temp_dir = Path(tempfile.mkdtemp())
             self._original_cwd = os.getcwd()
@@ -89,7 +89,7 @@ Enter context and set up isolation.        if self.isolation_level == IsolationL
         return self
 
     def __exit__(self, *args: Any) -> None:
-        ""
+"""
 Exit context and clean up.        if self._original_cwd:
             os.chdir(self._original_cwd)
         if self._temp_dir and self._temp_dir.exists():
@@ -97,7 +97,7 @@ Exit context and clean up.        if self._original_cwd:
         self._created_files.clear()
 
     def write_file(self, path: str, content: str) -> Path:
-        ""
+"""
 Write a file in isolated environment.""""
 Args:
             path: File path.
@@ -114,7 +114,7 @@ Args:
         return file_path
 
     def read_file(self, path: str) -> str:
-        ""
+"""
 Read a file from isolated environment.""""
 Args:
             path: File path.
@@ -126,10 +126,28 @@ Args:
             file_path = self._temp_dir / path
         return file_path.read_text(encoding="utf-8")
     def get_temp_dir(self) -> Path | None:
-        ""
+"""
 Get the temporary directory.        return self._temp_dir
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

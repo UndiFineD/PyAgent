@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from dataclasses import dataclass
@@ -34,11 +34,29 @@ __version__ = VERSION
 
 @dataclass(frozen=True)
 class ResourceHandle:
-    ""
+"""
 A handle representing an acquired resource from ResourcePool.
     name: str
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

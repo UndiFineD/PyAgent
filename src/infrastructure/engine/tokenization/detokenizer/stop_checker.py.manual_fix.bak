@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
 Stop condition checker for detokenization.
-""
+"""
 
 """
 from typing import List, Optional, Set, Tuple
@@ -57,7 +57,7 @@ class StopChecker:
             self.stop_token_ids.add(eos_token_id)
 
     def check_token(self, token_id: int) -> Optional[int]:
-        ""
+"""
 Check if a token should trigger stopping.        if HAS_RUST and self.stop_token_ids:
             if check_stop_tokens_rust(token_id, list(self.stop_token_ids)):
                 return token_id
@@ -68,7 +68,7 @@ Check if a token should trigger stopping.        if HAS_RUST and self.stop_token
         return None
 
     def check_text(self, text: str) -> Tuple[Optional[str], str]:
-        ""
+"""
 Check if text contains a stop string.        for stop_string in self.stop_strings:
             idx = text.find(stop_string)
             if idx != -1:
@@ -78,7 +78,7 @@ Check if text contains a stop string.        for stop_string in self.stop_string
         return None, text
 
     def check_partial(self, text: str) -> Optional[int]:
-        ""
+"""
 Check if text ends with a partial match of a stop string.        for stop_string in self.stop_strings:
             for length in range(1, min(len(stop_string), len(text)) + 1):
                 if text[-length:] == stop_string[:length]:

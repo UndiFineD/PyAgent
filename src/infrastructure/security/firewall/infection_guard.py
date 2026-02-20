@@ -52,7 +52,7 @@ def __init__(self, workspace_root: str):
     def _ensure_log_exists(self):
         self.log_file.parent.mkdir(parents=True, exist_ok=True)
         if not self.log_file.exists():
-            self.log_file.touch()
+        self.log_file.touch()
 
     def validate_instruction(self, sender_id: str, instruction: Dict[str, Any]) -> bool:
 """
@@ -80,17 +80,17 @@ command = str(instruction.get("prompt", "")).lower()
 
     def _log_block(self, sender_id: str, command: str, reason: str):
 """
-Logs a blocked command for real-time visualization.""
-entry = {
-            "timestamp": datetime.now().isoformat(),
-            "sender_id": sender_id,
-            "command": command,
-            "reason": reason,
-            "severity": "CRITICAL"
+        Logs a blocked command for real-time visualization.""
+        entry = {
+        "timestamp": datetime.now().isoformat(),
+        "sender_id": sender_id,
+        "command": command,
+        "reason": reason,
+        "severity": "CRITICAL"
         }
         logger.warning(f"InfectionGuard: BLOCKED instruction from {sender_id}. Reason: {reason}")
         with open(self.log_file, "a", encoding="utf-8") as f:
-            f.write(json.dumps(entry) + "\n")
+        f.write(json.dumps(entry) + "\n")
 
     def get_blocked_events(self, limit: int = 50) -> List[Dict[str, Any]]:
         ""

@@ -15,13 +15,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Context package for cognitive agents.""
 try:
 
-"""
-    from src.core.base.lifecycle.version import VERSION
+""
+from src.core.base.lifecycle.version import VERSION
 except Exception:
     VERSION = "0.0.0"
 

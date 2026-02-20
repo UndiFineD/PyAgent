@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Slot.py module.
-""
+"""
 try:
 
 """
-    from _thread import LockType
+from _thread import LockType
 except ImportError:
     from _thread import LockType
 
@@ -51,7 +51,7 @@ except ImportError:
 
 
 class LoRASlotManager:
-    ""
+"""
 Manages GPU slots for LoRA adapters.
     def __init__(self, num_slots: int = 8) -> None:
         self.num_slots: int = num_slots

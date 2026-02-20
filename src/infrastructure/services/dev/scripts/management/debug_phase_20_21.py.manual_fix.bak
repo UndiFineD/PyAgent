@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Debug script for testing Phases 20 (Visual/Multimodal) and 21 (Distributed Observability).
-""
+"""
 
 """
 import logging
@@ -89,4 +89,4 @@ if __name__ == "__main__":"    logging.basicConfig(level=logging.INFO)
 
         traceback.print_exc()
 
-""
+"""

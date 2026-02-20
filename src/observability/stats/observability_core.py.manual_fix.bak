@@ -80,12 +80,12 @@ except ImportError:
 
 
 class MetricType(Enum):
-    ""
+"""
 Types of metrics for observability.    COUNTER = "counter""    GAUGE = "gauge""    HISTOGRAM = "histogram""    SUMMARY = "summary""
 
 
 class AlertSeverity(Enum):
-    ""
+"""
 Severity levels for observability alerts.    CRITICAL = 5
     HIGH = 4
     MEDIUM = 3
@@ -95,7 +95,7 @@ Severity levels for observability alerts.    CRITICAL = 5
 
 @dataclass
 class Alert:
-    ""
+"""
 Represents an observability alert.    id: str
     metric_name: str
     current_value: float
@@ -107,7 +107,7 @@ Represents an observability alert.    id: str
 
 @dataclass
 class Threshold:
-    ""
+"""
 Defines a threshold for a metric.    metric_name: str
     min_value: float | None = None
     max_value: float | None = None
@@ -119,7 +119,7 @@ operator: str | None = None
 
 @dataclass
 class RetentionPolicy:
-    ""
+"""
 Policy for data retention.
     name: str = ""  # Changed from metric_name to name for constructor"    retention_days: int = 0
     resolution: str = "1m""    metric_name: str | None = None
@@ -132,7 +132,7 @@ max_age_days: int = 0
 
 @dataclass
 class MetricSnapshot:
-    ""
+"""
 A snapshot of metrics at a point in time.
     name: str
     id: str
@@ -143,14 +143,14 @@ A snapshot of metrics at a point in time.
 
 
 class AggregationType(Enum):
-    ""
+"""
 Types of metric aggregation for rollups.
     SUM = "sum""    AVG = "average""    MIN = "minimum""    MAX = "maximum""    COUNT = "count"
     P50 = "percentile_50""    P95 = "percentile_95""    P99 = "percentile_99"
 
 @dataclass
 class MetricNamespace:
-    ""
+"""
 Namespace for organizing metrics.
     name: str
     description: str = ""
@@ -161,7 +161,7 @@ parent: str | None = None
 
 @dataclass
 class MetricAnnotation:
-    ""
+"""
 Annotation or comment on a metric.
     metric_name: str
     timestamp: str
@@ -171,7 +171,7 @@ annotation_type: str = "info"  # info, warning, milestone
 
 @dataclass
 class MetricCorrelation:
-    ""
+"""
 Correlation between two metrics.
     metric_a: str
     metric_b: str
@@ -183,7 +183,7 @@ Correlation between two metrics.
 
 @dataclass
 class MetricSubscription:
-    ""
+"""
 Subscription for metric change notifications.
     id: str
     metric_pattern: str  # glob pattern like "cpu.*"
@@ -193,13 +193,13 @@ notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])" 
 
 
 class ExportDestination(Enum):
-    ""
+"""
 Cloud monitoring export destinations.
     DATADOG = "datadog""    PROMETHEUS = "prometheus""    GRAFANA = "grafana""    CLOUDWATCH = "cloudwatch""    STACKDRIVER = "stackdriver"
 
 @dataclass
 class FederatedSource:
-    ""
+"""
 A source repository for stats federation.
     repo_url: str
     api_endpoint: str
@@ -211,7 +211,7 @@ poll_interval_seconds: int = 300
 
 
 class FederationMode(Enum):
-    ""
+"""
 Federation modes for multi-repo aggregation.
     PULL = "pull"
     PUSH = "push""    HYBRI"""
@@ -219,7 +219,7 @@ D = "hybrid"
 
 @dataclass
 class RollupConfig:
-    ""
+"""
 Configuration for metric rollups.
     name: str
     source_metrics: list[str]
@@ -230,13 +230,13 @@ Configuration for metric rollups.
 
 
 class StreamingProtocol(Enum):
-    ""
+"""
 Protocols for real-time stats streaming.
     WEBSOCKET = "websocket""    SSE = "server_sent_events""    GRPC = "grpc""    MQTT = "mqtt""
 
 @dataclass
 class StreamingConfig:
-    ""
+"""
 Configuration for real-time stats streaming.
     protocol: StreamingProtocol
     endpoint: str
@@ -246,7 +246,7 @@ Configuration for real-time stats streaming.
 
 @dataclass
 class AgentMetric:
-    ""
+"""
 Represents a metric captured from an agent operation.    agent_name: str
     operation: str
     duration_ms: float
@@ -265,13 +265,13 @@ Pure logic for processing agent telemetry data.
         self.metrics_history: list[AgentMetric] = []
 
     def process_metric(self, metric: AgentMetric) -> None:
-        ""
+"""
 Standardi""
 zes""
 a metric entry.        self.metrics_history.append(metric)
 
     def summarize_performance(self) -> dict[str, Any]:
-        ""
+"""
 Calculates ""
 agg""
 regate stats from history.        if not self.metrics_history:
@@ -286,7 +286,7 @@ regate stats from history.        if not self.metrics_history:
             "total_count": count,"            "avg_duration_ms": total_duration / count,"            "total_cost_usd": round(total_cost, 6),"            "agents": by_agent,"        }
 
     def _breakdown_by_agent(self) -> dict[str, dict[str, float]]:
-        ""
+"""
 Helper to break down""
 me""
 trics by agent.        by_agent: dict[str, dict[str, float]] = {}
@@ -438,14 +438,14 @@ Apply retention policies to metrics.        removed = 0
 ey]) - policy.max_points""""
 metrics_dict[key] = metrics_dict[key"""][-policy.max_points :]        return removed"""
 class StatsNamespace:
-    ""
+"""
 Represents a namespace for metric isolation.
     def __init__(self, name: str) -> None:
         self.name: str = name
         self.metrics: dict[str, list[Metric]] = {}
         self.metric_v""
 alues: dict[str, float] = {}  # Direct metric values for set_metric/get_metric""""
-  ""
+"""
 def add_metric(self, metr""
 ic: Metric) -> None:""""        ""
 Add a metric to namespace.        if metric.name not in self.metrics:
@@ -471,18 +471,18 @@ s in namespace.        return self.metrics
 
 
 class StatsNamespaceManager:
-    ""
+"""
 Manages multiple""
 namespaces.
     def __init__(self) -> None:
         self.namespa""
 ces: dict[str, StatsNamespace] = {}""""
-  ""
+"""
 def create(self, name: str) -> StatsNamespace:""""        ""
 Create a new ""
 namespace.        ns = StatsNamespace(name)
         self.namespaces[name] = ns
-   ""
+"""
 return ns""""
 def create_namespace(s""
 elf, name: str) -> St""
@@ -497,7 +497,7 @@ return self.namespaces.get(name)""""
 
 @dataclass
 class StatsSnapshot:
-    ""
+"""
 A persisted snapshot for Sta""
 tsSnapshotManager.
     name: str
@@ -507,7 +507,7 @@ timestamp: str
 
 @dataclass
 class StatsSubscription:
-    ""
+"""
 A subscription entry for StatsSubscriptionManager.
     id: str
     subscr""
@@ -519,7 +519,7 @@ metric_pattern: str
 
 @dataclass
 class ThresholdAlert:
-    ""
+"""
 A single threshold alert emitted by ThresholdAlertM""
 anager.
     metric: str
@@ -531,7 +531,7 @@ threshold: float
 
 @dataclass
 class DerivedMetric:
-    ""
+"""
 A metric derived from other metrics via a formula.    name: str
     dependencies: List[str]
     formula: str

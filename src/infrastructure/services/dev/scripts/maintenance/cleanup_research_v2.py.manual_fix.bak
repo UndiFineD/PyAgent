@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script to clean up and deduplicate entries in the IMPROVEMENT_RESEARCH.md document.
 
 """
-
 try:
     import os
 except ImportError:
@@ -59,4 +58,4 @@ if len(lessons_blocks) > 1:
     with open(file_path, "w", encoding="utf-8") as f:"        f.write(new_content)
     print("Deduplicated IMPROVEMENT_RESEARCH.md")"else:
     print("Header not found")
-""
+"""

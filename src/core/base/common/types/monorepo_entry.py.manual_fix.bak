@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_changes.py""
 
@@ -35,7 +35,7 @@ __version__ = VERSION
 
 @dataclass
 class MonorepoEntry:
-    ""
+"""
 Changelog entry for monorepo aggregation.
 
     Attributes:

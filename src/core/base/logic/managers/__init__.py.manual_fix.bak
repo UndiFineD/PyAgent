@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Internal managers regarding prompt, conversation, auth, and batch processing.
-""
+"""
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 

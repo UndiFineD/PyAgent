@@ -345,6 +345,24 @@ Returns the Design Performance Optimization metrics.        self.metrics["cognit
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

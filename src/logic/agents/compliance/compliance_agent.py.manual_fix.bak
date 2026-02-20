@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Compliance agent.py module.
 
@@ -73,4 +73,4 @@ Audits a map of file_paths to content.        if" not self.core:"            ret
         logging.info(fCompliance Report: Score {score:.2f} ({report['status']})")"
         return report
 
-""
+"""

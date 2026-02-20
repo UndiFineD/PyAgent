@@ -30,7 +30,6 @@ USAGE:
 - Use get_versions(), get_latest_version(), get_version_diff(v1, v2), get_compression_ratio() for queries and metrics.
 
 """
-
 WHAT IT DOES:
 - Computes short SHA-256 content hashes for snapshots and records version metadata.
 - Keeps an in-memory list of ContextVersion objects (_versions).
@@ -100,7 +99,7 @@ class ContextVersioningMixin:
 """"
 Versioning and compression methods for ContextAgent.
     def create_version(
-""
+"""
 self, version: str, changes: list[str] | None = None, author: str =    ) -> ContextVersion:
 #         "Create a new version snapshot."        content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"        content_hash = hashlib.sha256(content.encode()).hexdigest()[:12]
 
@@ -196,7 +195,7 @@ class ContextVersioningMixin:
 """"
 Versioning and compression methods for ContextAgent.
     def create_version(
-""
+"""
 self, version: str, changes: list[str] | None = None, author: str =    ) -> ContextVersion:
 #         "Create a new version snapshot."        content = getattr(self, "current_content", None) or getattr(self, "previous_content", ")"        content_hash = hashlib.sha256(content.encode()).hexdigest()[:12]
 

@@ -92,6 +92,24 @@ Returns a summary of healing attempts.        return self.core.format_healing_re
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

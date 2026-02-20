@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Engine.py module.
-""
+"""
 
 """
 import threading
@@ -145,7 +145,7 @@ class StructuredOutputManager:
         request_id: Optional[str],
         cache_key: str,
     ) -> StructuredOutputGrammar:
-        ""
+"""
 Inner method to perform grammar compilation.        import time
 
         start = time.perf_counter()
@@ -279,7 +279,7 @@ Inner method to perform grammar compilation.        import time
         stats["backends"] = dict(map(build_backend_stat, self._backends.items()))"        return stats
 
     def shutdown(self) -> None:
-        ""
+"""
 Shutdown the manager and its workers.        if self._executor:
             self._executor.shutdown(wait=True)
             self._executor = None
@@ -338,5 +338,5 @@ class SimpleBackend(StructuredOutputBackend):
 
         raise ValueError(f"Unsupported grammar type: {grammar_spec.grammar_type}")
     def get_supported_types(self) -> List[GrammarType]:
-        ""
+"""
 Get supported types.        return [GrammarType.REGEX, GrammarType.CHOICE]

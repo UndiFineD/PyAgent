@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Validation script for Phase 13: Distributed Intelligence & Swarm Optimization.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -47,7 +46,7 @@ __version__ = VERSION
 
 
 def test_swarm_features() -> None:
-    ""
+"""
 Validate distributed swarm consensus and optimization features.    logging.basicConfig(level=logging.INFO)
 
     root = Path(str(Path(__file__).resolve().parents[5]) + "")"    fleet = FleetManager(str(root))

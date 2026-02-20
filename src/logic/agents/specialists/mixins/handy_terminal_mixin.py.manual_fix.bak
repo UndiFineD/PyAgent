@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Handy Terminal Mixin - Terminal execution and slash-command handling
 
@@ -139,4 +139,4 @@ Handles agentic slash commands like /fix, /test, /summarize directly from a "CLI
 #             err_msg = fExecution error: {e}
             self._record("execute_error", command, err_msg)"            return err_msg
 
-""
+"""

@@ -76,6 +76,24 @@ Registers a tool from an external OpenAPI definition.        if not self.core.va
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

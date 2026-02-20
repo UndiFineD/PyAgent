@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import os
+import os
 
 try:
     import time

@@ -26,7 +26,6 @@ Instantiate the agent with a belief-store path and call as tools:
 Also runnable as a CLI via the provided create_main_function entrypoint.
 
 """
-
 WHAT IT DOES:
 Implements a lightweight Bayesian belief store and routines to update priors using Bayes' theorem, compute expected utilities for candidate actions using stored beliefs, and offer an async analysis helper that composes a prompt for downstream reasoning. Exposes update and decision helpers as tools (as_tool) for integration into the agent fleet.'
 WHAT IT SHOULD DO BETTER:

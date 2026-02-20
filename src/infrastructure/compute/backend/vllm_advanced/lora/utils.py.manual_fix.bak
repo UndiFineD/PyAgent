@@ -18,7 +18,6 @@
 Utilities for LoRA adapter management.
 
 """
-
 import json
 import logging
 from pathlib import Path
@@ -39,7 +38,7 @@ def create_lora_request(
     adapter_id: int,
     path: str,
 ) -> Optional[Any]:
-    ""
+"""
 Create a LoRARequest directly.    if not HAS_LORA:
         return None
 
@@ -69,4 +68,4 @@ def discover_adapters(
             logger.debug(f"Failed to parse adapter config {config_path}: {e}")
     return adapters
 
-""
+"""

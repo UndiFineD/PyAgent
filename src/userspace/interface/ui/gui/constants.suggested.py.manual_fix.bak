@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Constants.py module.
-""
+"""
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -39,9 +39,9 @@ __version__ = VERSION
 # limitations under the License.
 
 
-""
+"""
 
-""
+"""
 Constants and definitions for the BMAD Method and PyAgent GUI.
 # BMAD Agent Roles
 BMAD_AGENTS = [

@@ -17,12 +17,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 AutoDebuggerOrchestrator for PyAgent.""""
 Coordinates between ImmuneSystemAgent and CoderAgent to self-heal source code changes.
 
 Implemented as part of Phase 40: Recursive Self-Debugging.
-""
+"""
 import logging
 import os
 import subprocess
@@ -39,7 +39,7 @@ __version__ = VERSION
 
 
 class AutoDebuggerOrchestrator:
-    ""
+"""
 Orchestrates recursive self-debugging and code repair.
     def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root or os.getcwd()
@@ -52,7 +52,7 @@ Orchestrates recursive self-debugging and code repair.
 
     @as_tool
     async def validate_and_repair(self, file_path: str) -> dict[str, Any]:
-        ""
+"""
 Validates a file and attempts automatic repair if it fails syntax check.""""
 Args:
             file_path: The absolute path to the file to check.
@@ -102,7 +102,7 @@ Args:
 
     @as_tool
     def run_fleet_self_audit(self) -> str:
-        ""
+"""
 Audits all python files in the src directory for syntax issues.        src_path = os.path.join(self.workspace_root, "src")"        python_files = []
 
         for root, dirs, files in os.walk(src_path):
@@ -123,4 +123,4 @@ if __name__ == "__main__":"    logging.basicConfig(level=logging.INFO)
     else:
         print(orchestrator.run_fleet_self_audit())
 
-""
+"""

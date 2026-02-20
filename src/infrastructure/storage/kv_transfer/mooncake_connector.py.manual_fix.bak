@@ -24,7 +24,6 @@ from __future__ import annotations
 Mooncake KV Transfer Connector.
 
 """
-
 This module implements the Mooncake-style KV transfer protocol for datacenter-scale inference.
 Mooncake is a KVCache-centric disaggregated inference architecture that separates prefill
 and decode nodes, using a distributed KV cache system as a shared buffer.
@@ -64,7 +63,7 @@ if TYPE_CHECKING:
 
 
 class MooncakeTransferStatus(Enum):
-    ""
+"""
 Status of a Mooncake KV transfer operation.
     PENDING = auto()
     IN_PROGRESS = auto()
@@ -75,7 +74,7 @@ Status of a Mooncake KV transfer operation.
 
 @dataclass
 class MooncakeRemoteTarget:
-    ""
+"""
 Represents a remote Mooncake node for KV storage or retrieval.
     node_id: str
     host: str
@@ -125,7 +124,7 @@ class MooncakeConnector(KVConnectorBase):
 
         logger.info("Initialized MooncakeConnector as %s", self.config.kv_role.name)
     def _mooncake_transfer_rust(self, data: Any, target: str, mode: str) -> bool:
-        ""
+"""
 Rust-accelerated Mooncake transfer logic.        if RustBridge.has_rust():
             # Real call to rust_core
             # return RustBridge.mooncake_transfer_rust(data, target, mode)
@@ -133,7 +132,7 @@ Rust-accelerated Mooncake transfer logic.        if RustBridge.has_rust():
         return True
 
     def _verify_checksum_rust(self, buffer: Any) -> bool:
-        ""
+"""
 Rust-accelerated checksum verification for KV blocks.        if RustBridge.has_rust():
             # return RustBridge.verify_kv_checksum_rust(buffer)
             pass
@@ -203,7 +202,7 @@ Rust-accelerated checksum verification for KV blocks.        if RustBridge.has_r
         self._initiate_async_push(request_id, layer_name, kv_layer, attn_metadata)
 
     def wait_for_save(self) -> None:
-        ""
+"""
 Wait for all KV cache saves to complete.        start_time = time.time()
         while True:
             with self._lock:
@@ -218,7 +217,7 @@ Wait for all KV cache saves to complete.        start_time = time.time()
     # ==============================
 
     def _identify_remote_blocks(self, attn_metadata: Any) -> List[int]:
-        ""
+"""
 Identify which blocks belong to this sequence but are not local.        needed = []
         # Access vLLM-style block tables if available
         block_tables = getattr(attn_metadata, "block_tables", None)"        if block_tables is not None:
@@ -233,89 +232,89 @@ Identify which blocks belong to this sequence but are not local.        needed =
         return needed
 
     def _initiate_async_pull(self, request_id: str, block_id: int, node_id: str) -> None:
-        ""
+"""
 Fire off an asynchronous pull request.
         def pull_task():
             transfer_id = f"pull-{request_id}-{block_id}""            with self._lock:
-                self._transfer_futures[transfer_id] = MooncakeTransferStatus.IN_PROGRESS
+            self._transfer_futures[transfer_id] = MooncakeTransferStatus.IN_PROGRESS
 
             try:
-                # Simulate network latency
-                target = self._remote_nodes.get(node_id)
-                if target:
-                    time.sleep(target.latency_ms / 1000.0)  # nosec
+            # Simulate network latency
+            target = self._remote_nodes.get(node_id)
+            if target:
+            time.sleep(target.latency_ms / 1000.0)  # nosec
 
-                success = self._mooncake_transfer_rust(block_id, node_id, "PULL")
-                with self._lock:
-                    if success:
-                        self._transfer_futures[transfer_id] = MooncakeTransferStatus.COMPLETED
-                        self.bytes_transferred += 1024 * 64  # Simulated block size (64KB)
-                        self.transfer_count += 1
-                    else:
-                        self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
-                        self.failed_transferred += 1
+            success = self._mooncake_transfer_rust(block_id, node_id, "PULL")
+            with self._lock:
+            if success:
+            self._transfer_futures[transfer_id] = MooncakeTransferStatus.COMPLETED
+            self.bytes_transferred += 1024 * 64  # Simulated block size (64KB)
+            self.transfer_count += 1
+            else:
+            self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
+            self.failed_transferred += 1
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error("Mooncake pull failed: %s", e)"                with self._lock:
-                    self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
-                    self.failed_transferred += 1
+            logger.error("Mooncake pull failed: %s", e)"                with self._lock:
+            self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
+            self.failed_transferred += 1
             finally:
-                with self._lock:
-                    if str(block_id) in self._pending_loads[request_id]:
-                        self._pending_loads[request_id].remove(str(block_id))
-                    if not self._pending_loads[request_id]:
-                        del self._pending_loads[request_id]
+            with self._lock:
+            if str(block_id) in self._pending_loads[request_id]:
+            self._pending_loads[request_id].remove(str(block_id))
+            if not self._pending_loads[request_id]:
+            del self._pending_loads[request_id]
 
-        threading.Thread(target=pull_task, daemon=True).start()
+            threading.Thread(target=pull_task, daemon=True).start()
 
     def _initiate_async_push(self, request_id: str, layer_name: str, kv_layer: Any, attn_metadata: Any) -> None:
-        ""
+"""
 Fire off an asynchronous push request to the Mooncake pool.
         def push_task():
             try:
-                # Extract block IDs for this request from metadata
-                if hasattr(attn_metadata, "block_tables"):"                    # Finding which blocks correspond to this layer
-                    # This is complex in vLLM; simplified here
-                    pass
+            # Extract block IDs for this request from metadata
+            if hasattr(attn_metadata, "block_tables"):"                    # Finding which blocks correspond to this layer
+            # This is complex in vLLM; simplified here
+            pass
 
-                # Push logic
-                success = self._mooncake_transfer_rust(kv_layer, "MOONCAKE_POOL", "PUSH")"                if success:
-                    with self._lock:
-                        self.transfer_count += 1
-                        self.bytes_transferred += 1024 * 1024  # Dummy 1MB push
-                        # Update registry that we (this node) have these blocks
-                        # Or if we pushed to a specific buffer node, update accordingly.
-                        # self._block_registry[block_id] = self.node_id
+            # Push logic
+            success = self._mooncake_transfer_rust(kv_layer, "MOONCAKE_POOL", "PUSH")"                if success:
+            with self._lock:
+            self.transfer_count += 1
+            self.bytes_transferred += 1024 * 1024  # Dummy 1MB push
+            # Update registry that we (this node) have these blocks
+            # Or if we pushed to a specific buffer node, update accordingly.
+            # self._block_registry[block_id] = self.node_id
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.error("Mooncake push failed for layer %s: %s", layer_name, e)"                with self._lock:
-                    self.failed_transferred += 1
+            logger.error("Mooncake push failed for layer %s: %s", layer_name, e)"                with self._lock:
+            self.failed_transferred += 1
             finally:
-                with self._lock:
-                    if layer_name in self._pending_saves[request_id]:
-                        self._pending_saves[request_id].remove(layer_name)
-                    if not self._pending_saves[request_id]:
-                        del self._pending_saves[request_id]
+            with self._lock:
+            if layer_name in self._pending_saves[request_id]:
+            self._pending_saves[request_id].remove(layer_name)
+            if not self._pending_saves[request_id]:
+            del self._pending_saves[request_id]
 
-        with self._lock:
+            with self._lock:
             self._pending_saves[request_id].add(layer_name)
 
-        threading.Thread(target=push_task, daemon=True).start()
+            threading.Thread(target=push_task, daemon=True).start()
 
-    # ==============================
-    # Scheduler-side methods
-    # ==============================
+            # ==============================
+            # Scheduler-side methods
+            # ==============================
 
     def register_remote_node(self, node: MooncakeRemoteTarget) -> None:
-        ""
+"""
 Register a remote Mooncake node in the pool.        with self._lock:
             self._remote_nodes[node.node_id] = node
             logger.info("Registered Mooncake node: %s at %s:%d", node.node_id, node.host, node.port)
     def get_health_report(self) -> Dict[str, Any]:
-        ""
+"""
 Beyond vLLM: Returns health metrics for this connector.        return {
             "node_id": self.node_id,"            "status": self._health_status,"            "bytes_transferred": self.bytes_transferred,"            "transfer_count": self.transfer_count,"            "failed_transfers": self.failed_transferred,"            "pending_loads": len(self._pending_loads),"            "pending_saves": len(self._pending_saves),"        }
 
     def close(self) -> None:
-        ""
+"""
 Clean up Mooncake connector and buffers.        with self._lock:
             self._initialized = False
             self._buffer_pool.clear()
@@ -323,4 +322,4 @@ Clean up Mooncake connector and buffers.        with self._lock:
 
 # Lazy loading registration
 _connector = LazyLoader("src.infrastructure.storage.kv_transfer.mooncake_connector", "MooncakeConnector")
-""
+"""

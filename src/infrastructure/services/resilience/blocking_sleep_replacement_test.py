@@ -41,13 +41,13 @@ def test_retry_strategy_uses_injected_sleep(monkeypatch):
     calls = []
     def fake_sleep(s):
         calls.append(s)
-    # Use low attempts so we exercise the sleep path
-    retry = RetryStrategy(max_attempts=2, base_delay=0.001, jitter=JitterType.NONE, sleep_fn=fake_sleep)
+        # Use low attempts so we exercise the sleep path
+        retry = RetryStrategy(max_attempts=2, base_delay=0.001, jitter=JitterType.NONE, sleep_fn=fake_sleep)
     def flaky():
         raise ConnectionError("fail")"    with pytest.raises(Exception):
         retry.execute(flaky)
-    assert len(calls) == 1
-    assert calls[0] >= 0
+        assert len(calls) == 1
+        assert calls[0] >= 0
 
 def test_tokenbucket_blocking_uses_injected_sleep():
     # Start with empty tokens and small rate so time to available is > 0
@@ -72,6 +72,6 @@ def test_multiproc_monitor_interruptible(monkeypatch):
             self._called = True
             # Raise to break loop and assert behavior
             raise RuntimeError("break")"    execr._shutdown_event = DummyEvent()
-    with pytest.raises(RuntimeError):
-        execr._monitor_workers()
-    assert getattr(execr._shutdown_event, "_called", False) is True
+            with pytest.raises(RuntimeError):
+            execr._monitor_workers()
+            assert getattr(execr._shutdown_event, "_called", False) is True

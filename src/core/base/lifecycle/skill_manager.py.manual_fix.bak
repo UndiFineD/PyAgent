@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: skill_manager
 Handles dynamic loading and orchestration of SkillCore components.
-""
+"""
 
 """
 import importlib
@@ -35,7 +35,7 @@ logger = logging.getLogger(__name__)
 
 
 class SkillManager:
-    ""
+"""
 Orchestrates the lifecycle of SkillCores for a Universal Agent.""
 def __init__(self, agent: BaseAgent) -> None:
         self.agent = agent
@@ -43,7 +43,7 @@ def __init__(self, agent: BaseAgent) -> None:
 
 
     async def load_skill(self, skill_name: str) -> bool:
-        ""
+"""
 Dynamically load a skill core.""
 if skill_name in self.skills:
             return True
@@ -70,7 +70,7 @@ if skill_name in self.skills:
 
 
     async def shutdown_all(self) -> None:
-        ""
+"""
 Shutdown all loaded skills.""
 for name, skill in self.skills.items():
             try:
@@ -80,6 +80,6 @@ for name, skill in self.skills.items():
         self.skills.clear()
 
     def get_skill(self, name: str) -> 'SkillCore | None':
-        ""
+"""
 Retrieve a loaded skill instance.""
 return self.skills.get(name)

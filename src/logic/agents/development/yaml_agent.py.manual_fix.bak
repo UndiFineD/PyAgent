@@ -29,7 +29,6 @@ WHAT IT DOES:
 - Sets language="yaml", supplies a system prompt tailored to YAML, anchors/aliases, and common infrastructure schemas (Kubernetes, Docker Compose, CI/CD)."- Provides a minimal default YAML template and a CLI entrypoint via create_main_function for quick use.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Validate and lint YAML using a schema-aware linter (ruamel.yaml + schema validators) and optionally target specific schemas (k8s, compose) via CLI flags.
 - Preserve comments, formatting and ordering (use ruamel.yaml rather than PyYAML) and expose a dry-run/patch mode to show changes before applying.
@@ -70,7 +69,7 @@ Agent for YAML configuration improvement.
 #             "You are a YAML and DevOps Configuration Expert."#             "Focus on clean structure, proper indentation, use of anchors/aliases where helpful,"#             "and adherence to specific schemas (Kubernetes, Docker Compose, CI/CD pipelines)."#             "Ensure the YAML is valid and optimized for machine readability."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "version: '1.0'\\nservices:\\n  app:\\n    image: baseline\\n
 
 if __name__ == "__main__":"    main = create_main_function(YamlAgent, "YAML Agent", "Path to YAML file (.yaml, .yml)")"    "main()"
@@ -106,7 +105,7 @@ Agent for YAML configuration improvement.
 #             "You are a YAML and DevOps Configuration Expert."#             "Focus on clean structure, proper indentation, use of anchors/aliases where helpful,"#             "and adherence to specific schemas (Kubernetes, Docker Compose, CI/CD pipelines)."#             "Ensure the YAML is valid and optimized for machine readability."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "version: '1.0'\\nservices:\\n  app:\\n    image: baseline\\n
 
 if __name__ == "__main__":"    main = create_main_function(YamlAgent, "YAML Agent", "Path to YAML file (.yaml, .yml)")"    main()

@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from src.core.base.common.types.changelog_entry import ChangelogEntry
+from src.core.base.common.types.changelog_entry import ChangelogEntry
 
 try:
     from .core.base.common.types.release_note import ReleaseNote
@@ -40,14 +40,14 @@ __version__ = VERSION
 
 
 class ReleaseNotesGenerator:
-    ""
+"""
 Generates release notes from changelog entries.    Creates formatted release notes suitable for publication.
 
     Example:
         >>> generator=ReleaseNotesGenerator()
         >>> notes=generator.generate("1.0.0", entries)"    
     def generate(self, version: str, entries: list[ChangelogEntry], title: str | None = None) -> ReleaseNote:
-        ""
+"""
 Generate release notes from entries.""""
 Args:
             version: Release version.
@@ -81,7 +81,25 @@ Args:
             breaking_changes=breaking,
             full_changelog="\\n".join(changelog_lines),"        )
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

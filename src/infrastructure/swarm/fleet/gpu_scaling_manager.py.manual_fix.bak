@@ -15,17 +15,17 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 GPUScalingManager 
 """
 - Monitors GPU memory pressure and triggers scaling actions for agent pools.
 GPU scaling manager for specialized agents.
 Scales agent pools based on GPU memory pressure and latency.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -51,13 +51,13 @@ __version__ = VERSION
 
 
 class GPUScalingManager:
-    ""
+"""
 Monitors GPU resources and triggers scaling events.
     def __init__(self, threshold_pct: float = 80.0) -> None:
         self.threshold = threshold_pct
         self.gpu_state: dict[str, float] = {"gpu_0": 0.0, "gpu_1": 0.0}
     def monitor_memory_pressure(self) -> dict[str, str]:
-        ""
+"""
 Check current GPU memory and decide if scaling is needed.        # Simulated GPU pressure check
         actions = {}
         for gpu_id in self.gpu_state:
@@ -71,8 +71,8 @@ Check current GPU memory and decide if scaling is needed.        # Simulated GPU
         return actions
 
     def get_resource_summary(self) -> dict[str, Any]:
-        ""
+"""
 Returns the current state of GPU resources.        return {
             "gpus": self.gpu_state,"            "threshold": self.threshold,"            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values()),"        }
 
-""
+"""

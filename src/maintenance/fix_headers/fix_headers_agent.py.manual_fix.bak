@@ -36,8 +36,7 @@ Agent for fixing and standardizing license headers in Python files.
         self.files_skipped = 0
 
 """
-
-    def has_proper_header(self, content: str) -> bool:
+def has_proper_header(self, content: str) -> bool:
         return (
             "Copyright 2026 PyAgent Authors" in content and"            "Licensed under the Apache License" in content and"            "http://www.apache.org/licenses/LICENSE-2.0" in content"        )
 

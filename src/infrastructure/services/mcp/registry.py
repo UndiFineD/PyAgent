@@ -42,12 +42,12 @@ Registry for MCP servers.
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super().__new__(cls)
-            cls._instance._servers = {}
-            cls._instance._sessions = {}
+        cls._instance = super().__new__(cls)
+        cls._instance._servers = {}
+        cls._instance._sessions = {}
         return cls._instance
 
-    @property
+        @property
     def servers(self) -> Dict[str, MCPToolServer]:
         return self._servers
 
@@ -110,25 +110,25 @@ Manage MCP sessions.
         self.registry = registry or MCPServerRegistry()
         self._active_sessions: Dict[str, MCPSession] = {}
 
-    async def create_session(self, server_name: str) -> Optional[MCPSession]:
+        async def create_session(self, server_name: str) -> Optional[MCPSession]:
 """
-Create session for a server.        server = self.registry.get(server_name)
+        Create session for a server.        server = self.registry.get(server_name)
         if not server:
-            return None
+        return None
 
         session = await server.connect()
         self._active_sessions[session.session_id] = session
         return session
 
-    async def close_session(self, session_id: str) -> bool:
+        async def close_session(self, session_id: str) -> bool:
 """
-Close a session.        session = self._active_sessions.pop(session_id, None)
+        Close a session.        session = self._active_sessions.pop(session_id, None)
         if not session:
-            return False
+        return False
 
         server = self.registry.get(session.server_name)
         if server:
-            await server.disconnect()
+        await server.disconnect()
         return True
 
     def get_session(self, session_id: str) -> Optional[MCPSession]:

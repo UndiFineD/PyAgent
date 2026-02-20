@@ -13,13 +13,12 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Voice Agent Orchestrator - Multi-modal agent coordination
 # ========================================================
 
 """
-
 Inspired by big-3-super-agent's sophisticated orchestration system.'Provides voice-controlled coordination of multiple specialized agents.
 
 Key Features:
@@ -70,7 +69,7 @@ class VoiceAgentOrchestrator(BaseAgent):
         # Token and cost tracking
         self.response_count = 0
         self.cumulative_tokens = {
-            "total": 0, "input": 0, "output": 0,"            "input_text": 0, "input_audio": 0,"            "output_text": 0, "output_audio": 0"        }
+        "total": 0, "input": 0, "output": 0,"            "input_text": 0, "input_audio": 0,"            "output_text": 0, "output_audio": 0"        }
         self.cumulative_cost_usd = 0.0
 
         # Sub-agents registry
@@ -82,8 +81,8 @@ class VoiceAgentOrchestrator(BaseAgent):
         # Validate OpenAI API key
         if not os.environ.get("OPENAI_API_KEY"):"            raise ValueError("OPENAI_API_KEY environment variable required")"
     def register_agent(self, name: str, agent: BaseAgent):
-""""
-Register a specialized agent for orchestration.        self.registered_agents[name] = agent
+        """"
+        Register a specialized agent for orchestration.        self.registered_agents[name] = agent
         self.logger.info(fRegistered agent: {name}")"
     def _build_tool_specs(self) -> List[Dict[str, Any]]:
 """"
@@ -109,53 +108,53 @@ Build tool specifications for available agents.   "     tools = []"
         return tools
 
     def setup_audio(self):
-""""
-Initialize PyAudio for voice input/output.        self.logger.info("Setting up audio interface...")"        try:
-            self.audio_interface = pyaudio.PyAudio()
-            self.audio_stream = self.audio_interface.open(
-                format=self.format,
-                channels=self.channels,
-                rate=self.rate,
-                input=True,
-                output=True,
-                frames_per_buffer=self.chunk_size,
-            )
-            self.logger.info("Audio interface ready")"        except Exception as e:
-            self.logger.error(fFailed to setup audio: {e}")"            raise
+        """"
+        Initialize PyAudio for voice input/output.        self.logger.info("Setting up audio interface...")"        try:
+        self.audio_interface = pyaudio.PyAudio()
+        self.audio_stream = self.audio_interface.open(
+        format=self.format,
+        channels=self.channels,
+        rate=self.rate,
+        input=True,
+        output=True,
+        frames_per_buffer=self.chunk_size,
+        )
+        self.logger.info("Audio interface ready")"        except Exception as e:
+        self.logger.error(fFailed to setup audio: {e}")"            raise
 
     def cleanup_audio(self):
-""""
-Clean up audio resources.        "if self.audio_stream:"            self.audio_stream.stop_stream()
-            self.audio_stream.close()
+        """"
+        Clean up audio resources.        "if self.audio_stream:"            self.audio_stream.stop_stream()
+        self.audio_stream.close()
         if self.audio_interface:
-            self.audio_interface.terminate()
+        self.audio_interface.terminate()
         self.logger.info("Audio interface cleaned up")
     def base64_encode_audio(self, audio_bytes):
-""""
-Encode audio bytes to base64.        return base64.b64encode(audio_bytes).decode("ascii")
+        """"
+        Encode audio bytes to base64.        return base64.b64encode(audio_bytes).decode("ascii")
     def base64_decode_audio(self, base64_str):
-""""
-Decode base64 audio to bytes.        return base64.b64decode(base64_str)
+        """"
+        Decode base64 audio to bytes.        return base64.b64decode(base64_str)
 
-    async def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
-#         "Execute a tool call by delegating to appropriate agent."        self.logger.info(fExecuting tool: {tool_name} with args: {arguments}")"
+        async def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
+        #         "Execute a tool call by delegating to appropriate agent."        self.logger.info(fExecuting tool: {tool_name} with args: {arguments}")"
         try:
-            if tool_name == "generate_code":"                # Delegate to coding agent
-                if "coding_agent" in self.registered_agents:"                    agent = self.registered_agents["coding_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
-                    return {"result": result, "success": True}"                else:
-                    return {"error": "No coding agent registered", "success": False}
-            elif tool_name == "browse_web":"                # Delegate to browser agent
-                if "browser_agent" in self.registered_agents:"                    agent = self.registered_agents["browser_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
-                    return {"result": result, "success": True}"                else:
-                    return {"error": "No browser agent registered", "success": False}
-            elif tool_name == "analyze_data":"                # Delegate to analysis agent
-                if "analysis_agent" in self.registered_agents:"                    agent = self.registered_agents["analysis_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
-                    return {"result": result, "success": True}"                else:
-                    return {"error": "No analysis agent registered", "success": False}
-            else:
-                return {"error": fUnknown tool: {tool_name}", "success": False}"
+        if tool_name == "generate_code":"                # Delegate to coding agent
+        if "coding_agent" in self.registered_agents:"                    agent = self.registered_agents["coding_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
+        return {"result": result, "success": True}"                else:
+        return {"error": "No coding agent registered", "success": False}
+        elif tool_name == "browse_web":"                # Delegate to browser agent
+        if "browser_agent" in self.registered_agents:"                    agent = self.registered_agents["browser_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
+        return {"result": result, "success": True}"                else:
+        return {"error": "No browser agent registered", "success": False}
+        elif tool_name == "analyze_data":"                # Delegate to analysis agent
+        if "analysis_agent" in self.registered_agents:"                    agent = self.registered_agents["analysis_agent"]"                    context = CascadeContext.create_root("voice_orchestration")"                    result = await agent.execute(context, **arguments)
+        return {"result": result, "success": True}"                else:
+        return {"error": "No analysis agent registered", "success": False}
+        else:
+        return {"error": fUnknown tool: {tool_name}", "success": False}"
         except Exception as e:
-            self.logger.error(fTool execution failed: {e}")"            return {"error": str(e), "success": False}
+        self.logger.error(fTool execution failed: {e}")"            return {"error": str(e), "success": False}
     def _log_panel(self, message: str, title: str = "Voice Agent", style: str = "cyan"):""""
 Log message in a rich panel.        self.console.print(Panel(message, "title=title, border_style=style))"
     async def process_voice_command(self, audio_data: bytes) -> str:
@@ -211,4 +210,4 @@ Get orchestrator status and metrics.        return {
             "status": "active" if self.running else "inactive","            "registered_agents": list(self.registered_agents.keys()),"            "response_count": self.response_count,"            "total_tokens": self.cumulative_tokens["total"],"            "total_cost_usd": self.cumulative_cost_usd,"            "audio_active": self.audio_stream is not None"        }
 
 
-""
+"""

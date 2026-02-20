@@ -1,9 +1,9 @@
-from __future__ import annotations
-""
+"""
 Minimal parser-safe GUIAgent shim used during repository repair.
 
 Exposes small API for design/interpretation to satisfy imports.
-""
+"""
+from __future__ import annotations
 
 
 

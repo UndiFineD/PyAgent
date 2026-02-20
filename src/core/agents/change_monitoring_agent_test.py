@@ -59,25 +59,25 @@ manager = HistoryManager()
 
     def test_save_and_load_history(self):
 """
-Test saving and loading history to/from file.""
-manager = HistoryManager()
+        Test saving and loading history to/from file.""
+        manager = HistoryManager()
         manager.add_change({
-            'object': 'test_obj',
-            'attribute_name': 'test_attr',
-            'attribute_value': 'test_value'
+        'object': 'test_obj',
+        'attribute_name': 'test_attr',
+        'attribute_value': 'test_value'
         })
         with tempfile.NamedTemporaryFile(mode='w+', delete=False) as f:
-            temp_file = f.name
+        temp_file = f.name
         try:
-            # Save
-            manager.save_to_file(temp_file)
-            # Load into new manager
-            new_manager = HistoryManager()
-            new_manager.load_from_file(temp_file)
-            self.assertEqual(len(new_manager.history), 1)
-            self.assertEqual(new_manager.history[0]['object'], 'test_obj')
+        # Save
+        manager.save_to_file(temp_file)
+        # Load into new manager
+        new_manager = HistoryManager()
+        new_manager.load_from_file(temp_file)
+        self.assertEqual(len(new_manager.history), 1)
+        self.assertEqual(new_manager.history[0]['object'], 'test_obj')
         finally:
-            Path(temp_file).unlink()
+        Path(temp_file).unlink()
 
 
 
@@ -92,15 +92,15 @@ self.temp_dir = tempfile.mkdtemp()
 
     def tearDown(self):
 """
-Clean up test fixtures.""
-import shutil
+        Clean up test fixtures.""
+        import shutil
         shutil.rmtree(self.temp_dir)
 
 
     def test_get_current_usn(self):
 """
-Test getting current USN (mtime).""
-loop = asyncio.new_event_loop()
+        Test getting current USN (mtime).""
+        loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
 
         data_source = FileSystemDataSource(self.temp_dir)
@@ -112,8 +112,8 @@ loop = asyncio.new_event_loop()
 
     def test_get_changes_since(self):
 """
-Test getting changes since a USN.""
-loop = asyncio.new_event_loop()
+        Test getting changes since a USN.""
+        loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
 
         data_source = FileSystemDataSource(self.temp_dir)
@@ -145,15 +145,15 @@ self.automem_patcher = patch('src.core.base.lifecycle.base_agent.AutoMemCore')
 
     def tearDown(self):
 """
-Clean up test fixtures.""
-if hasattr(self, 'automem_patcher'):
-            self.automem_patcher.stop()
+        Clean up test fixtures.""
+        if hasattr(self, 'automem_patcher'):
+        self.automem_patcher.stop()
 
 
     def test_add_data_source(self):
 """
-Test adding a data source.""
-data_source = FileSystemDataSource('/tmp')
+        Test adding a data source.""
+        data_source = FileSystemDataSource('/tmp')
         self.agent.add_data_source('test_ds', data_source)
         self.assertIn('test_ds', self.agent.data_sources)
         self.assertIn('test_ds', self.agent.history_managers)
@@ -161,19 +161,19 @@ data_source = FileSystemDataSource('/tmp')
 
     def test_get_change_summary_empty(self):
 """
-Test getting change summary for empty history.""
-summary = asyncio.run(self.agent.get_change_summary('nonexistent'))
+        Test getting change summary for empty history.""
+        summary = asyncio.run(self.agent.get_change_summary('nonexistent'))
         self.assertEqual(summary, {})
 
 
-    @patch('src.core.agents.change_monitoring_agent.FileSystemDataSource')
+        @patch('src.core.agents.change_monitoring_agent.FileSystemDataSource')
     def test_get_initial_dump(self, mock_ds_class):
 """
-Test getting initial dump.""
+        Test getting initial dump.""
         # Mock data source
         mock_ds = MagicMock()
         mock_ds.get_initial_dump = AsyncMock(return_value=[
-            {'object': 'test', 'attribute_name': 'useraccountcontrol', 'attribute_value': 512}
+        {'object': 'test', 'attribute_name': 'useraccountcontrol', 'attribute_value': 512}
         ])
         mock_ds_class.return_value = mock_ds
 
@@ -185,15 +185,15 @@ Test getting initial dump.""
 
     def test_format_output_integration(self):
 """
-Test that agent can format output using mixin.""
-changes = [
-            {
-                'object': 'CN=TestUser',
-                'attribute_name': 'userAccountControl',
-                'attribute_value': '512',
-                'last_orig_change_time': '2023-01-01',
-                'explanation': 'NORMAL_ACCOUNT'
-            }
+        Test that agent can format output using mixin.""
+        changes = [
+        {
+        'object': 'CN=TestUser',
+        'attribute_name': 'userAccountControl',
+        'attribute_value': '512',
+        'last_orig_change_time': '2023-01-01',
+        'explanation': 'NORMAL_ACCOUNT'
+        }
         ]
 
         # Agent inherits format_change_output from mixin
@@ -201,5 +201,5 @@ changes = [
         self.assertIn('NORMAL_ACCOUNT', output)
 
 
-if __name__ == '__main__':
-    unittest.main()
+        if __name__ == '__main__':
+        unittest.main()

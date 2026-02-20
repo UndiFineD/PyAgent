@@ -20,7 +20,7 @@ try:
 except ImportError:
 
 """
-    import logging
+import logging
 
 try:
     from .core.base.common.registry_core import RegistryCore
@@ -35,11 +35,11 @@ def test_hook_failure_logged(caplog):
     def bad_hook(key, item):
         raise ValueError("bad")
 
-    r.add_hook("on_register", bad_hook)
-    with caplog.at_level(logging.ERROR):
+        r.add_hook("on_register", bad_hook)
+        with caplog.at_level(logging.ERROR):
         r.register("k", "v")
 
-    assert "Registry hook 'on_register' failed" in caplog.text
+        assert "Registry hook 'on_register' failed" in caplog.text
 
 def test_rust_detect_cycles_fallback(monkeypatch):
     import src.core.base.common.registry_core as mod
@@ -48,11 +48,11 @@ def test_rust_detect_cycles_fallback(monkeypatch):
         def detect_cycles_rust(self, *args, **kwargs):
             raise RuntimeError("boom")
 
-    orig = getattr(mod, "rc", None)
-    mod.rc = BadRC()
+            orig = getattr(mod, "rc", None)
+            mod.rc = BadRC()
 
-    r = RegistryCore()
-    # Should not raise and return None so Python fallback kicks in
-    assert r._try_rust_detect_cycles([], []) is None
+            r = RegistryCore()
+            # Should not raise and return None so Python fallback kicks in
+            assert r._try_rust_detect_cycles([], []) is None
 
-    mod.rc = orig
+            mod.rc = orig

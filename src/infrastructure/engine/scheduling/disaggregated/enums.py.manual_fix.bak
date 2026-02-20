@@ -30,7 +30,7 @@ except ImportError:
 
 
 class InstanceRole(Enum):
-    ""
+"""
 Role of a vLLM instance in disaggregated serving.
     PREFILL = auto()  # Handles prefill phase only
     DECODE = auto()  # Handles decode phase only
@@ -39,7 +39,7 @@ Role of a vLLM instance in disaggregated serving.
 
 
 class SchedulingPolicy(Enum):
-    ""
+"""
 Request routing policy for multi-instance deployment.
     ROUND_ROBIN = auto()  # Simple rotation
     LEAST_LOADED = auto()  # Route to least busy instance

@@ -1,4 +1,3 @@
-from __future__ import annotations
 """
 Minimal shim for AutoMem memory core used in tests.
 
@@ -6,6 +5,7 @@ This module provides a small, import-safe subset of the original
 AutoMemCore API so the test-suite can import and exercise higher-level
 components without requiring external services.
 """
+from __future__ import annotations
 
 
 

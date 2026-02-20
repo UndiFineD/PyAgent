@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Move top-level external_candidates into src/external_candidates.""""
 [Brief Summary]
 # DATE: 2026-02-12
@@ -49,7 +49,7 @@ FILE CONTENT SUMMARY:
 Move files from top-level external_candidates into src/external_candidates.
 Tries `git mv` for tracked files, falls back to shutil.move for others.
 Preserves directory structure and removes empty source dirs afterwards.
-""
+"""
 import os
 import shutil
 import subprocess
@@ -91,7 +91,43 @@ print(f"Moved {len(moved)} files into {SRC_ROOT}")"for a, b in moved[:200]:
 if len(moved) == 0:
     print('No files moved.')'else:
     print('Done.')
-""
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
+
+''
+
+"""
 
 ''
 

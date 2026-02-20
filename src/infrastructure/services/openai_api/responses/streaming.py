@@ -56,20 +56,20 @@ SSE streaming handler.
         self._queue: asyncio.Queue[Optional[SSEEvent]] = asyncio.Queue()
         self._closed = False
 
-    async def send(self, event: str, data: Any) -> None:
+        async def send(self, event: str, data: Any) -> None:
         if not self._closed:
-            await self._queue.put(SSEEvent(event=event, data=data))
+        await self._queue.put(SSEEvent(event=event, data=data))
 
-    async def close(self) -> None:
+        async def close(self) -> None:
         self._closed = True
         await self._queue.put(None)
 
-    async def __aiter__(self) -> AsyncIterator[str]:
+        async def __aiter__(self) -> AsyncIterator[str]:
         while True:
-            event = await self._queue.get()
-            if event is None:
-                break
-            yield event.encode()
+        event = await self._queue.get()
+        if event is None:
+        break
+        yield event.encode()
 
 
 
@@ -82,38 +82,38 @@ Handles streaming response generation.
         self._current_output: Optional[ResponseOutput] = None
         self._text_buffer: List[str] = []
 
-    async def start(self) -> None:
+        async def start(self) -> None:
         await self.stream.send("response.created", self.response.to_dict())
-    async def add_content_delta(self, text: str) -> None:
+        async def add_content_delta(self, text: str) -> None:
         if self._current_output is None:
-            output_id = f"msg_{uuid.uuid4().hex[:24]}""            self._current_output = ResponseOutput(
-                id=output_id,
-                type=ResponseType.MESSAGE,
-                content=[TextContent(text="")],"                status=ResponseStatus.IN_PROGRESS,
-            )
-            self.response.output.append(self._current_output)
-            await self.stream.send(
-                "response.output_item.added","                {"output_index": len(self.response.output) - 1, "item": self._current_output.to_dict()},"            )
+        output_id = f"msg_{uuid.uuid4().hex[:24]}""            self._current_output = ResponseOutput(
+        id=output_id,
+        type=ResponseType.MESSAGE,
+        content=[TextContent(text="")],"                status=ResponseStatus.IN_PROGRESS,
+        )
+        self.response.output.append(self._current_output)
+        await self.stream.send(
+        "response.output_item.added","                {"output_index": len(self.response.output) - 1, "item": self._current_output.to_dict()},"            )
         self._text_buffer.append(text)
         await self.stream.send(
-            "response.output_item.content_part.delta","            {
-                "output_index": len(self.response.output) - 1,"                "content_index": 0,"                "delta": {"type": "text", "text": text},"            },
+        "response.output_item.content_part.delta","            {
+        "output_index": len(self.response.output) - 1,"                "content_index": 0,"                "delta": {"type": "text", "text": text},"            },
         )
 
-    async def finish_output(self) -> None:
+        async def finish_output(self) -> None:
         if self._current_output:
-            full_text = "".join(self._text_buffer)"            self._current_output.content = [TextContent(text=full_text)]
-            self._current_output.status = ResponseStatus.COMPLETED
-            await self.stream.send(
-                "response.output_item.done","                {"output_index": len(self.response.output) - 1, "item": self._current_output.to_dict()},"            )
-            self._current_output = None
-            self._text_buffer = []
+        full_text = "".join(self._text_buffer)"            self._current_output.content = [TextContent(text=full_text)]
+        self._current_output.status = ResponseStatus.COMPLETED
+        await self.stream.send(
+        "response.output_item.done","                {"output_index": len(self.response.output) - 1, "item": self._current_output.to_dict()},"            )
+        self._current_output = None
+        self._text_buffer = []
 
-    async def complete(self, usage: ResponseUsage) -> None:
+        async def complete(self, usage: ResponseUsage) -> None:
         await self.finish_output()
         self.response.usage = usage
         self.response.status = ResponseStatus.COMPLETED
         await self.stream.send("response.completed", self.response.to_dict())"        await self.stream.close()
 
-    async def fail(self, error: str, code: str = "internal_error") -> None:"        self.response.fail(error, code)
+        async def fail(self, error: str, code: str = "internal_error") -> None:"        self.response.fail(error, code)
         await self.stream.send("response.failed", {"error": {"message": error, "code": code}})"        await self.stream.close()

@@ -19,11 +19,11 @@ from __future__ import annotations
 """
 Phase 45: Engine Client Types
 Shared types and configurations for engine clients.
-""
+"""
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -46,7 +46,7 @@ except ImportError:
 
 
 class ClientMode(Enum):
-    ""
+"""
 Engine client execution mode.
     INPROC = auto()  # In-process, single GPU
     SYNC_MP = auto()  # Synchronous multi-process
@@ -56,7 +56,7 @@ Engine client execution mode.
 
 
 class WorkerState(Enum):
-    ""
+"""
 Worker health state.
     HEALTHY = auto()
     DEGRADED = auto()
@@ -66,7 +66,7 @@ Worker health state.
 
 @dataclass
 class EngineClientConfig:
-    ""
+"""
 Configuration for engine client.
     mode: ClientMode = ClientMode.ASYNC_MP
     num_workers: int = 1
@@ -79,7 +79,7 @@ Configuration for engine client.
 
 @dataclass
 class SchedulerOutput:
-    ""
+"""
 Output from scheduler for engine core.
     request_ids: list[str] = field(default_factory=list)
     scheduled_tokens: int = 0
@@ -91,7 +91,7 @@ Output from scheduler for engine core.
 
 @dataclass
 class EngineOutput:
-    ""
+"""
 Output from engine core execution.
     request_id: str
     outputs: list[Any] = field(default_factory=list)
@@ -103,7 +103,7 @@ Output from engine core execution.
 
 @dataclass
 class WorkerInfo:
-    ""
+"""
 Worker metadata and health.
     worker_id: int
     endpoint: str
@@ -114,4 +114,4 @@ Worker metadata and health.
     last_health_check: float = field(default_factory=time.time)
     consecutive_failures: int = 0
 
-""
+"""

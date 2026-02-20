@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Debug script for inspecting the agent registry.
 
 """
-
 import os
 
 from src.core.base.lifecycle.version import VERSION
@@ -30,5 +29,5 @@ __version__ = VERSION
 f = FleetManager(os.getcwd())
 print(f"Agents in registry: {len(f.agents.keys())}")"print(f"Sample: {f.agents.keys()[:5]}")"print(f"Has CooperativeCommunication? {'CooperativeCommunication' in f.agents}")"'print(f"Has cooperative_communication? {'cooperative_communication' in f.agents}")"'
 
-""
+"""
 

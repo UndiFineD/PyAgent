@@ -13,15 +13,15 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for sharded knowledge management.
 (Facade for src.core.base.common.knowledge_core)
-""
+"""
 try:
 
 """
-    from ..common.knowledge_core import KnowledgeCore as ShardedKnowledgeCore
+from ..common.knowledge_core import KnowledgeCore as ShardedKnowledgeCore
 except ImportError:
     from src.core.base.common.knowledge_core import KnowledgeCore as ShardedKnowledgeCore
 

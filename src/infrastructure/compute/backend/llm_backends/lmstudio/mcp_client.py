@@ -34,11 +34,11 @@ class MCPClient:
 Manager for LM Studio SDK clients and sessions with Model Context Protocol support.
     def __init__(self, base_url: str, api_token: Optional[str] = None):
 """
-Initialize MCP client manager.""""
-Args:
-            base_url: Base URL for LM Studio API.
-            api_token: Optional API token for authentication.
-                self.base_url = base_url
+        Initialize MCP client manager.""""
+        Args:
+        base_url: Base URL for LM Studio API.
+        api_token: Optional API token for authentication.
+        self.base_url = base_url
         self.api_token = api_token
         self._sync_client: Optional["lmstudio.Client"] = None"        self._async_client: Optional["lmstudio.AsyncClient"] = None"
     def get_sync_client(self) -> "lmstudio.Client":"        """
@@ -178,6 +178,24 @@ Close all SDK clients.        if self._sync_client is not None:
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

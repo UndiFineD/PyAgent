@@ -155,6 +155,24 @@ Calculate cyclomatic complexity for a function node.        cc = 1
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

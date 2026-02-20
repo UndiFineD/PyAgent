@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Notification Channel - Enumeration of notification channel types
 
@@ -37,7 +37,7 @@ WHAT IT DOES:
 WHAT IT SHOULD DO BETTER:
 - Add richer metadata per channel (display name, default configuration keys, required credentials) and helper methods for normalization, validation, and serialization.
 - Provide case-insensitive construction, explicit unit tests, and documentation linking enum members to channel-specific sender implementations or configuration entries.
-""
+"""
 try:
     from enum import Enum
 except ImportError:
@@ -54,9 +54,9 @@ __version__ = VERSION
 
 
 class NotificationChannel(Enum):
-    ""
+"""
 Notification channel types.
-    ""
+"""
 SLACK = "slack"
     TEAMS = "teams"
     EMAIL = "email"

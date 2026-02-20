@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ComplianceAgent - Monitoring and enforcing data privacy & compliance
 
@@ -40,7 +40,7 @@ Make PII patterns configurable and extensible, support async/streaming scans for
 FILE CONTENT SUMMARY:
 ComplianceAgent: Agent for monitoring, enforcing, and reporting on regulatory and organizational compliance.
 Automates compliance checks and remediation workflows.
-""
+"""
 try:
     from pathlib import Path
 except ImportError:
@@ -94,7 +94,7 @@ class ComplianceAgent(BaseAgent, PrivacyScannerMixin, PrivacyAssessmentMixin):  
 
 # [AUTO-FIXED F821]     @as_tool
     def scan_shard(self, shard_data: str) -> dict:
-        ""
+"""
 Scans a memory shard for compliance issues (Phase 57). Enforces privacy and rate limiting.        if not self._privacy_enforced:
             raise PermissionError("Privacy enforcement is required for compliance scanning.")"        import re
         findings = []
@@ -102,4 +102,4 @@ Scans a memory shard for compliance issues (Phase 57). Enforces privacy and rate
             if re.search(pattern, shard_data):
                 findings.append(name)
         return {"compliant": len(findings) == 0, "findings": findings, "pii_detected": len(findings) > 0}
-""
+"""

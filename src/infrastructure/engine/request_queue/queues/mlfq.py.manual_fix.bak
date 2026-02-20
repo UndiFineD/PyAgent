@@ -51,14 +51,14 @@ class MLFQueue(RequestQueue):
         self._last_aging = time.time()
 
     def add(self, request: T) -> None:
-        ""
+"""
 Add request to highest priority level.        self._levels[0].append(request)
         self._request_levels[request.request_id] = 0
         self._request_runtime[request.request_id] = 0.0
         self._total_requests += 1
 
     def pop(self) -> T:
-        ""
+"""
 Pop from highest non-empty priority level.        self._maybe_age_requests()
 
         for queue in self._levels:
@@ -69,19 +69,19 @@ Pop from highest non-empty priority level.        self._maybe_age_requests()
 
         raise IndexError("pop from empty MLFQ")
     def peek(self) -> T:
-        ""
+"""
 Peek at highest priority request.        for queue in self._levels:
             if queue:
                 return queue[0]
         raise IndexError("peek from empty MLFQ")
     def prepend(self, request: T) -> None:
-        ""
+"""
 Prepend to appropriate level.        level = self._request_levels.get(request.request_id, 0)
         self._levels[level].appendleft(request)
         self._total_requests += 1
 
     def remove(self, value: T) -> bool:
-        ""
+"""
 Remove specific request.        level = self._request_levels.get(value.request_id)
         if level is not None:
             try:
@@ -95,7 +95,7 @@ Remove specific request.        level = self._request_levels.get(value.request_i
         return False
 
     def demote(self, request_id: str, runtime_increment: float) -> None:
-        ""
+"""
 Demote request to lower priority after using quantum.        if request_id not in self._request_levels:
             return
 
@@ -108,7 +108,7 @@ Demote request to lower priority after using quantum.        if request_id not i
             self._request_runtime[request_id] = 0.0
 
     def _maybe_age_requests(self) -> None:
-        ""
+"""
 Age requests to prevent starvation.        now = time.time()
         if now - self._last_aging < self.aging_interval:
             return
@@ -131,4 +131,4 @@ Age requests to prevent starvation.        now = time.time()
         for queue in self._levels:
             yield from queue
 
-""
+"""

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Consensus Conflict Agent - Multi-agent arbitration and voting
 
@@ -183,4 +183,4 @@ Returns statistics" on handled conflicts.        return {
             "pending_disputes": len("                [d for d in self.active_disputes.values() if d["status"] == "voting"]"            ),
         }
 
-""
+"""

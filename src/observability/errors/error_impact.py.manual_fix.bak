@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ErrorImpact - Impact analysis dataclass
 
@@ -37,7 +37,7 @@ WHAT IT SHOULD DO BETTER:
 - Validate fields (e.g., enforce impact_score in 0..100), prefer typing.List from typing for older Python versions, and avoid mutable default pitfalls by using tuple or frozen dataclass when immutability is desired.
 - Add serialization (to_dict/from_dict), merging utilities, human-readable repr, and convenience methods to aggregate multiple ErrorImpact instances.
 - Document intended semantics of impact_score and downstream_effects, add unit tests, and consider richer scoring (weighted by file criticality) and provenance metadata (timestamps, analyzer id).
-""
+"""
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -55,7 +55,7 @@ __version__ = VERSION
 
 @dataclass
 class ErrorImpact:
-    ""
+"""
 Impact analysis for an error.
     
     Attributes:
@@ -64,7 +64,7 @@ Impact analysis for an error.
         affected_functions: Functions impacted by the error.
         downstream_effects: Downstream components affected.
         impact_score: Overall impact score (0 - 100).
-    ""
+"""
 error_id: str
     affected_files: list[str] = field(default_factory=lambda: [])
     affected_functions: list[str] = field(default_factory=lambda: [])

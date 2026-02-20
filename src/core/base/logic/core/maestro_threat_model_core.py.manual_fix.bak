@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from typing import Dict, Any, List
+from typing import Dict, Any, List
 
 try:
     from enum import Enum
@@ -59,10 +59,10 @@ class AgentThreat:
 
 
 class MaestroThreatModelCore:
-    ""
+"""
 Evaluates agentic systems against the MAESTRO security framework.
     (Multi-Agent Environment, Security, Threat Risk, and Outcome).
-    ""
+"""
 THREAT_CATALOG = {
         MaestroLayer.AGENT_ECOSYSTEM: [
             "Compromised Agents",
@@ -113,7 +113,7 @@ THREAT_CATALOG = {
         self.active_threats: List[AgentThreat] = []
 
     def perform_scan(self, system_config: Dict[str, Any]) -> List[AgentThreat]:
-        ""
+"""
 Simulates a security scan against the MAESTRO layers.""
 threats_found: List[AgentThreat] = []
 
@@ -151,7 +151,7 @@ threats_found: List[AgentThreat] = []
         return threats_found
 
     def generate_maestro_report(self) -> str:
-        ""
+"""
 Generates a Markdown report of the threat landscape.""
 if not self.active_threats:
             return "# MAESTRO Security Report\n\n[] No critical threats detected in current architecture."

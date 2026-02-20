@@ -21,7 +21,6 @@ from __future__ import annotations
 search within the agent's context and memory.'
 
 """
-
 try:
     from enum import Enum
 except ImportError:
@@ -42,7 +41,25 @@ class SearchAlgorithm(Enum):
 """"
 Algorithms for semantic search.
 #     KEYWORD = "keyword"#     FUZZY = "fuzzy"#     SEMANTIC = "semantic"#     HYBRID = "hybrid"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -196,12 +196,12 @@ class CompilationCounter:
 
     Based on vLLM's counter pattern for limiting recompiles.'    
     def __init__(self, max_recompiles: int = 8, warmup_iters: int = 10):
-                Initialize counter.
+        Initialize counter.
 
         Args:
-            max_recompiles: Maximum allowed recompiles
-            warmup_iters: Iterations before stable compilation
-                self.max_recompiles = max_recompiles
+        max_recompiles: Maximum allowed recompiles
+        warmup_iters: Iterations before stable compilation
+        self.max_recompiles = max_recompiles
         self.warmup_iters = warmup_iters
         self._count = 0
         self._recompiles = 0
@@ -424,6 +424,24 @@ def with_compiler_context(mode: CompileMode = CompileMode.DEFAULT) -> Callable[[
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

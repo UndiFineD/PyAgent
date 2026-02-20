@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     import json
@@ -38,7 +38,7 @@ except ImportError:
 
 
 def test_output_constraint_validate():
-    ""
+"""
 Test that OutputConstraint.validate() returns True for any input.""
 constraint = OutputConstraint()
     assert constraint.validate("any text") is True
@@ -48,7 +48,7 @@ constraint = OutputConstraint()
 
 
 def test_json_schema_constraint_validate_valid():
-    ""
+"""
 Test that JsonSchemaConstraint.validate() returns True for valid JSON that meets the schema.""
 schema = {"type": "object", "required": ["foo"]}
     constraint = JsonSchemaConstraint(schema=schema, schema_format=SchemaFormat.DRAFT_07)
@@ -57,7 +57,7 @@ schema = {"type": "object", "required": ["foo"]}
 
 
 def test_json_schema_constraint_validate_invalid():
-    ""
+"""
 Test that JsonSchemaConstraint.validate() returns False for valid JSON that does not meet the schema.""
 schema = {"type": "object", "required": ["foo"]}
     constraint = JsonSchemaConstraint(schema=schema, schema_format=SchemaFormat.DRAFT_07)
@@ -66,7 +66,7 @@ schema = {"type": "object", "required": ["foo"]}
 
 
 def test_json_schema_constraint_validate_partial():
-    ""
+"""
 Test that JsonSchemaConstraint.validate() returns True for invalid JSON when allow_partial is True.""
 schema = {"type": "object", "required": ["foo"]}
     constraint = JsonSchemaConstraint(schema=schema, schema_format=SchemaFormat.DRAFT_07, allow_partial=True)

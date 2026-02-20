@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Swarm Distillation Agent - Distills fleet-wide agent knowledge into a compact representation
 
@@ -38,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Swarm distillation agent module.
-""
+"""
 try:
     import logging
 except ImportError:

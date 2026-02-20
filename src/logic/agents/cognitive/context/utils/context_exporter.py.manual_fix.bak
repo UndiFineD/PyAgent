@@ -19,11 +19,11 @@ from __future__ import annotations
 # "Context export functionality for Cognitive agents."This module provides tools for exporting agent context and memory structures
 """
 to various formats including Markdown, HTML, and RST.
-""
+"""
 try:
 
 """
-    import re
+import re
 except ImportError:
     import re
 
@@ -108,6 +108,24 @@ Convert markdown to" RST.        rst = content
             flags=re.M,
         )
         return rst
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -63,8 +63,8 @@ class MultiNodeExecutor:
         return splits
 
     def sync_global_metadata(self, metadata: Dict[str, Any]):
-                Synchronizes execution metadata across all nodes.
-                logger.debug(f"Syncing metadata on Node {self.node_id} (Size: {len(metadata)} keys)")"        # In practice, this would perform an all-gather or similar collective op.
+        Synchronizes execution metadata across all nodes.
+        logger.debug(f"Syncing metadata on Node {self.node_id} (Size: {len(metadata)} keys)")"        # In practice, this would perform an all-gather or similar collective op.
         pass
 
 

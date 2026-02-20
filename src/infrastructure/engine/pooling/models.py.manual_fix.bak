@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Data models and Enums for the Pooling Engine.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -48,7 +48,7 @@ except ImportError:
 
 
 class PoolingTask(Enum):
-    ""
+"""
 Supported pooling tasks.
     EMBED = auto()  # Sentence/document embedding
     CLASSIFY = auto()  # Sequence classification
@@ -60,7 +60,7 @@ Supported pooling tasks.
 
 
 class PoolingStrategy(Enum):
-    ""
+"""
 Pooling strategies for sequence representations.
     MEAN = auto()  # Mean of all tokens
     CLS = auto()  # First token ([CLS])
@@ -76,7 +76,7 @@ Pooling strategies for sequence representations.
 
 @dataclass
 class PoolingConfig:
-    ""
+"""
 Configuration for pooling operations.
     task: PoolingTask = PoolingTask.EMBED
     strategy: PoolingStrategy = PoolingStrategy.MEAN
@@ -102,7 +102,7 @@ Create copy with different truncation dimension.        return PoolingConfig(
 
 @dataclass
 class PoolingResult:
-    ""
+"""
 Result from pooling operation.
     embeddings: np.ndarray  # Pooled embeddings
     dim: int  # Embedding dimension (compatible with engine.py results.shape[-1])
@@ -112,41 +112,59 @@ Result from pooling operation.
 
     @property
     def shape(self) -> Tuple[int, ...]:
-        ""
+"""
 Get the shape of the resulting embeddings array.        return self.embeddings.shape
 
     @property
     def dimension(self) -> int:
-        ""
+"""
 Legacy access for dimension.        return self.dim
 
     @property
     def strategy_used(self) -> PoolingStrategy:
-        ""
+"""
 Legacy access for strategy_used.        return self.strategy
 
 
 @dataclass
 class EmbeddingOutput:
-    ""
+"""
 Output for embedding tasks.
     embedding: np.ndarray  # Single embedding vector
     tokens_used: int  # Number of tokens pooled
     truncated: bool = False  # Was dimension truncated
 
     def to_list(self) -> List[float]:
-        ""
+"""
 Convert embedding to list of floats.        return self.embedding.tolist()
 
 
 @dataclass
 class ClassificationOutput:
-    ""
+"""
 Output for classification tasks.
     logits: np.ndarray  # Raw logits
     probs: np.ndarray  # Softmax probabilities
     label: Optional[str] = None  # Predicted label
     score: Optional[float] = None  # Confidence score
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

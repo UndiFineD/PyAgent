@@ -42,6 +42,24 @@ A handle representing an acquired resource from ResourcePool.
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

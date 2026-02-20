@@ -14,11 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Remote neural synapse.py module.
 # Phase 319: Multi-Cloud Teleportation (Remote Neural Synapse)
-""
+"""
 
 """
 import asyncio
@@ -33,14 +33,14 @@ logger = StructuredLogger(__name__)
 
 
 class RemoteNeuralSynapse:
-    ""
+"""
 Manages the 'synaptic' firing of tasks and agents to remote peers.
     Implements the transport layer for Voyager Phase 1.1 using ZMQ.
-    ""
+"""
 def __init__(self, fleet_manager: Any, transport_port: int = 5555, discovery_node: Any = None) -> None:
-        ""
+"""
 Initializes the RemoteNeuralSynapse.
-        ""
+"""
 self.fleet_manager = fleet_manager
         self.engine = TeleportationEngine()
         self.transport = VoyagerTransport(port=transport_port)
@@ -50,7 +50,7 @@ self.fleet_manager = fleet_manager
 
 
     async def start(self) -> None:
-        ""
+"""
 Starts the transport server to receive remote synaptic fires.""
 if self._server_task:
             return
@@ -58,7 +58,7 @@ if self._server_task:
 
 
     async def stop(self) -> None:
-        ""
+"""
 Stops the transport server.""
 self.transport.stop()
         if self._server_task:
@@ -71,7 +71,7 @@ self.transport.stop()
 
 
     async def broadcast(self, message: Dict[str, Any]) -> None:
-        ""
+"""
 Broadcasts a message to all discovered peers.""
 if not self.discovery_node:
             return
@@ -85,7 +85,7 @@ if not self.discovery_node:
 
 
     async def send_to_peer(self, ip: str, port: int, message: Dict[str, Any]) -> Optional[Dict[str, Any]]:
-        ""
+"""
 Sends a message to a specific peer.""
 try:
             return await self.transport.send_to_peer(ip, port, message)
@@ -95,7 +95,7 @@ try:
 
 
     async def _handle_incoming_synapse(self, message: Dict[str, Any]) -> Dict[str, Any]:
-        ""
+"""
 Processes incoming teleported agents or task requests.""
 msg_type = message.get("type", "unknown")
         logger.info(f"Synapse: Incoming {msg_type} from {message.get('sender_id', 'unknown')}")
@@ -157,7 +157,7 @@ msg_type = message.get("type", "unknown")
 
 
     async def teleport_agent_to_peer(self, agent: Any, peer_address: str, transport_port: int) -> bool:
-        ""
+"""
 Transmits an agent's neural state to a remote peer via ZMQ.""
 blob: bytes = self.engine.capture_agent_state(agent)
         payload = {
@@ -179,10 +179,10 @@ blob: bytes = self.engine.capture_agent_state(agent)
 
 
     async def teleport_to_peer_name(self, agent: Any, peer_name: str) -> bool:
-        ""
+"""
 Phase 319: Bridges mDNS discovery with ZMQ transport.
         Resolves peer name to address automatically.
-        ""
+"""
 if not self.discovery_node:
             logger.error("Synapse: Cannot teleport by name - discovery_node not initialized.")
             return False

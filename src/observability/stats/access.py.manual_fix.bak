@@ -22,13 +22,13 @@ try:
 except ImportError:
 
 """
-    import fnmatch
+import fnmatch
 
 
 
 
 class StatsAccessController:
-    ""
+"""
 Controls access to stats.    def __init__(self) -> None:        self.permissions: dict[str, dict[str, str]] = {}
 
     def grant(self, user: str, pattern: str, level: str = "read") -> None:"        self.permissions.setdefault(user, {})[pattern] = level
@@ -44,4 +44,4 @@ Controls access to stats.    def __init__(self) -> None:        self.permissions
         return False
 
 
-""
+"""

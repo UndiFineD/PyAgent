@@ -52,7 +52,7 @@ FILE CONTENT SUMMARY:
 GovernanceAgent for PyAgent.
 Specializes in multi-agent proposal deliberation, voting, and fleet-wide policy management.
 Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
-""
+"""
 try:
     import json
 except ImportError:
@@ -110,10 +110,10 @@ Manages proposals, voting cycles, and governance policies for the fleet.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 self.proposals_dir = Path(self._workspace_root) / "data/memory/agent_store/governance/proposals"  # [BATCHFIX] closed string"        self.proposals_dir.mkdir(parents=True, exist_ok=True)
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/governance/policies.json"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
@@ -133,7 +133,7 @@ self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/gover
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 options: list[str] | None = None,""""    ) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -145,7 +145,7 @@ options: list[str] | None = None,""""    ) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 options: List of choices for the vote (default is ['Approve', 'Reject']).""""'# [BATCHFIX] Commented metadata/non-Python
 #         proposal_id = str(uuid."uuid4())[:8]"  # [BATCHFIX] closed string"        proposal = {
             "id": proposal_id,"            "title": title,"            "description": description,"            "creator": creator,"# [BATCHFIX] Commented metadata/non-Python
@@ -157,7 +157,7 @@ options: List of choices for the vote (default is ['Approve', 'Reject']).""""'# 
 """             "votes": {opt: [] for opt in (options or ["Approve", "Reject"])},"            "created_at": time.time(),"        }
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"        with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
 
         # Phase 108: Intelligence Recording
@@ -189,13 +189,13 @@ path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"  
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 if proposal["status"] != "active":"#             return fError: Proposal {proposal_id} is no longer active.
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 if choice not in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -204,21 +204,21 @@ if choice not in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 for opt in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 for v in proposal["votes"][opt]:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 if v["agent"] == voter:"#                     return fError: Agent {voter} has already voted on this proposal.
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "timestamp": time.time()})
         with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
 
@@ -235,25 +235,25 @@ proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "times
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def close_proposal(self, proposal_id: str) -> dict[str, Any]:"Closes a proposal and calculates the results.#         path = self.proposals_dir / "f"{proposal_id}.json"        if not path.exists():
             return {"error": "Proposal not found"}
         with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 proposal["status"] = "closed"  # [BATCHFIX] closed string
         # Calculate winner
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 tallies = {opt: len(proposal["votes"][opt]) for opt in proposal["votes"]}"        winner = max(tallies, key=tallies.get)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 proposal["result"] = {"winner": winner, "tallies": tallies}
         with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
 
@@ -262,7 +262,7 @@ proposal["result"] = {"winner": winner, "tallies": tallies}
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         _ = (prompt, target_file)
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 return "Decentralized governance ensures fleet resilience and alignment."  # [BATCHFIX] closed string
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
@@ -328,10 +328,10 @@ Manages proposals, voting cycles, and governance "policies for the fleet.
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 self.proposals_dir = Path(self._workspace_root) / "data/memory/agent_store/governance/proposals"  # [BATCHFIX] closed string"        self.proposals_dir.mkdir(parents=True, exist_ok=True)
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/governance/policies.json"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #         self._system_prompt = (
@@ -351,7 +351,7 @@ self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/gover
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 options: list[str] | None = None,""""    ) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -363,11 +363,11 @@ options: list[str] | None = None,""""    ) -> str:
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 options: List of choices for the vote (default is ['Approve', 'Reject']).""""'# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 proposal_id = str(uuid.uuid4())[:8]""""
 proposal = {
             "id": proposal_id,"            "title": title,"            "description": description,"            "creator": creator,"# [BATCHFIX] Commented metadata/non-Python
@@ -379,7 +379,7 @@ proposal = {
 """             "votes": {opt: [] for opt in (options or ["Approve", "Reject"])},"            "created_at": time.time(),"        }
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"        with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
 
         # Phase 108: Intelligence Recording
@@ -404,7 +404,7 @@ path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"  
             choice: The selected option.
             rationale: Brief explanation for the vote.
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"        if not path.exists():
 #             return fError: Proposal {proposal_id} not found.
 
@@ -413,13 +413,13 @@ path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"  
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 if proposal["status"] != "active":"#             return fError: Proposal {proposal_id} is no longer active.
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 if choice not in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
@@ -428,21 +428,21 @@ if choice not in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 for opt in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 for v in proposal["votes"][opt]:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 if v["agent"] == voter:"#                     return fError: Agent {voter} has already voted on this proposal.
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "timestamp": time.time()})
         with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
 
@@ -459,25 +459,25 @@ proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "times
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def close_proposal(self, proposal_id: str) -> dict[str, Any]:"Closes a proposal and calculates the results.#         path = "self.proposals_dir / f"{proposal_id}.json"        if not path.exists():
             return {"error": "Proposal not found"}
         with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 proposal["status"] = "closed"  # [BATCHFIX] closed string
         # Calculate winner
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 tallies = {opt: len(proposal["votes"][opt]) for opt in proposal["votes"]}"        winner = max(tallies, key=tallies.get)
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 proposal["result"] = {"winner": winner, "tallies": tallies}
         with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
 
@@ -486,7 +486,7 @@ proposal["result"] = {"winner": winner, "tallies": tallies}
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         _ = (prompt, target_file)
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 return "Decentralized governance ensures fleet resilience and alignment."  # [BATCHFIX] closed string
 
 if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
@@ -494,6 +494,24 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
     main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 #     main()
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

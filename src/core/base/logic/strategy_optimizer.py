@@ -48,10 +48,10 @@ name: str
 
     def __post_init__(self):
         if self.created_at is None:
-            self.created_at = time.time()
+        self.created_at = time.time()
 
 
-@dataclass
+        @dataclass
 class PerformanceResult:
 """
 Result of evaluating a strategy""
@@ -65,10 +65,10 @@ strategy_name: str
 
     def __post_init__(self):
         if self.timestamp is None:
-            self.timestamp = time.time()
+        self.timestamp = time.time()
 
 
-@dataclass
+        @dataclass
 class OptimizationTrial:
 """
 A single optimization trial""
@@ -153,8 +153,8 @@ filtered = []
 
     def update_thresholds(self, new_thresholds: Dict[str, float]):
 """
-Update filtering thresholds""
-self.thresholds.update(new_thresholds)
+        Update filtering thresholds""
+        self.thresholds.update(new_thresholds)
 
 
 
@@ -168,60 +168,60 @@ def __init__(self, metrics: List[OptimizationMetric]):
 
     def register_metric_function(self, metric: str, func: Callable):
 """
-Register a custom metric measurement function""
-self.measurement_functions[metric] = func
+        Register a custom metric measurement function""
+        self.measurement_functions[metric] = func
 
-    async def measure_performance(
+        async def measure_performance(
         self, strategy: Strategy, input_data: Any,
         ground_truth: Optional[Any] = None, **kwargs
-    ) -> PerformanceResult:
+        ) -> PerformanceResult:
 """
-Measure performance of a strategy""
-start_time = time.time()
+        Measure performance of a strategy""
+        start_time = time.time()
 
         try:
-            # Execute strategy
-            result = await strategy.execute(input_data, **kwargs)
-            execution_time = time.time() - start_time
+        # Execute strategy
+        result = await strategy.execute(input_data, **kwargs)
+        execution_time = time.time() - start_time
 
-            # Calculate metrics
-            metrics = {}
-            for metric in self.metrics:
-                if metric.value in self.measurement_functions:
-                    # Use custom measurement function
-                    metrics[metric.value] = self.measurement_functions[metric.value](
-                        result, ground_truth, **kwargs
-                    )
-                else:
-                    # Use default measurement
-                    metrics[metric.value] = self._default_metric_calculation(
-                        metric, result, ground_truth, execution_time
-                    )
+        # Calculate metrics
+        metrics = {}
+        for metric in self.metrics:
+        if metric.value in self.measurement_functions:
+        # Use custom measurement function
+        metrics[metric.value] = self.measurement_functions[metric.value](
+        result, ground_truth, **kwargs
+        )
+        else:
+        # Use default measurement
+        metrics[metric.value] = self._default_metric_calculation(
+        metric, result, ground_truth, execution_time
+        )
 
-            return PerformanceResult(
-                strategy_name=strategy.name,
-                metrics=metrics,
-                execution_time=execution_time,
-                metadata={"input_size": len(str(input_data)) if input_data else 0}"            )
+        return PerformanceResult(
+        strategy_name=strategy.name,
+        metrics=metrics,
+        execution_time=execution_time,
+        metadata={"input_size": len(str(input_data)) if input_data else 0}"            )
 
         except Exception as e:
-            execution_time = time.time() - start_time
+        execution_time = time.time() - start_time
 
-            # Phase 336: Failure Taxonomy Classification
-            failure_type = FailureClassification.UNKNOWN
-            error_str = str(e).lower()
-            if "timeout" in error_str:"                failure_type = FailureClassification.NETWORK_FAILURE
-            elif "memory" in error_str or "oom" in error_str:"                failure_type = FailureClassification.RESOURCE_EXHAUSTION
-            elif "recursion" in error_str:"                failure_type = FailureClassification.RECURSION_LIMIT
-            elif "shard" in error_str:"                failure_type = FailureClassification.SHARD_CORRUPTION
-            elif "ai" in error_str or "llm" in error_str:"                failure_type = FailureClassification.AI_ERROR
+        # Phase 336: Failure Taxonomy Classification
+        failure_type = FailureClassification.UNKNOWN
+        error_str = str(e).lower()
+        if "timeout" in error_str:"                failure_type = FailureClassification.NETWORK_FAILURE
+        elif "memory" in error_str or "oom" in error_str:"                failure_type = FailureClassification.RESOURCE_EXHAUSTION
+        elif "recursion" in error_str:"                failure_type = FailureClassification.RECURSION_LIMIT
+        elif "shard" in error_str:"                failure_type = FailureClassification.SHARD_CORRUPTION
+        elif "ai" in error_str or "llm" in error_str:"                failure_type = FailureClassification.AI_ERROR
 
-            return PerformanceResult(
-                strategy_name=strategy.name,
-                execution_time=execution_time,
-                error=str(e),
-                failure_type=failure_type
-            )
+        return PerformanceResult(
+        strategy_name=strategy.name,
+        execution_time=execution_time,
+        error=str(e),
+        failure_type=failure_type
+        )
 
     def _default_metric_calculation(
         self, metric: OptimizationMetric, result: Any, ground_truth: Any, execution_time: float
@@ -442,51 +442,51 @@ def __init__(self,
 
     def register_strategy(self, strategy: Strategy):
 """
-Register a strategy for optimization""
-self.strategy_registry[strategy.name] = strategy
+        Register a strategy for optimization""
+        self.strategy_registry[strategy.name] = strategy
         logger.info(f"Registered strategy: {strategy.name}")
     def unregister_strategy(self, strategy_name: str):
 """
-Unregister a strategy""
-if strategy_name in self.strategy_registry:
-            del self.strategy_registry[strategy_name]
-            logger.info(f"Unregistered strategy: {strategy_name}")
-    async def optimize(
+        Unregister a strategy""
+        if strategy_name in self.strategy_registry:
+        del self.strategy_registry[strategy_name]
+        logger.info(f"Unregistered strategy: {strategy_name}")
+        async def optimize(
         self, strategies: List[Strategy], input_data: Any,
         ground_truth: Optional[Any] = None, metric_weights: Optional[Dict[str, float]] = None,
         **kwargs
-    ) -> OptimizationTrial:
+        ) -> OptimizationTrial:
 """
-Run optimization trial across multiple strategies
+        Run optimization trial across multiple strategies
         Based on AutoRAG's optimization workflow'        ""
-trial_id = f"trial_{int(time.time())}_{len(self.optimization_history)}"
+        trial_id = f"trial_{int(time.time())}_{len(self.optimization_history)}"
         # Create trial
         trial = OptimizationTrial(
-            trial_id=trial_id,
-            strategy_configs=[s.get_config() for s in strategies]
+        trial_id=trial_id,
+        strategy_configs=[s.get_config() for s in strategies]
         )
 
         logger.info(f"Starting optimization trial: {trial_id}")
         # Measure performance for each strategy
         performance_results = []
         for strategy in strategies:
-            logger.debug(f"Evaluating strategy: {strategy.name}")"            result = await self.performance_measurer.measure_performance(
-                strategy, input_data, ground_truth, **kwargs
-            )
-            performance_results.append(result)
+        logger.debug(f"Evaluating strategy: {strategy.name}")"            result = await self.performance_measurer.measure_performance(
+        strategy, input_data, ground_truth, **kwargs
+        )
+        performance_results.append(result)
 
         # Apply threshold filtering
         filtered_results = self.threshold_filter.filter_strategies(performance_results)
         logger.info(f"Threshold filtering: {len(performance_results)} -> {len(filtered_results)} strategies")
         # Select best strategy
         if filtered_results:
-            best_result = self.selection_algorithm.select_best(filtered_results, metric_weights)
-            best_strategy_config = next(
-                config for config in trial.strategy_configs
-                if config.name == best_result.strategy_name
-            )
-            trial.best_strategy = best_strategy_config
-            trial.optimization_score = self._calculate_optimization_score(best_result, metric_weights)
+        best_result = self.selection_algorithm.select_best(filtered_results, metric_weights)
+        best_strategy_config = next(
+        config for config in trial.strategy_configs
+        if config.name == best_result.strategy_name
+        )
+        trial.best_strategy = best_strategy_config
+        trial.optimization_score = self._calculate_optimization_score(best_result, metric_weights)
 
         trial.performance_results = performance_results
         trial.completed_at = time.time()

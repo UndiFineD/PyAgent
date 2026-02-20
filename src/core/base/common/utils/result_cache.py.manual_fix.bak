@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Manager for result caching.
 (Facade for src.core.base.common.cache_core)
-""
+"""
 try:
 
 """
-    from pathlib import Path
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -42,7 +42,7 @@ except ImportError:
 
 
 class ResultCache:
-    ""
+"""
 Caches results of agent operations.""
 def __init__(self, core: CacheCore | None = None) -> None:
         self._core = core or CacheCore(Path("data/agent_cache"))
@@ -55,7 +55,7 @@ def __init__(self, core: CacheCore | None = None) -> None:
         content_hash: str | None = None,
         default: Any = None,
     ) -> Any:
-        ""
+"""
 Get a cached result. Supports legacy multi-arg calls.""
 key = file_path_or_key
         if agent_name and content_hash:
@@ -76,7 +76,7 @@ key = file_path_or_key
         content_hash: str | None = None,
         data: Any = None
     ) -> None:
-        ""
+"""
 Cache a result. Supports legacy multi-arg calls.""
 key = file_path_or_key
         value = agent_name_or_value
@@ -90,7 +90,7 @@ key = file_path_or_key
         self._core.set(key, value)
 
     def clear(self) -> None:
-        ""
+"""
 Clears both memory and disk cache.""
 self._memory_cache.clear()
         self._core.clear()

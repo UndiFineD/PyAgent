@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: security_skill
 Implements security auditing and firewall enforcement for Universal Agents.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -46,21 +46,21 @@ logger = logging.getLogger(__name__)
 
 
 class SecuritySkill(SkillCore):
-    ""
+"""
 Security capability for Universal Agents.
     Integrates Zero-Trust validation and content scanning.
-    ""
+"""
 async def initialize(self) -> None:
-        ""
+"""
 Initialize security hooks.""
 logger.info("Security Skill initialized for agent: %s", self.agent.manifest.role)
     async def shutdown(self) -> None:
-        ""
+"""
 Cleanup.""
 pass
 
     def validate_action(self, action: str, params: dict[str, Any]) -> bool:
-        ""
+"""
 Check if an action is permitted by the agent's manifest.'        ""
 permissions = self.agent.manifest.permissions
 
@@ -71,7 +71,7 @@ permissions = self.agent.manifest.permissions
         return True
 
     async def scan_content(self, content: str) -> bool:
-        ""
+"""
 Scan content for insecure patterns (delegates to rust_core if available).
         ""
 # TODO Placeholder for Rust-accelerated scanning

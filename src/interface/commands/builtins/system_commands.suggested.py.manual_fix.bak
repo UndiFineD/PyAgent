@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Built-in system commands for slash commands.
-""
+"""
 
 """
 import os
@@ -38,7 +38,7 @@ _builtins_registered = False
 
 
 def register_system_commands(registry: CommandRegistry, start_time: float) -> None:
-    ""
+"""
 Register system-related built-in commands.
     @registry.command(
         "datetime","        description="Get current server date and time","        usage="/datetime","        aliases=["dt", "now"],"    )
@@ -238,4 +238,4 @@ output = f"[/{defn.name}{aliases_str}: {defn.description}]""            if defn.
         return CommandResult.ok(
             output=f"[{value}]","            data={"value": value, "max": max_val},"        )
 
-""
+"""

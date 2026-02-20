@@ -231,21 +231,21 @@ return self._stats
     @contextmanager
     def scope(self):
 """
-Create a scoped region that auto-resets on exit.
+        Create a scoped region that auto-resets on exit.
 
         Useful regarding temporary allocations within a function.
 """
-# Remember current position
+        # Remember current position
         saved_block = self._current_block
         saved_offset = self._offset
 
         try:
-            yield self
+        yield self
         finally:
-            # Reset to saved position
-            with self._lock:
-                self._current_block = saved_block
-                self._offset = saved_offset
+        # Reset to saved position
+        with self._lock:
+        self._current_block = saved_block
+        self._offset = saved_offset
 
 
 
@@ -405,13 +405,13 @@ return self._stats
     @contextmanager
     def frame(self):
 """
-Create a stack frame that auto-pops on exit.
+        Create a stack frame that auto-pops on exit.
 """
-mark = self.push_mark()
+        mark = self.push_mark()
         try:
-            yield self
+        yield self
         finally:
-            self.pop_to_mark(mark)
+        self.pop_to_mark(mark)
 
 
 
@@ -494,17 +494,17 @@ with self._lock:
             # Find which slab this belongs to
             def find_slab(idx):
                 if idx >= len(self._slabs):
-                    return False
+                return False
                 slab = self._slabs[idx]
                 slab_view = memoryview(slab)
                 if view.obj is slab_view.obj:
-                    # Calculate offset
-                    # This is approximate - in practice we'd track allocations'                    offset = 0  # Would need to compute from pointer
-                    self._free_list.append((idx, offset))
-                    return True
+                # Calculate offset
+                # This is approximate - in practice we'd track allocations'                    offset = 0  # Would need to compute from pointer
+                self._free_list.append((idx, offset))
+                return True
                 return find_slab(idx + 1)
 
-            find_slab(0)
+                find_slab(0)
 
     def reset(self) -> None:
 """

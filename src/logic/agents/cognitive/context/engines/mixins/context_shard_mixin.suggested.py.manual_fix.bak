@@ -27,7 +27,7 @@ class ContextShardMixin:
 Mixin for managing memory shards and persistence.
 
 """
-    def _ensure_shard_loaded(self, category: str) -> None:
+def _ensure_shard_loaded(self, category: str) -> None:
 """"
 Lazy load a specific shard or sub-shards if they exist.        if not hasattr(self, "_loaded_shards") or category in self._loaded_shards:"            return
 
@@ -86,7 +86,25 @@ Saves context to disk with optimization for large datasets."        if ("       
 """"
 Manually force a rebalancing of the context shards.        logging.info("CONTEXT: Triggering manual shard rebalancing...")"        self.save()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

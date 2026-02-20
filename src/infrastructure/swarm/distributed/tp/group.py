@@ -286,8 +286,8 @@ Synchronize all TP ranks.        if self.tp_size == 1:
 
     @contextmanager
     def parallel_region(self):
-                Context manager for tensor parallel execution regions.
-                yield
+        Context manager for tensor parallel execution regions.
+        yield
         self.barrier()
 
     def get_stats(self) -> dict[str, Any]:

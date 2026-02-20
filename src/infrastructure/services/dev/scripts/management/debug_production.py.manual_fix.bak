@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Validation script for Phase 8: Production Readiness & Phase 9: Security/Infra.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -47,7 +46,7 @@ __version__ = VERSION
 
 
 def test_production_features() -> None:
-    ""
+"""
 Validate Kubernetes deployment and telemetry export features.    logging.basicConfig(level=logging.INFO)
 
     root = Path(str(Path(__file__).resolve().parents[5]) + "")

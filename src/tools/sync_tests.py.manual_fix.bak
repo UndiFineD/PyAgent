@@ -17,7 +17,6 @@
 sync_tests.py - Synchronize test files with cleaned modules
 
 """
-
 DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
 USAGE:
@@ -39,7 +38,7 @@ except ImportError:
 CLEANED_DIR = Path(r"C:\\DEV\\PyAgent\\src\\external_candidates\\cleaned")"TESTS_DIR = Path(r"C:\\DEV\\PyAgent\\tests\\unit")"
 
 def main():
-    ""
+"""
 Synchronize test files with cleaned modules.    modules = glob.glob(str(CLEANED_DIR / "*.py"))"    print(f"Found {len(modules)} modules in cleaned.")"
     for mod_path in modules:
         mod_name = Path(mod_path).name
@@ -61,4 +60,4 @@ spec.loader.exec_module(mod)
 
 if __name__ == "__main__":"    main()
 
-""
+"""

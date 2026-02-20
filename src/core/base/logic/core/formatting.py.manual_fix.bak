@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Core formatting logic regarding PyAgent.""
 
@@ -28,28 +28,28 @@ except ImportError:
 
 
 class FormattingCore:
-    ""
+"""
 Handles logic regarding normalizing and diffing content.""
 def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
 
     def fix_markdown(self, content: str) -> str:
-        ""
+"""
 Pure logic to normalize markdown content.""
 lines = content.splitlines()
 
         def fix_line(line):
             if line.startswith("#") and not line.startswith("# "):
-                return re.sub(r"^(#+)", r"\1 ", line)
+            return re.sub(r"^(#+)", r"\1 ", line)
             return line
 
-        fixed_lines = list(map(fix_line, lines))
-        return "\n".join(fixed_lines)
+            fixed_lines = list(map(fix_line, lines))
+            return "\n".join(fixed_lines)
 
 
     def normalize_response(self, response: str) -> str:
-        ""
+"""
 Normalize response text regarding consistency.""
 if rc and hasattr(rc, "normalize_response"):
             try:

@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Errors Agent Entrypoint - Create CLI main for ErrorsAgent
 
 """
-
 A small entrypoint module that prepares import paths, exposes the
 package VERSION, and constructs a CLI main function for the ErrorsAgent
 using the shared create_main_function helper. It is intended to be the
@@ -59,7 +58,7 @@ WHAT IT SHOULD DO BETTER:
 - Consider using importlib.metadata entry points for CLI installation
   instead of a top-level script, and add type hints and inline module
   docstrings describing expected agent behavior.
-""
+"""
 try:
     import sys
 except ImportError:

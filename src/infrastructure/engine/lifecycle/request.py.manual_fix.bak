@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import time
+import time
 
 try:
     from dataclasses import dataclass, field
@@ -42,7 +42,7 @@ except ImportError:
 
 @dataclass
 class Request:
-    ""
+"""
 Core request representation with lifecycle tracking.
 
     This class tracks the full lifecycle of an inference request from
@@ -58,7 +58,7 @@ Core request representation with lifecycle tracking.
         output_token_ids: Generated token IDs
         stop_reason: Why the request stopped (if finished)
         finish_reason: High-level finish reason enum
-    ""
+"""
 request_id: str
     prompt: Union[str, List[int]]
     max_tokens: int = 100
@@ -96,7 +96,7 @@ request_id: str
 
 
     def __post_init__(self) -> None:
-        ""
+"""
 Record creation event.""
 self.record_event(RequestEventType.CREATED)
 
@@ -106,13 +106,13 @@ self.record_event(RequestEventType.CREATED)
         event_type: RequestEventType,
         details: Optional[Dict[str, Any]] = None,
     ) -> None:
-        ""
+"""
 Record a lifecycle event.""
 self.events.append(RequestEvent.new_event(event_type, details=details))
 
 
     def _transition_to(self, new_status: RequestStatus) -> None:
-        ""
+"""
 Transition to a new status with validation.""
 if not is_valid_transition(self.status, new_status):
             raise ValueError(f"Invalid status transition: {self.status} -> {new_status}")
@@ -123,25 +123,25 @@ if not is_valid_transition(self.status, new_status):
     # Status Properties
     # -------------------------------------------------------------------------
     def is_finished(self) -> bool:
-        ""
+"""
 Check if the request is finished.""
 return RequestStatus.is_finished(self.status)
 
 
     def is_waiting(self) -> bool:
-        ""
+"""
 Check if the request is waiting.""
 return RequestStatus.is_waiting(self.status)
 
 
     def is_running(self) -> bool:
-        ""
+"""
 Check if the request is currently running.""
 return self.status == RequestStatus.RUNNING
 
 
     def get_finished_reason(self) -> Optional[FinishReason]:
-        ""
+"""
 Get the finish reason if finished.""
 return self.finish_reason or RequestStatus.get_finished_reason(self.status)
 
@@ -151,14 +151,14 @@ return self.finish_reason or RequestStatus.get_finished_reason(self.status)
     # -------------------------------------------------------------------------
     @property
     def num_output_tokens(self) -> int:
-        ""
+"""
 Number of output tokens generated so far.""
 return len(self.output_token_ids)
 
 
     @property
     def num_prompt_tokens(self) -> int:
-        ""
+"""
 Number of prompt tokens.""
 if self.prompt_token_ids is not None:
             return len(self.prompt_token_ids)
@@ -170,14 +170,14 @@ if self.prompt_token_ids is not None:
 
     @property
     def num_tokens(self) -> int:
-        ""
+"""
 Total number of tokens (prompt + output).""
 return self.num_prompt_tokens + self.num_output_tokens
 
 
     @property
     def time_in_queue(self) -> Optional[float]:
-        ""
+"""
 Time spent waiting in queue.""
 if self.first_scheduled_time is None:
             return None
@@ -186,7 +186,7 @@ if self.first_scheduled_time is None:
 
     @property
     def time_to_first_token(self) -> Optional[float]:
-        ""
+"""
 Time from scheduling to first token.""
 if self.first_token_time is None or self.first_scheduled_time is None:
             return None
@@ -195,7 +195,7 @@ if self.first_token_time is None or self.first_scheduled_time is None:
 
     @property
     def total_time(self) -> Optional[float]:
-        ""
+"""
 Total time from arrival to completion.""
 if self.finished_time is None:
             return None
@@ -206,7 +206,7 @@ if self.finished_time is None:
     # Lifecycle Methods
     # -------------------------------------------------------------------------
     def start_running(self) -> None:
-        ""
+"""
 Transition to RUNNING state.""
 now = time.time()
         self._transition_to(RequestStatus.RUNNING)
@@ -216,7 +216,7 @@ now = time.time()
 
 
     def add_output_token(self, token_id: int) -> None:
-        ""
+"""
 Add a generated token to the output.""
 if not self.is_running():
             raise RuntimeError(f"Cannot add token to request in state {self.status}")
@@ -228,14 +228,14 @@ if not self.is_running():
 
 
     def preempt(self) -> None:
-        ""
+"""
 Preempt the request (move back to waiting).""
 self._transition_to(RequestStatus.PREEMPTED)
         self.record_event(RequestEventType.PREEMPTED)
 
 
     def resume(self) -> None:
-        ""
+"""
 Resume a preempted request.""
 if self.status != RequestStatus.PREEMPTED:
             raise ValueError("Can only resume preempted requests")
@@ -248,7 +248,7 @@ if self.status != RequestStatus.PREEMPTED:
         reason: FinishReason,
         stop_reason: Optional[Union[int, str]] = None,
     ) -> None:
-        ""
+"""
 Finish the request with a reason.""
         # Determine the finish status based on reason
         status_map = {
@@ -269,7 +269,7 @@ Finish the request with a reason.""
 
 
     def abort(self) -> None:
-        ""
+"""
 Abort the request.""
 if not self.is_finished():
             self.status = RequestStatus.FINISHED_ABORTED
@@ -279,7 +279,7 @@ if not self.is_finished():
 
 
     def error(self, error_msg: Optional[str] = None) -> None:
-        ""
+"""
 Mark the request as errored.""
 if not self.is_finished():
             self.status = RequestStatus.FINISHED_ERROR

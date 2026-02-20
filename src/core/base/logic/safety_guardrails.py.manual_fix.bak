@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Guardrails and Safety Patterns for Agent Systems
 
 """
-
 This module implements comprehensive safety mechanisms for multi-agent systems including:
 - Input validation and moderation
 - Output validation and filtering
@@ -27,7 +26,7 @@ This module implements comprehensive safety mechanisms for multi-agent systems i
 - Rate limiting and abuse prevention
 
 Based on patterns from agentic_design_patterns repository.
-""
+"""
 import asyncio
 import json
 import logging
@@ -47,7 +46,7 @@ T = TypeVar('T')
 
 
 class ValidationResult(BaseModel):
-    ""
+"""
 Result of a validation operation.""
 is_valid: bool
     message: str
@@ -56,19 +55,19 @@ is_valid: bool
 
 
 class SafetyLevel(Enum):
-    ""
+"""
 Safety enforcement levels.""
 PERMISSIVE = "permissive""    MODERATE = "moderate""    STRICT = "strict""    PARANOID = "paranoid""
 
 
 class ContentCategory(Enum):
-    ""
+"""
 Content categories for filtering.""
 VIOLENCE = "violence""    HATE_SPEECH = "hate_speech""    ADULT_CONTENT = "adult_content""    SPAM = "spam""    MALICIOUS_CODE = "malicious_code""    SENSITIVE_DATA = "sensitive_data""
 
 @dataclass
 class SafetyConfig:
-    ""
+"""
 Configuration for safety mechanisms.""
 level: SafetyLevel = SafetyLevel.MODERATE
     blocked_categories: List[ContentCategory] = field(default_factory=lambda: [
@@ -86,14 +85,14 @@ level: SafetyLevel = SafetyLevel.MODERATE
 
 
 class InputValidator:
-    ""
+"""
 Validates and moderates input content.""
 def __init__(self, config: SafetyConfig):
         self.config = config
         self._patterns = self._build_patterns()
 
     def _build_patterns(self) -> Dict[ContentCategory, List[str]]:
-        ""
+"""
 Build regex patterns for content filtering.""
 return {
             ContentCategory.VIOLENCE: [
@@ -111,7 +110,7 @@ return {
         }
 
     async def validate_input(self, content: str, context: Optional[Dict[str, Any]] = None) -> ValidationResult:
-        ""
+"""
 Validate input content against safety rules.""
 try:
             # Length check
@@ -146,7 +145,7 @@ try:
                 message=f"Validation error: {str(e)}","                severity="high""            )
 
     async def _run_filter(self, filter_func: Callable[[str], ValidationResult], content: str) -> ValidationResult:
-        ""
+"""
 Run a custom filter function.""
 try:
             # Run filter in thread pool if it's synchronous'            if asyncio.iscoroutinefunction(filter_func):
@@ -162,7 +161,7 @@ try:
 
 
 class OutputValidator:
-    ""
+"""
 Validates and filters output content.""
 def __init__(self, config: SafetyConfig):
         self.config = config
@@ -173,7 +172,7 @@ def __init__(self, config: SafetyConfig):
         expected_schema: Optional[BaseModel] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> ValidationResult:
-        ""
+"""
 Validate output content.""
 try:
             # Convert to string for basic checks
@@ -206,7 +205,7 @@ try:
                 message=f"Validation error: {str(e)}","                severity="high""            )
 
     async def _validate_schema(self, content: Any, schema: BaseModel) -> ValidationResult:
-        ""
+"""
 Validate content against a Pydantic schema.""
 try:
             if isinstance(content, dict):
@@ -229,7 +228,7 @@ try:
                 message=f"Schema validation failed: {str(e)}","                severity="medium","                details={"error": str(e)}"            )
 
     async def _check_output_safety(self, content: str) -> ValidationResult:
-        ""
+"""
 Check output content for safety issues.""
 # Basic checks for potentially harmful content
         dangerous_patterns = [
@@ -245,7 +244,7 @@ Check output content for safety issues.""
 
 
 class RateLimiter:
-    ""
+"""
 Rate limiting for agent requests.""
 def __init__(self, requests_per_window: int = 100, window_seconds: int = 60):
         self.requests_per_window = requests_per_window
@@ -253,7 +252,7 @@ def __init__(self, requests_per_window: int = 100, window_seconds: int = 60):
         self.requests: Dict[str, List[datetime]] = {}
 
     async def check_rate_limit(self, identifier: str) -> ValidationResult:
-        ""
+"""
 Check if request is within rate limits.""
 now = datetime.now()
         window_start = now - timedelta(seconds=self.window_seconds)
@@ -285,7 +284,7 @@ now = datetime.now()
 
 
 class Guardrail:
-    ""
+"""
 Comprehensive guardrail system combining multiple safety mechanisms.""
 def __init__(self, config: Optional[SafetyConfig] = None):
         self.config = config or SafetyConfig()
@@ -302,7 +301,7 @@ def __init__(self, config: Optional[SafetyConfig] = None):
         user_id: Optional[str] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> ValidationResult:
-        ""
+"""
 Validate an incoming request.""
 # Rate limiting
         if user_id:
@@ -327,7 +326,7 @@ Validate an incoming request.""
         expected_schema: Optional[BaseModel] = None,
         context: Optional[Dict[str, Any]] = None
     ) -> ValidationResult:
-        ""
+"""
 Validate an outgoing response.""
 return await self.output_validator.validate_output(output_content, expected_schema, context)
 
@@ -337,7 +336,7 @@ return await self.output_validator.validate_output(output_content, expected_sche
         input_param: str = "input","        output_schema: Optional[BaseModel] = None,
         user_id_param: Optional[str] = None
     ) -> Callable[..., T]:
-        ""
+"""
 Create a guarded version of a function with automatic validation.""
         @wraps(func)
         async def guarded_function(*args, **kwargs) -> T:
@@ -375,7 +374,7 @@ Create a guarded version of a function with automatic validation.""
 
 
 class ResilienceDecorator:
-    ""
+"""
 Decorator for adding resilience patterns to functions.""
     @staticmethod
     def retry_with_exponential_backoff(
@@ -384,7 +383,7 @@ Decorator for adding resilience patterns to functions.""
         backoff_factor: float = 2.0,
         max_delay: float = 60.0
     ):
-        ""
+"""
 Decorator that retries a function with exponential backoff.""
 def decorator(func):
             @wraps(func)
@@ -415,7 +414,7 @@ def decorator(func):
         recovery_timeout: float = 60.0,
         expected_exception: Exception = Exception
     ):
-        ""
+"""
 Circuit breaker decorator.""
 def decorator(func):
             failures = 0
@@ -456,7 +455,7 @@ def decorator(func):
 
 
 class ResearchSummary(BaseModel):
-    ""
+"""
 Schema for research summary outputs.""
 title: str = Field(..., description="A concise title for the research summary")"    key_findings: List[str] = Field(..., description="A list of 3-5 key findings")"    confidence_score: float = Field(..., ge=0.0, le=1.0, description="Confidence score from 0.0 to 1.0")
     @field_validator('title')'    @classmethod
@@ -473,14 +472,14 @@ title: str = Field(..., description="A concise title for the research summary")"
 
 
 class CodeReviewResult(BaseModel):
-    ""
+"""
 Schema for code review outputs.""
 overall_score: int = Field(..., ge=1, le=10, description="Overall code quality score")"    issues: List[Dict[str, str]] = Field(..., description="List of identified issues")"    recommendations: List[str] = Field(..., description="Improvement recommendations")"    security_concerns: List[str] = Field(default_factory=list, description="Security-related concerns")"
 
 # Convenience functions
 
 def create_default_guardrail(level: SafetyLevel = SafetyLevel.MODERATE) -> Guardrail:
-    ""
+"""
 Create a guardrail with default configuration.""
 config = SafetyConfig(level=level)
     return Guardrail(config)

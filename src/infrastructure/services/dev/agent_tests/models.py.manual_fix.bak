@@ -17,12 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Data models for test agent functionality.
 
 """
-
 try:
     from dataclasses import dataclass, field
 except ImportError:
@@ -68,7 +67,7 @@ def _empty_action_list() -> list[dict[str, Any]]:
 
 @dataclass
 class TestCase:
-    ""
+"""
 Represents a single test case.
 
     __test__ = False
@@ -95,7 +94,7 @@ run_count: int = 0
 
 @dataclass
 class TestRun:
-    ""
+"""
 A test execution run.
     __test__ = False
 
@@ -116,7 +115,7 @@ A test execution run.
 
 @dataclass
 class CoverageGap:
-    ""
+"""
 Represents a gap in test coverage.
     file_path: str
     line_start: int
@@ -127,7 +126,7 @@ Represents a gap in test coverage.
 
 @dataclass
 class TestFactory:
-    ""
+"""
 A test data factory for generating test data.
     __test__ = False
     name: str
@@ -138,7 +137,7 @@ A test data factory for generating test data.
 
 @dataclass
 class VisualRegressionConfig:
-    ""
+"""
 Configuration for visual regression testing.
     baseline_dir: str
 
@@ -151,7 +150,7 @@ Configuration for visual regression testing.
 
 @dataclass
 class ContractTest:
-    ""
+"""
 A contract test for API boundaries.
     consumer: str
     provider: str
@@ -163,7 +162,7 @@ A contract test for API boundaries.
 
 @dataclass
 class TestEnvironment:
-    ""
+"""
 Test environment configuration.
     __test__ = False
     name: str
@@ -177,7 +176,7 @@ variables: dict[str, str] = field(default_factory=lambda: {})
 
 @dataclass
 class ExecutionTrace:
-    ""
+"""
 Test execution trace for replay.
     test_id: str
     timestamp: str
@@ -188,7 +187,7 @@ stderr: str = ""
 
 @dataclass
 class TestDependency:
-    ""
+"""
 A dependency for test injection.
     __test__ = False
     name: str
@@ -198,7 +197,7 @@ mock_behavior: str = ""
 
 @dataclass
 class CrossBrowserConfig:
-    ""
+"""
 Cross-browser testing configuration.
     browsers: list[BrowserType]
     parallel: bool = True
@@ -209,7 +208,7 @@ Cross-browser testing configuration.
 
 @dataclass
 class AggregatedResult:
-    ""
+"""
 Aggregated test result from multiple sources.
     source: TestSourceType
     test_name: str
@@ -221,7 +220,7 @@ Aggregated test result from multiple sources.
 
 @dataclass
 class Mutation:
-    ""
+"""
 A code mutation for mutation testing.
     id: str
     file_path: str
@@ -234,7 +233,7 @@ A code mutation for mutation testing.
 
 @dataclass
 class GeneratedTest:
-    ""
+"""
 A test generated from specification.
     name: str
     specification: str
@@ -245,7 +244,7 @@ A test generated from specification.
 
 @dataclass
 class TestProfile:
-    ""
+"""
 Runtime profiling data for a test.
     __test__ = False
     test_id: str
@@ -257,7 +256,7 @@ Runtime profiling data for a test.
 
 @dataclass
 class ScheduleSlot:
-    ""
+"""
 A scheduled time slot for test execution.
     start_time: str
     end_time: str
@@ -268,7 +267,7 @@ A scheduled time slot for test execution.
 
 @dataclass
 class ProvisionedEnvironment:
-    ""
+"""
 A provisioned test environment.
     status: str
     python_version: str = ""
@@ -278,7 +277,7 @@ dependencies: list[str] = field(default_factory=lambda: [])
 
 @dataclass
 class ValidationResult:
-    ""
+"""
 Result of a validation operation.
     valid: bool
     errors: list[str] = field(default_factory=lambda: [])
@@ -286,7 +285,7 @@ Result of a validation operation.
 
 @dataclass
 class Recording:
-    ""
+"""
 A recording of test execution.
     test_name: str
     actions: list[dict[str, Any]] = field(default_factory=lambda: [])
@@ -294,7 +293,7 @@ A recording of test execution.
 
 @dataclass
 class ReplayResult:
-    ""
+"""
 Result of replaying a recorded test.
     success: bool
     errors: list[str] = field(default_factory=lambda: [])

@@ -14,14 +14,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Multi-Node Executor for Phase 55.
 Handles cross-node communication and execution management for Tensor Parallel (TP)
 across physical machine boundaries.
 
 """
-
 import logging
 import socket
 from typing import Any, Dict
@@ -64,9 +63,9 @@ class MultiNodeExecutor:
         return splits
 
     def sync_global_metadata(self, metadata: Dict[str, Any]):
-                Synchronizes execution metadata across all nodes.
-                logger.debug(f"Syncing metadata on Node {self.node_id} (Size: {len(metadata)} keys)")"        # In practice, this would perform an all-gather or similar collective op.
+        Synchronizes execution metadata across all nodes.
+        logger.debug(f"Syncing metadata on Node {self.node_id} (Size: {len(metadata)} keys)")"        # In practice, this would perform an all-gather or similar collective op.
         pass
 
 
-""
+"""

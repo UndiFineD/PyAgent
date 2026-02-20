@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Models and configurations for KV offloading.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -45,7 +45,7 @@ BlockHash = Union[str, int, bytes]
 
 
 class OffloadMedium(Enum):
-    ""
+"""
 Storage medium types for offloading.
     GPU = auto()
     CPU = auto()
@@ -55,7 +55,7 @@ Storage medium types for offloading.
 
 @dataclass
 class LoadStoreSpec:
-    ""
+"""
 Specification for load/store operations.
     block_hashes: List[BlockHash]
     medium: OffloadMedium
@@ -64,13 +64,13 @@ Specification for load/store operations.
 
     @property
     def num_blocks(self) -> int:
-        ""
+"""
 Get number of blocks in specification.        return len(self.block_hashes)
 
 
 @dataclass
 class BlockStatus:
-    ""
+"""
 Status of an offloaded block.
     address: int = 0
     size: int = 0
@@ -79,13 +79,13 @@ Status of an offloaded block.
 
     @property
     def is_pinned(self) -> bool:
-        ""
+"""
 Block is pinned if it has references.        return self.ref_cnt > 0
 
 
 @dataclass
 class OffloadingEvent:
-    ""
+"""
 Event for block offloading operations.
     block_hashes: List[BlockHash]
     block_size: int
@@ -95,7 +95,7 @@ Event for block offloading operations.
 
 @dataclass
 class PrepareStoreOutput:
-    ""
+"""
 Output from prepare_store operation.
     block_hashes_to_store: List[BlockHash]
     store_spec: LoadStoreSpec

@@ -14,13 +14,13 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Metadata structure for serialized tensors.
 try:
 
 """
-    import struct
+import struct
 except ImportError:
     import struct
 
@@ -44,7 +44,7 @@ except ImportError:
 
 @dataclass
 class TensorMetadata:
-    ""
+"""
 Metadata for a serialized tensor.
     name: str
     shape: Tuple[int, ...]
@@ -56,7 +56,7 @@ compression: CompressionType = CompressionType.NONE
     compressed_size: int = 0
 
     def to_bytes(self) -> bytes:
-        ""
+"""
 Serialize metadata to bytes.        # Name (length-prefixed)
         name_bytes: bytes = self.name.encode("utf-8")"        result: bytes = struct.pack("<I", len(name_bytes)) + name_bytes"
         # Shape (length-prefixed array)
@@ -109,8 +109,26 @@ Deserialize metadata from bytes.        # Name
             compressed_size=compressed_size,
         ), pos
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

@@ -19,7 +19,7 @@ from __future__ import annotations
 """
 Core logic for Python Linting analysis.
 # Integrates ruff, flake8, and pylint for comprehensive code quality checks.
-""
+"""
 
 """
 import json
@@ -176,4 +176,4 @@ Runs flake8 and returns issues.        issues:" list[LintIssue] = []"        try
         return {
             "valid": len(all_issues) == 0,"            "issues": all_issues,"            "error": None"        }
 
-""
+"""

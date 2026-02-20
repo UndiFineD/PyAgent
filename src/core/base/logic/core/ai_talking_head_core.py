@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: AITalkingHead core (conservative).
 
 Minimal stub preserving types for tests.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Optional, Dict, Any

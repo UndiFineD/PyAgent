@@ -21,7 +21,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Registry for platform implementations.
-""
+"""
 
 """
 import logging
@@ -42,7 +42,7 @@ logger = logging.getLogger(__name__)
 
 
 class PlatformRegistry:
-    ""
+"""
 Registry for platform implementations.
     _platforms: Dict[PlatformType, Type[Platform]] = {}
     _current: Optional[Platform] = None
@@ -50,12 +50,12 @@ Registry for platform implementations.
 
     @classmethod
     def register(cls, platform_type: PlatformType, platform_cls: Type[Platform]) -> None:
-        ""
+"""
 Register a platform implementation.        cls._platforms[platform_type] = platform_cls
 
     @classmethod
     def get_platform(cls, platform_type: PlatformType) -> Optional[Platform]:
-        ""
+"""
 Get platform instance by type.        if platform_type not in cls._platforms:
             return None
         platform_cls = cls._platforms[platform_type]
@@ -65,7 +65,7 @@ Get platform instance by type.        if platform_type not in cls._platforms:
 
     @classmethod
     def detect_current(cls) -> Platform:
-        ""
+"""
 Detect and return current platform.        with cls._lock:
             if cls._current is not None:
                 return cls._current
@@ -90,14 +90,14 @@ Detect and return current platform.        with cls._lock:
 
     @classmethod
     def get_current(cls) -> Platform:
-        ""
+"""
 Get current platform (cached).        if cls._current is None:
             return cls.detect_current()
         return cls._current
 
     @classmethod
     def reset(cls) -> None:
-        ""
+"""
 Reset cached platform.        with cls._lock:
             cls._current = None
 
@@ -139,4 +139,4 @@ def select_attention_backend(
 ) -> AttentionBackend:
     return get_current_platform().select_attention_backend(preferred)
 
-""
+"""

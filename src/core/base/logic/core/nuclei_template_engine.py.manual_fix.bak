@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-""
+"""
 Minimal, parser-safe Nuclei template engine stub used for tests.
 
 This module provides small dataclasses and a lightweight engine that
 can parse simple YAML content and present the expected symbols to
 tests without executing real HTTP requests.
-""
+"""
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional
 import logging

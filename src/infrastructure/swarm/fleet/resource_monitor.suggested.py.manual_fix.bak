@@ -40,16 +40,16 @@ class ResourceMonitor:
         self.running = False
         self.is_borrowing = False
 
-    @property
+        @property
     def is_stressed(self) -> bool:
-        ""
+"""
 Returns True if any core metric exceeds the high threshold.        stats = self.get_latest_stats()
         core_metrics = [
             stats.get("cpu_usage", 0.0),"            stats.get("memory_usage", 0.0),"            stats.get("gpu", {}).get("usage", 0.0),"        ]
         return any(val > self.high_threshold for val in core_metrics)
 
     async def start(self, interval: int = 10):
-        ""
+"""
 Starts the background monitoring loop.        self.running = True
         logger.info(f"ResourceMonitor: Starting with thresholds H:{self.high_threshold}% C:{self.critical_threshold}%")"        while self.running:
             try:
@@ -62,14 +62,14 @@ Starts the background monitoring loop.        self.running = True
                 logger.error(f"ResourceMonitor: Error in loop: {e}")"                await asyncio.sleep(interval)
 
     def collect_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Collects current hardware metrics including processing, memory, disk, network, and sensors.        stats = {
             "cpu_percent": psutil.cpu_percent(interval=None),"            "memory_percent": psutil.virtual_memory().percent,"            "disk_percent": psutil.disk_usage("/").percent,"            "network_io": psutil.net_io_counters()._asdict(),"            "temp": self._get_temperature(),"            "gpu": self._get_gpu_stats(),"        }
         # Backward compatibility aliases
         stats["cpu_usage"] = stats["cpu_percent"]"        stats["memory_usage"] = stats["memory_percent"]"        stats["disk_usage"] = stats["disk_percent"]"        return stats
 
     def _get_temperature(self) -> float:
-        ""
+"""
 Attempts to retrieve the primary system temperature.        try:
             if not hasattr(psutil, "sensors_temperatures"):"                return 0.0
             # temps = psutil.sensors_temperatures()
@@ -84,7 +84,7 @@ Attempts to retrieve the primary system temperature.        try:
             return 0.0
 
     def _get_gpu_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Attempts to retrieve GPU utilization using GPUtil if available.        gpu_data = {"usage": 0.0, "mem": 0.0}"        try:
             import GPUtil
 
@@ -95,11 +95,11 @@ Attempts to retrieve GPU utilization using GPUtil if available.        gpu_data 
         return gpu_data
 
     def get_latest_stats(self) -> Dict[str, Any]:
-        ""
+"""
 Returns the most recently collected hardware metrics.        return self.last_stats or self.collect_stats()
 
     async def _evaluate_stress(self, stats: Dict[str, Any]):
-        ""
+"""
 Checks if local node is under heavy load and needs to delegate.        # Only check core metrics for stress evaluation
         core_metrics = [
             stats.get("cpu_usage", 0.0),"            stats.get("memory_usage", 0.0),"            stats.get("gpu", {}).get("usage", 0.0),"        ]
@@ -124,4 +124,4 @@ Checks if local node is under heavy load and needs to delegate.        # Only ch
     def stop(self):
         self.running = False
         logger.info("ResourceMonitor: Stopped.")
-""
+"""

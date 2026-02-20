@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 FleetConsensusManager
 """
 Consensus management for the FleetManager.
-""
+"""
 
 """
 import asyncio
@@ -33,7 +33,7 @@ if TYPE_CHECKING:
 
 
 class FleetConsensusManager:
-    ""
+"""
 Manages multi-agent consensus workflows.
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
@@ -109,4 +109,4 @@ Manages multi-agent consensus workflows.
         return result
 
 
-""
+"""

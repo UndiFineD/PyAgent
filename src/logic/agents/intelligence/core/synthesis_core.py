@@ -144,6 +144,24 @@ Averages multiple feature vectors into a single swarm insight.        if HAS_RUS
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

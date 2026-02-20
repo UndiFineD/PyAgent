@@ -21,7 +21,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Video loader implementation.
-""
+"""
 
 """
 from typing import BinaryIO, Tuple, Union
@@ -41,17 +41,17 @@ from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
 
 
 class VideoLoader(MediaLoader):
-    ""
+"""
 Load and process videos.
     def __init__(self):
         self._cv2_available = False
         try:
-            import cv2
+        import cv2
 
-            self._cv2_available = True
-            self._cv2 = cv2
+        self._cv2_available = True
+        self._cv2 = cv2
         except ImportError:
-            pass
+        pass
 
     def supports(self, media_type: MediaType) -> bool:
         return media_type == MediaType.VIDEO
@@ -61,7 +61,7 @@ Load and process videos.
         source: Union[str, bytes, BinaryIO],
         config: MediaLoadConfig,
     ) -> VideoData:
-        ""
+"""
 Load video from source.        if not self._cv2_available:
             raise RuntimeError("OpenCV required for video loading")
         if isinstance(source, bytes):
@@ -82,7 +82,7 @@ Load video from source.        if not self._cv2_available:
         )
 
     async def _load_frames(self, path: str, config: MediaLoadConfig) -> Tuple[np.ndarray, np.ndarray, MediaMetadata]:
-        ""
+"""
 Load frames from video file.        if config.use_tensorrt and rc and hasattr(rc, "initialize_tensorrt_rust"):"            # TensorRT path for 120fps optimization
             # This is a stub for real TensorRT/CUDA acceleration
             rc.initialize_tensorrt_rust()

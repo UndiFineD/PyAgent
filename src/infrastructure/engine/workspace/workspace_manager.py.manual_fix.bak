@@ -11,14 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""
+"""
 """
 Workspace manager stub.
 
 """
-
 Minimal WorkspaceManager to satisfy imports during test stabilization.
-""
+"""
 from typing import Any, Dict, Optional
 
 
@@ -154,13 +153,13 @@ class WorkspaceManager:
         self.last_sync_time: float = now
 
     def get_utilization(self) -> float:
-        ""
+"""
 Returns the current memory utilization percentage.        if self.total_size == 0:
             return 0.0
         return (self.allocated / self.total_size) * 100.0
 
     def purge(self) -> None:
-        ""
+"""
 Clears all allocations and resets the workspace.        with self._lock:
             self._workspaces.clear()
             self._channels.clear()

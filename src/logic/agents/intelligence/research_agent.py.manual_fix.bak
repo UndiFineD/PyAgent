@@ -29,7 +29,6 @@ USAGE:
 - Optionally call improve_content(prompt: str, target_file: str|None) for a lightweight content pass.
 
 """
-
 WHAT IT DOES:
 - Provides a focused agent wrapping ResearchCore to run the SGI-Bench DCAP cycle (Deliberation, Conception, Action, Perception).
 - Exposes three tool-decorated methods (dcap_research, ingest_paper, generate_tool_from_research) suitable for integration into the PyAgent toolchain and memory system.
@@ -43,7 +42,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in automated paper-to-tool generation.
 Ingests SOTA research (simulated) and generates new agentic tools.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -190,4 +189,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(ResearchAgent, "Research Agent", "Research database path")"    main()
 
-""
+"""

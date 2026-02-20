@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Base.py module.
-""
+"""
 try:
 
 """
-    import threading
+import threading
 except ImportError:
     import threading
 
@@ -126,7 +126,7 @@ class StructuredOutputGrammar(ABC):
                 return self._is_terminated
 
     def reset(self) -> None:
-        ""
+"""
 Reset the grammar state.        self._is_terminated = False
         self._tokens_accepted = 0
         self._state_history.clear()
@@ -214,8 +214,8 @@ class StructuredOutputBackend(ABC):
             self.stats.total_compile_time_ms += elapsed_ms
 
     def record_compilation_failure(self) -> None:
-        ""
+"""
 Record a failed grammar compilation.        with self._lock:
             self.stats.compilations_failed += 1
 
-""
+"""

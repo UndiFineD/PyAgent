@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     from abc import ABC, abstractmethod
@@ -34,13 +34,13 @@ __version__ = VERSION
 
 
 class ResponseTransformerBase(ABC):
-    ""
+"""
 Abstract base class for response transformers.""""
 Implement this to create custom response transformation logic.
     
     @abstractmethod
     def transform(self, response: str) -> str:
-        ""
+"""
 Transform a response string.""""
 Args:
             response: Raw response string.
@@ -50,9 +50,27 @@ Args:
         
     @abstractmethod
     def get_name(self) -> str:
-        ""
+"""
 Get transformer name.
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

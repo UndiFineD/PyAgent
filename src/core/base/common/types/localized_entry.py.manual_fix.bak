@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_changes.py
-""
+"""
 
 """
 from dataclasses import dataclass, field
@@ -32,7 +32,7 @@ __version__ = VERSION
 
 @dataclass
 class LocalizedEntry:
-    ""
+"""
 A changelog entry with localization support.
 
     Attributes:
@@ -40,7 +40,7 @@ A changelog entry with localization support.
         language: Source language of the entry.
         translations: Dictionary of translations by language code.
         auto_translated: Whether translations were auto-generated.
-    ""
+"""
 original_text: str
     language: LocalizationLanguage = LocalizationLanguage.ENGLISH
     translations: dict[str, str] = field(default_factory=lambda: {})

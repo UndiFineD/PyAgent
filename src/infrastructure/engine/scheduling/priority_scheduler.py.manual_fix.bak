@@ -19,7 +19,6 @@ Priority Scheduler Facade.
 Redirects to the modular implementation in .priority
 
 """
-
 try:
     from .priority import (AsyncPriorityScheduler, DeadlineScheduler,
 except ImportError:

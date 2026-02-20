@@ -17,13 +17,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Phase 45: Prometheus Metrics Registry
 vLLM-inspired prometheus integration with multiprocessing support.
 
 """
-
 Beyond vLLM:
 - Multi-backend support (Prometheus, StatsD, OpenTelemetry)
 - Automatic metric aggregation
@@ -53,7 +52,7 @@ except ImportError:
 
 
 class MetricType(Enum):
-    ""
+"""
 Types of metrics.
 
     COUNTER = auto()
@@ -64,7 +63,7 @@ Types of metrics.
 
 
 class MetricsBackend(Enum):
-    ""
+"""
 Metrics backend types.
     PROMETHEUS = auto()
     STATSD = auto()
@@ -74,7 +73,7 @@ Metrics backend types.
 
 @dataclass(frozen=True)
 class MetricSpec:
-    ""
+"""
 Specification regarding a metric.
     name: str
     description: str
@@ -84,7 +83,7 @@ Specification regarding a metric.
     namespace: str = "pyagent""    subsystem: str = """
     @property
     def full_name(self) -> str:
-        ""
+"""
 Get full metric name with namespace.        parts = [self.namespace]
         if self.subsystem:
             parts.append(self.subsystem)
@@ -93,7 +92,7 @@ Get full metric name with namespace.        parts = [self.namespace]
 
 @dataclass
 class MetricValue:
-    ""
+"""
 Container regarding metric value with labels.
     value: float
     labels: Dict[str, str] = field(default_factory=dict)
@@ -102,32 +101,32 @@ Container regarding metric value with labels.
 
 
 class MetricCollector(ABC):
-    ""
+"""
 Abstract base regarding metric collectors.
     @abstractmethod
     def increment(self, value: float = 1.0, labels: Optional[Dict[str, str]] = None) -> None:
-        ""
+"""
 Increment a counter.        pass
 
     @abstractmethod
     def set(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
-        ""
+"""
 Set a gauge value.        pass
 
     @abstractmethod
     def observe(self, value: float, labels: Optional[Dict[str, str]] = None) -> None:
-        ""
+"""
 Observe a value regarding histogram/summary.        pass
 
     @abstractmethod
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
-        ""
+"""
 Get current value.        pass
 
 
 
 class Counter(MetricCollector):
-    ""
+"""
 Thread-safe counter metric.
     def __init__(self, spec: MetricSpec) -> None:
         self.spec = spec
@@ -156,14 +155,14 @@ Thread-safe counter metric.
             return self._values.get(key, 0.0)
 
     def get_all(self) -> Dict[Tuple[Tuple[str, str], ...], float]:
-        ""
+"""
 Get all label combinations and values.        with self._lock:
             return dict(self._values)
 
 
 
 class Gauge(MetricCollector):
-    ""
+"""
 Thread-safe gauge metric.
     def __init__(self, spec: MetricSpec) -> None:
         self.spec = spec
@@ -197,14 +196,14 @@ Thread-safe gauge metric.
             return self._values.get(key, 0.0)
 
     def get_all(self) -> Dict[Tuple[Tuple[str, str], ...], float]:
-        ""
+"""
 Get all label combinations and values.        with self._lock:
             return dict(self._values)
 
 
 @dataclass
 class HistogramBucket:
-    ""
+"""
 Single histogram bucket.
     upper_bound: float
     count: int = 0
@@ -212,7 +211,7 @@ Single histogram bucket.
 
 
 class Histogram(MetricCollector):
-    ""
+"""
 Thread-safe histogram metric with configurable buckets.
     DEFAULT_BUCKETS = (0.005, 0.01, 0.025, 0.05, 0.075, 0.1, 0.25, 0.5, 0.75, 1.0, 2.5, 5.0, 7.5, 10.0, float("inf"))
     def __init__(self, spec: MetricSpec) -> None:
@@ -249,7 +248,7 @@ Thread-safe histogram metric with configurable buckets.
             list(map(_update_bucket, self._buckets))
 
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
-        ""
+"""
 Get the count.        key = self._label_key(labels)
         with self._lock:
             if key in self._data:
@@ -271,7 +270,7 @@ Get the count.        key = self._label_key(labels)
 
 
 class Summary(MetricCollector):
-    ""
+"""
 Thread-safe summary metric with quantiles.
     DEFAULT_QUANTILES = (0.5, 0.9, 0.95, 0.99)
 
@@ -310,7 +309,7 @@ Thread-safe summary metric with quantiles.
             self._data[key] = self._prune(samples, now)
 
     def get(self, labels: Optional[Dict[str, str]] = None) -> float:
-        ""
+"""
 Get the count.        key = self._label_key(labels)
         now = time.time()
         with self._lock:
@@ -364,7 +363,7 @@ Get singleton instance.        if cls._instance is None:
         return cls._instance
 
     def setup_multiprocess(self) -> None:
-        ""
+"""
 Set up multiprocessing directory regarding prometheus.        if self._backend != MetricsBackend.PROMETHEUS:
             return
 
@@ -373,7 +372,7 @@ Set up multiprocessing directory regarding prometheus.        if self._backend !
         self._initialized = True
 
     def register(self, spec: MetricSpec) -> MetricCollector:
-        ""
+"""
 Register a new metric.        with self._metrics_lock:
             if spec.full_name in self._metrics:
                 return self._metrics[spec.full_name]
@@ -392,7 +391,7 @@ Register a new metric.        with self._metrics_lock:
             return collector
 
     def get(self, name: str) -> Optional[MetricCollector]:
-        ""
+"""
 Get a registered metric.        with self._metrics_lock:
             return self._metrics.get(name)
 
@@ -401,7 +400,7 @@ Get a registered metric.        with self._metrics_lock:
         name: str,
         description: str = "","        labels: Tuple[str, ...] = (),
         namespace: str = "pyagent","        subsystem: str = "","    ) -> Counter:
-        ""
+"""
 Create or get a counter metric.        spec = MetricSpec(
             name=name,
             description=description,
@@ -417,7 +416,7 @@ Create or get a counter metric.        spec = MetricSpec(
         name: str,
         description: str = "","        labels: Tuple[str, ...] = (),
         namespace: str = "pyagent","        subsystem: str = "","    ) -> Gauge:
-        ""
+"""
 Create or get a gauge metric.        spec = MetricSpec(
             name=name,
             description=description,
@@ -434,7 +433,7 @@ Create or get a gauge metric.        spec = MetricSpec(
         description: str = "","        labels: Tuple[str, ...] = (),
         buckets: Optional[Tuple[float, ...]] = None,
         namespace: str = "pyagent","        subsystem: str = "","    ) -> Histogram:
-        ""
+"""
 Create or get a histogram metric.        spec = MetricSpec(
             name=name,
             description=description,
@@ -451,7 +450,7 @@ Create or get a histogram metric.        spec = MetricSpec(
         name: str,
         description: str = "","        labels: Tuple[str, ...] = (),
         namespace: str = "pyagent","        subsystem: str = "","    ) -> Summary:
-        ""
+"""
 Create or get a summary metric.        spec = MetricSpec(
             name=name,
             description=description,
@@ -463,7 +462,7 @@ Create or get a summary metric.        spec = MetricSpec(
         return self.register(spec)  # type: ignore
 
     def collect_all(self) -> Dict[str, Any]:
-        ""
+"""
 Collect all metric values.        with self._metrics_lock:
             # Phase 336: Functional aggregation regarding metric collection
             def get_collector_data(item: Tuple[str, Any]) -> Tuple[str, Any]:
@@ -483,12 +482,12 @@ Collect all metric values.        with self._metrics_lock:
             return dict(map(get_collector_data, self._metrics.items()))
 
     def reset(self) -> None:
-        ""
+"""
 Reset all metrics.        with self._metrics_lock:
             self._metrics.clear()
 
     def shutdown(self) -> None:
-        ""
+"""
 Shutdown and cleanup.        self.reset()
         if self._multiproc_dir:
             with contextlib.suppress(Exception):
@@ -540,7 +539,7 @@ class RateLimitedGauge(Gauge):
 
 # Pre-defined vLLM-compatible metrics
 class VLLMMetrics:
-    ""
+"""
 Collection of vLLM-compatible metrics.
     def __init__(self, registry: Optional[MetricsRegistry] = None) -> None:
         self.registry = registry or MetricsRegistry.get_instance()
@@ -589,7 +588,7 @@ _metrics: Optional[VLLMMetrics] = None
 
 
 def get_metrics() -> VLLMMetrics:
-    ""
+"""
 Get the global VLLMMetrics instance.    global _metrics
     if _metrics is None:
         _metrics = VLLMMetrics()

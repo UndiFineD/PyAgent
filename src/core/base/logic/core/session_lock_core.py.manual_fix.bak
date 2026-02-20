@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""Minimal, parser-safe Session Lock Core used for tests."""
-
+""
+Minimal, parser-safe Session Lock Core used for tests.""
 import os
 import secrets
 from typing import Dict, Any, Optional

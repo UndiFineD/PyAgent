@@ -30,20 +30,20 @@ class TestAuthCore:
     def core(self):
         return AuthCore()
 
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
-    @given(agent_id=st.text(min_size=1))
+        @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
+        @given(agent_id=st.text(min_size=1))
     def test_generate_challenge(self, core, agent_id):
         # We can't strictly test the output value due to time.time(),
         # but we can test structure and length.
         challenge = core.generate_challenge(agent_id)
         assert len(challenge) == 64
         try:
-            int(challenge, 16)
+        int(challenge, 16)
         except ValueError:
-            pytest.fail("Challenge is not valid hex")
+        pytest.fail("Challenge is not valid hex")
 
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
-    @given(challenge=st.text(min_size=1), secret_key=st.text(min_size=1))
+        @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
+        @given(challenge=st.text(min_size=1), secret_key=st.text(min_size=1))
     def test_generate_proof(self, core, challenge, secret_key):
         proof = core.generate_proof(challenge, secret_key)
 
@@ -51,29 +51,29 @@ class TestAuthCore:
         assert proof == expected
         assert len(proof) == 128  # sha512 is 128 chars hex
 
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
-    @given(challenge=st.text(min_size=1), secret=st.text(min_size=1))
+        @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
+        @given(challenge=st.text(min_size=1), secret=st.text(min_size=1))
     def test_verify_proof_valid(self, core, challenge, secret):
         proof = core.generate_proof(challenge, secret)
         is_valid = core.verify_proof(challenge, proof, secret)
         assert is_valid
 
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
-    @given(
+        @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
+        @given(
         challenge=st.text(min_size=1),
         secret=st.text(min_size=1, max_size=10),
         wrong_secret=st.text(min_size=11, max_size=20),
-    )
+        )
     def test_verify_proof_invalid(self, core, challenge, secret, wrong_secret):
         proof = core.generate_proof(challenge, secret)
         is_valid = core.verify_proof(challenge, proof, wrong_secret)
         assert not is_valid
 
-    @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
-    @given(
+        @settings(suppress_health_check=[HealthCheck.function_scoped_fixture], deadline=None)
+        @given(
         proof_time=st.floats(min_value=0, max_value=2000000000),
         ttl=st.integers(min_value=1, max_value=3600),
-    )
+        )
     def test_is_proof_expired_logic(self, core, proof_time, ttl):
         # We need to control current time to test this purely.
         # But the method calls time.time().
@@ -87,4 +87,4 @@ class TestAuthCore:
         # valid case
         fresh_time = now - (ttl - 10)
         if ttl > 10:
-            assert not core.is_proof_expired(fresh_time, ttl)
+        assert not core.is_proof_expired(fresh_time, ttl)

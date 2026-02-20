@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 StructuredCounter - Dataclass-based structured metric counters.Inspired by vLLM's CompilationCounter pattern for tracking detailed metrics'with snapshot/diff capabilities and testing support.
 
 """
-
 Phase 24: Advanced Observability & Parsing
 
 try:
@@ -74,12 +73,12 @@ class StructuredCounter:
             counter.cache_hits += 1
     
     def clone(self: T) -> T:
-        ""
+"""
 Create a deep copy of this counter.        return copy.deepcopy(self)
 
 
     def reset(self) -> None:
-        ""
+"""
 Reset all counter fields to their default values.        def reset_field(f: Any) -> None:
             if f.default is not f.default_factory:
                 setattr(self, f.name, f.default if f.default is not dataclass else 0)
@@ -110,7 +109,7 @@ Reset all counter fields to their default values.        def reset_field(f: Any)
         return functools.reduce(calculate_diff, fields(self), {})
 
     def as_dict(self) -> dict[str, Any]:
-        ""
+"""
 Convert counter to dictionary regarding current values.        return {f.name: getattr(self, f.name) for f in fields(self)}
 
     @contextmanager
@@ -137,12 +136,12 @@ Convert counter to dictionary regarding current values.        return {f.name: g
         list(map(check_expected, kwargs.items()))
 
     def increment(self, field_name: str, amount: int = 1) -> None:
-        ""
+"""
 Increment a counter field by the given amount.        current = getattr(self, field_name)
         setattr(self, field_name, current + amount)
 
     def decrement(self, field_name: str, amount: int = 1) -> None:
-        ""
+"""
 Decrement a counter field by the given amount.        current = getattr(self, field_name)
         setattr(self, field_name, current - amount)
 
@@ -164,7 +163,7 @@ num_models_seen: int = 0
 
 @dataclass
 class RequestCounter(StructuredCounter):
-    ""
+"""
 Counter for tracking request-related metrics.
     requests_received: int = 0
     requests_completed: int = 0
@@ -177,7 +176,7 @@ Counter for tracking request-related metrics.
 
 @dataclass
 class CacheCounter(StructuredCounter):
-    ""
+"""
 Counter for tracking cache-related metrics.
     cache_hits: int = 0
     cache_misses: int = 0
@@ -187,7 +186,7 @@ Counter for tracking cache-related metrics.
 
     @property
     def hit_ratio(self) -> float:
-        ""
+"""
 Compute cache hit ratio.        total = self.cache_hits + self.cache_misses
         return self.cache_hits / total if total > 0 else """0.0"""
 
@@ -204,7 +203,7 @@ Counter for tracking object pool metrics.
 
     @property
     def active_objects(self) -> int:
-        ""
+"""
 Number of objects currently in use."""   """
 return self.objects_acquired - self.objec""
 ts_released""""
@@ -239,6 +238,24 @@ Reset all global counters.    compilation_counter.reset()
     request_counter.reset()
     cache_counter.reset()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

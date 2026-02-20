@@ -23,7 +23,7 @@ try:
 except ImportError:
 
 """
-    import logging
+import logging
 
 try:
     import random
@@ -54,14 +54,14 @@ logger = StructuredLogger(__name__)
 
 
 class RLSelector:
-    ""
+"""
 Uses Bayesian Thompson Sampling to optimize tool selection under uncertainty.
     def __init__(self) -> None:
         # Bayesian parameters for Beta distribution: alpha (successes), beta (failures)
         # schema: {tool_name: {"alpha": float, "beta": float, "total_calls": int}}"        self.tool_stats: dict[str, dict[str, Any]] = {}
 
     def update_stats(self, tool_name: str, success: bool) -> None:
-        ""
+"""
 Updates the posterior beliefs for a tool using Bayesian inference.        if tool_name not in self.tool_stats:
             # Prior: Beta(1, 1) is a flat uniform prior
             self.tool_stats[tool_name] = {"alpha": 1.0, "beta": 1.0, "total_calls": 0}
@@ -91,7 +91,7 @@ Updates the posterior beliefs for a tool using Bayesian inference.        if too
         return best_tool
 
     def get_policy_summary(self) -> str:
-        ""
+"""
 Returns a summary of the current selection policy.        summary = ["## Tool Selection Policy (Bayesian Thompson Sampling)"]
         for tool, stats in self.tool_stats.items():
             expected = stats["alpha"] / (stats["alpha"] + stats["beta"])"            summary.append(f"- **{tool}**: Expected Success Rate {expected * 100:.1f}% ({stats['total_calls']} calls)")"'        return "\\n".join(summary) if len(summary) > 1 else "No policy data yet."
@@ -100,4 +100,4 @@ if __name__ == "__main__":"    # Internal test for Bayesian Thompson Sampling
     rl = RLSelector()
     rl.update_stats("tool_a", True)"    rl.update_stats("tool_a", True)"    rl.update_stats("tool_a", False)"    rl.update_stats("tool_b", False)"    logger.info(rl.get_policy_summary())
     logger.info(f"Sampled winner: {rl.select_best_tool(['tool_a', 'tool_b'])}")
-""
+"""

@@ -22,7 +22,7 @@ from __future__ import annotations
 # Phase 41: Tool Parser Framework - Granite Parser
 """
 IBM Granite tool call parser.
-""
+"""
 
 """
 import json
@@ -109,4 +109,4 @@ class GraniteToolParser(ToolParser):
 
         return state, completed_tool
 
-""
+"""

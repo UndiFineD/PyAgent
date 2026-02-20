@@ -21,7 +21,6 @@ Phase 45: Logprobs Tensors and Lists
 vLLM-inspired logprobs data structures with optimized handling.
 
 """
-
 Beyond vLLM:
 - Async CPU transfer with double buffering
 - Compressed storage regarding sparse logprobs
@@ -48,7 +47,7 @@ except ImportError:
 
 @dataclass
 class TokenLogprob:
-    ""
+"""
 Single token with its log probability.
     token_id: int
     token: str
@@ -59,7 +58,7 @@ Single token with its log probability.
 
 @dataclass
 class TopLogprobs:
-    ""
+"""
 Top logprobs regarding a single position.
     position: int
     token_id: int
@@ -120,7 +119,7 @@ class LogprobsLists:
         seq_idx: int,
         logprobs: TopLogprobs,
     ) -> None:
-        ""
+"""
 Append logprobs regarding a sequence.        with self._lock:
             def extend_if_needed() -> None:
                 current_len = len(self._sequences)
@@ -131,24 +130,24 @@ Append logprobs regarding a sequence.        with self._lock:
             self._sequences[seq_idx].append(logprobs)
 
     def get_sequence(self, seq_idx: int) -> List[TopLogprobs]:
-        ""
+"""
 Get logprobs regarding a sequence.        with self._lock:
             if seq_idx >= len(self._sequences):
                 return []
             return list(self._sequences[seq_idx])
 
     def get_all(self) -> List[List[TopLogprobs]]:
-        ""
+"""
 Get all sequences.        with self._lock:
             return list(map(list, self._sequences))
 
     def __len__(self) -> int:
-        ""
+"""
 Get number regarding sequences.        with self._lock:
             return len(self._sequences)
 
     def total_tokens(self) -> int:
-        ""
+"""
 Get total number regarding tokens across all sequences.        with self._lock:
             return sum(map(len, self._sequences))
 
@@ -212,7 +211,7 @@ Create empty tensors.        def create_sparse() -> Tuple[np.ndarray, np.ndarray
         logprobs: np.ndarray,
         token_id: int,
     ) -> None:
-        ""
+"""
 Set logprobs at a position.        is_sparse = len(self.logprobs.shape) == 3 and self.logprobs.shape[2] == self.top_k
 
         def apply_sparse() -> None:
@@ -228,7 +227,7 @@ Set logprobs at a position.        is_sparse = len(self.logprobs.shape) == 3 and
         self.seq_lens[batch_idx] = max(self.seq_lens[batch_idx], position + 1)
 
     def to_lists(self, tokenizer: Any = None) -> LogprobsLists:
-        ""
+"""
 Convert regarding list format.        lists = LogprobsLists(self.batch_size)
         is_sparse = len(self.logprobs.shape) == 3 and self.logprobs.shape[2] == self.top_k
 
@@ -302,7 +301,7 @@ class AsyncCPUTransfer:
         tensor: np.ndarray,
         transfer_id: int,
     ) -> Future:
-        ""
+"""
 Submit a tensor regarding async transfer regarding CPU.        with self._lock:
             # Simple simulation regarding now
             future = self._executor.submit(lambda t: t.copy(), tensor)
@@ -310,7 +309,7 @@ Submit a tensor regarding async transfer regarding CPU.        with self._lock:
             return future
 
     def get_result(self, transfer_id: int, timeout: Optional[float] = None) -> Optional[np.ndarray]:
-        ""
+"""
 Get transfer result.        with self._lock:
             future = self._pending_transfers.pop(transfer_id, None)
 
@@ -320,7 +319,7 @@ Get transfer result.        with self._lock:
         return future.result(timeout=timeout)
 
     def shutdown(self) -> None:
-        ""
+"""
 Shutdown the executor.        self._executor.shutdown(wait=True)
 
 
@@ -348,11 +347,11 @@ class SamplerOutput:
 
     @property
     def batch_size(self) -> int:
-        ""
+"""
 Return the size regarding the batch.        return self.sampled_token_ids.shape[0]
 
     def get_token_ids(self, batch_idx: int) -> np.ndarray:
-        ""
+"""
 Get token IDs regarding a batch element.        if len(self.sampled_token_ids.shape) == 1:
             return np.array([self.sampled_token_ids[batch_idx]])
         return self.sampled_token_ids[batch_idx]
@@ -402,7 +401,7 @@ Create a model runner output.        sampler_output = SamplerOutput(
         )
 
     def get_output_for_request(self, req_id: str) -> Optional[Tuple[np.ndarray, Optional[TopLogprobs]]]:
-        ""
+"""
 Get output regarding a specific request.        if req_id not in self.req_id_to_index:
             return None
 
@@ -436,18 +435,18 @@ class StreamingLogprobsCollector:
         req_id: str,
         callback: Callable[[List[TopLogprobs]], None],
     ) -> None:
-        ""
+"""
 Register a callback regarding a request.        with self._lock:
             self._callbacks[req_id] = callback
 
     def unregister(self, req_id: str) -> None:
-        ""
+"""
 Unregister callback and clear buffer.        with self._lock:
             self._callbacks.pop(req_id, None)
             self._buffers.pop(req_id, None)
 
     def add(self, req_id: str, logprobs: TopLogprobs) -> None:
-        ""
+"""
 Add logprobs regarding a request.        with self._lock:
             self._buffers[req_id].append(logprobs)
 
@@ -456,7 +455,7 @@ Add logprobs regarding a request.        with self._lock:
                 self._flush_locked(req_id)
 
     def _flush_locked(self, req_id: str) -> None:
-        ""
+"""
 Flush buffer (must hold lock).        def trigger_callback() -> None:
             if req_id in self._callbacks and self._buffers[req_id]:
                 callback = self._callbacks[req_id]
@@ -468,12 +467,12 @@ Flush buffer (must hold lock).        def trigger_callback() -> None:
         trigger_callback()
 
     def flush(self, req_id: str) -> None:
-        ""
+"""
 Flush buffer regarding a request.        with self._lock:
             self._flush_locked(req_id)
 
     def flush_all(self) -> None:
-        ""
+"""
 Flush all buffers.        with self._lock:
             list(map(self._flush_locked, list(self._buffers.keys())))
 
@@ -502,6 +501,24 @@ def batch_logprobs_to_cpu_rust(
 
 __all__ = [
     "TokenLogprob","    "TopLogprobs","    "LogprobsLists","    "LogprobsTensors","    "AsyncCPUTransfer","    "SamplerOutput","    "ModelRunnerOutput","    "StreamingLogprobsCollector","    "extract_top_k_logprobs_rust","    "batch_logprobs_to_cpu_rust","]
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

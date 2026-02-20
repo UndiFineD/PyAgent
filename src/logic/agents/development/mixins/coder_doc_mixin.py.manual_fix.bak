@@ -15,13 +15,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Documentation generation logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
 """
-
 import ast
 
 from src.core.base.common.types.code_language import CodeLanguage
@@ -72,6 +71,24 @@ Generate documentation for a Python function.        func_docs = [f"## Function:
             func_docs.append(f"{func_doc}\\n")"        params = [arg.arg for arg in node.args.args]
         if params:
             func_docs.append(f"**Parameters:** {', '.join(params)}\\n")"'        func_docs.append("\\n")"        return ".join(func_docs)"
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

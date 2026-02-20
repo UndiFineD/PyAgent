@@ -16,10 +16,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Self healing orchestrator.py module.
-""
+"""
 
 """
 import logging
@@ -69,7 +69,7 @@ class SelfHealingOrchestrator:
                 logging.warning(f"Self-Healing: Failed to load overrides: {e}")
     @property
     def health_registry(self) -> dict[str, Any]:
-        ""
+"""
 Provides access to the core health registry for testing and monitoring.        return self.core.health_registry
 
     def register_heartbeat(
@@ -79,13 +79,13 @@ Provides access to the core health registry for testing and monitoring.        r
         latency: float = 0.0,
         error: bool = False,
     ) -> None:
-        ""
+"""
 Signals that an agent is alive and optionally backs up its state.        self.core.update_health(agent_name, latency=latency, error=error)
         if state:
             self.state_backups[agent_name] = state
 
     def check_fleet_health(self) -> None:
-        ""
+"""
 Scans the fleet for agents that have stopped responding.        failed_agents = self.core.detect_failures()
 
         for agent_name in failed_agents:
@@ -110,7 +110,7 @@ Scans the fleet for agents that have stopped responding.        failed_agents = 
         return audit_results
 
     def attempt_recovery(self, agent_name: str) -> bool:
-        ""
+"""
 Attempts to restart a failed agent and restore its last known state.        action = self.core.get_recovery_action(agent_name)
         logging.info(f"Self-Healing: Recovery action '{action}' triggered for {agent_name}")
         success = False
@@ -139,11 +139,11 @@ Attempts to restart a failed agent and restore its last known state.        acti
         return False
 
     def attempt_repair(self, agent_name: str, error: Exception | None = None, **kwargs) -> Any:
-        ""
+"""
 Alias for attempt_recovery (Legacy Phase 35 compatibility).        logging.info(f"Self-Healing: Attempting repair for {agent_name}...")"        self.attempt_recovery(agent_name)
         return f"Self-healing complete for {agent_name}."
     def get_recovery_status(self) -> dict[str, Any]:
-        ""
+"""
 Returns statistics on health and recovery actions.        return {
             "monitored_agents": len(self.core.health_registry),"            "total_recoveries": len(self.recovery_logs),"            "recent_actions": self.recovery_logs[-5:],"        }
 

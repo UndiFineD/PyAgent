@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ExternalReporter - Enumeration of external error reporting systems
 
@@ -39,7 +39,7 @@ Defines a simple Enum listing supported external error reporting providers (sent
 
 WHAT IT SHOULD DO BETTER:
 Should include explanatory module-level docstring, mapping utilities to provider SDK clients and configuration keys, validation helpers, and unit tests; consider adding serialization helpers and a provider discovery function for pluggable integrations
-""
+"""
 try:
     from enum import Enum
 except ImportError:

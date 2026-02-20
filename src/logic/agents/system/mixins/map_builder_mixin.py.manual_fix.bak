@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Map Builder Mixin - Build and index module/class/function dependency graph
 
@@ -46,7 +46,7 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-""
+"""
 Map builder mixin.py module.
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");

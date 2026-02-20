@@ -49,19 +49,19 @@ Load and process audio.
         self._scipy_available = False
         self._librosa_available = False
         try:
-            from scipy.io import wavfile
+        from scipy.io import wavfile
 
-            self._scipy_available = True
-            self._wavfile = wavfile
+        self._scipy_available = True
+        self._wavfile = wavfile
         except ImportError:
-            pass
+        pass
         try:
-            import librosa
+        import librosa
 
-            self._librosa_available = True
-            self._librosa = librosa
+        self._librosa_available = True
+        self._librosa = librosa
         except ImportError:
-            pass
+        pass
 
     def supports(self, media_type: MediaType) -> bool:
         return media_type == MediaType.AUDIO

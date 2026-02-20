@@ -17,7 +17,6 @@
 N-gram Proposer Package - Speculative decoding via pattern matching.
 
 """
-
 try:
     from .infrastructure.engine.sampling.ngram.factory import \
 except ImportError:

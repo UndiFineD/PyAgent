@@ -27,7 +27,6 @@ USAGE:
   agent = ChangesAgent(rC:\\repo\\\\module.changes.md")"  await agent.improve_content("Summarize recent changes and suggest version bump")"  agent.update_file()
 
 """
-
 WHAT IT DOES:
 - Detects and validates .changes.md files and attempts to locate the associated code file.
 - Provides AI-assisted changelog improvement using structured "Keep a Changelog" formatting and supports preview mode to avoid writing."- Offers templating, validation rules, versioning strategies (default SemVer), merge-conflict handling, changelog analytics, entry previewing, and entry management via mixins.

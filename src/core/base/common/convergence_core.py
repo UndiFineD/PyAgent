@@ -58,14 +58,14 @@ if rc and hasattr(rc, "verify_fleet_health"):  # pylint: disable=no-member
             name, status = item
             return name if not status else None
 
-        failed_agents = list(filter(None, map(get_failed, agent_reports.items())))
+            failed_agents = list(filter(None, map(get_failed, agent_reports.items())))
 
-        return {
+            return {
             "all_passed": all_passed,
             "healthy_count": healthy_count,
             "total_count": total_count,
             "failed_agents": failed_agents,
-        }
+            }
 
 
     def generate_strategic_summary(self, _phase_history: List[Dict[str, Any]]) -> str:

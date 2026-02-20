@@ -16,12 +16,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-generated module exports.
 
 """
-
 try:
     from collections.abc import Callable
 except ImportError:
@@ -64,5 +63,5 @@ BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 __version__ = VERSION
 
 
-""
+"""
 

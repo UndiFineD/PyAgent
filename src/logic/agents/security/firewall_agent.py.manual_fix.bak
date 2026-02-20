@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 FirewallAgent - Gatekeeper for agent actions
 
@@ -33,7 +33,7 @@ Persist clearance and configuration (use StateTransaction and durable storage in
 FILE CONTENT SUMMARY:
 FirewallAgent: Agent for enforcing network security, access control, and traffic filtering in the PyAgent swarm.
 Implements distributed firewall rules and adaptive threat response.
-""
+"""
 import json
 import logging
 import re
@@ -67,7 +67,7 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
         self.whitelist_path = Path("data/config/whitelist-domains.json")"        self.whitelisted_domains = self._load_whitelist()
 
     def _load_whitelist(self) -> list[str]:
-        ""
+"""
 Loads whitelisted domains from config.        try:
             if self.whitelist_path.exists():
                 with open(self.whitelist_path, "r", encoding="utf-8") as f:"                    data = json.load(f)
@@ -75,7 +75,7 @@ Loads whitelisted domains from config.        try:
             logging.error(f"[FirewallAgent] Failed to load whitelist: {e}")"        return []
 
     async def _analyze_thought(self, event: dict[str, Any]) -> None:  # pylint: disable=too-many-return-statements
-        ""
+"""
 Inform the fleet and perform security analysis on the thought.        data = event.get("data", {})"        agent_name = data.get("agent", "Unknown")"        thought = data.get("thought", "")
         if not thought:
             return
@@ -135,7 +135,7 @@ Inform the fleet and perform security analysis on the thought.        data = eve
         self.clearance_registry[cid] = False
 
     def _generate_cid(self, agent_name: str, thought: str) -> str:
-        ""
+"""
 Generates a unique clearance ID.        return f"{agent_name}:{thought[:200]}""    
     async def _process_task(self, task: dict) -> None:
                 Required by TaskQueueMixin. Not used in FirewallAgent.
@@ -151,4 +151,4 @@ Generates a unique clearance ID.        return f"{agent_name}:{thought[:200]}""
                 A synchronous-like awaitable call for agents that need immediate clearance.
                 # Trigger analysis if it wasn't already caught by signal'        await self._analyze_thought({"data": {"agent": agent_name, "thought": thought}})"        return self.has_clearance(agent_name, thought)
 
-""
+"""

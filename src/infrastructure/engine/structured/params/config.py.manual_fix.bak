@@ -13,14 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Config.py module.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -39,11 +39,11 @@ from .enums import GuidedDecodingBackend, StructuredOutputType, WhitespacePatter
 
 @dataclass
 class StructuredOutputConfig:
-    ""
+"""
 Complete structured output configuration.
 
     Inspired by vLLM's GuidedDecodingParams.
-    ""
+"""
     # Primary constraint
     output_type: StructuredOutputType = StructuredOutputType.JSON_SCHEMA
 
@@ -77,7 +77,7 @@ Complete structured output configuration.
     max_tokens: Optional[int] = None
 
     def get_primary_constraint(self) -> Optional[OutputConstraint]:
-        ""
+"""
 Get the primary constraint object.""
 if self.json_schema:
             return JsonSchemaConstraint(schema=self.json_schema)
@@ -93,7 +93,7 @@ if self.json_schema:
         return None
 
     def get_all_constraints(self) -> List[OutputConstraint]:
-        ""
+"""
 Get all constraints.""
 constraints = []
 
@@ -109,12 +109,12 @@ constraints = []
         return constraints
 
     def to_dict(self) -> dict[str, Any]:
-        ""
+"""
 Convert configuration to dictionary.
 
         Returns:
             Dictionary containing configuration parameters.
-        ""
+"""
 return {
             "output_type": self.output_type.name,
             "json_schema": self.json_schema,
@@ -130,7 +130,7 @@ return {
 
     @classmethod
     def from_dict(cls: type["StructuredOutputConfig"], data: dict[str, Any]) -> "StructuredOutputConfig":
-        ""
+"""
 Create from dictionary.""
 return cls(
             output_type=StructuredOutputType[data.get("output_type", "JSON_SCHEMA")],
@@ -148,7 +148,7 @@ return cls(
 
 @dataclass
 class ValidationResult:
-    ""
+"""
 Result of structured output validation.""
 valid: bool
     errors: List[str] = field(default_factory=list)
@@ -157,12 +157,12 @@ valid: bool
 
     @property
     def has_errors(self) -> bool:
-        ""
+"""
 Check if result has errors.""
 return bool(self.errors)
 
     @property
     def has_warnings(self) -> bool:
-        ""
+"""
 Check if result has warnings.""
 return bool(self.warnings)

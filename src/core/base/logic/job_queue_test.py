@@ -37,23 +37,23 @@ queue = JobQueue(max_queue_size=10)
 
         def processor(job_id, data):
             results.append(f"Processed: {data['task']}")"'            return f"Result for {data['task']}""'
-queue.set_job_processor(processor)
-        queue.start()
+            queue.set_job_processor(processor)
+            queue.start()
 
-        # Submit a job
-        job_id = queue.submit_job({'task': 'integration_test'})
-        # Wait for processing
-        time.sleep(0.1)
+            # Submit a job
+            job_id = queue.submit_job({'task': 'integration_test'})
+            # Wait for processing
+            time.sleep(0.1)
 
-        # Check status
-        status = queue.get_job_status(job_id)
-        assert status['status'] == 'completed''        assert 'Result for integration_test' in status['result']'
-        queue.stop()
+            # Check status
+            status = queue.get_job_status(job_id)
+            assert status['status'] == 'completed''        assert 'Result for integration_test' in status['result']'
+            queue.stop()
 
     def test_tts_service_basic_functionality(self):
 """
-Test TTS service generates audio.""
-tts = TTSService()
+        Test TTS service generates audio.""
+        tts = TTSService()
 
         # Generate audio
         audio_data = tts.synthesize("Hello, this is a test.")
@@ -63,8 +63,8 @@ tts = TTSService()
 
     def test_multimodal_ai_service_initialization(self):
 """
-Test multimodal AI service can be initialized and configured.""
-service = MultimodalAIService()
+        Test multimodal AI service can be initialized and configured.""
+        service = MultimodalAIService()
 
         # Create a mock provider
         config = AIServiceConfig(provider='cloudflare', api_key='test_key')'        provider = CloudflareProvider(config)
@@ -76,8 +76,8 @@ service = MultimodalAIService()
 
     def test_services_work_together(self):
         ""
-Test that all services can be used together in a workflow.""
-# Initialize all services
+        Test that all services can be used together in a workflow.""
+        # Initialize all services
         queue = JobQueue(max_queue_size=10)
         tts = TTSService()
         multimodal = MultimodalAIService()
@@ -87,9 +87,9 @@ Test that all services can be used together in a workflow.""
         multimodal.register_provider('cloudflare', provider)
         # Create a workflow that uses TTS to generate audio for a job
         def workflow_processor(job_id, data):
-            text = data.get('text', 'Default message')'            audio = tts.synthesize(text)
-            return {
-                'text': text,'                'audio_length': len(audio),'                'processed_by': 'integration_test''            }
+        text = data.get('text', 'Default message')'            audio = tts.synthesize(text)
+        return {
+        'text': text,'                'audio_length': len(audio),'                'processed_by': 'integration_test''            }
 
         queue.set_job_processor(workflow_processor)
         queue.start()
@@ -105,24 +105,24 @@ Test that all services can be used together in a workflow.""
         queue.stop()
 
 
-if __name__ == "__main__":"    # Run the tests
-    test_instance = TestNewServicesIntegration()
+        if __name__ == "__main__":"    # Run the tests
+        test_instance = TestNewServicesIntegration()
 
-    print("Running integration tests...")
-    try:
+        print("Running integration tests...")
+        try:
         test_instance.test_job_queue_basic_functionality()
         print(" JobQueue test passed")"    except Exception as e:
         print(f" JobQueue test failed: {e}")
-    try:
+        try:
         test_instance.test_tts_service_basic_functionality()
         print(" TTSService test passed")"    except Exception as e:
         print(f" TTSService test failed: {e}")
-    try:
+        try:
         test_instance.test_multimodal_ai_service_initialization()
         print(" MultimodalAIService test passed")"    except Exception as e:
         print(f" MultimodalAIService test failed: {e}")
-    try:
+        try:
         test_instance.test_services_work_together()
         print(" Integration workflow test passed")"    except Exception as e:
         print(f" Integration workflow test failed: {e}")
-    print("Integration tests completed!")
+        print("Integration tests completed!")

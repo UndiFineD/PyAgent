@@ -23,7 +23,7 @@ try:
 except ImportError:
 
 """
-    import logging
+import logging
 
 
 try:
@@ -83,7 +83,7 @@ Injects a zero-shot speaker embedding from a reference audio file (Toucan Patter
         Actions: 'load', 'unload', 'status'.'        if" action == 'load':"'            logging.info("Loading CosyVoice-300M-SFT model into VRAM...")"#             return "CosyVoice model loaded."        elif action == 'unload':'            logging.info("Unloading CosyVoice model to free resources.")"#             return "CosyVoice model unloaded."#         return "CosyVoice Status: IDLE"
     @as_tool
     def transcribe_audio(
-""
+"""
 self, audio_file_path: str, strategy: str = "whisper-gpu    ) -> str:
         Transcribes an "audio file into text."        Supports multiple strategies (Handy/Whisper patterns):
         - whisper-gpu: High-accuracy Large/Turbo models (GPU)
@@ -115,4 +115,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
 
     main = create_main_function(VoiceAgent, "Voice Agent", "Voice logs path")"    main()
 
-""
+"""

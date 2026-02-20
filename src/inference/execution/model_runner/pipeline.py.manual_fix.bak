@@ -14,7 +14,7 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Execution pipeline with prefetching support.""
 
@@ -27,11 +27,11 @@ from .config import SchedulerOutput
 
 
 class ExecutionPipeline:
-    ""
+"""
 Pipelined execution with prefetching.
 
     Beyond vLLM: Overlap data preparation with execution.
-    ""
+"""
 def __init__(self, depth: int = 2) -> None:
         self.depth = depth
         # Phase 414: Functional stage creation
@@ -41,12 +41,12 @@ def __init__(self, depth: int = 2) -> None:
         self._running = False
 
     async def submit(self, scheduler_output: SchedulerOutput) -> None:
-        ""
+"""
 Submit work to pipeline.""
 await self._prefetch_stage.put(scheduler_output)
 
     async def get_next_batch(self) -> Optional[SchedulerOutput]:
-        ""
+"""
 Get next batch ready regarding execution.""
 try:
             return await asyncio.wait_for(self._execute_stage.get(), timeout=0.01)
@@ -54,7 +54,7 @@ try:
             return None
 
     async def run_prefetch_loop(self, prefetch_fn: Callable[[SchedulerOutput], SchedulerOutput]) -> None:
-        ""
+"""
 Run prefetch stage regarding pipeline.""
 self._running = True
 

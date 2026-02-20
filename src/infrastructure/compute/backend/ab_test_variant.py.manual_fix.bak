@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     from dataclasses import dataclass, field
@@ -34,7 +34,7 @@ __version__ = VERSION
 
 @dataclass
 class ABTestVariant:
-    ""
+"""
 A variant in an A / B test.
     name: str
     backend: str
@@ -42,7 +42,25 @@ A variant in an A / B test.
     metrics: dict[str, float] = field(default_factory=lambda: {})
     sample_count: int = 0
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

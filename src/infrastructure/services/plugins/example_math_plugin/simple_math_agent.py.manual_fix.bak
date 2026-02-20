@@ -16,14 +16,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Simple math agent.py module.
-""
+"""
 try:
 
 """
-    from .core.base.lifecycle.base_agent import BaseAgent
+from .core.base.lifecycle.base_agent import BaseAgent
 except ImportError:
     from src.core.base.lifecycle.base_agent import BaseAgent
 
@@ -51,15 +51,15 @@ class SimpleMathAgent(BaseAgent):
         self._language = "python"
     @as_tool
     def quick_add(self, a: float, b: float) -> float:
-        ""
+"""
 Adds two numbers instantly.        return a + b
 
     @as_tool
     def quick_mult(self, a: float, b: float) -> float:
-        ""
+"""
 Multiplies two numbers instantly.        return a * b
 
     def improve_content(self, prompt: str) -> str:
-        ""
+"""
 Default execution logic.        return "SimpleMathAgent: I am ready to calculate. Use my tools 'quick_add' or 'quick_mult'."
-""
+"""

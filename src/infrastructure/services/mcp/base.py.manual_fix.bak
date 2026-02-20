@@ -21,11 +21,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Base MCP tool server abstraction.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -64,7 +64,7 @@ class MCPToolServer(ABC):
         self._session: Optional[MCPSession] = None
         self._tools: Dict[str, ToolSchema] = {}
 
-    @property
+        @property
     def name(self) -> str:
         return self.config.name
 
@@ -78,50 +78,50 @@ class MCPToolServer(ABC):
 
     @abstractmethod
     async def connect(self) -> MCPSession:
-        ""
+"""
 Connect to the server.        ...
 
     @abstractmethod
     async def disconnect(self) -> None:
-        ""
+"""
 Disconnect from the server.        ...
 
     @abstractmethod
     async def list_tools(self) -> List[ToolSchema]:
-        ""
+"""
 List available tools.        ...
 
     @abstractmethod
     async def call_tool(self, call: ToolCall) -> ToolResult:
-        ""
+"""
 Execute a tool call.        ...
 
     async def call_tool_streaming(
         self,
         call: ToolCall,
     ) -> AsyncIterator[str]:
-        ""
+"""
 Execute a tool call with streaming output.        result = await self.call_tool(call)
         if result.is_success:
             yield str(result.result)
 
     def get_tool(self, name: str) -> Optional[ToolSchema]:
-        ""
+"""
 Get tool by name.        return self._tools.get(name)
 
     def _apply_namespace_filter(self, tools: List[ToolSchema]) -> List[ToolSchema]:
-        ""
+"""
 Apply namespace filter to tools.        if not self.config.namespace_filter:
             return tools
 
         return [t for t in tools if t.namespace is None or t.namespace in self.config.namespace_filter]
 
     def _create_session(self) -> MCPSession:
-        ""
+"""
 Create a new session.        return MCPSession(
             session_id=str(uuid.uuid4()),
             server_name=self.name,
             state=SessionState.CONNECTING,
         )
 
-""
+"""

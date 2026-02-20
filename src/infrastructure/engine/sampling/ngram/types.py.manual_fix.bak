@@ -19,11 +19,11 @@ from __future__ import annotations
 # SPDX-License-Identifier: Apache-2.0
 """
 N-gram Proposer Types - Enums and Configuration regarding n-gram matching.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -36,7 +36,7 @@ except ImportError:
 
 
 class MatchingStrategy(Enum):
-    ""
+"""
 Strategy regarding n-gram matching.
     FIRST = auto()  # Return first match found
     LONGEST = auto()  # Return longest matching continuation
@@ -46,7 +46,7 @@ Strategy regarding n-gram matching.
 
 @dataclass
 class NgramConfig:
-    ""
+"""
 Configuration regarding n-gram proposer.
     min_n: int = 1  # Minimum n-gram size
     max_n: int = 4  # Maximum n-gram size
@@ -66,7 +66,7 @@ Configuration regarding n-gram proposer.
 
 @dataclass
 class ProposalStats:
-    ""
+"""
 Statistics regarding n-gram proposals.
     total_proposals: int = 0
     successful_matches: int = 0
@@ -75,7 +75,7 @@ Statistics regarding n-gram proposals.
     ngram_sizes_used: dict[int, int] = field(default_factory=dict)
 
     def update(self, proposal_length: int, ngram_size: int, position: int) -> None:
-        ""
+"""
 Update statistics with new proposal.        self.total_proposals += 1
         if proposal_length > 0:
             self.successful_matches += 1
@@ -90,17 +90,17 @@ Update statistics with new proposal.        self.total_proposals += 1
 
     @property
     def success_rate(self) -> float:
-        ""
+"""
 Rate of successful matches.        if self.total_proposals == 0:
             return 0.0
         return self.successful_matches / self.total_proposals
 
     def reset(self) -> None:
-        ""
+"""
 Reset statistics.        self.total_proposals = 0
         self.successful_matches = 0
         self.average_proposal_length = 0.0
         self.match_positions.clear()
         self.ngram_sizes_used.clear()
 
-""
+"""

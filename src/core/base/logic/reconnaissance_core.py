@@ -44,10 +44,10 @@ subdomain: str
 
     def __post_init__(self):
         if self.ip_addresses is None:
-            self.ip_addresses = []
+        self.ip_addresses = []
 
 
-@dataclass
+        @dataclass
 class ReconConfig:
 """
 Configuration for reconnaissance operations""
@@ -60,9 +60,9 @@ domain: str
 
     def __post_init__(self):
         if self.wordlist is None:
-            self.wordlist = []
+        self.wordlist = []
         if self.sources is None:
-            self.sources = ['dns', 'crtsh', 'threatcrowd']
+        self.sources = ['dns', 'crtsh', 'threatcrowd']
 
 
 class IntelligenceSource(ABC):
@@ -232,70 +232,70 @@ self.sources = {}
 
     def _register_sources(self):
 """
-Register available intelligence sources""
-self.sources['dns'] = DNSSource()'        self.sources['crtsh'] = CertificateTransparencySource()'        self.sources['threatcrowd'] = ThreatCrowdSource()
-    async def enumerate_subdomains(self, config: ReconConfig) -> List[SubdomainResult]:
+        Register available intelligence sources""
+        self.sources['dns'] = DNSSource()'        self.sources['crtsh'] = CertificateTransparencySource()'        self.sources['threatcrowd'] = ThreatCrowdSource()
+        async def enumerate_subdomains(self, config: ReconConfig) -> List[SubdomainResult]:
 """
-Enumerate subdomains using multiple intelligence sources
+        Enumerate subdomains using multiple intelligence sources
         Based on amass multi-source enumeration patterns
 """
-all_results = []
+        all_results = []
 
         # Run enumeration from all configured sources concurrently
         tasks = []
         for source_name in config.sources:
-            if source_name in self.sources:
-                source = self.sources[source_name]
-                task = source.enumerate_subdomains(config.domain, config)
-                tasks.append(task)
+        if source_name in self.sources:
+        source = self.sources[source_name]
+        task = source.enumerate_subdomains(config.domain, config)
+        tasks.append(task)
 
         # Wait for all sources to complete
         source_results = await asyncio.gather(*tasks, return_exceptions=True)
 
         # Collect results
         for result_set in source_results:
-            if isinstance(result_set, Exception):
-                logger.error(f"Source enumeration failed: {result_set}")"                continue
-            all_results.extend(result_set)
+        if isinstance(result_set, Exception):
+        logger.error(f"Source enumeration failed: {result_set}")"                continue
+        all_results.extend(result_set)
 
         # Deduplicate results
         seen = set()
         deduplicated = []
         for result in all_results:
-            if result.subdomain not in seen:
-                seen.add(result.subdomain)
-                deduplicated.append(result)
+        if result.subdomain not in seen:
+        seen.add(result.subdomain)
+        deduplicated.append(result)
 
         # DNS verification if requested
         if config.verify_dns:
-            await self._verify_dns(deduplicated, config)
+        await self._verify_dns(deduplicated, config)
 
         return deduplicated
 
-    async def _verify_dns(self, results: List[SubdomainResult], config: ReconConfig):
+        async def _verify_dns(self, results: List[SubdomainResult], config: ReconConfig):
 """
-Verify subdomains exist via DNS resolution""
-async def verify_result(result: SubdomainResult):
-            if not result.verified:
-                # Try to resolve the subdomain
-                try:
-                    answers = await asyncio.get_event_loop().run_in_executor(
-                        None, dns.resolver.resolve, result.subdomain, 'A''                    )
-                    result.ip_addresses = [str(rdata) for rdata in answers]
-                    result.verified = True
-                except Exception:
-                    pass  # Keep as unverified
+        Verify subdomains exist via DNS resolution""
+        async def verify_result(result: SubdomainResult):
+        if not result.verified:
+        # Try to resolve the subdomain
+        try:
+        answers = await asyncio.get_event_loop().run_in_executor(
+        None, dns.resolver.resolve, result.subdomain, 'A''                    )
+        result.ip_addresses = [str(rdata) for rdata in answers]
+        result.verified = True
+        except Exception:
+        pass  # Keep as unverified
 
         # Verify in batches
         semaphore = asyncio.Semaphore(config.max_concurrent)
         tasks = []
 
         for result in results:
-            async def verify_with_semaphore(result: SubdomainResult):
-                async with semaphore:
-                    await verify_result(result)
+        async def verify_with_semaphore(result: SubdomainResult):
+        async with semaphore:
+        await verify_result(result)
 
-            tasks.append(verify_with_semaphore(result))
+        tasks.append(verify_with_semaphore(result))
 
         await asyncio.gather(*tasks)
 

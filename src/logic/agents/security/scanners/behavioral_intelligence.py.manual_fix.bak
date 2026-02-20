@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from typing import Dict, List, Any
+from typing import Dict, List, Any
 
 
 
@@ -26,14 +26,14 @@ except ImportError:
 class BehavioralIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""
+"""
 Intelligence engine for Windows behavioral indicators and TTPs.#     Ported from Fibratus rules and various EDR detection sets.
 
     @staticmethod
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_detection_rules() -> Dict[str, Any]:"High-fidelity detection rules for Windows security events.        return {
             "RID Hijacking": {"                "description": "Modification of RID (Relative ID) in SAM for low-privilege accounts.","                "indicators": {"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -65,7 +65,7 @@ def get_detection_rules() -> Dict[str, Any]:"High-fidelity detection rules for W
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_persistence_indicators() -> List[Dict[str, str]]:"Registry and file system indicators for advanced persistence.# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #        " return ["  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
@@ -80,4 +80,4 @@ def get_persistence_indicators() -> List[Dict[str, str]]:"Registry and file syst
 # [BATCHFIX] Commented metadata/non-Python
 #             {"path": rC:\\Windows\\System32\\\\drivers\\etc\\hosts", "name": "Hosts File Hijack"},"  # [BATCHFIX] closed string"        ]
 
-""
+"""

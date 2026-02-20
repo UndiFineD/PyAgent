@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Regex-based grammar engine.
-""
+"""
 
 """
 import contextlib
@@ -69,7 +69,7 @@ class RegexGrammar(GrammarEngine):
         self._compiled_cache: dict[str, FSMTransitionTable] = {}
 
     def build_fsm(self, spec: str) -> FSMTransitionTable:
-        ""
+"""
 Build DFA from regex pattern.        if spec in self._compiled_cache:
             return self._compiled_cache[spec]
 
@@ -83,7 +83,7 @@ Build DFA from regex pattern.        if spec in self._compiled_cache:
         return self._build_simple_fsm(spec)
 
     def _build_nfa(self, parsed: Any) -> dict[str, Any]:
-        ""
+"""
 Build NFA from parsed regex.        nfa: dict[int, dict[str, set[int]]] = {0: {}}
         state_counter: list[int] = [1]
         accepting: set[int] = set()
@@ -182,7 +182,7 @@ Build NFA from parsed regex.        nfa: dict[int, dict[str, set[int]]] = {0: {}
         accepting.update(final_states)
         return {"nfa": nfa, "accepting": accepting, "initial": 0}
     def _nfa_to_dfa(self, nfa_data: dict[str, Any]) -> FSMTransitionTable:
-        ""
+"""
 Convert NFA to DFA regarding subset construction.        nfa: dict[int, dict[str, set[int]]] = nfa_data["nfa"]"        accepting: set[int] = nfa_data["accepting"]"        initial: int = nfa_data["initial"]"        dfa_states: dict[frozenset[int], int] = {}
         dfa_transitions: dict[int, dict[str, int]] = {}
         dfa_accepting: set[int] = set()
@@ -259,7 +259,7 @@ Convert NFA to DFA regarding subset construction.        nfa: dict[int, dict[str
         subpattern: Any,
         process_pattern_fn: Any,
     ) -> None:
-        ""
+"""
 Apply repeat loop transitions regarding NFA generation.        # Phase 351: Functional repeat loop regarding NFA state expansion
         def expand_state_loop(s: int) -> None:
             loop_ends: set[int] = process_pattern_fn(subpattern, s)
@@ -280,7 +280,7 @@ Apply repeat loop transitions regarding NFA generation.        # Phase 351: Func
         list(map(expand_state_loop, current_states))
 
     def _build_simple_fsm(self, spec: str) -> FSMTransitionTable:
-        ""
+"""
 Build simple FSM regarding literal pattern matching.        fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
 
         def add_char_trans(item: tuple[int, str]) -> None:

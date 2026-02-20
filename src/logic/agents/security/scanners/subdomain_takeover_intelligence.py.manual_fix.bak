@@ -22,7 +22,7 @@ from typing import List, Dict, Any, Optional, cast
 class SubdomainTakeoverIntelligence:
 # [BATCHFIX] Commented metadata/non-Python
 #     pass  # [BATCHFIX] inserted for empty class
-""
+"""
 """
 Detects potential subdomain takeover vulnerabilities by checking CNAME records#     and analyzing HTTP responses for known service fingerprints.
 # [BATCHFIX] Commented metadata/non-Python
@@ -34,7 +34,7 @@ Detects potential subdomain takeover vulnerabilities by checking CNAME records# 
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 TAKEOVER_SIGNATURES: List[Dict[str, Any]] = [""""
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -175,103 +175,103 @@ TAKEOVER_SIGNATURES: List[Dict[str, Any]] = [""""
         self.resolver.timeout = 2.0
         self.resolver.lifetime = 2.0
 
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-async def get_cnames(self, domain: str) -> List[str]:""""
-# [BATCHFIX] Commented metadata/non-Python
-"""         "Resolves CNAME records for a domain."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string"""
-#       "  try:"  # [BATCHFIX] closed string"            loop = asyncio.get_event_loop()
-            answers = await loop.run_in_executor(None, lambda: self.resolver.resolve(domain, "CNAME"))"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-return [str(rdata.target).rstrip(".") for rdata in answers]"        except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.exception.Timeout):
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-return []""""
-except Exception:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-return []""""
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-async def check_takeover(self, domain: str) -> Optional[Dict[str, Any]]:""""
-# [BATCHFIX] Commented metadata/non-Python
-"""         "Checks if a domain is vulnerable to takeover."  # [BATCHFIX] closed string"        cnames = await self.get_cnames(domain)
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        async def get_cnames(self, domain: str) -> List[str]:""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """         "Resolves CNAME records for a domain."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented unterminated string"""
+        #       "  try:"  # [BATCHFIX] closed string"            loop = asyncio.get_event_loop()
+        answers = await loop.run_in_executor(None, lambda: self.resolver.resolve(domain, "CNAME"))"# [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        return [str(rdata.target).rstrip(".") for rdata in answers]"        except (dns.resolver.NoAnswer, dns.resolver.NXDOMAIN, dns.exception.Timeout):
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        return []""""
+        except Exception:
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        return []""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        async def check_takeover(self, domain: str) -> Optional[Dict[str, Any]]:""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """         "Checks if a domain is vulnerable to takeover."  # [BATCHFIX] closed string"        cnames = await self.get_cnames(domain)
 
         # If no CNAME, check for NXDOMAIN vulnerability if applicable for some services
         # (Though usually CNAME is required for these fingerprints)
 
         for cname in cnames:
-            for sig in self.TAKEOVER_SIGNATURES:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""                 # Explicitly cast to List[str] for MyPy"""
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-cname_patterns = cast(List[str], sig["cname"])"                match = any(pattern in cname.lower() for pattern in cname_patterns)
-                if match:
-                    # Potential match, verify with HTTP
-                    status, body = await self._fetch_url(domain)
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-fingerprints = cast(List[str], sig["fingerprint"])"                    for fp in fingerprints:
-                        if fp.lower() in body.lower():
-                            return {
-                                "domain": domain,"                                "cname": cname,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""                                 "service": sig["service"],"                                "vulnerable": True,"                                "fingerprint_match": fp,"                            }
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-if sig["nxdomain"]:"                        # Some azure/apigee services are vulnerable if they return NXDOMAIN or 404
-                        if status == 404:
-                            return {
-                                "domain": domain,"                                "cname": cname,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""                                 "service": sig["service"],"                                "vulnerable": True,"                                "status": 404,"                            }
+        for sig in self.TAKEOVER_SIGNATURES:
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+        """                 # Explicitly cast to List[str] for MyPy"""
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        cname_patterns = cast(List[str], sig["cname"])"                match = any(pattern in cname.lower() for pattern in cname_patterns)
+        if match:
+        # Potential match, verify with HTTP
+        status, body = await self._fetch_url(domain)
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        fingerprints = cast(List[str], sig["fingerprint"])"                    for fp in fingerprints:
+        if fp.lower() in body.lower():
+        return {
+        "domain": domain,"                                "cname": cname,"# [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+        """                                 "service": sig["service"],"                                "vulnerable": True,"                                "fingerprint_match": fp,"                            }
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        if sig["nxdomain"]:"                        # Some azure/apigee services are vulnerable if they return NXDOMAIN or 404
+        if status == 404:
+        return {
+        "domain": domain,"                                "cname": cname,"# [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+        """                                 "service": sig["service"],"                                "vulnerable": True,"                                "status": 404,"                            }
         return None
 
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-async def _fetch_url(self, domain: str) -> tuple[int, str]:""""
-# [BATCHFIX] Commented metadata/non-Python
-"""         "Fetches URL content safely."  # [BATCHFIX] closed string"        timeout = aiohttp.ClientTimeout(total=5)
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        async def _fetch_url(self, domain: str) -> tuple[int, str]:""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """         "Fetches URL content safely."  # [BATCHFIX] closed string"        timeout = aiohttp.ClientTimeout(total=5)
         async with aiohttp.ClientSession(timeout=timeout) as session:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""
-for proto in ["https://", "http://"]:"                try:
-                    async with session.get(f"{proto}{domain}", ssl=False) as resp:"                        return resp.status, await resp.text()
-                except Exception:
-                    continue
-#         return 0,
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
+"""
+        for proto in ["https://", "http://"]:"                try:
+        async with session.get(f"{proto}{domain}", ssl=False) as resp:"                        return resp.status, await resp.text()
+        except Exception:
+        continue
+        #         return 0,
 
 
-async def main():
-    # Example usage
-    intel = SubdomainTakeoverIntelligence()
-    result = await intel.check_takeover("test.github.io")"    print(result)
+        async def main():
+        # Example usage
+        intel = SubdomainTakeoverIntelligence()
+        result = await intel.check_takeover("test.github.io")"    print(result)
 
 
-if __name__ == "__main__":"    asyncio.run(main())
+        if __name__ == "__main__":"    asyncio.run(main())

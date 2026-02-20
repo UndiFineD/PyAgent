@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import time
@@ -44,7 +44,7 @@ __version__ = VERSION
 
 @dataclass
 class RecordedInteraction:
-    ""
+"""
 A recorded test interaction.""""
 Attributes:
         call_type: Type of call (e.g., "api", "file", "db")."        call_name: Name of the call.

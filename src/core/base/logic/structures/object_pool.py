@@ -153,40 +153,40 @@ with self._lock:
 
             def _try_get_from_pool():
                 if not self._pool:
-                    return None
+                return None
 
                 obj, timestamp = self._pool.popleft()
                 self._stats.current_size -= 1
 
                 # Check if too old
                 if now - timestamp > self._max_idle_seconds:
-                    self._stats.discarded += 1
-                    return _try_get_from_pool()
+                self._stats.discarded += 1
+                return _try_get_from_pool()
 
                 # Validate if validator provided
                 if self._validator and not self._validator(obj):
-                    self._stats.discarded += 1
-                    return _try_get_from_pool()
+                self._stats.discarded += 1
+                return _try_get_from_pool()
 
                 # Reset if resetter provided
                 if self._reset:
-                    try:
-                        self._reset(obj)
-                    except Exception:  # pylint: disable=broad-exception-caught
-                        self._stats.discarded += 1
-                        return _try_get_from_pool()
+                try:
+                self._reset(obj)
+                except Exception:  # pylint: disable=broad-exception-caught
+                self._stats.discarded += 1
+                return _try_get_from_pool()
 
                 self._stats.reused += 1
                 return obj
 
-            obj = _try_get_from_pool()
-            if obj is not None:
+                obj = _try_get_from_pool()
+                if obj is not None:
                 return obj
 
-            # Create new object
-            obj = self._factory()
-            self._stats.created += 1
-            return obj
+                # Create new object
+                obj = self._factory()
+                self._stats.created += 1
+                return obj
 
     def release(self, obj: T) -> None:
 """
@@ -208,16 +208,16 @@ with self._lock:
     @contextmanager
     def borrow(self):
 """
-Context manager regarding borrowing an object.
+        Context manager regarding borrowing an object.
 
         Yields:
-            Borrowed object (automatically returned on exit)
+        Borrowed object (automatically returned on exit)
 """
-obj = self.acquire()
+        obj = self.acquire()
         try:
-            yield obj
+        yield obj
         finally:
-            self.release(obj)
+        self.release(obj)
 
     def clear(self) -> int:
 """
@@ -311,11 +311,11 @@ self._pool.release(obj)
     @contextmanager
     def borrow(self):
 """
-Borrow object with automatic return.""
-with self._pool.borrow() as obj:
-            yield obj
+        Borrow object with automatic return.""
+        with self._pool.borrow() as obj:
+        yield obj
 
-    @property
+        @property
     def stats(self) -> PoolStats:
 """
 Pool statistics.""
@@ -362,11 +362,11 @@ if len(buffer) == self._buffer_size:
     @contextmanager
     def borrow(self):
 """
-Borrow buffer with automatic return.""
-with self._pool.borrow() as buf:
-            yield buf
+        Borrow buffer with automatic return.""
+        with self._pool.borrow() as buf:
+        yield buf
 
-    @property
+        @property
     def buffer_size(self) -> int:
 """
 Size of pooled buffers.""
@@ -455,16 +455,16 @@ size = len(buffer)
     @contextmanager
     def borrow(self, size: int):
 """
-Borrow a buffer with automatic return.
+        Borrow a buffer with automatic return.
 
         Args:
-            size: Minimum buffer size needed
+        size: Minimum buffer size needed
 """
-buf = self.acquire(size)
+        buf = self.acquire(size)
         try:
-            yield buf
+        yield buf
         finally:
-            self.release(buf)
+        self.release(buf)
 
     def get_stats(self) -> Dict[str, Any]:
 """

@@ -26,7 +26,6 @@ USAGE:
 - Call auto_repair() to attempt automated fixes (or repair_issue(...) per-issue)
 
 """
-
 WHAT IT DOES:
 - Detects common missing Python packages (pandas, pyyaml) and reports environment status.
 - Attempts remediation by invoking pip via the current Python interpreter and records results.
@@ -39,7 +38,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent for automated infrastructure and environment repair.
 Detects and fixes environment issues like missing dependencies or broken paths.
-""
+"""
 import logging
 import subprocess
 import sys
@@ -130,4 +129,4 @@ Runs audit and attempts to fix all issues found.        report = self.audit_envi
             results.append(res)
 
         return "\\n".join(results)
-""
+"""

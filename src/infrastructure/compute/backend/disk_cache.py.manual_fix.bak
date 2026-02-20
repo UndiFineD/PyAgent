@@ -18,7 +18,6 @@ Disk-based cache for persistent storage.
 (Facade for src.core.base.common.cache_core)
 
 """
-
 import json
 import logging
 import time
@@ -29,12 +28,12 @@ from src.core.base.common.cache_core import CacheCore as StandardCacheCore
 
 
 class DiskCache(StandardCacheCore):
-    ""
+"""
 Facade for CacheCore.
     pass
 
     def __init__(self, cache_dir: Path, ttl_seconds: float | None = None) -> None:
-        ""
+"""
 Initialize disk cache.""""
 Args:
             cache_dir: Directory where cache files will be stored.
@@ -44,16 +43,16 @@ Args:
         self._ensure_cache_dir()
 
     def _ensure_cache_dir(self) -> None:
-        ""
+"""
 Ensure the cache directory exists.        try:
             self.cache_dir.mkdir(parents=True, exist_ok=True)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to create cache directory {self.cache_dir}: {e}")
     def _get_file_path(self, key: str) -> Path:
-        ""
+"""
 Generate a file path for a cache key.        return self.cache_dir / f"{key}.json"
     def set(self, key: str, value: str) -> None:
-        ""
+"""
 Set a cache entry.""""
 Args:
             key: Cache key (should be a hash).
@@ -63,7 +62,7 @@ Args:
             file_path.write_text(json.dumps(data), encoding="utf-8")"        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Failed to write cache file {file_path}: {e}")
     def get(self, key: str) -> str | None:
-        ""
+"""
 Get a cache entry.""""
 Args:
             key: Cache key.
@@ -88,11 +87,29 @@ Args:
             logging.warning(f"Failed to read cache file {file_path}: {e}")"            return None
 
     def clear(self) -> None:
-        ""
+"""
 Clear all cache entries.        try:
             for file_path in self.cache_dir.glob("*.json"):"                file_path.unlink()
             logging.debug(f"Cleared disk cache at {self.cache_dir}")"        except Exception:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Failed to clear disk cache")
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

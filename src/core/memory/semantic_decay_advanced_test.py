@@ -69,27 +69,27 @@ pruner = NeuralContextPruner()
 
     def test_pruning_decision_low_attention(self):
 """
-Test pruning decision for low-attention blocks.""
-pruner = NeuralContextPruner(attention_threshold=0.5)
+        Test pruning decision for low-attention blocks.""
+        pruner = NeuralContextPruner(attention_threshold=0.5)
         block = MemoryBlock(
-            key="isolated_block","            content="unique content","            access_count=1,
-            creation_time=time.time() - 86400 * 2,  # 2 days old
-            last_access=time.time() - 86400 * 7,  # Not accessed for 1 week
-            semantic_fingerprint="fp3""        )
+        key="isolated_block","            content="unique content","            access_count=1,
+        creation_time=time.time() - 86400 * 2,  # 2 days old
+        last_access=time.time() - 86400 * 7,  # Not accessed for 1 week
+        semantic_fingerprint="fp3""        )
         context = [MemoryBlock(key="other", content="different", semantic_fingerprint="diff")]"        decision = pruner.should_prune_block(block, context)
         assert decision.should_prune is True
         assert "low attention entropy" in decision.reason"        assert decision.confidence > 0.5
 
     def test_pruning_decision_high_attention(self):
 """
-Test that high-attention blocks are preserved.""
-pruner = NeuralContextPruner()
+        Test that high-attention blocks are preserved.""
+        pruner = NeuralContextPruner()
         block = MemoryBlock(
-            key="important_block","            content="important content","            access_count=10,
-            last_access=time.time() - 3600  # Accessed 1 hour ago
+        key="important_block","            content="important content","            access_count=10,
+        last_access=time.time() - 3600  # Accessed 1 hour ago
         )
         context = [
-            MemoryBlock(key="similar1", content="important content", semantic_fingerprint="same"),"            MemoryBlock(key="similar2", content="important content", semantic_fingerprint="same"),"        ]
+        MemoryBlock(key="similar1", content="important content", semantic_fingerprint="same"),"            MemoryBlock(key="similar2", content="important content", semantic_fingerprint="same"),"        ]
         block.semantic_fingerprint = "same""        decision = pruner.should_prune_block(block, context)
         assert decision.should_prune is False
         assert "high attention entropy" in decision.reason
@@ -106,15 +106,15 @@ invalidator = SemanticCacheInvalidator(window_size=5)
         assert invalidator.access_window[0][0] == "key1"
     def test_window_size_limit(self):
 """
-Test that window size is maintained.""
-invalidator = SemanticCacheInvalidator(window_size=2)
+        Test that window size is maintained.""
+        invalidator = SemanticCacheInvalidator(window_size=2)
         for i in range(5):
-            invalidator.track_access(f"key{i}")"        assert len(invalidator.access_window) == 2
+        invalidator.track_access(f"key{i}")"        assert len(invalidator.access_window) == 2
 
     def test_invalidation_candidates(self):
 """
-Test identification of invalidation candidates.""
-invalidator = SemanticCacheInvalidator()
+        Test identification of invalidation candidates.""
+        invalidator = SemanticCacheInvalidator()
         invalidator.track_access("current1")"        invalidator.track_access("current2")"        invalidator.track_access("stale1")"        time.sleep(0.01)
         current_context = ["current1", "current2"]"        invalidated = invalidator.get_invalidated_keys(current_context)
         assert isinstance(invalidated, set)
@@ -131,13 +131,13 @@ decay = SynapticDecay()
         decay.add_memory_block("block1", "content1", "fingerprint1")"        decay.add_memory_block("block2", "content2", "fingerprint2")"        assert "block1" in decay.memory_blocks"        assert "block2" in decay.memory_blocks"        assert decay.memory_blocks["block1"].semantic_fingerprint == "fingerprint1"
     def test_access_tracking_with_blocks(self):
 """
-Test access tracking updates memory blocks.""
-decay = SynapticDecay()
+        Test access tracking updates memory blocks.""
+        decay = SynapticDecay()
         decay.add_memory_block("block1", "content1")"        initial_access = decay.memory_blocks["block1"].access_count"        decay.track_access("block1")"        assert decay.memory_blocks["block1"].access_count == initial_access + 1"        assert decay.memory_blocks["block1"].relevance_score > 1.0
     def test_enhanced_decay_processing(self):
 """
-Test enhanced decay processing with multiple strategies.""
-decay = SynapticDecay(relevance_threshold=0.5)
+        Test enhanced decay processing with multiple strategies.""
+        decay = SynapticDecay(relevance_threshold=0.5)
         decay.add_memory_block("recent_active", "content")"        decay.add_memory_block("old_inactive", "content")"        old_block = decay.memory_blocks["old_inactive"]"        old_block.creation_time = time.time() - 86400 * 30  # 30 days old
         old_block.last_access = time.time() - 86400 * 7  # 1 week since access
         old_block.relevance_score = 0.3
@@ -145,12 +145,12 @@ decay = SynapticDecay(relevance_threshold=0.5)
         assert "old_inactive" in to_prune
     def test_memory_stats(self):
 """
-Test memory statistics reporting.""
-decay = SynapticDecay()
+        Test memory statistics reporting.""
+        decay = SynapticDecay()
         decay.add_memory_block("block1", "content1")"        decay.add_memory_block("block2", "content2")"        stats = decay.get_memory_stats()
         assert stats["total_memory_blocks"] == 2"        assert "average_attention_entropy" in stats"        assert "average_relevance_score" in stats"        assert "semantic_clusters" in stats"        assert "access_window_size" in stats
     def test_cleanup_after_pruning(self):
 """
-Test that pruned blocks are properly cleaned up.""
-decay = SynapticDecay(relevance_threshold=0.1)
+        Test that pruned blocks are properly cleaned up.""
+        decay = SynapticDecay(relevance_threshold=0.1)
         decay.add_memory_block("to_prune", "content")"        decay.knowledge_scores["to_prune"] = 0.05  # Below threshold"        decay.last_access["to_prune"] = time.time() - 86400 * 100  # Very old"        to_prune = decay.process_decay(["to_prune"])"        assert "to_prune" in to_prune"        assert "to_prune" not in decay.memory_blocks"        assert "to_prune" not in decay.knowledge_scores"        assert "to_prune" not in decay.last_access"

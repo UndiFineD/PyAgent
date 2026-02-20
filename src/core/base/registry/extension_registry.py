@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Minimal extension registry used for tests.
 
 This file provides a lightweight, well-typed registry API that
 preserves the names expected by tests while keeping behavior simple.
 """
+from __future__ import annotations
 
 
 

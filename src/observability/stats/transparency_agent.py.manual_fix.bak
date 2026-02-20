@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from src.core.base.common.base_utilities import as_tool, create_main_function
+from src.core.base.common.base_utilities import as_tool, create_main_function
 
 try:
     from .core.base.lifecycle.base_agent import BaseAgent
@@ -46,7 +46,7 @@ __version__ = VERSION
 
 
 class TransparencyAgent(BaseAgent):
-    ""
+"""
 Provides a detailed audit trail of agent thoughts, signals, and dependencies.    def __init__(self, file_path: str) -> None:        super().__init__(file_path)
         self.signals = SignalRegistry()
         self.workspace_root = self.file_path.parent.parent.parent
@@ -55,7 +55,7 @@ Provides a detailed audit trail of agent thoughts, signals, and dependencies.   
 
     @as_tool
     def generate_audit_trail(self, workflow_id: str | None = None) -> str:
-        ""
+"""
 Generates a detailed markdown report of recent agent interactions.        history = self.signals.get_history(limit=100)
 
         if workflow_id:

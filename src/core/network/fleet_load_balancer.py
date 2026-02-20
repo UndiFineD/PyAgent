@@ -32,7 +32,7 @@ def __init__(self):
 
     def register_node(self, node_id: str, capacity: int, metadata: Dict[str, Any] = None):
         self.nodes.append({
-            "id": node_id,"            "capacity": capacity,"            "load": 0,"            "metadata": metadata or {}"        })
+        "id": node_id,"            "capacity": capacity,"            "load": 0,"            "metadata": metadata or {}"        })
 
     def get_optimal_node(self) -> str:
         if not self.nodes:

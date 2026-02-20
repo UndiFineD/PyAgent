@@ -28,7 +28,6 @@ WHAT IT DOES:
 Provides a specialized agent (Chandra Pattern) for high-accuracy OCR and layout-aware reconstruction of documents; reads PDF text (via pypdf when available), converts documents into structured outputs (markdown/html/json), extracts form key-values and checkbox states, and writes simple ingested knowledge JSON exports.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Integrate a production-grade OCR/layout engine (e.g., Tesseract/Google Vision/LayoutLM/Detectron) for reliable table/form reconstruction and handwriting/math transcription.
 - Stream and chunk large PDFs/images, add async I/O, and robust error handling for long-running conversions.
@@ -223,7 +222,25 @@ async def improve_content(self, prompt: str, target_file: str | None = None) -> 
 
 if __name__ == "__main__":"    main = create_main_function(DocInferenceAgent, "Document Inference Agent", "Path to document")"    main()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

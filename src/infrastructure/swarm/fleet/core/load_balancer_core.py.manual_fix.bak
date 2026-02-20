@@ -17,11 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AgentMetrics data class and LoadBalancerCore logic for cognitive load balancing.
 Load balancer core.py module.
-""
+"""
 
 """
 from dataclasses import dataclass
@@ -36,7 +36,7 @@ except ImportError:
 
 @dataclass(frozen=True)
 class AgentMetrics:
-    ""
+"""
 Metrics for agent load and performance tracking.
     token_pressure: float  # 0.0 to 1.0 (context used / context limit)
     queue_depth: int
@@ -46,12 +46,12 @@ Metrics for agent load and performance tracking.
 
 
 class LoadBalancerCore:
-    ""
+"""
 Pure logic for cognitive load balancing across the agent fleet.""""
 Calculates cognitive pressure and suggests optimal task routing.
     
     def calculate_cognitive_pressure(self, metrics: AgentMetrics) -> float:
-        ""
+"""
 Heuristic for 'Cognitive Pressure': (complexity * history_len).'        # score = (tokens * 0.4) + (queue * 0.4) + (latency * 0.2)
         score = (
             (metrics.token_pressure * 0.4)
@@ -62,7 +62,7 @@ Heuristic for 'Cognitive Pressure': (complexity * history_len).'        # score 
         return min(max(score, 0.0), 1.0)
 
     def select_best_agent(self, agents: dict[str, AgentMetrics]) -> str:
-        ""
+"""
 Returns the Agent ID with the lowest cognitive pressure.        if not agents:
             return """        # Rust-accelerated agent selection
         if HAS_RUST:
@@ -77,8 +77,8 @@ Returns the Agent ID with the lowest cognitive pressure.        if not agents:
         return min(scores, key=scores.get)
 
     def suggest_scaling(self, fleet_pressure: float) -> str:
-        ""
+"""
 Suggests infrastructure scaling based on aggregate pressure.        if fleet_pressure > 0.8:
             return "SPAWN_NEW_INSTANCES""        if fleet_pressure < 0.2:
             return "CONSOLIDATE_SHARDS""        return "STABLE""
-""
+"""

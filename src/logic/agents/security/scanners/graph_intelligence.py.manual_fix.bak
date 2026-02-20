@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    from typing import Dict
+from typing import Dict
 
 
 
@@ -33,7 +33,7 @@ Intelligence module for Graph-based security analysis and AD relationships.#    
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_ad_graph_queries() -> Dict[str, str]:"Cypher queries for Active Directory graph analysis.        return {
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
@@ -62,7 +62,7 @@ def get_ad_graph_queries() -> Dict[str, str]:"Cypher queries for Active Director
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 def get_graph_performance_primitives() -> Dict[str, str]:"Techniques for high-performance graph querying (Ported from FalkorDB).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
 #        " return {"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python

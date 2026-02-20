@@ -17,7 +17,7 @@ from typing import List, Dict
 
 
 def get_interactive_elements(xml_content: str) -> List[Dict]:
-""
+"""
 """
 Parses Android Accessibility XML and returns a lean list of interactive elements.#     Calculates center coordinates (x, y) for every clickable element.
     try:
@@ -26,8 +26,7 @@ Parses Android Accessibility XML and returns a lean list of interactive elements
         print("️ Error parsing XML. The screen might be loading.")"        return []
 
 """
-
-    elements = []
+elements = []
 
     # Recursively find all nodes
     for node in root.iter():
@@ -53,4 +52,4 @@ Parses Android Accessibility XML and returns a lean list of interactive elements
 
     return elements
 
-""
+"""

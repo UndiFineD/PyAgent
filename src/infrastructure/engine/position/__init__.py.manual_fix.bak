@@ -18,7 +18,6 @@
 Position embedding module for PyAgent.
 
 """
-
 Provides rotary position embedding implementations for transformer models.
 
 try:

@@ -64,7 +64,7 @@ class MCPToolServer(ABC):
         self._session: Optional[MCPSession] = None
         self._tools: Dict[str, ToolSchema] = {}
 
-    @property
+        @property
     def name(self) -> str:
         return self.config.name
 

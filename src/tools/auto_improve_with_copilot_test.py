@@ -79,6 +79,24 @@ def fake_run(cmd, capture_output, text, timeout, shell):
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

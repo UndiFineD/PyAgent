@@ -14,11 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Parser-safe stub for ProfilingSuggestion.""
 
-"""
+""
 from dataclasses import dataclass, field
 
 

@@ -19,11 +19,11 @@ from __future__ import annotations
 # SPDX-License-Identifier: Apache-2.0
 """
 Mamba Configuration and State Classes.
-""
+"""
 try:
 
 """
-    import math
+import math
 except ImportError:
     import math
 
@@ -73,12 +73,12 @@ class MambaConfig:  # pylint: disable=too-many-instance-attributes
             raise ValueError(f"conv_kernel_size must be > 0, got {self.conv_kernel_size}")
     @property
     def d_inner(self) -> int:
-        ""
+"""
 Get intermediate size.        return self.intermediate_size or (2 * self.hidden_size)
 
     @property
     def dt_rank(self) -> int:
-        ""
+"""
 Get time step rank.        return self.time_step_rank or math.ceil(self.hidden_size / 16)
 
 
@@ -116,7 +116,7 @@ Clone state.        return MambaState(
 
 
 class MambaOutput(NamedTuple):
-    ""
+"""
 Output from Mamba forward pass.
     output: np.ndarray  # [batch, seq_len, hidden_size]
     state: MambaState  # Updated state

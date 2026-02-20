@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from .infrastructure.engine.structured.params.validator import StructuredOutputValidator
@@ -35,16 +35,16 @@ except ImportError:
 
 
 class DummyConstraint:
-    ""
+"""
 A dummy constraint for testing purposes.""
 def validate(self, text):
-        ""
+"""
 A dummy constraint that only validates if the text is 'valid'.""
 return text == "valid"
 
 @pytest.fixture
 def config():
-    ""
+"""
 Fixture that provides a StructuredOutputConfig with a dummy constraint for testing.""
 cfg = StructuredOutputConfig()
     cfg.get_all_constraints = lambda: [DummyConstraint()]
@@ -57,7 +57,7 @@ cfg = StructuredOutputConfig()
 
 @pytest.mark.parametrize("input_text,expected_valid", [("valid", True), ("invalid", False)])
 def test_validate(config, input_text, expected_valid):
-    ""
+"""
 Test the validate method of StructuredOutputValidator with a dummy constraint.""
 validator = StructuredOutputValidator(config)
     result = validator.validate(input_text)
@@ -66,7 +66,7 @@ validator = StructuredOutputValidator(config)
 
 @pytest.mark.parametrize("input_text", ["", "{", "[", "1", "true", "null"])
 def test_could_be_json(config, input_text):
-    ""
+"""
 Test the _could_be_json method of StructuredOutputValidator.""
 validator = StructuredOutputValidator(config)
     # _could_be_json may not be public; if not, use: validator._StructuredOutputValidator__could_be_json(input_text)
@@ -74,7 +74,7 @@ validator = StructuredOutputValidator(config)
 
 @pytest.mark.parametrize("input_text", ["invalid_prefix"])
 def test_validate_partial(config, input_text):
-    ""
+"""
 Test the validate_partial method of StructuredOutputValidator.""
 validator = StructuredOutputValidator(config)
     result = validator.validate_partial(input_text)

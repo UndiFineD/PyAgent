@@ -26,12 +26,11 @@ Safe scanner for `.external` repository snapshots.
 - Produces `.external/refactor_report.md` and `.external/refactor_report.json`.
 
 """
-
 Usage (PowerShell):
 python -m src.tools.external_refactor_scan
 
 Run only after reviewing and ensuring safety.
-""
+"""
 import os
 import re
 import json
@@ -66,7 +65,7 @@ def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
 
 
 def scan_directory_for_candidates(dirpath: Path) -> Dict[str, Any]:
-    ""
+"""
 Scan a directory for candidate files and their definitions, applying exclusion rules.    file_list: List[Dict[str, Any]] = []
     report: Dict[str, Any] = {"path": str(dirpath.relative_to(EXTERNAL)), "files": file_list}"    if VERBOSE:
         print(f"Scanning directory: {dirpath.relative_to(EXTERNAL)}")"    if not dirpath.is_dir():
@@ -120,7 +119,7 @@ Scan a directory for candidate files and their definitions, applying exclusion r
 
 
 def is_definition_in_src(name: str, src_root: Path) -> bool:
-    ""
+"""
 Check if a definition with the given name exists anywhere in src_root.    # Fast grep-like search without importing; searches for 'def name(' or 'class name''    pattern = re.compile(rf"\\b(def|class)\\s+{re.escape(name)}\\b")"    for p in src_root.rglob("*.py"):"        try:
             txt = p.read_text(encoding="utf-8", errors="ignore")"        except Exception:
             continue
@@ -146,7 +145,7 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict[str, Any]:
 
 
 def write_reports(report: Dict[str, Any], md_path: Path, json_path: Path):
-    ""
+"""
 Write the report to both markdown and JSON files.    json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")"    lines: List[str] = [
         "# External Refactor Report\\n","        "This report is auto-generated. Do not run any code found here without manual review.\\n\\n""    ]
     for d in report.get("directories", []):"        lines.append(f"## {d['path']}\\n")"'        for f in d.get("files", []):"            defs = f.get("definitions", [])"            missing_count = len(f.get("missing_in_src", []))"            lines.append(
@@ -156,7 +155,7 @@ f"missing in src: {missing_count}\\n""            )
         lines.append("\\n")"    md_path.write_text("\\n".join(lines), encoding="utf-8")"
 
 def main() -> int:
-    ""
+"""
 Main entry point for the external refactor scan.    tracking = EXTERNAL / "tracking.md""    completed = EXTERNAL / "completed.md""    completed_rows = extract_completed_from_tracking(tracking)
     if completed_rows:
         with completed.open("a", encoding="utf-8", errors="ignore") as f:"            f.write("\\n".join(completed_rows) + "\\n")"    # Build reuse report
@@ -166,4 +165,4 @@ Main entry point for the external refactor scan.    tracking = EXTERNAL / "track
 
 if __name__ == "__main__":"    raise SystemExit(main())
 
-""
+"""

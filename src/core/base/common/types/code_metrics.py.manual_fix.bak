@@ -14,11 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Code metrics dataclass used by tests and analysis tools.""
 
-"""
+""
 from dataclasses import dataclass
 
 try:

@@ -17,12 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Dependency injection for tests.
 
 """
-
 try:
     from typing import Any
 except ImportError:
@@ -46,11 +45,11 @@ __version__ = VERSION
 
 
 class DependencyInjector:
-    ""
+"""
 Test dependency injection framework.
 
     def __init__(self) -> None:
-        ""
+"""
 Initialize dependency injector.        self.dependencies: dict[str, TestDependency] = {}
         self.overrides: dict[str, Any] = {}
         self._scopes: dict[str, str] = {}
@@ -60,7 +59,7 @@ Initialize dependency injector.        self.dependencies: dict[str, TestDependen
         name: str,
         dependency_type: str,
         implementation: str = "","        mock_behavior: str = "","        scope: str = "function","    ) -> TestDependency:
-        ""
+"""
 Register a dependency.        dep = TestDependency(
             name=name,
             dependency_type=dependency_type,
@@ -72,18 +71,18 @@ Register a dependency.        dep = TestDependency(
         return dep
 
     def override(self, name: str, value: Any) -> None:
-        ""
+"""
 Override a dependency with a specific value.        self.overrides[name] = value
 
     def clear_override(self, name: str) -> bool:
-        ""
+"""
 Clear a dependency override.        if name in self.overrides:
             del self.overrides[name]
             return True
         return False
 
     def resolve(self, name: str) -> Any | None:
-        ""
+"""
 Resolve a dependency.        if name in self.overrides:
             return self.overrides[name]
         dep = self.dependencies.get(name)
@@ -92,7 +91,7 @@ Resolve a dependency.        if name in self.overrides:
         return dep.implementation
 
     def get_fixture_code(self, name: str) -> str:
-        ""
+"""
 Generate pytest fixture code for a dependency.        dep = self.dependencies.get(name)
         if not dep:
             return ""
@@ -103,13 +102,31 @@ f"def {name}() -> {dep.dependency_type}:\\n""            f'    """
 f"    {dep.implementation or 'pass'}\\n""'        )
 
     def get_all_fixtures(self) -> str:
-        ""
+"""
 Generate all fixture code.        fixtures: list[str] = []
         for name in self.dependencies:
             fixtures.append(self.get_fixture_code(name))
         return "\\n".join(fixtures)
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

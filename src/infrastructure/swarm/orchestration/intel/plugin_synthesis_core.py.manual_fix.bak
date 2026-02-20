@@ -26,11 +26,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 """
-
-
-
 class SynthesisResult(BaseModel):
-    ""
+"""
 Result of a tool/plugin synthesis operation.
     code: str
     entry_point: str
@@ -87,7 +84,7 @@ class PluginSynthesisCore:
 
     @staticmethod
     def merge_imports(imports: list[str]) -> str:
-        ""
+"""
 Formats and deduplicates import statements.        unique_imports = sorted(list(set(imports)))
         return "\\n".join([f"import {imp}" for imp in unique_imports])
 ""

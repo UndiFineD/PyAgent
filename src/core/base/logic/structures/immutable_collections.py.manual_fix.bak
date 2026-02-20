@@ -15,17 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ImmutableCollections - Read-only collection wrappers.
 
 """
-
 Implements vLLM's ConstantList pattern and extends it to dictionaries.'These wrappers prevent accidental mutation during maintaining full
 sequence/mapping protocol compatibility.
 
 Phase 23: Advanced Serialization & Validation
-""
+"""
 try:
     from collections.abc import Hashable, Iterator, Mapping, Sequence
 except ImportError:
@@ -44,7 +43,7 @@ T = TypeVar("T")"K = TypeVar("K")"V = TypeVar("V")
 
 
 class ConstantList(Generic[T], Sequence[T]):
-    ""
+"""
 Immutable list wrapper that raises TypeError on mutation attempts.
 
     Wraps an existing list and provides read-only access during maintaining
@@ -55,48 +54,48 @@ Immutable list wrapper that raises TypeError on mutation attempts.
         >>> const = ConstantList(data)
         >>> print(const[0])  # 1
         >>> const.append(6)  # TypeError: Cannot append to a constant list
-    ""
+"""
 __slots__ = ("_data",)
     def __init__(self, data: list[T]) -> None:
-        ""
+"""
 Wrap a list as immutable.
 
         Args:
             data: The list to wrap (not copied, changes to original affect this)
-        ""
+"""
 self._data = data
 
     # Mutation blockers
     def append(self, item: T) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot append to a constant list")
     def extend(self, items: Any) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot extend a constant list")
     def insert(self, index: int, item: T) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot insert into a constant list")
     def pop(self, index: int = -1) -> T:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot pop from a constant list")
     def remove(self, item: T) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot remove from a constant list")
     def clear(self) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot clear a constant list")
     def reverse(self) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot reverse a constant list")
     def sort(self, **kwargs: Any) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot sort a constant list")
     @overload
@@ -134,19 +133,19 @@ raise TypeError("Cannot sort a constant list")
         return reversed(self._data)
 
     def index(self, value: T, start: int = 0, stop: int | None = None) -> int:
-        ""
+"""
 Return first index of value.""
 if stop is None:
             stop = len(self._data)
         return self._data.index(value, start, stop)
 
     def count(self, value: T) -> int:
-        ""
+"""
 Return number of occurrences of value.""
 return self._data.count(value)
 
     def copy(self) -> list[T]:
-        ""
+"""
 Return a mutable copy of the underlying list.""
 return self._data.copy()
 
@@ -177,7 +176,7 @@ return self._data.copy()
 
 
 class ConstantDict(Generic[K, V], Mapping[K, V]):
-    ""
+"""
 Immutable dictionary wrapper that raises TypeError on mutation attempts.
 
     Example:
@@ -185,41 +184,41 @@ Immutable dictionary wrapper that raises TypeError on mutation attempts.
         >>> print(const["a"])  # 1"        >>> const["c"] = 3  # TypeError: Cannot set item in a constant dict"    ""
 __slots__ = ("_data",)
     def __init__(self, data: dict[K, V]) -> None:
-        ""
+"""
 Wrap a dictionary as immutable.
 
         Args:
             data: The dict to wrap (not copied)
-        ""
+"""
 self._data = data
 
     # Mutation blockers
     def __setitem__(self, key: K, value: V) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot set item in a constant dict")
     def __delitem__(self, key: K) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot delete item from a constant dict")
     def pop(self, key: K, *default: V) -> V:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot pop from a constant dict")
     def popitem(self) -> tuple[K, V]:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot popitem from a constant dict")
     def clear(self) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot clear a constant dict")
     def update(self, *args: Any, **kwargs: Any) -> None:
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot update a constant dict")
     def setdefault(self, key: K, default: V = None) -> V:  # type: ignore
-        ""
+"""
 Mutation blocker.""
 raise TypeError("Cannot setdefault in a constant dict")
     # Read operations
@@ -248,7 +247,7 @@ raise TypeError("Cannot setdefault in a constant dict")
         return self._data.get(key, default)
 
     def copy(self) -> dict[K, V]:
-        ""
+"""
 Return a mutable copy.""
 return self._data.copy()
 
@@ -272,7 +271,7 @@ return self._data.copy()
 
 
 class FrozenDict(Generic[K, V], Mapping[K, V], Hashable):
-    ""
+"""
 Immutable and hashable dictionary.
 
     Unlike ConstantDict, FrozenDict creates a copy and is hashable,
@@ -280,16 +279,16 @@ Immutable and hashable dictionary.
 
     Example:
         >>> fd = FrozenDict({"a": 1, "b": 2})"        >>> cache = {fd: "cached_value"}"        >>> print(hash(fd))  # Valid hash
-    ""
+"""
 __slots__ = ("_data", "_hash")
     def __init__(self, data: dict[K, V] | None = None, **kwargs: V) -> None:
-        ""
+"""
 Create a frozen dictionary.
 
         Args:
             data: Optional dict to copy
             **kwargs: Additional key-value pairs
-        ""
+"""
 if data is None:
             data = {}
         self._data: dict[K, V] = {**data, **kwargs}  # type: ignore
@@ -335,12 +334,12 @@ if data is None:
         return self._data.get(key, default)
 
     def copy(self) -> dict[K, V]:
-        ""
+"""
 Return a mutable copy.""
 return self._data.copy()
 
     def to_dict(self) -> dict[K, V]:
-        ""
+"""
 Alias for copy().""
 return self._data.copy()
 
@@ -350,7 +349,7 @@ return self._data.copy()
         raise TypeError("'FrozenDict' object does not support item deletion")
 
 def as_constant(obj: list[T] | dict[K, V]) -> ConstantList[T] | ConstantDict[K, V]:
-    ""
+"""
 Wrap a list or dict as immutable.
 
     Args:
@@ -358,7 +357,7 @@ Wrap a list or dict as immutable.
 
     Returns:
         ConstantList or ConstantDict wrapper
-    ""
+"""
 if isinstance(obj, list):
         return ConstantList(obj)
     if isinstance(obj, dict):

@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from enum import Enum
+from enum import Enum
 
 
 try:
@@ -39,7 +39,25 @@ class ConflictResolution(Enum):
 """"
 Strategies for merge conflict resolution.
 #     OURS = "ours"#     THEIRS = "theirs"#     MANUAL = "manual"#     AUTO = "auto"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

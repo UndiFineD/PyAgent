@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .logic.agents.cognitive.context.models.generated_code import GeneratedCode
@@ -42,7 +42,7 @@ class CodeGenerator:
         >>> generator=CodeGenerator()
 #         >>> code=generator.generate("Create a login function", context)
     def __init__(self) -> None:
-""
+"""
 self.language: str = "python        self.contexts: dict[str, str] = {}
 
     def set_language(self, language: str) -> None:
@@ -93,6 +93,24 @@ Return supported target languages. "       return ["            "python","      
             context_used=used_contexts,
             description=prompt,
         )
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

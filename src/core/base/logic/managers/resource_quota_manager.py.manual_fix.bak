@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Manager regarding Resource Quotas and budget enforcement.
 (Facade regarding src.core.base.common.resource_core)
-""
+"""
 
 """
 import asyncio
@@ -45,16 +45,16 @@ except ImportError:
 
 
 class LocalTokenBucket:
-    ""
+"""
 Local in-memory token bucket implementation for fallback.""
 def __init__(self, capacity: int, refill_rate: float):
-        ""
+"""
 Initialize local token bucket.
 
         Args:
             capacity: Maximum number of tokens in bucket
             refill_rate: Number of tokens added per second
-        ""
+"""
 self._capacity = capacity
         self._refill_rate = refill_rate
         self._tokens = float(capacity)
@@ -62,7 +62,7 @@ self._capacity = capacity
         self._lock = asyncio.Lock()
 
 async def acquire(self, tokens: int = 1) -> bool:
-    ""
+"""
 Try to acquire tokens from bucket.
 
     Args:
@@ -70,7 +70,7 @@ Try to acquire tokens from bucket.
 
     Returns:
         True if tokens acquired, False otherwise
-    ""
+"""
 async with self._lock:
         self._refill()
         if self._tokens >= tokens:
@@ -79,26 +79,26 @@ async with self._lock:
         return False
 
     async def try_acquire(self, tokens: int = 1) -> bool:
-        ""
+"""
 Alias for acquire for API compatibility.""
 return await self.acquire(tokens)
 
     async def get_available_tokens(self) -> int:
-        ""
+"""
 Get number of available tokens.""
 async with self._lock:
             self._refill()
             return int(self._tokens)
 
     async def reset_bucket(self) -> None:
-        ""
+"""
 Reset bucket to full capacity.""
 async with self._lock:
             self._tokens = float(self._capacity)
             self._last_refill = time.monotonic()
 
     def _refill(self) -> None:
-        ""
+"""
 Refill tokens based on elapsed time.""
 now = time.monotonic()
         elapsed = now - self._last_refill
@@ -136,14 +136,14 @@ else
     redis.call('EXPIRE', key, 3600)
     return 0
 end
-""
+"""
 class DistributedTokenBucket:
-    ""
+"""
 Distributed token bucket rate limiter with Redis backend.
 
     Implements token bucket algorithm with Redis for fleet-wide quota enforcement.
     Gracefully degrades to local in-memory bucket when Redis unavailable.
-    ""
+"""
 def __init__(
         self,
         redis_url: Optional[str] = None,
@@ -151,7 +151,7 @@ def __init__(
         refill_rate: float = 10.0,
         circuit_breaker: Optional[CircuitBreaker] = None,
     ):
-        ""
+"""
 Initialize distributed token bucket.
 
         Args:
@@ -159,7 +159,7 @@ Initialize distributed token bucket.
             capacity: Maximum number of tokens in bucket
             refill_rate: Number of tokens added per second
             circuit_breaker: Optional circuit breaker for Redis protection
-        ""
+"""
 self._redis_url = redis_url or os.getenv("REDIS_URL")
         self._capacity = capacity
         self._refill_rate = refill_rate
@@ -170,7 +170,7 @@ self._redis_url = redis_url or os.getenv("REDIS_URL")
         self._redis_connected = False
 
     async def _ensure_redis_connection(self) -> bool:
-        ""
+"""
 Ensure Redis connection is established.""
 if not REDIS_AVAILABLE or not self._redis_url:
             return False
@@ -203,7 +203,7 @@ if not REDIS_AVAILABLE or not self._redis_url:
             return False
 
     async def acquire(self, agent_id: str, tokens: int = 1) -> bool:
-        ""
+"""
 Acquire tokens from distributed bucket.
 
         Args:
@@ -212,7 +212,7 @@ Acquire tokens from distributed bucket.
 
         Returns:
             True if tokens acquired, False otherwise
-        ""
+"""
         # Try Redis first with circuit breaker
         if await self._ensure_redis_connection():
             try:
@@ -232,7 +232,7 @@ Acquire tokens from distributed bucket.
         return await self._local_bucket.acquire(tokens)
 
     async def _acquire_from_redis(self, agent_id: str, tokens: int) -> bool:
-        ""
+"""
 Acquire tokens from Redis using Lua script.""
 if not self._redis_client or not self._acquire_script_sha:
             return False
@@ -256,7 +256,7 @@ if not self._redis_client or not self._acquire_script_sha:
         return bool(result)
 
     async def try_acquire(self, agent_id: str, tokens: int = 1) -> bool:
-        ""
+"""
 try to acquire tokens (non-blocking).
 
         Args:
@@ -265,11 +265,11 @@ try to acquire tokens (non-blocking).
 
         Returns:
             True if tokens acquired, False otherwise
-        ""
+"""
 return await self.acquire(agent_id, tokens)
 
     async def get_available_tokens(self, agent_id: str) -> int:
-        ""
+"""
 Get available tokens for agent.
 
         Args:
@@ -277,7 +277,7 @@ Get available tokens for agent.
 
         Returns:
             Number of available tokens
-        ""
+"""
 if await self._ensure_redis_connection() and self._redis_client:
             try:
                 key = f"quota:{agent_id}:tokens"
@@ -293,12 +293,12 @@ if await self._ensure_redis_connection() and self._redis_client:
         return await self._local_bucket.get_available_tokens()
 
     async def reset_bucket(self, agent_id: str) -> None:
-        ""
+"""
 Reset bucket to full capacity.
 
         Args:
             agent_id: Agent identifier
-        ""
+"""
 if await self._ensure_redis_connection() and self._redis_client:
             try:
                 key = f"quota:{agent_id}:tokens"
@@ -317,7 +317,7 @@ if await self._ensure_redis_connection() and self._redis_client:
         await self._local_bucket.reset_bucket()
 
     async def close(self) -> None:
-        ""
+"""
 Close Redis connection.""
 if self._redis_client:
             await self._redis_client.aclose()
@@ -327,19 +327,19 @@ if self._redis_client:
 
 
 class ResourceQuotaManager(StandardResourceQuotaManager):
-    ""
+"""
 Facade regarding ResourceCore to maintain backward compatibility.
     Resource enforcement logic is now centralized in the Infrastructure/Common tier.
-    ""
+"""
 def __init__(self, config: Optional[QuotaConfig] = None):
-        ""
+"""
 Initialize with optional distributed rate limiting.""
 super().__init__(config)
         self._token_bucket: Optional[DistributedTokenBucket] = None
         self._init_token_bucket()
 
     def _init_token_bucket(self) -> None:
-        ""
+"""
 Initialize distributed token bucket if configured.""
 redis_url = os.getenv("REDIS_URL")
         if not redis_url:
@@ -364,7 +364,7 @@ redis_url = os.getenv("REDIS_URL")
         )
 
     async def check_and_consume(self, agent_id: str, tokens: int = 1) -> bool:
-        ""
+"""
 Check quota and consume tokens atomically.
 
         Args:
@@ -373,13 +373,13 @@ Check quota and consume tokens atomically.
 
         Returns:
             True if tokens consumed successfully, False if quota exceeded
-        ""
+"""
 if self._token_bucket:
             return await self._token_bucket.acquire(agent_id, tokens)
         return True  # No rate limiting if token bucket not configured
 
     async def cleanup(self) -> None:
-        ""
+"""
 Cleanup resources.""
 if self._token_bucket:
             await self._token_bucket.close()

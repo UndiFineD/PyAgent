@@ -21,9 +21,8 @@ Run self-improvement with comprehensive profiling enabled.
 Tracks ALL function calls in src/ and rust_core during execution.
 
 """
-
 Uses Python's built-in cProfile for accurate function profiling,'plus custom rust_core wrapper for Rust function tracking.
-""
+"""
 import atexit
 import cProfile
 import functools
@@ -51,7 +50,7 @@ src_path = os.path.join(project_root, "src")
 
 @dataclass
 class RustFunctionStats:
-    ""
+"""
 Statistics for a Rust function.
     name: str
     call_count: int = 0
@@ -68,7 +67,7 @@ Statistics for a Rust function.
 
 
 class RustProfiler:
-    ""
+"""
 Profiler specifically for rust_core function calls.
     _instance = None
 
@@ -95,7 +94,7 @@ try:
     import rust_core as _original_rc
 
     class ProfiledRustCore:
-        ""
+"""
 Wrapper that profiles all rust_core function calls.
         def __getattr__(self, name: str) -> object:
             original = getattr(_original_rc, name)
@@ -105,25 +104,25 @@ Wrapper that profiles all rust_core function calls.
                 def profiled_func(*args, **kwargs):
                     start_time_ns = time.perf_counter_ns()
                     try:
-                        return original(*args, **kwargs)
+                    return original(*args, **kwargs)
                     finally:
-                        elapsed_ns = time.perf_counter_ns() - start_time_ns
-                        rust_profiler.record_call(name, elapsed_ns)
+                    elapsed_ns = time.perf_counter_ns() - start_time_ns
+                    rust_profiler.record_call(name, elapsed_ns)
 
-                return profiled_func
-            return original
+                    return profiled_func
+                    return original
 
-    sys.modules["rust_core"] = ProfiledRustCore()  # type: ignore[assignment]"    print(" Rust profiling enabled")"except ImportError:
-    print("️ rust_core not available")
+                    sys.modules["rust_core"] = ProfiledRustCore()  # type: ignore[assignment]"    print(" Rust profiling enabled")"except ImportError:
+                    print("️ rust_core not available")
 
-# =============================================================================
-# COMPREHENSIVE PROFILE ANALYZER
-# =============================================================================
+                    # =============================================================================
+                    # COMPREHENSIVE PROFILE ANALYZER
+                    # =============================================================================
 
 
 
 class ComprehensiveProfileAnalyzer:
-    ""
+"""
 Analyzes cProfile results and filters for src/ code.
     def __init__(self, src_dir: str, proj_root: str) -> None:
         self._src_dir = src_dir
@@ -132,16 +131,16 @@ Analyzes cProfile results and filters for src/ code.
         self._start_time = None
 
     def start(self) -> None:
-        ""
+"""
 Start profiling.        self._start_time = time.time()
         self.profiler.enable()
 
     def stop(self) -> None:
-        ""
+"""
 Stop profiling.        self.profiler.disable()
 
     def _is_src_file(self, filename: str) -> bool:
-        ""
+"""
 Check if a file is in src/.        if not filename:
             return False
         # Normalize path for comparison
@@ -154,7 +153,7 @@ Check if a file is in src/.        if not filename:
             return False
 
     def _clean_filename(self, filename: str) -> str:
-        ""
+"""
 Convert full path to relative module-style path.        try:
             rel = os.path.relpath(filename, self._proj_root)
             return rel.replace(os.sep, ".").replace(".py", "")"        except (ValueError, TypeError):
@@ -162,7 +161,7 @@ Convert full path to relative module-style path.        try:
             return filename
 
     def analyze(self) -> dict:
-        ""
+"""
 Analyze profiling results and return structured data.        # Get stats
         stream = io.StringIO()
         stats = pstats.Stats(self.profiler, stream=stream)
@@ -209,7 +208,7 @@ Analyze profiling results and return structured data.        # Get stats
             "python_by_cumtime": by_cumtime[:50],"            "python_by_tottime": by_tottime[:50],"            "python_by_calls": by_calls[:50],"            "rust_by_time": rust_by_time[:30],"            "modules": module_summary[:30],"        }
 
     def print_report(self, report: dict) -> None:
-        ""
+"""
 Print formatted report.        summary = report["summary"]
         print("\\n" + "=" * 80)"        print(" COMPREHENSIVE PROFILING REPORT")"        print("=" * 80)
         print(f"\\n{'' * 40}")"'        print(" SUMMARY")"        print(f"{'' * 40}")"'        print(f"  Python Functions Profiled: {summary['python_functions_profiled']:,}")"'        print(f"  Python Total Calls:        {summary['python_total_calls']:,}")"'        print(f"  Python Total Time:         {summary['python_total_time_ms']:.2f} ms")"'        print(f"  Rust Functions Used:       {summary['rust_functions_used']:,}")"'        print(f"  Rust Total Calls:          {summary['rust_total_calls']:,}")"'        print(f"  Rust Total Time:           {summary['rust_total_time_ms']:.2f} ms")"'        print(f"  Modules Profiled:          {summary['modules_profiled']:,}")"
@@ -248,7 +247,7 @@ from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement
 
 
 def save_profile_report() -> None:
-    ""
+"""
 Save profiling report on exit.    analyzer.stop()
     report = analyzer.analyze()
 

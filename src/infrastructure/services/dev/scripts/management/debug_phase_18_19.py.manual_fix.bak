@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Debug phase 18 19.py module.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -62,7 +62,7 @@ __version__ = VERSION
 
 
 def test_sql_and_adversarial() -> None:
-    ""
+"""
 Validate SQL query agent and adversarial security guard features.    logging.basicConfig(level=logging.INFO)
     workspace = Path(str(Path(__file__).resolve().parents[5]) + "")"    fleet = FleetManager(str(workspace))
 

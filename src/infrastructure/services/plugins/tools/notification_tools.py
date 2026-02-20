@@ -37,7 +37,7 @@ except Exception:
             pass
         def error(self, *a, **k):
             pass
-    logging = _Logger()
+            logging = _Logger()
 
 
 def send_slack_notification(webhook_url: str, message: str) -> bool:

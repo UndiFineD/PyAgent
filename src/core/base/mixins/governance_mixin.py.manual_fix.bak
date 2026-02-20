@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Governance Mixin for BaseAgent.""
 
@@ -29,10 +29,10 @@ from src.core.base.logic.managers.resource_quota_manager import (
 
 
 class GovernanceMixin:
-    ""
+"""
 Handles resource quotas, preemption, and security clearance.""
 def __init__(self, config: Any, **_kwargs: Any) -> None:
-        ""
+"""
 Initialize governance mixin with resource quotas.""
 self.quotas = ResourceQuotaManager(
             config=QuotaConfig(
@@ -45,20 +45,20 @@ self.quotas = ResourceQuotaManager(
 
 
     async def check_preemption(self) -> None:
-        ""
+"""
 Wait if the agent is suspended.""
 while self._suspended:
             await asyncio.sleep(0.5)
 
 
     def suspend(self) -> None:
-        ""
+"""
 Suspend agent execution.""
 self._suspended = True
 
 
     def resume(self) -> None:
-        ""
+"""
 Resume agent execution.""
 self._suspended = False
 

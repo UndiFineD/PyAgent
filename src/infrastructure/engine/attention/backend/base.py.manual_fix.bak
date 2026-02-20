@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Base classes for attention backends.
-""
+"""
 try:
 
 """
-    from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod
 except ImportError:
     from abc import ABC, abstractmethod
 
@@ -53,12 +53,12 @@ class AttentionBackend(ABC, Generic[T]):
     @staticmethod
     @abstractmethod
     def get_name() -> str:
-        ""
+"""
 Get the backend name.
     @staticmethod
     @abstractmethod
     def get_capabilities() -> AttentionCapabilities:
-        ""
+"""
 Get backend capabilities.
     @abstractmethod
     def forward(
@@ -84,7 +84,7 @@ Get backend capabilities.
             Attention output [batch*seq, num_heads, head_dim]
         
     def supports(self, attn_type: AttentionType) -> bool:
-        ""
+"""
 Check if backend supports attention type.        caps = self.get_capabilities()
         mapping = {
             AttentionType.PREFILL: caps.supports_prefill,

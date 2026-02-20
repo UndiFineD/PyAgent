@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ConflictResolution - Resolution dataclass for conflicting improvements
 
@@ -60,7 +60,7 @@ __version__ = VERSION
 
 @dataclass
 class ConflictResolution:
-    ""
+"""
 Resolution for a conflicting improvement.""""
 Attributes:
         improvement_id: ID of conflicting improvement.

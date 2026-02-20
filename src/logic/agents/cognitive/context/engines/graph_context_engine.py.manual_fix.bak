@@ -28,7 +28,7 @@ try:
 except ImportError:
 
 """
-    from src.logic.agents.cognitive.context.engines.graph_core import GraphCore
+from src.logic.agents.cognitive.context.engines.graph_core import GraphCore
     from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -37,10 +37,10 @@ __version__ = VERSION
 class DummyGraph:
     pass
 class GraphContextEngine:
-    ""
+"""
 Manages an adjacency list of file and class dependencies.""
 def __init__(self, workspace_root: str) -> None:
-        ""
+"""
 Initializes the Graph Context Engine.""
 self.workspace_root = Path(workspace_root)
         self.graph: dict[str, set[str]] = {}
@@ -52,7 +52,7 @@ self.workspace_root = Path(workspace_root)
 
 
     def add_edge(self, source: str, target: str, relationship: str = "imports") -> None:
-        ""
+"""
 Add a directed edge to the graph.""
 if source not in self.graph:
             self.graph[source] = set()
@@ -63,7 +63,7 @@ if source not in self.graph:
 
 
     def add_node(self, node_id: str, node_type: str, metadata: dict[str, Any] | None = None) -> None:
-        ""
+"""
 Add a node and its metadata to the graph (Phase 72).""
 if node_id not in self.graph:
             self.graph[node_id] = set()
@@ -75,7 +75,7 @@ if node_id not in self.graph:
 
 
     def scan_project(self, start_path: Path | None = None) -> None:
-        ""
+"""
 Scans files using AST to build a detailed relationship graph.""
 target = start_path or self.workspace_root
         logging.info(f"Scanning project graph from {target}")
@@ -107,7 +107,7 @@ target = start_path or self.workspace_root
 
 
     def get_impact_radius(self, node: str, max_depth: int = 3) -> set[str]:
-        ""
+"""
 Find all nodes that depend on the given node (inverse of graph).""
 affected = set()
         to_visit = [(node, 0)]
@@ -135,7 +135,7 @@ affected = set()
 
 
     def save(self, file_path: str | Path | None = None) -> None:
-        ""
+"""
 Serialize graph to disk.""
 target = Path(file_path) if file_path else self.persist_file
         data = {
@@ -147,7 +147,7 @@ target = Path(file_path) if file_path else self.persist_file
             json.dump(data, f, indent=2)
 
     def load(self, file_path: str | Path | None = None) -> None:
-        ""
+"""
 Load graph from disk.""
 target = Path(file_path) if file_path else self.persist_file
         if target.exists():

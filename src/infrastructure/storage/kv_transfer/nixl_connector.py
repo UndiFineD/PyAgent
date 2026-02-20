@@ -99,22 +99,22 @@ class NixlConnector(KVConnectorBase):
         logger.info("NixlConnector initialized on rank %d/%d", self.rank, self.world_size)
     def _init_rdma(self):
 """
-Initialize Rust RDMA context.        try:
-            self.rust_bridge.execute(
-                "init_nixl_rdma","                {
-                    "rank": self.rank,"                    "world_size": self.world_size,"                    "device_name": self.config.extra_config.get("rdma_device", "ib0"),"                },
-            )
+        Initialize Rust RDMA context.        try:
+        self.rust_bridge.execute(
+        "init_nixl_rdma","                {
+        "rank": self.rank,"                    "world_size": self.world_size,"                    "device_name": self.config.extra_config.get("rdma_device", "ib0"),"                },
+        )
 
-            # Start completion thread
-            self._completion_thread = threading.Thread(target=self._poll_loop, daemon=True)
-            self._completion_thread.start()
+        # Start completion thread
+        self._completion_thread = threading.Thread(target=self._poll_loop, daemon=True)
+        self._completion_thread.start()
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.error(f"Failed to initialize Nixl RDMA: {e}")
+        logger.error(f"Failed to initialize Nixl RDMA: {e}")
     def _poll_loop(self):
 """
-Background thread to poll NIXL completion queues.        while not self._stop_event.is_set():
-            self.poll_completions()
-            time.sleep(0.001)  # nosec
+        Background thread to poll NIXL completion queues.        while not self._stop_event.is_set():
+        self.poll_completions()
+        time.sleep(0.001)  # nosec
 
     def register_memory(self, tensor: Any) -> NixlMemoryRegion:
 """

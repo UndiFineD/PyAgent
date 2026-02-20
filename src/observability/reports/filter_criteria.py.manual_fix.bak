@@ -21,7 +21,7 @@ Basic module docstring.
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -30,10 +30,28 @@ __version__ = VERSION
 
 # TODO Placeholder class
 class TODO Placeholder:
-    ""
+"""
 TODO Placeholder class.  ""
 p""
 ass""""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

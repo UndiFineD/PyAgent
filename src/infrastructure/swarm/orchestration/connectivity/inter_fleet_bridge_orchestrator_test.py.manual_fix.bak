@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.swarm.orchestration.connectivity.inter_fleet_bridge_orchestrator import InterFleetBridgeOrchestrator

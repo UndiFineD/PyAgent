@@ -19,7 +19,7 @@ from __future__ import annotations
 """
 Phase 45: Async Multi-process Engine Client
 Queue-based asynchronous client.
-""
+"""
 
 """
 import asyncio
@@ -76,7 +76,7 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):"    
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Busy loop error: {e}")
     async def _output_handler(self) -> None:
-        ""
+"""
 Handle output distribution to waiting futures.        while self._running:
             try:
                 output = await asyncio.wait_for(self._output_queue.get(), timeout=0.1)
@@ -93,7 +93,7 @@ Handle output distribution to waiting futures.        while self._running:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Output handler error: {e}")
     def send_request(self, request: SchedulerOutput) -> str:
-        ""
+"""
 Submit request to async queue.        request_id = self._generate_request_id()
 
         # loop = asyncio.get_event_loop() # Use get_running_loop if available or create_task to use current loop
@@ -111,7 +111,7 @@ Submit request to async queue.        request_id = self._generate_request_id()
         return request_id
 
     def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        ""
+"""
 Blocking get (runs event loop).        if request_id not in self._pending_futures:
             return None
 
@@ -128,7 +128,7 @@ Blocking get (runs event loop).        if request_id not in self._pending_future
             return None
 
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
-        ""
+"""
 Non-blocking async get.        if request_id not in self._pending_futures:
             return None
 
@@ -140,7 +140,7 @@ Non-blocking async get.        if request_id not in self._pending_futures:
             return None
 
     def start(self) -> None:
-        ""
+"""
 Start async workers.        self._running = True
 
         try:
@@ -153,7 +153,7 @@ Start async workers.        self._running = True
 
         logger.info("AsyncMPClient started")
     def shutdown(self) -> None:
-        ""
+"""
 Shutdown async workers.        self._running = False
 
         if self._worker_task:
@@ -167,4 +167,4 @@ Shutdown async workers.        self._running = False
                 future.cancel()
 
         logger.info("AsyncMPClient shutdown")
-""
+"""

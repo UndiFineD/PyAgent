@@ -136,6 +136,24 @@ Heuristic for optimization: time * frequency.        return stats.total_time * s
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

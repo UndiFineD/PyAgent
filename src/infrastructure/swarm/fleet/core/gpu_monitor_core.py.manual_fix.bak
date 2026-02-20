@@ -17,15 +17,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 GPUMetrics
 """
 Gpu monitor core.py module.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -33,7 +33,7 @@ except ImportError:
 
 @dataclass(frozen=True)
 class GPUMetrics:
-    ""
+"""
 Pure data class for GPU telemetry.
     index: int
     name: str
@@ -88,4 +88,4 @@ class GPUMonitorCore:
         return False
 
 
-""
+"""

@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from infrastructure.swarm.orchestration.core.distributed.client import MPClient, AsyncMPClient, DPLBAsyncMPClient

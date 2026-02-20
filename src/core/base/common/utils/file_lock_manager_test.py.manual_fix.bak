@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from core.base.common.utils.file_lock_manager import LockProxy, FileLockManager

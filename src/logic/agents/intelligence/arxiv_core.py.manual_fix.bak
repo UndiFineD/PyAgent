@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Arxiv Core - ArXiv paper fetch, extract and summarize
 
@@ -179,4 +179,4 @@ Format search results into a readable summary block.        if not results:
 #         block = "### Arxiv Research Results\\n\\n"        for i, res in enumerate(results, 1):
 #             block += f"{i}. **{res['title']}** ({res['published'][:10]})\\n"'#             block += f"   - Authors: {', '.join(res['authors'][:3])}...\\n"'#             block += f"   - PDF: {res['pdf_url']}\\n"'#             block += f"   - Summary: {res['summary'][:200]}...\\n\\n"'        return block
 
-""
+"""

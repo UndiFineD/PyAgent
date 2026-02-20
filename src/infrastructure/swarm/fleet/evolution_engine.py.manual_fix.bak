@@ -15,16 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 EvolutionEngine
 """
 Engine for autonomous agent creation.
 Allows agents to generate new, specialized agent files to expand fleet capabilities.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -79,9 +79,27 @@ Generates a new agent class file based on a name and capabilities description.  
                 return self.core.compute_mutations(fleet_stats)
 
     def register_generated_agent(self, _fleet_manager: Any, name: str, path: str) -> str:
-        ""
+"""
 Dynamically loads and registers the generated agent into the fleet.        # For simulation, we'll just mock the dynamic import or use standard registration'        # In a real system, we'd use importlib.util.spec_from_file_location'        logging.info(f"Evolution: Registering generated agent {name} from {path}")"        # Note: FleetManager already has a register_agent method
         return f"Agent {name} registered."
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

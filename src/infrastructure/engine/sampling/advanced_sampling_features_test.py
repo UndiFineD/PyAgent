@@ -56,19 +56,19 @@ class TestEnums:
 Test enum values.
     def test_output_kind_values(self):
 """
-Test OutputKind enum.        assert OutputKind.CUMULATIVE is not None
+        Test OutputKind enum.        assert OutputKind.CUMULATIVE is not None
         assert OutputKind.DELTA is not None
         assert OutputKind.FINAL_ONLY is not None
 
     def test_stop_condition_values(self):
 """
-Test StopCondition enum.        assert StopCondition.EOS is not None
+        Test StopCondition enum.        assert StopCondition.EOS is not None
         assert StopCondition.MAX_TOKENS is not None
         assert StopCondition.STOP_STRING is not None
 
     def test_temperature_schedule_values(self):
 """
-Test TemperatureSchedule enum.        assert TemperatureSchedule.CONSTANT is not None
+        Test TemperatureSchedule enum.        assert TemperatureSchedule.CONSTANT is not None
         assert TemperatureSchedule.LINEAR_DECAY is not None
         assert TemperatureSchedule.COSINE_DECAY is not None
         assert TemperatureSchedule.ADAPTIVE is not None
@@ -80,7 +80,7 @@ class TestSamplingParams:
 Test basic SamplingParams.
     def test_create_default_params(self):
 """
-Test creating default params.        params = SamplingParams()
+        Test creating default params.        params = SamplingParams()
 
         assert params.temperature == 1.0
         assert params.top_p == 1.0
@@ -88,11 +88,11 @@ Test creating default params.        params = SamplingParams()
 
     def test_create_custom_params(self):
 """
-Test creating custom params.        params = SamplingParams(
-            temperature=0.7,
-            top_p=0.9,
-            top_k=50,
-            max_tokens=100,
+        Test creating custom params.        params = SamplingParams(
+        temperature=0.7,
+        top_p=0.9,
+        top_k=50,
+        max_tokens=100,
         )
 
         assert params.temperature == 0.7
@@ -102,10 +102,10 @@ Test creating custom params.        params = SamplingParams(
 
     def test_params_with_repetition_penalty(self):
 """
-Test params with repetition penalty.        params = SamplingParams(
-            repetition_penalty=1.1,
-            frequency_penalty=0.5,
-            presence_penalty=0.3,
+        Test params with repetition penalty.        params = SamplingParams(
+        repetition_penalty=1.1,
+        frequency_penalty=0.5,
+        presence_penalty=0.3,
         )
 
         assert params.repetition_penalty == 1.1
@@ -113,16 +113,16 @@ Test params with repetition penalty.        params = SamplingParams(
 
     def test_params_validation(self):
 """
-Test parameter validation.        with pytest.raises(ValueError):
-            SamplingParams(temperature=-1.0)
+        Test parameter validation.        with pytest.raises(ValueError):
+        SamplingParams(temperature=-1.0)
 
         with pytest.raises(ValueError):
-            SamplingParams(top_p=1.5)
+        SamplingParams(top_p=1.5)
 
     def test_params_with_stop_strings(self):
 """
-Test params with stop token IDs.        params = SamplingParams(
-            stop_token_ids=[50256, 50257],
+        Test params with stop token IDs.        params = SamplingParams(
+        stop_token_ids=[50256, 50257],
         )
 
         assert len(params.stop_token_ids) == 2
@@ -134,10 +134,10 @@ class TestAdvancedSamplingParams:
 Test AdvancedSamplingParams.
     def test_create_advanced_params(self):
 """
-Test creating advanced params.        params = AdvancedSamplingParams(
-            temperature=0.8,
-            bad_words_ids=[[1, 2, 3]],
-            flat_logprobs=True,
+        Test creating advanced params.        params = AdvancedSamplingParams(
+        temperature=0.8,
+        bad_words_ids=[[1, 2, 3]],
+        flat_logprobs=True,
         )
 
         assert params.temperature == 0.8
@@ -145,11 +145,11 @@ Test creating advanced params.        params = AdvancedSamplingParams(
 
     def test_temperature_scheduling(self):
 """
-Test temperature scheduling.        params = AdvancedSamplingParams(
-            temperature=1.0,
-            temperature_schedule=TemperatureSchedule.LINEAR_DECAY,
-            temperature_decay_target=0.1,
-            temperature_decay_steps=100,
+        Test temperature scheduling.        params = AdvancedSamplingParams(
+        temperature=1.0,
+        temperature_schedule=TemperatureSchedule.LINEAR_DECAY,
+        temperature_decay_target=0.1,
+        temperature_decay_steps=100,
         )
 
         # At step 0
@@ -166,11 +166,11 @@ Test temperature scheduling.        params = AdvancedSamplingParams(
 
     def test_cosine_temperature_schedule(self):
 """
-Test cosine temperature scheduling.        params = AdvancedSamplingParams(
-            temperature=1.0,
-            temperature_schedule=TemperatureSchedule.COSINE_DECAY,
-            temperature_decay_target=0.0,
-            temperature_decay_steps=100,
+        Test cosine temperature scheduling.        params = AdvancedSamplingParams(
+        temperature=1.0,
+        temperature_schedule=TemperatureSchedule.COSINE_DECAY,
+        temperature_decay_target=0.0,
+        temperature_decay_steps=100,
         )
 
         # Cosine should decay smoothly
@@ -179,11 +179,11 @@ Test cosine temperature scheduling.        params = AdvancedSamplingParams(
 
     def test_adaptive_top_k(self):
 """
-Test adaptive top_k based on entropy.        params = AdvancedSamplingParams(
-            adaptive_top_k=True,
-            entropy_threshold=2.0,
-            min_adaptive_k=5,
-            max_adaptive_k=100,
+        Test adaptive top_k based on entropy.        params = AdvancedSamplingParams(
+        adaptive_top_k=True,
+        entropy_threshold=2.0,
+        min_adaptive_k=5,
+        max_adaptive_k=100,
         )
 
         # Low entropy -> small k
@@ -196,10 +196,10 @@ Test adaptive top_k based on entropy.        params = AdvancedSamplingParams(
 
     def test_contextual_penalty(self):
 """
-Test contextual repetition penalty.        params = AdvancedSamplingParams(
-            repetition_penalty=1.2,
-            repetition_penalty_range=100,
-            repetition_penalty_decay=0.99,
+        Test contextual repetition penalty.        params = AdvancedSamplingParams(
+        repetition_penalty=1.2,
+        repetition_penalty_range=100,
+        repetition_penalty_decay=0.99,
         )
 
         # Near token (distance 1)
@@ -216,10 +216,10 @@ Test contextual repetition penalty.        params = AdvancedSamplingParams(
 
     def test_mirostat_params(self):
 """
-Test mirostat parameters.        params = AdvancedSamplingParams(
-            mirostat_mode=2,
-            mirostat_tau=5.0,
-            mirostat_eta=0.1,
+        Test mirostat parameters.        params = AdvancedSamplingParams(
+        mirostat_mode=2,
+        mirostat_tau=5.0,
+        mirostat_eta=0.1,
         )
 
         assert params.mirostat_mode == 2
@@ -232,7 +232,7 @@ class TestLogitBiasBuilder:
 Test LogitBiasBuilder.
     def test_add_bias(self):
 """
-Test adding bias.        builder = LogitBiasBuilder()
+        Test adding bias.        builder = LogitBiasBuilder()
         builder.add_bias(100, 2.0)
         builder.add_bias(200, -1.0)
 
@@ -243,7 +243,7 @@ Test adding bias.        builder = LogitBiasBuilder()
 
     def test_ban_token(self):
 """
-Test banning token.        builder = LogitBiasBuilder()
+        Test banning token.        builder = LogitBiasBuilder()
         builder.ban_token(500)
 
         biases = builder.build()
@@ -252,7 +252,7 @@ Test banning token.        builder = LogitBiasBuilder()
 
     def test_prefer_token(self):
 """
-Test preferring token.        builder = LogitBiasBuilder()
+        Test preferring token.        builder = LogitBiasBuilder()
         builder.prefer_token(300, strength=10.0)
 
         biases = builder.build()
@@ -261,12 +261,12 @@ Test preferring token.        builder = LogitBiasBuilder()
 
     def test_chain_operations(self):
 """
-Test chaining operations.        biases = (
-            LogitBiasBuilder()
-            .add_bias(1, 1.0)
-            .ban_token(2)
-            .prefer_token(3)
-            .build()
+        Test chaining operations.        biases = (
+        LogitBiasBuilder()
+        .add_bias(1, 1.0)
+        .ban_token(2)
+        .prefer_token(3)
+        .build()
         )
 
         assert 1 in biases
@@ -280,7 +280,7 @@ class TestBadWordsProcessor:
 Test BadWordsProcessor.
     def test_single_token_ban(self):
 """
-Test banning single tokens.        processor = BadWordsProcessor(bad_words_ids=[[5], [10], [15]])
+        Test banning single tokens.        processor = BadWordsProcessor(bad_words_ids=[[5], [10], [15]])
 
         banned = processor.get_banned_tokens([1, 2, 3])
 
@@ -290,7 +290,7 @@ Test banning single tokens.        processor = BadWordsProcessor(bad_words_ids=[
 
     def test_multi_token_sequence(self):
 """
-Test banning multi-token sequences.        processor = BadWordsProcessor(bad_words_ids=[[1, 2, 3]])
+        Test banning multi-token sequences.        processor = BadWordsProcessor(bad_words_ids=[[1, 2, 3]])
 
         # Context ends with [1, 2] -> should ban 3
         banned = processor.get_banned_tokens([0, 1, 2])
@@ -301,7 +301,7 @@ Test banning multi-token sequences.        processor = BadWordsProcessor(bad_wor
 
     def test_apply_to_logits(self):
 """
-Test applying bad words to logits.        processor = BadWordsProcessor(bad_words_ids=[[5]])
+        Test applying bad words to logits.        processor = BadWordsProcessor(bad_words_ids=[[5]])
 
         logits = np.zeros(10)
         logits = processor.apply_to_logits(logits, [1, 2, 3])
@@ -314,7 +314,7 @@ class TestTokenWhitelistProcessor:
 Test TokenWhitelistProcessor.
     def test_whitelist_tokens(self):
 """
-Test whitelisting tokens.        processor = TokenWhitelistProcessor(allowed_token_ids=[0, 1, 2])
+        Test whitelisting tokens.        processor = TokenWhitelistProcessor(allowed_token_ids=[0, 1, 2])
 
         logits = np.zeros(10)
         logits = processor.apply_to_logits(logits, vocab_size=10)
@@ -328,7 +328,7 @@ Test whitelisting tokens.        processor = TokenWhitelistProcessor(allowed_tok
         assert logits[5] == -float('inf')
     def test_build_mask(self):
 """
-Test building mask.        processor = TokenWhitelistProcessor(allowed_token_ids=[1, 3, 5])
+        Test building mask.        processor = TokenWhitelistProcessor(allowed_token_ids=[1, 3, 5])
 
         mask = processor.build_mask(vocab_size=10)
 
@@ -345,14 +345,14 @@ class TestMirostatSampler:
 Test MirostatSampler.
     def test_create_sampler(self):
 """
-Test creating sampler.        sampler = MirostatSampler(tau=5.0, eta=0.1, mode=2)
+        Test creating sampler.        sampler = MirostatSampler(tau=5.0, eta=0.1, mode=2)
 
         assert sampler.tau == 5.0
         assert sampler.eta == 0.1
 
     def test_sample(self):
 """
-Test sampling.        sampler = MirostatSampler(tau=5.0, eta=0.1, mode=2)
+        Test sampling.        sampler = MirostatSampler(tau=5.0, eta=0.1, mode=2)
 
         # Create logits with one dominant token
         logits = np.array([-10.0, -10.0, 5.0, -10.0, -10.0])
@@ -365,7 +365,7 @@ Test sampling.        sampler = MirostatSampler(tau=5.0, eta=0.1, mode=2)
 
     def test_mu_update(self):
 """
-Test mu is updated after sampling.        sampler = MirostatSampler(tau=5.0, eta=0.1)
+        Test mu is updated after sampling.        sampler = MirostatSampler(tau=5.0, eta=0.1)
         initial_mu = sampler.mu
 
         logits = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
@@ -381,14 +381,14 @@ class TestSamplingEngine:
 Test SamplingEngine.
     def test_create_engine(self):
 """
-Test creating engine.        params = SamplingParams(temperature=0.7)
+        Test creating engine.        params = SamplingParams(temperature=0.7)
         engine = SamplingEngine(params)
 
         assert engine is not None
 
     def test_sample_with_temperature(self):
 """
-Test sampling with temperature.        params = SamplingParams(temperature=0.5)
+        Test sampling with temperature.        params = SamplingParams(temperature=0.5)
         engine = SamplingEngine(params)
 
         logits = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
@@ -399,7 +399,7 @@ Test sampling with temperature.        params = SamplingParams(temperature=0.5)
 
     def test_sample_greedy(self):
 """
-Test greedy sampling (temperature=0).        params = SamplingParams(temperature=0.0)
+        Test greedy sampling (temperature=0).        params = SamplingParams(temperature=0.0)
         engine = SamplingEngine(params)
 
         logits = np.array([1.0, 2.0, 5.0, 3.0, 4.0])
@@ -410,7 +410,7 @@ Test greedy sampling (temperature=0).        params = SamplingParams(temperature
 
     def test_sample_with_top_k(self):
 """
-Test sampling with top_k.        params = SamplingParams(temperature=1.0, top_k=2)
+        Test sampling with top_k.        params = SamplingParams(temperature=1.0, top_k=2)
         engine = SamplingEngine(params)
 
         logits = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
@@ -418,15 +418,15 @@ Test sampling with top_k.        params = SamplingParams(temperature=1.0, top_k=
         # Sample multiple times
         selections = set()
         for _ in range(100):
-            token_id, _ = engine.sample(logits)
-            selections.add(token_id)
+        token_id, _ = engine.sample(logits)
+        selections.add(token_id)
 
         # Should only select from top 2 tokens
         assert all(s in [3, 4] for s in selections)
 
     def test_sample_with_top_p(self):
 """
-Test sampling with top_p.        params = SamplingParams(temperature=1.0, top_p=0.5)
+        Test sampling with top_p.        params = SamplingParams(temperature=1.0, top_p=0.5)
         engine = SamplingEngine(params)
 
         logits = np.array([0.0, 0.0, 0.0, 0.0, 10.0])
@@ -437,9 +437,9 @@ Test sampling with top_p.        params = SamplingParams(temperature=1.0, top_p=
 
     def test_sample_with_bad_words(self):
 """
-Test sampling with bad words.        params = AdvancedSamplingParams(
-            temperature=1.0,
-            bad_words_ids=[[2]],
+        Test sampling with bad words.        params = AdvancedSamplingParams(
+        temperature=1.0,
+        bad_words_ids=[[2]],
         )
         engine = SamplingEngine(params)
 
@@ -447,14 +447,14 @@ Test sampling with bad words.        params = AdvancedSamplingParams(
 
         # Sample multiple times
         for _ in range(10):
-            token_id, _ = engine.sample(logits, context_ids=[0, 1])
-            assert token_id != 2  # Token 2 should be banned
+        token_id, _ = engine.sample(logits, context_ids=[0, 1])
+        assert token_id != 2  # Token 2 should be banned
 
     def test_sample_with_whitelist(self):
 """
-Test sampling with token whitelist.        params = AdvancedSamplingParams(
-            temperature=1.0,
-            allowed_token_ids=[0, 1],
+        Test sampling with token whitelist.        params = AdvancedSamplingParams(
+        temperature=1.0,
+        allowed_token_ids=[0, 1],
         )
         engine = SamplingEngine(params)
 
@@ -462,17 +462,17 @@ Test sampling with token whitelist.        params = AdvancedSamplingParams(
 
         # Should only select from whitelist
         for _ in range(10):
-            token_id, _ = engine.sample(logits)
-            assert token_id in [0, 1]
+        token_id, _ = engine.sample(logits)
+        assert token_id in [0, 1]
 
     def test_reset(self):
 """
-Test resetting engine.        params = SamplingParams(temperature=0.7)
+        Test resetting engine.        params = SamplingParams(temperature=0.7)
         engine = SamplingEngine(params)
 
         # Sample a few times
         for _ in range(5):
-            engine.sample(np.array([1.0, 2.0, 3.0]))
+        engine.sample(np.array([1.0, 2.0, 3.0]))
 
         # Reset
         engine.reset()
@@ -487,10 +487,10 @@ class TestFactoryFunctions:
 Test factory functions.
     def test_create_sampling_params(self):
 """
-Test create_sampling_params.        params = create_sampling_params(
-            temperature=0.7,
-            top_p=0.9,
-            max_tokens=100,
+        Test create_sampling_params.        params = create_sampling_params(
+        temperature=0.7,
+        top_p=0.9,
+        max_tokens=100,
         )
 
         assert params.temperature == 0.7
@@ -498,9 +498,9 @@ Test create_sampling_params.        params = create_sampling_params(
 
     def test_create_advanced_sampling_params(self):
 """
-Test create_advanced_sampling_params.        params = create_advanced_sampling_params(
-            temperature=0.8,
-            adaptive=True,
+        Test create_advanced_sampling_params.        params = create_advanced_sampling_params(
+        temperature=0.8,
+        adaptive=True,
         )
 
         assert params.temperature == 0.8
@@ -508,11 +508,11 @@ Test create_advanced_sampling_params.        params = create_advanced_sampling_p
 
     def test_create_params_with_defaults(self):
 """
-Test creating params with defaults.        params = create_sampling_params()
+        Test creating params with defaults.        params = create_sampling_params()
 
         assert params.temperature == 1.0
         assert params.top_p == 1.0
 
 
-# Run pytest if executed directly
-if __name__ == "__main__":"    pytest.main([__file__, "-v"])"
+        # Run pytest if executed directly
+        if __name__ == "__main__":"    pytest.main([__file__, "-v"])"

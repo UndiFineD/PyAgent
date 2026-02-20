@@ -20,7 +20,7 @@ try:
 except ImportError:
 
 """
-    from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 try:
     import numpy
@@ -40,7 +40,7 @@ except ImportError:
 
 
 class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]]):
-    ""
+"""
 Processor for video inputs.  
     Processes a video as a sequence of frames, applies image processing to each frame, 
     and returns a tensor of shape (num_frames, channels, height, width) 
@@ -70,7 +70,7 @@ modality = ModalityType.VIDEO
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-        ""
+"""
 Process raw video data into a tensor of frame features. 
         Expects a tuple of (frames, metadata), where frames is a numpy array of shape 
         (total_frames, height, width, channels) and metadata is a dict containing video info like fps.""

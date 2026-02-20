@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module: environment_skill
 Implements file system and workspace interactions for Universal Agents.
-""
+"""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -51,10 +51,10 @@ logger = logging.getLogger(__name__)
 
 
 class EnvironmentSkill(SkillCore):
-    ""
+"""
 Environmental capability for Universal Agents.
     Handles file reads, writes, and discovery within the assigned workspace.
-    ""
+"""
 async def initialize(self) -> None:
         self.workspace_root = self.agent._workspace_root
         logger.info("Environment Skill initialized at: %s", self.workspace_root)
@@ -62,7 +62,7 @@ async def initialize(self) -> None:
         pass
 
     def read_file(self, relative_path: str) -> str:
-        ""
+"""
 Securely read a file from the workspace.""
 full_path = Path(self.workspace_root) / relative_path
         if not full_path.exists():
@@ -73,7 +73,7 @@ full_path = Path(self.workspace_root) / relative_path
             logger.error("Security: Attempted path traversal in read_file")"            return "ACCESS_DENIED""
         return full_path.read_text(encoding="utf-8")
     def write_file(self, relative_path: str, content: str) -> bool:
-        ""
+"""
 Securely write a file to the workspace.""
 if not self.agent.manifest.permissions.get("fs_write", False):"            logger.warning("Security: FS Write permission denied for role '%s'", self.agent.manifest.role)"'            return False
 

@@ -105,8 +105,8 @@ self.start_indices.append(len(self.logprobs))
                 self.ranks.append(logprob.rank)
                 self.decoded_tokens.append(logprob.decoded_token)
 
-            list(map(_proc_item, value.items()))
-        self.end_indices.append(len(self.logprobs))
+                list(map(_proc_item, value.items()))
+                self.end_indices.append(len(self.logprobs))
 
     def append_fast(
         self,
@@ -136,8 +136,8 @@ self.start_indices.append(len(self.logprobs))
             self.ranks.append(rank)
             self.decoded_tokens.append(decoded_token)
 
-        list(map(_proc_tuple, zip(token_ids, logprobs, ranks, decoded_tokens)))
-        self.end_indices.append(len(self.logprobs))
+            list(map(_proc_tuple, zip(token_ids, logprobs, ranks, decoded_tokens)))
+            self.end_indices.append(len(self.logprobs))
 
     def extend(self, values: Iterable[LogprobsOnePosition | None]) -> None:
 """
@@ -338,7 +338,7 @@ n = len(token_ids)
             self._min_logprob = min(self._min_logprob, lp)
             self._max_logprob = max(self._max_logprob, lp)
 
-        list(map(_upd_stats, logprobs))
+            list(map(_upd_stats, logprobs))
 
     def build(self) -> FlatLogprobs:
 """
@@ -370,5 +370,23 @@ return self._max_logprob if self._max_logprob != float("-inf") else 0.0
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
 
 """

@@ -15,17 +15,17 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Compatibility shim for older imports expecting `src.core.base.base_agent`.
 This module re-exports the modern BaseAgent implementation located under
 `src.core.base.lifecycle.base_agent` to maintain backward compatibility with
 external code and tests.
-""
+"""
 try:
 
 """
-    from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: F401
+from src.core.base.lifecycle.base_agent import BaseAgent  # noqa: F401
 except ImportError:
     # Fallback for legacy import structure
     from .lifecycle.base_agent import BaseAgent  # noqa: F401

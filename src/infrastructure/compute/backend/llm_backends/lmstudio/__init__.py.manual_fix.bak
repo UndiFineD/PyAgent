@@ -18,7 +18,6 @@
 LM Studio backend for LLM inference.
 
 """
-
 try:
     from .backend import LMStudioBackend  # noqa: F401
 except ImportError:

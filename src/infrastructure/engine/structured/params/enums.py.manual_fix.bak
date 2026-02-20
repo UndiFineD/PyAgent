@@ -19,13 +19,13 @@ try:
 except ImportError:
 
 """
-    from enum import Enum, auto
+from enum import Enum, auto
 
 
 
 
 class StructuredOutputType(Enum):
-    ""
+"""
 Type of structured output constraint.""
 JSON_SCHEMA = auto()  # JSON Schema constraint
     REGEX = auto()  # Regex pattern
@@ -37,7 +37,7 @@ JSON_SCHEMA = auto()  # JSON Schema constraint
 
 
 class ConstraintType(Enum):
-    ""
+"""
 Internal constraint type.""
 INCLUDE = auto()  # Must match
     EXCLUDE = auto()  # Must not match
@@ -47,7 +47,7 @@ INCLUDE = auto()  # Must match
 
 
 class SchemaFormat(Enum):
-    ""
+"""
 JSON Schema format.""
 DRAFT_07 = "draft-07"
     DRAFT_2020_12 = "draft-2020-12"
@@ -57,7 +57,7 @@ DRAFT_07 = "draft-07"
 
 
 class GuidedDecodingBackend(Enum):
-    ""
+"""
 Guided decoding backend.""
 AUTO = auto()  # Auto-select best backend
     OUTLINES = auto()  # Outlines library

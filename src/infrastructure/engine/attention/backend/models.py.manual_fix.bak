@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 
 try:
     from enum import Enum, auto
@@ -36,7 +36,7 @@ except ImportError:
 
 
 class AttentionBackendEnum(Enum):
-    ""
+"""
 Enumeration of available attention backends.""
 FLASH_ATTN = "flash_attn"
     FLASH_ATTN_2 = "flash_attn_2"
@@ -49,7 +49,7 @@ FLASH_ATTN = "flash_attn"
     PACKKV = "packkv"  # PackKV compressed (arXiv:2512.24449)
 
 class AttentionType(Enum):
-    ""
+"""
 Types of attention computation.""
 PREFILL = auto()  # Full attention during prefill
     DECODE = auto()  # Incremental attention during decode
@@ -59,7 +59,7 @@ PREFILL = auto()  # Full attention during prefill
 
 @dataclass
 class AttentionCapabilities:
-    ""
+"""
 Capabilities of an attention backend.""
     # Supported attention types
     supports_prefill: bool = True
@@ -89,7 +89,7 @@ Capabilities of an attention backend.""
 
 @dataclass
 class AttentionMetadata:
-    ""
+"""
 Metadata for attention computation.""
     # Sequence lengths
     seq_lens: list[int] = field(default_factory=list)

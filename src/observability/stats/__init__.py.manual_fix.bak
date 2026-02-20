@@ -18,13 +18,13 @@ from __future__ import annotations
 # ruff: noqa: F401
 # flake8: noqa: F401
 
-""
+"""
 """
 Lazy-loading entry point for observability.stats.from __future__ import annotationsfrom typing import Any, TYPE_CHECKING
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -92,5 +92,5 @@ def __getattr__(name: str) -> Any:
 
 __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())
 
-""
+"""
 

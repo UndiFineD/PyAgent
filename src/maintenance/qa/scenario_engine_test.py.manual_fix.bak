@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from maintenance.qa.scenario_engine import ScenarioEngine

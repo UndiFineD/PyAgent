@@ -218,6 +218,24 @@ Test that regression check is deterministic.        core = BenchmarkCore()
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

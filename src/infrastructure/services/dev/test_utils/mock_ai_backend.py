@@ -180,3 +180,21 @@ Clear all mock responses and history.        self._responses.clear()
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
+
+"""

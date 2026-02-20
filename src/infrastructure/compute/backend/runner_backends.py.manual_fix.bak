@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Backend implementation handlers for SubagentRunner.
 
 """
-
 import json
 import logging
 import os
@@ -36,7 +35,7 @@ __version__: str = VERSION
 
 
 class BackendHandlers:
-    ""
+"""
 Namespace for backend execution logic.
 
     @staticmethod
@@ -63,7 +62,7 @@ Namespace for backend execution logic.
 
     @staticmethod
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
-        ""
+"""
 Build full prompt with task description, prompt, and context.        try:
             max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))"        except ValueError:
             max_context_chars = 12_000
@@ -72,7 +71,7 @@ Build full prompt with task description, prompt, and context.        try:
 
     @staticmethod
     def try_codex_cli(full_prompt: str, repo_root: Path, recorder: Any | None = None) -> str | None:
-        ""
+"""
 try to use Codex CLI backend for code generation.        try:
             logging.debug("Attempting to use Codex CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
                 [
@@ -101,7 +100,7 @@ try to use Codex CLI backend for code generation.        try:
 
     @staticmethod
     def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
-        ""
+"""
 try to use Copilot CLI backend for code generation.        try:
             logging.debug("Attempting to use local Copilot CLI backend")"            result: subprocess.CompletedProcess[str] = subprocess.run(
                 ["copilot", "explain", full_prompt],"                capture_output=True,
@@ -117,7 +116,7 @@ try to use Copilot CLI backend for code generation.        try:
 
     @staticmethod
     def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
-        ""
+"""
 try to use GitHub Copilot CLI backend for code generation.        # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
             # Basic heuristic: if it doesn't look like a command, skip gh copilot explain'            # (This logic was partially in SubagentRunner, but we can pass a flag)
@@ -140,7 +139,7 @@ try to use GitHub Copilot CLI backend for code generation.        # Optimization
 
     @staticmethod
     def _get_github_token() -> str | None:
-        ""
+"""
 Get GitHub token from environment or file.        # Try environment variable first
         token: str | None = os.environ.get("GITHUB_TOKEN")"        if token:
             return token
@@ -164,7 +163,7 @@ Get GitHub token from environment or file.        # Try environment variable fir
 
     @staticmethod
     def _prepare_github_request(full_prompt: str, model: str, _base_url: str) -> tuple[dict[str, str], dict[str, Any]]:
-        ""
+"""
 Prepare headers and payload for GitHub Models API request.        content = BackendHandlers._parse_content(full_prompt)
         headers: dict[str, str] = {
             "Authorization": f"Bearer {BackendHandlers._get_github_token()}","            "Content-Type": "application/json","        }
@@ -177,7 +176,7 @@ Prepare headers and payload for GitHub Models API request.        content = Back
 
     @staticmethod
     def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
-        ""
+"""
 Attempt to invoke GitHub Models API for code generation.        if not requests_lib:
             return None
 
@@ -201,7 +200,7 @@ Attempt to invoke GitHub Models API for code generation.        if not requests_
 
     @staticmethod
     def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
-        ""
+"""
 try to use OpenAI API backend for code generation.        if not requests_lib:
             return None
 

@@ -48,10 +48,10 @@ def test_record_shell_interaction_truncates(monkeypatch):
         def record_interaction(self, **kwargs):
             self.calls.append(kwargs)
 
-    sc.fleet = type("X", (), {})()
-    sc.fleet.recorder = DummyRecorder()
+            sc.fleet = type("X", (), {})()
+            sc.fleet.recorder = DummyRecorder()
 
-    long_text = "x" * 5000
-    sc._record_shell_interaction(provider="shell", prompt="p", result_text=long_text, meta={})
-    assert sc.fleet.recorder.calls
-    assert sc.fleet.recorder.calls[-1]["result"].endswith("... [TRUNCATED]")
+            long_text = "x" * 5000
+            sc._record_shell_interaction(provider="shell", prompt="p", result_text=long_text, meta={})
+            assert sc.fleet.recorder.calls
+            assert sc.fleet.recorder.calls[-1]["result"].endswith("... [TRUNCATED]")

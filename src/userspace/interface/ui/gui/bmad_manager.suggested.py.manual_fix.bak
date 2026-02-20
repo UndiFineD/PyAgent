@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 BMAD (Bulk Multi-Agent Deployment) component for the PyAgent GUI.
 
 """
-
 import os
 import tkinter as tk
 from tkinter import messagebox, ttk
@@ -34,7 +33,7 @@ __version__ = VERSION
 
 
 class BmadManager:
-    ""
+"""
 Manages the BMAD workflow for deploying agents at scale across the project.
 
     def __init__(self, parent, callbacks) -> None:
@@ -44,7 +43,7 @@ Manages the BMAD workflow for deploying agents at scale across the project.
         self.frame = ttk.LabelFrame(parent, text="BMAD - Bulk Multi-Agent Deployment", padding=10)"        self.setup_ui()
 
     def _record(self, action: str, result: str) -> None:
-        ""
+"""
 Record BMAD operations.        if self.recorder:
             self.recorder.record_interaction("BMAD", "GUI", action, result)
     def setup_ui(self) -> None:
@@ -143,12 +142,12 @@ Record BMAD operations.        if self.recorder:
             var.set(value)
 
     def workflow_init(self) -> None:
-        ""
+"""
 Analyzes project and recommends track.        messagebox.showinfo(
             "Workflow-Init","            "Analyzing project structure...\\nRecommending 'BMad Method' track based on codebase complexity.","'        )
 
     def start_workflow_action(self) -> None:
-        ""
+"""
 Triggers the step-by-step workflow manager.        targets = self.get_targets()
         if not targets:
             return
@@ -209,4 +208,4 @@ Triggers the step-by-step workflow manager.        targets = self.get_targets()
                 instr = DEFAULT_INSTRUCTIONS.get(agent_name, f"Role: {agent_name}. Phase: {phase}.")"                col.local_context.delete("1.0", tk.END)"                col.local_context.insert("1.0", f"--- BMAD {phase} PHASE ---\\n{instr}")
         # Final status update via callback if available
         # self.callbacks["set_status"](f"Deployed {total_instances} agents for {mode} targeting.")
-""
+"""

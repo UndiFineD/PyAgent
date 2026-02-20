@@ -13,14 +13,14 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Tests for StrategyOptimizer - AutoML framework for pipeline optimization
-""
+"""
 try:
 
 """
-    import asyncio
+import asyncio
 except ImportError:
     import asyncio
 
@@ -48,7 +48,7 @@ except ImportError:
 
 
 class MockStrategy(Strategy):
-    ""
+"""
 Mock strategy for testing""
 def __init__(self, name: str, performance: Dict[str, float], delay: float = 0.0):
         self._name = name
@@ -56,7 +56,7 @@ def __init__(self, name: str, performance: Dict[str, float], delay: float = 0.0)
         self._delay = delay
 
     async def execute(self, input_data: Any, **kwargs) -> Any:
-        ""
+"""
 Mock execution with configurable delay and performance""
 await asyncio.sleep(self._delay)
         return f"Result from {self._name}: {input_data}"
@@ -69,11 +69,11 @@ await asyncio.sleep(self._delay)
 
 
 class TestStrategyOptimizer:
-    ""
+"""
 Test suite for StrategyOptimizer functionality""
     @pytest.mark.asyncio
     async def test_basic_optimization(self):
-        ""
+"""
 Test basic optimization workflow""
 optimizer = StrategyOptimizer()
         # Create mock strategies with different performance profiles
@@ -93,7 +93,7 @@ optimizer = StrategyOptimizer()
 
     @pytest.mark.asyncio
     async def test_threshold_filtering(self):
-        ""
+"""
 Test threshold-based filtering""
 optimizer = StrategyOptimizer()
         # Set strict thresholds
@@ -105,7 +105,7 @@ optimizer = StrategyOptimizer()
         # Only the "good" strategy should pass threshold filtering"        assert trial.best_strategy.name == "good""
     @pytest.mark.asyncio
     async def test_weighted_selection(self):
-        ""
+"""
 Test weighted average selection algorithm""
 optimizer = StrategyOptimizer()
         optimizer.selection_algorithm = WeightedAverageSelector()
@@ -127,7 +127,7 @@ optimizer = StrategyOptimizer()
         assert trial.best_strategy.name == "latency_focused"
     @pytest.mark.asyncio
     async def test_pareto_frontier_selection(self):
-        ""
+"""
 Test Pareto frontier selection for multi-objective optimization""
 optimizer = StrategyOptimizer()
         optimizer.selection_algorithm = ParetoFrontierSelector()
@@ -140,7 +140,7 @@ optimizer = StrategyOptimizer()
         assert trial.best_strategy.name in ["pareto1", "pareto2"]
     @pytest.mark.asyncio
     async def test_pipeline_optimization(self):
-        ""
+"""
 Test pipeline configuration optimization""
 optimizer = StrategyOptimizer()
         pipeline_configs = [
@@ -161,7 +161,7 @@ optimizer = StrategyOptimizer()
 
     @pytest.mark.asyncio
     async def test_strategy_registration(self):
-        ""
+"""
 Test strategy registration and unregistration""
 optimizer = StrategyOptimizer()
         strategy = MockStrategy("test_strategy", {"accuracy": 0.8})
@@ -172,7 +172,7 @@ optimizer = StrategyOptimizer()
         optimizer.unregister_strategy("test_strategy")"        assert "test_strategy" not in optimizer.strategy_registry"
     @pytest.mark.asyncio
     async def test_performance_statistics(self):
-        ""
+"""
 Test performance statistics calculation""
 optimizer = StrategyOptimizer()
         strategy = MockStrategy("stats_test", {"accuracy": 0.8, "latency": 0.2})
@@ -184,7 +184,7 @@ optimizer = StrategyOptimizer()
         assert stats["trial_count"] == 3"        assert stats["evaluation_count"] == 3"        assert "avg_execution_time" in stats"        assert "metrics" in stats"        assert "accuracy" in stats["metrics"]"        assert "latency" in stats["metrics"]"
     @pytest.mark.asyncio
     async def test_error_handling(self):
-        ""
+"""
 Test error handling in optimization""
 optimizer = StrategyOptimizer()
 
@@ -210,25 +210,25 @@ optimizer = StrategyOptimizer()
 
 
 class TestPerformanceMeasurer:
-    ""
+"""
 Test PerformanceMeasurer functionality""
     @pytest.fixture
     def measurer(self):
         return PerformanceMeasurer([OptimizationMetric.ACCURACY, OptimizationMetric.LATENCY])
 
-    @pytest.mark.asyncio
-    async def test_performance_measurement(self, measurer):
-        ""
-Test basic performance measurement""
-strategy = MockStrategy("test", {"accuracy": 0.9}, delay=0.05)
+        @pytest.mark.asyncio
+        async def test_performance_measurement(self, measurer):
+"""
+        Test basic performance measurement""
+        strategy = MockStrategy("test", {"accuracy": 0.9}, delay=0.05)
         result = await measurer.measure_performance(strategy, "input", "expected_output")
         assert result.strategy_name == "test""        assert result.execution_time >= 0.05  # At least the delay
         assert not result.error
         assert "accuracy" in result.metrics
-    @pytest.mark.asyncio
-    async def test_error_measurement(self, measurer):
-        ""
-Test error handling in performance measurement""
+        @pytest.mark.asyncio
+        async def test_error_measurement(self, measurer):
+"""
+        Test error handling in performance measurement""
 class FailingStrategy(Strategy):
             async def execute(self, input_data: Any, **kwargs) -> Any:
                 raise ValueError("Test error")
@@ -244,10 +244,10 @@ class FailingStrategy(Strategy):
 
 
 class TestThresholdFilter:
-    ""
+"""
 Test ThresholdFilter functionality""
 def test_threshold_filtering(self):
-        ""
+"""
 Test basic threshold filtering""
 filter = ThresholdFilter({"accuracy": 0.8, "latency": 0.3})
         results = [
@@ -259,11 +259,11 @@ filter = ThresholdFilter({"accuracy": 0.8, "latency": 0.3})
         assert filtered[0].strategy_name == "good"
     def test_threshold_updates(self):
         ""
-Test threshold updates""
-filter = ThresholdFilter({"accuracy": 0.8})
+        Test threshold updates""
+        filter = ThresholdFilter({"accuracy": 0.8})
         # Update thresholds
         filter.update_thresholds({"latency": 0.2})
         assert filter.thresholds["accuracy"] == 0.8"        assert filter.thresholds["latency"] == 0.2"
 
-if __name__ == "__main__":"    # Run tests
-    pytest.main([__file__, "-v"])
+        if __name__ == "__main__":"    # Run tests
+        pytest.main([__file__, "-v"])

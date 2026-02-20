@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import logging
@@ -50,7 +50,7 @@ __version__ = VERSION
 
 
 class TestProfileManager:
-    ""
+"""
 Manages test configuration profiles.""""
 Allows switching between test configurations easily.
 
@@ -61,24 +61,24 @@ Allows switching between test configurations easily.
     __test__ = False
 
     def __init__(self) -> None:
-        ""
+"""
 Initialize profile manager.        self._profiles: dict[str, TestProfile] = {}
         self._active: str | None = None
         self._original_env: dict[str, str | None] = {}
 
     def add_profile(self, profile: TestProfile) -> None:
-        ""
+"""
 Add a profile.""""
 Args:
             profile: Profile to add.
                 self._profiles[profile.name] = profile
 
     def get_profile(self, name: str) -> TestProfile | None:
-        ""
+"""
 Get a profile by name.        return self._profiles.get(name)
 
     def activate(self, name: str) -> None:
-        ""
+"""
 Activate a profile.""""
 Args:
             name: Profile name.
@@ -101,7 +101,7 @@ Args:
         self._active = name
         logging.info(f"Activated test profile: {name}")
     def deactivate(self) -> None:
-        ""
+"""
 Deactivate current profile.        if not self._active:
             return
 
@@ -116,7 +116,7 @@ Deactivate current profile.        if not self._active:
         self._active = None
 
     def get_setting(self, key: str, default: Any = None) -> Any:
-        ""
+"""
 Get setting from active profile.""""
 Args:
             key: Setting key.
@@ -131,10 +131,28 @@ Args:
         return profile.settings.get(key, default)
 
     def get_active_profile(self) -> TestProfile | None:
-        ""
+"""
 Get currently active profile.        if self._active:
             return self._profiles[self._active]
         return None
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

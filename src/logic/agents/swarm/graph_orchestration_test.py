@@ -58,13 +58,13 @@ Mock runnable for testing.
         self.result = result
         self.should_fail = should_fail
 
-    async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
+        async def execute(self, state: OrchestrationState, context: ExecutionContext) -> OrchestrationResult:
 """
-Mock execution.        if self.should_fail:
-            raise Exception("Mock failure")"        return OrchestrationResult(
-            runner_name=self.name,
-            success=True,
-            output=self.result
+        Mock execution.        if self.should_fail:
+        raise Exception("Mock failure")"        return OrchestrationResult(
+        runner_name=self.name,
+        success=True,
+        output=self.result
         )
 
 
@@ -74,7 +74,7 @@ class TestOrchestrationGraphBuilder:
 Test the orchestration graph builder.
     def test_builder_initialization(self):
 """
-Test builder initialization.        builder = OrchestrationGraphBuilder[OrchestrationState]()
+        Test builder initialization.        builder = OrchestrationGraphBuilder[OrchestrationState]()
         assert builder._runnables == []
         assert builder._edges == []
         assert builder._entry_runnable is None
@@ -83,7 +83,7 @@ Test builder initialization.        builder = OrchestrationGraphBuilder[Orchestr
 
     def test_add_runnable(self):
 """
-Test adding runnables.        builder = OrchestrationGraphBuilder[OrchestrationState]()
+        Test adding runnables.        builder = OrchestrationGraphBuilder[OrchestrationState]()
         runnable = MockRunnable("test")
         result = builder.add_runnable(runnable)
         assert result is builder
@@ -91,7 +91,7 @@ Test adding runnables.        builder = OrchestrationGraphBuilder[OrchestrationS
 
     def test_set_entry_runnable(self):
 """
-Test setting entry runnable.        builder = OrchestrationGraphBuilder[OrchestrationState]()
+        Test setting entry runnable.        builder = OrchestrationGraphBuilder[OrchestrationState]()
         runnable = MockRunnable("entry")
         result = builder.set_entry_runnable(runnable)
         assert result is builder
@@ -100,7 +100,7 @@ Test setting entry runnable.        builder = OrchestrationGraphBuilder[Orchestr
 
     def test_set_exit_runnable(self):
 """
-Test setting exit runnable.        builder = OrchestrationGraphBuilder[OrchestrationState]()
+        Test setting exit runnable.        builder = OrchestrationGraphBuilder[OrchestrationState]()
         runnable = MockRunnable("exit")
         result = builder.set_exit_runnable(runnable)
         assert result is builder
@@ -109,7 +109,7 @@ Test setting exit runnable.        builder = OrchestrationGraphBuilder[Orchestra
 
     def test_add_edge(self):
 """
-Test adding edges.        builder = OrchestrationGraphBuilder[OrchestrationState]()
+        Test adding edges.        builder = OrchestrationGraphBuilder[OrchestrationState]()
         source = MockRunnable("source")"        target = MockRunnable("target")"
         result = builder.add_edge(source, target)
         assert result is builder
@@ -117,7 +117,7 @@ Test adding edges.        builder = OrchestrationGraphBuilder[OrchestrationState
         assert builder._edges[0].source_runner == "source""        assert builder._edges[0].target_runner == "target""
     def test_build_graph(self):
 """
-Test building a complete graph.        builder = OrchestrationGraphBuilder[OrchestrationState]()
+        Test building a complete graph.        builder = OrchestrationGraphBuilder[OrchestrationState]()
 
         entry = MockRunnable("entry")"        middle = MockRunnable("middle")"        exit_runnable = MockRunnable("exit")
         builder.set_entry_runnable(entry)
@@ -134,7 +134,7 @@ Test building a complete graph.        builder = OrchestrationGraphBuilder[Orche
 
     def test_build_after_build_fails(self):
 """
-Test that building after build fails.        builder = OrchestrationGraphBuilder[OrchestrationState]()
+        Test that building after build fails.        builder = OrchestrationGraphBuilder[OrchestrationState]()
         runnable = MockRunnable("test")"        builder.set_entry_runnable(runnable)
         builder.build()
 
@@ -142,7 +142,7 @@ Test that building after build fails.        builder = OrchestrationGraphBuilder
 
     def test_modify_after_build_fails(self):
 """
-Test that modifying after build fails.        builder = OrchestrationGraphBuilder[OrchestrationState]()
+        Test that modifying after build fails.        builder = OrchestrationGraphBuilder[OrchestrationState]()
         runnable = MockRunnable("test")"        builder.set_entry_runnable(runnable)
         builder.build()
 
@@ -154,7 +154,7 @@ class TestOrchestrationGraph:
 Test the orchestration graph.
     def test_graph_initialization(self):
 """
-Test graph initialization.        runnables = [MockRunnable("test")]"        edges = []
+        Test graph initialization.        runnables = [MockRunnable("test")]"        edges = []
         graph = OrchestrationGraph(runnables, edges)
 
         assert graph.runnables == runnables
@@ -164,21 +164,21 @@ Test graph initialization.        runnables = [MockRunnable("test")]"        edg
 
     def test_get_runnable(self):
 """
-Test getting runnable by name.        runnable = MockRunnable("test")"        graph = OrchestrationGraph([runnable], [])
+        Test getting runnable by name.        runnable = MockRunnable("test")"        graph = OrchestrationGraph([runnable], [])
 
         assert graph.get_runnable("test") is runnable"        assert graph.get_runnable("nonexistent") is None"
     def test_get_next_runners(self):
 """
-Test getting next runners.        source = MockRunnable("source")"        target1 = MockRunnable("target1")"        target2 = MockRunnable("target2")
+        Test getting next runners.        source = MockRunnable("source")"        target1 = MockRunnable("target1")"        target2 = MockRunnable("target2")
         edges = [
-            GraphEdge("source", "target1"),"            GraphEdge("source", "target2")"        ]
+        GraphEdge("source", "target1"),"            GraphEdge("source", "target2")"        ]
 
         graph = OrchestrationGraph([source, target1, target2], edges)
         result = OrchestrationResult("source", True)
         next_runners = graph.get_next_runners("source", result)"        assert set(next_runners) == {"target1", "target2"}"
     def test_is_exit_runnable(self):
 """
-Test checking if runnable is exit.        exit_runnable = MockRunnable("exit")"        graph = OrchestrationGraph([], [], exit_runnables=[exit_runnable])
+        Test checking if runnable is exit.        exit_runnable = MockRunnable("exit")"        graph = OrchestrationGraph([], [], exit_runnables=[exit_runnable])
 
         assert graph.is_exit_runnable(exit_runnable)
         assert not graph.is_exit_runnable(MockRunnable("other"))
@@ -286,25 +286,25 @@ Test conditional runner with true condition.        true_runner = MockRunnable("
         def condition(state):
             return True
 
-        runner = ConditionalRunner("condition", condition, true_runner, false_runner)"        state = OrchestrationState()
-        context = ExecutionContext.create_root("test")
-        result = await runner.execute(state, context)
+            runner = ConditionalRunner("condition", condition, true_runner, false_runner)"        state = OrchestrationState()
+            context = ExecutionContext.create_root("test")
+            result = await runner.execute(state, context)
 
-        assert result.success
-        assert result.output["condition"] is True"        assert result.output["next_runner"] == "true_path""
-    @pytest.mark.asyncio
-    async def test_conditional_false(self):
+            assert result.success
+            assert result.output["condition"] is True"        assert result.output["next_runner"] == "true_path""
+            @pytest.mark.asyncio
+            async def test_conditional_false(self):
 """
-Test conditional runner with false condition.        true_runner = MockRunnable("true_path")"        false_runner = MockRunnable("false_path")"
+            Test conditional runner with false condition.        true_runner = MockRunnable("true_path")"        false_runner = MockRunnable("false_path")"
         def condition(state):
             return False
 
-        runner = ConditionalRunner("condition", condition, true_runner, false_runner)"        state = OrchestrationState()
-        context = ExecutionContext.create_root("test")
-        result = await runner.execute(state, context)
+            runner = ConditionalRunner("condition", condition, true_runner, false_runner)"        state = OrchestrationState()
+            context = ExecutionContext.create_root("test")
+            result = await runner.execute(state, context)
 
-        assert result.success
-        assert result.output["condition"] is False"        assert result.output["next_runner"] == "false_path""
+            assert result.success
+            assert result.output["condition"] is False"        assert result.output["next_runner"] == "false_path""
 
 
 class MockOrchestratorWithMixin(GraphOrchestrationMixin):
@@ -319,12 +319,12 @@ class TestGraphOrchestrationMixin:
 Test the graph orchestration mixin.
     def test_mixin_initialization(self):
 """
-Test mixin initialization.        orchestrator = MockOrchestratorWithMixin()
+        Test mixin initialization.        orchestrator = MockOrchestratorWithMixin()
         assert hasattr(orchestrator, '_orchestrators')'        assert orchestrator._orchestrators == {}
 
     def test_create_builders(self):
 """
-Test creating builders.        orchestrator = MockOrchestratorWithMixin()
+        Test creating builders.        orchestrator = MockOrchestratorWithMixin()
 
         builder1 = orchestrator.create_orchestration_builder()
         assert isinstance(builder1, OrchestrationGraphBuilder)
@@ -334,7 +334,7 @@ Test creating builders.        orchestrator = MockOrchestratorWithMixin()
 
     def test_register_and_get_orchestrator(self):
 """
-Test registering and getting orchestrators.        orchestrator = MockOrchestratorWithMixin()
+        Test registering and getting orchestrators.        orchestrator = MockOrchestratorWithMixin()
 
         # Create a simple graph
         builder = orchestrator.create_orchestration_builder()
@@ -347,10 +347,10 @@ Test registering and getting orchestrators.        orchestrator = MockOrchestrat
         retrieved = orchestrator.get_orchestrator("test_orch")"        assert retrieved is orch
 
         assert orchestrator.list_orchestrators() == ["test_orch"]
-    @pytest.mark.asyncio
-    async def test_execute_orchestration(self):
+        @pytest.mark.asyncio
+        async def test_execute_orchestration(self):
 """
-Test executing registered orchestration.        orchestrator = MockOrchestratorWithMixin()
+        Test executing registered orchestration.        orchestrator = MockOrchestratorWithMixin()
 
         # Create and register a simple orchestration
         builder = orchestrator.create_orchestration_builder()

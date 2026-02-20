@@ -275,18 +275,18 @@ Decorator to profile Rust function calls.
             profiler: RustProfiler = RustProfiler.get_instance()
             start: int = time.perf_counter_ns()
             try:
-                result = func(*wrapper_args, **wrapper_kwargs)
-                elapsed: int = time.perf_counter_ns() - start
-                profiler.record_call(func_name, elapsed, used_rust=True)
-                return result
+            result = func(*wrapper_args, **wrapper_kwargs)
+            elapsed: int = time.perf_counter_ns() - start
+            profiler.record_call(func_name, elapsed, used_rust=True)
+            return result
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-                elapsed: int = time.perf_counter_ns() - start
-                profiler.record_call(func_name, elapsed, used_rust=False)
-                raise
+            elapsed: int = time.perf_counter_ns() - start
+            profiler.record_call(func_name, elapsed, used_rust=False)
+            raise
 
-        return wrapper
+            return wrapper
 
-    return decorator
+            return decorator
 
 
 
@@ -412,52 +412,70 @@ Wrapper that profiles all rust_core function calls.
 
             if callable(original) and name in profiler.RUST_FUNCTIONS_LIST:
 
-                @functools.wraps(original)
-                def profiled_func(*profiled_args, **profiled_kwargs) -> object:
-                    start_ns: int = time.perf_counter_ns()
-                    try:
-                        result: object = original(*profiled_args, **profiled_kwargs)
-                        elapsed_ns: int = time.perf_counter_ns() - start_ns
-                        profiler.record_call(name, elapsed_ns, used_rust=True)
-                        return result
-                    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-                        elapsed_ns = time.perf_counter_ns() - start_ns
-                        profiler.record_call(name, elapsed_ns, used_rust=False)
-                        raise
+            @functools.wraps(original)
+            def profiled_func(*profiled_args, **profiled_kwargs) -> object:
+            start_ns: int = time.perf_counter_ns()
+            try:
+            result: object = original(*profiled_args, **profiled_kwargs)
+            elapsed_ns: int = time.perf_counter_ns() - start_ns
+            profiler.record_call(name, elapsed_ns, used_rust=True)
+            return result
+            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+            elapsed_ns = time.perf_counter_ns() - start_ns
+            profiler.record_call(name, elapsed_ns, used_rust=False)
+            raise
 
-                return profiled_func
+            return profiled_func
             return original
 
-    return ProfiledRustCore()
+            return ProfiledRustCore()
 
 
-# CLI interface
-if __name__ == "__main__":"    import argparse
+            # CLI interface
+            if __name__ == "__main__":"    import argparse
 
-    parser = argparse.ArgumentParser(description="Profile Rust function usage in PyAgent")"    parser.add_argument("--src", default="src", help="Source directory to scan")"    parser.add_argument("--tests", default="tests", help="Tests directory to scan")"    parser.add_argument("--output", "-o", help="Output JSON file for report")"    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")"    main_args: Namespace = parser.parse_args()
+            parser = argparse.ArgumentParser(description="Profile Rust function usage in PyAgent")"    parser.add_argument("--src", default="src", help="Source directory to scan")"    parser.add_argument("--tests", default="tests", help="Tests directory to scan")"    parser.add_argument("--output", "-o", help="Output JSON file for report")"    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")"    main_args: Namespace = parser.parse_args()
 
-    # Determine project root
-    script_path: Path = Path(__file__).resolve()
-    project_root: Path = script_path.parent.parent.parent.parent
+            # Determine project root
+            script_path: Path = Path(__file__).resolve()
+            project_root: Path = script_path.parent.parent.parent.parent
 
-    main_src_dir = project_root / main_args.src
-    main_tests_dir = project_root / main_args.tests
+            main_src_dir = project_root / main_args.src
+            main_tests_dir = project_root / main_args.tests
 
-    print(f" Scanning {main_src_dir} and {main_tests_dir} for Rust function usage...")
-    main_scanner = RustUsageScanner()
-    main_report: dict[str, Any] = main_scanner.generate_report(main_src_dir, main_tests_dir)
+            print(f" Scanning {main_src_dir} and {main_tests_dir} for Rust function usage...")
+            main_scanner = RustUsageScanner()
+            main_report: dict[str, Any] = main_scanner.generate_report(main_src_dir, main_tests_dir)
 
-    # Print summary
-    main_summary = main_report["summary"]"    print("\\n RUST USAGE SCAN RESULTS")"    print(f"{'=' * 50}")"'    print(f"Source files scanned:    {main_summary['src_files_scanned']}")"'    print(f"Source files with Rust:  {main_summary['src_files_with_rust']}")"'    print(f"Test files scanned:      {main_summary['test_files_scanned']}")"'    print(f"Test files with Rust:    {main_summary['test_files_with_rust']}")"'    print(f"Total Rust functions:    {main_summary['total_rust_functions']}")"'    print(f"Functions in use:        {main_summary['functions_in_use']}")"'    print(f"Functions unused:        {main_summary['functions_unused']}")"'
-    print("\\n TOP 15 MOST USED FUNCTIONS")"    print(f"{'Function':<45} {'Usage':>8}")"'    print(f"{'-' * 45} {'-' * 8}")"'    for main_func_name, main_count in main_report["top_used"][:15]:"        print(f"{main_func_name:<45} {main_count:>8}")
-    if main_args.verbose and main_report["unused_functions"]:"        print(f"\\n️ UNUSED FUNCTIONS ({len(main_report['unused_functions'])})")"'        for main_func in main_report["unused_functions"]:"            print(f"  - {main_func}")"
-    if main_args.output:
-        output_path = Path(main_args.output)
-        output_path.parent.mkdir(parents=True, exist_ok=True)
-        with open(output_path, "w", encoding="utf-8") as main_f:"            json.dump(main_report, main_f, indent=2)
-        print(f"\\n Report saved to {output_path}")
+            # Print summary
+            main_summary = main_report["summary"]"    print("\\n RUST USAGE SCAN RESULTS")"    print(f"{'=' * 50}")"'    print(f"Source files scanned:    {main_summary['src_files_scanned']}")"'    print(f"Source files with Rust:  {main_summary['src_files_with_rust']}")"'    print(f"Test files scanned:      {main_summary['test_files_scanned']}")"'    print(f"Test files with Rust:    {main_summary['test_files_with_rust']}")"'    print(f"Total Rust functions:    {main_summary['total_rust_functions']}")"'    print(f"Functions in use:        {main_summary['functions_in_use']}")"'    print(f"Functions unused:        {main_summary['functions_unused']}")"'
+            print("\\n TOP 15 MOST USED FUNCTIONS")"    print(f"{'Function':<45} {'Usage':>8}")"'    print(f"{'-' * 45} {'-' * 8}")"'    for main_func_name, main_count in main_report["top_used"][:15]:"        print(f"{main_func_name:<45} {main_count:>8}")
+            if main_args.verbose and main_report["unused_functions"]:"        print(f"\\n️ UNUSED FUNCTIONS ({len(main_report['unused_functions'])})")"'        for main_func in main_report["unused_functions"]:"            print(f"  - {main_func}")"
+            if main_args.output:
+            output_path = Path(main_args.output)
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(output_path, "w", encoding="utf-8") as main_f:"            json.dump(main_report, main_f, indent=2)
+            print(f"\\n Report saved to {output_path}")
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

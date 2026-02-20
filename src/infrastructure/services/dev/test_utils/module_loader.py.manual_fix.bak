@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Module loading utilities for test environment.
 
 """
-
 import importlib.util
 import logging
 import re
@@ -37,11 +36,11 @@ __version__ = VERSION
 
 
 class ModuleLoader:
-    ""
+"""
 Handles dynamic loading of agent modules and sys.path management.
 
     def __init__(self, agent_dir: Path | None = None) -> None:
-        ""
+"""
 Initialize with project root (containing src).        # Search for project root by looking for 'src' folder'        current = Path(__file__).resolve()
         root_found = None
         for parent in current.parents:
@@ -51,7 +50,7 @@ Initialize with project root (containing src).        # Search for project root 
         self.src_dir = self.agent_dir / "src"
     @contextmanager
     def agent_dir_on_path(self) -> Iterator[None]:
-        ""
+"""
 Temporarily add the project root to sys.path.        old_sys_path = list(sys.path)
         path_str = str(self.agent_dir)
         if path_str not in sys.path:
@@ -63,7 +62,7 @@ Temporarily add the project root to sys.path.        old_sys_path = list(sys.pat
 
     @contextmanager
     def agent_sys_path(self) -> Iterator[None]:
-        ""
+"""
 Add scripts/agent to sys.path temporarily.        path = str(self.agent_dir)
         if path not in sys.path:
             sys.path.insert(0, path)
@@ -75,7 +74,7 @@ Add scripts/agent to sys.path temporarily.        path = str(self.agent_dir)
             yield
 
     def load_module_from_path(self, name: str, path: Path) -> ModuleType:
-        ""
+"""
 Load a module from a specific path.        logging.debug(f"Loading module {name} from {path}")"        spec = importlib.util.spec_from_file_location(name, str(path))
         if spec is None or spec.loader is None:
             logging.error(f"Could not load module {name} from {path}")"            raise ImportError(f"Could not load module {name} from {path}")"        mod = importlib.util.module_from_spec(spec)
@@ -84,7 +83,7 @@ Load a module from a specific path.        logging.debug(f"Loading module {name}
         return mod
 
     def load_agent_module(self, filename: str, module_name: str | None = None) -> ModuleType:
-        ""
+"""
 Load an agent module from scripts/agent by filename.        path = self.agent_dir / filename
         if not path.exists():
             raise FileNotFoundError(path)
@@ -99,5 +98,5 @@ Load an agent module from scripts/agent by filename.        path = self.agent_di
             raise
 
     def get_base_agent_module(self) -> ModuleType:
-        ""
+"""
 Load base_agent module without modifying sys.path.        return self.load_agent_module("base_agent.py", "base_agent")

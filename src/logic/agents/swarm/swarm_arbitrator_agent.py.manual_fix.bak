@@ -25,7 +25,6 @@ USAGE:
 Instantiate SwarmArbitratorAgent within a PyAgent swarm control loop or orchestration service; call arbitrate_consensus(votes) to resolve conflicting state proposals, use submit_bid(...) to register resource bids, and query get_reputation_report() / get_resource_usage_report() for monitoring and diagnostics.
 
 """
-
 WHAT IT DOES:
 Implements a PBFT-inspired majority consensus check (2/3 threshold) over submitted votes, updates per-agent reputation on vote behavior, records unresolved conflicts for audit, provides a simple auction-style resource ledger with bid submission and allocation heuristics, and exposes lightweight reporting for reputation and resource allocation.
 

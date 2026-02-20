@@ -17,7 +17,6 @@
 Specialized request queue implementations.
 
 """
-
 try:
     from .infrastructure.engine.request_queue.queues.fair import FairQueue
 except ImportError:

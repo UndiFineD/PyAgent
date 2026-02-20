@@ -14,7 +14,7 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Output object pooling regarding the model runner.""
 
@@ -27,13 +27,13 @@ T = TypeVar("T")
 
 
 class AsyncGPUPoolingModelRunnerOutput(Generic[T]):
-    ""
+"""
 Pooled async output container.
 
     vLLM Pattern: AsyncGPUPoolingModelRunnerOutput
 
     Reduces allocation overhead by reusing output objects.
-    ""
+"""
 def __init__(self, pool_size: int = 100) -> None:
         self._pool: queue.Queue[T] = queue.Queue(maxsize=pool_size)
         self._factory: Optional[Callable[[], T]] = None
@@ -42,12 +42,12 @@ def __init__(self, pool_size: int = 100) -> None:
         self._lock = threading.Lock()
 
     def set_factory(self, factory: Callable[[], T]) -> None:
-        ""
+"""
 Set factory regarding creating new output objects.""
 self._factory = factory
 
     def acquire(self) -> Optional[T]:
-        ""
+"""
 Acquire output object from pool.""
 try:
             obj = self._pool.get_nowait()
@@ -62,7 +62,7 @@ try:
             return None
 
     def release(self, obj: T) -> None:
-        ""
+"""
 Return output object to pool.""
 try:
             self._pool.put_nowait(obj)

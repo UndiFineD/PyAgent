@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: Browser outline helpers (conservative).
 
 Minimal, side-effect free implementation to restore importability.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional

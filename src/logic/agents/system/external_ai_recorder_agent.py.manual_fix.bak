@@ -28,7 +28,6 @@ USAGE:
 - The archive is written to data\\\\logs\\external_ai_learning\\external_knowledge.jsonl and a recorder shard is optionally used if configured.
 
 """
-
 WHAT IT DOES:
 - Captures prompts, supplemental context, and responses from external AI systems and persists them as JSONL entries for later reuse.
 - Optionally forwards interactions to an internal recorder (self.recorder.record_interaction) to integrate with the agent's shard-based recording system.'- Provides lightweight synthesis and improvement entry points (currently stubs) to analyze and apply insights from recorded external sessions.
@@ -42,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in recording and consolidating knowledge from external AI sessions.
 Captures prompts, contexts, and responses provided to/from external systems like ChatGPT, Claude, etc.
-""
+"""
 import json
 import time
 
@@ -101,4 +100,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
         "External AI Recorder Agent","        "Cross-model knowledge harvester","    )
     main()
 
-""
+"""

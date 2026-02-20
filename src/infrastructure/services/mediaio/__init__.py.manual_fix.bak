@@ -19,7 +19,6 @@
 Media IO package for unified media loading and processing.
 
 """
-
 try:
     from .audio import AudioLoader  # noqa: F401
 except ImportError:

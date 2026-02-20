@@ -20,7 +20,6 @@ from __future__ import annotations
 Localization core module.
 
 """
-
 import re
 from typing import Any
 

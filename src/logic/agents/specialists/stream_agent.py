@@ -390,6 +390,24 @@ Basic XML extraction using regex.        tags = re.findall(r"<(\\w+)>([^<]+)</\\
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

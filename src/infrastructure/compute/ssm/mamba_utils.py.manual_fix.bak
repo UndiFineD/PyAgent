@@ -20,7 +20,6 @@ from __future__ import annotations
 Mamba Utilities.
 
 """
-
 vLLM Pattern: vllm/model_executor/layers/mamba/mamba_utils.py
 Utility functions for Mamba computation.
 
@@ -213,7 +212,7 @@ def softplus(x: np.ndarray, beta: float = 1.0, threshold: float = 20.0) -> np.nd
 
 @dataclass
 class MambaBlockState:
-    ""
+"""
 State for a block of Mamba layers.
     layer_states: list[tuple[np.ndarray, np.ndarray]]  # List of (conv_state, ssm_state)
 
@@ -242,7 +241,7 @@ Create zero-initialized block state.        layer_states = []
         return cls(layer_states=layer_states)
 
     def get_layer(self, layer_idx: int) -> tuple[np.ndarray, np.ndarray]:
-        ""
+"""
 Get state for a specific layer.        return self.layer_states[layer_idx]
 
     def set_layer(
@@ -251,7 +250,7 @@ Get state for a specific layer.        return self.layer_states[layer_idx]
         conv_state: np.ndarray,
         ssm_state: np.ndarray,
     ) -> None:
-        ""
+"""
 Set state for a specific layer.        self.layer_states[layer_idx] = (conv_state, ssm_state)
 
     def clone(self) -> "MambaBlockState":"        """
@@ -286,7 +285,7 @@ def chunk_sequence(
 
 
 def merge_chunks(chunks: list[np.ndarray]) -> np.ndarray:
-    ""
+"""
 Merge chunked outputs back to single sequence.    return np.concatenate(chunks, axis=1)
 
 

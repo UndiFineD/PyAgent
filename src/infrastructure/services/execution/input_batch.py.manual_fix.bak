@@ -17,12 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 InputBatch.py - Structured batch management for model execution.
 
 """
-
 Inspired by vLLM's v1/worker/gpu/input_batch.py. Provides pre-allocated'buffers and structured batch state for efficient model execution.
 
 Phase 29: Execution Context, Batching & Async Streaming
@@ -116,7 +115,7 @@ Create from per-request parameters.        num_reqs = len(temperatures)
 
     @property
     def num_reqs(self) -> int:
-        ""
+"""
 Get number of requests.        return len(self.temperature)
 
     def slice(self, start: int, end: int) -> "SamplingMetadata":"        """
@@ -195,7 +194,7 @@ Allocate buffers with specified sizes.        buffers = cls(
         return buffers
 
     def reset(self) -> None:
-        ""
+"""
 Reset all buffers to zero.        self.input_ids.fill(0)
         self.positions.fill(0)
         self.seq_lens.fill(0)
@@ -254,12 +253,12 @@ class InputBatch:
 
     @property
     def num_reqs(self) -> int:
-        ""
+"""
 Get number of requests in batch.        return len(self.req_ids)
 
     @property
     def num_tokens(self) -> int:
-        ""
+"""
 Get total number of tokens.        return len(self.input_ids)
 
     @classmethod
@@ -346,7 +345,7 @@ Get total number of tokens.        return len(self.input_ids)
         )
 
     def get_req_index(self, req_id: str) -> Optional[int]:
-        ""
+"""
 Get the index of a request by ID.        try:
             return self.req_ids.index(req_id)
         except ValueError:
@@ -360,13 +359,13 @@ Get the index of a request by ID.        try:
         return self.query_start_loc[1:] - 1
 
     def get_token_range(self, req_idx: int) -> tuple[int, int]:
-        ""
+"""
 Get token range [start, end) for a request.        start = int(self.query_start_loc[req_idx])
         end = int(self.query_start_loc[req_idx + 1])
         return start, end
 
     def slice_request(self, req_idx: int) -> Dict[str, Any]:
-        ""
+"""
 Get inputs for a single request.        start, end = self.get_token_range(req_idx)
         return {
             "req_id": self.req_ids[req_idx],"            "input_ids": self.input_ids[start:end],"            "positions": self.positions[start:end],"            "seq_len": int(self.seq_lens[req_idx]),"        }
@@ -388,7 +387,7 @@ class BatchBuilder:
         self.reset()
 
     def reset(self) -> None:
-        ""
+"""
 Reset builder state.        self.req_ids: List[str] = []
         self.input_ids_list: List[List[int]] = []
         self.positions_list: List[List[int]] = []
@@ -429,7 +428,7 @@ Reset builder state.        self.req_ids: List[str] = []
         return True
 
     def build(self) -> InputBatch:
-        ""
+"""
 Build the batch.        sampling_metadata = SamplingMetadata.from_params(
             temperatures=self.temperatures,
             top_ks=self.top_ks,
@@ -446,18 +445,18 @@ Build the batch.        sampling_metadata = SamplingMetadata.from_params(
 
     @property
     def num_reqs(self) -> int:
-        ""
+"""
 Get current number of requests.        return len(self.req_ids)
 
     @property
     def total_tokens(self) -> int:
-        ""
+"""
 Get current total tokens.        return self._total_tokens
 
     def is_empty(self) -> bool:
-        ""
+"""
 Check if builder is empty.        return not self.req_ids
 
     def is_full(self) -> bool:
-        ""
+"""
 Check if batch is at capacity.        return len(self.req_ids) >= self.buffers.max_num_reqs

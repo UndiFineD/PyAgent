@@ -19,7 +19,7 @@ from __future__ import annotations
 """
 Utility to repair corrupted source files by uncommenting essential system imports.
 Part of the Fleet Healer autonomous recovery pattern.
-""
+"""
 
 """
 import os
@@ -52,4 +52,4 @@ def uncomment_lines(root_dir: str) -> None:
                     print(f"Error fixing {filepath}: {e}")
 
 if __name__ == "__main__":"    uncomment_lines("src/classes")"
-""
+"""

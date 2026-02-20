@@ -18,7 +18,6 @@ Unified Benchmarking CLI for PyAgent.
 Uses the BenchmarkSuite to run various performance tests.
 
 """
-
 import sys
 import asyncio
 from pathlib import Path
@@ -37,7 +36,7 @@ from src.infrastructure.services.benchmarks.benchmark_suite import \
 
 
 async def main():
-    ""
+"""
 Main entry point for the benchmarking CLI.    suite = BenchmarkSuite()
 
     # 1. Tokenization Benchmarks
@@ -64,4 +63,4 @@ Main entry point for the benchmarking CLI.    suite = BenchmarkSuite()
 
 if __name__ == "__main__":"    asyncio.run(main())
 
-""
+"""

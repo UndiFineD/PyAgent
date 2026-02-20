@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Truncation management for prompt rendering.
-""
+"""
 try:
 
 """
-    from typing import List, Tuple
+from typing import List, Tuple
 except ImportError:
     from typing import List, Tuple
 
@@ -38,7 +38,7 @@ except ImportError:
 
 
 class TruncationManager:
-    ""
+"""
 Manage prompt truncation strategies.
     @classmethod
     def truncate(
@@ -48,7 +48,7 @@ Manage prompt truncation strategies.
         strategy: TruncationStrategy = TruncationStrategy.AUTO,
         reserve_tokens: int = 0,
     ) -> Tuple[List[int], TruncationResult]:
-        ""
+"""
 Truncate token sequence to fit within limit.        target_tokens: int = max_tokens - reserve_tokens
         original_len: int = len(tokens)
 
@@ -121,4 +121,4 @@ Truncate token sequence to fit within limit.        target_tokens: int = max_tok
     def _truncate_smart(cls, tokens: List[int], target: int, original: int) -> Tuple[List[int], TruncationResult]:
         return cls._truncate_left(tokens, target, original)
 
-""
+"""

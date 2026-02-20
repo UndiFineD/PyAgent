@@ -59,7 +59,7 @@ class SelfImprovementAnalysis(
 Specialized assistant for scanning and analyzing tech debt and fleet metrics.
     def __init__(self, workspace_root: str):
 """
-Initializes the SelfImprovementAnalysis assistant.        self.workspace_root = workspace_root
+        Initializes the SelfImprovementAnalysis assistant.        self.workspace_root = workspace_root
         self.research_doc = os.path.join(workspace_root, "docs", "IMPROVEMENT_RESEARCH.md")"        self.profiling_agent: Any = None  # Set by orchestrator
 
-    # Logic delegated to mixins
+        # Logic delegated to mixins

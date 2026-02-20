@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .logic.agents.cognitive.context.models.nl_query_result import NLQueryResult
@@ -74,7 +74,25 @@ Extract keywords from query.        return query."lower().split()"
             confidence=0.7 if relevant else 0.2,
         )
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -1,9 +1,9 @@
-from __future__ import annotations
-""
+"""
 Memory profiler utilities (parser-safe stub).
 
 Minimal memory profiler used by tests to simulate memory tracking.
-""
+"""
+from __future__ import annotations
 
 
 

@@ -19,15 +19,14 @@ from __future__ import annotations
 # you may not use this file except in compliance with the License.
 
 
-""
+"""
 """
 Test runner utilities.
 
 """
-
 Provides a small helper to execute focused pytest runs and return results.
 Used by agents to verify changes before committing.
-""
+"""
 import shlex
 import subprocess
 from pathlib import Path
@@ -44,7 +43,7 @@ def _build_pytest_command(kexpr: Optional[str] = None, extra_args: Optional[Iter
 
 
 def run_focused_tests_for_files(files: Iterable[str], timeout: int = 300) -> Tuple[bool, str]:
-    ""
+"""
 Run a focused pytest subset based on changed file names.
     Args:
         files: Iterable of changed file paths (relative or absolute).
@@ -56,7 +55,7 @@ Run a focused pytest subset based on changed file names.
     Behavior:
         - Extracts base names from files and builds a -k expression joining with 'or'.
         - If no file names can be extracted, runs the entire `tests/unit` suite as a conservative fallback.
-    ""
+"""
 basenames = []
     for p in files:
         try:

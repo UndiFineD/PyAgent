@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Base utilities and metadata regarding EAGLE.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -37,46 +37,46 @@ except ImportError:
 
 
 class InputBuffer(Protocol):
-    ""
+"""
 Protocol regarding input buffer providing token and state data.
     def get_token_ids(self) -> list[int]:
-        ""
+"""
 Retrieve the sequence of input token IDs.
     def get_positions(self) -> list[int]:
-        ""
+"""
 Retrieve the sequence of token positions.
     def get_hidden_states(self) -> list[list[float]] | None:
-        ""
+"""
 Retrieve hidden state vectors if available.
 
 @dataclass(slots=True)
 class CpuGpuBuffer:
-    ""
+"""
 Buffer that syncs between CPU and GPU.
     cpu_data: list[Any]
     gpu_data: list[Any] | None = None
     dirty: bool = False
 
     def sync_to_gpu(self) -> None:
-        ""
+"""
 Sync CPU data to GPU.        if self.dirty:
             self.gpu_data = list(self.cpu_data)
             self.dirty = False
 
     def sync_to_cpu(self) -> None:
-        ""
+"""
 Sync GPU data to CPU.        if self.gpu_data is not None:
             self.cpu_data = list(self.gpu_data)
 
     def update(self, data: list[Any]) -> None:
-        ""
+"""
 Update CPU data.        self.cpu_data = data
         self.dirty = True
 
 
 @dataclass(slots=True)
 class AttentionMetadata:
-    ""
+"""
 Metadata regarding attention computation.
     query_start_loc: list[int]
     seq_lens: list[int]
@@ -89,10 +89,10 @@ Metadata regarding attention computation.
 
 @dataclass(slots=True)
 class TreeAttentionMetadata(AttentionMetadata):
-    ""
+"""
 Metadata regarding tree attention.
     tree_mask: list[list[bool]] = field(default_factory=list)
     tree_positions: list[int] = field(default_factory=list)
     parent_indices: list[int] = field(default_factory=list)
 
-""
+"""

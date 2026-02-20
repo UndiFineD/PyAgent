@@ -82,10 +82,10 @@ class ParallelConfig:
         # Validate configuration
         expected_world = self.tensor_parallel_size * self.pipeline_parallel_size * self.data_parallel_size
         if self.world_size == 1 and expected_world > 1:
-            self.world_size = expected_world
+        self.world_size = expected_world
         elif self.world_size != expected_world and expected_world > 1:
-            logger.warning(f"World size {self.world_size} != TP*PP*DP = {expected_world}")
-    @classmethod
+        logger.warning(f"World size {self.world_size} != TP*PP*DP = {expected_world}")
+        @classmethod
     def from_env(cls) -> "ParallelConfig":"        """
 Create configuration from environment variables.        return cls(
             world_size=int(os.environ.get("WORLD_SIZE", 1)),"            tensor_parallel_size=int(os.environ.get("TENSOR_PARALLEL_SIZE", 1)),"            pipeline_parallel_size=int(os.environ.get("PIPELINE_PARALLEL_SIZE", 1)),"            data_parallel_size=int(os.environ.get("DATA_PARALLEL_SIZE", 1)),"            backend=os.environ.get("DISTRIBUTED_BACKEND", "nccl"),"        )

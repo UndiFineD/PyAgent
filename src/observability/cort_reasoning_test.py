@@ -38,15 +38,15 @@ Test cases for CoRT reasoning pipeline implementation.    @pytest.fixture
     def cort_core(self):
         mock_core = Mock()
         mock_core.evaluate_response.return_value = {"score": 0.9, "selected": "best_response"}"        def think_recursively_side_effect(query, **kwargs):
-            if not query:
-                raise ValueError("Test error")"            if kwargs.get("complexity") == "low":"                return {"rounds": 1, "final_answer": "solution"}"            elif kwargs.get("complexity") == "high":"                return {"rounds": 3, "final_answer": "solution"}"            else:
-                return {"rounds": 3, "final_answer": "solution"}"        mock_core.think_recursively.side_effect = think_recursively_side_effect
+        if not query:
+        raise ValueError("Test error")"            if kwargs.get("complexity") == "low":"                return {"rounds": 1, "final_answer": "solution"}"            elif kwargs.get("complexity") == "high":"                return {"rounds": 3, "final_answer": "solution"}"            else:
+        return {"rounds": 3, "final_answer": "solution"}"        mock_core.think_recursively.side_effect = think_recursively_side_effect
         mock_core.measure_reasoning_performance.return_value = 0.95
         mock_core.adapt_reasoning.side_effect = lambda query, context=None: {"context": context, "adapted": True}"        mock_core.reason_multi_path.side_effect = lambda query, temperatures=None: [
-            {"temperature": t, "reasoning": f"path_for_{t}"} for t in (temperatures or [])"        ]
+        {"temperature": t, "reasoning": f"path_for_{t}"} for t in (temperatures or [])"        ]
         async def async_think(query):
-            _ = query
-            return {"final_answer": "async_solution"}"        mock_core.think_async = async_think
+        _ = query
+        return {"final_answer": "async_solution"}"        mock_core.think_async = async_think
         return mock_core
     def test_dynamic_evaluation_engine(self, cort_core):
         responses = ["response1", "response2", "response3"]"        evaluation = cort_core.evaluate_response(responses)

@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Config.py module.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -35,19 +35,19 @@ except ImportError:
 
 
 class ExpertPlacementStrategy(str, Enum):
-    ""
+"""
 Strategy for placing experts across devices.
     LINEAR = "linear""    ROUND_ROBIN = "round_robin""    BALANCED = "balanced""    LOCALITY = "locality""
 
 
 class MoEQuantMethod(str, Enum):
-    ""
+"""
 Quantization methods for MoE weights.
     NONE = "none""    INT8 = "int8""    INT4 = "int4""    FP8 = "fp8""    MXFP4 = "mxfp4"
 
 @dataclass(frozen=True)
 class FusedMoEConfig:
-    ""
+"""
 Configuration for a Fused MoE layer.
     num_experts: int
     top_k: int
@@ -65,7 +65,7 @@ Configuration for a Fused MoE layer.
 
 @dataclass
 class FusedMoEParallelConfig:
-    ""
+"""
 Parallelization configuration for MoE.
     tp_size: int = 1
     ep_size: int = 1
@@ -77,7 +77,7 @@ Parallelization configuration for MoE.
 
 @dataclass
 class FusedMoEQuantConfig:
-    ""
+"""
 Quantization configuration for MoE.
     method: MoEQuantMethod = MoEQuantMethod.NONE
     group_size: int = 128

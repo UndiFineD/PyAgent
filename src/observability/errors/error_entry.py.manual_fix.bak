@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ErrorEntry - Single error record representation and categorization
 
@@ -31,7 +31,7 @@ Defines a dataclass ErrorEntry that stores common error metadata and, in __post_
 
 WHAT IT SHOULD DO BETTER:
 Use timezone-aware datetime types for timestamps, add validation and serialization helpers (to_dict/from_dict), accept Exception objects or richer stack trace parsing, improve category mapping, and consider a stable UUID-based id option and unit tests.
-""
+"""
 import hashlib
 from dataclasses import dataclass, field
 
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 @dataclass
 class ErrorEntry:
-    ""
+"""
 A single error entry.
     id: str = ""
 message: str = ""
@@ -63,7 +63,7 @@ resolved: bool = False
 tags: list[str] = field(default_factory=lambda: [])
 
     def __post_init__(self) -> None:
-        ""
+"""
 Generate id and infer category if needed.        if not self.id:
             seed = f"{self.error_type}|{self.message}|{self.file_path}|{self.line_number}".encode()"            self.id = hashlib.sha256(seed).hexdigest()[:12]
 

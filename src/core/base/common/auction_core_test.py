@@ -33,14 +33,14 @@ except ImportError:
 class TestAuctionCore:
     def test_calculate_vcg_auction_basic(self):
         bids = [
-            {"agent_id": "a1", "amount": 100.0},
-            {"agent_id": "a2", "amount": 80.0},
+        {"agent_id": "a1", "amount": 100.0},
+        {"agent_id": "a2", "amount": 80.0},
         ]
         winners = AuctionCore.calculate_vcg_auction([b.copy() for b in bids], 1)
         # Expect one winner with highest amount
         assert isinstance(winners, list)
         if winners:
-            assert winners[0]["amount"] == 100.0
+        assert winners[0]["amount"] == 100.0
 
     def test_enforce_vram_quota_basic(self):
         assert AuctionCore.enforce_vram_quota(10.0, 100.0, 0.2) is True

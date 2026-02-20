@@ -92,7 +92,7 @@ Enable rate limiting for the agent.        from src.core.base.common.utils.rate_
 
     def get_rate_limit_stats(self):
 """
-Get statistics from the rate limiter.        return self.rate_limiter.get_stats() if self.rate_limiter else {}
+        Get statistics from the rate limiter.        return self.rate_limiter.get_stats() if self.rate_limiter else {}
 
     def enable_file_locking(self, lock_timeout: float | None = None) -> None:
 """
@@ -108,13 +108,13 @@ Enable diff preview functionality.        from src.core.base.common.utils.diff_g
 
     def preview_changes(self, file_path: Path, content: str):
 """
-Generate a preview of changes for a file.        if not self.diff_generator:
-            from src.core.base.common.utils.diff_generator import DiffGenerator
-            self.diff_generator = DiffGenerator()
+        Generate a preview of changes for a file.        if not self.diff_generator:
+        from src.core.base.common.utils.diff_generator import DiffGenerator
+        self.diff_generator = DiffGenerator()
 
         original = ""
-if file_path.exists():
-            original = file_path.read_text(errors="ignore")
+        if file_path.exists():
+        original = file_path.read_text(errors="ignore")
         return self.diff_generator.generate_diff(file_path, original, content)
 
     def enable_incremental_processing(self) -> None:
@@ -124,12 +124,12 @@ Enable incremental processing of files.        from src.core.base.logic.incremen
 
     def get_changed_files(self, files: list[Path]):
 """
-Get list of changed files using incremental processor.        return self.incremental_processor.get_changed_files(files) if self.incremental_processor else files
+        Get list of changed files using incremental processor.        return self.incremental_processor.get_changed_files(files) if self.incremental_processor else files
 
     def reset_incremental_state(self):
 """
-Reset the state of incremental processor.        if self.incremental_processor:
-            self.incremental_processor.reset_state()
+        Reset the state of incremental processor.        if self.incremental_processor:
+        self.incremental_processor.reset_state()
 
     def enable_graceful_shutdown(self) -> None:
 """
@@ -144,7 +144,7 @@ Attempt to resume operations from a previous shutdown state.        if self.shut
 
     def run_health_checks(self):
 """
-Run all configured health checks.        from src.core.base.logic.managers.system_managers import HealthChecker
+        Run all configured health checks.        from src.core.base.logic.managers.system_managers import HealthChecker
         self.health_checker = HealthChecker(repo_root=self.repo_root)
         return self.health_checker.run_all_checks()
 
@@ -156,11 +156,11 @@ Check if the system is healthy.        if self.health_checker:
     @property
     def selective_agents(self):
 """
-Get set of selected agents.        return getattr(self, "_selective_agents", None) or set()
-    @selective_agents.setter
+        Get set of selected agents.        return getattr(self, "_selective_agents", None) or set()
+        @selective_agents.setter
     def selective_agents(self, value):
 """
-Set allowed agents.        self._selective_agents = set(value) if value is not None else None
+        Set allowed agents.        self._selective_agents = set(value) if value is not None else None
 
     def should_execute_agent(self, name: str) -> bool:
 """
@@ -171,11 +171,11 @@ Check if an agent should be executed based on selection.        if not self._sel
     @property
     def timeout_per_agent(self):
 """
-Get timeout configuration per agent.        return getattr(self, "_timeout_per_agent", {})
-    @timeout_per_agent.setter
+        Get timeout configuration per agent.        return getattr(self, "_timeout_per_agent", {})
+        @timeout_per_agent.setter
     def timeout_per_agent(self, value):
 """
-Set timeout configuration per agent.        self._timeout_per_agent = value
+        Set timeout configuration per agent.        self._timeout_per_agent = value
 
     def get_timeout_for_agent(self, name: str, default: float = 60.0) -> float:
 """
@@ -184,40 +184,40 @@ Get timeout value for a specific agent.        return self.timeout_per_agent.get
     @property
     def metrics(self):
 """
-Get performance metrics.        return self._metrics
+        Get performance metrics.        return self._metrics
 
-    @metrics.setter
+        @metrics.setter
     def metrics(self, value):
 """
-Set performance metrics.        self._metrics = value
+        Set performance metrics.        self._metrics = value
 
     def print_metrics_summary(self):
 """
-Print a summary of metrics.        self.metrics["end_time"] = 1234567890.0
+        Print a summary of metrics.        self.metrics["end_time"] = 1234567890.0
     def create_file_snapshot(self, _file_path):
 """
-Create a snapshot of a file (mock implementation).        if hasattr(self, "repo_root") and self.repo_root:"            snap_dir = Path(self.repo_root) / ".agent_snapshots""            snap_dir.mkdir(parents=True, exist_ok=True)
+        Create a snapshot of a file (mock implementation).        if hasattr(self, "repo_root") and self.repo_root:"            snap_dir = Path(self.repo_root) / ".agent_snapshots""            snap_dir.mkdir(parents=True, exist_ok=True)
         return "snap-123"
     def restore_from_snapshot(self, _snapshot_id, *_args):
 """
-Restore file from snapshot (mock implementation).        return False
+        Restore file from snapshot (mock implementation).        return False
 
     def load_cascading_codeignore(self, path=None):
 """
-Load codeignore patterns cascading from repo root.        target_path = Path(path) if path else self.repo_root
+        Load codeignore patterns cascading from repo root.        target_path = Path(path) if path else self.repo_root
         patterns = []
         ignore_file = target_path / ".codeignore""        if ignore_file.exists():
-            patterns.extend([line.strip() for line in ignore_file.read_text().splitlines() if line.strip()])
+        patterns.extend([line.strip() for line in ignore_file.read_text().splitlines() if line.strip()])
         if path and path != self.repo_root:
-            root_ignore = self.repo_root / ".codeignore""            if root_ignore.exists():
-                patterns.extend([line.strip() for line in root_ignore.read_text().splitlines() if line.strip()])
+        root_ignore = self.repo_root / ".codeignore""            if root_ignore.exists():
+        patterns.extend([line.strip() for line in root_ignore.read_text().splitlines() if line.strip()])
         return patterns
 
     def generate_improvement_report(self):
 """
-Generate a report of improvements made.        processed = self.metrics.get("files_processed", 0)"        modified = self.metrics.get("files_modified", 0)"        rate = (modified / processed * 100.0) if processed > 0 else 0.0
+        Generate a report of improvements made.        processed = self.metrics.get("files_processed", 0)"        modified = self.metrics.get("files_modified", 0)"        rate = (modified / processed * 100.0) if processed > 0 else 0.0
         return {
-            "summary": {"files_processed": processed, "files_modified": modified, "modification_rate": rate},"            "agents": self.metrics.get("agents_applied", {}),"            "mode": {"                "dry_run": self.dry_run,"                "async_enabled": getattr(self, "enable_async", False),"                "multiprocessing_enabled": getattr(self, "enable_multiprocessing", False),"            },
+        "summary": {"files_processed": processed, "files_modified": modified, "modification_rate": rate},"            "agents": self.metrics.get("agents_applied", {}),"            "mode": {"                "dry_run": self.dry_run,"                "async_enabled": getattr(self, "enable_async", False),"                "multiprocessing_enabled": getattr(self, "enable_multiprocessing", False),"            },
         }
 
     def cost_analysis(self, backend="mock", cost_per_request=0.0):"        """
@@ -226,13 +226,13 @@ Analyze cost of operations.        agents_runs = sum(self.metrics.get("agents_ap
 
     def cleanup_old_snapshots(self, max_age_days=7):
 """
-Cleanup old snapshots.        snapshot_dir = self.repo_root / ".agent_snapshots""        count = 0
+        Cleanup old snapshots.        snapshot_dir = self.repo_root / ".agent_snapshots""        count = 0
         if snapshot_dir.exists():
-            import time
-            now = time.time()
-            for f in snapshot_dir.glob("*"):"                if f.is_file() and (now - f.stat().st_mtime) > (max_age_days * 86400):
-                    f.unlink()
-                    count += 1
+        import time
+        now = time.time()
+        for f in snapshot_dir.glob("*"):"                if f.is_file() and (now - f.stat().st_mtime) > (max_age_days * 86400):
+        f.unlink()
+        count += 1
         return count
 
 
@@ -285,43 +285,61 @@ Unregister a plugin by name.            if plugin_name in base_agent_cls._plugin
 
         def process_files_multiprocessing(self, *args):
 """
-Mock process_files_multiprocessing.
-        @property
+            Mock process_files_multiprocessing.
+            @property
         def webhooks(self):
 """
-Get registered webhooks.            return self._webhooks
+            Get registered webhooks.            return self._webhooks
 
         def register_webhook(self, url):
 """
-Register a webhook URL.            self._webhooks.append(url)
+            Register a webhook URL.            self._webhooks.append(url)
 
         def send_webhook_notification(self, *args, **kwargs):
 """
-Mock send_webhook_notification.
+            Mock send_webhook_notification.
         def register_callback(self, func):
 """
-Register a callback.            self.callbacks.append(func)
+            Register a callback.            self.callbacks.append(func)
 
         def execute_callbacks(self, *args, **kwargs):
 """
-Mock execute_callbacks.
-        @classmethod
+            Mock execute_callbacks.
+            @classmethod
         def from_config_file(cls, config_path):
 """
-Create instance from config file.            return cls(repo_root=str(config_path.parent), dry_run="dry_run" in config_path.read_text())
-        @staticmethod
+            Create instance from config file.            return cls(repo_root=str(config_path.parent), dry_run="dry_run" in config_path.read_text())
+            @staticmethod
         def auto_configure(path):
 """
-Auto configure the agent instance.            instance = LegacyAgentWrapper(repo_root=path)
+            Auto configure the agent instance.            instance = LegacyAgentWrapper(repo_root=path)
             if (Path(path) / "agent.json").exists():"                instance.loop = 5  # pylint: disable=attribute-defined-outside-init
             return instance
 
-    return LegacyAgentWrapper
+            return LegacyAgentWrapper
 
 """
 
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+            ""
 
 """

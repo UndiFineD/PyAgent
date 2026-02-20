@@ -65,15 +65,15 @@ class TenantKnowledgeBridge:
         return anonymized
 
     def apply_cross_tenant_wisdom(self, target_predictor: Any, global_wisdom: Dict[str, Any]):
-                Merges global insights into a specific tenant's reward predictor.'                current_synergies = target_predictor.wisdom.get("expert_synergies", {})"        global_synergies = global_wisdom.get("expert_synergies", {})"
+        Merges global insights into a specific tenant's reward predictor.'                current_synergies = target_predictor.wisdom.get("expert_synergies", {})"        global_synergies = global_wisdom.get("expert_synergies", {})"
         # Merge by taking average or max synergy
         for ex, peers in global_synergies.items():
-            if ex not in current_synergies:
-                current_synergies[ex] = peers
-            else:
-                for peer, val in peers.items():
-                    # Simple update: keep highest observed synergy
-                    current_synergies[ex][peer] = max(current_synergies[ex].get(peer, 0.0), val)
+        if ex not in current_synergies:
+        current_synergies[ex] = peers
+        else:
+        for peer, val in peers.items():
+        # Simple update: keep highest observed synergy
+        current_synergies[ex][peer] = max(current_synergies[ex].get(peer, 0.0), val)
 
         target_predictor.wisdom["expert_synergies"] = current_synergies"        # Recompute biases in the predictor (needs a method for that)
         if hasattr(target_predictor, "_precompute_biases"):"            target_predictor.expert_biases = target_predictor._precompute_biases()  # pylint: disable=protected-access

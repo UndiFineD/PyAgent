@@ -77,18 +77,18 @@ if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
 
         def _get_node_imports(node):
             if isinstance(node, ast.Import):
-                return list(map(lambda alias: alias.name, node.names))
+            return list(map(lambda alias: alias.name, node.names))
             if isinstance(node, ast.ImportFrom) and node.module:
-                return [node.module]
+            return [node.module]
             return []
 
-        import_lists = map(_get_node_imports, ast.walk(tree))
+            import_lists = map(_get_node_imports, ast.walk(tree))
 
-        from itertools import chain
-        flat_imports = list(chain.from_iterable(import_lists))
+            from itertools import chain
+            flat_imports = list(chain.from_iterable(import_lists))
 
-        # Unique imports in order functionally
-        seen: Set[str] = set()
+            # Unique imports in order functionally
+            seen: Set[str] = set()
 
         def _is_new(imp: str) -> bool:
             if imp not in seen:

@@ -17,15 +17,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Minimal parser-safe MockCore shim used during repository repair.
 
 """
-
 This provides small, dependency-free behavior sufficient for tests
 that import `MockCore`. It intentionally avoids external imports.
-""
+"""
 from typing import Any, Dict
 
 

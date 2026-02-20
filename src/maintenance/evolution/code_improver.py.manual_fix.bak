@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 code_improver - Autonomous Evolution Loop
 
@@ -63,7 +63,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Module: code_improver
 Autonomous Codebase Evolution Loop for self-optimizing system logic.
-""
+"""
 import asyncio
 import logging
 from typing import TYPE_CHECKING
@@ -76,16 +76,16 @@ logger = logging.getLogger(__name__)
 
 
 class EvolutionLoop:
-  ""
+"""
 Background process that proactively improves the PyAgent core.
   Follows Pillar 8: Self-Improving Intelligence.
-  ""
+"""
 def __init__(self, fleet: 'FleetManager'):
     self.fleet = fleet
     self.running = False
 
   async def start(self):
-    ""
+"""
 Starts the autonomous evolution cycle.""
 self.running = True
     logger.info("Autonomous Evolution Loop engaged.")
@@ -107,7 +107,7 @@ self.running = True
       await asyncio.sleep(3600)  # Once per hour
 
   async def _identify_and_improve_bottleneck(self):
-    ""
+"""
 Heuristic-based logic bottleneck identification and Rust acceleration.""
 logger.info("Evolution: Identifying code bottlenecks (Pillar 8)...")
     # 1. Complexity-based Rust Candidate Identification

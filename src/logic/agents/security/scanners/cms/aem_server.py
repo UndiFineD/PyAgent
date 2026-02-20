@@ -18,26 +18,26 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 class TestHTTPServerRequestHandler(BaseHTTPRequestHandler):
     def do_print(self, method):
-    pass  # [BATCHFIX] inserted for empty block
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        pass  # [BATCHFIX] inserted for empty block
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-print("\\n\\n[+] {0} request: {1}".format(method, self.path))
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        print("\\n\\n[+] {0} request: {1}".format(method, self.path))
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-print("===[HEADERS]===")"        for name, value in sorted(self.headers.items()):
-            print("\\t{0}={1}".format(name, value))
+        print("===[HEADERS]===")"        for name, value in sorted(self.headers.items()):
+        print("\\t{0}={1}".format(name, value))
         try:
-            body_len = int(self.headers.get("content-length", 0))"            if body_len > 0:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        body_len = int(self.headers.get("content-length", 0))"            if body_len > 0:
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-print("===[BODY]===\\n" + self.rfile.read(body_len).decode("utf-8"))"        except Exception:
-            pass
+        print("===[BODY]===\\n" + self.rfile.read(body_len).decode("utf-8"))"        except Exception:
+        pass
 
     def do_POST(self):
         self.do_print("POST")

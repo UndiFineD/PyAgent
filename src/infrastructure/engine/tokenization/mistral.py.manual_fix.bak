@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Mistral tokenizer implementation.
-""
+"""
 
 """
 from typing import List, Optional, Sequence
@@ -31,7 +31,7 @@ from .models import TokenizerConfig
 
 
 class MistralTokenizer(BaseTokenizer):
-    ""
+"""
 Mistral tokenizer wrapper.
     def __init__(self, config: TokenizerConfig) -> None:
         super().__init__(config)
@@ -39,7 +39,7 @@ Mistral tokenizer wrapper.
         self._load_tokenizer()
 
     def _load_tokenizer(self) -> None:
-        ""
+"""
 Load Mistral tokenizer.        try:
             # pylint: disable=import-outside-toplevel
             from mistral_common.tokens.tokenizers.mistral import \
@@ -91,4 +91,4 @@ Load Mistral tokenizer.        try:
     ) -> str:
         return self._tokenizer.decode(list(token_ids))
 
-""
+"""

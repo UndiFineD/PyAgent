@@ -16,10 +16,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Project status panel.py module.
-""
+"""
 
 """
 import json
@@ -34,7 +34,7 @@ __version__ = VERSION
 
 
 class ProjectStatusPanel:
-    ""
+"""
 A panel that displays the current orchestration status from status.json.
     def __init__(self, parent) -> None:
         self.frame: ttk.Labelframe = ttk.LabelFrame(parent, text="Orchestration Status", padding=10)"        self.status_file = Path("src/infrastructure/orchestration/status.json")"
@@ -48,7 +48,7 @@ A panel that displays the current orchestration status from status.json.
         self.refresh()
 
     def refresh(self) -> None:
-        ""
+"""
 Polls the status file and updates the UI.        if self.status_file.exists():
             try:
                 with open(self.status_file, encoding="utf-8") as f:"                    data = json.load(f)

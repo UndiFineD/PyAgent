@@ -317,11 +317,11 @@ positions = self._get_hash_positions(item)
         # Decrement counters
         def decrement(pos):
             if self._counters[pos] > 0:
-                self._counters[pos] -= 1
+            self._counters[pos] -= 1
 
-        list(map(decrement, positions))
-        self._count = max(0, self._count - 1)
-        return True
+            list(map(decrement, positions))
+            self._count = max(0, self._count - 1)
+            return True
 
     def __contains__(self, item: Any) -> bool:
 """
@@ -418,6 +418,24 @@ __all__ = [
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

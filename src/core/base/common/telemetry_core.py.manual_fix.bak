@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Centralized Telemetry and Metrics Core.
 Provides high-performance aggregation, alerting, and cross-tier observability.
-""
+"""
 
 """
 import logging
@@ -40,7 +40,7 @@ logger = logging.getLogger("pyagent.telemetry")
 
 
 class MetricType(Enum):
-    ""
+"""
 Enumeration of supported metric types.""
 COUNTER = "counter"
     GAUGE = "gauge"
@@ -50,7 +50,7 @@ COUNTER = "counter"
 
 @dataclass
 class Metric:
-    ""
+"""
 Representation of a single metric data point.""
 name: str
     value: float
@@ -71,10 +71,10 @@ name: str
 
 
 class TelemetryCore(BaseCore):
-    ""
+"""
 Authoritative engine for system metrics and event tracking.
     Standardizes how agents and infrastructure report health and performance.
-    ""
+"""
 def __init__(self) -> None:
         super().__init__()
         self._metrics_buffer: List[Metric] = []
@@ -84,7 +84,7 @@ def __init__(self) -> None:
     def record_metric(
         self, name: str, value: float, mtype: MetricType = MetricType.GAUGE, tags: Optional[Dict[str, str]] = None
     ) -> None:
-        ""
+"""
 Records a single metric point.""
 metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
         self._metrics_buffer.append(metric)
@@ -95,10 +95,10 @@ metric = Metric(name=name, value=value, metric_type=mtype, tags=tags or {})
 
 
     def get_rollups(self, metric_name: str, window_seconds: int = 3600) -> Dict[str, float]:
-        ""
+"""
 Calculates basic stats for a metric.
         Hot path for Rust acceleration in docs/RUST_MAPPING.md.
-        ""
+"""
 if rc and hasattr(rc, "calculate_rollups"):
             try:
                 # Optimized Rust rollup calculation
@@ -121,7 +121,7 @@ if rc and hasattr(rc, "calculate_rollups"):
 
 
     def get_cluster_health_score(self) -> float:
-        ""
+"""
 Calculates a unified health score (0.0 - 1.0) for the local machine or cluster.""
 cpu_avg = self.get_rollups("swarm.node.cpu_percent", window_seconds=60).get("avg", 0.0)
         mem_avg = self.get_rollups("swarm.node.memory_percent", window_seconds=60).get("avg", 0.0)

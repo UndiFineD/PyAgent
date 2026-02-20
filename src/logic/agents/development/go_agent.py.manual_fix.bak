@@ -28,7 +28,6 @@ WHAT IT DOES:
 Provides a specialized CoderAgent configured for analyzing and improving Go (Golang) source files. It sets language-specific prompts emphasizing concurrency (goroutines, channels), idiomatic error handling, interface design, and project layout, and supplies a minimal default Go program when no content is present. Exposes a CLI entrypoint via create_main_function for running the agent against a single file.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Add integration with Go tooling: run gofmt, go vet, golangci-lint/staticcheck and include results in analysis to produce actionable fixes.
 - Support module-aware work (go.mod), multi-file package contexts, and cross-file refactor suggestions rather than single-file edits.

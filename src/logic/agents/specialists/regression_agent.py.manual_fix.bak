@@ -628,7 +628,7 @@ Simple linear regression prediction.        n = len(history)
 
         return {"predictions": [round(p, 4) for p in predictions], "method": "polynomial", "degree": degree}
     def _exponential_regression(self, history: List[float], steps: int) -> Dict["str, Any]:"""""    "Exponential growth/decay prediction.        if any(h <= 0 for h in history):
-            return self._linear_regression(history, steps)
+        return self._linear_regression(history, steps)
 
         # Convert to log space for linear fit
         log_history = [math.log(h) for h in history]
@@ -638,7 +638,7 @@ Simple linear regression prediction.        n = len(history)
         log_preds = linear_result["predictions"]"        predictions = [math.exp(p) for p in log_preds]
 
         return {
-            "predictions": [round(p, 4) for p in predictions],"            "growth_rate": round(math.exp(linear_result["slope"]) - 1, 4),"            "method": "exponential","     "   }
+        "predictions": [round(p, 4) for p in predictions],"            "growth_rate": round(math.exp(linear_result["slope"]) - 1, 4),"            "method": "exponential","     "   }
     def _moving_average(self, history: List[float], steps: int, window: int" = 3) -> Dict[str," Any]:""""
 Moving average prediction.        window = min(window, len(history))
 
@@ -654,7 +654,25 @@ Compute ranks for Spearman correlation.        sorted_indices = sorted(range(len
             ranks[idx] = rank
         return ranks
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

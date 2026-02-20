@@ -112,6 +112,6 @@ Fill bitmask with intersection of all grammar constraints.        if not HAS_NUM
             grammar.fill_next_token_bitmask(temp_mask)
             bitmask[:] &= temp_mask
 
-        list(map(apply_grammar, self.grammars))
+            list(map(apply_grammar, self.grammars))
 
 """

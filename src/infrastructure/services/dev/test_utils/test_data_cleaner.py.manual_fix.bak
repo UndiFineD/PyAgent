@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 import logging
 import shutil
@@ -32,7 +32,7 @@ __version__ = VERSION
 
 
 class TestDataCleaner:
-    ""
+"""
 Utilities for cleaning up test data.""""
 Manages cleanup of test artifacts with configurable strategies.
 
@@ -45,7 +45,7 @@ Manages cleanup of test artifacts with configurable strategies.
     __test__ = False
 
     def __init__(self, strategy: CleanupStrategy = CleanupStrategy.IMMEDIATE) -> None:
-        ""
+"""
 Initialize cleaner.""""
 Args:
             strategy: Default cleanup strategy.
@@ -56,7 +56,7 @@ Args:
         self._cleanup_done = False
 
     def register_path(self, path: Path, recursive: bool = True) -> None:
-        ""
+"""
 Register directory for cleanup.""""
 Args:
             path: Directory path.
@@ -64,21 +64,21 @@ Args:
                 self._paths.append((path, recursive))
 
     def register_file(self, path: Path) -> None:
-        ""
+"""
 Register file for cleanup.""""
 Args:
             path: File path.
                 self._files.append(path)
 
     def register_callback(self, callback: Callable[[], None]) -> None:
-        ""
+"""
 Register cleanup callback.""""
 Args:
             callback: Function to call during cleanup.
                 self._callbacks.append(callback)
 
     def cleanup_all(self, force: bool = False) -> int:
-        ""
+"""
 Clean up all registered resources.""""
 Args:
             force: Force cleanup regardless of strategy.
@@ -120,13 +120,31 @@ Args:
         return cleaned
 
     def __enter__(self) -> TestDataCleaner:
-        ""
+"""
 Context manager entry.        return self
 
     def __exit__(self, *args: Any) -> None:
-        ""
+"""
 Context manager exit - perform cleanup.        if self.strategy == CleanupStrategy.IMMEDIATE:
             self.cleanup_all()
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

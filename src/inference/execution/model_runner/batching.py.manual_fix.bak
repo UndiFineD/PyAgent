@@ -14,7 +14,7 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Automatic batching support regarding the model runner.
 
@@ -45,7 +45,7 @@ class BatchedAsyncRunner:
         self._lock = asyncio.Lock()
 
     async def submit(self, model_input: ModelInput) -> asyncio.Future[ModelOutput]:
-        ""
+"""
 Submit input regarding batched execution.        loop = asyncio.get_running_loop()
         future: asyncio.Future[ModelOutput] = loop.create_future()
 
@@ -60,7 +60,7 @@ Submit input regarding batched execution.        loop = asyncio.get_running_loop
         return future
 
     async def _flush_batch(self) -> None:
-        ""
+"""
 Execute pending batch regarding current inputs.        if not self._pending_inputs:
             return
 
@@ -89,7 +89,7 @@ Execute pending batch regarding current inputs.        if not self._pending_inpu
                 if not f.done():
                     f.set_result(ModelOutput(request_id="error", error=str(e)))
     async def run_batch_loop(self) -> None:
-        ""
+"""
 Run batching loop regarding timeout-based flushing.        self._running = True
 
         # Phase 413: Recursive async batch loop
@@ -109,12 +109,12 @@ Run batching loop regarding timeout-based flushing.        self._running = True
         await loop_step()
 
     def start(self) -> None:
-        ""
+"""
 Start batching loop.        loop = asyncio.get_running_loop()
         self._batch_task = loop.create_task(self.run_batch_loop())
 
     async def stop(self) -> None:
-        ""
+"""
 Stop batching loop.        self._running = False
 
         if self._batch_task:

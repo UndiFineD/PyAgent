@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_backend.py""""
 try:
     from dataclasses import dataclass, field
@@ -39,7 +39,7 @@ __version__ = VERSION
 
 @dataclass
 class RecordedRequest:
-    ""
+"""
 A recorded request for replay.
     request_id: str
     timestamp: float
@@ -50,7 +50,25 @@ A recorded request for replay.
     success: bool = True
     metadata: dict[str, Any] = field(default_factory=lambda: {})
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -26,7 +26,6 @@ USAGE:
 - Can be launched standalone via the provided create_main_function entry-point for manual invocation or debugging.
 
 """
-
 WHAT IT DOES:
 - Provides methods to convert long multi-turn dialogues into dense, token-efficient summaries focused on decisions, tool outputs, and unresolved state.
 - Exposes extract_gist to produce a single-paragraph bottom-line from technical reports.
@@ -41,7 +40,7 @@ FILE CONTENT SUMMARY:
 CompressionAgent for PyAgent.
 Specializes in context window optimization, recursive summarization,
 and minimizing token usage for long-running sub-swarm dialogues.
-""
+"""
 try:
     import logging
 except ImportError:
@@ -175,4 +174,4 @@ if __name__ == "__main__":"    from src.core.base.common.base_utilities import c
         "Compression Agent","        "Token efficiency and summarization optimizer","    )
     main()
 
-""
+"""

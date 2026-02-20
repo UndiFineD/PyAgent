@@ -33,7 +33,7 @@ logger = logging.getLogger(__name__)
 
 
 class ProxyOrchestrator:
-    ""
+"""
 Orchestrator that wraps DisaggregatedScheduler for easier request management.""""
 Acts as a high-level API for disaggregated prefill-decode serving.
     
@@ -41,7 +41,7 @@ Acts as a high-level API for disaggregated prefill-decode serving.
         self.scheduler = scheduler
 
     def create_request(self, prompt: str, max_tokens: int = 128, request_id: Optional[str] = None) -> ScheduledRequest:
-        ""
+"""
 Create a new request for scheduling.        if request_id is None:
             request_id = f"req-{uuid.uuid4().hex[:8]}"
         from .config import KVTransferParams
@@ -56,7 +56,7 @@ Create a new request for scheduling.        if request_id is None:
         return request
 
     async def process_request(self, request: ScheduledRequest) -> Dict[str, Any]:
-        ""
+"""
 Process a request through prefill and decode phases.""""
 This is a simplified orchestration flow.
                 try:
@@ -82,4 +82,4 @@ This is a simplified orchestration flow.
                 "status": "completed","                "request_id": request.request_id,"                "prefill_instance": prefill_instance.instance_id,"                "decode_instance": decode_instance.instance_id,"                "id": request.request_id,  # For test compatibility"            }
         except (RuntimeError, ValueError, AttributeError) as e:
             logger.error("Error in ProxyOrchestrator: %s", e)"            return {"error": str(e), "request_id": request.request_id}"
-""
+"""

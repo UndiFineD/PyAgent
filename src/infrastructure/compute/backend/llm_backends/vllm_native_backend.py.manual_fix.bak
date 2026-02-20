@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Vllm native backend.py module.
-""
+"""
 
 """
 import logging
@@ -32,7 +32,7 @@ __version__ = VERSION
 
 
 class VllmNativeBackend(LLMBackend):
-    ""
+"""
 vLLM Native Engine LLM Backend.
     def chat(
         self,
@@ -61,6 +61,24 @@ result = engine.generate(prompt, system_prompt=system_prompt)
             return result
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug(f"vLLM Native Engine unavailable: {e}")"            return """
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

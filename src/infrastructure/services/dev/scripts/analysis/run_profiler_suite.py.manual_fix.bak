@@ -18,7 +18,6 @@ Performance Profiling Suite for PyAgent.
 Validates Rust-accelerated logic and monitors tokenization throughput.
 
 """
-
 import sys
 import asyncio
 from pathlib import Path
@@ -55,7 +54,7 @@ from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuit
 
 
 async def main():
-    ""
+"""
 Main execution point for the profiling suite.    profiler = RustProfiler.get_instance()
     profiler.enable()
 
@@ -97,4 +96,4 @@ Main execution point for the profiling suite.    profiler = RustProfiler.get_ins
     print(f"\\n Dynamic profiling report saved to {report_path}")
 if __name__ == "__main__":"    asyncio.run(main())
 
-""
+"""

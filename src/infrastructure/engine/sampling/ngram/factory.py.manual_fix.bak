@@ -19,11 +19,11 @@ from __future__ import annotations
 # SPDX-License-Identifier: Apache-2.0
 """
 N-gram Proposer Factory - Helper functions to instantiate proposers.
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -66,4 +66,4 @@ def create_ngram_proposer(
         return AdaptiveNgramProposer(config)
     return NgramProposer(config)
 
-""
+"""

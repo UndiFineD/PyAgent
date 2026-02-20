@@ -21,7 +21,6 @@ from __future__ import annotations
 Reading kernel_agent.py to capture full content for the module description. Executing file read.
 
 """
-
 Kernel Agent - OS-level environment management and system diagnostics
 
 Brief Summary
@@ -45,7 +44,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in OS-level operations, environment management, and system diagnosis.
 Inspired by Open Interpreter and Openator.
-""
+"""
 import asyncio
 import json
 import logging
@@ -201,4 +200,4 @@ Interacts directly with the host OS to manage environments and "perform diagnost
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             if hasattr(self, "recorder") and self.recorder:"                self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})"#             return fError executing command: {e}
 
-""
+"""

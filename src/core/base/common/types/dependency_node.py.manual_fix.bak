@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Types: DependencyNode dataclass.""
 
@@ -25,7 +25,7 @@ try:
     from src.core.base.common.types.dependency_type import DependencyType
 except Exception:
     class DependencyType:
-        ""
+"""
 Fallback placeholder for DependencyType.""
 try:
     from src.core.base.lifecycle.version import VERSION

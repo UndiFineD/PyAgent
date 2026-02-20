@@ -18,7 +18,7 @@ try:
 except ImportError:
 
 """
-    import pytest
+import pytest
 
 try:
     from maintenance.fix_headers.test_fix_headers_agent import test_preserve_bom_and_encoding, test_remove_old_license_but_preserve_other_comments, test_keep_unrelated_top_comment

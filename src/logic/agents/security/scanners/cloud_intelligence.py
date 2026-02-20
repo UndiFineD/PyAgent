@@ -43,67 +43,67 @@ Handles discovery and auditing of cloud assets (S3, Azure Blobs, GCP Buckets).# 
 #         rdump","  # [BATCHFIX] closed string"    ]
 
     def __init__(self):
-    pass  # [BATCHFIX] inserted for empty block
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        pass  # [BATCHFIX] inserted for empty block
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-self.session: Optional[aiohttp.ClientSession] = None""""
-async def get_session(self):
+        self.session: Optional[aiohttp.ClientSession] = None""""
+        async def get_session(self):
         if self.session is None or self.session.closed:
-            self.session = aiohttp.ClientSession(headers={"User-Agent": "PyAgent CloudAudit/1.0"})"        return self.session
+        self.session = aiohttp.ClientSession(headers={"User-Agent": "PyAgent CloudAudit/1.0"})"        return self.session
 
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-async def check_bucket_accessibility(self, bucket_url: str) -> Dict[str, Any]:""""
-# [BATCHFIX] Commented metadata/non-Python
-"""         "Checks if a cloud bucket is public, private, or non-existent."  # [BATCHFIX] closed string"        session = await self.get_session()
+        async def check_bucket_accessibility(self, bucket_url: str) -> Dict[str, Any]:""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """         "Checks if a cloud bucket is public, private, or non-existent."  # [BATCHFIX] closed string"        session = await self.get_session()
         try:
-            async with session.get(bucket_url, timeout=5) as resp:
-                if resp.status == 200:
-                    return {"url": bucket_url, "status": "public"}"                elif resp.status == 403:
-                    return {"url": bucket_url, "status": "private"}"                else:
-                    return {"url": bucket_url, "status": "not_found", "code": resp.status}"        except (asyncio.TimeoutError, aiohttp.ClientError) as e:
-            return {"url": bucket_url, "status": "error", "message": str(e)}"        except Exception as e:
-# [BATCHFIX] Commented metadata/non-Python
-#             return {"url": bucket_url, "status": "error", "message": fUnexpected error: {str(e)}"}"  # [BATCHFIX] closed string
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        async with session.get(bucket_url, timeout=5) as resp:
+        if resp.status == 200:
+        return {"url": bucket_url, "status": "public"}"                elif resp.status == 403:
+        return {"url": bucket_url, "status": "private"}"                else:
+        return {"url": bucket_url, "status": "not_found", "code": resp.status}"        except (asyncio.TimeoutError, aiohttp.ClientError) as e:
+        return {"url": bucket_url, "status": "error", "message": str(e)}"        except Exception as e:
+        # [BATCHFIX] Commented metadata/non-Python
+        #             return {"url": bucket_url, "status": "error", "message": fUnexpected error: {str(e)}"}"  # [BATCHFIX] closed string
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-async def list_public_files(self, _bucket_url: str) -> List[str]:""""
-# [BATCHFIX] Commented metadata/non-Python
-"""         "Attempts to list files in a public S3 bucket."  # [BATCHFIX] closed string"        # Simple XML parsing would happen here
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        async def list_public_files(self, _bucket_url: str) -> List[str]:""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """         "Attempts to list files in a public S3 bucket."  # [BATCHFIX] closed string"        # Simple XML parsing would happen here
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-return []""""
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        return []""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-async def audit_target_on_cloud(self, target: str) -> List[Dict[str, Any]]:""""
-# [BATCHFIX] Commented metadata/non-Python
-"""         "Scans for common bucket names based on target name."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string"""
-#         "results = []"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        async def audit_target_on_cloud(self, target: str) -> List[Dict[str, Any]]:""""
+        # [BATCHFIX] Commented metadata/non-Python
+        """         "Scans for common bucket names based on target name."  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented unterminated string"""
+        #         "results = []"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-tasks = []""""
-for pattern in self.BUCKET_PATTERNS:
-            url = "https://" + pattern.format(target=target, region="us-east-1")"            tasks.append(self.check_bucket_accessibility(url))
+        tasks = []""""
+        for pattern in self.BUCKET_PATTERNS:
+        url = "https://" + pattern.format(target=target, region="us-east-1")"            tasks.append(self.check_bucket_accessibility(url))
 
         results = await asyncio.gather(*tasks)
         return results
 
-    @staticmethod
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        @staticmethod
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
 def get_gcp_audit_targets() -> List[str]:"GCP services to audit for security misconfigurations (Ported from gcp_scanner).# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unterminated string"""
@@ -150,6 +150,24 @@ def get_ai_spm_indicators() -> Dict[str, str]:"Indicators for AI service exposur
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

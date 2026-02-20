@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Storage.py module.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -41,7 +41,7 @@ except ImportError:
 
 @dataclass
 class BlockTable:
-    ""
+"""
 Manages physical block allocation for sequences.
     num_blocks: int
     block_size: int
@@ -52,7 +52,7 @@ Manages physical block allocation for sequences.
         self.free_blocks = set(range(self.num_blocks))
 
     def allocate_block(self, seq_id: int) -> int:
-        ""
+"""
 Allocate a block for a sequence.        if not self.free_blocks:
             raise RuntimeError("No free blocks available")"        block_idx = self.free_blocks.pop()
         if seq_id not in self.block_tables:
@@ -61,7 +61,7 @@ Allocate a block for a sequence.        if not self.free_blocks:
         return block_idx
 
     def free_sequence(self, seq_id: int) -> list[int]:
-        ""
+"""
 Free all blocks allocated to a sequence.        if seq_id not in self.block_tables:
             return []
         freed = self.block_tables.pop(seq_id)
@@ -69,36 +69,36 @@ Free all blocks allocated to a sequence.        if seq_id not in self.block_tabl
         return freed
 
     def get_block_table(self, seq_id: int) -> list[int]:
-        ""
+"""
 Get the block table for a sequence.        return self.block_tables.get(seq_id, [])
 
     def num_allocated_blocks(self, seq_id: int) -> int:
-        ""
+"""
 Get the number of blocks allocated to a sequence.        return len(self.block_tables.get(seq_id, []))
 
     @property
     def num_free_blocks(self) -> int:
-        ""
+"""
 Get the number of available free blocks.        return len(self.free_blocks)
 
 
 @dataclass
 class SlotMapping:
-    ""
+"""
 Maps tokens to (block_idx, block_offset) slots.
     block_size: int
     slots: np.ndarray = field(default_factory=lambda: np.array([], dtype=np.int64))
 
     def compute_slot(self, block_idx: int, offset: int) -> int:
-        ""
+"""
 Compute global slot index.        return block_idx * self.block_size + offset
 
     def decode_slot(self, slot: int) -> tuple[int, int]:
-        ""
+"""
 Decode slot into (block_idx, block_offset).        return divmod(slot, self.block_size)
 
     def map_sequence_slots(self, block_table: list[int], seq_len: int) -> np.ndarray:
-        ""
+"""
 Map sequence to slots.        slots = np.zeros(seq_len, dtype=np.int64)
         for i in range(seq_len):
             block_idx = i // self.block_size
@@ -112,7 +112,7 @@ Map sequence to slots.        slots = np.zeros(seq_len, dtype=np.int64)
 
 @dataclass
 class PagedKVCache:
-    ""
+"""
 Block-organized key/value cache.
     num_blocks: int
     block_size: int
@@ -128,7 +128,7 @@ Block-organized key/value cache.
         self.value_cache = np.zeros(shape, dtype=self.dtype)
 
     def write(self, key: np.ndarray, value: np.ndarray, slot_mapping: np.ndarray) -> None:
-        ""
+"""
 Write K/V to cache.        for i, slot in enumerate(slot_mapping):
             if slot < 0:
                 continue
@@ -137,7 +137,7 @@ Write K/V to cache.        for i, slot in enumerate(slot_mapping):
             self.value_cache[block_idx, offset] = value[i]
 
     def read_blocks(self, block_table: list[int], seq_len: int) -> tuple[np.ndarray, np.ndarray]:
-        ""
+"""
 Read K/V blocks.        keys = np.zeros((seq_len, self.num_kv_heads, self.head_size), dtype=self.dtype)
         values = np.zeros((seq_len, self.num_kv_heads, self.head_size), dtype=self.dtype)
         for i in range(seq_len):
@@ -149,7 +149,7 @@ Read K/V blocks.        keys = np.zeros((seq_len, self.num_kv_heads, self.head_s
         return keys, values
 
     def get_memory_usage(self) -> int:
-        ""
+"""
 Get memory usage.        if self.key_cache is not None and self.value_cache is not None:
             return self.key_cache.nbytes + self.value_cache.nbytes
         return 0
@@ -157,7 +157,7 @@ Get memory usage.        if self.key_cache is not None and self.value_cache is n
 
 @dataclass
 class AttentionMetadata:
-    ""
+"""
 Metadata for batched attention computation.
     seq_lens: np.ndarray
     query_start_loc: np.ndarray
@@ -170,12 +170,12 @@ Metadata for batched attention computation.
 
     @property
     def num_seqs(self) -> int:
-        ""
+"""
 Get the number of sequences in the batch.        return len(self.seq_lens)
 
     @property
     def total_tokens(self) -> int:
-        ""
+"""
 Get the total number of tokens across all sequences.        return int(np.sum(self.seq_lens))
 
     @classmethod
@@ -209,7 +209,25 @@ Factory method to create AttentionMetadata from sequence lengths and block table
             slot_mapping=slot_mapping,
         )
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

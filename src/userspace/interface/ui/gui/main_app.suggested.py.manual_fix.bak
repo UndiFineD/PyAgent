@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Main application controller for PyAgent GUI.
 
 """
-
 try:
     import os
 except ImportError:
@@ -134,7 +133,7 @@ __version__ = VERSION
 
 
 class PyAgentGUI:
-    ""
+"""
 The main application window and controller.
 
     def __init__(self, root: tk.Tk) -> None:
@@ -252,7 +251,7 @@ The main application window and controller.
             self.dialogs.show_memory_dialog(agent_name, history, save_memory)
 
     def delegate_task(self, target_agent: str, context: str, target_file: str) -> None:
-        ""
+"""
 Creates a new agent and pre-fills it with context from another agent.        col = self.add_agent_column(target_agent)
         col.file_var.set(target_file)
         col.local_context.delete("1.0", tk.END)"        col.local_context.insert("1.0", f"--- Delegated Context ---\\n{context}")"        self.status_var.set(f"Delegated task from active agent to {target_agent}.")
@@ -312,4 +311,4 @@ if __name__ == "__main__":"    root = tk.Tk()
     app = PyAgentGUI(root)
     root.mainloop()
 
-""
+"""

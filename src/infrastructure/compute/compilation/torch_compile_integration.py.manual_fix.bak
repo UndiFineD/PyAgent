@@ -20,7 +20,6 @@ from __future__ import annotations
 TorchCompileIntegration - Integration with torch.compile for model optimization.
 
 """
-
 Implements vLLM's compilation patterns:'- CompilerInterface for backend abstraction
 - Compilation modes (default, reduce-overhead, max-autotune)
 - Counter-based dynamic recompilation
@@ -48,19 +47,19 @@ F = TypeVar("F", bound=Callable[..., Any])
 
 
 class CompileMode(Enum):
-    ""
+"""
 Compilation mode selection.
     DEFAULT = "default"  # Standard optimization"    REDUCE_OVERHEAD = "reduce-overhead"  # Minimize CPU overhead"    MAX_AUTOTUNE = "max-autotune"  # Maximum tuning"    MAX_AUTOTUNE_NO_CUDAGRAPH = "max-autotune-no-cudagraphs""
 
 
 class CompileBackend(Enum):
-    ""
+"""
 Torch compilation backends.
     ONNXRT = "onnxrt"  # ONNX Runtime"    EAGER = "eager"  # No compilation (debug)"    INDUCTOR = "inductor"  # In-ductor backend (default)"    CUDAGRAPHS = "cudagraphs"  # CUDA Graphs backend"
 
 @dataclass
 class CompileConfig:
-    ""
+"""
 Configuration for torch.compile integration.
     mode: CompileMode = CompileMode.DEFAULT
     backend: CompileBackend = CompileBackend.INDUCTOR
@@ -77,7 +76,7 @@ Create config from environment variables.        return cls(
 
 @dataclass
 class CompileStats:
-    ""
+"""
 Statistics for compilation.
     compile_count: int = 0
     recompile_count: int = 0
@@ -88,7 +87,7 @@ Statistics for compilation.
 
     @property
     def avg_compile_time(self) -> float:
-        ""
+"""
 Average compilation time.        total = self.compile_count + self.recompile_count
         if total == 0:
             return 0.0
@@ -102,15 +101,15 @@ class CompilerInterface(ABC):
     Based on vLLM's CompilerInterface for backend abstraction.'    
     @abstractmethod
     def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
-        ""
+"""
 Compile a function.
     @abstractmethod
     def is_compiled(self, fn: Callable[..., Any]) -> bool:
-        ""
+"""
 Check if function is compiled.
     @abstractmethod
     def invalidate(self, fn: Callable[..., Any]) -> None:
-        ""
+"""
 Invalidate compilation cache for function.
 
 
@@ -174,12 +173,12 @@ class TorchCompiler(CompilerInterface):
         return compiled
 
     def is_compiled(self, fn: Callable[..., Any]) -> bool:
-        ""
+"""
 Check if function is compiled.        with self._lock:
             return id(fn) in self._compiled_fns
 
     def invalidate(self, fn: Callable[..., Any]) -> None:
-        ""
+"""
 Invalidate cache for function.        fn_id = id(fn)
         with self._lock:
             if fn_id in self._compiled_fns:
@@ -187,7 +186,7 @@ Invalidate cache for function.        fn_id = id(fn)
 
     @property
     def stats(self) -> CompileStats:
-        ""
+"""
 Get compilation statistics.        return self._stats
 
 
@@ -197,12 +196,12 @@ class CompilationCounter:
 
     Based on vLLM's counter pattern for limiting recompiles.'    
     def __init__(self, max_recompiles: int = 8, warmup_iters: int = 10):
-                Initialize counter.
+        Initialize counter.
 
         Args:
-            max_recompiles: Maximum allowed recompiles
-            warmup_iters: Iterations before stable compilation
-                self.max_recompiles = max_recompiles
+        max_recompiles: Maximum allowed recompiles
+        warmup_iters: Iterations before stable compilation
+        self.max_recompiles = max_recompiles
         self.warmup_iters = warmup_iters
         self._count = 0
         self._recompiles = 0
@@ -235,7 +234,7 @@ class CompilationCounter:
             return True
 
     def reset(self) -> None:
-        ""
+"""
 Reset counter state.        with self._lock:
             self._count = 0
             self._recompiles = 0
@@ -243,7 +242,7 @@ Reset counter state.        with self._lock:
 
     @property
     def recompile_count(self) -> int:
-        ""
+"""
 Get recompile count.        return self._recompiles
 
 
@@ -263,7 +262,7 @@ class IncrementalCompiler(CompilerInterface):
         self._lock = threading.Lock()
 
     def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
-        ""
+"""
 Compile after threshold calls.        fn_id = id(fn)
 
         with self._lock:
@@ -305,7 +304,7 @@ class ProfileGuidedCompiler(CompilerInterface):
         self._lock = threading.Lock()
 
     def profile_execution(self, fn: Callable[..., Any], args: Tuple[Any, ...], kwargs: Dict[str, Any]) -> float:
-        ""
+"""
 Profile a function execution.        start = time.perf_counter()
         fn(*args, **kwargs)
         elapsed = time.perf_counter() - start
@@ -319,7 +318,7 @@ Profile a function execution.        start = time.perf_counter()
         return elapsed
 
     def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
-        ""
+"""
 Compile with best backend based on profile.        fn_id = id(fn)
 
         # Check if already compiled
@@ -396,11 +395,11 @@ def compile_fn(
 
 
 def set_compile_enabled(enabled: bool) -> None:
-    ""
+"""
 Globally enable/disable torch.compile.    os.environ["VLLM_TORCH_COMPILE_DISABLE"] = "0" if enabled else "1"
 
 def get_compile_config() -> CompileConfig:
-    ""
+"""
 Get current compile configuration from environment.    return CompileConfig.from_env()
 
 
@@ -421,7 +420,25 @@ def with_compiler_context(mode: CompileMode = CompileMode.DEFAULT) -> Callable[[
 
     return decorator
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

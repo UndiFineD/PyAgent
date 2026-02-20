@@ -133,10 +133,10 @@ all_peers = self.get_peers()
         def proximity_score(peer):
             peer_ip = peer.get("ip", "")
             if peer_ip.startswith(local_prefix):
-                return 0  # On same subnet
+            return 0  # On same subnet
             return 1  # Different subnet
 
-        return sorted(all_peers, key=proximity_score)[:count]
+            return sorted(all_peers, key=proximity_score)[:count]
 
 
     def _get_local_ip(self) -> str:

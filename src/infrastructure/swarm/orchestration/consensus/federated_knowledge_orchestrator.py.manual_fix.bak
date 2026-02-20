@@ -17,11 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 FederatedKnowledgeOrchestrator for PyAgent.""""
 Synchronizes learned insights ('Lessons Learned') between distributed fleet nodes.'Uses InterFleetBridgeOrchestrator to transmit knowledge without raw data leakage.
 
-""
+"""
 try:
     import logging
 except ImportError:
@@ -55,7 +55,7 @@ __version__ = VERSION
 
 
 class FederatedKnowledgeOrchestrator:
-    ""
+"""
 Orchestrates the synchronization of cognitive insights across distributed fleets.
     def __init__(self, fleet_manager: Any | None = None, fleet: Any | None = None) -> None:
         self.fleet = fleet_manager or fleet
@@ -73,7 +73,7 @@ Orchestrates the synchronization of cognitive insights across distributed fleets
         self.sync_history: list[dict[str, Any]] = []
 
     async def broadcast_lesson(self, lesson_id: str, lesson_data: dict[str, Any]) -> dict[str, Any]:
-        ""
+"""
 Broadcasts a successful outcome/lesson to the federated network.""""
 Args:
             lesson_id: Unique identifier for the lesson.
@@ -93,7 +93,7 @@ Args:
 
         self.sync_history.append({"id": lesson_id, "status": "broadcasted", "targets": peers})"        return {"status": "success", "peer_count": len(peers), "results": results}"
     def receive_and_fuse_knowledge(self, incoming_knowledge: list[dict[str, Any]]) -> int:
-        ""
+"""
 Fuses incoming lessons from external fleets into the local Knowledge agent.""""
 Args:
             incoming_knowledge: List of lesson dictionaries.
@@ -109,7 +109,7 @@ Args:
         return fused_count
 
     def run_fleet_wide_sync(self) -> dict[str, Any]:
-        ""
+"""
 Initiates a full sync request to peers by polling for new insights.        logging.info("FederatedKnowledge: Starting full peer sync request.")
         # Discover peers through the bridge
         peer_list = list(self.bridge.connected_fleets.keys())
@@ -132,7 +132,25 @@ Initiates a full sync request to peers by polling for new insights.        loggi
         return {
             "status": "success","            "fused_insights": count,"            "peers_polled": len(peer_list),"        }
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

@@ -83,18 +83,18 @@ Verifies changelog entries meet security, legal, and
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]"    LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]"
     def __init__(self):
         self.standards = {
-            "Security": ComplianceStandard("                "Security","                [
-                    ComplianceCheck(
-                        "Security Category Check","                        check_fn=self._security_category_check,
-                        recommendation="Move security-related entries to the Security section","                    ),
-                ],
-            ),
-            "Legal": ComplianceStandard("                "Legal","                [
-                    ComplianceCheck(
-                        "Legal Review Check","                        check_fn=self._legal_review_check,
-                        recommendation="Have legal team review license / copyright changes","                    ),
-                ],
-            ),
+        "Security": ComplianceStandard("                "Security","                [
+        ComplianceCheck(
+        "Security Category Check","                        check_fn=self._security_category_check,
+        recommendation="Move security-related entries to the Security section","                    ),
+        ],
+        ),
+        "Legal": ComplianceStandard("                "Legal","                [
+        ComplianceCheck(
+        "Legal Review Check","                        check_fn=self._legal_review_check,
+        recommendation="Have legal team review license / copyright changes","                    ),
+        ],
+        ),
         }
 
     def _security_category_check(self) -> bool:

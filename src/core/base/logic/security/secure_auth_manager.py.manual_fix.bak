@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-""
+"""
 Lightweight secure auth manager shim for tests.
 
 Provides minimal behavior for creating and verifying sessions.
 Real WebAuthn / OAuth flows are out of scope for unit tests.
-""
+"""
+from __future__ import annotations
 
 
 

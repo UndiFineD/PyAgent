@@ -53,60 +53,60 @@ def __init__(self, rp_id: str = "localhost", rp_name: str = "PyAgent"):"        
 
     def get_registration_options(self, username: str, user_id: str):
 """
-Generates options for WebAuthn registration.""
-options = generate_registration_options(
-            rp_id=self.rp_id,
-            rp_name=self.rp_name,
-            user_id=user_id,
-            user_name=username,
-            authenticator_selection=AuthenticatorSelectionCriteria(
-                authenticator_attachment=AuthenticatorAttachment.PLATFORM,  # Prefer FaceID/TouchID/Windows Hello
-                user_verification=UserVerificationRequirement.PREFERRED,
-            ),
+        Generates options for WebAuthn registration.""
+        options = generate_registration_options(
+        rp_id=self.rp_id,
+        rp_name=self.rp_name,
+        user_id=user_id,
+        user_name=username,
+        authenticator_selection=AuthenticatorSelectionCriteria(
+        authenticator_attachment=AuthenticatorAttachment.PLATFORM,  # Prefer FaceID/TouchID/Windows Hello
+        user_verification=UserVerificationRequirement.PREFERRED,
+        ),
         )
         # Store challenge for verification
         self.challenges[username] = options.challenge.decode(
-            "utf-8") if isinstance(options.challenge, bytes) else options.challenge"        return json.loads(options_to_json(options))
+        "utf-8") if isinstance(options.challenge, bytes) else options.challenge"        return json.loads(options_to_json(options))
 
     def verify_registration(self, username: str, credential_data: Dict[str, Any]):
 """
-Verifies the WebAuthn registration response.""
-challenge = self.challenges.get(username)
+        Verifies the WebAuthn registration response.""
+        challenge = self.challenges.get(username)
         if not challenge:
-            raise ValueError("No challenge found for registration verification")
+        raise ValueError("No challenge found for registration verification")
         try:
-            verification = verify_registration_response(
-                credential=credential_data,
-                expected_challenge=challenge,
-                expected_origin=f"http://{self.rp_id}:8000" if self.rp_id == "localhost" else f"https://{self.rp_id}","                expected_rp_id=self.rp_id,
-            )
+        verification = verify_registration_response(
+        credential=credential_data,
+        expected_challenge=challenge,
+        expected_origin=f"http://{self.rp_id}:8000" if self.rp_id == "localhost" else f"https://{self.rp_id}","                expected_rp_id=self.rp_id,
+        )
 
-            # Store credential for future logins
-            if username not in self.user_credentials:
-                self.user_credentials[username] = []
+        # Store credential for future logins
+        if username not in self.user_credentials:
+        self.user_credentials[username] = []
 
-            self.user_credentials[username].append({
-                "id": verification.credential_id,"                "public_key": verification.credential_public_key,"                "sign_count": verification.sign_count,"            })
+        self.user_credentials[username].append({
+        "id": verification.credential_id,"                "public_key": verification.credential_public_key,"                "sign_count": verification.sign_count,"            })
 
-            return True
+        return True
         except Exception as e:
-            logger.error(f"WebAuthn registration verification failed: {e}")"            return False
+        logger.error(f"WebAuthn registration verification failed: {e}")"            return False
 
-    # --- WebAuthn Authentication ---
+        # --- WebAuthn Authentication ---
 
     def get_authentication_options(self, username: str):
 """
-Generates options for WebAuthn login.""
-if username not in self.user_credentials:
-            return None
+        Generates options for WebAuthn login.""
+        if username not in self.user_credentials:
+        return None
 
         allowed_credentials = [
-            {"id": cred["id"], "type": "public-key"} for cred in self.user_credentials[username]"        ]
+        {"id": cred["id"], "type": "public-key"} for cred in self.user_credentials[username]"        ]
 
         options = generate_authentication_options(
-            rp_id=self.rp_id,
-            allow_credentials=allowed_credentials,
-            user_verification=UserVerificationRequirement.PREFERRED,
+        rp_id=self.rp_id,
+        allow_credentials=allowed_credentials,
+        user_verification=UserVerificationRequirement.PREFERRED,
         )
 
         self.challenges[username] = options.challenge
@@ -114,25 +114,25 @@ if username not in self.user_credentials:
 
     def verify_authentication(self, username: str, auth_data: Dict[str, Any]):
         ""
-Verifies the WebAuthn login response.""
-challenge = self.challenges.get(username)
+        Verifies the WebAuthn login response.""
+        challenge = self.challenges.get(username)
         if not challenge:
-            return False
+        return False
 
         # Find the credential
         credential_id = auth_data.get("id")"        user_creds = self.user_credentials.get(username, [])
         matching_cred = next((c for c in user_creds if c["id"] == credential_id), None)
         if not matching_cred:
-            return False
+        return False
 
         try:
-            verification = verify_authentication_response(
-                credential=auth_data,
-                expected_challenge=challenge,
-                expected_origin=f"http://{self.rp_id}:8000" if self.rp_id == "localhost" else f"https://{self.rp_id}","                expected_rp_id=self.rp_id,
-                credential_public_key=matching_cred["public_key"],"                credential_current_sign_count=matching_cred["sign_count"],"            )
+        verification = verify_authentication_response(
+        credential=auth_data,
+        expected_challenge=challenge,
+        expected_origin=f"http://{self.rp_id}:8000" if self.rp_id == "localhost" else f"https://{self.rp_id}","                expected_rp_id=self.rp_id,
+        credential_public_key=matching_cred["public_key"],"                credential_current_sign_count=matching_cred["sign_count"],"            )
 
-            # Update sign count
-            matching_cred["sign_count"] = verification.new_sign_count"            return True
+        # Update sign count
+        matching_cred["sign_count"] = verification.new_sign_count"            return True
         except Exception as e:
-            logger.error(f"WebAuthn authentication verification failed: {e}")"            return False
+        logger.error(f"WebAuthn authentication verification failed: {e}")"            return False

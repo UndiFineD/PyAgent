@@ -165,6 +165,24 @@ Self-Review: Analyzes staged changes for security, style, and" logic issues.    
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

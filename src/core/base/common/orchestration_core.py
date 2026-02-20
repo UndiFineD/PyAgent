@@ -165,18 +165,18 @@ if not self.criteria:
         # Calculate totals regarding scores and weights functionally
         def _get_vals(pair):
 """
-Helper to get score and weight from a criterion.""
-func, weight = pair
+            Helper to get score and weight from a criterion.""
+            func, weight = pair
             return func(text) * weight, weight
 
-        sums = list(map(_get_vals, self.criteria.values()))
-        total_score = sum(map(lambda x: x[0], sums))
-        total_weight = sum(map(lambda x: x[1], sums))
+            sums = list(map(_get_vals, self.criteria.values()))
+            total_score = sum(map(lambda x: x[0], sums))
+            total_weight = sum(map(lambda x: x[1], sums))
 
-        return total_score / total_weight if total_weight > 0 else 0.0
+            return total_score / total_weight if total_weight > 0 else 0.0
 
 
-@dataclass
+            @dataclass
 class ABTest:
 """
 Simple A/B testing harness regarding variants.

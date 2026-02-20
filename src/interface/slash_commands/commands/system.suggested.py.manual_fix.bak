@@ -13,12 +13,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 System commands - stats, memory, health, CPU, disk.
 
 """
-
 from ..core import CommandContext, CommandResult
 from ..registry import register
 
@@ -26,7 +25,7 @@ from ..registry import register
 @register(
     "stats","    description="Get system statistics","    usage="/stats","    aliases=["sys", "system"],"    category="system",")
 def cmd_stats(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get system CPU, memory, disk stats.    try:
         import psutil
     except ImportError:
@@ -47,7 +46,7 @@ Get system CPU, memory, disk stats.    try:
 @register(
     "memory","    description="Get detailed memory usage","    usage="/memory","    aliases=["mem", "ram"],"    category="system",")
 def cmd_memory(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get detailed memory information.    try:
         import psutil
     except ImportError:
@@ -69,7 +68,7 @@ Get detailed memory information.    try:
 @register(
     "health","    description="System health check","    usage="/health","    aliases=["ping", "status"],"    category="system",")
 def cmd_health(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Check system health.    try:
         import psutil
     except ImportError:
@@ -101,7 +100,7 @@ Check system health.    try:
 @register(
     "cpu","    description="Get CPU information","    usage="/cpu","    aliases=["processor"],"    category="system",")
 def cmd_cpu(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get CPU information.    try:
         import psutil
     except ImportError:
@@ -123,7 +122,7 @@ Get CPU information.    try:
 @register(
     "disk","    description="Get disk usage","    usage="/disk [path]","    aliases=["storage"],"    category="system",")
 def cmd_disk(ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get disk usage.    try:
         import psutil
     except ImportError:
@@ -144,7 +143,7 @@ Get disk usage.    try:
 @register(
     "gpu","    description="GPU information","    usage="/gpu","    aliases=["cuda", "nvidia"],"    category="system",")
 def cmd_gpu(_ctx: CommandContext) -> CommandResult:
-    ""
+"""
 Get GPU information.    try:
         import torch
 
@@ -169,7 +168,7 @@ Get GPU information.    try:
 @register(
     "processes","    description="List top processes by CPU","    usage="/processes [count]","    aliases=["procs", "top"],"    category="system",")
 def cmd_processes(ctx: CommandContext) -> CommandResult:
-    ""
+"""
 List top processes by CPU usage.    try:
         import psutil
     except ImportError:

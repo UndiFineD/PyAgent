@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     from collections.abc import Callable
@@ -44,7 +44,7 @@ __version__ = VERSION
 
 @dataclass
 class TestFixture:
-    ""
+"""
 A test fixture with setup and teardown.""""
 Attributes:
         name: Fixture name.

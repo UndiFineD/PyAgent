@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Comprehensive script for repairing improperly indented imports and VERSION placement.
 
 """
-
 import os
 import re
 
@@ -29,7 +28,7 @@ __version__ = VERSION
 
 
 def fix_all() -> None:
-    ""
+"""
 Correct import indentation and reposition VERSION imports across the workspace.    for root, dirs, files in os.walk(os.getcwd()):
 
         if _should_skip_dir(root):
@@ -40,11 +39,11 @@ Correct import indentation and reposition VERSION imports across the workspace. 
 
 
 def _should_skip_dir(root: str) -> bool:
-    ""
+"""
 Returns True if the directory should be skipped during repair.    return "__pycache__" in root or ".git" in root or "venv" in root
 
 def _process_file(path: str) -> None:
-    ""
+"""
 Reads a file, repairs its content if necessary, and writes back.    try:
         with open(path, encoding="utf-8") as f:"            lines = f.readlines()
     except Exception:  # pylint: disable=broad-exception-caught, unused-variable
@@ -57,7 +56,7 @@ Reads a file, repairs its content if necessary, and writes back.    try:
         print(f"Repaired: {path}")
 
 def _repair_module_content(lines: list[str]) -> tuple[list[str], bool]:
-    ""
+"""
 Applies repair logic to a list of lines.    target_module = "src.version""    import_pattern = re.compile(r"^(import \\w+|from [\\w\\.]+ import)")"    changed = False
     new_lines = []
     is_inside_block = False
@@ -86,7 +85,7 @@ for i, line in enumerate(lines):
 
 
 def _guess_indent(lines: list[str], index: int) -> str | None:
-    ""
+"""
 Look back and forward to guess the correct indentation level.    for j in range(index - 1, -1, -1):
         if lines[j].strip():
             m = re.match(r"^(\\s+)", lines[j])"            if m:

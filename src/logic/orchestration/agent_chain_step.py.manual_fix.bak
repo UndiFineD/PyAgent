@@ -87,7 +87,7 @@ __version__ = VERSION
 
 @dataclass
 class AgentChainStep:
-    ""
+"""
 A step in an agent chain.""""
 Attributes:
         agent_name: Name of the agent to execute.
@@ -101,6 +101,24 @@ Attributes:
     output_transform: Callable[[Any], Any] | None = None
     enabled: bool = True
     condition: Callable[[Any], bool] | None = None
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

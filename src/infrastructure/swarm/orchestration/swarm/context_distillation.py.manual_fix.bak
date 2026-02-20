@@ -14,12 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Context distillation.py module.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -84,4 +83,4 @@ class ContextDistiller:
         return reconstructed
 
 
-""
+"""

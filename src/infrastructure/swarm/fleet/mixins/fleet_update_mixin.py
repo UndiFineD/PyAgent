@@ -77,52 +77,52 @@ self._kill_event.set()
 
     def _update_loop(self):
 """
-Background thread loop for git operations.""
+        Background thread loop for git operations.""
         # Initial short delay to let the system stabilize
         self._sleep_fn(30)
 
         while not getattr(self, "kill_switch", False) and not getattr(self, "_kill_event", threading.Event()).is_set():
-            try:
-                self._run_git_pull()
-            except (subprocess.SubprocessError, OSError, RuntimeError) as e:
-                logger.error(f"FleetUpdateMixin: Update check failed: {e}")
-            # Sleep in small increments to respond faster to kill_switch
-            for _ in range(max(1, self._update_interval // 5)):
-                if getattr(self, "kill_switch", False) or getattr(self, "_kill_event", threading.Event()).is_set():
-                    break
-                self._sleep_fn(5)
+        try:
+        self._run_git_pull()
+        except (subprocess.SubprocessError, OSError, RuntimeError) as e:
+        logger.error(f"FleetUpdateMixin: Update check failed: {e}")
+        # Sleep in small increments to respond faster to kill_switch
+        for _ in range(max(1, self._update_interval // 5)):
+        if getattr(self, "kill_switch", False) or getattr(self, "_kill_event", threading.Event()).is_set():
+        break
+        self._sleep_fn(5)
 
     def _run_git_pull(self):
         ""
-Executes the git pull command.""
-workspace_path = getattr(self, "workspace_root", Path.cwd())
+        Executes the git pull command.""
+        workspace_path = getattr(self, "workspace_root", Path.cwd())
         # Check if it's a git repo
         git_dir = workspace_path / ".git"
         if not git_dir.exists():
-            logger.warning(f"FleetUpdateMixin: {workspace_path} is not a git repository. Skipping update.")
-            return
+        logger.warning(f"FleetUpdateMixin: {workspace_path} is not a git repository. Skipping update.")
+        return
 
         logger.info("FleetUpdateMixin: Checking for updates from https://github.com/UndiFineD/PyAgent...")
         try:
-            # specifically pull from the repo requested by the user
-            result = subprocess.run(
-                ["git", "pull", "https://github.com/UndiFineD/PyAgent", "main"],
-                cwd=str(workspace_path),
-                capture_output=True,
-                text=True,
-                check=False,
-            )
+        # specifically pull from the repo requested by the user
+        result = subprocess.run(
+        ["git", "pull", "https://github.com/UndiFineD/PyAgent", "main"],
+        cwd=str(workspace_path),
+        capture_output=True,
+        text=True,
+        check=False,
+        )
 
-            if "Already up to date" in result.stdout:
-                logger.info("FleetUpdateMixin: System is already up to date.")
-            elif result.returncode == 0:
-                logger.info(f"FleetUpdateMixin: Successfully updated PyAgent.\\n{result.stdout}")
-                # Future: trigger post-update migration or reload logic
-            else:
-                # Common issue: local changes. We don't want to force pull and lose user work
-                # # unless explicitly requested, so we just log the failure.
-                logger.error(f"FleetUpdateMixin: Git pull failed (exit {result.returncode}): {result.stderr}")
+        if "Already up to date" in result.stdout:
+        logger.info("FleetUpdateMixin: System is already up to date.")
+        elif result.returncode == 0:
+        logger.info(f"FleetUpdateMixin: Successfully updated PyAgent.\\n{result.stdout}")
+        # Future: trigger post-update migration or reload logic
+        else:
+        # Common issue: local changes. We don't want to force pull and lose user work
+        # # unless explicitly requested, so we just log the failure.
+        logger.error(f"FleetUpdateMixin: Git pull failed (exit {result.returncode}): {result.stderr}")
         except FileNotFoundError:
-            logger.error("FleetUpdateMixin: 'git' command not found. Cannot perform auto-update.")
+        logger.error("FleetUpdateMixin: 'git' command not found. Cannot perform auto-update.")
         except (subprocess.SubprocessError, OSError, ValueError) as e:
-            logger.error(f"FleetUpdateMixin: Unexpected error during git pull: {e}")
+        logger.error(f"FleetUpdateMixin: Unexpected error during git pull: {e}")

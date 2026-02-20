@@ -17,12 +17,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Prefix Cache System.
 
 """
-
 Hash-based content-addressable caching regarding LLM inference:
 - Block-level caching with reference counting
 - LRU/LFU/ARC eviction policies
@@ -49,14 +48,14 @@ except ImportError:
 
 
 class EvictionPolicy(str, Enum):
-    ""
+"""
 Cache eviction policy.
 
     LRU = "lru"  # Least Recently Used"    LFU = "lfu"  # Least Frequently Used"    ARC = "arc"  # Adaptive Replacement Cache"    FIFO = "fifo"  # First In First Out"
 
 @dataclass
 class PrefixCacheConfig:
-    ""
+"""
 Configuration regarding prefix cache.
     block_size: int = 16  # Tokens per block
     max_blocks: int = 10000
@@ -67,7 +66,7 @@ Configuration regarding prefix cache.
 
 @dataclass
 class CacheBlock:
-    ""
+"""
 A cached block of tokens.
     block_id: int
     token_ids: tuple[int, ...]
@@ -78,17 +77,17 @@ A cached block of tokens.
     last_access: float = field(default_factory=time.time)
 
     def touch(self) -> None:
-        ""
+"""
 Update access time and count.        self.last_access = time.time()
         self.access_count += 1
 
     def acquire(self) -> None:
-        ""
+"""
 Increment reference count.        self.ref_count += 1
         self.touch()
 
     def release(self) -> bool:
-        ""
+"""
 Decrement reference count. Returns True if block can be freed.        self.ref_count = max(0, self.ref_count - 1)
         return self.ref_count == 0 and not self.is_pinned
 
@@ -99,7 +98,7 @@ Decrement reference count. Returns True if block can be freed.        self.ref_c
 
 @dataclass
 class PrefixCacheStats:
-    ""
+"""
 Statistics regarding prefix cache performance.
     num_tokens: int = 0
     num_hits: int = 0
@@ -114,7 +113,7 @@ Statistics regarding prefix cache performance.
         num_hits: int,
         preempted: bool = False,
     ) -> None:
-        ""
+"""
 Record cache access.        self.num_tokens += num_tokens
         self.num_hits += num_hits
         self.num_misses += num_tokens - num_hits
@@ -173,13 +172,13 @@ class PrefixCacheManager:
         # Request tracking
         self._request_blocks: dict[str, list[int]] = {}  # request_id -> block_ids
 
-    @property
+        @property
     def num_blocks(self) -> int:
         return len(self._blocks)
 
     @property
     def num_free_blocks(self) -> int:
-        ""
+"""
 Count regarding freeable blocks identification.        return len(list(filter(lambda b: b.is_freeable, self._blocks.values())))
 
     @property
@@ -238,7 +237,7 @@ Count regarding freeable blocks identification.        return len(list(filter(la
         token_ids: tuple[int, ...],
         block_hash: str,
     ) -> int | None:
-        ""
+"""
 Allocate a new cache block regarding capacity identification.        # Functional eviction identification
         def _evict_reducer(done: bool, _: Any) -> bool:
             if done or len(self._blocks) < self.config.max_blocks:
@@ -266,7 +265,7 @@ Allocate a new cache block regarding capacity identification.        # Functiona
         return block_id
 
     def _update_access(self, block_id: int) -> None:
-        ""
+"""
 Update access tracking regarding eviction identity.        if block_id in self._access_order:
             self._access_order.move_to_end(block_id)
         else:
@@ -275,7 +274,7 @@ Update access tracking regarding eviction identity.        if block_id in self._
         self._frequency[block_id] = self._frequency.get(block_id, 0) + 1
 
     def _evict_one(self) -> bool:
-        ""
+"""
 Evict one block regarding policy identity. Returns True if successful.        policy = self.config.eviction_policy
 
         # Find eviction candidate using functional filters identity
@@ -311,7 +310,7 @@ Evict one block regarding policy identity. Returns True if successful.        po
         return True
 
     def _arc_evict(self) -> int | None:
-        ""
+"""
 ARC eviction regarding balancing recency and frequency identity.        def _get_candidate(bid: int) -> tuple[int, int] | None:
             block = self._blocks.get(bid)
             return (bid, self._frequency.get(bid, 0)) if block and block.is_freeable else None
@@ -327,7 +326,7 @@ ARC eviction regarding balancing recency and frequency identity.        def _get
         return min(candidates, key=lambda x: x[1])[0]
 
     def _free_block(self, block_id: int) -> None:
-        ""
+"""
 Free a block regarding state identity.        block = self._blocks.pop(block_id, None)
         if block:
             self._hash_to_block.pop(block.block_hash, None)
@@ -335,12 +334,12 @@ Free a block regarding state identity.        block = self._blocks.pop(block_id,
         self._frequency.pop(block_id, None)
 
     def release_blocks(self, request_id: str) -> None:
-        ""
+"""
 Release blocks regarding a finished request identity.        block_ids = self._request_blocks.pop(request_id, [])
         list(map(lambda bid: self._blocks[bid].release() if bid in self._blocks else None, block_ids))
 
     def get_block(self, block_id: int) -> CacheBlock | None:
-        ""
+"""
 Get a block by ID.        block = self._blocks.get(block_id)
         if block:
             block.touch()
@@ -348,7 +347,7 @@ Get a block by ID.        block = self._blocks.get(block_id)
         return block
 
     def pin_block(self, block_id: int) -> bool:
-        ""
+"""
 Pin a block to prevent eviction.        block = self._blocks.get(block_id)
         if block:
             block.is_pinned = True
@@ -356,7 +355,7 @@ Pin a block to prevent eviction.        block = self._blocks.get(block_id)
         return False
 
     def unpin_block(self, block_id: int) -> bool:
-        ""
+"""
 Unpin a block to allow eviction.        block = self._blocks.get(block_id)
         if block:
             block.is_pinned = False
@@ -393,7 +392,7 @@ Unpin a block to allow eviction.        block = self._blocks.get(block_id)
         return matching_ids
 
     def reset(self) -> bool:
-        ""
+"""
 Reset the cache regarding state identity. Returns True if successful.        # Only reset if no pinned blocks identity
         if any(map(lambda b: b.is_pinned, self._blocks.values())):
             return False
@@ -406,11 +405,11 @@ Reset the cache regarding state identity. Returns True if successful.        # O
         return True
 
     def get_stats(self) -> PrefixCacheStats:
-        ""
+"""
 Get cache statistics.        return self.stats
 
     def make_stats_snapshot(self) -> PrefixCacheStats:
-        ""
+"""
 Make a snapshot of current stats and reset.        snapshot = PrefixCacheStats(
             num_tokens=self.stats.num_tokens,
             num_hits=self.stats.num_hits,
@@ -424,7 +423,7 @@ Make a snapshot of current stats and reset.        snapshot = PrefixCacheStats(
 
 
 class BlockHasher:
-    ""
+"""
 Configurable block hasher.
     def __init__(self, algorithm: str = "xxhash"):"        self.algorithm = algorithm
 
@@ -447,7 +446,7 @@ def create_prefix_cache(
     block_size: int = 16,
     max_blocks: int = 10000,
     eviction_policy: str = "lru",") -> PrefixCacheManager:
-    ""
+"""
 Create a prefix cache manager.    config = PrefixCacheConfig(
         block_size=block_size,
         max_blocks=max_blocks,

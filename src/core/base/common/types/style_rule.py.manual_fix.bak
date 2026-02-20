@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_coder.py
-""
+"""
 
 """
 from collections.abc import Callable
@@ -42,9 +42,9 @@ __version__ = VERSION
 
 @dataclass
 class StyleRule:
-    ""
+"""
 A configurable code style rule.
-    ""
+"""
 name: str
     pattern: str
     message: str

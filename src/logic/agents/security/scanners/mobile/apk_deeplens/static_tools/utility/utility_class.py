@@ -57,25 +57,43 @@ UNDERLINE = "\\033[4m"  # [BATCHFIX] closed string
         Better mod print. It gives the line number, 
         file name in which error occured.
         stack = traceback.extract_stack()
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
+        # [BATCHFIX] Commented metadata/non-Python
+        """ [BATCHFIX] Commented metadata/non-Python"""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-filename, line_no, func_name, text = stack[-2]""""
-# [BATCHFIX] Commented metadata/non-Python
+        filename, line_no, func_name, text = stack[-2]""""
+        # [BATCHFIX] Commented metadata/non-Python
 """
-formatted_message = f"{filename}:{line_no}: {text_output}"  # [BATCHFIX] closed string"        print(color + formatted_message + Util.ENDC)
+        formatted_message = f"{filename}:{line_no}: {text_output}"  # [BATCHFIX] closed string"        print(color + formatted_message + Util.ENDC)
 
-    @staticmethod
+        @staticmethod
     def mod_log(text, color):
-# [BATCHFIX] Commented metadata/non-Python
-#         Better mod log. It gives the line" number,"  # [BATCHFIX] closed string"        file name in which error occured.
-# [BATCHFIX] Commented metadata/non-Python
-#         logging.info(color + "{}".format(text) "+ Util.ENDC)"  # [BATCHFIX] closed string
+        # [BATCHFIX] Commented metadata/non-Python
+        #         Better mod log. It gives the line" number,"  # [BATCHFIX] closed string"        file name in which error occured.
+        # [BATCHFIX] Commented metadata/non-Python
+        #         logging.info(color + "{}".format(text) "+ Util.ENDC)"  # [BATCHFIX] closed string
 """
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

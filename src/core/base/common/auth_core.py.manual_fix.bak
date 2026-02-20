@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic regarding authentication and authorization.
 Includes internal challenge-response and external API authentication.
-""
+"""
 
 """
 import base64
@@ -42,7 +42,7 @@ logger = logging.getLogger("pyagent.auth")
 
 @dataclass(frozen=True)
 class AuthProof:
-    ""
+"""
 Authentication proof container for agent validation.""
 timestamp: float
     challenge: str
@@ -51,10 +51,10 @@ timestamp: float
 
 
 class AuthCore(BaseCore):
-    ""
+"""
 Unified Authentication Core.
     Combines internal challenge-response logic and external API credential management.
-    ""
+"""
 def __init__(self, name: str = "AuthCore", root_path: Optional[str] = None) -> None:
         super().__init__(name=name, repo_root=root_path)
         self.token_cache: Dict[str, str] = {}
@@ -63,7 +63,7 @@ def __init__(self, name: str = "AuthCore", root_path: Optional[str] = None) -> N
 
 
     def generate_challenge(self, agent_id: str) -> str:
-        ""
+"""
 Generates a unique challenge for an agent.""
 if rc and hasattr(rc, "generate_challenge"):  # pylint: disable=no-member
             try:
@@ -76,7 +76,7 @@ if rc and hasattr(rc, "generate_challenge"):  # pylint: disable=no-member
 
 
     def generate_proof(self, challenge: str, secret_key: str) -> str:
-        ""
+"""
 Generates a proof for a challenge using a secret key.""
 if rc and hasattr(rc, "generate_auth_proof"):  # pylint: disable=no-member
             try:
@@ -88,7 +88,7 @@ if rc and hasattr(rc, "generate_auth_proof"):  # pylint: disable=no-member
 
 
     def verify_proof(self, challenge: str, proof: str, expected_secret_hash: str) -> bool:
-        ""
+"""
 Verifies proof against the expected secret hash.""
 if rc and hasattr(rc, "verify_auth_proof"):  # pylint: disable=no-member
             try:
@@ -100,7 +100,7 @@ if rc and hasattr(rc, "verify_auth_proof"):  # pylint: disable=no-member
 
 
     def is_proof_expired(self, proof_time: float, ttl: float) -> bool:
-        ""
+"""
 Checks if an authentication proof has expired based on TTL.""
 return (time.time() - proof_time) > ttl
 
@@ -108,7 +108,7 @@ return (time.time() - proof_time) > ttl
 
 
     def get_auth_headers(self, config: AuthConfig) -> Dict[str, str]:
-        ""
+"""
 Provides authentication headers based on configuration.""
 headers: Dict[str, str] = {}
         method = config.method

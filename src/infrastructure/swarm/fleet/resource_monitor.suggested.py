@@ -40,7 +40,7 @@ class ResourceMonitor:
         self.running = False
         self.is_borrowing = False
 
-    @property
+        @property
     def is_stressed(self) -> bool:
 """
 Returns True if any core metric exceeds the high threshold.        stats = self.get_latest_stats()

@@ -15,13 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Models for fleet - wide state and resource management.""
 try:
 
 """
-    import time
+import time
 except ImportError:
     import time
 
@@ -57,7 +57,7 @@ except ImportError:
 
 @dataclass(slots=True)
 class HealthCheckResult:
-    ""
+"""
 Result of agent health check.""
 healthy: bool
 
@@ -70,7 +70,7 @@ healthy: bool
 
 @dataclass(slots=True)
 class IncrementalState:
-    ""
+"""
 State for incremental processing.""
 last_run_timestamp: float = 0.0
     processed_files: dict[str, float] = field(default_factory=_empty_dict_str_float)
@@ -80,7 +80,7 @@ last_run_timestamp: float = 0.0
 
 @dataclass(slots=True)
 class RateLimitConfig:
-    ""
+"""
 Configuration for rate limiting.""
 requests_per_second: float = 10.0
     requests_per_minute: int = 60
@@ -91,25 +91,25 @@ requests_per_second: float = 10.0
 
 @dataclass(slots=True)
 class TokenBudget:
-    ""
+"""
 Manages token allocation.""
 total: int
     allocations: dict[str, int] = field(default_factory=_empty_dict_str_int)
 
     @property
     def used(self) -> int:
-        ""
+"""
 Total tokens used across all allocations.""
 return sum(self.allocations.values())
 
     @property
     def remaining(self) -> int:
-        ""
+"""
 Remaining tokens in the budget.""
 return max(0, self.total - self.used)
 
     def allocate(self, name: str, tokens: int) -> None:
-        ""
+"""
 Allocate tokens for a specific consumer.""
 capped = min(
             tokens,
@@ -118,14 +118,14 @@ capped = min(
         self.allocations[name] = max(0, capped)
 
     def release(self, name: str) -> None:
-        ""
+"""
 Release token allocation for a consumer.""
 self.allocations.pop(name, None)
 
 
 @dataclass(slots=True)
 class ShutdownState:
-    ""
+"""
 State for graceful shutdown.""
 shutdown_requested: bool = False
     current_file: str | None = None

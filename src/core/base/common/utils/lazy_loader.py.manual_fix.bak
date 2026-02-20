@@ -1,9 +1,9 @@
-""
+"""
 Parser-safe lazy loading utilities (minimal stub).
 
 This file contains a lightweight LazyModule and helper used to restore
 importability while the codebase is being repaired.
-""
+"""
 from importlib import import_module
 from typing import Any
 

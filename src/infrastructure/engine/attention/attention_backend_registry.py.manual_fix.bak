@@ -18,7 +18,6 @@
 AttentionBackendRegistry - Dynamic attention backend selection (Facade).
 
 """
-
 This file is now a facade for the modularized backend package.
 
 try:

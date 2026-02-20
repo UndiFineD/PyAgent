@@ -13,13 +13,13 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Built-in command modules.
 try:
 
 """
-    from .system_commands import register_system_commands  # noqa: F401
+from .system_commands import register_system_commands  # noqa: F401
 except ImportError:
     from .system_commands import register_system_commands # noqa: F401
 
@@ -31,4 +31,4 @@ except ImportError:
 
 __all__ = ["register_system_commands", "register_utility_commands"]
 
-""
+"""

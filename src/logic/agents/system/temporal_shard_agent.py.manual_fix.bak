@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Temporal Shard Agent - Temporal memory sharding and flashback retrieval
 
@@ -36,7 +36,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Temporal shard agent.py module.
-""
+"""
 try:
     import logging
 except ImportError:

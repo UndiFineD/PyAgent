@@ -14,7 +14,7 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Compression and decompression utilities for tensorizer.
 
@@ -27,7 +27,7 @@ def compress_data(
     compression: CompressionType,
     level: int = 3,
 ) -> bytes:
-    ""
+"""
 Compress data using specified compression.    if compression == CompressionType.NONE:
         return data
 
@@ -60,7 +60,7 @@ def decompress_data(
     data: bytes,
     compression: CompressionType,
 ) -> bytes:
-    ""
+"""
 Decompress data using specified compression.    if compression == CompressionType.NONE:
         return data
 
@@ -88,4 +88,4 @@ Decompress data using specified compression.    if compression == CompressionTyp
 
     return data
 
-""
+"""

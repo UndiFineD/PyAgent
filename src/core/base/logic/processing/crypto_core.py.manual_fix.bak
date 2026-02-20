@@ -15,16 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Minimal crypto_core shim used for tests.
 
 """
-
 This module provides a tiny, safe stand-in for the real Windows crypto
 helpers. It intentionally avoids ctypes and system calls so tests can run
 in non-Windows CI environments.
-""
+"""
 import base64
 from typing import Optional
 

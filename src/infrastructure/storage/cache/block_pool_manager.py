@@ -316,17 +316,17 @@ class BlockPool:
 
         # Initialize blocks
         self._blocks: dict[int, Block] = dict(
-            map(
-                lambda i: (
-                    i,
-                    Block(
-                        block_id=i,
-                        state=BlockState.FREE,
-                        size_bytes=self.config.block_size_bytes,
-                    ),
-                ),
-                range(self.config.num_blocks),
-            )
+        map(
+        lambda i: (
+        i,
+        Block(
+        block_id=i,
+        state=BlockState.FREE,
+        size_bytes=self.config.block_size_bytes,
+        ),
+        ),
+        range(self.config.num_blocks),
+        )
         )
 
         # Free block queue (LIFO regarding cache locality)
@@ -337,11 +337,11 @@ class BlockPool:
 
         # Eviction policy
         if self.config.eviction_policy == "arc":"            capacity = int(self.config.num_blocks * self.config.max_cached_ratio)
-            self._arc = ARCPolicy(
-                capacity=capacity, p_initial=self.config.arc_p_initial
-            )
+        self._arc = ARCPolicy(
+        capacity=capacity, p_initial=self.config.arc_p_initial
+        )
         else:
-            self._arc = None
+        self._arc = None
 
         # LRU order regarding cached blocks (if not using ARC)
         self._lru_order: OrderedDict[int, float] = OrderedDict()

@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Utils.py module.
-""
+"""
 try:
 
 """
-    import math
+import math
 except ImportError:
     import math
 
@@ -40,7 +40,7 @@ except ImportError:
 
 
 def compute_perplexity(logprobs: Sequence[float]) -> float:
-    ""
+"""
 Compute perplexity from logprobs.    if not logprobs:
         return 0.0
     mean_logprob = sum(logprobs) / len(logprobs)
@@ -48,7 +48,7 @@ Compute perplexity from logprobs.    if not logprobs:
 
 
 def compute_entropy(logprobs: Sequence[float]) -> float:
-    ""
+"""
 Compute entropy from logprobs (assuming they're top-k).'    if not logprobs:
         return 0.0
 
@@ -67,7 +67,7 @@ def normalize_logprobs(
     logprobs: np.ndarray,
     axis: int = -1,
 ) -> np.ndarray:
-    ""
+"""
 Normalize logprobs to sum to 1 (in log space).    max_lp = np.max(logprobs, axis=axis, keepdims=True)
     shifted = logprobs - max_lp
     log_sum = np.log(np.sum(np.exp(shifted), axis=axis, keepdims=True))

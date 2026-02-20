@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 import json
 from collections.abc import Iterator
@@ -32,7 +32,7 @@ __version__ = VERSION
 
 
 class TestRecorder:
-    ""
+"""
 Records and replays test interactions.""""
 Useful for recording external calls and replaying in tests.
 
@@ -48,7 +48,7 @@ Useful for recording external calls and replaying in tests.
     __test__ = False
 
     def __init__(self) -> None:
-        ""
+"""
 Initialize recorder.        self._recordings: list[RecordedInteraction] = []
         self._replay_index = 0
         self._mode: str = "normal"  # "record", "replay", "normal"
@@ -60,7 +60,7 @@ Initialize recorder.        self._recordings: list[RecordedInteraction] = []
         kwargs: dict[str, Any],
         result: Any,
     ) -> None:
-        ""
+"""
 Record an interaction.""""
 Args:
             call_type: Type of call.
@@ -82,7 +82,7 @@ Args:
         call_type: str,
         call_name: str,
     ) -> Any | None:
-        ""
+"""
 Get replayed result for a call.""""
 Args:
             call_type: Type of call.
@@ -102,7 +102,7 @@ Args:
 
     @contextmanager
     def record(self) -> Iterator[TestRecorder]:
-        ""
+"""
 Context manager for recording mode.        self._mode = "record""        self._recordings = []
         try:
             yield self
@@ -110,14 +110,14 @@ Context manager for recording mode.        self._mode = "record""        self._r
             self._mode = "normal"
     @contextmanager
     def replay(self) -> Iterator[TestRecorder]:
-        ""
+"""
 Context manager for replay mode.        self._mode = "replay""        self._replay_index = 0
         try:
             yield self
         finally:
             self._mode = "normal"
     def save(self, path: Path) -> None:
-        ""
+"""
 Save recordings to file.        data: list[dict[str, Any]] = []
         for r in self._recordings:
             data.append(
@@ -127,7 +127,7 @@ Save recordings to file.        data: list[dict[str, Any]] = []
         with open(path, 'w', encoding='utf-8') as f:'            json.dump(data, f, indent=2, default=str)
 
     def load(self, path: Path) -> None:
-        ""
+"""
 Load recordings from file.        with open(path, encoding='utf-8') as f:'            data = json.load(f)
         self._recordings = [
             RecordedInteraction(
@@ -135,4 +135,4 @@ Load recordings from file.        with open(path, encoding='utf-8') as f:'      
             for d in data
         ]
 
-""
+"""

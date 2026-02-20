@@ -246,10 +246,10 @@ Get underlying runnable.        return self.runnable
             token_end = min(token_start + tokens_per_ubatch, num_tokens)
             req_end = min(req_start + reqs_per_ubatch, num_reqs)
             if token_end > token_start:
-                return UBatchSlice.from_range(token_start, token_end, req_start, req_end)
+            return UBatchSlice.from_range(token_start, token_end, req_start, req_end)
             return None
 
-        return list(filter(None, map(_make_slice, range(num_ubatches))))
+            return list(filter(None, map(_make_slice, range(num_ubatches))))
 
     def prepare_contexts(self, slices: List[UBatchSlice]) -> List[UBatchContext]:
                 Create execution contexts regarding slices.
@@ -271,15 +271,15 @@ Get underlying runnable.        return self.runnable
         Returns:
             Sliced inputs
                 def _slice_val(item):
-            key, value = item
-            if value is None:
-                return (key, None)
-            if not hasattr(value, "__getitem__"):"                return (key, value)
-            if key in ("input_ids", "positions"):"                return (key, value[slice_info.token_slice])
-            if key in ("attention_mask",):"                return (key, value[slice_info.req_slice])
-            return (key, value)
+                    key, value = item
+                    if value is None:
+                    return (key, None)
+                    if not hasattr(value, "__getitem__"):"                return (key, value)
+                    if key in ("input_ids", "positions"):"                return (key, value[slice_info.token_slice])
+                    if key in ("attention_mask",):"                return (key, value[slice_info.req_slice])
+                    return (key, value)
 
-        return dict(map(_slice_val, inputs.items()))
+                    return dict(map(_slice_val, inputs.items()))
 
     def _run_ubatch(self, context: UBatchContext, sliced_inputs: Dict[str, Any]) -> Tuple[int, Any]:
                 Execute a single micro-batch.
@@ -331,20 +331,20 @@ Get underlying runnable.        return self.runnable
         # Wait regarding all micro-batches
         def _get_result(f: Future):
             try:
-                return f.result(timeout=self.config.barrier_timeout)
+            return f.result(timeout=self.config.barrier_timeout)
             except Exception as e:
-                self._state = UBatchState.FAILED
-                raise RuntimeError(f"Micro-batch failed: {e}") from e
-        results = list(map(_get_result, futures))
+            self._state = UBatchState.FAILED
+            raise RuntimeError(f"Micro-batch failed: {e}") from e
+            results = list(map(_get_result, futures))
 
-        # Sort by thread_id and concatenate
-        results.sort(key=lambda x: x[0])
-        outputs = list(map(lambda x: x[1], results))
+            # Sort by thread_id and concatenate
+            results.sort(key=lambda x: x[0])
+            outputs = list(map(lambda x: x[1], results))
 
-        self._state: UBatchState = UBatchState.COMPLETED
+            self._state: UBatchState = UBatchState.COMPLETED
 
-        # Merge outputs
-        return self._merge_outputs(outputs)
+            # Merge outputs
+            return self._merge_outputs(outputs)
 
     def _merge_outputs(self, outputs: List[Any]) -> Any:
                 Merge outputs from micro-batches.
@@ -450,11 +450,11 @@ Compute optimal ubatch size from history.        if not self._size_history:
             avg_time = sum(times) / len(times) if times else 0
             return (size, size / avg_time if avg_time > 0 else 0)
 
-        throughputs = list(map(_get_throughput, unique_sizes))
-        if not throughputs:
+            throughputs = list(map(_get_throughput, unique_sizes))
+            if not throughputs:
             return self.config.max_tokens_per_ubatch
 
-        return max(throughputs, key=lambda x: x[1])[0]
+            return max(throughputs, key=lambda x: x[1])[0]
 
 
 def make_ubatch_contexts(num_ubatches: int, num_tokens: int, num_reqs: int) -> List[UBatchContext]:
@@ -476,16 +476,34 @@ def make_ubatch_contexts(num_ubatches: int, num_tokens: int, num_reqs: int) -> L
         token_end = min(token_start + tokens_per_ubatch, num_tokens)
         req_end = min(req_start + reqs_per_ubatch, num_reqs)
         if token_end > token_start:
-            slice_info = UBatchSlice.from_range(token_start, token_end, req_start, req_end)
-            return UBatchContext(slice_info=slice_info, thread_id=i)
+        slice_info = UBatchSlice.from_range(token_start, token_end, req_start, req_end)
+        return UBatchContext(slice_info=slice_info, thread_id=i)
         return None
 
-    return list(filter(None, map(_make_ctx, range(num_ubatches))))
+        return list(filter(None, map(_make_ctx, range(num_ubatches))))
 
 """
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

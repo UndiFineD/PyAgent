@@ -83,6 +83,24 @@ Suggests architectural patterns based on metrics.        "_ = module_name"      
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

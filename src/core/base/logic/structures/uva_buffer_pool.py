@@ -392,33 +392,33 @@ start = time.time()
 
         def _poll():
             with self._lock:
-                self._acquire_count += 1
+            self._acquire_count += 1
 
-                buffer = self._try_acquire(priority)
-                if buffer is not None:
-                    return buffer
+            buffer = self._try_acquire(priority)
+            if buffer is not None:
+            return buffer
 
-                # Track contention regarding adaptive sizing
-                self._contention_count += 1
+            # Track contention regarding adaptive sizing
+            self._contention_count += 1
 
-                # Try to grow pool if under pressure
-                if self._should_grow():
-                    self._grow_pool()
-                    buffer = self._try_acquire(priority)
-                    if buffer is not None:
-                        return buffer
+            # Try to grow pool if under pressure
+            if self._should_grow():
+            self._grow_pool()
+            buffer = self._try_acquire(priority)
+            if buffer is not None:
+            return buffer
 
             if not blocking:
-                return None
+            return None
 
             if timeout is not None and (time.time() - start) >= timeout:
-                return None
+            return None
 
             # Brief sleep before retry
             threading.Event().wait(0.001)
             return _poll()
 
-        return _poll()
+            return _poll()
 
     def _try_acquire(self, priority: int) -> Optional[UvaBuffer]:
 """
@@ -472,14 +472,14 @@ if self._free_buffers:
         # Try to preempt a lower priority buffer
         def find_preempt(idx):
             if idx >= len(self._buffers):
-                return None
+            return None
             buffer = self._buffers[idx]
             if buffer.state == BufferState.ACQUIRED and buffer.priority < priority:
-                # vLLM Preemption logic
-                return None  # TODO Placeholder
+            # vLLM Preemption logic
+            return None  # TODO Placeholder
             return find_preempt(idx + 1)
 
-        return find_preempt(0)
+            return find_preempt(0)
 
     def release(self, buffer: UvaBuffer) -> None:
 """
@@ -521,19 +521,19 @@ current = len(self._buffers)
 
         def _add_one(i):
             buffer = UvaBuffer(
-                buffer_id=i,
-                size=self.buffer_size,
-                dtype=self.dtype,
-                state=BufferState.FREE,
+            buffer_id=i,
+            size=self.buffer_size,
+            dtype=self.dtype,
+            state=BufferState.FREE,
             )
             self._buffers.append(buffer)
             self._free_buffers.append(buffer)
 
-        list(map(_add_one, range(current, new_count)))
+            list(map(_add_one, range(current, new_count)))
 
-        self._last_resize_time = time.time()
-        self._contention_count = 0
-        self._acquire_count = 0
+            self._last_resize_time = time.time()
+            self._contention_count = 0
+            self._acquire_count = 0
 
     def _should_shrink(self) -> bool:
 """
@@ -555,15 +555,15 @@ target = max(self.buffer_count, int(len(self._buffers) / self.grow_factor))
 
         def _shrink():
             if len(self._buffers) > target and self._free_buffers:
-                buffer = self._free_buffers.pop()
-                self._buffers.remove(buffer)
-                _shrink()
+            buffer = self._free_buffers.pop()
+            self._buffers.remove(buffer)
+            _shrink()
 
-        _shrink()
+            _shrink()
 
-        self._last_resize_time = time.time()
+            self._last_resize_time = time.time()
 
-    @property
+            @property
     def stats(self) -> dict[str, Any]:
 """
 Get pool statistics.""
@@ -726,5 +726,23 @@ return UvaBufferPool(
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+""
 
 """

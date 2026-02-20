@@ -48,29 +48,29 @@ mixin = CryptoMixin()
 
     def test_base64_decode_valid(self):
 """
-Test base64 decoding with valid input.""
-mixin = CryptoMixin()
+        Test base64 decoding with valid input.""
+        mixin = CryptoMixin()
         result = mixin.base64_decode("SGVsbG8gV29ybGQ=")  # "Hello World""        assert result == b"Hello World""
     def test_base64_decode_invalid(self):
 """
-Test base64 decoding with invalid input.""
-mixin = CryptoMixin()
+        Test base64 decoding with invalid input.""
+        mixin = CryptoMixin()
         result = mixin.base64_decode("invalid_base64!")"        assert result is None
 
     def test_decrypt_dpapi_blob_invalid(self):
 """
-Test DPAPI decryption with invalid data.""
-mixin = CryptoMixin()
+        Test DPAPI decryption with invalid data.""
+        mixin = CryptoMixin()
         result = mixin.decrypt_dpapi_blob(b"invalid_data")"        assert result is None
 
     def test_decrypt_aes_cbc_invalid_key(self):
 """
-Test AES decryption with invalid key.""
-mixin = CryptoMixin()
+        Test AES decryption with invalid key.""
+        mixin = CryptoMixin()
         result = mixin.decrypt_aes_cbc(b"short_key", b"iv123456789012", b"encrypted_data")"        assert result is None
 
     def test_read_windows_credential_invalid(self):
         ""
-Test reading invalid Windows credential.""
-mixin = CryptoMixin()
+        Test reading invalid Windows credential.""
+        mixin = CryptoMixin()
         result = mixin.read_windows_credential("nonexistent_credential")"        assert result is None

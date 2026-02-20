@@ -30,7 +30,6 @@ USAGE:
   - archive_change(name: str) -> str
 
 """
-
 WHAT IT DOES:
 - Provides an agent specialized for Spec-Driven Development (SDD) workflows that creates and manages spec artifacts (SPECIFICATION.md, openspec/ structure, proposals, tasks and spec deltas).
 - Enforces a gated workflow by locking execution when a new SDD specification is generated and requiring an explicit "COMMAND: PROCEED" confirmation to unlock implementation."- Offers scaffolding utilities to initialize an openspec repository layout, create change proposals with task lists and spec deltas, and an archive mechanism for completed changes (archive_change).
@@ -208,7 +207,25 @@ Reads an OpenAPI/JSON spec and generates a persistent Python tool.        path =
 
 if __name__ == "__main__":"    main = create_main_function(SpecToolAgent, "SpecTool Agent", "Path to spec file")"    main()
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

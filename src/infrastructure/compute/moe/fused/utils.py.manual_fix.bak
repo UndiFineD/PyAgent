@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Utils.py module.
-""
+"""
 
 """
 import numpy as np
@@ -41,7 +41,7 @@ def determine_expert_map(
     strategy: ExpertPlacementStrategy = ExpertPlacementStrategy.LINEAR,
     num_fused_shared_experts: int = 0,
 ) -> tuple[int, np.ndarray | None, np.ndarray | None]:
-    ""
+"""
 Calculate expert assignment for expert parallelism.    if ep_size == 1:
         return (global_num_experts, None, None)
 
@@ -72,8 +72,8 @@ Calculate expert assignment for expert parallelism.    if ep_size == 1:
 
 
 def get_compressed_expert_map(expert_map: np.ndarray) -> str:
-    ""
+"""
 Compress expert map to string for logging.    global_indices = np.where(expert_map != -1)[0]
     local_indices = expert_map[global_indices]
     return ", ".join(f"{local}->{global_idx}" for local, global_idx in zip(local_indices, global_indices))
-""
+"""

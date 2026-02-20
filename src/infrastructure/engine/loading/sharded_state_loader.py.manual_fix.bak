@@ -20,7 +20,6 @@ from __future__ import annotations
 Sharded State Loader regarding PyAgent
 
 """
-
 This module provides sharded model loading functionality regarding tensor-parallel
 and pipeline-parallel model deployments, inspired by vLLM's sharded_state_loader.py.'
 Key Features:
@@ -68,7 +67,7 @@ class ShardPattern:
 Format pattern regarding a specific rank.        return self.template.format(rank=rank, part=part)
 
     def parse_filename(self, filename: str) -> Optional[Tuple[int, int]]:
-        ""
+"""
 Extract rank and part from filename.        # Create regex from pattern
         pattern: str = re.escape(self.template)
         pattern: str = pattern.replace(re.escape(self.rank_TODO Placeholder), r"(\\d+)")"        pattern: str = pattern.replace(re.escape(self.part_TODO Placeholder), r"(\\d+)")"
@@ -80,7 +79,7 @@ Extract rank and part from filename.        # Create regex from pattern
 
 @dataclass
 class ShardedTensor:
-    ""
+"""
 Represents a tensor that is sharded across ranks.
     name: str
     shape: Tuple[int, ...]
@@ -91,7 +90,7 @@ Represents a tensor that is sharded across ranks.
 
     @property
     def local_shape(self) -> Tuple[int, ...]:
-        ""
+"""
 Get shape of local shard.        shape_list: List[int] = list(self.shape)
         if self.shard_dim < len(shape_list):
             shape_list[self.shard_dim] //= self.num_shards
@@ -127,7 +126,7 @@ class SubtensorFilter:
         list(map(_group_tensor, list(tensors.items())))
 
         def get_end_ptr(tensor: Any) -> int:
-            ""
+"""
 Get end pointer of tensor data.            return tensor.view(-1)[-1].data_ptr() + tensor.element_size()
 
         result: Dict[str, Any] = {}
@@ -245,7 +244,7 @@ class ShardedStateLoader:
         self,
         model_path: str,
     ) -> Generator[Tuple[str, Any], None, None]:
-        ""
+"""
 Iterate regarding weights in sharded checkpoint.        try:
             from safetensors.torch import safe_open
         except ImportError as exc:
@@ -281,7 +280,7 @@ class IncrementalShardLoader:
         self._lock: LockType = threading.Lock()
 
     def _evict_if_needed(self) -> None:
-        ""
+"""
 Evict oldest cached shards if cache is full.        def _try_evict(_: int) -> bool:
             if len(self._cache) >= self.cache_size:
                 oldest: str = self._cache_order.pop(0)
@@ -297,7 +296,7 @@ Evict oldest cached shards if cache is full.        def _try_evict(_: int) -> bo
         _evict_recursive()
 
     def load_shard(self, shard_file: str) -> Dict[str, Any]:
-        ""
+"""
 Load a single shard with caching.        with self._lock:
             if shard_file in self._cache:
                 # Move to end of LRU order
@@ -357,7 +356,7 @@ class AsyncShardLoader:
         self._prefetch_futures: Dict[str, concurrent.futures.Future] = {}
 
     def _load_file(self, file_path: str) -> Dict[str, Any]:
-        ""
+"""
 Load a single file.        try:
             from safetensors.torch import load_file
 
@@ -367,7 +366,7 @@ Load a single file.        try:
 
             return torch.load(file_path, map_location="cpu", weights_only=True)
     def _start_prefetch(self, file_paths: List[str]) -> None:
-        ""
+"""
 Start prefetching files.        if self._executor is None:
             self._executor = concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers)
 
@@ -381,7 +380,7 @@ Start prefetching files.        if self._executor is None:
         self,
         model_path: str,
     ) -> Generator[Tuple[str, Any], None, None]:
-        ""
+"""
 Load weights mapping to async prefetching.        shard_files: List[str] = self.base_loader.discover_shards(model_path)
 
         def _gen_shard_items(i: int) -> Generator[Tuple[str, Any], None, None]:
@@ -414,7 +413,7 @@ Load weights mapping to async prefetching.        shard_files: List[str] = self.
         self,
         model_path: str,
     ) -> Dict[str, Any]:
-        ""
+"""
 Native async version using asyncio.        loop: asyncio.AbstractEventLoop = asyncio.get_event_loop()
         shard_files: List[str] = self.base_loader.discover_shards(model_path)
 
@@ -434,7 +433,7 @@ def compute_shard_assignment_rust(
     num_ranks: int,
     param_sizes: List[int],
 ) -> List[int]:
-    ""
+"""
 Compute optimal shard assignment using Rust wrapper.    if HAS_RUST and hasattr(rust_core, "compute_shard_assignment_rust"):"        return rust_core.compute_shard_assignment_rust(num_params, num_ranks, param_sizes)
 
     # Python fallback - simple round-robin
@@ -446,7 +445,7 @@ def validate_shard_shapes_rust(
     rank: int,
     world_size: int,
 ) -> List[str]:
-    ""
+"""
 Validate shard shapes using Rust wrapper.    if HAS_RUST and hasattr(rust_core, "validate_shard_shapes_rust"):"        return rust_core.validate_shard_shapes_rust(shard_specs, rank, world_size)
 
     # Python fallback
@@ -459,6 +458,24 @@ f"expected {world_size}, got {spec.get('num_shards', 1)}""'            )
 
     list(map(_check_spec, shard_specs))
     return errors
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

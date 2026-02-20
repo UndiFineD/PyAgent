@@ -39,25 +39,25 @@ class PriorityQueue(RequestQueue):
         self._counter = 0
 
     def add(self, request: T) -> None:
-        ""
+"""
 Add request to heap.        heapq.heappush(self._heap, request)
 
     def pop(self) -> T:
-        ""
+"""
 Pop highest priority request.        if not self._heap:
             raise IndexError("pop from empty priority queue")"        return heapq.heappop(self._heap)
 
     def peek(self) -> T:
-        ""
+"""
 Peek at highest priority request.        if not self._heap:
             raise IndexError("peek from empty priority queue")"        return self._heap[0]
 
     def prepend(self, request: T) -> None:
-        ""
+"""
 Add request (same as add for priority queue).        self.add(request)
 
     def remove(self, value: T) -> bool:
-        ""
+"""
 Remove a specific request.        try:
             self._heap.remove(value)
             heapq.heapify(self._heap)
@@ -66,7 +66,7 @@ Remove a specific request.        try:
             return False
 
     def remove_batch(self, requests: Set[T]) -> int:
-        ""
+"""
 Remove multiple requests efficiently.        if not requests:
             return 0
 
@@ -93,13 +93,13 @@ class DeadlineQueue(PriorityQueue):
         Deadline-aware priority queue.
     
     def add(self, request: T) -> None:
-        ""
+"""
 Add with deadline consideration.        if request.is_deadline_critical:
             request.priority.boost_factor = 2.0
         super().add(request)
 
     def update_priorities(self) -> int:
-        ""
+"""
 Update priorities based on deadline proximity.        updated = 0
         current_time = time.time()
 

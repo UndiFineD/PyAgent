@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Unified platform and hardware detection core.""
 
@@ -28,7 +28,7 @@ logger = logging.getLogger("pyagent.platform")
 
 
 class PlatformCore:
-    ""
+"""
 Standardized detector for environment, OS, and hardware capabilities.""
 _instance: Optional["PlatformCore"] = None
 
@@ -49,7 +49,7 @@ _instance: Optional["PlatformCore"] = None
         self._is_darwin: bool = False
 
     def _initialize(self) -> None:
-        ""
+"""
 Initializes platform attributes.""
 self.system = platform.system()
         self.release = platform.release()
@@ -61,24 +61,24 @@ self.system = platform.system()
 
     @property
     def is_windows(self) -> bool:
-        ""
+"""
 Returns True if the current OS is Windows.""
 return self._is_windows
 
     @property
     def is_linux(self) -> bool:
-        ""
+"""
 Returns True if the current OS is Linux.""
 return self._is_linux
 
     @property
     def is_macos(self) -> bool:
-        ""
+"""
 Returns True if the current OS is macOS.""
 return self._is_darwin
 
     def get_info(self) -> dict[str, Any]:
-        ""
+"""
 Get comprehensive platform information.""
 return {
             "os": self.system,
@@ -92,7 +92,7 @@ return {
         }
 
     def get_resource_usage(self) -> dict[str, Any]:
-        ""
+"""
 Basic resource usage without full psutil dependency requirement.""
 try:
             import psutil  # pylint: disable=import-outside-toplevel

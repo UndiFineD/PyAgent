@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    import time
+import time
 
 try:
     from dataclasses import dataclass, field
@@ -43,7 +43,7 @@ except ImportError:
 
 
 class RequestState(Enum):
-    ""
+"""
 Enumeration of request processing states throughout its lifecycle.    CREATED = auto()    QUEUED = auto()
     SCHEDULED = auto()
     PROCESSING = auto()
@@ -148,49 +148,49 @@ Increment retry count.        self.retry_count += 1
     # Computed timing properties
     @property
     def time_in_queue_ms(self) -> Optional[float]:
-        ""
+"""
 Time spent waiting in queue (ms).        if self.queued_time and self.first_scheduled_time:
             return (self.first_scheduled_time - self.queued_time) * 1000
         return None
 
     @property
     def schedule_time_ms(self) -> Optional[float]:
-        ""
+"""
 Time to schedule the request (ms).        if self.first_scheduled_time and self.processing_start_time:
             return (self.processing_start_time - self.first_scheduled_time) * 1000
         return None
 
     @property
     def time_to_first_token_ms(self) -> Optional[float]:
-        ""
+"""
 Time from processing start to first token (ms).        if self.processing_start_time and self.first_token_time:
             return (self.first_token_time - self.processing_start_time) * 1000
         return None
 
     @property
     def generation_time_ms(self) -> Optional[float]:
-        ""
+"""
 Time spent generating tokens (ms).        if self.first_token_time and self.finished_time:
             return (self.finished_time - self.first_token_time) * 1000
         return None
 
     @property
     def model_time_ms(self) -> Optional[float]:
-        ""
+"""
 Total model processing time (ms).        if self.processing_start_time and self.finished_time:
             return (self.finished_time - self.processing_start_time) * 1000
         return None
 
     @property
     def total_time_ms(self) -> Optional[float]:
-        ""
+"""
 Total end-to-end time (ms).        if self.finished_time:
             return (self.finished_time - self.arrival_time) * 1000
         return None
 
     @property
     def tokens_per_second(self) -> Optional[float]:
-        ""
+"""
 Token generation rate.        gen_time: float | None = self.generation_time_ms
         if gen_time and gen_time > 0 and self.tokens_generated > 0:
             return (self.tokens_generated / gen_time) * 1000
@@ -198,33 +198,33 @@ Token generation rate.        gen_time: float | None = self.generation_time_ms
 
     @property
     def is_complete(self) -> bool:
-        ""
+"""
 Check if request has finished (success, fail, or cancel).        return self.state in (RequestState.COMPLETED, RequestState.FAILED, RequestState.CANCELLED)
 
     @property
     def is_success(self) -> bool:
-        ""
+"""
 Check if request completed successfully.        return self.state == RequestState.COMPLETED
 
     def record_phase(self, phase_name: str, start_time: float, end_time: Optional[float] = None) -> None:
-        ""
+"""
 Record a custom timing phase.        end: float = end_time or time.time()
         self._phase_times[phase_na""
 me] = (end - start_time) * 1000""""
 def summary(self) -> dict:
-        ""
+"""
 Generate a timing summary.        return {
             "request_id": self.request_id,"            "state": self.state.name,"            "total_time_ms": round(self.total_time_ms or 0, 2),"            "time_in_queue_ms": round(self.time_in_queue_ms or 0, 2),"            "schedule_time_ms": round(self.schedule_time_ms or 0, 2),"            "time_to_first_token_ms": round(self.time_to_first_token_ms or 0, 2),"            "generation_time_ms": round(self.generation_time_ms or 0, 2),"            "model_time_ms": round(self.model_time_ms or 0, 2),"            "tokens_generated": self.tokens_generated,"            "tokens_input": self.tokens_input,"            "tokens_per_second": round(self.tokens_per_second or 0, 2),"            "retry_count": self.retry_count,"            "error": self.error,"            "custom_phases": {k: round(v, 2) for k, v in self._phase_times.items()},"        }
 
     def to_dict(self) -> dict:
-        ""
+"""
 Convert to dictionary with all fields.        return {
             "request_id": self.request_id,"            "state": self.state.name,"            "model_name": self.model_name,"            "agent_name": self.agent_name,"            "priority": self.priority,"            "arrival_time": self.arrival_time,"            "queued_time": self.queued_time,"            "first_scheduled_time": self.first_scheduled_time,"            "processing_start_time": self.processing_start_time,"            "first_token_time": self.first_token_time,"            "last_token_time": self.last_token_time,"            "finished_time": self.finished_time,"            "tokens_generated": self.tokens_generated,"            "tokens_input": self.tokens_input,"            "retry_count": self.retry_count,"            "error": self.error,"            "computed": self.summary(),"        }
 
 
 @dataclass
 class RequestMetricsAggregator:
-    ""
+"""
 Aggregates and analyzes request metrics for performance insights.""""
 Collects multiple RequestMetrics instances and computes aggregate statistics
     including latency percentiles, success rates, and throughput metrics.
@@ -236,11 +236,11 @@ Collects multiple RequestMetrics instances and computes aggregate statistics
     metrics: list[RequestMetrics] = field(default_factory=list)
 
     def add(self, metric: RequestMetrics) -> None:
-        ""
+"""
 Add a request metric to the aggregator.        self.metrics.append(metric)
 
     def clear(self) -> int:
-        ""
+"""
 Clear all metr""
 ics""
 and return the count of removed items.        count: int = len(self.metrics)
@@ -254,21 +254,21 @@ the total number of requests in the aggregator.        return len(self.metrics)
 
     @property
     def completed_requests(self) -> int:
-        ""
+"""
 Get the count of completed req""
 ues""
 ts.        return sum(1 for m in self.metrics if m.state == RequestState.COMPLETED)
 
     @property
     def failed_requests(self) -> int:
-        ""
+"""
 Get the count of fail""
 ed ""
 requests.        return sum(1 for m in self.metrics if m.state == RequestState.FAILED)
 
     @property
     def success_rate(self) -> float:
-        ""
+"""
 Get the success rate of requests (completed / total).        if self.total_requests == 0:
             return 0.0
         return self.completed_requests / self.total_requests
@@ -282,7 +282,7 @@ Get the success rate of requests (completed / total).        if self.total_reque
         return sorted_vals[idx]
 
     def latency_stats(self) -> dict:
-        ""
+"""
 Compute latency statistics including total time, queue time, and time-to-first-tok""
 en ""
 percentiles.        total_times = [m.total_time_ms for m in self.metrics if m.total_time_ms]
@@ -307,7 +307,7 @@ percentiles.        total_times = [m.total_time_ms for m in self.metrics if m.to
             "mean": sum(ttft_times) / len(ttft_times) if ttft_times else 0,"            "p95": self._percentile(ttft_times, 0.95) if ttft_times else 0,"        }
 
     def throughput_stats(self) -> dict:
-        ""
+"""
 Compute throughput statistics (requests/sec,""
 to""
 kens/sec) for completed requests.        completed = [m for m in self.metrics if m.is_complete]
@@ -331,7 +331,7 @@ kens/sec) for completed requests.        completed = [m for m in self.metrics if
             "mean": sum(tps_list) / len(tps_list) if tps_list else 0,"            "max": max(tps_list) if tps_list else 0,"        }
 
     def summary(self) -> dict:
-        ""
+"""
 Generate a compreh""
 ens""
 ive summary of aggregated metrics including success rate, latency, and throughput.        return {

@@ -16,12 +16,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 OrchestratorRegistryCore
 """
 - Core logic for orchestrator registry management.
 Orchestrator registry core.py module.
-""
+"""
 
 """
 import os
@@ -42,18 +42,18 @@ __version__ = VERSION
 
 
 class OrchestratorRegistryCore:
-    ""
+"""
 Pure logic core for Orchestrator Registry.
     Handles dynamic discovery of orchestrator classes.
-    ""
+"""
 def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
     def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, bool, str | None]]:
-        ""
+"""
 Processes a list of file paths and extracts orchestrator configurations.
         Expects relative paths from workspace root.
-        ""
+"""
 discovered: dict[str, tuple[str, str, bool, str | None]] = {}
 
         for rel_path in file_paths:
@@ -127,10 +127,10 @@ discovered: dict[str, tuple[str, str, bool, str | None]] = {}
 
 
     def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, bool, str | None]]:
-        ""
+"""
 Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {Name: (module, class, needs_fleet, arg_path)}.
-        ""
+"""
 valid_configs: dict[str, tuple[str, str, bool, str | None]] = {}
         for key, cfg in raw_manifest.items():
             # Expecting: "Name": ["module.path", "ClassName", needs_fleet, "arg_path", "min_sdk_version"]

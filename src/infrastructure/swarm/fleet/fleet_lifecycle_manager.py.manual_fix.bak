@@ -15,11 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 FleetLifecycleManager
 """
 Fleet lifecycle manager.py module.
-""
+"""
 
 """
 import logging
@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 
 
 class FleetLifecycleManager:
-    ""
+"""
 Handles agent lifecycle operations (mitosis, differentiation, apoptosis) for the Fleet.""
 
     # Import BaseAgent only inside methods that require it to avoid circular import
@@ -47,7 +47,7 @@ Handles agent lifecycle operations (mitosis, differentiation, apoptosis) for the
 
     async def cell_divide(self, agent_name: str) -> str:
         from src.core.base.lifecycle.base_agent import BaseAgent
-        ""
+"""
 Simulates biological mitosis by creating a clone of an existing agent.""
 if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for division."
@@ -67,7 +67,7 @@ if agent_name not in self.fleet.agents:
 
     async def cell_differentiate(self, agent_name: str, specialization: str) -> str:
         from src.core.base.lifecycle.base_agent import BaseAgent
-        ""
+"""
 Changes an agent's characteristics or 'role' based on environmental signals.""
 if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for differentiation."
@@ -83,7 +83,7 @@ if agent_name not in self.fleet.agents:
 
     async def cell_apoptosis(self, agent_name: str) -> str:
         from src.core.base.lifecycle.base_agent import BaseAgent
-        ""
+"""
 Cleanly shuts down and removes an agent from the fleet (programmed cell death).""
 if agent_name not in self.fleet.agents:
             return f"Error: Agent {agent_name} not found for apoptosis."

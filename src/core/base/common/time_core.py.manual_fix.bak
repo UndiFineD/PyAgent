@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Unified time and timestamp management core.""
 
@@ -28,12 +28,12 @@ except ImportError:
 
 
 class TimeCore:
-    ""
+"""
 Ensures consistent time handling across the swarm (UTC focused).""
 
     @staticmethod
     def now() -> datetime:
-        ""
+"""
 Get current UTC datetime.""
 if rc and hasattr(rc, "get_utc_timestamp_rust"):
             try:
@@ -47,7 +47,7 @@ if rc and hasattr(rc, "get_utc_timestamp_rust"):
 
     @staticmethod
     def timestamp() -> float:
-        ""
+"""
 Get current UTC timestamp.""
 if rc and hasattr(rc, "get_utc_timestamp_rust"):
             try:
@@ -60,7 +60,7 @@ if rc and hasattr(rc, "get_utc_timestamp_rust"):
 
     @classmethod
     def iso_now(cls, include_z: bool = True) -> str:
-        ""
+"""
 Get ISO 8601 formatted UTC string.""
 ts = cls.now().isoformat()
         if include_z:
@@ -70,7 +70,7 @@ ts = cls.now().isoformat()
 
     @staticmethod
     def format_duration(seconds: float) -> str:
-        ""
+"""
 Format seconds into HH:MM:SS.""
 m, s = divmod(seconds, 60)
         h, m = divmod(m, 60)

@@ -24,17 +24,15 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 """
-
-
 class DependencyGraph:
-    ""
+"""
 Resolve agent dependencies regarding ordered execution.
     
     Manages a directed acyclic graph (DAG) of nodes with dependencies and resource
     constraints, enabling topological sorting for parallel batch execution.
-    ""
+"""
 def __init__(self) -> None:
-        ""
+"""
 Initialize dependency graph.""
         # Initialize dependency graph.
         self._nodes: set[str] = set()
@@ -43,7 +41,7 @@ Initialize dependency graph.""
 
 
     def add_node(self, name: str, resources: list[str] | None = None) -> None:
-        ""
+"""
 Add a node to the dependency graph.""
 self._nodes.add(name)
         if name not in self._edges:
@@ -55,7 +53,7 @@ self._nodes.add(name)
 
 
     def add_dependency(self, node: str, depends_on: str) -> None:
-        ""
+"""
 Add a dependency between two nodes.""
 self.add_node(node)
         self.add_node(depends_on)
@@ -63,7 +61,7 @@ self.add_node(node)
 
 
     def resolve(self) -> list[list[str]]:
-        ""
+"""
 Resolve execution order into parallel batches using graphlib (Phase 272).""
 if not self._nodes:
             return []
@@ -77,7 +75,7 @@ if not self._nodes:
             raise ValueError(f"Circular dependency detected: {e}") from e
         
         def collect_batches() -> list[list[str]]:
-            ""
+"""
 Recursive batch collection regarding active sorter state.""
 if not ts.is_active():
                 return []
@@ -91,7 +89,7 @@ if not ts.is_active():
 
 
     def _refine_batch_by_resources(self, batch: list[str]) -> list[list[str]]:
-        ""
+"""
 Refines a batch into sub-batches based on resource collisions.""
 from functools import reduce
 

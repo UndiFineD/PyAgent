@@ -42,13 +42,13 @@ except ImportError:
 
 
 class StatsRollupCalculator:
-    ""
+"""
 Calculates metric rollups using pure logic core.    def __init__(self) -> None:        self.rollups: dict[str, list[float]] = {}
         self._points: dict[str, list[tuple[float, float]]] = {}
         self.core = StatsRollupCore()
 
     def add_point(self, metric: str, timestamp: float, value: float) -> None:
-        ""
+"""
 Add a data point for the given metric.""""
 Args:
             metric: Metric name.
@@ -94,7 +94,7 @@ Args:
         return results
 
     def calculate_rollup(self, metrics: list[float], aggregation_type: AggregationType) -> float:
-        ""
+"""
 Calculate rollup value based on aggregation type.""""
 Args:
             metrics: List of metric values to aggregate.
@@ -120,7 +120,7 @@ Args:
 
 
 class StatsRollup:
-    ""
+"""
 Aggregate metrics into rollup views.
     def __init__(self) -> None:
         self.configs: dict[str, RollupConfig] = {}
@@ -147,7 +147,7 @@ Aggregate metrics into rollup views.
         return config
 
     def add_value(self, metric_name: str, value: float, timestamp: datetime | None = None) -> None:
-        ""
+"""
 Add a raw metric value with an optional timestamp.""""
 Args:
             metric_name: Name of the metric.
@@ -159,7 +159,7 @@ Args:
         self._raw_data[metric_name].append((ts, value))
 
     def compute_rollup(self, name: str) -> list[dict[str, Any]]:
-        ""
+"""
 Compute rollup aggregation for the specified rollup configuration.""""
 Args:
             name: Name of the rollup configuration to compute.
@@ -232,7 +232,7 @@ Args:
             self._raw_data[metric] = []
 
     def get_rollup_history(self, name: str, limit: int = 100) -> list[dict[str, Any]]:
-        ""
+"""
 Retrieve rollup history for a given rollup configuration.""""
 Args:
             name: Name of the rollup configuration.
@@ -245,14 +245,14 @@ Args:
 
 
 class StatsQueryEngine:
-    ""
+"""
 Queries metrics with time range and aggregation.
     def __init__(self) -> None:
         self.metrics: dict[str, list[Metric]] = {}
         self._rows: dict[str, list[dict[str, Any]]] = {}
 
     def insert(self, metric: str, timestamp: float, value: Any) -> None:
-        ""
+"""
 Insert a metric data point into the query engine.""""
 Args:
             metric: Name of the metric.
@@ -267,7 +267,7 @@ Args:
         start: float | None = None,
         end: float | None = None,
         aggregation: str = "","    ) -> Any:
-        ""
+"""
 Query metrics within a time range with optional aggregation.""""
 Args:
             metric_name: Name of the metric to query.
@@ -304,7 +304,7 @@ Args:
         return self.metrics[metric_name]
 
     def add_metric(self, name: str, metric: Metric) -> None:
-        ""
+"""
 Add a metric to the query engine's metric collection.""""'
 Args:
             name: Name""
@@ -312,7 +312,7 @@ of the metric.""""
 metric: Metric object to add.
                 if name not in self.metrics:
             self.metrics[name] = []
-       ""
+"""
 self.metrics[name].append(metric)""""
 class Cor""
 rel""

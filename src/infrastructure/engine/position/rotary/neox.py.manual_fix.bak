@@ -17,7 +17,6 @@
 Neox.py module.
 
 """
-
 try:
     from typing import Any, Tuple
 except ImportError:
@@ -43,7 +42,7 @@ if HAS_NUMPY:
 
 
 class NeoxRotaryEmbedding(RotaryEmbeddingBase):
-    ""
+"""
 NeoX style rotary position embedding.""""
 Rotates pairs of dimensions (0, d/2), (1, d/2+1), etc.
     This is the standard implementation used in Llama, Mistral, and others.
@@ -53,14 +52,14 @@ Rotates pairs of dimensions (0, d/2), (1, d/2+1), etc.
         self.inv_freq = self._compute_inv_freq()
 
     def _compute_inv_freq(self) -> Any:
-        ""
+"""
 Compute inverse frequencies.        if HAS_TORCH:
             return 1.0 / (self.base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
         if HAS_NUMPY:
             return 1.0 / (self.base ** (np.arange(0, self.rotary_dim, 2, axis=0) / self.rotary_dim))
         raise RuntimeError("No numerical backend available")
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
-        ""
+"""
 Compute cos/sin cache.        if HAS_TORCH:
             t = torch.arange(max_len, dtype=torch.float32)
             freqs = torch.outer(t, self.inv_freq)
@@ -79,7 +78,7 @@ Compute cos/sin cache.        if HAS_TORCH:
         query: Any,
         key: Any,
     ) -> Tuple[Any, Any]:
-        ""
+"""
 Apply NeoX style rotary embeddings.        if HAS_TORCH and isinstance(positions, torch.Tensor):
             return self._forward_torch(positions, query, key)
         if HAS_NUMPY:
@@ -142,7 +141,25 @@ NumPy implementation of NeoX RoPE.        seq_len = int(positions.max()) + 1
 
         return q_rotated, k_rotated
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

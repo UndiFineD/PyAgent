@@ -25,7 +25,6 @@ USAGE:
 - Use improve_content(prompt: str, target_file: str|None) for lightweight content improvement workflows or to pipeline refinement steps into downstream agents.
 
 """
-
 WHAT IT DOES:
 - Provides a focused orchestration agent whose purpose is to break monolithic user requests into actionable sub-tasks and assign or recommend assignments to specialized swarm members.
 - Exposes two decorated tool methods (decompose_task_v2 and balance_swarm_load) suitable for use by the fleet orchestration system and one async utility (improve_content) for content optimization.

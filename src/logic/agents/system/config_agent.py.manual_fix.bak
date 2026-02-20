@@ -27,7 +27,6 @@ USAGE:
 - For content-assisted edits use await agent.improve_content(prompt, target_file) (async).
 
 """
-
 WHAT IT DOES:
 - Checks for required environment variables and reports missing keys without exposing secret values.
 - Loads and performs a basic structural validation of config/models.yaml, reporting parsing errors or structural issues.
@@ -42,7 +41,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 Agent specializing in configuration validation, secrets checking, and environment setup.
 Inspired by external-secrets and infrastructure-as-code patterns.
-""
+"""
 import yaml
 
 from src.core.base.common.base_utilities import as_tool
@@ -131,4 +130,4 @@ Verifies the integrity of models.yaml.#         config_path = self.workspace_roo
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.validate_env()
 
-""
+"""

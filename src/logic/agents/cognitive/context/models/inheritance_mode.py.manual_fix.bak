@@ -22,7 +22,7 @@ from __future__ import annotations
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from enum import Enum
@@ -38,7 +38,25 @@ class InheritanceMode(Enum):
 """"
 Modes for context inheritance.
 #     OVERRIDE = "override"#     MERGE = "merge"#     APPEND = "append"
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

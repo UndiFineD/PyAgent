@@ -21,11 +21,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Models and configurations for media loading.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass
+from dataclasses import dataclass
 except ImportError:
     from dataclasses import dataclass
 
@@ -49,7 +49,7 @@ except ImportError:
 
 
 class MediaType(Enum):
-    ""
+"""
 Supported media types.
     IMAGE = auto()
     VIDEO = auto()
@@ -59,7 +59,7 @@ Supported media types.
 
 
 class ImageFormat(Enum):
-    ""
+"""
 Supported image formats.
     JPEG = auto()
     PNG = auto()
@@ -72,7 +72,7 @@ Supported image formats.
 
 
 class VideoFormat(Enum):
-    ""
+"""
 Supported video formats.
     MP4 = auto()
     WEBM = auto()
@@ -83,7 +83,7 @@ Supported video formats.
 
 
 class AudioFormat(Enum):
-    ""
+"""
 Supported audio formats.
     WAV = auto()
     MP3 = auto()
@@ -94,7 +94,7 @@ Supported audio formats.
 
 
 class ResizeMode(Enum):
-    ""
+"""
 Image resize modes.
     CROP = auto()  # Center crop to target
     PAD = auto()  # Pad to target maintaining aspect
@@ -105,7 +105,7 @@ Image resize modes.
 
 @dataclass
 class MediaMetadata:
-    ""
+"""
 Metadata for loaded media.
     media_type: MediaType
     format: Union[ImageFormat, VideoFormat, AudioFormat, None]
@@ -121,7 +121,7 @@ Metadata for loaded media.
 
 @dataclass
 class ImageData:
-    ""
+"""
 Loaded image data.
     data: np.ndarray  # [H, W, C] or [N, H, W, C]
     metadata: MediaMetadata
@@ -146,7 +146,7 @@ Loaded image data.
 
 @dataclass
 class VideoData:
-    ""
+"""
 Loaded video data.
     frames: np.ndarray  # [N, H, W, C]
     metadata: MediaMetadata
@@ -160,7 +160,7 @@ Loaded video data.
 
 @dataclass
 class AudioData:
-    ""
+"""
 Loaded audio data.
     waveform: np.ndarray  # [C, T] or [T]
     metadata: MediaMetadata
@@ -175,7 +175,7 @@ Loaded audio data.
 
 @dataclass
 class MediaLoadConfig:
-    ""
+"""
 Configuration for media loading.
     # Image settings
     target_size: Optional[Tuple[int, int]] = None
@@ -205,4 +205,4 @@ Configuration for media loading.
     use_nixl: bool = False
     use_mooncake: bool = False
 
-""
+"""

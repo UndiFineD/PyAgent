@@ -18,7 +18,7 @@ from __future__ import annotations
 # limitations under the License.
 """
 Gptq.py module.
-""
+"""
 
 """
 from typing import TYPE_CHECKING
@@ -36,7 +36,7 @@ if TYPE_CHECKING:
 
 
 class GPTQQuantizer(Quantizer):
-    ""
+"""
 GPTQ Quantization using Hessian-based optimal rounding.
     def __init__(
         self,
@@ -53,7 +53,7 @@ GPTQ Quantization using Hessian-based optimal rounding.
         weight: NDArray[np.float32],
         hessian: NDArray[np.float32] | None = None,
     ) -> QuantizedTensor:
-        ""
+"""
 Quantizes weights using the GPTQ Hessian-based algorithm.        from .utils import pack_int4
 
         _, in_features = weight.shape
@@ -95,7 +95,7 @@ Quantizes weights using the GPTQ Hessian-based algorithm.        from .utils imp
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
-        ""
+"""
 Dequantizes a GPTQ-compressed tensor.        return qtensor.dequantize()
 
     def _gptq_quantize(
@@ -103,7 +103,7 @@ Dequantizes a GPTQ-compressed tensor.        return qtensor.dequantize()
         weight: NDArray[np.float32],
         hessian_inv: NDArray[np.float32],
     ) -> NDArray[np.int8]:
-        ""
+"""
 Internal implementation of GPTQ weight update loop.        _, in_features = weight.shape
         qweight: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = (
             np.zeros_like(weight, dtype=np.int8)
@@ -147,4 +147,4 @@ Internal implementation of GPTQ weight update loop.        _, in_features = weig
 
         return qweight
 
-""
+"""

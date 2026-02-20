@@ -138,16 +138,16 @@ Execute operation with retry on failure.        last_error = None
     @contextmanager
     def _timed_op(self, op_name: str, tensor: Any = None):
 """
-Context manager for timing operations.        start = time.perf_counter()
+        Context manager for timing operations.        start = time.perf_counter()
         yield
         elapsed = (time.perf_counter() - start) * 1000  # ms
         self._stats.total_time_ms += elapsed
 
         if tensor is not None and HAS_TORCH:
-            self._stats.total_bytes += tensor.numel() * tensor.element_size()
+        self._stats.total_bytes += tensor.numel() * tensor.element_size()
 
         if self.config.log_all_ops:
-            logger.debug(f"NCCL {op_name}: {elapsed:.2f}ms")
+        logger.debug(f"NCCL {op_name}: {elapsed:.2f}ms")
     def all_reduce(
         self,
         tensor: Any,
@@ -167,16 +167,16 @@ Context manager for timing operations.        start = time.perf_counter()
         is_avg = op in (ReduceOp.AVG, "avg")
         def do_reduce():
             with self._timed_op("all_reduce", tensor):"                handle = dist.all_reduce(
-                    tensor,
-                    op=reduce_op,
-                    group=self.group,
-                    async_op=async_op,
-                )
-                if is_avg and not async_op:
-                    tensor.div_(self._world_size)
-                return handle
+            tensor,
+            op=reduce_op,
+            group=self.group,
+            async_op=async_op,
+            )
+            if is_avg and not async_op:
+            tensor.div_(self._world_size)
+            return handle
 
-        return self._with_retry("all_reduce", do_reduce)
+            return self._with_retry("all_reduce", do_reduce)
     def all_gather(
         self,
         tensor: Any,
@@ -197,17 +197,17 @@ Context manager for timing operations.        start = time.perf_counter()
 
         def do_gather():
             with self._timed_op("all_gather", tensor):"                tensor_list = [torch.empty_like(tensor) for _ in range(self._world_size)]
-                handle = dist.all_gather(
-                    tensor_list,
-                    tensor,
-                    group=self.group,
-                    async_op=async_op,
-                )
-                if async_op:
-                    return handle, tensor_list
-                return torch.cat(tensor_list, dim=dim)
+            handle = dist.all_gather(
+            tensor_list,
+            tensor,
+            group=self.group,
+            async_op=async_op,
+            )
+            if async_op:
+            return handle, tensor_list
+            return torch.cat(tensor_list, dim=dim)
 
-        return self._with_retry("all_gather", do_gather)
+            return self._with_retry("all_gather", do_gather)
     def reduce_scatter(
         self,
         tensor: Any,
@@ -233,18 +233,18 @@ Context manager for timing operations.        start = time.perf_counter()
 
         def do_reduce_scatter():
             with self._timed_op("reduce_scatter", tensor):"                input_chunks = list(tensor.chunk(self._world_size, dim=dim))
-                output = torch.empty_like(input_chunks[0])
+            output = torch.empty_like(input_chunks[0])
 
-                handle = dist.reduce_scatter(
-                    output,
-                    input_chunks,
-                    op=reduce_op,
-                    group=self.group,
-                    async_op=async_op,
-                )
-                return handle if async_op else output
+            handle = dist.reduce_scatter(
+            output,
+            input_chunks,
+            op=reduce_op,
+            group=self.group,
+            async_op=async_op,
+            )
+            return handle if async_op else output
 
-        return self._with_retry("reduce_scatter", do_reduce_scatter)
+            return self._with_retry("reduce_scatter", do_reduce_scatter)
     def reduce_scatterv(
         self,
         tensor: Any,
@@ -267,17 +267,17 @@ Context manager for timing operations.        start = time.perf_counter()
 
         def do_reduce_scatterv():
             with self._timed_op("reduce_scatterv", tensor):"                input_chunks = list(tensor.split(output_sizes, dim=dim))
-                output = torch.empty_like(input_chunks[self._rank])
+            output = torch.empty_like(input_chunks[self._rank])
 
-                dist.reduce_scatter(
-                    output,
-                    input_chunks,
-                    op=reduce_op,
-                    group=self.group,
-                )
-                return output
+            dist.reduce_scatter(
+            output,
+            input_chunks,
+            op=reduce_op,
+            group=self.group,
+            )
+            return output
 
-        return self._with_retry("reduce_scatterv", do_reduce_scatterv)
+            return self._with_retry("reduce_scatterv", do_reduce_scatterv)
     def broadcast(
         self,
         tensor: Any,
@@ -293,13 +293,13 @@ Context manager for timing operations.        start = time.perf_counter()
 
         def do_broadcast():
             with self._timed_op("broadcast", tensor):"                return dist.broadcast(
-                    tensor,
-                    src=src,
-                    group=self.group,
-                    async_op=async_op,
-                )
+            tensor,
+            src=src,
+            group=self.group,
+            async_op=async_op,
+            )
 
-        return self._with_retry("broadcast", do_broadcast)
+            return self._with_retry("broadcast", do_broadcast)
     def send(
         self,
         tensor: Any,
@@ -315,7 +315,7 @@ Context manager for timing operations.        start = time.perf_counter()
         def do_send():
             with self._timed_op("send", tensor):"                dist.send(tensor, dst=dst, group=self.group, tag=tag)
 
-        self._with_retry("send", do_send)
+            self._with_retry("send", do_send)
     def recv(
         self,
         tensor: Any,
@@ -331,7 +331,7 @@ Context manager for timing operations.        start = time.perf_counter()
         def do_recv():
             with self._timed_op("recv", tensor):"                dist.recv(tensor, src=src, group=self.group, tag=tag)
 
-        self._with_retry("recv", do_recv)
+            self._with_retry("recv", do_recv)
     def barrier(self) -> None:
 """
 Synchronize all ranks in the group.        self._stats.barrier_count += 1
@@ -345,15 +345,15 @@ Synchronize all ranks in the group.        self._stats.barrier_count += 1
         def do_barrier():
             with self._timed_op("barrier"):"                dist.barrier(group=self.group)
 
-        self._with_retry("barrier", do_barrier)
-    @contextmanager
+            self._with_retry("barrier", do_barrier)
+            @contextmanager
     def stream_context(self):
-                Execute operations on the communication stream.
-                if self._stream is not None and HAS_TORCH:
-            with torch.cuda.stream(self._stream):
-                yield
+        Execute operations on the communication stream.
+        if self._stream is not None and HAS_TORCH:
+        with torch.cuda.stream(self._stream):
+        yield
         else:
-            yield
+        yield
 
     def synchronize(self) -> None:
 """

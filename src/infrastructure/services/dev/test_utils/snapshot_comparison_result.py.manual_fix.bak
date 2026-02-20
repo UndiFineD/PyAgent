@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 Auto-extracted class from agent_test_utils.py""""
 try:
     import json
@@ -44,7 +44,7 @@ __version__ = VERSION
 
 @dataclass
 class SnapshotComparisonResult:
-    ""
+"""
 Result of comparing snapshots.""""
 Attributes:
         matches: Whether snapshots match.
@@ -59,7 +59,7 @@ Attributes:
 
     @property
     def diff(self) -> str | None:
-        ""
+"""
 Get a simple diff representation.        if self.matches:
             return None
 
@@ -71,4 +71,4 @@ Get a simple diff representation.        if self.matches:
             actual_str = str(self.actual)  # type: ignore[arg-type]
 
         return f"Expected:\\n{expected_str}\\n\\nActual:\\n{actual_str}"
-""
+"""

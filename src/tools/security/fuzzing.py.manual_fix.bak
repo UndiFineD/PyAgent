@@ -33,20 +33,18 @@ from bs4 import BeautifulSoup
 logger = logging.getLogger("pyagent.security.fuzzing")
 
 """
-
-
 class FuzzingTarget(Enum):
-    ""
+"""
 Types of targets for fuzzing.    WEB_URL = "web_url""    API_ENDPOINT = "api_endpoint""    FILE_PATH = "file_path""    NETWORK_HOST = "network_host""    APPLICATION = "application"
 
 
 class FuzzingTechnique(Enum):
-    ""
+"""
 Fuzzing techniques available.    PATH_TRAVERSAL = "path_traversal""    SQL_INJECTION = "sql_injection""    XSS = "xss""    COMMAND_INJECTION = "command_injection""    BUFFER_OVERFLOW = "buffer_overflow""    FORMAT_STRING = "format_string""    DIRECTORY_TRAVERSAL = "directory_traversal"
 
 @dataclass
 class FuzzingResult:
-    ""
+"""
 Result of a fuzzing attempt.    target: str
     technique: FuzzingTechnique
     payload: str
@@ -61,7 +59,7 @@ Result of a fuzzing attempt.    target: str
 
 @dataclass
 class FuzzingSession:
-    ""
+"""
 A fuzzing session configuration.    session_id: str
     target: str
     target_type: FuzzingTarget
@@ -88,7 +86,7 @@ class AIFuzzingEngine:
         self.session_history: List[FuzzingSession] = []
 
     def _load_default_payloads(self) -> Dict[FuzzingTechnique, List[str]]:
-        ""
+"""
 Load default fuzzing payloads.        return {
             FuzzingTechnique.PATH_TRAVERSAL: [
                 "../../../etc/passwd","                "..\\..\\..\\windows\\system32\\config\\sam","                "/etc/passwd","                "....//....//....//etc/passwd","                "..%2f..%2f..%2fetc%2fpasswd""            ],
@@ -172,7 +170,7 @@ Load default fuzzing payloads.        return {
         self.logger.info(f"Completed fuzzing session {session_id} with {len(results)} results")"        return results
 
     async def _web_discovery_phase(self, session: FuzzingSession) -> List[FuzzingResult]:
-        ""
+"""
 Perform web discovery to find fuzzing targets.        results = []
 
         try:
@@ -204,7 +202,7 @@ Perform web discovery to find fuzzing targets.        results = []
         return results
 
     async def _fuzz_technique(self, session: FuzzingSession, technique: FuzzingTechnique) -> List[FuzzingResult]:
-        ""
+"""
 Fuzz using a specific technique.        results = []
 
         # Get base payloads for this technique
@@ -239,7 +237,7 @@ Fuzz using a specific technique.        results = []
         technique: FuzzingTechnique,
         base_payloads: List[str]
     ) -> List[str]:
-        ""
+"""
 Generate new payloads using AI.        try:
             # Create prompt for AI payload generation
             prompt = f""
@@ -276,7 +274,7 @@ async def _execute_payload(
         technique: FuzzingTechnique,
         payload: str
     ) -> FuzzingResult:
-        ""
+"""
 Execute a fuzzing payload against the target.        result = FuzzingResult(
             target=session.target,
             technique=technique,
@@ -309,7 +307,7 @@ Execute a fuzzing payload against the target.        result = FuzzingResult(
         technique: FuzzingTechnique,
         payload: str
     ) -> FuzzingResult:
-        ""
+"""
 Execute payload against web target.        result = FuzzingResult(target=target, technique=technique, payload=payload)
 
         try:
@@ -338,7 +336,7 @@ Execute payload against web target.        result = FuzzingResult(target=target,
         technique: FuzzingTechnique,
         payload: str
     ) -> FuzzingResult:
-        ""
+"""
 Execute payload against API endpoint.        result = FuzzingResult(target=target, technique=technique, payload=payload)
 
         try:
@@ -363,7 +361,7 @@ Execute payload against API endpoint.        result = FuzzingResult(target=targe
         technique: FuzzingTechnique,
         payload: str
     ) -> FuzzingResult:
-        ""
+"""
 Execute payload against file system.        result = FuzzingResult(target=target, technique=technique, payload=payload)
 
         try:
@@ -382,7 +380,7 @@ Execute payload against file system.        result = FuzzingResult(target=target
         return result
 
     async def _analyze_result(self, result: FuzzingResult):
-        ""
+"""
 Analyze fuzzing result for vulnerabilities.        # Simple pattern-based analysis
         if result.response_code == 200 and result.technique == FuzzingTechnique.PATH_TRAVERSAL:
             # Check for file content in response
@@ -402,7 +400,7 @@ Analyze fuzzing result for vulnerabilities.        # Simple pattern-based analys
                 result.vulnerability_type = "xss_reflected""                result.confidence = 0.7
 
     async def _learning_phase(self, session: FuzzingSession, results: List[FuzzingResult]):
-        ""
+"""
 Learning phase - analyze results and improve future fuzzing.        # Analyze successful payloads
         successful_payloads = [r for r in results if r.error_detected]
 
@@ -420,12 +418,12 @@ Learning phase - analyze results and improve future fuzzing.        # Analyze su
 
             self.logger.info(f"Learned {len(successful_payloads)} new patterns from session {session.session_id}")
     def get_session_results(self, session_id: str) -> Optional[List[FuzzingResult]]:
-        ""
+"""
 Get results from a completed session.        session = next((s for s in self.session_history if s.session_id == session_id), None)
         return session.results if session else None
 
     def get_vulnerability_summary(self) -> Dict[str, Any]:
-        ""
+"""
 Get summary of all detected vulnerabilities.        all_results = []
         for session in self.session_history:
             all_results.extend(session.results)
@@ -536,66 +534,84 @@ class MultiCycleFuzzing:
     def __init__(self, fuzzing_engine: AIFuzzingEngine):
         self.engine = fuzzing_engine
         self.logger = logging.getLogger("pyagent.security.fuzzing.multicycle")
-    async def run_multi_cycle_fuzzing(
+        async def run_multi_cycle_fuzzing(
         self,
         target: str,
         target_type: FuzzingTarget,
         cycles: int = 3,
         techniques: Optional[List[FuzzingTechnique]] = None
-    ) -> Dict[str, Any]:
-                Run multi-cycle fuzzing with iterative improvement.
+        ) -> Dict[str, Any]:
+        Run multi-cycle fuzzing with iterative improvement.
 
         Args:
-            target: Target to fuzz
-            target_type: Type of target
-            cycles: Number of fuzzing cycles
-            techniques: Fuzzing techniques to use
+        target: Target to fuzz
+        target_type: Type of target
+        cycles: Number of fuzzing cycles
+        techniques: Fuzzing techniques to use
 
         Returns:
-            Multi-cycle results summary
-                self.logger.info(f"Starting multi-cycle fuzzing for {target} with {cycles} cycles")
+        Multi-cycle results summary
+        self.logger.info(f"Starting multi-cycle fuzzing for {target} with {cycles} cycles")
         all_sessions = []
         cumulative_findings = []
 
         for cycle in range(1, cycles + 1):
-            self.logger.info(f"Starting cycle {cycle}/{cycles}")
-            # Start new session
-            session_id = await self.engine.start_fuzzing_session(
-                target=target,
-                target_type=target_type,
-                techniques=techniques,
-                max_iterations=500  # Shorter sessions for multi-cycle
-            )
+        self.logger.info(f"Starting cycle {cycle}/{cycles}")
+        # Start new session
+        session_id = await self.engine.start_fuzzing_session(
+        target=target,
+        target_type=target_type,
+        techniques=techniques,
+        max_iterations=500  # Shorter sessions for multi-cycle
+        )
 
-            # Run the session
-            results = await self.engine.run_fuzzing_session(session_id)
-            all_sessions.append(session_id)
+        # Run the session
+        results = await self.engine.run_fuzzing_session(session_id)
+        all_sessions.append(session_id)
 
-            # Analyze findings
-            cycle_findings = [r for r in results if r.error_detected]
-            cumulative_findings.extend(cycle_findings)
+        # Analyze findings
+        cycle_findings = [r for r in results if r.error_detected]
+        cumulative_findings.extend(cycle_findings)
 
-            self.logger.info(f"Cycle {cycle} found {len(cycle_findings)} vulnerabilities")
-            # If we found high-confidence vulnerabilities, we might stop early
-            high_confidence = [r for r in cycle_findings if r.confidence > 0.8]
-            if high_confidence:
-                self.logger.warning(f"High-confidence vulnerabilities found in cycle {cycle}, stopping early")"                break
+        self.logger.info(f"Cycle {cycle} found {len(cycle_findings)} vulnerabilities")
+        # If we found high-confidence vulnerabilities, we might stop early
+        high_confidence = [r for r in cycle_findings if r.confidence > 0.8]
+        if high_confidence:
+        self.logger.warning(f"High-confidence vulnerabilities found in cycle {cycle}, stopping early")"                break
 
-            # Learning phase between cycles
-            await asyncio.sleep(1)  # Brief pause for learning
+        # Learning phase between cycles
+        await asyncio.sleep(1)  # Brief pause for learning
 
         # Generate final summary
         summary: Dict[str, Any] = {
-            'target': target,'            'cycles_completed': len(all_sessions),'            'total_findings': len(cumulative_findings),'            'sessions': all_sessions,'            'high_confidence_findings': len([r for r in cumulative_findings if r.confidence > 0.8]),'            'vulnerability_breakdown': {}'        }
+        'target': target,'            'cycles_completed': len(all_sessions),'            'total_findings': len(cumulative_findings),'            'sessions': all_sessions,'            'high_confidence_findings': len([r for r in cumulative_findings if r.confidence > 0.8]),'            'vulnerability_breakdown': {}'        }
 
         # Breakdown by vulnerability type
         vuln_breakdown: Dict[str, int] = {}
         for finding in cumulative_findings:
-            vuln_type = finding.vulnerability_type or 'unknown''            vuln_breakdown[vuln_type] = vuln_breakdown.get(vuln_type, 0) + 1
+        vuln_type = finding.vulnerability_type or 'unknown''            vuln_breakdown[vuln_type] = vuln_breakdown.get(vuln_type, 0) + 1
 
         summary['vulnerability_breakdown'] = vuln_breakdown
         self.logger.info(f"Multi-cycle fuzzing complete: {summary['total_findings']} total findings")"'        return summary
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

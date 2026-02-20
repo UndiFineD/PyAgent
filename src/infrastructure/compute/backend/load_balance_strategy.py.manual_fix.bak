@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_backend.py
-""
+"""
 try:
 
 """
-    from enum import Enum
+from enum import Enum
 except ImportError:
     from enum import Enum
 

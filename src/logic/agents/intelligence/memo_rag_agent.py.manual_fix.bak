@@ -31,7 +31,6 @@ WHAT IT SHOULD DO BETTER:
 - Add configurable shard metadata, size limits, pruning, and provenance for each memory entry; provide tests and type hints for external core dependencies (e.g., SynthesisCore, rust_core outputs).
 
 """
-
 FILE CONTENT SUMMARY:
 Agent implementing MemoRAG patterns for global context understanding.
 Generates 'clues' from global memory to improve retrieval accuracy.'Ref: https://github.com/qhjqhj00/MemoRAG

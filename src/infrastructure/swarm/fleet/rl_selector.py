@@ -84,17 +84,17 @@ if not candidates:
 
     def record_feedback(self, goal: str, candidate: str, success: bool, latency: float = 0.0):
         ""
-Records the outcome of a selection to update the MDP models.""
+        Records the outcome of a selection to update the MDP models.""
         # Calculate reward: 1.0 for success, -1.0 for failure, with latency penalty
         reward = 1.0 if success else -1.0
         if success and latency > 0:
-            reward -= min(0.5, latency / 10.0)  # Penalty for slow success
+        reward -= min(0.5, latency / 10.0)  # Penalty for slow success
 
         self.mdp.add_transition(
-            state=goal,
-            action=candidate,
-            next_state="done",
-            reward=reward,
-            done=True
+        state=goal,
+        action=candidate,
+        next_state="done",
+        reward=reward,
+        done=True
         )
         logger.debug("RLSelector: Recorded feedback for (%s, %s): Reward=%.2f", goal, candidate, reward)

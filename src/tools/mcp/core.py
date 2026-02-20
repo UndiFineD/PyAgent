@@ -29,8 +29,8 @@ class MCPCore:
 Core MCP functionality for tool registration and execution.
     def _initialize_adapters(self):
 """
-Initialize language adapters.        self._adapters = {
-            "python": PythonAdapter(),"            "typescript": TypeScriptAdapter(),"            "go": GoAdapter(),"            "rust": RustAdapter(),"            "javascript": JavaScriptAdapter()"        }
+        Initialize language adapters.        self._adapters = {
+        "python": PythonAdapter(),"            "typescript": TypeScriptAdapter(),"            "go": GoAdapter(),"            "rust": RustAdapter(),"            "javascript": JavaScriptAdapter()"        }
 
     def __init__(self):
         self._tools: Dict[str, Dict[str, Any]] = {}
@@ -38,33 +38,33 @@ Initialize language adapters.        self._adapters = {
         self._adapters: Dict[str, Any] = {}
         self._security_manager = None
         try:
-            self._initialize_security()
-            self._initialize_default_tools()
-            self._initialize_connectors()
-            self._initialize_adapters()
+        self._initialize_security()
+        self._initialize_default_tools()
+        self._initialize_connectors()
+        self._initialize_adapters()
         except Exception as e:
-            print(f"Error during initialization: {e}")"            import traceback
-            traceback.print_exc()
+        print(f"Error during initialization: {e}")"            import traceback
+        traceback.print_exc()
 
     def _initialize_security(self):
 """
-Initialize security manager.        try:
-            from src.core.security.external_tools import ExternalToolSecurity
-            self._security_manager = ExternalToolSecurity()
+        Initialize security manager.        try:
+        from src.core.security.external_tools import ExternalToolSecurity
+        self._security_manager = ExternalToolSecurity()
         except ImportError:
-            print("Warning: External tool security not available, using basic validation")"            self._security_manager = None
+        print("Warning: External tool security not available, using basic validation")"            self._security_manager = None
 
     def _initialize_default_tools(self):
 """
-Initialize default tools for 10x expansion.        # Add 100+ default tools for expansion test
+        Initialize default tools for 10x expansion.        # Add 100+ default tools for expansion test
         for i in range(150):
-            self._tools[f"tool_{i}"] = {"description": f"Tool {i}", "category": "default"}
+        self._tools[f"tool_{i}"] = {"description": f"Tool {i}", "category": "default"}
         # Register specific tools used in tests
         self._tools["async_tool"] = {"description": "Async test tool", "category": "test"}"        self._tools["safe_tool"] = {"description": "Safe tool", "category": "test", "safe": True}"        self._tools["malicious_tool"] = {"description": "Malicious tool", "category": "test", "safe": False}
     def _initialize_connectors(self):
 """
-Initialize default connectors.        self._connectors = {
-            "database": DatabaseConnector(),"            "api": APIConnector(),"            "cloud": CloudConnector()"        }
+        Initialize default connectors.        self._connectors = {
+        "database": DatabaseConnector(),"            "api": APIConnector(),"            "cloud": CloudConnector()"        }
 
     def register_tool(self, name: str, config: Dict[str, Any]) -> bool:
 """
@@ -229,7 +229,7 @@ class CloudConnector:
 Enhanced cloud connector with multi-provider support and failover.
     def __init__(self):
         self._providers = {
-            "aws": AWSS3Connector(),"            "gcp": GCPStorageConnector(),"            "azure": AzureBlobConnector()"        }
+        "aws": AWSS3Connector(),"            "gcp": GCPStorageConnector(),"            "azure": AzureBlobConnector()"        }
         self._failover_enabled = True
 
     def upload_file(self, filename: str, provider: str = "aws", bucket: str = "default-bucket") -> Dict[str, Any]:"        """
@@ -334,6 +334,24 @@ Mock sandbox environment.    def execute(self, code: str) -> Dict[str, Any]:
         return {"status": "success", "output": f"Executed: {code}"}
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

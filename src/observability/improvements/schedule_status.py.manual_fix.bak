@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 schedule_status.py - ScheduleStatus enum for scheduled improvements
 
@@ -58,7 +58,7 @@ __version__ = VERSION
 
 
 class ScheduleStatus(Enum):
-    ""
+"""
 Status of scheduled improvements.
 
     UNSCHEDULED = "unscheduled""    SCHEDULED = "scheduled""    IN_SPRINT = "in_sprint""    BLOCKED = "blocked""    OVERDUE = "overdue"

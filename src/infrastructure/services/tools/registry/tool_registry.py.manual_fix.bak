@@ -22,7 +22,7 @@ from __future__ import annotations
 # Phase 41: Tool Parser Framework - Tool Registry
 """
 Tool parser registry for managing parser types and model mappings.
-""
+"""
 
 """
 import re
@@ -53,22 +53,22 @@ class ToolParserRegistry:
 
     def _init_registry(self):
         self._parsers: Dict[ToolParserType, Type[ToolParser]] = {
-            ToolParserType.GENERIC_JSON: JsonToolParser,
-            ToolParserType.HERMES: HermesToolParser,
-            ToolParserType.LLAMA3: Llama3ToolParser,
-            ToolParserType.MISTRAL: MistralToolParser,
-            ToolParserType.GRANITE: GraniteToolParser,
+        ToolParserType.GENERIC_JSON: JsonToolParser,
+        ToolParserType.HERMES: HermesToolParser,
+        ToolParserType.LLAMA3: Llama3ToolParser,
+        ToolParserType.MISTRAL: MistralToolParser,
+        ToolParserType.GRANITE: GraniteToolParser,
         }
 
         # Model name patterns to parser types
         self._model_patterns: List[Tuple[Pattern, ToolParserType]] = [
-            (re.compile(r"hermes", re.I), ToolParserType.HERMES),"            (re.compile(r"llama.*3", re.I), ToolParserType.LLAMA3),"            (re.compile(r"mistral", re.I), ToolParserType.MISTRAL),"            (re.compile(r"granite", re.I), ToolParserType.GRANITE),"            (re.compile(r"qwen", re.I), ToolParserType.GENERIC_JSON),"        ]
+        (re.compile(r"hermes", re.I), ToolParserType.HERMES),"            (re.compile(r"llama.*3", re.I), ToolParserType.LLAMA3),"            (re.compile(r"mistral", re.I), ToolParserType.MISTRAL),"            (re.compile(r"granite", re.I), ToolParserType.GRANITE),"            (re.compile(r"qwen", re.I), ToolParserType.GENERIC_JSON),"        ]
 
     def get_parser(
         self,
         parser_type: ToolParserType,
     ) -> ToolParser:
-        ""
+"""
 Get a parser by type.        parser_class = self._parsers.get(parser_type)
         if parser_class is None:
             raise ValueError(f"Unknown parser type: {parser_type}")"        return parser_class()
@@ -77,7 +77,7 @@ Get a parser by type.        parser_class = self._parsers.get(parser_type)
         self,
         model_name: str,
     ) -> ToolParser:
-        ""
+"""
 Get a parser based on model name.        for pattern, parser_type in self._model_patterns:
             if pattern.search(model_name):
                 return self.get_parser(parser_type)
@@ -90,7 +90,7 @@ Get a parser based on model name.        for pattern, parser_type in self._model
         parser_type: ToolParserType,
         parser_class: Type[ToolParser],
     ):
-        ""
+"""
 Register a custom parser.        self._parsers[parser_type] = parser_class
 
     def register_model_pattern(
@@ -98,14 +98,14 @@ Register a custom parser.        self._parsers[parser_type] = parser_class
         pattern: str,
         parser_type: ToolParserType,
     ):
-        ""
+"""
 Register a model pattern to parser mapping.        self._model_patterns.insert(0, (re.compile(pattern, re.I), parser_type))
 
     def detect_parser_type(
         self,
         text: str,
     ) -> ToolParserType:
-        ""
+"""
 Auto-detect parser type from text.        if HermesToolParser.TOOL_CALL_OPEN in text:
             return ToolParserType.HERMES
         if Llama3ToolParser.PYTHON_TAG in text:
@@ -166,12 +166,12 @@ class StreamingToolParser:
         )
 
     def reset(self):
-        ""
-Reset parser state.        self._state = StreamingToolState()
+"""
+        Reset parser state.        self._state = StreamingToolState()
 
-    @property
+        @property
     def completed_tools(self) -> List[ToolCall]:
-        ""
+"""
 Get all completed tool calls so far.        return self._state.completed_tools.copy()
 
 

@@ -15,13 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Priority queue for ordered agent execution with simple dependency support.""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -33,7 +33,7 @@ except ImportError:
 
 
 class AgentPriorityQueue:
-    ""
+"""
 Simple priority queue for agents.
 
 

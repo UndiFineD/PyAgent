@@ -17,7 +17,6 @@
 Dynamic.py module.
 
 """
-
 try:
     from typing import Any, Optional, Tuple
 except ImportError:
@@ -43,7 +42,7 @@ if HAS_NUMPY:
 
 
 class XDRotaryEmbedding(RotaryEmbeddingBase):
-    ""
+"""
 Extended Dynamic Rotary Position Embedding.""""
 Implements dynamic NTK-aware scaling for extended context lengths.
     
@@ -58,7 +57,7 @@ Implements dynamic NTK-aware scaling for extended context lengths.
         self.inv_freq = self._compute_inv_freq()
 
     def _compute_inv_freq(self, base: Optional[float] = None) -> Any:
-        ""
+"""
 Compute inverse frequencies with optional custom base.        base = base or self.base
         if HAS_TORCH:
             return 1.0 / (base ** (torch.arange(0, self.rotary_dim, 2, dtype=torch.float32) / self.rotary_dim))
@@ -66,7 +65,7 @@ Compute inverse frequencies with optional custom base.        base = base or sel
             return 1.0 / (base ** (np.arange(0, self.rotary_dim, 2, dtype=np.float32) / self.rotary_dim))
         raise RuntimeError("No numerical backend available")
     def _compute_dynamic_base(self, seq_len: int) -> float:
-        ""
+"""
 Compute dynamically scaled base for sequence length.        if seq_len <= self.original_max_position:
             return self.base
 
@@ -75,7 +74,7 @@ Compute dynamically scaled base for sequence length.        if seq_len <= self.o
         return self.base * alpha
 
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
-        ""
+"""
 Compute cos/sin cache with dynamic scaling.        new_base = self._compute_dynamic_base(max_len)
 
         if new_base != self._current_base:
@@ -97,7 +96,7 @@ Compute cos/sin cache with dynamic scaling.        new_base = self._compute_dyna
         query: Any,
         key: Any,
     ) -> Tuple[Any, Any]:
-        ""
+"""
 Apply XD rotary embeddings with dynamic scaling.        if HAS_TORCH and isinstance(positions, torch.Tensor):
             seq_len = int(positions.max().item()) + 1
         else:
@@ -122,6 +121,24 @@ Apply XD rotary embeddings with dynamic scaling.        if HAS_TORCH and isinsta
             return q_rot, k_rot
 
         raise RuntimeError("XDRotaryEmbedding requires PyTorch")
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Coding Standards Agent - Enforce coding standards, headers, and basic syntax fixes
 
@@ -39,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 Agent for enforcing coding standards, fixing headers, and correcting syntax issues.
-""
+"""
 try:
     import logging
 except ImportError:

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 LazyOrchestratorMap
 """
 - A lazy-loading registry that maps orchestrator names to their instances.
@@ -45,7 +45,7 @@ __version__ = VERSION
 
 
 class LazyOrchestratorMap:
-    ""
+"""
 A dictionary-like object that instantiates orchestrators only when accessed.
 
     def __init__(self, fleet_instance: FleetManager) -> None:
@@ -71,7 +71,7 @@ A dictionary-like object that instantiates orchestrators only when accessed.
         }
 
     def _scan_workspace_for_orchestrators(self) -> list[str]:
-        ""
+"""
 Performs the I/O-bound scanning of the workspace.        subdirs = [
             "src/infrastructure/swarm/orchestration","            "src/infrastructure/orchestration","            "src/logic/agents/cognitive","            "src/infrastructure/fleet","            "src/logic/agents/swarm","            "src/logic/agents/security","        ]
         found_paths = []
@@ -88,7 +88,7 @@ Performs the I/O-bound scanning of the workspace.        subdirs = [
         return found_paths
 
     def _load_manifests(self) -> dict[str, tuple]:
-        ""
+"""
 Loads orchestrator configurations from plugin manifests.        manifest_configs = {}
         manifest_paths = [
             self.workspace_root / "plugins" / "orchestrator_manifest.json","            self.workspace_root / "plugins" / "manifest.json","        ]
@@ -117,7 +117,7 @@ Loads orchestrator configurations from plugin manifests.        manifest_configs
 
         raise AttributeError(f"Orchestrator '{name}' not found.")
     def try_reload(self, name: str) -> bool:
-        ""
+"""
 Attempts to reload/re-instantiate a specific orchestrator.        if name in self._instances:
             del self._instances[name]
 
@@ -202,7 +202,7 @@ logging.warning(error_msg)
             logging.error(f"Failed to lazy-load orchestrator {key} from {module_path}: {e}")"            return None
 
     def keys(self) -> list[str]:
-        ""
+"""
 Returns list of available orchestrators.
         return list(self._configs.keys())
 
@@ -212,9 +212,9 @@ Returns list of available orchestrators.
 
 
 class OrchestratorRegistry:
-    ""
+"""
 Registry for mapping agent types to their corresponding orchestrators.
     @staticmethod
     def get_orchestrator_map(fleet_instance: FleetManager) -> LazyOrchestratorMap:
-        ""
+"""
 Factory method to create a new live orchestrator map for a fleet.        return LazyOrchestratorMap(fleet_instance)

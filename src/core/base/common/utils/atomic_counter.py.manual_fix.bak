@@ -15,17 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AtomicCounter - Thread-safe counters and related primitives.
 
 """
-
 This module provides several simple concurrency primitives used in tests
 and lightweight parts of the codebase. Implementations favor clarity
 and correct behavior over performance; a Rust-accelerated variant may be
 plugged in later.
-""
+"""
 import threading
 from typing import Optional
 
@@ -40,7 +39,7 @@ except Exception:  # pragma: no cover - optional dependency
 
 
 class Counter:
-    ""
+"""
 Simple non-atomic counter for single-threaded use.""
 __slots__ = ("_value",)
 
@@ -69,7 +68,7 @@ __slots__ = ("_value",)
 
 
 class AtomicCounter:
-    ""
+"""
 Thread-safe atomic counter implemented with a lock.""
 __slots__ = ("_value", "_lock", "_use_rust")
 
@@ -134,7 +133,7 @@ __slots__ = ("_value", "_lock", "_use_rust")
 
 
 class AtomicFlag:
-    ""
+"""
 Thread-safe atomic boolean flag.""
 __slots__ = ("_flag", "_lock")
 
@@ -179,7 +178,7 @@ __slots__ = ("_flag", "_lock")
 
 
 class AtomicGauge:
-    ""
+"""
 Thread-safe gauge that tracks min, max, and current value.""
 __slots__ = ("_value", "_min", "_max", "_lock")
 

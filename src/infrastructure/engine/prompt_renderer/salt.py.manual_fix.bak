@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Cache salt generation for prompt rendering.
-""
+"""
 try:
 
 """
-    import hashlib
+import hashlib
 except ImportError:
     import hashlib
 
@@ -43,7 +43,7 @@ except ImportError:
 
 
 class CacheSaltGenerator:
-    ""
+"""
 Generate cache salt for prefix caching disambiguation.
     @classmethod
     def generate(

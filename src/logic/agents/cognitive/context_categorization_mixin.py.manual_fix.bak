@@ -27,7 +27,6 @@ USAGE:
 - Attach ContextCategorizationMixin to a ContextAgent to provide methods for setting/getting priority and category, auto-categorizing files by path/extension, maintaining arbitrary metadata/tags/annotations, and computing a heuristic priority score for content review and ranking.
 
 """
-
 WHAT IT DOES:
 - Implements priority management (set/get), a heuristic calculate_priority_score using content heuristics and validation results, category management and auto_categorize by file name/extension, metadata storage/export, and simple tag/version/annotation handling to support downstream agent decision-making.
 

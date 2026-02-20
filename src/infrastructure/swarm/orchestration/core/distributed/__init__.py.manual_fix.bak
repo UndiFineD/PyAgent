@@ -19,7 +19,6 @@
 Distributed coordination package.
 
 """
-
 try:
     from .client import MPClient  # noqa: F401
 except ImportError:

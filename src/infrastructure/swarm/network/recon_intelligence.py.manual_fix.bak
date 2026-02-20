@@ -20,12 +20,11 @@ from typing import List, Dict, Set
 
 class ReconIntelligence:
 """
-        Refactored Reconnaissance logic from Argus.
+Refactored Reconnaissance logic from Argus.
     Focuses on OSINT and infrastructure detection.
 
 """
-    
-    FIREWALL_SIGNATURES = {
+FIREWALL_SIGNATURES = {
         'cloudflare': 'Cloudflare Firewall','        'akamai': 'Akamai Firewall','        'sucuri': 'Sucuri Firewall','        'imperva': 'Imperva Firewall','        'incapsula': 'Incapsula Firewall','        'f5 big-ip': 'F5 BIG-IP','        'bunnycdn': 'BunnyCDN''    }
 
     @classmethod

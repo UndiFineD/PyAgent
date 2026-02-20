@@ -18,7 +18,6 @@
 Convenience functions for LM Studio.
 
 """
-
 import logging
 from typing import Iterator
 
@@ -29,7 +28,7 @@ def lmstudio_chat(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    **_kwargs,
 ) -> str:
-    ""
+"""
 Convenience function for quick LM Studio chat.    try:
         import lmstudio
 
@@ -45,7 +44,7 @@ Convenience function for quick LM Studio chat.    try:
 def lmstudio_stream(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.",") -> Iterator[str]:
-    ""
+"""
 Convenience function for streaming LM Studio chat.    try:
         import lmstudio
 
@@ -62,7 +61,7 @@ Convenience function for streaming LM Studio chat.    try:
 async def lmstudio_chat_async(
     prompt: str,
     model: str = "","    system_prompt: str = "You are a helpful assistant.","    host: str = "localhost:1234",") -> str:
-    ""
+"""
 Async convenience function for LM Studio chat.""""
 This function is robust to different SDK shapes for `client.llm`.
         try:
@@ -92,6 +91,24 @@ This function is robust to different SDK shapes for `client.llm`.
 
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         logger.error(f"lmstudio_chat_async error: {e}")"        return """
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
 ""
 
 """

@@ -46,19 +46,19 @@ class TestEnums:
 Test enum values.
     def test_media_type_values(self):
 """
-Test MediaType enum.        assert MediaType.IMAGE is not None
+        Test MediaType enum.        assert MediaType.IMAGE is not None
         assert MediaType.VIDEO is not None
         assert MediaType.AUDIO is not None
 
     def test_cache_backend_values(self):
 """
-Test CacheBackend enum.        assert CacheBackend.MEMORY is not None
+        Test CacheBackend enum.        assert CacheBackend.MEMORY is not None
         assert CacheBackend.SHARED is not None
         assert CacheBackend.MMAP is not None
 
     def test_hash_algorithm_values(self):
 """
-Test HashAlgorithm enum.        assert HashAlgorithm.BLAKE3 is not None
+        Test HashAlgorithm enum.        assert HashAlgorithm.BLAKE3 is not None
         assert HashAlgorithm.SHA256 is not None
         assert HashAlgorithm.XXHASH is not None
         assert HashAlgorithm.PERCEPTUAL is not None
@@ -70,18 +70,18 @@ class TestMediaHash:
 Test MediaHash dataclass.
     def test_create_media_hash(self):
 """
-Test creating MediaHash.        h = MediaHash(
-            value="abc123","            algorithm=HashAlgorithm.BLAKE3,
-            media_type=MediaType.IMAGE,
+        Test creating MediaHash.        h = MediaHash(
+        value="abc123","            algorithm=HashAlgorithm.BLAKE3,
+        media_type=MediaType.IMAGE,
         )
         assert h.value == "abc123""        assert h.algorithm == HashAlgorithm.BLAKE3
 
     def test_media_hash_with_size(self):
 """
-Test MediaHash with size.        h = MediaHash(
-            value="def456","            algorithm=HashAlgorithm.SHA256,
-            media_type=MediaType.VIDEO,
-            size_bytes=1024,
+        Test MediaHash with size.        h = MediaHash(
+        value="def456","            algorithm=HashAlgorithm.SHA256,
+        media_type=MediaType.VIDEO,
+        size_bytes=1024,
         )
         assert h.size_bytes == 1024
 
@@ -92,20 +92,20 @@ class TestCacheEntry:
 Test CacheEntry dataclass.
     def test_create_cache_entry(self):
 """
-Test creating CacheEntry.        key = MediaHash(value="test_key", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        entry = CacheEntry(
-            key=key,
-            data=b"test data","            media_type=MediaType.IMAGE,
-            size_bytes=9,
+        Test creating CacheEntry.        key = MediaHash(value="test_key", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        entry = CacheEntry(
+        key=key,
+        data=b"test data","            media_type=MediaType.IMAGE,
+        size_bytes=9,
         )
         assert entry.key == key
         assert entry.data == b"test data"
     def test_cache_entry_with_metadata(self):
 """
-Test CacheEntry with metadata.        key = MediaHash(value="key", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.AUDIO)"        entry = CacheEntry(
-            key=key,
-            data=b"data","            media_type=MediaType.AUDIO,
-            size_bytes=4,
-            metadata={"format": "wav"},"        )
+        Test CacheEntry with metadata.        key = MediaHash(value="key", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.AUDIO)"        entry = CacheEntry(
+        key=key,
+        data=b"data","            media_type=MediaType.AUDIO,
+        size_bytes=4,
+        metadata={"format": "wav"},"        )
         assert entry.metadata["format"] == "wav"
 
 
@@ -114,7 +114,7 @@ class TestMultiModalHasher:
 Test MultiModalHasher class.
     def test_hash_bytes(self):
 """
-Test hashing bytes.        hasher = MultiModalHasher()
+        Test hashing bytes.        hasher = MultiModalHasher()
         data = b"test data for hashing"
         h = hasher.hash_bytes(data)
         assert isinstance(h, str)
@@ -122,7 +122,7 @@ Test hashing bytes.        hasher = MultiModalHasher()
 
     def test_hash_deterministic(self):
 """
-Test hashing is deterministic.        hasher = MultiModalHasher()
+        Test hashing is deterministic.        hasher = MultiModalHasher()
         data = b"consistent data"
         h1 = hasher.hash_bytes(data)
         h2 = hasher.hash_bytes(data)
@@ -130,13 +130,13 @@ Test hashing is deterministic.        hasher = MultiModalHasher()
 
     def test_different_data_different_hash(self):
 """
-Test different data produces different hash.        hasher = MultiModalHasher()
+        Test different data produces different hash.        hasher = MultiModalHasher()
 
         h1 = hasher.hash_bytes(b"data1")"        h2 = hasher.hash_bytes(b"data2")"        assert h1 != h2
 
     def test_hash_with_algorithm(self):
 """
-Test hashing with specific algorithm.        hasher = MultiModalHasher(algorithm=HashAlgorithm.SHA256)
+        Test hashing with specific algorithm.        hasher = MultiModalHasher(algorithm=HashAlgorithm.SHA256)
         data = b"test"
         h = hasher.hash_bytes(data)
         assert isinstance(h, str)
@@ -148,12 +148,12 @@ class TestMemoryMultiModalCache:
 Test in-memory cache implementation.
     def test_create_cache(self):
 """
-Test creating memory cache.        cache = MemoryMultiModalCache(max_size_bytes=1024)
+        Test creating memory cache.        cache = MemoryMultiModalCache(max_size_bytes=1024)
         assert cache is not None
 
     def test_put_and_get(self):
 """
-Test put and get operations.        cache = MemoryMultiModalCache(max_size_bytes=10240)
+        Test put and get operations.        cache = MemoryMultiModalCache(max_size_bytes=10240)
 
         key = MediaHash(value="test_key", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        data = b"test data""
         cache.put(key, data)
@@ -164,13 +164,13 @@ Test put and get operations.        cache = MemoryMultiModalCache(max_size_bytes
 
     def test_get_missing_key(self):
 """
-Test getting missing key.        cache = MemoryMultiModalCache()
+        Test getting missing key.        cache = MemoryMultiModalCache()
         key = MediaHash(value="nonexistent", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        result = cache.get(key)
         assert result is None
 
     def test_contains(self):
 """
-Test contains check.        cache = MemoryMultiModalCache()
+        Test contains check.        cache = MemoryMultiModalCache()
 
         key_exists = MediaHash(value="exists", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        key_missing = MediaHash(value="missing", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"
         cache.put(key_exists, b"data")
@@ -179,7 +179,7 @@ Test contains check.        cache = MemoryMultiModalCache()
 
     def test_clear(self):
 """
-Test clearing cache.        cache = MemoryMultiModalCache()
+        Test clearing cache.        cache = MemoryMultiModalCache()
 
         key1 = MediaHash(value="key1", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        key2 = MediaHash(value="key2", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.VIDEO)"
         cache.put(key1, b"data1")"        cache.put(key2, b"data2")"
@@ -190,18 +190,18 @@ Test clearing cache.        cache = MemoryMultiModalCache()
 
     def test_lru_eviction(self):
 """
-Test LRU eviction.        cache = MemoryMultiModalCache(max_size_bytes=100)
+        Test LRU eviction.        cache = MemoryMultiModalCache(max_size_bytes=100)
 
         # Fill cache
         for i in range(10):
-            key = MediaHash(value=f"key{i}", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"            cache.put(key, b"x" * 20)"
+        key = MediaHash(value=f"key{i}", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"            cache.put(key, b"x" * 20)"
         # Oldest entries should be evicted
         stats = cache.stats
         assert stats.evictions >= 0
 
     def test_stats(self):
 """
-Test cache statistics.        cache = MemoryMultiModalCache()
+        Test cache statistics.        cache = MemoryMultiModalCache()
 
         key = MediaHash(value="key", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        key_missing = MediaHash(value="missing", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"
         cache.put(key, b"data")"        cache.get(key)  # Hit
@@ -212,16 +212,16 @@ Test cache statistics.        cache = MemoryMultiModalCache()
         assert stats.misses >= 1
 
 
-@pytest.mark.skipif(sys.platform == 'win32', reason='IPC cache uses /tmp which is not available on Windows')'class TestIPCMultiModalCache:
+        @pytest.mark.skipif(sys.platform == 'win32', reason='IPC cache uses /tmp which is not available on Windows')'class TestIPCMultiModalCache:
 """
-Test IPC-enabled cache.
+        Test IPC-enabled cache.
     def test_create_ipc_cache(self):
 """
-Test creating IPC cache.        cache = IPCMultiModalCache(name="test_cache", max_size_bytes=1024)"        assert cache is not None
+        Test creating IPC cache.        cache = IPCMultiModalCache(name="test_cache", max_size_bytes=1024)"        assert cache is not None
 
     def test_basic_operations(self):
 """
-Test basic IPC cache operations.        cache = IPCMultiModalCache(name="test_ops")
+        Test basic IPC cache operations.        cache = IPCMultiModalCache(name="test_ops")
         key = MediaHash(value="key", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        cache.put(key, b"data")"        result = cache.get(key)
 
         # May or may not return CacheEntry depending on platform
@@ -233,12 +233,12 @@ class TestPerceptualCache:
 Test perceptual similarity cache.
     def test_create_perceptual_cache(self):
 """
-Test creating perceptual cache.        cache = PerceptualCache(similarity_threshold=0.9)
+        Test creating perceptual cache.        cache = PerceptualCache(similarity_threshold=0.9)
         assert cache is not None
 
     def test_perceptual_match(self):
 """
-Test perceptual matching.        cache = PerceptualCache(similarity_threshold=0.8)
+        Test perceptual matching.        cache = PerceptualCache(similarity_threshold=0.8)
 
         # Store with perceptual hash
         key = MediaHash(value="key1", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)"        cache.put(key, b"image data 1")"
@@ -253,12 +253,12 @@ class TestPrefetchMultiModalCache:
 Test prefetch-enabled cache.
     def test_create_prefetch_cache(self):
 """
-Test creating prefetch cache.        cache = PrefetchMultiModalCache()
+        Test creating prefetch cache.        cache = PrefetchMultiModalCache()
         assert cache is not None
 
     def test_predict_next(self):
 """
-Test prediction of next access.        cache = PrefetchMultiModalCache()
+        Test prediction of next access.        cache = PrefetchMultiModalCache()
 
         key = MediaHash(value="key1", algorithm=HashAlgorithm.BLAKE3, media_type=MediaType.IMAGE)
         # Record access patterns
@@ -275,19 +275,19 @@ class TestFactoryFunctions:
 Test factory functions.
     def test_compute_media_hash(self):
 """
-Test compute_media_hash utility.        data = b"test image data"
+        Test compute_media_hash utility.        data = b"test image data"
         h = compute_media_hash(data, MediaType.IMAGE)
         assert isinstance(h, MediaHash)
         assert h.media_type == MediaType.IMAGE
 
     def test_create_memory_cache(self):
 """
-Test creating memory cache via factory.        cache = create_cache(CacheBackend.MEMORY, max_size_bytes=1024)
+        Test creating memory cache via factory.        cache = create_cache(CacheBackend.MEMORY, max_size_bytes=1024)
         assert isinstance(cache, MemoryMultiModalCache)
 
-    @pytest.mark.skipif(sys.platform == 'win32', reason='IPC cache uses /tmp which is not available on Windows')'    def test_create_shared_cache(self):
+        @pytest.mark.skipif(sys.platform == 'win32', reason='IPC cache uses /tmp which is not available on Windows')'    def test_create_shared_cache(self):
 """
-Test creating shared/IPC cache via factory.        cache = create_cache(CacheBackend.SHARED, name="factory_test")"        assert isinstance(cache, IPCMultiModalCache)
+        Test creating shared/IPC cache via factory.        cache = create_cache(CacheBackend.SHARED, name="factory_test")"        assert isinstance(cache, IPCMultiModalCache)
 
 
 
@@ -296,11 +296,11 @@ class TestCacheStats:
 Test cache statistics.
     def test_cache_stats_dataclass(self):
 """
-Test CacheStats dataclass.        stats = CacheStats(
-            hits=100,
-            misses=20,
-            evictions=5,
-            total_size_bytes=1024,
+        Test CacheStats dataclass.        stats = CacheStats(
+        hits=100,
+        misses=20,
+        evictions=5,
+        total_size_bytes=1024,
         )
         assert stats.hits == 100
         assert stats.misses == 20
@@ -308,7 +308,7 @@ Test CacheStats dataclass.        stats = CacheStats(
 
     def test_hit_ratio(self):
 """
-Test hit ratio calculation.        stats = CacheStats(hits=80, misses=20, evictions=0, total_size_bytes=100)
+        Test hit ratio calculation.        stats = CacheStats(hits=80, misses=20, evictions=0, total_size_bytes=100)
 
         # Hit ratio should be 0.8
         assert stats.hit_rate == 0.8

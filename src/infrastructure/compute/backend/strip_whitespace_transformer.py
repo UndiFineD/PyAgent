@@ -47,6 +47,24 @@ Get transformer name.        return "strip_whitespace"
 
 """
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

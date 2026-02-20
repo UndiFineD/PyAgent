@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Core logic for safe mathematical formula evaluation.""
 
@@ -33,10 +33,10 @@ logger = logging.getLogger("pyagent.formula")
 
 
 class FormulaCore:
-    ""
+"""
 Safely evaluates mathematical expressions using AST.
     Standardized math primitives with Rust acceleration.
-    ""
+"""
     # Supported operators for safe evaluation
     OPERATORS: Dict[Any, Callable] = {
         ast.Add: operator.add,
@@ -64,7 +64,7 @@ Safely evaluates mathematical expressions using AST.
 
     @classmethod
     def compute_perplexity(cls, logprobs: Sequence[float]) -> float:
-        ""
+"""
 Compute perplexity from logprobs with Rust acceleration.""
 result = cls._try_rust_perplexity(logprobs)
         if result is not None:
@@ -87,7 +87,7 @@ result = cls._try_rust_perplexity(logprobs)
 
     @classmethod
     def compute_entropy(cls, logprobs: Sequence[float]) -> float:
-        ""
+"""
 Compute entropy from logprobs (assuming they're top-k).""
 result = cls._try_rust_entropy(logprobs)
         if result is not None:
@@ -115,7 +115,7 @@ result = cls._try_rust_entropy(logprobs)
 
     @classmethod
     def evaluate(cls, expression: str, variables: dict[str, float]) -> float:
-        ""
+"""
 Evaluate a mathematical expression with variable substitution.
 
         Args:
@@ -123,7 +123,7 @@ Evaluate a mathematical expression with variable substitution.
             variables: Context variables (e.g., {"a": 10, "b": 5})
         Returns:
             Computed float result.
-        ""
+"""
 result = cls._try_rust_evaluate(expression, variables)
         if result is not None:
             return result
@@ -151,7 +151,7 @@ result = cls._try_rust_evaluate(expression, variables)
 
     @classmethod
     def _eval_node(cls, node: ast.AST, variables: dict[str, float]) -> float:
-        ""
+"""
 Recursively evaluate AST nodes using small specialized helpers.""
 if isinstance(node, ast.Constant):
             return cls._eval_constant(node)

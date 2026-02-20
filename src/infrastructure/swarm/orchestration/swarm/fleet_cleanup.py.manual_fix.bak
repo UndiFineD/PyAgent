@@ -21,7 +21,7 @@ Ensures the swarm doesn't suffer from resource exhaustion.'
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 

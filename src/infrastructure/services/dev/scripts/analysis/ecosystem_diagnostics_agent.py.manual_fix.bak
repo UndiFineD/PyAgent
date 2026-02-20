@@ -18,7 +18,6 @@ Phase 309: Ecosystem Diagnostics Agent.
 Consolidates various dev scripts into a single diagnostic engine.
 
 """
-
 import ast
 from pathlib import Path
 from typing import Any
@@ -26,7 +25,7 @@ from typing import Any
 
 
 class EcosystemDiagnosticsAgent:
-    ""
+"""
 Agent for running high-level ecosystem diagnostics and health checks.
     def __init__(self, root_path: str = ".") -> None:"        self.root_path = Path(root_path)
         self.results: dict[Any, Any] = {}
@@ -69,4 +68,4 @@ Agent for running high-level ecosystem diagnostics and health checks.
 if __name__ == "__main__":"    agent = EcosystemDiagnosticsAgent()
     agent.run_all_checks()
 
-""
+"""

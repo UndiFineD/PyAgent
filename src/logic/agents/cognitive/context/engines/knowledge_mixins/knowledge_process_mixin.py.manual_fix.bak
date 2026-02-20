@@ -14,14 +14,14 @@
 
 
 
-""
+"""
 """
 Knowledge process mixin for content analysis.
-""
+"""
 try:
 
 """
-    import re
+import re
 except ImportError:
     import re
 
@@ -29,12 +29,12 @@ except ImportError:
 
 
 class KnowledgeProcessMixin:
-    ""
+"""
 Methods for processing file content and computing similarity.""
 def process_file_content(
         self, rel_path: str, content: str, extension: str
     ) -> list[tuple[str, str, str, str]]:
-        ""
+"""
 Parses content and returns a list of (symbol, path, category, snippet) tuples.""
 results: list[tuple[str, str, str, str]] = []
         if extension == ".py":

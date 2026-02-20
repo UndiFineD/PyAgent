@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_coder.py
-""
+"""
 
 """
 from dataclasses import dataclass
@@ -37,7 +37,7 @@ __version__ = VERSION
 
 @dataclass
 class OptimizationSuggestion:
-    ""
+"""
 A suggestion for code optimization.
 
     Attributes:
@@ -47,7 +47,7 @@ A suggestion for code optimization.
         code_location: File and line information.
         before_snippet: Code before optimization.
         after_snippet: Suggested optimized code.
-    ""
+"""
 type: OptimizationType
     description: str
     impact: str

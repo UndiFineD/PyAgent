@@ -18,7 +18,6 @@
 LM Studio streaming chat completion handler.
 
 """
-
 import json
 import logging
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Optional
@@ -33,17 +32,17 @@ logger = logging.getLogger(__name__)
 
 
 class StreamingChatHandler:
-    ""
+"""
 Handler for streaming chat operations with SDK-first and HTTP fallback support.
     def __init__(self, api_client: LMStudioAPIClient):
-        ""
-Initialize streaming chat handler.""""
-Args:
-            api_client: LMStudioAPIClient instance for HTTP fallback.
-                self.api_client = api_client
+"""
+        Initialize streaming chat handler.""""
+        Args:
+        api_client: LMStudioAPIClient instance for HTTP fallback.
+        self.api_client = api_client
 
     def _build_prediction_config(self, sdk_available: bool, **kwargs) -> Optional[Any]:
-        ""
+"""
 Build prediction config from kwargs.""""
 Args:
             sdk_available: Whether LM Studio SDK is available.
@@ -77,7 +76,7 @@ Args:
         on_fragment: Optional[Callable[[str], None]] = None,
         **kwargs,
     ) -> Iterator[str]:
-        ""
+"""
 Stream chat via LM Studio SDK.""""
 Args:
             llm: LM Studio LLM model handle.
@@ -106,7 +105,7 @@ Args:
         on_fragment: Optional[Callable[[str], None]] = None,
         **kwargs,
     ) -> Iterator[str]:
-        ""
+"""
 Stream chat via HTTP REST API fallback with SSE.""""
 Args:
             prompt: User prompt/message.
@@ -173,7 +172,7 @@ Args:
         on_fragment: Optional[Callable[[str], None]] = None,
         **kwargs,
     ) -> Iterator[str]:
-        ""
+"""
 Stream chat completion with SDK-first and HTTP fallback.""""
 Args:
             llm: LM Studio LLM model handle (from SDK).
@@ -196,7 +195,25 @@ Args:
         # HTTP fallback
         yield from self._http_fallback_chat_stream(prompt, model, system_prompt, on_fragment, **kwargs)
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

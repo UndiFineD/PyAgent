@@ -20,7 +20,7 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 FlashAttention-2 backend.
-""
+"""
 
 """
 import logging
@@ -73,7 +73,7 @@ class FlashAttentionBackend(AttentionBackend[None]):
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-        ""
+"""
 FlashAttention implementation.        try:
             from flash_attn import flash_attn_func
         except ImportError:

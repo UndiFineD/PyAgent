@@ -14,14 +14,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Vector store.py module.
-""
+"""
 try:
 
 """
-    from typing import Any
+from typing import Any
 except ImportError:
     from typing import Any
 
@@ -43,10 +43,10 @@ __version__ = VERSION
 
 
 class VectorKnowledgeStore(KnowledgeStore):
-    ""
+"""
 Handles vector-based knowledge storage.
     Delegates to MemoryCore for unified semantic handling (Rust/ChromaDB).
-    ""
+"""
 def store(self, key: str, value: str, metadata: dict[str, Any] | None = None) -> bool:
         return self._memory_core.store_knowledge(
             agent_id=self.agent_id, key=key, content=value, mode="semantic", metadata=metadata"        )

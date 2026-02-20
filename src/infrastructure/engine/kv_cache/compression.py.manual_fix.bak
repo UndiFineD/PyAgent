@@ -18,7 +18,6 @@ Adaptive Swarm Compression (Phase 65).
 Dynamically manages KV-cache precision and eviction based on shard activity.
 
 """
-
 try:
     import logging
 except ImportError:
@@ -105,7 +104,7 @@ f"shards due to {load_pct:.1f}% load.""            )
         return stats
 
     def touch_shard(self, context_id: str, token_index: int) -> None:
-        ""
+"""
 Updates last_access and restores precision if needed.        shards = self.shard_manager.context_registry.get(context_id, [])
         for shard in shards:
             if shard.start_token <= token_index < shard.end_token:
@@ -114,4 +113,4 @@ Updates last_access and restores precision if needed.        shards = self.shard
                     logger.info(f"Compressor: Reloading evicted shard {shard.shard_id}")"                    shard.is_cached = True
                 if shard.precision != "float16":"                    shard.precision = "float16"  # Decompress on access"                break
 
-""
+"""

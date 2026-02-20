@@ -20,7 +20,7 @@ from __future__ import annotations
 # Pure logic for reducing the size of source files while preserving structural context.
 """
 No I/O or side effects.
-""
+"""
 
 """
 import re
@@ -101,4 +101,4 @@ Logic for formatting summary headers.#         return f"### {filename} ({mode})\
     def decide_compression_mode(filename: str) -> str:
 """"
 Determines logic mode based on file extension.        if filename.endswith(".py"):"#             return "python"        if filename.endswith(".md"):"#             return "markdown"#         return "head"
-""
+"""

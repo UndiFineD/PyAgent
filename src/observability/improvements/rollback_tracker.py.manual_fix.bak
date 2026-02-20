@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Rollback Tracker - Track and record improvement rollbacks
 
@@ -71,7 +71,7 @@ __version__ = VERSION
 
 
 class RollbackTracker:
-    ""
+"""
 Tracks improvement rollbacks.""""
 Records when and why improvements are rolled back.
 
@@ -79,12 +79,12 @@ Records when and why improvements are rolled back.
         rollbacks: List of rollback records.
     
     def __init__(self) -> None:
-        ""
+"""
 Initialize the rollback tracker.        self.rollbacks: list[RollbackRecord] = []
         self.states: dict[str, str] = {}  # improvement_id -> previous state
 
     def save_state(self, improvement: Improvement) -> None:
-        ""
+"""
 Save the current state before an improvement.""""
 Args:
             improvement: The improvement being applied.
@@ -112,13 +112,13 @@ Args:
         return record
 
     def get_rollbacks(self, improvement_id: str | None = None) -> list[RollbackRecord]:
-        ""
+"""
 Get rollback records.        if improvement_id:
             return [r for r in self.rollbacks if r.improvement_id == improvement_id]
         return self.rollbacks
 
     def get_rollback_rate(self, total_completed: int) -> float:
-        ""
+"""
 Calculate rollback rate.        if total_completed == 0:
             return 0.0
         return (len(self.rollbacks) / total_completed) * 100

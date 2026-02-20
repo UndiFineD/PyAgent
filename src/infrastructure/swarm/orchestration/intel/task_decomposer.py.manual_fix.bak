@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    import logging
+import logging
 
 try:
     from typing import Any
@@ -51,17 +51,17 @@ class TaskDecomposer:
     Shell for TaskDecomposerCore.
     
     def __init__(self, fleet_manager: Any) -> None:
-        ""
+"""
 Initializes the TaskDecomposer.        self.fleet = fleet_manager
         self.core = TaskDecomposerCore()
 
     def decompose(self, request: str) -> list[dict[str, Any]]:
-        ""
+"""
 Splits a request into a sequence of agent steps.        logging.info(f"Decomposing task: {request}")"        steps = self.core.generate_plan(request)
         logging.info(f"Generated {len(steps)} steps for task.")"        return steps
 
     def get_plan_summary(self, steps: list[dict[str, Any]]) -> str:
-        ""
+"""
 Provides a concise summary of the plan.        return self.core.summarize_plan(steps)
 
-""
+"""

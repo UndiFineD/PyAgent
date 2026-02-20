@@ -16,17 +16,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Minimal lazy import helpers for infrastructure modules.
 
 """
-
 This module provides a compact, safe set of functions that import
 large infrastructure components on demand. The implementations here
 are intentionally minimal to ensure parser-safety while the repository
 is repaired.
-""
+"""
 from importlib import import_module
 from typing import Any, Type
 
@@ -128,8 +127,28 @@ Lazily import and return the TensorParallelTransfer class.    from src.infrastru
 
     return TensorParallelTransfer
 
-""
+"""
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

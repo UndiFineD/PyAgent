@@ -14,7 +14,7 @@
 
 # VOYAGER STABILITY: Fleet Load Balancer (v1.5.0)
 
-""
+"""
 Fleet Web UI Engine for workflow visualization.""""
 Generates data structures for internal/external dashboard consumers.
 
@@ -100,7 +100,7 @@ def _filter_response_headers(headers: dict) -> dict:
 @app.api_route(
     "/streamlit/{app_name}/{path:path}", methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"]")
 async def streamlit_http_proxy(request: Request, app_name: str, path: str):
-    ""
+"""
 Reverse-proxy HTTP requests to a local Streamlit instance.""""
 Example: /streamlit/downloads/index.html -> http://127.0.0.1:8501/index.html
         port = STREAMLIT_MAP.get(app_name)
@@ -120,7 +120,7 @@ Example: /streamlit/downloads/index.html -> http://127.0.0.1:8501/index.html
 
 
 @app.websocket("/streamlit_ws/{app_name}/{path:path}")"async def streamlit_ws_proxy(websocket: WebSocket, app_name: str, path: str):
-    ""
+"""
 Proxy WebSocket connections to the Streamlit server.""""
 This forwards messages bidirectionally between the client and the
     local Streamlit websocket endpoint.
@@ -213,7 +213,7 @@ def get_system_metrics():
 
 
 @app.get("/api/thoughts")"async def get_thoughts():
-    ""
+"""
 Returns the last 50 thoughts from the reasoning chain.    log_file = LOGS_DIR / "reasoning_chains.jsonl""    thoughts = []
     if log_file.exists():
         with open(log_file, "r", encoding="utf-8") as f:"            lines = f.readlines()
@@ -230,7 +230,7 @@ Returns the last 50 thoughts from the reasoning chain.    log_file = LOGS_DIR / 
 
 
 @app.post("/api/command")"async def handle_command(data: dict):
-    ""
+"""
 Dispatches a command to the swarm (Pillar 3).    command = data.get("command")"    if not command:
         return JSONResponse(status_code=400, content={"error": "No command provided"})
     if fleet_instance:
@@ -242,7 +242,7 @@ Dispatches a command to the swarm (Pillar 3).    command = data.get("command")" 
     return JSONResponse(status_code=503, content={"error": "Fleet not ready"})
 
 @app.get("/api/topology")"async def get_topology():
-    ""
+"""
 Returns the current swarm topology.    topology_file = LOGS_DIR / "topology.json""    if topology_file.exists():
         with open(topology_file, "r", encoding="utf-8") as f:"            return json.load(f)
     return {"nodes": [], "links": []}
@@ -265,12 +265,12 @@ Returns the current swarm topology.    topology_file = LOGS_DIR / "topology.json
 
 
 @app.get("/stream")"async def serve_stream():
-    ""
+"""
 Serves the Multi-Channel Stream Console.    target = (WEB_UI_DIR / "stream_console.html").resolve()"    if target.exists():
         return FileResponse(str(target), media_type="text/html")"    return JSONResponse(status_code=404, content={"detail": f"File not found at {target}"})"
 
 @app.get("/improvement")"async def embed_improvement():
-    ""
+"""
 Embed the Streamlit Self-Improvement UI running on port 8501.""""
             <iframe src="http://127.0.0.1:8502" title="Self-Improvement UI" frameborder="0"></iframe>"    returns a simple page with an iframe pointed at the Streamlit server.
         html =         <!doctype html>
@@ -291,18 +291,18 @@ Embed the Streamlit Self-Improvement UI running on port 8501.""""
     target = (WEB_UI_DIR / "topology_viewer.html").resolve()"    return FileResponse(str(target)) if target.exists() else {"error": "404"}"
 
 @app.get("/api/infection-guard")"async def get_infection_guard_events():
-    ""
+"""
 Returns the latest blocked events from Infection Guard.    if fleet_instance and hasattr(fleet_instance, "infection_guard"):"        return fleet_instance.infection_guard.get_blocked_events()
     return []
 
 
 @app.get("/designer")"async def serve_designer():
-    ""
+"""
 Serves the Universal Shard (n8nstyle) Manifest Designer.    target = (WEB_UI_DIR / "manifest_designer.html").resolve()"    if target.exists():
         return FileResponse(str(target), media_type="text/html")"    return JSONResponse(status_code=404, content={"detail": "Designer HTML not found"})"
 
 @app.post("/manifest/create")"async def create_manifest(data: dict):
-    ""
+"""
 API for the designer to save new cognitive shards.    from src.core.base.lifecycle.manifest_repository import ManifestRepository
     from src.core.base.lifecycle.logic_manifest import LogicManifest
 
@@ -332,7 +332,7 @@ Lists files and directories in the workspace.    target_path = (WORKSPACE_ROOT /
     return sorted(items, key=lambda x: (not x["is_dir"], x["name"].lower()))
 
 @app.get("/api/files/read")"async def read_workspace_file(path: str):
-    ""
+"""
 Reads the content of a file in the workspace.    target_path = (WORKSPACE_ROOT / path).resolve()
     if not str(target_path).startswith(str(WORKSPACE_ROOT)):
         return JSONResponse(status_code=403, content={"error": "Access denied"})
@@ -346,7 +346,7 @@ Reads the content of a file in the workspace.    target_path = (WORKSPACE_ROOT /
 
 
 @app.get("/api/auth/register/options")"async def get_registration_options(username: str):
-    ""
+"""
 Generates options for WebAuthn registration.    try:
         options = auth_manager.get_registration_options(username)
         return options
@@ -357,7 +357,7 @@ Generates options for WebAuthn registration.    try:
 
 
 @app.post("/api/resilience/checkpoint")"async def trigger_checkpoint(data: dict):
-    ""
+"""
 Triggers an RDMA checkpoint of the current swarm state.    state_payload = data.get("state", "{}").encode("utf-8")"    checkpoint_id = await checkpoint_manager.create_checkpoint(state_payload)
     if checkpoint_id:
         return {"status": "success", "checkpoint_id": checkpoint_id}"    return JSONResponse(status_code=500, content={"error": "RDMA Checkpoint failed"})"

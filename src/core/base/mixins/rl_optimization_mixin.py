@@ -60,15 +60,15 @@ def __init__(self, **kwargs):
 
     def record_step(self, action: Any, reward: float, next_state: Any, done: bool = False):
 """
-Records a transition in the agent's internal MDP.""
-if self.current_state is None:
-            self.current_state = "initial"
+        Records a transition in the agent's internal MDP.""
+        if self.current_state is None:
+        self.current_state = "initial"
         self.mdp.add_transition(
-            state=self.current_state,
-            action=action,
-            next_state=next_state,
-            reward=reward,
-            done=done
+        state=self.current_state,
+        action=action,
+        next_state=next_state,
+        reward=reward,
+        done=done
         )
         self.current_state = next_state
         self.last_action = action
@@ -83,19 +83,19 @@ Queries the MDP policy for the best action in the given state.""
 
     def optimize_policy(self):
         ""
-Triggers value iteration on the gathered experiences.""
-logger.info("RLOptimization: Optimizing agent policy via value iteration...")
+        Triggers value iteration on the gathered experiences.""
+        logger.info("RLOptimization: Optimizing agent policy via value iteration...")
         # TODO Placeholder for complex value iteration if implemented in MDP
         # For now, we'll just use the best-observed action per state
         for state in self.mdp.states:
-            best_action = None
-            max_reward = -float('inf')
-            # Simple greedy policy update
-            for action in self.mdp.actions:
-                reward = self.mdp.get_expected_reward(state, action)
-                if reward > max_reward:
-                    max_reward = reward
-                    best_action = action
+        best_action = None
+        max_reward = -float('inf')
+        # Simple greedy policy update
+        for action in self.mdp.actions:
+        reward = self.mdp.get_expected_reward(state, action)
+        if reward > max_reward:
+        max_reward = reward
+        best_action = action
 
-            if best_action:
-                self.mdp.policy[state] = best_action
+        if best_action:
+        self.mdp.policy[state] = best_action

@@ -20,7 +20,7 @@ try:
 except ImportError:
 
 """
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 try:
     from .core.base.lifecycle.base_agent import BaseAgent
@@ -61,7 +61,7 @@ Refines project knowledge by analyzing past interactions and outcomes from feder
 #             "You are the Memory Consolidation Agent."#             "Your task is to review federated DiskCache memory shards and extract long-term value."#             "1. Merge duplicate interactions into high-level factual summaries."#             "2. Identify successful patterns and turn them into best practices."#             "3. Prune redundant episodic data from local shards."        )
 
     def _get_default_content(self) -> str:
-""
+"""
 return "# Memory Consolidation Log\\n\\n## Status\\nReady for federated consolidation.\\n
     @as_tool
     def consolidate_all(self) -> str:
@@ -116,4 +116,4 @@ if __name__ == "__main__":"    main = create_main_function(
 #         MemoryConsolidationAgent, "MemoryConsolidation Agent", "Consolidation Task"    )
     main()
 
-""
+"""

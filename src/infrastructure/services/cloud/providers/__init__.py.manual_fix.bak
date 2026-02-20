@@ -20,10 +20,9 @@ from __future__ import annotations
 Cloud provider implementations.
 
 """
-
 This package contains concrete implementations of CloudProviderBase
 for various cloud AI providers.
-""
+"""
 try:
     from typing import TYPE_CHECKING
 except ImportError:
@@ -57,7 +56,7 @@ __all__: list[str] = [
 
 def __getattr__(
         name: str) -> type[GeminiConnector] | type[AWSBedrockConnector] | type[GroqConnector] | type[AzureAIConnector]:
-    ""
+"""
 Lazy load provider implementations.    if name == "GeminiConnector":"        from .gemini import GeminiConnector
 
         return GeminiConnector

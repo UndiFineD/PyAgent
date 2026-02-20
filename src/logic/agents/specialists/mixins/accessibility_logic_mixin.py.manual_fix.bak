@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AccessibilityLogicMixin - Entry-point analysis and WCAG rule management
 
@@ -52,7 +52,7 @@ FILE CONTENT SUMMARY:
 # limitations under the License.
 
 
-""
+"""
 Accessibility logic mixin.py module.
 # Licensed under the Apache License, Version 2.0 (the "License");
 

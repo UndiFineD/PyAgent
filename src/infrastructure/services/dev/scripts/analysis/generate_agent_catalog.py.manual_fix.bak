@@ -17,14 +17,13 @@
 Generate agent catalog.py module.
 
 """
-
 import ast
 import os
 from pathlib import Path
 
 
 def generate_catalog() -> None:
-    ""
+"""
 Phase 244: Scans src/logic/agents and generates detailed documentation.    agents_dir = Path("src/logic/agents")"    output_file = Path("docs/AGENTS.md")"
     agent_data = []
 
@@ -75,4 +74,4 @@ md += "##  Agent Manifest\\n\\n""    md += "| Category | Agent | Version | Descr
 
 if __name__ == "__main__":"    generate_catalog()
 
-""
+"""

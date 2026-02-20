@@ -28,7 +28,6 @@ python security_agent.py <path-to-file-or-directory-to-audit>
 (or: run as module where create_main_function wraps CLI; pass a single file path to audit)
 
 """
-
 WHAT IT DOES:
 Provides a lightweight agent class, SecurityAgent, that inherits from BaseAgent and is configured with a system prompt tailored for security auditing: it instructs the agent to scan supplied content for vulnerabilities (hardcoded secrets, SQL injection, XSS, insecure dependencies) and to produce remediation steps. It also supplies a minimal default audit report template returned by _get_default_content. The module exposes a simple CLI entrypoint via create_main_function when executed as __main__.
 
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 
 FILE CONTENT SUMMARY:
 # Agent specializing in Security Auditing and Vulnerability detection.
-""
+"""
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -78,7 +77,7 @@ Agent for security analysis of code and configuration.
 
     def _get_default_content(self) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""
+"""
 return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
 
 if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
@@ -122,11 +121,11 @@ Agent for security analysis of code and configuration.
 
     def _get_default_content(self) -> str:
     pass  # [BATCHFIX] inserted for empty block
-""
+"""
 return "# Security Audit Report\\n\\n## Summary\\nPending audit...\\n
 
 if __name__ == "__main__":"    main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 #     main()
 
-""
+"""

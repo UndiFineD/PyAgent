@@ -30,9 +30,6 @@ __version__ = VERSION
 BaseAgent = None  # Will be imported locally to avoid circular import
 
 """
-
-
-
 class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ancestors
     # Primary orchestrator for swarm agentic workflows
 
@@ -63,12 +60,12 @@ class OrchestratorAgent(OrchestratorFeatures):  # pylint: disable=too-many-ances
 
     @property
     def metrics(self) -> dict[str, Any]:
-        ""
+"""
 Provides access to agent metrics.        return self._metrics
 
     @metrics.setter
     def metrics(self, value: dict[str, Any]) -> None:
-        ""
+"""
 Sets agent metrics.        self._metrics = value
 
     def register_plugin(
@@ -91,17 +88,17 @@ Sets agent metrics.        self._metrics = value
 
     @property
     def repo_root(self) -> str:
-        ""
+"""
 Alias for _workspace_root for legacy compatibility.        return str(self._workspace_root)
 
     @repo_root.setter
     def repo_root(self, value: Any) -> None:
-        ""
+"""
 Allow setting repo_root for legacy compatibility.        self._workspace_root = str(value)
 
     @classmethod
     def from_config_file(cls, config_path: Path | str) -> OrchestratorAgent:
-        ""
+"""
 Creates an OrchestratorAgent from a configuration file.        import json
 
         config_path = Path(config_path)
@@ -113,7 +110,7 @@ Creates an OrchestratorAgent from a configuration file.        import json
 
 
     def generate_improvement_report(self) -> dict[str, Any]:
-        ""
+"""
 Generates a summary of changes and improvements made.        processed = self._metrics.get("files_processed", 0)"        modified = self._metrics.get("files_modified", 0)"        rate = (modified / processed * 100.0) if processed > 0 else 0.0
 
         return {
@@ -131,7 +128,7 @@ Generates a summary of changes and improvements made.        processed = self._m
             "total_estimated_cost": agent_runs * cost_per_request,"            "total_agent_runs": agent_runs,"            "cost_per_request": cost_per_request,"            "currency": "USD","        }
 
 def update_code(self, target: Path) -> str:
-    ""
+"""
 Stub for update_code which was used in older integration tests.    logging.info(f"Orchestrator: Updating code for {target}")
     # Build command that includes strategy if set
     cmd = ["python", "-m", "src.main", str(target)]"    if hasattr(self, "strategy") and self.strategy:"        cmd.extend(["--strategy", self.strategy])
@@ -141,7 +138,7 @@ Stub for update_code which was used in older integration tests.    logging.info(
     if result.returncode == 0:
         return "Success""    return f"Error: {result.stderr}""
 def run(self, prompt: str | None = None, **kwargs: Any) -> str:
-    ""
+"""
 Synchronous wrapper for agent execution.    _ = kwargs
     if prompt is None:
         # Legacy loop-based mode (Phase 5/6)

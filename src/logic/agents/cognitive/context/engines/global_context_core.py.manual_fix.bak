@@ -26,12 +26,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Global context core logic for cognitive agents.
 
 """
-
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -63,5 +62,5 @@ class GlobalContextCore(CorePartitionMixin, CoreResolutionMixin, CoreSummaryMixi
 #     No I/O or direct disk access.
 
 
-""
+"""
 

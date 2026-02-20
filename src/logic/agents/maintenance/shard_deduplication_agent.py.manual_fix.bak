@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Shard Deduplication Agent - Deduplicates semantic records in compressed shard files
 
@@ -41,7 +41,7 @@ Add robust unit tests and better error handling for partial failures and filesys
 
 FILE CONTENT SUMMARY:
 Agent for deduplicating redundant data in shards.
-""
+"""
 import gzip
 import hashlib
 import json

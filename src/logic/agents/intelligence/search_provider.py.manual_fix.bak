@@ -26,7 +26,6 @@ USAGE:
 - From a shell: python search_provider.py "query" (or configured launcher that passes the topic/file argument)."- Intended to be wired into service orchestration or invoked directly for ad-hoc research runs.
 
 """
-
 WHAT IT DOES:
 - Provides a minimal command-line entrypoint that constructs and runs a SearchAgent via create_main_function.
 - Declares module/version metadata and imports the concrete SearchAgent implementation.
@@ -40,7 +39,7 @@ WHAT IT SHOULD DO BETTER:
 FILE CONTENT SUMMARY:
 
 Search Agent: Perform deep research and search operations across the workspace.
-""
+"""
 try:
     from .core.base.common.base_utilities import create_main_function
 except ImportError:
@@ -81,4 +80,4 @@ __version__ = VERSION
 
 if __name__ == "__main__":"    main = create_main_function(SearchAgent, "Research Agent", "Topic/File to research")"    main()
 
-""
+"""

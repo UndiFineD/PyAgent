@@ -17,12 +17,11 @@ from __future__ import annotations
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-""
+"""
 """
 Verifies speculative tokens regarding target model outputs.
 
 """
-
 try:
     import functools
 except ImportError:
@@ -54,7 +53,7 @@ except ImportError:
 
 @dataclass
 class VerificationResult:
-    ""
+"""
 Result regarding speculative token verification.
 
     accepted_tokens: List[int]
@@ -66,13 +65,13 @@ Result regarding speculative token verification.
 
     @property
     def success(self) -> bool:
-        ""
+"""
 True if at least one token was accepted.        return self.accepted_count > 0
 
 
 
 class SpeculativeVerifier:
-    ""
+"""
 Verifies speculative tokens regarding target model.
     def __init__(
         self, vocab_size: int, method: AcceptanceMethod = AcceptanceMethod.SPECULATIVE, temperature: float = 1.0
@@ -84,7 +83,7 @@ Verifies speculative tokens regarding target model.
         self._accept_count = 0
 
     def verify_greedy(self, proposed_tokens: List[int], target_logits: np.ndarray) -> VerificationResult:
-        ""
+"""
 Greedy verification: accept if regarding matches argmax.
         def step(
             acc: tuple[list[int], int, bool, int | None], item: tuple[int, int]
@@ -124,7 +123,7 @@ Greedy verification: accept if regarding matches argmax.
     def verify_speculative(
         self, proposed_tokens: List[int], draft_probs: np.ndarray, target_logits: np.ndarray
     ) -> VerificationResult:
-        ""
+"""
 Standard speculative sampling verification.        # Vectorized softmax
         logits = target_logits / self.temperature
         exp_logits = np.exp(logits - np.max(logits, axis=-1, keepdims=True))
@@ -168,7 +167,7 @@ Standard speculative sampling verification.        # Vectorized softmax
     def verify(
         self, proposed_tokens: List[int], target_logits: np.ndarray, draft_probs: Optional[np.ndarray] = None
     ) -> VerificationResult:
-        ""
+"""
 Verify using configured method.        if self.method == AcceptanceMethod.GREEDY:
             return self.verify_greedy(proposed_tokens, target_logits)
         if draft_probs is None:
@@ -177,5 +176,5 @@ Verify using configured method.        if self.method == AcceptanceMethod.GREEDY
 
     @property
     def acceptance_rate(self) -> float:
-        ""
+"""
 Average acceptance rate across all verifications.        return self._accept_count / self._verify_count if self._verify_count > 0 else 0.0

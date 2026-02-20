@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Proposers.py module.
-""
+"""
 try:
 
 """
-    from typing import Protocol, Sequence
+from typing import Protocol, Sequence
 except ImportError:
     from typing import Protocol, Sequence
 
@@ -42,7 +42,7 @@ except ImportError:
 
 
 class DraftProposer(Protocol):
-    ""
+"""
 Protocol for draft token proposers.
     def propose(
         self,
@@ -50,7 +50,7 @@ Protocol for draft token proposers.
         token_ids: Sequence[int],
         max_tokens: int,
     ) -> DraftProposal:
-        ""
+"""
 Propose draft tokens for a request.        ...
 
     def update(
@@ -58,7 +58,7 @@ Propose draft tokens for a request.        ...
         request_id: str,
         new_token_ids: list[int],
     ) -> None:
-        ""
+"""
 Update proposer state with new tokens.        ...
 
 
@@ -81,12 +81,12 @@ class NgramProposer:
         self._outputs: dict[str, list[int]] = {}
 
     def start_request(self, request_id: str, prompt_token_ids: list[int]) -> None:
-        ""
+"""
 Initialize state for a new request.        self._prompts[request_id] = list(prompt_token_ids)
         self._outputs[request_id] = []
 
     def stop_request(self, request_id: str) -> None:
-        ""
+"""
 Clean up state for a finished request.        self._prompts.pop(request_id, None)
         self._outputs.pop(request_id, None)
 
@@ -96,7 +96,7 @@ Clean up state for a finished request.        self._prompts.pop(request_id, None
         token_ids: Sequence[int],
         max_tokens: int,
     ) -> DraftProposal:
-        ""
+"""
 Propose draft tokens using n-gram matching.        if request_id not in self._prompts:
             return DraftProposal(request_id=request_id, token_ids=[])
 
@@ -131,7 +131,7 @@ Propose draft tokens using n-gram matching.        if request_id not in self._pr
         pattern: list[int],
         max_tokens: int,
     ) -> list[int] | None:
-        ""
+"""
 Find n-gram pattern in tokens and return continuation.        n = len(pattern)
 
         # Search from end to find most recent match
@@ -150,14 +150,14 @@ Find n-gram pattern in tokens and return continuation.        n = len(pattern)
         request_id: str,
         new_token_ids: list[int],
     ) -> None:
-        ""
+"""
 Update output tokens for a request.        if request_id in self._outputs:
             self._outputs[request_id].extend(new_token_ids)
 
 
 
 class SuffixNode:
-    ""
+"""
 Node in a suffix tree.
     __slots__ = ("children", "count", "continuations")
     def __init__(self) -> None:
@@ -196,7 +196,7 @@ class SuffixProposer:
         self._request_order: list[str] = []
 
     def start_request(self, request_id: str, prompt_token_ids: list[int]) -> None:
-        ""
+"""
 Initialize suffix tree for a new request.        # Build prompt tree
         root = SuffixNode()
         self._build_tree(root, prompt_token_ids)
@@ -212,7 +212,7 @@ Initialize suffix tree for a new request.        # Build prompt tree
         self._maybe_evict()
 
     def stop_request(self, request_id: str) -> None:
-        ""
+"""
 Add request tokens to global tree and clean up.        if request_id in self._request_tokens:
             tokens = self._request_tokens[request_id]
             if tokens:
@@ -224,7 +224,7 @@ Add request tokens to global tree and clean up.        if request_id in self._re
             self._request_order.remove(request_id)
 
     def _build_tree(self, root: SuffixNode, tokens: list[int]) -> None:
-        ""
+"""
 Build suffix tree from tokens.        for start in range(len(tokens)):
             node = root
             for i in range(start, min(start + self.max_tree_depth, len(tokens))):
@@ -240,7 +240,7 @@ Build suffix tree from tokens.        for start in range(len(tokens)):
                     node.continuations[next_token] = node.continuations.get(next_token, 0) + 1
 
     def _maybe_evict(self) -> None:
-        ""
+"""
 Evict old requests if over limit.        while len(self._request_order) > self.max_cached_requests:
             old_id = self._request_order.pop(0)
             self._prompt_trees.pop(old_id, None)
@@ -252,7 +252,7 @@ Evict old requests if over limit.        while len(self._request_order) > self.m
         token_ids: Sequence[int],
         max_tokens: int,
     ) -> DraftProposal:
-        ""
+"""
 Propose draft tokens using suffix matching.        if request_id not in self._prompt_trees:
             return DraftProposal(request_id=request_id, token_ids=[])
 
@@ -287,7 +287,7 @@ Propose draft tokens using suffix matching.        if request_id not in self._pr
         pattern: list[int],
         max_tokens: int,
     ) -> tuple[list[int], list[float]] | None:
-        ""
+"""
 Search suffix tree for pattern and return continuations.        # Navigate to pattern end
         node = root
         for token in pattern:
@@ -333,7 +333,7 @@ Search suffix tree for pattern and return continuations.        # Navigate to pa
         request_id: str,
         new_token_ids: list[int],
     ) -> None:
-        ""
+"""
 Update request tokens and rebuild tree.        if request_id in self._request_tokens:
             self._request_tokens[request_id].extend(new_token_ids)
 
@@ -359,4 +359,4 @@ def ngram_match(
 
     return None
 
-""
+"""

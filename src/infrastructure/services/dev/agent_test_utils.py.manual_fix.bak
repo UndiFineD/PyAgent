@@ -16,13 +16,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Import test utilities from src.""
 try:
 
 """
-    from pathlib import Path
+from pathlib import Path
 except ImportError:
     from pathlib import Path
 
@@ -53,13 +53,13 @@ load_module_from_path = _loader.load_module_from_path
 
 
 def agent_dir_on_path():
-    ""
+"""
 Context manager to ensure agent directory is on sys.path.""
 return _loader.agent_dir_on_path()
 
 
 def agent_sys_path():
-    ""
+"""
 Context manager for adding agent directory to sys.path temporarily.""
 return _loader.agent_sys_path()
 
@@ -68,7 +68,7 @@ return _loader.agent_sys_path()
 
 
 def load_agent_module(module_path: Union[str, Path]):
-    ""
+"""
 Dynamically load an agent module (which may have hyphens in name).""
 if isinstance(module_path, str):
         module_path = Path(module_path)

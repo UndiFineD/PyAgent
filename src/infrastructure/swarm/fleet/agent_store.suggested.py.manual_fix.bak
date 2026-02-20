@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 AgentStore for sharing specialized agent configurations and templates.
 
 """
-
 Allows agents to 'buy' or download new capabilities.
 
 try:
@@ -48,7 +47,7 @@ except ImportError:
 
 
 class AgentStore:
-    ""
+"""
 Marketplace for agent templates and specialized configurations.
 
     def __init__(self, store_path: str) -> None:
@@ -60,11 +59,11 @@ Marketplace for agent templates and specialized configurations.
         }
 
     def list_templates(self) -> dict[str, dict[str, Any]]:
-        ""
+"""
 Returns all available agent blueprints in the store.        return self.templates
 
     def purchase_template(self, agent_id: str, template_name: str, economy: Any) -> dict[str, Any] | None:
-        ""
+"""
 Purchases a template using agent credits.        if template_name not in self.templates:
             return None
 

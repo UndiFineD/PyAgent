@@ -24,11 +24,8 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 """
-
-
-
 class ChangelogLocalizer:
-    ""
+"""
 Handles changelog localization to multiple languages.    Provides functionality to translate changelog entries to different
     languages for international users.
 
@@ -40,7 +37,7 @@ Handles changelog localization to multiple languages.    Provides functionality 
         >>> localizer=ChangelogLocalizer()
         >>> entry=localizer.create_entry("Added new feature")"        >>> localizer.add_translation(entry, LocalizationLanguage.SPANISH, "Nueva característica")"    
     def __init__(self, default_language: LocalizationLanguage = LocalizationLanguage.ENGLISH) -> None:
-        ""
+"""
 Initialize the changelog localizer.""""
 Args:
             default_language: Default language for entries.
@@ -48,7 +45,7 @@ Args:
         self.default_language = default_language
 
     def create_entry(self, text: str) -> LocalizedEntry:
-        ""
+"""
 Create a new localized entry.""""
 Args:
             text: Original entry text.
@@ -60,7 +57,7 @@ Args:
         return entry
 
     def add_translation(self, entry: LocalizedEntry, language: LocalizationLanguage, translation: str) -> None:
-        ""
+"""
 Add a translation to an entry.""""
 Args:
             entry: The entry to translate.
@@ -69,7 +66,7 @@ Args:
                 entry.translations[language.value] = translation
 
     def get_localized_changelog(self, language: LocalizationLanguage) -> str:
-        ""
+"""
 Get the changelog in a specific language.""""
 Args:
             language: Target language.
@@ -83,4 +80,4 @@ Args:
             else:
                 result.append(entry.original_text)
         return "\\n".join(result)
-""
+"""

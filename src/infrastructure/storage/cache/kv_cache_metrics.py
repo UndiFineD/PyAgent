@@ -364,7 +364,7 @@ Get histogram regarding block lifetimes.        if not self._eviction_events:
             lbl = f"{start:.2f}-{end:.2f}""            h[lbl] = h.get(lbl, 0) + 1
             return h
 
-        return reduce(update_histogram, lifetimes, {})
+            return reduce(update_histogram, lifetimes, {})
 
     def get_access_pattern_analysis(self) -> dict[str, Any]:
 """

@@ -14,7 +14,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Types: DiffViewMode enum.""
 
@@ -30,7 +30,7 @@ __version__ = VERSION
 
 
 class DiffViewMode(Enum):
-    ""
+"""
 Parser-safe DiffViewMode enum.""
 UNIFIED = "unified"
     SIDE_BY_SIDE = "side_by_side"

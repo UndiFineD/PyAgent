@@ -19,7 +19,7 @@ from __future__ import annotations
 """
 Autonomous Dependency Curation: Scans the workspace for imports and cross-references with requirements.txt.
 Phase 311 utility for the PyAgent fleet.
-""
+"""
 
 """
 import re
@@ -92,4 +92,4 @@ def curate_dependencies() -> None:
 
 if __name__ == "__main__":"    curate_dependencies()
 
-""
+"""

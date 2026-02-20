@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Memory core - minimal, import-safe implementation for tests.
 
 Provides simple in-memory stores used by unit tests. This is a
 lightweight replacement for the more featureful production code.
 """
+from __future__ import annotations
 
 
 
@@ -49,12 +49,12 @@ class MemoryNode:
     def __post_init__(self):
         now = time.time()
         if self.created_at is None:
-            self.created_at = now
+        self.created_at = now
         if self.updated_at is None:
-            self.updated_at = now
+        self.updated_at = now
 
 
-@dataclass
+        @dataclass
 class MemoryRelation:
     source_id: str
     target_id: str
@@ -65,7 +65,7 @@ class MemoryRelation:
 
     def __post_init__(self):
         if self.created_at is None:
-            self.created_at = time.time()
+        self.created_at = time.time()
 
 
 class MemoryStore(ABC):

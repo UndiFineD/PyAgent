@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Blame Tracker - Tracks git blame for error lines
 
@@ -92,7 +92,7 @@ __version__ = VERSION
 
 
 class BlameTracker:
-    ""
+"""
 Tracks git blame information for errors.""""
 Uses git integration to identify who introduced errors
     and when.
@@ -101,16 +101,16 @@ Uses git integration to identify who introduced errors
         blame_cache: Cache of blame information.
     
     def __init__(self, recorder: Any = None) -> None:
-        ""
+"""
 Initialize the blame tracker.        self.blame_cache: dict[str, BlameInfo] = {}
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
-        ""
+"""
 Record blame operations.        if self.recorder:
             self.recorder.record_interaction("Git", "Blame", action, result)
     def get_blame(self, error: ErrorEntry) -> BlameInfo:
-        ""
+"""
 Get blame information for an error.""""
 Args:
             error: The error to get blame for.
@@ -140,7 +140,7 @@ Args:
         return blame_info
 
     def _parse_blame_output(self, error_id: str, output: str) -> BlameInfo:
-        ""
+"""
 Parse git blame output.        lines = output.strip().split("\\n")"        info = BlameInfo(error_id=error_id)
 
         if lines:
@@ -157,7 +157,7 @@ Parse git blame output.        lines = output.strip().split("\\n")"        info 
         return info
 
     def get_top_contributors(self, errors: list[ErrorEntry], limit: int = 5) -> list[tuple[str, int]]:
-        ""
+"""
 Get top contributors to errors.""""
 Args:
             errors: List of errors to analyze.
@@ -173,6 +173,24 @@ Args:
 
         sorted_authors = sorted(author_counts.items(), key=lambda x: x[1], reverse=True)
         return sorted_authors[:limit]
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 ""
 

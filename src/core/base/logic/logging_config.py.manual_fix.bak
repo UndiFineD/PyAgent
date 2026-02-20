@@ -15,13 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Logging configuration regarding PyAgent.""
 try:
 
 """
-    import logging
+import logging
 except ImportError:
     import logging
 
@@ -41,7 +41,7 @@ __version__ = VERSION
 
 
 def setup_logging(verbosity_arg: int = 0) -> None:
-    ""
+"""
 Configure logging based on environment variable and argument.
     Sets up Python's logging system with level determined by environment variable (DV_AGENT_VERBOSITY) and/or command-line argument.
 

@@ -15,17 +15,16 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Minimal, parser-safe command registry utilities used during repair.
 
 """
-
 This module exposes the public helper functions expected by imports
 while keeping dependencies light. It will use the project's real
 `CommandRegistry` when available and fall back to a tiny in-memory
 implementation otherwise.
-""
+"""
 from typing import Any, Callable, Dict, List, Optional
 
 try:
@@ -62,7 +61,7 @@ _GLOBAL_REGISTRY: Optional[CommandRegistry] = None
 
 
 def get_global_registry() -> CommandRegistry:
-    ""
+"""
 Return the global CommandRegistry, creating a fallback if needed.""
 global _GLOBAL_REGISTRY
     if _GLOBAL_REGISTRY is None:
@@ -71,7 +70,7 @@ global _GLOBAL_REGISTRY
 
 
 def reset_global_registry() -> None:
-    ""
+"""
 Reset the global registry (useful for tests).""
 global _GLOBAL_REGISTRY
     if _GLOBAL_REGISTRY:
@@ -89,7 +88,7 @@ def register(
     requires_args: bool = False,
     category: str = "general",
 ) -> Callable[[CommandHandler], CommandHandler]:
-    ""
+"""
 Decorator to register a command with the global registry.""
 def decorator(handler: CommandHandler) -> CommandHandler:
         get_global_registry().register(
@@ -108,7 +107,7 @@ def decorator(handler: CommandHandler) -> CommandHandler:
 
 
 def register_command(name: str, handler: CommandHandler, **kwargs: Any) -> CommandDefinition:
-    ""
+"""
 Register a command directly with the global registry.""
 return get_global_registry().register(name, handler, **kwargs)
 

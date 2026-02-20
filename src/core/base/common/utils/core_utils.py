@@ -1,4 +1,3 @@
-from __future__ import annotations
 """
 Utility functions used by the Agent classes.""
 import importlib.util
@@ -16,6 +15,7 @@ _CODEIGNORE_CACHE_TIME: dict[str, float] = {}
 
 def load_codeignore(root: Path) -> set[str]:
 """
+from __future__ import annotations
 Load and parse ignore patterns from a .codeignore file.
 
 

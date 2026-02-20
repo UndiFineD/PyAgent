@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ImpactAnalyzer - Analyze error impact across files and functions
 
@@ -56,7 +56,7 @@ WHAT IT SHOULD DO BETTER:
   AST or static analysis to discover dependencies automatically.
 - Add unit tests and benchmarks for scoring behavior and graph traversal
   performance; expose tuning parameters for production use.
-""
+"""
 try:
     from .core.base.lifecycle.version import VERSION
 except ImportError:
@@ -83,7 +83,7 @@ __version__ = VERSION
 
 
 class ImpactAnalyzer:
-    ""
+"""
 Analyzes the impact of errors on the codebase.
     Determines which files and functions are affected by errors
     and calculates impact scores.
@@ -91,38 +91,38 @@ Analyzes the impact of errors on the codebase.
     Attributes:
         file_dependencies: Map of file dependencies.
         function_map: Map of file to functions.
-    ""
+"""
 def __init__(self) -> None:
-        ""
+"""
 Initialize the impact analyzer.""
 self.file_dependencies: dict[str, list[str]] = {}
         self.function_map: dict[str, list[str]] = {}
 
 
     def add_dependency(self, file: str, depends_on: list[str]) -> None:
-        ""
+"""
 Add file dependencies.
         
         Args:
             file: The file path.
             depends_on: List of files this file depends on.
-        ""
+"""
 self.file_dependencies[file] = depends_on
 
 
     def add_functions(self, file: str, functions: list[str]) -> None:
-        ""
+"""
 Add functions in a file.
         
         Args:
             file: The file path.
             functions: List of function names in the file.
-        ""
+"""
 self.function_map[file] = functions
 
 
     def analyze(self, error: ErrorEntry) -> ErrorImpact:
-        ""
+"""
 Analyze the impact of an error.
         
         Args:
@@ -130,7 +130,7 @@ Analyze the impact of an error.
 
         Returns:
             ErrorImpact with affected files and functions.
-        ""
+"""
 affected_files = self._find_affected_files(error.file_path)
         affected_functions = self.function_map.get(error.file_path, [])
         downstream = self._find_downstream_effects(error.file_path)
@@ -147,7 +147,7 @@ affected_files = self._find_affected_files(error.file_path)
 
 
     def _find_affected_files(self, file_path: str) -> list[str]:
-        ""
+"""
 Find files that depend on the given file.""
 affected: list[str] = []
         for file, deps in self.file_dependencies.items():
@@ -157,7 +157,7 @@ affected: list[str] = []
 
 
     def _find_downstream_effects(self, file_path: str) -> list[str]:
-        ""
+"""
 Find downstream effects recursively.""
 effects: list[str] = []
         visited: set[str] = set()
@@ -166,7 +166,7 @@ effects: list[str] = []
 
 
     def _find_downstream_recursive(self, file_path: str, effects: list[str], visited: set[str]) -> None:
-        ""
+"""
 Recursively find downstream effects.""
 if file_path in visited:
             return

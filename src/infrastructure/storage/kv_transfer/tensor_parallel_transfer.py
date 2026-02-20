@@ -81,8 +81,8 @@ def shard_aware_push(self, layer_name: str, kv_shard: Any, attn_metadata: Any):
         self.local_connector.save_kv_layer(layer_name, kv_shard, attn_metadata)
 
     def shard_aware_pull(self, layer_name: str, request_id: str):
-                Pull a shard of the KV cache from the remote consumer group.
-                # The connector handles the actual transport
+        Pull a shard of the KV cache from the remote consumer group.
+        # The connector handles the actual transport
         self.local_connector.wait_for_layer_load(layer_name)
 
     def verify_tp_consistency(self, request_id: str) -> bool:

@@ -14,12 +14,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Script for ensuring __future__ imports appear before any logic category markers.
 
 """
-
 import os
 
 from src.core.base.lifecycle.version import VERSION
@@ -28,7 +27,7 @@ __version__ = VERSION
 
 
 def fix_future_ordering(directory: str) -> None:
-    ""
+"""
 Reorder file content to place __future__ imports correctly.    for root, _, files in os.walk(directory):
 
         for file in files:

@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 ErrorCluster - Grouping container for similar agent errors
 
@@ -55,7 +55,7 @@ __version__ = VERSION
 
 @dataclass
 class ErrorCluster:
-    ""
+"""
 A cluster of similar errors.
 
     id: str

@@ -30,14 +30,14 @@ class TestCanaryAgent:
 Test cases for CanaryAgent.
     def test_deploy_canary(self):
 """
-Test deploying a canary object.        agent = CanaryAgent("test_path")"        canary_id = agent.deploy_canary("test_canary", "task", "Test description")"        assert canary_id in agent.canaries
+        Test deploying a canary object.        agent = CanaryAgent("test_path")"        canary_id = agent.deploy_canary("test_canary", "task", "Test description")"        assert canary_id in agent.canaries
         assert agent.canaries[canary_id].name == "test_canary""        assert agent.canaries[canary_id].type == "task""
     def test_list_canaries(self):
 """
-Test listing canaries.        agent = CanaryAgent("test_path")"        agent.deploy_canary("canary1", "user")"        agent.deploy_canary("canary2", "computer")"        canaries = agent.list_canaries()
+        Test listing canaries.        agent = CanaryAgent("test_path")"        agent.deploy_canary("canary1", "user")"        agent.deploy_canary("canary2", "computer")"        canaries = agent.list_canaries()
         assert len(canaries) == 2
         assert canaries[0]['name'] == "canary1"
-assert canaries[1]['name'] == "canary2"
+        assert canaries[1]['name'] == "canary2"
 def test_simulate_access_attempt(self):
 """
 Test simulating access attempt.        agent = CanaryAgent("test_path")"        canary_id = agent.deploy_canary("test_canary")"        result = agent.simulate_access_attempt(canary_id, "agent123", {"ip": "192.168.1.1"})"        assert result is False  # Access denied
@@ -51,6 +51,6 @@ Test checking canary access log.        agent = CanaryAgent("test_path")"       
 
     def test_remove_canary(self):
 """
-Test removing a canary.        agent = CanaryAgent("test_path")"        canary_id = agent.deploy_canary("test_canary")"        assert agent.remove_canary(canary_id) is True
+        Test removing a canary.        agent = CanaryAgent("test_path")"        canary_id = agent.deploy_canary("test_canary")"        assert agent.remove_canary(canary_id) is True
         assert canary_id not in agent.canaries
         assert agent.remove_canary("nonexistent") is False

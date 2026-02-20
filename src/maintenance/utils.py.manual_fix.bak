@@ -15,7 +15,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Maintenance Utilities - Support for filesystem cleanup, log rotation, and environment integrity checks
 
@@ -43,7 +43,7 @@ Standard maintenance utilities for the PyAgent ecosystem.
 
 Provides shared helper functions for filesystem cleanup, log rotation,
 and environment verification used by other maintenance components.
-""
+"""
 try:
     import logging
 except ImportError:

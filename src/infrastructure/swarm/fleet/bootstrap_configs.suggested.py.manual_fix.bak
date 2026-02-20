@@ -15,15 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Hardcoded bootstrap configurations for essential system components.
 These must remain static to ensure the system can boot up before dynamic discovery.
-""
+"""
 try:
 
 """
-    from .core.base.lifecycle.version import VERSION
+from .core.base.lifecycle.version import VERSION
 except ImportError:
     from src.core.base.lifecycle.version import VERSION
 
@@ -39,7 +39,7 @@ _overlay = RegistryOverlay()
 
 
 def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
-    ""
+"""
 Returns the bootstrap agents with dynamic overrides applied.    defaults = {
         "Orchestrator": ("            "src.logic.agents.swarm.pattern_orchestrator","            "PatternOrchestrator","            None,
         ),
@@ -92,4 +92,4 @@ BOOTSTRAP_ORCHESTRATORS = {
 }
 
 
-""
+"""

@@ -15,14 +15,14 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Auto-extracted class from agent_backend.py
-""
+"""
 try:
 
 """
-    from collections.abc import Callable
+from collections.abc import Callable
 except ImportError:
     from collections.abc import Callable
 
@@ -43,7 +43,7 @@ __version__ = VERSION
 
 @dataclass
 class QueuedRequest:
-    ""
+"""
 A request waiting in the queue.
     Attributes:
         priority: Request priority (higher=more urgent).
@@ -51,7 +51,7 @@ A request waiting in the queue.
         request_id: Unique request identifier.
         prompt: The prompt to send.
         callback: Optional callback function.
-    ""
+"""
 priority: int
     timestamp: float
     request_id: str

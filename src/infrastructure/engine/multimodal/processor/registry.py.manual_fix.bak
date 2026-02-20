@@ -21,7 +21,7 @@ from typing import Any, Dict, List, Optional
 from .audio import AudioProcessor
 from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,
 """
-                   MultiModalData, MultiModalInputs, PlaceholderInfo)
+MultiModalData, MultiModalInputs, PlaceholderInfo)
 
 """
 from .embed import TextEmbedProcessor
@@ -32,7 +32,7 @@ logger = logging.getLogger(__name__)
 
 
 class MultiModalRegistry:
-    ""
+"""
 Central registry for multimodal processors.""
 def __init__(self) -> None:
         self._processors: Dict[ModalityType, BaseMultiModalProcessor] = {}
@@ -43,12 +43,12 @@ def __init__(self) -> None:
         modality: ModalityType,
         processor: BaseMultiModalProcessor,
     ) -> None:
-        ""
+"""
 Register a processor for a specific modality.""
 self._processors[modality] = processor
         logger.debug("Registered processor for %s", modality.name)
     def get_processor(self, modality: ModalityType) -> Optional[BaseMultiModalProcessor]:
-        ""
+"""
 Get the registered processor for a modality, if any.""
 return self._processors.get(modality)
 
@@ -57,7 +57,7 @@ return self._processors.get(modality)
         modality: ModalityType,
         config: Optional[MultiModalConfig] = None,
     ) -> BaseMultiModalProcessor:
-        ""
+"""
 Create a new processor instance for the given modality.""
 config = config or self._default_config
 
@@ -76,7 +76,7 @@ config = config or self._default_config
         config: Optional[MultiModalConfig] = None,
         **kwargs: Any,
     ) -> MultiModalInputs:
-        ""
+"""
 Process multiple modalities into unified inputs for the model.""
 config = config or self._default_config
         result = MultiModalInputs()
@@ -199,7 +199,7 @@ def process_multimodal_inputs(
     config: Optional[MultiModalConfig] = None,
     **kwargs: Any,
 ) -> MultiModalInputs:
-    ""
+"""
 Entry point for processing multimodal data using the global registry.""
 return MULTIMODAL_REGISTRY.process_inputs(mm_data, config, **kwargs)
 

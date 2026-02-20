@@ -15,16 +15,15 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Conversation context facade (parser-safe).
 
 """
-
 Exposes a small set of symbols used by other modules/tests. The real
 package provides a more feature-rich implementation; this module acts
 as a stable import surface while the repository is repaired.
-""
+"""
 from typing import Any, Callable, Optional
 
 try:
@@ -92,24 +91,24 @@ except Exception:  # pragma: no cover - provide lightweight fallbacks
     def restore_context(*_, **__):
         return None
 
-__all__ = [
-    "ContextConfig",
-    "ContextState",
-    "ContextSnapshot",
-    "TokenMetrics",
-    "TurnType",
-    "ConversationTurn",
-    "ToolExecution",
-    "ToolExecutionPolicy",
-    "ConversationContext",
-    "AgenticContext",
-    "ContextManager",
-    "get_context_manager",
-    "create_context",
-    "merge_contexts",
-    "restore_context",
-    "TurnTracker",
-    "TokenTracker",
-    "ToolOrchestrator",
-    "ContextOrchestrator",
-]
+        __all__ = [
+        "ContextConfig",
+        "ContextState",
+        "ContextSnapshot",
+        "TokenMetrics",
+        "TurnType",
+        "ConversationTurn",
+        "ToolExecution",
+        "ToolExecutionPolicy",
+        "ConversationContext",
+        "AgenticContext",
+        "ContextManager",
+        "get_context_manager",
+        "create_context",
+        "merge_contexts",
+        "restore_context",
+        "TurnTracker",
+        "TokenTracker",
+        "ToolOrchestrator",
+        "ContextOrchestrator",
+        ]

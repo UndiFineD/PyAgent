@@ -27,7 +27,6 @@ WHAT IT DOES:
 - Parses .py files with ast, extracts module/class/function docstrings, formats them as simple Markdown headings and paragraphs, stores results in doc_registry, and writes one .md file per registered module.
 
 """
-
 WHAT IT SHOULD DO BETTER:
 - Recursively discover and process modules automatically (current API expects external iteration), preserve and render function signatures and type hints, include private members optionally, support reStructuredText/Sphinx directives and cross-references, perform atomic writes via StateTransaction, run asynchronously for large codebases, and add robust logging/error reporting and template-driven rendering.
 

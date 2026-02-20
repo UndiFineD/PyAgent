@@ -25,7 +25,6 @@ USAGE:
 Instantiate ResourceCurationAgent and call as_tool methods (e.g., add_resource(url, title, summary?, tags?)), use process_research_queue(urls) for bulk discovery, and await improve_content(prompt, target_file?) for asynchronous summary updates.
 
 """
-
 WHAT IT DOES:
 Keeps a simple JSON-backed research library, accepts new resource entries, bulk-processes discovery URLs (simulated), and exposes an async stub to improve content summaries; integrates with fleet agents via its system prompt and as_tool wrappers.
 

@@ -17,10 +17,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Latent signal bus.py module.
-""
+"""
 
 """
 import base64

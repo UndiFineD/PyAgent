@@ -534,62 +534,62 @@ class MultiCycleFuzzing:
     def __init__(self, fuzzing_engine: AIFuzzingEngine):
         self.engine = fuzzing_engine
         self.logger = logging.getLogger("pyagent.security.fuzzing.multicycle")
-    async def run_multi_cycle_fuzzing(
+        async def run_multi_cycle_fuzzing(
         self,
         target: str,
         target_type: FuzzingTarget,
         cycles: int = 3,
         techniques: Optional[List[FuzzingTechnique]] = None
-    ) -> Dict[str, Any]:
-                Run multi-cycle fuzzing with iterative improvement.
+        ) -> Dict[str, Any]:
+        Run multi-cycle fuzzing with iterative improvement.
 
         Args:
-            target: Target to fuzz
-            target_type: Type of target
-            cycles: Number of fuzzing cycles
-            techniques: Fuzzing techniques to use
+        target: Target to fuzz
+        target_type: Type of target
+        cycles: Number of fuzzing cycles
+        techniques: Fuzzing techniques to use
 
         Returns:
-            Multi-cycle results summary
-                self.logger.info(f"Starting multi-cycle fuzzing for {target} with {cycles} cycles")
+        Multi-cycle results summary
+        self.logger.info(f"Starting multi-cycle fuzzing for {target} with {cycles} cycles")
         all_sessions = []
         cumulative_findings = []
 
         for cycle in range(1, cycles + 1):
-            self.logger.info(f"Starting cycle {cycle}/{cycles}")
-            # Start new session
-            session_id = await self.engine.start_fuzzing_session(
-                target=target,
-                target_type=target_type,
-                techniques=techniques,
-                max_iterations=500  # Shorter sessions for multi-cycle
-            )
+        self.logger.info(f"Starting cycle {cycle}/{cycles}")
+        # Start new session
+        session_id = await self.engine.start_fuzzing_session(
+        target=target,
+        target_type=target_type,
+        techniques=techniques,
+        max_iterations=500  # Shorter sessions for multi-cycle
+        )
 
-            # Run the session
-            results = await self.engine.run_fuzzing_session(session_id)
-            all_sessions.append(session_id)
+        # Run the session
+        results = await self.engine.run_fuzzing_session(session_id)
+        all_sessions.append(session_id)
 
-            # Analyze findings
-            cycle_findings = [r for r in results if r.error_detected]
-            cumulative_findings.extend(cycle_findings)
+        # Analyze findings
+        cycle_findings = [r for r in results if r.error_detected]
+        cumulative_findings.extend(cycle_findings)
 
-            self.logger.info(f"Cycle {cycle} found {len(cycle_findings)} vulnerabilities")
-            # If we found high-confidence vulnerabilities, we might stop early
-            high_confidence = [r for r in cycle_findings if r.confidence > 0.8]
-            if high_confidence:
-                self.logger.warning(f"High-confidence vulnerabilities found in cycle {cycle}, stopping early")"                break
+        self.logger.info(f"Cycle {cycle} found {len(cycle_findings)} vulnerabilities")
+        # If we found high-confidence vulnerabilities, we might stop early
+        high_confidence = [r for r in cycle_findings if r.confidence > 0.8]
+        if high_confidence:
+        self.logger.warning(f"High-confidence vulnerabilities found in cycle {cycle}, stopping early")"                break
 
-            # Learning phase between cycles
-            await asyncio.sleep(1)  # Brief pause for learning
+        # Learning phase between cycles
+        await asyncio.sleep(1)  # Brief pause for learning
 
         # Generate final summary
         summary: Dict[str, Any] = {
-            'target': target,'            'cycles_completed': len(all_sessions),'            'total_findings': len(cumulative_findings),'            'sessions': all_sessions,'            'high_confidence_findings': len([r for r in cumulative_findings if r.confidence > 0.8]),'            'vulnerability_breakdown': {}'        }
+        'target': target,'            'cycles_completed': len(all_sessions),'            'total_findings': len(cumulative_findings),'            'sessions': all_sessions,'            'high_confidence_findings': len([r for r in cumulative_findings if r.confidence > 0.8]),'            'vulnerability_breakdown': {}'        }
 
         # Breakdown by vulnerability type
         vuln_breakdown: Dict[str, int] = {}
         for finding in cumulative_findings:
-            vuln_type = finding.vulnerability_type or 'unknown''            vuln_breakdown[vuln_type] = vuln_breakdown.get(vuln_type, 0) + 1
+        vuln_type = finding.vulnerability_type or 'unknown''            vuln_breakdown[vuln_type] = vuln_breakdown.get(vuln_type, 0) + 1
 
         summary['vulnerability_breakdown'] = vuln_breakdown
         self.logger.info(f"Multi-cycle fuzzing complete: {summary['total_findings']} total findings")"'        return summary
@@ -597,5 +597,23 @@ class MultiCycleFuzzing:
 """
 
 """
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+        ""
 
 """

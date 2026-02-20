@@ -16,15 +16,14 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-""
+"""
 """
 Tool core utilities: metadata extraction and argument filtering.
 
 """
-
 This module provides a trimmed, reliable implementation used by the
 test suite to inspect tool functions and filter invocation arguments.
-""
+"""
 import inspect
 import logging
 import re
@@ -56,7 +55,7 @@ class ToolMetadata(BaseModel):
 
 
 class ToolCore:
-    ""
+"""
 Core helpers for tooling metadata and argument handling.""
 def extract_metadata(self, owner_name: str, func: Callable, category: str = "general", priority: int = 0) -> ToolMetadata:
         name: str = getattr(func, "__name__", "<anonymous>")
@@ -90,7 +89,7 @@ def extract_metadata(self, owner_name: str, func: Callable, category: str = "gen
         return {k: v for k, v in args_dict.items() if k in sig.parameters}
 
     def score_tool_relevance(self, metadata: ToolMetadata, query: str) -> float:
-        ""
+"""
 Heuristic relevance scoring; defers to rust_core when available.""
 if rc:
             try:

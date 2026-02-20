@@ -14,12 +14,11 @@
 # limitations under the License.
 
 
-""
+"""
 """
 Load balancer.py module.
 
 """
-
 import asyncio
 import logging
 from typing import Any, Dict, List
@@ -105,7 +104,7 @@ class SwarmLoadBalancer:
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Failed to migrate shard during load balancing: {e}")
     def _get_shards_on_rank(self, rank_id: int) -> List[tuple]:
-        ""
+"""
 Scans the shard manager for shards hosted on a specific rank.        res = []
         # Accessing the internal registry of the shard manager
         for ctx_id, shards in self.shard_manager.context_registry.items():
@@ -115,11 +114,11 @@ Scans the shard manager for shards hosted on a specific rank.        res = []
         return res
 
     async def start_loop(self, interval: float = 5.0) -> None:
-        ""
+"""
 Starts a background balancing loop.        while self.balancing_active:
             await self.run_balancing_cycle()
             await asyncio.sleep(interval)
 
     def stop(self) -> None:
-        ""
+"""
 Stops the balancing service.        self.balancing_active = False

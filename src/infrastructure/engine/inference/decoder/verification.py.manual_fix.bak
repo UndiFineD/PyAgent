@@ -18,11 +18,11 @@ from __future__ import annotations
 # limitations under the License.
 """
 Verification.py module.
-""
+"""
 try:
 
 """
-    import numpy
+import numpy
 except ImportError:
     import numpy
  as np
@@ -85,7 +85,7 @@ class TreeSpeculator:
         target_token_ids: list[int],
         temperature: float,
     ) -> VerificationResult:
-        ""
+"""
 Verify a single proposal.        accepted_tokens: list[int] = []
         rejected_at: int | None = None
         bonus_token: int | None = None

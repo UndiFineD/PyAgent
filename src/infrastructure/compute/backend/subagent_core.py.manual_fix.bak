@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Core execution logic for SubagentRunner.
 
 """
-
 import logging
 import os
 import time
@@ -38,7 +37,7 @@ if TYPE_CHECKING:
 
 
 class SubagentCore:
-    ""
+"""
 Delegated execution core for SubagentRunner.
 
     def __init__(self, runner: SubagentRunner) -> None:
@@ -74,7 +73,7 @@ Run a subagent using available backends.        backend_env = os.environ.get("DV
         return res
 
     def _create_backend_functions(self, full_prompt: str, original_prompt: str, repo_root: Any) -> dict[str, callable]:
-        ""
+"""
 Create backend function mappings.        def _try_codex_cli() -> str | None:
             if not self.runner._command_available("codex"):  # pylint: disable=protected-access"                return None
             return BackendHandlers.try_codex_cli(full_prompt, repo_root)
@@ -99,14 +98,14 @@ Create backend function mappings.        def _try_codex_cli() -> str | None:
         def _try_ollama() -> str | None:
             return self.runner.llm_client.llm_chat_via_ollama(full_prompt, model="llama3")
         def _try_lmstudio() -> str | None:
-            ""
+"""
 Attempts to use LM Studio (Phase 21).            return self.runner.llm_client.llm_chat_via_lmstudio(full_prompt)
 
         def _try_openai_api() -> str | None:
             return BackendHandlers.try_openai_api(full_prompt, self.runner.requests)
 
         def _try_neural() -> str | None:
-            ""
+"""
 Attempts to use the local Rust-accelerated NeuralTransformer (Phase 319).            try:
                 import rust_core
 
@@ -131,14 +130,14 @@ Attempts to use the local Rust-accelerated NeuralTransformer (Phase 319).       
         }
 
     def _select_backend_by_env(self, backend_env: str, backends: dict[str, callable]) -> str | None:
-        ""
+"""
 Select backend based on environment string.        backend_mapping = {
             "codex": "codex","            "codex-cli": "codex","            "vllm": "vllm","            "ollama": "ollama","            "lmstudio": "lmstudio","            "lms": "lmstudio","            "neural": "neural","            "rust": "neural","            "local-neural": "neural","            "copilot": "copilot","            "local": "copilot","            "copilot-cli": "copilot_cli_only","            "copilot_cli": "copilot_cli_only","            "gh": "gh","            "gh-copilot": "gh","            "github-models": "github_models","            "github_models": "github_models","            "models": "github_models","            "openai": "openai","            "gpt": "openai","            "localai": "openai","            "huggingface": "openai","        }
 
         backend_key = backend_mapping.get(backend_env, "auto")"        return backends[backend_key]()
 
     def _select_and_try_backend(self, backend_env: str, full_prompt: str, original_prompt: str) -> str | None:
-        ""
+"""
 Select and attempt to use the appropriate backend based on environment configuration.        repo_root = self.runner._resolve_repo_root()  # pylint: disable=protected-access
         backends = self._create_backend_functions(full_prompt, original_prompt, repo_root)
         return self._select_backend_by_env(backend_env, backends)
@@ -155,7 +154,7 @@ Select and attempt to use the appropriate backend based on environment configura
         stream: bool = False,
         validate_content: bool = True,
     ) -> str:
-        ""
+"""
 Call a GitHub Models OpenAI-compatible chat endpoint with caching.        cache_key = self.runner._get_cache_key(prompt, model)  # pylint: disable=protected-access
         if use_cache:
             if cache_key in self.runner._response_cache:  # pylint: disable=protected-access
@@ -189,6 +188,24 @@ Call a GitHub Models OpenAI-compatible chat endpoint with caching.        cache_
 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.runner._metrics["errors"] += 1  # pylint: disable=protected-access"            logging.error(f"GitHub Models call failed: {e}")"            raise
 
-""
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
+
+"""
 
 """

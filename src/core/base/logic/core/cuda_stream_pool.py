@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Minimal CUDA stream pool stub for tests.
 
 Provides lightweight classes and functions expected by tests without GPU deps.
 """
+from __future__ import annotations
 
 
 
@@ -70,16 +70,16 @@ class PooledStream:
     def context(self):
         # simple context manager
         class _CM:
-            def __enter__(self_non):
-                return self
+        def __enter__(self_non):
+        return self
 
-            def __exit__(self_non, exc_type, exc, tb):
-                return False
+        def __exit__(self_non, exc_type, exc, tb):
+        return False
 
         return _CM()
 
 
-@dataclass
+        @dataclass
 class PooledEvent:
     event_id: int
     event: Any = None

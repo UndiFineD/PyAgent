@@ -26,36 +26,36 @@ from posixpath import join as path_urljoin
 # GLOBALS
 
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 WINDOWS_PROTOCOLS_URL = "https://docs.microsoft.com/en-us/openspecs/windows_protocols"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented unmatched parenthesis"""
 # TECHNICAL_DOCS_URL = (
 # [BATCHFIX] Commented metadata/non-Python
 """     "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-winprotlp/e36c976a-6263-42a8-b119-7a3cc41ddd2a"  # [BATCHFIX] closed string")
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 DEFAULT = "DEFAULT"  # [BATCHFIX] closed string
 
 def get_protocol_names():
     pass  # [BATCHFIX] inserted for empty block
-""
+"""
 Fetch the list of protocol names from Microsoft's technical documents page.'#     html = requests.get(TECHNICAL_DOCS_URL).content
     soup = BeautifulSoup(html, "html.parser")"    table_rows = soup.find("table").find("tbody").find_all("tr")"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 idl_names = []""""
 for row in table_rows:
         left_cell = row.find("td")"        a = left_cell.find("a")"# [BATCHFIX] Commented metadata/non-Python
-""
+"""
 assert a["data-linktype"] == "relative-path"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 relative_url = left_cell.find("a")["href"]"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 name, uuid = relative_url.split("/")[1:]"        idl_names.append(name)
     return idl_names
 
@@ -74,7 +74,7 @@ def get_dicts_rec(array):
         if "children" in element:"# [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 for child in get_dicts_rec(element["children"]):"                yield (child)
 
 
@@ -102,7 +102,7 @@ def generate_urls_from_uuids(protocol_name, idl_uuids):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 result[name] = path_urljoin(WINDOWS_PROTOCOLS_URL, protocol_name, uuid)""""
 return result
 
@@ -153,7 +153,7 @@ def download_all_protocols_idls(output):
 # [BATCHFIX] Commented metadata/non-Python
 """ [BATCHFIX] Commented metadata/non-Python"""
 # [BATCHFIX] Commented metadata/non-Python
-""
+"""
 status[protocol_name] = download_protocol_idls(protocol_name, output)""""
 logging.info(fProtocols' Status: {status}")"  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
 

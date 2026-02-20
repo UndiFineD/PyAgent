@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 """
 Parser-safe stub: Crew Orchestrator (conservative).
 
 Provides minimal types and no-op implementations to restore imports.
 """
+from __future__ import annotations
 
 from dataclasses import dataclass
 from enum import Enum

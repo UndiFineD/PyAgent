@@ -15,13 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Enum definitions for PyAgent models.""
 try:
 
 """
-    from enum import Enum, auto
+from enum import Enum, auto
 except ImportError:
     from enum import Enum, auto
 
@@ -29,7 +29,7 @@ except ImportError:
 
 
 class AgentState(Enum):
-    ""
+"""
 Agent lifecycle states.""
 INITIALIZED = "initialized"
     IDLE = "idle"
@@ -43,7 +43,7 @@ INITIALIZED = "initialized"
 
 
 class ResponseQuality(Enum):
-    ""
+"""
 AI response quality levels.""
 EXCELLENT = 5
 
@@ -57,7 +57,7 @@ EXCELLENT = 5
 
 
 class FailureClassification(Enum):
-    ""
+"""
 Phase 336: Structured failure taxonomy for collective intelligence.""
 AI_ERROR = "ai_error"
     NETWORK_FAILURE = "network_failure"
@@ -72,7 +72,7 @@ AI_ERROR = "ai_error"
 
 
 class OptimizationMetric(Enum):
-    ""
+"""
 Metrics for strategy optimization.""
 LATENCY = "latency"
     THROUGHPUT = "throughput"
@@ -85,7 +85,7 @@ LATENCY = "latency"
 
 
 class EventType(Enum):
-    ""
+"""
 Agent event types for hooks.""
 PRE_READ = "pre_read"
     POST_READ = "post_read"
@@ -97,7 +97,7 @@ PRE_READ = "pre_read"
 
 
 class AuthMethod(Enum):
-    ""
+"""
 Authentication methods for backends.""
 NONE = "none"
     API_KEY = "api_key"
@@ -109,7 +109,7 @@ NONE = "none"
 
 
 class SerializationFormat(Enum):
-    ""
+"""
 Custom serialization formats.""
 JSON = "json"
     YAML = "yaml"
@@ -120,7 +120,7 @@ JSON = "json"
 
 
 class FilePriority(Enum):
-    ""
+"""
 File priority levels for request prioritization.""
 CRITICAL = 5
     HIGH = 4
@@ -131,7 +131,7 @@ CRITICAL = 5
 
 
 class InputType(Enum):
-    ""
+"""
 Input types for multimodal support.""
 TEXT = "text"
     IMAGE = "image"
@@ -182,7 +182,7 @@ TEXT = "text"
 
 
 class AgentType(Enum):
-    ""
+"""
 Agent type classifications.""
 GENERAL = "general"
     CODE_REVIEW = "code_review"
@@ -192,7 +192,7 @@ GENERAL = "general"
 
 
 class MessageRole(Enum):
-    ""
+"""
 Roles for conversation messages.""
 USER = "user"
     ASSISTANT = "assistant"
@@ -200,7 +200,7 @@ USER = "user"
 
 
 class AgentEvent(Enum):
-    ""
+"""
 Agent event types.""
 START = "start"
     COMPLETE = "complete"
@@ -208,7 +208,7 @@ START = "start"
 
 
 class AgentExecutionState(Enum):
-    ""
+"""
 Execution state for an agent run.""
 PENDING = auto()
     RUNNING = auto()
@@ -220,7 +220,7 @@ PENDING = auto()
 
 
 class AgentPriority(Enum):
-    ""
+"""
 Priority level for agent execution.""
 CRITICAL = 1
     HIGH = 2
@@ -231,7 +231,7 @@ CRITICAL = 1
 
 
 class ConfigFormat(Enum):
-    ""
+"""
 Configuration file format.""
 YAML = auto()
     TOML = auto()
@@ -241,7 +241,7 @@ YAML = auto()
 
 
 class DiffOutputFormat(Enum):
-    ""
+"""
 Output format for diff preview.""
 UNIFIED = auto()  # Unified diff format
     CONTEXT = auto()  # Context diff format
@@ -251,7 +251,7 @@ UNIFIED = auto()  # Unified diff format
 
 
 class HealthStatus(Enum):
-    ""
+"""
 Health status for components.""
 HEALTHY = auto()
     DEGRADED = auto()
@@ -261,7 +261,7 @@ HEALTHY = auto()
 
 
 class LockType(Enum):
-    ""
+"""
 File locking type.""
 SHARED = auto()  # Multiple readers allowed
     EXCLUSIVE = auto()  # Single writer only
@@ -270,7 +270,7 @@ SHARED = auto()  # Multiple readers allowed
 
 
 class RateLimitStrategy(Enum):
-    ""
+"""
 Rate limiting strategy for API calls.""
 FIXED_WINDOW = auto()  # Fixed time window rate limiting
     SLIDING_WINDOW = auto()  # Sliding window rate limiting
@@ -280,7 +280,7 @@ FIXED_WINDOW = auto()  # Fixed time window rate limiting
 
 
 class EnvironmentStatus(Enum):
-    ""
+"""
 Environment instance status.""
 PENDING = "pending"
     CREATING = "creating"
@@ -291,7 +291,7 @@ PENDING = "pending"
 
 
 class EnvironmentIsolation(Enum):
-    ""
+"""
 Environment isolation levels.""
 NONE = "none"  # No isolation
     PROCESS = "process"  # Separate process

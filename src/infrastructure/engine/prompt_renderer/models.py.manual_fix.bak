@@ -20,11 +20,11 @@ from __future__ import annotations
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Models for Prompt Rendering.
-""
+"""
 try:
 
 """
-    from dataclasses import dataclass, field
+from dataclasses import dataclass, field
 except ImportError:
     from dataclasses import dataclass, field
 
@@ -42,25 +42,25 @@ except ImportError:
 
 
 class TruncationStrategy(Enum):
-    ""
+"""
 Prompt truncation strategies.
     NONE = "none""    AUTO = "auto""    LEFT = "left""    RIGHT = "right""    MIDDLE = "middle""    SMART = "smart""
 
 
 class InputType(Enum):
-    ""
+"""
 Input types for prompt rendering.
     TEXT = "text""    TOKENS = "tokens""    EMBEDDING = "embedding""    MULTIMODAL = "multimodal""
 
 
 class RenderMode(Enum):
-    ""
+"""
 Rendering modes.
     COMPLETION = "completion""    CHAT = "chat""    EMBEDDING = "embedding""    INSTRUCT = "instruct""
 
 @dataclass
 class PromptConfig:
-    ""
+"""
 Configuration for prompt rendering.
     prompt: Optional[str] = None
     messages: Optional[List[Dict[str, Any]]] = None
@@ -80,14 +80,14 @@ Configuration for prompt rendering.
     normalize_unicode: bool = True
 
     def to_dict(self) -> Dict[str, Any]:
-        ""
+"""
 Convert config to dictionary.        return {
             "prompt": self.prompt,"            "messages": self.messages,"            "max_tokens": self.max_tokens,"            "truncation": self.truncation.value,"            "cache_salt": self.cache_salt,"        }
 
 
 @dataclass
 class TruncationResult:
-    ""
+"""
 Result of prompt truncation.
     original_tokens: int
     truncated_tokens: int
@@ -98,7 +98,7 @@ Result of prompt truncation.
 
     @property
     def truncation_ratio(self) -> float:
-        ""
+"""
 Calculate ratio of removed tokens to original tokens.        if self.original_tokens == 0:
             return 0.0
         return self.removed_tokens / self.original_tokens
@@ -106,7 +106,7 @@ Calculate ratio of removed tokens to original tokens.        if self.original_to
 
 @dataclass
 class RenderResult:
-    ""
+"""
 Result of prompt rendering.
     text: Optional[str] = None
     token_ids: Optional[List[int]] = None
@@ -122,13 +122,13 @@ Result of prompt rendering.
 
     @property
     def is_multimodal(self) -> bool:
-        ""
+"""
 Check if result contains multimodal data.        return bool(self.image_positions or self.audio_positions)
 
 
 @dataclass
 class EmbeddingInput:
-    ""
+"""
 Embedding input for direct embedding injection.
     embeddings: List[List[float]]
     positions: Optional[List[int]] = None
@@ -136,14 +136,14 @@ Embedding input for direct embedding injection.
 
 @dataclass
 class MultimodalInput:
-    ""
+"""
 Multimodal input container.
     images: List[Dict[str, Any]] = field(default_factory=list)
     audio: List[Dict[str, Any]] = field(default_factory=list)
     video: List[Dict[str, Any]] = field(default_factory=list)
 
     def is_empty(self) -> bool:
-        ""
+"""
 Check if input is empty.        return not (self.images or self.audio or self.video)
 
-""
+"""

@@ -16,16 +16,15 @@ from __future__ import annotations
 
 
  
-""
+"""
 """
 Encrypted Memory Store shim for tests.
 
 """
-
 Provides a thin wrapper delegating to the backend store without
 performing real encryption. This keeps imports and API compatibility
 for unit tests while avoiding dependency on the full crypto stack.
-""
+"""
 try:
     from typing import Any, Dict, List, Optional, Tuple
 except ImportError:
@@ -51,17 +50,17 @@ class EncryptedMemoryStore:
         self.backend = backend_store
         self.e2e_core = e2e_core
 
-    async def store_memory(self, user_id: str, node: MemoryNode) -> str:
+        async def store_memory(self, user_id: str, node: MemoryNode) -> str:
         return await self.backend.store_memory(node)
 
-    async def get_memory(self, user_id: str, memory_id: str) -> Optional[MemoryNode]:
+        async def get_memory(self, user_id: str, memory_id: str) -> Optional[MemoryNode]:
         return await self.backend.get_memory(memory_id)
 
-    async def search_similar(self, user_id: str, query_embedding: List[float], limit: int = 10, threshold: float = 0.7) -> List[Tuple[MemoryNode, float]]:
+        async def search_similar(self, user_id: str, query_embedding: List[float], limit: int = 10, threshold: float = 0.7) -> List[Tuple[MemoryNode, float]]:
         return await self.backend.search_similar(query_embedding, limit, threshold)
 
-    async def update_memory(self, user_id: str, memory_id: str, updates: Dict[str, Any]) -> bool:
+        async def update_memory(self, user_id: str, memory_id: str, updates: Dict[str, Any]) -> bool:
         return await self.backend.update_memory(user_id, memory_id, updates)
 
-    async def delete_memory(self, user_id: str, memory_id: str) -> bool:
+        async def delete_memory(self, user_id: str, memory_id: str) -> bool:
         return await self.backend.delete_memory(memory_id)

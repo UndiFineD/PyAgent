@@ -17,7 +17,6 @@
 Test script for verifying Copilot backend integration.
 
 """
-
 try:
     import sys
 except ImportError:

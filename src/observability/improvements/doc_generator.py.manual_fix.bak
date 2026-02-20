@@ -15,12 +15,11 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 DocGenerator - Generates simple documentation for Improvement objects
 
 """
-
 A small utility class that renders human-readable Markdown for Improvement instances using simple string templates and optional metadata extraction.
 # DATE: 2026-02-12
 # AUTHOR: Keimpe de Jong
@@ -64,7 +63,7 @@ __version__ = VERSION
 
 
 class DocGenerator:
-    ""
+"""
 Generates simple documentation text for improvements.
 
     def __init__(self) -> None:
@@ -101,7 +100,7 @@ __version__ = VERSION
 
 
 class DocGenerator:
-    ""
+"""
 Generates simple documentation text for improvements.
     def __init__(self) -> None:
         self.templates: dict[str, str] = {
@@ -114,4 +113,4 @@ Generates simple documentation text for improvements.
                 for k, v in meta_dict.items():
                     base += f"- {k}: {v}\\n""        return base
 
-""
+"""

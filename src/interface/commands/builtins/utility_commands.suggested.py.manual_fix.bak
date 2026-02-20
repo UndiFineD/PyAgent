@@ -15,10 +15,10 @@ from __future__ import annotations
 # limitations under the License.
 
 
-""
+"""
 """
 Utility commands for slash commands.
-""
+"""
 
 """
 from typing import TYPE_CHECKING
@@ -30,7 +30,7 @@ if TYPE_CHECKING:
 
 
 def register_utility_commands(registry: CommandRegistry) -> None:
-    ""
+"""
 Register utility-related built-in commands.
     @registry.command(
         "tokens","        description="Count tokens in text","        usage="/tokens <text>","        aliases=["tok", "tokenize"],"        requires_args=True,
@@ -82,4 +82,4 @@ Register utility-related built-in commands.
         )
 
 
-""
+"""

@@ -22,7 +22,7 @@ try:
 except ImportError:
 
 """
-    import json
+import json
 
 try:
     from pathlib import Path
@@ -46,7 +46,7 @@ class GrafanaDashboardGenerator:
         self.output_dir.mkdir(parents=True, exist_ok=True)
 
     def generate_fleet_summary(self) -> str:
-        ""
+"""
 Generates a summary dashboard for the entire fleet.        dashboard = {
             "title": "PyAgent Fleet Summary","            "panels": ["                {
                     "title": "Agent Count","                    "type": "stat","                    "targets": [{"expr": "count(agent_up)"}],"                },
@@ -59,7 +59,7 @@ Generates a summary dashboard for the entire fleet.        dashboard = {
         return str(output_path)
 
     def generate_shard_obs(self, shard_name: str) -> str:
-        ""
+"""
 Generates a dashboard for a specific swarm shard.        dashboard = {
             "title": f"PyAgent Shard: {shard_name}","            "panels": ["                {
                     "title": "Shard Load","                    "type": "gauge","                    "targets": [{"expr": f"shard_load{{shard='{shard_name}'}} "}],"'                }

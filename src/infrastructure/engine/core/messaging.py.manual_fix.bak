@@ -13,7 +13,7 @@
 # limitations under the License.
 
 
-""
+"""
 """
 IPC and background process support for the engine core.""
 
@@ -26,7 +26,7 @@ from .engine import EngineCore
 
 
 class EngineCoreProc(EngineCore):
-    ""
+"""
 ZMQ-wrapper for running EngineCore in a background process.""
 def __init__(
         self,
@@ -35,7 +35,7 @@ def __init__(
         log_stats: bool = True,
         engine_index: int = 0,
     ) -> None:
-        ""
+"""
 Initialize the engine core process.""
 super().__init__(scheduler, executor, log_stats)
         self.engine_index = engine_index
@@ -47,7 +47,7 @@ super().__init__(scheduler, executor, log_stats)
 
 
     def _process_engine_step(self) -> bool:
-        ""
+"""
 Process one engine step and queue outputs.""
 outputs, model_executed = self.step()
 
@@ -59,7 +59,7 @@ outputs, model_executed = self.step()
 
 
     def run_loop(self) -> None:
-        ""
+"""
 Main engine loop for background process.""
         # Main engine loop for background process
         self.engines_running = True
@@ -81,7 +81,7 @@ Main engine loop for background process.""
 
 
     def _handle_request(self, request_type: str, request_data: Any) -> None:
-        ""
+"""
 Handle incoming request.""
 if request_type == "add":
             self.add_request(request_data)

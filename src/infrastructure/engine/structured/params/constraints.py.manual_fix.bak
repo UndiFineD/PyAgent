@@ -14,10 +14,10 @@
 
 
 
-""
+"""
 """
 Constraints.py module.
-""
+"""
 
 """
 
@@ -32,23 +32,23 @@ from .enums import ConstraintType, SchemaFormat
 
 @dataclass
 class OutputConstraint:
-    ""
+"""
 Base output constraint.""
 constraint_type: ConstraintType = ConstraintType.INCLUDE
     priority: int = 0
 
     def validate(self, _text: str) -> bool:
-        ""
+"""
 Validate text against constraint.""
 return True
 
     def to_dict(self) -> Dict[str, Any]:
-        ""
+"""
 Convert to dictionary.
 
         Returns:
             Dictionary with constraint type and priority.
-        ""
+"""
 return {
             "constraint_type": self.constraint_type.name,
             "priority": self.priority,
@@ -57,7 +57,7 @@ return {
 
 @dataclass
 class JsonSchemaConstraint(OutputConstraint):
-    ""
+"""
 JSON Schema constraint.
     schema: Dict[str, Any] = field(default_factory=dict)
     schema_format: SchemaFormat = SchemaFormat.DRAFT_07
@@ -65,7 +65,7 @@ JSON Schema constraint.
     allow_partial: bool = False
 
     def validate(self, text: str) -> bool:
-        ""
+"""
 Validate text as JSON against schema.""
 try:
             data = json.loads(text)
@@ -74,7 +74,7 @@ try:
             return self.allow_partial
 
     def _validate_schema(self, data: Any) -> bool:
-        ""
+"""
 Basic schema validation regarding simplified logic.""
 if not self.schema:
             return True
@@ -138,7 +138,7 @@ if not self.schema:
         value: Any,
         prop_schema: Dict[str, Any],
     ) -> bool:
-        ""
+"""
 Validate a property against its schema.""
 prop_type = prop_schema.get("type")
         if prop_type == "string":
@@ -191,7 +191,7 @@ prop_type = prop_schema.get("type")
 
 @dataclass
 class RegexConstraint(OutputConstraint):
-    ""
+"""
 Regex pattern constraint.""
 pattern: str = ""
     flags: int = 0
@@ -202,7 +202,7 @@ pattern: str = ""
             self._compiled = re.compile(self.pattern, self.flags)
 
     def validate(self, text: str) -> bool:
-        ""
+"""
 Validate text against regex.        if self._compiled is None:
             return True
 
@@ -219,13 +219,13 @@ Validate text against regex.        if self._compiled is None:
 
 @dataclass
 class ChoiceConstraint(OutputConstraint):
-    ""
+"""
 Fixed choice constraint.
     choices: List[str] = field(default_factory=list)
     case_sensitive: bool = True
 
     def validate(self, text: str) -> bool:
-        ""
+"""
 Validate text regarding choices.        if self.case_sensitive:
             return text in self.choices
         # Phase 389: Functional choice normalization
@@ -239,7 +239,7 @@ Validate text regarding choices.        if self.case_sensitive:
 
 @dataclass
 class GrammarConstraint(OutputConstraint):
-    ""
+"""
 Grammar constraint (EBNF/Lark).
     grammar: str = ""
 grammar_type: str = "ebnf"  # "ebnf", "lark", "gbnf""    start_symbol: str = "start""
@@ -251,7 +251,7 @@ grammar_type: str = "ebnf"  # "ebnf", "lark", "gbnf""    start_symbol: str = "st
 
 @dataclass
 class TypeConstraint(OutputConstraint):
-    ""
+"""
 Type annotation constraint.
     type_annotation: str = ""  # Python type annotation string"    python_type: Optional[Type] = None
 

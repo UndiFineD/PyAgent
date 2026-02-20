@@ -25,7 +25,6 @@ USAGE:
 - As a script: python src/interface/.../documentation_indexer_agent.py "path/to/workspace" (module exposes create_main_function for CLI)."- As a library: from documentation_indexer_agent import DocumentationIndexerAgent; agent = DocumentationIndexerAgent(file_path); index = agent.build_index(root_path); pointers = agent.get_semantic_pointers("query")."- For async helpers (content improvement): await agent.improve_content(prompt, target_file=None).
 
 """
-
 WHAT IT DOES:
 - Crawls a repository root for markdown (.md) and Python (.py) files and builds a simple in-memory index grouping readmes, docs, and source comment candidates.
 - Exposes get_semantic_pointers(query) as a TODO Placeholder for semantic retrieval (prints a simple search message).
