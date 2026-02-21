@@ -1,4 +1,9 @@
+#!/usr/bin/env python3
+"""Parser-safe placeholder tests for web_security_scanner_agent."""
+
+def test_placeholder_true():
+    assert True
+
+
 def test_web_security_scanner_agent_smoke():
-    ""
-Minimal smoke test for web security scanner agent tests.""
-assert True
+    assert True

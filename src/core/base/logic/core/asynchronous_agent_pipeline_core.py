@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""Minimal stub for asynchronous_agent_pipeline_core used during repairs."""
+
+from __future__ import annotations
+
+
+class AsynchronousAgentPipelineCore:
+    """Repair-time stub of AsynchronousAgentPipelineCore."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
+__all__ = ["AsynchronousAgentPipelineCore"]
+
+#!/usr/bin/env python3
 """
 Parser-safe stub: Asynchronous agent pipeline core (conservative).
 

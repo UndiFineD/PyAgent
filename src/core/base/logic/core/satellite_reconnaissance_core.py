@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-""
-Minimal, parser-safe Satellite Reconnaissance Core used for tests.""
+"""Satellite reconnaissance core - minimal parser-safe stub for tests."""
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
@@ -50,13 +51,13 @@ class SatelliteReconnaissanceCore:
     def __init__(self, config: Optional[SatelliteReconConfig] = None):
         self.config = config or SatelliteReconConfig()
 
-        async def initialize(self) -> None:
+    async def initialize(self) -> None:
         return None
 
-        async def cleanup(self) -> None:
+    async def cleanup(self) -> None:
         return None
 
-        async def discover_satellite_assets(self, target: str) -> SatelliteReconResult:
+    async def discover_satellite_assets(self, target: str) -> SatelliteReconResult:
         result = SatelliteReconResult(target=target)
         # Minimal deterministic stub
         result.satellites_found.append(SatelliteAsset(name=f"{target}-SAT-1"))

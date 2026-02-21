@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+# Minimal CredentialExtractionAgent stub for repair runs.
 
+class CredentialExtractionAgent:
+    """Repair-time stub used to restore imports."""
+
+    def extract(self, source: str) -> dict:
+        return {}
+
+
+__all__ = ["CredentialExtractionAgent"]
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.
@@ -39,9 +48,9 @@ class CredentialExtractionAgent(
     CryptoMixin,
     DataParsingMixin
 ):
-"""
-Agent for extracting credentials using Windows-specific techniques.""
-def __init__(self, **kwargs: Any) -> None:
+    """Agent for extracting credentials using Windows-specific techniques."""
+
+    def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("CredentialExtractionAgent is only supported on Windows")
         super().__init__(**kwargs)

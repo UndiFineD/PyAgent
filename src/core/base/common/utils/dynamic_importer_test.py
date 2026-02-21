@@ -12,15 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-try:
-    import importlib
-"""
-except ImportError:
-
-"""
 import importlib
-
-
 
 try:
     from core.base.common.utils.dynamic_importer import (
@@ -78,4 +70,3 @@ def test_dynamic_importer_symbols_basic():
     assert callable(is_module_available)
     assert callable(get_module_version)
     assert callable(require_module)
-

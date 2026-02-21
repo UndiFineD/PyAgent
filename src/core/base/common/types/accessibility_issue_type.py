@@ -14,26 +14,16 @@
 # limitations under the License.
 
 
-"""
-"""
-Accessibility issue types used across tests and types modules.""
+"""Accessibility issue type definitions (parser-safe).
 
+This module provides a small Enum used by tests and other modules.
 """
+from __future__ import annotations
+
 from enum import Enum
 
-try:
-    from .core.base.lifecycle.version import VERSION
-except Exception:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
-
-class AccessibilityIssueType(Enum):
-"""
-Parser-safe AccessibilityIssueType enum.""
-MISSING_ALT_TEXT = "missing_alt_text"
+class AccessibilityIssueType(str, Enum):
+    MISSING_ALT_TEXT = "missing_alt_text"
     LOW_COLOR_CONTRAST = "low_color_contrast"
     MISSING_LABEL = "missing_label"
     KEYBOARD_NAVIGATION = "keyboard_navigation"

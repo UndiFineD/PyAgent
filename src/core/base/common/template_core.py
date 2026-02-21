@@ -1,28 +1,8 @@
 #!/usr/bin/env python3
+"""Template core - minimal parser-safe implementation."""
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""
-"""
-Unified Template Core for PyAgent.
-Handles variable substitution, template registration, and versioning.
-"""
-
-"""
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 try:
     import rust_core as rc  # type: ignore
@@ -33,52 +13,38 @@ from .base_core import BaseCore
 
 
 class TemplateCore(BaseCore):
-"""
-Standard implementation for manage structured templates.
-    Supports variable substitution using {{variable}} or [variable] syntax.
-"""
-def __init__(self) -> None:
-"""
-Initialize the template registry.""
-super().__init__()
+    """Standard implementation for managing structured templates."""
+
+    def __init__(self) -> None:
+        super().__init__()
         self.templates: Dict[str, str] = {
             "python_full": "Python code template: [code]",
             "improvement": "Suggested improvement: [description]",
-            "report": "Analysis report for [file]: [content]"
+            "report": "Analysis report for [file]: [content]",
         }
 
-
     def register_template(self, name: str, content: str) -> None:
-"""
-Adds a new template to the registry.""
-self.templates[name] = content
+        """Adds a new template to the registry."""
+        self.templates[name] = content
 
-
-    def get_template(self, name: str) -> str | None:
-"""
-Retrieves a template by name.""
-return self.templates.get(name)
-
+    def get_template(self, name: str) -> Optional[str]:
+        """Retrieves a template by name."""
+        return self.templates.get(name)
 
     def apply_template(self, name: str, context: Dict[str, Any]) -> str:
-"""
-Applies context variables to a template.""
-if name not in self.templates:
+        """Applies context variables to a template."""
+        if name not in self.templates:
             return ""
         content = self.templates[name]
-        # Try Rust acceleration for high-performance substitution
         if rc and hasattr(rc, "apply_template_rust"):
-            # Convert context to string dict
             str_context = {k: str(v) for k, v in context.items()}
-            return rc.apply_template_rust(content, str_context)  # pylint: disable=no-member
-        # Python fallback
+            return rc.apply_template_rust(content, str_context)  # type: ignore
         for key, value in context.items():
             content = content.replace(f"{{{{{key}}}}}", str(value))
             content = content.replace(f"[{key}]", str(value))
         return content
 
-
     def list_templates(self) -> List[str]:
-        ""
-Returns list of registered template names.""
-return list(self.templates.keys())
+        """Returns list of registered template names."""
+        return list(self.templates.keys())
+

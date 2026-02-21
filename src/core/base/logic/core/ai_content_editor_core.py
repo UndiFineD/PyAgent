@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""Minimal stub for ai_content_editor_core used during repairs."""
+
+from __future__ import annotations
+
+
+class AIContentEditorCore:
+    """Repair-time stub of AIContentEditorCore."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
+__all__ = ["AIContentEditorCore"]
+
+#!/usr/bin/env python3
 """
 Parser-safe stub: AI content editor core (conservative).
 

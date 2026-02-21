@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-""
-Minimal, parser-safe Session Control Core used for tests.""
+"""Session Control Core - minimal parser-safe implementation."""
+from __future__ import annotations
+
 import enum
 import json
 from pathlib import Path

@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""Minimal stub for ai_talking_head_core used during repairs."""
+
+from __future__ import annotations
+
+
+class AITalkingHeadCore:
+    """Repair-time stub of AITalkingHeadCore."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
+__all__ = ["AITalkingHeadCore"]
+
+#!/usr/bin/env python3
 """
 Parser-safe stub: AITalkingHead core (conservative).
 

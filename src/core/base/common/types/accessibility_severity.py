@@ -14,26 +14,14 @@
 # limitations under the License.
 
 
-"""
-"""
-Severity levels for accessibility issues.""
+"""Accessibility severity levels (parser-safe enum)."""
+from __future__ import annotations
 
-"""
-from enum import Enum
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except Exception:
-    from src.core.base.lifecycle.version import VERSION
+from enum import IntEnum
 
 
-__version__ = VERSION
-
-
-class AccessibilitySeverity(Enum):
-"""
-Parser-safe AccessibilitySeverity enum.""
-CRITICAL = 4
+class AccessibilitySeverity(IntEnum):
+    CRITICAL = 4
     SERIOUS = 3
     MODERATE = 2
     MINOR = 1

@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""Minimal stub for ai_security_validation_core used during repairs."""
+
+from __future__ import annotations
+
+
+class AISecurityValidationCore:
+    """Repair-time stub of AISecurityValidationCore."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
+__all__ = ["AISecurityValidationCore"]
+
+#!/usr/bin/env python3
 """
 Parser-safe stub: AI security validation core (conservative).
 

@@ -14,20 +14,10 @@
 # limitations under the License.
 
 
-"""
-"""
-Code metrics dataclass used by tests and analysis tools.""
+"""Code metrics dataclass used by tests and analysis tools."""
+from __future__ import annotations
 
-""
 from dataclasses import dataclass
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except Exception:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
 
 
 @dataclass

@@ -1,3 +1,6 @@
+Corrupted content saved prior to automated repair.
+Original file contained mixed prose, malformed code fragments, and incomplete
+docstrings which prevented parsing. Backup created by automated repair tool.
 #!/usr/bin/env python3
 
 

@@ -14,9 +14,7 @@
 
 
 """
-"""
-Unified code analysis and AST inspection core.""
-
+Unified code analysis and AST inspection core.
 """
 import ast
 import re
@@ -31,19 +29,84 @@ except ImportError:
 
 
 class AnalysisCore:
-"""
-Standardized tools regarding analyzing Python source code without execution.
-"""
+    """
+    Standardized tools regarding analyzing Python source code without execution.
+    """
+
     @staticmethod
     def calculate_complexity(source: str) -> int:
-"""
-Calculate cyclomatic complexity (Rust accelerated).""
-if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member
+        """
+        Calculate cyclomatic complexity (Rust accelerated)."""
+        if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member
             try:
                 # pylint: disable=no-member
                 return rc.calculate_complexity_rust(source)  # type: ignore
             except Exception:  # pylint: disable=broad-exception-caught, unused-variable
-                pass
+                return {}
+
+            @staticmethod
+            def calculate_complexity(source: str) -> int:
+                """Calculate cyclomatic complexity (Rust accelerated)."""
+                if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member
+                    try:
+                        # pylint: disable=no-member
+                        return rc.calculate_complexity_rust(source)  # type: ignore
+                    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                        pass
+                # Fallback to simple count regarding control flow keywords functionally
+                keywords = ["if", "for", "while", "except", "with", "and", "or"]
+                def count_keyword(kw: str) -> int:
+                    return len(re.findall(rf"\b{kw}\b", source))
+                return 1 + sum(map(count_keyword, keywords))
+
+            @staticmethod
+            def get_imports(source_or_path: str | Path) -> List[str]:  # pylint: disable=too-many-branches
+                """Extract all top-level imports from source or a file (Rust accelerated)."""
+                if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
+                    try:
+                        if isinstance(source_or_path, Path):
+                            content = source_or_path.read_text(encoding="utf-8")
+                            # pylint: disable=no-member
+                            return rc.get_imports_rust(content)  # type: ignore
+                        # pylint: disable=no-member
+                        return rc.get_imports_rust(source_or_path)  # type: ignore
+                    except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                        pass
+
+                try:
+                    if isinstance(source_or_path, Path):
+                        tree = ast.parse(source_or_path.read_text(encoding="utf-8"), feature_version=(3, 11))
+                    else:
+                        tree = ast.parse(source_or_path, feature_version=(3, 11))
+                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                    return []
+
+                # Extract imports functionally regarding AST nodes
+
+                def _get_node_imports(node):
+                    if isinstance(node, ast.Import):
+                        return list(map(lambda alias: alias.name, node.names))
+                    if isinstance(node, ast.ImportFrom) and node.module:
+                        return [node.module]
+                    return []
+
+                import_lists = map(_get_node_imports, ast.walk(tree))
+
+                from itertools import chain
+                flat_imports = list(chain.from_iterable(import_lists))
+
+                # Unique imports in order functionally
+                seen: Set[str] = set()
+
+                def _is_new(imp: str) -> bool:
+                    if imp not in seen:
+                        seen.add(imp)
+                        return True
+                    return False
+
+                return list(filter(_is_new, flat_imports))
+
+        __all__ = ["AnalysisCore"]
         # Fallback to simple count regarding control flow keywords functionally
         keywords = ["if", "for", "while", "except", "with", "and", "or"]
         def count_keyword(kw: str) -> int:
@@ -52,9 +115,10 @@ if rc and hasattr(rc, "calculate_complexity_rust"):  # pylint: disable=no-member
 
     @staticmethod
     def get_imports(source_or_path: str | Path) -> List[str]:  # pylint: disable=too-many-branches
-"""
-Extract all top-level imports from source or a file (Rust accelerated).""
-if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
+        """
+        Extract all top-level imports from source or a file (Rust accelerated).
+        """
+        if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
             try:
                 if isinstance(source_or_path, Path):
                     content = source_or_path.read_text(encoding="utf-8")
@@ -77,9 +141,9 @@ if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
 
         def _get_node_imports(node):
             if isinstance(node, ast.Import):
-            return list(map(lambda alias: alias.name, node.names))
+                return list(map(lambda alias: alias.name, node.names))
             if isinstance(node, ast.ImportFrom) and node.module:
-            return [node.module]
+                return [node.module]
             return []
 
             import_lists = map(_get_node_imports, ast.walk(tree))
@@ -100,17 +164,19 @@ if rc and hasattr(rc, "get_imports_rust"):  # pylint: disable=no-member
 
     @staticmethod
     def is_pytest_file(path: Path) -> bool:
-"""
-Heuristic check for pytest files.""
-return path.name.startswith("test_") and path.name.endswith(".py")
+        """
+        Heuristic check for pytest files."""
+        return path.name.startswith("test_") and path.name.endswith(".py")
+    
     @staticmethod
     def has_main_block(source: str) -> bool:
-"""
-Detect if 'if __name__ == "__main__":' exists.""
-return bool(re.search(r'if\s+__name__\s*==\s*["\']__main__["\']\s*:', source))
+        """Detect if 'if __name__ == "__main__":' exists."""
+        return bool(re.search(r'if\s+__name__\s*==\s*["\']__main__["\']\s*:', source))
+
+
     @staticmethod
     def detect_library_usage(source: str, library_name: str) -> bool:
-"""
-Check if a library is likely used in the source.""
-# Simple string check for now, can be expanded to AST check
+        """
+        Check if a library is likely used in the source."""
+        # Simple string check for now, can be expanded to AST check
         return library_name in source

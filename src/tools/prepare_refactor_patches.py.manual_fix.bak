@@ -1,4 +1,8 @@
 #!/usr/bin/env python3
+"""Backup of prepare_refactor_patches.py before automated repair."""
+
+<original file backed up>
+#!/usr/bin/env python3
 
 
 

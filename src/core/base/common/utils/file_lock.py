@@ -1,62 +1,34 @@
 #!/usr/bin/env python3
+"""Simple file lock context manager used in tests and repair runs."""
+
 from __future__ import annotations
-
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+import os
+import time
+from contextlib import contextmanager
+from typing import Iterator
 
 
-"""
-"""
-Simple file lock dataclass used in tests.
+@contextmanager
+def file_lock(path: str, timeout: float = 5.0, poll: float = 0.05) -> Iterator[None]:
+    """Acquire a simple filesystem lock by creating a .lock file.
 
-"""
-This lightweight implementation avoids external dependencies and provides
-the minimal fields needed by the test-suite.
-"""
-try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib import Path
-
-try:
-    from typing import Optional
-except ImportError:
-    from typing import Optional
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
-
-@dataclass
-class FileLock:
-    ""
-File lock representation.""
-file_path: Path
-    lock_type: str
-    owner: str
-    acquired_at: float
-    expires_at: Optional[float] = None
-
-
-__all__ = ["FileLock"]
+    This is intentionally minimal and not suitable for production use.
+    """
+    lockfile = f"{path}.lock"
+    start = time.time()
+    while True:
+        try:
+            fd = os.open(lockfile, os.O_CREAT | os.O_EXCL | os.O_RDWR)
+            os.close(fd)
+            break
+        except FileExistsError:
+            if time.time() - start > timeout:
+                raise TimeoutError(f"Timeout acquiring lock for {path}")
+            time.sleep(poll)
+    try:
+        yield
+    finally:
+        try:
+            os.remove(lockfile)
+        except FileNotFoundError:
+            pass

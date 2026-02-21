@@ -39,9 +39,14 @@ V = TypeVar("V")
 
 
 class LazyDict(dict):
-"""
-A very small LazyDict: values can be callables evaluated on first access.""
-def __init__(self, factory: Dict[str, Callable[[], V]] | None = None) -> None:
+    """A very small LazyDict: values can be callables evaluated on first access.
+
+    Example:
+        ld = LazyDict({'x': lambda: expensive()})
+        val = ld['x']  # factory runs once
+    """
+
+    def __init__(self, factory: Dict[str, Callable[[], V]] | None = None) -> None:
         super().__init__()
         self._factory = dict(factory or {})
         self._cache: Dict[str, V] = {}
@@ -56,14 +61,13 @@ def __init__(self, factory: Dict[str, Callable[[], V]] | None = None) -> None:
         return super().__getitem__(key)
 
     def register(self, key: str, factory: Callable[[], V]) -> None:
-"""
-Register a factory function for lazy evaluation of a key.
+        """Register a factory function for lazy evaluation of a key.
 
         Args:
             key: The dictionary key to register.
             factory: A callable that returns the value for this key.
-        ""
-self._factory[key] = factory
+        """
+        self._factory[key] = factory
         self._cache.pop(key, None)
 
 

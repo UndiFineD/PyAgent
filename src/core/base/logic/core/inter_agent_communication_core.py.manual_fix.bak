@@ -1,4 +1,34 @@
 #!/usr/bin/env python3
+"""Backup of inter_agent_communication_core.py before automated repair."""
+
+#!/usr/bin/env python3
+"""Minimal inter-agent communication core stub for repairs."""
+
+from __future__ import annotations
+
+
+class InterAgentCommunicationCore:
+    """Repair-time placeholder for inter-agent communication."""
+
+    def send(self, target: str, msg: str) -> None:
+        pass
+
+
+__all__ = ["InterAgentCommunicationCore"]
+
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License")
+# you may not use this file except in compliance with the License.
+
+"""
+Inter-Agent Communication Core
+
+Implements A2A (Agent2Agent) protocol for secure, structured communication between agents.
+"""
+
+<original file truncated for backup>
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.

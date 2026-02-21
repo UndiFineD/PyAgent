@@ -1,4 +1,25 @@
 #!/usr/bin/env python3
+"""Backup of lesson_core.py before automated repair."""
+
+#!/usr/bin/env python3
+"""Minimal lesson core stub used while repairs run."""
+
+from __future__ import annotations
+
+
+class LessonCore:
+    """Repair-time placeholder for lesson functionality."""
+
+    def create(self, title: str) -> dict:
+        return {"title": title}
+
+
+__all__ = ["LessonCore"]
+
+#!/usr/bin/env python3
+
+<original file truncated for backup>
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.

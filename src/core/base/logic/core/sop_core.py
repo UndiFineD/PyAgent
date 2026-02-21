@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-""
-Minimal, parser-safe SOP Core used for tests.""
+"""SOP Core - minimal, parser-safe implementation for tests."""
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from typing import List, Dict, Any, Optional
 
@@ -18,7 +19,7 @@ class SopManifest:
 
 
 class SopCore:
-    def __init__(self):
+    def __init__(self) -> None:
         self.manifests: Dict[str, SopManifest] = {}
 
     def register_manifest(self, manifest: SopManifest) -> None:

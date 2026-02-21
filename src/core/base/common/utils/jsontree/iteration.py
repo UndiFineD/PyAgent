@@ -1,54 +1,20 @@
-#!/usr/bin/env python3
+"""Minimal iteration helpers for the jsontree utilities."""
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+from __future__ import annotations
+from typing import Any, Iterable, Iterator, List, Tuple
 
 
-"""
-"""
-Parser-safe JSON tree iteration helpers (minimal).""
-
-"""
-from typing import Any, Generator, Iterable, Tuple
-
-
-JSONTree = Any
-
-
-def json_iter_leaves(value: JSONTree) -> Iterable[Any]:
-"""
-Yield each leaf in a nested JSON structure (depth-first).""
-if isinstance(value, dict):
-        for v in value.values():
-            yield from json_iter_leaves(v)
-    elif isinstance(value, (list, tuple)):
-        for v in value:
-            yield from json_iter_leaves(v)
-    else:
-        yield value
+def iter_items(obj: Any, path: List = None) -> Iterator[Tuple[List, Any]]:
+    """Yield (path, value) pairs for dicts and lists."""
+    if path is None:
+        path = []
+    yield path, obj
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            yield from iter_items(v, path + [k])
+    elif isinstance(obj, list):
+        for i, v in enumerate(obj):
+            yield from iter_items(v, path + [i])
 
 
-def json_iter_leaves_with_path(value: JSONTree, prefix: str = "") -> Generator[Tuple[str, Any], None, None]:
-    ""
-Yield (path, leaf) pairs. Minimal stable implementation.""
-if isinstance(value, dict):
-        for k, v in value.items():
-            new_prefix = f"{prefix}.{k}" if prefix else str(k)
-            yield from json_iter_leaves_with_path(v, new_prefix)
-    elif isinstance(value, (list, tuple)):
-        for i, v in enumerate(value):
-            new_prefix = f"{prefix}[{i}]" if prefix else f"[{i}]"
-            yield from json_iter_leaves_with_path(v, new_prefix)
-    else:
-        yield (prefix, value)
-
+__all__ = ["iter_items"]

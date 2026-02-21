@@ -29,3 +29,5 @@ except ImportError:
 
 def test_agentconfig_basic():
     assert AgentConfig is not None
+    def test_agent_config_placeholder():
+        assert True

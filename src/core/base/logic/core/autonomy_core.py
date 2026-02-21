@@ -17,12 +17,12 @@ class StandardAutonomyCore:
 
 
 class AutonomyCore(StandardAutonomyCore):
-"""
-Compatibility facade around the real Autonomy core.
+    """Compatibility facade around the real Autonomy core.
 
     This stub exposes the same class name so imports succeed during tests.
-"""
-def __init__(self, *args: Any, **kwargs: Any) -> None:
+    """
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
 
 

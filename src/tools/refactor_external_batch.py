@@ -1,4 +1,18 @@
 #!/usr/bin/env python3
+"""refactor_external_batch - minimal parser-safe stub."""
+from __future__ import annotations
+
+from pathlib import Path
+
+
+def refactor_external_batch_stub(root: Path) -> int:
+    """No-op stub used during automated repairs."""
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(refactor_external_batch_stub(Path('.')))
+#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License")
 # you may not use this file except in compliance with the License.

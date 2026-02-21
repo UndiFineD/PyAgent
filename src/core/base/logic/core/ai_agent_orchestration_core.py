@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""Minimal stub for ai_agent_orchestration_core used during repairs."""
+
+from __future__ import annotations
+
+
+class AIAgentOrchestrationCore:
+    """Repair-time stub of AIAgentOrchestrationCore."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
+__all__ = ["AIAgentOrchestrationCore"]
+
+#!/usr/bin/env python3
 """
 Parser-safe stub: AI agent orchestration core (conservative).
 

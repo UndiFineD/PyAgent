@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""Minimal stub for agent_card_core used during repairs."""
+
+from __future__ import annotations
+
+
+class AgentCardCore:
+    """Repair-time stub of AgentCardCore."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
+__all__ = ["AgentCardCore"]
+
+#!/usr/bin/env python3
 """
 Parser-safe stub: Agent Card core (conservative).
 

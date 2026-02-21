@@ -14,34 +14,20 @@
 # limitations under the License.
 
 
-"""
-"""
-Accessibility report dataclass used by tests and tools.""
+"""Accessibility report dataclass (minimal, parser-safe)."""
+from __future__ import annotations
 
-"""
 from dataclasses import dataclass, field
-from typing import List
-
-try:
-    from .accessibility_issue import AccessibilityIssue
-except Exception:
-    from src.core.base.common.types.accessibility_issue import AccessibilityIssue
-
-try:
-    from .wcag_level import WCAGLevel
-except Exception:
-    from src.core.base.common.types.wcag_level import WCAGLevel
+from typing import List, Optional
 
 
 @dataclass
 class AccessibilityReport:
-"""
-Parser-safe AccessibilityReport dataclass.""
-file_path: str
-    issues: list = field(default_factory=list)
+    file_path: str
+    issues: List[dict] = field(default_factory=list)
     total_elements: int = 0
-    wcag_level: object = None
+    wcag_level: Optional[str] = None
     compliance_score: float = 100.0
     critical_count: int = 0
     serious_count: int = 0
-    recommendations: list = field(default_factory=list)
+    recommendations: List[str] = field(default_factory=list)

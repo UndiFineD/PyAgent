@@ -14,20 +14,11 @@
 # limitations under the License.
 
 
-"""
-"""
-Changelog entry type used by tests and reporting tools.""
+"""Changelog entry type used by tests and reporting tools."""
+from __future__ import annotations
 
-""
 from dataclasses import dataclass, field
 from typing import List, Optional
-
-try:
-    from src.core.base.lifecycle.version import VERSION
-except Exception:
-    VERSION = "0.0"
-
-__version__ = VERSION
 
 
 @dataclass
@@ -36,8 +27,8 @@ class ChangelogEntry:
     description: str
     version: Optional[str] = None
     date: Optional[str] = None
-    priority: int = 0  # Higher=more important
-    severity: str = "normal"  # low, normal, high, critical
+    priority: int = 0
+    severity: str = "normal"
     tags: List[str] = field(default_factory=list)
     linked_issues: List[str] = field(default_factory=list)
     linked_commits: List[str] = field(default_factory=list)

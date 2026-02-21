@@ -14,56 +14,63 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Parser-safe minimal `KnowledgeCore`.
 
+Provides a conservative, importable fallback of the project's knowledge
+management core so dependent modules can import while full logic is
+restored incrementally.
 """
-Core logic for Sharded Knowledge Management.
-
-Handles trillion-parameter scale entity distribution.
-"""
-import hashlib
 from pathlib import Path
 from typing import Any, Dict, Optional
+import hashlib
+import logging
 
-from .base_core import BaseCore
+logger = logging.getLogger("pyagent.core")
 
 try:
-    import rust_core as rc  # pylint: disable=no-member
-except ImportError:
+    from .base_core import BaseCore
+except Exception:  # pragma: no cover - fallback
+    class BaseCore:  # type: ignore[no-redef]
+        def __init__(self, *_, **__):
+            self.repo_root = Path.cwd()
+
+try:
+    import rust_core as rc  # pylint: disable=no-name-in-module
+except Exception:
     rc = None
 
 
 class KnowledgeCore(BaseCore):
-"""
-Standardized sharded knowledge management.
+    """Lightweight knowledge sharding helper.
 
-        Uses Adler-32 or MD5 based sharding to map entity keys to shards.
-"""
-def __init__(self, shard_count: int = 1024, base_path: Optional[Path] = None) -> None:
+    This minimal implementation exposes `get_shard_id` and `index_entity`
+    with deterministic behavior but does not perform persistent storage.
+    """
+
+    def __init__(self, shard_count: int = 1024, base_path: Optional[Path] = None) -> None:
         super().__init__()
-        self.shard_count = shard_count
-        self.base_path = base_path
+        self.shard_count = int(shard_count)
+        self.base_path = Path(base_path) if base_path else Path(self.repo_root) / "data" / "knowledge"
 
     def get_shard_id(self, entity_key: str) -> int:
-"""
-Determine the shard index for a given entity key.
+        """Return a shard index for `entity_key`.
 
-                Prefers a Rust-accelerated Adler-32 shard function if available,
-                otherwise falls back to MD5-based modulus.
-"""
-if rc and hasattr(rc, "get_adler32_shard"):  # pylint: disable=no-member
-            return rc.get_adler32_shard(entity_key, self.shard_count)  # pylint: disable=no-member
+        Uses rust-accelerated function when available; otherwise MD5 modulus.
+        """
+        if rc and hasattr(rc, "get_adler32_shard"):  # pragma: no cover - optional
+            try:
+                return rc.get_adler32_shard(entity_key, self.shard_count)  # type: ignore[attr-defined]
+            except Exception:
+                logger.debug("rust shard failed, falling back to md5")
         hash_val = int(hashlib.md5(entity_key.encode()).hexdigest(), 16)
         return hash_val % self.shard_count
 
     def index_entity(self, entity: Dict[str, Any]) -> bool:
-"""
-Index an entity into the sharded knowledge store.
+        """Compute shard for entity and return True on success.
 
-                This function currently computes the target shard and returns True
-                to indicate success; actual persistence is implemented elsewhere.
-"""
-key = entity.get("id") or entity.get("name", "unknown")
-        # Determine shard placement (side effectable) but don't store here
-        _ = self.get_shard_id(key)
-        # TODO: write to shard storage
+        This conservative stub does not persist data; it merely provides a
+        stable interface for higher-level components and tests.
+        """
+        key = entity.get("id") or entity.get("name") or "unknown"
+        _ = self.get_shard_id(str(key))
         return True

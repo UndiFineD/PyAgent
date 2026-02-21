@@ -1,75 +1,25 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+"""Parser-safe `ModelSelectorCore` fallback.
 
-
+Provides a minimal, deterministic interface for selecting models so
+dependent modules can import during repair workflows.
 """
-"""
-Core logic for model selection and routing.
-"""
-try:
-
-"""
-import logging
-except ImportError:
-    import logging
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import Dict
-except ImportError:
-    from typing import Dict
+from typing import Dict, Optional
 
 
-try:
-    from .base_core import BaseCore
-except ImportError:
-    from .base_core import BaseCore
+class ModelSelectorCore:
+    """Conservative model selection helper."""
 
-try:
-    from .models import ModelConfig
-except ImportError:
-    from .models import ModelConfig
+    def __init__(self, default_model: str = "gpt-3.5-turbo") -> None:
+        self._models: Dict[str, str] = {"default": default_model}
 
+    def register(self, name: str, model_id: str) -> None:
+        self._models[name] = model_id
 
-
-@dataclass
-class ModelSelectorCore(BaseCore):
-"""
-Authoritative engine for selecting models based on agent type and task size.""
-models: Dict[str, ModelConfig] = field(
-        default_factory=lambda: {
-            "default": ModelConfig(model_id="gpt-3.5-turbo"),
-            "coding": ModelConfig(model_id="glm-4.7"),
-            "reasoning": ModelConfig(model_id="deepseek-reasoner"),
-        }
-    )
-
-    def __post_init__(self) -> None:
-        super().__init__()
-        if "default" not in self.models:
-            self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")
-
-    def select(self, agent_type: str, token_estimate: int = 0) -> ModelConfig:
-"""
-Selects the best model based on agent type and workload size.""
-if agent_type == "coding" and token_estimate > 4000:
-            logging.info("Routing high-token task (%d) to GLM-4.7.", token_estimate)
-            return self.models.get("coding", self.models["default"])
-        return self.models.get(agent_type, self.models["default"])
+    def select(self, agent_type: Optional[str] = None, token_estimate: int = 0) -> str:
+        """Select a model id given an agent type and optional token estimate."""
+        if agent_type == "coding" and token_estimate > 4000:
+            return self._models.get("coding", self._models["default"])
+        return self._models.get(agent_type or "default", self._models["default"])

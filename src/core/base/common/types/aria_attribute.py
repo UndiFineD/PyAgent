@@ -14,29 +14,17 @@
 # limitations under the License.
 
 
-"""
-"""
-ARIA attribute type used by accessibility checks and tests.""
-try:
+"""ARIA attribute dataclass used by accessibility checks (parser-safe)."""
+from __future__ import annotations
 
-"""
 from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import List, Optional
-except ImportError:
-    from typing import List, Optional
-
+from typing import List, Optional
 
 
 @dataclass
 class ARIAAttribute:
-"""
-Parser-safe ARIAAttribute dataclass.""
-name: str
+    name: str
     value: str = ""
     is_valid: bool = True
-    allowed_values: list = field(default_factory=list)
-    suggestion: str | None = None
+    allowed_values: List[str] = field(default_factory=list)
+    suggestion: Optional[str] = None

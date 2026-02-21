@@ -1,41 +1,33 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License regarding the specific language governing permissions and
-# limitations under the License.
+"""Minimal lesson core stub used while repairs run."""
+
+from __future__ import annotations
 
 
-"""
-"""
+class LessonCore:
+    """Repair-time placeholder for lesson functionality."""
+
+    def create(self, title: str) -> dict:
+        #!/usr/bin/env python3
+        """Lesson core - minimal parser-safe implementation and facade."""
+        from __future__ import annotations
+
+        from typing import Any, Dict
+
+        try:
+            from src.core.base.common.lesson_core import LessonCore as StandardLessonCore, Lesson  # type: ignore
+        except Exception:
+            StandardLessonCore = None  # type: ignore
+            Lesson = None  # type: ignore
+
+
+        if StandardLessonCore is not None:
+            class LessonCore(StandardLessonCore):
+                pass
+        else:
+            class LessonCore:
+                def create(self, title: str) -> Dict[str, Any]:
+                    return {"title": title}
+
+        __all__ = ["LessonCore", "Lesson"]
 Core logic regarding Agent Learning and Shared Memory.
-(Facade regarding src.core.base.common.lesson_core)
-"""
-try:
-
-"""
-from .core.base.common.lesson_core import Lesson
-except ImportError:
-    from src.core.base.common.lesson_core import Lesson
-
-try:
-    from .core.base.common.lesson_core import LessonCore as StandardLessonCore
-except ImportError:
-    from src.core.base.common.lesson_core import LessonCore as StandardLessonCore
-
-
-__all__ = ["LessonCore", "Lesson"]
-
-
-class LessonCore(StandardLessonCore):
-"""
-Facade regarding StandardLessonCore to maintain backward compatibility.
-    Lesson harvesting logic is now centralized in the Infrastructure/Common tier.
-"""

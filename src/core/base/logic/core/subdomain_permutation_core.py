@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-""
-Minimal, parser-safe Subdomain Permutation Core used for tests.""
+"""Subdomain permutation core - minimal, parser-safe stub for tests."""
+from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import List, Dict, Any
 
@@ -21,11 +22,11 @@ class PermutationResult:
 
 
 class SubdomainPermutationCore:
-    def __init__(self, config: PermutationConfig):
+    def __init__(self, config: PermutationConfig) -> None:
         self.config = config
 
     def generate(self, sub: str, suffix: str) -> List[str]:
-        results = []
+        results: List[str] = []
         for p in self.config.patterns:
             results.append(p.replace("{{sub}}", sub).replace("{{suffix}}", suffix))
         return results

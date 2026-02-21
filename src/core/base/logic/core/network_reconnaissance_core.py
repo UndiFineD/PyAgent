@@ -2,10 +2,12 @@
 """
 Minimal, parser-safe network reconnaissance core stub used for tests.
 
-This file provides small, well-formed replacements for the real (and
-potentially large) network reconnaissance implementation so tests can
-import the expected symbols without executing complex network logic.
+This module provides a small, well-formed replacement for the network
+reconnaissance implementation so tests can import the expected symbols
+without executing complex network logic.
 """
+from __future__ import annotations
+
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional, Set
@@ -40,9 +42,9 @@ class ReconnaissanceConfig:
 
 
 class NetworkReconnaissanceCore:
-    ""
-A small, test-friendly stub of the reconnaissance core.""
-def __init__(self, config: Optional[ReconnaissanceConfig] = None):
+    """A small, test-friendly stub of the reconnaissance core."""
+
+    def __init__(self, config: Optional[ReconnaissanceConfig] = None):
         self.config = config or ReconnaissanceConfig()
 
     async def initialize(self) -> None:

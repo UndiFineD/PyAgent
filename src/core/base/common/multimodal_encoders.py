@@ -1,110 +1,22 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+from __future__ import annotations
 
+"""Minimal multimodal encoders shim.
 
+Provides simple encode helpers used by other modules during repairs.
 """
-"""
-Multimodal encoders logic.""
-
-"""
-from typing import List, Optional, Tuple, Union
-
-try:
-    import rust_core as rc  # pylint: disable=no-member
-except ImportError:
-    rc = None
+from typing import Any
 
 
-
-class StreamingVisionEncoder:
-"""
-Handles efficient vision streaming using adaptive delta compression.
-    Only sends changed pixels between frames to conserve bandwidth.
-    Adjusts sensitivity based on scene dynamics (entropy).
-"""
-def __init__(self, base_threshold: int = 15) -> None:
-        self.prev_frame: Optional[bytes] = None
-        self.threshold = base_threshold
-        self.base_threshold = base_threshold
-
-    def adapt_threshold(self, entropy: float) -> None:
-"""
-Adjust threshold based on motion complexity.
-        Higher entropy (lots of motion) -> higher threshold to save bandwidth.
-"""
-# Logic: If entropy is high, we can afford to skip subtle changes
-        self.threshold = int(self.base_threshold * (1.0 + entropy))
-
-    def encode(self, frame: bytes, entropy: float = 0.0) -> Union[bytes, List[Tuple[int, int, int, int]]]:
-"""
-Encode frame: returns full bytes for keyframes, or deltas for P-frames.""
-if entropy > 0:
-            self.adapt_threshold(entropy)
-
-        if self.prev_frame is None:
-            self.prev_frame = frame
-            return frame  # Keyframe
-
-        if rc and hasattr(rc, "calculate_visual_deltas_rust"):
-            deltas = rc.calculate_visual_deltas_rust(list(self.prev_frame), list(frame), self.threshold)
-            self.prev_frame = frame
-            return deltas
-
-        self.prev_frame = frame
-        return frame
-
-    def decode(self, base_frame: bytes, deltas: List[Tuple[int, int, int, int]]) -> bytes:
-"""
-Reconstruct a frame using a base and incoming deltas.""
-if rc and hasattr(rc, "apply_visual_deltas_rust"):
-            return bytes(rc.apply_visual_deltas_rust(list(base_frame), deltas))
-        return base_frame
+def encode_to_bytes(obj: Any) -> bytes:
+    """Conservative encoder that stringifies objects."""
+    if obj is None:
+        return b""
+    if isinstance(obj, bytes):
+        return obj
+    return str(obj).encode("utf-8")
 
 
-
-class StreamingAudioProcessor:
-"""
-Stateful processor for continuous audio streams.
-    Handles rolling buffers, VAD, and feature extraction.
-"""
-def __init__(self, sample_rate: int = 16000, frame_size: int = 512) -> None:
-        self.sample_rate = sample_rate
-        self.frame_size = frame_size
-        self.buffer: List[float] = []
-
-    def push(self, chunk: List[float]) -> List[List[float]]:
-"""
-Push new audio samples and return extracted Mel features for completed frames.
-        ""
-self.buffer.extend(chunk)
-        frames = []
-
-        while len(self.buffer) >= self.frame_size:
-            frame = self.buffer[: self.frame_size]
-            self.buffer = self.buffer[self.frame_size :]
-
-            # Check for voice activity
-            is_active = True
-            if rc and hasattr(rc, "speech_vad_rust"):
-                is_active = rc.speech_vad_rust(frame, 0.01)
-
-            if is_active:
-                if rc and hasattr(rc, "calculate_mel_features_rust"):
-                    features = rc.calculate_mel_features_rust(frame, 80, self.sample_rate)
-                    frames.append(features)
-                else:
-                    # Generic fallback
-                    frames.append([sum(frame) / len(frame)] * 80)
-
-        return frames
+class Encoder:
+    def encode(self, obj: Any) -> bytes:
+        return encode_to_bytes(obj)

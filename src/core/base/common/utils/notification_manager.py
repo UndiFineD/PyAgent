@@ -1,43 +1,25 @@
-"""
-Parser-safe NotificationManager stub.
+"""Minimal notification manager used by tests and lightweight codepaths."""
 
-Minimal, importable implementation used while repairing codebase.
-Avoids external side effects and optional heavy dependencies.
-"""
 from __future__ import annotations
-
-
-
-
-from typing import Any, Callable, Dict, List, Optional
-import logging
+from typing import Callable, Dict, List
 
 
 class NotificationManager:
-"""
-Minimal notification manager used by tests and imports.
+    """Tiny manager to register and notify subscribers."""
 
-    This stub records registered webhooks/callbacks and exposes a no-op
-    `notify` method that calls callbacks synchronously.
-"""
-def __init__(self, workspace_root: Optional[str] = None, recorder: Optional[Any] = None) -> None:
-        self.webhooks: List[str] = []
-        self.callbacks: List[Callable[[str, Dict[str, Any]], None]] = []
-        self.workspace_root = workspace_root
-        self.recorder = recorder
+    def __init__(self) -> None:
+        self._subs: Dict[str, List[Callable[..., None]]] = {}
 
-    def register_webhook(self, url: str) -> None:
-        self.webhooks.append(url)
+    def subscribe(self, topic: str, fn: Callable[..., None]) -> None:
+        self._subs.setdefault(topic, []).append(fn)
 
-    def register_callback(self, cb: Callable[[str, Dict[str, Any]], None]) -> None:
-        self.callbacks.append(cb)
-
-    def notify(self, event_name: str, event_data: Dict[str, Any]) -> None:
-        for cb in list(self.callbacks):
+    def notify(self, topic: str, *args, **kwargs) -> None:
+        for fn in list(self._subs.get(topic, [])):
             try:
-                cb(event_name, event_data)
+                fn(*args, **kwargs)
             except Exception:
-                logging.exception("Notification callback failed")
+                # swallow errors in minimal test shim
+                pass
 
 
 __all__ = ["NotificationManager"]

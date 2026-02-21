@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""Minimal stub for advanced_web_scanning_core used during repairs."""
+
+from __future__ import annotations
+
+
+class AdvancedWebScanningCore:
+    """Repair-time stub of AdvancedWebScanningCore."""
+
+    def __init__(self, *args, **kwargs) -> None:
+        pass
+
+
+__all__ = ["AdvancedWebScanningCore"]
+
+#!/usr/bin/env python3
 """
 Parser-safe stub: Advanced web scanning core (conservative).
 
