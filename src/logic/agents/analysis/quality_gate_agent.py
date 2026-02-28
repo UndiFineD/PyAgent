@@ -1,47 +1,22 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# Quality Gate Agent - Enforces quality gates and release validation
+"""Agent specializing in automated quality gates and release validation."""
 
-# DATE: 2026-02-13
-# AUTHOR: Keimpe de Jong
-USAGE:
-"""
-- Instantiate with the path to this file (or the agent's file path): agent = QualityGateAgent(__file__)'- Call agent.check_gates() to run the summarized quality validations and receive a markdown-formatted report string.
-- Use validate_against_blueprint(result, blueprint) to perform a simple heuristic alignment check between a result and a blueprint document.
+from __future__ import annotations
 
-"""
-WHAT IT DOES:
-- Provides an agent class QualityGateAgent that extends BaseAgent and centralizes pre-release checks.
-- Runs a lightweight test gate by checking for a pre-produced test_results.txt under the repository root and records failures or absence of results.
-- Inspects an agent telemetry file (.agent_telemetry.json) for recent execution errors as a reliability/security gate.
-- Produces a Markdown report summarizing gates and returns "DEPLOYMENT BLOCKED" messaging when any gate fails; otherwise returns "READY FOR RELEASE"."- Includes a simple blueprint validation helper (validate_against_blueprint) that matches blueprint "Primary Objective" lines against result text."- Uses internal recording (_record) and a configurable system prompt designed to protect the production branch.
-
-WHAT IT SHOULD DO BETTER:
-- Execute real, reproducible test and coverage runs (invoke pytest on tests/ and capture structured results) rather than relying on the presence of test_results.txt; optionally support coverage thresholds and fail the gate if coverage < configured minimum.
-- Integrate static analysis and lint gates (e.g., flake8/pylint), dependency vulnerability scanning (e.g., safety or SCA), and SAST/secret-scanning outputs into the consolidated report.
-- Make gate thresholds, telemetry paths, and check selectors configurable via agent configuration (CLI args, env vars, or a blueprint file) instead of hard-coded file names and heuristics.
-- Replace synchronous subprocess calls with asyncio-friendly execution for non-blocking orchestration and better integration in larger fleets.
-- Improve telemetric parsing to include severity levels, historical trends, and per-check provenance; add stronger error handling and retry semantics for transient failures.
-- Add unit and integration tests for the agent's logic, and provide detailed logging with structured JSON output for downstream aggregation.'
-FILE CONTENT SUMMARY:
-# Agent specializing in automated quality gates and release validation.
-"""
 import json
 import logging
 import subprocess
@@ -53,168 +28,112 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 
-
 class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-"""
-Enforces thresholds for code quality, test coverage, and security before deployment.
+    """Enforces thresholds for code quality, test coverage, and security before deployment."""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
         self._system_prompt = (
-#             "You are the Quality Gate Agent."#             "Your role is to protect the production branch by verifying that all quality gates are green."#             "Scan for: Test failures, low coverage, linting errors, and high-severity security issues."#             "If any gate is red, output 'DEPLOYMENT BLOCKED'."'        )
+            "You are the Quality Gate Agent. "
+            "Your role is to protect the production branch by verifying that all quality gates are green. "
+            "Scan for: Test failures, low coverage, linting errors, and high-severity security issues. "
+            "If any gate is red, output 'DEPLOYMENT BLOCKED'."
+        )
 
     def _get_default_content(self) -> str:
-"""
-return "# Quality Gate Log\\n\\n## Status\\nIdle.\\n
+        return "# Quality Gate Log\n\n## Status\nIdle.\n"
+
     def check_gates(self) -> str:
-"""
-Executes a full suite of quality checks.        report = ["# Quality Gate Validation Report\\n"]"        blocked = False
+        """Executes a full suite of quality checks."""
+        report = ["# Quality Gate Validation Report\n"]
+        blocked = False
 
         # 1. Test Gate
         try:
-            logging.info("Quality Gate: Running Pytest...")"            # Use sys.executable to be robust
+            logging.info("Quality Gate: Running Pytest...")
+            # Use sys.executable to be robust
             import sys
 
-            subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True, check=False)"            # Phase 108: Record validation
+            subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True, check=False)
+            # Phase 108: Record validation
             self._record("check_gates", "Initiated", provider="Internal", model="Gatekeeper")
-            # In a real scenario, we'd run: ["python", "-m", "pytest", "tests/"]"'            # To keep this fast for the dashboard, we check if test_results.txt exists
-#             test_results = self.workspace_root / "test_results.txt"            if test_results.exists():
+
+            # In a real scenario, we'd run: ["python", "-m", "pytest", "tests/"]
+            # To keep this fast for the dashboard, we check if test_results.txt exists
+            test_results = self.workspace_root / "test_results.txt"
+            if test_results.exists():
                 content = test_results.read_text()
-                if "FAILED" in content:"                    report.append("-  **Tests**: FAILED items detected in test_results.txt")"                    blocked = True
+                if "FAILED" in content:
+                    report.append("- Γ¥î **Tests**: FAILED items detected in test_results.txt")
+                    blocked = True
                 else:
-                    report.append("-  **Tests**: All tests passing.")"            else:
-                report.append("- ️ **Tests**: No test_results.txt found. Run tests first.")"        except (subprocess.SubprocessError, RuntimeError, OSError) as e:
-            report.append(f"-  **Tests**: Error running test suites: {e}")"            blocked = True
+                    report.append("- Γ£à **Tests**: All tests passing.")
+            else:
+                report.append("- ΓÜá∩╕Å **Tests**: No test_results.txt found. Run tests first.")
+        except (subprocess.SubprocessError, RuntimeError, OSError) as e:
+            report.append(f"- Γ¥î **Tests**: Error running test suites: {e}")
+            blocked = True
 
         # 2. Security Gate
-        # Since we are an agent, we can't easily 'summon' another unless we are the FleetManager,'        # but we can look for the output of others.
-#         telemetry_file = self.workspace_root / ".agent_telemetry.json"        if telemetry_file.exists():
+        # Since we are an agent, we can't easily 'summon' another unless we are the FleetManager,
+        # but we can look for the output of others.
+        telemetry_file = self.workspace_root / ".agent_telemetry.json"
+        if telemetry_file.exists():
             telemetry = json.loads(telemetry_file.read_text())
-            errors = [m for m in telemetry if m.get("status") == "error"]"            if errors:
-                report.append(f"-  **Reliability**: Found {len(errors)} execution errors in recent telemetry.")"                blocked = True
+            errors = [m for m in telemetry if m.get("status") == "error"]
+            if errors:
+                report.append(f"- Γ¥î **Reliability**: Found {len(errors)} execution errors in recent telemetry.")
+                blocked = True
             else:
-                report.append("-  **Reliability**: Zero execution errors in history.")
+                report.append("- Γ£à **Reliability**: Zero execution errors in history.")
+
         if blocked:
-            report.append("\\n##  DEPLOYMENT BLOCKED")"            report.append("Please resolve the issues above before attempting to release.")"        else:
-            report.append("\\n##  READY FOR RELEASE")"            report.append("All quality gates are currently green.")"
-        return "\\n".join(report)
+            report.append("\n## Γ¢ö DEPLOYMENT BLOCKED")
+            report.append("Please resolve the issues above before attempting to release.")
+        else:
+            report.append("\n## Γ£à READY FOR RELEASE")
+            report.append("All quality gates are currently green.")
+
+        return "\n".join(report)
+
     def validate_against_blueprint(self, result: str, blueprint: str) -> str:
-"""
-Verifies if the result aligns with the logical reasoning blueprint.        # Simple heuristic check: ensure key objectives from blueprint are mentioned in results
+        """Verifies if the result aligns with the logical reasoning blueprint."""
+        # Simple heuristic check: ensure key objectives from blueprint are mentioned in results
         objectives = [
-            line.replace("- **Primary Objective**: ", ")"            for line in blueprint.splitlines()
-            if "Primary Objective" in line"        ]
+            line.replace("- **Primary Objective**: ", "")
+            for line in blueprint.splitlines()
+            if "Primary Objective" in line
+        ]
 
         if not objectives:
-#             return "️ No clear objectives found in blueprint for validation."
+            return "ΓÜá∩╕Å No clear objectives found in blueprint for validation."
+
         matches = [obj for obj in objectives if obj.lower() in result.lower()]
         if len(matches) == len(objectives):
-            return " Result successfully aligns with the logical blueprint objecti"
+            return "Γ£à Result successfully aligns with the logical blueprint objectives."
 
-import json
-import logging
-import subprocess
-
-from src.core.base.common.base_utilities import as_tool, create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-
-class QualityGateAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-"""
-Enforces thresholds for code quality, test coverage, and security before deployment.
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self.workspace_root = self.file_path.parent.parent.parent
-        self._system_prompt = (
-#             "You are the Quality Gate Agent."#             "Your role is to protect the production branch by verifying that all quality gates are green."#             "Scan for: Test failures, low coverage, linting errors, and high-severity security issues."#             "If any gate is red, output 'DEPLOYMENT BLOCKED'."'        )
-
-    def _get_default_content(self) -> str:
-"""
-return "# Quality Gate Log\\n\\n## Status\\nIdle.\\n
-    def check_gates(self) -> str:
-"""
-Executes a full suite of quality checks.        report = ["# Quality Gate "Validation Report\\n"]"        blocked = False
-
-        # 1. Test Gate
-        try:
-            logging.info("Quality Gate: Running Pytest...")"            # Use sys.executable to be robust
-            import sys
-
-            subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True, check=False)"            # Phase 108: Record validation
-            self._record("check_gates", "Initiated", provider="Internal", model="Gatekeeper")
-            # In a real scenario, we'd run: ["python", "-m", "pytest", "tests/"]"'            # To keep this fast for the dashboard, we check if test_results.txt exists
-#             test_results = self.workspace_root / "test_results.txt"            if test_results.exists():
-                content = test_results.read_text()
-                if "FAILED" in content:"                    report.append("-  **Tests**: FAILED items detected in test_results.txt")"                    blocked = True
-                else:
-                    report.append("-  **Tests**: All tests passing.")"            else:
-                report.append("- ️ **Tests**: No test_results.txt found. Run tests first.")"        except (subprocess.SubprocessError, RuntimeError, OSError) as e:
-            report.append(f"-  **Tests**: Error running test suites: {e}")"            blocked = True
-
-        # 2. Security Gate
-        # Since we are an agent, we can't easily 'summon' another unless we are the FleetManager,'        # but we can look for the output of others.
-#         telemetry_file = self.workspace_root / ".agent_telemetry.json"        if telemetry_file.exists():
-            telemetry = json.loads(telemetry_file.read_text())
-            errors = [m for m in telemetry if m.get("status") == "error"]"            if errors:
-                report.append(f"-  **Reliability**: Found {len(errors)} execution errors in recent telemetry.")"                blocked = True
-            else:
-                report.append("-  **Reliability**: Zero execution errors in history.")
-        if blocked:
-            report.append("\\n##  DEPLOYMENT BLOCKED")"            report.append("Please resolve the issues above before attempting to release.")"        else:
-            report.append("\\n##  READY FOR RELEASE")"            report.append("All quality gates are currently green.")"
-        return "\\n".join(report)
-    def validate_against_blueprint(self, result: str, blueprint: str) -> str:
-"""
-Verifies if the result aligns with the logical reasoning blueprint.        # Simple heuristic check: ensure key objectives from blueprint "are mentioned in results"        objectives = [
-            line.replace("- **Primary Objective**: ", ")"            for line in blueprint.splitlines()
-            if "Primary Objective" in line"        ]
-
-        if not objectives:
-#             return "️ No clear objectives found in blueprint for validation."
-        matches = [obj for obj in objectives if obj.lower() in result.lower()]
-        if len(matches) == len(objectives):
-#             return " Result successfully aligns with the logical blueprint objectives."
         return (
-#             f" Alignment mismatch: Result did not clearly address"#             f"{len(objectives) - len(matches)} blueprint objectives."        )
+            f"Γ¥î Alignment mismatch: Result did not clearly address "
+            f"{len(objectives) - len(matches)} blueprint objectives."
+        )
 
     @as_tool
     def validate_release(self, current_result: str | None = None, reasoning_blueprint: str | None = None) -> str:
-"""
-High-level validation including blueprint alignment and gates.        report = [self.check_gates()]
+        """High-level validation including blueprint alignment and gates."""
+        report = [self.check_gates()]
 
         if current_result and reasoning_blueprint:
-            report.append("\\n## Blueprint Alignment Check")"            report.append(self.validate_against_blueprint(current_result, reasoning_blueprint))
+            report.append("\n## Blueprint Alignment Check")
+            report.append(self.validate_against_blueprint(current_result, reasoning_blueprint))
 
-        return "\\n".join(report)
+        return "\n".join(report)
+
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-#         "Perform a quality gate check."   "     return self.check_gates()"
+        """Perform a quality gate check."""
+        return self.check_gates()
 
-if __name__ == "__main__":"    main = create_main_function(QualityGateAgent, "QualityGate Agent", "Task (e.g. 'check')")"'    main()
 
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
+if __name__ == "__main__":
+    main = create_main_function(QualityGateAgent, "QualityGate Agent", "Task (e.g. 'check')")
+    main()

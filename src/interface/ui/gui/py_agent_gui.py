@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""
+GUI Agent: Provides a graphical user interface for PyAgent.
+"""
+
+from __future__ import annotations
+
+import sys
+import tkinter as tk
+from pathlib import Path
+
+from src.core.base.lifecycle.version import VERSION
+from src.interface.ui.gui.main_app import PyAgentGUI
+
+# Ensure project root is in path for modular imports
+# Path(__file__) is src/interface/ui/gui/PyAgent_gui.py
+project_root = Path(__file__).resolve().parent.parent.parent.parent.parent
+if str(project_root) not in sys.path:
+    sys.path.insert(0, str(project_root))
+
+__version__ = VERSION
+
+
+def main() -> None:
+    root = tk.Tk()
+    PyAgentGUI(root)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
