@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -22,62 +17,53 @@ from __future__ import annotations
 """
 MCP-related data models and enums.
 """
-try:
 
-"""
+from __future__ import annotations
+
 import json
-except ImportError:
-    import json
-
-try:
-    import time
-except ImportError:
-    import time
-
-try:
-    import uuid
-except ImportError:
-    import uuid
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
-try:
-    from typing import Any, Dict, List, Optional, Set
-except ImportError:
-    from typing import Any, Dict, List, Optional, Set
-
-
+import time
+import uuid
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional, Set
 
 
 class MCPServerType(Enum):
-"""
-MCP server connection types.
-    SSE = "sse"  # Server-Sent Events"    STDIO = "stdio"  # Standard I/O"    WEBSOCKET = "websocket""    HTTP = "http""    LOCAL = "local"  # In-process
+    """MCP server connection types."""
+
+    SSE = "sse"  # Server-Sent Events
+    STDIO = "stdio"  # Standard I/O
+    WEBSOCKET = "websocket"
+    HTTP = "http"
+    LOCAL = "local"  # In-process
 
 
 class ToolStatus(Enum):
-"""
-Tool execution status.
-    PENDING = "pending""    RUNNING = "running""    COMPLETED = "completed""    FAILED = "failed""    CANCELLED = "cancelled""    TIMEOUT = "timeout""
+    """Tool execution status."""
+
+    PENDING = "pending"
+    RUNNING = "running"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+    TIMEOUT = "timeout"
 
 
 class SessionState(Enum):
-"""
-MCP session state.
-    DISCONNECTED = "disconnected""    CONNECTING = "connecting""    CONNECTED = "connected""    READY = "ready""    ERROR = "error""    CLOSING = "closing""
+    """MCP session state."""
+
+    DISCONNECTED = "disconnected"
+    CONNECTING = "connecting"
+    CONNECTED = "connected"
+    READY = "ready"
+    ERROR = "error"
+    CLOSING = "closing"
+
 
 @dataclass
 class MCPServerConfig:
-"""
-MCP server configuration.
+    """MCP server configuration."""
+
     name: str
     server_type: MCPServerType
     url: Optional[str] = None
@@ -92,13 +78,19 @@ MCP server configuration.
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "name": self.name,"            "server_type": self.server_type.value,"            "url": self.url,"            "command": self.command,"            "args": self.args,"            "timeout_seconds": self.timeout_seconds,"        }
+            "name": self.name,
+            "server_type": self.server_type.value,
+            "url": self.url,
+            "command": self.command,
+            "args": self.args,
+            "timeout_seconds": self.timeout_seconds,
+        }
 
 
 @dataclass
 class ToolSchema:
-"""
-Tool schema definition.
+    """Tool schema definition."""
+
     name: str
     description: str
     parameters: Dict[str, Any] = field(default_factory=dict)
@@ -110,27 +102,41 @@ Tool schema definition.
     is_async: bool = True
 
     def to_openai_format(self) -> Dict[str, Any]:
-"""
-Convert to OpenAI tool format.        return {
-            "type": "function","            "function": {"                "name": self.full_name,"                "description": self.description,"                "parameters": {"                    "type": "object","                    "properties": self.parameters,"                    "required": self.required,"                },
+        """Convert to OpenAI tool format."""
+        return {
+            "type": "function",
+            "function": {
+                "name": self.full_name,
+                "description": self.description,
+                "parameters": {
+                    "type": "object",
+                    "properties": self.parameters,
+                    "required": self.required,
+                },
             },
         }
 
     @property
     def full_name(self) -> str:
-"""
-Get namespaced tool name.        if self.namespace:
-            return f"{self.namespace}__{self.name}""        return self.name
+        """Get namespaced tool name."""
+        if self.namespace:
+            return f"{self.namespace}__{self.name}"
+        return self.name
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "name": self.name,"            "description": self.description,"            "parameters": self.parameters,"            "required": self.required,"            "namespace": self.namespace,"        }
+            "name": self.name,
+            "description": self.description,
+            "parameters": self.parameters,
+            "required": self.required,
+            "namespace": self.namespace,
+        }
 
 
 @dataclass
 class ToolCall:
-"""
-Tool call request.
+    """Tool call request."""
+
     id: str
     name: str
     arguments: Dict[str, Any]
@@ -139,19 +145,24 @@ Tool call request.
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     @classmethod
-    def from_openai_format(cls, data: Dict[str, Any]) -> "ToolCall":"        """
-Parse from OpenAI format.        func = data.get("function", {})"        args = func.get("arguments", "{}")"        if isinstance(args, str):
+    def from_openai_format(cls, data: Dict[str, Any]) -> "ToolCall":
+        """Parse from OpenAI format."""
+        func = data.get("function", {})
+        args = func.get("arguments", "{}")
+        if isinstance(args, str):
             args = json.loads(args)
 
         return cls(
-            id=data.get("id", str(uuid.uuid4())),"            name=func.get("name", ""),"            arguments=args,
+            id=data.get("id", str(uuid.uuid4())),
+            name=func.get("name", ""),
+            arguments=args,
         )
 
 
 @dataclass
 class ToolResult:
-"""
-Tool execution result.
+    """Tool execution result."""
+
     call_id: str
     name: str
     status: ToolStatus
@@ -161,17 +172,21 @@ Tool execution result.
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_openai_format(self) -> Dict[str, Any]:
-"""
-Convert to OpenAI tool result format.        content = ""
-if self.status == ToolStatus.COMPLETED:
+        """Convert to OpenAI tool result format."""
+        content = ""
+        if self.status == ToolStatus.COMPLETED:
             if isinstance(self.result, str):
                 content = self.result
             else:
                 content = json.dumps(self.result)
         elif self.status == ToolStatus.FAILED:
             content = f"Error: {self.error}"
+
         return {
-            "role": "tool","            "tool_call_id": self.call_id,"            "content": content,"        }
+            "role": "tool",
+            "tool_call_id": self.call_id,
+            "content": content,
+        }
 
     @property
     def is_success(self) -> bool:
@@ -180,8 +195,8 @@ if self.status == ToolStatus.COMPLETED:
 
 @dataclass
 class MCPSession:
-"""
-MCP session information.
+    """MCP session information."""
+
     session_id: str
     server_name: str
     state: SessionState = SessionState.DISCONNECTED
@@ -201,31 +216,3 @@ MCP session information.
         if self.connected_at is None:
             return 0.0
         return time.time() - self.connected_at
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""
-
-"""

@@ -1,30 +1,27 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
 """
 CUDAGraphConfig.py - CUDA graph mode management and configuration.
 
-"""
-Inspired by vLLM's config/compilation.py. Provides CUDA graph capture'and replay management for optimized inference.
+Inspired by vLLM's config/compilation.py. Provides CUDA graph capture
+and replay management for optimized inference.
 
 Phase 29: Execution Context, Batching & Async Streaming
+"""
+
+from __future__ import annotations
 
 import logging
 import threading
@@ -43,11 +40,13 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 
-
 class CUDAGraphMode(Enum):
-        CUDA graph execution modes.
+    """
+    CUDA graph execution modes.
 
-    Based on vLLM's CUDAGraphMode enum.'    
+    Based on vLLM's CUDAGraphMode enum.
+    """
+
     NONE = 0  # No CUDA graphs, eager execution
     CAPTURE = 1  # Currently capturing a graph
     REPLAY = 2  # Replaying a captured graph
@@ -61,9 +60,12 @@ class CUDAGraphMode(Enum):
 
 @dataclass
 class CUDAGraphConfig:
-        Configuration for CUDA graph capture and replay.
+    """
+    Configuration for CUDA graph capture and replay.
 
-    Based on vLLM's compilation config patterns.'    
+    Based on vLLM's compilation config patterns.
+    """
+
     # Enable/disable graphs
     enabled: bool = True
 
@@ -97,9 +99,8 @@ class CUDAGraphConfig:
         batch_size: int,
         seq_len: int,
     ) -> bool:
-"""
-Check if CUDA graph should be used for given batch.        if not self.enabled:
-
+        """Check if CUDA graph should be used for given batch."""
+        if not self.enabled:
             return False
         if batch_size > self.max_capture_batch_size:
             return False
@@ -108,24 +109,36 @@ Check if CUDA graph should be used for given batch.        if not self.enabled:
         return True
 
     def get_padded_batch_size(self, batch_size: int) -> int:
-"""
-Get padded batch size for graph lookup.        for size in sorted(self.capture_sizes):
+        """Get padded batch size for graph lookup."""
+        for size in sorted(self.capture_sizes):
             if size >= batch_size:
                 return size
         return batch_size  # Fallback to exact size
 
     def to_dict(self) -> Dict[str, Any]:
-"""
-Convert to dictionary.        return {
-            "enabled": self.enabled,"            "max_capture_batch_size": self.max_capture_batch_size,"            "capture_sizes": self.capture_sizes,"            "max_capture_seq_len": self.max_capture_seq_len,"            "use_memory_pool": self.use_memory_pool,"            "memory_pool_size_mb": self.memory_pool_size_mb,"            "cudagraph_copy_inputs": self.cudagraph_copy_inputs,"            "warmup_iterations": self.warmup_iterations,"            "per_layer_graphs": self.per_layer_graphs,"            "debug_mode": self.debug_mode,"        }
+        """Convert to dictionary."""
+        return {
+            "enabled": self.enabled,
+            "max_capture_batch_size": self.max_capture_batch_size,
+            "capture_sizes": self.capture_sizes,
+            "max_capture_seq_len": self.max_capture_seq_len,
+            "use_memory_pool": self.use_memory_pool,
+            "memory_pool_size_mb": self.memory_pool_size_mb,
+            "cudagraph_copy_inputs": self.cudagraph_copy_inputs,
+            "warmup_iterations": self.warmup_iterations,
+            "per_layer_graphs": self.per_layer_graphs,
+            "debug_mode": self.debug_mode,
+        }
 
     @classmethod
-    def from_dict(cls, d: Dict[str, Any]) -> "CUDAGraphConfig":"        """
-Create from dictionary.        return cls(**d)
+    def from_dict(cls, d: Dict[str, Any]) -> "CUDAGraphConfig":
+        """Create from dictionary."""
+        return cls(**d)
 
     @classmethod
-    def disabled(cls) -> "CUDAGraphConfig":"        """
-Create a disabled config.        return cls(enabled=False)
+    def disabled(cls) -> "CUDAGraphConfig":
+        """Create a disabled config."""
+        return cls(enabled=False)
 
 
 # ============================================================================
@@ -135,10 +148,12 @@ Create a disabled config.        return cls(enabled=False)
 
 @dataclass
 class CUDAGraphEntry:
-        A captured CUDA graph entry.
+    """
+    A captured CUDA graph entry.
 
     Stores the graph and associated metadata.
-    
+    """
+
     # Key for lookup
     batch_size: int
     seq_len: int
@@ -146,7 +161,7 @@ class CUDAGraphEntry:
     # Graph (simulated - real impl uses torch.cuda.CUDAGraph)
     graph_id: int
 
-    # Input/output TODO Placeholders
+    # Input/output placeholders
     input_buffers: Dict[str, np.ndarray] = field(default_factory=dict)
     output_buffers: Dict[str, np.ndarray] = field(default_factory=dict)
 
@@ -156,12 +171,14 @@ class CUDAGraphEntry:
     total_replay_time_ms: float = 0.0
 
     def replay(self, inputs: Dict[str, np.ndarray]) -> Dict[str, np.ndarray]:
-                Replay the graph with given inputs.
+        """
+        Replay the graph with given inputs.
 
-        In real implementation, copies inputs to TODO Placeholders and replays.
-                start = time.perf_counter()
+        In real implementation, copies inputs to placeholders and replays.
+        """
+        start = time.perf_counter()
 
-        # Copy inputs to TODO Placeholders
+        # Copy inputs to placeholders
         for name, arr in inputs.items():
             if name in self.input_buffers:
                 np.copyto(self.input_buffers[name], arr)
@@ -178,13 +195,13 @@ class CUDAGraphEntry:
 
     @property
     def key(self) -> Tuple[int, int]:
-"""
-Get lookup key.        return (self.batch_size, self.seq_len)
+        """Get lookup key."""
+        return (self.batch_size, self.seq_len)
 
     @property
     def avg_replay_time_ms(self) -> float:
-"""
-Average replay time in milliseconds.        if self.replay_count == 0:
+        """Average replay time in milliseconds."""
+        if self.replay_count == 0:
             return 0.0
         return self.total_replay_time_ms / self.replay_count
 
@@ -194,12 +211,13 @@ Average replay time in milliseconds.        if self.replay_count == 0:
 # ============================================================================
 
 
-
 class CUDAGraphRegistry:
-        Registry for captured CUDA graphs.
+    """
+    Registry for captured CUDA graphs.
 
     Manages graph capture, storage, and lookup.
-    
+    """
+
     def __init__(self, config: Optional[CUDAGraphConfig] = None):
         self.config = config or CUDAGraphConfig()
         self._graphs: Dict[Tuple[int, int], CUDAGraphEntry] = {}
@@ -215,7 +233,8 @@ class CUDAGraphRegistry:
         input_shapes: Dict[str, Tuple[int, ...]],
         output_shapes: Dict[str, Tuple[int, ...]],
     ) -> CUDAGraphEntry:
-                Capture a new CUDA graph.
+        """
+        Capture a new CUDA graph.
 
         Args:
             batch_size: Batch size for the graph
@@ -226,7 +245,8 @@ class CUDAGraphRegistry:
 
         Returns:
             Captured graph entry
-                start = time.perf_counter()
+        """
+        start = time.perf_counter()
 
         # Allocate input/output buffers
         input_buffers = {name: np.zeros(shape, dtype=np.float32) for name, shape in input_shapes.items()}
@@ -260,7 +280,8 @@ class CUDAGraphRegistry:
             self._capture_count += 1
 
         logger.debug(
-            f"Captured CUDA graph {graph_id} for batch_size={batch_size}, seq_len={seq_len} in {elapsed_ms:.2f}ms""        )
+            f"Captured CUDA graph {graph_id} for batch_size={batch_size}, seq_len={seq_len} in {elapsed_ms:.2f}ms"
+        )
 
         return entry
 
@@ -269,8 +290,8 @@ class CUDAGraphRegistry:
         batch_size: int,
         seq_len: int,
     ) -> Optional[CUDAGraphEntry]:
-"""
-Get a captured graph for the given dimensions.        # Try exact match first
+        """Get a captured graph for the given dimensions."""
+        # Try exact match first
         key = (batch_size, seq_len)
         with self._lock:
             if key in self._graphs:
@@ -283,12 +304,12 @@ Get a captured graph for the given dimensions.        # Try exact match first
             return self._graphs.get(padded_key)
 
     def has(self, batch_size: int, seq_len: int) -> bool:
-"""
-Check if a graph exists.        return self.get(batch_size, seq_len) is not None
+        """Check if a graph exists."""
+        return self.get(batch_size, seq_len) is not None
 
     def remove(self, batch_size: int, seq_len: int) -> bool:
-"""
-Remove a graph from the registry.        key = (batch_size, seq_len)
+        """Remove a graph from the registry."""
+        key = (batch_size, seq_len)
         with self._lock:
             if key in self._graphs:
                 del self._graphs[key]
@@ -296,23 +317,34 @@ Remove a graph from the registry.        key = (batch_size, seq_len)
             return False
 
     def clear(self) -> None:
-"""
-Clear all captured graphs.        with self._lock:
+        """Clear all captured graphs."""
+        with self._lock:
             self._graphs.clear()
 
     @property
     def num_graphs(self) -> int:
-"""
-Number of captured graphs.        return len(self._graphs)
+        """Number of captured graphs."""
+        return len(self._graphs)
 
     def stats(self) -> Dict[str, Any]:
-"""
-Get registry statistics.        with self._lock:
+        """Get registry statistics."""
+        with self._lock:
             total_replays = sum(g.replay_count for g in self._graphs.values())
             total_replay_time = sum(g.total_replay_time_ms for g in self._graphs.values())
 
             return {
-                "num_graphs": len(self._graphs),"                "capture_count": self._capture_count,"                "total_replays": total_replays,"                "total_replay_time_ms": total_replay_time,"                "avg_replay_time_ms": total_replay_time / total_replays if total_replays > 0 else 0.0,"                "graphs": {"                    f"{g.batch_size}x{g.seq_len}": {"                        "graph_id": g.graph_id,"                        "capture_time_ms": g.capture_time_ms,"                        "replay_count": g.replay_count,"                        "avg_replay_time_ms": g.avg_replay_time_ms,"                    }
+                "num_graphs": len(self._graphs),
+                "capture_count": self._capture_count,
+                "total_replays": total_replays,
+                "total_replay_time_ms": total_replay_time,
+                "avg_replay_time_ms": total_replay_time / total_replays if total_replays > 0 else 0.0,
+                "graphs": {
+                    f"{g.batch_size}x{g.seq_len}": {
+                        "graph_id": g.graph_id,
+                        "capture_time_ms": g.capture_time_ms,
+                        "replay_count": g.replay_count,
+                        "avg_replay_time_ms": g.avg_replay_time_ms,
+                    }
                     for g in self._graphs.values()
                 },
             }
@@ -323,36 +355,37 @@ Get registry statistics.        with self._lock:
 # ============================================================================
 
 
-
 class CUDAGraphManager:
-        High-level manager for CUDA graph operations.
+    """
+    High-level manager for CUDA graph operations.
 
     Provides convenient interface for graph capture and replay.
-    
+    """
+
     def __init__(self, config: Optional[CUDAGraphConfig] = None):
         self.config = config or CUDAGraphConfig()
         self.registry = CUDAGraphRegistry(self.config)
         self._mode = CUDAGraphMode.NONE
         self._lock = threading.Lock()
 
-        @property
+    @property
     def mode(self) -> CUDAGraphMode:
-"""
-Current CUDA graph mode.        return self._mode
+        """Current CUDA graph mode."""
+        return self._mode
 
     @mode.setter
     def mode(self, value: CUDAGraphMode) -> None:
-"""
-Set CUDA graph mode.        with self._lock:
+        """Set CUDA graph mode."""
+        with self._lock:
             self._mode = value
 
     def is_enabled(self) -> bool:
-"""
-Check if CUDA graphs are enabled.        return self.config.enabled and self._mode != CUDAGraphMode.DISABLED
+        """Check if CUDA graphs are enabled."""
+        return self.config.enabled and self._mode != CUDAGraphMode.DISABLED
 
     def should_capture(self, batch_size: int, seq_len: int) -> bool:
-"""
-Check if we should capture a graph for given dimensions.        if not self.is_enabled():
+        """Check if we should capture a graph for given dimensions."""
+        if not self.is_enabled():
             return False
         if not self.config.should_use_cudagraph(batch_size, seq_len):
             return False
@@ -361,8 +394,8 @@ Check if we should capture a graph for given dimensions.        if not self.is_e
         return True
 
     def get_mode_for_batch(self, batch_size: int, seq_len: int) -> CUDAGraphMode:
-"""
-Get the appropriate mode for a batch.        if not self.is_enabled():
+        """Get the appropriate mode for a batch."""
+        if not self.is_enabled():
             return CUDAGraphMode.DISABLED
 
         if not self.config.should_use_cudagraph(batch_size, seq_len):
@@ -381,10 +414,12 @@ Get the appropriate mode for a batch.        if not self.is_enabled():
         input_shapes: Dict[str, Tuple[int, ...]],
         output_shapes: Dict[str, Tuple[int, ...]],
     ) -> Optional[CUDAGraphEntry]:
-                Capture a CUDA graph.
+        """
+        Capture a CUDA graph.
 
         Sets mode to CAPTURE during capture, then restores.
-                if not self.is_enabled():
+        """
+        if not self.is_enabled():
             return None
 
         old_mode = self._mode
@@ -406,10 +441,12 @@ Get the appropriate mode for a batch.        if not self.is_enabled():
         seq_len: int,
         inputs: Dict[str, np.ndarray],
     ) -> Optional[Dict[str, np.ndarray]]:
-                Replay a captured graph.
+        """
+        Replay a captured graph.
 
         Returns None if no graph found.
-                entry = self.registry.get(batch_size, seq_len)
+        """
+        entry = self.registry.get(batch_size, seq_len)
         if entry is None:
             return None
 
@@ -429,10 +466,12 @@ Get the appropriate mode for a batch.        if not self.is_enabled():
         input_shapes: Optional[Dict[str, Tuple[int, ...]]] = None,
         output_shapes: Optional[Dict[str, Tuple[int, ...]]] = None,
     ) -> Dict[str, np.ndarray]:
-                Execute using graph replay if available, otherwise capture and execute.
+        """
+        Execute using graph replay if available, otherwise capture and execute.
 
         This is the main entry point for graph-aware execution.
-                # Try replay first
+        """
+        # Try replay first
         outputs = self.replay_graph(batch_size, seq_len, inputs)
         if outputs is not None:
             return outputs
@@ -451,28 +490,30 @@ Get the appropriate mode for a batch.        if not self.is_enabled():
             def capture_fn():
                 return execute_fn(inputs)
 
-                self.capture_graph(
+            self.capture_graph(
                 batch_size=batch_size,
                 seq_len=seq_len,
                 capture_fn=capture_fn,
                 input_shapes=input_shapes,
                 output_shapes=output_shapes,
-                )
+            )
 
-                # Replay the newly captured graph
-                return self.replay_graph(batch_size, seq_len, inputs) or execute_fn(inputs)
+            # Replay the newly captured graph
+            return self.replay_graph(batch_size, seq_len, inputs) or execute_fn(inputs)
 
-                # Eager execution
-                return execute_fn(inputs)
+        # Eager execution
+        return execute_fn(inputs)
 
     def stats(self) -> Dict[str, Any]:
-"""
-Get manager statistics.        return {
-            "enabled": self.config.enabled,"            "mode": self._mode.name,"            "registry": self.registry.stats(),"            "config": self.config.to_dict(),"        }
+        """Get manager statistics."""
+        return {
+            "enabled": self.config.enabled,
+            "mode": self._mode.name,
+            "registry": self.registry.stats(),
+            "config": self.config.to_dict(),
+        }
 
     def reset(self) -> None:
-"""
-Reset the manager.        self.registry.clear()
+        """Reset the manager."""
+        self.registry.clear()
         self._mode = CUDAGraphMode.NONE
-
-"""

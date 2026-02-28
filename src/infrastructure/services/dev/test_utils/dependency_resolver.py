@@ -1,54 +1,47 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_test_utils.py""
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+"""Auto-extracted class from agent_test_utils.py"""
 
+from __future__ import annotations
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-
 class DependencyResolver:
-"""
-Resolves dependencies between tests.
+    """Resolves dependencies between tests."""
+
     def __init__(self) -> None:
-"""
-Initialize resolver.        self.dependencies: dict[str, list[str]] = {}
+        """Initialize resolver."""
+        self.dependencies: dict[str, list[str]] = {}
 
     def add_test(self, name: str, depends_on: list[str]) -> None:
-"""
-Register a test and its dependencies (test compatibility API).        self.dependencies[name] = list(depends_on)
+        """Register a test and its dependencies (test compatibility API)."""
+        self.dependencies[name] = list(depends_on)
 
     def add_dependency(self, test: str, depends_on: str) -> None:
-"""
-Add dependency.        if test not in self.dependencies:
+        """Add dependency."""
+        if test not in self.dependencies:
             self.dependencies[test] = []
         self.dependencies[test].append(depends_on)
 
     def resolve(self) -> list[str]:
-"""
-Resolve execution order or raise on circular dependencies.        visiting: set[str] = set()
+        """Resolve execution order or raise on circular dependencies."""
+        visiting: set[str] = set()
         visited: set[str] = set()
         order: list[str] = []
 
@@ -56,7 +49,8 @@ Resolve execution order or raise on circular dependencies.        visiting: set[
             if node in visited:
                 return
             if node in visiting:
-                raise ValueError("Circular dependency detected")"            visiting.add(node)
+                raise ValueError("Circular dependency detected")
+            visiting.add(node)
             for dep in self.dependencies.get(node, []):
                 visit(dep)
             visiting.remove(node)
@@ -71,8 +65,8 @@ Resolve execution order or raise on circular dependencies.        visiting: set[
         return order
 
     def resolve_order(self) -> list[str]:
-"""
-Resolve execution order (topological sort).        visited: set[str] = set()
+        """Resolve execution order (topological sort)."""
+        visited: set[str] = set()
         order: list[str] = []
 
         def visit(node: str) -> None:
@@ -88,8 +82,8 @@ Resolve execution order (topological sort).        visited: set[str] = set()
         return order
 
     def detect_cycle(self) -> bool:
-"""
-Detect circular dependencies.        visited: set[str] = set()
+        """Detect circular dependencies."""
+        visited: set[str] = set()
         rec_stack: set[str] = set()
 
         def has_cycle(node: str) -> bool:
@@ -109,29 +103,3 @@ Detect circular dependencies.        visited: set[str] = set()
                 if has_cycle(test):
                     return True
         return False
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""

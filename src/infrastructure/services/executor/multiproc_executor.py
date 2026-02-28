@@ -1,71 +1,48 @@
 #!/usr/bin/env python3
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
 """
 Phase 45: Multiprocess Executor
 vLLM-inspired multiprocess executor with advanced coordination.
 
-"""
 Refactored to modular package structure for Phase 317.
 Decomposed into types, future, base, and specific implementation modules.
+"""
 
-try:
-    from .infrastructure.services.executor.multiproc.base import Executor
-except ImportError:
-    from src.infrastructure.services.executor.multiproc.base import Executor
-
-try:
-    from .infrastructure.services.executor.multiproc.distributed import \
-except ImportError:
-    from src.infrastructure.services.executor.multiproc.distributed import \
-
+from src.infrastructure.services.executor.multiproc.base import Executor
+from src.infrastructure.services.executor.multiproc.distributed import \
     DistributedExecutor
-try:
-    from .infrastructure.services.executor.multiproc.factory import \
-except ImportError:
-    from src.infrastructure.services.executor.multiproc.factory import \
-
+from src.infrastructure.services.executor.multiproc.factory import \
     ExecutorFactory
-try:
-    from .infrastructure.services.executor.multiproc.future import FutureWrapper
-except ImportError:
-    from src.infrastructure.services.executor.multiproc.future import FutureWrapper
-
-try:
-    from .infrastructure.services.executor.multiproc.multiproc_logic import \
-except ImportError:
-    from src.infrastructure.services.executor.multiproc.multiproc_logic import \
-
+from src.infrastructure.services.executor.multiproc.future import FutureWrapper
+from src.infrastructure.services.executor.multiproc.multiproc_logic import \
     MultiprocExecutor
-try:
-    from .infrastructure.services.executor.multiproc.types import (
-except ImportError:
-    from src.infrastructure.services.executor.multiproc.types import (
-
+from src.infrastructure.services.executor.multiproc.types import (
     ExecutorBackend, ResultMessage, TaskMessage, WorkerInfo, WorkerState)
-try:
-    from .infrastructure.services.executor.multiproc.uniproc import \
-except ImportError:
-    from src.infrastructure.services.executor.multiproc.uniproc import \
-
+from src.infrastructure.services.executor.multiproc.uniproc import \
     UniprocExecutor
 
 __all__ = [
-    "ExecutorBackend","    "WorkerState","    "WorkerInfo","    "TaskMessage","    "ResultMessage","    "FutureWrapper","    "Executor","    "UniprocExecutor","    "MultiprocExecutor","    "DistributedExecutor","    "ExecutorFactory","]
-
-
-"""
+    "ExecutorBackend",
+    "WorkerState",
+    "WorkerInfo",
+    "TaskMessage",
+    "ResultMessage",
+    "FutureWrapper",
+    "Executor",
+    "UniprocExecutor",
+    "MultiprocExecutor",
+    "DistributedExecutor",
+    "ExecutorFactory",
+]

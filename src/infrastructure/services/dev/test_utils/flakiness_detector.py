@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-Auto-extracted class from agent_test_utils.py""
+"""Auto-extracted class from agent_test_utils.py"""
+
+from __future__ import annotations
+
 from collections.abc import Callable
 
 from src.core.base.lifecycle.version import VERSION
@@ -28,23 +26,25 @@ from .flakiness_report import FlakinessReport
 __version__ = VERSION
 
 
-
 class FlakinessDetector:
-"""
-Detects flaky tests through repeated execution.""
-Runs tests multiple times to identify intermittent failures.
+    """Detects flaky tests through repeated execution.
+
+    Runs tests multiple times to identify intermittent failures.
 
     Example:
         detector=FlakinessDetector()
         report=detector.analyze(test_fn, runs=10)
         if report.flakiness_score > 0.1:
-            print(f"Test is flaky: {report.flakiness_score}")"    
+            print(f"Test is flaky: {report.flakiness_score}")
+    """
+
     def __init__(self, default_runs: int = 5) -> None:
-"""
-Initialize detector.""
-Args:
+        """Initialize detector.
+
+        Args:
             default_runs: Default number of test runs.
-                self.default_runs = default_runs
+        """
+        self.default_runs = default_runs
         self._history: dict[str, list[FlakinessReport]] = {}
 
     def analyze(
@@ -53,16 +53,17 @@ Args:
         runs: int | None = None,
         test_name: str | None = None,
     ) -> FlakinessReport:
-"""
-Analyze test for flakiness.""
-Args:
+        """Analyze test for flakiness.
+
+        Args:
             test_fn: Test function to analyze.
             runs: Number of runs.
             test_name: Test name for reporting.
 
         Returns:
             FlakinessReport with analysis results.
-                runs = runs or self.default_runs
+        """
+        runs = runs or self.default_runs
         test_name = test_name or test_fn.__name__
 
         passes = 0
@@ -104,12 +105,12 @@ Args:
         return report
 
     def get_history(self, test_name: str) -> list[FlakinessReport]:
-"""
-Get flakiness history for a test.        return self._history.get(test_name, [])
+        """Get flakiness history for a test."""
+        return self._history.get(test_name, [])
 
     def get_flaky_tests(self, threshold: float = 0.1) -> list[str]:
-"""
-Get tests that exceed flakiness threshold.        flaky: list[str] = []
+        """Get tests that exceed flakiness threshold."""
+        flaky: list[str] = []
         for name, reports in self._history.items():
             if reports and reports[-1].flakiness_score > threshold:
                 flaky.append(name)

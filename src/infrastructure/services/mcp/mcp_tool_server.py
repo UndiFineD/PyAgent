@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -23,45 +18,18 @@ from __future__ import annotations
 Facade for MCP Tool Server Integration.
 Delegates to modularized sub-packages in src/infrastructure/mcp_tools/.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from typing import Any, Dict, List, Optional
-except ImportError:
-    from typing import Any, Dict, List, Optional
 
-
-try:
-    from .adapter import SchemaAdapter
-except ImportError:
-    from .adapter import SchemaAdapter
-
-try:
-    from .base import MCPToolServer as MCPToolServerBase
-except ImportError:
-    from .base import MCPToolServer as MCPToolServerBase
-
-try:
-    from .local import LocalMCPServer
-except ImportError:
-    from .local import LocalMCPServer
-
-try:
-    from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,
-except ImportError:
-    from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,
-
+from .adapter import SchemaAdapter
+from .base import MCPToolServer as MCPToolServerBase
+from .local import LocalMCPServer
+from .models import (MCPServerConfig, MCPServerType, MCPSession, SessionState,
                      ToolCall, ToolResult, ToolSchema, ToolStatus)
-try:
-    from .registry import MCPServerRegistry, SessionManager
-except ImportError:
-    from .registry import MCPServerRegistry, SessionManager
-
-try:
-    from .sse import SSEMCPServer
-except ImportError:
-    from .sse import SSEMCPServer
-
+from .registry import MCPServerRegistry, SessionManager
+from .sse import SSEMCPServer
 
 # For backward compatibility mapping
 MCPToolServer = MCPToolServerBase
@@ -69,21 +37,39 @@ ServerType = MCPServerType
 
 
 def adapt_tool_schema(schema: ToolSchema | List[ToolSchema]) -> List[Dict[str, Any]]:
-"""
-Legacy helper for adaptation.    if isinstance(schema, ToolSchema):
+    """Legacy helper for adaptation."""
+    if isinstance(schema, ToolSchema):
         return [schema.to_openai_format()]
     return SchemaAdapter.to_openai(schema)
 
 
 async def create_mcp_session(server_name: str) -> Optional[MCPSession]:
-"""
-Legacy helper for session creation.    return await SessionManager().create_session(server_name)
+    """Legacy helper for session creation."""
+    return await SessionManager().create_session(server_name)
 
 
 def discover_mcp_servers() -> List[str]:
-"""
-Legacy helper for server discovery.    return list(MCPServerRegistry().servers.keys())
+    """Legacy helper for server discovery."""
+    return list(MCPServerRegistry().servers.keys())
 
 
 __all__ = [
-    "MCPServerConfig","    "MCPServerType","    "ServerType","    "ToolStatus","    "SessionState","    "ToolSchema","    "ToolCall","    "ToolResult","    "MCPSession","    "MCPToolServer","    "SSEMCPServer","    "LocalMCPServer","    "SchemaAdapter","    "MCPServerRegistry","    "SessionManager","    "adapt_tool_schema","    "create_mcp_session","    "discover_mcp_servers","]
+    "MCPServerConfig",
+    "MCPServerType",
+    "ServerType",
+    "ToolStatus",
+    "SessionState",
+    "ToolSchema",
+    "ToolCall",
+    "ToolResult",
+    "MCPSession",
+    "MCPToolServer",
+    "SSEMCPServer",
+    "LocalMCPServer",
+    "SchemaAdapter",
+    "MCPServerRegistry",
+    "SessionManager",
+    "adapt_tool_schema",
+    "create_mcp_session",
+    "discover_mcp_servers",
+]

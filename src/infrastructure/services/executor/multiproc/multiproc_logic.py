@@ -1,28 +1,23 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
 """
 Multiproc logic.py module.
 """
 
-"""
+from __future__ import annotations
+
 import contextlib
 import multiprocessing as mp
 import queue
@@ -38,10 +33,11 @@ from src.infrastructure.services.executor.multiproc.types import (
     ResultMessage, TaskMessage, WorkerInfo, WorkerState)
 
 
-
 class MultiprocExecutor(Executor):
-        Multiprocess executor (vLLM MultiprocExecutor equivalent).
-    
+    """
+    Multiprocess executor (vLLM MultiprocExecutor equivalent).
+    """
+
     uses_ray = False
     supports_pp = True
     supports_tp = False
@@ -80,12 +76,12 @@ class MultiprocExecutor(Executor):
         self._started = False
 
     def register_function(self, name: str, func: Callable) -> None:
-"""
-Register a function for workers to execute.        self._functions[name] = func
+        """Register a function for workers to execute."""
+        self._functions[name] = func
 
     def start(self) -> None:
-"""
-Start the executor.        if self._started:
+        """Start the executor."""
+        if self._started:
             return
 
         # Create queues
@@ -113,8 +109,8 @@ Start the executor.        if self._started:
         self._started = True
 
     def _start_worker(self, worker_id: int) -> None:
-"""
-Start a worker process.        control_queue = mp.Queue()
+        """Start a worker process."""
+        control_queue = mp.Queue()
         self._control_queues[worker_id] = control_queue
 
         process = mp.Process(
@@ -141,8 +137,8 @@ Start a worker process.        control_queue = mp.Queue()
         control_queue: mp.Queue,
         functions: Dict[str, Callable],
     ) -> None:
-"""
-Worker process main loop.        # Set up signal handlers
+        """Worker process main loop."""
+        # Set up signal handlers
         signal.signal(signal.SIGTERM, lambda *_: None)
 
         while True:
@@ -150,7 +146,8 @@ Worker process main loop.        # Set up signal handlers
                 # Check for control messages (non-blocking)
                 try:
                     control = control_queue.get_nowait()
-                    if control == "shutdown":"                        break
+                    if control == "shutdown":
+                        break
                 except queue.Empty:
                     pass
 
@@ -161,7 +158,8 @@ Worker process main loop.        # Set up signal handlers
                     # Send heartbeat
                     result_queue.put(
                         ResultMessage(
-                            task_id="__heartbeat__","                            worker_id=worker_id,
+                            task_id="__heartbeat__",
+                            worker_id=worker_id,
                             success=True,
                         )
                     )
@@ -171,7 +169,8 @@ Worker process main loop.        # Set up signal handlers
                 start_time = time.time_ns()
                 try:
                     if task.func_name not in functions:
-                        raise ValueError(f"Unknown function: {task.func_name}")"                    result = functions[task.func_name](*task.args, **task.kwargs)
+                        raise ValueError(f"Unknown function: {task.func_name}")
+                    result = functions[task.func_name](*task.args, **task.kwargs)
                     end_time = time.time_ns()
 
                     result_queue.put(
@@ -196,18 +195,19 @@ Worker process main loop.        # Set up signal handlers
                         )
                     )
 
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 with contextlib.suppress(Exception):
                     # Worker loop error - try to continue
                     pass
 
     def _collect_results(self) -> None:
-"""
-Collect results from workers.        while not self._shutdown_event.is_set():
+        """Collect results from workers."""
+        while not self._shutdown_event.is_set():
             try:
                 result: ResultMessage = self._result_queue.get(timeout=1.0)
 
-                if result.task_id == "__heartbeat__":"                    # Update heartbeat
+                if result.task_id == "__heartbeat__":
+                    # Update heartbeat
                     with self._lock:
                         if result.worker_id in self._worker_info:
                             self._worker_info[result.worker_id].last_heartbeat = time.time()
@@ -225,19 +225,17 @@ Collect results from workers.        while not self._shutdown_event.is_set():
                     if result.success:
                         future.set_result(result.result)
                     else:
-                        future.set_exception(Exception(f"{result.error}\\n{result.traceback}"))
+                        future.set_exception(Exception(f"{result.error}\n{result.traceback}"))
+
             except queue.Empty:
                 continue
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def _monitor_workers(self) -> None:
-"""
-Monitor worker health.""
-Uses the shutdown event's wait() method so the loop can be interrupted'        promptly during shutdown rather than being stuck in a blocking sleep.
-                while not self._shutdown_event.is_set():
-            # Use the Event.wait to be interruptible on shutdown
-            self._shutdown_event.wait(self._heartbeat_interval)
+        """Monitor worker health."""
+        while not self._shutdown_event.is_set():
+            time.sleep(self._heartbeat_interval)
 
             now = time.time()
             with self._lock:
@@ -251,8 +249,8 @@ Uses the shutdown event's wait() method so the loop can be interrupted'        p
                         self._restart_worker(worker_id)
 
     def _restart_worker(self, worker_id: int) -> None:
-"""
-Restart a failed worker.        # Terminate old process
+        """Restart a failed worker."""
+        # Terminate old process
         if worker_id in self._workers:
             with contextlib.suppress(Exception):
                 self._workers[worker_id].terminate()
@@ -262,8 +260,8 @@ Restart a failed worker.        # Terminate old process
         self._start_worker(worker_id)
 
     def shutdown(self, graceful: bool = True) -> None:
-"""
-Shutdown the executor.        if not self._started:
+        """Shutdown the executor."""
+        if not self._started:
             return
 
         self._shutdown_event.set()
@@ -272,6 +270,7 @@ Shutdown the executor.        if not self._started:
         for worker_id, control_queue in self._control_queues.items():
             with contextlib.suppress(Exception):
                 control_queue.put("shutdown")
+
         # Wait for workers
         if graceful:
             for worker_id, process in self._workers.items():
@@ -287,10 +286,11 @@ Shutdown the executor.        if not self._started:
         self._started = False
 
     def submit(self, func_name: str, *args: Any, **kwargs: Any) -> FutureWrapper[Any]:
-"""
-Submit a task.        with self._lock:
+        """Submit a task."""
+        with self._lock:
             self._task_counter += 1
             task_id = f"task-{self._task_counter}"
+
             future: FutureWrapper[Any] = FutureWrapper(task_id)
             self._pending_tasks[task_id] = future
 
@@ -305,19 +305,19 @@ Submit a task.        with self._lock:
         return future
 
     def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
-"""
-Broadcast to all workers.        futures = []
+        """Broadcast to all workers."""
+        futures = []
         for _ in range(self._num_workers):
             futures.append(self.submit(func_name, *args, **kwargs))
         return futures
 
     def get_num_workers(self) -> int:
-"""
-Get number of workers.        return self._num_workers
+        """Get number of workers."""
+        return self._num_workers
 
     def get_worker_stats(self) -> Dict[int, WorkerInfo]:
-"""
-Get worker statistics.        with self._lock:
+        """Get worker statistics."""
+        with self._lock:
             return {
                 wid: WorkerInfo(
                     worker_id=info.worker_id,
@@ -334,8 +334,8 @@ Get worker statistics.        with self._lock:
             }
 
     def is_healthy(self) -> bool:
-"""
-Check executor health.        if not self._started:
+        """Check executor health."""
+        if not self._started:
             return False
 
         with self._lock:
@@ -343,27 +343,3 @@ Check executor health.        if not self._started:
                 1 for info in self._worker_info.values() if info.state in (WorkerState.READY, WorkerState.BUSY)
             )
             return healthy_workers >= self._num_workers // 2
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""
