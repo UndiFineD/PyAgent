@@ -1,48 +1,37 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+"""Core engine for managing code relationships as a graph."""
+
+from __future__ import annotations
 import json
 import logging
 from pathlib import Path
 from typing import Any
 
-try:
-    from .graph_core import GraphCore
-    from ...core.base.lifecycle.version import VERSION
-"""
-except ImportError:
-
-"""
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.engines.graph_core import GraphCore
-    from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-class DummyGraph:
-    pass
 class GraphContextEngine:
-"""
-Manages an adjacency list of file and class dependencies.""
-def __init__(self, workspace_root: str) -> None:
-"""
-Initializes the Graph Context Engine.""
-self.workspace_root = Path(workspace_root)
+    """Manages an adjacency list of file and class dependencies."""
+
+    def __init__(self, workspace_root: str) -> None:
+        self.workspace_root = Path(workspace_root)
         self.graph: dict[str, set[str]] = {}
         self.metadata: dict[str, Any] = {}
         self.symbols: dict[str, Any] = {}
@@ -50,22 +39,18 @@ self.workspace_root = Path(workspace_root)
         self.core = GraphCore()
         self.load()
 
-
     def add_edge(self, source: str, target: str, relationship: str = "imports") -> None:
-"""
-Add a directed edge to the graph.""
-if source not in self.graph:
+        """Add a directed edge to the graph."""
+        if source not in self.graph:
             self.graph[source] = set()
         self.graph[source].add(target)
         # Store metadata
-        key = f"{source}->{target}"        
+        key = f"{source}->{target}"
         self.metadata[key] = {"type": relationship}
 
-
     def add_node(self, node_id: str, node_type: str, metadata: dict[str, Any] | None = None) -> None:
-"""
-Add a node and its metadata to the graph (Phase 72).""
-if node_id not in self.graph:
+        """Add a node and its metadata to the graph (Phase 72)."""
+        if node_id not in self.graph:
             self.graph[node_id] = set()
         if node_id not in self.metadata:
             self.metadata[node_id] = {}
@@ -73,12 +58,11 @@ if node_id not in self.graph:
         if metadata:
             self.metadata[node_id].update(metadata)
 
-
     def scan_project(self, start_path: Path | None = None) -> None:
-"""
-Scans files using AST to build a detailed relationship graph.""
-target = start_path or self.workspace_root
+        """Scans files using AST to build a detailed relationship graph."""
+        target = start_path or self.workspace_root
         logging.info(f"Scanning project graph from {target}")
+
         for py_file in target.rglob("*.py"):
             if any(p in str(py_file) for p in [".venv", "__pycache__", ".git"]):
                 continue
@@ -93,7 +77,6 @@ target = start_path or self.workspace_root
                     "classes": analysis["classes"],
                     "inherits": analysis["inherits"],
                     "calls": analysis["calls"],
-                    "imports": analysis["imports"],
                 }
 
                 # Build and add edges
@@ -103,13 +86,12 @@ target = start_path or self.workspace_root
 
             except (SyntaxError, ValueError, AttributeError, IOError) as e:
                 logging.error(f"GraphContextEngine: Failed to scan {rel_path}: {e}")
+
         self.save()
 
-
     def get_impact_radius(self, node: str, max_depth: int = 3) -> set[str]:
-"""
-Find all nodes that depend on the given node (inverse of graph).""
-affected = set()
+        """Find all nodes that depend on the given node (inverse of graph)."""
+        affected = set()
         to_visit = [(node, 0)]
         visited = {node}
 
@@ -133,11 +115,9 @@ affected = set()
 
         return affected
 
-
     def save(self, file_path: str | Path | None = None) -> None:
-"""
-Serialize graph to disk.""
-target = Path(file_path) if file_path else self.persist_file
+        """Serialize graph to disk."""
+        target = Path(file_path) if file_path else self.persist_file
         data = {
             "graph": {k: list(v) for k, v in self.graph.items()},
             "metadata": self.metadata,
@@ -147,9 +127,8 @@ target = Path(file_path) if file_path else self.persist_file
             json.dump(data, f, indent=2)
 
     def load(self, file_path: str | Path | None = None) -> None:
-"""
-Load graph from disk.""
-target = Path(file_path) if file_path else self.persist_file
+        """Load graph from disk."""
+        target = Path(file_path) if file_path else self.persist_file
         if target.exists():
             try:
                 with open(target, "r", encoding="utf-8") as f:

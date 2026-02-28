@@ -1,79 +1,74 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# "Auto-extracted class from agent_context.py"try:
-    import re
-"""
-except ImportError:
+"""Auto-extracted class from agent_context.py"""
 
-"""
+from __future__ import annotations
 import re
 
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-try:
-    from .logic.agents.cognitive.context.models.context_diff import ContextDiff
-except ImportError:
-    from src.logic.agents.cognitive.context.models.context_diff import ContextDiff
-
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.cognitive.context.models.context_diff import ContextDiff
 
 __version__ = VERSION
 
 
-
 class ContextDiffer:
-    "Shows changes in context between versions."
+    """Shows changes in context between versions.
+
     Provides detailed diff visualization between context versions.
 
     Example:
         >>> differ=ContextDiffer()
-#         >>> diff=differ.diff_versions(old_content, new_content)
+        >>> diff=differ.diff_versions(old_content, new_content)
+    """
 
     def __init__(self) -> None:
-"""
-Initialize context differ.        self.diffs: list["str] = []"
+        """Initialize context differ."""
+        self.diffs: list[str] = []
+
     def compute_diff(self, content_from: str, content_to: str) -> ContextDiff:
-"""
-Compute a structured diff between two context contents.        return self.diff_versions(content_from," content_to)"
+        """Compute a structured diff between two context contents."""
+        return self.diff_versions(content_from, content_to)
+
     def get_section_changes(
         self, content_from: str, content_to: str
     ) -> dict[str, list[str]]:
-#         "Return section-level changes between two contents."        diff = self.diff_versions(content_from, content_to)
+        """Return section-level changes between two contents."""
+        diff = self.diff_versions(content_from, content_to)
         return {
-            "added": diff.added_sections,"            "removed": diff.removed_sections,"            "modified": diff.modified_sections,"        }
+            "added": diff.added_sections,
+            "removed": diff.removed_sections,
+            "modified": diff.modified_sections,
+        }
 
     def summarize_diff(self, diff: ContextDiff) -> str:
-"""
-Summarize a ContextDiff into a human-readable sentence.        return diff.change_summary or (
-#             fAdded {len(diff.added_sections)}, removed {len(diff.removed_sections)},
-#             fmodified {len(diff.modified_sections)} sections
+        """Summarize a ContextDiff into a human-readable sentence."""
+        return diff.change_summary or (
+            f"Added {len(diff.added_sections)}, removed {len(diff.removed_sections)}, "
+            f"modified {len(diff.modified_sections)} sections"
         )
 
     def diff_versions(
         self,
         content_from: str,
         content_to: str,
-        version_from: str = "v1","        version_to: str = "v2","    ) -> ContextDiff:
-        "Create diff between "two content versions.
+        version_from: str = "v1",
+        version_to: str = "v2",
+    ) -> ContextDiff:
+        """Create diff between two content versions.
+
         Args:
             content_from: Original content.
             content_to: New content.
@@ -82,7 +77,11 @@ Summarize a ContextDiff into a human-readable sentence.        return diff.chang
 
         Returns:
             ContextDiff with changes.
-  "      # Extract sections"        sections_from: set[str] = set(re.findall(r"##\\\\s+(\\w+)", content_from))"        sections_to: set[str] = set(re.findall(r"##\\\\s+(\\w+)", content_to))"        added: list[str] = list(sections_to - sections_from)
+        """
+        # Extract sections
+        sections_from: set[str] = set(re.findall(r"##\s+(\w+)", content_from))
+        sections_to: set[str] = set(re.findall(r"##\s+(\w+)", content_to))
+        added: list[str] = list(sections_to - sections_from)
         removed: list[str] = list(sections_from - sections_to)
         modified: list[str] = []
         # Check for modified content in common sections
@@ -97,33 +96,7 @@ Summarize a ContextDiff into a human-readable sentence.        return diff.chang
             removed_sections=removed,
             modified_sections=modified,
             change_summary=(
-#                 fAdded {len(added)}, removed {len(removed)},
-#                 fmodified {len(modified)} sections
+                f"Added {len(added)}, removed {len(removed)}, "
+                f"modified {len(modified)} sections"
             ),
         )
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""

@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Phase 16: Rust acceleration for keyword matching and scoring
 
-# "Auto-extracted class from agent_context.py"# from typing import Any
+"""Auto-extracted class from agent_context.py"""
+
+from typing import Any
 import logging
 
 from src.core.base.lifecycle.version import VERSION
@@ -23,10 +25,7 @@ from src.logic.agents.cognitive.context.models.semantic_search_result import (
     SemanticSearchResult,
 )
 
-"""
 __version__ = VERSION
-
-"""
 
 # Phase 16: Rust acceleration imports
 try:
@@ -38,7 +37,8 @@ except ImportError:
 
 
 class SemanticSearchEngine:
-    "Performs semantic code search using embeddings."
+    """Performs semantic code search using embeddings.
+
     Provides functionality to search code using semantic similarity
     rather than just keyword matching.
 
@@ -49,27 +49,33 @@ class SemanticSearchEngine:
     Example:
         >>> engine=SemanticSearchEngine()
         >>> results=engine.search("function that handles authentication")
+    """
+
     def __init__(self, persist_directory: str | None = None) -> None:
-"""
-Initialize the semantic search engine.        self.results: list[SemanticSearchResult] = []
+        """Initialize the semantic search engine."""
+        self.results: list[SemanticSearchResult] = []
         self.algorithm: SearchAlgorithm = SearchAlgorithm.KEYWORD
-#         self.similarity_metric: str = "cosine"        self.documents: dict[str, str] = {}
+        self.similarity_metric: str = "cosine"
+        self.documents: dict[str, str] = {}
         self.persist_directory = persist_directory
         self._client = None
         self._collection = None
 
     def _maybe_patch_pydantic(self) -> None:
-"""
-Handle Pydantic v2 compatibility for older ChromaDB versions."        try:"            import pydantic  # pylint: disable=import-outside-toplevel
-            if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):"                from pydantic_settings import BaseSettings  # pylint: disable=import-outside-toplevel
+        """Handle Pydantic v2 compatibility for older ChromaDB versions."""
+        try:
+            import pydantic  # pylint: disable=import-outside-toplevel
+            if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):
+                from pydantic_settings import BaseSettings  # pylint: disable=import-outside-toplevel
                 # Only patch if not already present
-                if not hasattr(pydantic, "BaseSettings"):"                    pydantic.BaseSettings = BaseSettings
+                if not hasattr(pydantic, "BaseSettings"):
+                    pydantic.BaseSettings = BaseSettings
         except (ImportError, AttributeError):
             pass
 
     def _get_collection(self) -> Any:
-"""
-Lazy initialization of ChromaDB collection.        if self._collection is not None:
+        """Lazy initialization of ChromaDB collection."""
+        if self._collection is not None:
             return self._collection
 
         try:
@@ -86,60 +92,71 @@ Lazy initialization of ChromaDB collection.        if self._collection is not No
                 self._client = chromadb.EphemeralClient()
 
             emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
-#                 model_name="all-MiniLM-L6-v2"            )
+                model_name="all-MiniLM-L6-v2"
+            )
 
             self._collection = self._client.get_or_create_collection(
-                name="pyagent_code","                embedding_function=emb_fn,
-                metadata={"hnsw:space": self.similarity_metric},"            )
+                name="pyagent_code",
+                embedding_function=emb_fn,
+                metadata={"hnsw:space": self.similarity_metric},
+            )
         except (ImportError, RuntimeError, ValueError) as e:
             logging.warning(
-#                 fFailed to initialize ChromaDB: {e}. Falling back to keyword search.
+                f"Failed to initialize ChromaDB: {e}. Falling back to keyword search."
             )
             return None
 
         return self._collection
 
     def set_algorithm(self, algorithm: SearchAlgorithm) -> None:
-"""
-Set the search algorithm.        self.algorithm = algorithm
+        """Set the search algorithm."""
+        self.algorithm = algorithm
 
     def add_document(self, doc_id: str, content: str) -> None:
-"""
-Add a document to the search index.        self.documents[doc_id] = content
+        """Add a document to the search index."""
+        self.documents[doc_id] = content
         self.index_content(doc_id, content)
 
     def clear(self) -> None:
-"""
-Clear all indexed documents and results.    "    self.results.clear()"        self.documents.clear()
+        """Clear all indexed documents and results."""
+        self.results.clear()
+        self.documents.clear()
         collection = self._get_collection()
         if collection:
             # Delete all items in collection by fetching all IDs
-            existing_ids = collection.get().get("ids", [])"            if existing_ids:
+            existing_ids = collection.get().get("ids", [])
+            if existing_ids:
                 collection.delete(ids=existing_ids)
 
     def index_content(self, file_path: str, content: str) -> None:
-        "Index content for searching."
+        """Index content for searching.
+
         Args:
             file_path: Path to the file.
             content: File content to index.
-    "    # Update documents storage"        self.documents[file_path] = content
+        """
+        # Update documents storage
+        self.documents[file_path] = content
 
         collection = self._get_collection()
         if collection:
             # Upsert into Chroma
             collection.upsert(
-                documents=[content], ids=[file_path], metadatas=[{"path": file_path}]"            )
+                documents=[content], ids=[file_path], metadatas=[{"path": file_path}]
+            )
 
     def search(
         self, query: str, algorithm: SearchAlgorithm | None = None
     ) -> list[SemanticSearchResult]:
-  "      "Search for related code.
+        """Search for related code.
+
         Args:
             query: Search query.
             algorithm: Search algorithm to use (uses self.algorithm if None).
 
         Returns:
             List of search results.
+        """
         search_algo = algorithm or self.algorithm
         self.results = []
 
@@ -148,10 +165,17 @@ Clear all indexed documents and results.    "    self.results.clear()"        se
             if collection:
                 results = collection.query(query_texts=[query], n_results=10)
 
-                if results and "documents" in results and results["documents"]:"                    for i in range(len(results["ids"][0])):"                        file_path = results["ids"][0][i]"                        content = results["documents"][0][i]"                        # Chroma distances: smaller is better for cosine if it's 1-cosine'                        # But Chroma cosine space is usually 1 - cosine similarity
+                if results and "documents" in results and results["documents"]:
+                    for i in range(len(results["ids"][0])):
+                        file_path = results["ids"][0][i]
+                        content = results["documents"][0][i]
+                        # Chroma distances: smaller is better for cosine if it's 1-cosine
+                        # But Chroma cosine space is usually 1 - cosine similarity
                         # Score: 1.0 - distance
                         distance = (
-                            results["distances"][0][i]"                            if "distances" in results"                            else 0.5
+                            results["distances"][0][i]
+                            if "distances" in results
+                            else 0.5
                         )
                         score = max(0.0, min(1.0, 1.0 - distance))
 
@@ -170,7 +194,8 @@ Clear all indexed documents and results.    "    self.results.clear()"        se
 
         # Fallback to keyword search (original logic)
         # Phase 16: Try Rust-accelerated keyword scoring
-        if _RUST_AVAILABLE and hasattr(rust_core, "keyword_search_score_rust"):"            try:
+        if _RUST_AVAILABLE and hasattr(rust_core, "keyword_search_score_rust"):
+            try:
                 query_words = query.lower().split()
                 doc_items = list(self.documents.items())
                 contents = [content for _, content in doc_items]
