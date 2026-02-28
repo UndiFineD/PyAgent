@@ -1,25 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Main engine core implementation."""
 
-"""
-"""
-Main engine core implementation.""
-
-"""
 import logging
 import queue
 import time
@@ -35,21 +31,20 @@ logger = logging.getLogger(__name__)
 
 
 class EngineCore:
-"""
-Central engine orchestration loop.
+    """
+    Central engine orchestration loop.
 
     Manages the lifecycle of requests through scheduling, execution,
     and output processing.
-"""
-def __init__(
+    """
+
+    def __init__(
         self,
         scheduler: Optional[Scheduler] = None,
         executor: Optional[Executor] = None,
         log_stats: bool = True,
     ) -> None:
-"""
-Initialize the engine core.""
-self.scheduler = scheduler or SimpleScheduler()
+        self.scheduler = scheduler or SimpleScheduler()
         self.executor = executor or MockExecutor()
         self.log_stats = log_stats
 
@@ -63,72 +58,63 @@ self.scheduler = scheduler or SimpleScheduler()
         self._total_steps = 0
         self._total_requests = 0
 
-
     def add_request(self, request: Request, _request_wave: int = 0) -> None:
-"""
-Add a request to be processed.""
-self.scheduler.add_request(request)
+        """Add a request to be processed."""
+        self.scheduler.add_request(request)
         self._total_requests += 1
 
-
     def preprocess_add_request(self, request: Request) -> Tuple[Request, int]:
-"""
-Preprocess a request before adding (for compatibility).""
-return (request, 0)
-
+        """Preprocess a request before adding (for compatibility)."""
+        return (request, 0)
 
     def abort_requests(self, request_ids: List[str]) -> None:
-"""
-Abort requests by ID.""
-self.scheduler.abort_requests(request_ids)
-
+        """Abort requests by ID."""
+        self.scheduler.abort_requests(request_ids)
 
     def _process_aborts_queue(self) -> None:
-"""
-Process any pending aborts.""
-while not self._abort_queue.empty():
+        """Process any pending aborts."""
+        while not self._abort_queue.empty():
             try:
                 request_ids = self._abort_queue.get_nowait()
                 self.abort_requests(request_ids)
             except queue.Empty:
                 break
 
-
     @contextmanager
     def log_error_detail(self, scheduler_output: SchedulerOutput) -> Iterator[None]:
-"""
-Context manager for detailed error logging.""
-try:
+        """Context manager for detailed error logging."""
+        try:
             yield
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(
-                f"Error during model execution. Scheduled {len(scheduler_output.scheduled_requests)} requests, "
-                f"Total tokens: {scheduler_output.total_num_scheduled_tokens}. Error: {e}"
+                "Error during model execution. "
+                f"Scheduled {len(scheduler_output.scheduled_requests)} requests, "
+                f"Total tokens: {scheduler_output.total_num_scheduled_tokens}. "
+                f"Error: {e}"
             )
             raise
 
-
     @contextmanager
     def log_iteration_details(self, scheduler_output: SchedulerOutput) -> Iterator[None]:
-"""
-Context manager for iteration logging.""
-start_time = time.time()
+        """Context manager for iteration logging."""
+        start_time = time.time()
         yield
         if self.log_stats:
             elapsed = time.time() - start_time
             logger.debug(
-                f"Step {self._total_steps}: {len(scheduler_output.scheduled_requests)} requests, "
-                f"{scheduler_output.total_num_scheduled_tokens} tokens, {elapsed * 1000:.2f}ms"
+                f"Step {self._total_steps}: "
+                f"{len(scheduler_output.scheduled_requests)} requests, "
+                f"{scheduler_output.total_num_scheduled_tokens} tokens, "
+                f"{elapsed * 1000:.2f}ms"
             )
 
-
     def step(self) -> Tuple[Dict[int, EngineCoreOutputs], bool]:
-"""
-Execute one step of the engine loop.
+        """
+        Execute one step of the engine loop.
 
         Returns:
             Tuple of (outputs by client index, whether model was executed)
-"""
+        """
         # Check for any requests
         if not self.scheduler.has_requests():
             return {}, False
@@ -154,23 +140,19 @@ Execute one step of the engine loop.
 
         return outputs, True
 
-
     def step_fn(self) -> Tuple[Dict[int, EngineCoreOutputs], bool]:
-"""
-Alias for step() for compatibility.""
-        # todo: consider deprecating step_fn in favor of step for clarity
+        """Alias for step() for compatibility."""
         return self.step()
-
 
     def step_with_batch_queue(
         self,
     ) -> Tuple[Optional[Dict[int, EngineCoreOutputs]], bool]:
-"""
-Step with batch queue support for concurrent batches.
+        """
+        Step with batch queue support for concurrent batches.
 
         Returns:
             Tuple of (outputs or None, whether to continue)
-"""
+        """
         # Schedule new batch if we can
         if self.scheduler.has_requests():
             scheduler_output = self.scheduler.schedule()
@@ -187,32 +169,19 @@ Step with batch queue support for concurrent batches.
 
         return None, False
 
-
     def post_step(self, model_executed: bool = True) -> None:
-"""
-Post-step hook for cleanup.""
-        # todo: any necessary cleanup after step, e.g. logging, stats aggregation, etc.
-        pass
-
+        """Post-step hook for cleanup."""
 
     def shutdown(self) -> None:
-"""
-Shutdown the engine.""
-        # todo: any necessary cleanup before shutdown, e.g. flushing logs, saving stats, etc.
+        """Shutdown the engine."""
         self.executor.shutdown()
 
-
     def profile(self, is_start: bool = True) -> None:
-"""
-Start or stop profiling.""
-        # TODO start or stop profiling logic here   
-        pass
-
+        """Start or stop profiling."""
 
     def get_stats(self) -> Dict[str, Any]:
-        ""
-Get engine statistics.""
-return {
+        """Get engine statistics."""
+        return {
             "total_steps": self._total_steps,
             "total_requests": self._total_requests,
             "waiting_requests": len(self.scheduler.waiting),

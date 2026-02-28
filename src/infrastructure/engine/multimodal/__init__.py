@@ -14,36 +14,46 @@
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-# Multimodal input processing infrastructure.
-# Phase 26: Unified handling for image, video, audio, and text modalities.
-
-
-from .multi_modal_processor import (
 """
-MULTIMODAL_REGISTRY, AudioProcessor, BaseMultiModalProcessor, ImageProcessor,
-    ModalityType, MultiModalConfig, MultiModalData, MultiModalInputs,
-    MultiModalRegistry, TextEmbedProcessor, VideoProcessor, process_multimodal_inputs
-)
+Multimodal input processing infrastructure.
 
+Phase 26: Unified handling for image, video, audio, and text modalities.
 """
+
+from .multi_modal_processor import (MULTIMODAL_REGISTRY, AudioProcessor,  # noqa: F401
+                                    BaseMultiModalProcessor, ImageProcessor,
+                                    ModalityType, MultiModalConfig,
+                                    MultiModalData, MultiModalInputs,
+                                    MultiModalRegistry, PlaceholderInfo,
+                                    TextEmbedProcessor, VideoProcessor,
+                                    get_placeholder_tokens,
+                                    process_multimodal_inputs)
 from .muxer import ChannelType, Muxer  # noqa: F401
 from .quantized_engine import QuantizedMultimediaEngine  # noqa: F401
-
-try:
-    from .tensorrt_loader import TensorRTLoader  # noqa: F401
-except ImportError:
-    pass
-
+from .tensorrt_loader import TensorRTLoader  # noqa: F401
 
 __all__ = [
     # Enums and config
-    "ModalityType", "MultiModalConfig", "ChannelType",
+    "ModalityType",
+    "MultiModalConfig",
+    "ChannelType",
     # Data classes
-    "MultiModalData", "MultiModalInputs",
+    "MultiModalData",
+    "MultiModalInputs",
+    "PlaceholderInfo",
     # Processor classes
-    "BaseMultiModalProcessor", "ImageProcessor", "VideoProcessor", "AudioProcessor", "TextEmbedProcessor", "Muxer", "QuantizedMultimediaEngine", "TensorRTLoader",
+    "BaseMultiModalProcessor",
+    "ImageProcessor",
+    "VideoProcessor",
+    "AudioProcessor",
+    "TextEmbedProcessor",
+    "Muxer",
+    "QuantizedMultimediaEngine",
+    "TensorRTLoader",
     # Registry
-    "MultiModalRegistry", "MULTIMODAL_REGISTRY",
+    "MultiModalRegistry",
+    "MULTIMODAL_REGISTRY",
     # Convenience functions
-    "process_multimodal_inputs"
+    "process_multimodal_inputs",
+    "get_placeholder_tokens",
 ]

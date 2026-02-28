@@ -1,55 +1,40 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Utils.py module.
 """
-try:
 
-"""
+from __future__ import annotations
+
 import math
-except ImportError:
-    import math
+from typing import Sequence
 
-try:
-    from typing import Sequence
-except ImportError:
-    from typing import Sequence
-
-
-try:
-    import numpy
-except ImportError:
-    import numpy
- as np
+import numpy as np
 
 
 def compute_perplexity(logprobs: Sequence[float]) -> float:
-"""
-Compute perplexity from logprobs.    if not logprobs:
+    """Compute perplexity from logprobs."""
+    if not logprobs:
         return 0.0
     mean_logprob = sum(logprobs) / len(logprobs)
     return math.exp(-mean_logprob)
 
 
 def compute_entropy(logprobs: Sequence[float]) -> float:
-"""
-Compute entropy from logprobs (assuming they're top-k).'    if not logprobs:
+    """Compute entropy from logprobs (assuming they're top-k)."""
+    if not logprobs:
         return 0.0
 
     max_lp = max(logprobs)
@@ -67,8 +52,8 @@ def normalize_logprobs(
     logprobs: np.ndarray,
     axis: int = -1,
 ) -> np.ndarray:
-"""
-Normalize logprobs to sum to 1 (in log space).    max_lp = np.max(logprobs, axis=axis, keepdims=True)
+    """Normalize logprobs to sum to 1 (in log space)."""
+    max_lp = np.max(logprobs, axis=axis, keepdims=True)
     shifted = logprobs - max_lp
     log_sum = np.log(np.sum(np.exp(shifted), axis=axis, keepdims=True))
     return shifted - log_sum

@@ -1,49 +1,34 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Request object implementation."""
 
-try:
-    import time
-"""
-except ImportError:
-
-"""
 import time
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional, Union
 
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import Any, Dict, List, Optional, Union
-except ImportError:
-    from typing import Any, Dict, List, Optional, Union
-
-
-from .enums import FinishReason, RequestEventType, RequestStatus, is_valid_transition
-try:
-    from .event import RequestEvent
-except ImportError:
-    from .event import RequestEvent
-
+from .enums import (FinishReason, RequestEventType, RequestStatus,
+                    is_valid_transition)
+from .event import RequestEvent
 
 
 @dataclass
 class Request:
-"""
-Core request representation with lifecycle tracking.
+    """
+    Core request representation with lifecycle tracking.
 
     This class tracks the full lifecycle of an inference request from
     creation through completion, including state transitions and timing.
@@ -58,8 +43,9 @@ Core request representation with lifecycle tracking.
         output_token_ids: Generated token IDs
         stop_reason: Why the request stopped (if finished)
         finish_reason: High-level finish reason enum
-"""
-request_id: str
+    """
+
+    request_id: str
     prompt: Union[str, List[int]]
     max_tokens: int = 100
 
@@ -94,131 +80,104 @@ request_id: str
     kv_transfer_params: Optional[Dict[str, Any]] = None
     priority: int = 0
 
-
     def __post_init__(self) -> None:
-"""
-Record creation event.""
-self.record_event(RequestEventType.CREATED)
-
+        """Record creation event."""
+        self.record_event(RequestEventType.CREATED)
 
     def record_event(
         self,
         event_type: RequestEventType,
         details: Optional[Dict[str, Any]] = None,
     ) -> None:
-"""
-Record a lifecycle event.""
-self.events.append(RequestEvent.new_event(event_type, details=details))
-
+        """Record a lifecycle event."""
+        self.events.append(RequestEvent.new_event(event_type, details=details))
 
     def _transition_to(self, new_status: RequestStatus) -> None:
-"""
-Transition to a new status with validation.""
-if not is_valid_transition(self.status, new_status):
+        """Transition to a new status with validation."""
+        if not is_valid_transition(self.status, new_status):
             raise ValueError(f"Invalid status transition: {self.status} -> {new_status}")
         self.status = new_status
-
 
     # -------------------------------------------------------------------------
     # Status Properties
     # -------------------------------------------------------------------------
-    def is_finished(self) -> bool:
-"""
-Check if the request is finished.""
-return RequestStatus.is_finished(self.status)
 
+    def is_finished(self) -> bool:
+        """Check if the request is finished."""
+        return RequestStatus.is_finished(self.status)
 
     def is_waiting(self) -> bool:
-"""
-Check if the request is waiting.""
-return RequestStatus.is_waiting(self.status)
-
+        """Check if the request is waiting."""
+        return RequestStatus.is_waiting(self.status)
 
     def is_running(self) -> bool:
-"""
-Check if the request is currently running.""
-return self.status == RequestStatus.RUNNING
-
+        """Check if the request is currently running."""
+        return self.status == RequestStatus.RUNNING
 
     def get_finished_reason(self) -> Optional[FinishReason]:
-"""
-Get the finish reason if finished.""
-return self.finish_reason or RequestStatus.get_finished_reason(self.status)
-
+        """Get the finish reason if finished."""
+        return self.finish_reason or RequestStatus.get_finished_reason(self.status)
 
     # -------------------------------------------------------------------------
     # Computed Properties
     # -------------------------------------------------------------------------
+
     @property
     def num_output_tokens(self) -> int:
-"""
-Number of output tokens generated so far.""
-return len(self.output_token_ids)
-
+        """Number of output tokens generated so far."""
+        return len(self.output_token_ids)
 
     @property
     def num_prompt_tokens(self) -> int:
-"""
-Number of prompt tokens.""
-if self.prompt_token_ids is not None:
+        """Number of prompt tokens."""
+        if self.prompt_token_ids is not None:
             return len(self.prompt_token_ids)
         if isinstance(self.prompt, list):
             return len(self.prompt)
         # Estimate for string prompts (rough approximation)
         return len(self.prompt.split()) * 4 // 3
 
-
     @property
     def num_tokens(self) -> int:
-"""
-Total number of tokens (prompt + output).""
-return self.num_prompt_tokens + self.num_output_tokens
-
+        """Total number of tokens (prompt + output)."""
+        return self.num_prompt_tokens + self.num_output_tokens
 
     @property
     def time_in_queue(self) -> Optional[float]:
-"""
-Time spent waiting in queue.""
-if self.first_scheduled_time is None:
+        """Time spent waiting in queue."""
+        if self.first_scheduled_time is None:
             return None
         return self.first_scheduled_time - self.arrival_time
 
-
     @property
     def time_to_first_token(self) -> Optional[float]:
-"""
-Time from scheduling to first token.""
-if self.first_token_time is None or self.first_scheduled_time is None:
+        """Time from scheduling to first token."""
+        if self.first_token_time is None or self.first_scheduled_time is None:
             return None
         return self.first_token_time - self.first_scheduled_time
 
-
     @property
     def total_time(self) -> Optional[float]:
-"""
-Total time from arrival to completion.""
-if self.finished_time is None:
+        """Total time from arrival to completion."""
+        if self.finished_time is None:
             return None
         return self.finished_time - self.arrival_time
-
 
     # -------------------------------------------------------------------------
     # Lifecycle Methods
     # -------------------------------------------------------------------------
+
     def start_running(self) -> None:
-"""
-Transition to RUNNING state.""
-now = time.time()
+        """Transition to RUNNING state."""
+        now = time.time()
         self._transition_to(RequestStatus.RUNNING)
         if self.first_scheduled_time is None:
             self.first_scheduled_time = now
         self.record_event(RequestEventType.SCHEDULED)
 
-
     def add_output_token(self, token_id: int) -> None:
-"""
-Add a generated token to the output.""
-if not self.is_running():
+        """Add a generated token to the output."""
+        if not self.is_running():
             raise RuntimeError(f"Cannot add token to request in state {self.status}")
         was_empty = not self.output_token_ids
         self.output_token_ids.append(token_id)
@@ -226,30 +185,24 @@ if not self.is_running():
             self.first_token_time = time.time()
             self.record_event(RequestEventType.FIRST_TOKEN)
 
-
     def preempt(self) -> None:
-"""
-Preempt the request (move back to waiting).""
-self._transition_to(RequestStatus.PREEMPTED)
+        """Preempt the request (move back to waiting)."""
+        self._transition_to(RequestStatus.PREEMPTED)
         self.record_event(RequestEventType.PREEMPTED)
 
-
     def resume(self) -> None:
-"""
-Resume a preempted request.""
-if self.status != RequestStatus.PREEMPTED:
+        """Resume a preempted request."""
+        if self.status != RequestStatus.PREEMPTED:
             raise ValueError("Can only resume preempted requests")
         self.status = RequestStatus.WAITING
         self.record_event(RequestEventType.RESUMED)
-
 
     def finish(
         self,
         reason: FinishReason,
         stop_reason: Optional[Union[int, str]] = None,
     ) -> None:
-"""
-Finish the request with a reason.""
+        """Finish the request with a reason."""
         # Determine the finish status based on reason
         status_map = {
             FinishReason.STOP: RequestStatus.FINISHED_STOPPED,
@@ -265,33 +218,28 @@ Finish the request with a reason.""
         self.finished_time = time.time()
         self.record_event(
             RequestEventType.FINISHED,
-            {"reason": str(reason), "stop_reason": stop_reason})
-
+            {"reason": str(reason), "stop_reason": stop_reason},
+        )
 
     def abort(self) -> None:
-"""
-Abort the request.""
-if not self.is_finished():
+        """Abort the request."""
+        if not self.is_finished():
             self.status = RequestStatus.FINISHED_ABORTED
             self.finish_reason = FinishReason.ABORT
             self.finished_time = time.time()
             self.record_event(RequestEventType.ABORTED)
 
-
     def error(self, error_msg: Optional[str] = None) -> None:
-"""
-Mark the request as errored.""
-if not self.is_finished():
+        """Mark the request as errored."""
+        if not self.is_finished():
             self.status = RequestStatus.FINISHED_ERROR
             self.finish_reason = FinishReason.ERROR
             self.finished_time = time.time()
             self.record_event(RequestEventType.ERROR, {"message": error_msg})
 
-
     def should_stop(self, max_model_len: Optional[int] = None) -> bool:
-        ""
-Check if the request should stop generating.""
-if self.is_finished():
+        """Check if the request should stop generating."""
+        if self.is_finished():
             return True
 
         if self.num_output_tokens >= self.max_tokens:

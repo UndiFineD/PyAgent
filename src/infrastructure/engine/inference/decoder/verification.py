@@ -1,46 +1,36 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Verification.py module.
 """
-try:
 
-"""
-import numpy
-except ImportError:
-    import numpy
- as np
+from __future__ import annotations
 
-try:
-    from .config import DraftProposal, VerificationResult
-except ImportError:
-    from .config import DraftProposal, VerificationResult
+import numpy as np
 
-
+from .config import DraftProposal, VerificationResult
 
 
 class TreeSpeculator:
-        Token tree speculator for batched verification.
+    """
+    Token tree speculator for batched verification.
 
     Supports tree-structured speculation where multiple branches
     can be verified in parallel.
-    
+    """
+
     def __init__(
         self,
         num_speculative_tokens: int = 5,
@@ -56,10 +46,12 @@ class TreeSpeculator:
         target_token_ids: list[list[int]],
         temperature: float = 0.0,
     ) -> list[VerificationResult]:
-                Verify a batch of draft proposals against target model output.
+        """
+        Verify a batch of draft proposals against target model output.
 
         Uses rejection sampling to accept/reject draft tokens.
-                results: list[VerificationResult] = []
+        """
+        results: list[VerificationResult] = []
 
         for i, proposal in enumerate(proposals):
             if proposal.is_empty():
@@ -85,8 +77,8 @@ class TreeSpeculator:
         target_token_ids: list[int],
         temperature: float,
     ) -> VerificationResult:
-"""
-Verify a single proposal.        accepted_tokens: list[int] = []
+        """Verify a single proposal."""
+        accepted_tokens: list[int] = []
         rejected_at: int | None = None
         bonus_token: int | None = None
 
@@ -104,7 +96,8 @@ Verify a single proposal.        accepted_tokens: list[int] = []
                 bonus_token = target_token
                 break
 
-        # If all accepted and there's a bonus token'        if rejected_at is None and len(target_token_ids) > len(proposal.token_ids):
+        # If all accepted and there's a bonus token
+        if rejected_at is None and len(target_token_ids) > len(proposal.token_ids):
             bonus_token = target_token_ids[len(proposal.token_ids)]
 
         return VerificationResult(

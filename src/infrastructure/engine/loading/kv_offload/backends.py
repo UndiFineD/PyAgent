@@ -1,62 +1,45 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Storage backends for KV block offloading.
 """
-try:
 
-"""
+from __future__ import annotations
+
 import threading
-except ImportError:
-    import threading
+from typing import Dict, Iterable, List
 
-try:
-    from typing import Dict, Iterable, List
-except ImportError:
-    from typing import Dict, Iterable, List
-
-
-try:
-    from .base import OffloadingBackend
-except ImportError:
-    from .base import OffloadingBackend
-
-try:
-    from .models import BlockHash, BlockStatus, LoadStoreSpec, OffloadMedium
-except ImportError:
-    from .models import BlockHash, BlockStatus, LoadStoreSpec, OffloadMedium
-
-
+from .base import OffloadingBackend
+from .models import BlockHash, BlockStatus, LoadStoreSpec, OffloadMedium
 
 
 class MemoryBackend(OffloadingBackend):
-        In-memory backend for block storage.
+    """
+    In-memory backend for block storage.
 
     Simple implementation for testing and CPU offloading.
-    
+    """
+
     def __init__(
         self,
         capacity_blocks: int,
         block_size: int = 4096,
-        medium: str = "cpu","    ) -> None:
+        medium: str = "cpu",
+    ) -> None:
         self._capacity = capacity_blocks
         self._block_size = block_size
         self._medium = medium
@@ -82,6 +65,7 @@ class MemoryBackend(OffloadingBackend):
             for _ in block_hashes:
                 if len(self._allocated) >= self._capacity:
                     raise RuntimeError("Backend out of capacity")
+
                 address = self._next_address
                 self._next_address += self._block_size
                 self._allocated[address] = bytes(self._block_size)
@@ -112,5 +96,3 @@ class MemoryBackend(OffloadingBackend):
             addresses=[b.address for b in blocks],
             sizes=[b.size for b in blocks],
         )
-
-"""

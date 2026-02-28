@@ -1,24 +1,20 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Structural components for KV cache management: queues, caches, and pools."""
 
-"""
-"""
-Structural components for KV cache management: queues, caches, and pools.
 # SPDX-License-Identifier: Apache-2.0
-
-"""
 import time
 from typing import Any, Dict, List, Optional
 
@@ -26,11 +22,12 @@ from .data_classes import BlockHashWithGroupId, KVCacheBlock
 from .enums import EvictionPolicy
 
 
-
 class FreeBlockQueue:
-        Doubly-linked list queue for free blocks with O(1) operations.
+    """
+    Doubly-linked list queue for free blocks with O(1) operations.
     Maintains LRU order for eviction decisions.
-    
+    """
+
     def __init__(self, blocks: List[KVCacheBlock]) -> None:
         self.num_free_blocks = len(blocks)
         for i, block in enumerate(blocks):
@@ -52,16 +49,16 @@ class FreeBlockQueue:
             self._tail.prev_free_block = self._head
 
     def pop_front(self) -> Optional[KVCacheBlock]:
-"""
-Remove and return the first block in the queue.        if self.num_free_blocks == 0:
+        """Remove and return the first block in the queue."""
+        if self.num_free_blocks == 0:
             return None
         block = self._head.next_free_block
         self._remove(block)
         return block
 
     def append(self, block: KVCacheBlock) -> None:
-"""
-Add a block to the end of the queue.        prev = self._tail.prev_free_block
+        """Add a block to the end of the queue."""
+        prev = self._tail.prev_free_block
         prev.next_free_block = block
         block.prev_free_block = prev
         block.next_free_block = self._tail
@@ -69,12 +66,12 @@ Add a block to the end of the queue.        prev = self._tail.prev_free_block
         self.num_free_blocks += 1
 
     def remove(self, block: KVCacheBlock) -> None:
-"""
-Remove a specific block from the queue.        self._remove(block)
+        """Remove a specific block from the queue."""
+        self._remove(block)
 
     def _remove(self, block: KVCacheBlock) -> None:
-"""
-Internal helper to remove a block from the linked list.        prev = block.prev_free_block
+        """Internal helper to remove a block from the linked list."""
+        prev = block.prev_free_block
         next_ = block.next_free_block
         if prev:
             prev.next_free_block = next_
@@ -91,16 +88,15 @@ Internal helper to remove a block from the linked list.        prev = block.prev
         return self.num_free_blocks > 0
 
 
-
 class BlockHashCache:
-"""
-Cache mapping block hashes to blocks for prefix caching.
+    """Cache mapping block hashes to blocks for prefix caching."""
+
     def __init__(self) -> None:
         self._cache: Dict[BlockHashWithGroupId, KVCacheBlock | Dict[int, KVCacheBlock]] = {}
 
     def get(self, key: BlockHashWithGroupId) -> Optional[KVCacheBlock]:
-"""
-Look up a block by its hash.        entry = self._cache.get(key)
+        """Look up a block by its hash."""
+        entry = self._cache.get(key)
         if entry is None:
             return None
         if isinstance(entry, KVCacheBlock):
@@ -108,8 +104,8 @@ Look up a block by its hash.        entry = self._cache.get(key)
         return next(iter(entry.values()))
 
     def insert(self, key: BlockHashWithGroupId, block: KVCacheBlock) -> None:
-"""
-Insert a block-hash association into the cache.        entry = self._cache.get(key)
+        """Insert a block-hash association into the cache."""
+        entry = self._cache.get(key)
         if entry is None:
             self._cache[key] = block
         elif isinstance(entry, KVCacheBlock):
@@ -118,8 +114,8 @@ Insert a block-hash association into the cache.        entry = self._cache.get(k
             entry[block.block_id] = block
 
     def remove(self, key: BlockHashWithGroupId, block_id: int) -> Optional[KVCacheBlock]:
-"""
-Remove a block-hash association from the cache.        entry = self._cache.get(key)
+        """Remove a block-hash association from the cache."""
+        entry = self._cache.get(key)
         if entry is None:
             return None
         if isinstance(entry, KVCacheBlock):
@@ -136,10 +132,9 @@ Remove a block-hash association from the cache.        entry = self._cache.get(k
         return len(self._cache)
 
 
-
 class BlockPool:
-"""
-Manages allocation, caching, and eviction of KV cache blocks.
+    """Manages allocation, caching, and eviction of KV cache blocks."""
+
     def __init__(
         self, num_blocks: int, enable_caching: bool = True, eviction_policy: EvictionPolicy = EvictionPolicy.LRU
     ) -> None:
@@ -158,30 +153,31 @@ Manages allocation, caching, and eviction of KV cache blocks.
 
     @property
     def usage(self) -> float:
-"""
-Current percentage of used blocks in the pool.        used = self.num_blocks - len(self.free_queue)
+        """Current percentage of used blocks in the pool."""
+        used = self.num_blocks - len(self.free_queue)
         return used / self.num_blocks if self.num_blocks > 0 else 0.0
 
     @property
     def num_free_blocks(self) -> int:
-"""
-Number of currently available blocks.        return len(self.free_queue)
+        """Number of currently available blocks."""
+        return len(self.free_queue)
 
     def allocate(self, num_blocks: int) -> List[KVCacheBlock]:
-"""
-Allocate a list of blocks from the pool.        allocated = []
+        """Allocate a list of blocks from the pool."""
+        allocated = []
         for _ in range(num_blocks):
             block = self._allocate_one()
             if block is None:
                 for b in allocated:
                     self.free(b)
-                raise MemoryError(f"Cannot allocate {num_blocks} blocks")"            allocated.append(block)
+                raise MemoryError(f"Cannot allocate {num_blocks} blocks")
+            allocated.append(block)
         self.total_allocations += num_blocks
         return allocated
 
     def _allocate_one(self) -> Optional[KVCacheBlock]:
-"""
-Internal helper to allocate a single block, potentially evicting.        block = self.free_queue.pop_front()
+        """Internal helper to allocate a single block, potentially evicting."""
+        block = self.free_queue.pop_front()
         if block is None:
             return None
         if block.block_hash is not None:
@@ -193,8 +189,8 @@ Internal helper to allocate a single block, potentially evicting.        block =
         return block
 
     def free(self, block: KVCacheBlock) -> None:
-"""
-Free a block and return it to the pool.        if block.is_null:
+        """Free a block and return it to the pool."""
+        if block.is_null:
             return
         block.ref_cnt -= 1
         if block.ref_cnt <= 0:
@@ -202,15 +198,15 @@ Free a block and return it to the pool.        if block.is_null:
             self.free_queue.append(block)
 
     def cache_block(self, block: KVCacheBlock, block_hash: BlockHashWithGroupId) -> None:
-"""
-Enable prefix caching for a block by associating it with a hash.        if not self.enable_caching:
+        """Enable prefix caching for a block by associating it with a hash."""
+        if not self.enable_caching:
             return
         block.block_hash = block_hash
         self.hash_cache.insert(block_hash, block)
 
     def lookup_cached(self, block_hash: BlockHashWithGroupId) -> Optional[KVCacheBlock]:
-"""
-Look up a block in the prefix cache.        if not self.enable_caching:
+        """Look up a block in the prefix cache."""
+        if not self.enable_caching:
             return None
         block = self.hash_cache.get(block_hash)
         if block is not None:
@@ -222,20 +218,22 @@ Look up a block in the prefix cache.        if not self.enable_caching:
         return None
 
     def _record_eviction(self, block: KVCacheBlock) -> None:
-"""
-Record an eviction event for analytics.        self.total_evictions += 1
+        """Record an eviction event for analytics."""
+        self.total_evictions += 1
         lifetime = time.time() - block.last_access_time
         self._eviction_events.append(
             {
-                "block_id": block.block_id,"                "lifetime_seconds": lifetime,"                "access_count": block.access_count,"                "timestamp": time.time(),"            }
+                "block_id": block.block_id,
+                "lifetime_seconds": lifetime,
+                "access_count": block.access_count,
+                "timestamp": time.time(),
+            }
         )
         if len(self._eviction_events) > 10000:
             self._eviction_events = self._eviction_events[-5000:]
 
     def get_eviction_events(self) -> List[Dict[str, Any]]:
-"""
-Retrieve and clear the list of recorded eviction events.        events = self._eviction_events
+        """Retrieve and clear the list of recorded eviction events."""
+        events = self._eviction_events
         self._eviction_events = []
         return events
-
-"""

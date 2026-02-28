@@ -12,44 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-# Processor package.
-
-try:
-    from .audio import AudioProcessor  # noqa: F401
 """
-except ImportError:
-
+Processor package.
 """
-from .audio import AudioProcessor # noqa: F401
 
-try:
-    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig, MultiModalData, MultiModalInputs, PlaceholderInfo  # noqa: F401
-except ImportError:
-    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig, MultiModalData, MultiModalInputs, PlaceholderInfo # noqa: F401
-
-
-try:
-    from .embed import TextEmbedProcessor  # noqa: F401
-except ImportError:
-    from .embed import TextEmbedProcessor # noqa: F401
-
-try:
-    from .image import ImageProcessor  # noqa: F401
-except ImportError:
-    from .image import ImageProcessor # noqa: F401
-
-try:
-    from .registry import MULTIMODAL_REGISTRY, MultiModalRegistry, get_placeholder_tokens, process_multimodal_inputs  # noqa: F401
-except ImportError:
-    from .registry import MULTIMODAL_REGISTRY, MultiModalRegistry, get_placeholder_tokens, process_multimodal_inputs # noqa: F401
-
-try:
-    from .video import VideoProcessor  # noqa: F401
-except ImportError:
-    from .video import VideoProcessor # noqa: F401
-
-
+from .audio import AudioProcessor  # noqa: F401
+from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,  # noqa: F401
+                   MultiModalData, MultiModalInputs, PlaceholderInfo)
+from .embed import TextEmbedProcessor  # noqa: F401
+from .image import ImageProcessor  # noqa: F401
+from .registry import (MULTIMODAL_REGISTRY, MultiModalRegistry,  # noqa: F401
+                       get_placeholder_tokens, process_multimodal_inputs)
+from .video import VideoProcessor  # noqa: F401
 
 __all__ = [
     "ModalityType",

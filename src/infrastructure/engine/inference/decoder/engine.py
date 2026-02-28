@@ -1,67 +1,41 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Engine.py module.
 """
-try:
 
-"""
+from __future__ import annotations
+
 import time
-except ImportError:
-    import time
+from typing import Any, Sequence
 
-try:
-    from typing import Any, Sequence
-except ImportError:
-    from typing import Any, Sequence
+import numpy as np
 
-
-try:
-    import numpy
-except ImportError:
-    import numpy
- as np
-
-try:
-    from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
-except ImportError:
-    from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
-
+from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
                      SpeculativeConfig, VerificationResult)
-try:
-    from .proposers import NgramProposer, SuffixProposer
-except ImportError:
-    from .proposers import NgramProposer, SuffixProposer
-
-try:
-    from .verification import TreeSpeculator
-except ImportError:
-    from .verification import TreeSpeculator
-
-
+from .proposers import NgramProposer, SuffixProposer
+from .verification import TreeSpeculator
 
 
 class SpeculativeDecoder:
-        Main speculative decoding engine.
+    """
+    Main speculative decoding engine.
 
     Coordinates proposer and verifier for accelerated inference.
-    
+    """
+
     def __init__(self, config: SpeculativeConfig) -> None:
         self.config = config
         self.metrics = SpecDecodingMetrics.new(config.num_speculative_tokens)
@@ -92,13 +66,13 @@ class SpeculativeDecoder:
         self._active_requests: set[str] = set()
 
     def start_request(self, request_id: str, prompt_token_ids: list[int]) -> None:
-"""
-Start speculative decoding for a request.        self._proposer.start_request(request_id, prompt_token_ids)
+        """Start speculative decoding for a request."""
+        self._proposer.start_request(request_id, prompt_token_ids)
         self._active_requests.add(request_id)
 
     def stop_request(self, request_id: str) -> None:
-"""
-Stop speculative decoding for a request.        self._proposer.stop_request(request_id)
+        """Stop speculative decoding for a request."""
+        self._proposer.stop_request(request_id)
         self._active_requests.discard(request_id)
 
     def propose(
@@ -106,8 +80,8 @@ Stop speculative decoding for a request.        self._proposer.stop_request(requ
         request_id: str,
         current_tokens: Sequence[int],
     ) -> DraftProposal:
-"""
-Generate draft tokens for a request.        if request_id not in self._active_requests:
+        """Generate draft tokens for a request."""
+        if request_id not in self._active_requests:
             return DraftProposal(request_id=request_id, token_ids=[])
 
         start = time.perf_counter()
@@ -126,8 +100,8 @@ Generate draft tokens for a request.        if request_id not in self._active_re
         proposals: list[DraftProposal],
         target_token_ids: list[list[int]],
     ) -> list[VerificationResult]:
-"""
-Verify draft tokens against target model output.        start = time.perf_counter()
+        """Verify draft tokens against target model output."""
+        start = time.perf_counter()
 
         # Use tree speculator for verification
         results = self._speculator.verify_batch(
@@ -156,17 +130,17 @@ Verify draft tokens against target model output.        start = time.perf_counte
         request_id: str,
         new_token_ids: list[int],
     ) -> None:
-"""
-Update proposer state after verification.        if request_id in self._active_requests:
+        """Update proposer state after verification."""
+        if request_id in self._active_requests:
             self._proposer.update(request_id, new_token_ids)
 
     def get_metrics(self) -> SpecDecodingMetrics:
-"""
-Get current metrics.        return self.metrics
+        """Get current metrics."""
+        return self.metrics
 
     def reset_metrics(self) -> None:
-"""
-Reset metrics.        self.metrics.reset()
+        """Reset metrics."""
+        self.metrics.reset()
 
     @property
     def num_active_requests(self) -> int:
@@ -174,15 +148,14 @@ Reset metrics.        self.metrics.reset()
 
 
 def create_speculative_decoder(
-    method: str = "ngram","    num_speculative_tokens: int = 5,
+    method: str = "ngram",
+    num_speculative_tokens: int = 5,
     **kwargs: Any,
 ) -> SpeculativeDecoder:
-"""
-Create a speculative decoder with the given configuration.    config = SpeculativeConfig(
+    """Create a speculative decoder with the given configuration."""
+    config = SpeculativeConfig(
         method=SpecMethod(method),
         num_speculative_tokens=num_speculative_tokens,
         **kwargs,
     )
     return SpeculativeDecoder(config)
-
-"""

@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
@@ -22,7 +18,8 @@ from __future__ import annotations
 Backend selection and dispatching logic for structured output grammars.
 """
 
-"""
+from __future__ import annotations
+
 import json
 import logging
 import re
@@ -39,11 +36,12 @@ from .regex_constraint import ChoiceGrammar, RegexGrammar
 logger = logging.getLogger(__name__)
 
 
-
 class GrammarCompiler:
-"""
-Compiles grammar specifications into grammar objects.""
-Inspired by vLLM's structured output backends.'    
+    """Compiles grammar specifications into grammar objects.
+
+    Inspired by vLLM's structured output backends.
+    """
+
     def __init__(
         self,
         vocab_size: int,
@@ -56,14 +54,15 @@ Inspired by vLLM's structured output backends.'
         self,
         params: StructuredOutputsParams,
     ) -> Optional[StructuredOutputGrammar]:
-"""
-Compile structured output params into a grammar.""
-Args:
+        """Compile structured output params into a grammar.
+
+        Args:
             params: Structured output parameters.
 
         Returns:
             Compiled grammar, or None if no constraints.
-                option_type = params.get_option_type()
+        """
+        option_type = params.get_option_type()
 
         if option_type is None:
             return None
@@ -80,7 +79,8 @@ Args:
 
         if option_type == StructuredOutputOptions.JSON_OBJECT:
             return JSONSchemaGrammar(
-                schema={"type": "object"},"                vocab_size=self.vocab_size,
+                schema={"type": "object"},
+                vocab_size=self.vocab_size,
                 token_to_string=self.token_to_string,
             )
 
@@ -109,9 +109,11 @@ Args:
 
 
 class StructuredOutputManager:
-"""
-Manages grammar compilation and lifecycle.""
-Inspired by vLLM's StructuredOutputManager.'    
+    """Manages grammar compilation and lifecycle.
+
+    Inspired by vLLM's StructuredOutputManager.
+    """
+
     def __init__(
         self,
         vocab_size: int,
@@ -121,37 +123,40 @@ Inspired by vLLM's StructuredOutputManager.'
         self._grammars: Dict[str, StructuredOutputGrammar] = {}
 
     def init_grammar(self, request_id: str, params: StructuredOutputsParams) -> None:
-"""
-Initialize grammar for a request.""
-Args:
+        """Initialize grammar for a request.
+
+        Args:
             request_id: Request identifier.
             params: Structured output parameters.
-                grammar = self.compiler.compile(params)
+        """
+        grammar = self.compiler.compile(params)
         if grammar:
             self._grammars[request_id] = grammar
             logger.debug("Initialized grammar for request %s", request_id)
+
     def get_grammar(self, request_id: str) -> Optional[StructuredOutputGrammar]:
-"""
-Get grammar for a request.        return self._grammars.get(request_id)
+        """Get grammar for a request."""
+        return self._grammars.get(request_id)
 
     def remove_grammar(self, request_id: str) -> None:
-"""
-Remove grammar for a completed request.        self._grammars.pop(request_id, None)
+        """Remove grammar for a completed request."""
+        self._grammars.pop(request_id, None)
 
     def accept_tokens(
         self,
         request_id: str,
         tokens: List[int],
     ) -> bool:
-"""
-Accept tokens for a request's grammar."""'
-Args:
+        """Accept tokens for a request's grammar.
+
+        Args:
             request_id: Request identifier.
             tokens: Tokens to accept.
 
         Returns:
             True if tokens were accepted.
-                grammar = self._grammars.get(request_id)
+        """
+        grammar = self._grammars.get(request_id)
         if grammar is None:
             return True  # No grammar constraint
 
@@ -162,12 +167,13 @@ Args:
         request_ids: List[str],
         bitmask: np.ndarray,
     ) -> None:
-"""
-Fill bitmasks for multiple requests.""
-Args:
+        """Fill bitmasks for multiple requests.
+
+        Args:
             request_ids: List of request IDs.
             bitmask: 2D array [batch_size, vocab_size].
-                for idx, request_id in enumerate(request_ids):
+        """
+        for idx, request_id in enumerate(request_ids):
             grammar = self._grammars.get(request_id)
             if grammar:
                 grammar.fill_bitmask(bitmask, idx)
@@ -181,28 +187,30 @@ def compile_grammar(
     vocab_size: int,
     token_to_string: Callable[[int], str],
 ) -> Optional[StructuredOutputGrammar]:
-"""
-Compile structured output parameters into a grammar.""
-Args:
+    """Compile structured output parameters into a grammar.
+
+    Args:
         params: Structured output parameters.
         vocab_size: Vocabulary size.
         token_to_string: Function to convert token ID to string.
 
     Returns:
         Compiled grammar, or None if no constraints.
-        compiler = GrammarCompiler(vocab_size, token_to_string)
+    """
+    compiler = GrammarCompiler(vocab_size, token_to_string)
     return compiler.compile(params)
 
 
 def validate_structured_output_params(params: StructuredOutputsParams) -> List[str]:
-"""
-Validate structured output parameters.""
-Args:
+    """Validate structured output parameters.
+
+    Args:
         params: Parameters to validate.
 
     Returns:
         List of validation error messages (empty if valid).
-        errors = []
+    """
+    errors = []
 
     if params.json is not None:
         try:
@@ -210,22 +218,23 @@ Args:
                 json.loads(params.json)
         except json.JSONDecodeError as e:
             errors.append(f"Invalid JSON schema: {e}")
+
     if params.regex is not None:
         try:
             re.compile(params.regex)
         except re.error as e:
             errors.append(f"Invalid regex pattern: {e}")
+
     if params.choice is not None:
         if not isinstance(params.choice, list):
-            errors.append("Choice must be a list")"        elif not params.choice:
+            errors.append("Choice must be a list")
+        elif not params.choice:
             errors.append("Choice list cannot be empty")
+
     if params.grammar is not None:
         if not isinstance(params.grammar, str):
-            errors.append("Grammar must be a string")"        elif "::=" not in params.grammar:"            errors.append("Grammar must contain at least one rule (::=)")
+            errors.append("Grammar must be a string")
+        elif "::=" not in params.grammar:
+            errors.append("Grammar must contain at least one rule (::=)")
+
     return errors
-
-"""
-
-""
-
-"""

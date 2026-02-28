@@ -12,39 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Standard scheduler implementations."""
 
-"""
-"""
-Standard scheduler implementations.""
-try:
-
-"""
 from .base import Scheduler
-except ImportError:
-    from .base import Scheduler
-
-try:
-    from .config import RequestStatus, SchedulerOutput
-except ImportError:
-    from .config import RequestStatus, SchedulerOutput
-
+from .config import RequestStatus, SchedulerOutput
 
 
 class SimpleScheduler(Scheduler):
-"""
-Simple FCFS scheduler implementation.""
-def __init__(self, max_batch_size: int = 32, max_tokens: int = 4096) -> None:
-"""
-Initialize the scheduler.""
-super().__init__()
+    """Simple FCFS scheduler implementation."""
+
+    def __init__(self, max_batch_size: int = 32, max_tokens: int = 4096) -> None:
+        super().__init__()
         self.max_batch_size = max_batch_size
         self.max_tokens = max_tokens
 
-
     def schedule(self) -> SchedulerOutput:
-"""
-Schedule waiting requests for execution.""
-output = SchedulerOutput()
+        """Schedule waiting requests for execution."""
+        output = SchedulerOutput()
 
         # Move waiting to running up to batch size
         total_tokens = sum(r.num_tokens - r.num_computed_tokens for r in self.running)
