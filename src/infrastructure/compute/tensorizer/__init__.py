@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -17,15 +17,21 @@
 """
 Tensorizer Package
 High-performance tensor serialization and streaming system.
-
 """
-try:
-    from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,  # noqa: F401
-except ImportError:
-    from .core import (CompressionType, StreamingTensorizerReader, TensorDtype, # noqa: F401
 
+from .core import (CompressionType, StreamingTensorizerReader, TensorDtype,  # noqa: F401
                    TensorizerConfig, TensorizerReader, TensorizerWriter,
                    TensorMetadata, get_model_info, load_model, save_model)
 
 __all__ = [
-    "TensorizerConfig","    "CompressionType","    "TensorDtype","    "TensorMetadata","    "TensorizerWriter","    "TensorizerReader","    "StreamingTensorizerReader","    "save_model","    "load_model","    "get_model_info","]
+    "TensorizerConfig",
+    "CompressionType",
+    "TensorDtype",
+    "TensorMetadata",
+    "TensorizerWriter",
+    "TensorizerReader",
+    "StreamingTensorizerReader",
+    "save_model",
+    "load_model",
+    "get_model_info",
+]

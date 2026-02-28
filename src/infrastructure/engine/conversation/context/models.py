@@ -1,72 +1,67 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Conversation context models and enums.
 """
-try:
 
-"""
+from __future__ import annotations
+
 import time
-except ImportError:
-    import time
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
-try:
-    from typing import Any, Dict, List, Optional
-except ImportError:
-    from typing import Any, Dict, List, Optional
-
-
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
 
 class ContextState(Enum):
-"""
-Conversation context state.
-    ACTIVE = "active""    WAITING_INPUT = "waiting_input""    WAITING_TOOL = "waiting_tool""    PROCESSING = "processing""    COMPLETED = "completed""    ERROR = "error""    EXPIRED = "expired"
+    """Conversation context state."""
+
+    ACTIVE = "active"
+    WAITING_INPUT = "waiting_input"
+    WAITING_TOOL = "waiting_tool"
+    PROCESSING = "processing"
+    COMPLETED = "completed"
+    ERROR = "error"
+    EXPIRED = "expired"
 
 
 class TurnType(Enum):
-"""
-Conversation turn type.
-    SYSTEM = "system""    USER = "user""    ASSISTANT = "assistant""    TOOL_CALL = "tool_call""    TOOL_RESULT = "tool_result""    REASONING = "reasoning""
+    """Conversation turn type."""
+
+    SYSTEM = "system"
+    USER = "user"
+    ASSISTANT = "assistant"
+    TOOL_CALL = "tool_call"
+    TOOL_RESULT = "tool_result"
+    REASONING = "reasoning"
 
 
 class ToolExecutionPolicy(Enum):
-"""
-Tool execution policy.
-    SEQUENTIAL = "sequential"  # Execute tools one at a time"    PARALLEL = "parallel"  # Execute tools in parallel"    BATCH = "batch"  # Batch similar tools"    LAZY = "lazy"  # Defer execution until needed"
+    """Tool execution policy."""
+
+    SEQUENTIAL = "sequential"  # Execute tools one at a time
+    PARALLEL = "parallel"  # Execute tools in parallel
+    BATCH = "batch"  # Batch similar tools
+    LAZY = "lazy"  # Defer execution until needed
+
 
 @dataclass
 class TokenMetrics:
-"""
-Token usage metrics.
+    """Token usage metrics."""
+
     input_tokens: int = 0
     output_tokens: int = 0
     cached_tokens: int = 0
@@ -75,16 +70,17 @@ Token usage metrics.
 
     @property
     def total_tokens(self) -> int:
-"""
-Get the total number of tokens.        return self.input_tokens + self.output_tokens
+        """Get the total number of tokens."""
+        return self.input_tokens + self.output_tokens
 
     @property
     def effective_input_tokens(self) -> int:
-"""
-Input tokens minus cached.        return self.input_tokens - self.cached_tokens
+        """Input tokens minus cached."""
+        return self.input_tokens - self.cached_tokens
 
-    def add(self, other: "TokenMetrics") -> "TokenMetrics":"        """
-Add metrics.        return TokenMetrics(
+    def add(self, other: "TokenMetrics") -> "TokenMetrics":
+        """Add metrics."""
+        return TokenMetrics(
             input_tokens=self.input_tokens + other.input_tokens,
             output_tokens=self.output_tokens + other.output_tokens,
             cached_tokens=self.cached_tokens + other.cached_tokens,
@@ -93,15 +89,21 @@ Add metrics.        return TokenMetrics(
         )
 
     def to_dict(self) -> Dict[str, int]:
-"""
-Convert metrics to dictionary.        return {
-            "input_tokens": self.input_tokens,"            "output_tokens": self.output_tokens,"            "cached_tokens": self.cached_tokens,"            "tool_tokens": self.tool_tokens,"            "reasoning_tokens": self.reasoning_tokens,"            "total_tokens": self.total_tokens,"        }
+        """Convert metrics to dictionary."""
+        return {
+            "input_tokens": self.input_tokens,
+            "output_tokens": self.output_tokens,
+            "cached_tokens": self.cached_tokens,
+            "tool_tokens": self.tool_tokens,
+            "reasoning_tokens": self.reasoning_tokens,
+            "total_tokens": self.total_tokens,
+        }
 
 
 @dataclass
 class ConversationTurn:
-"""
-Single conversation turn.
+    """Single conversation turn."""
+
     id: str
     type: TurnType
     content: Any
@@ -112,25 +114,42 @@ Single conversation turn.
     child_ids: List[str] = field(default_factory=list)
 
     def to_message(self) -> Dict[str, Any]:
-"""
-Convert to message format.        role_map = {
-            TurnType.SYSTEM: "system","            TurnType.USER: "user","            TurnType.ASSISTANT: "assistant","            TurnType.TOOL_CALL: "assistant","            TurnType.TOOL_RESULT: "tool","            TurnType.REASONING: "assistant","        }
+        """Convert to message format."""
+        role_map = {
+            TurnType.SYSTEM: "system",
+            TurnType.USER: "user",
+            TurnType.ASSISTANT: "assistant",
+            TurnType.TOOL_CALL: "assistant",
+            TurnType.TOOL_RESULT: "tool",
+            TurnType.REASONING: "assistant",
+        }
         msg = {
-            "role": role_map.get(self.type, "user"),"            "content": self.content if isinstance(self.content, str) else "","        }
+            "role": role_map.get(self.type, "user"),
+            "content": self.content if isinstance(self.content, str) else "",
+        }
         if self.type == TurnType.TOOL_CALL and isinstance(self.content, list):
-            msg["content"] = None"            msg["tool_calls"] = self.content"        if self.type == TurnType.TOOL_RESULT:
-            msg["tool_call_id"] = self.metadata.get("tool_call_id", "")"        return msg
+            msg["content"] = None
+            msg["tool_calls"] = self.content
+        if self.type == TurnType.TOOL_RESULT:
+            msg["tool_call_id"] = self.metadata.get("tool_call_id", "")
+        return msg
 
     def to_dict(self) -> Dict[str, Any]:
-"""
-Convert turn to dictionary.        return {
-            "id": self.id,"            "type": self.type.value,"            "content": self.content,"            "timestamp": self.timestamp,"            "tokens": self.tokens.to_dict() if self.tokens else None,"            "metadata": self.metadata,"        }
+        """Convert turn to dictionary."""
+        return {
+            "id": self.id,
+            "type": self.type.value,
+            "content": self.content,
+            "timestamp": self.timestamp,
+            "tokens": self.tokens.to_dict() if self.tokens else None,
+            "metadata": self.metadata,
+        }
 
 
 @dataclass
 class ToolExecution:
-"""
-Tool execution record.
+    """Tool execution record."""
+
     call_id: str
     tool_name: str
     arguments: Dict[str, Any]
@@ -139,22 +158,24 @@ Tool execution record.
     start_time: Optional[float] = None
     end_time: Optional[float] = None
     status: str = "pending"
+
     @property
     def duration_ms(self) -> float:
-"""
-Get execution duration in milliseconds.        if self.start_time and self.end_time:
+        """Get execution duration in milliseconds."""
+        if self.start_time and self.end_time:
             return (self.end_time - self.start_time) * 1000
         return 0.0
 
     @property
     def is_complete(self) -> bool:
-"""
-Check if execution is finished.        return self.status in ("completed", "failed")
+        """Check if execution is finished."""
+        return self.status in ("completed", "failed")
+
 
 @dataclass
 class ContextConfig:
-"""
-Context configuration.
+    """Context configuration."""
+
     max_turns: int = 100
     max_tokens: int = 128000
     max_tool_calls_per_turn: int = 10
@@ -167,15 +188,19 @@ Context configuration.
     summarize_threshold: int = 50
 
     def to_dict(self) -> Dict[str, Any]:
-"""
-Convert configuration to dictionary.        return {
-            "max_turns": self.max_turns,"            "max_tokens": self.max_tokens,"            "tool_policy": self.tool_policy.value,"            "enable_reasoning": self.enable_reasoning,"        }
+        """Convert configuration to dictionary."""
+        return {
+            "max_turns": self.max_turns,
+            "max_tokens": self.max_tokens,
+            "tool_policy": self.tool_policy.value,
+            "enable_reasoning": self.enable_reasoning,
+        }
 
 
 @dataclass
 class ContextSnapshot:
-"""
-Snapshot of context state.
+    """Snapshot of context state."""
+
     context_id: str
     timestamp: float
     state: ContextState
@@ -185,20 +210,43 @@ Snapshot of context state.
     metadata: Dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-"""
-Convert snapshot to dictionary.        return {
-            "context_id": self.context_id,"            "timestamp": self.timestamp,"            "state": self.state.value,"            "turn_count": self.turn_count,"            "total_tokens": self.total_tokens.to_dict(),"            "turns": [t.to_dict() for t in self.turns],"            "metadata": self.metadata,"        }
+        """Convert snapshot to dictionary."""
+        return {
+            "context_id": self.context_id,
+            "timestamp": self.timestamp,
+            "state": self.state.value,
+            "turn_count": self.turn_count,
+            "total_tokens": self.total_tokens.to_dict(),
+            "turns": [t.to_dict() for t in self.turns],
+            "metadata": self.metadata,
+        }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> "ContextSnapshot":"        """
-Restore from dictionary.        turns = []
-        for turn_data in data.get("turns", []):"            tokens = None
-            if turn_data.get("tokens"):"                tokens = TokenMetrics(**turn_data["tokens"])"            turns.append(
+    def from_dict(cls, data: Dict[str, Any]) -> "ContextSnapshot":
+        """Restore from dictionary."""
+        turns = []
+        for turn_data in data.get("turns", []):
+            tokens = None
+            if turn_data.get("tokens"):
+                tokens = TokenMetrics(**turn_data["tokens"])
+            turns.append(
                 ConversationTurn(
-                    id=turn_data["id"],"                    type=TurnType(turn_data["type"]),"                    content=turn_data["content"],"                    timestamp=turn_data.get("timestamp", 0),"                    tokens=tokens,
-                    metadata=turn_data.get("metadata", {}),"                )
+                    id=turn_data["id"],
+                    type=TurnType(turn_data["type"]),
+                    content=turn_data["content"],
+                    timestamp=turn_data.get("timestamp", 0),
+                    tokens=tokens,
+                    metadata=turn_data.get("metadata", {}),
+                )
             )
-        token_data = data.get("total_tokens", {})"        token_data = {k: v for k, v in token_data.items() if k != "total_tokens"}"        return cls(
-            context_id=data["context_id"],"            timestamp=data["timestamp"],"            state=ContextState(data["state"]),"            turn_count=data["turn_count"],"            total_tokens=TokenMetrics(**token_data),
+        token_data = data.get("total_tokens", {})
+        token_data = {k: v for k, v in token_data.items() if k != "total_tokens"}
+        return cls(
+            context_id=data["context_id"],
+            timestamp=data["timestamp"],
+            state=ContextState(data["state"]),
+            turn_count=data["turn_count"],
+            total_tokens=TokenMetrics(**token_data),
             turns=turns,
-            metadata=data.get("metadata", {}),"        )
+            metadata=data.get("metadata", {}),
+        )

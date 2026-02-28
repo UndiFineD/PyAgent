@@ -1,65 +1,52 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Base classes for attention backends.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
-except ImportError:
-    from abc import ABC, abstractmethod
+from typing import Any, Generic, TypeVar
 
-try:
-    from typing import Any, Generic, TypeVar
-except ImportError:
-    from typing import Any, Generic, TypeVar
-
-
-try:
-    from .models import AttentionCapabilities, AttentionMetadata, AttentionType
-except ImportError:
-    from .models import AttentionCapabilities, AttentionMetadata, AttentionType
-
+from .models import AttentionCapabilities, AttentionMetadata, AttentionType
 
 # Type variable for backend implementations
 T = TypeVar("T")
 
 
 class AttentionBackend(ABC, Generic[T]):
-        Abstract base class for attention backends.
+    """
+    Abstract base class for attention backends.
 
     Each backend implements specific attention algorithms
     optimized for different scenarios.
-    
+    """
+
     @staticmethod
     @abstractmethod
     def get_name() -> str:
-"""
-Get the backend name.
+        """Get the backend name."""
+
     @staticmethod
     @abstractmethod
     def get_capabilities() -> AttentionCapabilities:
-"""
-Get backend capabilities.
+        """Get backend capabilities."""
+
     @abstractmethod
     def forward(
         self,
@@ -70,7 +57,8 @@ Get backend capabilities.
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-                Compute attention.
+        """
+        Compute attention.
 
         Args:
             query: Query tensor
@@ -82,10 +70,11 @@ Get backend capabilities.
 
         Returns:
             Attention output [batch*seq, num_heads, head_dim]
-        
+        """
+
     def supports(self, attn_type: AttentionType) -> bool:
-"""
-Check if backend supports attention type.        caps = self.get_capabilities()
+        """Check if backend supports attention type."""
+        caps = self.get_capabilities()
         mapping = {
             AttentionType.PREFILL: caps.supports_prefill,
             AttentionType.DECODE: caps.supports_decode,

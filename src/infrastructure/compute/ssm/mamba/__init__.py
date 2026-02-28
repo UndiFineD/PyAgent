@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -15,13 +15,9 @@
 # SPDX-License-Identifier: Apache-2.0
 """
 Mamba SSM Package - Implementation of State Space Models.
-
 """
-try:
-    from typing import TYPE_CHECKING, Any
-except ImportError:
-    from typing import TYPE_CHECKING, Any
 
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .config import MambaConfig, MambaOutput, MambaState
@@ -31,23 +27,40 @@ if TYPE_CHECKING:
 
 
 def __getattr__(name: str) -> Any:
-    if name == "MambaConfig":"        from .config import MambaConfig
+    if name == "MambaConfig":
+        from .config import MambaConfig
         return MambaConfig
-    if name == "MambaState":"        from .config import MambaState
+    if name == "MambaState":
+        from .config import MambaState
         return MambaState
-    if name == "MambaOutput":"        from .config import MambaOutput
+    if name == "MambaOutput":
+        from .config import MambaOutput
         return MambaOutput
-    if name == "MambaMixer":"        from .mixer import MambaMixer
+    if name == "MambaMixer":
+        from .mixer import MambaMixer
         return MambaMixer
-    if name == "Mamba2Mixer":"        from .mixer import Mamba2Mixer
+    if name == "Mamba2Mixer":
+        from .mixer import Mamba2Mixer
         return Mamba2Mixer
-    if name == "HybridMambaMixer":"        from .hybrid import HybridMambaMixer
+    if name == "HybridMambaMixer":
+        from .hybrid import HybridMambaMixer
         return HybridMambaMixer
-    if name == "CausalConv1d":"        from .ops import CausalConv1d
+    if name == "CausalConv1d":
+        from .ops import CausalConv1d
         return CausalConv1d
-    if name == "SelectiveScan":"        from .ops import SelectiveScan
+    if name == "SelectiveScan":
+        from .ops import SelectiveScan
         return SelectiveScan
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
+
 __all__ = [
-    "MambaConfig","    "MambaState","    "MambaOutput","    "MambaMixer","    "Mamba2Mixer","    "HybridMambaMixer","    "CausalConv1d","    "SelectiveScan","]
+    "MambaConfig",
+    "MambaState",
+    "MambaOutput",
+    "MambaMixer",
+    "Mamba2Mixer",
+    "HybridMambaMixer",
+    "CausalConv1d",
+    "SelectiveScan",
+]

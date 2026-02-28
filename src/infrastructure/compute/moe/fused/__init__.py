@@ -1,53 +1,40 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Fused package.
-
 """
-try:
-    from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer  # noqa: F401
-except ImportError:
-    from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer # noqa: F401
 
-try:
-    from .config import (ExpertPlacementStrategy, FusedMoEConfig,  # noqa: F401
-except ImportError:
-    from .config import (ExpertPlacementStrategy, FusedMoEConfig, # noqa: F401
-
+from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer  # noqa: F401
+from .config import (ExpertPlacementStrategy, FusedMoEConfig,  # noqa: F401
                      FusedMoEParallelConfig, FusedMoEQuantConfig)
-try:
-    from .dispatcher import DenseDispatcher, SparseDispatcher  # noqa: F401
-except ImportError:
-    from .dispatcher import DenseDispatcher, SparseDispatcher # noqa: F401
-
-try:
-    from .layer import FusedMoELayer  # noqa: F401
-except ImportError:
-    from .layer import FusedMoELayer # noqa: F401
-
-try:
-    from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod  # noqa: F401
-except ImportError:
-    from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod # noqa: F401
-
-try:
-    from .utils import determine_expert_map  # noqa: F401
-except ImportError:
-    from .utils import determine_expert_map # noqa: F401
-
+from .dispatcher import DenseDispatcher, SparseDispatcher  # noqa: F401
+from .layer import FusedMoELayer  # noqa: F401
+from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod  # noqa: F401
+from .utils import determine_expert_map  # noqa: F401
 
 __all__ = [
-    "FusedMoEConfig","    "FusedMoEParallelConfig","    "FusedMoEQuantConfig","    "ExpertPlacementStrategy","    "FusedMoEMethodBase","    "UnquantizedFusedMoEMethod","    "SparseDispatcher","    "DenseDispatcher","    "determine_expert_map","    "FusedMoELayer","    "AdaptiveMoELayer","    "HierarchicalMoELayer","]
+    "FusedMoEConfig",
+    "FusedMoEParallelConfig",
+    "FusedMoEQuantConfig",
+    "ExpertPlacementStrategy",
+    "FusedMoEMethodBase",
+    "UnquantizedFusedMoEMethod",
+    "SparseDispatcher",
+    "DenseDispatcher",
+    "determine_expert_map",
+    "FusedMoELayer",
+    "AdaptiveMoELayer",
+    "HierarchicalMoELayer",
+]

@@ -12,42 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-"""
-Engine Core sub-package.""
-try:
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Engine Core sub-package."""
 
-"""
 from .base import Executor, Scheduler  # noqa: F401
-except ImportError:
-    from .base import Executor, Scheduler # noqa: F401
-
-try:
-    from .config import EngineCoreOutput, EngineCoreOutputs, FinishReason, ModelRunnerOutput, Request, RequestStatus, SchedulerOutput  # noqa: F401
-except ImportError:
-    from .config import EngineCoreOutput, EngineCoreOutputs, FinishReason, ModelRunnerOutput, Request, RequestStatus, SchedulerOutput # noqa: F401
-
-try:
-    from .engine import EngineCore  # noqa: F401
-except ImportError:
-    from .engine import EngineCore # noqa: F401
-
-try:
-    from .executor import MockExecutor  # noqa: F401
-except ImportError:
-    from .executor import MockExecutor # noqa: F401
-
-try:
-    from .messaging import EngineCoreProc  # noqa: F401
-except ImportError:
-    from .messaging import EngineCoreProc # noqa: F401
-
-try:
-    from .scheduler import SimpleScheduler  # noqa: F401
-except ImportError:
-    from .scheduler import SimpleScheduler # noqa: F401
-
-
+from .config import (EngineCoreOutput, EngineCoreOutputs, FinishReason,  # noqa: F401
+                     ModelRunnerOutput, Request, RequestStatus,
+                     SchedulerOutput)
+from .engine import EngineCore  # noqa: F401
+from .executor import MockExecutor  # noqa: F401
+from .messaging import EngineCoreProc  # noqa: F401
+from .scheduler import SimpleScheduler  # noqa: F401
 
 
 def create_engine_core(
@@ -55,14 +31,25 @@ def create_engine_core(
     max_tokens: int = 4096,
     log_stats: bool = True,
 ) -> EngineCore:
-"""
-Create an EngineCore with default settings.""
-scheduler = SimpleScheduler(max_batch_size=max_batch_size, max_tokens=max_tokens)
+    """Create an EngineCore with default settings."""
+    scheduler = SimpleScheduler(max_batch_size=max_batch_size, max_tokens=max_tokens)
     executor = MockExecutor()
     return EngineCore(scheduler=scheduler, executor=executor, log_stats=log_stats)
 
 
 __all__ = [
-     "RequestStatus", "FinishReason", "Request", "SchedulerOutput", "ModelRunnerOutput", "EngineCoreOutput", "EngineCoreOutputs", "Scheduler", "SimpleScheduler", "Executor", "MockExecutor", "EngineCore", "EngineCoreProc", "create_engine_core"
+    "RequestStatus",
+    "FinishReason",
+    "Request",
+    "SchedulerOutput",
+    "ModelRunnerOutput",
+    "EngineCoreOutput",
+    "EngineCoreOutputs",
+    "Scheduler",
+    "SimpleScheduler",
+    "Executor",
+    "MockExecutor",
+    "EngineCore",
+    "EngineCoreProc",
+    "create_engine_core",
 ]
-

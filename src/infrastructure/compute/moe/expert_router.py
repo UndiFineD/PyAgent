@@ -1,25 +1,20 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Expert Router for Mixture of Experts.
 
-"""
 vLLM Pattern: Routing logic from fused_moe/layer.py
 Implements various routing strategies for token-to-expert assignment.
 
@@ -27,6 +22,9 @@ Beyond vLLM:
 - AdaptiveRouter with learned routing thresholds
 - SoftMoE with soft expert assignment
 - ExpertChoiceRouter for expert-centric routing
+"""
+
+from __future__ import annotations
 
 import math
 import threading
@@ -51,11 +49,15 @@ except ImportError:
 # =============================================================================
 
 
-
 class RoutingMethod(str, Enum):
-"""
-Routing method for token-to-expert assignment.
-    TOP_K = "top_k"  # Standard top-k routing"    EXPERT_CHOICE = "expert_choice"  # Expert chooses tokens"    SOFT_MOE = "soft_moe"  # Soft assignment"    GROUPED_TOP_K = "grouped_top_k"  # Grouped top-k"    ADAPTIVE = "adaptive"  # Learned adaptive routing
+    """Routing method for token-to-expert assignment."""
+
+    TOP_K = "top_k"  # Standard top-k routing
+    EXPERT_CHOICE = "expert_choice"  # Expert chooses tokens
+    SOFT_MOE = "soft_moe"  # Soft assignment
+    GROUPED_TOP_K = "grouped_top_k"  # Grouped top-k
+    ADAPTIVE = "adaptive"  # Learned adaptive routing
+
 
 # =============================================================================
 # Configuration
@@ -64,8 +66,8 @@ Routing method for token-to-expert assignment.
 
 @dataclass
 class RouterConfig:
-"""
-Configuration for expert router.
+    """Configuration for expert router."""
+
     num_experts: int
     top_k: int
     hidden_size: int
@@ -97,8 +99,8 @@ Configuration for expert router.
 
 @dataclass
 class RouterOutput:
-"""
-Output from router forward pass.
+    """Output from router forward pass."""
+
     expert_indices: np.ndarray  # [batch, top_k] - selected expert indices
     expert_weights: np.ndarray  # [batch, top_k] - routing weights
     router_logits: np.ndarray  # [batch, num_experts] - raw logits
@@ -117,10 +119,9 @@ Output from router forward pass.
 # =============================================================================
 
 
-
 class RouterBase(ABC):
-"""
-Base class for expert routers.
+    """Base class for expert routers."""
+
     def __init__(self, config: RouterConfig) -> None:
         self.config = config
 
@@ -136,17 +137,19 @@ Base class for expert routers.
 
     @abstractmethod
     def forward(self, x: np.ndarray) -> RouterOutput:
-                Route tokens to experts.
+        """
+        Route tokens to experts.
 
         Args:
             x: Input hidden states [batch, hidden_size]
 
         Returns:
             RouterOutput with expert assignments and weights
-        
+        """
+
     def compute_router_logits(self, x: np.ndarray) -> np.ndarray:
-"""
-Compute router logits.        logits = x @ self.weight.T
+        """Compute router logits."""
+        logits = x @ self.weight.T
 
         # Add noise for exploration during training
         if self.config.noise_std > 0:
@@ -160,10 +163,12 @@ Compute router logits.        logits = x @ self.weight.T
         router_logits: np.ndarray,
         expert_indices: np.ndarray,
     ) -> float:
-                Compute auxiliary load balancing loss.
+        """
+        Compute auxiliary load balancing loss.
 
         vLLM Pattern: aux_loss computation in MoE layers
-                if self.config.aux_loss_coef == 0:
+        """
+        if self.config.aux_loss_coef == 0:
             return 0.0
 
         batch_size = router_logits.shape[0]
@@ -188,10 +193,12 @@ Compute router logits.        logits = x @ self.weight.T
         return float(aux_loss * self.config.aux_loss_coef)
 
     def compute_z_loss(self, router_logits: np.ndarray) -> float:
-                Compute router z-loss to prevent logit explosion.
+        """
+        Compute router z-loss to prevent logit explosion.
 
         vLLM Pattern: z_loss for numerical stability
-                if self.config.z_loss_coef == 0:
+        """
+        if self.config.z_loss_coef == 0:
             return 0.0
 
         # Mean of squared max logits
@@ -200,22 +207,26 @@ Compute router logits.        logits = x @ self.weight.T
         return float(z_loss * self.config.z_loss_coef)
 
     def update_stats(self, expert_indices: np.ndarray) -> None:
-"""
-Update routing statistics.        with self._lock:
+        """Update routing statistics."""
+        with self._lock:
             self._total_tokens += expert_indices.shape[0]
             for idx in expert_indices.flatten():
                 self._expert_counts[idx] += 1
 
     def get_stats(self) -> dict[str, Any]:
-"""
-Get routing statistics.        with self._lock:
+        """Get routing statistics."""
+        with self._lock:
             if self._total_tokens == 0:
                 return {"expert_utilization": []}
+
             expected = self._total_tokens * self.config.top_k / self.config.num_experts
             utilization = (self._expert_counts / expected).tolist()
 
             return {
-                "total_tokens": self._total_tokens,"                "expert_counts": self._expert_counts.tolist(),"                "expert_utilization": utilization,"            }
+                "total_tokens": self._total_tokens,
+                "expert_counts": self._expert_counts.tolist(),
+                "expert_utilization": utilization,
+            }
 
 
 # =============================================================================
@@ -223,19 +234,21 @@ Get routing statistics.        with self._lock:
 # =============================================================================
 
 
-
 class TopKRouter(RouterBase):
-        Standard top-k router.
+    """
+    Standard top-k router.
 
     vLLM Pattern: Default routing in FusedMoE
-    
+    """
+
     def forward(self, x: np.ndarray) -> RouterOutput:
-"""
-Route using top-k selection.        # Compute logits
+        """Route using top-k selection."""
+        # Compute logits
         router_logits = self.compute_router_logits(x)
 
         # Get top-k experts
-        if HAS_RUST and hasattr(rust_core, "topk_routing_rust"):"            expert_indices, expert_weights = rust_core.topk_routing_rust(
+        if HAS_RUST and hasattr(rust_core, "topk_routing_rust"):
+            expert_indices, expert_weights = rust_core.topk_routing_rust(
                 router_logits, self.config.top_k, self.config.renormalize
             )
         else:
@@ -261,8 +274,8 @@ Route using top-k selection.        # Compute logits
         self,
         router_logits: np.ndarray,
     ) -> tuple[np.ndarray, np.ndarray]:
-"""
-NumPy implementation of top-k selection.        # Softmax
+        """NumPy implementation of top-k selection."""
+        # Softmax
         routing_weights = np.exp(router_logits - router_logits.max(axis=-1, keepdims=True))
         routing_weights = routing_weights / routing_weights.sum(axis=-1, keepdims=True)
 
@@ -284,15 +297,16 @@ NumPy implementation of top-k selection.        # Softmax
 # =============================================================================
 
 
-
 class GroupedTopKRouter(RouterBase):
-        Grouped top-k router for expert groups.
+    """
+    Grouped top-k router for expert groups.
 
     vLLM Pattern: grouped_topk from fused_moe.py
-    
+    """
+
     def forward(self, x: np.ndarray) -> RouterOutput:
-"""
-Route using grouped top-k selection.        batch_size = x.shape[0]
+        """Route using grouped top-k selection."""
+        batch_size = x.shape[0]
         num_experts = self.config.num_experts
         num_groups = self.config.num_expert_groups
         experts_per_group = num_experts // num_groups
@@ -351,12 +365,13 @@ Route using grouped top-k selection.        batch_size = x.shape[0]
 # =============================================================================
 
 
-
 class ExpertChoiceRouter(RouterBase):
-        Expert-choice router where experts select tokens.
+    """
+    Expert-choice router where experts select tokens.
 
     Beyond vLLM: Inverse routing for better load balance.
-    
+    """
+
     def __init__(
         self,
         config: RouterConfig,
@@ -366,8 +381,8 @@ class ExpertChoiceRouter(RouterBase):
         self.tokens_per_expert = tokens_per_expert
 
     def forward(self, x: np.ndarray) -> RouterOutput:
-"""
-Route using expert choice.        batch_size = x.shape[0]
+        """Route using expert choice."""
+        batch_size = x.shape[0]
         num_experts = self.config.num_experts
 
         # Compute logits
@@ -447,12 +462,13 @@ Route using expert choice.        batch_size = x.shape[0]
 # =============================================================================
 
 
-
 class SoftMoERouter(RouterBase):
-        Soft MoE router with differentiable soft assignments.
+    """
+    Soft MoE router with differentiable soft assignments.
 
     Beyond vLLM: Fully differentiable routing without discrete selection.
-    
+    """
+
     def __init__(
         self,
         config: RouterConfig,
@@ -462,8 +478,8 @@ class SoftMoERouter(RouterBase):
         self.temperature = temperature
 
     def forward(self, x: np.ndarray) -> RouterOutput:
-"""
-Soft routing with all experts weighted.        # Compute logits
+        """Soft routing with all experts weighted."""
+        # Compute logits
         router_logits = self.compute_router_logits(x)
 
         # Soft assignment (full softmax)
@@ -493,12 +509,13 @@ Soft routing with all experts weighted.        # Compute logits
 # =============================================================================
 
 
-
 class AdaptiveRouter(RouterBase):
-        Adaptive router with learned routing thresholds.
+    """
+    Adaptive router with learned routing thresholds.
 
     Beyond vLLM: Dynamic k selection based on input.
-    
+    """
+
     def __init__(
         self,
         config: RouterConfig,
@@ -516,8 +533,8 @@ class AdaptiveRouter(RouterBase):
         self.k_weight = np.random.randn(config.hidden_size).astype(np.float32) * 0.01
 
     def predict_k(self, x: np.ndarray) -> np.ndarray:
-"""
-Predict optimal k per token.        # Simple: use projection to predict k
+        """Predict optimal k per token."""
+        # Simple: use projection to predict k
         k_logits = x @ self.k_weight
         k_probs = 1 / (1 + np.exp(-k_logits))  # Sigmoid
 
@@ -526,8 +543,8 @@ Predict optimal k per token.        # Simple: use projection to predict k
         return np.round(k_values).astype(np.int32)
 
     def forward(self, x: np.ndarray) -> RouterOutput:
-"""
-Adaptive routing with per-token k.        batch_size = x.shape[0]
+        """Adaptive routing with per-token k."""
+        batch_size = x.shape[0]
 
         # Compute logits
         router_logits = self.compute_router_logits(x)
@@ -570,12 +587,13 @@ Adaptive routing with per-token k.        batch_size = x.shape[0]
 # =============================================================================
 
 
-
 class RoutingSimulator:
-        Simulate routing behavior for analysis.
+    """
+    Simulate routing behavior for analysis.
 
     vLLM Pattern: RoutingSimulator from routing_simulator.py
-    
+    """
+
     def __init__(
         self,
         num_experts: int,
@@ -590,14 +608,14 @@ class RoutingSimulator:
         self.routing_history: list[np.ndarray] = []
 
     def simulate_uniform(self) -> np.ndarray:
-"""
-Simulate uniform routing.        routing = np.random.randint(0, self.num_experts, (self.num_tokens, self.top_k))
+        """Simulate uniform routing."""
+        routing = np.random.randint(0, self.num_experts, (self.num_tokens, self.top_k))
         self.routing_history.append(routing)
         return routing
 
     def simulate_skewed(self, skew_factor: float = 2.0) -> np.ndarray:
-"""
-Simulate skewed routing (some experts get more traffic).        # Power-law distribution
+        """Simulate skewed routing (some experts get more traffic)."""
+        # Power-law distribution
         probs = np.arange(1, self.num_experts + 1, dtype=np.float32) ** (-skew_factor)
         probs = probs / probs.sum()
 
@@ -610,20 +628,26 @@ Simulate skewed routing (some experts get more traffic).        # Power-law dist
         return routing
 
     def analyze_load_balance(self, routing: np.ndarray) -> dict[str, Any]:
-"""
-Analyze load balance of routing pattern.        expert_counts = np.bincount(routing.flatten(), minlength=self.num_experts)
+        """Analyze load balance of routing pattern."""
+        expert_counts = np.bincount(routing.flatten(), minlength=self.num_experts)
         expected = self.num_tokens * self.top_k / self.num_experts
 
         return {
-            "expert_counts": expert_counts.tolist(),"            "expected_per_expert": expected,"            "max_load": int(expert_counts.max()),"            "min_load": int(expert_counts.min()),"            "load_imbalance": float((expert_counts.max() - expert_counts.min()) / expected),"            "coefficient_of_variation": float(expert_counts.std() / expert_counts.mean()),"        }
+            "expert_counts": expert_counts.tolist(),
+            "expected_per_expert": expected,
+            "max_load": int(expert_counts.max()),
+            "min_load": int(expert_counts.min()),
+            "load_imbalance": float((expert_counts.max() - expert_counts.min()) / expected),
+            "coefficient_of_variation": float(expert_counts.std() / expert_counts.mean()),
+        }
 
     def estimate_communication_cost(
         self,
         routing: np.ndarray,
         num_devices: int,
     ) -> dict[str, Any]:
-"""
-Estimate all-to-all communication cost.        experts_per_device = self.num_experts // num_devices
+        """Estimate all-to-all communication cost."""
+        experts_per_device = self.num_experts // num_devices
         tokens_per_device = self.num_tokens // num_devices
 
         # Count cross-device transfers
@@ -644,4 +668,8 @@ Estimate all-to-all communication cost.        experts_per_device = self.num_exp
         total_assignments = self.num_tokens * self.top_k
 
         return {
-            "total_assignments": total_assignments,"            "cross_device_transfers": cross_device,"            "local_assignments": total_assignments - cross_device,"            "communication_ratio": cross_device / total_assignments,"        }
+            "total_assignments": total_assignments,
+            "cross_device_transfers": cross_device,
+            "local_assignments": total_assignments - cross_device,
+            "communication_ratio": cross_device / total_assignments,
+        }

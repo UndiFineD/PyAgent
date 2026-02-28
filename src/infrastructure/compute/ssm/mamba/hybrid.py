@@ -1,59 +1,41 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # SPDX-License-Identifier: Apache-2.0
 """
 Hybrid Mamba Mixer - Combining SSM with Attention.
-
 """
 
 # pylint: disable=invalid-name
 
-try:
-    import math
-except ImportError:
-    import math
+from __future__ import annotations
 
+import math
 
-try:
-    import numpy
-except ImportError:
-    import numpy
- as np
+import numpy as np
 
-try:
-    from .infrastructure.compute.ssm.mamba.config import (MambaConfig,
-except ImportError:
-    from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
-
+from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
                                                          MambaOutput,
                                                          MambaState)
-try:
-    from .infrastructure.compute.ssm.mamba.mixer import MambaMixer
-except ImportError:
-    from src.infrastructure.compute.ssm.mamba.mixer import MambaMixer
-
-
+from src.infrastructure.compute.ssm.mamba.mixer import MambaMixer
 
 
 class HybridMambaMixer:
-        Hybrid layer combining Mamba SSM with attention.
-    
+    """
+    Hybrid layer combining Mamba SSM with attention.
+    """
+
     def __init__(
         self,
         config: MambaConfig,
@@ -91,8 +73,8 @@ class HybridMambaMixer:
         hidden_states: np.ndarray,
         state: MambaState | None = None,
     ) -> MambaOutput:
-"""
-Forward with hybrid SSM + attention.        batch_size, seq_len, _ = hidden_states.shape
+        """Forward with hybrid SSM + attention."""
+        batch_size, seq_len, _ = hidden_states.shape
 
         # SSM path
         ssm_input = hidden_states[:, :, : self.ssm_dim]
@@ -120,6 +102,7 @@ Forward with hybrid SSM + attention.        batch_size, seq_len, _ = hidden_stat
         # Attention scores
         # scores = [batch, heads, seq_len, seq_len]
         scores = np.einsum("bqhd,bkhd->bhqk", Q, K) * self.scale
+
         # Causal mask
         mask = np.triu(np.ones((seq_len, seq_len)), k=1) * -1e9
         scores = scores + mask
@@ -127,12 +110,11 @@ Forward with hybrid SSM + attention.        batch_size, seq_len, _ = hidden_stat
         # Softmax and weighted sum
         attn_weights = np.exp(scores - scores.max(axis=-1, keepdims=True))
         attn_weights = attn_weights / attn_weights.sum(axis=-1, keepdims=True)
-        attn_output = np.einsum("bhqk,bkhd->bqhd", attn_weights, V)"        attn_output = attn_output.reshape(batch_size, seq_len, self.attn_dim)
+        attn_output = np.einsum("bhqk,bkhd->bqhd", attn_weights, V)
+        attn_output = attn_output.reshape(batch_size, seq_len, self.attn_dim)
 
         # Combine outputs
         combined = np.concatenate([ssm_output.output, attn_output], axis=-1)
         output = combined @ self.o_proj.T
 
         return MambaOutput(output=output, state=ssm_output.state)
-
-"""

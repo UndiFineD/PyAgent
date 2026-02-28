@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -16,40 +16,39 @@
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
 Conversation context management package.
-
 """
-try:
-    from .core import AgenticContext, ConversationContext  # noqa: F401
-except ImportError:
-    from .core import AgenticContext, ConversationContext # noqa: F401
 
-try:
-    from .manager import (ContextManager, create_context, get_context_manager,  # noqa: F401
-except ImportError:
-    from .manager import (ContextManager, create_context, get_context_manager, # noqa: F401
-
+from .core import AgenticContext, ConversationContext  # noqa: F401
+from .manager import (ContextManager, create_context, get_context_manager,  # noqa: F401
                       merge_contexts, restore_context)
-try:
-    from .models import (ContextConfig, ContextSnapshot, ContextState,  # noqa: F401
-except ImportError:
-    from .models import (ContextConfig, ContextSnapshot, ContextState, # noqa: F401
-
+from .models import (ContextConfig, ContextSnapshot, ContextState,  # noqa: F401
                      ConversationTurn, TokenMetrics, ToolExecution,
                      ToolExecutionPolicy, TurnType)
-try:
-    from .orchestrator import ToolOrchestrator  # noqa: F401
-except ImportError:
-    from .orchestrator import ToolOrchestrator # noqa: F401
-
-try:
-    from .tracker import TurnTracker  # noqa: F401
-except ImportError:
-    from .tracker import TurnTracker # noqa: F401
-
+from .orchestrator import ToolOrchestrator  # noqa: F401
+from .tracker import TurnTracker  # noqa: F401
 
 # Aliases for compatibility
 TokenTracker = TurnTracker
 ContextOrchestrator = ToolOrchestrator
 
 __all__ = [
-    "ContextConfig","    "ContextState","    "ContextSnapshot","    "TokenMetrics","    "TurnType","    "ConversationTurn","    "ToolExecution","    "ToolExecutionPolicy","    "ConversationContext","    "AgenticContext","    "ContextManager","    "get_context_manager","    "create_context","    "merge_contexts","    "restore_context","    "TurnTracker","    "TokenTracker","    "ToolOrchestrator","    "ContextOrchestrator","]
+    "ContextConfig",
+    "ContextState",
+    "ContextSnapshot",
+    "TokenMetrics",
+    "TurnType",
+    "ConversationTurn",
+    "ToolExecution",
+    "ToolExecutionPolicy",
+    "ConversationContext",
+    "AgenticContext",
+    "ContextManager",
+    "get_context_manager",
+    "create_context",
+    "merge_contexts",
+    "restore_context",
+    "TurnTracker",
+    "TokenTracker",
+    "ToolOrchestrator",
+    "ContextOrchestrator",
+]

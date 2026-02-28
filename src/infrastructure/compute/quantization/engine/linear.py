@@ -1,68 +1,44 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Linear.py module.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
-except ImportError:
-    from typing import TYPE_CHECKING
 
+import numpy as np
 
-try:
-    import numpy
-except ImportError:
-    import numpy
- as np
-
-try:
-    from .base import Quantizer
-except ImportError:
-    from .base import Quantizer
-
-try:
-    from .config import QuantStrategy
-except ImportError:
-    from .config import QuantStrategy
-
-try:
-    from .tensor import QuantizedTensor
-except ImportError:
-    from .tensor import QuantizedTensor
-
+from .base import Quantizer
+from .config import QuantStrategy
+from .tensor import QuantizedTensor
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
 
-
 class LinearQuantizer(Quantizer):
-"""
-Linear (uniform) quantization.
+    """Linear (uniform) quantization."""
+
     def quantize(
         self,
         weight: NDArray[np.float32],
     ) -> QuantizedTensor:
-"""
-Quantizes a float matrix into the configured bit-depth.        from .utils import pack_int4
+        """Quantizes a float matrix into the configured bit-depth."""
+        from .utils import pack_int4
 
         original_shape = weight.shape
 
@@ -91,15 +67,15 @@ Quantizes a float matrix into the configured bit-depth.        from .utils impor
         self,
         qtensor: QuantizedTensor,
     ) -> NDArray[np.float32]:
-"""
-Restores a float matrix from the quantized representation.        return qtensor.dequantize()
+        """Restores a float matrix from the quantized representation."""
+        return qtensor.dequantize()
 
     def compute_tensor_params(
         self,
         weight: NDArray[np.float32],
     ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
-"""
-Computes quantization parameters for the entire tensor.        if self.config.symmetric:
+        """Computes quantization parameters for the entire tensor."""
+        if self.config.symmetric:
             max_val = np.max(np.abs(weight))
             scale = max_val / self.config.qmax if max_val > 0 else 1.0
             return np.array([scale], dtype=np.float32), None
@@ -116,8 +92,8 @@ Computes quantization parameters for the entire tensor.        if self.config.sy
         self,
         weight: NDArray[np.float32],
     ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
-"""
-Computes quantization parameters per output channel.        num_channels = weight.shape[0]
+        """Computes quantization parameters per output channel."""
+        num_channels = weight.shape[0]
         weight_flat = weight.reshape(num_channels, -1)
 
         if self.config.symmetric:
@@ -137,8 +113,8 @@ Computes quantization parameters per output channel.        num_channels = weigh
         self,
         weight: NDArray[np.float32],
     ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
-"""
-Computes quantization parameters per group of weights.        out_features, in_features = weight.shape[:2] if weight.ndim >= 2 else (weight.shape[0], 1)
+        """Computes quantization parameters per group of weights."""
+        out_features, in_features = weight.shape[:2] if weight.ndim >= 2 else (weight.shape[0], 1)
         flat = weight.reshape(out_features, -1)
         in_features = flat.shape[1]
 
@@ -176,8 +152,8 @@ Computes quantization parameters per group of weights.        out_features, in_f
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
     ) -> NDArray[np.int8]:
-"""
-Quantizes the entire tensor using a single scale/zero-point.        scaled = weight / scale[0]
+        """Quantizes the entire tensor using a single scale/zero-point."""
+        scaled = weight / scale[0]
         if zp is not None:
             scaled = scaled + zp[0]
         clipped = np.clip(scaled, self.config.qmin, self.config.qmax)
@@ -189,8 +165,8 @@ Quantizes the entire tensor using a single scale/zero-point.        scaled = wei
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
     ) -> NDArray[np.int8]:
-"""
-Quantizes the tensor per output channel.        num_channels = weight.shape[0]
+        """Quantizes the tensor per output channel."""
+        num_channels = weight.shape[0]
         weight_flat = weight.reshape(num_channels, -1)
 
         scaled = weight_flat / scale[:, None]
@@ -205,8 +181,8 @@ Quantizes the tensor per output channel.        num_channels = weight.shape[0]
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
     ) -> NDArray[np.int8]:
-"""
-Quantizes the tensor in grouped blocks.        original_shape = weight.shape
+        """Quantizes the tensor in grouped blocks."""
+        original_shape = weight.shape
         out_features = weight.shape[0]
         flat = weight.reshape(out_features, -1)
         in_features = flat.shape[1]

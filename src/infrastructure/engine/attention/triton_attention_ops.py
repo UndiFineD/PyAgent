@@ -1,31 +1,73 @@
+"""
+Module: triton_attention_ops
+Triton-based attention operations for PyAgent engine.
+"""
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
+Triton Attention Operations - GPU-accelerated attention kernels.
 
-"""
-"""
-Module: triton_attention_ops - Triton-based attention operations.
+Implements high-performance attention operations inspired by vLLM's
+Triton attention kernels. Provides paged attention, flash attention,
+and optimized decode attention for inference.
 
+Key patterns from vLLM:
+- kernel_paged_attention_2d for 2D block attention
+- _paged_attention_decode with CUDA streams
+- KV splits for handling long contexts
+
+Beyond vLLM:
+- Unified attention API with automatic backend selection
+- Memory-efficient sliding window attention
+- Dynamic precision switching (FP16/BF16/FP32)
 """
+
+from __future__ import annotations
+
 import logging
 import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
+
+from torch import Tensor
 
 from torch import Tensor
 
@@ -48,10 +90,8 @@ except ImportError:
     HAS_TRITON = False
 
 
-
 class AttentionBackend(Enum):
-"""
-Available attention backends.
+    """Available attention backends."""
 
     TRITON = auto()  # Triton kernel
     FLASH_ATTN = auto()  # Flash Attention
@@ -60,10 +100,9 @@ Available attention backends.
     NAIVE = auto()  # Reference implementation
 
 
-
 class PrecisionMode(Enum):
-"""
-Precision mode targeting attention computation.
+    """Precision mode for attention computation."""
+
     FP32 = auto()
     FP16 = auto()
     BF16 = auto()
@@ -72,81 +111,85 @@ Precision mode targeting attention computation.
 
 @dataclass
 class AttentionConfig:
-"""
-Configuration to handle attention operations regarding sequence processing.""
-Inspired by vLLM's attention configuration patterns regarding paged attention.'    
-    # Basic attention config regarding heads
+    """Configuration for attention operations.
+
+    Inspired by vLLM's attention configuration patterns.
+    """
+
+    # Basic attention config
     num_heads: int = 32
     head_dim: int = 128
-    num_kv_heads: int = 8  # Supporting GQA regarding efficiency
+    num_kv_heads: int = 8  # For GQA
 
-    # Block configuration regarding memory
+    # Block configuration
     block_size: int = 16
     max_seq_len: int = 8192
 
-    # Backend selection regarding hardware
+    # Backend selection
     backend: AttentionBackend = AttentionBackend.TRITON
     precision: PrecisionMode = PrecisionMode.AUTO
 
-    # Memory optimization regarding large contexts
+    # Memory optimization
     use_sliding_window: bool = False
     sliding_window_size: int = 4096
 
-    # KV cache configuration regarding data types
-    kv_cache_dtype: str = "auto""    kv_scale: float = 1.0
+    # KV cache configuration
+    kv_cache_dtype: str = "auto"
+    kv_scale: float = 1.0
 
-    # Performance tuning regarding throughput
+    # Performance tuning
     num_kv_splits: int = 8
     max_num_blocks_per_seq: int = 512
 
-    # Beyond vLLM: Advanced options regarding CUDA graphs
+    # Beyond vLLM: Advanced options
     enable_cuda_graphs: bool = True
     use_tensor_cores: bool = True
 
     @property
     def num_queries_per_kv(self) -> int:
-"""
-Number of query heads per KV head regarding GQA.        return self.num_heads // self.num_kv_heads
+        """Number of query heads per KV head (for GQA)."""
+        return self.num_heads // self.num_kv_heads
 
 
 @dataclass
 class AttentionMetadata:
-"""
-Metadata to enable attention computation regarding sequence state.""
-Mirrors vLLM's AttentionMetadata structure regarding paged attention.'    
-    # Sequence info regarding length
+    """Metadata for attention computation.
+
+    Mirrors vLLM's AttentionMetadata structure.
+    """
+
+    # Sequence info
     seq_lens: List[int] = field(default_factory=list)
     max_decode_seq_len: int = 0
 
-    # Block tables dedicated to paged attention regarding storage
+    # Block tables for paged attention
     block_tables: Optional[Any] = None  # torch.Tensor
     slot_mapping: Optional[Any] = None  # torch.Tensor
 
-    # Context info regarding attention window
+    # Context info
     context_lens: Optional[Any] = None  # torch.Tensor
 
-    # Prefill vs decode regarding execution phase
+    # Prefill vs decode
     is_prefill: bool = False
     num_prefill_tokens: int = 0
     num_decode_tokens: int = 0
 
-    # Query start locations regarding ragged tensors
+    # Query start locations (for ragged tensors)
     query_start_loc: Optional[Any] = None  # torch.Tensor
     seq_start_loc: Optional[Any] = None  # torch.Tensor
 
-    # Multi-modal positions regarding cross-modal attention
-    multi_modal_TODO Placeholder_index_maps: Optional[Dict] = None
+    # Multi-modal positions
+    multi_modal_placeholder_index_maps: Optional[Dict] = None
 
     @property
     def total_tokens(self) -> int:
-"""
-Get total tokens regarding both prefill and decode.        return self.num_prefill_tokens + self.num_decode_tokens
-
+        """Get total tokens (prefill + decode)."""
+        return self.num_prefill_tokens + self.num_decode_tokens
 
 
 class AttentionKernel(ABC):
-"""
-Abstract base dedicated regarding attention kernels.
+    """Abstract base for attention kernels."""
+
     @abstractmethod
     def forward(
         self,
@@ -157,73 +200,77 @@ Abstract base dedicated regarding attention kernels.
         k_cache: Optional[Any] = None,
         v_cache: Optional[Any] = None,
     ) -> Any:  # torch.Tensor
-"""
-Execute attention forward pass regarding sequence data.
+        """Execute attention forward pass."""
+
     @abstractmethod
     def supports_context_length(self, context_len: int) -> bool:
-"""
-Check if kernel supports given context length during execution.
+        """Check if kernel supports given context length."""
 
-PAGED_ATTENTION_KERNEL = None
+
+_paged_attention_kernel = None
 
 if HAS_TRITON and HAS_TORCH:
 
     @triton.jit
-    def _paged_attention_kernel_impl(
-        output_ptr: tl.tensor,
-        query_ptr: tl.tensor,
-        k_cache_ptr: tl.tensor,
-        v_cache_ptr: tl.tensor,
-        block_tables_ptr: tl.tensor,
-        context_lens_ptr: tl.tensor,
-        stride_query_batch: int,
-        stride_query_head: int,
-        stride_query_dim: int,
-        stride_k_cache_block: int,
-        stride_k_cache_head: int,
-        stride_k_cache_seq: int,
-        stride_k_cache_dim: int,
-        stride_v_cache_block: int,
-        stride_v_cache_head: int,
-        stride_v_cache_seq: int,
-        stride_v_cache_dim: int,
-        stride_output_batch: int,
-        stride_output_head: int,
-        stride_output_dim: int,
-        stride_block_tables_batch: int,
-        stride_block_tables_block: int,
+    def _paged_attention_kernel(  # pylint: disable=function-redefined, unused-argument, invalid-name
+        output_ptr,
+        query_ptr,
+        k_cache_ptr,
+        v_cache_ptr,
+        block_tables_ptr,
+        context_lens_ptr,
+        stride_query_batch,
+        stride_query_head,
+        stride_query_dim,
+        stride_k_cache_block,
+        stride_k_cache_head,
+        stride_k_cache_seq,
+        stride_k_cache_dim,
+        stride_v_cache_block,
+        stride_v_cache_head,
+        stride_v_cache_seq,
+        stride_v_cache_dim,
+        stride_output_batch,
+        stride_output_head,
+        stride_output_dim,
+        stride_block_tables_batch,
+        stride_block_tables_block,
         num_heads: tl.constexpr,
         head_dim: tl.constexpr,
         num_kv_heads: tl.constexpr,
         block_size: tl.constexpr,
         scale: tl.constexpr,
-        block_d: tl.constexpr,
+        BLOCK_D: tl.constexpr,
     ) -> None:
-"""
-Triton kernel providing paged attention decode logic.        # Get batch and head indices
+        """Triton kernel for paged attention decode.
+
+        Inspired by vLLM's kernel_paged_attention_2d.
+        """
+        # Get batch and head indices
         batch_idx = tl.program_id(0)
         head_idx = tl.program_id(1)
 
-        # Get context length logic
+        # Get context length for this sequence
         context_len = tl.load(context_lens_ptr + batch_idx)
 
-        # Get KV head index supporting GQA
+        # Get KV head index (for GQA)
         kv_head_idx = head_idx // (num_heads // num_kv_heads)
 
         # Load query vector
         q_offset = batch_idx * stride_query_batch + head_idx * stride_query_head
-        dim_offsets = tl.arange(0, block_d)
+        dim_offsets = tl.arange(0, BLOCK_D)
         query = tl.load(query_ptr + q_offset + dim_offsets * stride_query_dim)
         query = query * scale
 
         # Initialize accumulator
-        acc = tl.zeros([block_d], dtype=tl.float32)
-        max_logit = float("-inf")"        sum_exp = 0.0
+        acc = tl.zeros([BLOCK_D], dtype=tl.float32)
+        max_logit = float("-inf")
+        sum_exp = 0.0
 
         # Process each block
         num_blocks = (context_len + block_size - 1) // block_size
 
-        for block_idx in range(num_blocks):
+        for block_idx: int in range(num_blocks):
             # Get physical block number from block table
             block_table_offset = batch_idx * stride_block_tables_batch
             phys_block = tl.load(block_tables_ptr + block_table_offset + block_idx * stride_block_tables_block)
@@ -231,8 +278,8 @@ Triton kernel providing paged attention decode logic.        # Get batch and hea
             # Load key block
             k_offset = phys_block * stride_k_cache_block + kv_head_idx * stride_k_cache_head
 
-            # Compute attention scores relative to this block
-            for seq_pos in range(block_size):
+            # Compute attention scores for this block
+            for seq_pos: int in range(block_size):
                 abs_pos = block_idx * block_size + seq_pos
                 if abs_pos < context_len:
                     # Load key vector
@@ -268,34 +315,42 @@ Triton kernel providing paged attention decode logic.        # Get batch and hea
         tl.store(output_ptr + out_offset + dim_offsets * stride_output_dim, acc)
 
 
-
 class TritonPagedAttention(AttentionKernel):
-"""
-Triton-based paged attention kernel.""
-Implements efficient paged attention using Triton JIT compilation.
-    
+    """Triton-based paged attention kernel.
+
+    Implements efficient paged attention using Triton JIT compilation.
+    """
+
     def __init__(self, config: AttentionConfig) -> None:
         self.config: AttentionConfig = config
         self.scale: float = 1.0 / math.sqrt(config.head_dim)
 
     def forward(
         self,
-        query: "torch.Tensor","        key: "torch.Tensor","        value: "torch.Tensor","        metadata: AttentionMetadata,
-        k_cache: Optional["torch.Tensor"] = None,"        v_cache: Optional["torch.Tensor"] = None,"    ) -> "torch.Tensor":"        """
-Execute Triton paged attention.        if not HAS_TRITON:
+        query: "torch.Tensor",
+        key: "torch.Tensor",
+        value: "torch.Tensor",
+        metadata: AttentionMetadata,
+        k_cache: Optional["torch.Tensor"] = None,
+        v_cache: Optional["torch.Tensor"] = None,
+    ) -> "torch.Tensor":
+        """Execute Triton paged attention."""
+        if not HAS_TRITON:
             raise RuntimeError("Triton not available")
+
         batch_size, num_heads, head_dim = query.shape
 
         # Allocate output
         output: Tensor = torch.empty_like(query)
 
-        # Check block tables
+        # Check for block tables
         if metadata.block_tables is None:
-            raise ValueError("Block tables required to enable paged attention")
+            raise ValueError("Block tables required for paged attention")
+
         # Launch kernel
         grid: tuple[int, int] = (batch_size, num_heads)
 
-        PAGED_ATTENTION_KERNEL[grid](
+        _paged_attention_kernel[grid](
             output,
             query,
             k_cache,
@@ -325,7 +380,7 @@ Execute Triton paged attention.        if not HAS_TRITON:
             num_kv_heads=self.config.num_kv_heads,
             block_size=self.config.block_size,
             scale=self.scale,
-            block_d=head_dim,
+            BLOCK_D=head_dim,
         )
 
         return output
@@ -334,10 +389,9 @@ Execute Triton paged attention.        if not HAS_TRITON:
         return context_len <= self.config.max_seq_len
 
 
-
 class NaiveAttention(AttentionKernel):
-"""
-Reference implementation of attention (CPU/GPU compatible).
+    """Reference implementation of attention (CPU/GPU compatible)."""
+
     def __init__(self, config: AttentionConfig) -> None:
         self.config: AttentionConfig = config
         self.scale: float = 1.0 / math.sqrt(config.head_dim)
@@ -351,16 +405,20 @@ Reference implementation of attention (CPU/GPU compatible).
         k_cache: Optional[Any] = None,
         v_cache: Optional[Any] = None,
     ) -> Any:
-"""
-Execute naive attention.        if HAS_TORCH:
+        """Execute naive attention."""
+        if HAS_TORCH:
             return self._forward_torch(query, key, value, metadata)
         return self._forward_numpy(query, key, value, metadata)
 
     def _forward_torch(
         self,
-        query: "torch.Tensor","        key: "torch.Tensor","        value: "torch.Tensor","        _metadata: AttentionMetadata,
-    ) -> "torch.Tensor":"        """
-PyTorch implementation.        # Standard attention computation
+        query: "torch.Tensor",
+        key: "torch.Tensor",
+        value: "torch.Tensor",
+        _metadata: AttentionMetadata,
+    ) -> "torch.Tensor":
+        """PyTorch implementation."""
+        # Standard attention computation
         scores: Tensor = torch.matmul(query, key.transpose(-2, -1)) * self.scale
         attn_weights: Tensor = torch.softmax(scores, dim=-1)
         output: Tensor = torch.matmul(attn_weights, value)
@@ -373,8 +431,8 @@ PyTorch implementation.        # Standard attention computation
         value: Any,
         _metadata: AttentionMetadata,
     ) -> Any:
-"""
-NumPy fallback implementation.        import numpy as np
+        """NumPy fallback implementation."""
+        import numpy as np
 
         # Standard attention computation
         scores = np.matmul(query, np.swapaxes(key, -2, -1)) * self.scale
@@ -384,13 +442,12 @@ NumPy fallback implementation.        import numpy as np
         return output
 
     def supports_context_length(self, context_len: int) -> bool:
-        return True  # No limit set in naive implementation
-
+        return True  # No limit for naive implementation
 
 
 class SlidingWindowAttention(AttentionKernel):
-"""
-Sliding window attention targeting efficient long-context handling.
+    """Sliding window attention for efficient long-context handling."""
+
     def __init__(self, config: AttentionConfig) -> None:
         self.config: AttentionConfig = config
         self.scale: float = 1.0 / math.sqrt(config.head_dim)
@@ -405,26 +462,29 @@ Sliding window attention targeting efficient long-context handling.
         k_cache: Optional[Any] = None,
         v_cache: Optional[Any] = None,
     ) -> Any:
-"""
-Execute sliding window attention phase.        if not HAS_TORCH:
-            raise RuntimeError("PyTorch required to enable sliding window attention")
+        """Execute sliding window attention."""
+        if not HAS_TORCH:
+            raise RuntimeError("PyTorch required for sliding window attention")
+
         _, _, seq_len, _ = query.shape
 
         # Create sliding window mask
         causal_mask: Tensor = torch.ones(seq_len, seq_len, device=query.device, dtype=torch.bool)
         causal_mask: Tensor = torch.tril(causal_mask)
 
-        # Apply sliding window logic using vectorized operations
-        rows: Tensor = torch.arange(seq_len, device=query.device, dtype=torch.long).view(-1, 1)
-        cols: Tensor = torch.arange(seq_len, device=query.device, dtype=torch.long).view(1, -1)
-        window_mask: Tensor = (cols > (rows - self.window_size)).to(torch.bool)
+        # Apply sliding window
+        window_mask: Tensor = torch.ones_like(causal_mask)
+        for i: int in range(seq_len):
+            start: int = max(0, i - self.window_size + 1)
+            window_mask[i, :start] = 0
 
         mask: Tensor = causal_mask & window_mask
         mask: Tensor = mask.unsqueeze(0).unsqueeze(0)  # [1, 1, seq, seq]
 
         # Compute attention
         scores: Tensor = torch.matmul(query, key.transpose(-2, -1)) * self.scale
-        scores: Tensor = scores.masked_fill(~mask, float("-inf"))"        attn_weights: Tensor = torch.softmax(scores, dim=-1)
+        scores: Tensor = scores.masked_fill(~mask, float("-inf"))
+        attn_weights: Tensor = torch.softmax(scores, dim=-1)
         output: Tensor = torch.matmul(attn_weights, value)
 
         return output
@@ -435,40 +495,43 @@ Execute sliding window attention phase.        if not HAS_TORCH:
 
 @dataclass
 class KVSplitConfig:
-"""
-Configuration involving KV splits to handle long contexts.""
-Inspired by vLLM patterns to handle decode attention.
-    
+    """Configuration for KV splits to handle long contexts.
+
+    Inspired by vLLM's KV split patterns for decode attention.
+    """
+
     num_splits: int = 8
-    split_overlap: int = 0  # To maintain context continuity
+    split_overlap: int = 0  # For context continuity
     use_parallel_reduction: bool = True
     max_context_per_split: int = 1024
 
 
-
 class TritonAttentionOps:
-"""
-Unified attention operations interface.""
-Provides automatic backend selection and fallback logic.
+    """Unified attention operations interface.
 
-    Beyond vLLM: Unified API across all attention backends.
-    
+    Provides automatic backend selection and fallback.
+
+    Beyond vLLM: Unified API for all attention backends.
+    """
+
     _BACKEND_MAP: Dict[AttentionBackend, type] = {
         AttentionBackend.TRITON: TritonPagedAttention if HAS_TRITON else NaiveAttention,
         AttentionBackend.NAIVE: NaiveAttention,
     }
 
     def __init__(self, config: AttentionConfig) -> None:
-"""
-Initialize attention operations.""
-Args:
+        """Initialize attention operations.
+
+        Args:
             config: Attention configuration
-                self.config: AttentionConfig = config
+        """
+        self.config: AttentionConfig = config
 
         # Select backend
         backend: AttentionBackend = config.backend
         if backend == AttentionBackend.TRITON and not HAS_TRITON:
-            logger.warning("Triton not available, falling back to naive attention")"            backend: AttentionBackend = AttentionBackend.NAIVE
+            logger.warning("Triton not available, falling back to naive attention")
+            backend: AttentionBackend = AttentionBackend.NAIVE
 
         kernel_cls: type = self._BACKEND_MAP.get(backend, NaiveAttention)
         self._kernel = kernel_cls(config)
@@ -491,10 +554,11 @@ Args:
         k_cache: Optional[Any] = None,
         v_cache: Optional[Any] = None,
     ) -> Any:
-"""
-Execute attention operation.""
-Automatically selects appropriate kernel based on context.
-                # Check if sliding window is needed
+        """Execute attention operation.
+
+        Automatically selects appropriate kernel based on context.
+        """
+        # Check if sliding window is needed
         if self._sliding_kernel and metadata.max_decode_seq_len > self.config.sliding_window_size:
             return self._sliding_kernel.forward(query, key, value, metadata, k_cache, v_cache)
 
@@ -510,16 +574,18 @@ Automatically selects appropriate kernel based on context.
         context_lens: Any,
         max_context_len: int,
     ) -> Any:
-"""
-Execute paged attention during decode phase.""
-Inspired by vLLM's _paged_attention_decode.'                metadata = AttentionMetadata(
+        """Execute paged attention for decode phase.
+
+        Inspired by vLLM's _paged_attention_decode.
+        """
+        metadata = AttentionMetadata(
             block_tables=block_tables,
             context_lens=context_lens,
             max_decode_seq_len=max_context_len,
             is_prefill=False,
         )
 
-        # To handle long contexts, use KV splits
+        # For long contexts, use KV splits
         if max_context_len > self._kv_split.max_context_per_split * self._kv_split.num_splits:
             return self._split_kv_attention(query, k_cache, v_cache, metadata)
 
@@ -532,22 +598,26 @@ Inspired by vLLM's _paged_attention_decode.'                metadata = Attention
         v_cache: Any,
         metadata: AttentionMetadata,
     ) -> Any:
-"""
-Execute attention with KV splits dedicated to very long contexts.""
-Divides context into splits and aggregates results.
-                if not HAS_TORCH:
+        """Execute attention with KV splits for very long contexts.
+
+        Divides context into splits and aggregates results.
+        """
+        if not HAS_TORCH:
             raise RuntimeError("KV splits require PyTorch")
+
         num_splits: int = self._kv_split.num_splits
         max_context: int = metadata.max_decode_seq_len
         split_size: int = (max_context + num_splits - 1) // num_splits
 
-        def _process_one_split(i: int) -> Optional[Any]:
-"""
-Process a single KV split.            start_pos: int = i * split_size
+        # Collect split outputs
+        split_outputs = []
+
+        for i: int in range(num_splits):
+            start_pos: int = i * split_size
             end_pos: int = min((i + 1) * split_size, max_context)
 
             if start_pos >= max_context:
-                return None
+                break
 
             # Create split metadata
             split_metadata = AttentionMetadata(
@@ -557,10 +627,8 @@ Process a single KV split.            start_pos: int = i * split_size
             )
 
             # Get split output with attention statistics
-            return self._kernel.forward(query, None, None, split_metadata, k_cache, v_cache)
-
-        # Collect split outputs using map to optimize loop count
-        split_outputs: List[Any] = list(filter(None, map(_process_one_split, range(num_splits))))
+            split_out = self._kernel.forward(query, None, None, split_metadata, k_cache, v_cache)
+            split_outputs.append(split_out)
 
         # Aggregate splits (simplified - full implementation would use log-sum-exp)
         if len(split_outputs) == 1:
@@ -576,15 +644,16 @@ Process a single KV split.            start_pos: int = i * split_size
         seq_lens: List[int],
         _causal: bool = True,
     ) -> Any:
-"""
-Compute attention during prefill phase.""
-Args:
+        """Compute attention for prefill phase.
+
+        Args:
             query: Query tensor
             key: Key tensor
             value: Value tensor
             seq_lens: Sequence lengths
             causal: Whether to use causal masking
-                metadata = AttentionMetadata(
+        """
+        metadata = AttentionMetadata(
             seq_lens=seq_lens,
             is_prefill=True,
             num_prefill_tokens=sum(seq_lens),
@@ -594,8 +663,8 @@ Args:
 
     @staticmethod
     def detect_best_backend() -> AttentionBackend:
-"""
-Detect the best available attention backend.        if HAS_TRITON and HAS_TORCH:
+        """Detect the best available attention backend."""
+        if HAS_TRITON and HAS_TORCH:
             return AttentionBackend.TRITON
         if HAS_TORCH:
             return AttentionBackend.SDPA
@@ -609,14 +678,15 @@ def create_attention_ops(
     num_kv_heads: Optional[int] = None,
     **kwargs: Any,
 ) -> TritonAttentionOps:
-"""
-Create attention operations with sensible defaults.""
-Args:
+    """Create attention operations with sensible defaults.
+
+    Args:
         num_heads: Number of attention heads
         head_dim: Dimension per head
-        num_kv_heads: Number of KV heads supporting GQA
+        num_kv_heads: Number of KV heads (for GQA)
         **kwargs: Additional config options
-        config = AttentionConfig(
+    """
+    config = AttentionConfig(
         num_heads=num_heads,
         head_dim=head_dim,
         num_kv_heads=num_kv_heads or num_heads,
@@ -625,27 +695,3 @@ Args:
     )
 
     return TritonAttentionOps(config)
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""

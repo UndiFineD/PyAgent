@@ -1,42 +1,27 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Weights.py module.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Dict, List, Optional, Set
 
-try:
-    from typing import TYPE_CHECKING, Dict, List, Optional, Set
-except ImportError:
-    from typing import TYPE_CHECKING, Dict, List, Optional, Set
-
-
-try:
-    import numpy
-except ImportError:
-    import numpy
- as np
+import numpy as np
 
 if TYPE_CHECKING:
     from .adapter import LoRAAdapter
@@ -44,8 +29,8 @@ if TYPE_CHECKING:
 
 @dataclass
 class LoRAWeights:
-"""
-LoRA weight matrices.
+    """LoRA weight matrices."""
+
     lora_a: Dict[str, np.ndarray] = field(default_factory=dict)
     lora_b: Dict[str, np.ndarray] = field(default_factory=dict)
     scales: Dict[str, float] = field(default_factory=dict)
@@ -66,11 +51,14 @@ LoRA weight matrices.
         return total
 
 
-def merge_adapters(adapters: List["LoRAAdapter"], weights: Optional[List[float]] = None) -> LoRAWeights:"    if not adapters:
-        raise ValueError("No adapters to merge")"    if weights is None:
+def merge_adapters(adapters: List["LoRAAdapter"], weights: Optional[List[float]] = None) -> LoRAWeights:
+    if not adapters:
+        raise ValueError("No adapters to merge")
+    if weights is None:
         weights = [1.0 / len(adapters)] * len(adapters)
     if len(weights) != len(adapters):
         raise ValueError("Number of weights must match adapters")
+
     merged = LoRAWeights()
     all_modules: Set[str] = set()
     for adapter in adapters:

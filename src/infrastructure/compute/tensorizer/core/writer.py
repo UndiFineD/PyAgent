@@ -1,75 +1,41 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-"""
-Writer for tensorizer file format.
-try:
+"""Writer for tensorizer file format."""
 
-"""
 import hashlib
-except ImportError:
-    import hashlib
+import struct
+from pathlib import Path
+from typing import BinaryIO, Callable, Dict, List, Optional, Union
 
-try:
-    import struct
-except ImportError:
-    import struct
+import numpy as np
 
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib import Path
-
-try:
-    from typing import BinaryIO, Callable, Dict, List, Optional, Union
-except ImportError:
-    from typing import BinaryIO, Callable, Dict, List, Optional, Union
-
-
-try:
-    import numpy
-except ImportError:
-    import numpy
- as np
-
-try:
-    from .compression import compress_data
-except ImportError:
-    from .compression import compress_data
-
-try:
-    from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
-except ImportError:
-    from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
-
+from .compression import compress_data
+from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
                      TensorDtype, TensorizerConfig)
-try:
-    from .metadata import TensorMetadata
-except ImportError:
-    from .metadata import TensorMetadata
-
-
+from .metadata import TensorMetadata
 
 
 class TensorizerWriter:
-        Writes tensors to a tensorizer file format.
+    """
+    Writes tensors to a tensorizer file format.
 
     Supports streaming writes, compression, and checksums.
-    
+    """
+
     def __init__(
         self,
         path: Union[str, Path],
@@ -83,41 +49,47 @@ class TensorizerWriter:
         self._data_offset = 0
         self._header_written = False
 
-    def __enter__(self) -> "TensorizerWriter":"        self.open()
+    def __enter__(self) -> "TensorizerWriter":
+        self.open()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         self.close()
 
     def open(self) -> None:
-"""
-Open file for writing.        self._file = open(self.path, 'wb')'        self._write_header()
+        """Open file for writing."""
+        self._file = open(self.path, 'wb')
+        self._write_header()
 
     def close(self) -> None:
-"""
-Close file and finalize.        if self._file:
+        """Close file and finalize."""
+        if self._file:
             self._finalize()
             self._file.close()
             self._file = None
 
     def _write_header(self) -> None:
-"""
-Write file header.        if self._file is None:
+        """Write file header."""
+        if self._file is None:
             return
 
         # Magic + version
         self._file.write(TENSORIZER_MAGIC)
         self._file.write(struct.pack("<I", TENSORIZER_VERSION))
-        # TODO Placeholder for metadata offset (will be filled in finalize)
+
+        # Placeholder for metadata offset (will be filled in finalize)
         self._file.write(struct.pack("<Q", 0))
+
         # Config info
-        comp_bytes: bytes = self.config.compression.value.encode("utf-8")"        self._file.write(struct.pack("<I", len(comp_bytes)) + comp_bytes)"
+        comp_bytes: bytes = self.config.compression.value.encode("utf-8")
+        self._file.write(struct.pack("<I", len(comp_bytes)) + comp_bytes)
+
         self._data_offset: int = self._file.tell()
         self._header_written = True
 
     def _finalize(self) -> None:
-"""
-Finalize file with metadata index.        if self._file is None:
+        """Finalize file with metadata index."""
+        if self._file is None:
             return
 
         # Write metadata
@@ -125,21 +97,26 @@ Finalize file with metadata index.        if self._file is None:
 
         # Number of tensors
         self._file.write(struct.pack("<I", len(self._metadata)))
-        # Each tensor's metadata'        for meta in self._metadata:
+
+        # Each tensor's metadata
+        for meta: TensorMetadata in self._metadata:
             meta_bytes: bytes = meta.to_bytes()
-            self._file.write(struct.pack("<I", len(meta_bytes)))"            self._file.write(meta_bytes)
+            self._file.write(struct.pack("<I", len(meta_bytes)))
+            self._file.write(meta_bytes)
 
         # Update header with metadata offset
         self._file.seek(8)  # After magic + version
         self._file.write(struct.pack("<Q", metadata_offset))
+
     def write_tensor(
         self,
         name: str,
         tensor: np.ndarray,
     ) -> TensorMetadata:
-"""
-Write a tensor to the file.        if self._file is None:
+        """Write a tensor to the file."""
+        if self._file is None:
             raise RuntimeError("Writer not opened")
+
         # Determine dtype
         dtype: TensorDtype = TensorDtype.FLOAT32
         for td, (np_dtype, _) in DTYPE_MAP.items():
@@ -186,8 +163,8 @@ Write a tensor to the file.        if self._file is None:
         tensors: Dict[str, np.ndarray],
         progress_callback: Optional[Callable[[str, int, int], None]] = None,
     ) -> List[TensorMetadata]:
-"""
-Write multiple tensors (a model) to the file.        results = []
+        """Write multiple tensors (a model) to the file."""
+        results = []
         total: int = len(tensors)
 
         for i, (name, tensor) in enumerate(tensors.items()):
@@ -198,5 +175,3 @@ Write multiple tensors (a model) to the file.        results = []
             results.append(meta)
 
         return results
-
-"""

@@ -1,43 +1,28 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Factory.py module for quantization orchestration.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
-except ImportError:
-    from typing import TYPE_CHECKING
 
+import numpy as np
 
-try:
-    import numpy
-except ImportError:
-    import numpy
- as np
-
-try:
-    from .config import QuantConfig, QuantScheme, QuantStrategy
-except ImportError:
-    from .config import QuantConfig, QuantScheme, QuantStrategy
-
+from .config import QuantConfig, QuantScheme, QuantStrategy
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -49,9 +34,10 @@ def quantize_tensor(
     bits: int = 8,
     group_size: int = 128,
     symmetric: bool = True,
-    scheme: str = "linear",") -> QuantizedTensor:
-"""
-Quantizes a float tensor into a QuantizedTensor object using the specified scheme.    config = QuantConfig(
+    scheme: str = "linear",
+) -> QuantizedTensor:
+    """Quantizes a float tensor into a QuantizedTensor object using the specified scheme."""
+    config = QuantConfig(
         bits=bits,
         scheme=QuantScheme[scheme.upper()] if scheme.upper() in QuantScheme.__members__ else QuantScheme.INT8,
         strategy=QuantStrategy.GROUP if group_size > 0 else QuantStrategy.TENSOR,
@@ -59,9 +45,11 @@ Quantizes a float tensor into a QuantizedTensor object using the specified schem
         symmetric=symmetric,
     )
 
-    if scheme.lower() == "awq":"        from .awq import AWQQuantizer
+    if scheme.lower() == "awq":
+        from .awq import AWQQuantizer
         quantizer = AWQQuantizer(config)
-    elif scheme.lower() == "gptq":"        from .gptq import GPTQQuantizer
+    elif scheme.lower() == "gptq":
+        from .gptq import GPTQQuantizer
         quantizer = GPTQQuantizer(config)
     else:
         from .linear import LinearQuantizer

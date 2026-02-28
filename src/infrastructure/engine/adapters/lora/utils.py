@@ -1,24 +1,21 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-"""
-Utility functions for LoRA initialization and analysis.
+"""Utility functions for LoRA initialization and analysis."""
 
-"""
 import math
 from typing import Any
 
@@ -39,13 +36,17 @@ def create_lora_weights(
     out_features: int,
     rank: int,
     alpha: float = 16.0,
-    module_name: str = "linear","    init_method: str = "kaiming",") -> LoRALayerWeights:
-"""
-Create initialized LoRA layer weights.    if init_method == "kaiming":"        # Kaiming uniform for A, zeros for B
+    module_name: str = "linear",
+    init_method: str = "kaiming",
+) -> LoRALayerWeights:
+    """Create initialized LoRA layer weights."""
+    if init_method == "kaiming":
+        # Kaiming uniform for A, zeros for B
         bound = math.sqrt(6.0 / (rank + in_features))
         lora_a = np.random.uniform(-bound, bound, (rank, in_features)).astype(np.float32)
         lora_b = np.zeros((out_features, rank), dtype=np.float32)
-    elif init_method == "gaussian":"        # Gaussian for A, zeros for B
+    elif init_method == "gaussian":
+        # Gaussian for A, zeros for B
         std = 1.0 / math.sqrt(rank)
         lora_a = np.random.normal(0, std, (rank, in_features)).astype(np.float32)
         lora_b = np.zeros((out_features, rank), dtype=np.float32)
@@ -66,8 +67,8 @@ def create_lora_model(
     layer_dims: dict[str, tuple[int, int]],
     config: LoRAConfig | None = None,
 ) -> LoRAModel:
-"""
-Create a LoRA model with initialized weights.    config = config or LoRAConfig()
+    """Create a LoRA model with initialized weights."""
+    config = config or LoRAConfig()
     model = LoRAModel(model_id=model_id, config=config)
 
     for module_name, (in_features, out_features) in layer_dims.items():
@@ -90,8 +91,8 @@ def merge_lora_weights(
     base_weights: dict[str, NDArray[np.float32]],
     lora_model: LoRAModel,
 ) -> dict[str, NDArray[np.float32]]:
-"""
-Merge LoRA weights into base model weights.    merged = {}
+    """Merge LoRA weights into base model weights."""
+    merged = {}
 
     for module_name, base_weight in base_weights.items():
         lora_layer = lora_model.get_layer(module_name)
@@ -108,8 +109,8 @@ def compute_effective_rank(
     lora_b: NDArray[np.float32],
     threshold: float = 0.01,
 ) -> int:
-"""
-Compute effective rank of LoRA matrices.    # Compute BA product
+    """Compute effective rank of LoRA matrices."""
+    # Compute BA product
     product = lora_b @ lora_a
 
     # SVD
@@ -122,5 +123,3 @@ Compute effective rank of LoRA matrices.    # Compute BA product
 
     effective = int(np.sum(s / max_s > threshold))
     return effective
-
-"""

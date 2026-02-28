@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
@@ -22,7 +18,8 @@ from __future__ import annotations
 FlashAttention-2 backend.
 """
 
-"""
+from __future__ import annotations
+
 import logging
 from typing import Any
 
@@ -33,15 +30,17 @@ from .sdpa import TorchSDPABackend
 logger = logging.getLogger(__name__)
 
 
-
 class FlashAttentionBackend(AttentionBackend[None]):
-        FlashAttention-2 backend.
+    """
+    FlashAttention-2 backend.
 
     Optimized attention using tiling and recomputation.
-    
+    """
+
     @staticmethod
     def get_name() -> str:
         return "flash_attn"
+
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -73,11 +72,12 @@ class FlashAttentionBackend(AttentionBackend[None]):
         metadata: AttentionMetadata,
         scale: float | None = None,
     ) -> Any:
-"""
-FlashAttention implementation.        try:
+        """FlashAttention implementation."""
+        try:
             from flash_attn import flash_attn_func
         except ImportError:
-            logger.warning("flash_attn not available, falling back to SDPA")"            return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)
+            logger.warning("flash_attn not available, falling back to SDPA")
+            return TorchSDPABackend().forward(query, key, value, kv_cache, metadata, scale)
 
         q = query.unsqueeze(0)  # Add batch dim
         k = key.unsqueeze(0)
