@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
 """
 Intelligent routing for multi-cloud AI providers.
 
-"""
 Routes requests to the optimal provider based on model availability,
 latency requirements, budget constraints, and provider health.
 """
+
+from __future__ import annotations
+
 import asyncio
 import logging
 from dataclasses import dataclass, field
@@ -37,16 +33,20 @@ from .base import CloudProviderBase, InferenceRequest
 logger: logging.Logger = logging.getLogger(__name__)
 
 
-
 class RoutingStrategy(Enum):
-"""
-Strategy for selecting providers.
-    COST_OPTIMIZED = "cost_optimized""    LATENCY_OPTIMIZED = "latency_optimized""    QUALITY_OPTIMIZED = "quality_optimized""    ROUND_ROBIN = "round_robin""    FAILOVER = "failover"
+    """Strategy for selecting providers."""
+
+    COST_OPTIMIZED = "cost_optimized"
+    LATENCY_OPTIMIZED = "latency_optimized"
+    QUALITY_OPTIMIZED = "quality_optimized"
+    ROUND_ROBIN = "round_robin"
+    FAILOVER = "failover"
+
 
 @dataclass
 class ProviderMetrics:
-"""
-Metrics for a registered provider.
+    """Metrics for a registered provider."""
+
     avg_latency_ms: float = 0.0
     success_rate: float = 1.0
     total_requests: int = 0
@@ -58,8 +58,8 @@ Metrics for a registered provider.
 
 @dataclass
 class RoutingConstraints:
-"""
-Constraints for routing decisions.
+    """Constraints for routing decisions."""
+
     max_latency_ms: Optional[float] = None
     max_cost: Optional[float] = None
     preferred_providers: List[str] = field(default_factory=list)
@@ -67,9 +67,9 @@ Constraints for routing decisions.
     require_streaming: bool = False
 
 
-
 class IntelligentRouter:
-        Intelligent request router for multi-cloud AI providers.
+    """
+    Intelligent request router for multi-cloud AI providers.
 
     Manages provider registration, health monitoring, and intelligent
     routing based on various optimization strategies.
@@ -86,20 +86,23 @@ class IntelligentRouter:
         )
 
         response = await provider.complete(request)
-    
+    """
+
     def __init__(
         self,
         default_strategy: RoutingStrategy = RoutingStrategy.COST_OPTIMIZED,
         health_check_interval: float = 60.0,
         failover_cooldown: float = 30.0,
     ) -> None:
-                Initialize the router.
+        """
+        Initialize the router.
 
         Args:
             default_strategy: Default routing strategy to use.
             health_check_interval: Seconds between health checks.
             failover_cooldown: Seconds to wait before retrying failed provider.
-                self.default_strategy: RoutingStrategy = default_strategy
+        """
+        self.default_strategy: RoutingStrategy = default_strategy
         self.health_check_interval: float = health_check_interval
         self.failover_cooldown: float = failover_cooldown
 
@@ -117,13 +120,15 @@ class IntelligentRouter:
         priority: int = 10,
         cost_per_1k_tokens: float = 0.0,
     ) -> None:
-                Register a cloud provider with the router.
+        """
+        Register a cloud provider with the router.
 
         Args:
             provider: The provider instance to register.
             priority: Lower number = higher priority (1 is highest).
             cost_per_1k_tokens: Average cost for pricing decisions.
-                name: str = provider.name
+        """
+        name: str = provider.name
         self._providers[name] = provider
         self._priorities[name] = priority
         self._metrics[name] = ProviderMetrics(cost_per_1k_tokens=cost_per_1k_tokens)
@@ -135,15 +140,18 @@ class IntelligentRouter:
             self._model_mapping[model].append(name)
 
         logger.info(f"Registered provider: {name} with priority {priority}")
+
     def unregister_provider(self, name: str) -> bool:
-                Unregister a provider from the router.
+        """
+        Unregister a provider from the router.
 
         Args:
             name: Name of the provider to remove.
 
         Returns:
             True if provider was removed, False if not found.
-                if name not in self._providers:
+        """
+        if name not in self._providers:
             return False
 
         self._providers.pop(name)
@@ -157,7 +165,8 @@ class IntelligentRouter:
                 if not providers:
                     del self._model_mapping[model]
 
-        logger.info(f"Unregistered provider: {name}")"        return True
+        logger.info(f"Unregistered provider: {name}")
+        return True
 
     async def get_provider_for_request(
         self,
@@ -165,7 +174,8 @@ class IntelligentRouter:
         strategy: Optional[RoutingStrategy] = None,
         constraints: Optional[RoutingConstraints] = None,
     ) -> Optional[CloudProviderBase]:
-                Get the best provider for a given request.
+        """
+        Get the best provider for a given request.
 
         Args:
             request: The inference request to route.
@@ -174,20 +184,23 @@ class IntelligentRouter:
 
         Returns:
             Best matching provider, or None if no suitable provider found.
-                strategy = strategy or self.default_strategy
+        """
+        strategy = strategy or self.default_strategy
         constraints = constraints or RoutingConstraints()
 
         # Get candidates that support the requested model
         candidates: List[str] = self._get_candidates(request.model, constraints)
 
         if not candidates:
-            logger.warning(f"No providers available for model: {request.model}")"            return None
+            logger.warning(f"No providers available for model: {request.model}")
+            return None
 
         # Filter by health
         healthy_candidates: List[str] = [name for name in candidates if self._is_provider_healthy(name)]
 
         if not healthy_candidates:
-            logger.warning("No healthy providers available, trying all candidates")"            healthy_candidates: List[str] = candidates
+            logger.warning("No healthy providers available, trying all candidates")
+            healthy_candidates: List[str] = candidates
 
         # Apply routing strategy
         if strategy == RoutingStrategy.COST_OPTIMIZED:
@@ -204,7 +217,8 @@ class IntelligentRouter:
             selected: Never = healthy_candidates[0] if healthy_candidates else None
 
         if selected:
-            logger.debug(f"Routed request to provider: {selected}")"            return self._providers[selected]
+            logger.debug(f"Routed request to provider: {selected}")
+            return self._providers[selected]
 
         return None
 
@@ -213,15 +227,13 @@ class IntelligentRouter:
         model: str,
         constraints: RoutingConstraints,
     ) -> List[str]:
-"""
-Get candidate providers for a model with constraints applied.        # Start with providers that support the model
+        """Get candidate providers for a model with constraints applied."""
+        # Start with providers that support the model
         if model in self._model_mapping:
             candidates: List[str] = self._model_mapping[model].copy()
         else:
             # Try all providers if model not in mapping
-            candidates: List[str] = [
-                name for name, provider in self._providers.items() if provider.supports_model(model)
-            ]
+            candidates: List[str] = [name for name, provider in self._providers.items() if provider.supports_model(model)]
 
         # Apply exclusions
         candidates: List[str] = [name for name in candidates if name not in constraints.excluded_providers]
@@ -235,8 +247,8 @@ Get candidate providers for a model with constraints applied.        # Start wit
         return candidates
 
     def _is_provider_healthy(self, name: str) -> bool:
-"""
-Check if a provider is healthy and not in cooldown.        provider: CloudProviderBase | None = self._providers.get(name)
+        """Check if a provider is healthy and not in cooldown."""
+        provider: CloudProviderBase | None = self._providers.get(name)
         if not provider or not provider.is_healthy:
             return False
 
@@ -253,8 +265,8 @@ Check if a provider is healthy and not in cooldown.        provider: CloudProvid
         candidates: List[str],
         request: InferenceRequest,
     ) -> Optional[str]:
-"""
-Select provider with lowest cost.        if not candidates:
+        """Select provider with lowest cost."""
+        if not candidates:
             return None
 
         def get_cost(name: str) -> float:
@@ -264,8 +276,8 @@ Select provider with lowest cost.        if not candidates:
         return min(candidates, key=get_cost)
 
     def _route_by_latency(self, candidates: List[str]) -> Optional[str]:
-"""
-Select provider with lowest average latency.        if not candidates:
+        """Select provider with lowest average latency."""
+        if not candidates:
             return None
 
         def get_latency(name: str) -> float:
@@ -274,8 +286,8 @@ Select provider with lowest average latency.        if not candidates:
         return min(candidates, key=get_latency)
 
     def _route_by_priority(self, candidates: List[str]) -> Optional[str]:
-"""
-Select highest priority provider.        if not candidates:
+        """Select highest priority provider."""
+        if not candidates:
             return None
 
         def get_priority(name: str) -> int:
@@ -284,8 +296,8 @@ Select highest priority provider.        if not candidates:
         return min(candidates, key=get_priority)
 
     def _route_round_robin(self, candidates: List[str]) -> Optional[str]:
-"""
-Select next provider in round-robin fashion.        if not candidates:
+        """Select next provider in round-robin fashion."""
+        if not candidates:
             return None
 
         selected: str = candidates[self._round_robin_index % len(candidates)]
@@ -293,8 +305,8 @@ Select next provider in round-robin fashion.        if not candidates:
         return selected
 
     def _route_failover(self, candidates: List[str]) -> Optional[str]:
-"""
-Select first healthy provider (failover mode).        return candidates[0] if candidates else None
+        """Select first healthy provider (failover mode)."""
+        return candidates[0] if candidates else None
 
     def record_request_result(
         self,
@@ -302,13 +314,15 @@ Select first healthy provider (failover mode).        return candidates[0] if ca
         success: bool,
         latency_ms: float,
     ) -> None:
-                Record the result of a request for metrics tracking.
+        """
+        Record the result of a request for metrics tracking.
 
         Args:
             provider_name: Name of the provider used.
             success: Whether the request succeeded.
             latency_ms: Request latency in milliseconds.
-                if provider_name not in self._metrics:
+        """
+        if provider_name not in self._metrics:
             return
 
         metrics: ProviderMetrics = self._metrics[provider_name]
@@ -331,8 +345,8 @@ Select first healthy provider (failover mode).        return candidates[0] if ca
         metrics.success_rate = 1 - (metrics.failed_requests / metrics.total_requests)
 
     async def start_health_monitoring(self) -> None:
-"""
-Start background health monitoring task.        if self._health_check_task is not None:
+        """Start background health monitoring task."""
+        if self._health_check_task is not None:
             return
 
         async def _health_loop() -> NoReturn:
@@ -342,24 +356,34 @@ Start background health monitoring task.        if self._health_check_task is no
 
         self._health_check_task = asyncio.create_task(_health_loop())
         logger.info("Started health monitoring")
+
     async def stop_health_monitoring(self) -> None:
-"""
-Stop background health monitoring task.        if self._health_check_task:
+        """Stop background health monitoring task."""
+        if self._health_check_task:
             self._health_check_task.cancel()
             self._health_check_task = None
             logger.info("Stopped health monitoring")
+
     async def _run_health_checks(self) -> None:
-"""
-Run health checks on all providers.        for name, provider in self._providers.items():
+        """Run health checks on all providers."""
+        for name, provider in self._providers.items():
             try:
                 is_healthy: bool = await provider.health_check()
-                logger.debug(f"Health check {name}: {is_healthy}")"            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                logger.debug(f"Health check {name}: {is_healthy}")
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Health check failed for {name}: {e}")
+
     def get_provider_stats(self) -> Dict[str, Dict[str, Any]]:
-"""
-Get statistics for all registered providers.        stats = {}
+        """Get statistics for all registered providers."""
+        stats = {}
         for name, provider in self._providers.items():
             metrics: ProviderMetrics = self._metrics.get(name, ProviderMetrics())
             stats[name] = {
-                "healthy": provider.is_healthy,"                "priority": self._priorities.get(name, 999),"                "models": provider.available_models,"                "avg_latency_ms": metrics.avg_latency_ms,"                "success_rate": metrics.success_rate,"                "total_requests": metrics.total_requests,"            }
+                "healthy": provider.is_healthy,
+                "priority": self._priorities.get(name, 999),
+                "models": provider.available_models,
+                "avg_latency_ms": metrics.avg_latency_ms,
+                "success_rate": metrics.success_rate,
+                "total_requests": metrics.total_requests,
+            }
         return stats

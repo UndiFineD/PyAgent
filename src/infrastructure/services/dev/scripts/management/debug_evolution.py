@@ -1,84 +1,79 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-"""
-Validation script for Phase 14: Autonomous Evolution & Self-Repair.
+"""Validation script for Phase 14: Autonomous Evolution & Self-Repair."""
 
-"""
-try:
-    import logging
-except ImportError:
-    import logging
+from __future__ import annotations
 
-try:
-    import os
-except ImportError:
-    import os
+import logging
+import os
+from pathlib import Path
 
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib import Path
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-try:
-    from .infrastructure.swarm.fleet.fleet_manager import FleetManager
-except ImportError:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-
-try:
-    from .logic.agents.infrastructure.infrastructure_repair_agent import \
-except ImportError:
-    from src.logic.agents.infrastructure.infrastructure_repair_agent import \
-
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.logic.agents.infrastructure.infrastructure_repair_agent import \
     InfrastructureRepairAgent
 
 __version__ = VERSION
 
 
 def test_evolution_and_repair() -> None:
-"""
-Validate self-generation and self-repair features.    logging.basicConfig(level=logging.INFO)
+    """Validate self-generation and self-repair features."""
+    logging.basicConfig(level=logging.INFO)
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")
+    fleet = FleetManager(str(root))
 
-    root = Path(str(Path(__file__).resolve().parents[5]) + "")"    fleet = FleetManager(str(root))
-
-    print("--- Phase 14: Agent Self-Generation ---")"    generated_path = fleet.evolution.generate_agent("TestGenerated", "Perform complex math and string analysis")"    print(f"Generated Agent Path: {generated_path}")"    if os.path.exists(generated_path):
+    print("--- Phase 14: Agent Self-Generation ---")
+    generated_path = fleet.evolution.generate_agent("TestGenerated", "Perform complex math and string analysis")
+    print(f"Generated Agent Path: {generated_path}")
+    if os.path.exists(generated_path):
         print("Generated file exists.")
-    print("\\n--- Phase 14: Cross-Fleet Knowledge Transfer ---")"    dummy_knowledge = {"lessons": [{"failure_context": "API timeout", "correction": "Increase retries"}]}"    export_file = fleet.knowledge_transfer.export_knowledge("fleet_A", dummy_knowledge)"    print(f"Knowledge exported to: {export_file}")"
+
+    print("\n--- Phase 14: Cross-Fleet Knowledge Transfer ---")
+    dummy_knowledge = {"lessons": [{"failure_context": "API timeout", "correction": "Increase retries"}]}
+    export_file = fleet.knowledge_transfer.export_knowledge("fleet_A", dummy_knowledge)
+    print(f"Knowledge exported to: {export_file}")
+
     imported_data = fleet.knowledge_transfer.import_knowledge(export_file)
     print(f"Imported Lesson: {imported_data['lessons'][0]['failure_context']}")
-    print("\\n--- Phase 14: Infrastructure Repair ---")"    repair_agent = InfrastructureRepairAgent(
-        str(root / "src.logic.agents.infrastructure.infrastructure_repair_agent.py")"    )
 
-    # We won't actually install anything in the test to avoid side effects, but we'll run the audit'    audit = repair_agent.audit_environment()
+    print("\n--- Phase 14: Infrastructure Repair ---")
+    repair_agent = InfrastructureRepairAgent(
+        str(root / "src.logic.agents.infrastructure.infrastructure_repair_agent.py")
+    )
+
+    # We won't actually install anything in the test to avoid side effects, but we'll run the audit
+    audit = repair_agent.audit_environment()
     print(f"Environment Audit Status: {audit['status']}")
-    print("\\n--- Phase 14: Loop Detection ---")"    # Simulate a loop in FleetManager
-    fleet.register_agent("Dummy", InfrastructureRepairAgent)  # Just a TODO Placeholder"    workflow = [
-        {"agent": "Dummy", "action": "audit_environment", "args": []},"        {"agent": "Dummy", "action": "audit_environment", "args": []},"        {"agent": "Dummy", "action": "audit_environment", "args": []},"        {"agent": "Dummy", "action": "audit_environment", "args": []},"    ]
+
+    print("\n--- Phase 14: Loop Detection ---")
+    # Simulate a loop in FleetManager
+    fleet.register_agent("Dummy", InfrastructureRepairAgent)  # Just a placeholder
+    workflow = [
+        {"agent": "Dummy", "action": "audit_environment", "args": []},
+        {"agent": "Dummy", "action": "audit_environment", "args": []},
+        {"agent": "Dummy", "action": "audit_environment", "args": []},
+        {"agent": "Dummy", "action": "audit_environment", "args": []},
+    ]
     # We expect it to stop after 3 calls to the same action in the history
 
     # Note: FleetManager.action_history is per instance, so multiple calls to execute_workflow will accumulate.
     fleet.execute_workflow("Loop Test", workflow)
-    print("\\nEvolution and self-repair validation COMPLETED.")
 
-if __name__ == "__main__":"    test_evolution_and_repair()
+    print("\nEvolution and self-repair validation COMPLETED.")
+
+
+if __name__ == "__main__":
+    test_evolution_and_repair()

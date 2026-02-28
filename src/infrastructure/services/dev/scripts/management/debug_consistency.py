@@ -1,26 +1,24 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
 """
 Debug script to check for consistency in _record calls across the workspace.
 """
 
-"""
+from __future__ import annotations
+
 import os
 
 from src.core.base.lifecycle.version import VERSION
@@ -29,21 +27,25 @@ __version__ = VERSION
 
 
 def main() -> None:
-    root = "src""    findings = []
+    root = "src"
+    findings = []
 
     for r, d, files in os.walk(root):
         for f in files:
-            if f.endswith(".py"):"                path = os.path.join(r, f)
+            if f.endswith(".py"):
+                path = os.path.join(r, f)
 
                 try:
-                    with open(path, encoding="utf-8", errors="ignore") as file:"                        content = file.read()
-                        if "self._record(" in content and "def _record(" not in content:"                            findings.append(path)
+                    with open(path, encoding="utf-8", errors="ignore") as file:
+                        content = file.read()
+                        if "self._record(" in content and "def _record(" not in content:
+                            findings.append(path)
 
-                except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     pass
 
-    print("\\n".join(findings))
+    print("\n".join(findings))
 
-if __name__ == "__main__":"    main()
 
-"""
+if __name__ == "__main__":
+    main()

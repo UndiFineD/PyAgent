@@ -1,27 +1,22 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-"""
-Test generation and case minimization.
+"""Test generation and case minimization."""
 
-"""
+from __future__ import annotations
+
 import ast
 from collections.abc import Callable
 from typing import Any
@@ -33,34 +28,47 @@ from .models import GeneratedTest
 __version__ = VERSION
 
 
-
 class TestGenerator:
-"""
-Generate tests from specifications.
+    """Generate tests from specifications."""
 
     __test__ = False
 
     def __init__(self) -> None:
-"""
-Initialize test generator.        self.generated: list[GeneratedTest] = []
+        """Initialize test generator."""
+        self.generated: list[GeneratedTest] = []
         self._templates: dict[str, str] = {}
 
     def add_template(self, name: str, template: str) -> None:
-"""
-Add a test template.        self._templates[name] = template
+        """Add a test template."""
+        self._templates[name] = template
 
     def generate_from_spec(
         self,
         specification: str,
         function_name: str,
-        input_type: str = "Any","        output_type: str = "Any","    ) -> GeneratedTest:
-"""
-Generate test from specification.        test_name = f"test_{function_name}_{len(self.generated)}"
+        input_type: str = "Any",
+        output_type: str = "Any",
+    ) -> GeneratedTest:
+        """Generate test from specification."""
+        test_name = f"test_{function_name}_{len(self.generated)}"
+
         code = (
-            f"import pytest\\n\\n""            f"def {test_name}():\\n""            f'    ""
-Pre-Validation: {specification}"""\\n'"""'
-f"    # This test was auto-generated from specification before implementation.\\n""            f"    # Ensure the code matches the intent: {function_name}\\n""            f"    # Requirement: {specification}\\n""            f"    try:\\n""            f"        from src.infrastructure.services.dev.generated import {function_name}\\n""            f"    except ImportError:\\n""            f"        pytest.fail(f'Implementation {function_name} not found in src.generated')\\n"
-f"    \\n""            f"    # Mock data based on types\\n""            f"    # result = {function_name}(...)\\n""            f"    # assert result is not None\\n""            f"    pass\\n""        )
+            f"import pytest\n\n"
+            f"def {test_name}():\n"
+            f'    """Pre-Validation: {specification}"""\n'
+            f"    # This test was auto-generated from specification before implementation.\n"
+            f"    # Ensure the code matches the intent: {function_name}\n"
+            f"    # Requirement: {specification}\n"
+            f"    try:\n"
+            f"        from src.infrastructure.services.dev.generated import {function_name}\n"
+            f"    except ImportError:\n"
+            f"        pytest.fail(f'Implementation {function_name} not found in src.generated')\n"
+            f"    \n"
+            f"    # Mock data based on types\n"
+            f"    # result = {function_name}(...)\n"
+            f"    # assert result is not None\n"
+            f"    pass\n"
+        )
 
         generated = GeneratedTest(
             name=test_name,
@@ -72,21 +80,29 @@ f"    \\n""            f"    # Mock data based on types\\n""            f"    # 
         return generated
 
     def generate_parametrized(self, function_name: str, test_cases: list[tuple[Any, Any]]) -> GeneratedTest:
-"""
-Generate parametrized test.        test_name = f"test_{function_name}_parametrized""        params = ", ".join(str(tc) for tc in test_cases)"        code = (
-            f"@pytest.mark.parametrize('input_val,expected', [\\n"
-f"    {params}\\n""            f"])\\n""            f"def {test_name}(input_val, expected):\\n""            f"    result={function_name}(input_val)\\n""            f"    assert result == expected\\n""        )
+        """Generate parametrized test."""
+        test_name = f"test_{function_name}_parametrized"
+        params = ", ".join(str(tc) for tc in test_cases)
+        code = (
+            f"@pytest.mark.parametrize('input_val,expected', [\n"
+            f"    {params}\n"
+            f"])\n"
+            f"def {test_name}(input_val, expected):\n"
+            f"    result={function_name}(input_val)\n"
+            f"    assert result == expected\n"
+        )
         generated = GeneratedTest(
             name=test_name,
-            specification=f"Parametrized test for {function_name}","            generated_code=code,
+            specification=f"Parametrized test for {function_name}",
+            generated_code=code,
             confidence=0.8,
         )
         self.generated.append(generated)
         return generated
 
     def validate_generated(self, test_id: int) -> bool:
-"""
-Validate a generated test has valid syntax.        if test_id < 0 or test_id >= len(self.generated):
+        """Validate a generated test has valid syntax."""
+        if test_id < 0 or test_id >= len(self.generated):
             return False
         try:
             ast.parse(self.generated[test_id].generated_code)
@@ -96,49 +112,65 @@ Validate a generated test has valid syntax.        if test_id < 0 or test_id >= 
             return False
 
     def export_all(self) -> str:
-"""
-Export all generated tests.        return "\\n\\n".join(t.generated_code for t in self.generated)
+        """Export all generated tests."""
+        return "\n\n".join(t.generated_code for t in self.generated)
+
     def generate_red_team_tests(self, function_name: str, implementation_code: str) -> GeneratedTest:
-"""
-SCA Pattern: Generate tests specifically designed to break the implementation.        test_name = f"test_{function_name}_red_team"
+        """SCA Pattern: Generate tests specifically designed to break the implementation."""
+        test_name = f"test_{function_name}_red_team"
+
         # Phase 125: Enhanced Red-Team Adversarial Generation
         # (Inspired by Digital Red Queen - Adversarial Program Evolution)
         code = (
-            f"import pytest\\n""            f"import sys\\n""            f"from src.infrastructure.services.dev.generated import {function_name}\\n\\n""            f"@pytest.mark.parametrize('adversarial_input', [\\n""
-f"    None, '', ' ', '\\0', '\\n' * 1000, # NULL and Bloat\\n"
-f"    sys.maxsize, -sys.maxsize - 1, float('inf'), float('nan'), # Numeric Edges\\n"
-f"    {{'nested': 'data' * 100}}, [0] * 1000, # Large Collections\\n"
-f"    '<b>Unsanitized</b> <script>alert(1)</script>', # Injection stubs\\n"
-f"])\\n""            f"def {test_name}_edge_cases(adversarial_input):\\n""            f'    ""
-SCA Red-Team: Targeting edge cases for {function_name}"""\\n'"""'
-f"    # This test verifies that the implementation handles extreme inputs gracefully\\n""            f"    try:\\n""            f"        result = {function_name}(adversarial_input)\\n""            f"        # If it returns, we check it doesn't crash internally or leak memory\\n""'
-f"        assert True\\n""            f"    except (ValueError, TypeError, KeyError):\\n""            f"        # Expected graceful failures are acceptable\\n""            f"        pytest.skip('Accepted domain error')\\n""
-f"    except Exception as e:\\n""            f"        # Unhandled exceptions are red-team victories\\n""            f"        pytest.fail(f'Red-Team Win: Unhandled {{type(e).__name__}}: {{e}}')\\n""'        )
+            f"import pytest\n"
+            f"import sys\n"
+            f"from src.infrastructure.services.dev.generated import {function_name}\n\n"
+            f"@pytest.mark.parametrize('adversarial_input', [\n"
+            f"    None, '', ' ', '\\0', '\\n' * 1000, # NULL and Bloat\n"
+            f"    sys.maxsize, -sys.maxsize - 1, float('inf'), float('nan'), # Numeric Edges\n"
+            f"    {{'nested': 'data' * 100}}, [0] * 1000, # Large Collections\n"
+            f"    '<b>Unsanitized</b> <script>alert(1)</script>', # Injection stubs\n"
+            f"])\n"
+            f"def {test_name}_edge_cases(adversarial_input):\n"
+            f'    """SCA Red-Team: Targeting edge cases for {function_name}"""\n'
+            f"    # This test verifies that the implementation handles extreme inputs gracefully\n"
+            f"    try:\n"
+            f"        result = {function_name}(adversarial_input)\n"
+            f"        # If it returns, we check it doesn't crash internally or leak memory\n"
+            f"        assert True\n"
+            f"    except (ValueError, TypeError, KeyError):\n"
+            f"        # Expected graceful failures are acceptable\n"
+            f"        pytest.skip('Accepted domain error')\n"
+            f"    except Exception as e:\n"
+            f"        # Unhandled exceptions are red-team victories\n"
+            f"        pytest.fail(f'Red-Team Win: Unhandled {{type(e).__name__}}: {{e}}')\n"
+        )
 
         generated = GeneratedTest(
             name=test_name,
-            specification=f"Red-Team adversarial tests for {function_name}","            generated_code=code,
+            specification=f"Red-Team adversarial tests for {function_name}",
+            generated_code=code,
             confidence=0.9,
         )
 
         self.generated.append(generated)
         return generated
         validated = [g for g in self.generated if g.validated]
-        return "\\n\\n".join(g.generated_code for g in validated)
+        return "\n\n".join(g.generated_code for g in validated)
 
 
 class TestCaseMinimizer:
-"""
-Minimize test cases for debugging.
+    """Minimize test cases for debugging."""
+
     __test__ = False
 
     def __init__(self) -> None:
-"""
-Initialize test case minimizer.        self.history: list[dict[str, Any]] = []
+        """Initialize test case minimizer."""
+        self.history: list[dict[str, Any]] = []
 
     def minimize_string(self, input_str: str, test_fn: Callable[[str], bool]) -> str:
-"""
-Minimize a string input using delta debugging.        current = input_str
+        """Minimize a string input using delta debugging."""
+        current = input_str
         while len(current) > 1:
             mid = len(current) // 2
             left = current[:mid]
@@ -152,11 +184,12 @@ Minimize a string input using delta debugging.        current = input_str
                 break
 
         reduction = 1 - len(current) / len(input_str) if input_str else 0
-        self.history.append({"original": input_str, "minimized": current, "reduction": reduction})"        return current
+        self.history.append({"original": input_str, "minimized": current, "reduction": reduction})
+        return current
 
     def minimize_list(self, input_list: list[Any], test_fn: Callable[[list[Any]], bool]) -> list[Any]:
-"""
-Minimize a list input by removing elements.        current = input_list.copy()
+        """Minimize a list input by removing elements."""
+        current = input_list.copy()
         i = 0
         while i < len(current):
             candidate = current[:i] + current[i + 1 :]
@@ -166,77 +199,61 @@ Minimize a list input by removing elements.        current = input_list.copy()
             else:
                 i += 1
 
-        self.history.append({"original_length": len(input_list), "minimized_length": len(current)})"        return current
+        self.history.append({"original_length": len(input_list), "minimized_length": len(current)})
+        return current
 
     def get_minimization_stats(self) -> dict[str, Any]:
-"""
-Get minimization statistics.        if not self.history:
+        """Get minimization statistics."""
+        if not self.history:
             return {"total": 0}
-        reductions = [h.get("reduction", 0) for h in self.history if "reduction" in h]"        avg_reduction = sum(reductions) / len(reductions) if reductions else 0
+
+        reductions = [h.get("reduction", 0) for h in self.history if "reduction" in h]
+        avg_reduction = sum(reductions) / len(reductions) if reductions else 0
 
         return {
-            "total_minimizations": len(self.history),"            "average_reduction": avg_reduction,"            "total": len(self.history),"        }
-
+            "total_minimizations": len(self.history),
+            "average_reduction": avg_reduction,
+            "total": len(self.history),
+        }
 
 
 class TestDocGenerator:
-"""
-Generates documentation from tests.
+    """Generates documentation from tests."""
+
     __test__ = False
 
     def __init__(self) -> None:
-"""
-Initialize doc generator.        self.tests: list[dict[str, Any]] = []
+        """Initialize doc generator."""
+        self.tests: list[dict[str, Any]] = []
 
-    def add_test(self, name: str, module: str = "unknown", docstring: str = "", code: str = "") -> None:"        """
-Add test for documentation.        self.tests.append({"name": name, "module": module, "docstring": docstring, "code": code})
+    def add_test(self, name: str, module: str = "unknown", docstring: str = "", code: str = "") -> None:
+        """Add test for documentation."""
+        self.tests.append({"name": name, "module": module, "docstring": docstring, "code": code})
+
     def generate(self) -> str:
-"""
-Generate a human-readable documentation summary.        parts: list[str] = []
+        """Generate a human-readable documentation summary."""
+        parts: list[str] = []
         for test in self.tests:
-            title = test.get("name", "")"            doc = test.get("docstring", "")"            code = test.get("code", "")"            parts.append(f"{title}: {doc}\\n{code}".strip())"        return "\\n\\n".join(parts)
+            title = test.get("name", "")
+            doc = test.get("docstring", "")
+            code = test.get("code", "")
+            parts.append(f"{title}: {doc}\n{code}".strip())
+        return "\n\n".join(parts)
+
     def generate_grouped(self) -> dict[str, list[dict[str, Any]]]:
-"""
-Generate documentation grouped by module.        return self.group_by_module(self.tests)
+        """Generate documentation grouped by module."""
+        return self.group_by_module(self.tests)
 
     def extract_examples(self, test_code: str) -> list[dict[str, str]]:
-"""
-Extract examples from test code.        return [{"example": test_code}] if test_code else []
+        """Extract examples from test code."""
+        return [{"example": test_code}] if test_code else []
+
     def group_by_module(self, tests: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
-"""
-Group tests by module.        result: dict[str, list[dict[str, Any]]] = {}
+        """Group tests by module."""
+        result: dict[str, list[dict[str, Any]]] = {}
         for test in tests:
-            module = test.get("module", "unknown")"            if module not in result:
+            module = test.get("module", "unknown")
+            if module not in result:
                 result[module] = []
             result[module].append(test)
         return result
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
