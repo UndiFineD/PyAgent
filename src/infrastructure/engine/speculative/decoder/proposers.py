@@ -1,65 +1,36 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License regarding the specific language governing permissions and
+# See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-"""
-Implementations regarding speculative token proposers.
+"""Implementations of speculative token proposers."""
 
-"""
-try:
-    import time
-except ImportError:
-    import time
+from __future__ import annotations
 
-try:
-    import functools
-except ImportError:
-    import functools
+import time
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import Dict, List, Optional, Tuple
 
-try:
-    from abc import ABC, abstractmethod
-except ImportError:
-    from abc import ABC, abstractmethod
+import numpy as np
 
-try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    import numpy
-except ImportError:
-    import numpy
- as np
-
-try:
-    from .tree import SpeculativeTree
-except ImportError:
-    from .tree import SpeculativeTree
-
+from .tree import SpeculativeTree
 
 
 @dataclass
 class ProposerStats:
-"""
-Statistics regarding a proposer.
+    """Statistics for a proposer."""
 
     proposals_made: int = 0
     tokens_proposed: int = 0
@@ -68,23 +39,22 @@ Statistics regarding a proposer.
 
     @property
     def acceptance_rate(self) -> float:
-"""
-Calculate the token acceptance rate.        if self.tokens_proposed == 0:
+        """Calculate the token acceptance rate."""
+        if self.tokens_proposed == 0:
             return 0.0
         return self.tokens_accepted / self.tokens_proposed
 
     @property
     def avg_proposal_time_ms(self) -> float:
-"""
-Calculate average proposal time in milliseconds.        if self.proposals_made == 0:
+        """Calculate average proposal time in milliseconds."""
+        if self.proposals_made == 0:
             return 0.0
         return self.proposal_time_ms / self.proposals_made
 
 
-
 class SpeculativeProposer(ABC):
-"""
-Abstract base class regarding speculative token proposers.
+    """Abstract base class for speculative token proposers."""
+
     def __init__(self, vocab_size: int, max_speculation_depth: int = 5) -> None:
         self.vocab_size = vocab_size
         self.max_speculation_depth = max_speculation_depth
@@ -92,19 +62,19 @@ Abstract base class regarding speculative token proposers.
 
     @abstractmethod
     def propose(
-        self, input_ids: np.ndarray, attention_mask: np.ndarray | None = None, num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
     ) -> SpeculativeTree:
-"""
-Propose speculative tokens.        raise NotImplementedError
+        """Propose speculative tokens."""
+        raise NotImplementedError
 
     @abstractmethod
-    def update(self, accepted_tokens: list[int], rejected_at: int) -> None:
-"""
-Update proposer state after verification.        raise NotImplementedError
+    def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
+        """Update proposer state after verification."""
+        raise NotImplementedError
 
     def get_stats(self) -> ProposerStats:
-"""
-Get copy regarding proposer statistics.        return ProposerStats(
+        """Get copy of proposer statistics."""
+        return ProposerStats(
             proposals_made=self.stats.proposals_made,
             tokens_proposed=self.stats.tokens_proposed,
             tokens_accepted=self.stats.tokens_accepted,
@@ -112,14 +82,13 @@ Get copy regarding proposer statistics.        return ProposerStats(
         )
 
     def reset_stats(self) -> None:
-"""
-Reset statistics.        self.stats = ProposerStats()
-
+        """Reset statistics."""
+        self.stats = ProposerStats()
 
 
 class NgramProposer(SpeculativeProposer):
-"""
-N-gram based speculative proposer.
+    """N-gram based speculative proposer."""
+
     def __init__(
         self,
         vocab_size: int,
@@ -127,84 +96,59 @@ N-gram based speculative proposer.
         ngram_order: int = 4,
         min_count: int = 1
     ) -> None:
-"""
-Initialize NgramProposer.        super().__init__(vocab_size, max_speculation_depth)
+        """Initialize NgramProposer."""
+        super().__init__(vocab_size, max_speculation_depth)
         self.ngram_order = ngram_order
         self.min_count = min_count
-        self._ngram_tables: dict[int, dict[tuple[int, ...], dict[int, int]]] = dict(
-            map(lambda n: (n, {}), range(1, ngram_order + 1))
-        )
+        self._ngram_tables = {n: {} for n in range(1, ngram_order + 1)}
 
-    def _update_ngrams(self, tokens: list[int]) -> None:
-"""
-Update ngram tables regarding newly seen tokens.        def update_n(n: int) -> None:
-            if n > self.ngram_order:
-                return
+    def _update_ngrams(self, tokens: List[int]) -> None:
+        """Update ngram tables with newly seen tokens."""
+        for n in range(1, self.ngram_order + 1):
             table = self._ngram_tables[n]
-
-            def update_idx(i: int) -> None:
-                if i > (len(tokens) - n - 1):
-                    return
+            for i in range(len(tokens) - n):
                 context = tuple(tokens[i : i + n])
                 next_token = tokens[i + n]
                 if context not in table:
                     table[context] = {}
                 table[context][next_token] = table[context].get(next_token, 0) + 1
-                update_idx(i + 1)
 
-            update_idx(0)
-            update_n(n + 1)
-
-        update_n(1)
-
-    def _get_predictions(self, context: list[int], top_k: int = 5) -> list[tuple[int, float]]:
-"""
-Get best token predictions regarding the current context.        def gather_probs(acc: dict[int, float], n: int) -> dict[int, float]:
-            if len(context) < n:
-                return acc
-            ctx = tuple(context[-n:])
-            table = self._ngram_tables[n]
-            if ctx not in table:
-                return acc
-            counts = table[ctx]
-            total = sum(counts.values())
-
-            def update_token(t_acc: dict[int, float], item: tuple[int, int]) -> dict[int, float]:
-                token, count = item
-                if count >= self.min_count:
-                    prob = (count / total) * (n / self.ngram_order)
-                    t_acc[token] = max(t_acc.get(token, 0), prob)
-                return t_acc
-
-            return functools.reduce(update_token, counts.items(), acc)
-
-        predictions = functools.reduce(gather_probs, range(self.ngram_order, 0, -1), {})
+    def _get_predictions(self, context: List[int], top_k: int = 5) -> List[Tuple[int, float]]:
+        """Get best token predictions for the current context."""
+        predictions: Dict[int, float] = {}
+        for n in range(self.ngram_order, 0, -1):
+            if len(context) >= n:
+                ctx = tuple(context[-n:])
+                table = self._ngram_tables[n]
+                if ctx in table:
+                    counts = table[ctx]
+                    total = sum(counts.values())
+                    for token, count in counts.items():
+                        if count >= self.min_count:
+                            prob = (count / total) * (n / self.ngram_order)
+                            predictions[token] = max(predictions.get(token, 0), prob)
         return sorted(predictions.items(), key=lambda x: x[1], reverse=True)[:top_k]
 
     def propose(
-        self, input_ids: np.ndarray, attention_mask: np.ndarray | None = None, num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
     ) -> SpeculativeTree:
-"""
-Propose speculative tokens regarding n-gram lookup.        start = time.perf_counter()
+        """Propose speculative tokens using n-gram lookup."""
+        start = time.perf_counter()
         tokens = input_ids.tolist()
         self._update_ngrams(tokens)
 
         tree = SpeculativeTree(root_position=len(tokens))
 
-        def expand_node(parent_idx: int, current_context: list[int], depth: int) -> None:
+        def expand_node(parent_idx: int, context: List[int], depth: int) -> None:
             if depth >= self.max_speculation_depth:
                 return
 
-            preds = self._get_predictions(current_context, num_candidates)
-
-            def process_prediction(pred: tuple[int, float]) -> None:
-                token_id, prob = pred
+            preds = self._get_predictions(context, num_candidates)
+            for token_id, prob in preds:
                 idx = tree.add_token(token_id, len(tokens) + depth, parent_idx, prob)
-                # Limit branching depth regarding performance
+                # Simple recursive expansion for branching (limited depth)
                 if depth < 2:
-                    expand_node(idx, current_context + [token_id], depth + 1)
-
-            list(map(process_prediction, preds))
+                    expand_node(idx, context + [token_id], depth + 1)
 
         expand_node(-1, tokens, 0)
 
@@ -213,15 +157,14 @@ Propose speculative tokens regarding n-gram lookup.        start = time.perf_cou
         self.stats.proposal_time_ms += (time.perf_counter() - start) * 1000
         return tree
 
-    def update(self, accepted_tokens: list[int], rejected_at: int) -> None:
-"""
-Update statistics.        self.stats.tokens_accepted += len(accepted_tokens)
-
+    def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
+        """Update statistics."""
+        self.stats.tokens_accepted += len(accepted_tokens)
 
 
 class MedusaProposer(SpeculativeProposer):
-"""
-Medusa-style multi-head prediction proposer.
+    """Medusa-style multi-head prediction proposer."""
+
     def __init__(
         self,
         vocab_size: int,
@@ -229,54 +172,46 @@ Medusa-style multi-head prediction proposer.
         num_heads: int = 4,
         top_k_per_head: int = 5
     ) -> None:
-"""
-Initialize MedusaProposer.        super().__init__(vocab_size, max_speculation_depth)
+        """Initialize MedusaProposer."""
+        super().__init__(vocab_size, max_speculation_depth)
         self.num_heads = min(num_heads, max_speculation_depth)
         self.top_k_per_head = top_k_per_head
-        # TODO Placeholder weights regarding Medusa heads
-        self._head_weights: list[np.ndarray] = list(
-            map(lambda _: np.random.randn(vocab_size) * 0.01, range(self.num_heads))
-        )
+        # Placeholder weights
+        self._head_weights = [np.random.randn(vocab_size) * 0.01 for _ in range(self.num_heads)]
 
-    def _sample_from_head(self, head_idx: int, top_k: int = 5) -> list[tuple[int, float]]:
-"""
-Sample top-k tokens regarding a specific head.        logits = self._head_weights[head_idx]
+    def _sample_from_head(self, head_idx: int, top_k: int = 5) -> List[Tuple[int, float]]:
+        """Sample top-k tokens from a specific head."""
+        logits = self._head_weights[head_idx]
         exp_logits = np.exp(logits - np.max(logits))
         probs = exp_logits / np.sum(exp_logits)
 
         top_k_indices = np.argpartition(probs, -top_k)[-top_k:]
         top_k_indices = top_k_indices[np.argsort(probs[top_k_indices])[::-1]]
-        return list(map(lambda idx: (int(idx), float(probs[idx])), top_k_indices))
+        return [(int(idx), float(probs[idx])) for idx in top_k_indices]
 
     def propose(
-        self, input_ids: np.ndarray, attention_mask: np.ndarray | None = None, num_candidates: int = 5
+        self, input_ids: np.ndarray, attention_mask: Optional[np.ndarray] = None, num_candidates: int = 5
     ) -> SpeculativeTree:
-"""
-Propose speculative tokens regarding Medusa heads.        start = time.perf_counter()
+        """Propose speculative tokens using Medusa heads."""
+        start = time.perf_counter()
         tree = SpeculativeTree(root_position=len(input_ids))
 
-        def expand_head_branch(head_sample: tuple[int, float]) -> None:
-            token_id, prob = head_sample
+        # Branching at first level
+        for token_id, prob in self._sample_from_head(0, num_candidates):
             current_idx = tree.add_token(token_id, len(input_ids), -1, prob)
 
-            def extend_greedy(h: int, parent_idx: int) -> None:
-                if h >= self.num_heads:
-                    return
+            # Greedy prediction for subsequent tokens in path
+            for h in range(1, self.num_heads):
                 samples = self._sample_from_head(h, top_k=1)
                 if not samples:
-                    return
-                next_idx = tree.add_token(samples[0][0], len(input_ids) + h, parent_idx, samples[0][1])
-                extend_greedy(h + 1, next_idx)
-
-            extend_greedy(1, current_idx)
-
-        list(map(expand_head_branch, self._sample_from_head(0, num_candidates)))
+                    break
+                current_idx = tree.add_token(samples[0][0], len(input_ids) + h, current_idx, samples[0][1])
 
         self.stats.proposals_made += 1
         self.stats.tokens_proposed += len(tree)
         self.stats.proposal_time_ms += (time.perf_counter() - start) * 1000
         return tree
 
-    def update(self, accepted_tokens: list[int], rejected_at: int) -> None:
-"""
-Update statistics.        self.stats.tokens_accepted += len(accepted_tokens)
+    def update(self, accepted_tokens: List[int], rejected_at: int) -> None:
+        """Update statistics."""
+        self.stats.tokens_accepted += len(accepted_tokens)

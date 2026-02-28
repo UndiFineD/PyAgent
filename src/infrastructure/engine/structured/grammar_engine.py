@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -17,38 +17,22 @@
 """
 Facade for Grammar Engine.
 Delegates to modularized sub-packages in src.infrastructure.engine.structured/.
-
 """
-try:
-    from .base import GrammarEngine
-except ImportError:
-    from .base import GrammarEngine
 
-try:
-    from .choice import ChoiceGrammar
-except ImportError:
-    from .choice import ChoiceGrammar
-
-try:
-    from .ebnf import EBNFGrammar
-except ImportError:
-    from .ebnf import EBNFGrammar
-
-try:
-    from .json_schema import JsonSchemaGrammar
-except ImportError:
-    from .json_schema import JsonSchemaGrammar
-
-try:
-    from .models import FSMState, FSMTransitionTable, TokenMask
-except ImportError:
-    from .models import FSMState, FSMTransitionTable, TokenMask
-
-try:
-    from .regex import RegexGrammar
-except ImportError:
-    from .regex import RegexGrammar
-
+from .base import GrammarEngine
+from .choice import ChoiceGrammar
+from .ebnf import EBNFGrammar
+from .json_schema import JsonSchemaGrammar
+from .models import FSMState, FSMTransitionTable, TokenMask
+from .regex import RegexGrammar
 
 __all__ = [
-    "FSMState","    "FSMTransitionTable","    "TokenMask","    "GrammarEngine","    "RegexGrammar","    "JsonSchemaGrammar","    "ChoiceGrammar","    "EBNFGrammar","]
+    "FSMState",
+    "FSMTransitionTable",
+    "TokenMask",
+    "GrammarEngine",
+    "RegexGrammar",
+    "JsonSchemaGrammar",
+    "ChoiceGrammar",
+    "EBNFGrammar",
+]

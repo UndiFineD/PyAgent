@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Workspace package.
+"""
 
-"""
-"""
-Workspace utilities for the engine (parser-safe stub).
+from .buffer_recycler import BufferRecycler  # noqa: F401
+from .memory_profiler import MemoryProfiler  # noqa: F401
+from .ubatching_utils import UBatchingUtils  # noqa: F401
+from .workspace_manager import WorkspaceManager  # noqa: F401
 
-"""
-This package provides minimal stubs for workspace components used by
-tests and higher-level modules while the repository is being repaired.
-"""
-from .buffer_recycler import BufferRecycler
-from .memory_profiler import MemoryProfiler
-from .predictive_workspace import PredictiveWorkspace
-from .ubatching_utils import ubatch
-
-__all__ = ["BufferRecycler", "MemoryProfiler", "PredictiveWorkspace", "ubatch"]
+__all__ = [
+    "WorkspaceManager",
+    "UBatchingUtils",
+    "MemoryProfiler",
+    "BufferRecycler",
+]

@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
@@ -22,25 +18,25 @@ from __future__ import annotations
 HuggingFace tokenizer implementation.
 """
 
-"""
+from __future__ import annotations
+
 from typing import Dict, List, Optional, Sequence
 
 from .base import BaseTokenizer
 from .models import TokenizerBackend, TokenizerConfig, TokenizerInfo
 
 
-
 class HuggingFaceTokenizer(BaseTokenizer):
-"""
-HuggingFace transformers tokenizer wrapper.
+    """HuggingFace transformers tokenizer wrapper."""
+
     def __init__(self, config: TokenizerConfig) -> None:
         super().__init__(config)
         self._tokenizer = None
         self._load_tokenizer()
 
     def _load_tokenizer(self) -> None:
-"""
-Load the HuggingFace tokenizer.        try:
+        """Load the HuggingFace tokenizer."""
+        try:
             from transformers import AutoTokenizer
 
             self._tokenizer = AutoTokenizer.from_pretrained(
@@ -53,8 +49,10 @@ Load the HuggingFace tokenizer.        try:
                 if self._tokenizer.eos_token is not None:
                     self._tokenizer.pad_token = self._tokenizer.eos_token
                 else:
-                    self._tokenizer.add_special_tokens({"pad_token": "[PAD]"})"        except ImportError as exc:
+                    self._tokenizer.add_special_tokens({"pad_token": "[PAD]"})
+        except ImportError as exc:
             raise ImportError("transformers package required for HuggingFace tokenizer") from exc
+
     @property
     def vocab_size(self) -> int:
         return self._tokenizer.vocab_size
@@ -97,21 +95,25 @@ Load the HuggingFace tokenizer.        try:
             truncation=False,
         )
         return result["input_ids"]
+
     def apply_chat_template(
         self,
         messages: List[Dict[str, str]],
         add_generation_prompt: bool = True,
     ) -> str:
-"""
-Apply chat template to messages.        if hasattr(self._tokenizer, "apply_chat_template"):"            return self._tokenizer.apply_chat_template(
+        """Apply chat template to messages."""
+        if hasattr(self._tokenizer, "apply_chat_template"):
+            return self._tokenizer.apply_chat_template(
                 messages,
                 tokenize=False,
                 add_generation_prompt=add_generation_prompt,
             )
         raise ValueError("Tokenizer does not support chat templates")
+
     def get_info(self) -> TokenizerInfo:
         if self._info is None:
-            has_chat = hasattr(self._tokenizer, "chat_template") and self._tokenizer.chat_template is not None"            self._info = TokenizerInfo(
+            has_chat = hasattr(self._tokenizer, "chat_template") and self._tokenizer.chat_template is not None
+            self._info = TokenizerInfo(
                 backend=TokenizerBackend.HUGGINGFACE,
                 vocab_size=self.vocab_size,
                 bos_token_id=self.bos_token_id,
@@ -119,7 +121,8 @@ Apply chat template to messages.        if hasattr(self._tokenizer, "apply_chat_
                 pad_token_id=self.pad_token_id,
                 max_length=self._tokenizer.model_max_length,
                 model_name=self.config.model_name,
-                is_fast=self._tokenizer.is_fast if hasattr(self._tokenizer, "is_fast") else False,"                supports_chat_template=has_chat,
+                is_fast=self._tokenizer.is_fast if hasattr(self._tokenizer, "is_fast") else False,
+                supports_chat_template=has_chat,
                 chat_template=self._tokenizer.chat_template if has_chat else None,
             )
         return self._info

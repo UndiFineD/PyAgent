@@ -1,24 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License regarding the specific language governing permissions and
+# See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
-"""
 """
 Constraints.py module.
-"""
-
 """
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
@@ -32,24 +27,23 @@ from .enums import ConstraintType, SchemaFormat
 
 @dataclass
 class OutputConstraint:
-"""
-Base output constraint.""
-constraint_type: ConstraintType = ConstraintType.INCLUDE
+    """Base output constraint."""
+
+    constraint_type: ConstraintType = ConstraintType.INCLUDE
     priority: int = 0
 
     def validate(self, _text: str) -> bool:
-"""
-Validate text against constraint.""
-return True
+        """Validate text against constraint."""
+        return True
 
     def to_dict(self) -> Dict[str, Any]:
-"""
-Convert to dictionary.
+        """
+        Convert to dictionary.
 
         Returns:
             Dictionary with constraint type and priority.
-"""
-return {
+        """
+        return {
             "constraint_type": self.constraint_type.name,
             "priority": self.priority,
         }
@@ -57,50 +51,44 @@ return {
 
 @dataclass
 class JsonSchemaConstraint(OutputConstraint):
-"""
-JSON Schema constraint.
+    """JSON Schema constraint."""
+
     schema: Dict[str, Any] = field(default_factory=dict)
     schema_format: SchemaFormat = SchemaFormat.DRAFT_07
     strict: bool = True
     allow_partial: bool = False
 
     def validate(self, text: str) -> bool:
-"""
-Validate text as JSON against schema.""
-try:
+        """Validate text as JSON against schema."""
+        try:
             data = json.loads(text)
             return self._validate_schema(data)
         except json.JSONDecodeError:
             return self.allow_partial
 
     def _validate_schema(self, data: Any) -> bool:
-"""
-Basic schema validation regarding simplified logic.""
-if not self.schema:
+        """Basic schema validation (simplified)."""
+        if not self.schema:
             return True
 
         schema_type = self.schema.get("type")
+
         if schema_type == "object":
             if not isinstance(data, dict):
                 return False
 
-            # Check required properties regarding functional validation
-            # Phase 386: Functional required property check
+            # Check required properties
             required = self.schema.get("required", [])
-            if not all(map(lambda req: req in data, required)):
-                return False
+            for req in required:
+                if req not in data:
+                    return False
 
-            # Check properties regarding functional validation
-            # Phase 387: Functional property check
+            # Check properties
             properties = self.schema.get("properties", {})
-            def check_prop(item: tuple[str, dict]) -> bool:
-                key, prop_schema = item
+            for key, prop_schema in properties.items():
                 if key in data:
-                    return self._validate_property(data[key], prop_schema)
-                return True
-
-            if not all(map(check_prop, properties.items())):
-                return False
+                    if not self._validate_property(data[key], prop_schema):
+                        return False
 
             return True
 
@@ -110,9 +98,9 @@ if not self.schema:
 
             items_schema = self.schema.get("items")
             if items_schema:
-                # Phase 388: Functional array item check
-                if not all(map(lambda item: self._validate_property(item, items_schema), data)):
-                    return False
+                for item in data:
+                    if not self._validate_property(item, items_schema):
+                        return False
 
             return True
 
@@ -138,9 +126,9 @@ if not self.schema:
         value: Any,
         prop_schema: Dict[str, Any],
     ) -> bool:
-"""
-Validate a property against its schema.""
-prop_type = prop_schema.get("type")
+        """Validate a property against its schema."""
+        prop_type = prop_schema.get("type")
+
         if prop_type == "string":
             if not isinstance(value, str):
                 return False
@@ -186,14 +174,17 @@ prop_type = prop_schema.get("type")
     def to_dict(self) -> Dict[str, Any]:
         return {
             **super().to_dict(),
-            "schema": self.schema,"            "schema_format": self.schema_format.value,"            "strict": self.strict,"        }
+            "schema": self.schema,
+            "schema_format": self.schema_format.value,
+            "strict": self.strict,
+        }
 
 
 @dataclass
 class RegexConstraint(OutputConstraint):
-"""
-Regex pattern constraint.""
-pattern: str = ""
+    """Regex pattern constraint."""
+
+    pattern: str = ""
     flags: int = 0
     _compiled: Optional[Pattern] = field(default=None, repr=False)
 
@@ -202,8 +193,8 @@ pattern: str = ""
             self._compiled = re.compile(self.pattern, self.flags)
 
     def validate(self, text: str) -> bool:
-"""
-Validate text against regex.        if self._compiled is None:
+        """Validate text against regex."""
+        if self._compiled is None:
             return True
 
         if self.constraint_type == ConstraintType.INCLUDE:
@@ -214,62 +205,76 @@ Validate text against regex.        if self._compiled is None:
     def to_dict(self) -> Dict[str, Any]:
         return {
             **super().to_dict(),
-            "pattern": self.pattern,"            "flags": self.flags,"        }
+            "pattern": self.pattern,
+            "flags": self.flags,
+        }
 
 
 @dataclass
 class ChoiceConstraint(OutputConstraint):
-"""
-Fixed choice constraint.
+    """Fixed choice constraint."""
+
     choices: List[str] = field(default_factory=list)
     case_sensitive: bool = True
 
     def validate(self, text: str) -> bool:
-"""
-Validate text regarding choices.        if self.case_sensitive:
+        if self.case_sensitive:
             return text in self.choices
-        # Phase 389: Functional choice normalization
-        return text.lower() in list(map(lambda c: c.lower(), self.choices))
+        return text.lower() in [c.lower() for c in self.choices]
 
     def to_dict(self) -> Dict[str, Any]:
         return {
             **super().to_dict(),
-            "choices": self.choices,"            "case_sensitive": self.case_sensitive,"        }
+            "choices": self.choices,
+            "case_sensitive": self.case_sensitive,
+        }
 
 
 @dataclass
 class GrammarConstraint(OutputConstraint):
-"""
-Grammar constraint (EBNF/Lark).
+    """Grammar constraint (EBNF/Lark)."""
+
     grammar: str = ""
-grammar_type: str = "ebnf"  # "ebnf", "lark", "gbnf""    start_symbol: str = "start""
+    grammar_type: str = "ebnf"  # "ebnf", "lark", "gbnf"
+    start_symbol: str = "start"
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             **super().to_dict(),
-            "grammar": self.grammar,"            "grammar_type": self.grammar_type,"            "start_symbol": self.start_symbol,"        }
+            "grammar": self.grammar,
+            "grammar_type": self.grammar_type,
+            "start_symbol": self.start_symbol,
+        }
 
 
 @dataclass
 class TypeConstraint(OutputConstraint):
-"""
-Type annotation constraint.
-    type_annotation: str = ""  # Python type annotation string"    python_type: Optional[Type] = None
+    """Type annotation constraint."""
+
+    type_annotation: str = ""  # Python type annotation string
+    python_type: Optional[Type] = None
 
     def validate(self, text: str) -> bool:
-        ""
-Validate parsed value against type.        try:
+        """Validate parsed value against type."""
+        try:
             value = json.loads(text)
 
             if self.python_type is not None:
                 return isinstance(value, self.python_type)
 
             # Parse type annotation
-            if self.type_annotation == "str":"                return isinstance(value, str)
-            if self.type_annotation == "int":"                return isinstance(value, int)
-            if self.type_annotation == "float":"                return isinstance(value, (int, float))
-            if self.type_annotation == "bool":"                return isinstance(value, bool)
-            if self.type_annotation.startswith("List["):"                return isinstance(value, list)
-            if self.type_annotation.startswith("Dict["):"                return isinstance(value, dict)
+            if self.type_annotation == "str":
+                return isinstance(value, str)
+            if self.type_annotation == "int":
+                return isinstance(value, int)
+            if self.type_annotation == "float":
+                return isinstance(value, (int, float))
+            if self.type_annotation == "bool":
+                return isinstance(value, bool)
+            if self.type_annotation.startswith("List["):
+                return isinstance(value, list)
+            if self.type_annotation.startswith("Dict["):
+                return isinstance(value, dict)
 
             return True
 
@@ -279,4 +284,5 @@ Validate parsed value against type.        try:
     def to_dict(self) -> Dict[str, Any]:
         return {
             **super().to_dict(),
-            "type_annotation": self.type_annotation,"        }
+            "type_annotation": self.type_annotation,
+        }
