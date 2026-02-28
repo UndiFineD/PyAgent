@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+"""Unified Memory and Knowledge management core."""
 
-"""
-"""
-Unified Memory and Knowledge management core.""
-
-"""
 import logging
 from datetime import datetime
 from pathlib import Path
@@ -28,7 +28,7 @@ from .storage_core import StorageCore
 from .workspace_core import WorkspaceCore
 
 try:
-    import rust_core as rc  # pylint: disable=no-member
+    import rust_core as rc
 except ImportError:
     rc = None
 
@@ -36,33 +36,30 @@ logger = logging.getLogger("pyagent.memory")
 
 
 class MemoryCore:
-"""
-Centralized handler for Episodic, Long-term, and Sharded Knowledge.
+    """
+    Centralized handler for Episodic, Long-term, and Sharded Knowledge.
     Standardizes utility scoring, filtering, and cross-agent indexing.
-"""
-_instance: Optional["MemoryCore"] = None
+    """
+
+    _instance: Optional["MemoryCore"] = None
+
     def __new__(cls) -> "MemoryCore":
         if cls._instance is None:
             cls._instance = super(MemoryCore, cls).__new__(cls)
             cls._instance._initialize()
         return cls._instance
 
-
     def __init__(self) -> None:
         # Already initialized via _initialize in __new__
         pass
-
 
     def _initialize(self) -> None:
         # pylint: disable=attribute-defined-outside-init
         self._fs = FileSystemCore()
         self._storage = StorageCore()
-        from src.core.base.configuration.config_manager import config
-        self.shared_enabled = config.get("memory.shared_enabled", True)
         self.base_path = WorkspaceCore().get_path("data/memory")
         self._fs.ensure_directory(self.base_path)
         self.index_path = Path("data/agent_knowledge_index.json")
-
 
     # pylint: disable=too-many-arguments,too-many-positional-arguments
     def create_episode(
@@ -71,21 +68,22 @@ _instance: Optional["MemoryCore"] = None
         task: str,
         content: str,
         success: bool,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[Dict[str, Any]] = None,
         base_utility: float = 0.5,
-    ) -> dict[str, Any]:
-"""
-Create a standardized episodic memory record.
+    ) -> Dict[str, Any]:
+        """
+        Create a standardized episodic memory record.
         Hot path for Rust acceleration (utility scoring).
-"""
-if rc and hasattr(rc, "create_episode_struct"):
+        """
+        if rc and hasattr(rc, "create_episode_struct"):
             try:
                 # pylint: disable=no-member
                 return rc.create_episode_struct(  # type: ignore
                     agent_id, task, content, success, metadata or {}, base_utility
                 )
-            except (RuntimeError, AttributeError) as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust create_episode_struct failed: %s", e)
+
         # Python Fallback
         utility_score = base_utility + (0.2 if success else -0.3)
         utility_score = max(0.0, min(1.0, utility_score))
@@ -100,83 +98,85 @@ if rc and hasattr(rc, "create_episode_struct"):
             "metadata": metadata or {},
         }
 
-
     def rank_memories(
-        self, memories: list[dict[str, Any]], limit: int = 5, min_utility: float = 0.0
-    ) -> list[dict[str, Any]]:
-"""
-Rank memories by utility score and recency.
+        self, memories: List[Dict[str, Any]], limit: int = 5, min_utility: float = 0.0
+    ) -> List[Dict[str, Any]]:
+        """
+        Rank memories by utility score and recency.
         Hot path for Rust acceleration.
-"""
-if rc and hasattr(rc, "rank_memories_rust"):
+        """
+        if rc and hasattr(rc, "rank_memories_rust"):
             try:
                 # pylint: disable=no-member
                 return rc.rank_memories_rust(memories, limit, min_utility)  # type: ignore
-            except (RuntimeError, AttributeError) as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust rank_memories_rust failed: %s", e)
+
         # Python Fallback
         filtered = [m for m in memories if m.get("utility_score", 0.0) >= min_utility]
         # Sort by utility (desc) then timestamp (desc)
         sorted_m = sorted(filtered, key=lambda x: (x.get("utility_score", 0.0), x.get("timestamp", "")), reverse=True)
         return sorted_m[:limit]
 
-
-    def retrieve_memory_graph(self, root_id: str, depth: int = 2) -> list[dict[str, str]]:
-"""
-Rust-accelerated graph traversal for complex memory retrieval.""
-if rc and hasattr(rc, "retrieve_memory_graph_rust"):
+    def retrieve_memory_graph(self, root_id: str, depth: int = 2) -> List[Dict[str, str]]:
+        """Rust-accelerated graph traversal for complex memory retrieval."""
+        if rc and hasattr(rc, "retrieve_memory_graph_rust"):
             try:
                 # pylint: disable=no-member
                 return rc.retrieve_memory_graph_rust(root_id, depth)  # type: ignore
-            except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust-side failures
-                logger.debug("Rust retrieve_memory_graph_rust failed: %s", e)
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
+                pass
+
         # Simple Python fallback (stub)
         return [{"source": root_id, "target": "related_concept", "relation": "associated"}]
 
-
     def store_knowledge(
-        self, agent_id: str, key: str, content: Any, mode: str = "structured", metadata: Optional[Dict[str, Any]] = None
+        self,
+        agent_id: str,
+        key: str,
+        content: Any,
+        mode: str = "structured",
+        metadata: Optional[Dict[str, Any]] = None
     ) -> bool:
-"""
-Store knowledge based on mode.""
-if mode == "semantic":
+        """
+        Store knowledge in the agent's partitioned space.
+        Modes: 'structured' (JSON/B-Tree), 'semantic' (Vector), 'relational' (Graph)
+        """
+        if mode == "semantic":
             return self._store_semantic(agent_id, key, content, metadata)
 
-        # Structured storage
         agent_dir = self._get_agent_path(agent_id, mode)
         file_path = agent_dir / f"{key}.json"
+
         try:
+            # Standardized I/O via StorageCore
             self._storage.save_json(file_path, content)
             return True
-        except (OSError, ValueError) as e:
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("Failed to store %s knowledge for %s: %s", mode, agent_id, e)
             return False
 
-
     def _store_semantic(self, agent_id: str, key: str, content: Any, metadata: Optional[Dict[str, Any]]) -> bool:
-"""
-Internal helper for semantic (vector) storage.""
-try:
+        """Internal helper for semantic (vector) storage."""
+        try:
             import chromadb  # pylint: disable=import-outside-toplevel
 
             client = chromadb.PersistentClient(path=str(self.base_path / "vector_db"))
             collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
             collection.add(documents=[str(content)], metadatas=[metadata] if metadata else [{}], ids=[key])
             return True
-        except ImportError as e:
-            logger.warning("ChromaDB not available for semantic storage: %s", e)
-            return False
-        except (RuntimeError, OSError, ValueError) as e:  # pragma: no cover - external db errors
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.warning("ChromaDB storage failed for %s: %s", agent_id, e)
             return False
-
 
     def retrieve_knowledge(
         self, agent_id: str, query: str, mode: str = "structured", limit: int = 5
     ) -> List[Dict[str, Any]]:
-"""
-Retrieve knowledge based on mode and query.""
-if mode == "semantic":
+        """
+        Retrieve knowledge based on mode and query.
+        """
+        if mode == "semantic":
             return self._retrieve_semantic(agent_id, query, limit)
 
         # Python Fallback / Structured Logic
@@ -193,16 +193,15 @@ if mode == "semantic":
 
         return []
 
-
     def _retrieve_semantic(self, agent_id: str, query: str, limit: int) -> List[Dict[str, Any]]:
-"""
-Internal helper for semantic retrieval.""
-if rc and hasattr(rc, "semantic_search"):
+        """Internal helper for semantic retrieval."""
+        if rc and hasattr(rc, "semantic_search"):
             try:
                 # pylint: disable=no-member
                 return rc.semantic_search(agent_id, query, limit)  # type: ignore
-            except (RuntimeError, AttributeError) as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning("Rust semantic search failed: %s", e)
+
         try:
             import chromadb  # pylint: disable=import-outside-toplevel
 
@@ -214,21 +213,17 @@ if rc and hasattr(rc, "semantic_search"):
             docs = results.get("documents", [[]])[0]
             metas = results.get("metadatas", [[]])[0]
             ids = results.get("ids", [[]])[0]
+
             for i, doc in enumerate(docs):
                 output.append({"id": ids[i], "content": doc, "metadata": metas[i]})
             return output
-        except ImportError as e:
-            logger.warning("ChromaDB not installed for semantic retrieval: %s", e)
-            return []
-        except (RuntimeError, OSError, ValueError) as e:  # pragma: no cover - external db errors
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.warning("ChromaDB retrieval failed for %s: %s", agent_id, e)
             return []
 
-
     def delete_knowledge(self, agent_id: str, key: str, mode: str = "structured") -> bool:
-"""
-Standardized deletion of knowledge.""
-if mode == "semantic":
+        """Standardized deletion of knowledge."""
+        if mode == "semantic":
             try:
                 import chromadb  # pylint: disable=import-outside-toplevel
 
@@ -236,7 +231,8 @@ if mode == "semantic":
                 collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
                 collection.delete(ids=[key])
                 return True
-            except Exception:  # pylint: disable=broad-exception-caught
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+ # pylint: disable=broad-exception-caught
                 return False
 
         agent_dir = self._get_agent_path(agent_id, mode)
@@ -245,24 +241,21 @@ if mode == "semantic":
             try:
                 file_path.unlink()
                 return True
-            except OSError as e:
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Failed to delete %s knowledge: %s", mode, e)
-                return False
-
+        return False
 
     def _get_agent_path(self, agent_id: str, mode: str) -> Path:
-"""
-Helper to get partitioned storage path.""
-path = self.base_path / agent_id / mode
+        """Helper to get partitioned storage path."""
+        path = self.base_path / agent_id / mode
         self._fs.ensure_directory(path)
         return path
 
-
     def update_index(self, agent_id: str, tags: List[str]) -> bool:
-"""
-Update the global knowledge index with agent metadata.
+        """
+        Update the global knowledge index with agent metadata.
         This file can be very large (>50MB), so we use atomic write.
-"""
-index = self._storage.load_json(self.index_path, default={})
+        """
+        index = self._storage.load_json(self.index_path, default={})
         index[agent_id] = {"tags": tags, "last_updated": datetime.now().isoformat()}
         return self._fs.atomic_write(self.index_path, self._storage.to_json(index))

@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,123 +14,95 @@ from __future__ import annotations
 
 
 """
-"""
 Core protocols and interfaces for the PyAgent framework.
 Provides structural typing (Protocols) for agents, orchestrators, and components.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from pathlib import Path
-except ImportError:
-    from pathlib import Path
+from typing import Any, Protocol, runtime_checkable
 
-try:
-    from typing import Any, Protocol, runtime_checkable
-except ImportError:
-    from typing import Any, Protocol, runtime_checkable
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 @runtime_checkable
 class AgentInterface(Protocol):
-"""
-Core interface for all AI-powered agents.
+    """
+    Core interface for all AI-powered agents.
     Defining this as a Protocol facilitates future Rust implementation (PyO3).
-"""
-file_path: Path
+    """
+
+    file_path: Path
+
     previous_content: str
+
     current_content: str
 
-
     def read_previous_content(self) -> str:
-"""
-Reads the original content of the file.""
-raise NotImplementedError()
-
+        """Reads the original content of the file."""
+        raise NotImplementedError()
 
     def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-"""
-Applies AI reasoning to improve file content.""
-raise NotImplementedError()
-
+        """Applies AI reasoning to improve file content."""
+        raise NotImplementedError()
 
     def update_file(self) -> bool:
-"""
-Commits changes to the file system via StateTransaction.""
-raise NotImplementedError()
-
+        """Commits changes to the file system via StateTransaction."""
+        raise NotImplementedError()
 
     def get_diff(self) -> str:
-"""
-Returns a unified diff of changes.""
-raise NotImplementedError()
-
+        """Returns a unified diff of changes."""
+        raise NotImplementedError()
 
     # Advanced features that might be offloaded to Rust later
-    def calculate_metrics(self, content: str | None = None) -> Any:
-"""
-Calculates complexity and quality metrics.""
-raise NotImplementedError()
 
+    def calculate_metrics(self, content: str | None = None) -> Any:
+        """Calculates complexity and quality metrics."""
+        raise NotImplementedError()
 
     def scan_for_secrets(self, content: str) -> list[str]:
-"""
-Scans content for sensitive keys or passwords.""
-raise NotImplementedError()
+        """Scans content for sensitive keys or passwords."""
+        raise NotImplementedError()
 
 
 @runtime_checkable
 class OrchestratorInterface(Protocol):
-"""
-Interface for fleet orchestrators.""
-def execute_task(self, task: str) -> str:
-"""
-Executes a high-level swarm task.""
-raise NotImplementedError()
+    """Interface for fleet orchestrators."""
 
+    def execute_task(self, task: str) -> str:
+        """Executes a high-level swarm task."""
+        raise NotImplementedError()
 
     def get_status(self) -> dict[str, Any]:
-"""
-Returns current status of the orchestrator.""
-raise NotImplementedError()
+        """Returns current status of the orchestrator."""
+        raise NotImplementedError()
 
 
 @runtime_checkable
 class CoreInterface(Protocol):
-"""
-Pure logic interface. High-performance, no-IO, candidate for Rust parity.""
-def process_data(self, data: Any) -> Any:
-"""
-Processes raw data into structured output.""
-raise NotImplementedError()
+    """Pure logic interface. High-performance, no-IO, candidate for Rust parity."""
 
+    def process_data(self, data: Any) -> Any:
+        """Processes raw data into structured output."""
+        raise NotImplementedError()
 
     def validate(self, content: str) -> bool:
-"""
-Validates content against internal rules.""
-raise NotImplementedError()
-
+        """Validates content against internal rules."""
+        raise NotImplementedError()
 
     def get_metadata(self) -> dict[str, Any]:
-"""
-Returns metadata about the core logic state.""
-raise NotImplementedError()
+        """Returns metadata about the core logic state."""
+        raise NotImplementedError()
 
 
 @runtime_checkable
 class ContextRecorderInterface(Protocol):  # pylint: disable=too-few-public-methods
-"""
-Interface for cognitive recording and context harvesting.""
-def record_interaction(  # pylint: disable=too-many-arguments,too-many-positional-arguments
+    """Interface for cognitive recording and context harvesting."""
+
+    def record_interaction(  # pylint: disable=too-many-arguments,too-many-positional-arguments
         self,
         provider: str,
         model: str,
@@ -140,33 +110,29 @@ def record_interaction(  # pylint: disable=too-many-arguments,too-many-positiona
         result: str,
         meta: dict[str, Any] | None = None,
     ) -> None:
-"""
-Records an LLM interaction for audit and lineage.""
-raise NotImplementedError()
+        """Records an LLM interaction for audit and lineage."""
+        raise NotImplementedError()
 
 
 @runtime_checkable
 class Loadable(Protocol):  # pylint: disable=too-few-public-methods
-"""
-Protocol for objects that can load their state from disk.""
-def load(self, path: Path | None = None) -> bool:
-"""
-Loads state from file.""
-raise NotImplementedError()
+    """Protocol for objects that can load their state from disk."""
+
+    def load(self, path: Path | None = None) -> bool:
+        """Loads state from file."""
+
 
 @runtime_checkable
 class Saveable(Protocol):  # pylint: disable=too-few-public-methods
-"""
-Protocol for objects that can save their state to disk.""
-def save(self, path: Path | None = None) -> bool:
-"""
-Saves state to file.""
-raise NotImplementedError()
+    """Protocol for objects that can save their state to disk."""
+
+    def save(self, path: Path | None = None) -> bool:
+        """Saves state to file."""
 
 
 @runtime_checkable
 class Component(Protocol):  # pylint: disable=too-few-public-methods
-"""
-Base interface for all PyAgent components with a name and version.""
-name: str
+    """Base interface for all PyAgent components with a name and version."""
+
+    name: str
     version: str

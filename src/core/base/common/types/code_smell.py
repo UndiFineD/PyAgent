@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,24 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Types: CodeSmell dataclass used by analysis tools and tests."""
+
+"""Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+
+from src.core.base.lifecycle.version import VERSION
+
+__version__ = VERSION
 
 
 @dataclass
 class CodeSmell:
-    """Simple, parser-safe representation of a code smell."""
+    """A detected code smell."""
 
     name: str
     description: str
     severity: str
-    line_number: Optional[int] = None
-    suggestion: Optional[str] = None
+    line_number: int
+    suggestion: str
     category: str = "general"
-
-
-__all__ = ["CodeSmell"]

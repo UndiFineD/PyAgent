@@ -12,88 +12,112 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# -*- coding: utf-8 -*-
 
-"""
-"""
-Utilities used across base modules.
+"""Utility classes for BaseAgent framework."""
 
-"""
-Small, well-typed helper functions and decorators used by agents and tools.
-Focus on low-risk, testable behaviors: replacement helpers, logging setup,
-and tool wrappers that record interactions to the fleet recorder when present.
-"""
-import os
+from __future__ import annotations
 
-from pathlib import Path
-import re
-import logging
-import inspect
 import argparse
-import sys
+import inspect
 import json
-import time
-from typing import Union, Callable, Any
-from ..base_agent import BaseAgent
+import logging
+import os
+import re
+import sys
+from collections.abc import Callable
+from pathlib import Path
+from typing import TYPE_CHECKING, Any
+
+from ..lifecycle.version import VERSION
 from .file_system_core import FileSystemCore
+from .shell_core import ShellCore
+from .workspace_core import WorkspaceCore
+
+if TYPE_CHECKING:
+    from .agent import BaseAgent
+
+try:
+    from ....logic import strategies as agent_strategies
+except (ImportError, ValueError):
+    from src.logic import strategies as agent_strategies
+
+__version__ = VERSION
+
+# Shared cores
+_shell = ShellCore()
+_ws = WorkspaceCore()
 _fs = FileSystemCore()
 
 
-def _bulk_replace_python_fallback(
-    file_paths: list[Union[str, Path]], old_pattern: str, new_string: str, use_regex: bool
+def strip_ansi_codes(text: str) -> str:
+    """
+    Removes ANSI escape sequences (color codes, formatting) from a string.
+    Useful for processing terminal output from external tools.
+    """
+    return _shell.strip_ansi(text)
+
+
+def bulk_replace(
+    file_paths: list[str | Path],
+    old_pattern: str,
+    new_string: str,
+    use_regex: bool = False,
 ) -> dict[str, bool]:
+    """
+    Performs a bulk string or regex replacement across multiple files.
+    Returns a mapping of file path to boolean (True if file was modified).
+    Phase 318: Rust-Native Parallel Engine.
+    """
+    # 1. High-Speed Rust Acceleration (Phase 318)
+    try:
+        # pylint: disable=import-outside-toplevel
+        from ...rust_bridge import RustBridge
+    except (ImportError, ValueError):
+        # pylint: disable=import-outside-toplevel
+        from src.core.rust_bridge import RustBridge
+
+    if RustBridge.is_rust_active():
+        str_paths = [str(p) for p in file_paths]
+        replacements = {old_pattern: new_string}
+        return RustBridge.bulk_replace_files(str_paths, replacements)
+
+    # 2. Python Fallback
     results = {}
     for path_in in file_paths:
         path = Path(path_in)
         if not _fs.exists(path):
             results[str(path)] = False
             continue
-        content = _fs.read_text(path)
-        if use_regex:
-            new_content, count = re.subn(old_pattern, new_string, content)
-            changed = count > 0
-        else:
-            changed = old_pattern in content
-            new_content = content.replace(old_pattern, new_string)
-        if changed:
-            _fs.atomic_write(path, new_content)
-            results[str(path)] = True
-        else:
-            results[str(path)] = False
+
+        try:
+            content = _fs.read_text(path)
+            if use_regex:
+                new_content, count = re.subn(old_pattern, new_string, content)
+                changed = count > 0
+            else:
+                changed = old_pattern in content
+                new_content = content.replace(old_pattern, new_string)
+
+            if changed:
+                _fs.atomic_write(path, new_content)
+                results[str(path)] = True
+            else:
+                results[str(path)] = False
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.error("BulkReplace: Failed to process %s: %s", path, e)
+
     return results
 
 
-def bulk_replace_files(
-    file_paths: list[Union[str, Path]],
-    old_pattern: str,
-    new_string: str,
-    use_regex: bool = False,
-) -> dict[str, bool]:
-"""
-Performs a bulk string or regex replacement across multiple files.
-    Returns a mapping of file path to boolean (True if file was modified).
-    Phase 318: Rust-Native Parallel Engine.
-"""
-try:
-        # pylint: disable=import-outside-toplevel
-        from src.core.rust_bridge import RustBridge
-    except (ImportError, ValueError):
-        from src.core.rust_bridge import RustBridge
-    if RustBridge.is_rust_active():
-        str_paths = [str(p) for p in file_paths]
-        replacements = {old_pattern: new_string}
-        return RustBridge.bulk_replace_files(str_paths, replacements)
-    return _bulk_replace_python_fallback(file_paths, old_pattern, new_string, use_regex)
-
-
 def setup_logging(verbosity_arg: int = 0) -> None:
-"""
-Configure logging based on verbosity level.""
-if verbosity_arg >= 2:
+    """Configure logging based on verbosity level."""
+    level = logging.INFO
+    if verbosity_arg >= 2:
         level = logging.DEBUG
     elif verbosity_arg == 1:
         level = logging.INFO
-    else:
-        level = logging.WARNING
+
     logging.basicConfig(
         level=level,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -101,107 +125,105 @@ if verbosity_arg >= 2:
     )
 
 
-def _record_tool_execution(self: Any, func_name: str, args: tuple, kwargs: dict, result: Any) -> None:
-"""
-Record a tool execution to the fleet recorder if available.
-    Separated into a helper to keep the decorator logic small and testable.
-    Critical exceptions (KeyboardInterrupt, SystemExit) are re-raised.
-"""
-if not hasattr(self, "fleet") or not self.fleet or not hasattr(self.fleet, "recorder"):
-        return
-    try:
-        shard_result = str(result)
-        if len(shard_result) > 2000:
-            shard_result = shard_result[:2000] + "... [TRUNCATED]"
-        prompt_trace = f"TOOL_EXECUTION: {func_name}\\nArgs: {args}\\nKwargs: {kwargs}"
-        self.fleet.recorder.record_interaction(
-            provider="agent_tool",
-            model=self.__class__.__name__,
-            prompt=prompt_trace,
-            result=shard_result,
-            meta={
-                "tool": func_name,
-                "agent": self.__class__.__name__,
-                "timestamp_ms": int(time.time() * 1000),
-            },
-        )
-    except (RuntimeError, OSError, AttributeError, ValueError, TypeError) as e:
-        # Re-raise critical signals and otherwise log for debugging.
-        if isinstance(e, (KeyboardInterrupt, SystemExit)):
-            raise
-        logging.debug("_record_tool_execution failed: %s", e)
-
-
 def as_tool(priority: int = 0, category: str | None = None) -> Callable:
-"""
-Decorator to mark a method as a tool for the ToolRegistry.
+    """Decorator to mark a method as a tool for the ToolRegistry.
     Automatically records tool interactions to the fleet context shards for autonomous learning.
     Can be used as @as_tool or @as_tool(priority=10).
-"""
+    """
     # pylint: disable=import-outside-toplevel
+    import time
     from functools import wraps
+
+    def decorator(func: Callable) -> Callable:
+        if inspect.iscoroutinefunction(func):
+
+            @wraps(func)
+            async def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+                # Phase 108: Enhanced Traceability
+                logging.debug("Executing async tool %s on %s", func.__name__, self.__class__.__name__)
+
+                result = await func(self, *args, **kwargs)
+
+                # Autonomous Logic Harvesting:
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                    try:
+                        shard_result = str(result)
+                        if len(shard_result) > 2000:
+                            shard_result = shard_result[:2000] + "... [TRUNCATED]"
+
+                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
+
+                        self.fleet.recorder.record_interaction(
+                            provider="agent_tool",
+                            model=self.__class__.__name__,
+                            prompt=prompt_trace,
+                            result=shard_result,
+                            meta={
+                                "tool": func.__name__,
+                                "agent": self.__class__.__name__,
+                                "timestamp_ms": int(time.time() * 1000),
+                            },
+                        )
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                        logging.debug("Failed to record tool interaction: %s", e)
+
+                return result
+        else:
+
+            @wraps(func)
+            def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+                # Phase 108: Enhanced Traceability
+
+                logging.debug("Executing tool %s on %s", func.__name__, self.__class__.__name__)
+
+                result = func(self, *args, **kwargs)
+
+                # Autonomous Logic Harvesting:
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                    try:
+                        shard_result = str(result)
+                        if len(shard_result) > 2000:
+                            shard_result = shard_result[:2000] + "... [TRUNCATED]"
+
+                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
+
+                        self.fleet.recorder.record_interaction(
+                            provider="agent_tool",
+                            model=self.__class__.__name__,
+                            prompt=prompt_trace,
+                            result=shard_result,
+                            meta={
+                                "tool": func.__name__,
+                                "agent": self.__class__.__name__,
+                                "timestamp_ms": int(time.time() * 1000),
+                            },
+                        )
+                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                        logging.debug("Failed to record tool interaction: %s", e)
+
+                return result
+
+        # pylint: disable=protected-access
+        wrapper._is_tool = True
+        wrapper._tool_priority = priority
+        if category:
+            wrapper._tool_category = category
+
+        return wrapper
 
     # Support @as_tool without parentheses
     if callable(priority):
         f = priority
-        actual_priority = 0
-        actual_category = category
-    else:
-        f = None
-        actual_priority = priority
-        actual_category = category
-
-    def decorator(func: Callable) -> Callable:
-        if inspect.iscoroutinefunction(func):
-            @wraps(func)
-            async def async_wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
-                # Phase 108: Enhanced Traceability
-                logging.debug("Executing async tool %s on %s", func.__name__, self.__class__.__name__)
-                result = await func(self, *args, **kwargs)
-                # Autonomous Logic Harvesting:
-                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
-                    try:
-                        _record_tool_execution(self, func.__name__, args, kwargs, result)
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                        if isinstance(e, (KeyboardInterrupt, SystemExit)):
-                            raise
-                        logging.debug("Failed to record tool interaction: %s", e)
-                return result
-            wrapper = async_wrapper
-        else:
-            @wraps(func)
-            def sync_wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
-                # Phase 108: Enhanced Traceability
-                logging.debug("Executing tool %s on %s", func.__name__, self.__class__.__name__)
-                result = func(self, *args, **kwargs)
-                # Autonomous Logic Harvesting:
-                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
-                    try:
-                        _record_tool_execution(self, func.__name__, args, kwargs, result)
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                        if isinstance(e, (KeyboardInterrupt, SystemExit)):
-                            raise
-                        logging.debug("Failed to record tool interaction: %s", e)
-                return result
-            wrapper = sync_wrapper
-
-        # pylint: disable=protected-access
-        wrapper._is_tool = True
-        wrapper._tool_priority = actual_priority
-        if actual_category:
-            wrapper._tool_category = actual_category
-        return wrapper
-
-    if f is not None:
+        priority = 0
         return decorator(f)
+
     return decorator
 
 
 def create_main_function(agent_class: type[BaseAgent], description: str, context_help: str) -> Callable[[], None]:
-"""
-Create a main function for an agent class.
-    ""
-def main() -> None:
+    """Create a main function for an agent class."""
+
+    def main() -> None:
         parser = argparse.ArgumentParser(description=description)
         parser.add_argument(
             "--describe-backends",
@@ -221,7 +243,8 @@ def main() -> None:
             help="Select reasoning strategy (direct, cot, reflexion)",
         )
         parser.add_argument(
-            "--verbose", "-v",
+            "--verbose",
+            "-v",
             action="count",
             default=0,
             help="Increase verbosity (can be used multiple times, e.g. -vv)",
@@ -247,6 +270,7 @@ def main() -> None:
 
         if args.backend:
             os.environ["DV_AGENT_BACKEND"] = args.backend
+
         agent = agent_class(args.context)
 
         # If delegation is requested via CLI
@@ -265,8 +289,14 @@ def main() -> None:
             # pylint: disable=protected-access
             agent._no_cascade = True
             logging.info("No-cascade mode enabled for this agent (prevents spawning other agents)")
-        # Set strategy based on argument (stub: always direct)
-        # If you want to support other strategies, implement them here
+
+        # Set strategy based on argument
+        if args.strategy == "cot":
+            agent.set_strategy(agent_strategies.ChainOfThoughtStrategy())
+        elif args.strategy == "reflexion":
+            agent.set_strategy(agent_strategies.ReflexionStrategy())
+        else:
+            agent.set_strategy(agent_strategies.DirectStrategy())
 
         agent.read_previous_content()
         agent.improve_content(args.prompt)
@@ -288,4 +318,5 @@ def main() -> None:
                 logging.info(diff)
             else:
                 logging.info("No changes made to %s.", agent_class.__name__.replace("Agent", "").lower())
+
     return main
