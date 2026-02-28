@@ -1,43 +1,32 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
-try:
-    from typing import Any, Dict, Optional, Tuple
 """
-except ImportError:
-
+Image.py module.
 """
+
 from typing import Any, Dict, Optional, Tuple
 
-try:
-    import numpy
-except ImportError:
-    import numpy
 import numpy as np
-try:
-    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
-except ImportError:
-    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
+from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
 
 class ImageProcessor(BaseMultiModalProcessor[Any]):
-"""
-Processor for image inputs.""
-modality = ModalityType.IMAGE
+    """Processor for image inputs."""
+
+    modality = ModalityType.IMAGE
 
     def __init__(
         self,
@@ -47,9 +36,7 @@ modality = ModalityType.IMAGE
         std: Tuple[float, ...] = (0.229, 0.224, 0.225),
         patch_size: int = 14,
     ) -> None:
-"""
-Initialize the image processor with configuration and processing parameters.""
-super().__init__(config)
+        super().__init__(config)
         self.target_size = target_size
         self.mean = np.array(mean).reshape((1, 1, 3))
         self.std = np.array(std).reshape((1, 1, 3))
@@ -60,8 +47,6 @@ super().__init__(config)
         data: Any,
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-"""
-Process image data. Expects a PIL Image or a numpy array. Returns a normalized numpy array and metadata.""
         # Convert PIL to numpy if needed
         if hasattr(data, "convert"):
             data = data.convert("RGB")
@@ -73,6 +58,7 @@ Process image data. Expects a PIL Image or a numpy array. Returns a normalized n
                 image_np = data.astype(np.float32)
         else:
             raise TypeError(f"Unsupported image type: {type(data)}")
+
         original_size = image_np.shape[:2]
 
         # Resize
@@ -98,7 +84,7 @@ Process image data. Expects a PIL Image or a numpy array. Returns a normalized n
 
         return image_normalized, metadata
 
-    def get_patches_count(self, data: Any, **kwargs: Any) -> int:
+    def get_placeholder_count(self, data: Any, **kwargs: Any) -> int:
         target = kwargs.get("target_size", self.target_size)
         h, w = target
         num_patches_h = h // self.patch_size
@@ -110,9 +96,7 @@ Process image data. Expects a PIL Image or a numpy array. Returns a normalized n
         image: np.ndarray,
         target_size: Tuple[int, int],
     ) -> np.ndarray:
-"""
-Resize the image to the target size using bilinear interpolation.""
-src_h, src_w = image.shape[:2]
+        src_h, src_w = image.shape[:2]
         tgt_h, tgt_w = target_size
 
         if (src_h, src_w) == (tgt_h, tgt_w):

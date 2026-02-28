@@ -1,92 +1,63 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Rate limited.py module.
-
 """
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-try:
-    from _thread import LockType
-except ImportError:
-    from _thread import LockType
+from _thread import LockType
+import threading
+import time
+from concurrent.futures import Future
+from typing import Callable, Dict, Optional, TypeVar
 
-try:
-    import threading
-except ImportError:
-    import threading
-
-try:
-    import time
-except ImportError:
-    import time
-
-try:
-    from concurrent.futures import Future
-except ImportError:
-    from concurrent.futures import Future
-
-try:
-    from typing import Callable, Dict, Optional, TypeVar
-except ImportError:
-    from typing import Callable, Dict, Optional, TypeVar
-
-
-try:
-    from .base import PriorityScheduler
-except ImportError:
-    from .base import PriorityScheduler
-
-try:
-    from .enums import TaskPriority
-except ImportError:
-    from .enums import TaskPriority
-
-try:
-    from .models import TaskStats
-except ImportError:
-    from .models import TaskStats
-
+from .base import PriorityScheduler
+from .enums import TaskPriority
+from .models import TaskStats
 
 R = TypeVar("R")
 
 
 class RateLimitedScheduler:
-        Scheduler with rate limiting per priority level.
-    
+    """
+    Scheduler with rate limiting per priority level.
+    """
+
     def __init__(
         self,
         rates: Optional[Dict[TaskPriority, float]] = None,
         workers: int = 4,
     ) -> None:
-                Initialize rate-limited scheduler.
+        """
+        Initialize rate-limited scheduler.
 
         Args:
             rates: Tasks per second per priority level
             workers: Number of worker threads
-                self._rates: Dict[TaskPriority, float] = rates or {
-            TaskPriority.CRITICAL: float("inf"),"            TaskPriority.HIGH: 100.0,
+        """
+        self._rates: Dict[TaskPriority, float] = rates or {
+            TaskPriority.CRITICAL: float("inf"),
+            TaskPriority.HIGH: 100.0,
             TaskPriority.NORMAL: 50.0,
             TaskPriority.LOW: 20.0,
             TaskPriority.IDLE: 5.0,
         }
 
-        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p in TaskPriority}
+        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p: TaskPriority in TaskPriority}
 
         self._scheduler = PriorityScheduler(workers=workers)
         self._lock: LockType = threading.Lock()
@@ -96,9 +67,10 @@ class RateLimitedScheduler:
         func: Callable[[], R],
         priority: TaskPriority = TaskPriority.NORMAL,
     ) -> Future[R]:
-"""
-Submit a rate-limited task.        rate: float = self._rates.get(priority, 10.0)
+        """Submit a rate-limited task."""
+        rate: float = self._rates.get(priority, 10.0)
         min_interval: float = 1.0 / rate if rate < float("inf") else 0.0
+
         with self._lock:
             now: float = time.monotonic()
             last: float = self._last_execution[priority]
@@ -113,12 +85,10 @@ Submit a rate-limited task.        rate: float = self._rates.get(priority, 10.0)
         return self._scheduler.submit(func, priority=priority)
 
     def shutdown(self, wait: bool = True) -> None:
-"""
-Shutdown the scheduler.        self._scheduler.shutdown(wait=wait)
+        """Shutdown the scheduler."""
+        self._scheduler.shutdown(wait=wait)
 
     @property
     def stats(self) -> TaskStats:
-"""
-Scheduler statistics.        return self._scheduler.stats
-
-"""
+        """Scheduler statistics."""
+        return self._scheduler.stats

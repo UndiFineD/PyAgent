@@ -1,67 +1,47 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Selectors.py module.
-
 """
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-try:
-    import random
-except ImportError:
-    import random
+import random
+from abc import ABC, abstractmethod
+from typing import List, Optional
 
-try:
-    from abc import ABC, abstractmethod
-except ImportError:
-    from abc import ABC, abstractmethod
-
-try:
-    from typing import List, Optional
-except ImportError:
-    from typing import List, Optional
-
-
-try:
-    from .config import InstanceInfo, ScheduledRequest
-except ImportError:
-    from .config import InstanceInfo, ScheduledRequest
-
-
+from .config import InstanceInfo, ScheduledRequest
 
 
 class InstanceSelector(ABC):
-"""
-Abstract base for instance selection strategies.
+    """Abstract base for instance selection strategies."""
+
     @abstractmethod
     def select(
         self,
         instances: List[InstanceInfo],
         request: ScheduledRequest,
     ) -> Optional[InstanceInfo]:
-"""
-Select an instance for the request.        raise NotImplementedError
-
+        """Select an instance for the request."""
+        raise NotImplementedError
 
 
 class RoundRobinSelector(InstanceSelector):
-"""
-Round-robin instance selection.
+    """Round-robin instance selection."""
+
     def __init__(self) -> None:
         self._counter = 0
 
@@ -82,10 +62,9 @@ Round-robin instance selection.
         return healthy[idx]
 
 
-
 class LeastLoadedSelector(InstanceSelector):
-"""
-Select least loaded instance.
+    """Select least loaded instance."""
+
     def select(
         self,
         instances: List[InstanceInfo],
@@ -98,10 +77,9 @@ Select least loaded instance.
         return min(healthy, key=lambda i: i.load_score)
 
 
-
 class RandomSelector(InstanceSelector):
-"""
-Random instance selection.
+    """Random instance selection."""
+
     def select(
         self,
         instances: List[InstanceInfo],
@@ -114,10 +92,9 @@ Random instance selection.
         return random.choice(healthy)
 
 
-
 class HashSelector(InstanceSelector):
-"""
-Hash-based consistent instance selection.
+    """Hash-based consistent instance selection."""
+
     def select(
         self,
         instances: List[InstanceInfo],

@@ -1,38 +1,25 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Multimodal.py module.
-
 """
-try:
-    from typing import Any, Tuple
-except ImportError:
-    from typing import Any, Tuple
 
+from typing import Any, Tuple
 
-try:
-    from .base import HAS_TORCH, RotaryEmbeddingBase
-except ImportError:
-    from .base import HAS_TORCH, RotaryEmbeddingBase
-
-try:
-    from .config import RoPEConfig
-except ImportError:
-    from .config import RoPEConfig
-
+from .base import HAS_TORCH, RotaryEmbeddingBase
+from .config import RoPEConfig
 
 if HAS_TORCH:
     import torch
@@ -40,26 +27,28 @@ else:
     torch = None  # pylint: disable=invalid-name
 
 
-
 class MRotaryEmbedding(RotaryEmbeddingBase):
-"""
-Multimodal Rotary Position Embedding.""
-Applies separate rotary embeddings for different modality sections:
+    """Multimodal Rotary Position Embedding.
+
+    Applies separate rotary embeddings for different modality sections:
     - Temporal (time/frame index)
     - Height (spatial y)
     - Width (spatial x)
-    
+    """
+
     def __init__(self, config: RoPEConfig) -> None:
         super().__init__(config)
         self.mrope_sections = config.mrope_sections or [8, 8, 8]
-        assert len(self.mrope_sections) == 3, "Need 3 sections: temporal, height, width""        assert sum(self.mrope_sections) * 2 <= self.rotary_dim
+        assert len(self.mrope_sections) == 3, "Need 3 sections: temporal, height, width"
+        assert sum(self.mrope_sections) * 2 <= self.rotary_dim
 
         self.inv_freq = self._compute_inv_freq()
 
     def _compute_inv_freq(self) -> Any:
-"""
-Compute inverse frequencies for each section.        if not HAS_TORCH:
+        """Compute inverse frequencies for each section."""
+        if not HAS_TORCH:
             raise RuntimeError("MRotaryEmbedding requires PyTorch")
+
         inv_freqs = []
         for section_size in self.mrope_sections:
             inv_freq = 1.0 / (
@@ -69,9 +58,10 @@ Compute inverse frequencies for each section.        if not HAS_TORCH:
         return inv_freqs
 
     def _compute_cos_sin_cache(self, max_len: int) -> Tuple[Any, Any]:
-"""
-Compute cos/sin cache for each section.        if not HAS_TORCH:
+        """Compute cos/sin cache for each section."""
+        if not HAS_TORCH:
             raise RuntimeError("MRotaryEmbedding requires PyTorch")
+
         t = torch.arange(max_len, dtype=torch.float32)
 
         cos_caches = []
@@ -90,9 +80,10 @@ Compute cos/sin cache for each section.        if not HAS_TORCH:
         query: Any,
         key: Any,
     ) -> Tuple[Any, Any]:
-"""
-Apply multimodal rotary embeddings.        if not HAS_TORCH:
+        """Apply multimodal rotary embeddings."""
+        if not HAS_TORCH:
             raise RuntimeError("MRotaryEmbedding requires PyTorch")
+
         if positions.dim() == 1:
             # Fallback to single positions
             positions = positions.unsqueeze(0).expand(3, -1)
@@ -133,9 +124,15 @@ Apply multimodal rotary embeddings.        if not HAS_TORCH:
 
     def _apply_rotation(
         self,
-        q: "torch.Tensor","        k: "torch.Tensor","        cos: "torch.Tensor","        sin: "torch.Tensor","    ) -> Tuple["torch.Tensor", "torch.Tensor"]:"        """
-Apply rotation to a section.
-        def rotate_half(x: "torch.Tensor") -> "torch.Tensor":"            x1 = x[..., : x.shape[-1] // 2]
+        q: "torch.Tensor",
+        k: "torch.Tensor",
+        cos: "torch.Tensor",
+        sin: "torch.Tensor",
+    ) -> Tuple["torch.Tensor", "torch.Tensor"]:
+        """Apply rotation to a section."""
+
+        def rotate_half(x: "torch.Tensor") -> "torch.Tensor":
+            x1 = x[..., : x.shape[-1] // 2]
             x2 = x[..., x.shape[-1] // 2 :]
             return torch.cat((-x2, x1), dim=-1)
 
@@ -146,7 +143,3 @@ Apply rotation to a section.
         k_rot = k * cos + rotate_half(k) * sin
 
         return q_rot, k_rot
-
-""
-
-"""

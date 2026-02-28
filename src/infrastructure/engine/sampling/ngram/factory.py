@@ -1,60 +1,53 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License regarding the specific language regarding permissions and
+# See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 """
 N-gram Proposer Factory - Helper functions to instantiate proposers.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from typing import Any
-except ImportError:
-    from typing import Any
 
-
-try:
-    from .infrastructure.engine.sampling.ngram.proposer import (
-except ImportError:
-    from src.infrastructure.engine.sampling.ngram.proposer import (
-
+from src.infrastructure.engine.sampling.ngram.proposer import (
     AdaptiveNgramProposer, NgramProposer)
-try:
-    from .infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
-except ImportError:
-    from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
-
+from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
                                                             NgramConfig)
 
 
 def create_ngram_proposer(
-    strategy: str = "longest","    use_suffix_tree: bool = True,
+    strategy: str = "longest",
+    use_suffix_tree: bool = True,
     adaptive: bool = False,
     **kwargs: Any,
 ) -> NgramProposer:
-        Factory function regarding creation regarding n-gram proposer.
+    """
+    Factory function to create n-gram proposer.
 
     Args:
-        strategy: "first", "longest", "recent", "weighted""        use_suffix_tree: Use suffix tree indexing
+        strategy: "first", "longest", "recent", "weighted"
+        use_suffix_tree: Use suffix tree indexing
         adaptive: Use adaptive n-gram sizing
         **kwargs: Additional NgramConfig parameters
-        strategy_map = {
-        "first": MatchingStrategy.FIRST,"        "longest": MatchingStrategy.LONGEST,"        "recent": MatchingStrategy.RECENT,"        "weighted": MatchingStrategy.WEIGHTED,"    }
+    """
+    strategy_map = {
+        "first": MatchingStrategy.FIRST,
+        "longest": MatchingStrategy.LONGEST,
+        "recent": MatchingStrategy.RECENT,
+        "weighted": MatchingStrategy.WEIGHTED,
+    }
 
     config = NgramConfig(
         strategy=strategy_map.get(strategy, MatchingStrategy.LONGEST),
@@ -65,5 +58,3 @@ def create_ngram_proposer(
     if adaptive:
         return AdaptiveNgramProposer(config)
     return NgramProposer(config)
-
-"""

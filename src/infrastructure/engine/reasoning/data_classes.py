@@ -1,54 +1,33 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
 Data classes.py module.
-
 """
-try:
-    import json
-except ImportError:
-    import json
 
-try:
-    import time
-except ImportError:
-    import time
+import json
+import time
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
 
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import Any, Dict, List, Optional
-except ImportError:
-    from typing import Any, Dict, List, Optional
-
-
-try:
-    from .enums import ReasoningFormat, ToolCallFormat
-except ImportError:
-    from .enums import ReasoningFormat, ToolCallFormat
-
+from .enums import ReasoningFormat, ToolCallFormat
 
 
 @dataclass
 class ReasoningToken:
-"""
-A single token with reasoning metadata.
+    """A single token with reasoning metadata."""
+
     token_id: int
     text: str
     is_thinking: bool = False
@@ -59,8 +38,8 @@ A single token with reasoning metadata.
 
 @dataclass
 class ThinkingBlock:
-"""
-A complete thinking/reasoning block.
+    """A complete thinking/reasoning block."""
+
     content: str
     start_position: int
     end_position: int
@@ -72,33 +51,37 @@ A complete thinking/reasoning block.
     def __len__(self) -> int:
         return len(self.content)
 
-    def get_steps(self, delimiter: str = "\\n") -> List[str]:"        """
-Extract reasoning steps.        steps = [s.strip() for s in self.content.split(delimiter) if s.strip()]
+    def get_steps(self, delimiter: str = "\n") -> List[str]:
+        """Extract reasoning steps."""
+        steps = [s.strip() for s in self.content.split(delimiter) if s.strip()]
         return steps
 
 
 @dataclass
 class ToolCall:
-"""
-A parsed tool/function call.
+    """A parsed tool/function call."""
+
     id: str
     name: str
     arguments: Dict[str, Any]
     raw_text: str = ""
-format: ToolCallFormat = ToolCallFormat.OPENAI
+    format: ToolCallFormat = ToolCallFormat.OPENAI
     position: int = 0
     is_complete: bool = True
 
     def to_dict(self) -> Dict[str, Any]:
-"""
-Convert tool call to dictionary format.        return {
-            "id": self.id,"            "type": "function","            "function": {"name": self.name, "arguments": json.dumps(self.arguments)},"        }
+        """Convert tool call to dictionary format."""
+        return {
+            "id": self.id,
+            "type": "function",
+            "function": {"name": self.name, "arguments": json.dumps(self.arguments)},
+        }
 
 
 @dataclass
 class ToolCallResult:
-"""
-Result from tool execution.
+    """Result from tool execution."""
+
     tool_call_id: str
     content: str
     is_error: bool = False
@@ -107,55 +90,26 @@ Result from tool execution.
 
 @dataclass
 class ParseResult:
-"""
-Result of parsing a generation stream.
+    """Result of parsing a generation stream."""
+
     content: str  # Final content (without thinking)
     thinking_blocks: List[ThinkingBlock] = field(default_factory=list)
     tool_calls: List[ToolCall] = field(default_factory=list)
-    raw_text: str = ""  # Original full text"    parse_time_ms: float = 0.0
+    raw_text: str = ""  # Original full text
+    parse_time_ms: float = 0.0
     tokens_processed: int = 0
 
     @property
     def has_thinking(self) -> bool:
-"""
-Check if result has thinking blocks.        return bool(self.thinking_blocks)
+        """Check if result has thinking blocks."""
+        return bool(self.thinking_blocks)
 
     @property
     def has_tool_calls(self) -> bool:
-"""
-Check if result has tool calls.        return bool(self.tool_calls)
+        """Check if result has tool calls."""
+        return bool(self.tool_calls)
 
     @property
     def total_thinking_length(self) -> int:
-"""
-Calculate total number of characters in all thinking blocks.        return sum(len(block) for block in self.thinking_blocks)
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""
-
-"""
+        """Calculate total number of characters in all thinking blocks."""
+        return sum(len(block) for block in self.thinking_blocks)

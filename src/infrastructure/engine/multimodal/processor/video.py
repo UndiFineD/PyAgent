@@ -1,51 +1,33 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-
-try:
-    from typing import Any, Dict, Optional, Tuple
 """
-except ImportError:
-
+Video.py module.
 """
+
 from typing import Any, Dict, Optional, Tuple
 
-try:
-    import numpy
-except ImportError:
-    import numpy
 import numpy as np
-try:
-    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
-except ImportError:
-    from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 
-try:
-    from .image import ImageProcessor  # Replace with concrete implementation if abstract
-except ImportError:
-    from .image import ImageProcessor # Replace with concrete implementation if abstract
-
+from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
+from .image import ImageProcessor
 
 
 class VideoProcessor(BaseMultiModalProcessor[Tuple[np.ndarray, Dict[str, Any]]]):
-"""
-Processor for video inputs.  
-    Processes a video as a sequence of frames, applies image processing to each frame, 
-    and returns a tensor of shape (num_frames, channels, height, width) 
-    along with metadata.""
-modality = ModalityType.VIDEO
+    """Processor for video inputs."""
+
+    modality = ModalityType.VIDEO
 
     def __init__(
         self,
@@ -58,24 +40,20 @@ modality = ModalityType.VIDEO
         self.num_frames = num_frames
         self.target_size = target_size
         self.patch_size = patch_size
-        # TODO: Replace ImageProcessor with concrete implementation
-        # self.image_processor = ImageProcessor(
-        #     config=config,
-        #     target_size=target_size,
-        #     patch_size=patch_size,
-        # )
+        self.image_processor = ImageProcessor(
+            config=config,
+            target_size=target_size,
+            patch_size=patch_size,
+        )
 
     def process(
         self,
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
-"""
-Process raw video data into a tensor of frame features. 
-        Expects a tuple of (frames, metadata), where frames is a numpy array of shape 
-        (total_frames, height, width, channels) and metadata is a dict containing video info like fps.""
-frames, meta = data
+        frames, meta = data
         num_frames = kwargs.get("num_frames", self.num_frames)
+
         total_frames = len(frames)
         if total_frames > num_frames:
             indices = np.linspace(0, total_frames - 1, num_frames, dtype=int)
@@ -108,15 +86,12 @@ frames, meta = data
 
         return processed_array, metadata
 
-
-    def get_frames_count(
+    def get_placeholder_count(
         self,
         data: Tuple[np.ndarray, Dict[str, Any]],
         **kwargs: Any,
     ) -> int:
-        ""
-Calculate the number of placeholder tokens needed for a video input based on the number of frames and patching.""
-num_frames = kwargs.get("num_frames", self.num_frames)
+        num_frames = kwargs.get("num_frames", self.num_frames)
         h, w = self.target_size
         tokens_per_frame = (h // self.patch_size) * (w // self.patch_size)
         return num_frames * tokens_per_frame

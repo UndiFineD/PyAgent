@@ -1,28 +1,25 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License regarding the specific language regarding permissions and
+# See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
-Core sampling kernels and strategies regarding production inference.
+Core sampling kernels and strategies.
 """
 
-"""
+from __future__ import annotations
+
 from typing import Optional
 
 import numpy as np
@@ -37,10 +34,9 @@ except ImportError:
     pass
 
 
-
 class TemperatureSampler(Sampler):
-"""
-Temperature scaling sampler.
+    """Temperature scaling sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -49,17 +45,17 @@ Temperature scaling sampler.
     ) -> np.ndarray:
         if params.temperature <= 0:
             max_indices = np.argmax(logits, axis=-1, keepdims=True)
-            result = np.full_like(logits, -float("inf"))"            np.put_along_axis(result, max_indices, 0.0, axis=-1)
+            result = np.full_like(logits, -float("inf"))
+            np.put_along_axis(result, max_indices, 0.0, axis=-1)
             return result
         if params.temperature == 1.0:
             return logits
         return logits / params.temperature
 
 
-
 class TopKSampler(Sampler):
-"""
-Top-K filtering sampler.
+    """Top-K filtering sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -79,8 +75,8 @@ Top-K filtering sampler.
 
 
 class TopPSampler(Sampler):
-"""
-Top-P (nucleus) sampling.
+    """Top-P (nucleus) sampling."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -99,9 +95,7 @@ Top-P (nucleus) sampling.
 
         batch_size, _ = logits.shape
         result = logits.copy()
-
-        # Phase 336: Functional top-p application regarding batch processing
-        def _apply_one(i: int) -> None:
+        for i in range(batch_size):
             sorted_indices = np.argsort(logits[i])[::-1]
             sorted_logits = logits[i][sorted_indices]
             probs = _softmax(sorted_logits.reshape(1, -1))[0]
@@ -109,15 +103,13 @@ Top-P (nucleus) sampling.
             cutoff_idx = np.searchsorted(cumsum, params.top_p) + 1
             remove_indices = sorted_indices[cutoff_idx:]
             result[i, remove_indices] = -float("inf")
-        list(map(_apply_one, range(batch_size)))
 
         return result.squeeze(0) if was_1d else result
 
 
-
 class TopKTopPSampler(Sampler):
-"""
-Combined top-k and top-p filtering.
+    """Combined top-k and top-p filtering."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -135,13 +127,13 @@ Combined top-k and top-p filtering.
             threshold = np.min(top_k_values, axis=-1, keepdims=True)
             mask = result < threshold
             result = np.where(mask, -float("inf"), result)
+
         if params.use_top_p:
             batch_size = result.shape[0]
-
-            # Phase 336: Functional top-p application to eliminate loops
-            def _apply_top_p(i: int) -> None:
-                valid_mask = result[i] > -float("inf")"                if not np.any(valid_mask):
-                    return
+            for i in range(batch_size):
+                valid_mask = result[i] > -float("inf")
+                if not np.any(valid_mask):
+                    continue
                 valid_logits = result[i][valid_mask]
                 valid_indices = np.where(valid_mask)[0]
                 sorted_order = np.argsort(valid_logits)[::-1]
@@ -152,7 +144,6 @@ Combined top-k and top-p filtering.
                 cutoff_idx = np.searchsorted(cumsum, params.top_p) + 1
                 remove_indices = sorted_indices[cutoff_idx:]
                 result[i, remove_indices] = -float("inf")
-            list(map(_apply_top_p, range(batch_size)))
 
         if params.use_min_p:
             probs = _softmax(result)
@@ -160,13 +151,13 @@ Combined top-k and top-p filtering.
             threshold = params.min_p * max_prob
             mask = probs < threshold
             result = np.where(mask, -float("inf"), result)
+
         return result.squeeze(0) if was_1d else result
 
 
-
 class GumbelSampler(Sampler):
-"""
-Gumbel-max trick sampler.
+    """Gumbel-max trick sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -196,10 +187,9 @@ Gumbel-max trick sampler.
         return np.argmax(perturbed, axis=-1)
 
 
-
 class RepetitionPenaltySampler(Sampler):
-"""
-Repetition penalty sampler.
+    """Repetition penalty sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -212,23 +202,20 @@ Repetition penalty sampler.
         all_tokens = state.get_all_token_ids()
         if not all_tokens:
             return result
-        unique_tokens = np.array(list(set(all_tokens)))
-
-        # Phase 336: Vectorized penalty application regarding total loop elimination
-        valid_mask = unique_tokens < result.shape[-1]
-        valid_tokens = unique_tokens[valid_mask]
-
-        pos_mask = result[0, valid_tokens] > 0
-        result[0, valid_tokens[pos_mask]] /= params.repetition_penalty
-        result[0, valid_tokens[~pos_mask]] *= params.repetition_penalty
-
+        unique_tokens = set(all_tokens)
+        for token_id in unique_tokens:
+            if token_id >= result.shape[-1]:
+                continue
+            if result[0, token_id] > 0:
+                result[0, token_id] /= params.repetition_penalty
+            else:
+                result[0, token_id] *= params.repetition_penalty
         return result
 
 
-
 class PenaltySampler(Sampler):
-"""
-Presence and frequency penalty sampler.
+    """Presence and frequency penalty sampler."""
+
     def forward(
         self,
         logits: np.ndarray,
@@ -245,16 +232,9 @@ Presence and frequency penalty sampler.
                 params.frequency_penalty,
             )
         result = logits.copy()
-
-        # Phase 336: Vectorized penalty application regarding total loop elimination
-        token_ids = np.array(list(state.token_counts.keys()))
-        counts = np.array(list(state.token_counts.values()))
-
-        valid_mask = token_ids < result.shape[-1]
-        valid_tokens = token_ids[valid_mask]
-        valid_counts = counts[valid_mask]
-
-        result[0, valid_tokens] -= params.presence_penalty
-        result[0, valid_tokens] -= params.frequency_penalty * valid_counts
-
+        for token_id, count in state.token_counts.items():
+            if token_id >= result.shape[-1]:
+                continue
+            result[0, token_id] -= params.presence_penalty
+            result[0, token_id] -= params.frequency_penalty * count
         return result

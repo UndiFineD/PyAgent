@@ -1,54 +1,33 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-"""
-Request and metrics data structures for scheduling.
+"""Request and metrics data structures for scheduling."""
 
-"""
-try:
-    import time
-except ImportError:
-    import time
+from __future__ import annotations
 
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
+import time
+from dataclasses import dataclass, field
+from typing import Any, Optional
 
-try:
-    from typing import Any, Optional
-except ImportError:
-    from typing import Any, Optional
-
-
-try:
-    from .config import PreemptionReason, RequestPriority, RequestState
-except ImportError:
-    from .config import PreemptionReason, RequestPriority, RequestState
-
+from .config import PreemptionReason, RequestPriority, RequestState
 
 
 @dataclass
 class RequestMetrics:
-"""
-Metrics for a single request.
+    """Metrics for a single request."""
 
     created_at: float = 0.0
     first_scheduled_at: float = 0.0
@@ -60,23 +39,23 @@ Metrics for a single request.
 
     @property
     def latency_ms(self) -> float:
-"""
-Total latency in milliseconds.        if self.completed_at > 0:
+        """Total latency in milliseconds."""
+        if self.completed_at > 0:
             return (self.completed_at - self.created_at) * 1000
         return 0.0
 
     @property
     def queue_time_ms(self) -> float:
-"""
-Time spent waiting in queue.        if self.first_scheduled_at > 0:
+        """Time spent waiting in queue."""
+        if self.first_scheduled_at > 0:
             return (self.first_scheduled_at - self.created_at) * 1000
         return 0.0
 
 
 @dataclass
 class ScheduledRequest:
-"""
-A request scheduled for inference.
+    """A request scheduled for inference."""
+
     request_id: str
     prompt: str
     priority: RequestPriority = RequestPriority.NORMAL
@@ -99,39 +78,37 @@ A request scheduled for inference.
     sequence: int = field(default=0, repr=False)
 
     def __post_init__(self) -> None:
-"""
-Initialize metrics.        self.metrics.created_at = self.arrival_time
+        """Initialize metrics."""
+        self.metrics.created_at = self.arrival_time
 
     @property
     def total_tokens(self) -> int:
-"""
-Total tokens (prompt + generated).        return self.prompt_tokens + self.generated_tokens
+        """Total tokens (prompt + generated)."""
+        return self.prompt_tokens + self.generated_tokens
 
     @property
     def remaining_tokens(self) -> int:
-"""
-Tokens remaining to generate.        return max(0, self.max_tokens - self.generated_tokens)
+        """Tokens remaining to generate."""
+        return max(0, self.max_tokens - self.generated_tokens)
 
     @property
     def is_preemptible(self) -> bool:
-"""
-Whether request can be preempted.        return self.state == RequestState.RUNNING and self.priority != RequestPriority.CRITICAL
+        """Whether request can be preempted."""
+        return self.state == RequestState.RUNNING and self.priority != RequestPriority.CRITICAL
 
     def preempt(self, reason: PreemptionReason, state: Optional[Any] = None) -> None:
-"""
-Preempt this request.        self.state = RequestState.PREEMPTED
+        """Preempt this request."""
+        self.state = RequestState.PREEMPTED
         self.preempted_at = time.time()
         self.preemption_reason = reason
         self.saved_state = state
         self.metrics.preemption_count += 1
 
     def resume(self) -> Optional[Any]:
-"""
-Resume a preempted request.        if self.state == RequestState.PREEMPTED:
+        """Resume a preempted request."""
+        if self.state == RequestState.PREEMPTED:
             preemption_duration = time.time() - self.preempted_at
             self.metrics.total_preemption_time += preemption_duration
             self.state = RequestState.WAITING
             return self.saved_state
         return None
-
-"""
