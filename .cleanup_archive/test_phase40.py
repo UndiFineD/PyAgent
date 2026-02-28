@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+#!/usr/bin/env python3
+
+"""Test script for Phase 40 improvements: Recursive Self-Debugging & Neural Pruning."""
+
+import os
+import unittest
+import logging
+from unittest.mock import MagicMock, patch, AsyncMock
+from unittest import IsolatedAsyncioTestCase
+
+# Add src to path
+
+from src.infrastructure.orchestration.healing.AutoDebuggerOrchestrator import (
+    AutoDebuggerOrchestrator,
+)
+from src.infrastructure.orchestration.swarm.SwarmPruningOrchestrator import (
+    SwarmPruningOrchestrator,
+)
+from src.core.base.NeuralPruningEngine import NeuralPruningEngine
+
+
+class TestPhase40(IsolatedAsyncioTestCase):
+    """Integrations tests for neural pruning and debugging."""
+
+    def setUp(self):
+        self.workspace_root = os.getcwd()
+        logging.basicConfig(level=logging.DEBUG)
+
+    async def test_auto_debugger_syntax_check(self) -> None:
+        """Tests that the AutoDebugger can identify syntax errors."""
+        orchestrator = AutoDebuggerOrchestrator(self.workspace_root)
+
+        # Test with a valid file (this file)
+        result = await orchestrator.validate_and_repair(__file__)
+        self.assertEqual(result["status"], "success")
+
+    def test_neural_pruning_performance(self) -> None:
+        """Tests the Neural Pruning logic with performance tracking."""
+        mock_fleet = MagicMock()
+        engine = NeuralPruningEngine(mock_fleet)
+        orchestrator = SwarmPruningOrchestrator(mock_fleet)
+        orchestrator.pruning_engine = engine  # Ensure they use the same engine
+
+        # High performance, low cost node
+        orchestrator.record_node_performance("EfficientAgent", True, 100)
+        orchestrator.record_node_performance("EfficientAgent", True, 100)
+
+        # Low performance, high cost node
+        orchestrator.record_node_performance("WastefulAgent", False, 5000)
+        orchestrator.record_node_performance("WastefulAgent", False, 5000)
+
+        # Check synaptic weights
+        efficient_weight = engine.active_synapses.get("EfficientAgent")
+        wasteful_weight = engine.active_synapses.get("WastefulAgent")
+
+        print(f"Efficient Weight: {efficient_weight}")
+        print(f"Wasteful Weight: {wasteful_weight}")
+
+        self.assertGreater(efficient_weight.weight, wasteful_weight.weight)
+
+        # Run pruning cycle with a threshold that should prune WastefulAgent
+        result = orchestrator.run_pruning_cycle(threshold=0.8)
+        self.assertIn("WastefulAgent", result["pruned_nodes"])
+        self.assertNotIn("EfficientAgent", result["pruned_nodes"])
+
+    @patch("subprocess.run")
+    async def test_auto_debugger_repair_trigger(self, mock_run) -> None:
+        """Tests that repair is triggered on syntax error."""
+        from subprocess import CalledProcessError
+
+        # Simulate a syntax error
+        mock_run.side_effect = CalledProcessError(
+            1, "python -m py_compile", stderr="SyntaxError: invalid syntax"
+        )
+
+        orchestrator = AutoDebuggerOrchestrator(self.workspace_root)
+
+        # Mock CoderAgent.improve_content
+
+        orchestrator.coder.improve_content = AsyncMock(return_value="fixed code")
+
+        # Create a dummy broken file
+        dummy_file = "dummy_broken.py"
+        with open(dummy_file, 'w', encoding='utf-8') as f:
+            f.write("invalid python code")
+
+        try:
+            result = await orchestrator.validate_and_repair(dummy_file)
+            self.assertEqual(result["status"], "repaired")
+
+            orchestrator.coder.improve_content.assert_called()
+        finally:
+            if os.path.exists(dummy_file):
+                os.remove(dummy_file)
+
+
+if __name__ == "__main__":
+    unittest.main()

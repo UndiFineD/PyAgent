@@ -1,0 +1,25 @@
+# Extracted from: C:\DEV\PyAgent\.external\0xSojalSec-ROADtools\roadlib\setup.py
+from setuptools import find_namespace_packages, setup
+
+setup(
+    name="roadlib",
+    version="0.15.1",
+    description="ROADtools common components library",
+    author="Dirk-jan Mollema",
+    author_email="dirkjan@outsidersecurity.nl",
+    url="https://github.com/dirkjanm/ROADtools/",
+    license="MIT",
+    classifiers=[
+        "Intended Audience :: Information Technology",
+        "License :: OSI Approved :: MIT License",
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+    ],
+    packages=find_namespace_packages(include=["roadtools.*"]),
+    install_requires=["adal", "sqlalchemy", "pyjwt>=2.0"],
+    zip_safe=False,
+)

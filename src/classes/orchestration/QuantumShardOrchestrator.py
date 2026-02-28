@@ -20,7 +20,7 @@ class QuantumShardOrchestrator(BaseAgent):
         super().__init__(file_path)
         self.shard_id = str(uuid.uuid4())[:8]
         self.shared_state: Dict[str, Any] = {}
-        self.state_file = Path("agent_store/quantum_state.json")
+        self.state_file = Path("data/agents/store/quantum_state.json")
         self._system_prompt = (
             "You are the Quantum Shard Orchestrator. You ensure non-local state consistency. "
             "When a variable is updated in one shard, it is instantly reflected across the "
@@ -69,3 +69,4 @@ if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
     main = create_main_function(QuantumShardOrchestrator, "Quantum Shard Orchestrator", "Distributed state entanglement")
     main()
+

@@ -1,0 +1,74 @@
+<<<<<<< HEAD:test_phase19.py
+import sys
+=======
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Test Phase19 module.
+"""
+
+>>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor):tests/phases/test_phase19.py
+from pathlib import Path
+<<<<<<< HEAD:test_phase19.py
+<<<<<<< HEAD:test_phase19.py
+sys.path.append(str(Path(__file__).parent / "src"))
+=======
+>>>>>>> 0777c397c (phase 320):tests/phases/test_phase19.py
+=======
+>>>>>>> d6712a17b (phase 320):tests/phases/test_phase19.py
+
+from classes.fleet.FleetManager import FleetManager
+import time
+
+def test_phase19() -> None:
+    print("--- Phase 19 Verification: Synthetic Data & Signal Bus ---")
+    workspace_root = Path(__file__).parent
+    fleet = FleetManager(str(workspace_root))
+    
+    # 1. Test Signal Bus
+    print("\n[1/2] Testing Signal Bus (Inter-Agent Telepathy)...")
+    results = []
+    
+    def mock_subscriber(topic, data):
+        results.append(data)
+        print(f"Subscriber received on {topic}: {data}")
+
+    fleet.signal_bus.subscribe("test_topic", mock_subscriber)
+    fleet.signal_bus.publish("test_topic", {"action": "sync", "data": "Hello Swarm"})
+    
+    time.sleep(0.5) # Give it a moment to process
+    if results:
+        print("✅ Signal Bus confirmed.")
+    else:
+        print("❌ Signal Bus failed.")
+
+    # 2. Test Synthetic Data Agent
+    print("\n[2/2] Testing Synthetic Data Forge...")
+    topic = "Python Refactoring"
+    
+    # generate_training_data(self, topic: str, count: int = 5)
+    training_data = fleet.synthetic_data.generate_training_data(topic, count=3)
+    
+    # The agent saves to logs/synthetic_data by default
+    expected_path = Path("logs/synthetic_data") / f"synthetic_{topic.replace(' ', '_').lower()}.jsonl"
+    
+    if expected_path.exists():
+        print(f"✅ Synthetic data generated at {expected_path}")
+        # Cleanup
+        # expected_path.unlink()
+    else:
+        print(f"❌ Synthetic data generation failed. Expected {expected_path}")
+
+if __name__ == "__main__":
+    test_phase19()

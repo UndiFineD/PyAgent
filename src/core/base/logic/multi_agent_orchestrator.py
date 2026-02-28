@@ -83,7 +83,7 @@ class MultiAgentOrchestratorCore:
 
     def __init__(self, base_working_dir: Optional[Path] = None):
         """Initialize the multi-agent orchestrator."""
-        self.base_working_dir = base_working_dir or Path.cwd() / "agent_workspace"
+        self.base_working_dir = base_working_dir or Path.cwd() / "data/agents/workspace"
         self.base_working_dir.mkdir(parents=True, exist_ok=True)
 
         # Agent registry storage

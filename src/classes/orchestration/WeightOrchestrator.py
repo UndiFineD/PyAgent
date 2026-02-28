@@ -18,7 +18,7 @@ class WeightOrchestrator(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = Path(file_path).parent
-        self.weights_registry_path = self.workspace_root / "agent_store/weights_registry.json"
+        self.weights_registry_path = self.workspace_root / "data/agents/store/weights_registry.json"
         self.active_adapters: Dict[str, str] = {} # agent_name -> adapter_name
         self._load_registry()
         self._system_prompt = "You are the Weight Orchestrator. You manage model adapters and neural weights across the fleet."
@@ -76,3 +76,4 @@ if __name__ == "__main__":
     orchestrator = WeightOrchestrator(".")
     orchestrator.activate_adapter("LinguisticAgent", "poetry_v1")
     print(f"Active adapters: {orchestrator.list_registrations()}")
+

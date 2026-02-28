@@ -17,17 +17,18 @@ class KnowledgeCore:
     KnowledgeCore logic for specialized workspace analysis.
     Uses SQLite FTS5 for extreme scalability (Trillion-Parameter compatible).
     """
-    
+
     def __init__(self, workspace_root: Optional[str] = None) -> None:
+        """Initialize the KnowledgeCore with an optional workspace root."""
         self.workspace_root = Path(workspace_root) if workspace_root else None
-        self.db_path = self.workspace_root / "agent_store" / "knowledge_graph.db" if self.workspace_root else None
+        self.db_path = self.workspace_root / "data/agents/store" / "knowledge_graph.db" if self.workspace_root else None
         self._init_db()
 
     def _init_db(self) -> None:
         """Initializes the SQLite FTS5 database for high-performance indexing."""
         if not self.db_path:
             return
-        
+
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         try:
             conn = sqlite3.connect(self.db_path)
@@ -78,7 +79,7 @@ class KnowledgeCore:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             cursor.execute("DELETE FROM symbols_idx") # Refresh index
-            
+
             batch_data = []
             for ext, pattern in extension_patterns.items():
                 for p in root.rglob(f"*{ext}"):
@@ -88,30 +89,30 @@ class KnowledgeCore:
                         content = p.read_text(encoding="utf-8")
                         matches = re.findall(pattern, content)
                         rel_path = str(p.relative_to(root))
-                        
+
                         for match in matches:
                             key = match if ext != ".md" else f"link:{match}"
                             category = "python_symbol" if ext == ".py" else "markdown_link"
                             batch_data.append((key, rel_path, category, content[:1000]))
-                            
+
                             if key not in symbol_map: 
                                 symbol_map[key] = []
                             symbol_map[key].append(rel_path)
-                            
+
                         # Commit in batches of 500 records
                         if len(batch_data) >= 500:
                             cursor.executemany("INSERT INTO symbols_idx VALUES (?, ?, ?, ?)", batch_data)
                             batch_data = []
-                            
+
                     except Exception as e:
                         logging.debug(f"Failed to scan {p}: {e}")
-            
+
             if batch_data:
                 cursor.executemany("INSERT INTO symbols_idx VALUES (?, ?, ?, ?)", batch_data)
-                
+
             conn.commit()
             conn.close()
         except Exception as e:
             logging.error(f"KnowledgeCore indexing failed: {e}")
-            
+
         return symbol_map
