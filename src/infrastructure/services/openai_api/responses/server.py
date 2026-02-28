@@ -1,23 +1,19 @@
 #!/usr/bin/env python3
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
 """
 Server.py module.
-
 """
 
 # SPDX-License-Identifier: Apache-2.0
@@ -34,10 +30,11 @@ from .streaming import SSEStream, StreamingHandler
 logger = logging.getLogger(__name__)
 
 
-
 class ResponsesAPIServer:
-        OpenAI Responses API server implementation.
-    
+    """
+    OpenAI Responses API server implementation.
+    """
+
     def __init__(
         self,
         model_handler: Callable[[ResponseConfig], AsyncIterator[str]],
@@ -51,6 +48,7 @@ class ResponsesAPIServer:
 
     def _create_response_id(self) -> str:
         return f"resp_{uuid.uuid4().hex[:24]}"
+
     async def create_response(self, config: ResponseConfig) -> Union[Response, SSEStream]:
         response = Response(
             id=self._create_response_id(),
@@ -70,7 +68,8 @@ class ResponsesAPIServer:
             async for chunk in self.model_handler(config):
                 text_parts.append(chunk)
                 completion_tokens += len(chunk.split())
-            full_text = "".join(text_parts)"            response.add_text_output(full_text)
+            full_text = "".join(text_parts)
+            response.add_text_output(full_text)
             if config.messages:
                 for msg in config.messages:
                     if isinstance(msg.content, str):
@@ -85,7 +84,8 @@ class ResponsesAPIServer:
             if config.store and self.enable_store:
                 await self.store.save(response)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logger.exception(f"Error creating response: {e}")"            response.fail(str(e))
+            logger.exception(f"Error creating response: {e}")
+            response.fail(str(e))
         return response
 
     async def _create_streaming_response(self, response: Response, config: ResponseConfig) -> SSEStream:
@@ -114,7 +114,8 @@ class ResponsesAPIServer:
                 if config.store and self.enable_store:
                     await self.store.save(response)
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logger.exception(f"Streaming error: {e}")"                await handler.fail(str(e))
+                logger.exception(f"Streaming error: {e}")
+                await handler.fail(str(e))
 
         task = asyncio.create_task(generate())
         self._background_tasks[response.id] = task
@@ -143,6 +144,3 @@ class ResponsesAPIServer:
             response.status = ResponseStatus.CANCELLED
             await self.store.save(response)
         return response
-
-
-"""

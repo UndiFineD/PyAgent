@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -23,59 +18,40 @@ from __future__ import annotations
 Facade for Platform Abstraction.
 Delegates to modularized sub-packages in src/infrastructure/platform/.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from typing import Optional
-except ImportError:
-    from typing import Optional
 
-
-try:
-    from .base import Platform
-except ImportError:
-    from .base import Platform
-
-try:
-    from .cpu import CpuPlatform
-except ImportError:
-    from .cpu import CpuPlatform
-
-try:
-    from .cuda import CudaPlatform
-except ImportError:
-    from .cuda import CudaPlatform
-
-try:
-    from .models import (AttentionBackend, CpuArchitecture, DeviceCapability,
-except ImportError:
-    from .models import (AttentionBackend, CpuArchitecture, DeviceCapability,
-
+from .base import Platform
+from .cpu import CpuPlatform
+from .cuda import CudaPlatform
+from .models import (AttentionBackend, CpuArchitecture, DeviceCapability,
                      DeviceFeature, DeviceInfo, MemoryInfo, PlatformConfig,
                      PlatformType, QuantizationType)
-try:
-    from .registry import PlatformRegistry
-except ImportError:
-    from .registry import PlatformRegistry
-
-try:
-    from .rocm import RocmPlatform
-except ImportError:
-    from .rocm import RocmPlatform
-
-try:
-    from .tpu import TpuPlatform
-except ImportError:
-    from .tpu import TpuPlatform
-
-try:
-    from .xpu import XpuPlatform
-except ImportError:
-    from .xpu import XpuPlatform
-
+from .registry import PlatformRegistry
+from .rocm import RocmPlatform
+from .tpu import TpuPlatform
+from .xpu import XpuPlatform
 
 __all__ = [
-    "PlatformType","    "CpuArchitecture","    "QuantizationType","    "AttentionBackend","    "DeviceFeature","    "DeviceCapability","    "MemoryInfo","    "DeviceInfo","    "PlatformConfig","    "Platform","    "CudaPlatform","    "RocmPlatform","    "TpuPlatform","    "XpuPlatform","    "CpuPlatform","    "PlatformRegistry","]
+    "PlatformType",
+    "CpuArchitecture",
+    "QuantizationType",
+    "AttentionBackend",
+    "DeviceFeature",
+    "DeviceCapability",
+    "MemoryInfo",
+    "DeviceInfo",
+    "PlatformConfig",
+    "Platform",
+    "CudaPlatform",
+    "RocmPlatform",
+    "TpuPlatform",
+    "XpuPlatform",
+    "CpuPlatform",
+    "PlatformRegistry",
+]
 
 # For backward compatibility
 PlatformInterface = Platform
@@ -117,5 +93,3 @@ def select_attention_backend(capability: Optional[DeviceCapability] = None) -> A
     if capability is None:
         capability = get_device_capability()
     return get_current_platform().select_attention_backend(capability)
-
-"""

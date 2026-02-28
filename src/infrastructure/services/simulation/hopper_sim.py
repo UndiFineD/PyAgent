@@ -1,56 +1,32 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
 """
-"""
 Hopper Architecture Matrix Multiplication Simulator for H100 performance estimation.
 Part of the Phase 130 performance optimization suite.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
+from enum import Enum, auto
 
-try:
-    from enum import Enum, auto
-except ImportError:
-    from enum import Enum, auto
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-try:
-    from .infrastructure.services.simulation.core.simulation_core import \
-except ImportError:
-    from src.infrastructure.services.simulation.core.simulation_core import \
-
+from src.core.base.lifecycle.version import VERSION
+from src.infrastructure.services.simulation.core.simulation_core import \
     SimulationCore
-try:
-    from .observability.structured_logger import StructuredLogger
-except ImportError:
-    from src.observability.structured_logger import StructuredLogger
-
+from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
 
@@ -58,8 +34,8 @@ logger = StructuredLogger("HopperSim")
 
 
 class Precision(Enum):
-"""
-Floating point precision modes for simulation.
+    """Floating point precision modes for simulation."""
+
     FP8 = auto()
     FP16 = auto()
     TF32 = auto()
@@ -68,8 +44,8 @@ Floating point precision modes for simulation.
 
 @dataclass
 class HopperConfig:
-"""
-NVIDIA H100 SXM5 specifications.
+    """NVIDIA H100 SXM5 specifications."""
+
     sm_count: int = 132
     tensor_core_per_sm: int = 4
     clock_ghz: float = 1.83
@@ -77,17 +53,18 @@ NVIDIA H100 SXM5 specifications.
     tma_units_per_sm: int = 1
 
 
-
 class HopperSim:
-"""
-Simulates Hopper architecture performance for GEMM operations.
+    """Simulates Hopper architecture performance for GEMM operations."""
+
     def __init__(self, config: HopperConfig = HopperConfig()):
         self.config = config
 
     def estimate_matmul_latency(self, m: int, n: int, k: int, precision: Precision = Precision.FP16) -> float:
-                Estimates the latency of a C = A * B matmul operation.
+        """
+        Estimates the latency of a C = A * B matmul operation.
         Returns estimated time in milliseconds.
-                # Peak TFLOPS (Total across all SMs)
+        """
+        # Peak TFLOPS (Total across all SMs)
         # H100 FP16 Peak is approx 989 TFLOPS with sparsity
         throughput_map = {
             Precision.FP8: 3958.0,  # Dense PFLOPS
@@ -129,12 +106,17 @@ Simulates Hopper architecture performance for GEMM operations.
         total_ms = (latency_qkv + latency_attn) / num_gpus  # Simplified linear scaling
 
         return {
-            "qkv_latency_ms": latency_qkv,"            "m_params": (d_model * d_model * 12) / 1e6,  # Parameter count estimate"            "est_step_ms": total_ms,"            "tflops_utilization": 0.45 * 100,  # Typical real-world efficiency"        }
+            "qkv_latency_ms": latency_qkv,
+            "m_params": (d_model * d_model * 12) / 1e6,  # Parameter count estimate
+            "est_step_ms": total_ms,
+            "tflops_utilization": 0.45 * 100,  # Typical real-world efficiency
+        }
 
     def run_swarm_stress_test(self, agent_count: int, steps: int = 10) -> None:
-"""
-Runs a swarm stress test with stochastic failures (Phase 181).
+        """Runs a swarm stress test with stochastic failures (Phase 181)."""
+
         logger.info(f"=== SWARM STRESS TEST: {agent_count} AGENTS ===")
+
         core = SimulationCore()
         active_agents = agent_count
 
@@ -145,8 +127,11 @@ Runs a swarm stress test with stochastic failures (Phase 181).
 
             bar = core.format_progress_bar(step, steps)
             logger.info(f"Step {step:02d}: {bar} | Failed: {len(failures)} | Alive: {active_agents}")
+
         logger.info(f"=== TEST COMPLETE. Final Resilience: {active_agents / agent_count * 100:.1f}% ===")
 
-if __name__ == "__main__":"    sim = HopperSim()
+
+if __name__ == "__main__":
+    sim = HopperSim()
     result = sim.simulate_distributed_training(32, 2048, 4096, 8)
     print(f"Hopper Simulation Result: {result}")

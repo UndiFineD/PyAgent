@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
-
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Mistral Parser
+
 """
 Mistral AI tool call parser.
 """
 
-""
+from __future__ import annotations
+
 import json
 from typing import Optional, Tuple
 
@@ -32,13 +28,16 @@ from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
                    ToolParserType)
 
 
-
 class MistralToolParser(ToolParser):
-        Mistral AI tool call parser.
+    """
+    Mistral AI tool call parser.
 
     Format:
-    [TOOL_CALLS] [{"name": "...", "arguments": {...}}]"    
+    [TOOL_CALLS] [{"name": "...", "arguments": {...}}]
+    """
+
     TOOL_CALLS_TAG = "[TOOL_CALLS]"
+
     @property
     def parser_type(self) -> ToolParserType:
         return ToolParserType.MISTRAL
@@ -63,15 +62,19 @@ class MistralToolParser(ToolParser):
 
                 if isinstance(tool_list, list):
                     for i, tool_data in enumerate(tool_list):
-                        name = tool_data.get("name", "")"                        args = tool_data.get("arguments", {})"
+                        name = tool_data.get("name", "")
+                        args = tool_data.get("arguments", {})
+
                         tool_call = ToolCall(
-                            id=tool_data.get("id", self._generate_call_id(i)),"                            name=name,
+                            id=tool_data.get("id", self._generate_call_id(i)),
+                            name=name,
                             arguments=args,
                             raw_arguments=json.dumps(args),
                         )
                         result.tool_calls.append(tool_call)
             except json.JSONDecodeError as e:
                 result.errors.append(f"JSON parse error: {e}")
+
         return result
 
     def parse_streaming(
@@ -89,8 +92,10 @@ class MistralToolParser(ToolParser):
         if state.in_tool_call:
             # Track array completion
             for char in delta:
-                if char == "[":"                    state.brace_depth += 1
-                elif char == "]":"                    state.brace_depth -= 1
+                if char == "[":
+                    state.brace_depth += 1
+                elif char == "]":
+                    state.brace_depth -= 1
 
                     if state.brace_depth == 0:
                         # Complete array
@@ -101,9 +106,12 @@ class MistralToolParser(ToolParser):
                             tool_list = json.loads(tool_json)
                             if isinstance(tool_list, list):
                                 for i, tool_data in enumerate(tool_list):
-                                    name = tool_data.get("name", "")"                                    args = tool_data.get("arguments", {})"
+                                    name = tool_data.get("name", "")
+                                    args = tool_data.get("arguments", {})
+
                                     tool_call = ToolCall(
-                                        id=tool_data.get("id", self._generate_call_id(i)),"                                        name=name,
+                                        id=tool_data.get("id", self._generate_call_id(i)),
+                                        name=name,
                                         arguments=args,
                                         raw_arguments=json.dumps(args),
                                     )
@@ -116,4 +124,5 @@ class MistralToolParser(ToolParser):
 
                         state.in_tool_call = False
                         state.buffer = ""
-return state, completed_tool
+
+        return state, completed_tool

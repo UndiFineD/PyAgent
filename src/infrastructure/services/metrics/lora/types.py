@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -21,34 +16,18 @@ from __future__ import annotations
 """
 LoRA Stats Types - Enums and DataClasses for LoRA adapter tracking.
 """
-try:
 
-"""
+from __future__ import annotations
+
 import time
-except ImportError:
-    import time
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from enum import Enum, auto
-except ImportError:
-    from enum import Enum, auto
-
-try:
-    from typing import Dict, Optional, Tuple
-except ImportError:
-    from typing import Dict, Optional, Tuple
-
-
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Dict, Optional, Tuple
 
 
 class LoRALoadState(Enum):
-"""
-State of a LoRA adapter.
+    """State of a LoRA adapter."""
+
     NOT_LOADED = auto()
     LOADING = auto()
     LOADED = auto()
@@ -56,10 +35,9 @@ State of a LoRA adapter.
     FAILED = auto()
 
 
-
 class RequestStatus(Enum):
-"""
-Status of a request in the system.
+    """Status of a request in the system."""
+
     WAITING = auto()
     RUNNING = auto()
     PREEMPTED = auto()
@@ -70,8 +48,8 @@ Status of a request in the system.
 
 @dataclass
 class LoRAAdapterInfo:
-"""
-Information about a LoRA adapter.
+    """Information about a LoRA adapter."""
+
     adapter_id: str
     rank: int
     alpha: float
@@ -83,17 +61,19 @@ Information about a LoRA adapter.
     use_count: int = 0
 
     def mark_used(self) -> None:
-"""
-Mark adapter as used.        self.last_used = time.time()
+        """Mark adapter as used."""
+        self.last_used = time.time()
         self.use_count += 1
 
 
 @dataclass
 class LoRARequestState:
-        State of a LoRA request.
+    """
+    State of a LoRA request.
 
     Tracks per-request LoRA adapter usage and timing.
-    
+    """
+
     request_id: str
     adapter_id: str
     adapter_rank: int
@@ -107,37 +87,39 @@ class LoRARequestState:
 
     @property
     def load_latency(self) -> Optional[float]:
-"""
-Time spent loading the adapter.        if self.load_start_time and self.load_end_time:
+        """Time spent loading the adapter."""
+        if self.load_start_time and self.load_end_time:
             return self.load_end_time - self.load_start_time
         return None
 
     @property
     def queue_latency(self) -> Optional[float]:
-"""
-Time spent waiting in queue.        if self.execution_start_time:
+        """Time spent waiting in queue."""
+        if self.execution_start_time:
             return self.execution_start_time - self.queued_time
         return None
 
     @property
     def execution_latency(self) -> Optional[float]:
-"""
-Time spent executing.        if self.execution_start_time and self.execution_end_time:
+        """Time spent executing."""
+        if self.execution_start_time and self.execution_end_time:
             return self.execution_end_time - self.execution_start_time
         return None
 
     @property
     def total_latency(self) -> Optional[float]:
-"""
-Total request latency.        if self.execution_end_time:
+        """Total request latency."""
+        if self.execution_end_time:
             return self.execution_end_time - self.queued_time
         return None
 
 
 @dataclass
 class LoRAStats:
-        Aggregate statistics for LoRA operations.
-    
+    """
+    Aggregate statistics for LoRA operations.
+    """
+
     # Request counts
     total_requests: int = 0
     active_requests: int = 0
@@ -162,5 +144,3 @@ class LoRAStats:
     # Per-adapter stats
     adapter_use_counts: Dict[str, int] = field(default_factory=dict)
     adapter_request_counts: Dict[str, int] = field(default_factory=dict)
-
-"""

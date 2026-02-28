@@ -1,66 +1,53 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
 """
+MockAgent for a community-submitted plugin.
+Demonstrates how to wrap a Core and interact with the Fleet.
 """
-Minimal parser-safe MockAgent shim used during repository repair.
 
-"""
-This file provides a tiny, well-typed MockAgent class exposing the
-basic API expected by consumers. It intentionally avoids heavy
-dependencies and defers to `mock_core` where available.
-"""
-from typing import Any, Dict
+from __future__ import annotations
 
-try:
-    import logging
-except Exception:
-    class _Logger:
-        def info(self, *a, **k):
-            pass
-            logging = _Logger()
+import logging
 
-            try:
-            from .mock_core import MockCore
-            except Exception:
-    class MockCore:
-        def __init__(self, multiplier: float = 1.0) -> None:
-            self.multiplier = multiplier
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
-        def format_mock_response(self, task: str) -> str:
-            return task
+from .mock_core import MockCore
 
-        def get_metadata(self) -> Dict[str, Any]:
-            return {"mock_core": True}
+__version__ = VERSION
 
 
-__all__ = ["MockAgent"]
+class MockAgent(BaseAgent):
+    """A mock agent that shows community developers the recommended pattern."""
 
-
-class MockAgent:
-    def __init__(self, arg_path: str | None = None) -> None:
-        self.core = MockCore(multiplier=1.0)
+    def __init__(self, arg_path: str = "mock_config.json") -> None:
+        # We don't strictly need a real config file for this mock
+        super().__init__(arg_path)
+        self.core = MockCore(multiplier=1.5)
+        logging.info("MockAgent initialized with MockCore.")
 
     def run(self, task: str) -> str:
+        """Main entry point for agent logic."""
         logging.info(f"MockAgent handling task: {task}")
         processed = self.core.format_mock_response(task)
+
+        # Accessing fleet-wide tools if registry is available
+        # result = self.call_tool("SearchAgent", query="python patterns")
+
         return f"MockAgent processed your task: {processed}"
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict:
         return self.core.get_metadata()

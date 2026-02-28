@@ -1,30 +1,26 @@
 #!/usr/bin/env python3
-
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Granite Parser
+
 """
 IBM Granite tool call parser.
 """
 
-"""
+from __future__ import annotations
+
 import json
 from typing import Optional, Tuple
 
@@ -32,15 +28,19 @@ from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
                    ToolParserType)
 
 
-
 class GraniteToolParser(ToolParser):
-        IBM Granite tool call parser.
+    """
+    IBM Granite tool call parser.
 
     Format:
     <|tool_call|>
-    {"name": "...", "arguments": {...}}"    <|end_of_text|>
-    
-    TOOL_CALL_TAG = "<|tool_call|>""    END_TAG = "<|end_of_text|>""
+    {"name": "...", "arguments": {...}}
+    <|end_of_text|>
+    """
+
+    TOOL_CALL_TAG = "<|tool_call|>"
+    END_TAG = "<|end_of_text|>"
+
     @property
     def parser_type(self) -> ToolParserType:
         return ToolParserType.GRANITE
@@ -59,9 +59,12 @@ class GraniteToolParser(ToolParser):
         for i, part in enumerate(parts[1:]):
             # Remove end tag
             tool_json = part.replace(self.END_TAG, "").strip()
+
             try:
                 data = json.loads(tool_json)
-                name = data.get("name", "")"                args = data.get("arguments", {})"
+                name = data.get("name", "")
+                args = data.get("arguments", {})
+
                 tool_call = ToolCall(
                     id=self._generate_call_id(i),
                     name=name,
@@ -71,6 +74,7 @@ class GraniteToolParser(ToolParser):
                 result.tool_calls.append(tool_call)
             except json.JSONDecodeError as e:
                 result.errors.append(f"JSON parse error: {e}")
+
         return result
 
     def parse_streaming(
@@ -92,7 +96,9 @@ class GraniteToolParser(ToolParser):
 
             try:
                 data = json.loads(tool_json)
-                name = data.get("name", "")"                args = data.get("arguments", {})"
+                name = data.get("name", "")
+                args = data.get("arguments", {})
+
                 completed_tool = ToolCall(
                     id=self._generate_call_id(state.tool_call_index),
                     name=name,
@@ -108,5 +114,3 @@ class GraniteToolParser(ToolParser):
             state.in_tool_call = False
 
         return state, completed_tool
-
-"""

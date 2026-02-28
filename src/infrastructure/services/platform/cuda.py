@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -23,7 +18,8 @@ from __future__ import annotations
 NVIDIA CUDA platform implementation.
 """
 
-"""
+from __future__ import annotations
+
 import logging
 from typing import Set
 
@@ -34,10 +30,9 @@ from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
 logger = logging.getLogger(__name__)
 
 
-
 class CudaPlatform(Platform):
-"""
-NVIDIA CUDA platform implementation.
+    """NVIDIA CUDA platform implementation."""
+
     _torch = None
 
     @classmethod
@@ -55,9 +50,9 @@ NVIDIA CUDA platform implementation.
 
     def _get_torch(self):
         if self._torch is None:
-        import torch
+            import torch
 
-        self._torch = torch
+            self._torch = torch
         return self._torch
 
     def get_device_count(self) -> int:
@@ -113,8 +108,10 @@ NVIDIA CUDA platform implementation.
     def get_driver_version(self) -> str:
         torch = self._get_torch()
         try:
-            return torch.version.cuda or "unknown""        except (AttributeError, RuntimeError):
+            return torch.version.cuda or "unknown"
+        except (AttributeError, RuntimeError):
             return "unknown"
+
     def get_supported_quantizations(self) -> Set[QuantizationType]:
         cap = self.get_device_capability()
         quants = {QuantizationType.NONE, QuantizationType.INT8}

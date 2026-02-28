@@ -1,30 +1,25 @@
 #!/usr/bin/env python3
-
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # Copyright (c) 2026 PyAgent Authors. All rights reserved.
 # Phase 41: Tool Parser Framework - Model-Specific Parsing
+
 """
 Tool/function call parsing with model-specific parsers.
 
-"""
-Inspired by vLLM's tool_parsers patterns, this module provides:'- Model-specific tool call parsing (Hermes, Llama3, Mistral, etc.)
+Inspired by vLLM's tool_parsers patterns, this module provides:
+- Model-specific tool call parsing (Hermes, Llama3, Mistral, etc.)
 - Streaming tool call extraction
 - JSON schema validation
 - Multi-tool support
@@ -40,31 +35,40 @@ The actual implementations have been split into:
 - parser/ - Base classes and parser implementations
 - validator/ - Schema validation
 - registry/ - Parser registry and streaming parser
+"""
+
+from __future__ import annotations
 
 # Re-export from parser module
-try:
-    from .parser import (  # Enums; Data Classes; Base Class; Parsers; Utilities
-except ImportError:
-    from .parser import ( # Enums; Data Classes; Base Class; Parsers; Utilities
-
-    HermesToolParser, JsonToolParser, Llama3ToolParser,
-    ToolCall, ToolParseResult, extract_json_from_text)
+from .parser import (  # Enums; Data Classes; Base Class; Parsers; Utilities
+    GraniteToolParser, HermesToolParser, JsonToolParser, Llama3ToolParser,
+    MistralToolParser, StreamingToolState, ToolCall, ToolCallStatus,
+    ToolParameter, ToolParser, ToolParseResult, ToolParserType,
+    extract_json_from_text)
 # Re-export from registry module
-try:
-    from .registry import StreamingToolParser, ToolParserRegistry, parse_tool_call
-except ImportError:
-    from .registry import StreamingToolParser, ToolParserRegistry, parse_tool_call
-
+from .registry import StreamingToolParser, ToolParserRegistry, parse_tool_call
 # Re-export from validator module
-try:
-    from .validator import (validate_argument_type, validate_tool_call,
-except ImportError:
-    from .validator import (validate_argument_type, validate_tool_call,
-
+from .validator import (validate_argument_type, validate_tool_call,
                         validate_tool_schema)
 
 __all__ = [
     # Enums
-    "ToolCall","    "ToolParseResult","    "JsonToolParser","    "HermesToolParser","    "Llama3ToolParser","    "ToolParserRegistry","    # Streaming
-    "StreamingToolParser","    # Utilities
-    "parse_tool_call","    "extract_json_from_text","    "validate_tool_call","    "validate_tool_schema","    "validate_argument_type","]
+    "ToolCall",
+    "ToolParseResult",
+    "JsonToolParser",
+    "HermesToolParser",
+    "Llama3ToolParser",
+    "ToolParserRegistry",
+                        """
+                        Module: tool_parser_framework
+                        Framework for parsing and managing tool definitions in PyAgent.
+                        """
+    # Streaming
+    "StreamingToolParser",
+    # Utilities
+    "parse_tool_call",
+    "extract_json_from_text",
+    "validate_tool_call",
+    "validate_tool_schema",
+    "validate_argument_type",
+]
