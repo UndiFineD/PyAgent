@@ -1,58 +1,28 @@
 #!/usr/bin/env python3
 
-
+"""
+Streaming.py module.
+"""
+# Copyright 2026 PyAgent Authors
+# Real-time stats streaming engine.
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-try:
-    import contextlib
-"""
-except ImportError:
-
-"""
 import contextlib
+import logging
+from typing import Any, Callable
 
-try:
-    import logging
-except ImportError:
-    import logging
-
-try:
-    from typing import Any, Callable
-except ImportError:
-    from typing import Any, Callable
-
-
-try:
-    from .metrics import Metric
-except ImportError:
-    from .metrics import Metric
-
-try:
-    from .observability_core import StreamingConfig
-except ImportError:
-    from .observability_core import StreamingConfig
-
+from .metrics import Metric
+from .observability_core import StreamingConfig
 
 logger = logging.getLogger(__name__)
 
 
-
 class StatsStream:
-"""
-Represents a real-time stats stream.    def __init__(self, name: str, buffer_size: int = 1000) -> None:        self.name = name
+    """Represents a real-time stats stream."""
+
+    def __init__(self, name: str, buffer_size: int = 1000) -> None:
+        self.name = name
 
         self.buffer_size = buffer_size
 
@@ -67,8 +37,8 @@ Represents a real-time stats stream.    def __init__(self, name: str, buffer_siz
             self.buffer.pop(0)
 
 
-
 class StatsStreamManager:
+    """Manages real-time stats streaming."""
 
     def __init__(self, config: StreamingConfig | None = None) -> None:
         self.config = config
@@ -91,10 +61,9 @@ class StatsStreamManager:
         self.subscribers.setdefault(name, []).append(callback)
 
 
-
 class StatsStreamer:
-"""
-Real-time stats streaming via WebSocket (simulated).
+    """Real-time stats streaming via WebSocket (simulated)."""
+
     def __init__(self, config: StreamingConfig) -> None:
         self.config = config
         self.subscribers: list[str] = []

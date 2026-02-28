@@ -1,48 +1,12 @@
-#!/usr/bin/env python3
+
+"""
+Rust bridge profiler.py module.
+"""
+# Copyright 2026 PyAgent Authors
+# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
+
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-"""
-"""
-Rust Bridge Profiler - Profiling Rust-accelerated functions
-
-"""
-
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-USAGE:
-- Import the module and instantiate RustBridgeProfiler.
-- Call enable() to monkey-patch exported functions from the rust_core extension (if available).
-- Use get_report() to retrieve a markdown-formatted profiling report, and log_summary() to emit a short top-5 summary to logs.
-
-WHAT IT DOES:
-- Detects whether the rust_core extension is importable and, if present, wraps all public callable attributes with a nanosecond-precision timing wrapper.
-- Tracks per-function call counts and cumulative execution time (nanoseconds) in an internal stats structure.
-- Provides human-readable outputs: a detailed markdown report (get_report) and concise logging of the top consumers (log_summary).
-
-WHAT IT SHOULD DO BETTER:
-- Provide opt-in sampling, context-aware tagging, and non-blocking/asynchronous reporting to avoid adding overhead in latency-sensitive paths.
-- Preserve original function metadata (name, docstring, signature) using functools.wraps to improve debugging and stack traces.
-- Offer persistence/export (e.g., JSON/Prometheus) and configurable aggregation windows, plus safe unpatch/unregister to restore original functions.
-- Add thread-safety for stats updates (use threading.Lock or atomic counters) and better handling of non-callable attributes and C-extension edge cases.
-
-FILE CONTENT SUMMARY:
-Rust bridge profiler.py module.
-# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
-"""
 import logging
 import time
 from collections import defaultdict
@@ -57,151 +21,82 @@ except ImportError:
     _RUST_AVAILABLE = False
 
 
-
 class RustBridgeProfiler:
-        Orchestrates the profiling of the rust_core.pyd binary.
+    """
+    Orchestrates the profiling of the rust_core.pyd binary.
     Collects execution counts and timing metrics for all exported Rust functions.
-    
+    """
+
     def __init__(self) -> None:
-        self.stats: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"calls": 0, "total_ns": 0})"        self._is_active = False
+        self.stats: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"calls": 0, "total_ns": 0})
+        self._is_active = False
 
     def enable(self) -> None:
-"""
-Monkey-patches rust_core functions with profiling wrappers.        if not _RUST_AVAILABLE or self._is_active:
+        """Monkey-patches rust_core functions with profiling wrappers."""
+        if not _RUST_AVAILABLE or self._is_active:
             return
 
         for name in dir(rust_core):
-            if not name.startswith("_"):"                func = getattr(rust_core, name)
+            if not name.startswith("_"):
+                func = getattr(rust_core, name)
                 if callable(func):
                     setattr(rust_core, name, self._wrap_function(func, name))
 
         self._is_active = True
         logging.info("RustBridgeProfiler: Enabled (High-precision profiling active).")
-    def _wrap_function(self, fn: Callable[..., Any], fname: str) -> Callable[..., Any]:
-"""
-Wraps a function with nanosecond-precision timing.
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
+
+    def _wrap_function(self, fn: Callable, fname: str) -> Callable:
+        """Wraps a function with nanosecond-precision timing."""
+
+        def wrapper(*args, **kwargs):
             start = time.perf_counter_ns()
             try:
                 result = fn(*args, **kwargs)
                 duration = time.perf_counter_ns() - start
-                self.stats[fname]["calls"] += 1"                self.stats[fname]["total_ns"] += duration"                return result
+                self.stats[fname]["calls"] += 1
+                self.stats[fname]["total_ns"] += duration
+                return result
             except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 # Still record the time even if it failed
                 duration = time.perf_counter_ns() - start
-                self.stats[fname]["calls"] += 1"                self.stats[fname]["total_ns"] += duration"                raise e
+                self.stats[fname]["calls"] += 1
+                self.stats[fname]["total_ns"] += duration
+                raise e
 
         return wrapper
 
     def get_report(self) -> str:
-"""
-Generates a markdown report of the profiling results.        if not self.stats:
+        """Generates a markdown report of the profiling results."""
+        if not self.stats:
             return "No profiling data collected."
-        sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        total_calls = sum(s["calls"] for _, s in sorted_stats)"        total_time_ms = sum(s["total_ns"] for _, s in sorted_stats) / 1e6
+
+        sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)
+        total_calls = sum(s["calls"] for _, s in sorted_stats)
+        total_time_ms = sum(s["total_ns"] for _, s in sorted_stats) / 1e6
+
         report = [
-            "##  Rust Bridge Profiling Report","            f"- **Functions Profiled**: {len(sorted_stats)}","            f"- **Total Invocations**: {total_calls}","            f"- **Cumulative Execution Time**: {total_time_ms:.3f} ms","            "","            "| Function | Calls | Total (ms) | Avg (μs) |","            "| :--- | :---: | :---: | :---: |","        ]
+            "## ≡ƒªÇ Rust Bridge Profiling Report",
+            f"- **Functions Profiled**: {len(sorted_stats)}",
+            f"- **Total Invocations**: {total_calls}",
+            f"- **Cumulative Execution Time**: {total_time_ms:.3f} ms",
+            "",
+            "| Function | Calls | Total (ms) | Avg (╬╝s) |",
+            "| :--- | :---: | :---: | :---: |",
+        ]
 
         for name, s in sorted_stats:
-            avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            report.append(f"| `{name}` | {s['calls']} | {s['total_ns'] / 1e6:.3f} | {avg_us:.2f} |")"
-        return "\\n".join(report)
+            avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0
+            report.append(f"| `{name}` | {s['calls']} | {s['total_ns'] / 1e6:.3f} | {avg_us:.2f} |")
+
+        return "\n".join(report)
+
     def log_summary(self) -> None:
-"""
-Logs a summary of the top 5 most expensive functions.        if not self.stats:
+        """Logs a summary of the top 5 most expensive functions."""
+        if not self.stats:
             return
 
-        sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        logging.info("RustBridgeProfiler: Pulse check complete.")"        for name, s in sorted_stats[:5]:
-            avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            logging.info(f" - {name}: {s['calls']} calls, {avg_us:.1f}μs avg")"'# Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
-"""
-import logging
-import time
-from collections import defaultdict
-from typing import Any, Callable, Dict
-
-try:
-    import rust_core
-
-    _RUST_AVAILABLE = True
-except ImportError:
-    rust_core = None
-    _RUST_AVAILABLE = False
-
-
-
-class RustBridgeProfiler:
-        Orchestrates the profiling of the rust_core.pyd binary.
-    Collects execution counts and timing metrics for a""
-ll exported Rust functions.""
-def __init__(self) -> None:
-        self.stats: Dict[str, Dict[str, Any]] = defaultdict(lambda: {"calls": 0, "total_ns": 0})"        self._is_active = False
-
-    def enable(self) -> None:
-"""
-Monkey-patches rust_core functions with profiling wrappers.        if not _RUST_AVAILABLE or self._is_active:
-            return
-
-        for name in dir(rust_core):
-            if not name.startswith("_"):"                func = getattr(rust_core, name)
-                if callable(func):
-                    setattr(rust_core, name, self._wrap_function(func, name))
-
-        self._is_active = True
-        logging.info("RustBridgeProfiler: Enabled (High-precision profiling active).")
-    def _wrap_function(self, fn: Callable[..., Any], fname: str) -> Callable[..., Any]:
-"""
-Wraps a function with nanosecond-precision timing.
-        def wrapper(*args: Any, **kwargs: Any) -> Any:
-            start = time.perf_counter_ns()
-            try:
-                result = fn(*args, **kwargs)
-                duration = time.perf_counter_ns() - start
-                self.stats[fname]["calls"] += 1"                self.stats[fname]["total_ns"] += duration"                return result
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                # Still record the time even if it failed
-                duration = time.perf_counter_ns() - start
-                self.stats[fname]["calls"] += 1"                self.stats[fname]["total_ns"] += duration"                raise e
-
-        return wrapper
-
-    def get_report(self) -> str:
-"""
-Generates a markdown report of the profiling results.        if not self.stats:
-            return "No profiling data collected."
-        sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        total_calls = sum(s["calls"] for _, s in sorted_stats)"        total_time_ms = sum(s["total_ns"] for _, s in sorted_stats) / 1e6
-        report = [
-            "##  Rust Bridge Profiling Report","            f"- **Functions Profiled**: {len(sorted_stats)}","            f"- **Total Invocations**: {total_calls}","            f"- **Cumulative Execution Time**: {total_time_ms:.3f} ms","            "","            "| Function | Calls | Total (ms) | Avg (μs) |","            "| :--- | :---: | :---: | :---: |","        ]
-
-        for name, s in sorted_stats:
-            avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            report.append(f"| `{name}` | {s['calls']} | {s['total_ns'] / 1e6:.3f} | {avg_us:.2f} |")"
-        return "\\n".join(report)
-    def log_summary(self) -> None:
-"""
-Logs a summary of the top 5 most expensive functions.        if not self.stats:
-            return
-
-        sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)"        logging.info("RustBridgeProfiler: Pulse check complete.")"        for name, s in sorted_stats[:5]:
-            avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0"            logging.info(f" - {name}: {s['calls']} calls, {avg_us:.1f}μs avg")"
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
+        sorted_stats = sorted(self.stats.items(), key=lambda x: x[1]["total_ns"], reverse=True)
+        logging.info("RustBridgeProfiler: Pulse check complete.")
+        for name, s in sorted_stats[:5]:
+            avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0
+            logging.info(f" - {name}: {s['calls']} calls, {avg_us:.1f}╬╝s avg")

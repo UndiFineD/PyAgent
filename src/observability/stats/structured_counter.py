@@ -1,58 +1,40 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+StructuredCounter - Dataclass-based structured metric counters.
 
-"""
-"""
-StructuredCounter - Dataclass-based structured metric counters.Inspired by vLLM's CompilationCounter pattern for tracking detailed metrics'with snapshot/diff capabilities and testing support.
+Inspired by vLLM's CompilationCounter pattern for tracking detailed metrics
+with snapshot/diff capabilities and testing support.
 
-"""
 Phase 24: Advanced Observability & Parsing
+"""
 
-try:
-    import copy
-except ImportError:
-    import copy
+from __future__ import annotations
 
-try:
-    import functools
-except ImportError:
-    import functools
-
-try:
-    from contextlib import contextmanager
-except ImportError:
-    from contextlib import contextmanager
-
-try:
-    from dataclasses import dataclass, fields
-except ImportError:
-    from dataclasses import dataclass, fields
-
-try:
-    from typing import Any, Generator, TypeVar
-except ImportError:
-    from typing import Any, Generator, TypeVar
-
+import copy
+from contextlib import contextmanager
+from dataclasses import dataclass, fields
+from typing import Any, Generator, TypeVar
 
 T = TypeVar("T", bound="StructuredCounter")
 
+
 @dataclass
 class StructuredCounter:
-        Base class for structured metric counters.
+    """
+    Base class for structured metric counters.
 
     Provides snapshot, diff, and testing utilities for tracking
     detailed metrics across operations.
@@ -71,15 +53,15 @@ class StructuredCounter:
         with counter.expect(requests_processed=1, cache_hits=1):
             counter.requests_processed += 1
             counter.cache_hits += 1
-    
-    def clone(self: T) -> T:
-"""
-Create a deep copy of this counter.        return copy.deepcopy(self)
+    """
 
+    def clone(self: T) -> T:
+        """Create a deep copy of this counter."""
+        return copy.deepcopy(self)
 
     def reset(self) -> None:
-"""
-Reset all counter fields to their default values.        def reset_field(f: Any) -> None:
+        """Reset all counter fields to their default values."""
+        for f in fields(self):
             if f.default is not f.default_factory:
                 setattr(self, f.name, f.default if f.default is not dataclass else 0)
             elif f.default_factory is not dataclass:
@@ -87,72 +69,75 @@ Reset all counter fields to their default values.        def reset_field(f: Any)
             else:
                 setattr(self, f.name, 0)
 
-        list(map(reset_field, fields(self)))
-
     def diff(self: T, other: T) -> dict[str, int]:
-                Compute the difference between this counter and another.
+        """
+        Compute the difference between this counter and another.
 
         Args:
             other: The baseline counter to compare against
 
         Returns:
             Dictionary of field names to their differences (self - other)
-                def calculate_diff(acc: dict[str, int], f: Any) -> dict[str, int]:
+        """
+        result = {}
+        for f in fields(self):
             current = getattr(self, f.name)
             baseline = getattr(other, f.name)
             if isinstance(current, (int, float)) and isinstance(baseline, (int, float)):
-                diff_val = current - baseline
-                if diff_val != 0:
-                    acc[f.name] = diff_val
-            return acc
-
-        return functools.reduce(calculate_diff, fields(self), {})
+                diff = current - baseline
+                if diff != 0:
+                    result[f.name] = diff
+        return result
 
     def as_dict(self) -> dict[str, Any]:
-"""
-Convert counter to dictionary regarding current values.        return {f.name: getattr(self, f.name) for f in fields(self)}
+        """Convert counter to dictionary."""
+        return {f.name: getattr(self, f.name) for f in fields(self)}
 
     @contextmanager
     def expect(self, **kwargs: int) -> Generator[None, None, None]:
-                Context manager for testing expected counter changes.
+        """
+        Context manager for testing expected counter changes.
 
         Args:
             **kwargs: Expected changes for each counter field
 
         Raises:
-            AssertionError: If actual changes don't match expected'
+            AssertionError: If actual changes don't match expected
+
         Example:
             with counter.expect(cache_hits=2, cache_misses=1):
                 # ... code that should increment cache_hits by 2, cache_misses by 1
-                old = self.clone()
+        """
+        old = self.clone()
         yield
-
-        def check_expected(item: tuple[str, int]) -> None:
-            name, expected_diff = item
+        for name, expected_diff in kwargs.items():
             actual_diff = getattr(self, name) - getattr(old, name)
             assert actual_diff == expected_diff, (
-                f"{name} not as expected: before={getattr(old, name)}, ""                f"after={getattr(self, name)}, expected_diff={expected_diff}, ""                f"actual_diff={actual_diff}""            )
-
-        list(map(check_expected, kwargs.items()))
+                f"{name} not as expected: before={getattr(old, name)}, "
+                f"after={getattr(self, name)}, expected_diff={expected_diff}, "
+                f"actual_diff={actual_diff}"
+            )
 
     def increment(self, field_name: str, amount: int = 1) -> None:
-"""
-Increment a counter field by the given amount.        current = getattr(self, field_name)
+        """Increment a counter field by the given amount."""
+        current = getattr(self, field_name)
         setattr(self, field_name, current + amount)
 
     def decrement(self, field_name: str, amount: int = 1) -> None:
-"""
-Decrement a counter field by the given amount.        current = getattr(self, field_name)
+        """Decrement a counter field by the given amount."""
+        current = getattr(self, field_name)
         setattr(self, field_name, current - amount)
 
 
 @dataclass
 class CompilationCounter(StructuredCounter):
-        Counter for tracking compilation-related metrics.
+    """
+    Counter for tracking compilation-related metrics.
 
-    Based""
-on vLLM's compilation counter pattern."""'
-num_models_seen: int = 0
+    Based on vLLM's compilation counter pattern.
+    """
+
+    num_models_seen: int = 0
     num_graphs_seen: int = 0
     num_piecewise_graphs_seen: int = 0
     num_piecewise_capturable_graphs_seen: int = 0
@@ -163,8 +148,8 @@ num_models_seen: int = 0
 
 @dataclass
 class RequestCounter(StructuredCounter):
-"""
-Counter for tracking request-related metrics.
+    """Counter for tracking request-related metrics."""
+
     requests_received: int = 0
     requests_completed: int = 0
     requests_failed: int = 0
@@ -176,8 +161,8 @@ Counter for tracking request-related metrics.
 
 @dataclass
 class CacheCounter(StructuredCounter):
-"""
-Counter for tracking cache-related metrics.
+    """Counter for tracking cache-related metrics."""
+
     cache_hits: int = 0
     cache_misses: int = 0
     cache_evictions: int = 0
@@ -186,14 +171,15 @@ Counter for tracking cache-related metrics.
 
     @property
     def hit_ratio(self) -> float:
-"""
-Compute cache hit ratio.        total = self.cache_hits + self.cache_misses
-        return self.cache_hits / total if total > 0 else """0.0"""
+        """Compute cache hit ratio."""
+        total = self.cache_hits + self.cache_misses
+        return self.cache_hits / total if total > 0 else 0.0
+
 
 @dataclass
-class PoolCounter(StructuredCount""
-er)""":"""    ""
-Counter for tracking object pool metrics.
+class PoolCounter(StructuredCounter):
+    """Counter for tracking object pool metrics."""
+
     objects_acquired: int = 0
     objects_released: int = 0
     objects_created: int = 0
@@ -203,16 +189,14 @@ Counter for tracking object pool metrics.
 
     @property
     def active_objects(self) -> int:
-"""
-Number of objects currently in use."""   """
-return self.objects_acquired - self.objec""
-ts_released""
+        """Number of objects currently in use."""
+        return self.objects_acquired - self.objects_released
+
 
 @dataclass
-class QueueCounter(""
-Struct""
-uredCounter):"""    "
-Counter for tracking queue metrics.
+class QueueCounter(StructuredCounter):
+    """Counter for tracking queue metrics."""
+
     items_enqueued: int = 0
     items_dequeued: int = 0
     items_dropped: int = 0
@@ -223,45 +207,20 @@ Counter for tracking queue metrics.
 # Global counters
 compilation_counter = CompilationCounter()
 request_counter = RequestCounter()
-cache_counter = Cac""
-heCounter()""
-def get_all_counters() -> dict[""
-str, Stru""
-cturedCounter]:"""    "
-Get all global counters.    return {
-        "compilation": compilation_counter,"        "request": request_counter,"        "cache": cache_counter,"    }
+cache_counter = CacheCounter()
 
 
-def reset_all_counters() ->""
-None:"""  """  ""
-Reset all global counters.    compilation_counter.reset()
+def get_all_counters() -> dict[str, StructuredCounter]:
+    """Get all global counters."""
+    return {
+        "compilation": compilation_counter,
+        "request": request_counter,
+        "cache": cache_counter,
+    }
+
+
+def reset_all_counters() -> None:
+    """Reset all global counters."""
+    compilation_counter.reset()
     request_counter.reset()
     cache_counter.reset()
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""
-
-"""

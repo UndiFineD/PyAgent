@@ -1,36 +1,45 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-"""
-ReportAnnotation - Annotate and enrich error reports.
-"""
-try:
+"""Auto-extracted class from generate_agent_reports.py"""
 
-"""
-from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+from __future__ import annotations
 
+import time
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-# TODO ReportAnnotation class
+
+@dataclass
 class ReportAnnotation:
-    ""
-ReportAnnotation class.  ""
-pass
+    """Annotation on a report.
+    Attributes:
+        annotation_id: Unique annotation identifier.
+        report_id: Associated report ID.
+        author: Author of annotation.
+        content: Annotation content.
+        line_number: Line number if applicable.
+        created_at: Creation timestamp.
+    """
+
+    annotation_id: str
+    report_id: str
+    author: str
+    content: str
+    line_number: int | None = None
+    created_at: float = field(default_factory=time.time)  # type: ignore[assignment]

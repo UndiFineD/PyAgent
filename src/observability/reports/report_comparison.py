@@ -1,87 +1,44 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-"""
-ReportComparison - Data model for comparing two reports
+"""Auto-extracted class from generate_agent_reports.py"""
 
-"""
+from __future__ import annotations
 
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
+from dataclasses import dataclass, field
 
-USAGE:
-    Instantiate ReportComparison to represent differences between two reports:
-        comparison = ReportComparison(
-            old_path="old_report.md",
-            new_path="new_report.md",
-            added=["- New section"],
-            removed=["- Old section"],
-            changed=[("- Old content", "- New content")],
-            unchanged_count=10
-        )
-    Use for report diffing and change tracking.
-
-WHAT IT DOES:
-    Provides a dataclass to capture the differences between two reports, including added/removed/changed content and counts.
-
-WHAT IT SHOULD DO BETTER:
-    Add methods for generating diff summaries, calculating change percentages, and serializing to/from JSON.
-"""
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from typing import List
-except ImportError:
-    from typing import List
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 @dataclass
 class ReportComparison:
-"""
-Comparison between two reports.
+    """Result of comparing two report versions.
     Attributes:
-        old_path: Path to the old report.
-        new_path: Path to the new report.
-        added: List of added content.
-        removed: List of removed content.
-        changed: List of changed content pairs (old, new).
-        unchanged_count: Number of unchanged items.
-"""
-old_path: str
+        old_path: Path to old version.
+        new_path: Path to new version.
+        added: Items added in new version.
+        removed: Items removed from old version.
+        changed: Items that changed (list of tuples of old, new).
+        unchanged_count: Count of unchanged items.
+    """
+
+    old_path: str
     new_path: str
-    added: list[str] = field(default_factory=list)
-    removed: list[str] = field(default_factory=list)
-    changed: list[tuple[str, str]] = field(default_factory=list)
-    unchanged_count: int = 0
-    new_path: str
-    added: List[str] = field(default_factory=list)
-    removed: List[str] = field(default_factory=list)
-    changed: List[tuple[str, str]] = field(default_factory=list)
+    added: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    removed: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    changed: list[tuple] = field(default_factory=list)  # type: ignore[assignment]
     unchanged_count: int = 0

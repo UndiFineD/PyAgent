@@ -1,21 +1,14 @@
 #!/usr/bin/env python3
 
-
+"""
+Rollup engine.py module.
+"""
+# Copyright 2026 PyAgent Authors
+# Rollup, query, and correlation analyzer engine.
+# Phase 16: Rust acceleration for aggregation and percentile calculations
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 import contextlib
 import logging
 import math
@@ -26,14 +19,11 @@ from .metrics import AggregationType, Metric
 from .metrics_core import CorrelationCore, StatsRollupCore
 from .observability_core import RollupConfig
 
-"""
 logger: logging.Logger = logging.getLogger(__name__)
-
-"""
 
 # Phase 16: Rust acceleration imports
 try:
-    import rust_core  # type: ignore[import-untyped]
+    import rust_core
 
     _RUST_AVAILABLE = True
 except ImportError:
@@ -42,30 +32,20 @@ except ImportError:
 
 
 class StatsRollupCalculator:
-"""
-Calculates metric rollups using pure logic core.    def __init__(self) -> None:        self.rollups: dict[str, list[float]] = {}
+    """Calculates metric rollups using pure logic core."""
+
+    def __init__(self) -> None:
+        self.rollups: dict[str, list[float]] = {}
         self._points: dict[str, list[tuple[float, float]]] = {}
         self.core = StatsRollupCore()
 
     def add_point(self, metric: str, timestamp: float, value: float) -> None:
-"""
-Add a data point for the given metric.""
-Args:
-            metric: Metric name.
-            timestamp: Unix timestamp of the measurement.
-            value: Numeric value of the measurement.
-                if metric not in self._points:
+        if metric not in self._points:
             self._points[metric] = []
         self._points[metric].append((float(timestamp), float(value)))
 
-    def rollup(self, metric: str, interval: str = "1h") -> list[float]:"        """
-Compute rollup statistics for a metric over specified time intervals.""
-Args:
-            metric: Metric name to rollup.
-            interval: Time interval string (e.g., "1h", "5m", "1d").
-        Returns:
-            List of averaged values bucketed by the specified interval.
-                points: list[tuple[float, float]] = self._points.get(metric, [])
+    def rollup(self, metric: str, interval: str = "1h") -> list[float]:
+        points: list[tuple[float, float]] = self._points.get(metric, [])
         if not points:
             return []
 
@@ -74,9 +54,12 @@ Args:
         with contextlib.suppress(Exception):
             amount = int(interval[:-1])
 
-        if unit == "m":"            bucket: int = 60 * amount
-        elif unit == "h":"            bucket: int = 3600 * amount
-        elif unit == "d":"            bucket: int = 86400 * amount
+        if unit == "m":
+            bucket: int = 60 * amount
+        elif unit == "h":
+            bucket: int = 3600 * amount
+        elif unit == "d":
+            bucket: int = 86400 * amount
         else:
             bucket: int = 3600 * amount
 
@@ -94,15 +77,7 @@ Args:
         return results
 
     def calculate_rollup(self, metrics: list[float], aggregation_type: AggregationType) -> float:
-"""
-Calculate rollup value based on aggregation type.""
-Args:
-            metrics: List of metric values to aggregate.
-            aggregation_type: Type of aggregation (SUM, AVG, MIN, MAX, COUNT).
-
-        Returns:
-            Aggregated metric value as a float.
-                if not metrics:
+        if not metrics:
             return 0.0
         if aggregation_type == AggregationType.SUM:
             return sum(metrics)
@@ -118,10 +93,9 @@ Args:
         return 0.0
 
 
-
 class StatsRollup:
-"""
-Aggregate metrics into rollup views.
+    """Aggregate metrics into rollup views."""
+
     def __init__(self) -> None:
         self.configs: dict[str, RollupConfig] = {}
         self.rollups: dict[str, list[dict[str, Any]]] = {}
@@ -147,26 +121,13 @@ Aggregate metrics into rollup views.
         return config
 
     def add_value(self, metric_name: str, value: float, timestamp: datetime | None = None) -> None:
-"""
-Add a raw metric value with an optional timestamp.""
-Args:
-            metric_name: Name of the metric.
-            value: Numeric value to record.
-            timestamp: Optional datetime; defaults to current time if not provided.
-                ts: datetime = timestamp or datetime.now()
+        ts: datetime = timestamp or datetime.now()
         if metric_name not in self._raw_data:
             self._raw_data[metric_name] = []
         self._raw_data[metric_name].append((ts, value))
 
     def compute_rollup(self, name: str) -> list[dict[str, Any]]:
-"""
-Compute rollup aggregation for the specified rollup configuration.""
-Args:
-            name: Name of the rollup configuration to compute.
-
-        Returns:
-            List of rollup entries with timestamp, aggregated value, sample count, and aggregation type.
-                config: RollupConfig | None = self.configs.get(name)
+        config: RollupConfig | None = self.configs.get(name)
         if not config:
             return []
         all_values: list[float] = []
@@ -181,7 +142,11 @@ Args:
             result = self._python_aggregation(config, all_values)
 
         rollup_entry: dict[str, Any] = {
-            "timestamp": datetime.now().isoformat(),"            "value": result,"            "sample_count": len(all_values),"            "aggregation": config.aggregation.value,"        }
+            "timestamp": datetime.now().isoformat(),
+            "value": result,
+            "sample_count": len(all_values),
+            "aggregation": config.aggregation.value,
+        }
         self.rollups[name].append(rollup_entry)
         if not config.keep_raw:
             self._clear_raw_data(config)
@@ -191,13 +156,20 @@ Args:
         if not _RUST_AVAILABLE:
             return None
         with contextlib.suppress(Exception):
-            if config.aggregation == AggregationType.SUM and hasattr(rust_core, "calculate_sum_rust"):"                return rust_core.calculate_sum_rust(all_values)
-            elif config.aggregation == AggregationType.AVG and hasattr(rust_core, "calculate_avg_rust"):"                return rust_core.calculate_avg_rust(all_values)
-            elif config.aggregation == AggregationType.MIN and hasattr(rust_core, "calculate_min_rust"):"                return rust_core.calculate_min_rust(all_values)
-            elif config.aggregation == AggregationType.MAX and hasattr(rust_core, "calculate_max_rust"):"                return rust_core.calculate_max_rust(all_values)
-            elif config.aggregation == AggregationType.P50 and hasattr(rust_core, "calculate_median_rust"):"                return rust_core.calculate_median_rust(all_values)
-            elif config.aggregation == AggregationType.P95 and hasattr(rust_core, "calculate_p95_rust"):"                return rust_core.calculate_p95_rust(all_values)
-            elif config.aggregation == AggregationType.P99 and hasattr(rust_core, "calculate_p99_rust"):"                return rust_core.calculate_p99_rust(all_values)
+            if config.aggregation == AggregationType.SUM and hasattr(rust_core, "calculate_sum_rust"):
+                return rust_core.calculate_sum_rust(all_values)
+            elif config.aggregation == AggregationType.AVG and hasattr(rust_core, "calculate_avg_rust"):
+                return rust_core.calculate_avg_rust(all_values)
+            elif config.aggregation == AggregationType.MIN and hasattr(rust_core, "calculate_min_rust"):
+                return rust_core.calculate_min_rust(all_values)
+            elif config.aggregation == AggregationType.MAX and hasattr(rust_core, "calculate_max_rust"):
+                return rust_core.calculate_max_rust(all_values)
+            elif config.aggregation == AggregationType.P50 and hasattr(rust_core, "calculate_median_rust"):
+                return rust_core.calculate_median_rust(all_values)
+            elif config.aggregation == AggregationType.P95 and hasattr(rust_core, "calculate_p95_rust"):
+                return rust_core.calculate_p95_rust(all_values)
+            elif config.aggregation == AggregationType.P99 and hasattr(rust_core, "calculate_p99_rust"):
+                return rust_core.calculate_p99_rust(all_values)
         return None
 
     def _python_aggregation(self, config: RollupConfig, all_values: list[float]) -> float:
@@ -232,71 +204,61 @@ Args:
             self._raw_data[metric] = []
 
     def get_rollup_history(self, name: str, limit: int = 100) -> list[dict[str, Any]]:
-"""
-Retrieve rollup history for a given rollup configuration.""
-Args:
-            name: Name of the rollup configuration.
-            limit: Maximum number of historical entries to return (default: 100).
-
-        Returns:
-            List of most recent rollup entries up to the specified limit.
-                return self.rollups.get(name, [])[-limit:]
-
+        return self.rollups.get(name, [])[-limit:]
 
 
 class StatsQueryEngine:
-"""
-Queries metrics with time range and aggregation.
+    """Queries metrics with time range and aggregation."""
+
     def __init__(self) -> None:
         self.metrics: dict[str, list[Metric]] = {}
         self._rows: dict[str, list[dict[str, Any]]] = {}
 
     def insert(self, metric: str, timestamp: float, value: Any) -> None:
-"""
-Insert a metric data point into the query engine.""
-Args:
-            metric: Name of the metric.
-            timestamp: Unix timestamp of the measurement.
-            value: Numeric or categorical value of the measurement.
-                if metric not in self._rows:
+        if metric not in self._rows:
             self._rows[metric] = []
         self._rows[metric].append({"timestamp": float(timestamp), "value": value})
+
     def query(
         self,
         metric_name: str,
+        start_time: str | None = None,  # noqa: ARG002
+        end_time: str | None = None,  # noqa: ARG002
         start: float | None = None,
         end: float | None = None,
-        aggregation: str = "","    ) -> Any:
-"""
-Query metrics within a time range with optional aggregation.""
-Args:
-            metric_name: Name of the metric to query.
-            start: Start timestamp as float.
-            end: End timestamp as float.
-            aggregation: Aggregation type (sum, avg, mean, min, max).
-
-        Returns:
-            Aggregated result or list of rows matching the query.
-                rows: list[dict[str, Any]] = list(self._rows.get(metric_name, []))
+        aggregation: str = "",
+    ) -> Any:
+        rows: list[dict[str, Any]] = list(self._rows.get(metric_name, []))
         if rows:
             if start is not None or end is not None:
-                start_v: float = float(start) if start is not None else float("-inf")"                end_v: float = float(end) if end is not None else float("inf")"                rows = [r for r in rows if start_v <= float(r.get("timestamp", 0.0)) <= end_v]
+                start_v: float = float(start) if start is not None else float("-inf")
+                end_v: float = float(end) if end is not None else float("inf")
+                rows = [r for r in rows if start_v <= float(r.get("timestamp", 0.0)) <= end_v]
+
             if aggregation:
                 values: list[float] = []
                 for r in rows:
                     with contextlib.suppress(Exception):
-                        values.append(float(r.get("value")))"                if not values:
+                        values.append(float(r.get("value")))
+                if not values:
                     agg_value = 0.0
                 else:
                     agg: str = aggregation.lower()
-                    if agg == "sum":"                        agg_value = float(sum(values))
-                    elif agg in ("avg", "mean"):"                        agg_value = float(sum(values) / len(values))
-                    elif agg == "min":"                        agg_value = float(min(values))
-                    elif agg == "max":"                        agg_value = float(max(values))
+                    if agg == "sum":
+                        agg_value = float(sum(values))
+                    elif agg in ("avg", "mean"):
+                        agg_value = float(sum(values) / len(values))
+                    elif agg == "min":
+                        agg_value = float(min(values))
+                    elif agg == "max":
+                        agg_value = float(max(values))
                     else:
                         agg_value = float(sum(values) / len(values))
                 return {
-                    "metric": metric_name,"                    "aggregation": aggregation,"                    "value": agg_value,"                }
+                    "metric": metric_name,
+                    "aggregation": aggregation,
+                    "value": agg_value,
+                }
             return rows
 
         if metric_name not in self.metrics:
@@ -304,48 +266,26 @@ Args:
         return self.metrics[metric_name]
 
     def add_metric(self, name: str, metric: Metric) -> None:
-"""
-Add a metric to the query engine's metric collection."""'
-Args:
-            name: Name""
-of the metric.""
-metric: Metric object to add.
-                if name not in self.metrics:
+        if name not in self.metrics:
             self.metrics[name] = []
-"""
-self.metrics[name].append(metric)""
-class Cor""
-rel""
-ationAnalyzer:"""    "
-Analyze correlations between metrics.
+        self.metrics[name].append(metric)
+
+
+class CorrelationAnalyzer:
+    """Analyze correlations between metrics."""
+
     def __init__(self) -> None:
         self.correlations: list[Any] = []  # Use Any for MetricCorrelation to avoid circular import if needed
         self._metric_history: dict[str, list[float]] = {}
         self.core = CorrelationCore()
 
     def record_value(self, metric_name: str, value: float) -> None:
-  """   """   ""
-Record a metric value in the correlation analyzer's history."""'
-Args:
-            metr""
-ic_name: Name of the metric.""
-value: Numeric value""
-to re""
-cord.""
-if metric_name not in self._metric_history:
+        if metric_name not in self._metric_history:
             self._metric_history[metric_name] = []
         self._metric_history[metric_name].append(value)
 
-    def compute_correlation(self, metric_a: str, metric_b: str) -"""> Any:        """
-Compute Pearson correlation coefficient between two metrics.""
-Args:
-            metric_a: Name of the first metric.
-            metric_b: Name of the second metric.
-
-        Returns:
-            Correlation result object with metric names, coefficient, and sample size, or None if insufficient data.
- """      """
-values_a: list[float] = self._metric_history.get(metric_a, [])
+    def compute_correlation(self, metric_a: str, metric_b: str) -> Any:
+        values_a: list[float] = self._metric_history.get(metric_a, [])
         values_b: list[float] = self._metric_history.get(metric_b, [])
         n: int = min(len(values_a), len(values_b))
         if n < 3:
@@ -355,7 +295,7 @@ values_a: list[float] = self._metric_history.get(metric_a, [])
 
         # Rust optimization
         try:
-            import rust_core as rc  # pylint: disable=no-member
+            import rust_core as rc
 
             correlation = rc.calculate_pearson_correlation(values_a, values_b)
         except (ImportError, AttributeError):
@@ -380,12 +320,13 @@ values_a: list[float] = self._metric_history.get(metric_a, [])
         self.correlations.append(result)
         return result
 
-    def find_strong_correlations(self, threshold: float = 0.8) -> list[Any"""]:"""   """     "
-Find strong correlations.        from types import SimpleNamespace
+    def find_strong_correlations(self, threshold: float = 0.8) -> list[Any]:
+        """Find strong correlations."""
+        from types import SimpleNamespace
 
         keys: list[str] = list(self._metric_history.keys())
 
-        # Rust-accelerated O(N²) pairwise correlation
+        # Rust-accelerated O(N┬▓) pairwise correlation
         with contextlib.suppress(ImportError, Exception):
             from rust_core import \
                 find_strong_correlations_rust  # pylint: disable=no-name-in-module
@@ -407,15 +348,9 @@ Find strong correlations.        from types import SimpleNamespace
 
         # Python fallback: Re-compute pairwise for all history (O(N^2) naive)
         strong = []
-        for i, key_i in enumerate(keys):
+        for i in range(len(keys)):
             for j in range(i + 1, len(keys)):
-                corr = self.compute_correlation(key_i, keys[j])
+                corr = self.compute_correlation(keys[i], keys[j])
                 if corr and abs(corr.correlation_coefficient) >= threshold:
                     strong.append(corr)
         return strong
-
-"""
-
-"""
-
-"""
