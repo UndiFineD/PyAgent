@@ -1,16 +1,42 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""Coordinator for multi-group KV cache management."""
+
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, List, Optional, Any, Tuple
-from .Enums import CacheGroupType
-from .DataClasses import CacheConfig, KVCacheBlocks, BlockHash, BlockHashWithGroupId, KVCacheBlock, CacheGroupSpec
-from .Structural import BlockPool
-from .Managers import SingleTypeKVCacheManager, FullAttentionManager, SlidingWindowManager, CrossAttentionManager
+from typing import Any, Dict, List, Tuple
+
+from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,
+                           CacheGroupSpec, KVCacheBlock, KVCacheBlocks)
+from .enums import CacheGroupType
+from .managers import (CrossAttentionManager, FullAttentionManager,
+                       SingleTypeKVCacheManager, SlidingWindowManager)
+from .pack_kv import PackKVManager
+from .structural import BlockPool
+
 
 class KVCacheCoordinator:
     """Coordinates multiple KV cache groups for complex attention patterns."""
+
     def __init__(self, config: CacheConfig, max_model_len: int) -> None:
         self.config = config
         self.max_model_len = max_model_len
-        self.block_pool = BlockPool(num_blocks=config.num_blocks, enable_caching=config.enable_prefix_caching, eviction_policy=config.eviction_policy)
+        self.block_pool = BlockPool(
+            num_blocks=config.num_blocks,
+            enable_caching=config.enable_prefix_caching,
+            eviction_policy=config.eviction_policy,
+        )
         self.managers: List[SingleTypeKVCacheManager] = []
         for spec in config.groups:
             manager = self._create_manager(spec)
@@ -18,61 +44,106 @@ class KVCacheCoordinator:
         self._empty_blocks = KVCacheBlocks.empty(len(config.groups))
         self.total_allocations = 0
         self.total_frees = 0
-    
+
     def _create_manager(self, spec: CacheGroupSpec) -> SingleTypeKVCacheManager:
-        if spec.group_type == CacheGroupType.FULL_ATTENTION: return FullAttentionManager(spec, self.block_pool)
-        elif spec.group_type == CacheGroupType.SLIDING_WINDOW: return SlidingWindowManager(spec, self.block_pool)
-        elif spec.group_type == CacheGroupType.CROSS_ATTENTION: return CrossAttentionManager(spec, self.block_pool)
+        """Create a specific cache manager based on the group type."""
+        if spec.group_type == CacheGroupType.FULL_ATTENTION:
+            return FullAttentionManager(spec, self.block_pool)
+        if spec.group_type == CacheGroupType.SLIDING_WINDOW:
+            return SlidingWindowManager(spec, self.block_pool)
+        if spec.group_type == CacheGroupType.CROSS_ATTENTION:
+            return CrossAttentionManager(spec, self.block_pool)
+        if spec.group_type == CacheGroupType.PACKKV_COMPRESSED:
+            return PackKVManager(spec, self.block_pool)
         return FullAttentionManager(spec, self.block_pool)
-    
+
     @property
-    def usage(self) -> float: return self.block_pool.usage
+    def usage(self) -> float:
+        """Current overall cache usage percentage."""
+        return self.block_pool.usage
+
     @property
-    def num_groups(self) -> int: return len(self.managers)
-    
+    def num_groups(self) -> int:
+        """Number of cache groups being coordinated."""
+        return len(self.managers)
+
     def get_num_blocks_to_allocate(self, request_id: str, num_tokens: int, num_encoder_tokens: int = 0) -> int:
+        """Calculate total number of blocks needed across all groups."""
+        _ = request_id  # Unused argument
         total = 0
         for i, manager in enumerate(self.managers):
             spec = self.config.groups[i]
-            total += manager.get_num_blocks_needed(num_encoder_tokens if spec.group_type == CacheGroupType.CROSS_ATTENTION else num_tokens)
+            is_cross = spec.group_type == CacheGroupType.CROSS_ATTENTION
+            num_needed = num_encoder_tokens if is_cross else num_tokens
+            total += manager.get_num_blocks_needed(num_needed)
         return total
-    
+
     def allocate(self, request_id: str, num_tokens: int, num_encoder_tokens: int = 0) -> KVCacheBlocks:
+        """Allocate blocks for a request across all cache groups."""
         blocks_per_group = []
         for i, manager in enumerate(self.managers):
             spec = self.config.groups[i]
-            blocks = manager.allocate(request_id, num_encoder_tokens if spec.group_type == CacheGroupType.CROSS_ATTENTION else num_tokens)
+            is_cross = spec.group_type == CacheGroupType.CROSS_ATTENTION
+            num_to_alloc = num_encoder_tokens if is_cross else num_tokens
+            blocks = manager.allocate(request_id, num_to_alloc)
             blocks_per_group.append(tuple(blocks))
         self.total_allocations += 1
         return KVCacheBlocks(tuple(blocks_per_group))
-    
+
     def free(self, request_id: str) -> None:
-        for manager in self.managers: manager.free(request_id)
+        """Free all blocks associated with a specific request."""
+        for manager in self.managers:
+            manager.free(request_id)
         self.total_frees += 1
-    
+
     def get_blocks(self, request_id: str) -> KVCacheBlocks:
+        """Retrieve allocated blocks for a specific request."""
         blocks_per_group = [tuple(manager.get_blocks(request_id)) for manager in self.managers]
         return KVCacheBlocks(tuple(blocks_per_group))
-    
+
+    def get_compression_metadata(self, _request_id: str) -> Dict[int, Dict[str, Any]]:
+        """Collect compression metadata from all managers supporting it."""
+        metadata = {}
+        for manager in self.managers:
+            if hasattr(manager, "compression_metadata"):
+                # manager.compression_metadata is Dict[int, Dict[str, Any]]
+                # where key is block_id
+                metadata.update(getattr(manager, "compression_metadata"))
+        return metadata
+
     def cache_blocks(self, request_id: str, block_hashes: List[BlockHash], group_id: int = 0) -> None:
+        """Associate hashes with blocks to enable future prefix caching hits."""
         blocks = self.managers[group_id].get_blocks(request_id)
         for block, hash_ in zip(blocks, block_hashes):
             hash_with_group = BlockHashWithGroupId(hash_, group_id)
             self.block_pool.cache_block(block, hash_with_group)
-    
+
     def find_cached_blocks(self, block_hashes: List[BlockHash], group_id: int = 0) -> Tuple[List[KVCacheBlock], int]:
+        """Look up sequence of hashes in prefix cache to find usable blocks."""
         cached = []
         num_hits = 0
         for hash_ in block_hashes:
             hash_with_group = BlockHashWithGroupId(hash_, group_id)
             block = self.block_pool.lookup_cached(hash_with_group)
             if block is not None:
-                cached.append(block); num_hits += 1
-            else: break
+                cached.append(block)
+                num_hits += 1
+            else:
+                break
         return cached, num_hits
-    
+
     def get_stats(self) -> Dict[str, Any]:
+        """Collect and return usage and performance statistics."""
         return {
-            'usage': self.usage, 'num_groups': self.num_groups, 'total_allocations': self.total_allocations, 'total_frees': self.total_frees,
-            'block_pool_stats': {'total_blocks': self.block_pool.num_blocks, 'free_blocks': self.block_pool.num_free_blocks, 'cache_hits': self.block_pool.cache_hits, 'cache_misses': self.block_pool.cache_misses, 'total_evictions': self.block_pool.total_evictions}
+            "usage": self.usage,
+            "num_groups": self.num_groups,
+            "total_allocations": self.total_allocations,
+            "total_frees": self.total_frees,
+            "block_pool_stats": {
+                "total_blocks": self.block_pool.num_blocks,
+                "free_blocks": self.block_pool.num_free_blocks,
+                "cache_hits": self.block_pool.cache_hits,
+                "cache_misses": self.block_pool.cache_misses,
+                "total_evictions": self.block_pool.total_evictions,
+            },
         }
