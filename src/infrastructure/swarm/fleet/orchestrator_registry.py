@@ -1,30 +1,24 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
-LazyOrchestratorMap
-"""
-- A lazy-loading registry that maps orchestrator names to their instances.
 Orchestrator registry.py module.
 """
 
-"""
-
 # Import local version for gatekeeping
+
+from __future__ import annotations
 
 import json
 import logging
@@ -34,9 +28,9 @@ from typing import TYPE_CHECKING, Any
 
 from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 
-from src.infrastructure.swarm.fleet.bootstrap_configs import BOOTSTRAP_ORCHESTRATORS
-from src.infrastructure.swarm.fleet.orchestrator_registry_core import OrchestratorRegistryCore
-from src.infrastructure.swarm.fleet.resilient_stubs import ResilientStub
+from .bootstrap_configs import BOOTSTRAP_ORCHESTRATORS
+from .orchestrator_registry_core import OrchestratorRegistryCore
+from .resilient_stubs import ResilientStub
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -44,17 +38,11 @@ if TYPE_CHECKING:
 __version__ = VERSION
 
 
-
 class LazyOrchestratorMap:
-"""
-A dictionary-like object that instantiates orchestrators only when accessed.""
-def __init__(self, fleet_instance: FleetManager) -> None:
-"""
-Initializes the lazy orchestrator map 
-        with a reference to the fleet 
-        and loads configurations from manifests and discovery.
-"""
-self.fleet = fleet_instance
+    """A dictionary-like object that instantiates orchestrators only when accessed."""
+
+    def __init__(self, fleet_instance: FleetManager) -> None:
+        self.fleet = fleet_instance
         self.workspace_root = Path(fleet_instance.workspace_root)
         self._instances: dict[Any, Any] = {}
         self._registry_core = OrchestratorRegistryCore(SDK_VERSION)
@@ -66,6 +54,7 @@ self.fleet = fleet_instance
         discovered_files = self._scan_workspace_for_orchestrators()
         self._discovered_configs = self._registry_core.process_discovered_files(discovered_files)
         logging.info(f"Registry: Discovered {len(self._discovered_configs)} orchestrators.")
+
         # Combined map: Bootstrap > Manifest > Discovery
         # Convert BOOTSTRAP_ORCHESTRATORS to the 4-tuple format (module, class, needs_fleet, arg)
         boot_configs = {k: (v[0], v[1], True, None) for k, v in BOOTSTRAP_ORCHESTRATORS.items()}
@@ -75,18 +64,16 @@ self.fleet = fleet_instance
             **boot_configs,
         }
 
-
     def _scan_workspace_for_orchestrators(self) -> list[str]:
-"""
-Performs the I/O-bound scanning of the workspace.""
-subdirs = [
+        """Performs the I/O-bound scanning of the workspace."""
+        subdirs = [
             "src/infrastructure/swarm/orchestration",
             "src/infrastructure/orchestration",
             "src/logic/agents/cognitive",
             "src/infrastructure/fleet",
             "src/logic/agents/swarm",
             "src/logic/agents/security",
-            "src/logic/agents/management",]
+        ]
         found_paths = []
         for subdir in subdirs:
             search_root = self.workspace_root / subdir
@@ -101,11 +88,9 @@ subdirs = [
                         found_paths.append(str(rel_path))
         return found_paths
 
-
     def _load_manifests(self) -> dict[str, tuple]:
-"""
-Loads orchestrator configurations from plugin manifests.""
-manifest_configs = {}
+        """Loads orchestrator configurations from plugin manifests."""
+        manifest_configs = {}
         manifest_paths = [
             self.workspace_root / "plugins" / "orchestrator_manifest.json",
             self.workspace_root / "plugins" / "manifest.json",
@@ -120,7 +105,6 @@ manifest_configs = {}
                 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logging.error(f"Failed to load orchestrator manifest {m_path}: {e}")
         return manifest_configs
-
 
     def __getattr__(self, name: str) -> Any:
         if name in self.__dict__:
@@ -140,16 +124,15 @@ manifest_configs = {}
 
         raise AttributeError(f"Orchestrator '{name}' not found.")
 
-
     def try_reload(self, name: str) -> bool:
-"""
-Attempts to reload/re-instantiate a specific orchestrator.""
-if name in self._instances:
+        """Attempts to reload/re-instantiate a specific orchestrator."""
+        if name in self._instances:
             del self._instances[name]
 
         try:
             instance = getattr(self, name)
-            # Check if it's still a stub'            return not isinstance(instance, ResilientStub)
+            # Check if it's still a stub
+            return not isinstance(instance, ResilientStub)
         except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Failed to reload orchestrator '{name}': {e}")
             return False
@@ -180,7 +163,7 @@ if name in self._instances:
                 from src.core.base.lifecycle.base_agent import BaseAgent
 
                 is_agent = issubclass(orchestrator_class, BaseAgent)
-            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 is_agent = False
 
             if is_agent:
@@ -234,22 +217,18 @@ if name in self._instances:
             return None
 
     def keys(self) -> list[str]:
-"""
-Returns list of available orchestrators.""
-return list(self._configs.keys())
+        """Returns list of available orchestrators."""
+
+        return list(self._configs.keys())
 
     def __contains__(self, key: object) -> bool:
-"""
-Checks if a given key is in the orchestrator registry.""
-return key in self._configs
+        return key in self._configs
 
 
 class OrchestratorRegistry:
-"""
-Registry for mapping agent types to their corresponding orchestrators.""
+    """Registry for mapping agent types to their corresponding orchestrators."""
 
     @staticmethod
     def get_orchestrator_map(fleet_instance: FleetManager) -> LazyOrchestratorMap:
-"""
-Factory method to create a new live orchestrator map for a fleet.""
-return LazyOrchestratorMap(fleet_instance)
+        """Factory method to create a new live orchestrator map for a fleet."""
+        return LazyOrchestratorMap(fleet_instance)

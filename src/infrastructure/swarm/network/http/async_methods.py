@@ -1,47 +1,33 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
 """
 Async methods.py module.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from pathlib import Path
-except ImportError:
-    from pathlib import Path
-
-try:
-    from typing import TYPE_CHECKING, Any, Callable, Mapping
-except ImportError:
-    from typing import TYPE_CHECKING, Any, Callable, Mapping
-
+from typing import TYPE_CHECKING, Any, Callable, Mapping
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.network.http.connection import HTTPConnection
 
 
-
 class AsyncHTTPMixin:
-"""
-Mixin providing asynchronous HTTP methods.
+    """Mixin providing asynchronous HTTP methods."""
+
     async def async_get_response(
         self: HTTPConnection,
         url: str,
@@ -50,8 +36,8 @@ Mixin providing asynchronous HTTP methods.
         extra_headers: Mapping[str, str] | None = None,
         allow_redirects: bool = True,
     ) -> Any:
-"""
-Make an async GET request and return the response object.        self._validate_http_url(url)
+        """Make an async GET request and return the response object."""
+        self._validate_http_url(url)
 
         client = await self.get_async_client()
         extra_headers = extra_headers or {}
@@ -70,8 +56,8 @@ Make an async GET request and return the response object.        self._validate_
         timeout: float | None = None,
         allow_redirects: bool = True,
     ) -> bytes:
-"""
-Async GET request returning response body as bytes.        async with await self.async_get_response(url, timeout=timeout, allow_redirects=allow_redirects) as r:
+        """Async GET request returning response body as bytes."""
+        async with await self.async_get_response(url, timeout=timeout, allow_redirects=allow_redirects) as r:
             r.raise_for_status()
             return await r.read()
 
@@ -82,8 +68,8 @@ Async GET request returning response body as bytes.        async with await self
         timeout: float | None = None,
         encoding: str | None = None,
     ) -> str:
-"""
-Async GET request returning response body as text.        async with await self.async_get_response(url, timeout=timeout) as r:
+        """Async GET request returning response body as text."""
+        async with await self.async_get_response(url, timeout=timeout) as r:
             r.raise_for_status()
             return await r.text(encoding=encoding)
 
@@ -93,8 +79,8 @@ Async GET request returning response body as text.        async with await self.
         *,
         timeout: float | None = None,
     ) -> Any:
-"""
-Async GET request returning response body as parsed JSON.        async with await self.async_get_response(url, timeout=timeout) as r:
+        """Async GET request returning response body as parsed JSON."""
+        async with await self.async_get_response(url, timeout=timeout) as r:
             r.raise_for_status()
             return await r.json()
 
@@ -106,8 +92,8 @@ Async GET request returning response body as parsed JSON.        async with awai
         timeout: float | None = None,
         extra_headers: Mapping[str, str] | None = None,
     ) -> Any:
-"""
-Async POST JSON data and return parsed JSON response.        self._validate_http_url(url)
+        """Async POST JSON data and return parsed JSON response."""
+        self._validate_http_url(url)
 
         client = await self.get_async_client()
         extra_headers = extra_headers or {}
@@ -130,21 +116,21 @@ Async POST JSON data and return parsed JSON response.        self._validate_http
         chunk_size: int = 8192,
         progress_callback: Callable[[int, int | None], None] | None = None,
     ) -> Path:
-"""
-Async download a file from URL to local path.        save_path = Path(save_path)
+        """Async download a file from URL to local path."""
+        save_path = Path(save_path)
         save_path.parent.mkdir(parents=True, exist_ok=True)
 
         async with await self.async_get_response(url, timeout=timeout) as r:
             r.raise_for_status()
 
-            total_size = int(r.headers.get("content-length", 0)) or None"            downloaded = 0
+            total_size = int(r.headers.get("content-length", 0)) or None
+            downloaded = 0
 
-            with save_path.open("wb", encoding='utf-8') as f:"'                async for chunk in r.content.iter_chunked(chunk_size):
+            with save_path.open("wb", encoding='utf-8') as f:
+                async for chunk in r.content.iter_chunked(chunk_size):
                     f.write(chunk)
                     downloaded += len(chunk)
                     if progress_callback:
                         progress_callback(downloaded, total_size)
 
         return save_path
-
-"""

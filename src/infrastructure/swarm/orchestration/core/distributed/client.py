@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -22,60 +17,21 @@ from __future__ import annotations
 """
 Clients for distributed communication.
 """
-try:
 
-"""
+from __future__ import annotations
+
 import asyncio
-except ImportError:
-    import asyncio
+import logging
+import threading
+import time
+import uuid
+from typing import Callable, Dict, Generic, List, Optional, TypeVar
 
-try:
-    import logging
-except ImportError:
-    import logging
-
-try:
-    import threading
-except ImportError:
-    import threading
-
-try:
-    import time
-except ImportError:
-    import time
-
-try:
-    import uuid
-except ImportError:
-    import uuid
-
-try:
-    from typing import Callable, Dict, Generic, List, Optional, TypeVar
-except ImportError:
-    from typing import Callable, Dict, Generic, List, Optional, TypeVar
-
-
-try:
-    from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
-except ImportError:
-    from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
-
+from .config import (EngineIdentity, LoadBalancingStrategy, ParallelConfig,
                      WorkerIdentity)
-try:
-    from .coordinator import DPCoordinator
-except ImportError:
-    from .coordinator import DPCoordinator
-
-try:
-    from .messages import RequestMessage, ResponseMessage
-except ImportError:
-    from .messages import RequestMessage, ResponseMessage
-
-try:
-    from .worker import BaseWorker, WorkerProcess
-except ImportError:
-    from .worker import BaseWorker, WorkerProcess
-
+from .coordinator import DPCoordinator
+from .messages import RequestMessage, ResponseMessage
+from .worker import BaseWorker, WorkerProcess
 
 logger = logging.getLogger(__name__)
 
@@ -83,10 +39,12 @@ T = TypeVar("T")
 
 
 class MPClient(Generic[T]):
-"""
-Client for communicating with worker processes.""
-Inspired by vLLM's MPClient pattern.'    Synchronous interface for multi-process workers.
-    
+    """Client for communicating with worker processes.
+
+    Inspired by vLLM's MPClient pattern.
+    Synchronous interface for multi-process workers.
+    """
+
     def __init__(
         self,
         worker_factory: Callable[[WorkerIdentity], BaseWorker],
@@ -101,8 +59,8 @@ Inspired by vLLM's MPClient pattern.'    Synchronous interface for multi-process
         self._lock = threading.Lock()
 
     def start(self) -> None:
-"""
-Start all worker processes.        for i in range(self.config.data_parallel_size):
+        """Start all worker processes."""
+        for i in range(self.config.data_parallel_size):
             worker = WorkerProcess(
                 worker_id=i,
                 worker_factory=self.worker_factory,
@@ -114,26 +72,29 @@ Start all worker processes.        for i in range(self.config.data_parallel_size
             self._workers.append(worker)
 
         # Wait for workers to initialize
-        time.sleep(0.5)  # nosec
+        time.sleep(0.5)
         logger.info("Started %d workers", len(self._workers))
+
     def stop(self) -> None:
-"""
-Stop all worker processes.        for worker in self._workers:
+        """Stop all worker processes."""
+        for worker in self._workers:
             worker.stop()
         self._workers.clear()
         logger.info("Stopped all workers")
+
     def submit(self, request: RequestMessage) -> None:
-"""
-Submit a request to be processed.""
-Uses round-robin distribution by default.
-                with self._lock:
+        """Submit a request to be processed.
+
+        Uses round-robin distribution by default.
+        """
+        with self._lock:
             worker_id = hash(request.request_id) % len(self._workers)
             self._pending[request.request_id] = worker_id
             self._workers[worker_id].submit(request)
 
     def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
-"""
-Get a response from any worker.        # Poll all workers
+        """Get a response from any worker."""
+        # Poll all workers
         deadline = time.time() + (timeout or 0)
 
         while True:
@@ -149,21 +110,22 @@ Get a response from any worker.        # Poll all workers
 
     @property
     def num_workers(self) -> int:
-"""
-Number of active workers.        return len(self._workers)
+        """Number of active workers."""
+        return len(self._workers)
 
     @property
     def num_pending(self) -> int:
-"""
-Number of pending requests.        return len(self._pending)
-
+        """Number of pending requests."""
+        return len(self._pending)
 
 
 class AsyncMPClient(Generic[T]):
-"""
-Async client for communicating with worker processes.""
-Inspired by vLLM's AsyncMPClient.'    Async interface for non-blocking operations.
-    
+    """Async client for communicating with worker processes.
+
+    Inspired by vLLM's AsyncMPClient.
+    Async interface for non-blocking operations.
+    """
+
     def __init__(
         self,
         worker_factory: Callable[[WorkerIdentity], BaseWorker],
@@ -174,33 +136,34 @@ Inspired by vLLM's AsyncMPClient.'    Async interface for non-blocking operation
         self._executor = None
 
     async def start(self) -> None:
-"""
-Start worker processes.        self._loop = asyncio.get_event_loop()
+        """Start worker processes."""
+        self._loop = asyncio.get_event_loop()
         await self._loop.run_in_executor(None, self._sync_client.start)
 
     async def stop(self) -> None:
-"""
-Stop worker processes.        if self._loop:
+        """Stop worker processes."""
+        if self._loop:
             await self._loop.run_in_executor(None, self._sync_client.stop)
 
     async def submit(self, request: RequestMessage) -> None:
-"""
-Submit a request asynchronously.        if self._loop:
+        """Submit a request asynchronously."""
+        if self._loop:
             await self._loop.run_in_executor(None, self._sync_client.submit, request)
 
     async def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
-"""
-Get a response asynchronously.        if self._loop:
+        """Get a response asynchronously."""
+        if self._loop:
             return await self._loop.run_in_executor(None, self._sync_client.get_response, timeout)
         return None
 
 
-
 class DPLBAsyncMPClient(Generic[T]):
-"""
-Data-parallel load-balanced async client.""
-Inspired by vLLM's dp_lb_pool and DPAsyncMPClient.'    Combines coordination with async multi-process execution.
-    
+    """Data-parallel load-balanced async client.
+
+    Inspired by vLLM's dp_lb_pool and DPAsyncMPClient.
+    Combines coordination with async multi-process execution.
+    """
+
     def __init__(
         self,
         worker_factory: Callable[[WorkerIdentity], BaseWorker],
@@ -215,9 +178,10 @@ Inspired by vLLM's dp_lb_pool and DPAsyncMPClient.'    Combines coordination wit
         self._lock = asyncio.Lock()
 
     async def start(self) -> None:
-"""
-Start all data-parallel instances.        for dp_rank in range(self.config.data_parallel_size):
-            engine_id = f"engine_{dp_rank}""            identity = EngineIdentity(
+        """Start all data-parallel instances."""
+        for dp_rank in range(self.config.data_parallel_size):
+            engine_id = f"engine_{dp_rank}"
+            identity = EngineIdentity(
                 dp_rank=dp_rank,
                 dp_size=self.config.data_parallel_size,
                 engine_id=engine_id,
@@ -236,24 +200,26 @@ Start all data-parallel instances.        for dp_rank in range(self.config.data_
             self._coordinator.register_engine(identity)
 
         logger.info("Started %d data-parallel instances", len(self._clients))
+
     async def stop(self) -> None:
-"""
-Stop all data-parallel instances.        for engine_id, client in self._clients.items():
+        """Stop all data-parallel instances."""
+        for engine_id, client in self._clients.items():
             await client.stop()
             self._coordinator.deregister_engine(engine_id)
 
         self._clients.clear()
 
     async def submit(self, request: RequestMessage) -> None:
-"""
-Submit a request with load balancing.        engine_id = self._coordinator.select_engine(request.request_id)
+        """Submit a request with load balancing."""
+        engine_id = self._coordinator.select_engine(request.request_id)
         if engine_id and engine_id in self._clients:
             await self._clients[engine_id].submit(request)
         else:
             raise RuntimeError("No available engines")
+
     async def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
-"""
-Get a response from any client.        # Poll all clients
+        """Get a response from any client."""
+        # Poll all clients
         tasks = [asyncio.create_task(client.get_response(timeout=0.01)) for client in self._clients.values()]
 
         done, pending = await asyncio.wait(
@@ -276,10 +242,10 @@ Get a response from any client.        # Poll all clients
 
     @property
     def num_engines(self) -> int:
-"""
-Number of data-parallel engines.        return self._coordinator.num_engines
+        """Number of data-parallel engines."""
+        return self._coordinator.num_engines
 
     @property
     def num_ready(self) -> int:
-"""
-Number of ready engines.        return self._coordinator.num_ready
+        """Number of ready engines."""
+        return self._coordinator.num_ready

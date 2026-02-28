@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -22,29 +17,17 @@ from __future__ import annotations
 """
 Configuration and state enums for distributed coordination.
 """
-try:
 
-"""
+from __future__ import annotations
+
 import uuid
-except ImportError:
-    import uuid
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from enum import Enum, auto
-except ImportError:
-    from enum import Enum, auto
-
-
+from dataclasses import dataclass, field
+from enum import Enum, auto
 
 
 class EngineState(Enum):
-"""
-State of a distributed engine instance.
+    """State of a distributed engine instance."""
+
     INITIALIZING = auto()  # Engine is starting up
     READY = auto()  # Engine is ready to process
     BUSY = auto()  # Engine is processing requests
@@ -53,10 +36,9 @@ State of a distributed engine instance.
     ERROR = auto()  # Engine encountered an error
 
 
-
 class WorkerState(Enum):
-"""
-State of a worker process.
+    """State of a worker process."""
+
     STARTING = auto()
     RUNNING = auto()
     PAUSED = auto()
@@ -65,10 +47,9 @@ State of a worker process.
     ERROR = auto()
 
 
-
 class LoadBalancingStrategy(Enum):
-"""
-Load balancing strategies for data parallel.
+    """Load balancing strategies for data parallel."""
+
     ROUND_ROBIN = auto()
     LEAST_LOADED = auto()
     RANDOM = auto()
@@ -77,9 +58,10 @@ Load balancing strategies for data parallel.
 
 @dataclass
 class ParallelConfig:
-"""
-Configuration for parallelism.""
-Inspired by vLLM's ParallelConfig.'
+    """Configuration for parallelism.
+
+    Inspired by vLLM's ParallelConfig.
+
     Attributes:
         data_parallel_size: Number of data parallel replicas.
         tensor_parallel_size: Number of tensor parallel ranks.
@@ -88,47 +70,52 @@ Inspired by vLLM's ParallelConfig.'
         distributed_executor_backend: Backend type (mp, ray).
         worker_use_ray: Whether workers use Ray.
         max_parallel_loading: Max workers loading simultaneously.
-    
+    """
+
     data_parallel_size: int = 1
     tensor_parallel_size: int = 1
     pipeline_parallel_size: int = 1
-    distributed_executor_backend: str = "mp""    worker_use_ray: bool = False
+    distributed_executor_backend: str = "mp"
+    worker_use_ray: bool = False
     max_parallel_loading: int = 4
 
     @property
     def world_size(self) -> int:
-"""
-Total number of distributed ranks.        return self.data_parallel_size * self.tensor_parallel_size * self.pipeline_parallel_size
+        """Total number of distributed ranks."""
+        return self.data_parallel_size * self.tensor_parallel_size * self.pipeline_parallel_size
 
     @property
     def is_distributed(self) -> bool:
-"""
-Check if running in distributed mode.        return self.world_size > 1
+        """Check if running in distributed mode."""
+        return self.world_size > 1
 
 
 @dataclass
 class EngineIdentity:
-"""
-Identity of a distributed engine instance.""
-Inspired by vLLM's coordinator identity management.'
+    """Identity of a distributed engine instance.
+
+    Inspired by vLLM's coordinator identity management.
+
     Attributes:
         dp_rank: Data parallel rank.
         dp_size: Data parallel world size.
         address: Network address.
         engine_id: Unique engine identifier.
-    
+    """
+
     dp_rank: int
     dp_size: int
     address: str = ""
-engine_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
+    engine_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
 
     def __str__(self) -> str:
         return f"Engine[{self.engine_id}:DP{self.dp_rank}/{self.dp_size}]"
 
+
 @dataclass
 class WorkerIdentity:
-    ""
-Identity of a worker process.
+    """Identity of a worker process."""
+
     worker_id: int
     engine_id: str
     rank: int

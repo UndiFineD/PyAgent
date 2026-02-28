@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-
 """
 Process group coordinator for distributed operations.
-
 """
+
 import logging
 from typing import Any
 
@@ -38,22 +37,26 @@ except ImportError:
     dist = None
 
 
-
 class GroupCoordinator:
-        Manages process groups for distributed operations.
+    """
+    Manages process groups for distributed operations.
 
     Creates and caches process groups for different parallelism modes.
-    
+    """
+
     def __init__(
         self,
         config: ParallelConfig,
         rank_info: RankInfo,
     ):
-                Initialize the group coordinator.
+        """
+        Initialize the group coordinator.
 
         Args:
             config: Parallel configuration
-            rank_info: This rank's position info'                self.config = config
+            rank_info: This rank's position info
+        """
+        self.config = config
         self.rank_info = rank_info
 
         # Process groups
@@ -70,16 +73,18 @@ class GroupCoordinator:
         self._initialized = False
 
     def initialize(self) -> None:
-"""
-Initialize all process groups.        if self._initialized:
+        """Initialize all process groups."""
+        if self._initialized:
             return
 
         if not HAS_DIST:
-            logger.warning("torch.distributed not available, using single-process mode")"            self._initialized = True
+            logger.warning("torch.distributed not available, using single-process mode")
+            self._initialized = True
             return
 
         if not dist.is_initialized():
-            logger.warning("torch.distributed not initialized")"            self._initialized = True
+            logger.warning("torch.distributed not initialized")
+            self._initialized = True
             return
 
         self._world_group = dist.group.WORLD
@@ -89,11 +94,15 @@ Initialize all process groups.        if self._initialized:
 
         self._initialized = True
         logger.info(
-            f"GroupCoordinator initialized: rank={self.rank_info.global_rank}, ""            f"TP={self.rank_info.tp_rank}/{self.config.tensor_parallel_size}, ""            f"PP={self.rank_info.pp_rank}/{self.config.pipeline_parallel_size}, ""            f"DP={self.rank_info.dp_rank}/{self.config.data_parallel_size}""        )
+            f"GroupCoordinator initialized: rank={self.rank_info.global_rank}, "
+            f"TP={self.rank_info.tp_rank}/{self.config.tensor_parallel_size}, "
+            f"PP={self.rank_info.pp_rank}/{self.config.pipeline_parallel_size}, "
+            f"DP={self.rank_info.dp_rank}/{self.config.data_parallel_size}"
+        )
 
     def _create_tp_group(self) -> None:
-"""
-Create tensor parallel process group.        tp_size = self.config.tensor_parallel_size
+        """Create tensor parallel process group."""
+        tp_size = self.config.tensor_parallel_size
         pp_size = self.config.pipeline_parallel_size
         dp_size = self.config.data_parallel_size
 
@@ -107,8 +116,8 @@ Create tensor parallel process group.        tp_size = self.config.tensor_parall
                     self._tp_ranks = ranks
 
     def _create_pp_group(self) -> None:
-"""
-Create pipeline parallel process group.        tp_size = self.config.tensor_parallel_size
+        """Create pipeline parallel process group."""
+        tp_size = self.config.tensor_parallel_size
         pp_size = self.config.pipeline_parallel_size
         dp_size = self.config.data_parallel_size
 
@@ -122,8 +131,8 @@ Create pipeline parallel process group.        tp_size = self.config.tensor_para
                     self._pp_ranks = ranks
 
     def _create_dp_group(self) -> None:
-"""
-Create data parallel process group.        tp_size = self.config.tensor_parallel_size
+        """Create data parallel process group."""
+        tp_size = self.config.tensor_parallel_size
         pp_size = self.config.pipeline_parallel_size
         dp_size = self.config.data_parallel_size
 
@@ -138,27 +147,27 @@ Create data parallel process group.        tp_size = self.config.tensor_parallel
 
     @property
     def world_group(self) -> Any:
-"""
-Get world process group.        return self._world_group
+        """Get world process group."""
+        return self._world_group
 
     @property
     def tp_group(self) -> Any:
-"""
-Get tensor parallel process group.        return self._tp_group
+        """Get tensor parallel process group."""
+        return self._tp_group
 
     @property
     def pp_group(self) -> Any:
-"""
-Get pipeline parallel process group.        return self._pp_group
+        """Get pipeline parallel process group."""
+        return self._pp_group
 
     @property
     def dp_group(self) -> Any:
-"""
-Get data parallel process group.        return self._dp_group
+        """Get data parallel process group."""
+        return self._dp_group
 
     def get_world_size(self, mode: ParallelMode | None = None) -> int:
-"""
-Get world size for a parallelism mode.        if mode is None or mode == ParallelMode.DATA:
+        """Get world size for a parallelism mode."""
+        if mode is None or mode == ParallelMode.DATA:
             return self.config.world_size
         if mode == ParallelMode.TENSOR:
             return self.config.tensor_parallel_size
@@ -167,8 +176,8 @@ Get world size for a parallelism mode.        if mode is None or mode == Paralle
         return 1
 
     def get_rank(self, mode: ParallelMode | None = None) -> int:
-"""
-Get rank for a parallelism mode.        if mode is None:
+        """Get rank for a parallelism mode."""
+        if mode is None:
             return self.rank_info.global_rank
         if mode == ParallelMode.TENSOR:
             return self.rank_info.tp_rank

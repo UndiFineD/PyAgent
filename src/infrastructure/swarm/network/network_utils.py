@@ -1,32 +1,27 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
 """
 Network Utilities Module - Phase 20: Production Infrastructure
 ===============================================================
 
-"""
 Helper functions for network operations, IP detection, and port management.
-Inspired by vLLM's network_utils.py pattern.'
+Inspired by vLLM's network_utils.py pattern.
+
 Features:
-- get_ip: Detect the machine's IP address'- get_loopback_ip: Get localhost IP (IPv4/IPv6 aware)
+- get_ip: Detect the machine's IP address
+- get_loopback_ip: Get localhost IP (IPv4/IPv6 aware)
 - get_open_port: Find an available port
 - split_host_port: Parse host:port strings
 - join_host_port: Format host:port strings
@@ -35,19 +30,20 @@ Features:
 - ZMQ utilities: Socket helpers for ZeroMQ
 - Port scanning and discovery
 
-# AUTHOR: PyAgent Phase 20
+Author: PyAgent Phase 20
 """
+
+from __future__ import annotations
+
 import contextlib
 import time  # noqa: F401  # pylint: disable=unused-import,reimported
 import ipaddress
-import threading
 import logging
 import os
 import socket
 import sys
 import warnings
-import subprocess
-from collections.abc import Callable, Iterator, Sequence
+from collections.abc import Iterator, Sequence
 from typing import Any
 from urllib.parse import urlparse
 from uuid import uuid4
@@ -67,6 +63,7 @@ except ImportError:
 # Optional psutil import
 try:
     import psutil
+
     HAS_PSUTIL = True
 except ImportError:
     HAS_PSUTIL = False
@@ -76,17 +73,21 @@ except ImportError:
 # ============================================================================
 # IP Address Detection
 # ============================================================================
+
+
 def get_ip(prefer_ipv4: bool = True, host_env_var: str | None = None) -> str:
-"""
-Get the machine's IP address.'
+    """
+    Get the machine's IP address.
+
     Args:
         prefer_ipv4: If True, prefer IPv4 over IPv6.
         host_env_var: Optional environment variable to check first.
 
     Returns:
         The detected IP address, or "0.0.0.0" if detection fails.
-"""
-if host_env_var:
+    """
+    # Check environment variable first
+    if host_env_var:
         env_ip = os.environ.get(host_env_var)
         if env_ip:
             return env_ip
@@ -120,191 +121,9 @@ if host_env_var:
     return "0.0.0.0"
 
 
-def _is_windows() -> bool:
-"""
-Check if the current platform is Windows.""
-return sys.platform == 'win32'
-
-
-def _get_interfaces_from_ipconfig(debug: bool) -> list[dict]:
-"""
-Get network interfaces and their details using ipconfig on Windows.""
-try:
-        result = subprocess.run(
-            "ipconfig /all",
-            capture_output=True,
-            text=True,
-            timeout=5,
-            shell=False,
-            check=False
-        )
-        if debug:
-            print(f"DEBUG: ipconfig finished with code {result.returncode}", flush=True)
-        if result.returncode == 0:
-            lines = result.stdout.split('\n')
-            if debug:
-                print(f"DEBUG: Processing {len(lines)} lines of output", flush=True)
-            interfaces = []
-            current_iface = None
-
-            for line in lines:
-                line = line.strip()
-                if line.startswith(('Ethernet adapter', 'Wireless LAN adapter', 'Unknown adapter')):
-                    if current_iface and 'IPv4' in current_iface:
-                        interfaces.append(current_iface)
-                    name = line.split(':', 1)[0].replace(' adapter', '').strip()
-                    current_iface = {'name': name}
-                    if debug:
-                        print(f"DEBUG: Found new interface header: {name}", flush=True)
-                elif current_iface is not None:
-                    if line.startswith('IPv4 Address'):
-                        try:
-                            ip_part = line.split(':', 1)[1].strip()
-                            ip = ip_part.split('(')[0].strip()
-                            current_iface['IPv4'] = ip
-                            if debug:
-                                print(f"DEBUG:   Found IPv4: {ip}", flush=True)
-                        except Exception as e:
-                            if debug:
-                                print(f"DEBUG:   Error parsing IPv4: {e}", flush=True)
-                    elif line.startswith('Subnet Mask'):
-                        try:
-                            subnet = line.split(':', 1)[1].strip()
-                            current_iface['Subnet'] = subnet
-                            if debug:
-                                print(f"DEBUG:   Found Subnet: {subnet}", flush=True)
-                        except Exception as e:
-                            if debug:
-                                print(f"DEBUG:   Error parsing Subnet: {e}", flush=True)
-            if current_iface and 'IPv4' in current_iface:
-                interfaces.append(current_iface)
-
-            if debug:
-                print(f"DEBUG: Found {len(interfaces)} interfaces with IPv4 addresses", flush=True)
-            return interfaces
-    except subprocess.TimeoutExpired:
-        logger.warning("get_local_network_ip: ipconfig command timed out")
-        if debug:
-            print("DEBUG: ipconfig command timed out", flush=True)
-    return []
-
-
-def _score_interfaces(interfaces: list[dict], debug: bool) -> list[tuple[int, str, str]]:
-    scored_interfaces = []
-    for iface in interfaces:
-        ip = iface.get('IPv4', '')
-        subnet = iface.get('Subnet', '')
-        name = iface.get('name', '').lower()
-        if debug:
-            print(f"DEBUG: Scoring Interface: {name}, IP: {ip}, Subnet: {subnet}", flush=True)
-        vpn_keywords = ['vpn', 'tunnel', 'wireguard', 'proton', 'openvpn', 'pptp', 'l2tp']
-        if any(keyword in name for keyword in vpn_keywords):
-            score = 0
-            if debug:
-                print("DEBUG:   -> VPN Detected (score=0)", flush=True)
-        elif subnet == '255.255.255.0':
-            score = 100
-            if debug:
-                print("DEBUG:   -> /24 Subnet Detected (score=100)", flush=True)
-        elif subnet == '255.255.0.0':
-            score = 80
-            if debug:
-                print("DEBUG:   -> /16 Subnet Detected (score=80)", flush=True)
-        elif ip.startswith(('192.168.', '10.', '172.')):
-            score = 60
-            if debug:
-                print("DEBUG:   -> Other Private IP Detected (score=60)", flush=True)
-        else:
-            score = 40
-            if debug:
-                print("DEBUG:   -> Public/Other IP Detected (score=40)", flush=True)
-        scored_interfaces.append((score, ip, name))
-    return scored_interfaces
-
-
-def _get_ip_from_socket_fallback(debug: bool) -> str | None:
-    candidate_ips = []
-    try:
-        hostname = socket.gethostname()
-        all_addrs = socket.getaddrinfo(hostname, None, socket.AF_INET, socket.SOCK_STREAM)
-
-        for addr in all_addrs:
-            ip = addr[4][0]
-            if (not ip.startswith('127.') 
-                and not ip.startswith('169.254.') 
-                and ip != '0.0.0.0'):
-                candidate_ips.append(ip)
-
-    except Exception as e:
-        logger.warning(f"get_local_network_ip: Socket approach failed: {e}")
-    candidate_ips = list(set(candidate_ips))
-    private_ips = [ip for ip in candidate_ips if ip.startswith(('192.168.', '172.', '10.'))]
-    private_ips.sort(key=lambda ip: (ip.startswith('10.'), ip))
-    if private_ips:
-        selected_ip = private_ips[0]
-        logger.info(f"get_local_network_ip: Selected private IP {selected_ip} for LAN discovery")
-        return selected_ip
-    elif candidate_ips:
-        return candidate_ips[0]
-    return None
-
-
-def get_local_network_ip(debug: bool = False) -> str:
-"""
-Get the IP address of the local network interface for LAN discovery.
-
-    This function prefers interfaces that are suitable for local network communication,
-    avoiding VPN/tunnel interfaces and preferring interfaces with proper subnet masks.
-
-    Args:
-        debug: If True, prints detailed debug information to stdout.
-
-    Returns:
-        The detected local network IP address, or "0.0.0.0" if detection fails.
-    """        
-    # Simply delegate IP detection to the exact same logic as test_interface_scan.py
-    # We re-implement it here carefully to avoid any weird import issues or blocks.
-
-    if debug:
-        print("DEBUG: Entered get_local_network_ip", flush=True)
-    try:
-        # Check for Windows explicitly using sys.platform to avoid platform module if it's acting up
-        is_windows = _is_windows()
-        if debug:
-            print(f"DEBUG: sys.platform is {sys.platform}", flush=True)
-        if is_windows:
-            if debug:
-                print("DEBUG: Windows detected, proceeding with ipconfig...", flush=True)
-                # Use a simpler approach: get all IPv4 addresses and filter
-            interfaces = _get_interfaces_from_ipconfig(debug)
-            scored_interfaces = _score_interfaces(interfaces, debug)
-
-            if scored_interfaces:
-                scored_interfaces.sort(reverse=True)
-                best_score, best_ip, best_name = scored_interfaces[0]
-                if best_score > 0:
-                    logger.info(f"get_local_network_ip: Selected {best_ip} from {best_name} for LAN discovery")
-                    if debug:
-                        print(f"DEBUG: Selected {best_ip} from {best_name}", flush=True)
-                    return best_ip
-                else:
-                    if debug:
-                        print("DEBUG: No suitable interface found (all scored 0)", flush=True)
-        # Fallback
-        ip = _get_ip_from_socket_fallback(debug)
-        if ip:
-            return ip
-
-    except Exception as e:
-        logger.warning(f"get_local_network_ip: Failed to detect local network IP: {e}")
-    # Final fallback
-    logger.warning("get_local_network_ip: Using fallback IP detection")
-    return get_ip()
-
-
 def get_loopback_ip(loopback_env_var: str | None = None) -> str:
-"""
-Get the loopback IP address (localhost).
+    """
+    Get the loopback IP address (localhost).
 
     Automatically detects whether to use IPv4 (127.0.0.1) or IPv6 (::1).
 
@@ -316,8 +135,8 @@ Get the loopback IP address (localhost).
 
     Raises:
         RuntimeError: If no loopback interface is available.
-"""
-if loopback_env_var:
+    """
+    if loopback_env_var:
         env_ip = os.environ.get(loopback_env_var)
         if env_ip:
             return env_ip
@@ -325,16 +144,17 @@ if loopback_env_var:
     # Test IPv4 loopback
     if test_bind("127.0.0.1", socket.AF_INET):
         return "127.0.0.1"
+
     # Test IPv6 loopback
     if test_bind("::1", socket.AF_INET6):
         return "::1"
-    raise RuntimeError("No loopback interface available")
+
+    raise RuntimeError("Neither 127.0.0.1 nor ::1 are bound to a local interface.")
 
 
 def test_bind(address: str, family: int) -> bool:
-"""
-Test if an address can be bound to.""
-try:
+    """Test if an address can be bound to."""
+    try:
         with socket.socket(family, socket.SOCK_DGRAM) as s:
             s.bind((address, 0))  # Port 0 = auto assign
         return True
@@ -343,27 +163,25 @@ try:
 
 
 def get_hostname() -> str:
-"""
-Get the local hostname.""
-return socket.gethostname()
+    """Get the local hostname."""
+    return socket.gethostname()
 
 
 def get_fqdn() -> str:
-"""
-Get the fully qualified domain name.""
-return socket.getfqdn()
+    """Get the fully qualified domain name."""
+    return socket.getfqdn()
 
 
 def resolve_hostname(hostname: str) -> list[str]:
-"""
-Resolve a hostname to its IP addresses.
+    """
+    Resolve a hostname to its IP addresses.
 
     Returns:
         List of IP addresses.
-"""
-try:
+    """
+    try:
         results = socket.getaddrinfo(hostname, None)
-        return list(set(str(r[4][0]) for r in results))
+        return list(set(r[4][0] for r in results))
     except socket.gaierror:
         return []
 
@@ -371,10 +189,11 @@ try:
 # ============================================================================
 # IPv6 Utilities
 # ============================================================================
+
+
 def is_valid_ipv6_address(address: str) -> bool:
-"""
-Check if a string is a valid IPv6 address.""
-try:
+    """Check if a string is a valid IPv6 address."""
+    try:
         ipaddress.IPv6Address(address)
         return True
     except ValueError:
@@ -382,9 +201,8 @@ try:
 
 
 def is_valid_ipv4_address(address: str) -> bool:
-"""
-Check if a string is a valid IPv4 address.""
-try:
+    """Check if a string is a valid IPv4 address."""
+    try:
         ipaddress.IPv4Address(address)
         return True
     except ValueError:
@@ -392,15 +210,13 @@ try:
 
 
 def is_valid_ip_address(address: str) -> bool:
-"""
-Check if a string is a valid IP address (v4 or v6).""
-return is_valid_ipv4_address(address) or is_valid_ipv6_address(address)
+    """Check if a string is a valid IP address (v4 or v6)."""
+    return is_valid_ipv4_address(address) or is_valid_ipv6_address(address)
 
 
 def normalize_ip(address: str) -> str:
-"""
-Normalize an IP address to standard form.""
-if is_valid_ipv4_address(address):
+    """Normalize an IP address to standard form."""
+    if is_valid_ipv4_address(address):
         return str(ipaddress.IPv4Address(address))
     if is_valid_ipv6_address(address):
         return str(ipaddress.IPv6Address(address))
@@ -413,19 +229,20 @@ if is_valid_ipv4_address(address):
 
 
 def split_host_port(host_port: str) -> tuple[str, int]:
-"""
-Parse a host:port string into components.
+    """
+    Parse a host:port string into components.
 
     Handles IPv6 addresses with brackets: [::1]:8080
 
     Args:
         host_port: String in format "host:port" or "[ipv6]:port"
+
     Returns:
         Tuple of (host, port)
 
     Raises:
         ValueError: If the format is invalid.
-"""
+    """
     # IPv6 with brackets
     if host_port.startswith("["):
         try:
@@ -445,8 +262,8 @@ Parse a host:port string into components.
 
 
 def join_host_port(host: str, port: int) -> str:
-"""
-Join a host and port into a string.
+    """
+    Join a host and port into a string.
 
     Handles IPv6 addresses by adding brackets.
 
@@ -456,8 +273,8 @@ Join a host and port into a string.
 
     Returns:
         Formatted string "host:port" or "[ipv6]:port"
-"""
-if is_valid_ipv6_address(host):
+    """
+    if is_valid_ipv6_address(host):
         return f"[{host}]:{port}"
     return f"{host}:{port}"
 
@@ -465,9 +282,11 @@ if is_valid_ipv6_address(host):
 # ============================================================================
 # Port Discovery
 # ============================================================================
+
+
 def get_open_port(start_port: int | None = None, max_attempts: int = 100, prefer_ipv4: bool = True) -> int:
-"""
-Find an available port.
+    """
+    Find an available port.
 
     Args:
         start_port: Optional starting port to try.
@@ -479,8 +298,8 @@ Find an available port.
 
     Raises:
         RuntimeError: If no port is available.
-"""
-if start_port is not None:
+    """
+    if start_port is not None:
         # Try specific port range
         for port in range(start_port, start_port + max_attempts):
             try:
@@ -491,6 +310,7 @@ if start_port is not None:
             except OSError:
                 continue
         raise RuntimeError(f"No available port in range {start_port}-{start_port + max_attempts}")
+
     # Let OS assign a port
     try:
         family = socket.AF_INET if prefer_ipv4 else socket.AF_INET6
@@ -506,8 +326,8 @@ if start_port is not None:
 
 
 def get_open_ports(count: int = 5, **kwargs: Any) -> list[int]:
-"""
-Get multiple available ports.
+    """
+    Get multiple available ports.
 
     Args:
         count: Number of ports to find.
@@ -515,16 +335,16 @@ Get multiple available ports.
 
     Returns:
         List of available port numbers.
-"""
-ports: set[int] = set()
+    """
+    ports: set[int] = set()
     while len(ports) < count:
         ports.add(get_open_port(**kwargs))
     return list(ports)
 
 
 def is_port_open(host: str, port: int, timeout: float = 1.0) -> bool:
-"""
-Check if a port is open (accepting connections).
+    """
+    Check if a port is open (accepting connections).
 
     Args:
         host: Host to check.
@@ -533,85 +353,51 @@ Check if a port is open (accepting connections).
 
     Returns:
         True if the port is accepting connections.
-"""
-try:
+    """
+    try:
         with socket.create_connection((host, port), timeout=timeout):
             return True
     except (socket.timeout, socket.error):
         return False
 
 
-def wait_for_port(
-        host: str,
-        port: int,
-        timeout: float = 30.0,
-        poll_interval: float | Callable[[], float] = 0.5,
-        sleep_fn: Callable[[float], None] | None = None
-    ) -> bool:
-"""
-Wait for a port to become available.
+def wait_for_port(host: str, port: int, timeout: float = 30.0, poll_interval: float = 0.5) -> bool:
+    """
+    Wait for a port to become available.
 
-        Args:
-            host: Host to check.
-            port: Port to check.
-            timeout: Total timeout in seconds.
-            poll_interval: Interval between checks (seconds) or a callable returning seconds.
-            sleep_fn: Optional sleep function to allow injection and testability.
+    Args:
+        host: Host to check.
+        port: Port to check.
+        timeout: Total timeout in seconds.
+        poll_interval: Interval between checks.
 
-        Returns:
-            True if port became available, False if timeout.
-"""
-deadline = time.monotonic() + timeout
-        if sleep_fn is None:
-            def _wait(secs: float) -> None:
-                threading.Event().wait(secs)
-            sleep_fn = _wait
+    Returns:
+        True if port became available, False if timeout.
+    """
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if is_port_open(host, port, timeout=min(poll_interval, 0.5)):
+            return True
+        time.sleep(poll_interval)
 
-        while time.monotonic() < deadline:
-            # Determine actual interval
-            if callable(poll_interval):
-                current_interval = poll_interval()
-            else:
-                current_interval = poll_interval
-
-            if current_interval is None:
-                current_interval = 0.5
-
-            # Check port
-            if is_port_open(host, port, timeout=min(current_interval, 0.5)):
-                return True
-
-            # Wait safely
-            sleep_fn(current_interval)
-
-        return False
+    return False
 
 
 def find_process_using_port(port: int) -> Any | None:
-"""
-Find the process using a specific port.
+    """
+    Find the process using a specific port.
 
     Requires psutil.
 
     Returns:
         psutil.Process if found, None otherwise.
-"""
-if not HAS_PSUTIL or psutil is None:
-        logger.warning("psutil not installed, cannot find process")    
+    """
+    if not HAS_PSUTIL:
+        logger.warning("psutil not installed, cannot find process")
         return None
 
     for conn in psutil.net_connections():
-        # conn.laddr can be a tuple (host, port) or named tuple depending on psutil version
-        try:
-            if isinstance(conn.laddr, tuple) and len(conn.laddr) > 1:
-                laddr_port = conn.laddr[1]
-            elif hasattr(conn.laddr, 'port'):
-                laddr_port = conn.laddr.port  # type: ignore
-            else:
-                continue
-        except (IndexError, AttributeError):
-            continue
-        if laddr_port == port and conn.status == psutil.CONN_LISTEN:
+        if conn.laddr.port == port and conn.status == psutil.CONN_LISTEN:
             try:
                 return psutil.Process(conn.pid)
             except (psutil.NoSuchProcess, psutil.AccessDenied):
@@ -622,9 +408,11 @@ if not HAS_PSUTIL or psutil is None:
 # ============================================================================
 # URI Builders
 # ============================================================================
+
+
 def get_tcp_uri(ip: str, port: int) -> str:
-"""
-Build a TCP URI string.
+    """
+    Build a TCP URI string.
 
     Args:
         ip: IP address.
@@ -632,28 +420,29 @@ Build a TCP URI string.
 
     Returns:
         URI in format "tcp://ip:port" or "tcp://[ipv6]:port"
-"""
-if is_valid_ipv6_address(ip):
+    """
+    if is_valid_ipv6_address(ip):
         return f"tcp://[{ip}]:{port}"
     return f"tcp://{ip}:{port}"
 
+
 def get_distributed_init_method(ip: str, port: int) -> str:
-"""
-Get the distributed initialization method string.
+    """
+    Get the distributed initialization method string.
 
     Compatible with PyTorch distributed.
-"""
-return get_tcp_uri(ip, port)
+    """
+    return get_tcp_uri(ip, port)
 
 
 def parse_uri(uri: str) -> dict[str, Any]:
-"""
-Parse a URI into components.
+    """
+    Parse a URI into components.
 
     Returns:
         Dictionary with scheme, host, port, path, query, fragment.
-"""
-parsed = urlparse(uri)
+    """
+    parsed = urlparse(uri)
     return {
         "scheme": parsed.scheme,
         "host": parsed.hostname,
@@ -668,36 +457,38 @@ parsed = urlparse(uri)
 # ============================================================================
 # ZeroMQ Utilities
 # ============================================================================
+
+
 def get_zmq_ipc_path(base_path: str | None = None) -> str:
-"""
-Generate a unique ZeroMQ IPC path.
+    """
+    Generate a unique ZeroMQ IPC path.
 
     Args:
         base_path: Base directory for IPC sockets.
 
     Returns:
         IPC URI string.
-"""
-import tempfile
+    """
+    import tempfile
+
     if base_path is None:
         base_path = tempfile.gettempdir()
     return f"ipc://{base_path}/{uuid4()}"
 
 
 def get_zmq_inproc_path() -> str:
-"""
-Generate a unique ZeroMQ in-process path.""
-return f"inproc://{uuid4()}"
+    """Generate a unique ZeroMQ in-process path."""
+    return f"inproc://{uuid4()}"
 
 
 def close_zmq_sockets(sockets: Sequence[Any]) -> None:
-"""
-Close ZeroMQ sockets with linger=0.
+    """
+    Close ZeroMQ sockets with linger=0.
 
     Args:
         sockets: Sequence of ZMQ sockets to close.
-"""
-if not HAS_ZMQ:
+    """
+    if not HAS_ZMQ:
         return
 
     for sock in sockets:
@@ -708,14 +499,16 @@ if not HAS_ZMQ:
 
 @contextlib.contextmanager
 def zmq_socket_context(context: Any, socket_type: int, *, linger: int = 0) -> Iterator[Any]:
-"""
-Context manager for ZMQ sockets with automatic cleanup.
+    """
+    Context manager for ZMQ sockets with automatic cleanup.
 
     Usage:
         >>> with zmq_socket_context(ctx, zmq.REQ) as sock:
-        ...     sock.connect("tcp://localhost:5555")""
-if not HAS_ZMQ:
+        ...     sock.connect("tcp://localhost:5555")
+    """
+    if not HAS_ZMQ:
         raise RuntimeError("ZeroMQ is not installed")
+
     sock = context.socket(socket_type)
     try:
         yield sock
@@ -724,31 +517,31 @@ if not HAS_ZMQ:
 
 
 def create_zmq_context(io_threads: int = 1) -> Any:
-"""
-Create a new ZeroMQ context.
+    """
+    Create a new ZeroMQ context.
 
     Args:
         io_threads: Number of I/O threads.
 
     Returns:
         zmq.Context instance.
-"""
-if not HAS_ZMQ or zmq is None:
+    """
+    if not HAS_ZMQ:
         raise RuntimeError("ZeroMQ is not installed")
     return zmq.Context(io_threads)
 
 
 def create_async_zmq_context(io_threads: int = 1) -> Any:
-"""
-Create a new async ZeroMQ context.
+    """
+    Create a new async ZeroMQ context.
 
     Args:
         io_threads: Number of I/O threads.
 
     Returns:
         zmq.asyncio.Context instance.
-"""
-if not HAS_ZMQ or zmq is None:
+    """
+    if not HAS_ZMQ:
         raise RuntimeError("ZeroMQ is not installed")
     return zmq.asyncio.Context(io_threads)
 
@@ -756,18 +549,21 @@ if not HAS_ZMQ or zmq is None:
 # ============================================================================
 # Network Interface Information
 # ============================================================================
+
+
 def get_network_interfaces() -> dict[str, list[str]]:
-"""
-Get all network interfaces and their IP addresses.
+    """
+    Get all network interfaces and their IP addresses.
 
     Requires psutil.
 
     Returns:
         Dictionary mapping interface names to list of IP addresses.
-"""
-if not HAS_PSUTIL or psutil is None:
+    """
+    if not HAS_PSUTIL:
         logger.warning("psutil not installed, limited interface info")
         return {"default": [get_ip()]}
+
     result: dict[str, list[str]] = {}
 
     for iface, addrs in psutil.net_if_addrs().items():
@@ -782,14 +578,19 @@ if not HAS_PSUTIL or psutil is None:
 
 
 def get_primary_interface() -> str | None:
-"""
-Get the name of the primary network interface.
+    """
+    Get the name of the primary network interface.
 
     Returns:
         Interface name or None if not determinable.
-"""
+    """
+    if not HAS_PSUTIL:
+        return None
+
     # Get the interface used for default route
     with contextlib.suppress(Exception):
+        import subprocess
+
         if sys.platform != "win32":
             result = subprocess.run(
                 ["ip", "route", "get", "8.8.8.8"],
@@ -847,32 +648,3 @@ __all__ = [
     "get_network_interfaces",
     "get_primary_interface",
 ]
-
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""
-
-"""
