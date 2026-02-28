@@ -1,18 +1,13 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
@@ -22,41 +17,23 @@ from __future__ import annotations
 """
 Load balancing strategies for Data Parallel coordination.
 """
-try:
 
-"""
+from __future__ import annotations
+
 from _thread import LockType
-except ImportError:
-    from _thread import LockType
+import random
+import threading
+from typing import Optional
 
-try:
-    import random
-except ImportError:
-    import random
-
-try:
-    import threading
-except ImportError:
-    import threading
-
-try:
-    from typing import Optional
-except ImportError:
-    from typing import Optional
-
-
-try:
-    from .infrastructure.swarm.parallel.dp.types import (WorkerHealth,
-except ImportError:
-    from src.infrastructure.swarm.parallel.dp.types import (WorkerHealth,
-
+from src.infrastructure.swarm.parallel.dp.types import (WorkerHealth,
                                                         WorkerState)
 
 
-
 class P2CLoadBalancer:
-        Power of Two Choices load balancer.
-    
+    """
+    Power of Two Choices load balancer.
+    """
+
     def __init__(self, workers: list[WorkerState], sample_size: int = 2, enable_locality: bool = True) -> None:
         self._workers: list[WorkerState] = workers
         self._sample_size: int = min(sample_size, len(workers))
@@ -64,13 +41,10 @@ class P2CLoadBalancer:
         self._lock: LockType = threading.Lock()
 
     def select_worker(self, locality_group: Optional[int] = None) -> WorkerState:
-"""
-Select best worker using P2C algorithm.        with self._lock:
+        """Select best worker using P2C algorithm."""
+        with self._lock:
             # Filter healthy workers
-            healthy: list[WorkerState] = [
-                w for w in self._workers
-                if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)
-            ]
+            healthy: list[WorkerState] = [w for w in self._workers if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)]
 
             if not healthy:
                 # Fallback to any worker
@@ -94,8 +68,6 @@ Select best worker using P2C algorithm.        with self._lock:
             return best
 
     def update_workers(self, workers: list[WorkerState]) -> None:
-"""
-Update worker list.        with self._lock:
+        """Update worker list."""
+        with self._lock:
             self._workers: list[WorkerState] = workers
-
-"""
