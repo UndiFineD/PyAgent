@@ -1,8 +1,3 @@
-"""
-Module: batch_dcp_wrapper
-Implements batch DCP attention wrapper for PyAgent engine.
-"""
-
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +12,8 @@ Implements batch DCP attention wrapper for PyAgent engine.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
+Module: batch_dcp_wrapper
 Batch DCP Wrapper - Batch processing for disaggregated prefill-decode.
 
 Implements batch-level wrappers for coordinating DCP (Disaggregated
@@ -50,11 +44,12 @@ logger = logging.getLogger(__name__)
 # Try importing optional dependencies
 try:
     import torch  # noqa: F401
-    import torch.distributed as dist  # noqa: F401
+    import torch.distributed as dist_module  # noqa: F401
 
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
+    dist_module = None  # type: ignore
 
 
 class BatchPhase(Enum):
@@ -136,13 +131,13 @@ class BatchMetadata:
 
     @property
     def is_decode(self) -> bool:
+        """Check if phase is decode."""
+        return self.phase == BatchPhase.DECODE
 
 @dataclass
-    Controls how batches are planned and executed.
-    """
-    Module: batch_dcp_wrapper
+class DCPPlanConfig:
+    """Controls how batches are planned and executed.
     Batch DCP wrapper for attention mechanisms in PyAgent engine.
-    """
     """
 
     # Batch sizing
@@ -486,8 +481,9 @@ class BatchDCPDecodeWrapper(BatchExecutor):
             output = {"hidden_states": hidden_states}
 
         # LSE all-gather if distributed
-        if plan.lse_gather_plan and HAS_TORCH and dist.is_initialized():
-            output = self._do_lse_gather(output, plan.lse_gather_plan)
+        if plan.lse_gather_plan and HAS_TORCH:
+            if dist_module is not None and dist_module.is_initialized():
+                output = self._do_lse_gather(output, plan.lse_gather_plan)
 
         # Update statistics
         self._total_decodes += len(plan.request_order)
@@ -507,8 +503,10 @@ class BatchDCPDecodeWrapper(BatchExecutor):
 
         Aggregates attention statistics across distributed ranks.
         """
-        if not HAS_TORCH:
+        if not HAS_TORCH or dist_module is None:
             return output
+
+        import torch  # Now that HAS_TORCH is True, import is guaranteed to work
 
         # Get local LSE values
         local_lse = output.get("lse")
@@ -518,12 +516,14 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         # All-gather across ranks
         world_size = gather_plan["world_size"]
         gathered_lse = [torch.empty_like(local_lse) for _ in range(world_size)]
-        dist.all_gather(gathered_lse, local_lse)
+        dist_module.all_gather(gathered_lse, local_lse)
 
         # Combine with log-sum-exp
         stacked = torch.stack(gathered_lse)
         max_lse = torch.max(stacked, dim=0).values
-        combined = max_lse + torch.log(torch.sum(torch.exp(stacked - max_lse), dim=0))
+        combined = max_lse + torch.log(
+            torch.sum(torch.exp(stacked - max_lse), dim=0)
+        )
 
         output["lse"] = combined
         return output

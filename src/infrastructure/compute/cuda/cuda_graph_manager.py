@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Module: cuda_graph_manager
-Manages CUDA graph execution and lifecycle for GPU acceleration in PyAgent.
-"""
+from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,7 +29,6 @@ Beyond vLLM:
 - Memory-aware graph selection
 """
 
-from __future__ import annotations
 
 import gc
 import logging
@@ -82,6 +78,8 @@ class BatchDescriptor:
     is_uniform_decode: bool = False
 
     def __hash__(self) -> int:
+        """Compute hash based on descriptor fields for use as dict key.
+        """
         return hash((self.num_tokens, self.num_reqs, self.is_uniform_decode))
 
     def relaxed(self) -> "BatchDescriptor":
@@ -145,6 +143,7 @@ class MockCUDAGraph:
     """Mock CUDA graph for non-GPU environments."""
 
     def __init__(self):
+        """Initialize mock graph."""
         self._captured = False
         self._replay_fn: Optional[Callable] = None
 
@@ -391,6 +390,7 @@ class AdaptiveCUDAGraphWrapper(CUDAGraphWrapper):
         max_cached_graphs: int = 100,
         min_replays_to_keep: int = 3,
     ):
+        """Initialize adaptive wrapper."""
         super().__init__(runnable, runtime_mode, options, max_cached_graphs)
         self.min_replays_to_keep = min_replays_to_keep
         self.shape_frequency: Dict[BatchDescriptor, int] = defaultdict(int)

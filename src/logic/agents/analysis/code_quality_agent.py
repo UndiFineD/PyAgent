@@ -27,11 +27,6 @@ Provides linting, scoring, and automated code improvement for maintainability an
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Code quality agent.py module.
-"""
-
-
 from __future__ import annotations
 
 import json

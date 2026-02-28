@@ -25,15 +25,17 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass
+from typing import Any
 
 import numpy as np
 
 # Try to import Rust accelerators
 try:
-    import rust_core
+    import rust_core as rust_core
 
     HAS_RUST = True
 except ImportError:
+    rust_core = None  # type: ignore
     HAS_RUST = False
 
 
@@ -113,17 +115,17 @@ def discretize_ssm(
         dA: Discretized state transition
         dB: Discretized input projection
     """
-    if HAS_RUST and hasattr(rust_core, "discretize_ssm_rust"):
+    if HAS_RUST and rust_core is not None and hasattr(rust_core, "discretize_ssm_rust"):
         return rust_core.discretize_ssm_rust(A, B, dt)
 
     # Expand dimensions for broadcasting
     if dt.ndim == 2:
         # Single step: [batch, d_inner]
-        dA: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.exp(dt[:, :, None] * A)  # [batch, d_inner, ssm_state_size]
+        dA: np.ndarray[tuple[int, ...], np.dtype[Any]] = np.exp(dt[:, :, None] * A)  # [batch, d_inner, ssm_state_size]
         dB = dt[:, :, None] * B[:, None, :]  # [batch, d_inner, ssm_state_size]
     else:
         # Sequence: [batch, seq_len, d_inner]
-        dA: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.exp(dt[:, :, :, None] * A)  # [batch, seq_len, d_inner, ssm_state_size]
+        dA: np.ndarray[tuple[int, ...], np.dtype[Any]] = np.exp(dt[:, :, :, None] * A)  # [batch, seq_len, d_inner, ssm_state_size]
         dB = dt[:, :, :, None] * B[:, :, None, :]  # [batch, seq_len, d_inner, ssm_state_size]
 
     return dA, dB
@@ -167,7 +169,7 @@ def apply_ssm_recurrence(
     output = np.zeros_like(x)
 
     # Sequential recurrence (can be parallelized with scan)
-    for t: int in range(seq_len):
+    for t in range(seq_len):
         # State update
         state = dA[:, t] * state + dB[:, t] * x[:, t : t + 1, :].transpose(0, 2, 1)
         state = state.squeeze(-1) if state.ndim == 4 else state
@@ -194,7 +196,7 @@ def silu_activation(x: np.ndarray) -> np.ndarray:
 
     More numerically stable than naive implementation.
     """
-    if HAS_RUST and hasattr(rust_core, "silu_activation_rust"):
+    if HAS_RUST and rust_core is not None and hasattr(rust_core, "silu_activation_rust"):
         return rust_core.silu_activation_rust(x)
 
     # Stable implementation avoiding overflow
@@ -242,7 +244,7 @@ class MambaBlockState:
     ) -> "MambaBlockState":
         """Create zero-initialized block state."""
         layer_states = []
-        for _: int in range(num_layers):
+        for _ in range(num_layers):
             conv_state = np.zeros(
                 (batch_size, d_inner, conv_kernel_size),
                 dtype=dtype,
@@ -295,8 +297,8 @@ def chunk_sequence(
     seq_len = x.shape[1]
     chunks = []
 
-    for start: int in range(0, seq_len, chunk_size):
-        end: int = min(start + chunk_size, seq_len)
+    for start in range(0, seq_len, chunk_size):
+        end = min(start + chunk_size, seq_len)
         chunks.append(x[:, start:end])
 
     return chunks
@@ -337,14 +339,14 @@ def parallel_scan(
         return values.copy()
 
     # Use Rust implementation if available
-    if HAS_RUST and hasattr(rust_core, "parallel_scan_rust"):
+    if HAS_RUST and rust_core is not None and hasattr(rust_core, "parallel_scan_rust"):
         return rust_core.parallel_scan_rust(gates, values)
 
     # Python implementation (sequential for correctness)
     output = np.zeros_like(values)
     output[:, 0] = values[:, 0]
 
-    for t: int in range(1, seq_len):
+    for t in range(1, seq_len):
         output[:, t] = gates[:, t] * output[:, t - 1] + values[:, t]
 
     return output
@@ -369,7 +371,7 @@ def init_A_log(
     # Initialize as log of linearly spaced values
     A: np.ndarray[tuple[int], np.dtype[np.floating[np._32Bit]]] = np.arange(1, ssm_state_size + 1, dtype=np.float32)
     A: np.ndarray[tuple[int, ...], np.dtype[np.floating[np._32Bit]]] = np.tile(A, (d_inner, 1))
-    A_log: np.ndarray[tuple[int, ...], np.dtype[math.Any]] = np.log(A)
+    A_log: np.ndarray[tuple[int, ...], np.dtype[Any]] = np.log(A)
 
     return A_log
 

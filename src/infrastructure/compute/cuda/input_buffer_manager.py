@@ -12,20 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-InputBufferManager - Input staging and buffer management for CUDA graphs.
-
-Implements vLLM's InputBatch patterns:
-- Pre-allocated input buffers
-- Static tensor storage for graph capture
-- Efficient input staging
-- Memory-efficient buffer pooling
-
-Beyond vLLM:
-- Hierarchical buffer pools
-- Predictive pre-allocation
-- Zero-copy staging when possible
-"""
 
 from __future__ import annotations
 
@@ -38,7 +24,21 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Set, Tuple, TypeVar
 
-from torch import Tensor
+try:
+    from torch import Tensor
+    import torch  # type: ignore[import-not-found]
+    TORCH_AVAILABLE = True
+except ImportError:
+    Tensor = Any
+    torch = None
+    TORCH_AVAILABLE = False
+
+try:
+    import numpy as np
+    NUMPY_AVAILABLE = True
+except ImportError:
+    np = None
+    NUMPY_AVAILABLE = False
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -164,21 +164,19 @@ class SimpleBufferPool(BufferPool):
 
     def _create_tensor(self, spec: BufferSpec) -> Any:
         """Create a new tensor."""
-        try:
-            import torch
-
+        if TORCH_AVAILABLE and torch is not None:
             device = torch.device(spec.device)
             dtype = getattr(torch, spec.dtype)
 
             if spec.pinned and spec.device == "cpu":
-                tensor: Tensor = torch.empty(spec.shape, dtype=dtype, pin_memory=True)
+                tensor = torch.empty(spec.shape, dtype=dtype, pin_memory=True)
             else:
-                tensor: Tensor = torch.empty(spec.shape, dtype=dtype, device=device)
+                tensor = torch.empty(spec.shape, dtype=dtype, device=device)
 
             return tensor
-        except ImportError:
-            import numpy as np
-
+        else:
+            if not NUMPY_AVAILABLE or np is None:
+                raise RuntimeError("NumPy is required for CPU buffer allocation")
             dtype = getattr(np, spec.dtype)
             return np.empty(spec.shape, dtype=dtype)
 
@@ -231,8 +229,8 @@ class InputSlot:
             self.tensor.copy_(data)
         else:
             # NumPy fallback
-            import numpy as np
-
+            if not NUMPY_AVAILABLE or np is None:
+                raise RuntimeError("NumPy is required for buffer data copy")
             np.copyto(self.tensor, data)
 
 
@@ -353,7 +351,8 @@ class InputBufferManager:
     def release_all(self) -> None:
         """Release all buffers."""
         with self._lock:
-            for slot: InputSlot in self._slots.values():
+            for slot in self._slots.values():
+                slot: InputSlot
                 if slot.tensor is not None:
                     self.pool.release(slot.tensor)
             self._slots.clear()
@@ -434,7 +433,7 @@ class PredictiveBufferManager(InputBufferManager):
         """Pre-warm predicted buffers."""
         sizes: List[int] = self.predict_next_sizes()
 
-        for size: int in sizes:
+        for size in sizes:
             spec = BufferSpec(shape=(size,), dtype="int64", device="cuda")
 
             if spec not in self._prewarmed:

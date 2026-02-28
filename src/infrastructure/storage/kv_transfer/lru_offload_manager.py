@@ -1,8 +1,6 @@
-"""
-Module: lru_offload_manager
-Manages LRU offload for distributed KV storage in PyAgent.
-"""
 #!/usr/bin/env python3
+from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,7 +30,6 @@ Key Features Beyond vLLM:
 Based on vLLM v1 patterns with PyAgent innovations.
 """
 
-from __future__ import annotations
 
 import threading
 import time
@@ -57,7 +54,6 @@ except ImportError:
 @dataclass(slots=True)
 class LRUEntry:
     """Entry in LRU cache with metadata."""
-
     block: BlockStatus
     access_count: int = 1
     access_time: float = field(default_factory=time.time)
@@ -80,6 +76,7 @@ class LRUOffloadManager(OffloadingManager):
     """
 
     def __init__(self, backend: Backend, enable_events: bool = False):
+        """Initialize LRU manager with given backend."""
         self.backend = backend
         # block_hash -> BlockStatus (ordered by access time)
         self.blocks: OrderedDict[BlockHash, BlockStatus] = OrderedDict()
@@ -226,6 +223,7 @@ class WeightedLRUManager(LRUOffloadManager):
     """
 
     def __init__(self, backend: Backend, enable_events: bool = False, frequency_weight: float = 0.3):
+        """Initialize weighted LRU manager."""
         super().__init__(backend, enable_events)
         self.frequency_weight = frequency_weight
         # Track access counts
@@ -319,6 +317,7 @@ class TieredLRUManager:
         hot_ratio: float = 0.2,
         warm_ratio: float = 0.3,
     ):
+        """Initialize tiered LRU manager with separate backends for each tier."""
         self.hot_manager = LRUOffloadManager(hot_backend, enable_events=True)
         self.warm_manager = LRUOffloadManager(warm_backend, enable_events=True)
         self.cold_manager = LRUOffloadManager(cold_backend) if cold_backend else None
@@ -412,6 +411,7 @@ class PrefetchingLRUManager(LRUOffloadManager):
     """
 
     def __init__(self, backend: Backend, enable_events: bool = False, prefetch_lookahead: int = 4):
+        """Initialize prefetching LRU manager."""
         super().__init__(backend, enable_events)
         self.prefetch_lookahead = prefetch_lookahead
 
@@ -449,6 +449,7 @@ class AsyncLRUManager:
     """Async wrapper for LRU offloading manager."""
 
     def __init__(self, manager: LRUOffloadManager):
+        """Initialize async wrapper with given LRU manager."""
         self.manager = manager
 
     async def lookup_async(self, block_hashes: list[BlockHash]) -> int:

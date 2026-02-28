@@ -45,11 +45,16 @@ from typing import Any, ParamSpec, TypeVar
 
 logger = logging.getLogger(__name__)
 
+# Type variables
+T = TypeVar("T")
+P = ParamSpec("P")
+F = TypeVar("F", bound=Callable[..., Any])
+
 
 
 def identity(value: T, **_kwargs: Any) -> T:
-"""
-    """Returns the first provided value unchanged."""
+    """
+    Returns the first provided value unchanged."""
     return value
 
 
@@ -76,6 +81,9 @@ def run_once(f: Callable[P, None]) -> Callable[P, None]:
 
     @wraps(f)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> None:
+        """
+        Wrapper function that runs the original function only once.
+        """
         nonlocal has_run
         if has_run:
             return
@@ -104,6 +112,9 @@ def run_once_with_result(f: Callable[P, T]) -> Callable[P, T]:
 
     @wraps(f)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        """
+        Wrapper function that runs the original function only once and caches the result.
+        """
         nonlocal result, has_run
         if has_run:
             return result  # type: ignore
@@ -144,6 +155,9 @@ def deprecate_args(
     check_deprecated = is_deprecated if callable(is_deprecated) else lambda: is_deprecated
 
     def wrapper(fn: F) -> F:
+        """
+        Wrapper function that checks for deprecated positional arguments.
+        """
         params = inspect.signature(fn).parameters
         pos_types = (
             inspect.Parameter.POSITIONAL_ONLY,
@@ -153,6 +167,9 @@ def deprecate_args(
 
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
+            """
+            Inner function that checks for deprecated positional arguments and calls the original function.
+            """
             if check_deprecated():
                 deprecated_args = pos_kws[start_index : len(args)]
                 if deprecated_args:
@@ -194,8 +211,14 @@ def deprecate_kwargs(
     check_deprecated = is_deprecated if callable(is_deprecated) else lambda: is_deprecated
 
     def wrapper(fn: F) -> F:
+        """
+        Wrapper function that checks for deprecated keyword arguments.
+        """
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
+            """
+            Inner function that checks for deprecated keyword arguments and calls the original function.
+            """
             if check_deprecated():
                 used_deprecated = kwargs.keys() & deprecated_kws
                 if used_deprecated:
@@ -231,6 +254,9 @@ def deprecated(
     def wrapper(fn: F) -> F:
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
+            """
+            Inner function that marks the function as deprecated and calls the original function.
+            """
             msg = f"{fn.__name__} is deprecated"
             if reason:
                 msg += f": {reason}"
@@ -358,6 +384,9 @@ def memoize(fn: Callable[P, T]) -> Callable[P, T]:
 
     @wraps(fn)
     def wrapper(*args: P.args, **kwargs: P.kwargs) -> T:
+        """
+        Wrapper function that memoizes the results of the original function.
+        """
         key = (args, tuple(sorted(kwargs.items())))
 
         with lock:
@@ -386,6 +415,9 @@ def memoize_method(fn: Callable[..., T]) -> Callable[..., T]:
 
     @wraps(fn)
     def wrapper(self: Any, *args: Any, **kwargs: Any) -> T:
+        """
+        Wrapper function that memoizes the results of the original method on the instance.
+        """
         cache_attr = f"_memoize_cache_{fn.__name__}"
 
         if not hasattr(self, cache_attr):
@@ -421,11 +453,17 @@ def throttle(min_interval: float) -> Callable[[F], F]:
     """
 
     def wrapper(fn: F) -> F:
+        """
+        Wrapper function that throttles the original function to only allow calls at a certain interval.
+        """
         last_call = 0.0
         lock = threading.Lock()
 
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
+            """
+            Inner function that checks the time since the last call and only allows execution if the minimum interval has passed.
+            """
             nonlocal last_call
             current_time = time.monotonic()
 
@@ -450,14 +488,23 @@ def debounce(wait: float) -> Callable[[F], F]:
     """
 
     def wrapper(fn: F) -> F:
+        """
+        Wrapper function that debounces the original function to only allow execution after a certain period of inactivity.
+        """
         timer: threading.Timer | None = None
         lock = threading.Lock()
 
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> None:
+            """
+            Inner function that resets the timer on each call and only executes the original function after a period of inactivity.
+            """
             nonlocal timer
 
             def execute() -> None:
+                """
+                Function to execute the original function after the debounce period.
+                """
                 fn(*args, **kwargs)
 
             with lock:
@@ -497,9 +544,15 @@ def retry_on_exception(
     import asyncio
 
     def is_coroutine_function(fn: Callable) -> bool:
+        """
+        Check if the function is a coroutine function (async).
+        """
         return asyncio.iscoroutinefunction(fn)
 
     def sync_inner(fn: F, *args: Any, **kwargs: Any) -> Any:
+        """
+        Inner function that retries the original function on specified exceptions with delay and backoff.
+        """
         current_delay = delay
         for attempt in range(max_retries + 1):
             try:
@@ -514,6 +567,9 @@ def retry_on_exception(
         return None
 
     async def async_inner(fn: F, *args: Any, **kwargs: Any) -> Any:
+        """
+        Inner function that retries the original async function on specified exceptions with delay and backoff.
+        """
         current_delay = delay
         for attempt in range(max_retries + 1):
             try:
@@ -528,14 +584,23 @@ def retry_on_exception(
         return None
 
     def wrapper(fn: F) -> F:
+        """
+        Wrapper function that applies the retry logic to the original function.
+        """
         if is_coroutine_function(fn):
             @wraps(fn)
             async def wrapped_async(*args: Any, **kwargs: Any) -> Any:
+                """
+                Wrapper function for async functions that applies the retry logic.
+                """
                 return await async_inner(fn, *args, **kwargs)
             return wrapped_async  # type: ignore
         else:
             @wraps(fn)
             def wrapped_sync(*args: Any, **kwargs: Any) -> Any:
+                """
+                Wrapper function for sync functions that applies the retry logic.
+                """
                 return sync_inner(fn, *args, **kwargs)
             return wrapped_sync  # type: ignore
 
@@ -555,11 +620,15 @@ def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
     """
 
     def wrapper(fn: F) -> F:
+        """Wrapper function that limits the number of calls to the original function within a specified time period."""
         calls: list[float] = []
         lock = threading.Lock()
 
         @wraps(fn)
         def inner(*args: Any, **kwargs: Any) -> Any:
+            """
+            Inner function that checks the time since the last call and only allows execution if the maximum call limit has not been exceeded.
+            """
             current_time = time.monotonic()
 
             with lock:
@@ -590,6 +659,7 @@ def timed(fn: F) -> F:
 
     @wraps(fn)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
+        """Wrapper function that logs the execution time of the original function."""
         start = time.perf_counter()
         try:
             return fn(*args, **kwargs)

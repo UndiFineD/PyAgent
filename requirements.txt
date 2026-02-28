@@ -1,13 +1,24 @@
 # PyAgent Requirements (Federated)
 # Optimized for Python 3.12
 # Main entry point - includes all sub-requirements
-
--r requirements/base.txt
--r requirements/dev.txt
--r requirements/ml.txt
-
-# --- Flattened requirements (auto-generated) ---
-
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+MouseInfo==0.1.3
+PyAutoGUI==0.9.54
+PyYAML==6.0.3
+aiofiles==25.1.0
+aiohappyeyeballs==2.6.1
+aiohttp==3.13.3
+aiosignal==1.4.0
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anthropic==0.71.0
+anyio==4.12.1
+arxiv==2.4.0
+attrs==25.4.0
+# PyAgent Requirements (Federated)
+# Optimized for Python 3.12
+# Main entry point - includes all sub-requirements
 Jinja2==3.1.6
 MarkupSafe==3.0.3
 MouseInfo==0.1.3
@@ -62,6 +73,7 @@ httpcore==1.0.9
 httptools==0.7.1
 httpx-sse==0.4.3
 httpx==0.28.1
+beautifulsoup4==4.12.2
 huggingface-hub==0.36.0
 humanfriendly==10.0
 hypothesis==6.115.0
@@ -85,19 +97,15 @@ markdown-it-py==4.0.0
 matplotlib==3.10.8
 mcp==1.25.0
 mdurl==0.1.2
-mistral_common==1.8.8
 mmh3==5.2.0
 model-hosting-container-standards==0.1.12
 mpmath==1.3.0
 msgspec==0.20.0
 networkx==3.6.1
 ninja==1.13.0
-numpy==2.4.1
 nvidia-ml-py==13.590.44
 ollama
-onnxruntime==1.23.2
 openai==2.14.0
-opencv-python-headless==4.12.0.88
 opentelemetry-api==1.39.1
 opentelemetry-exporter-otlp-proto-common==1.39.1
 opentelemetry-exporter-otlp-proto-grpc==1.39.1
@@ -105,7 +113,12 @@ opentelemetry-proto==1.39.1
 opentelemetry-sdk==1.39.1
 opentelemetry-semantic-conventions==0.60b1
 orjson==3.11.5
-outlines_core==0.2.11
+# outlines_core requires building Rust native extensions and the `aws-lc-sys`
+# dependency needs `cmake` and a C toolchain available during build. On many
+# Windows hosts this fails in CI or clean venvs. Commenting out to allow
+# environment installation; re-enable after installing system `cmake` and a
+# Rust toolchain, or provide a prebuilt wheel for your platform.
+# outlines_core==0.2.11
 overrides==7.7.0
 packaging==25.0
 pandas==3.0.0
@@ -156,9 +169,7 @@ tqdm==4.67.1
 transformers==4.57.3
 typer==0.21.1
 tzdata==2025.3
-urllib3==2.6.3
 uvicorn==0.40.0
-vllm==0.14.1
 watchfiles==1.1.1
 websocket-client==1.9.0
 websockets==15.0.1
@@ -166,3 +177,36 @@ win32_setctime==1.2.0
 yarl==1.22.0
 zeroconf==0.148.0
 zipp==3.23.0
+
+# --- Conflict / commented entries moved here ---
+# The pinned `mistral_common==1.8.8` previously caused "No matching distribution"
+# errors on this environment (Python/platform). Commenting out so `pip install`
+# can proceed; please pin to a compatible version or provide a platform wheel
+# if you need exact reproducibility.
+# mistral_common==1.8.8
+
+# Some packages require `numpy` 2.x but `opencv-python-headless` requires
+# `numpy<2.3.0`. Pin `numpy` to a 2.x release that satisfies those constraints.
+# Adjust if your target runtime prefers a different set of binaries.
+numpy==2.4.1
+
+# Pin `onnxruntime` to a version available on PyPI for this Python build.
+# 1.23.2 wasn't available on this platform; 1.24.2 is compatible and present.
+onnxruntime==1.24.2
+
+# `opencv-python-headless` causes a numpy version conflict on Python 3.14
+# with `pandas==3.0.0`. Commenting out to allow installation. Re-enable when
+# you have a compatible numpy/opencv pairing for your platform.
+# opencv-python-headless==4.12.0.88
+
+# `kubernetes==34.1.0` requires `urllib3<2.4.0`; 2.6.3 conflicts and may not have
+# builds for this Python. Pinning to a compatible release under 2.4.0 to satisfy
+# `kubernetes` while keeping broad compatibility. Adjust if you have stricter
+# constraints.
+urllib3==2.3.0
+
+# vllm currently requires building from source and pulls a build-time dependency
+# on `torch==2.6.0` which is not available for this Python/platform. Commenting
+# out `vllm` to allow the rest of the environment to install. Re-enable or pin
+# to a prebuilt wheel when a compatible release is available for your runtime.
+# vllm==0.8.3

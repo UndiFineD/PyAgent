@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ArchitectureMapper: Auto-generates Mermaid C4 diagrams for the project.
-"""
+from __future__ import annotations
 
 import logging
 import os
@@ -25,8 +23,8 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 
 class ArchitectureMapper:
-    """
-    Auto-generates a Mermaid C4 System Context Diagram based on the PyAgent project structure.
+    """Auto-generates a Mermaid C4 System Context Diagram based on the PyAgent project structure.
+    
     Maps relations between Core, Infrastructure, Logic, and Observability.
     """
 
@@ -97,16 +95,13 @@ mapping the inter-dependencies between major system boundaries.
 | **Observability** | Telemetry and logging. | `StructuredLogger`, `OTelManager`, `GPUMonitor` |
 
 
-
-
-
 ---
 *Generated automatically by `ArchitectureMapper.py` (Phase 236)*
 """
 
         os.makedirs(self.output_path.parent, exist_ok=True)
 
-        with open(self.output_path, "w", encoding="utf-8") as f: logging.TextIOWrapper[_WrappedBuffer]:
+        with open(self.output_path, "w", encoding="utf-8") as f:
             f.write(md_content)
 
         logger.info("Architecture map generated: %s", self.output_path)

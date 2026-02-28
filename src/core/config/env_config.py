@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,13 +25,11 @@ Inspired by vLLM's envs.py pattern.
 Features:
 
 Author: PyAgent Phase 20
-"""
-"""
+
 Module: env_config
 Handles environment configuration and variable management for PyAgent core.
 """
 
-from __future__ import annotations
 
 import json
 import logging
@@ -173,14 +174,19 @@ class EnvVar(Generic[T]):
         self._is_cached = False
 
     def __get__(self, obj: Any, objtype: type | None = None) -> T:
+        """Get the environment variable value when accessed as a class attribute.
+        """
         return self.get()
 
     def __set__(self, obj: Any, value: T) -> None:
+        """Set the environment variable value when assigned to as a class attribute."""
         # Allow setting via env var for testing
         os.environ[self.name] = str(value)
         self.reset_cache()
 
     def __repr__(self) -> str:
+        """Return a string representation of the EnvVar descriptor.
+        """
         return f"EnvVar({self.name!r}, default={self.default!r})"
 
 
@@ -520,6 +526,7 @@ class LazyEnvVar(Generic[T]):
         *,
         type_: type[T] | None = None,
     ) -> None:
+        """Initialize a lazy environment variable descriptor."""
         self.name = name
         self.default_factory = default_factory
         self.type_ = type_
@@ -527,6 +534,7 @@ class LazyEnvVar(Generic[T]):
         self._computed = False
 
     def get(self) -> T:
+        """Get the environment variable value, computing it on first access."""
         if self._computed:
             return self._value  # type: ignore
 
@@ -583,6 +591,7 @@ class temp_env:
         self.original: dict[str, str | None] = {}
 
     def __enter__(self) -> "temp_env":
+        """Set the environment variables temporarily, saving original values for restoration."""
         # Save original values
         for key in self.env_vars:
             self.original[key] = os.environ.get(key)
@@ -597,6 +606,8 @@ class temp_env:
         return self
 
     def __exit__(self, *args: Any) -> None:
+        """Restore original environment variable values after the block exits.
+        """
         # Restore original values
         for key, value in self.original.items():
             if value is None:

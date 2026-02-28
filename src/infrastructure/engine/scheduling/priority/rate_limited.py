@@ -12,12 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Rate limited.py module.
-"""
-
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+from __future__ import annotations
 
 from _thread import LockType
 import threading
@@ -57,7 +52,7 @@ class RateLimitedScheduler:
             TaskPriority.IDLE: 5.0,
         }
 
-        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p: TaskPriority in TaskPriority}
+        self._last_execution: Dict[TaskPriority, float] = {p: 0.0 for p in TaskPriority}
 
         self._scheduler = PriorityScheduler(workers=workers)
         self._lock: LockType = threading.Lock()

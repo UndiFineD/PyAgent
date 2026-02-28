@@ -24,8 +24,7 @@ from typing import BinaryIO, Callable, Dict, List, Optional, Union
 import numpy as np
 
 from .compression import compress_data
-from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
-                     TensorDtype, TensorizerConfig)
+from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION, TensorDtype, TensorizerConfig)
 from .metadata import TensorMetadata
 
 
@@ -99,7 +98,7 @@ class TensorizerWriter:
         self._file.write(struct.pack("<I", len(self._metadata)))
 
         # Each tensor's metadata
-        for meta: TensorMetadata in self._metadata:
+        for meta in self._metadata:
             meta_bytes: bytes = meta.to_bytes()
             self._file.write(struct.pack("<I", len(meta_bytes)))
             self._file.write(meta_bytes)
@@ -121,7 +120,7 @@ class TensorizerWriter:
         dtype: TensorDtype = TensorDtype.FLOAT32
         for td, (np_dtype, _) in DTYPE_MAP.items():
             if tensor.dtype == np_dtype:
-                dtype: TensorDtype = td
+                dtype = td
                 break
 
         # Serialize tensor data

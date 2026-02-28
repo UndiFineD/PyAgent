@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
-"""
-Module: kv_cache_metrics
-Tracks and reports KV cache metrics for distributed inference in PyAgent.
-"""
+from __future__ import annotations
 
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +33,6 @@ Features beyond vLLM:
 - Export to various formats
 """
 
-from __future__ import annotations
 
 import random
 import statistics
@@ -60,7 +56,6 @@ except ImportError:
 
 class MetricType(Enum):
     """Types of metrics collected."""
-
     LIFETIME = auto()  # Block lifetime in cache
     IDLE_TIME = auto()  # Time since last access
     ACCESS_COUNT = auto()  # Number of accesses
@@ -70,7 +65,6 @@ class MetricType(Enum):
 
 class AlertLevel(Enum):
     """Alert severity levels."""
-
     INFO = auto()
     WARNING = auto()
     CRITICAL = auto()
@@ -79,7 +73,6 @@ class AlertLevel(Enum):
 @dataclass
 class MetricsConfig:
     """Configuration for metrics collection."""
-
     sample_rate: float = 0.01  # Fraction of blocks to sample
     history_size: int = 1000  # Number of events to retain
     trend_window: int = 100  # Window for trend detection
@@ -88,6 +81,7 @@ class MetricsConfig:
     export_interval: float = 60.0  # Seconds between exports
 
     def __post_init__(self) -> None:
+        """Validate configuration values."""
         if not 0 < self.sample_rate <= 1.0:
             raise ValueError(f"sample_rate must be in (0, 1.0], got {self.sample_rate}")
 
@@ -95,7 +89,6 @@ class MetricsConfig:
 @dataclass
 class BlockMetricsState:
     """Tracks lifecycle metrics for a single KV cache block."""
-
     block_id: int
     birth_time_ns: int = field(default_factory=time.monotonic_ns)
     last_access_ns: int = field(default_factory=time.monotonic_ns)
@@ -137,7 +130,6 @@ class BlockMetricsState:
 @dataclass
 class KVCacheEvictionEvent:
     """Event for block eviction."""
-
     block_id: int
     lifetime_seconds: float
     idle_seconds: float
@@ -216,6 +208,7 @@ class KVCacheMetricsCollector:
     """
 
     def __init__(self, config: MetricsConfig | None = None):
+        """Initialize the metrics collector."""
         self.config = config or MetricsConfig()
 
         # Block metrics (sampled)
@@ -522,6 +515,7 @@ class BatchMetricsCollector:
     """
 
     def __init__(self, sample_rate: float = 0.01):
+        """Initialize batch metrics collector."""
         self.sample_rate = sample_rate
         self._pending_allocations: list[int] = []
         self._pending_accesses: list[int] = []

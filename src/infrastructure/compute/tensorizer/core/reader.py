@@ -12,34 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""Reader for tensorizer file format."""
+from __future__ import annotations
 
 from _thread import LockType
-from _thread import LockType
+from concurrent.futures import ThreadPoolExecutor  # noqa: F401
 import hashlib
 import mmap
 import struct
 import threading
-from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from pathlib import Path
-from typing import (BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple,
-                    Union)
+from typing import (BinaryIO, Callable, Dict, Iterator, List, Optional, Tuple, Union)
 
 import numpy as np
 
 from .compression import decompress_data
-from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
-                     CompressionType, TensorizerConfig)
+from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION, CompressionType, TensorizerConfig)
 from .metadata import TensorMetadata
 
 
 @dataclass
 class LoadProgress:
     """Progress information for loading."""
-
     total_tensors: int = 0
     loaded_tensors: int = 0
     total_bytes: int = 0
@@ -84,10 +78,12 @@ class TensorizerReader:
         self._metadata_offset = 0
 
     def __enter__(self) -> "TensorizerReader":
+        """Context manager entry: open the file."""
         self.open()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        """Context manager exit: close the file."""
         self.close()
 
     def open(self) -> None:
@@ -238,7 +234,7 @@ class TensorizerReader:
 
         progress = LoadProgress(
             total_tensors=len(names),
-            total_bytes=sum(self._metadata[n].size_bytes for n: str in names if n in self._metadata),
+            total_bytes=sum(self._metadata[n].size_bytes for n in names if n in self._metadata),
         )
 
         result: Dict[str, np.ndarray] = {}
@@ -260,12 +256,14 @@ class TensorizerReader:
                 if progress_callback:
                     progress_callback(progress)
 
-        with ThreadPoolExecutor(max_workers=self.config.parallel_threads) as executor: ThreadPoolExecutor:
+        with ThreadPoolExecutor(max_workers=self.config.parallel_threads) as executor:
             executor.map(load_one, names)
 
         return result
 
     def iter_tensors(self) -> Iterator[Tuple[str, np.ndarray]]:
         """Iterate over tensors one at a time."""
-        for name: str in self._metadata:
-            yield name, self.read_tensor(name)
+        for name in self._metadata:
+            tensor = self.read_tensor(name)
+            if tensor is not None:
+                yield name, tensor

@@ -1,7 +1,3 @@
-"""
-Module: triton_attention_ops
-Triton-based attention operations for PyAgent engine.
-"""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,25 +12,6 @@ Triton-based attention operations for PyAgent engine.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-Triton Attention Operations - GPU-accelerated attention kernels.
-
-Implements high-performance attention operations inspired by vLLM's
-Triton attention kernels. Provides paged attention, flash attention,
-and optimized decode attention for inference.
-
-Key patterns from vLLM:
-- kernel_paged_attention_2d for 2D block attention
-- _paged_attention_decode with CUDA streams
-- KV splits for handling long contexts
-
-Beyond vLLM:
-- Unified attention API with automatic backend selection
-- Memory-efficient sliding window attention
-- Dynamic precision switching (FP16/BF16/FP32)
-"""
 
 from __future__ import annotations
 
@@ -43,51 +20,40 @@ import math
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Callable, Dict, List, Optional
 
-from torch import Tensor
+if TYPE_CHECKING:
+    import torch as torch  # type: ignore[import-not-found]
+    from torch import Tensor
+else:
+    Tensor = Any  # type: ignore[assignment]
 
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
-
-from torch import Tensor
 
 logger: logging.Logger = logging.getLogger(__name__)
 
 # Try importing PyTorch and Triton
 try:
-    import torch
-
+    import torch  # type: ignore[import-not-found]
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
 
 try:
-    import triton
-    import triton.language as tl
+    import triton  # type: ignore[import-not-found]
+    import triton.language as tl  # type: ignore[import-not-found]
 
     HAS_TRITON = True
 except ImportError:
     HAS_TRITON = False
+    tl = None  # type: ignore[assignment]
+
+try:
+    import numpy  # type: ignore[import-not-found]
+
+    HAS_NUMPY = True
+except ImportError:
+    HAS_NUMPY = False
+    numpy = None  # type: ignore[assignment]
 
 
 class AttentionBackend(Enum):
@@ -207,12 +173,13 @@ class AttentionKernel(ABC):
         """Check if kernel supports given context length."""
 
 
-_paged_attention_kernel = None
+_paged_attention_kernel_impl: Optional[Callable[..., None]] = None
 
 if HAS_TRITON and HAS_TORCH:
+    assert tl is not None, "Triton language module should be available"
 
-    @triton.jit
-    def _paged_attention_kernel(  # pylint: disable=function-redefined, unused-argument, invalid-name
+    @triton.jit  # type: ignore[name-defined]
+    def _paged_attention_kernel(  # pylint: disable=unused-argument, invalid-name
         output_ptr,
         query_ptr,
         k_cache_ptr,
@@ -235,20 +202,21 @@ if HAS_TRITON and HAS_TORCH:
         stride_output_dim,
         stride_block_tables_batch,
         stride_block_tables_block,
-        num_heads: tl.constexpr,
-        head_dim: tl.constexpr,
-        num_kv_heads: tl.constexpr,
-        block_size: tl.constexpr,
-        scale: tl.constexpr,
-        BLOCK_D: tl.constexpr,
+        num_heads,  # type: ignore[name-defined]
+        head_dim,  # type: ignore[name-defined]
+        num_kv_heads,  # type: ignore[name-defined]
+        block_size,  # type: ignore[name-defined]
+        scale,  # type: ignore[name-defined]
+        BLOCK_D,  # type: ignore[name-defined]
     ) -> None:
         """Triton kernel for paged attention decode.
 
         Inspired by vLLM's kernel_paged_attention_2d.
         """
+        assert tl is not None, "Triton language module must be available"
         # Get batch and head indices
-        batch_idx = tl.program_id(0)
-        head_idx = tl.program_id(1)
+        batch_idx = tl.program_id(0)  # type: ignore[attr-defined]
+        head_idx = tl.program_id(1)  # type: ignore[attr-defined]
 
         # Get context length for this sequence
         context_len = tl.load(context_lens_ptr + batch_idx)
@@ -270,7 +238,7 @@ if HAS_TRITON and HAS_TORCH:
         # Process each block
         num_blocks = (context_len + block_size - 1) // block_size
 
-        for block_idx: int in range(num_blocks):
+        for block_idx in range(num_blocks):
             # Get physical block number from block table
             block_table_offset = batch_idx * stride_block_tables_batch
             phys_block = tl.load(block_tables_ptr + block_table_offset + block_idx * stride_block_tables_block)
@@ -279,7 +247,7 @@ if HAS_TRITON and HAS_TORCH:
             k_offset = phys_block * stride_k_cache_block + kv_head_idx * stride_k_cache_head
 
             # Compute attention scores for this block
-            for seq_pos: int in range(block_size):
+            for seq_pos in range(block_size):
                 abs_pos = block_idx * block_size + seq_pos
                 if abs_pos < context_len:
                     # Load key vector
@@ -335,13 +303,13 @@ class TritonPagedAttention(AttentionKernel):
         v_cache: Optional["torch.Tensor"] = None,
     ) -> "torch.Tensor":
         """Execute Triton paged attention."""
-        if not HAS_TRITON:
-            raise RuntimeError("Triton not available")
+        if not HAS_TRITON or not HAS_TORCH:
+            raise RuntimeError("Triton and PyTorch required for paged attention")
 
         batch_size, num_heads, head_dim = query.shape
 
         # Allocate output
-        output: Tensor = torch.empty_like(query)
+        output: "torch.Tensor" = torch.empty_like(query)  # type: ignore[name-defined]
 
         # Check for block tables
         if metadata.block_tables is None:
@@ -350,7 +318,11 @@ class TritonPagedAttention(AttentionKernel):
         # Launch kernel
         grid: tuple[int, int] = (batch_size, num_heads)
 
-        _paged_attention_kernel[grid](
+        # Validate cache tensors are not None
+        if k_cache is None or v_cache is None:
+            raise ValueError("k_cache and v_cache tensors are required for paged attention")
+
+        _paged_attention_kernel[grid](  # type: ignore[index]
             output,
             query,
             k_cache,
@@ -418,6 +390,9 @@ class NaiveAttention(AttentionKernel):
         _metadata: AttentionMetadata,
     ) -> "torch.Tensor":
         """PyTorch implementation."""
+        if not HAS_TORCH:
+            raise RuntimeError("PyTorch required for torch forward")
+        import torch  # type: ignore[import-not-found]
         # Standard attention computation
         scores: Tensor = torch.matmul(query, key.transpose(-2, -1)) * self.scale
         attn_weights: Tensor = torch.softmax(scores, dim=-1)
@@ -432,13 +407,14 @@ class NaiveAttention(AttentionKernel):
         _metadata: AttentionMetadata,
     ) -> Any:
         """NumPy fallback implementation."""
-        import numpy as np
+        if not HAS_NUMPY or numpy is None:
+            raise RuntimeError("NumPy required for numpy fallback implementation")
 
         # Standard attention computation
-        scores = np.matmul(query, np.swapaxes(key, -2, -1)) * self.scale
-        scores = scores - np.max(scores, axis=-1, keepdims=True)
-        attn_weights = np.exp(scores) / np.sum(np.exp(scores), axis=-1, keepdims=True)
-        output = np.matmul(attn_weights, value)
+        scores = numpy.matmul(query, numpy.swapaxes(key, -2, -1)) * self.scale
+        scores = scores - numpy.max(scores, axis=-1, keepdims=True)
+        attn_weights = numpy.exp(scores) / numpy.sum(numpy.exp(scores), axis=-1, keepdims=True)
+        output = numpy.matmul(attn_weights, value)
         return output
 
     def supports_context_length(self, context_len: int) -> bool:
@@ -466,6 +442,8 @@ class SlidingWindowAttention(AttentionKernel):
         if not HAS_TORCH:
             raise RuntimeError("PyTorch required for sliding window attention")
 
+        import torch  # type: ignore[import-not-found]
+
         _, _, seq_len, _ = query.shape
 
         # Create sliding window mask
@@ -474,7 +452,7 @@ class SlidingWindowAttention(AttentionKernel):
 
         # Apply sliding window
         window_mask: Tensor = torch.ones_like(causal_mask)
-        for i: int in range(seq_len):
+        for i in range(seq_len):
             start: int = max(0, i - self.window_size + 1)
             window_mask[i, :start] = 0
 
@@ -605,6 +583,8 @@ class TritonAttentionOps:
         if not HAS_TORCH:
             raise RuntimeError("KV splits require PyTorch")
 
+        import torch  # type: ignore[import-not-found]
+
         num_splits: int = self._kv_split.num_splits
         max_context: int = metadata.max_decode_seq_len
         split_size: int = (max_context + num_splits - 1) // num_splits
@@ -612,7 +592,7 @@ class TritonAttentionOps:
         # Collect split outputs
         split_outputs = []
 
-        for i: int in range(num_splits):
+        for i in range(num_splits):
             start_pos: int = i * split_size
             end_pos: int = min((i + 1) * split_size, max_context)
 
@@ -620,9 +600,12 @@ class TritonAttentionOps:
                 break
 
             # Create split metadata
+            split_context_lens = None
+            if metadata.context_lens is not None:
+                split_context_lens = torch.clamp(metadata.context_lens - start_pos, min=0, max=end_pos - start_pos)
             split_metadata = AttentionMetadata(
                 block_tables=metadata.block_tables,
-                context_lens=torch.clamp(metadata.context_lens - start_pos, min=0, max=end_pos - start_pos),
+                context_lens=split_context_lens,
                 max_decode_seq_len=end_pos - start_pos,
             )
 

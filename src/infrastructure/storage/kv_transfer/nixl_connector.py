@@ -1,9 +1,6 @@
-"""
-Module: nixl_connector
-Connector for Nixl distributed KV storage in PyAgent.
-"""
-
 #!/usr/bin/env python3
+from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +27,6 @@ It utilizes RDMA techniques and peer-to-peer memory copies to minimize CPU overh
 Inspired by vLLM's NixlConnector and advanced distributed communication patterns.
 """
 
-from __future__ import annotations
 
 import logging
 import threading
@@ -106,7 +102,7 @@ class NixlConnector(KVConnectorBase):
     def _init_rdma(self):
         """Initialize Rust RDMA context."""
         try:
-            self.rust_bridge.execute(
+            self.rust_bridge.call(
                 "init_nixl_rdma",
                 {
                     "rank": self.rank,
@@ -143,7 +139,7 @@ class NixlConnector(KVConnectorBase):
                 addr = tensor.data_ptr()
                 length = tensor.numel() * tensor.element_size()
 
-            result = self.rust_bridge.execute("nixl_register_mr", {"address": addr, "length": length})
+            result = self.rust_bridge.call("nixl_register_mr", {"address": addr, "length": length})
 
             region = NixlMemoryRegion(
                 address=addr,
@@ -163,7 +159,7 @@ class NixlConnector(KVConnectorBase):
             region = self.register_memory(local_tensor)
             transfer_id = f"tx_{int(time.time() * 1000)}_{uuid.uuid4().hex[:8]}"
 
-            self.rust_bridge.execute(
+            self.rust_bridge.call(
                 "nixl_rdma_write",
                 {
                     "transfer_id": transfer_id,
@@ -185,7 +181,7 @@ class NixlConnector(KVConnectorBase):
     def poll_completions(self) -> List[str]:
         """Poll for completed transfers."""
         try:
-            completed = self.rust_bridge.execute("nixl_poll_cq", {})
+            completed = self.rust_bridge.call("nixl_poll_cq", {})
             finished_ids = []
             with self._lock:
                 for tx_id in completed:

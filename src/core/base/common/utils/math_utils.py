@@ -17,7 +17,9 @@ math_utils.py
 
 Mathematical utilities for numerical operations and statistical analysis.
 
-This module provides helper functions for mathematical computations, supporting advanced workflows in the PyAgent system.
+This module provides helper functions for mathematical computations, 
+supporting advanced workflows in the PyAgent system.
+"""
 
 
 from __future__ import annotations
@@ -31,6 +33,7 @@ try:
 
     RUST_AVAILABLE = True
 except ImportError:
+    rc = None
     RUST_AVAILABLE = False
 def cdiv(a: int, b: int) -> int:
     """Ceiling division without floating point.
@@ -53,7 +56,7 @@ def cdiv(a: int, b: int) -> int:
         >>> cdiv(1, 3)
         1
     """
-    if RUST_AVAILABLE and hasattr(rc, "cdiv_rust"):
+    if RUST_AVAILABLE and rc is not None and hasattr(rc, "cdiv_rust"):
         return rc.cdiv_rust(a, b)
     return -(a // -b)
 
@@ -78,7 +81,7 @@ def next_power_of_2(n: int) -> int:
         >>> next_power_of_2(1)
         1
     """
-    if RUST_AVAILABLE and hasattr(rc, "next_power_of_2_rust"):
+    if RUST_AVAILABLE and rc is not None and hasattr(rc, "next_power_of_2_rust"):
         return rc.next_power_of_2_rust(n)
     if n <= 0:
         return 1
@@ -105,7 +108,7 @@ def prev_power_of_2(n: int) -> int:
         >>> prev_power_of_2(1)
         1
     """
-    if RUST_AVAILABLE and hasattr(rc, "prev_power_of_2_rust"):
+    if RUST_AVAILABLE and rc is not None and hasattr(rc, "prev_power_of_2_rust"):
         return rc.prev_power_of_2_rust(n)
     if n <= 0:
         return 1
@@ -144,7 +147,7 @@ def round_up(n: int, multiple: int) -> int:
         >>> round_up(8, 4)
         8
     """
-    if RUST_AVAILABLE and hasattr(rc, "round_up_rust"):
+    if RUST_AVAILABLE and rc is not None and hasattr(rc, "round_up_rust"):
         return rc.round_up_rust(n, multiple)
     return cdiv(n, multiple) * multiple
 
@@ -166,7 +169,7 @@ def round_down(n: int, multiple: int) -> int:
         >>> round_down(8, 4)
         8
     """
-    if RUST_AVAILABLE and hasattr(rc, "round_down_rust"):
+    if RUST_AVAILABLE and rc is not None and hasattr(rc, "round_down_rust"):
         return rc.round_down_rust(n, multiple)
     return (n // multiple) * multiple
 

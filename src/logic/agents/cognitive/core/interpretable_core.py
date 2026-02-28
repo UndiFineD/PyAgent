@@ -21,7 +21,6 @@
 """
 InterpretableCore: Core logic for interpretable Sparse Autoencoder (SAE) bridges in PyAgent.
 Enables explainable AI, feature attribution, and transparent model reasoning for cognitive agents.
-"""
 
 This module simulates the decomposition of LLM activations into human-interpretable
 features, leveraging Rust for high-throughput vectorized operations.
@@ -80,7 +79,7 @@ class InterpretableCore:
         k = 10
 
         # Rust-accelerated top-K selection using partial sort
-        if RUST_AVAILABLE and hasattr(rc, "top_k_indices_rust"):
+        if RUST_AVAILABLE and rc is not None and hasattr(rc, "top_k_indices_rust"):
             try:
                 top_k = rc.top_k_indices_rust(mock_activations, k)
             except (ValueError, RuntimeError, TypeError) as e:

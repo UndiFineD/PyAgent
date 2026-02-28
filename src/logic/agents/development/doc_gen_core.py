@@ -28,13 +28,6 @@ No file I/O or side effects; designed for type safety and Rust FFI compatibility
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Doc gen core.py module.
-"""
-
-# pylint: disable=too-many-ancestors
-
-
 from __future__ import annotations
 
 import ast

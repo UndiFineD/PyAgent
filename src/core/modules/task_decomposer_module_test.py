@@ -1,0 +1,18 @@
+# Auto-synced test for core/modules/task_decomposer_module.py
+import importlib.util
+import pathlib
+
+
+def _load_module():
+    p = pathlib.Path(__file__).parent / "task_decomposer_module.py"
+    spec = importlib.util.spec_from_file_location("_mod_under_test", p)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_imports_and_symbols():
+    mod = _load_module()
+    assert hasattr(mod, "PlanStep"), "PlanStep missing"
+    assert hasattr(mod, "TaskDecomposerModule"), "TaskDecomposerModule missing"
+
