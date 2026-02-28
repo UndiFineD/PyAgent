@@ -1,136 +1,53 @@
 #!/usr/bin/env python3
 
-
+"""
+Voting agent.py module.
+"""
+# Copyright 2026 PyAgent Authors
+# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""
-VotingAgent - Consensus and Multi-Agent Voting Specialist
+import contextlib
+import json
+import logging
+import re
+import time
+from dataclasses import dataclass, field
+from enum import Enum
+from typing import Any, Dict, List, Optional
 
-"""
-
-# DATE: 2026-02-13
-# AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate and use inside the PyAgent swarm: from src.core.agents.voting_agent import VotingAgent
-- Create sessions and collect votes via the tool-wrapped async methods:
-  agent = VotingAgent(__file__); await agent.create_session("Which plan?", ["A","B"], method="ranked_choice")"  await agent.cast_vote(session_id, voter_id, choice, weight=1.0, rankings=None, reasoning=None)
-
-WHAT IT DOES:
-- Provides an agent (VotingAgent) that manages VotingSession objects, collects Vote dataclasses, and computes consensus using multiple voting methods (majority, weighted, ranked-choice, Borda, approval, quadratic, consensus).
-- Exposes as_tool-decorated async methods (create_session, cast_vote, etc.) for integration into the PyAgent lifecycle; maintains in-memory sessions, enforces active-state and duplicate-voter checks, stores timestamps and optional reasoning for auditability.
-- Ships enumerations (VotingMethod, VoteStatus) and simple data models (Vote, VotingSession) to standardize vote representation and session lifecycle handling.
-
-WHAT IT SHOULD DO BETTER:
-- Persist sessions and votes to durable storage (StateTransaction-backed) to survive process restarts and to support audit and reconciliation.
-- Implement full, tested tally algorithms for each VotingMethod (ranked-choice instant-runoff, Borda scoring, quadratic cost math, tie-break strategies) and surface detailed result metadata.
-- Add authentication/authorization for voters, replay-protection, conflict resolution for concurrent vote submissions, telemetry for voting anomalies, and pluggable tie/consensus policies; extract heavy computation into a Core class for Rust acceleration as per repository conventions.
-
-FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-
-Voting agent.py module.
-# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
-
-try:
-    import contextlib
-except ImportError:
-    import contextlib
-
-try:
-    import json
-except ImportError:
-    import json
-
-try:
-    import logging
-except ImportError:
-    import logging
-
-try:
-    import re
-except ImportError:
-    import re
-
-try:
-    import time
-except ImportError:
-    import time
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
-try:
-    from typing import Any, Dict, List, Optional
-except ImportError:
-    from typing import Any, Dict, List, Optional
-
-
-try:
-    from .core.base.common.base_utilities import as_tool
-except ImportError:
-    from src.core.base.common.base_utilities import as_tool
-
-try:
-    from .core.base.lifecycle.base_agent import BaseAgent
-except ImportError:
-    from src.core.base.lifecycle.base_agent import BaseAgent
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-
 class VotingMethod(Enum):
-"""
-Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
+    """Supported consensus and voting methodologies."""
+    MAJORITY = "majority"
+    WEIGHTED = "weighted"
+    RANKED_CHOICE = "ranked_choice"
+    BORDA_COUNT = "borda_count"
+    APPROVAL = "approval"
+    QUADRATIC = "quadratic"
+    CONSENSUS = "consensus"
 
 
 class VoteStatus(Enum):
-"""
-Current state of a voting session.#     PENDING" = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE = "inconclusive
+    """Current state of a voting session."""
+    PENDING = "pending"
+    ACTIVE = "active"
+    COMPLETED = "completed"
+    TIED = "tied"
+    INCONCLUSIVE = "inconclusive"
+
 
 @dataclass
 class Vote:
-"""
-Represents a single vote.
+    """Represents a single vote."""
+
     voter_id: str
     choice: str
     weight: float = 1.0
@@ -141,8 +58,8 @@ Represents a single vote.
 
 @dataclass
 class VotingSession:
-"""
-Represents a voting session.
+    """Represents a voting session."""
+
     session_id: str
     question: str
     options: List[str]
@@ -156,17 +73,27 @@ Represents a voting session.
 
 # pylint: disable=too-many-ancestors
 class VotingAgent(BaseAgent):
+    """
     Agent specializing in evaluation and consensus.
-    Gathers votes from multiple agents to decide on a 'truth' or 'best path'.'    Supports multiple voting methods including ranked choice "and quadratic voting."
+    Gathers votes from multiple agents to decide on a 'truth' or 'best path'.
+    Supports multiple voting methods including ranked choice and quadratic voting.
+    """
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._sessions: Dict[str, VotingSession] = {}
         self._session_counter = 0
         self._system_prompt = (
-#             "You are the Voting Agent. You act as an impartial judge for agentic consensus."#             "You aggregate multiple perspectives and determine the winner based on"#             "majority, ranked choice, or weighted quality metrics. You ensure fair voting."        )
+            "You are the Voting Agent. You act as an impartial judge for agentic consensus. "
+            "You aggregate multiple perspectives and determine the winner based on "
+            "majority, ranked choice, or weighted quality metrics. You ensure fair voting."
+        )
 
     @as_tool
-    async def create_session(self, question: str, options: List[str], method: str = "majority") -> Dict[str, Any]:"#         "Creates a new voting session."       " self._session_counter += 1"#         session_id = fvote_{self._session_counter}
+    async def create_session(self, question: str, options: List[str], method: str = "majority") -> Dict[str, Any]:
+        """Creates a new voting session."""
+        self._session_counter += 1
+        session_id = f"vote_{self._session_counter}"
 
         voting_method = VotingMethod(method) if method in [m.value for m in VotingMethod] else VotingMethod.MAJORITY
 
@@ -176,7 +103,12 @@ class VotingAgent(BaseAgent):
         self._sessions[session_id] = session
 
         return {
-            "session_id": session_id,"            "question": question,"            "options": options,"            "method": voting_method.value,"            "status": VoteStatus.ACTIVE.value,"        }
+            "session_id": session_id,
+            "question": question,
+            "options": options,
+            "method": voting_method.value,
+            "status": VoteStatus.ACTIVE.value,
+        }
 
     @as_tool
     # pylint: disable=too-many-positional-arguments
@@ -189,170 +121,34 @@ class VotingAgent(BaseAgent):
         rankings: Optional[List[str]] = None,
         reasoning: Optional[str] = None,
     ) -> Dict[str, Any]:
-#         "Casts a vote in an active session."        if session_id not in self._sessions:
-            return {"success": False, "error": fSession {session_id} not found"}"
+        """Casts a vote in an active session."""
+        if session_id not in self._sessions:
+            return {"success": False, "error": f"Session {session_id} not found"}
+
         session = self._sessions[session_id]
 
         if session.status != VoteStatus.ACTIVE:
-            return {"success": False, "error": fSession is {session.status.value}"}"
+            return {"success": False, "error": f"Session is {session.status.value}"}
+
         # Check if already voted
         if any(v.voter_id == voter_id for v in session.votes):
-            return {"success": False, "error": fVoter {voter_id} has already voted"}"
-        # Validate choice
-        if session.method != Votin
-# VotingAgent: Consensus and Multi-Agent Voting Specialist - Phase 319 Enhanced
+            return {"success": False, "error": f"Voter {voter_id} has already voted"}
 
-try:
-    import contextlib
-except ImportError:
-    import contextlib
-
-try:
-    import json
-except ImportError:
-    import json
-
-try:
-    import logging
-except ImportError:
-    import logging
-
-try:
-    import re
-except ImportError:
-    import re
-
-try:
-    import time
-except ImportError:
-    import time
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
-try:
-    from typing import Any, Dict, List, Optional
-except ImportError:
-    from typing import Any, Dict, List, Optional
-
-
-try:
-    from .core.base.common.base_utilities import as_tool
-except ImportError:
-    from src.core.base.common.base_utilities import as_tool
-
-try:
-    from .core.base.lifecycle.base_agent import BaseAgent
-except ImportError:
-    from src.core.base.lifecycle.base_agent import BaseAgent
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
-
-
-class VotingMethod(Enum):
-"""
-Supported consensus and voting methodologies.#     MAJORITY = "majority"#     WEIGHTED = "weighted"#     RANKED_CHOICE = "ranked_choice"#     BORDA_COUNT = "borda_count"#     APPROVAL = "approval"#     QUADRATIC = "quadratic"#     CONSENSUS = "consensus"
-
-
-class VoteStatus(Enum):
-"""
-Current state of a voting session.#     PENDING = "pending"#     ACTIVE = "active"#     COMPLETED = "completed"#     TIED = "tied"#     INCONCLUSIVE" = "inconclusive
-
-@dataclass
-class "Vote:"#     "Represents a single vote."
-    voter_id: str
-    choice: str
-    weight: float = 1.0
-    rankings: Optional[List[str]] = None  # For ranked choice
-    timestamp: float = field(default_factory=time.time)
-    reasoning: Optional[str] = None
-
-
-@dataclass
-class VotingSession:
-"""
-Represents a voting session.
-    session_id: str
-    question: str
-    options: List[str]
-    method: VotingMethod
-    votes: List[Vote] = field(default_factory=list)
-    status: VoteStatus = VoteStatus.PENDING
-    winner: Optional[str] = None
-    results: Dict[str, Any] = field(default_factory=dict)
-    created_at: float = field(default_factory=time.time)
-
-
-# pylint: disable=too-many-ancestors
-class VotingAgent(BaseAgent):
-   " Agent specializing in evaluation and consensus."    Gathers votes from multiple agents to decide on a 'truth' or 'best path'.'    Supports multiple voting methods including ranked choice and quadratic voting.
-
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self._sessions: Dict[str, VotingSession] = {}
-        self._session_counter = 0
-        self._system_prompt = (
-#             "You are the Voting Agent. You act as an impartial judge for agentic consensus."#             "You aggregate multiple perspectives and determine the winner based on"#             "majority, ranked choice, or weighted quality metrics. You ensure fair voting."        )
-
-    @as_tool
-    async def create_session(self, question: str, options: List[str], method: str = "majority") -> Dict[str, Any]:"#         "Creates a new" voting session."        self._session_counter += 1
-#         session_id = fvote_{self._session_counter}
-
-        voting_method = VotingMethod(method) if method in [m.value for m in VotingMethod] else VotingMethod.MAJORITY
-
-        session = VotingSession(
-            session_id=session_id, question=question, options=options, method=voting_method, status=VoteStatus.ACTIVE
-        )
-        self._sessions[session_id] = session
-
-        return {
-            "session_id": session_id,"            "question": question,"            "options": options,"            "method": voting_method.value,"            "status": VoteStatus.ACTIVE.value,"        }
-
-    @as_tool
-    # pylint: disable=too-many-positional-arguments
-    async def cast_vote(
-        self,
-        session_id: str,
-        voter_id: str,
-        choice: str,
-        weight: float = 1.0,
-        rankings: Optional[List[str]] = None,
-        reasoning: Optional[str] = None,
-    ) -> Dict[str, Any]:
-#         "Casts a vote in "an active" session."        if session_id not in self._sessions:
-            return {"success": False, "error": fSession {session_id} not found"}"
-        session = self._sessions[session_id]
-
-        if session.status != VoteStatus.ACTIVE:
-            return {"success": False, "error": fSession is {session.status.value}"}"
-        # Check if already voted
-        if any(v.voter_id == voter_id for v in session.votes):
-            return {"success": False, "error": fVoter {voter_id} has already voted"}"
         # Validate choice
         if session.method != VotingMethod.RANKED_CHOICE:
             if choice not in session.options:
-                return {"success": False, "error": fInvalid option: {choice}"}"
+                return {"success": False, "error": f"Invalid option: {choice}"}
+
         vote = Vote(voter_id=voter_id, choice=choice, weight=weight, rankings=rankings, reasoning=reasoning)
         session.votes.append(vote)
 
         return {"success": True, "session_id": session_id, "voter_id": voter_id, "vote_count": len(session.votes)}
+
     @as_tool
     async def cast_weighted_vote(self, options: List[str], weights: Dict[str, float]) -> Dict[str, Any]:
-#         "Determines the winner among options using provided weights (legacy method)."      "  logging.info("VotingAgent: Aggregating weighted votes...")"
+        """Determines the winner among options using provided weights (legacy method)."""
+        logging.info("VotingAgent: Aggregating weighted votes...")
+
         # Calculate weighted scores
         scores = {opt: 0.0 for opt in options}
         for opt in options:
@@ -364,25 +160,36 @@ class VotingAgent(BaseAgent):
 
         # LLM analysis for context
         prompt = (
-#             fOptions: {options}\\nWeights: {weights}\\n\\n
-#             "Analyze which option is objectively superior given the context of the fleet's mission."'#             "Provide reasoning in JSON: {'recommendation': '...', 'confidence': 0-1, 'reasoning': '...'}"'        )
+            f"Options: {options}\nWeights: {weights}\n\n"
+            "Analyze which option is objectively superior given the context of the fleet's mission. "
+            "Provide reasoning in JSON: {'recommendation': '...', 'confidence': 0-1, 'reasoning': '...'}"
+        )
         analysis = await self.improve_content(prompt)
 
-        llm_analysis = {"raw": analysis}"        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
-            match = re.search(r"(\{[\\\\s\\S]*\})", analysis)"            if match:
+        llm_analysis = {"raw": analysis}
+        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
+            match = re.search(r"(\{[\s\S]*\})", analysis)
+            if match:
                 llm_analysis = json.loads(match.group(1))
 
         return {
-            "winner": winner,"            "scores": scores,"            "percentages": {k: v / total if total else 0 for k, v in scores.items()},"            "llm_analysis": llm_analysis,"        }
+            "winner": winner,
+            "scores": scores,
+            "percentages": {k: v / total if total else 0 for k, v in scores.items()},
+            "llm_analysis": llm_analysis,
+        }
 
     @as_tool
     async def tally_votes(self, session_id: str) -> Dict[str, Any]:
-#         "Tallies votes and determines the winner."        if session_id not in self._sessions:
-            return {"success": False, "error": fSession {session_id} not found"}"
+        """Tallies votes and determines the winner."""
+        if session_id not in self._sessions:
+            return {"success": False, "error": f"Session {session_id} not found"}
+
         session = self._sessions[session_id]
 
         if not session.votes:
             return {"success": False, "error": "No votes cast"}
+
         # Tally based on method
         if session.method == VotingMethod.MAJORITY:
             results = self._tally_majority(session)
@@ -400,39 +207,67 @@ class VotingAgent(BaseAgent):
             results = self._tally_majority(session)
 
         session.results = results
-        session.winner = results.get("winner")"        session.status = VoteStatus.COMPLETED if results.get("winner") else VoteStatus.TIED"
+        session.winner = results.get("winner")
+        session.status = VoteStatus.COMPLETED if results.get("winner") else VoteStatus.TIED
+
         return {
-            "session_id": session_id,"            "method": session.method.value,"            "total_votes": len(session.votes),"            "status": session.status.value,"            **results,
+            "session_id": session_id,
+            "method": session.method.value,
+            "total_votes": len(session.votes),
+            "status": session.status.value,
+            **results,
         }
 
     @as_tool
     async def get_session_status(self, session_id: str) -> Dict[str, Any]:
-#         "Gets the current "status of" a voting session."        if session_id not in self._sessions:
-            return {"error": fSession {session_id} not found"}"
+        """Gets the current status of a voting session."""
+        if session_id not in self._sessions:
+            return {"error": f"Session {session_id} not found"}
+
         session = self._sessions[session_id]
 
         return {
-            "session_id": session_id,"            "question": session.question,"            "options": session.options,"            "method": session.method.value,"            "status": session.status.value,"            "vote_count": len(session.votes),"            "winner": session.winner,"            "results": session.results,"        }
+            "session_id": session_id,
+            "question": session.question,
+            "options": session.options,
+            "method": session.method.value,
+            "status": session.status.value,
+            "vote_count": len(session.votes),
+            "winner": session.winner,
+            "results": session.results,
+        }
 
     @as_tool
     async def deliberate(self, question: str, perspectives: List[Dict[str, str]]) -> Dict[str, Any]:
-#         "Facilitates deliberation among multiple perspectives."        perspectives_text = "\\n\\n".join("            [f"**{p.get('agent', 'Agent')}**: {p.get('position', 'No position')}" for p in perspectives]"'        )
+        """Facilitates deliberation among multiple perspectives."""
+        perspectives_text = "\n\n".join(
+            [f"**{p.get('agent', 'Agent')}**: {p.get('position', 'No position')}" for p in perspectives]
+        )
 
         prompt = (
-#             fQuestion: {question}\\n\\n
-#             fPerspectives:\\n{perspectives_text}\\n\\n
-#             "As an impartial moderator, synthesize these perspectives:\\n"#             "1. Identify common ground\\n"#             "2. Highlight key disagreements\\n"#             "3. Propose a compromise or synthesis\\n"#             "4. Recommend the best path forward\\n"#             "Output JSON: {'common_ground': [...], 'disagreements': [...],"'#             "'synthesis': '...', 'recommendation': '...', 'confidence': 0-1}"'        )
+            f"Question: {question}\n\n"
+            f"Perspectives:\n{perspectives_text}\n\n"
+            "As an impartial moderator, synthesize these perspectives:\n"
+            "1. Identify common ground\n"
+            "2. Highlight key disagreements\n"
+            "3. Propose a compromise or synthesis\n"
+            "4. Recommend the best path forward\n"
+            "Output JSON: {'common_ground': [...], 'disagreements': [...], "
+            "'synthesis': '...', 'recommendation': '...', 'confidence': 0-1}"
+        )
 
         res = await self.improve_content(prompt)
 
         with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
-            match = re.search(r"(\{[\\\\s\\S]*\})", res)"            if match:
+            match = re.search(r"(\{[\s\S]*\})", res)
+            if match:
                 return json.loads(match.group(1))
 
         return {"raw": res}
+
     def _tally_majority(self, session: VotingSession) -> Dict[str, Any]:
-"""
-Simple "majority voting.        counts = {opt: 0 for opt in session.options}
+        """Simple majority voting."""
+        counts = {opt: 0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in counts:
                 counts[vote.choice] += 1
@@ -441,10 +276,16 @@ Simple "majority voting.        counts = {opt: 0 for opt in session.options}
         winners = [opt for opt, count in counts.items() if count == max_votes]
 
         return {
-            "counts": counts,"            "winner": winners[0] if len(winners) == 1 else None,"            "tied": winners if len(winners) > 1 else None,"            "majority_threshold": len(session.votes) // 2 + 1,"            "has_majority": max_votes > len(session.votes) // 2,"        }
+            "counts": counts,
+            "winner": winners[0] if len(winners) == 1 else None,
+            "tied": winners if len(winners) > 1 else None,
+            "majority_threshold": len(session.votes) // 2 + 1,
+            "has_majority": max_votes > len(session.votes) // 2,
+        }
 
     def _tally_weighted(self, session: VotingSession) -> Dict[str, Any]:
-"""       "Weighted voting.        scores = {opt: 0.0 for opt in session.options}
+        """Weighted voting."""
+        scores = {opt: 0.0 for opt in session.options}
         for vote in session.votes:
             if vote.choice in scores:
                 scores[vote.choice] += vote.weight
@@ -453,8 +294,10 @@ Simple "majority voting.        counts = {opt: 0 for opt in session.options}
         winner = max(scores, key=scores.get) if max_score > 0 else None
 
         return {"scores": scores, "winner": winner, "total_weight": sum(v.weight for v in session.votes)}
+
     def _tally_ranked_choice(self, session: VotingSession) -> Dict[str, Any]:
-"""    "Instant-runoff ranked choice voting.        remaining = set(session.options)
+        """Instant-runoff ranked choice voting."""
+        remaining = set(session.options)
         rounds = []
 
         while len(remaining) > 1:
@@ -474,15 +317,17 @@ Simple "majority voting.        counts = {opt: 0 for opt in session.options}
             for opt, count in counts.items():
                 if count > total / 2:
                     return {"winner": opt, "rounds": rounds, "method": "majority_reached"}
+
             # Eliminate lowest
             if counts:
                 lowest = min(counts, key=counts.get)
                 remaining.remove(lowest)
 
         return {"winner": list(remaining)[0] if remaining else None, "rounds": rounds, "method": "elimination"}
+
     def _tally_borda(self, session: VotingSession) -> Dict[str, Any]:
-"""
-Borda count voting.        n = len(session.options)
+        """Borda count voting."""
+        n = len(session.options)
         scores = {opt: 0 for opt in session.options}
 
         for vote in session.votes:
@@ -494,9 +339,10 @@ Borda count voting.        n = len(session.options)
         winner = max(scores, key=scores.get) if scores else None
 
         return {"scores": scores, "winner": winner, "max_possible": n * len(session.votes)}
+
     def _tally_approval(self, session: VotingSession) -> Dict[str, Any]:
-"""
-Approval" voting (rankings treated as approvals).        counts = {opt: 0 for opt in session.options}
+        """Approval voting (rankings treated as approvals)."""
+        counts = {opt: 0 for opt in session.options}
 
         for vote in session.votes:
             if vote.rankings:
@@ -507,8 +353,10 @@ Approval" voting (rankings treated as approvals).        counts = {opt: 0 for op
         winner = max(counts, key=counts.get) if counts else None
 
         return {"counts": counts, "winner": winner}
-    def _tally_quadratic(self, session: VotingSession) -> Dict["str, Any]:"""
-Quadratic voting (weight = sqrt of votes).        import math
+
+    def _tally_quadratic(self, session: VotingSession) -> Dict[str, Any]:
+        """Quadratic voting (weight = sqrt of votes)."""
+        import math
 
         scores = {opt: 0.0 for opt in session.options}
 
@@ -519,32 +367,3 @@ Quadratic voting (weight = sqrt of votes).        import math
         winner = max(scores, key=scores.get) if scores else None
 
         return {"scores": {k: round(v, 3) for k, v in scores.items()}, "winner": winner}
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""

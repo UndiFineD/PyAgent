@@ -1,520 +1,172 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# Reading the repository to find governance_agent.py so the full file can be included verbatim in the module description.
-"""
-governance_agent.py - GovernanceAgent for proposal deliberation, voting, and policy management
-
-"""
-
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""" [Brief Summary]"""
-# DATE: 2026-02-13
-# [BATCHFIX] Commented metadata/non-Python
-# AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate: agent = GovernanceAgent(__file__)
-- Submit a proposal: agent.submit_proposal(title, description, creator, options=None)
-# [BATCHFIX] Commented metadata/non-Python
-# - Cast a vote: agent.cast_vote(proposal_id, voter, choice, rationale=")"  # [BATCHFIX] closed string"- Close a proposal and get results: agent.close_proposal(proposal_id)
-- Lightweight async helper: await agent.improve_content(prompt, target_file=None)
-
-WHAT IT DOES:
-- Provides tools to submit proposals, record them to disk, and log metadata via the agent _record pipeline.
-- Allows agents to cast votes with rationale, enforces one-vote-per-agent, persists votes, and records vote events.
-- Closes proposals, tallies votes, determines a winner, and writes results back to the proposal artifact.
-- Supplies a small async TODO Placeholder improve_content method and CLI entrypoint integration via create_main_function.
-
-WHAT IT SHOULD DO BETTER:
-- Add authentication/authorization and stronger identity verification for proposers and voters to prevent spoofing.
-- Support quorum rules, weighted voting, vote delegation, and configurable voting windows/expiration times.
-- Improve concurrency handling (file locks or transactional StateTransaction) to prevent race conditions on proposal files.
-- Add unit tests for edge cases (tie handling, invalid inputs), and a policy migration/validation mechanism for policies.json.
-- Replace bare filesystem persistence with the project's transactional StateTransaction abstraction and add schema validation for proposal artifacts."  # [BATCHFIX] closed string"  # [BATCHFIX] closed string"'
-FILE CONTENT SUMMARY:
-GovernanceAgent for PyAgent.
+"""GovernanceAgent for PyAgent.
 Specializes in multi-agent proposal deliberation, voting, and fleet-wide policy management.
 Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
 """
-try:
-    import json
-except ImportError:
-    import json
 
-try:
-    import logging
-except ImportError:
-    import logging
+from __future__ import annotations
 
-try:
-    import time
-except ImportError:
-    import time
+import json
+import logging
+import time
+import uuid
+from pathlib import Path
+from typing import Any
 
-try:
-    import uuid
-except ImportError:
-    import uuid
-
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib import Path
-
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
-
-
-try:
-    from .core.base.common.base_utilities import as_tool
-except ImportError:
-    from src.core.base.common.base_utilities import as_tool
-
-try:
-    from .core.base.lifecycle.base_agent import BaseAgent
-except ImportError:
-    from src.core.base.lifecycle.base_agent import BaseAgent
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-
 class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-"""
-Manages proposals, voting cycles, and governance policies for the fleet.
+    """Manages proposals, voting cycles, and governance policies for the fleet."""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-# [BATCHFIX] Commented metadata/non-Python
-"""
-self.proposals_dir = Path(self._workspace_root) / "data/memory/agent_store/governance/proposals"  # [BATCHFIX] closed string"        self.proposals_dir.mkdir(parents=True, exist_ok=True)
-# [BATCHFIX] Commented metadata/non-Python
-"""
-self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/governance/policies.json"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#         self._system_prompt = (
-# [BATCHFIX] Commented metadata/non-Python
-"""             "You are the Governance Agent. Your role is to oversee the democratic processes"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""             "of the fleet. You manage proposals for resource allocation, task prioritization,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""             "and model upgrades. You ensure that all votes are counted and policies are archived."  # [BATCHFIX] closed string"        )
+        self.proposals_dir = Path(self._workspace_root) / "data/memory/agent_store/governance/proposals"
+        self.proposals_dir.mkdir(parents=True, exist_ok=True)
+        self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/governance/policies.json"
+        self._system_prompt = (
+            "You are the Governance Agent. Your role is to oversee the democratic processes "
+            "of the fleet. You manage proposals for resource allocation, task prioritization, "
+            "and model upgrades. You ensure that all votes are counted and policies are archived."
+        )
 
     @as_tool
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#     def submit_proposal(
+    def submit_proposal(
         self,
         title: str,
         description: str,
         creator: str,
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-options: list[str] | None = None,"""    ) -> str:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string"""
-#         "Submits a new governance proposal for the fleet."  # [BATCHFIX] closed string
+        options: list[str] | None = None,
+    ) -> str:
+        """Submits a new governance proposal for the fleet.
+
         Args:
             title: Title of the proposal.
             description: Detailed description of the requested change/action.
             creator: Name of the agent or user submitting the proposal.
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-options: List of choices for the vote (default is ['Approve', 'Reject'])."""'# [BATCHFIX] Commented metadata/non-Python
-#         proposal_id = str(uuid."uuid4())[:8]"  # [BATCHFIX] closed string"        proposal = {
-            "id": proposal_id,"            "title": title,"            "description": description,"            "creator": creator,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""             "options": options or ["Approve", "Reject"],"            "status": "active","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""             "votes": {opt: [] for opt in (options or ["Approve", "Reject"])},"            "created_at": time.time(),"        }
+            options: List of choices for the vote (default is ['Approve', 'Reject']).
+        """
+        proposal_id = str(uuid.uuid4())[:8]
+        proposal = {
+            "id": proposal_id,
+            "title": title,
+            "description": description,
+            "creator": creator,
+            "options": options or ["Approve", "Reject"],
+            "status": "active",
+            "votes": {opt: [] for opt in (options or ["Approve", "Reject"])},
+            "created_at": time.time(),
+        }
 
-# [BATCHFIX] Commented metadata/non-Python
-"""
-path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"        with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
+        path = self.proposals_dir / f"{proposal_id}.json"
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(proposal, f, indent=4)
 
         # Phase 108: Intelligence Recording
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#         self._record(
+        self._record(
             description,
             proposal_id,
-            provider="Governance","            model="ProposalSubmission","            meta={"title": title, "creator": creator},"        )
+            provider="Governance",
+            model="ProposalSubmission",
+            meta={"title": title, "creator": creator},
+        )
 
-# [BATCHFIX] Commented metadata/non-Python
-#         logging.info(fGovernance: New proposal submitted: {title} ({proposal_id})")"  # [BATCHFIX] closed string"        return proposal_id
+        logging.info(f"Governance: New proposal submitted: {title} ({proposal_id})")
+        return proposal_id
 
     @as_tool
-# [BATCHFIX] Commented metadata/non-Python
-#     def cast_vote(self, proposal_id: str, voter: str, choice: str, rationale: str = ") -> str:"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string"""
-#         "Casts a vote on an active proposal."  # [BATCHFIX] closed string
+    def cast_vote(self, proposal_id: str, voter: str, choice: str, rationale: str = "") -> str:
+        """Casts a vote on an active proposal.
+
         Args:
             proposal_id: ID of the proposal to vote on.
             voter: Name of the agent casting the vote.
             choice: The selected option.
             rationale: Brief explanation for the vote.
-#         path = self.proposals_dir / f"{"proposal_id}.json"        if not path.exists():
-#             return fError: Proposal {proposal_id} not found.
+        """
+        path = self.proposals_dir / f"{proposal_id}.json"
+        if not path.exists():
+            return f"Error: Proposal {proposal_id} not found."
 
-        with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
+        with open(path, encoding="utf-8") as f:
+            proposal = json.load(f)
 
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-if proposal["status"] != "active":"#             return fError: Proposal {proposal_id} is no longer active.
+        if proposal["status"] != "active":
+            return f"Error: Proposal {proposal_id} is no longer active."
 
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-if choice not in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""" #             return fError: Invalid choice '{choice}'. Valid: {list(proposal['votes'].keys())}"""
+        if choice not in proposal["votes"]:
+            return f"Error: Invalid choice '{choice}'. Valid: {list(proposal['votes'].keys())}"
+
         # Check if already voted
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-for opt in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-for v in proposal["votes"][opt]:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-if v["agent"] == voter:"#                     return fError: Agent {voter} has already voted on this proposal.
+        for opt in proposal["votes"]:
+            for v in proposal["votes"][opt]:
+                if v["agent"] == voter:
+                    return f"Error: Agent {voter} has already voted on this proposal."
 
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "timestamp": time.time()})
-        with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
+        proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "timestamp": time.time()})
+
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(proposal, f, indent=4)
 
         # Phase 108: Intelligence Recording
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#         self._record(
-            f"{voter} voted {choice} on {proposal_id}","            rationale,
-            provider="Governance","            model="Vote","            meta={"proposal_id": proposal_id},"        )
+        self._record(
+            f"{voter} voted {choice} on {proposal_id}",
+            rationale,
+            provider="Governance",
+            model="Vote",
+            meta={"proposal_id": proposal_id},
+        )
 
-#         return fVote cast by {voter} on proposal {proposal_id}.
+        return f"Vote cast by {voter} on proposal {proposal_id}."
 
     @as_tool
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-def close_proposal(self, proposal_id: str) -> dict[str, Any]:"Closes a proposal and calculates the results.#         path = self.proposals_dir / "f"{proposal_id}.json"        if not path.exists():
+    def close_proposal(self, proposal_id: str) -> dict[str, Any]:
+        """Closes a proposal and calculates the results."""
+        path = self.proposals_dir / f"{proposal_id}.json"
+        if not path.exists():
             return {"error": "Proposal not found"}
-        with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
 
-# [BATCHFIX] Commented metadata/non-Python
-"""
-proposal["status"] = "closed"  # [BATCHFIX] closed string
+        with open(path, encoding="utf-8") as f:
+            proposal = json.load(f)
+
+        proposal["status"] = "closed"
+
         # Calculate winner
 
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-tallies = {opt: len(proposal["votes"][opt]) for opt in proposal["votes"]}"        winner = max(tallies, key=tallies.get)
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-proposal["result"] = {"winner": winner, "tallies": tallies}
-        with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
+        tallies = {opt: len(proposal["votes"][opt]) for opt in proposal["votes"]}
+        winner = max(tallies, key=tallies.get)
+        proposal["result"] = {"winner": winner, "tallies": tallies}
+
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(proposal, f, indent=4)
 
         return proposal
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         _ = (prompt, target_file)
-# [BATCHFIX] Commented metadata/non-Python
-"""
-return "Decentralized governance ensures fleet resilience and alignment."  # [BATCHFIX] closed string
-
-if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
-
-    main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-#     main()
-
-try:
-    import json
-except ImportError:
-    import json
-
-try:
-    import logging
-except ImportError:
-    import logging
-
-try:
-    import time
-except ImportError:
-    import time
-
-try:
-    import uuid
-except ImportError:
-    import uuid
-
-try:
-    from pathlib import Path
-except ImportError:
-    from pathlib import Path
-
-try:
-    from typing import Any
-except ImportError:
-    from typing import Any
+        return "Decentralized governance ensures fleet resilience and alignment."
 
 
-try:
-    from .core.base.common.base_utilities import as_tool
-except ImportError:
-    from src.core.base.common.base_utilities import as_tool
+if __name__ == "__main__":
+    from src.core.base.common.base_utilities import create_main_function
 
-try:
-    from .core.base.lifecycle.base_agent import BaseAgent
-except ImportError:
-    from src.core.base.lifecycle.base_agent import BaseAgent
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-__version__ = VERSION
-
-
-
-class GovernanceAgent(BaseAgent):  # pylint: disable=too-many-ancestors
-"""
-Manages proposals, voting cycles, and governance "policies for the fleet.
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-# [BATCHFIX] Commented metadata/non-Python
-"""
-self.proposals_dir = Path(self._workspace_root) / "data/memory/agent_store/governance/proposals"  # [BATCHFIX] closed string"        self.proposals_dir.mkdir(parents=True, exist_ok=True)
-# [BATCHFIX] Commented metadata/non-Python
-"""
-self.policies_path = Path(self._workspace_root) / "data/memory/agent_store/governance/policies.json"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#         self._system_prompt = (
-# [BATCHFIX] Commented metadata/non-Python
-"""             "You are the Governance Agent. Your role is to oversee the democratic processes"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""             "of the fleet. You manage proposals for resource allocation, task prioritization,"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-"""             "and model upgrades. You ensure that all votes are counted and policies are archived."  # [BATCHFIX] closed string"        )
-
-    @as_tool
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#     def submit_proposal(
-        self,
-        title: str,
-        description: str,
-        creator: str,
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-options: list[str] | None = None,"""    ) -> str:
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string"""
-#         "Submits a new governance proposal for the fleet."  # [BATCHFIX] closed string
-        Args:
-            title: Title of the proposal.
-            description: Detailed description of the requested change/action.
-            creator: Name of the agent or user submitting the proposal.
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-options: List of choices for the vote (default is ['Approve', 'Reject'])."""'# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-proposal_id = str(uuid.uuid4())[:8]""
-proposal = {
-            "id": proposal_id,"            "title": title,"            "description": description,"            "creator": creator,"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""             "options": options or ["Approve", "Reject"],"            "status": "active","# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""             "votes": {opt: [] for opt in (options or ["Approve", "Reject"])},"            "created_at": time.time(),"        }
-
-# [BATCHFIX] Commented metadata/non-Python
-"""
-path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"        with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
-
-        # Phase 108: Intelligence Recording
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#         self._record(
-            description,
-            proposal_id,
-            provider="Governance","            model="ProposalSubmission","            meta={"title": title, "creator": creator},"        )
-
-# [BATCHFIX] Commented metadata/non-Python
-#         logging.info(fGovernance: New proposal submitted: {title} ({proposal_id})")"  # [BATCHFIX] closed string"        return proposal_id
-
-    @as_tool
-# [BATCHFIX] Commented metadata/non-Python
-#     def cast_vote(self, proposal_id: str, voter: str, choice: str, rationale: str = ") -> str:"  # [BATCHFIX] closed string"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unterminated string"""
-#         "Casts a vote on an active proposal."  # [BATCHFIX] closed string
-        Args:
-            proposal_id: ID of the proposal to vote on.
-            voter: Name of the agent casting the vote.
-            choice: The selected option.
-            rationale: Brief explanation for the vote.
-# [BATCHFIX] Commented metadata/non-Python
-"""
-path = self.proposals_dir / f"{proposal_id}.json"  # [BATCHFIX] closed string"        if not path.exists():
-#             return fError: Proposal {proposal_id} not found.
-
-        with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
-
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-if proposal["status"] != "active":"#             return fError: Proposal {proposal_id} is no longer active.
-
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-if choice not in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-""" #             return fError: Invalid choice '{choice}'. Valid: {list(proposal['votes'].keys())}"""
-        # Check if already voted
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-for opt in proposal["votes"]:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-for v in proposal["votes"][opt]:"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-if v["agent"] == voter:"#                     return fError: Agent {voter} has already voted on this proposal.
-
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-proposal["votes"][choice].append({"agent": voter, "rationale": rationale, "timestamp": time.time()})
-        with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
-
-        # Phase 108: Intelligence Recording
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented unmatched parenthesis"""
-#         self._record(
-            f"{voter} voted {choice} on {proposal_id}","            rationale,
-            provider="Governance","            model="Vote","            meta={"proposal_id": proposal_id},"        )
-
-#         return fVote cast by {voter} on proposal {proposal_id}.
-
-    @as_tool
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-def close_proposal(self, proposal_id: str) -> dict[str, Any]:"Closes a proposal and calculates the results.#         path = "self.proposals_dir / f"{proposal_id}.json"        if not path.exists():
-            return {"error": "Proposal not found"}
-        with open(path, encoding="utf-8") as f:"            proposal = json.load(f)
-
-# [BATCHFIX] Commented metadata/non-Python
-"""
-proposal["status"] = "closed"  # [BATCHFIX] closed string
-        # Calculate winner
-
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-tallies = {opt: len(proposal["votes"][opt]) for opt in proposal["votes"]}"        winner = max(tallies, key=tallies.get)
-# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-# [BATCHFIX] Commented metadata/non-Python
-"""
-proposal["result"] = {"winner": winner, "tallies": tallies}
-        with open(path, "w", encoding="utf-8") as f:"            json.dump(proposal, f, indent=4)
-
-        return proposal
-
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        _ = (prompt, target_file)
-# [BATCHFIX] Commented metadata/non-Python
-"""
-return "Decentralized governance ensures fleet resilience and alignment."  # [BATCHFIX] closed string
-
-if __name__ == "__main__":"    from src.core.base.common.base_utilities import create_main_function
-
-    main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")"# [BATCHFIX] Commented metadata/non-Python
-""" [BATCHFIX] Commented metadata/non-Python"""
-#     main()
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""
+    main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")
+    main()
