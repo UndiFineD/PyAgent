@@ -1,71 +1,27 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
-"""
-ExcelAgent - Excel spreadsheet processing and data extraction
-
-"""
-
-# DATE: 2026-02-13
-# AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate with a path to an Excel file and call the DataIntelligenceAgent interface to extract tables, metadata, or run analysis pipelines.
-- Example (conceptual): from src.agents.excel_agent import ExcelAgent
-  agent = ExcelAgent(rC:\\\\data\\report.xlsx")"  results = agent.extract_structured_data()  # or agent.run_pipeline(...)
-- Intended to be used inside the PyAgent swarm where a DataIntelligenceAgent core provides common parsing, prompting, and persistence behavior.
-
-WHAT IT DOES:
-- Defines ExcelAgent, a thin subclass of DataIntelligenceAgent specialized for spreadsheet processing and data extraction.
-- Sets a dedicated system prompt for Excel-specific behavior and delegates heavy lifting (I/O, parsing, extraction, AI prompting) to the DataIntelligenceAgent core.
-- Serves as the integration point for Excel-format handling (sheet iteration, table detection, header inference) inside higher-level agent workflows.
-
-WHAT IT SHOULD DO BETTER:
-- Expose and document concrete API methods for common tasks (extract_structured_data, infer_schema, preview_sheet) rather than relying on implicit core behavior.
-- Add robust large-file streaming, memory-safe parsing, password-protected workbook support, and explicit error/edge-case handling (merged cells, non-rectangular ranges, mixed types).
-- Provide unit tests, typed return models for extracted tables, async I/O entrypoints, and configurable parsers (pandas/openpyxl/pyxlsb) with automatic fallback.
-
-FILE CONTENT SUMMARY:
 Excel agent.py module.
+"""
 
-try:
-    from .data_intelligence_agent import DataIntelligenceAgent
-except ImportError:
-    from .data_intelligence_agent import DataIntelligenceAgent
-
-
+from .data_intelligence_agent import DataIntelligenceAgent
 
 
 class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-"""
-Agent specialized in Excel spreadsheet processing and data extraction.
+    """Agent specialized in Excel spreadsheet processing and data extraction."""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-#         self._system_prompt = "You are the ExcelAgent (via DataIntelligence core)."
-try:
-    from .data_intelligence_agent import DataIntelligenceAgent
-except ImportError:
-    from .data_intelligence_agent import DataIntelligenceAgent
-
-
-
-
-class ExcelAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-"""
-Agent specialized in Excel spreadsheet processing and data extraction.
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-#         self._system_prompt = "You are the ExcelAgent (via DataIntelligence core)."
-"""
+        self._system_prompt = "You are the ExcelAgent (via DataIntelligence core)."

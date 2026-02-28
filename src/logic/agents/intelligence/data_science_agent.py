@@ -1,71 +1,27 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
-"""
-DataScienceAgent - Advanced statistical analysis and data science workflows
-
-"""
-
-# DATE: 2026-02-13
-# AUTHOR: Keimpe de Jong
-USAGE:
-try:
-    from .agents.data_science_agent import DataScienceAgent
-except ImportError:
-    from src.agents.data_science_agent import DataScienceAgent
-
-agent = DataScienceAgent(file_path="path/to/dataset.csv")"call agent methods via the DataIntelligenceAgent interface for ingestion, preprocessing, modeling, and evaluation.
-
-WHAT IT DOES:
-Provides a specialized agent subclassing DataIntelligenceAgent that sets a system prompt tailored for data science tasks and inherits core data intelligence capabilities (ingest, transform, analyze, report) from its parent.
-
-WHAT IT SHOULD DO BETTER:
-- Expose explicit methods for common data-science workflows (train_model, evaluate, explain) rather than relying solely on inherited behavior.
-- Accept configurable system prompts and pipeline configuration (presets for EDA, modeling, hyperparameter search).
-- Add type-hinted public APIs, documentation strings for methods, and unit tests covering typical analysis flows.
-
-FILE CONTENT SUMMARY:
 Data science agent.py module.
+"""
 
-try:
-    from .data_intelligence_agent import DataIntelligenceAgent
-except ImportError:
-    from .data_intelligence_agent import DataIntelligenceAgent
-
-
+from .data_intelligence_agent import DataIntelligenceAgent
 
 
 class DataScienceAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-"""
-Agent specialized in advanced statistical analysis and data science workflows.
+    """Agent specialized in advanced statistical analysis and data science workflows."""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-#         self._system_prompt = "You are the DataScienceAgent (via DataIntelligence core)."
-try:
-    from .data_intelligence_agent import DataIntelligenceAgent
-except ImportError:
-    from .data_intelligence_agent import DataIntelligenceAgent
-
-
-
-
-class DataScienceAgent(DataIntelligenceAgent):  # pylint: disable=too-many-ancestors
-"""
-Agent specialized in advanced statistical analysis and data science workflows.
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-#         self._system_prompt = "You are the DataScienceAgent (via DataIntelligence core)."
-"""
+        self._system_prompt = "You are the DataScienceAgent (via DataIntelligence core)."
