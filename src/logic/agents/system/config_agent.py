@@ -1,90 +1,23 @@
 #!/usr/bin/env python3
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-# Config Agent - Configuration validation and environment setup
-
-# DATE: 2026-02-13
-# AUTHOR: Keimpe de Jong
-USAGE:
-"""
-- Instantiate with the path to a file within the workspace: from pathlib import Path; agent = ConfigAgent(Path(__file__))
-- Run validation tools as methods: agent.validate_env() and agent.validate_models_yaml() (both decorated as tools via as_tool).
-- For content-assisted edits use await agent.improve_content(prompt, target_file) (async).
-
-"""
-WHAT IT DOES:
-- Checks for required environment variables and reports missing keys without exposing secret values.
-- Loads and performs a basic structural validation of config/models.yaml, reporting parsing errors or structural issues.
-- Provides a simple async entry point improve_content that currently proxies to validate_env for quick integration with other agents/tools.
-
-WHAT IT SHOULD DO BETTER:
-- Add strict schema validation for YAML (e.g., jsonschema) and clearer, structured diagnostics rather than plain strings.
-- Improve error handling to avoid broad except clauses and return machine-parseable results (status codes, lists).
-- Integrate secret-store validators (HashiCorp Vault, AWS Secrets Manager), redact or mask secrets robustly, and add unit tests and async I/O for file operations.
-- Expose richer telemetry/logging and make workspace discovery more configurable (avoid parent.parent.parent heuristics).
-
-FILE CONTENT SUMMARY:
-Agent specializing in configuration validation, secrets checking, and environment setup.
+"""Agent specializing in configuration validation, secrets checking, and environment setup.
 Inspired by external-secrets and infrastructure-as-code patterns.
 """
-import yaml
 
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.logic.core.validation import ValidationCore
-
-__version__ = VERSION
-
-
-
-class ConfigAgent(BaseAgent):
-"""
-Ensures the agent fleet has all necessary configurations and API keys.
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self.validator = ValidationCore()
-        self.workspace_root = self.file_path.parent.parent.parent
-        self._system_prompt = (
-#             "You are the Config Agent."#             "Your role is to verify the environment and project settings."#             "Check for missing API keys, invalid YAML configs, and environment contradictions."#             "Never display secret values in your output."        )
-
-    @as_tool
-    def validate_env(self) -> str:
-"""
-Checks for required environment variables.        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]"        success, missing = self.validator.validate_env_vars(required)
-
-        report = ["## ️ Environment Validation\\n"]"        if success:
-            report.append(" All required environment variables are set.")"        else:
-            report.append(f" **Missing variables**: {', '.join(missing)}")
-        return "\\n".join(report)
-    @as_tool
-    def validate_models_yaml(self) -> str:
-"""
-Verifies the integrity of models.yaml.#         config_path = self.workspace_root / "config" / "models.yaml"        if not config_path.exists():
-#             return " `config/models.yaml` not found."
-        try:
-            with open(config_path, encoding='utf-8') as f:'                data = yaml.safe_load(f)
-
-            # Simple structure check
-            if "models" in data and isinstance(data["models"], list):"#                 return f" `models.yaml` is valid. Detected {len(data['models'])} models."'#             return " `models.yaml` has invalid structure (missing 'models' list)."'        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-#             return f" Error parsing `models.yaml`: {e}"
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
-        return self.validate_env()
+from __future__ import annotations
 
 import yaml
 
@@ -96,38 +29,51 @@ from src.core.base.logic.core.validation import ValidationCore
 __version__ = VERSION
 
 
-
 class ConfigAgent(BaseAgent):
-"""
-Ensures the agent fleet has all necessary configurations" and API keys.
+    """Ensures the agent fleet has all necessary configurations and API keys."""
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.validator = ValidationCore()
         self.workspace_root = self.file_path.parent.parent.parent
         self._system_prompt = (
-#             "You are the Config Agent."#             "Your role is to verify the environment and project settings."#             "Check for missing API keys, invalid YAML configs, and environment contradictions."#             "Never display secret values in your output."        )
+            "You are the Config Agent. "
+            "Your role is to verify the environment and project settings. "
+            "Check for missing API keys, invalid YAML configs, and environment contradictions. "
+            "Never display secret values in your output."
+        )
 
     @as_tool
     def validate_env(self) -> str:
-"""
-Checks for required environment variables.        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]"        success, missing = self.validator.validate_env_vars(required)
+        """Checks for required environment variables."""
+        required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]
+        success, missing = self.validator.validate_env_vars(required)
 
-        report = ["## ️ Environment Validation\\n"]"        if success:
-            report.append(" All required environment variables are set.")"        else:
-            report.append(f" **Missing variables**: {', '.join(missing)}")
-        return "\\n".join(report)
+        report = ["## ΓÜÖ∩╕Å Environment Validation\n"]
+        if success:
+            report.append("Γ£à All required environment variables are set.")
+        else:
+            report.append(f"Γ¥î **Missing variables**: {', '.join(missing)}")
+
+        return "\n".join(report)
+
     @as_tool
     def validate_models_yaml(self) -> str:
-"""
-Verifies the integrity of models.yaml.#         config_path = self.workspace_root / "config" / "models.yaml"        if not config_path.exists():
-#             return " `config/models.yaml` not found."
+        """Verifies the integrity of models.yaml."""
+        config_path = self.workspace_root / "config" / "models.yaml"
+        if not config_path.exists():
+            return "Γ¥î `config/models.yaml` not found."
+
         try:
-            with open(config_path, encoding='utf-8') as f:'                data = yaml.safe_load(f)
+            with open(config_path, encoding='utf-8') as f:
+                data = yaml.safe_load(f)
 
             # Simple structure check
-            if "models" in data and isinstance(data["models"], list):"#                 return f" `models.yaml` is valid. Detected {len(data['models'])} models."'#             return " `models.yaml` has invalid structure (missing 'models' list)."'        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-#             return f" Error parsing `models.yaml`: {e}"
+            if "models" in data and isinstance(data["models"], list):
+                return f"Γ£à `models.yaml` is valid. Detected {len(data['models'])} models."
+            return "Γ¥î `models.yaml` has invalid structure (missing 'models' list)."
+        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            return f"Γ¥î Error parsing `models.yaml`: {e}"
+
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.validate_env()
-
-"""

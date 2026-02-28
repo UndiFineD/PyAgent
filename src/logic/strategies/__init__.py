@@ -1,67 +1,34 @@
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-"""
-Auto-generated module exports.
+"""Auto-generated module exports."""
 
-"""
-try:
-    from collections.abc import Callable
-except ImportError:
-    from collections.abc import Callable
+from __future__ import annotations
 
+from collections.abc import Callable
 
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
-
-try:
-    from .agent_strategy import AgentStrategy  # noqa: F401
-except ImportError:
-    from .agent_strategy import AgentStrategy # noqa: F401
-
-try:
-    from .chain_of_thought_strategy import (  # noqa: F401
-except ImportError:
-    from .chain_of_thought_strategy import ( # noqa: F401
-
+from .agent_strategy import AgentStrategy  # noqa: F401
+from .chain_of_thought_strategy import (  # noqa: F401
     ChainOfThoughtStrategy
 )
-try:
-    from .direct_strategy import DirectStrategy  # noqa: F401
-except ImportError:
-    from .direct_strategy import DirectStrategy # noqa: F401
-
-try:
-    from .reflexion_strategy import ReflexionStrategy  # noqa: F401
-except ImportError:
-    from .reflexion_strategy import ReflexionStrategy # noqa: F401
-
+from .direct_strategy import DirectStrategy  # noqa: F401
+from .reflexion_strategy import ReflexionStrategy  # noqa: F401
 
 # Type alias for the backend function signature
 # (prompt, system_prompt, history) -> response
 BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
-
-
-"""
-

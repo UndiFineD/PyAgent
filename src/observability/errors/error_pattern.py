@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-
-
-
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,40 +11,27 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-try:
-    from dataclasses import dataclass
-"""
-except ImportError:
 
-"""
+
+"""Auto-extracted class from agent_errors.py"""
+
+from __future__ import annotations
+
 from dataclasses import dataclass
 
+from src.core.base.lifecycle.version import VERSION
 
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-try:
-    from .error_category import ErrorCategory
-except ImportError:
-    from .error_category import ErrorCategory
-
-try:
-    from .error_severity import ErrorSeverity
-except ImportError:
-    from .error_severity import ErrorSeverity
-
+from .error_category import ErrorCategory
+from .error_severity import ErrorSeverity
 
 __version__ = VERSION
 
+
 @dataclass
 class ErrorPattern:
-"""
-A recognized error pattern.
-"""
-name: str
+    """A recognized error pattern."""
+
+    name: str
     regex: str
     severity: ErrorSeverity
     category: ErrorCategory

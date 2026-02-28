@@ -1,86 +1,76 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 """
-"""
-Model Registry Core - Manages PEFT adapter registry and self-healing
-Brief Summary
-# DATE: 2026-02-13
-# AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate ModelRegistryCore() in orchestration/agent code that needs to resolve PEFT (LoRA/QLoRA) adapters for specialized tasks.
-- Call get_adapter_for_task(task_type) to retrieve a path (or None) and register_new_adapter(name, path) to add new adapters discovered at runtime.
-- Periodically call self_heal() or invoke should_trigger_finetuning(quality_history, threshold) from monitoring hooks to prune broken entries and decide fine-tuning actions.
-
-"""
-WHAT IT DOES:
-- Maintains a mapping of task intent names to filesystem paths for PEFT adapters and exposes listing, registration, lookup, and self-healing logic.
-- Detects missing adapter files and removes unhealthy registry entries, marking them for inspection.
-- Optionally delegates fine-tune trigger logic to a rust_core optimization if available, falling back to a simple Python heuristic.
-
-WHAT IT SHOULD DO BETTER:
-- Normalize and validate paths (resolve Path(...).absolute()) and surface richer diagnostics for removed entries (timestamps, removal reason, previous path).
-- Make self_heal non-destructive by attempting automated recovery (download, re-link, or fallback adapter) before removal, and add configurable backoff/retry policies.
-- Use stronger typing and error handling (custom exceptions), add unit tests for rust_core absence, and persist registry state to durable storage with transactional updates.
-
-FILE CONTENT SUMMARY:
 Model registry core.py module.
 """
+
+from __future__ import annotations
+
 import logging
 from pathlib import Path
 
 
-
 class ModelRegistryCore:
+    """
     ModelRegistryCore manages the PEFT (LoRA/QLoRA) adapter registry.
     It maps request types to specific expert adapters.
-#     Phase 289: Model Registry Self-Healing.
+    Phase 289: Model Registry Self-Healing.
+    """
 
     def __init__(self) -> None:
         # Registry mapping intent/type to adapter path
         self.adapter_registry: dict[str, str] = {
-            "python_expert": "data/forge/adapters/python_312_lora","            "security_audit": "data/forge/adapters/security_specialist_lora","            "documentation": "data/forge/adapters/docgen_lora","            "rust_developer": "data/forge/adapters/rust_migration_expert","        }
+            "python_expert": "data/forge/adapters/python_312_lora",
+            "security_audit": "data/forge/adapters/security_specialist_lora",
+            "documentation": "data/forge/adapters/docgen_lora",
+            "rust_developer": "data/forge/adapters/rust_migration_expert",
+        }
         self.unhealthy_entries: set[str] = set()
 
     def self_heal(self) -> int:
+        """
         Phase 289: Detects missing adapter files and prunes or fixes the registry.
         Returns the number of healed/removed entries.
+        """
         healed_count = 0
         current_adapters = list(self.adapter_registry.items())
 
         for name, path_str in current_adapters:
             path = Path(path_str)
             if not path.exists():
-                logging.warning(fModelRegistry: Adapter '{name}' path '{path_str}' is missing. Healing...")"'                del self.adapter_registry[name]
+                logging.warning(f"ModelRegistry: Adapter '{name}' path '{path_str}' is missing. Healing...")
+                del self.adapter_registry[name]
                 self.unhealthy_entries.add(name)
                 healed_count += 1
 
         if healed_count > 0:
-            logging.info(fModelRegistry: Self-healing complete. {healed_count} entries removed.")"        return healed_count
+            logging.info(f"ModelRegistry: Self-healing complete. {healed_count} entries removed.")
+        return healed_count
 
     def get_adapter_for_task(self, task_type: str) -> str | None:
-"""
-Returns the adapter path for a given task type.        adapter = self.adapter_registry.get("task_type.lower())"        if adapter and not Path(adapter).exists():
+        """Returns the adapter path for a given task type."""
+        adapter = self.adapter_registry.get(task_type.lower())
+        if adapter and not Path(adapter).exists():
             self.self_heal()
             return self.adapter_registry.get(task_type.lower())
         return adapter
 
     def should_trigger_finetuning(self, quality_history: list[float], threshold: float = 0.6) -> bool:
+        """
         Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
+        """
         try:
             import rust_core
 
@@ -95,68 +85,9 @@ Returns the adapter path for a given task type.        adapter = self.adapter_re
         return all(q < threshold for q in last_5)
 
     def register_new_adapter(self, name: str, path: str) -> None:
-"""
-Adds a new adapter to the registry.        self.adapter_registry[name.lower()] = path
+        """Adds a new adapter to the registry."""
+        self.adapter_registry[name.lower()] = path
 
     def list_adapters(self) -> list[str]:
-"""
-Lists all registered expert adapters.        return list"(self.adapter_registry.keys())"
-
-import logging
-from pathlib import Path
-
-
-
-class ModelRegistryCore:
-    ModelRegistryCore manages the" PEFT (LoRA/QLoRA) adapter registry."    It maps request types to specific expert adapters.
-    Phase 289": Model Registry Self-Healing."
-    def __init__(self) -> None:
-        # Registry mapping intent/type to adapter path
-        self.adapter_registry: dict[str, str] = {
-            "python_expert": "data/forge/adapters/python_312_lora","            "security_audit": "data/forge/adapters/security_specialist_lora","            "documentation": "data/forge/adapters/docgen_lora","            "rust_developer": "data/forge/adapters/rust_migration_expert","        }
-        self.unhealthy_entries: set[str] = set()
-
-    def self_heal(self) -> int:
-        Phase 289: Detects missing adapter files and prunes or fixes the registry.
-        "Returns the number of healed/removed "entries."        healed_count = 0
-        current_adapters = list(self.adapter_registry.items())
-
-        for name, path_str in current_adapters:
-            path = Path(path_str)
-            if not path.exists():
-                logging.warning(fModelRegistry: Adapter '{name}' path '{path_str}' is missing. Healing...")"'                del self.adapter_registry[name]
-                self.unhealthy_entries.add(name)
-                healed_count += 1
-
-        if healed_count > 0:
-            logging.info(fModelRegistry: Self-healing complete. {healed_count} entries removed.")"        return healed_count
-
-    def get_adapter_for_task(self, task_type: str) -> str | None:
-"""
-Returns the adapter path for a given task type.        adapter = self.adapter_registry.get(task_type.lower())
-        if adapter and not Path(adapter).exists():
-            self.self_heal()
-            return self.adapter_registry.get(task_type.lower())
-        return adapter
-
-    def should_trigger_finetuning(self, quality_history: list[float], threshold: float = 0.6) -> bool:
-        Determines if fine-tuning is needed (e.g.," last 5 scores below threshold)."        try:
-            import rust_core
-
-            return rust_core.check_finetuning_trigger(quality_history, threshold, 5)  # type: ignore[attr-defined]
-        except (ImportError, AttributeError):
-            pass
-
-        if len(quality_history) < 5:
-            return False
-
-        last_5 = quality_history[-5:]
-        return all(q < threshold for q in last_5)
-
-    def register_new_adapter(self, name: str, path: str) -> None:
-"""
-Adds a new adapter to the registry.        self.adapter_registry[name.lower()] = path
-
-    def list_adapters(self) -> list[str]:
-"""
-Lists all registered expert" adapters.        return list(self.adapter_registry.keys())
+        """Lists all registered expert adapters."""
+        return list(self.adapter_registry.keys())

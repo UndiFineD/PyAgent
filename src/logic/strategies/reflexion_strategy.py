@@ -1,78 +1,19 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """
-Reflexion Strategy - Draft -> Critique -> Revise.""
-[Brief Summary]
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-
-USAGE:
-- Create an async-compatible backend function matching BackendFunction
-  signature: Callable[[str, Optional[str], Optional[list[dict[str,str]]]],
-  str].
-- Instantiate ReflexionStrategy and call its execute(...) coroutine:
-  result = await ReflexionStrategy().execute(
-      prompt, context, backend_call, system_prompt=None, history=None)
-
-WHAT IT DOES:
-- Coordinates a three-step reflexion workflow:
-  (1) Draft — produce initial implementation using backend_call
-  (2) Critique — senior-review-style critique of the draft
-  (3) Revise — produce final implementation addressing critique
-- Logs the critique for traceability and returns revised content
-  from the backend.
-
-WHAT IT SHOULD DO BETTER:
-- Pass meaningful history/context into Critique step instead of
-  empty list to preserve conversation state and reproducibility.
-- Add robust error handling and retries around backend_call;
-  gracefully handle unexpected outputs or timeouts.
-- Make system prompts, critique severity, and orchestration
-  configurable (policy for harshness, multiple passes, acceptance
-  criteria).
-- Surface richer telemetry (timings, token usage); include unit
-  tests and type-checked stubs for BackendFunction.
-
-FILE CONTENT SUMMARY:
 Reflexion strategy.py module.
 """
-try:
-    import logging
-except ImportError:
-    import logging
+# Copyright 2026 PyAgent Authors
+# Apache 2.0 License
 
-try:
-    from typing import TYPE_CHECKING, Dict, List, Optional
-except ImportError:
-    from typing import TYPE_CHECKING, Dict, List, Optional
+from __future__ import annotations
 
+import logging
+from typing import TYPE_CHECKING, Dict, List, Optional
 
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
-
-try:
-    from .agent_strategy import AgentStrategy
-except ImportError:
-    from .agent_strategy import AgentStrategy
-
+from .agent_strategy import AgentStrategy
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -82,10 +23,9 @@ if TYPE_CHECKING:
 __version__ = VERSION
 
 
-
 class ReflexionStrategy(AgentStrategy):
-"""
-Reflexion strategy: Draft -> Critique -> Revise.
+    """Reflexion strategy: Draft -> Critique -> Revise."""
+
     async def execute(
         self,
         prompt: str,
@@ -95,36 +35,24 @@ Reflexion strategy: Draft -> Critique -> Revise.
         history: Optional[List[Dict[str, str]]] = None,
     ) -> str:
         # Step 1: Draft
-        draft = await backend_call(f"{prompt}\\n\\nContext:\\n{context}", system_prompt, history)
+        draft = await backend_call(f"{prompt}\n\nContext:\n{context}", system_prompt, history)
+
         # Step 2: Critique
         critique_prompt = (
-            f"Original Request: {prompt}\\n\\n""            f"Draft Implementation:\\n{draft}\\n\\n""            "Critique this implementation. Identify any bugs, missing requirements, ""            "or style issues. Be harsh but constructive.""        )
-        critique = await backend_call(critique_prompt, "You are a senior code reviewer.", [])"        logging.info(f"Reflexion Critique:\\n{critique}")"
+            f"Original Request: {prompt}\n\n"
+            f"Draft Implementation:\n{draft}\n\n"
+            "Critique this implementation. Identify any bugs, missing requirements, "
+            "or style issues. Be harsh but constructive."
+        )
+        critique = await backend_call(critique_prompt, "You are a senior code reviewer.", [])
+        logging.info(f"Reflexion Critique:\n{critique}")
+
         # Step 3: Revise
         revision_prompt = (
-            f"Original Request: {prompt}\\n\\n""            f"Draft Implementation:\\n{draft}\\n\\n""            f"Critique:\\n{critique}\\n\\n""            "Please rewrite the implementation to address the critique. ""            "Output ONLY the final code/content.""        )
+            f"Original Request: {prompt}\n\n"
+            f"Draft Implementation:\n{draft}\n\n"
+            f"Critique:\n{critique}\n\n"
+            "Please rewrite the implementation to address the critique. "
+            "Output ONLY the final code/content."
+        )
         return await backend_call(revision_prompt, system_prompt, history)
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""
