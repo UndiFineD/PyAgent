@@ -1,116 +1,47 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 
+"""Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
 
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-"""
-CodeIssue - Data model for a single code issue
+from dataclasses import dataclass
 
-"""
+from src.core.base.lifecycle.version import VERSION
 
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-USAGE:
-Instantiate CodeIssue to represent a detected problem or suggestion, e.g. CodeIssue("naming inconsistent", IssueCategory.STYLE, SeverityLevel.MINOR, line_number=42, file_path="src/foo.py", function_name="bar").
-WHAT IT DOES:
-Provides a simple dataclass capturing message, category, severity and optional location/context for a code issue.
-
-WHAT IT SHOULD DO BETTER:
-Add validation, richer metadata (module, commit, rule_id), and methods to serialize/compare/format output for reports and triage.
-
-FILE CONTENT SUMMARY:
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-
-try:
-    from .issue_category import IssueCategory
-except ImportError:
-    from .issue_category import IssueCategory
-
-try:
-    from .severity_level import SeverityLevel
-except ImportError:
-    from .severity_level import SeverityLevel
-
+from .issue_category import IssueCategory
+from .severity_level import SeverityLevel
 
 __version__ = VERSION
 
 
 @dataclass
 class CodeIssue:
-"""
-Represents a code issue or improvement suggestion.""
-Attributes:
+    """Represents a code issue or improvement suggestion.
+    Attributes:
         message: Issue description.
         category: Issue category.
         severity: Severity level.
         line_number: Line number if applicable.
         file_path: File path if applicable.
         function_name: Function name if applicable.
-    
+    """
+
     message: str
     category: IssueCategory
     severity: SeverityLevel = SeverityLevel.INFO
     line_number: int | None = None
     file_path: str | None = None
     function_name: str | None = None
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""

@@ -1,18 +1,25 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-""
-Improvement dataclass - minimal, parser-safe shim for repairs.""
-from dataclasses import dataclass, field
-from typing import List, Optional
-from enum import Enum
 
-try:
-    from .core.base.lifecycle.version import VERSION
-except Exception:
-    try:
-        from src.core.base.lifecycle.version import VERSION
-    except Exception:
-        VERSION = "0.0.0"
+from dataclasses import dataclass, field
+
+from src.core.base.lifecycle.version import VERSION
 
 from .effort_estimate import EffortEstimate
 from .improvement_category import ImprovementCategory
@@ -24,24 +31,20 @@ __version__ = VERSION
 
 @dataclass
 class Improvement:
+    """A single improvement suggestion."""
+
     id: str
     title: str
-    description: str = ""
-    file_path: Optional[str] = None
+    description: str
+    file_path: str
     priority: ImprovementPriority = ImprovementPriority.MEDIUM
     category: ImprovementCategory = ImprovementCategory.OTHER
     status: ImprovementStatus = ImprovementStatus.PROPOSED
     effort: EffortEstimate = EffortEstimate.MEDIUM
-    impact_score: float = 0.0
+    impact_score: float = 50.0
     created_at: str = ""
-    assignee: Optional[str] = None
-    tags: List[str] = field(default_factory=list)
-
-    def to_dict(self) -> dict:
-        return {
-            "id": self.id,
-            "title": self.title,
-            "description": self.description,
-        }
-
-__all__ = ["Improvement"]
+    updated_at: str = ""
+    assignee: str | None = None
+    tags: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    dependencies: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    votes: int = 0

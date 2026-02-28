@@ -1,58 +1,23 @@
-from __future__ import annotations
-
-
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-"""
-Improvement Manager - Manage improvement lifecycle and templates
-
-"""
-
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-USAGE:
-- Instantiate: mgr = ImprovementManager(templates=None, base_file_path="src/module.py")"- Add an item: mgr.add_improvement(title, description, file_path="src/x.py", priority=..., category=..., effort=...)"- Load from markdown: mgr.parse_markdown(markdown_text)
-
-WHAT IT DOES:
-Manages collections of Improvement objects, provides a set of default ImprovementTemplate entries, allows adding improvements with deterministic IDs and timestamps, and parses simple markdown lists into improvements.
-
-WHAT IT SHOULD DO BETTER:
-- Harden markdown parsing (more robust regex or a markdown parser), validate inputs, and normalize file paths.
-- Use timezone-aware ISO datetimes, better id collision handling, and integrate transactional FS (StateTransaction) for persistence and atomic updates.
-- Expose async APIs and richer metadata (assignees, estimates revisions) and add unit tests for edge cases.
-
-FILE CONTENT SUMMARY:
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
 """
 Logic for managing code improvements.
-Extracted from ImprovementsAgent for decompositi""
-on.""
+Extracted from ImprovementsAgent for decomposition.
+"""
+
+from __future__ import annotations
+
 import hashlib
 import re
 from datetime import datetime
@@ -66,36 +31,52 @@ from .improvement_template import ImprovementTemplate
 
 DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
     ImprovementTemplate(
-        id="add_tests","        name="add_tests","        category=ImprovementCategory.TESTING,
-        title_pattern="Add tests for {function_name}","        description_template=("Add unit tests to cover {function_name} including edge cases and error handling."),"        default_effort=EffortEstimate.SMALL,
+        id="add_tests",
+        name="add_tests",
+        category=ImprovementCategory.TESTING,
+        title_pattern="Add tests for {function_name}",
+        description_template=("Add unit tests to cover {function_name} including edge cases and error handling."),
+        default_effort=EffortEstimate.SMALL,
     ),
     ImprovementTemplate(
-        id="add_type_hints","        name="add_type_hints","        category=ImprovementCategory.MAINTAINABILITY,
-        title_pattern="Add type hints to {function_name}","        description_template=(
-            "Add proper type annotations to {function_name} for better IDE support and documentation.""        ),
+        id="add_type_hints",
+        name="add_type_hints",
+        category=ImprovementCategory.MAINTAINABILITY,
+        title_pattern="Add type hints to {function_name}",
+        description_template=(
+            "Add proper type annotations to {function_name} for better IDE support and documentation."
+        ),
         default_effort=EffortEstimate.TRIVIAL,
     ),
     ImprovementTemplate(
-        id="performance_optimization","        name="performance_optimization","        category=ImprovementCategory.PERFORMANCE,
-        title_pattern="Optimize {component}","        description_template="Improve performance of {component} in {file}.","        default_priority=ImprovementPriority.HIGH,
+        id="performance_optimization",
+        name="performance_optimization",
+        category=ImprovementCategory.PERFORMANCE,
+        title_pattern="Optimize {component}",
+        description_template="Improve performance of {component} in {file}.",
+        default_priority=ImprovementPriority.HIGH,
         default_effort=EffortEstimate.MEDIUM,
     ),
     ImprovementTemplate(
-        id="security_fix","        name="security_fix","        category=ImprovementCategory.SECURITY,
-        title_pattern="Fix security issue in {component}","        description_template="Address security vulnerability: {vulnerability_description}","        default_priority=ImprovementPriority.CRITICAL,
+        id="security_fix",
+        name="security_fix",
+        category=ImprovementCategory.SECURITY,
+        title_pattern="Fix security issue in {component}",
+        description_template="Address security vulnerability: {vulnerability_description}",
+        default_priority=ImprovementPriority.CRITICAL,
         default_effort=EffortEstimate.MEDIUM,
     ),
 ]
 
 
-
 class ImprovementManager:
-"""
-Manages improvement lifecycle, templates, and impact scoring.
+    """Manages improvement lifecycle, templates, and impact scoring."""
+
     def __init__(
         self,
         templates: list[ImprovementTemplate] | None = None,
-        base_file_path: str = "","    ) -> None:
+        base_file_path: str = "",
+    ) -> None:
         self._improvements: list[Improvement] = []
         self._templates: dict[str, ImprovementTemplate] = {}
         self.base_file_path = base_file_path
@@ -116,9 +97,10 @@ Manages improvement lifecycle, templates, and impact scoring.
         tags: list[str] | None = None,
         dependencies: list[str] | None = None,
     ) -> Improvement:
-"""
-Add a new improvement.        final_path = file_path if file_path is not None else self.base_file_path
+        """Add a new improvement."""
+        final_path = file_path if file_path is not None else self.base_file_path
         improvement_id = hashlib.md5(f"{title}:{final_path}:{datetime.now().isoformat()}".encode()).hexdigest()[:8]
+
         improvement = Improvement(
             id=improvement_id,
             title=title,
@@ -137,115 +119,16 @@ Add a new improvement.        final_path = file_path if file_path is not None el
         return improvement
 
     def parse_markdown(self, content: str) -> None:
-"""
-Parse improvements from markdown content.        self._improvements = []
+        """Parse improvements from markdown content."""
+        self._improvements = []
         current_priority = ImprovementPriority.MEDIUM
 
-        item_re = re.compile(r"^\\\\s*-\\\\s*\[([\\\\sxX\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\\\\s*<!--\\\\s*id:\\\\s*(\\w+)\\\\s*-->)?")"        desc_re = re.compile(r"^\\\\s+-\\\\s*(.*)")"        section_re = re.compile(r"^##\\\\s+(.*)")
-        lines = content.split("\\n")"        current_improvement = None
+        item_re = re.compile(r"^\s*-\s*\[([\sxXΓ£ôΓùï\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?")
+        desc_re = re.compile(r"^\s+-\s*(.*)")
+        section_re = re.compile(r"^##\s+(.*)")
 
-        for line in lines:
-            section_match = section_re.match(line)
-            if section_match:
-                priority_name = s""
-ec""
-tio""
-n_match.group""
-import hashlib
-import re
-from datetime import datetime
-
-from .effort_estimate import EffortEstimate
-from .improvement import Improvement
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
-from .improvement_status import ImprovementStatus
-from .improvement_template import ImprovementTemplate
-
-DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
-    ImprovementTemplate(
-        id="add_tests","        name="add_tests","        category=ImprovementCategory.TESTING,
-        title_pattern="Add tests for {function_name}","        description_template=("Add unit tests to cover {function_name} including edge cases and error handling."),"        default_effort=EffortEstimate.SMALL,
-    ),
-    ImprovementTemplate(
-        id="add_type_hints","        name="add_type_hints","        category=ImprovementCategory.MAINTAINABILITY,
-        title_pattern="Add type hints to {function_name}","        description_template=(
-            "Add proper type annotations to {function_name} for better IDE support and documentation.""        ),
-        default_effort=EffortEstimate.TRIVIAL,
-    ),
-    ImprovementTemplate(
-        id="performance_optimization","        name="performance_optimization","        category=ImprovementCategory.PERFORMANCE,
-        title_pattern="Optimize {component}","        description_template="Improve performance of {component} in {file}.","        default_priority=ImprovementPriority.HIGH,
-        default_effort=EffortEstimate.MEDIUM,
-    ),
-    ImprovementTemplate(
-        id="security_fix","        name="security_fix","        category=ImprovementCategory.SECURITY,
-        title_pattern="Fix security issue in {component}","        description_template="Address security vulnerability: {vulnerability_description}","        default_priority=ImprovementPriority.CRITICAL,
-        default_effort=EffortEstimate.MEDIUM,
-    ),
-]
-
-
-
-class ImprovementManager:
-"""
-Manages improvement lifecycle, templates,""
-an""
-d impact scoring.
-    def __init__(
-        self,
-        templates: list[ImprovementTemplate] | None = None,
-        base_file_path: str = "","    ) -> None:
-        self._improvements: list[Improvement] = []
-        self._templates: dict[str, ImprovementTemplate] = {}
-        self.base_file_path = base_file_path
-
-        target_templates = templates or DEFAULT_TEMPLATES
-        for t in target_templates:
-            self._templates[t.id] = t
-            self._templates[t.name] = t
-
-    def add_improvement(
-        self,
-        title: str,
-        description: str,
-        file_path: str | None = None,
-        priority: ImprovementPriority = ImprovementPriority.MEDIUM,
-        category: ImprovementCategory = ImprovementCategory.OTHER,
-        effort: EffortEstimate = EffortEstimate.MEDIUM,
-        tags: list[str] | None = None,
-        dependencies: list[str] | None = None,
-    ) -> Improvement:
-"""
-Add a new improvement.        final_path = file_path if file_path is not No""
-ne ""
-else self.base_file_path""
-improvement_id = hashlib.md5(f"{title}:{final_path}:{datetime.now().isoformat()}".encode()).hexdigest()[:8]
-        improvement = Improvement(
-            id=improvement_id,
-            title=title,
-            description=description,
-            file_path=final_path,
-            priority=priority,
-            category=category,
-            effort=effort,
-            created_at=datetime.now().isoformat(),
-            updated_at=datetime.now().isoformat(),
-            tags=tags or [],
-            dependencies=dependencies or [],
-        )
-
-        self._improvements.append(improvement)
-        return improvement
-
-    def parse_markdown(self, content: str) -> None:
-"""
-Parse improvements from markdown content. """   """
-self._improvements = []""
-current_priority = ImprovementPriority.MEDIUM
-
-        item_re = re.compile(r"^\\\\s*-\\\\s*\[([\\\\sxX\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\\\\s*<!--\\\\s*id:\\\\s*(\\w+)\\\\s*-->)?")"        desc_re = re.compile(r"^\\\\s+-\\\\s*(.*)")"        section_re = re.compile(r"^##\\\\s+(.*)")
-        lines = content.split("\\n")"        current_improvement = None
+        lines = content.split("\n")
+        current_improvement = None
 
         for line in lines:
             section_match = section_re.match(line)
@@ -266,19 +149,24 @@ current_priority = ImprovementPriority.MEDIUM
                 imp_id = item_match.group(4)
 
                 status = ImprovementStatus.PROPOSED
-                if status_char in ("x", "X", ""):"                    status = ImprovementStatus.COMPLETED
-                elif status_char == "/":"                    status = ImprovementStatus.IN_PROGRESS
-                elif status_char == "-":"                    status = ImprovementStatus.DEFERRED
+                if status_char in ("x", "X", "Γ£ô"):
+                    status = ImprovementStatus.COMPLETED
+                elif status_char == "/":
+                    status = ImprovementStatus.IN_PROGRESS
+                elif status_char == "-":
+                    status = ImprovementStatus.DEFERRED
 
                 category = ImprovementCategory.OTHER
-                cat_part = category_val.split(",")[0].strip()"                for cat in ImprovementCategory:
+                cat_part = category_val.split(",")[0].strip()
+                for cat in ImprovementCategory:
                     if cat.value.lower() == cat_part.lower() or cat.name.lower() == cat_part.lower():
                         category = cat
                         break
 
                 current_improvement = self.add_improvement(
                     title=title,
-                    description="","                    file_path=self.base_file_path,
+                    description="",
+                    file_path=self.base_file_path,
                     priority=current_priority,
                     category=category,
                 )
@@ -290,14 +178,14 @@ current_priority = ImprovementPriority.MEDIUM
             desc_match = desc_re.match(line)
             if desc_match and current_improvement:
                 if current_improvement.description:
-                    current_improvement.description += "\\n" + desc_match.group(1)"                else:
+                    current_improvement.description += "\n" + desc_match.group(1)
+                else:
                     current_improvement.description = desc_match.group(1)
 
     def calculate_impact_score(self, improvement: Improvement) -> float:
-"""
-Calculate impact score for an improvement.        score """= i"""
-mprovement.priority.value * 20""
-category_weights = {
+        """Calculate impact score for an improvement."""
+        score = improvement.priority.value * 20
+        category_weights = {
             ImprovementCategory.SECURITY: 20,
             ImprovementCategory.PERFORMANCE: 15,
             ImprovementCategory.TESTING: 10,
@@ -310,10 +198,9 @@ category_weights = {
         return max(0, min(100, score))
 
     def prioritize(self) -> list[Improvement]:
-"""
-Return improvements sorted by impact score.  """   """
-for imp in self._improvements:""
-imp.impact_score = self.calculate_impact_score(imp)
+        """Return improvements sorted by impact score."""
+        for imp in self._improvements:
+            imp.impact_score = self.calculate_impact_score(imp)
         return sorted(
             self._improvements,
             key=lambda i: (i.impact_score, i.priority.value),
@@ -321,34 +208,30 @@ imp.impact_score = self.calculate_impact_score(imp)
         )
 
     def estimate_total_effort(self) -> int:
-"""
-Return total effort score for non-compl""
-ete""
-d improvements.        total = 0
+        """Return total effort score for non-completed improvements."""
+        total = 0
         for imp in self._improvements:
             if imp.status in (ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED):
                 continue
             try:
                 total += int(imp.effort.value)
-            except Exception:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
         return total
 
     # ========== Templates Logic ==========
 
     def add_template(self, template: ImprovementTemplate) -> None:
-"""
-Add a custom template.     """   """
-self._templates[template.id] = template""
-self._templates[template.name] = template
+        """Add a custom template."""
+        self._templates[template.id] = template
+        self._templates[template.name] = template
 
     def create_from_template(
-        self, template_name: str, variables: dict[str, str], file_path: str = """    ) -> Improvement | None:
-"""
-Create an improvement from a template.        ""
-tem""
-plate = self._templates.get(template_name)""
-if not template:
+        self, template_name: str, variables: dict[str, str], file_path: str = ""
+    ) -> Improvement | None:
+        """Create an improvement from a template."""
+        template = self._templates.get(template_name)
+        if not template:
             return None
 
         title = template.title_pattern.format(**variables)
@@ -358,7 +241,8 @@ if not template:
         from .improvements_agent import Improvement
 
         return Improvement(
-            id=f"IMP-{len(self._improvements) + 1:04d}","            title=title,
+            id=f"IMP-{len(self._improvements) + 1:04d}",
+            title=title,
             description=description,
             file_path=file_path,
             priority=template.default_priority,
@@ -369,34 +253,7 @@ if not template:
         )
 
     def export_markdown(self) -> str:
-"""
-Export improvements to markdown format.        # Simple export logic for ""
-now""", derived from agent implementation if needed"""        # (Usually the agent has more specific export logic)
-        return ""  # TODO Placeholder as the agent likely has its own complex exporter
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-"""
-
-""
-
-"""
+        """Export improvements to markdown format."""
+        # Simple export logic for now, derived from agent implementation if needed
+        # (Usually the agent has more specific export logic)
+        return ""  # Placeholder as the agent likely has its own complex exporter

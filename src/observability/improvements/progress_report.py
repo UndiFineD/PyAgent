@@ -1,62 +1,41 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-"""
-Progress Report - ProgressReport dataclass for improvements dashboard
+"""Auto-extracted class from agent_improvements.py"""
 
-"""
+from __future__ import annotations
 
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-USAGE:
-- Import the dataclass and instantiate with report_date and counts:
-  from src.interface.models.progress_report import ProgressReport
-  report = ProgressReport(report_date="2026-02-12", completed_count=5, in_progress_count=2, velocity=1.5)"- Use .burndown_data for charting libraries (list[tuple[str,int]] of date and remaining work).
+from dataclasses import dataclass, field
 
-WHAT IT DOES:
-- Provides a compact, type-annotated dataclass representing a progress report for the improvements dashboard, including counts, velocity and burndown series; versioned via src.core.base.lifecycle.version.VERSION.
-
-WHAT IT SHOULD DO BETTER:
-- Validate types/values (e.g., non-negative counts, ISO date parsing) and expose methods to compute derived metrics (week-over-week velocity, completion rate).
-- Replace bare list[tuple[str,int]] with a typed NamedTuple or small value class for burndown points and add serialization helpers (to_dict/from_dict) and JSON schema for API compatibility.
-- Add unit tests for edge cases and integrate timezone-aware dates.
-
-FILE CONTENT SUMMARY:
-Auto-extracted class from agent_improvements.py
-
-try:
-    from dataclasses import dataclass, field
-except ImportError:
-    from dataclasses import dataclass, field
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 @dataclass
 class ProgressReport:
-    # Progress report for improvements dashboard.
+    """Progress report for improvements dashboard.
+
+    Attributes:
+        report_date: Date of the report.
+        completed_count: Number of completed improvements.
+        in_progress_count: Number of in - progress improvements.
+        blocked_count: Number of blocked improvements.
+        velocity: Average improvements completed per week.
+        burndown_data: Data for burndown chart.
+    """
 
     report_date: str
     completed_count: int = 0
@@ -64,7 +43,3 @@ class ProgressReport:
     blocked_count: int = 0
     velocity: float = 0.0
     burndown_data: list[tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]
-
-
-"""
-

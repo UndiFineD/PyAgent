@@ -1,68 +1,41 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
+# Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #     http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
+# distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
 
-"""
-"""
-TimelineEvent - Simple dataclass for error timeline entries
+"""Auto-extracted class from agent_errors.py"""
 
-"""
+from __future__ import annotations
 
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-USAGE:
-try:
-    from .core.base.lifecycle.timeline_event import TimelineEvent
-except ImportError:
-    from src.core.base.lifecycle.timeline_event import TimelineEvent
+from dataclasses import dataclass
 
-event = TimelineEvent(timestamp="2026-02-12T21:00:00Z", event_type="created", error_id="err-1234", details="Initial occurrence")
-WHAT IT DOES:
-Defines a minimal dataclass representing a point in an error timeline with fields timestamp, event_type, error_id, and optional details and exposes module __version__ from the package VERSION
-
-WHAT IT SHOULD DO BETTER:
-Use timezone-aware datetime objects instead of plain strings, validate and normalize timestamps, replace event_type strings with an Enum, add serialization/deserialization helpers, add unit tests and richer docstrings
-"""
-try:
-    from dataclasses import dataclass
-except ImportError:
-    from dataclasses import dataclass
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 @dataclass
 class TimelineEvent:
-"""
-Event in error timeline.
+    """Event in error timeline.
 
     Attributes:
         timestamp: When the event occurred.
         event_type: Type of event (created, resolved, recurred).
         error_id: Associated error ID.
         details: Additional event details.
-"""
-timestamp: str
+    """
+
+    timestamp: str
     event_type: str
     error_id: str
     details: str = ""

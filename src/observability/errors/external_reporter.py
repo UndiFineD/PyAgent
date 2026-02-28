@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,51 +13,21 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""
-"""
-ExternalReporter - Enumeration of external error reporting systems
+"""Auto-extracted class from agent_errors.py"""
 
-"""
+from __future__ import annotations
 
-# DATE: 2026-02-12
-# AUTHOR: Keimpe de Jong
-USAGE:
-try:
-    from .core.base.external_reporter import ExternalReporter
-except ImportError:
-    from src.core.base.external_reporter import ExternalReporter
+from enum import Enum
 
-reporter = ExternalReporter.SENTRY
-if reporter == ExternalReporter.SENTRY:
-    # use Sentry-specific client mapping or configuration
-    pass
-
-WHAT IT DOES:
-Defines a simple Enum listing supported external error reporting providers (sentry, rollbar, bugsnag, datadog, newrelic) and exposes module version from src.core.base.lifecycle.version
-
-WHAT IT SHOULD DO BETTER:
-Should include explanatory module-level docstring, mapping utilities to provider SDK clients and configuration keys, validation helpers, and unit tests; consider adding serialization helpers and a provider discovery function for pluggable integrations
-"""
-try:
-    from enum import Enum
-except ImportError:
-    from enum import Enum
-
-
-try:
-    from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
-
 class ExternalReporter(Enum):
-    ""
-External error reporting systems.""
-SENTRY = "sentry"
+    """External error reporting systems."""
+
+    SENTRY = "sentry"
     ROLLBAR = "rollbar"
     BUGSNAG = "bugsnag"
     DATADOG = "datadog"

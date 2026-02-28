@@ -1,38 +1,12 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License")
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
+"""Lazy-loading entry point for observability.reports."""
 
-# ruff: noqa: F401
-# flake8: noqa: F401
-
-"""
-"""
-Lazy-loading entry point for observability.reports.from __future__ import annotationsfrom typing import Any, TYPE_CHECKING
-try:
-
-"""
-from .core.base.lifecycle.version import VERSION
-except ImportError:
-    from src.core.base.lifecycle.version import VERSION
-
-try:
-    from .core.lazy_loader import ModuleLazyLoader
-except ImportError:
-    from src.core.lazy_loader import ModuleLazyLoader
-
+from __future__ import annotations
+from typing import Any, TYPE_CHECKING
+from src.core.base.lifecycle.version import VERSION
+from src.core.lazy_loader import ModuleLazyLoader
 
 if TYPE_CHECKING:
     from .access_controller import AccessController
@@ -88,20 +62,70 @@ if TYPE_CHECKING:
     from .severity_level import SeverityLevel
     from .subscription_frequency import SubscriptionFrequency
     from .subscription_manager import SubscriptionManager
-    from src.infrastructure.swarm.topology_reporter import SwarmTopologyReporter
+    from .swarm_topology_reporter import SwarmTopologyReporter
     from .validation_result import ValidationResult
 
 _LAZY_REGISTRY = {
-    "AccessController": ("src.observability.reports.access_controller", "AccessController"),"    "AggregatedReport": ("src.observability.reports.aggregated_report", "AggregatedReport"),"    "AnnotationManager": ("src.observability.reports.annotation_manager", "AnnotationManager"),"    "ArchivedReport": ("src.observability.reports.archived_report", "ArchivedReport"),"    "AuditAction": ("src.observability.reports.audit_action", "AuditAction"),"    "AuditEntry": ("src.observability.reports.audit_entry", "AuditEntry"),"    "AuditLogger": ("src.observability.reports.audit_logger", "AuditLogger"),"    "ChangelogLocalizer": ("src.observability.reports.changelog_localizer", "ChangelogLocalizer"),"    "ChangelogSearcher": ("src.observability.reports.changelog_searcher", "ChangelogSearcher"),"    "ChangelogTemplate": ("src.observability.reports.changelog_template", "ChangelogTemplate"),"    "CodeIssue": ("src.observability.reports.code_issue", "CodeIssue"),"    "CompileResult": ("src.observability.reports.compile_result", "CompileResult"),"    "DiffVisualizer": ("src.observability.reports.diff_visualizer", "DiffVisualizer"),"    "ExportFormat": ("src.observability.reports.export_format", "ExportFormat"),"    "FeedGenerator": ("src.observability.reports.feed_generator", "FeedGenerator"),"    "FilterCriteria": ("src.observability.reports.filter_criteria", "FilterCriteria"),"    "GrafanaGenerator": ("src.observability.reports.grafana_generator", "GrafanaGenerator"),"    "IssueCategory": ("src.observability.reports.issue_category", "IssueCategory"),"    "LocaleCode": ("src.observability.reports.locale_code", "LocaleCode"),"    "LocalizedString": ("src.observability.reports.localized_string", "LocalizedString"),"    "MetricsCollector": ("src.observability.reports.metrics_collector", "MetricsCollector"),"    "PermissionLevel": ("src.observability.reports.permission_level", "PermissionLevel"),"    "ReleaseNotesGenerator": ("src.observability.reports.release_notes_generator", "ReleaseNotesGenerator"),"    "ReportAgent": ("src.observability.reports.reports_agent", "ReportAgent"),"    "ReportAggregator": ("src.observability.reports.report_aggregator", "ReportAggregator"),"    "ReportAnnotation": ("src.observability.reports.report_annotation", "ReportAnnotation"),"    "ReportAPI": ("src.observability.reports.report_api", "ReportAPI"),"    "ReportArchiver": ("src.observability.reports.report_archiver", "ReportArchiver"),"    "ReportCache": ("src.observability.reports.report_cache", "ReportCache"),"    "ReportCacheManager": ("src.observability.reports.report_cache_manager", "ReportCacheManager"),"    "ReportComparator": ("src.observability.reports.report_comparator", "ReportComparator"),"    "ReportComparison": ("src.observability.reports.report_comparison", "ReportComparison"),"    "ReportExporter": ("src.observability.reports.report_exporter", "ReportExporter"),"    "ReportFilter": ("src.observability.reports.report_filter", "ReportFilter"),"    "ReportFormat": ("src.observability.reports.report_format", "ReportFormat"),"    "ReportGenerator": ("src.observability.reports.report_generator", "ReportGenerator"),"    "ReportGeneratorCli": ("src.observability.reports.report_generator_cli", "ReportGeneratorCli"),"    "ReportLocalizer": ("src.observability.reports.report_localizer", "ReportLocalizer"),"    "ReportManager": ("src.observability.reports.report_manager", "ReportManager"),"    "ReportMetadata": ("src.observability.reports.report_metadata", "ReportMetadata"),"    "ReportMetric": ("src.observability.reports.report_metric", "ReportMetric"),"    "ReportPermission": ("src.observability.reports.report_permission", "ReportPermission"),"    "ReportScheduler": ("src.observability.reports.report_scheduler", "ReportScheduler"),"    "ReportSearchEngine": ("src.observability.reports.report_search_engine", "ReportSearchEngine"),"    "ReportSearchResult": ("src.observability.reports.report_search_result", "ReportSearchResult"),"    "ReportSubscription": ("src.observability.reports.report_subscription", "ReportSubscription"),"    "ReportTemplate": ("src.observability.reports.report_template", "ReportTemplate"),"    "ReportType": ("src.observability.reports.report_type", "ReportType"),"    "ReportUtils": ("src.observability.reports.report_utils", "ReportUtils"),"    "ReportValidator": ("src.observability.reports.report_validator", "ReportValidator"),"    "SeverityLevel": ("src.observability.reports.severity_level", "SeverityLevel"),"    "SubscriptionFrequency": ("src.observability.reports.subscription_frequency", "SubscriptionFrequency"),"    "SubscriptionManager": ("src.observability.reports.subscription_manager", "SubscriptionManager"),"    "SwarmTopologyReporter": ("src.infrastructure.swarm.topology_reporter", "SwarmTopologyReporter"),"    "ValidationResult": ("src.observability.reports.validation_result", "ValidationResult"),"}
+    "AccessController": ("src.observability.reports.access_controller", "AccessController"),
+    "AggregatedReport": ("src.observability.reports.aggregated_report", "AggregatedReport"),
+    "AnnotationManager": ("src.observability.reports.annotation_manager", "AnnotationManager"),
+    "ArchivedReport": ("src.observability.reports.archived_report", "ArchivedReport"),
+    "AuditAction": ("src.observability.reports.audit_action", "AuditAction"),
+    "AuditEntry": ("src.observability.reports.audit_entry", "AuditEntry"),
+    "AuditLogger": ("src.observability.reports.audit_logger", "AuditLogger"),
+    "ChangelogLocalizer": ("src.observability.reports.changelog_localizer", "ChangelogLocalizer"),
+    "ChangelogSearcher": ("src.observability.reports.changelog_searcher", "ChangelogSearcher"),
+    "ChangelogTemplate": ("src.observability.reports.changelog_template", "ChangelogTemplate"),
+    "CodeIssue": ("src.observability.reports.code_issue", "CodeIssue"),
+    "CompileResult": ("src.observability.reports.compile_result", "CompileResult"),
+    "DiffVisualizer": ("src.observability.reports.diff_visualizer", "DiffVisualizer"),
+    "ExportFormat": ("src.observability.reports.export_format", "ExportFormat"),
+    "FeedGenerator": ("src.observability.reports.feed_generator", "FeedGenerator"),
+    "FilterCriteria": ("src.observability.reports.filter_criteria", "FilterCriteria"),
+    "GrafanaGenerator": ("src.observability.reports.grafana_generator", "GrafanaGenerator"),
+    "IssueCategory": ("src.observability.reports.issue_category", "IssueCategory"),
+    "LocaleCode": ("src.observability.reports.locale_code", "LocaleCode"),
+    "LocalizedString": ("src.observability.reports.localized_string", "LocalizedString"),
+    "MetricsCollector": ("src.observability.reports.metrics_collector", "MetricsCollector"),
+    "PermissionLevel": ("src.observability.reports.permission_level", "PermissionLevel"),
+    "ReleaseNotesGenerator": ("src.observability.reports.release_notes_generator", "ReleaseNotesGenerator"),
+    "ReportAgent": ("src.observability.reports.reports_agent", "ReportAgent"),
+    "ReportAggregator": ("src.observability.reports.report_aggregator", "ReportAggregator"),
+    "ReportAnnotation": ("src.observability.reports.report_annotation", "ReportAnnotation"),
+    "ReportAPI": ("src.observability.reports.report_api", "ReportAPI"),
+    "ReportArchiver": ("src.observability.reports.report_archiver", "ReportArchiver"),
+    "ReportCache": ("src.observability.reports.report_cache", "ReportCache"),
+    "ReportCacheManager": ("src.observability.reports.report_cache_manager", "ReportCacheManager"),
+    "ReportComparator": ("src.observability.reports.report_comparator", "ReportComparator"),
+    "ReportComparison": ("src.observability.reports.report_comparison", "ReportComparison"),
+    "ReportExporter": ("src.observability.reports.report_exporter", "ReportExporter"),
+    "ReportFilter": ("src.observability.reports.report_filter", "ReportFilter"),
+    "ReportFormat": ("src.observability.reports.report_format", "ReportFormat"),
+    "ReportGenerator": ("src.observability.reports.report_generator", "ReportGenerator"),
+    "ReportGeneratorCli": ("src.observability.reports.report_generator_cli", "ReportGeneratorCli"),
+    "ReportLocalizer": ("src.observability.reports.report_localizer", "ReportLocalizer"),
+    "ReportManager": ("src.observability.reports.report_manager", "ReportManager"),
+    "ReportMetadata": ("src.observability.reports.report_metadata", "ReportMetadata"),
+    "ReportMetric": ("src.observability.reports.report_metric", "ReportMetric"),
+    "ReportPermission": ("src.observability.reports.report_permission", "ReportPermission"),
+    "ReportScheduler": ("src.observability.reports.report_scheduler", "ReportScheduler"),
+    "ReportSearchEngine": ("src.observability.reports.report_search_engine", "ReportSearchEngine"),
+    "ReportSearchResult": ("src.observability.reports.report_search_result", "ReportSearchResult"),
+    "ReportSubscription": ("src.observability.reports.report_subscription", "ReportSubscription"),
+    "ReportTemplate": ("src.observability.reports.report_template", "ReportTemplate"),
+    "ReportType": ("src.observability.reports.report_type", "ReportType"),
+    "ReportUtils": ("src.observability.reports.report_utils", "ReportUtils"),
+    "ReportValidator": ("src.observability.reports.report_validator", "ReportValidator"),
+    "SeverityLevel": ("src.observability.reports.severity_level", "SeverityLevel"),
+    "SubscriptionFrequency": ("src.observability.reports.subscription_frequency", "SubscriptionFrequency"),
+    "SubscriptionManager": ("src.observability.reports.subscription_manager", "SubscriptionManager"),
+    "SwarmTopologyReporter": ("src.observability.reports.swarm_topology_reporter", "SwarmTopologyReporter"),
+    "ValidationResult": ("src.observability.reports.validation_result", "ValidationResult"),
+}
 
 _loader = ModuleLazyLoader(_LAZY_REGISTRY)
-
 
 def __getattr__(name: str) -> Any:
     return _loader.load(name)
 
-
 __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())
-
-"""
-

@@ -1,35 +1,34 @@
-"""
-EffortEstimate enum - parser-safe stub for repairs.
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-This module provides a small Fibonacci-like effort enum used for compatibility
-with other modules during test repair. It intentionally keeps implementation
-minimal to avoid importing heavy dependencies while tests are being repaired.
-"""
+
+"""Auto-extracted class from agent_improvements.py"""
+
 from __future__ import annotations
 
-
-
 from enum import Enum
-try:
-    from .core.base.lifecycle.version import VERSION
-except Exception:
-    try:
-        from src.core.base.lifecycle.version import VERSION
-    except Exception:
-        VERSION = "0.0.0"
+
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 class EffortEstimate(Enum):
+    """Effort estimation levels."""
+
     TRIVIAL = 1
-    SMALL = 2
-    MEDIUM = 3
-    LARGE = 5
-    EPIC = 8
-
-    def approx_hours(self) -> int:
-        mapping = {1: 0, 2: 2, 3: 8, 5: 24, 8: 80}
-        return mapping.get(self.value, 1)
-
-__all__ = ["EffortEstimate"]
+    SMALL = 3
+    MEDIUM = 5
+    LARGE = 8
+    EPIC = 13
