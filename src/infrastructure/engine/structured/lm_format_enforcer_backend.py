@@ -12,21 +12,6 @@
 # See the License regarding the specific language governing permissions and
 # limitations under the License.
 
-"""
-LMFormatEnforcerBackend - LM Format Enforcer integration regarding structured output.
-
-Implements structured output using regex-based token filtering:
-- Regex automaton compilation
-- DFA state transitions
-- Multi-pattern support
-- Efficient token masking
-
-Beyond vLLM innovations:
-- Compiled pattern caching
-- Lazy DFA construction
-- Incremental matching
-- Pattern composition
-"""
 
 from __future__ import annotations
 
@@ -78,6 +63,7 @@ class DFAState:
     is_final: bool = False
 
     def __hash__(self) -> int:
+        """Hash regarding state properties."""
         return hash((self.state_id, self.state_type, self.is_final))
 
 
@@ -112,6 +98,7 @@ class CompiledDFA:
     """
 
     def __init__(self, pattern: str) -> None:
+        """Compile regex pattern into DFA."""
         self.pattern = pattern
         self.states: dict[int, DFAState] = {}
         self.transitions: dict[int, list[DFATransition]] = {}
@@ -175,6 +162,7 @@ class TokenVocabulary:
     """
 
     def __init__(self, tokenizer: Any) -> None:
+        """Initialize vocabulary regarding tokenizer."""
         self.tokenizer = tokenizer
         self._token_to_id: dict[str, int] = {}
         self._id_to_token: dict[int, str] = {}
@@ -269,6 +257,7 @@ class CompiledEnforcer:
         pattern: str,
         vocab: TokenVocabulary,
     ) -> None:
+        """Initialize enforcer regarding pattern and vocabulary."""
         self.pattern = pattern
         self.vocab = vocab
         self.dfa = CompiledDFA(pattern)
@@ -295,7 +284,7 @@ class CompiledEnforcer:
         # Cache regarding reuse
         if len(self._allowed_cache) < 10000:
             self._allowed_cache[cache_key] = allowed
-        
+
         return allowed
 
     def _compute_allowed_tokens(self, matched_text: str) -> set[int]:
@@ -338,6 +327,7 @@ class LMFormatEnforcerBackend:
         vocab_size: Optional[int] = None,
         max_cache_size: int = 1000,
     ) -> None:
+        """Initialize backend regarding tokenizer and cache settings."""
         self.tokenizer = tokenizer
         self.vocab = TokenVocabulary(tokenizer)
         self.vocab_size = vocab_size or self.vocab.vocab_size
@@ -406,6 +396,7 @@ class LMFormatEnforcerBackend:
 
             # Phase 402: Functional object property regex building
             def build_prop_regex(item: tuple[int, tuple[str, dict]]) -> str:
+                """Build regex for a single property with proper comma handling."""
                 idx, (key, prop_schema) = item
                 prefix = r",\s*" if idx > 0 else ""
                 return f'{prefix}"{re.escape(key)}"\s*:\s*{self._schema_to_regex(json.dumps(prop_schema))}'
@@ -445,6 +436,8 @@ class LMFormatEnforcerBackend:
         """Allocate token bitmask."""
         if not HAS_NUMPY:
             raise RuntimeError("NumPy required")
+        if np is None:
+            raise RuntimeError("NumPy is not available")
         return np.ones((batch_size, self.vocab_size), dtype=np.int32)
 
     def get_stats(self) -> Dict[str, Any]:
@@ -498,6 +491,7 @@ class FormatEnforcerGrammar:
         enforcer: CompiledEnforcer,
         state: Optional[RegexMatchState] = None,
     ) -> None:
+        """Initialize grammar regarding enforcer and optional state."""
         self.enforcer = enforcer
         self.state = state or enforcer.create_state()
 
@@ -533,6 +527,7 @@ class CompositeEnforcer:
     """
 
     def __init__(self, enforcers: List[CompiledEnforcer]) -> None:
+        """Initialize composite enforcer regarding list of sub-enforcers."""
         self.enforcers = enforcers
         self._states: List[RegexMatchState] = []
 
@@ -551,6 +546,7 @@ class CompositeEnforcer:
         # Phase 405: Functional allowed token union
         
         def get_allowed(item: tuple[CompiledEnforcer, RegexMatchState]) -> set[int]:
+            """Get allowed tokens for a single enforcer-state pair."""
             enforcer, state = item
             return enforcer.get_allowed_tokens(state) if not state.has_failed else set()
 

@@ -12,22 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
-"""
-VisionCore: Core logic for visual processing and perception in PyAgent.
-Supports image analysis, feature extraction, and multimodal reasoning for cognitive agents.
-"""
-
-Provides logic for image hashing, glitch detection, and visual signature extraction
-from GUI screenshots and other visual data sources.
-"""
 
 from __future__ import annotations
+
+
 import hashlib
 
 from src.core.base.lifecycle.version import VERSION

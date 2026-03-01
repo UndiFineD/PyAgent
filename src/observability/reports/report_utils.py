@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Report utils.py module.
-"""
-
 
 from __future__ import annotations
 
@@ -69,7 +65,7 @@ def _find_imports(tree: ast.AST) -> list[str]:
 
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
-            for alias: ast.alias in node.names:
+            for alias in node.names:
                 imports.append(alias.name)
         elif isinstance(node, ast.ImportFrom):
             mod: str = node.module or ""
@@ -102,11 +98,11 @@ def _placeholder_test_note(path: Path, source: str) -> str | None:
 def export_to_html(content: str, title: str = "PyAgent Report") -> str:
     """Convert markdown content to a full HTML document."""
     try:
-        import markdown
+        import markdown as md
     except ImportError:
         return f"<pre>{content}</pre>"
 
-    html_body: str = markdown.markdown(content, extensions=["extra", "codehilite"])
+    html_body: str = md.markdown(content, extensions=["extra", "codehilite"])
 
     return f"""<!DOCTYPE html>
 <html lang="en">

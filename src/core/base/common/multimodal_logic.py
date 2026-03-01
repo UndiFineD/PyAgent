@@ -45,8 +45,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
 
-from src.infrastructure.engine.multimodal import (Muxer,
-                                                  QuantizedMultimediaEngine)
+from src.infrastructure.engine.multimodal import (Muxer, QuantizedMultimediaEngine)
 
 from .base_core import BaseCore
 from .multimodal_state import StreamState
@@ -583,27 +582,53 @@ class MultimodalCore(BaseCore):
 
         # Real embedding extraction and projection
         uri = self.registry.get(m_id) if m_id else None
+        aligned = []
         if m_type.lower() == "image" and uri:
             # Example: extract image embedding using QuantizedMultimediaEngine
             try:
-                image_data = self.q_engine.load_image(uri)
-                emb = self.q_engine.extract_image_embedding(image_data)
-                weights = self.q_engine.get_projection_weights("image")
-                aligned = self.project_alignment(emb, weights)
+                load_image_method = getattr(self.q_engine, "load_image", None)
+                if load_image_method and callable(load_image_method):
+                    image_data = load_image_method(uri)
+                    if hasattr(self.q_engine, "extract_image_embedding") and callable(
+                        getattr(self.q_engine, "extract_image_embedding", None)
+                    ):
+                        emb = self.q_engine.extract_image_embedding(image_data)
+                        get_weights_method = getattr(self.q_engine, "get_projection_weights", None)
+                        if get_weights_method and callable(get_weights_method):
+                            weights = list(get_weights_method("image"))
+                        else:
+                            emb_len = len(emb) if hasattr(emb, "__len__") else 0
+                            weights = [1.0] * emb_len if emb_len > 0 else [1.0]
+                            logger.debug("QuantizedMultimediaEngine does not support get_projection_weights, using default weights")
+                        aligned = self.project_alignment(emb, weights)
+                    else:
+                        logger.debug(f"QuantizedMultimediaEngine does not support extract_image_embedding")
+                else:
+                    logger.debug(f"QuantizedMultimediaEngine does not support load_image for {m_id}")
             except (IOError, ValueError, AttributeError) as e:
                 logger.warning(f"Failed to process image media {m_id}: {e}")
-                aligned = []
         elif m_type.lower() == "audio" and uri:
             try:
-                audio_data = self.q_engine.load_audio(uri)
-                emb = self.q_engine.extract_audio_embedding(audio_data)
-                weights = self.q_engine.get_projection_weights("audio")
-                aligned = self.project_alignment(emb, weights)
+                load_audio_method = getattr(self.q_engine, "load_audio", None)
+                if load_audio_method and callable(load_audio_method):
+                    audio_data = load_audio_method(uri)
+                    extract_audio_method = getattr(self.q_engine, "extract_audio_embedding", None)
+                    if extract_audio_method and callable(extract_audio_method):
+                        emb = extract_audio_method(audio_data)
+                        get_weights_method = getattr(self.q_engine, "get_projection_weights", None)
+                        if get_weights_method and callable(get_weights_method):
+                            weights = list(get_weights_method("audio"))
+                        else:
+                            emb_len = len(emb) if hasattr(emb, "__len__") else 0
+                            weights = [1.0] * emb_len if emb_len > 0 else [1.0]
+                            logger.debug("QuantizedMultimediaEngine does not support get_projection_weights, using default weights")
+                        aligned = self.project_alignment(emb, weights)
+                    else:
+                        logger.debug(f"QuantizedMultimediaEngine does not support extract_audio_embedding")
+                else:
+                    logger.debug(f"QuantizedMultimediaEngine does not support load_audio for {m_id}")
             except (IOError, ValueError, AttributeError) as e:
                 logger.warning(f"Failed to process audio media {m_id}: {e}")
-                aligned = []
-        else:
-            aligned = []
 
         processed["aligned_embeddings"].append(aligned)
         processed["text"] += f"<{m_type.capitalize()}_{m_id}>"

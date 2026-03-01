@@ -12,11 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Context manager for coordinating multiple conversation contexts.
-"""
 
 from __future__ import annotations
 
@@ -37,22 +32,7 @@ class ContextManager:
     Registry and lifecycle manager for conversation contexts.
     """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     def __init__(self, default_config: Optional[ContextConfig] = None) -> None:
-=======
-    def __init__(self, default_config: Optional[ContextConfig] = None):
-<<<<<<< HEAD
->>>>>>> b0f03c9ef (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
->>>>>>> 7691cd526 (chore: repository-wide stability and Pylint 10/10 compliance refactor)
-=======
-    def __init__(self, default_config: Optional[ContextConfig] = None) -> None:
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
-    def __init__(self, default_config: Optional[ContextConfig] = None) -> None:
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
         """Initialize the context manager."""
         self._contexts: Dict[str, ConversationContext] = {}
         self._default_config = default_config or ContextConfig()

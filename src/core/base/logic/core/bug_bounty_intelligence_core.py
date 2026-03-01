@@ -12,24 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-"""
-Bug Bounty Intelligence Core
-
-This core implements automated collection and analysis of bug bounty reports from platforms
-like HackerOne. Based on analysis of 10000-h1-disclosed-reports repository patterns.
-
-Key Features:
-- GraphQL API interaction for bug bounty platforms
-- Automated report collection and pagination
-- Vulnerability pattern analysis
-- Security trend tracking
-- Intelligence gathering for security research
-"""
 
 import asyncio
 import aiohttp
@@ -53,7 +35,9 @@ class BugBountyIntelligenceCore(BaseAgent):
     """
 
     def __init__(self, agent_state_manager, cascade_context: CascadeContext):
-        super().__init__(agent_state_manager, cascade_context)
+        super().__init__(__file__)
+        self.cascade_context = cascade_context
+        self.agent_state_manager = agent_state_manager
         self.logger = logging.getLogger(__name__)
 
         # HTTP client configuration
@@ -196,6 +180,10 @@ class BugBountyIntelligenceCore(BaseAgent):
             }
 
             try:
+                if self.session is None:
+                    self.logger.error("Session is not initialized")
+                    break
+
                 async with self.session.post(
                     platform_config['graphql_url'],
                     json=payload,
@@ -521,5 +509,4 @@ class BugBountyIntelligenceCore(BaseAgent):
         """Clean up resources."""
         if self.session:
             await self.session.close()
-            self.session = None</content>
-<parameter name="filePath">c:\DEV\PyAgent\src\core\base\logic\core\bug_bounty_intelligence_core.py
+            self.session = None

@@ -12,12 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-PyAgent Better-Agents Testing Framework.
-
-Based on the better-agents repository for enterprise-grade development practices.
-Implements comprehensive testing pyramid with unit, integration, and E2E testing.
-"""
 
 from __future__ import annotations
 
@@ -561,8 +555,7 @@ class EvaluationNotebookSystem:
         self.notebooks_dir.mkdir(exist_ok=True)
         self.logger = logging.getLogger("pyagent.testing.notebooks")
 
-    def create_evaluation_notebook(self, test_results: List[TestResult],
-                                  notebook_name: str) -> str:
+    def create_evaluation_notebook(self, test_results: List[TestResult], notebook_name: str) -> str:
         """Create a Jupyter notebook for test result analysis."""
         notebook_content = {
             "cells": [
@@ -584,13 +577,15 @@ class EvaluationNotebookSystem:
                         "import json\n",
                         "\n",
                         "# Load test results\n",
-                        f"results_data = {json.dumps([{\n",
-                        "    'test_id': r.test_id,\n",
-                        "    'test_type': r.test_type.value,\n",
-                        "    'status': r.status.value,\n",
-                        "    'duration': r.duration,\n",
-                        "    'timestamp': r.timestamp\n",
-                        "} for r in test_results], indent=2)}\n",
+                        "results_data = " +
+                        json.dumps([{
+                            'test_id': 'r.test_id',
+                            'test_type': 'r.test_type.value',
+                            'status': 'r.status.value',
+                            'duration': 'r.duration',
+                            'timestamp': 'r.timestamp'
+                        } for r in test_results], indent=2) +
+                        "\n",
                         "\n",
                         "df = pd.DataFrame(results_data)\n",
                         "df.head()"
@@ -628,8 +623,11 @@ class EvaluationNotebookSystem:
 
         notebook_path = self.notebooks_dir / f"{notebook_name}.ipynb"
 
-        with open(notebook_path, 'w') as f:
-            json.dump(notebook_content, f, indent=2)
-
-        self.logger.info(f"Created evaluation notebook: {notebook_path}")
-        return str(notebook_path)
+        try:
+            with open(notebook_path, 'w') as f:
+                json.dump(notebook_content, f, indent=2)
+            self.logger.info(f"Created evaluation notebook: {notebook_path}")
+            return str(notebook_path)
+        except Exception as e:
+            self.logger.error(f"Failed to create evaluation notebook: {e}")
+            return ""

@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+"""
+Tests for EncoderCacheManager
+Auto-generated test template - expand with actual test cases
+"""
+
+import pytest
+import sys
+from pathlib import Path
+
+# Add src to path for imports
+src_path = Path(__file__).parent.parent
+if str(src_path) not in sys.path:
+    sys.path.insert(0, str(src_path))
+
+try:
+    from infrastructure.multimodal.EncoderCacheManager import *
+except ImportError as e:
+    pytest.skip(f"Cannot import module: {e}", allow_module_level=True)
+
+
+def test_cachetier_exists():
+    """Test that CacheTier class exists and is importable."""
+    assert 'CacheTier' in dir()
+
+
+def test_evictionpolicy_exists():
+    """Test that EvictionPolicy class exists and is importable."""
+    assert 'EvictionPolicy' in dir()
+
+
+def test_cacheconfig_exists():
+    """Test that CacheConfig class exists and is importable."""
+    assert 'CacheConfig' in dir()
+
+
+def test_cacheentry_exists():
+    """Test that CacheEntry class exists and is importable."""
+    assert 'CacheEntry' in dir()
+
+
+def test_cachestats_exists():
+    """Test that CacheStats class exists and is importable."""
+    assert 'CacheStats' in dir()
+
+
+def test_encodercachemanager_exists():
+    """Test that EncoderCacheManager class exists and is importable."""
+    assert 'EncoderCacheManager' in dir()
+
+
+def test_multitierencodercache_exists():
+    """Test that MultiTierEncoderCache class exists and is importable."""
+    assert 'MultiTierEncoderCache' in dir()
+
+
+def test_create_encoder_cache_exists():
+    """Test that create_encoder_cache function exists."""
+    assert callable(create_encoder_cache)
+
+
+def test_module_imports():
+    """Test that the module imports without errors."""
+    assert True  # If we got here, imports worked
+

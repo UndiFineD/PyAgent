@@ -1,0 +1,27 @@
+# UsageRecord
+
+**File**: `src\infrastructure\backend\UsageRecord.py`  
+**Type**: Python Module  
+**Summary**: 1 classes, 0 functions, 3 imports  
+**Lines**: 33  
+**Complexity**: 0 (simple)
+
+## Overview
+
+Auto-extracted class from agent_backend.py
+
+## Classes (1)
+
+### `UsageRecord`
+
+A usage record for analytics.
+
+## Dependencies
+
+**Imports** (3):
+- `__future__.annotations`
+- `dataclasses.dataclass`
+- `src.core.base.version.VERSION`
+
+---
+*Auto-generated documentation*

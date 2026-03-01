@@ -11,24 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-"""
-Knowledge symbol mixin for symbol extraction logic.
-"""
 
-"""
-Knowledge symbol mixin for symbol extraction logic.
-"""
-=======
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
-
-"""
-Knowledge symbol mixin for symbol extraction logic.
-"""
+from __future__ import annotations
 
 import re
 from typing import Any
@@ -39,14 +24,17 @@ try:
 except ImportError:
     HAS_RUST = False
 
+
 class KnowledgeSymbolMixin:
     """Methods for symbol extraction from various formats."""
+
 
     def extract_symbols(self, content: str, pattern: str) -> list[str]:
         """Generic symbol extractor using optimized regex."""
         if not content:
             return []
         return re.findall(pattern, content)
+
 
     def extract_python_symbols(self, content: str) -> list[str]:
         """Extracts class and function names from Python content."""
@@ -59,6 +47,7 @@ class KnowledgeSymbolMixin:
             content, r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)"
         )
 
+
     def extract_markdown_backlinks(self, content: str) -> list[str]:
         """Extracts [[WikiStyle]] backlinks from markdown content."""
         if HAS_RUST:
@@ -67,6 +56,7 @@ class KnowledgeSymbolMixin:
             except (RuntimeError, AttributeError):
                 pass
         return self.extract_symbols(content, r"\[\[(.*?)\]\]")
+
 
     def build_symbol_map(self, directory: Any, patterns: dict[str, str]) -> dict[str, list[str]]:
         """Scans a directory for symbols according to provided patterns."""

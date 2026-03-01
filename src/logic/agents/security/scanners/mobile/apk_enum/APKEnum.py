@@ -1,4 +1,7 @@
 #!/usr/bin/python
+
+from __future__ import annotations
+
 import os
 import sys
 import ntpath
@@ -58,40 +61,40 @@ gMapsAPI="(AIzaSy[\w-]{33})"
 
 def myPrint(text, type):
 	if(type=="INFO"):
-		print bcolors.INFO+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		print(bcolors.INFO+bcolors.BOLD+text+bcolors.ENDC+"\n")
 		return
 	if(type=="INFO_WS"):
-		print bcolors.INFO+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.INFO+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="PLAIN_OUTPUT_WS"):
-		print bcolors.INFO+text+bcolors.ENDC
+		print(bcolors.INFO+text+bcolors.ENDC)
 		return
 	if(type=="ERROR"):
-		print bcolors.BGRED+bcolors.FGWHITE+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.BGRED+bcolors.FGWHITE+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="MESSAGE_WS"):
-		print bcolors.TITLE+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.TITLE+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="MESSAGE"):
-		print bcolors.TITLE+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		print(bcolors.TITLE+bcolors.BOLD+text+bcolors.ENDC+"\n")
 		return
 	if(type=="INSECURE"):
-		print bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		print(bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC+"\n")
 		return
 	if(type=="INSECURE_WS"):
-		print bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.OKRED+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="OUTPUT"):
-		print bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		print(bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC+"\n")
 		return
 	if(type=="OUTPUT_WS"):
-		print bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.OKBLUE+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="SECURE_WS"):
-		print bcolors.OKGREEN+bcolors.BOLD+text+bcolors.ENDC
+		print(bcolors.OKGREEN+bcolors.BOLD+text+bcolors.ENDC)
 		return
 	if(type=="SECURE"):
-		print bcolors.OKGREEN+bcolors.BOLD+text+bcolors.ENDC+"\n"
+		print(bcolors.OKGREEN+bcolors.BOLD+text+bcolors.ENDC+"\n")
 		return
 
 
@@ -108,7 +111,7 @@ def isValidPath(apkFilePath):
 	myPrint("I: Checking if the APK file path is valid.", "INFO_WS")
 	if (os.path.exists(apkFilePath)==False):
 		myPrint("E: Incorrect APK file path found. Please try again with correct file name.", "ERROR")
-		print
+		print()
 		exit(1)
 	else:
 		myPrint("I: APK File Found.", "INFO_WS")
@@ -133,7 +136,7 @@ def reverseEngineerApplication(apkFileName):
 	result=os.system("java -jar "+apktoolPath+" d "+"--output "+'"'+projectDir+"/apktool/"+'"'+' "'+apkFilePath+'"'+'>/dev/null')
 	if (result!=0):
 		myPrint("E: Apktool failed with exit status "+str(result)+". Please try updating the APKTool binary.", "ERROR")
-		print
+		print()
 		exit(1)
 	myPrint("I: Successfully decompiled the application. Proceeding with scanning code.", "INFO_WS")
 
@@ -210,12 +213,12 @@ def performRecon():
 	filecontent=""
 	for dir_path, dirs, file_names in os.walk(rootDir+apkFileName+"_"+hashlib.md5().hexdigest()):
 		for file_name in file_names:
+			fullpath = os.path.join(dir_path, file_name)
 			try:
-				fullpath = os.path.join(dir_path, file_name)
 				fileobj= open(fullpath,mode='r')
 				filecontent = fileobj.read()
 				fileobj.close()
-			except Exception as e:
+			except Exception:
 				myPrint("E: Exception while reading "+fullpath,"ERROR")
 			
 			try:
@@ -298,7 +301,7 @@ def displayResults():
 		# myPrint("\nList of Unrestricted Google Map API Keys found in the application", "SECURE")
 		# printList(unrestrictedGmapKeys)
 
-	print ""
+	print("")
 
 
 ####################################################################################################
@@ -324,15 +327,15 @@ if ((len(sys.argv)==2) and (sys.argv[1]=="-h" or sys.argv[1]=="--help")):
 	myPrint("Usage: python APKEnum.py -p/--path <apkPathName> [ -s/--scope \"comma, seperated, list\"]","ERROR")
 	myPrint("\t-p/--path: Pathname of the APK file", "ERROR") 
 	myPrint("\t-s/--scope: List of keywords to filter out domains", "ERROR")
-	print ""
+	print("")
 	exit(1);
 
 if (len(sys.argv)<3):
 	myPrint("E: Please provide the required arguments to initiate", "ERROR")
-	print ""
+	print("")
 	myPrint("E: Usage: python APKEnum.py -p/--path <apkPathName> [ -s/--scope \"comma, seperated, list\"]","ERROR")
 	myPrint("E: Please try again!!", "ERROR") 
-	print ""
+	print("")
 	exit(1);
 
 if ((len(sys.argv)>4) and (sys.argv[3]=="-s" or sys.argv[3]=="--scope")):

@@ -107,3 +107,32 @@ python -m pytest tests/unit/
 ---
 *Locked under GOLDEN_MASTER_SEAL (v4.0.0-VOYAGER)*
 
+## Changelog (2026-03-01)
+
+- **Multimodal tokenizer added**: A new `MultimodalTokenizer` provides a unified token space for text, image, audio, and video tokens. It supports pluggable modality-specific tokenizers and a simple fallback implementation. See: `src/infrastructure/engine/tokenization/detokenizer/types.py` and `src/infrastructure/engine/tokenization/detokenizer/simple_tokenizer.py`.
+
+- **Documentation generator fixed for Windows**: `scripts/generate_docs_and_tests.py` now avoids emoji/Unicode characters that fail on Windows consoles (cp1252). The script completed a full run over the repository and generates `.description.md`, `.improvements.md`, `.splice.md`, and `*_test.py` artifacts with a resumable checkpointing mechanism. Use `--dry-run` to preview changes or `--execute` to create files.
+
+- **New tests**: Added lightweight tests and standalone examples for the tokenizer components:
+  - `test_tokenizer_protocol.py` — demonstrates Protocol vs implementation
+  - `test_multimodal_tokenizer.py` — integration tests for multimodal tokenization
+  - `test_multimodal_standalone.py` — quick verification harness
+
+## How to try the new tokenizer
+
+1. Install dev dependencies and activate the virtualenv (see Installation above).
+2. Run the standalone verification (no package imports required):
+
+```powershell
+python test_multimodal_standalone.py
+```
+
+3. Or run the protocol demo and integration tests:
+
+```powershell
+python test_tokenizer_protocol.py
+python test_multimodal_tokenizer.py
+```
+
+If you deploy to CI, ensure `pyproject.toml` or your test runner includes these new tests.
+

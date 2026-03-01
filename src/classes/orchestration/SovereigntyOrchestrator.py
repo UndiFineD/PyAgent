@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-<<<<<<<< HEAD:src/classes/orchestration/SovereigntyOrchestrator.py
-========
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
->>>>>>>> d6712a17b (phase 320):src/infrastructure/orchestration/FederatedOrchestrator.py
 
 from __future__ import annotations
 import logging
@@ -79,10 +76,6 @@ class FederatedOrchestrator:
         return {
             "proposal_id": proposal_id,
             "agreement_status": "signed",
-<<<<<<<< HEAD:src/classes/orchestration/SovereigntyOrchestrator.py
-            "execution_protocol": "distributed_swarm_v1"
-========
             "execution_protocol": "distributed_swarm_v1",
             "consensus_type": "sovereign_federation"
->>>>>>>> d6712a17b (phase 320):src/infrastructure/orchestration/FederatedOrchestrator.py
         }

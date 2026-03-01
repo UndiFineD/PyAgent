@@ -11,29 +11,38 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-"""
-Knowledge process mixin for content analysis.
-"""
 
-"""
-Knowledge process mixin for content analysis.
-"""
-=======
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
-
-"""
-Knowledge process mixin for content analysis.
-"""
+from __future__ import annotations
 
 import re
 
+
 class KnowledgeProcessMixin:
     """Methods for processing file content and computing similarity."""
+
+
+    def extract_python_symbols(self, content: str) -> list[str]:
+        """Extracts Python function, class, and variable names from content."""
+        symbols = []
+        # Match function definitions
+        symbols.extend(re.findall(r"def\s+(\w+)\s*\(", content))
+        # Match class definitions
+        symbols.extend(re.findall(r"class\s+(\w+)[\s(:)]", content))
+        # Match variable assignments at module level
+        symbols.extend(re.findall(r"^(\w+)\s*=", content, re.MULTILINE))
+        return symbols
+
+
+    def extract_markdown_backlinks(self, content: str) -> list[str]:
+        """Extracts markdown links (both [[wikilink]] and [text](url) formats)."""
+        links = []
+        # Match [[wikilink]] format
+        links.extend(re.findall(r"\[\[([^\]]+)\]\]", content))
+        # Match [text](url) format
+        links.extend(re.findall(r"\[([^\]]+)\]\(([^)]+)\)", content))
+        return links
+
 
     def process_file_content(
         self, rel_path: str, content: str, extension: str
@@ -55,6 +64,7 @@ class KnowledgeProcessMixin:
                 )
 
         return results
+
 
     def compute_similarity(self, text_a: str, text_b: str) -> float:
         """Computes basic string similarity (Jaccard) for symbol matching."""

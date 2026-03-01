@@ -12,10 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ModuleLoader: Centralized utility for dynamic module loading and agent discovery.
-Enables 'core' logic to find agent implementations without hardcoded paths.
-"""
 
 from __future__ import annotations
 
@@ -23,6 +19,7 @@ import importlib
 import logging
 import os
 from pathlib import Path
+from types import ModuleType
 from typing import Any, Type
 
 from ..lifecycle.version import VERSION
@@ -84,16 +81,16 @@ class ModuleLoader:
         if not module_path:
             type_clean: str = agent_type.replace("Agent", "").lower()
             if type_clean == "coder":
-                module_path: str = f"src.logic.agents.development.{agent_type}"
+                module_path = f"src.logic.agents.development.{agent_type}"
             # Add other known mappings here if needed
             else:
                 # Last resort attempt based on old structure
-                module_path: str = f"src.{type_clean}.{agent_type}"
+                module_path = f"src.{type_clean}.{agent_type}"
 
         try:
-            module: importlib.ModuleType = importlib.import_module(module_path)
+            module: ModuleType = importlib.import_module(module_path)
             return getattr(module, agent_type)
-        except (ImportError, AttributeError, ModuleNotFoundError) as e: ImportError | AttributeError | ModuleNotFoundError:
+        except (ImportError, AttributeError, ModuleNotFoundError) as e:
             logging.error(
                 "ModuleLoader: Failed to load class %s from %s. Error: %s",
                 agent_type,

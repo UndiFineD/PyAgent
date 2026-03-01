@@ -12,12 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-PyAgent AI Fuzzing Engine.
-
-Based on the brainstorm repository for AI-powered security testing.
-Implements learning-based discovery and intelligent fuzzing capabilities.
-"""
 
 from __future__ import annotations
 
@@ -599,5 +593,4 @@ class MultiCycleFuzzing:
             summary['vulnerability_breakdown'][vuln_type] = summary['vulnerability_breakdown'].get(vuln_type, 0) + 1
 
         self.logger.info(f"Multi-cycle fuzzing complete: {summary['total_findings']} total findings")
-        return summary</content>
-<parameter name="filePath">c:\DEV\PyAgent\src\tools\security\fuzzing.py
+        return summary

@@ -13,35 +13,11 @@
 
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
 use std::path::Path;
-=======
-use std::path::{Path, PathBuf};
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-use std::path::{Path, PathBuf};
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
-use std::path::Path;
->>>>>>> 8d4d334f2 (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
-=======
-use std::path::Path;
->>>>>>> 2a6f2626e (chore: stabilize rust_core and resolve pylint diagnostics in base common cores)
 use walkdir::WalkDir;
 use glob::Pattern;
 use std::fs;
 use std::io::Write;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 use pyo3::types::{PyList, PyDict, PyTuple, PyBool};
 use serde_json::{Value, Number, Map};
 
@@ -103,16 +79,6 @@ pub fn to_json_rust(data: &Bound<'_, PyAny>, indent: Option<usize>) -> PyResult<
     };
     Ok(s)
 }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
 
 /// Atomic save for JSON/YAML files (StorageCore Support).
 /// Ensures transactional speed and safety when writing large state files.
@@ -206,28 +172,10 @@ pub fn discover_files_rust(
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(discover_files_rust, m)?)?;
     m.add_function(wrap_pyfunction!(save_json_atomic_rust, m)?)?;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> e0370a77d (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
-=======
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
     m.add_function(wrap_pyfunction!(to_json_rust, m)?)?;
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
-=======
     m.add_function(wrap_pyfunction!(batch_exists_rust, m)?)?;
->>>>>>> 9f9a0297d (thank you github)
-=======
     m.add_function(wrap_pyfunction!(batch_exists_rust, m)?)?;
->>>>>>> 68c819738 (thank you github)
     Ok(())
 }

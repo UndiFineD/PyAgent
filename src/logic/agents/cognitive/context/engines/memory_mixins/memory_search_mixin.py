@@ -11,30 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-"""
-Memory search mixin for retrieving historical agent experiences.
-"""
 
-"""
-Memory search mixin for retrieving historical agent experiences.
-"""
-=======
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
-
-"""
-Memory search mixin for retrieving historical agent experiences.
-"""
+from __future__ import annotations
 
 import logging
 from typing import Any
 
+
 class MemorySearchMixin:
     """Methods for searching memories."""
+
+    episodes: list[dict[str, Any]]
+
+    def _init_db(self) -> Any | None:
+        """Initialize and return a Chroma collection for semantic search. Override in subclass."""
+        return None
 
     def get_lessons_learned(
         self, query: str = "", limit: int = 5, min_utility: float = 0.0
@@ -43,14 +35,13 @@ class MemorySearchMixin:
         if not query:
             # Return recent high utility episodes
             candidates = [
-                ep
-                for ep in self.episodes
+                ep for ep in self.episodes
                 if ep.get("utility_score", 0.5) >= min_utility
             ]
             return candidates[-limit:]
 
-        collection = self._init_db()
-        if collection:
+        collection: Any | None = self._init_db()
+        if collection is not None:
             try:
                 # Build specific filter for utility if Chroma version supports it
                 where_clause = (
@@ -92,9 +83,10 @@ class MemorySearchMixin:
                 break
         return relevant
 
+
     def search_memories(self, query: str, limit: int = 5) -> list[dict[str, Any]]:
         """Public interface for semantic search across episodic memories."""
-        collection = self._init_db()
+        collection: Any | None = self._init_db()
         if not collection:
             # Fallback to simple matching if Chroma is not available
             return [

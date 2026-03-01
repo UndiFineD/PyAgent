@@ -1,8 +1,3 @@
-# SPDX-License-Identifier: Apache-2.0
-# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
-"""
-Platform-related data models and enums.
-"""
 
 from __future__ import annotations
 
@@ -100,12 +95,16 @@ class DeviceCapability(NamedTuple):
     minor: int
 
     def __str__(self) -> str:
-        return f"{self.major#.minor}"
+        return f"{self.major}.{self.minor}"
 
-    def __ge__(self, other: "DeviceCapability") -> bool:
+    def __ge__(self, other: Any) -> bool:
+        if not isinstance(other, DeviceCapability):
+            return NotImplemented
         return (self.major, self.minor) >= (other.major, other.minor)
 
-    def __gt__(self, other: "DeviceCapability") -> bool:
+    def __gt__(self, other: Any) -> bool:
+        if not isinstance(other, DeviceCapability):
+            return NotImplemented
         return (self.major, self.minor) > (other.major, other.minor)
 
     @property
@@ -125,14 +124,17 @@ class MemoryInfo:
 
     @property
     def total_gb(self) -> float:
+        """Return total memory in gigabytes."""
         return self.total_bytes / (1024**3)
 
     @property
     def free_gb(self) -> float:
+        """Return free memory in gigabytes."""
         return self.free_bytes / (1024**3)
 
     @property
     def used_gb(self) -> float:
+        """Return used memory in gigabytes."""
         return self.used_bytes / (1024**3)
 
     @property
@@ -182,4 +184,3 @@ class PlatformConfig:
     quantization_types: Set[QuantizationType] = field(default_factory=set)
     custom_ops_enabled: bool = True
     compile_backend: str = "inductor"
-

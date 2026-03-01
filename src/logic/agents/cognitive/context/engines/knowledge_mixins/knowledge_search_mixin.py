@@ -11,24 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-"""
-Knowledge search mixin for workspace-wide queries.
-"""
 
-"""
-Knowledge search mixin for workspace-wide queries.
-"""
-=======
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
-
-"""
-Knowledge search mixin for workspace-wide queries.
-"""
+from __future__ import annotations
 
 from pathlib import Path
 

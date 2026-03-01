@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-ArchitectureMapper: Auto-generates Mermaid C4 diagrams for the project.
-"""
+from __future__ import annotations
 
 import logging
 import os
@@ -106,7 +104,7 @@ mapping the inter-dependencies between major system boundaries.
 
         os.makedirs(self.output_path.parent, exist_ok=True)
 
-        with open(self.output_path, "w", encoding="utf-8") as f: logging.TextIOWrapper[_WrappedBuffer]:
+        with open(self.output_path, "w", encoding="utf-8") as f:
             f.write(md_content)
 
         logger.info("Architecture map generated: %s", self.output_path)

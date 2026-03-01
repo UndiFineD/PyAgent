@@ -1,0 +1,51 @@
+# Class Breakdown: metadata
+
+**File**: `src\infrastructure\engine\speculative\spec_decode\metadata.py`  
+**Classes**: 3
+
+This file contains multiple classes. Consider splitting into separate modules for better maintainability.
+
+## Classes Overview
+
+### 1. `SpecDecodeMetadataV2`
+
+**Line**: 34  
+**Methods**: 8
+
+Enhanced metadata regarding speculative decoding verification.
+
+[TIP] **Suggested split**: Move to `specdecodemetadatav2.py`
+
+---
+
+### 2. `TreeVerificationMetadata`
+
+**Line**: 122  
+**Methods**: 3
+
+Metadata regarding tree-based verification.
+
+[TIP] **Suggested split**: Move to `treeverificationmetadata.py`
+
+---
+
+### 3. `SpecDecodeMetadataFactory`
+
+**Line**: 186  
+**Methods**: 2
+
+Factory regarding creating speculative decode metadata.
+
+[TIP] **Suggested split**: Move to `specdecodemetadatafactory.py`
+
+---
+
+## Refactoring Strategy
+
+1. Create separate files for each class
+2. Update imports in dependent modules
+3. Create __init__.py to maintain backwards compatibility
+4. Run tests to ensure functionality is preserved
+
+---
+*Auto-generated class breakdown*

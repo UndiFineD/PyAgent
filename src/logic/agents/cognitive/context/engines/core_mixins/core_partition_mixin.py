@@ -11,24 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-"""
-Core partition mixin for shard management.
-"""
-
-"""
-Core partition mixin for shard management.
-"""
-=======
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
-
-"""
-Core partition mixin for shard management.
-"""
+from __future__ import annotations
 
 from typing import Any
 import json
@@ -38,10 +22,13 @@ try:
     from rust_core import partition_to_shards_rust
     _RUST_ACCEL = True
 except ImportError:
+    partition_to_shards_rust = None
     _RUST_ACCEL = False
+
 
 class CorePartitionMixin:
     """Methods for partitioning and bloat detection."""
+
 
     def partition_memory(
         self, memory: dict[str, Any], max_entries_per_shard: int = 1000
@@ -62,12 +49,13 @@ class CorePartitionMixin:
                 shards["default"][category] = data
         return shards
 
+
     def _shard_category(
         self, category: str, data: dict, shards: dict, max_entries: int
     ) -> None:
         """Helper to shard a large category."""
         # Use Rust for sharding if available
-        if _RUST_ACCEL:
+        if _RUST_ACCEL and partition_to_shards_rust is not None:
             try:
                 items = [(k, json.dumps(v)) for k, v in data.items()]
                 rust_shards = partition_to_shards_rust(category, items, max_entries)
@@ -91,6 +79,7 @@ class CorePartitionMixin:
             if shard_name not in shards:
                 shards[shard_name] = {}
             shards[shard_name][key] = val
+
 
     def detect_shard_bloat(
         self, shards: dict[str, dict[str, Any]], size_threshold_bytes: int = 5_000_000

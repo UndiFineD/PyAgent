@@ -11,35 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-"""
-Core summary mixin for cognitive agents.
-"""
 
-"""
-Core summary mixin for cognitive agents.
-"""
-=======
->>>>>>> d5f1917bc (Fix Pylint errors: imports, whitespace, docstrings)
-=======
->>>>>>> 797ca81d4 (Fix Pylint errors: imports, whitespace, docstrings)
-
-"""
-Core summary mixin for cognitive agents.
-"""
+from __future__ import annotations
 
 from typing import Any
 
+
 class CoreSummaryMixin:
     """Methods for summary generation and pruning."""
+
 
     def prune_lessons(
         self, lessons: list[dict[str, Any]], max_lessons: int = 20
     ) -> list[dict[str, Any]]:
         """Prunes lessons to keep only the most recent."""
         return lessons[-max_lessons:]
+
 
     def generate_markdown_summary(self, memory: dict[str, Any]) -> str:
         """Logic for formatting the cognitive summary."""

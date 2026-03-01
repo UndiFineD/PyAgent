@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Log rotation core.py module.
-"""
 
 from __future__ import annotations
 
@@ -25,11 +22,6 @@ import shutil
 from datetime import datetime
 
 from src.core.base.common.file_system_core import FileSystemCore
-<<<<<<< HEAD
-
-from src.core.base.common.file_system_core import FileSystemCore
-=======
->>>>>>> 125558c4f (feat: implement Swarm Evolution Meta-Learning Phase 81-85)
 
 
 class LogRotationCore:
@@ -38,16 +30,19 @@ class LogRotationCore:
     It isolates the logic from the logging framework itself for future Rust migration.
     """
 
+
     def __init__(self, log_dir: str, max_size_bytes: int = 10 * 1024 * 1024) -> None:
         self.log_dir = log_dir
         self.max_size_bytes = max_size_bytes
         self._fs = FileSystemCore()
+
 
     def should_rotate(self, file_path: str) -> bool:
         """Checks if a log file exceeds the size limit."""
         if not os.path.exists(file_path):
             return False
         return os.path.getsize(file_path) > self.max_size_bytes
+
 
     def rotate_and_compress(self, file_path: str) -> str | None:
         """
@@ -76,6 +71,7 @@ class LogRotationCore:
 
         # If compression fails, try to restore or at least leave the rotated file
         return None
+
 
     def calculate_log_level(self, fleet_health_score: float) -> str:
         """
