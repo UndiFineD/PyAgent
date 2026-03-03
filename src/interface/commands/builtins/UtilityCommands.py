@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from ..Base import CommandContext, CommandResult
 
 if TYPE_CHECKING:
-from ..Registry import CommandRegistry
+    from ..Registry import CommandRegistry
 
 
 def register_utility_commands(registry: CommandRegistry) -> None:
