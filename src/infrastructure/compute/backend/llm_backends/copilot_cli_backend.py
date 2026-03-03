@@ -45,7 +45,7 @@ class CopilotCliBackend(LLMBackend):
 
         # Phase 336 Modification: Increased default timeout to 300s to support large context reasoning
         timeout_s = kwargs.get("timeout_s", 300)
-        import time
+import time
 
         start_t = time.time()
         try:
