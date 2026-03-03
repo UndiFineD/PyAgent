@@ -19,8 +19,8 @@ Manager package.
 from .base import StructuredOutputBackend, StructuredOutputGrammar  # noqa: F401
 from .config import (BackendStats, CompilationResult, CompilationStatus,  # noqa: F401
                      GrammarSpec, GrammarType, ValidationResult)
-                     from .engine import SimpleBackend, StructuredOutputManager  # noqa: F401
-                     from .impl import ChoiceGrammar, SimpleRegexGrammar  # noqa: F401
+from .engine import SimpleBackend, StructuredOutputManager  # noqa: F401
+from .impl import ChoiceGrammar, SimpleRegexGrammar  # noqa: F401
 
 __all__ = [
     "GrammarType",
