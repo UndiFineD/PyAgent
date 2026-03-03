@@ -35,7 +35,7 @@ class OllamaBackend(LLMBackend):
             logging.debug("Ollama skipped due to connection cache.")
             return ""
 
-        import os
+import os
 
         base_url = (
             kwargs.get("base_url")
