@@ -24,17 +24,17 @@ project_root = os.path.abspath(
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-    from src.core.base.Version import VERSION
-    import json
-    import time
-    import logging
-    import argparse
-    import subprocess
-    import re
-    from pathlib import Path
-    from typing import Any
-    from src.infrastructure.fleet.FleetManager import FleetManager
-    from src.observability.StructuredLogger import StructuredLogger
+from src.core.base.Version import VERSION
+import json
+import time
+import logging
+import argparse
+import subprocess
+import re
+from pathlib import Path
+from typing import Any
+from src.infrastructure.fleet.FleetManager import FleetManager
+from src.observability.StructuredLogger import StructuredLogger
 
 """
 Autonomous Fleet Self-Improvement Loop.
