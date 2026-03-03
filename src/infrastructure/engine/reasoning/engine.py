@@ -26,7 +26,7 @@ from .enums import ParseState, ReasoningFormat, ToolCallFormat
 from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
                               HermesToolParser, OpenAIToolParser,
                               QwenReasoningParser)
-                              from .parsers import ReasoningParser, ToolParser
+from .parsers import ReasoningParser, ToolParser
 
 
 class ReasoningEngine:
