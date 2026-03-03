@@ -19,9 +19,9 @@ Registry package.
 from .config import (ArchitectureSpec, ModelArchitecture, ModelCapability,  # noqa: F401
                      ModelConfig, ModelFormat, ModelInfo, QuantizationType,
                      VRAMEstimate)
-                     from .detector import ArchitectureDetector  # noqa: F401
-                     from .engine import ModelRegistry  # noqa: F401
-                     from .estimator import VRAMEstimator  # noqa: F401
+from .detector import ArchitectureDetector  # noqa: F401
+from .engine import ModelRegistry  # noqa: F401
+from .estimator import VRAMEstimator  # noqa: F401
 
 __all__ = [
     "ModelCapability",
