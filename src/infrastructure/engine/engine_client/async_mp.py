@@ -27,7 +27,7 @@ from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.types import EngineOutput
 
 if TYPE_CHECKING:
-from src.infrastructure.engine.engine_client.types import (
+    from src.infrastructure.engine.engine_client.types import (
         EngineClientConfig, SchedulerOutput)
 
 logger = logging.getLogger(__name__)
