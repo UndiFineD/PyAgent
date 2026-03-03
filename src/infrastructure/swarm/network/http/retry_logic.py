@@ -25,7 +25,7 @@ import threading
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.network.http.connection import HTTPConnection
+from src.infrastructure.swarm.network.http.connection import HTTPConnection
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ class RetryHTTPMixin:
         timeout: float | None = None,
     ) -> Any:
         """GET JSON with automatic retry on failure."""
-        import requests
+import requests
 
         last_error: Exception | None = None
         delay = self.retry_delay
