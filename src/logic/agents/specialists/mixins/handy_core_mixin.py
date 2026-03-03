@@ -12,7 +12,7 @@ import time
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-from src.logic.agents.specialists.handy_agent import HandyAgent
+    from src.logic.agents.specialists.handy_agent import HandyAgent
 
 
 class HandyCoreMixin:
