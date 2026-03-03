@@ -39,7 +39,7 @@ class BackendHandlers:
             return text
 
         parts = []
-        import re
+import re
 
         # Find [IMAGE_DATA:base64]
         pattern = r"\[IMAGE_DATA:([^\]\s]+)\]"
