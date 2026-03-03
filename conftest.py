@@ -26,7 +26,7 @@ def _collect_star_import_modules(tests_root: str = "src") -> set[str]:
     This is a conservative, best-effort heuristic used by the pytest shim to
     pre-import modules that tests expect to star-import at module import time.
     """
-    import re
+import re
 
     modules: set[str] = set()
     pattern = re.compile(r"from\s+([a-zA-Z0-9_.]+)\s+import\s+\*")

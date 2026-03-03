@@ -235,63 +235,55 @@ def move_inline_traceback(lines: list[str]) -> list[str]:
     return out
 
 
+
+from auto_fix.rule_engine import RuleEngine
+
+_engine = RuleEngine.load_from_dir("src/auto_fix/rules")
+
+
 def analyze_and_fix_file(path: Path, root: Path, apply: bool) -> tuple[bool, str]:
-    """Analyze a file for common pytest issues and return a proposed fix as a diff."""
+    """Analyze a file for common pytest issues by delegating to the rule engine.
+
+    Returns a tuple where the first element indicates whether a fix was
+    proposed and the second element contains a unified diff describing the
+    change.  The behaviour mirrors the previous implementation while
+    consolidating all transformation logic inside ``src/auto_fix/rules``.
+    """
     try:
-        # Use utf-8-sig to automatically strip BOM if present
         text = path.read_text(encoding="utf-8-sig")
     except UnicodeDecodeError:
         return False, ""
 
-    orig = text
-    text = normalize_text(text)
-    lines = text.splitlines(keepends=True)
+    fixes = _engine.evaluate(str(path), text)
+    if not fixes:
+        return False, ""
 
-    # top-of-file dedent for leading-space imports (common accidental indentation)
-    for idx, line in enumerate(lines[:20]):
-        if re.match(r"^\s+(from|import)\s+", line):
-            # if it's near the top and not inside a block, dedent
-            lines[idx] = line.lstrip()
+    # We conservatively apply only the first fix in this script; rules are
+    # written in a way that a single fix encapsulates all necessary changes
+    fix = fixes[0]
+    new_text = fix.replacement
 
-    # Fix imports that follow an unclosed `try:` where prior dedent may have
-    # removed required indentation. This will conservatively indent imports
-    # that immediately follow a `try:` line.
-    lines = indent_imports_after_try(lines)
+    try:
+        rel_path = path.relative_to(root)
+    except ValueError:
+        rel_path = path
 
-    # Apply a sequence of conservative transformations
-    lines = dedent_imports(lines)
-    # Move inline 'import traceback' out of except/finally blocks when safe
-    lines = move_inline_traceback(lines)
-    # Re-run import dedent after moving traceback
-    lines = dedent_imports(lines)
-    lines = safe_wrap_main(lines)
-
-    new_text = "".join(lines)
-    if new_text != orig:
+    diff = "\n".join(difflib.unified_diff(
+        text.splitlines(),
+        new_text.splitlines(),
+        fromfile=str(rel_path),
+        tofile=str(rel_path) + " (fixed)",
+        lineterm=""
+    ))
+    if apply:
         try:
-            rel_path = path.relative_to(root)
-        except ValueError:
-            rel_path = path
-
-        diff = "\n".join(difflib.unified_diff(
-            orig.splitlines(),
-            new_text.splitlines(),
-            fromfile=str(rel_path),
-            tofile=str(rel_path) + " (fixed)",
-            lineterm=""
-        ))
-        if apply:
-            # write backup and then replace file
-            try:
-                bak = path.with_suffix(path.suffix + ".bak")
-                if not bak.exists():
-                    bak.write_text(orig, encoding="utf-8")
-            except (OSError, IOError):
-                # best-effort backup; do not fail the whole run on backup errors
-                pass
-            path.write_text(new_text, encoding="utf-8")
-        return True, diff
-    return False, ""
+            bak = path.with_suffix(path.suffix + ".bak")
+            if not bak.exists():
+                bak.write_text(text, encoding="utf-8")
+        except (OSError, IOError):
+            pass
+        path.write_text(new_text, encoding="utf-8")
+    return True, diff
 
 
 def main() -> None:

@@ -61,6 +61,7 @@ dev = [
     "pytest-asyncio",
     "pytest-cov",
     "ruff",
+    "Pillow",  # required by many tests
 ]
 rust = [
     "maturin>=1.7.0",
