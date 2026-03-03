@@ -39,8 +39,8 @@ try:
 except ImportError:
     rc = None
 
-    from .exporters import MetricsExporter, OTelManager, PrometheusExporter
-    from src.core.base.lifecycle.version import VERSION
+from .exporters import MetricsExporter, OTelManager, PrometheusExporter
+from src.core.base.lifecycle.version import VERSION
 
 
 __version__: str = VERSION
