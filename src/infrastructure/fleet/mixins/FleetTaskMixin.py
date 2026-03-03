@@ -7,7 +7,7 @@ from typing import Any, TYPE_CHECKING
 from src.core.base.models import AgentPriority
 
 if TYPE_CHECKING:
-from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 class FleetTaskMixin:
     """Mixin for task execution, preemption, and consensus management in FleetManager."""
