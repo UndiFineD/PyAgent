@@ -19,13 +19,13 @@ try:
     import matplotlib
     # Use non-interactive backend
     matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
     has_matplotlib = True
 except (ImportError, RuntimeError, Exception):
     plt = None
     has_matplotlib = False
 
-    from .StatsAgent import StatsAgent
+from .StatsAgent import StatsAgent
 
 def main() -> None:
     """CLI entry point for the Stats Agent."""
