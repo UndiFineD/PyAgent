@@ -25,8 +25,8 @@ import numpy as np
 
 from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
                      SpeculativeConfig, VerificationResult)
-                     from .proposers import NgramProposer, SuffixProposer
-                     from .verification import TreeSpeculator
+from .proposers import NgramProposer, SuffixProposer
+from .verification import TreeSpeculator
 
 
 class SpeculativeDecoder:
