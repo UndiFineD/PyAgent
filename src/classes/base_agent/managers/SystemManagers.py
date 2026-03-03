@@ -27,7 +27,7 @@ class FilePriorityManager:
     def set_extension_priority(self, extension: str, priority: FilePriority) -> None:
         self.config.extension_priorities[extension] = priority
     def get_priority(self, path: Path) -> FilePriority:
-        import fnmatch
+import fnmatch
         path_str = str(path)
         for pattern, priority in self.config.path_patterns.items():
             if fnmatch.fnmatch(path_str, pattern): return priority
