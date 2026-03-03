@@ -26,7 +26,7 @@ from src.observability.profiling.profile_decorators import (ProfileAccumulator,
                                                             timer,
                                                             timer_context,
                                                             track)
-                                                            from src.observability.profiling.rust_profiler import (
+from src.observability.profiling.rust_profiler import (
     FunctionStats, RustProfiler, RustUsageScanner, create_profiled_rust_core,
     profile_rust_call)
 
