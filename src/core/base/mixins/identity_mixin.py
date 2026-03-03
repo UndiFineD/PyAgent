@@ -46,8 +46,8 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
         """Emits a signal with agent capabilities for discovery."""
         try:
             # pylint: disable=import-outside-toplevel
-            import asyncio
-            from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+import asyncio
+from src.infrastructure.swarm.orchestration.signals.signal_registry import \
                 SignalRegistry
 
             signals = SignalRegistry()
