@@ -30,7 +30,7 @@ class TemporalSyncOrchestrator:
 
     def __init__(self, *_args, **_kwargs) -> None:
         self.version = VERSION
-        import time
+import time
 
         self.last_activity_time = time.time()
         self.sprint_mode = False
@@ -38,13 +38,13 @@ class TemporalSyncOrchestrator:
 
     def report_activity(self) -> None:
         """Stub for activity reporting."""
-        import time
+import time
 
         self.last_activity_time = time.time()
 
     def get_current_metabolism(self) -> float:
         """Calculates current metabolism based on activity."""
-        import time
+import time
 
         elapsed = time.time() - self.last_activity_time
         base = 1.0 if not self.sprint_mode else 5.0
