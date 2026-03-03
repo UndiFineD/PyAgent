@@ -26,7 +26,7 @@ from src.infrastructure.fleet.WorkflowState import WorkflowState
 __version__ = VERSION
 
 if TYPE_CHECKING:
-from .FleetManager import FleetManager
+    from .FleetManager import FleetManager
 
 
 class FleetExecutionCore:
