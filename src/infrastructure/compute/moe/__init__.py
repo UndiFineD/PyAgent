@@ -31,7 +31,7 @@ from src.infrastructure.compute.moe.expert_router import (AdaptiveRouter,
                                                           RoutingSimulator,
                                                           SoftMoERouter,
                                                           TopKRouter)
-                                                          from src.infrastructure.compute.moe.fused_mo_e_layer import (
+from src.infrastructure.compute.moe.fused_mo_e_layer import (
     DenseDispatcher, ExpertPlacementStrategy, FusedMoEConfig, FusedMoELayer,
     FusedMoEMethodBase, FusedMoEParallelConfig, SparseDispatcher,
     UnquantizedFusedMoEMethod)
