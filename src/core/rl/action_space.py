@@ -45,7 +45,7 @@ class ActionSpace:
 
     def get_available_actions(self, current_time: float = None) -> List[str]:
         """Returns actions not on cooldown."""
-        import time
+import time
 
         now: float = current_time or time.time()
         return [a for a in self.actions if self._cooldowns.get(a, 0) <= now]
