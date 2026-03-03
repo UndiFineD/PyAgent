@@ -33,5 +33,5 @@ from .base import CloudProviderBase, InferenceRequest, InferenceResponse
 
 
 if TYPE_CHECKING:
-from .base import CloudProviderBase, InferenceRequest, InferenceResponse
+    from .base import CloudProviderBase, InferenceRequest, InferenceResponse
 
