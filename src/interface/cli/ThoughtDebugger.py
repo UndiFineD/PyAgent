@@ -35,7 +35,7 @@ class ThoughtDebugger:
         try:
             # If we're the main entry point, block here using event-driven approach
             if __name__ == "__main__":
-                import asyncio
+import asyncio
                 loop = asyncio.new_event_loop()
                 loop.run_forever()
         except KeyboardInterrupt:
