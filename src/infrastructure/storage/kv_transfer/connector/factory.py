@@ -26,14 +26,14 @@ from src.infrastructure.storage.kv_transfer.connector.decode_bench import \
     DecodeBenchConnector
 
 if TYPE_CHECKING:
-from src.infrastructure.storage.kv_transfer.connector.base import KVConnectorBase
-from src.infrastructure.storage.kv_transfer.connector.types import KVTransferConfig
+    from src.infrastructure.storage.kv_transfer.connector.base import KVConnectorBase
+    from src.infrastructure.storage.kv_transfer.connector.types import KVTransferConfig
 
-logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
 
-# ==============================
-# Connector Registry (Beyond vLLM)
-# ==============================
+    # ==============================
+    # Connector Registry (Beyond vLLM)
+    # ==============================
 
 _CONNECTOR_REGISTRY: Dict[str, type[KVConnectorBase]] = {
     "DecodeBenchConnector": DecodeBenchConnector,
