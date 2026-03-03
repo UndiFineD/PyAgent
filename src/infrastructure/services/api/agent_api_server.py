@@ -29,7 +29,7 @@ from pydantic import BaseModel
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.services.api.fleet_load_balancer import \
     FleetLoadBalancer
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
