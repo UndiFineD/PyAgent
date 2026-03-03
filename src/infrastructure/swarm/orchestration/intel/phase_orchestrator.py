@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING, Any
 from src.observability.structured_logger import StructuredLogger
 
 if TYPE_CHECKING:
-    from ..fleet.FleetManager import FleetManager
+from ..fleet.FleetManager import FleetManager
 
 logger = StructuredLogger(__name__)
 
