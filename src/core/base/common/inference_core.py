@@ -23,8 +23,8 @@ from typing import Any, Dict, List, Optional
 
 from ....infrastructure.engine.tokenization.utils import (estimate_token_count,
                                                           get_tokenizer)
-                                                          from .base_core import BaseCore
-                                                          from .models.communication_models import PromptTemplate
+from .base_core import BaseCore
+from .models.communication_models import PromptTemplate
 
 try:
     import rust_core as rc
