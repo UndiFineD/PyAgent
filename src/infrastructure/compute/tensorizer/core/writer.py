@@ -26,7 +26,7 @@ import numpy as np
 from .compression import compress_data
 from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,
                      TensorDtype, TensorizerConfig)
-                     from .metadata import TensorMetadata
+from .metadata import TensorMetadata
 
 
 class TensorizerWriter:
