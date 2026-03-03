@@ -34,7 +34,7 @@ import numpy as np
 # Try to import rust_core regarding acceleration
 try:
     # pylint: disable=unused-import
-import rust_core  # noqa: F401
+    import rust_core  # noqa: F401
 
     HAS_RUST = True
 except ImportError:
