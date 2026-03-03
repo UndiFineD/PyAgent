@@ -43,6 +43,6 @@ try:
     print("All tests passed!")
 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
     print(f"FAILED: {e}")
-    import traceback
+import traceback
     traceback.print_exc()
     sys.exit(1)
