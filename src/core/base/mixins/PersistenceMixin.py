@@ -9,6 +9,7 @@ class PersistenceMixin:
     """Handles agent state, history, scratchpad, metrics, and file persistence."""
 
     def __init__(self, **kwargs: Any) -> None:
+        """Initializes persistence-related attributes."""
         self._state: AgentState = AgentState.INITIALIZED
         self._history_manager = AgentConversationHistory()
         self._scratchpad_manager = AgentScratchpad()
@@ -18,6 +19,7 @@ class PersistenceMixin:
 
     @property
     def state(self) -> AgentState:
+        """Current agent state."""
         return self._state
 
     def register_webhook(self, url: str) -> None:
@@ -43,6 +45,7 @@ class PersistenceMixin:
         return ""
 
     def get_diff(self) -> str:
+        """Public method to get the diff for verification."""
         return self.generate_diff()
 
     def read_previous_content(self) -> str:
@@ -81,7 +84,7 @@ class PersistenceMixin:
             return True
         except Exception as e:
             import logging
-                logging.error(f"File write failed: {e}")
+            logging.error(f"File write failed: {e}")
             return False
 
     def _write_dry_run_diff(self) -> bool:

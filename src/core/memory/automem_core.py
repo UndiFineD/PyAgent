@@ -50,7 +50,7 @@ except ImportError:  # Allow tests to import without full qdrant client installe
     UnexpectedResponse = Exception  # type: ignore[misc,assignment]
 
 try:  # Allow tests to import without full qdrant client installed
-from qdrant_client.models import Distance, PayloadSchemaType, PointStruct, VectorParams
+    from qdrant_client.models import Distance, PayloadSchemaType, PointStruct, VectorParams
 except Exception:  # pragma: no cover - degraded import path
     try:
         from qdrant_client.http import models as _qmodels
@@ -65,15 +65,17 @@ except Exception:  # pragma: no cover - degraded import path
 
 # Provide a simple PointStruct shim for tests/environments lacking qdrant models
 if PointStruct is None:  # pragma: no cover - test shim
-
     class PointStruct:  # type: ignore[no-redef]
         def __init__(self, id: str, vector: List[float], payload: Dict[str, Any]):
             self.id = id
             self.vector = vector
             self.payload = payload
 
-
-            from werkzeug.exceptions import HTTPException
+# Optional Werkzeug HTTPException shim
+try:
+    from werkzeug.exceptions import HTTPException
+except Exception:  # pragma: no cover - optional dependency
+    HTTPException = Exception
 
 # Make OpenAI import optional to allow running without it
 try:
@@ -86,8 +88,9 @@ try:
 except ImportError:  # pragma: no cover - optional dependency
     spacy = None
 
-    from src.core.base.state import StateTransaction
-    from src.core.base.models.communication_models import CascadeContext
+# Core internal imports (should be available in-workspace)
+from src.core.base.state import StateTransaction
+from src.core.base.models.communication_models import CascadeContext
 
 logging.basicConfig(
     level=logging.INFO,

@@ -14,6 +14,7 @@
 
 import json
 import logging
+import re
 from typing import Tuple, Any, Optional, Type, Callable
 from pydantic import BaseModel, ValidationError
 
@@ -41,8 +42,7 @@ class GuardrailCore:
     @staticmethod
     def moderate_content(text: str, forbidden_keywords: list[str]) -> Tuple[bool, str]:
         """Simple keyword-based moderation."""
-import re
-        pattern = r'\b(' + '|'.join(re.escape(k) for k in forbidden_keywords) + r')\b'
+        pattern = r"\b(" + "|".join(re.escape(k) for k in forbidden_keywords) + r")\b"
         if re.search(pattern, text, re.IGNORECASE):
             return False, "Content contains forbidden keywords."
         return True, "Content is clean."

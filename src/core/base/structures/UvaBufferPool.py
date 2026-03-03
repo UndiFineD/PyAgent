@@ -191,7 +191,7 @@ class UvaBuffer:
                 self._cpu_tensor[:data.numel()].copy_(data.view(-1))
             elif hasattr(data, '__array__'):
                 # Numpy array
-            import numpy as np
+                import numpy as np
                 flat = np.asarray(data).ravel()
                 self._cpu_tensor[:len(flat)].copy_(
                     torch.from_numpy(flat)

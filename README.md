@@ -105,6 +105,8 @@ python -m pytest tests/unit/
 - [x] **Multimodal AI Integration**: Async task queues for image generation and processing, with background artifact cleanup (inspired by 4o-ghibli-at-home).
 - [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
 - [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
+- [x] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
+- [x] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
 
 ---
 *Locked under GOLDEN_MASTER_SEAL (v4.0.0-VOYAGER)*

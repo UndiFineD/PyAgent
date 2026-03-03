@@ -74,6 +74,43 @@ cache-keys = [{ file = "requirements/base.txt" }]
 [tool.ruff]
 line-length = 120
 target-version = "py312"
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # Pyflakes
+    "I",  # isort
+    "D",  # pydocstyle
+    "ANN", # flake8-annotations
+    "B",  # flake8-bugbear
+    "N",  # pep8-naming
+]
+ignore = [
+    "D100", # Missing docstring in public module
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
+    "ANN101", # Missing type annotation for `self` in method
+    "ANN102", # Missing type annotation for `cls` in classmethod
+]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+# Additional strictness flags for clarity, though 'strict = true' covers most
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+no_implicit_optional = true
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+
+# Exclude the 'generated' directory from mypy checks, as generated code might not always be fully type-hinted
+exclude = ["generated/"]
+
+# You can add specific overrides for modules or packages if needed, for example:
+# [[tool.mypy.overrides]]
+# module = "src.core.base.*"
+# disallow_untyped_defs = true
+# disallow_incomplete_defs = true
 
 [tool.pytest.ini_options]
 minversion = "6.0"

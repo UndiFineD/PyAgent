@@ -3,6 +3,7 @@
 
 import re
 from typing import Any
+from pathlib import Path
 
 try:
     import rust_core
@@ -41,8 +42,7 @@ class KnowledgeSymbolMixin:
 
     def build_symbol_map(self, directory: Any, patterns: dict[str, str]) -> dict[str, list[str]]:
         """Scans a directory for symbols according to provided patterns."""
-from pathlib import Path
-        symbol_map = {}
+        symbol_map: dict[str, list[str]] = {}
         dir_path = Path(directory)
         for ext, pattern in patterns.items():
             # Use non-recursive glob to avoid scanning the whole repo in tests
