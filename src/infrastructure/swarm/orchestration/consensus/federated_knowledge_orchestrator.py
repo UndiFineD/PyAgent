@@ -26,7 +26,7 @@ from typing import Any
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.swarm.orchestration.connectivity.inter_fleet_bridge_orchestrator import \
     InterFleetBridgeOrchestrator
-    from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
+from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 __version__ = VERSION
 
