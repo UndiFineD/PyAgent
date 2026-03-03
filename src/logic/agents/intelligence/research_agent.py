@@ -28,7 +28,7 @@ from src.core.base.lifecycle.version import VERSION
 try:
     from .research_core import ResearchCore
 except Exception:
-    from src.logic.agents.intelligence.research_core import ResearchCore
+from src.logic.agents.intelligence.research_core import ResearchCore
 
 __version__ = VERSION
 
