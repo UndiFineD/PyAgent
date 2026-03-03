@@ -7,7 +7,7 @@ from src.core.base.types.AccessibilityReport import AccessibilityReport
 from pathlib import Path
 
 if TYPE_CHECKING:
-from src.logic.agents.development.AccessibilityAgent import AccessibilityAgent
+    from src.logic.agents.development.AccessibilityAgent import AccessibilityAgent
 
 class AccessibilityLogicMixin:
     """Mixin for entry-point analysis logic and rule management in AccessibilityAgent."""
