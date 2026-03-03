@@ -36,7 +36,7 @@ class KnowledgeMixin:
         # Legacy Knowledge Trinity support
         try:
             # pylint: disable=import-outside-toplevel
-            from src.core.knowledge.knowledge_engine import KnowledgeEngine
+from src.core.knowledge.knowledge_engine import KnowledgeEngine
 
             self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=workspace_root / "data/agents")
         except (ImportError, ModuleNotFoundError):
