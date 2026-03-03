@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Callable, Mapping
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.network.http.connection import HTTPConnection
+from src.infrastructure.swarm.network.http.connection import HTTPConnection
 
 
 class SyncHTTPMixin:
