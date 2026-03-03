@@ -24,7 +24,7 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
 
-    from .batch_request import BatchRequest
+from .batch_request import BatchRequest
 
 # Infrastructure
 __version__ = VERSION
