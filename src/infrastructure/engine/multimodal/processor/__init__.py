@@ -19,11 +19,11 @@ Processor package.
 from .audio import AudioProcessor  # noqa: F401
 from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,  # noqa: F401
                    MultiModalData, MultiModalInputs, PlaceholderInfo)
-                   from .embed import TextEmbedProcessor  # noqa: F401
-                   from .image import ImageProcessor  # noqa: F401
-                   from .registry import (MULTIMODAL_REGISTRY, MultiModalRegistry,  # noqa: F401
+from .embed import TextEmbedProcessor  # noqa: F401
+from .image import ImageProcessor  # noqa: F401
+from .registry import (MULTIMODAL_REGISTRY, MultiModalRegistry,  # noqa: F401
                        get_placeholder_tokens, process_multimodal_inputs)
-                       from .video import VideoProcessor  # noqa: F401
+from .video import VideoProcessor  # noqa: F401
 
 __all__ = [
     "ModalityType",
