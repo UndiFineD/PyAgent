@@ -30,15 +30,15 @@ from src.infrastructure.swarm.orchestration.core.self_improvement_core import \
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
-from src.infrastructure.compute.backend.llm_client import LLMClient
+    from src.infrastructure.compute.backend.llm_client import LLMClient
 
-from .mixins.orchestrator_cycle_mixin import OrchestratorCycleMixin
-from .mixins.orchestrator_results_mixin import OrchestratorResultsMixin
-from .mixins.orchestrator_scan_mixin import OrchestratorScanMixin
-from .self_improvement_analysis import SelfImprovementAnalysis
-from .self_improvement_fixer import SelfImprovementFixer
+    from .mixins.orchestrator_cycle_mixin import OrchestratorCycleMixin
+    from .mixins.orchestrator_results_mixin import OrchestratorResultsMixin
+    from .mixins.orchestrator_scan_mixin import OrchestratorScanMixin
+    from .self_improvement_analysis import SelfImprovementAnalysis
+    from .self_improvement_fixer import SelfImprovementFixer
 
-__version__ = VERSION
+    __version__ = VERSION
 
 
 class SelfImprovementOrchestrator(BaseAgent, OrchestratorCycleMixin, OrchestratorScanMixin, OrchestratorResultsMixin):
