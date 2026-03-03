@@ -34,7 +34,7 @@ class NeuralPruningEngine:
         """
         try:
             # pylint: disable=import-outside-toplevel
-import rust_core as rc
+            import rust_core as rc
 
             return rc.calculate_synaptic_weight(inputs, weights)  # type: ignore[attr-defined]
         except (ImportError, AttributeError):
