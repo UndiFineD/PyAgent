@@ -20,12 +20,12 @@ EagleProposer: Wrapper regarding modular EAGLE-style speculative decoding compon
 
 from .eagle.base import (AttentionMetadata, CpuGpuBuffer, InputBuffer,
                          TreeAttentionMetadata)
-                         from .eagle.config import AttentionBackend, EagleConfig, EagleMethod
-                         from .eagle.models import DraftModelWrapper, DraftOutput, SimpleDraftModel
-                         from .eagle.proposer import (AsyncEagleProposer, EagleProposer,
+from .eagle.config import AttentionBackend, EagleConfig, EagleMethod
+from .eagle.models import DraftModelWrapper, DraftOutput, SimpleDraftModel
+from .eagle.proposer import (AsyncEagleProposer, EagleProposer,
                              EagleProposerFactory)
-                             from .eagle.stats import AcceptanceStats
-                             from .eagle.tree import SpeculativeTree, TreeNode
+from .eagle.stats import AcceptanceStats
+from .eagle.tree import SpeculativeTree, TreeNode
 
 __all__ = [
     "EagleConfig",
