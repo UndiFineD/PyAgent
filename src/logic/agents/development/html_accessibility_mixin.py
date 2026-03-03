@@ -30,9 +30,9 @@ import re
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
 from src.core.base.common.types.accessibility_issue_type import \
     AccessibilityIssueType
-    from src.core.base.common.types.accessibility_severity import \
+from src.core.base.common.types.accessibility_severity import \
     AccessibilitySeverity
-    from src.core.base.common.types.wcag_level import WCAGLevel
+from src.core.base.common.types.wcag_level import WCAGLevel
 
 
 class HtmlAccessibilityMixin:
