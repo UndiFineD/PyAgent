@@ -24,7 +24,7 @@ import re
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.logic.agents.security.compliance_agent import ComplianceAgent
+from src.logic.agents.security.compliance_agent import ComplianceAgent
 
 
 class PrivacyScannerMixin:
