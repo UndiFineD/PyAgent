@@ -30,8 +30,8 @@ except ImportError:
     rc = None
 
 
-    from .base import MediaLoader
-    from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
+from .base import MediaLoader
+from .models import (MediaLoadConfig, MediaMetadata, MediaType, VideoData,
                      VideoFormat)
 
 
