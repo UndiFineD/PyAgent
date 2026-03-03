@@ -44,7 +44,7 @@ Implements pipeline parallel transfer for distributed KV storage in PyAgent.
 from src.core.lazy_loader import LazyLoader
 
 if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
+from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         KVConnectorBase
 
 logger = logging.getLogger(__name__)
