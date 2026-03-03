@@ -29,7 +29,7 @@ PURPOSE
 
         def method(self):
             body = 1
-        from functools import reduce   # should be 8 spaces
+from functools import reduce   # should be 8 spaces
             return reduce(...)
 
     Pattern B  -  One or more consecutive non-import lines inside a method body
@@ -38,7 +38,7 @@ PURPOSE
 
         def method(self):
             body = 1
-        from functools import reduce
+from functools import reduce
         result = reduce(f, x, [])      # both lines should be at 8 spaces
             return result
 
