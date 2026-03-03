@@ -26,8 +26,8 @@ from typing import Any, Dict, List, Optional
 
 from .config import (ArchitectureSpec, ModelArchitecture, ModelCapability,
                      ModelInfo, QuantizationType, VRAMEstimate)
-                     from .detector import ArchitectureDetector
-                     from .estimator import VRAMEstimator
+from .detector import ArchitectureDetector
+from .estimator import VRAMEstimator
 
 
 class ModelRegistry:
