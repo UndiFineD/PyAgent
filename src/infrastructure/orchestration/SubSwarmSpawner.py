@@ -27,7 +27,7 @@ from typing import Dict, List, Optional, TYPE_CHECKING
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 
 class SubSwarm:
     """A lightweight sub-swarm with a subset of capabilities."""
