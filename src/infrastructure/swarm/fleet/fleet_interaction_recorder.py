@@ -21,7 +21,7 @@ import time
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from .fleet_manager import FleetManager
+from .fleet_manager import FleetManager
 
 
 class FleetInteractionRecorder:
