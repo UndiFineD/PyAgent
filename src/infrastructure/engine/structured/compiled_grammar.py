@@ -27,8 +27,8 @@ try:
 except ImportError:
     HAS_RUST = False
 
-    from .enums import GrammarType
-    from .models import FSMTransitionTable
+from .enums import GrammarType
+from .models import FSMTransitionTable
 
 
 @dataclass
