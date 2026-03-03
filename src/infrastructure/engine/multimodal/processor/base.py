@@ -26,7 +26,7 @@ from enum import Enum, auto
 from typing import (TYPE_CHECKING, Any, Dict, Generic, List, Optional, Tuple,
                     TypeVar)
 
-                    import numpy as np
+import numpy as np
 
 if TYPE_CHECKING:
     try:
