@@ -27,7 +27,7 @@ import re
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from .changelog_entry import ChangelogEntry
+from .changelog_entry import ChangelogEntry
 
 
 class ChangelogValidationMixin:
