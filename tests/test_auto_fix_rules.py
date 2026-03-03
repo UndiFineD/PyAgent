@@ -7,6 +7,7 @@ from auto_fix.rule_engine import RuleEngine
 
 
 def test_basic_fixes_dedent_imports(tmp_path):
+    """Test that the basic_fixes rule correctly dedents imports that are indented but not actually part of a block."""
     # simulate a file with a stray indented import in the middle of top-level
     content = (
         "from os import path\n"
@@ -22,6 +23,7 @@ def test_basic_fixes_dedent_imports(tmp_path):
 
 
 def test_basic_fixes_wrap_main():
+    """Test that the basic_fixes rule correctly wraps an unguarded main() call in a guard."""
     content = (
         "def main():\n"
         "    print('ok')\n"
@@ -37,6 +39,7 @@ def test_basic_fixes_wrap_main():
 
 
 def test_no_unnecessary_changes():
+    """Test that the basic_fixes rule does not produce any fixes if the content is already clean."""
     content = "print('nothing to fix')\n"
     engine = RuleEngine.load_from_dir("src/auto_fix/rules")
     fixes = engine.evaluate("x.py", content)

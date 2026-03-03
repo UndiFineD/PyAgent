@@ -40,6 +40,7 @@ def normalize_text(text: str) -> str:
 
 
 def safe_wrap_main(lines: List[str]) -> List[str]:
+    """If the file ends with an unguarded call to main(), wrap it in a guard."""
     if not lines:
         return lines
 
@@ -66,6 +67,7 @@ def safe_wrap_main(lines: List[str]) -> List[str]:
 
 
 def dedent_imports(lines: List[str]) -> List[str]:
+    """Dedent any import statements that are indented but not actually part of a block."""
     out: List[str] = []
 
     def prev_nonempty(idx: int) -> str | None:
@@ -103,6 +105,7 @@ def dedent_imports(lines: List[str]) -> List[str]:
 
 
 def indent_imports_after_control(lines: List[str]) -> List[str]:
+    """If an import is found immediately after a control statement, indent it."""
     out: List[str] = list(lines)
     i = 0
     while i < len(out) - 1:
@@ -112,18 +115,25 @@ def indent_imports_after_control(lines: List[str]) -> List[str]:
             base = m.group(1)
             block_indent = base + "    "
             j = i + 1
+            # skip over blank or comment lines when looking for imports
             while j < len(out):
                 nxt = out[j]
-                if not nxt.strip():
-                    break
+                # if we hit a non-import statement that's not a comment or blank,
+                # stop; we don't want to indent arbitrary code.
+                if not nxt.strip() or nxt.lstrip().startswith("#"):
+                    # continue scanning through comments/whitespace
+                    j += 1
+                    continue
                 m_imp = re.match(r"^(\s*)(from|import)\s+", nxt)
                 if m_imp:
                     if len(m_imp.group(1)) >= len(block_indent):
+                        # already indented enough
                         j += 1
                         continue
                     out[j] = block_indent + nxt.lstrip()
                     j += 1
                     continue
+                # encountered a real code line that isn't an import; stop
                 break
         i += 1
     return out
@@ -132,6 +142,7 @@ def indent_imports_after_control(lines: List[str]) -> List[str]:
 # ---------------------------------------------------------------------------
 
 def check(content: str) -> list[dict]:
+    """Apply basic syntactic cleanups to the file content, returning a single fix if any changes were made."""
     orig = content
     text = normalize_text(orig)
     lines = text.splitlines(keepends=True)

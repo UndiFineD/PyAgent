@@ -49,7 +49,7 @@ from .report_archiver import ReportArchiver
 from .report_cache import ReportCache
 from .report_cache_manager import ReportCacheManager
 from .report_comparator import ReportComparator
-    from .report_comparison import ReportComparison
+from .report_comparison import ReportComparison
     from .report_exporter import ReportExporter
     from .report_filter import ReportFilter
     from .report_format import ReportFormat
