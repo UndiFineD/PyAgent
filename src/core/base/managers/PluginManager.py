@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING
 from src.core.base.Version import SDK_VERSION
 
 if TYPE_CHECKING:
-    from src.core.base.AgentPluginBase import AgentPluginBase
+from src.core.base.AgentPluginBase import AgentPluginBase
 
 # Optional import for VersionGate
 try:
