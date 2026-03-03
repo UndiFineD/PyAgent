@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any
 from src.core.base.BaseUtilities import as_tool
 
 if TYPE_CHECKING:
-from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
+    from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
 
 class GraphAnalysisMixin:
     """Mixin for graph analysis and impact assessment in TopologicalNavigator."""
