@@ -20,7 +20,7 @@ class CorePartitionMixin:
         Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability.
         """
-        import zlib
+import zlib
 
         shards: dict[str, dict[str, Any]] = {"default": {}}
         for category, data in memory.items():
