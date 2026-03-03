@@ -9,7 +9,7 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
 if TYPE_CHECKING:
-from .ab_engine import (
+    from .ab_engine import (
         ABComparator, ABComparison, ABComparisonEngine,
         ABComparisonResult, ABSignificanceResult
     )
