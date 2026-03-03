@@ -37,7 +37,7 @@ class AuthenticationManager:
         elif self.config.method == AuthMethod.BEARER_TOKEN:
             headers["Authorization"] = f"Bearer {self.config.token}"
         elif self.config.method == AuthMethod.BASIC_AUTH:
-            import base64
+import base64
             credentials = f"{self.config.username}:{self.config.password}"
             encoded = base64.b64encode(credentials.encode()).decode()
             headers["Authorization"] = f"Basic {encoded}"
