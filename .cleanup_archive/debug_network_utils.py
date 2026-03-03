@@ -23,5 +23,5 @@ try:
     print(f"Result: {ip}")
 except Exception as e:
     print(f"Function call failed: {e}")
-    import traceback
+import traceback
     traceback.print_exc()
