@@ -25,7 +25,7 @@ import numpy as np
 from .tensor import QuantizedTensor
 
 if TYPE_CHECKING:
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 
 class DequantizedLinear:
