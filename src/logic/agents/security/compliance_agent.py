@@ -42,8 +42,8 @@ from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
 
-    from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
-    from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
+from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
+from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
 
 __version__ = VERSION
 
