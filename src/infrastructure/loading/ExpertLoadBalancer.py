@@ -41,8 +41,8 @@ from typing import (
 )
 
 if TYPE_CHECKING:
-import torch
-import numpy as np
+    import torch
+    import numpy as np
 
 try:
     import rust_core
