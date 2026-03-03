@@ -54,7 +54,7 @@ import numpy as np
 if TYPE_CHECKING:
     from numpy.typing import NDArray
 
-# Try to import rust_core regarding acceleration
+    # Try to import rust_core regarding acceleration
 try:
     import rust_core
 
