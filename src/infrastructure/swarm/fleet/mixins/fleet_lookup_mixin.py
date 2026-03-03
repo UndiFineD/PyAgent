@@ -20,8 +20,8 @@ from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator im
 from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import SelfImprovementOrchestrator
 from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
 from src.infrastructure.swarm.orchestration.system.tool_registry import ToolRegistry
-        from src.logic.agents.cognitive.context.engines.global_context_engine import GlobalContextEngine
-        from src.observability.stats.metrics_engine import ModelFallbackEngine, ObservabilityEngine
+from src.logic.agents.cognitive.context.engines.global_context_engine import GlobalContextEngine
+from src.observability.stats.metrics_engine import ModelFallbackEngine, ObservabilityEngine
 
 
 class FleetLookupMixin:
