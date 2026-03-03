@@ -35,7 +35,7 @@ class QualityGateAgent(BaseAgent):
         try:
             logging.info("Quality Gate: Running Pytest...")
             # Use sys.executable to be robust
-            import sys
+import sys
             res = subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True) 
             # Phase 108: Record validation
             self._record("check_gates", "Initiated", provider="Internal", model="Gatekeeper")
