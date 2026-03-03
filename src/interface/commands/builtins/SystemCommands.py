@@ -14,10 +14,10 @@ from typing import TYPE_CHECKING
 from ..Base import CommandContext, CommandResult
 
 if TYPE_CHECKING:
-from ..Registry import CommandRegistry
+    from ..Registry import CommandRegistry
 
 
-_builtins_registered = False
+    _builtins_registered = False
 
 
 def register_system_commands(registry: CommandRegistry, start_time: float) -> None:
