@@ -35,13 +35,13 @@ try:
 except ImportError:
     HAS_RUST = False
 
-    from src.core.base.lifecycle.version import VERSION
-    from src.observability.stats.observability_core import (Alert, AlertSeverity,
+from src.core.base.lifecycle.version import VERSION
+from src.observability.stats.observability_core import (Alert, AlertSeverity,
                                                         Metric, MetricSnapshot,
                                                         MetricType,
                                                         RetentionPolicy,
                                                         StatsCore, Threshold)
-                                                        from src.observability.structured_logger import StructuredLogger
+from src.observability.structured_logger import StructuredLogger
 
 __version__: str = VERSION
 
