@@ -26,7 +26,7 @@ from .RunnerBackends import BackendHandlers
 __version__ = VERSION
 
 if TYPE_CHECKING:
-from .SubagentRunner import SubagentRunner
+    from .SubagentRunner import SubagentRunner
 
 
 class SubagentCore:
