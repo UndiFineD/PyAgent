@@ -34,7 +34,7 @@ def test_swarm_features() -> None:
 
     print("--- Phase 13: Swarm Consensus ---")
     # Register agents that have 'improve_content'
-    from src.logic.agents.security.security_guard_agent import \
+from src.logic.agents.security.security_guard_agent import \
         SecurityGuardAgent
 
     fleet.register_agent("Voter1", SecurityGuardAgent)
