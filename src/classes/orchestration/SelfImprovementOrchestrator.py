@@ -23,13 +23,13 @@ class SelfImprovementOrchestrator(BaseAgent):
         os.makedirs(os.path.dirname(self.improvement_log), exist_ok=True)
         
         # Phase 107: AI-assisted refactoring
-        import requests
+import requests
         self.ai = LLMClient(requests, workspace_root=self.workspace_root)
 
     def run_improvement_cycle(self, target_dir: str = "src") -> Dict[str, Any]:
         """Runs a full scan and fix cycle across the specified directory."""
         # Gatekeeping Check (Phase 108)
-        from version import STABILITY_SCORE
+from version import STABILITY_SCORE
         if not is_gate_open(100) or STABILITY_SCORE < 0.8:
             logging.error(f"Self-Improvement: System stability too low ({STABILITY_SCORE}) for autonomous code modification.")
             return {"error": "Stability gate closed - system requires manual stabilization"}
