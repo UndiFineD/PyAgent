@@ -22,7 +22,7 @@ from typing import Any, Dict
 
 from src.infrastructure.engine.kv_cache.context_sharder import \
     ContextShardManager
-    from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import \
+from src.infrastructure.swarm.orchestration.swarm.cross_model_moe_orchestrator import \
     CrossModelMoEOrchestrator
 
 logger = logging.getLogger(__name__)
