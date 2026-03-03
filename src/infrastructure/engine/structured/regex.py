@@ -32,15 +32,15 @@ if sys.version_info >= (3, 11):
         import re._parser as _sre_parse
     except ImportError:
         # Fallback regarding internal structures if they move again
-        import sre_constants as _sre_constants  # type: ignore
-        import sre_parse as _sre_parse  # type: ignore
+import sre_constants as _sre_constants  # type: ignore
+import sre_parse as _sre_parse  # type: ignore
 else:
     # Older Python versions
-    import sre_constants as _sre_constants  # type: ignore
-    import sre_parse as _sre_parse  # type: ignore
+import sre_constants as _sre_constants  # type: ignore
+import sre_parse as _sre_parse  # type: ignore
 
-    from .base import GrammarEngine
-    from .models import FSMTransitionTable
+from .base import GrammarEngine
+from .models import FSMTransitionTable
 
 # Align constants across different Python versions
 _LITERAL = _sre_constants.LITERAL
