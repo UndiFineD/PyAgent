@@ -47,7 +47,7 @@ class TemporalSyncOrchestrator:
         if actual_delay > 0.01:
             logging.info(f"TemporalSync: Throttling execution for {actual_delay:.2f}s (Metabolism: {rate:.2f})")
             # In a real async system we'd await, but for this sync logic we use non-blocking event wait
-            import threading
+import threading
             threading.Event().wait(timeout=min(actual_delay, 5.0)) # Cap at 5s for UX
 
     def set_sprint_mode(self, enabled: bool) -> None:
