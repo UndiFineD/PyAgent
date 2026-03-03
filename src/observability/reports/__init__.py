@@ -9,22 +9,22 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.lazy_loader import ModuleLazyLoader
 
 if TYPE_CHECKING:
-from .access_controller import AccessController
-from .aggregated_report import AggregatedReport
-from .annotation_manager import AnnotationManager
-from .archived_report import ArchivedReport
-from .audit_action import AuditAction
-from .audit_entry import AuditEntry
-from .audit_logger import AuditLogger
-from .changelog_localizer import ChangelogLocalizer
-from .changelog_searcher import ChangelogSearcher
-from .changelog_template import ChangelogTemplate
-from .code_issue import CodeIssue
-from .compile_result import CompileResult
-from .diff_visualizer import DiffVisualizer
-from .export_format import ExportFormat
-from .feed_generator import FeedGenerator
-from .filter_criteria import FilterCriteria
+    from .access_controller import AccessController
+    from .aggregated_report import AggregatedReport
+    from .annotation_manager import AnnotationManager
+    from .archived_report import ArchivedReport
+    from .audit_action import AuditAction
+    from .audit_entry import AuditEntry
+    from .audit_logger import AuditLogger
+    from .changelog_localizer import ChangelogLocalizer
+    from .changelog_searcher import ChangelogSearcher
+    from .changelog_template import ChangelogTemplate
+    from .code_issue import CodeIssue
+    from .compile_result import CompileResult
+    from .diff_visualizer import DiffVisualizer
+    from .export_format import ExportFormat
+    from .feed_generator import FeedGenerator
+    from .filter_criteria import FilterCriteria
 try:
     from .grafana_generator import GrafanaGenerator
 except Exception:
