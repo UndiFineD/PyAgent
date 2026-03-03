@@ -37,17 +37,22 @@ def print_section(title: str) -> None:
     print(f"{'-' * 110}")
 
 
-def discover_test_files(src_path: str = "src") -> Dict[str, Path]:
-    """Recursively discover all *_test.py files."""
+def discover_test_files(src_paths: list[str] | str = None) -> Dict[str, Path]:
+    """Recursively discover all *_test.py files in one or more roots."""
+    if src_paths is None:
+        src_paths = ["src", "tests"]
+    elif isinstance(src_paths, str):
+        src_paths = [src_paths]
     discovered_files: Dict[str, Path] = {}
-    if not os.path.isdir(src_path):
-        return discovered_files
-    for root, _, files in os.walk(src_path):
-        for file in files:
-            if file.endswith('_test.py'):
-                test_filepath = Path(root) / file
-                test_file_key = str(test_filepath).replace('\\', '/')
-                discovered_files[test_file_key] = test_filepath
+    for src_path in src_paths:
+        if not os.path.isdir(src_path):
+            continue
+        for root, _, files in os.walk(src_path):
+            for file in files:
+                if file.endswith('_test.py'):
+                    test_filepath = Path(root) / file
+                    test_file_key = str(test_filepath).replace('\\', '/')
+                    discovered_files[test_file_key] = test_filepath
     return discovered_files
 
 
@@ -142,7 +147,17 @@ print(f"Config: Verbose={VERBOSE}, Recursive={RECURSIVE_SCAN}, Timeout={TIMEOUT_
 # ============================================================================
 print_section("STEP 1: TEST FILE DISCOVERY")
 
-test_files = discover_test_files("src" if os.path.exists("src") else ".")
+# look in both src/ and tests/ folders
+paths = []
+if os.path.exists("src"):
+    paths.append("src")
+if os.path.exists("tests"):
+    paths.append("tests")
+# fall back to current dir if nothing else
+if not paths:
+    paths = ["."]
+
+test_files = discover_test_files(paths)
 print(f"Test files discovered: {len(test_files)}\n")
 
 if not test_files:

@@ -48,5 +48,37 @@ class RuleEngine:
 
     @classmethod
     def load_from_dir(cls, directory: str) -> "RuleEngine":
-        # TODO: implement loader that discovers rule definitions
-        return cls([])
+        rules: List[Rule] = []
+        import importlib.util
+        import sys
+        from pathlib import Path
+
+        dirpath = Path(directory)
+        if not dirpath.is_dir():
+            return cls([])
+
+        for path in dirpath.glob("*.py"):
+            spec = importlib.util.spec_from_file_location(path.stem, str(path))
+            if spec and spec.loader:
+                module = importlib.util.module_from_spec(spec)
+                sys.modules[path.stem] = module
+                try:
+                    spec.loader.exec_module(module)  # type: ignore
+                except Exception:
+                    continue
+                if hasattr(module, "check"):
+                    func = getattr(module, "check")
+
+                    class FuncRule:
+                        def __init__(self, f: Callable[[str], list]):
+                            self._f = f
+
+                        def check(self, content: str) -> list[Fix]:
+                            results = self._f(content)
+                            out: List[Fix] = []
+                            for r in results:
+                                out.append(Fix(**r))
+                            return out
+
+                    rules.append(FuncRule(func))
+        return cls(rules)

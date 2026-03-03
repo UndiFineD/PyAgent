@@ -48,6 +48,9 @@ dependencies = [
     "censys>=2.2.0",
 ]
 
+[project.scripts]
+auto-fix = "auto_fix.cli:main"
+
 [project.optional-dependencies]
 dev = [
     "black",

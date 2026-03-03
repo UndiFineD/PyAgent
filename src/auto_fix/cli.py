@@ -41,8 +41,23 @@ def main() -> None:
         content = path.read_text(encoding="utf-8")
         fixes = engine.evaluate(str(path), content)
         for fix in fixes:
-            diff = "TODO: show diff"
-            logger.record(logger.__class__(path=str(path), description=fix.description, diff=diff))
+            # compute unified diff between original and replacement
+            import difflib
+
+            original_lines = content.splitlines(keepends=True)
+            replacement_lines = fix.replacement.splitlines(keepends=True)
+            diff_lines = list(
+                difflib.unified_diff(
+                    original_lines,
+                    replacement_lines,
+                    fromfile=str(path),
+                    tofile=f"{path} (fixed)",
+                )
+            )
+            diff = "".join(diff_lines)
+
+            from .logger import PlannedChange
+            logger.record(PlannedChange(path=str(path), description=fix.description, diff=diff))
             if args.apply and not args.dry_run:
                 with txn.transaction(f"auto fix {fix.description}"):
                     path.write_text(fix.replacement, encoding="utf-8")
