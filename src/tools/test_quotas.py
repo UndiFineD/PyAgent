@@ -25,7 +25,7 @@ def test_quotas():
     # Test 2: Time
     config = QuotaConfig(max_time_seconds=1)
     mgr = ResourceQuotaManager(config)
-    import time
+import time
     time.sleep(1.1)
     exceeded, reason = mgr.check_quotas()
     print(f"Time exceeded: exceeded={exceeded}, reason={reason}")
