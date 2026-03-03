@@ -20,28 +20,28 @@ __all__ = [
 def __getattr__(name: str):
     """Lazy load provider implementations."""
     if name == "GeminiConnector":
-        from .gemini import GeminiConnector
+from .gemini import GeminiConnector
         return GeminiConnector
     if name == "AWSBedrockConnector":
-        from .bedrock import AWSBedrockConnector
+from .bedrock import AWSBedrockConnector
         return AWSBedrockConnector
     if name == "GroqConnector":
-        from .groq import GroqConnector
+from .groq import GroqConnector
         return GroqConnector
     if name == "AzureAIConnector":
-        from .azure import AzureAIConnector
+from .azure import AzureAIConnector
         return AzureAIConnector
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
     if name == "GeminiConnector":
-        from .gemini import GeminiConnector
+from .gemini import GeminiConnector
         return GeminiConnector
     
     if name == "AWSBedrockConnector":
-        from .bedrock import AWSBedrockConnector
+from .bedrock import AWSBedrockConnector
         return AWSBedrockConnector
     
     if name == "GroqConnector":
-        from .groq import GroqConnector
+from .groq import GroqConnector
         return GroqConnector
     
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
