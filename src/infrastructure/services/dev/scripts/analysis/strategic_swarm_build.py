@@ -37,8 +37,8 @@ sys.path.append(os.getcwd())
 try:
     import requests
 
-    from src.infrastructure.compute.backend.llm_client import LLMClient
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.compute.backend.llm_client import LLMClient
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 except ImportError as e:
     print(f"FAILED TO IMPORT: {e}")
     sys.exit(1)
