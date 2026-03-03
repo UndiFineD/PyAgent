@@ -27,10 +27,10 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
-    from src.logic.agents.intelligence.arxiv_core import ArxivCore
-    from src.logic.agents.intelligence.search_core import SearchCore
-    from src.logic.agents.intelligence.web_core import WebCore
-    from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
+from src.logic.agents.intelligence.arxiv_core import ArxivCore
+from src.logic.agents.intelligence.search_core import SearchCore
+from src.logic.agents.intelligence.web_core import WebCore
+from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
 
