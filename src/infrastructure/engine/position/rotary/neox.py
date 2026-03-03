@@ -22,9 +22,9 @@ from .base import HAS_NUMPY, HAS_TORCH, RotaryEmbeddingBase
 from .config import RoPEConfig
 
 if HAS_TORCH:
-    import torch
+import torch
 if HAS_NUMPY:
-    import numpy as np
+import numpy as np
 
 
 class NeoxRotaryEmbedding(RotaryEmbeddingBase):
