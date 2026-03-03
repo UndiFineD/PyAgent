@@ -23,7 +23,7 @@ except ImportError:
     pass
 
 if TYPE_CHECKING:
-    from numpy.typing import NDArray
+from numpy.typing import NDArray
 
 logger = logging.getLogger(__name__)
 
