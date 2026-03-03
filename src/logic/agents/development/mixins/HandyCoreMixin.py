@@ -6,7 +6,7 @@ import time
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-from src.logic.agents.development.HandyAgent import HandyAgent
+    from src.logic.agents.development.HandyAgent import HandyAgent
 
 class HandyCoreMixin:
     """Mixin for core recording and evaluation logic in HandyAgent."""
