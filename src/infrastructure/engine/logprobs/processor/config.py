@@ -24,7 +24,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING, Iterator, List, Optional, Sequence, Tuple
 
 if TYPE_CHECKING:
-    from src.core.base.logic.structures.flat_logprobs import FlatLogprobs
+from src.core.base.logic.structures.flat_logprobs import FlatLogprobs
 
 
 class LogprobFormat(Enum):
