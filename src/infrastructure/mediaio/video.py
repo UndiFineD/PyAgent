@@ -45,7 +45,7 @@ class VideoLoader(MediaLoader):
             raise RuntimeError("OpenCV required for video loading")
         
         if isinstance(source, bytes):
-            import tempfile
+import tempfile
             with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as f:
                 f.write(source)
                 path = f.name
