@@ -22,9 +22,9 @@ from typing import Any, Dict, List, Optional
 from .audio import AudioProcessor
 from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,
                    MultiModalData, MultiModalInputs, PlaceholderInfo)
-                   from .embed import TextEmbedProcessor
-                   from .image import ImageProcessor
-                   from .video import VideoProcessor
+from .embed import TextEmbedProcessor
+from .image import ImageProcessor
+from .video import VideoProcessor
 
 logger = logging.getLogger(__name__)
 
