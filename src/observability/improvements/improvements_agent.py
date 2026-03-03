@@ -24,19 +24,19 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-from .improvement_manager import ImprovementManager
+    from .improvement_manager import ImprovementManager
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+    from src.core.base.lifecycle.base_agent import BaseAgent
+    from src.core.base.lifecycle.version import VERSION
 
-from .effort_estimate import EffortEstimate
-from .improvement import Improvement
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
-from .improvement_status import ImprovementStatus
-from .improvement_template import ImprovementTemplate
+    from .effort_estimate import EffortEstimate
+    from .improvement import Improvement
+    from .improvement_category import ImprovementCategory
+    from .improvement_priority import ImprovementPriority
+    from .improvement_status import ImprovementStatus
+    from .improvement_template import ImprovementTemplate
 
-__version__ = VERSION
+    __version__ = VERSION
 
 
 class ImprovementsAgent(BaseAgent):
