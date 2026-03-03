@@ -25,8 +25,8 @@ from typing import TYPE_CHECKING, Any
 from src.core.base.lifecycle.base_agent import BaseAgent
 
 if TYPE_CHECKING:
-from src.core.knowledge.GlobalContext import GlobalContext
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.core.knowledge.GlobalContext import GlobalContext
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class MetaOrchestratorAgent(BaseAgent):
