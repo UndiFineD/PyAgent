@@ -38,7 +38,7 @@ from .mcp_client import MCPClient
 from .models import LMStudioConfig
 
 if TYPE_CHECKING:
-    import lmstudio
+import lmstudio
 
 logger = logging.getLogger(__name__)
 
