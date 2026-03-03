@@ -27,7 +27,7 @@ from datetime import datetime
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.FleetManager import FleetManager
 
 class IntentCoherenceEngine:
     """
