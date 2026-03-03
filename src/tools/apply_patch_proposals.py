@@ -26,7 +26,7 @@ def main() -> int:
     except Exception:
         # fallback: try to import by path
         sys.path.insert(0, str(ROOT / 'src'))
-        from tools import prepare_refactor_patches as prep
+from tools import prepare_refactor_patches as prep
 
     try:
         data = prep.load_bandit()
