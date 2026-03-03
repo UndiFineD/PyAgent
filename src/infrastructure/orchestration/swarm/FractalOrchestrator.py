@@ -23,9 +23,9 @@ from typing import Dict, Any, List, TYPE_CHECKING
 from src.core.base.Version import VERSION
 
 if TYPE_CHECKING:
-from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
-__version__ = VERSION
+    __version__ = VERSION
 
 class FractalOrchestrator:
     """
