@@ -9,7 +9,7 @@ the local auto-generated shims when needed.
 try:
     # Import the observability stats module but only copy attributes
     # that can be accessed without raising (skip heavy deps).
-from importlib import import_module
+    from importlib import import_module
 
     _obs = import_module("src.observability.stats")
     _names = [
