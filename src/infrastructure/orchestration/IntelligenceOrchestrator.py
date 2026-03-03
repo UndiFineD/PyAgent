@@ -40,8 +40,8 @@ class IntelligenceOrchestrator:
         self.core = IntelligenceCore(workspace_root=self.workspace_root)
         
         # Phase 108: Native AI for collective synthesis
-        import requests
-        from src.infrastructure.backend.LLMClient import LLMClient
+import requests
+from src.infrastructure.backend.LLMClient import LLMClient
         self.ai = LLMClient(requests, workspace_root=self.workspace_root)
 
     def contribute_insight(self, agent_name: str, insight: str, confidence: float) -> None:
