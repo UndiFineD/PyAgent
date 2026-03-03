@@ -23,8 +23,8 @@ from typing import Any, Callable
 from .base import (AsyncCommandHandler, CommandContext, CommandDefinition,  # noqa: F401
                    CommandHandler, CommandResult, ParsedCommand,
                    ProcessedPrompt)
-                   from .parser import CommandParser, SlashCommands, parse_commands  # noqa: F401
-                   from .registry import CommandRegistry  # noqa: F401
+from .parser import CommandParser, SlashCommands, parse_commands  # noqa: F401
+from .registry import CommandRegistry  # noqa: F401
 
 __all__ = [
     "CommandContext",
