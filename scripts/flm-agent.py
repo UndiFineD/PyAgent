@@ -156,12 +156,12 @@ class MCPClient:
                 max_tokens=130000,
                 extra_query={},
             )
-            hasToolCall = False
-            if response.choices[0].message.tool_calls:
-                for tool in response.choices[0].message.tool_calls:
-                    hasToolCall = True
-                    tool_name = tool.function.name
-                    tool_args = json.loads(tool.function.arguments)
+            has_tool_call = response.choices[0].message.tool_calls
+            if has_tool_call:
+                for tool in has_tool_call:
+                    tool_name = tool.function.name if hasattr(tool, 'function') else tool.get('function', {}).get('name')
+                    tool_arguments = tool.function.arguments if hasattr(tool, 'function') else tool.get('function', {}).get('arguments')
+                    tool_args = json.loads(tool_arguments)
                     messages.append({
                         "role": "assistant", 
                         "tool_calls": [{
@@ -191,7 +191,6 @@ class MCPClient:
                     "content": response.choices[0].message.content
                 })
                 print(f"[Model Response]: {response.choices[0].message.content}")
-            if not hasToolCall:
                 return response.choices[0].message.content
 
 
