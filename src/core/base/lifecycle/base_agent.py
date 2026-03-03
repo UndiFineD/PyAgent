@@ -30,25 +30,25 @@ except ImportError:
     requests = None
     HAS_REQUESTS = False
 
-    from src.core.base.common.models.communication_models import CascadeContext
-    from src.core.base.common.models import CacheEntry, EventType, PromptTemplate, FailureClassification
-    from src.core.base.execution.shell_executor import ShellExecutor
-    from src.core.base.lifecycle.agent_core import BaseCore
-    from src.core.base.lifecycle.base_agent_core import BaseAgentCore
-    from src.core.base.lifecycle.version import VERSION
-    from src.core.base.mixins.governance_mixin import GovernanceMixin
+from src.core.base.common.models.communication_models import CascadeContext
+from src.core.base.common.models import CacheEntry, EventType, PromptTemplate, FailureClassification
+from src.core.base.execution.shell_executor import ShellExecutor
+from src.core.base.lifecycle.agent_core import BaseCore
+from src.core.base.lifecycle.base_agent_core import BaseAgentCore
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.mixins.governance_mixin import GovernanceMixin
 # Import Mixins for Synaptic Modularization (Phase 317)
 from src.core.base.mixins.config_mixin import ConfigMixin
 from src.core.base.mixins.environment_mixin import EnvironmentMixin
-    from src.core.base.mixins.expertise_mixin import ExpertiseMixin
-    from src.core.base.mixins.governance_mixin import GovernanceMixin
-    from src.core.base.mixins.identity_mixin import IdentityMixin
-    from src.core.base.mixins.knowledge_mixin import KnowledgeMixin
-    from src.core.base.mixins.multimodal_mixin import MultimodalMixin
-    from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
-    from src.core.base.mixins.persistence_mixin import PersistenceMixin
-    from src.core.base.mixins.reflection_mixin import ReflectionMixin
-    from src.core.base.mixins.security_mixin import SecurityMixin
+from src.core.base.mixins.expertise_mixin import ExpertiseMixin
+from src.core.base.mixins.governance_mixin import GovernanceMixin
+from src.core.base.mixins.identity_mixin import IdentityMixin
+from src.core.base.mixins.knowledge_mixin import KnowledgeMixin
+from src.core.base.mixins.multimodal_mixin import MultimodalMixin
+from src.core.base.mixins.orchestration_mixin import OrchestrationMixin
+from src.core.base.mixins.persistence_mixin import PersistenceMixin
+from src.core.base.mixins.reflection_mixin import ReflectionMixin
+from src.core.base.mixins.security_mixin import SecurityMixin
     from src.core.base.mixins.task_queue_mixin import TaskQueueMixin
     from src.core.base.mixins.stream_manager_mixin import StreamManagerMixin
     from src.core.base.mixins.task_manager_mixin import TaskManagerMixin
