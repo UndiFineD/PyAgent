@@ -19,10 +19,10 @@ from .config import MambaConfig, MambaState, MambaOutput
 from .mixer import MambaMixer, Mamba2Mixer
         return locals()[name]
     if name == "HybridMambaMixer":
-        from .hybrid import HybridMambaMixer
+from .hybrid import HybridMambaMixer
         return HybridMambaMixer
     if name in ("CausalConv1d", "SelectiveScan"):
-        from .ops import CausalConv1d, SelectiveScan
+from .ops import CausalConv1d, SelectiveScan
         return locals()[name]
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
