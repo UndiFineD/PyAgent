@@ -8,7 +8,7 @@ from .awq import AWQQuantizer
 from .gptq import GPTQQuantizer
 
 if TYPE_CHECKING:
-from numpy.typing import NDArray
+    from numpy.typing import NDArray
 
 def pack_int4(data: NDArray[np.int8]) -> NDArray[np.int8]:
     flat = data.flatten()
