@@ -21,9 +21,9 @@ from typing import Dict, Any, TYPE_CHECKING
 from src.core.base.version import VERSION
 
 if TYPE_CHECKING:
-from src.infrastructure.fleet.AsyncFleetManager import AsyncFleetManager
+    from src.infrastructure.fleet.AsyncFleetManager import AsyncFleetManager
 
-__version__ = VERSION
+    __version__ = VERSION
 
 class DreamStateOrchestrator:
     """
