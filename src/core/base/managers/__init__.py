@@ -12,58 +12,47 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+7
+
+from src.core.base.Version import VERSION as VERSION
+try:
+    from .PromptManagers import (
+        PromptTemplateManager,
+        PromptVersion,
+        PromptVersionManager,
+    )
+    from .ConversationManagers import ConversationHistory
+    from .AuthManagers import AuthenticationManager, AuthManager
+    from .BatchManagers import BatchRequest, RequestBatcher
+    from .ProcessorManagers import (
+        ResponsePostProcessor,
+        MultimodalProcessor,
+        SerializationManager,
+    )
+    from .OrchestrationManagers import (
+        AgentComposer,
+        ModelSelector,
+        QualityScorer,
+        ABTest,
+    )
+    from .PluginManager import PluginManager, PluginMetadata
+    from .SystemManagers import (
+        FilePriorityManager,
+        ResponseCache,
+        StatePersistence,
+        EventManager,
+        HealthChecker,
+        ProfileManager,
+    )
+    from .ResourceQuotaManager import ResourceQuotaManager, QuotaConfig
+except Exception:
+    # Best-effort: allow package import even if some manager submodules are
+    # missing or named differently (legacy/pluralization differences).
+    pass
 
 
 """
 Internal managers for prompt, conversation, auth, and batch processing.
 """
-
-from src.core.base.Version import VERSION as VERSION
-try:
-    from .PromptManagers import (
-        PromptTemplateManager as PromptTemplateManager,
-        PromptVersion as PromptVersion,
-        PromptVersionManager as PromptVersionManager,
-    )
-from .ConversationManagers import ConversationHistory as ConversationHistory
-from .AuthManagers import (
-        AuthenticationManager as AuthenticationManager,
-        AuthManager as AuthManager,
-    )
-from .BatchManagers import (
-        BatchRequest as BatchRequest,
-        RequestBatcher as RequestBatcher,
-    )
-from .ProcessorManagers import (
-        ResponsePostProcessor as ResponsePostProcessor,
-        MultimodalProcessor as MultimodalProcessor,
-        SerializationManager as SerializationManager,
-    )
-from .OrchestrationManagers import (
-        AgentComposer as AgentComposer,
-        ModelSelector as ModelSelector,
-        QualityScorer as QualityScorer,
-        ABTest as ABTest,
-    )
-from .PluginManager import (
-        PluginManager as PluginManager,
-        PluginMetadata as PluginMetadata,
-    )
-    from .SystemManagers import (
-        FilePriorityManager as FilePriorityManager,
-        ResponseCache as ResponseCache,
-        StatePersistence as StatePersistence,
-        EventManager as EventManager,
-        HealthChecker as HealthChecker,
-        ProfileManager as ProfileManager,
-    )
-    from .ResourceQuotaManager import (
-        ResourceQuotaManager as ResourceQuotaManager,
-        QuotaConfig as QuotaConfig,
-    )
-except Exception:
-    # Best-effort: allow package import even if some manager submodules are
-    # missing or named differently (legacy/pluralization differences).
-    pass
 
 __version__ = VERSION
