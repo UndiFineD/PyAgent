@@ -34,13 +34,13 @@ if this_python < min_version:
     sys.exit(1)
 
 
-    import os.path
-    import pkgutil
-    import shutil
-    import tempfile
-    import argparse
-    import importlib
-    from base64 import b85decode
+import os.path
+import pkgutil
+import shutil
+import tempfile
+import argparse
+import importlib
+from base64 import b85decode
 
 
 def include_setuptools(args):
