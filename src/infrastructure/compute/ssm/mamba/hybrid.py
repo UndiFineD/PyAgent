@@ -28,7 +28,7 @@ import numpy as np
 from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
                                                          MambaOutput,
                                                          MambaState)
-                                                         from src.infrastructure.compute.ssm.mamba.mixer import MambaMixer
+from src.infrastructure.compute.ssm.mamba.mixer import MambaMixer
 
 
 class HybridMambaMixer:
