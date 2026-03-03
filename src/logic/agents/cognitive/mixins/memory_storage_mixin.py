@@ -34,7 +34,7 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.common.base_utilities import as_tool
 
 if TYPE_CHECKING:
-    from src.logic.agents.cognitive.hierarchical_memory_agent import HierarchicalMemoryAgent
+from src.logic.agents.cognitive.hierarchical_memory_agent import HierarchicalMemoryAgent
 
 __version__ = VERSION
 
