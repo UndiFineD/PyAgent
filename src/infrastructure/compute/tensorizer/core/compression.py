@@ -46,7 +46,7 @@ def compress_data(
             return data
 
     if compression == CompressionType.GZIP:
-        import gzip
+import gzip
 
         return gzip.compress(data, compresslevel=level)
 
