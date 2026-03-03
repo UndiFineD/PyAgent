@@ -25,7 +25,7 @@ class BashCore:
             # -f json for machine readable output
             result = subprocess.run(["shellcheck", "-f", "json", script_path], capture_output=True, text=True)
             if result.stdout:
-                import json
+import json
                 findings = {"issues": json.loads(result.stdout), "valid": False}
             else:
                 findings = {"issues": [], "valid": True}
