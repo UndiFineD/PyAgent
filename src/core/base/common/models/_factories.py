@@ -21,8 +21,8 @@ Isolated from model definitions to prevent circularity during analysis.
 from typing import TYPE_CHECKING, Any, Callable
 
 if TYPE_CHECKING:
-    from .base_models import ConfigProfile, ModelConfig
-    from .core_enums import AgentEvent, FilePriority
+from .base_models import ConfigProfile, ModelConfig
+from .core_enums import AgentEvent, FilePriority
 
 
 def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
