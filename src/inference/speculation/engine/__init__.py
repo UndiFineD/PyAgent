@@ -26,7 +26,7 @@ from .engine import SpeculativeEngine, create_speculative_decoder  # noqa: F401
 from .proposals import DraftProposal, SpecDecodingMetrics, VerificationResult  # noqa: F401
 from .proposers import (EagleProposer, HybridDrafter, NgramProposer,  # noqa: F401
                         SuffixProposer)
-                        from .verifier import TokenVerifier  # noqa: F401
+from .verifier import TokenVerifier  # noqa: F401
 
 __all__ = [
     "SpecMethod",
