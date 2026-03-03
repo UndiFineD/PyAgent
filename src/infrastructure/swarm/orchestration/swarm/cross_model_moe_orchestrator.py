@@ -23,7 +23,7 @@ from typing import Any, Dict, Optional
 
 from src.infrastructure.swarm.orchestration.swarm.expert_fusion import \
     WeightedExpertFusion
-    from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
+from src.infrastructure.swarm.orchestration.swarm.moe_gatekeeper import \
     MoEGatekeeper
 
 logger = logging.getLogger(__name__)
