@@ -22,7 +22,7 @@ from typing import Any, TYPE_CHECKING
 import asyncio
 
 if TYPE_CHECKING:
-from .FleetManager import FleetManager
+    from .FleetManager import FleetManager
 
 
 class FleetRoutingCore:
