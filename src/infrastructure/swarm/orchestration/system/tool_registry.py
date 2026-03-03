@@ -28,7 +28,7 @@ from collections import namedtuple
 from .tool_core import ToolCore
 
 if TYPE_CHECKING:
-from ..fleet.FleetManager import FleetManager
+    from ..fleet.FleetManager import FleetManager
 
 
 class ToolRegistry:
