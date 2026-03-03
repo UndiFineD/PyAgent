@@ -41,7 +41,7 @@ class WorkflowManager:
 
     def start_workflow(self, track_name: str, targets: list[str]) -> None:
         """Starts a predefined workflow based on the track."""
-        from .constants import BMAD_TRACKS
+from .constants import BMAD_TRACKS
 
         track = BMAD_TRACKS.get(track_name)
         if not track:
