@@ -35,7 +35,7 @@ except ImportError:
     redis = None
     HAS_REDIS = False
 
-    from src.core.base.common.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 
 @dataclass
