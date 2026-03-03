@@ -20,10 +20,10 @@ Grammar-constrained decoding package.
 
 from .base import (StructuredOutputGrammar, StructuredOutputOptions,  # noqa: F401
                    StructuredOutputsParams)
-                   from .ebnf_grammar import EBNFGrammar, GrammarRule  # noqa: F401
-                   from .json_constraint import JSONSchemaGrammar  # noqa: F401
-                   from .regex_constraint import ChoiceGrammar, RegexGrammar  # noqa: F401
-                   from .registry import (GrammarCompiler, StructuredOutputManager,  # noqa: F401
+from .ebnf_grammar import EBNFGrammar, GrammarRule  # noqa: F401
+from .json_constraint import JSONSchemaGrammar  # noqa: F401
+from .regex_constraint import ChoiceGrammar, RegexGrammar  # noqa: F401
+from .registry import (GrammarCompiler, StructuredOutputManager,  # noqa: F401
                        compile_grammar, validate_structured_output_params)
 
 __all__ = [
