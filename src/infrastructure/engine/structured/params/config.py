@@ -23,7 +23,7 @@ from typing import Any, Dict, List, Optional
 from .constraints import (ChoiceConstraint, GrammarConstraint,
                           JsonSchemaConstraint, OutputConstraint,
                           RegexConstraint)
-                          from .enums import (GuidedDecodingBackend, StructuredOutputType,
+from .enums import (GuidedDecodingBackend, StructuredOutputType,
                     WhitespacePattern)
 
 
