@@ -21,7 +21,7 @@ from .multimodal_buffer import TemporalModalityBuffer
 from .multimodal_encoders import StreamingAudioProcessor, StreamingVisionEncoder
 
 if TYPE_CHECKING:
-    from .multimodal_logic import MultimodalCore
+from .multimodal_logic import MultimodalCore
 
 
 class MultimodalStreamSession:
