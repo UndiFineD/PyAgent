@@ -53,7 +53,7 @@ except ImportError:
 from src.core.base.lifecycle.version import VERSION  # noqa: E402
 from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: E402
 from src.observability.structured_logger import StructuredLogger  # noqa: E402
-    from src.infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent import PromptOptimizerAgent  # noqa: E402
+from src.infrastructure.services.dev.scripts.analysis.prompt_optimizer_agent import PromptOptimizerAgent  # noqa: E402
 # pylint: enable=wrong-import-position
 
 
