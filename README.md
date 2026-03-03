@@ -48,6 +48,8 @@ Fully integrated with **vLLM** and custom inference kernels:
 | **Inference** | `src/inference/` | vLLM connectors, streaming, and decoding constraints |
 | **Core** | `src/core/base/` | Mixins, state managers, and transactional FS |
 | **Acceleration**| `rust_core/` | Native PyO3 modules (Performance Kernels) |
+| **Auto-Fix** | `src/auto_fix/` | Modular rule engine, transaction manager, and CLI for safe automated fixes |
+
 | **Observability**| `src/observability/`| Prometheus metrics, stats, and health monitoring |
 
 ---
