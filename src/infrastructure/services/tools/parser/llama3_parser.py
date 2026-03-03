@@ -28,7 +28,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
                    ToolParserType)
-                   from .json_parser import JsonToolParser
+from .json_parser import JsonToolParser
 
 
 class Llama3ToolParser(ToolParser):
