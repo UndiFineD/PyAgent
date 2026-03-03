@@ -18,8 +18,8 @@ try:
 except ImportError:
     HAS_RUST = False
 
-    from .Config import SpecDecodeConfig, VerificationStrategy
-    from .Metadata import SpecDecodeMetadataV2, TreeVerificationMetadata
+from .Config import SpecDecodeConfig, VerificationStrategy
+from .Metadata import SpecDecodeMetadataV2, TreeVerificationMetadata
 
 
 @dataclass(slots=True)
