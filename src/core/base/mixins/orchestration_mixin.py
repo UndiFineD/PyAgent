@@ -37,7 +37,7 @@ class OrchestrationMixin:
 
         try:
             # pylint: disable=import-outside-toplevel
-from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import \
                 SignalRegistry
 
             self.registry = SignalRegistry()
@@ -46,7 +46,7 @@ from src.infrastructure.swarm.orchestration.signals.signal_registry import \
 
         try:
             # pylint: disable=import-outside-toplevel
-from src.infrastructure.swarm.orchestration.tools.tool_registry import ToolRegistry
+            from src.infrastructure.swarm.orchestration.tools.tool_registry import ToolRegistry
 
             self.tool_registry = ToolRegistry()
         except (ImportError, ValueError, ModuleNotFoundError, AttributeError):
