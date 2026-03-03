@@ -11,7 +11,7 @@ from .model import LoRAModel
 from .registry import LoRARegistry
 
 if TYPE_CHECKING:
-from numpy.typing import NDArray
+    from numpy.typing import NDArray
 
 
 class LoRAManager:
