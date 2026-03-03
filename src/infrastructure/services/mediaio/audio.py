@@ -33,8 +33,8 @@ except ImportError:
     rc = None
 
 
-    from .base import MediaLoader
-    from .models import (AudioData, AudioFormat, MediaLoadConfig, MediaMetadata,
+from .base import MediaLoader
+from .models import (AudioData, AudioFormat, MediaLoadConfig, MediaMetadata,
                      MediaType)
 
 
