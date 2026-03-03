@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from src.core.base.BaseUtilities import as_tool
 
 if TYPE_CHECKING:
-from src.logic.agents.cognitive.HierarchicalMemoryAgent import HierarchicalMemoryAgent
+    from src.logic.agents.cognitive.HierarchicalMemoryAgent import HierarchicalMemoryAgent
 
 class MemoryQueryMixin:
     """Mixin for hierarchical memory querying in HierarchicalMemoryAgent."""
