@@ -27,6 +27,6 @@ from .azure import AzureAIConnector
 
 
 if TYPE_CHECKING:
-from .bedrock import AWSBedrockConnector
-from .gemini import GeminiConnector
-from .groq import GroqConnector
+    from .bedrock import AWSBedrockConnector
+    from .gemini import GeminiConnector
+    from .groq import GroqConnector
