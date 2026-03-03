@@ -23,8 +23,8 @@ from typing import Any
 
 from .config import (PreemptionReason, RequestPriority, RequestState,
                      SchedulerConfig)
-                     from .queue import PriorityRequestQueue
-                     from .request import ScheduledRequest
+from .queue import PriorityRequestQueue
+from .request import ScheduledRequest
 
 
 class AdvancedRequestScheduler:
