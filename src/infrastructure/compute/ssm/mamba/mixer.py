@@ -27,10 +27,10 @@ except ImportError:
     torch = None  # type: ignore
     F = None  # type: ignore
 
-    from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
+from src.infrastructure.compute.ssm.mamba.config import (MambaConfig,
                                                          MambaOutput,
                                                          MambaState)
-                                                         from src.infrastructure.compute.ssm.mamba.ops import (CausalConv1d,
+from src.infrastructure.compute.ssm.mamba.ops import (CausalConv1d,
                                                       SelectiveScan)
 
 """
