@@ -10,7 +10,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
 if TYPE_CHECKING:
-from src.infrastructure.kv_transfer.connector.types import (
+    from src.infrastructure.kv_transfer.connector.types import (
         KVTransferConfig, ForwardContext, Request, KVCacheBlocks, KVConnectorMetadata
     )
 
