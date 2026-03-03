@@ -43,7 +43,7 @@ def send_slack_notification(webhook_url: str, message: str) -> bool:
 
         # Intelligence: Record outgoing notification (Phase 108)
         with contextlib.suppress(Exception):
-            from src.infrastructure.compute.backend.local_context_recorder import \
+from src.infrastructure.compute.backend.local_context_recorder import \
                 LocalContextRecorder
 
             recorder = LocalContextRecorder()
