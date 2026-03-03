@@ -25,7 +25,7 @@ from typing import TYPE_CHECKING, Optional
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.core.base.BaseAgent import BaseAgent
+from src.core.base.BaseAgent import BaseAgent
 
 class AgentRegistry:
     """Singleton registry to track all active agents."""
