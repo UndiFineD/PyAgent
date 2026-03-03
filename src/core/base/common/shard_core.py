@@ -47,7 +47,7 @@ class ShardCore(BaseCore):
                 pass
 
         # Fallback to simple hash-based sharding
-                import hashlib  # pylint: disable=import-outside-toplevel
+import hashlib  # pylint: disable=import-outside-toplevel
 
         h = hashlib.md5(key.encode()).digest()
         seed = int.from_bytes(h[:8], "big")
