@@ -30,9 +30,9 @@ from typing import TYPE_CHECKING, Any, Callable
 import numpy as np
 
 if TYPE_CHECKING:
-from numpy.typing import NDArray
+    from numpy.typing import NDArray
 
-# Try to import rust_core for acceleration
+    # Try to import rust_core for acceleration
 try:
     import rust_core
     HAS_RUST = True
