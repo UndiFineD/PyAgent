@@ -24,7 +24,7 @@ To add a new command:
 3. Define your handler with @register decorator
 
 Example (mycommand.py):
-    from src.interface.slash_commands import register, CommandContext, CommandResult
+from src.interface.slash_commands import register, CommandContext, CommandResult
 
     @register("mycommand", description="My custom command", category="custom")
     def cmd_mycommand(ctx: CommandContext) -> CommandResult:
