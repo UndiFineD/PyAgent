@@ -29,8 +29,8 @@ from src.infrastructure.engine.engine_client.types import (ClientMode,
                                                            EngineClientConfig)
 
 if TYPE_CHECKING:
-from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
-from src.infrastructure.engine.engine_client.types import (
+    from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
+    from src.infrastructure.engine.engine_client.types import (
         EngineOutput,
         SchedulerOutput,
     )
