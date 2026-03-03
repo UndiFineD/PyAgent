@@ -36,7 +36,7 @@ def _parse_dv_base_url() -> tuple[str, int]:
             # Ensure scheme exists for urlparse to properly parse netloc
             if not base.startswith("http://") and not base.startswith("https://"):
                 base = "http://" + base
-            from urllib.parse import urlparse
+from urllib.parse import urlparse
 
             parsed = urlparse(base)
             netloc = parsed.netloc
