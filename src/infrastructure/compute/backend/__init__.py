@@ -49,7 +49,7 @@ from src.infrastructure.compute.backend.request_queue import RequestQueue  # noq
 from src.infrastructure.compute.backend.request_recorder import RequestRecorder  # noqa: F401
 from src.infrastructure.compute.backend.request_signer import RequestSigner  # noqa: F401
 from src.infrastructure.compute.backend.request_throttler import RequestThrottler  # noqa: F401
-                               from src.infrastructure.compute.backend.request_tracer import RequestTracer  # noqa: F401
+from src.infrastructure.compute.backend.request_tracer import RequestTracer  # noqa: F401
                                from src.infrastructure.compute.backend.response_transform import ResponseTransform  # noqa: F401
                                from src.infrastructure.compute.backend.response_transformer_base import ResponseTransformerBase  # noqa: F401
                                from src.infrastructure.compute.backend.strip_whitespace_transformer import StripWhitespaceTransformer  # noqa: F401
