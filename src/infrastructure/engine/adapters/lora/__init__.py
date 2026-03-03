@@ -22,7 +22,7 @@ from .model import LoRAModel  # noqa: F401
 from .registry import LoRAModelEntry, LoRARegistry  # noqa: F401
 from .utils import (compute_effective_rank, create_lora_model,  # noqa: F401
                     create_lora_weights, merge_lora_weights)
-                    from .weights import LoRALayerWeights, PackedLoRAWeights  # noqa: F401
+from .weights import LoRALayerWeights, PackedLoRAWeights  # noqa: F401
 
 __all__ = [
     "LoRATarget",
