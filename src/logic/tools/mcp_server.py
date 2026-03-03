@@ -38,9 +38,9 @@ except ImportError:
 
             return _decorator
 
-            from src.core.base.lifecycle.version import VERSION
-            from src.logic.agents.cognitive.graph_memory_agent import GraphMemoryAgent
-            from src.logic.agents.development.spec_tool_agent import SpecToolAgent
+from src.core.base.lifecycle.version import VERSION
+from src.logic.agents.cognitive.graph_memory_agent import GraphMemoryAgent
+from src.logic.agents.development.spec_tool_agent import SpecToolAgent
 
 __version__ = VERSION
 
