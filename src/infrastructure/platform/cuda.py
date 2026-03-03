@@ -41,7 +41,7 @@ class CudaPlatform(Platform):
 
     def _get_torch(self):
         if self._torch is None:
-            import torch
+import torch
             self._torch = torch
         return self._torch
 
