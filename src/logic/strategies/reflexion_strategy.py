@@ -19,23 +19,54 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
-
-    __version__ = VERSION
-
+__version__ = VERSION
 
 class ReflexionStrategy(AgentStrategy):
     """Reflexion strategy: Draft -> Critique -> Revise."""
+    async def _safe_backend_call(
+        self,
+        step_name: str,
+        call_prompt: str,
+        backend_call: BackendFunction,
+        system_prompt: str | None,
+        history: list[dict[str, str]] | None,
+        original_prompt_for_logging: str,
+    ) -> str:
+        """
+        Helper method to encapsulate backend calls with error handling and logging.
+        """
+        try:
+            response = await backend_call(call_prompt, system_prompt, history)
+            logging.info(f"Reflexion {step_name.capitalize()}:\n{response}")
+            return response
+        except Exception as e:
+            logging.error(
+                f"Failed during {step_name} step for prompt: {original_prompt_for_logging[:100]}... Error: {e}"
+            )
+            raise  # Re-raise or handle more gracefully based on desired behavior
 
     async def execute(
         self,
         prompt: str,
         context: str,
         backend_call: BackendFunction,
-        system_prompt: Optional[str] = None,
-        history: Optional[List[Dict[str, str]]] = None,
+        system_prompt: str | None = None,
+        history: list[dict[str, str]] | None = None,
+        agent_name: str = "UnknownAgent",
+        task_id: str = "UnknownTask",
     ) -> str:
         # Step 1: Draft
-        draft = await backend_call(f"{prompt}\n\nContext:\n{context}", system_prompt, history)
+        draft_prompt = f"{prompt}\n\nContext:\n{context}"
+        draft = await self._safe_backend_call(
+            "draft",
+            draft_prompt,
+            backend_call,
+            system_prompt,
+            history,
+            prompt,
+            agent_name,
+            task_id,
+        )
 
         # Step 2: Critique
         critique_prompt = (
@@ -44,8 +75,16 @@ class ReflexionStrategy(AgentStrategy):
             "Critique this implementation. Identify any bugs, missing requirements, "
             "or style issues. Be harsh but constructive."
         )
-        critique = await backend_call(critique_prompt, "You are a senior code reviewer.", [])
-        logging.info(f"Reflexion Critique:\n{critique}")
+        critique = await self._safe_backend_call(
+            "critique",
+            critique_prompt,
+            backend_call,
+            "You are a senior code reviewer.",
+            [],
+            prompt,
+            agent_name,
+            task_id,
+        )
 
         # Step 3: Revise
         revision_prompt = (
@@ -55,4 +94,17 @@ class ReflexionStrategy(AgentStrategy):
             "Please rewrite the implementation to address the critique. "
             "Output ONLY the final code/content."
         )
-        return await backend_call(revision_prompt, system_prompt, history)
+        # We append the critique to the history for the revision step
+        new_history = list(history) if history else []
+        new_history.append({"role": "assistant", "content": critique})
+
+        return await self._safe_backend_call(
+            "revise",
+            revision_prompt,
+            backend_call,
+            system_prompt,
+            new_history,
+            prompt,
+            agent_name,
+            task_id,
+        )

@@ -15,6 +15,7 @@
 from __future__ import annotations
 
 import asyncio
+import uuid
 import collections.abc
 import logging
 import subprocess
@@ -172,7 +173,11 @@ class BaseAgent(
         self.status_cache: dict[str, float] = {}
 
         # Context for task lineage
-        self.context: CascadeContext | None = kwargs.get("context", None)
+        # Ensure self.context is always a CascadeContext instance
+        self.context: CascadeContext = kwargs.get("context", CascadeContext())
+        self.context.agent_name = self.__class__.__name__
+        if self.context.task_id is None:
+            self.context.task_id = str(uuid.uuid4())
 
 
     def _load_system_prompt(self) -> str:
@@ -314,6 +319,7 @@ class BaseAgent(
         self.previous_content = self.current_content
 
         # Reset reflection state for new task
+        self.context.task_id = str(uuid.uuid4()) # Assign a new task_id for this top-level run
         self.reset_reflection()
 
         result = await self.think(prompt)
@@ -323,6 +329,27 @@ class BaseAgent(
 
         self.current_content = result
         return result
+
+
+    async def _run_subagent_with_context(
+        self,
+        description: str,
+        prompt: str,
+        original_content: str,
+        parent_context: CascadeContext,
+    ) -> str:
+        """
+        Internal method to run a sub-agent, propagating the CascadeContext.
+        This wraps the actual backend call to allow context propagation.
+        """
+        # Derive a child context for the sub-agent
+        child_context = parent_context.derive_child_context(
+            child_agent_name=description, # Using description as a placeholder for sub-agent name
+            new_task_id=str(uuid.uuid4()) # Generate a new task ID for the sub-agent's task
+        )
+        # The actual ab.run_subagent would need to accept and use this child_context
+        from src.infrastructure.compute import backend as ab # pylint: disable=import-outside-toplevel
+        return await asyncio.to_thread(ab.run_subagent, description, prompt, original_content, child_context)
 
 
     async def think(self, prompt: str) -> str:
@@ -364,6 +391,7 @@ class BaseAgent(
         try:
             # pylint: disable=import-outside-toplevel
             from src.infrastructure.compute import backend as ab
+            # Ensure the context is passed to the backend for sub-agent invocation
 
             # Execute in thread to avoid blocking the async loop
             result = await asyncio.to_thread(
@@ -371,6 +399,7 @@ class BaseAgent(
                 description=f"{self.__class__.__name__} core reasoning",
                 prompt=full_prompt,
                 original_content=self.current_content,
+                cascade_context=self.context,  # Pass the current agent's context
             )
 
             if result:

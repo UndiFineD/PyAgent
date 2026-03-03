@@ -173,9 +173,10 @@ def llm_chat_via_copilot_cli(prompt: str) -> str | None:
     return _runner.llm_chat_via_copilot_cli(prompt=prompt)
 
 
-def run_subagent(description: str, prompt: str, original_content: str = "") -> str | None:
+def run_subagent(description: str, prompt: str, original_content: str = "", cascade_context: Any | None = None) -> str | None:
     """Run a subagent."""
-    return _runner.run_subagent(description, prompt, original_content)
+    # Note: _runner (SubagentRunner) must also be updated to accept cascade_context
+    return _runner.run_subagent(description, prompt, original_content, cascade_context)
 
 
 def get_backend_status() -> dict[str, Any]:

@@ -41,6 +41,8 @@ class AgentStrategy(ABC):
         backend_call: BackendFunction,
         system_prompt: str | None = None,
         history: list[dict[str, str]] | None = None,
+        agent_name: str = "UnknownAgent",
+        task_id: str = "UnknownTask",
     ) -> str:
         """Execute the strategy to generate a response.
 
@@ -50,6 +52,8 @@ class AgentStrategy(ABC):
             backend_call: A callable to invoke the LLM.
             system_prompt: Optional system prompt.
             history: Optional conversation history.
+            agent_name: The name of the agent executing the strategy.
+            task_id: A unique identifier for the current task.
 
         Returns:
             The final generated content.

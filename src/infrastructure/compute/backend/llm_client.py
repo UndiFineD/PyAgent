@@ -24,6 +24,7 @@ from pathlib import Path
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.compute.backend.core.pooling_core import PoolingCore
 
@@ -123,20 +124,24 @@ class LLMClient:
         # Split by comma and strip whitespace
         disabled_list = [b.strip().lower() for b in disabled_backends.split(",")]
         return backend_name.lower() in disabled_list
-
-    def chat(self, _provider: str, _model: str, prompt: str, system_prompt: str = "") -> str:
+    
+    def chat(self, _provider: str, _model: str, prompt: str, system_prompt: str = "", cascade_context: CascadeContext | None = None) -> str:
         """Central entry point for chat completion. Compresses prompt before sending."""
         # 1. Compress system prompt via Core
+        if cascade_context:
+            logging.debug(f"[{cascade_context.agent_name} | {cascade_context.task_id}] LLMClient.chat: Compressing system prompt.")
+        else:
+            logging.debug("LLMClient.chat: Compressing system prompt.")
         self.pooling_core.compress_prompt(system_prompt)
 
         # 2. Logic to invoke backends (simplified for this edit)
         # In actual code, this would delegate to backends[provider].chat(...)
         return f"Simulated response for: {prompt[:20]}"
 
-    def _get_cache_key(self, provider: str, model: str, prompt: str, system_prompt: str) -> str:
+    def _get_cache_key(self, provider: str, model: str, prompt: str, system_prompt: str, cascade_context: CascadeContext | None = None) -> str:
         import hashlib
 
-        combined = f"{provider}:{model}:{system_prompt}:{prompt}"
+        combined = f"{provider}:{model}:{system_prompt}:{prompt}:{cascade_context.task_id if cascade_context else ''}"
         return hashlib.sha256(combined.encode()).hexdigest()
 
     def _load_conn_status(self) -> dict[str, dict[str, Any]]:
@@ -161,6 +166,7 @@ class LLMClient:
         model: str,
         prompt: str,
         result: str,
+        cascade_context: CascadeContext | None = None,
         system_prompt: str = "",
     ) -> str:
         """
@@ -173,6 +179,8 @@ class LLMClient:
                 meta = {
                     "system_prompt": system_prompt,
                     "phase": 108,
+                    "agent_name": cascade_context.agent_name if cascade_context else "UnknownAgent",
+                    "task_id": cascade_context.task_id if cascade_context else "UnknownTask",
                     "timestamp_unix": time.time(),
                 }
                 self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
@@ -185,10 +193,11 @@ class LLMClient:
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.",
+        cascade_context: CascadeContext | None = None,
         **kwargs,
     ) -> str:
         """Call a GitHub Models OpenAI-compatible chat endpoint."""
-        return self.backends["github_models"].chat(prompt, model, system_prompt, **kwargs)
+        return self.backends["github_models"].chat(prompt, model, system_prompt, cascade_context=cascade_context, **kwargs)
 
     def llm_chat_via_ollama(
         self,
@@ -198,7 +207,7 @@ class LLMClient:
         **kwargs,
     ) -> str:
         """Call a local Ollama instance."""
-        return self.backends["ollama"].chat(prompt, model, system_prompt, **kwargs)
+        return self.backends["ollama"].chat(prompt, model, system_prompt, cascade_context=cascade_context, **kwargs)
 
     def llm_chat_via_vllm(
         self,
@@ -208,7 +217,7 @@ class LLMClient:
         **kwargs,
     ) -> str:
         """Call a local vLLM instance (OpenAI-compatible)."""
-        return self.backends["vllm"].chat(prompt, model, system_prompt, **kwargs)
+        return self.backends["vllm"].chat(prompt, model, system_prompt, cascade_context=cascade_context, **kwargs)
 
     def llm_chat_via_vllm_native(
         self,
@@ -218,7 +227,7 @@ class LLMClient:
         **kwargs,
     ) -> str:
         """Uses the locally installed vLLM library (Native Engine) for maximum performance."""
-        return self.backends["vllm_native"].chat(prompt, model, system_prompt, **kwargs)
+        return self.backends["vllm_native"].chat(prompt, model, system_prompt, cascade_context=cascade_context, **kwargs)
 
     def llm_chat_via_copilot_cli(
         self,
@@ -228,7 +237,7 @@ class LLMClient:
         **kwargs,
     ) -> str:
         """Calls the GitHub Copilot CLI (copilot)."""
-        return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)
+        return self.backends["copilot_cli"].chat(prompt, model, system_prompt, cascade_context=cascade_context, **kwargs)
 
     def llm_chat_via_lmstudio(
         self,
@@ -252,7 +261,7 @@ class LLMClient:
         Returns:
             Generated response text
         """
-        return self.backends["lmstudio"].chat(prompt, model, system_prompt, **kwargs)
+        return self.backends["lmstudio"].chat(prompt, model, system_prompt, cascade_context=cascade_context, **kwargs)
 
     def smart_chat(
         self,
@@ -276,9 +285,9 @@ class LLMClient:
                 env_model = "tinyllama:latest"
             local_model = env_model
         # Phase 108: Check Result Cache First
-        cache_key = self._get_cache_key(preference, local_model, prompt, system_prompt)
+        cache_key = self._get_cache_key(preference, local_model, prompt, system_prompt, cascade_context)
         if cache_key in self._result_cache:
-            logging.debug("LLMClient: Cache hit for smart_chat.")
+            logging.debug(f"[{cascade_context.agent_name if cascade_context else 'UnknownAgent'} | {cascade_context.task_id if cascade_context else 'UnknownTask'}] LLMClient: Cache hit for smart_chat.")
             return self._result_cache[cache_key]
 
         # Phase 108: Check for Preferred working endpoint first (15m TTL)
@@ -304,6 +313,7 @@ class LLMClient:
                 prompt,
                 model=local_model if "local" in preferred else external_model,
                 system_prompt=system_prompt,
+                cascade_context=cascade_context,
             )
             # Validation: don't return if it's obviously useless
             if result and len(result) > 10:
