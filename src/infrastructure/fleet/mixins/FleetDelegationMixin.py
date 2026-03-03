@@ -7,9 +7,9 @@ from typing import Any, TYPE_CHECKING, TypeVar, Dict
 import logging
 
 if TYPE_CHECKING:
-from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
-T = TypeVar("T", bound="FleetDelegationMixin")
+    T = TypeVar("T", bound="FleetDelegationMixin")
 
 class FleetDelegationMixin:
     """Mixin for agent delegation logic in FleetManager."""
