@@ -7,7 +7,7 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-from src.infrastructure.orchestration.intel.SelfImprovementAnalysis import SelfImprovementAnalysis
+    from src.infrastructure.orchestration.intel.SelfImprovementAnalysis import SelfImprovementAnalysis
 
 class ComplexityAnalysisMixin:
     """Mixin for workspace-wide complexity scanning in SelfImprovementAnalysis."""
