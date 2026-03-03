@@ -42,7 +42,7 @@ class VllmBackend(LLMBackend):
             logging.debug("vLLM skipped due to connection cache.")
             return ""
 
-            import os
+import os
 
         base_url = kwargs.get("base_url") or os.environ.get("DV_VLLM_BASE_URL") or "http://localhost:8000"
         url = base_url.rstrip("/") + "/v1/chat/completions"
