@@ -42,7 +42,7 @@ class DashboardAgent(BaseAgent):
         logging.info(f"Generating UI component: {name}")
         # Simplified boilerplate generation
         component = f"""
-        import React from 'react';
+import React from 'react';
 __version__ = VERSION
 
 const {name} = () => {{
