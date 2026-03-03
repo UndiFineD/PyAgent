@@ -41,7 +41,7 @@ from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
     KVConnectorRole, KVTransferConfig)
 
 if TYPE_CHECKING:
-from src.infrastructure.storage.cache.kv_cache_manager import \
+    from src.infrastructure.storage.cache.kv_cache_manager import \
         KVCacheManager
 from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
         KVConnectorBase
