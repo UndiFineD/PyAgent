@@ -25,7 +25,7 @@ from enum import Enum, auto
 from typing import TYPE_CHECKING, Any, Dict, Generic, List, Optional, Set, Tuple, TypeVar
 
 if TYPE_CHECKING:
-import torch
+    import torch
 
 try:
     import numpy as np
