@@ -41,7 +41,7 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.compute.backend.local_context_recorder import \
     LocalContextRecorder
-    from src.observability.structured_logger import StructuredLogger
+from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION
 
