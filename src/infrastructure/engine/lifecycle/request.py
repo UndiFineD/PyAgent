@@ -22,7 +22,7 @@ from typing import Any, Dict, List, Optional, Union
 
 from .enums import (FinishReason, RequestEventType, RequestStatus,
                     is_valid_transition)
-                    from .event import RequestEvent
+from .event import RequestEvent
 
 
 @dataclass
