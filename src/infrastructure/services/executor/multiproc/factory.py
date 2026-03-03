@@ -23,11 +23,11 @@ from typing import Any, Callable, Dict
 from src.infrastructure.services.executor.multiproc.base import Executor
 from src.infrastructure.services.executor.multiproc.distributed import \
     DistributedExecutor
-    from src.infrastructure.services.executor.multiproc.multiproc_logic import \
+from src.infrastructure.services.executor.multiproc.multiproc_logic import \
     MultiprocExecutor
-    from src.infrastructure.services.executor.multiproc.types import \
+from src.infrastructure.services.executor.multiproc.types import \
     ExecutorBackend
-    from src.infrastructure.services.executor.multiproc.uniproc import \
+from src.infrastructure.services.executor.multiproc.uniproc import \
     UniprocExecutor
 
 
