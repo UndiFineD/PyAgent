@@ -23,7 +23,7 @@ import re
 
 from src.core.base.common.types.modernization_suggestion import \
     ModernizationSuggestion
-    from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
