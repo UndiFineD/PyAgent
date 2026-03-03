@@ -38,9 +38,9 @@ except ImportError:
     rust_core = None
 
 if TYPE_CHECKING:
-import torch
+    import torch
 
-__all__ = [
+    __all__ = [
     "LogitsProcessor",
     "LogitsProcessorList",
     "TemperatureProcessor",
