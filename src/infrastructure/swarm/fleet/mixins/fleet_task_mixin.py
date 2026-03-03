@@ -13,7 +13,7 @@ from typing import TYPE_CHECKING, Any
 from src.core.base.common.models import AgentPriority
 
 if TYPE_CHECKING:
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class FleetTaskMixin:
