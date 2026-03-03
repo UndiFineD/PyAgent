@@ -27,7 +27,7 @@ from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
     print("\n--- Phase 13: Self-Referential Optimization ---")
     # Clear metrics to ensure threshold is hit
     fleet.telemetry.metrics = []
-    from src.classes.stats.ObservabilityEngine import AgentMetric
+from src.classes.stats.ObservabilityEngine import AgentMetric
     fleet.telemetry.metrics.append(AgentMetric(
         agent_name="Bot", operation="Compute", duration_ms=6000, status="success"
     ))
