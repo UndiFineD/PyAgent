@@ -45,9 +45,9 @@ from src.infrastructure.kv_transfer.KVTransferConnector import (
 )
 
 if TYPE_CHECKING:
-from src.infrastructure.kv_transfer.KVTransferConnector import ForwardContext
+    from src.infrastructure.kv_transfer.KVTransferConnector import ForwardContext
 
-logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
 
 class NixlMemoryRegionStatus(IntEnum):
     """Status of an RDMA memory region."""
