@@ -33,7 +33,7 @@ from src.infrastructure.swarm.fleet.workflow_state import WorkflowState
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from .fleet_manager import FleetManager
+from .fleet_manager import FleetManager
 
 
 class FleetExecutionCore:
