@@ -47,7 +47,7 @@ except ImportError:
 
 try:
     # Optional internal rust core bridge
-import pyagent_rust_core # type: ignore
+    import pyagent_rust_core # type: ignore
         HAS_RUST = True
 except ImportError:
     HAS_RUST = False
