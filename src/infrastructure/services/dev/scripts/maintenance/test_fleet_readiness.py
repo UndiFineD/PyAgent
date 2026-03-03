@@ -43,7 +43,7 @@ def test_imports():
         return True
     except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
         print(f"FAILURE: Error during instantiation: {e}")
-        import traceback
+import traceback
 
         traceback.print_exc()
         return False
