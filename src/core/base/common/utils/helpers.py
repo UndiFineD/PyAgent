@@ -43,7 +43,7 @@ __all__ = [
 ]
 
 if TYPE_CHECKING:
-    from src.core.base.common.models.agent_models import AgentPluginConfig
+from src.core.base.common.models.agent_models import AgentPluginConfig
 
 # Import optional dependencies
 try:
