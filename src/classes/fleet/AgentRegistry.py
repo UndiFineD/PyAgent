@@ -31,10 +31,10 @@ from .BootstrapConfigs import BOOTSTRAP_AGENTS
 from src.core.base.Version import SDK_VERSION
 
 if TYPE_CHECKING:
-from .FleetManager import FleetManager
+    from .FleetManager import FleetManager
 
-# Import local version for gatekeeping
-__version__ = VERSION
+    # Import local version for gatekeeping
+    __version__ = VERSION
 
 
 class LazyAgentMap(dict):
