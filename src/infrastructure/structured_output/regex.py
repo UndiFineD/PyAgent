@@ -20,7 +20,7 @@ if sys.version_info >= (3, 11):
     except ImportError:
         with warnings.catch_warnings():
             warnings.filterwarnings("ignore", category=DeprecationWarning)
-            import sre_parse as _sre_parse
+import sre_parse as _sre_parse
 else:
     import sre_parse as _sre_parse
 
