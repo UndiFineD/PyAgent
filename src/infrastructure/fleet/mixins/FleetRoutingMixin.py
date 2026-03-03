@@ -18,9 +18,9 @@ class FleetRoutingMixin:
         Registers a remote node and its available agents.
         Uses VersionGate to ensure compatibility (Phase 104).
         """
-        from src.core.base.Version import SDK_VERSION
-        from src.infrastructure.fleet.VersionGate import VersionGate
-        from src.infrastructure.fleet.RemoteAgentProxy import RemoteAgentProxy
+from src.core.base.Version import SDK_VERSION
+from src.infrastructure.fleet.VersionGate import VersionGate
+from src.infrastructure.fleet.RemoteAgentProxy import RemoteAgentProxy
 
         if not VersionGate.is_compatible(SDK_VERSION, remote_version):
             logging.warning(
