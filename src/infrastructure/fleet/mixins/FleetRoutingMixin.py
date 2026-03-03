@@ -6,7 +6,7 @@ import logging
 from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
-from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 class FleetRoutingMixin:
     """Mixin for task routing and remote node registration in FleetManager."""
