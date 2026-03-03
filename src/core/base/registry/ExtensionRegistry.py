@@ -35,18 +35,18 @@ from typing import (
 from functools import wraps
 
 if TYPE_CHECKING:
-from typing import ClassVar
+    from typing import ClassVar
 
-logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
 
-_T = TypeVar("_T", bound=type)
-_V = TypeVar("_V")
-_Base = TypeVar("_Base")
+    _T = TypeVar("_T", bound=type)
+    _V = TypeVar("_V")
+    _Base = TypeVar("_Base")
 
 
-# ============================================================================
-# Extension Manager (Basic)
-# ============================================================================
+    # ============================================================================
+    # Extension Manager (Basic)
+    # ============================================================================
 
 
 class ExtensionManager:
