@@ -36,7 +36,7 @@ except ImportError:
     Field = lambda **kwargs: None
     ValidationError = Exception
 
-    from src.core.base.common.models.communication_models import CascadeContext
+from src.core.base.common.models.communication_models import CascadeContext
 
 
 @dataclass
