@@ -29,9 +29,9 @@ from .cpu import CpuPlatform
 from .cuda import CudaPlatform
 from .models import (AttentionBackend, DeviceCapability, MemoryInfo,
                      PlatformType, QuantizationType)
-                     from .rocm import RocmPlatform
-                     from .tpu import TpuPlatform
-                     from .xpu import XpuPlatform
+from .rocm import RocmPlatform
+from .tpu import TpuPlatform
+from .xpu import XpuPlatform
 
 logger = logging.getLogger(__name__)
 
