@@ -47,8 +47,8 @@ from contextlib import contextmanager
 import json
 
 if TYPE_CHECKING:
-import numpy as np
-import torch
+    import numpy as np
+    import torch
 
 try:
     import rust_core
