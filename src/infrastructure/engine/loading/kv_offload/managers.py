@@ -32,8 +32,8 @@ try:
 except ImportError:
     HAS_RUST = False
 
-    from .base import OffloadingBackend, OffloadingManager
-    from .models import (BlockHash, BlockStatus, LoadStoreSpec, OffloadingEvent,
+from .base import OffloadingBackend, OffloadingManager
+from .models import (BlockHash, BlockStatus, LoadStoreSpec, OffloadingEvent,
                      PrepareStoreOutput)
 
 logger = logging.getLogger(__name__)
