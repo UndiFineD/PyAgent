@@ -23,7 +23,7 @@ from typing import TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
+from collections.abc import Callable
 
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
