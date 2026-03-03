@@ -36,8 +36,8 @@ if TYPE_CHECKING:
     from .fleet_manager import FleetManager
 
 
-# Import local version for gatekeeping
-__version__ = VERSION
+    # Import local version for gatekeeping
+    __version__ = VERSION
 
 def get_mcp_agent(*args: Any, **kwargs: Any) -> Any:
     global MCPAgent
