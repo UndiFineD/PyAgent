@@ -42,7 +42,7 @@ class VoyagerTransport:
                         break
                     
                     identity, _, msg_bytes = result
-                    import msgpack
+import msgpack
                     message = msgpack.unpackb(msg_bytes, raw=False)
                     
                     logger.debug(f"Voyager: Received message from {identity.hex()}")
