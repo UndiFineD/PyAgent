@@ -25,8 +25,8 @@ from src.core.base.models import FilePriority, BatchResult
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from ..agent import BaseAgent
-    from src.infrastructure.compute.backend.LocalContextRecorder import LocalContextRecorder
+from ..agent import BaseAgent
+from src.infrastructure.compute.backend.LocalContextRecorder import LocalContextRecorder
 
 class BatchRequest:
     """Request in a batch processing queue."""
