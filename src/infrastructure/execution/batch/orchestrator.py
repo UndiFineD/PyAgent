@@ -21,7 +21,7 @@ except ImportError:
     HAS_TORCH = False
     torch = None  # type: ignore
 
-    from .models import (
+from .models import (
     BatchUpdateBuilder,
     CachedRequestState,
     InputBatch,
