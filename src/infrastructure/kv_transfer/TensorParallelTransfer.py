@@ -33,9 +33,9 @@ from src.core.rust_bridge import RustBridge
 from src.core.lazy_loader import LazyLoader
 
 if TYPE_CHECKING:
-from src.infrastructure.kv_transfer.KVTransferConnector import KVConnectorBase
+    from src.infrastructure.kv_transfer.KVTransferConnector import KVConnectorBase
 
-logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
 
 
 class TensorParallelTransfer:
