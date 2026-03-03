@@ -32,7 +32,7 @@ class MultimodalProcessor:
     """
 
     def __init__(self) -> None:
-        from src.core.base.common.processor_core import ProcessorCore
+from src.core.base.common.processor_core import ProcessorCore
         self._core = ProcessorCore()
 
     def add_input(self, input_data: Any) -> None:
@@ -46,7 +46,7 @@ class SerializationManager:
     """
 
     def __init__(self) -> None:
-        from src.core.base.common.serialization_core import SerializationCore
+from src.core.base.common.serialization_core import SerializationCore
         self._core = SerializationCore()
 
     def serialize(self, data: Any) -> str:
