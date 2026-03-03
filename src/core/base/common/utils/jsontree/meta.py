@@ -26,7 +26,7 @@ from typing import Callable
 
 from src.core.base.common.utils.jsontree.iteration import (
     json_iter_leaves, json_iter_leaves_with_path)
-    from src.core.base.common.utils.jsontree.types import _T, JSONTree
+from src.core.base.common.utils.jsontree.types import _T, JSONTree
 
 
 def json_count_leaves(value: JSONTree[_T]) -> int:
