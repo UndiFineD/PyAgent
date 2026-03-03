@@ -27,10 +27,10 @@ from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.agent_verification import (CodeHealthAuditor,
                                                     CodeIntegrityVerifier)
 
-                                                    from .self_healing_core import SelfHealingCore
+from .self_healing_core import SelfHealingCore
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 
