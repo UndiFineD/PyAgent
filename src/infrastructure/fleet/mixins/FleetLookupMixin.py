@@ -5,10 +5,10 @@ from __future__ import annotations
 import logging
 from typing import Any, TYPE_CHECKING
 if TYPE_CHECKING:
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
-from src.observability.stats.MetricsEngine import (
+    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+    from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
+    from src.observability.stats.MetricsEngine import (
     ObservabilityEngine,
     ModelFallbackEngine,
 )
