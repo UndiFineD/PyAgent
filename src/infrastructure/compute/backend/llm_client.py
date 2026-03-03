@@ -44,7 +44,7 @@ class LLMClient:
         self.session = requests_lib
 
         # Only create a real session if it looks like the real requests module and hasn't been explicitly disabled
-        import requests as real_requests
+import requests as real_requests
 
         is_real_requests = requests_lib is real_requests
 
