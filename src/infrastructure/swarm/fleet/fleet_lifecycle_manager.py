@@ -29,7 +29,7 @@ from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from .fleet_manager import FleetManager
+from .fleet_manager import FleetManager
 
 
 class FleetLifecycleManager:
