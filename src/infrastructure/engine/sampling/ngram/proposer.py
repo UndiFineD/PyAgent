@@ -46,9 +46,9 @@ with contextlib.suppress(ImportError):
 import rust_core
 
 if TYPE_CHECKING:
-from numpy.typing import NDArray
+    from numpy.typing import NDArray
 
-logger = logging.getLogger(__name__)
+    logger = logging.getLogger(__name__)
 
 
 class NgramProposer:
