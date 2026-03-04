@@ -13,11 +13,11 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import TYPE_CHECKING
+ from typing import TYPE_CHECKING
 
-import numpy as np
+ import numpy as np
 
-from .config import QuantConfig
+ from .config import QuantConfig
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -47,7 +47,7 @@ class QuantizedTensor:
 
     def dequantize(self) -> NDArray[np.float32]:
         """Reconstructs float32 values from the quantized data."""
-from .utils import unpack_int4
+        from .utils import unpack_int4
 
         if self.config.bits == 4:
             unpacked: np.ndarray[tuple[int, ...], np.dtype[np.signedinteger[np._8Bit]]] = unpack_int4(self.data)

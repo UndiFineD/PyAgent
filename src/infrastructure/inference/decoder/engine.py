@@ -3,9 +3,9 @@ from __future__ import annotations
 import time
 from typing import Any, Sequence
 
-import numpy as np
+ import numpy as np
 
-from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
+ from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,
                      SpeculativeConfig, VerificationResult)
 from .proposers import NgramProposer, SuffixProposer
 from .verification import TreeSpeculator

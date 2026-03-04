@@ -16,7 +16,7 @@
 Internal helpers for prompt rendering.
 """
 
-from typing import Any, Dict, List, Optional
+ from typing import Any, Dict, List, Optional
 
 
 def _try_rust_render_template(

@@ -19,7 +19,7 @@ Contains pure regex and indexing logic for fast symbol discovery.
 This file is optimized for Rust migration (Phase 114).
 """
 
-from typing import Any
+ from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from .knowledge_mixins.knowledge_symbol_mixin import KnowledgeSymbolMixin

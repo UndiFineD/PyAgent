@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from generate_agent_reports.py"""
 
 
-import logging
+ import logging
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .report_annotation import ReportAnnotation
+ from .report_annotation import ReportAnnotation
 
 __version__ = VERSION
 

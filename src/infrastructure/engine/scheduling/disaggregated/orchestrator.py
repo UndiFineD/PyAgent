@@ -43,7 +43,7 @@ class ProxyOrchestrator:
         if request_id is None:
             request_id = f"req-{uuid.uuid4().hex[:8]}"
 
-from .config import KVTransferParams
+            from .config import KVTransferParams
 
         request = ScheduledRequest(
             request_id=request_id,

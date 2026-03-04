@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional
 
-import torch
+ import torch
 
 logger: logging.Logger = logging.getLogger(__name__)
 

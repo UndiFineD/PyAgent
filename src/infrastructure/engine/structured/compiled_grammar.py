@@ -18,7 +18,7 @@ import hashlib
 from dataclasses import dataclass, field
 from typing import Any
 
-import numpy as np
+ import numpy as np
 
 try:
     import rust_core

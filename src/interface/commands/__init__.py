@@ -18,13 +18,57 @@ Slash commands package.
 """
 
 
-from typing import Any, Callable
+ from typing import Any, Callable
 
-from .base import (AsyncCommandHandler, CommandContext, CommandDefinition,  # noqa: F401
-                   CommandHandler, CommandResult, ParsedCommand,
-                   ProcessedPrompt)
-from .parser import CommandParser, SlashCommands, parse_commands  # noqa: F401
-from .registry import CommandRegistry  # noqa: F401
+# Certain test modules import this package under the name
+# `src.interface.commands` which breaks normal relative imports.  To avoid
+# the resulting ModuleNotFoundError we bypass Python's import machinery and
+# load the local files directly by path.  This loader works regardless of
+# how the package is named on sys.path.
+import importlib.util, os, sys
+
+_pkg_dir = os.path.dirname(__file__)
+
+def _load_local(module_name: str):
+    """Dynamically load a submodule from the same directory.
+
+    The returned module object is also inserted into sys.modules under both
+    the true package name and the possibly prefixed ``src.`` variant so that
+    subsequent imports behave normally.
+    """
+    path = os.path.join(_pkg_dir, f"{module_name}.py")
+    # determine possible qualified names
+    candidates = []
+    if __name__.startswith("src."):
+        candidates.append(f"{__name__}.{module_name}")
+    candidates.append(f"interface.commands.{module_name}")
+    spec = importlib.util.spec_from_file_location(candidates[0], path)
+    mod = importlib.util.module_from_spec(spec)
+    # register under all candidate names
+    for name in candidates:
+        sys.modules[name] = mod
+    spec.loader.exec_module(mod)
+    return mod
+
+# load the pieces we need
+_base_mod = _load_local("base")
+_parser_mod = _load_local("parser")
+_registry_mod = _load_local("registry")
+
+AsyncCommandHandler = _base_mod.AsyncCommandHandler
+CommandContext = _base_mod.CommandContext
+CommandDefinition = _base_mod.CommandDefinition
+CommandHandler = _base_mod.CommandHandler
+CommandResult = _base_mod.CommandResult
+ParsedCommand = _base_mod.ParsedCommand
+ProcessedPrompt = _base_mod.ProcessedPrompt
+
+CommandParser = _parser_mod.CommandParser
+SlashCommands = _parser_mod.SlashCommands
+parse_commands = _parser_mod.parse_commands
+
+CommandRegistry = _registry_mod.CommandRegistry
+
 
 __all__ = [
     "CommandContext",

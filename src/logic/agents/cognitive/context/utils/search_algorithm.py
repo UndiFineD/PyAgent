@@ -20,9 +20,9 @@ This module defines the available algorithms for semantic and keyword-based
 search within the agent's context and memory.
 """
 
-from enum import Enum
+ from enum import Enum
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

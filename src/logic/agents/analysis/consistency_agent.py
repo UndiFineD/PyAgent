@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_coder.py"""
 
 
-import re
+ import re
 
 from src.core.base.common.types.consistency_issue import ConsistencyIssue
 from src.core.base.lifecycle.version import VERSION

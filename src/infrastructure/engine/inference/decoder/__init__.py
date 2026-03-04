@@ -16,7 +16,7 @@
 Decoder package.
 """
 
-from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,  # noqa: F401
+ from .config import (DraftProposal, SpecDecodingMetrics, SpecMethod,  # noqa: F401
                      SpeculativeConfig, VerificationResult)
 from .engine import SpeculativeDecoder, create_speculative_decoder  # noqa: F401
 from .proposers import DraftProposer, NgramProposer, SuffixProposer  # noqa: F401

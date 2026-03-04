@@ -20,7 +20,7 @@ Quality scoring and refactoring suggestion logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
 
-from typing import Any, Dict, List
+ from typing import Any, Dict, List
 
 from src.core.base.common.types.code_metrics import CodeMetrics
 from src.core.base.common.types.code_smell import CodeSmell

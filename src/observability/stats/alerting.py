@@ -12,7 +12,7 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from .observability_core import (Alert, AlertSeverity, RetentionPolicy,
+ from .observability_core import (Alert, AlertSeverity, RetentionPolicy,
                                  Threshold)
 
 try:

@@ -16,7 +16,7 @@
 Validation rule.py module.
 """
 
-from dataclasses import dataclass
+ from dataclasses import dataclass
 
 
 @dataclass

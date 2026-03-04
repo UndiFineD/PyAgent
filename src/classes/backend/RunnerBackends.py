@@ -20,7 +20,9 @@ from src.core.base.version import VERSION
 import logging
 import os
 import subprocess
+import asyncio
 import json
+import re
 from pathlib import Path
 from typing import Any, Optional
 
@@ -33,9 +35,8 @@ class BackendHandlers:
     def _parse_content(text: str) -> Any:
         if "[IMAGE_DATA:" not in text:
             return text
-            
+
         parts = []
-import re
         # Find [IMAGE_DATA:base64]
         pattern = r"\[IMAGE_DATA:([^\]\s]+)\]"
         last_idx = 0
@@ -43,25 +44,26 @@ import re
             pre_text = text[last_idx:match.start()].strip()
             if pre_text:
                 parts.append({"type": "text", "text": pre_text})
-            
+
             image_data = match.group(1)
             if not image_data.startswith("data:image"):
                 image_data = f"data:image/png;base64,{image_data}"
-                
+
             parts.append({
                 "type": "image_url",
                 "image_url": {"url": image_data}
             })
             last_idx = match.end()
-            
+
         remaining = text[last_idx:].strip()
         if remaining:
             parts.append({"type": "text", "text": remaining})
-            
+
         return parts if parts else text
 
     @staticmethod
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
+        """Constructs the full prompt for backends."""
         try:
             max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
         except ValueError:
@@ -75,42 +77,56 @@ import re
         ).strip()
 
     @staticmethod
-    def try_codex_cli(full_prompt: str, repo_root: Path, recorder=None) -> str | None:
+    async def try_codex_cli(full_prompt: str, repo_root: Path, recorder=None) -> str | None:
+        """Attempts to use the Codex CLI backend, with robust error handling and recording."""
         try:
             logging.debug("Attempting to use Codex CLI backend")
-            result = subprocess.run(
-                ['codex', '--prompt', full_prompt, '--no-color', '--log-level', 'error', '--add-dir', str(repo_root),
-                 '--allow-all-tools', '--disable-parallel-tools-execution', '--deny-tool', 'write', '--deny-tool', 'shell',
-                 '--silent', '--stream', 'off'],
-                capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180, cwd=str(repo_root), check=False
+            process = await asyncio.create_subprocess_exec(
+                'codex', '--prompt', full_prompt, '--no-color', '--log-level', 'error', 
+                '--add-dir', str(repo_root), '--allow-all-tools', '--disable-parallel-tools-execution', 
+                '--deny-tool', 'write', '--deny-tool', 'shell', '--silent', '--stream', 'off',
+                stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=str(repo_root)
             )
-            stdout = (result.stdout or "").strip()
-            
+            try:
+                stdout, stderr = await asyncio.wait_for(process.communicate(), timeout=180)
+            except asyncio.TimeoutError:
+                process.kill()
+                raise
+            stdout = stdout.decode('utf-8', errors='replace').strip()
+            returncode = process.returncode
             # Phase 108: Recording
             if recorder:
-                recorder.record_interaction("codex", "cli", full_prompt[:200], stdout[:1000] if result.returncode == 0 else "FAILED")
+                output = stdout[:1000] if returncode == 0 else "FAILED"
+                recorder.record_interaction("codex", "cli", full_prompt[:200], output)
 
-            if result.returncode == 0 and stdout:
+            if returncode == 0 and stdout:
                 logging.info("Codex CLI backend succeeded")
                 return stdout
-            if result.returncode != 0:
-                logging.debug(f"Codex CLI failed (code {result.returncode}): {result.stderr}")
-        except subprocess.TimeoutExpired:
+            if returncode != 0:
+                stderr_msg = stderr.decode('utf-8', errors='replace') if stderr else ""
+                logging.debug(f"Codex CLI failed (code {returncode}): {stderr_msg}")
+        except asyncio.TimeoutError:
             logging.warning("Codex CLI timed out")
         except Exception as e:
             logging.warning(f"Codex CLI error: {e}")
         return None
 
     @staticmethod
-    def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
+    async def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
+        """Attempts to use the Copilot CLI backend, with robust error handling."""
         try:
             logging.debug("Attempting to use local Copilot CLI backend")
-            result = subprocess.run(
-                ['copilot', 'explain', full_prompt],
-                capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=60, cwd=str(repo_root), check=False
+            process = await asyncio.create_subprocess_exec(
+                'copilot', 'explain', full_prompt,
+                stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=str(repo_root)
             )
-            stdout = (result.stdout or "").strip()
-            if result.returncode == 0 and stdout:
+            try:
+                stdout, _ = await asyncio.wait_for(process.communicate(), timeout=60)
+            except asyncio.TimeoutError:
+                process.kill()
+                raise
+            stdout = stdout.decode('utf-8', errors='replace').strip()
+            if process.returncode == 0 and stdout:
                 logging.info("Copilot CLI backend succeeded")
                 return stdout
         except Exception as e:
@@ -118,35 +134,67 @@ import re
         return None
 
     @staticmethod
-    def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
+    async def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
+        """Attempts to use the gh copilot alias backend for code explanation.
+        
+        Args:
+            full_prompt: The prompt to send to gh copilot.
+            repo_root: The root directory of the repository.
+            allow_non_command: Whether to allow non-command prompts (unused optimization flag).
+            
+        Returns:
+            The response from gh copilot, or None if the call fails.
+        """
         # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
-             # Basic heuristic: if it doesn't look like a command, skip gh copilot explain
-             # (This logic was partially in SubagentRunner, but we can pass a flag)
-             pass
+            # Basic heuristic: if it doesn't look like a command, skip gh copilot explain
+            # (This logic was partially in SubagentRunner, but we can pass a flag)
+            pass
 
         try:
             logging.debug("Attempting to use gh copilot alias backend")
             # Note: gh copilot requires interactive session or specific config for shell completion
             # We attempt it as a subprocess call
-            result = subprocess.run(
-                ['gh', 'copilot', 'explain', full_prompt],
-                capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=60, cwd=str(repo_root), check=False
+            process = await asyncio.create_subprocess_exec(
+                'gh', 'copilot', 'explain', full_prompt,
+                stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=str(repo_root)
             )
-            if result.returncode == 0 and result.stdout:
-                return result.stdout.strip()
+            try:
+                stdout, _ = await asyncio.wait_for(process.communicate(), timeout=60)
+            except asyncio.TimeoutError:
+                process.kill()
+                raise
+            if process.returncode == 0 and stdout:
+                return stdout.decode('utf-8', errors='replace').strip()
         except Exception as e:
             logging.debug(f"gh copilot failed: {e}")
         return None
 
     @staticmethod
     def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
+        """Attempts to use the GitHub Models API backend for code generation.
+        
+        Args:
+            full_prompt: The prompt to send to the GitHub Models API.
+            requests_lib: The requests library instance for making HTTP calls.
+            
+        Returns:
+            The response from GitHub Models, or None if the call fails or token is not found.
+        """
         if not requests_lib:
             return None
-        
-        base_url = (os.environ.get("GITHUB_MODELS_BASE_URL") or "https://models.inference.ai.azure.com").strip().rstrip("/")
-        model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini").strip()
-        
+
+        base_url = (
+            os.environ.get("GITHUB_MODELS_BASE_URL") 
+            or "https://models.inference.ai.azure.com").strip().rstrip("/"
+        )
+        model = (
+            os.environ.get("DV_AGENT_MODEL") 
+            or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini"
+        ) or ""
+        model = model if isinstance(model, str) else ""
+        model = model.strip()
+
         token = os.environ.get("GITHUB_TOKEN")
         if not token:
             search_paths = [
@@ -165,7 +213,7 @@ import re
                             break
                     except Exception:
                         continue
-        
+
         if not token:
             logging.debug("GitHub Models skipped: No token found")
             return None
@@ -198,13 +246,22 @@ import re
 
     @staticmethod
     def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
+        """Attempts to use the OpenAI API backend for code generation.
+        
+        Args:
+            full_prompt: The prompt to send to the OpenAI API.
+            requests_lib: The requests library instance for making HTTP calls.
+            
+        Returns:
+            The response from OpenAI, or None if the call fails or API key is not found.
+        """
         if not requests_lib:
             return None
-            
+
         api_key = os.environ.get("OPENAI_API_KEY")
         base_url = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1"
         model = os.environ.get("OPENAI_MODEL") or "gpt-4o-mini"
-        
+
         if not api_key:
             logging.debug("OpenAI API skipped: No API key")
             return None

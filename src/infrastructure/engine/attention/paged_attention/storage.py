@@ -21,7 +21,7 @@ Storage.py module.
 from dataclasses import dataclass, field
 from typing import Sequence
 
-import numpy as np
+ import numpy as np
 
 
 @dataclass

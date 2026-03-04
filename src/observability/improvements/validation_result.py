@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_improvements.py"""
 
 
-from dataclasses import dataclass, field
+ from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .validation_severity import ValidationSeverity
+ from .validation_severity import ValidationSeverity
 
 __version__ = VERSION
 

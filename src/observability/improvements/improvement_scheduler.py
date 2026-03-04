@@ -20,7 +20,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .improvement import Improvement
 from .resource_allocation import ResourceAllocation

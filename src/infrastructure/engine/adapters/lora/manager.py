@@ -18,9 +18,9 @@ from __future__ import annotations
 """High-level manager for multi-adapter serving."""
 
 
-from typing import Any
+ from typing import Any
 
-import numpy as np
+ import numpy as np
 
 from .config import LoRAConfig
 from .model import LoRAModel

@@ -18,9 +18,9 @@ High-level API functions for SlashCommands.
 """
 
 
-from typing import Any
+ from typing import Any
 
-from .core import CommandResult, ProcessedPrompt, SlashCommands
+ from .core import CommandResult, ProcessedPrompt, SlashCommands
 
 # ============================================================================
 # Default Instance

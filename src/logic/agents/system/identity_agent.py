@@ -40,7 +40,7 @@ class IdentityAgent(BaseAgent):
         self.identity_registry: dict[Any, Any] = {}  # agent_id -> DID document
 
         # New: Shared Secret Manager Access
-from src.infrastructure.swarm.fleet.secret_manager import SecretManager
+        from src.infrastructure.swarm.fleet.secret_manager import SecretManager
 
         self.secret_manager = SecretManager(
             vault_path=os.path.join(self._workspace_root, "data/memory/agent_store/vault.json")

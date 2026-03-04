@@ -45,7 +45,7 @@ class ConsensusOrchestrator:
         Simulates signing a state block after consensus to ensure data integrity
         across a distributed agent network.
         """
-import hashlib
+        import hashlib
         block_content = f"{task}:{decision}"
         block_hash = hashlib.sha256(block_content.encode()).hexdigest()
         

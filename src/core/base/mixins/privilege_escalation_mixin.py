@@ -24,7 +24,7 @@ import ctypes
 import platform
 from typing import Any, Optional
 
-from src.core.base.logic.security.privilege_escalation_core import PrivilegeEscalationCore
+ from src.core.base.logic.security.privilege_escalation_core import PrivilegeEscalationCore
 
 
 class PrivilegeEscalationMixin:

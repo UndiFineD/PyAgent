@@ -23,7 +23,7 @@ Core logic for multimodal processing and response post-processing.
 """
 
 
-from typing import Callable, List
+ from typing import Callable, List
 
 from .base_core import BaseCore
 from .models import InputType, MultimodalInput

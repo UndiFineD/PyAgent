@@ -12,15 +12,16 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.classes.reports import *
+ from src.classes.reports import *
 
 def _sha256_text(text: str) -> str:
     """Helper for legacy tests."""
-import hashlib
+    import hashlib
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 def main() -> None:
-import argparse
+    """Main function to generate agent reports."""
+    import argparse
     parser = argparse.ArgumentParser(description='Generate Agent Reports')
     parser.add_argument('--dir', default='.', help='Directory to scan')
     parser.add_argument('--output', default='reports', help='Output directory')

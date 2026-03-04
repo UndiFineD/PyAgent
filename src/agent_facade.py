@@ -14,7 +14,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.classes.agent import *
+ from src.classes.agent import *
 
 if __name__ == '__main__':
     main()

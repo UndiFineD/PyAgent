@@ -20,9 +20,9 @@ from __future__ import annotations
 import time
 from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .system_state import SystemState
+ from .system_state import SystemState
 
 __version__ = VERSION
 

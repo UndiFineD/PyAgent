@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_backend.py"""
 
 
-from dataclasses import dataclass
+ from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .provider_type import ProviderType
+ from .provider_type import ProviderType
 
 __version__ = VERSION
 

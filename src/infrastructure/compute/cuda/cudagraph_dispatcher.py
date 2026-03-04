@@ -39,7 +39,7 @@ from typing import Any, Callable, List, Optional, Set, Tuple, TypeVar
 
 logger = logging.getLogger(__name__)
 
-import time
+ import time
 
 T = TypeVar("T")
 

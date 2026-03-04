@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,10 +12,7 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Reporting agent.py module.
-"""
-
+ from __future__ import annotations
 
 import logging
 import os
@@ -25,9 +21,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from src.core.base.lifecycle.base_agent import BaseAgent
+ from src.core.base.lifecycle.base_agent import BaseAgent
 
-from .transparency_agent import TransparencyAgent
+ from .transparency_agent import TransparencyAgent
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -49,19 +45,13 @@ class ReportingAgent(BaseAgent):
         logging.info("ReportingAgent: Initiating dashboard generation workflow...")
 
         # Load required agents if not present
-        from src.logic.agents.analysis.test_agent import TestAgent
-        from src.logic.agents.cognitive.memory_consolidation_agent import \
-            MemoryConsolidationAgent
+        from src.logic.agents.cognitive.memory_consolidation_agent import MemoryConsolidationAgent
         from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
-        from src.logic.agents.development.pull_request_agent import \
-            PullRequestAgent
+        from src.logic.agents.development.pull_request_agent import PullRequestAgent
         from src.logic.agents.development.spec_tool_agent import SpecToolAgent
-        from src.logic.agents.development.tool_evolution_agent import \
-            ToolEvolutionAgent
-        from src.logic.agents.intelligence.browsing_agent import BrowsingAgent
+        from src.logic.agents.development.tool_evolution_agent import ToolEvolutionAgent
         from src.logic.agents.system.config_agent import ConfigAgent
         from src.logic.agents.system.kernel_agent import KernelAgent
-        from src.logic.agents.system.mcp_agent import MCPAgent
 
         self.fleet.register_agent(
             "Consolidator",
@@ -92,21 +82,6 @@ class ReportingAgent(BaseAgent):
             "Config",
             ConfigAgent,
             str(self.workspace_root / "src/logic/agents/system/config_agent.py"),
-        )
-        self.fleet.register_agent(
-            "Test",
-            TestAgent,
-            str(self.workspace_root / "src/logic/agents/analysis/test_agent.py"),
-        )
-        self.fleet.register_agent(
-            "Browser",
-            BrowsingAgent,
-            str(self.workspace_root / "src/logic/agents/intelligence/browsing_agent.py"),
-        )
-        self.fleet.register_agent(
-            "MCP",
-            MCPAgent,
-            str(self.workspace_root / "src/logic/agents/system/mcp_agent.py"),
         )
         self.fleet.register_agent(
             "Evolution",
@@ -175,9 +150,8 @@ class ReportingAgent(BaseAgent):
 
 if __name__ == "__main__":
     # Local test
-import asyncio
-from src.infrastructure.swarm.fleet.fleet_manager import \
-        FleetManager  # noqa: F811
+    import asyncio
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager  # noqa: F811
     from src.observability.structured_logger import StructuredLogger
 
     logger = StructuredLogger(__name__)

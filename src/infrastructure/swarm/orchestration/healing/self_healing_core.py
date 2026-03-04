@@ -21,7 +21,7 @@ and recovery strategy selection.
 """
 
 
-from src.core.base.common import StabilityCore
+ from src.core.base.common import StabilityCore
 
 
 class SelfHealingCore(StabilityCore):

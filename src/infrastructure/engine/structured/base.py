@@ -23,7 +23,7 @@ Base class regarding grammar engines.
 from abc import ABC, abstractmethod
 from typing import Dict, List, Optional, Set
 
-from .models import FSMTransitionTable, TokenMask
+ from .models import FSMTransitionTable, TokenMask
 
 
 class GrammarEngine(ABC):

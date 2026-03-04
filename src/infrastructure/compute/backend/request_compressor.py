@@ -14,10 +14,7 @@ from __future__ import annotations
 # limitations under the License.
 
 
-"""Auto-extracted class from agent_backend.py"""
-
-
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -39,8 +36,7 @@ class RequestCompressor:
         Args:
             compression_level: Compression level (1 - 9, default 6).
         """
-import zlib
-
+        import zlib
         self._zlib = zlib
         self.compression_level = compression_level
         self._stats = {

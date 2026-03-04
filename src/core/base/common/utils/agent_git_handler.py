@@ -21,7 +21,7 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from src.core.base.common.shell_core import ShellCore
+ from src.core.base.common.shell_core import ShellCore
 
 
 class AgentGitHandler:

@@ -25,7 +25,7 @@ Phase 18: Beyond vLLM - Advanced Metrics
 """
 # pylint: disable=protected-access
 
-from __future__ import annotations
+ from __future__ import annotations
 
 from _thread import LockType
 import math

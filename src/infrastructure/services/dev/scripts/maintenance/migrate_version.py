@@ -16,7 +16,7 @@ from __future__ import annotations
 """Script for migrating hardcoded version strings to use the central VERSION import."""
 
 
-import os
+ import os
 
 src_path = r"c:\DEV\PyAgent\src"
 version_import = "from src.core.base.lifecycle.version import VERSION"

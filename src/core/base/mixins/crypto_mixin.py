@@ -24,7 +24,7 @@ import base64
 import platform
 from typing import Any, Optional
 
-from src.core.base.logic.processing.crypto_core import CryptoCore
+ from src.core.base.logic.processing.crypto_core import CryptoCore
 
 
 class CryptoMixin:

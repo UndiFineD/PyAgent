@@ -13,16 +13,6 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-PyAgent Chain-of-Recursive-Thoughts (CoRT) Reasoning System.
-
-Based on the Chain-of-Recursive-Thoughts framework for breakthrough
-problem-solving and response quality through recursive thinking.
-"""
-
-
-import asyncio
-import json
 import logging
 import time
 from dataclasses import dataclass, field
@@ -32,6 +22,13 @@ from src.core.base.models.communication_models import CascadeContext
 from src.inference.engine import InferenceEngine
 
 logger = logging.getLogger("pyagent.reasoning.cort")
+
+"""
+PyAgent Chain-of-Recursive-Thoughts (CoRT) Reasoning System.
+
+Based on the Chain-of-Recursive-Thoughts framework for breakthrough
+problem-solving and response quality through recursive thinking.
+"""
 
 
 @dataclass
@@ -70,9 +67,9 @@ class CoRTReasoningCore:
 
 
     async def think_and_respond(
-        self, 
+        self,
         user_input: str, 
-        context: Optional[CascadeContext] = None,
+        _context: Optional[CascadeContext] = None,
         verbose: bool = True
     ) -> CoRTResult:
         """
@@ -288,12 +285,9 @@ Then on a new line, explain your choice in one sentence."""
                 else:
                     # Look for number
                     import re
-                        numbers = re.findall(r'\d+', first_line)
+                    numbers = re.findall(r'\d+', first_line)
                     if numbers:
                         choice = numbers[0]
-
-                if len(lines) > 1:
-                    explanation = ' '.join(lines[1:])
 
             # Select response based on choice
             if choice == 'current':

@@ -33,7 +33,7 @@ Sampling parameters and state tracking regarding text generation.
 from dataclasses import dataclass, field
 from typing import Any
 
-import numpy as np
+ import numpy as np
 
 
 @dataclass

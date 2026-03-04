@@ -21,7 +21,7 @@ Reflection Mixin: Enables autonomous self-critique and lesson learning for all a
 import logging
 from typing import Any
 
-from src.core.base.logic.core.lesson_core import Lesson, LessonCore
+ from src.core.base.logic.core.lesson_core import Lesson, LessonCore
 
 
 class ReflectionMixin:

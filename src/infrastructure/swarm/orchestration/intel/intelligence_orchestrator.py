@@ -22,9 +22,9 @@ import logging
 import time
 from typing import TYPE_CHECKING, Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .intelligence_core import IntelligenceCore
+ from .intelligence_core import IntelligenceCore
 
 if TYPE_CHECKING:
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
@@ -49,7 +49,7 @@ class IntelligenceOrchestrator:
         # Phase 108: Native AI for collective synthesis
 import requests
 
-from src.infrastructure.compute.backend.llm_client import LLMClient
+ from src.infrastructure.compute.backend.llm_client import LLMClient
 
         self.ai = LLMClient(requests, workspace_root=self.workspace_root)
 

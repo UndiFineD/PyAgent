@@ -20,9 +20,9 @@ from __future__ import annotations
 import json
 import re
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .test_assertion import TestAssertion
+ from .test_assertion import TestAssertion
 
 __version__ = VERSION
 

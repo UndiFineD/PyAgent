@@ -16,9 +16,9 @@ from __future__ import annotations
 """Agent for connecting to local FastFlowLM instances on NPU edge nodes."""
 
 
-import json
+ import json
 
-import requests
+ import requests
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

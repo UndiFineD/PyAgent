@@ -23,7 +23,7 @@ for confidence calibration and intent prediction using Rust acceleration.
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

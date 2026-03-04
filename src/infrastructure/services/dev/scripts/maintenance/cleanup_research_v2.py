@@ -16,9 +16,9 @@ from __future__ import annotations
 """Script to clean up and deduplicate entries in the IMPROVEMENT_RESEARCH.md document."""
 
 
-import os
+ import os
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

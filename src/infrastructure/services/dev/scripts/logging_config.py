@@ -19,7 +19,7 @@ Logging config.py module.
 import logging
 import os
 
-from src.infrastructure.services.logging.core.log_rotation_core import \
+ from src.infrastructure.services.logging.core.log_rotation_core import \
     LogRotationCore
 
 

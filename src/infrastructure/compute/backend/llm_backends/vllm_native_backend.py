@@ -19,11 +19,11 @@ Vllm native backend.py module.
 
 
 
-import logging
+ import logging
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .llm_backend import LLMBackend
+ from .llm_backend import LLMBackend
 
 __version__ = VERSION
 
@@ -38,7 +38,7 @@ class VllmNativeBackend(LLMBackend):
         system_prompt: str = "You are a helpful assistant.",
         **kwargs,
     ) -> str:
-import time
+        import time
 
         start_t = time.time()
         try:

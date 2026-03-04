@@ -335,7 +335,8 @@ class MultiThreadWeightLoader(WeightLoader):
             return load_file(file_path, device=device)
         except ImportError:
             import torch
-                return torch.load(file_path, map_location=device, weights_only=True)
+            # load weights fallback, ensure indentation uses spaces only
+            return torch.load(file_path, map_location=device, weights_only=True)
     
     def iterate_weights(
         self,

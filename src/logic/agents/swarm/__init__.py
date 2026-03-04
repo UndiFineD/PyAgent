@@ -15,9 +15,9 @@ from __future__ import annotations
 """Swarm agents package."""
 
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .orchestrator_agent import OrchestratorAgent
+ from .orchestrator_agent import OrchestratorAgent
 
 __version__ = VERSION
 

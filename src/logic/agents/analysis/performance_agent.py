@@ -28,7 +28,7 @@ try:
 except ImportError:
     HAS_RUST_CORE = False
 
-from src.core.base.common.types.optimization_suggestion import \
+ from src.core.base.common.types.optimization_suggestion import \
     OptimizationSuggestion
 from src.core.base.common.types.optimization_type import OptimizationType
 from src.core.base.lifecycle.version import VERSION

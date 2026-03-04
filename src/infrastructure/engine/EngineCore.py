@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Facade for Engine Core modular implementation."""
 
-from .core import (
+ from .core import (
     RequestStatus,
     FinishReason,
     Request,

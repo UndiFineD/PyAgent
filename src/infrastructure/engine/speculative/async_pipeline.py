@@ -23,7 +23,7 @@ import asyncio
 import logging
 from typing import Any, AsyncGenerator, Dict, List, Union
 
-from src.core.base.common.models.communication_models import (
+ from src.core.base.common.models.communication_models import (
     AsyncSpeculativeToken, PipelineCorrection)
 
 logger = logging.getLogger(__name__)

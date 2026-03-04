@@ -20,9 +20,9 @@ Fallback incremental detokenization for non-fast tokenizers.
 """
 
 
-from typing import List, Optional, Tuple
+ from typing import List, Optional, Tuple
 
-from src.infrastructure.engine.tokenization.detokenizer.base import (
+ from src.infrastructure.engine.tokenization.detokenizer.base import (
     IncrementalDetokenizer,
 )
 from src.infrastructure.engine.tokenization.detokenizer.stop_checker import (

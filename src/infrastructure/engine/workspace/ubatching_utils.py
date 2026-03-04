@@ -66,7 +66,7 @@ class UBatchingUtils:
         else:
             # Emulated wait
             import threading
-                threading.Event().wait(0.001 * (thread_id / total_threads))
+            threading.Event().wait(0.001 * (thread_id / total_threads))
 
     def get_ubatch_metrics(self) -> Dict[str, Any]:
         """Returns micro-batching performance metrics."""

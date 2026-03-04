@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 
-from src.logic.agents.cognitive.context.engines.memory_mixins.MemoryStorageMixin import (
+ from src.logic.agents.cognitive.context.engines.memory_mixins.MemoryStorageMixin import (
     MemoryStorageMixin,
 )
 

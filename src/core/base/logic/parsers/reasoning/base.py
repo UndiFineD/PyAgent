@@ -23,7 +23,7 @@ from abc import ABC, abstractmethod
 from functools import cached_property
 from typing import Any, ClassVar, Sequence
 
-from .models import ReasoningResult, StreamingReasoningState
+ from .models import ReasoningResult, StreamingReasoningState
 
 
 class ReasoningParser(ABC):

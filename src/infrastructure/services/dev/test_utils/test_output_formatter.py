@@ -17,9 +17,9 @@ from __future__ import annotations
 """Auto-extracted class from agent_test_utils.py"""
 
 
-from typing import Any
+ from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

@@ -7,7 +7,7 @@ This module provides a backward-compatible interface to the modularized
 chat template registry implementation.
 """
 
-from .registry import (
+ from .registry import (
     TemplateType,
     TemplateConfig,
     TemplateInfo,

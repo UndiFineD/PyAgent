@@ -25,7 +25,7 @@ import time
 from datetime import datetime, timezone
 from typing import TYPE_CHECKING
 
-from ..base import CommandContext, CommandResult
+ from ..base import CommandContext, CommandResult
 
 if TYPE_CHECKING:
     from ..registry import CommandRegistry

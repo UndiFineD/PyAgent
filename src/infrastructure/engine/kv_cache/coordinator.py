@@ -17,7 +17,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import Any, Dict, List, Tuple
 
-from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,
+ from .data_classes import (BlockHash, BlockHashWithGroupId, CacheConfig,
                            CacheGroupSpec, KVCacheBlock, KVCacheBlocks)
 from .enums import CacheGroupType
 from .managers import (CrossAttentionManager, FullAttentionManager,

@@ -25,9 +25,9 @@ import os
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .constants import (BMAD_AGENTS, BMAD_PHASES, BMAD_TRACKS,
+ from .constants import (BMAD_AGENTS, BMAD_PHASES, BMAD_TRACKS,
                         DEFAULT_INSTRUCTIONS)
 
 __version__ = VERSION

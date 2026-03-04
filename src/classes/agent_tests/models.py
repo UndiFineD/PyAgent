@@ -11,7 +11,7 @@ try:
     __all__ = [n for n in dir(_mod) if not (n.startswith("__") and n.endswith("__"))]
 except Exception:
     # Minimal dataclass placeholders for tests when infra module isn't available.
-from dataclasses import dataclass
+    from dataclasses import dataclass
 
     @dataclass
     class TestCase:

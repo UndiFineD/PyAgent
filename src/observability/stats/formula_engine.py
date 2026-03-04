@@ -15,7 +15,7 @@ import re
 from dataclasses import dataclass
 from typing import Any, Dict, Optional
 
-from src.core.base.common.formula_core import FormulaCore
+ from src.core.base.common.formula_core import FormulaCore
 
 try:
     import rust_core as rc

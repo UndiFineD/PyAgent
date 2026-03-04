@@ -24,7 +24,7 @@ import shlex
 import subprocess
 from typing import Optional, TypedDict
 
-from src.core.base.common.base_interfaces import ContextRecorderInterface
+ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ADBResult(TypedDict):

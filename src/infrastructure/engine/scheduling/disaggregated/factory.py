@@ -19,7 +19,7 @@ Factory.py module.
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from typing import List, Optional
+ from typing import List, Optional
 
 from .config import DCPConfig, InstanceInfo
 from .enums import SchedulingPolicy

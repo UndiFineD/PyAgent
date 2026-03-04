@@ -17,7 +17,7 @@
 DataParallelCoordinator Package.
 """
 
-from typing import TYPE_CHECKING, Any
+ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .balancer import P2CLoadBalancer
@@ -30,23 +30,23 @@ if TYPE_CHECKING:
 
 def __getattr__(name: str) -> Any:
     if name in ("DPRole", "WorkerHealth", "LoadBalanceStrategy", "DPConfig", "WorkerState", "StepState", "WaveState"):
-from . import types as _types
+        from . import types as _types
 
         return getattr(_types, name)
     if name == "P2CLoadBalancer":
-from . import balancer as _balancer
+        from . import balancer as _balancer
 
         return getattr(_balancer, name)
     if name == "DPEngineCoreProc":
-from . import engine as _engine
+        from . import engine as _engine
 
         return getattr(_engine, name)
     if name == "HierarchicalDPCoordinator":
-from . import hierarchical as _hierarchical
+        from . import hierarchical as _hierarchical
 
         return getattr(_hierarchical, name)
     if name == "dp_collective_all_reduce":
-from . import collectives as _collectives
+        from . import collectives as _collectives
 
         return getattr(_collectives, name)
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

@@ -13,7 +13,7 @@ class GlobalContextCore:
         Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability (Phase 104).
         """
-import zlib
+        import zlib
         shards: Dict[str, Dict[str, Any]] = {"default": {}}
         for category, data in memory.items():
             if isinstance(data, dict):

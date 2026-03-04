@@ -22,7 +22,7 @@ Base.py module.
 from abc import ABC, abstractmethod
 from typing import Generic, Iterator, TypeVar
 
-from .models import QueuedRequest
+ from .models import QueuedRequest
 
 T = TypeVar("T", bound=QueuedRequest)
 

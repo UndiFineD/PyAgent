@@ -17,7 +17,7 @@ from __future__ import annotations
 """ParallelizationStrategy for test distribution."""
 
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

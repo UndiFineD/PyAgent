@@ -23,7 +23,7 @@ Pure logic for OpenAPI spec generation and tool contract validation.
 import json
 from typing import Any
 
-from src.core.base.lifecycle.version import SDK_VERSION, VERSION
+ from src.core.base.lifecycle.version import SDK_VERSION, VERSION
 
 __version__ = VERSION
 

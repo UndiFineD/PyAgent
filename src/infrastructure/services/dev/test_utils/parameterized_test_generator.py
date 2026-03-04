@@ -20,9 +20,9 @@ from __future__ import annotations
 from collections.abc import Callable
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .parameterized_test_case import ParameterizedTestCase
+ from .parameterized_test_case import ParameterizedTestCase
 
 __version__ = VERSION
 

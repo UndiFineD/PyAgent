@@ -16,9 +16,9 @@ from __future__ import annotations
 """Auto-generated module exports."""
 
 
-from collections.abc import Callable
+ from collections.abc import Callable
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .agent_strategy import AgentStrategy  # noqa: F401
 from .chain_of_thought_strategy import (  # noqa: F401

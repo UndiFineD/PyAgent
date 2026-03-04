@@ -16,11 +16,11 @@
 Embed.py module.
 """
 
-from typing import Any, Dict, Tuple
+ from typing import Any, Dict, Tuple
 
-import numpy as np
+ import numpy as np
 
-from .base import BaseMultiModalProcessor, ModalityType
+ from .base import BaseMultiModalProcessor, ModalityType
 
 
 class TextEmbedProcessor(BaseMultiModalProcessor[np.ndarray]):

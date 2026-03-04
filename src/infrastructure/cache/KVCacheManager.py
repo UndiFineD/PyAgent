@@ -17,7 +17,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Generic, Protocol, TypeVar
 
-import numpy as np
+ import numpy as np
 
 
 class DeviceType(str, Enum):

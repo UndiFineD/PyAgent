@@ -23,9 +23,9 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .evolution_core import EvolutionCore
+ from .evolution_core import EvolutionCore
 
 __version__ = VERSION
 

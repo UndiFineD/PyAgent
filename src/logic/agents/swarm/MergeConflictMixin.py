@@ -2,7 +2,7 @@
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 
-from typing import Any
+ from typing import Any
 
 class MergeConflictMixin:
     """Mixin for handling merge conflicts in file content."""

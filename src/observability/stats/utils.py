@@ -29,9 +29,9 @@ import json
 import logging
 import sys
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .stats_agent import StatsAgent
+ from .stats_agent import StatsAgent
 
 __version__ = VERSION
 

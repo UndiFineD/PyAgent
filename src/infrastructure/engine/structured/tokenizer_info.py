@@ -21,7 +21,7 @@ Tokenizer information regarding structured output engine.
 from dataclasses import dataclass
 from typing import Any, Dict, Optional, Tuple
 
-from .enums import VocabType
+ from .enums import VocabType
 
 
 @dataclass(frozen=True)

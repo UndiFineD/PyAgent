@@ -40,7 +40,7 @@ from urllib.parse import urlparse
 import aiohttp
 from pydantic import BaseModel, Field, ConfigDict
 
-from src.core.base.common.base_core import BaseCore
+ from src.core.base.common.base_core import BaseCore
 
 
 class Role(str, Enum):

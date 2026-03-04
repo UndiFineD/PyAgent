@@ -22,9 +22,9 @@ import os
 import time
 from typing import TYPE_CHECKING, Any
 
-from src.core.base.lifecycle.version import VERSION  # pylint: disable=import-error
+ from src.core.base.lifecycle.version import VERSION  # pylint: disable=import-error
 
-from .runner_backends import BackendHandlers
+ from .runner_backends import BackendHandlers
 
 __version__ = VERSION
 

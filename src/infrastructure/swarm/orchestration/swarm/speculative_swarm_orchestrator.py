@@ -21,9 +21,9 @@ import logging
 import time
 from typing import Any, Dict, Optional
 
-from src.core.base.common.models.communication_models import (
+ from src.core.base.common.models.communication_models import (
     CascadeContext, SpeculativeProposal, VerificationOutcome)
-from src.infrastructure.engine.models.similarity import \
+    from src.infrastructure.engine.models.similarity import \
     EmbeddingSimilarityService
 
 logger = logging.getLogger(__name__)

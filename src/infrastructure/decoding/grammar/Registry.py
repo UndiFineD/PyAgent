@@ -16,9 +16,9 @@ from typing import (
     Optional,
 )
 
-import numpy as np
+ import numpy as np
 
-from .Base import (
+ from .Base import (
     StructuredOutputGrammar,
     StructuredOutputOptions,
     StructuredOutputsParams,

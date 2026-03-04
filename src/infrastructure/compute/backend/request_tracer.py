@@ -22,7 +22,7 @@ import threading
 import time
 import uuid
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .request_context import RequestContext
 from .request_priority import RequestPriority

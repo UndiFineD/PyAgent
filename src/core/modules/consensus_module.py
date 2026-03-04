@@ -17,9 +17,9 @@ Consensus module.py module.
 """
 
 
-from typing import Any
+ from typing import Any
 
-from src.core.base.common.base_modules import BaseModule
+ from src.core.base.common.base_modules import BaseModule
 
 
 class ConsensusModule(BaseModule):

@@ -6,7 +6,7 @@ Pure logic for evaluating reasoning certainty and consistency.
 No I/O or side effects.
 """
 
-from typing import Dict, Any, List
+ from typing import Dict, Any, List
 
 class MetacognitiveCore:
     """Pure logic core for metacognitive evaluation and intention prediction."""

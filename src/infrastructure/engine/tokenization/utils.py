@@ -20,7 +20,7 @@ Utility functions for tokenization.
 """
 
 
-from typing import Optional
+ from typing import Optional
 
 from .base import BaseTokenizer
 from .models import TokenizerBackend, TokenizerConfig

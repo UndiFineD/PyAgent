@@ -10,7 +10,7 @@ import random
 import threading
 from typing import List, Optional
 
-from src.infrastructure.parallel.dp.types import WorkerState, WorkerHealth
+ from src.infrastructure.parallel.dp.types import WorkerState, WorkerHealth
 
 class P2CLoadBalancer:
     """

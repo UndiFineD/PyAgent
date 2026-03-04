@@ -126,6 +126,39 @@ def _compile_check(path: Path) -> Optional[SyntaxError]:
         return e
 
 
+def _parse_error_log(log_path: Path, project_root: Path) -> dict[Path, set[int]]:
+    """Parse a pytest-style error log and return mapping of files to offending line numbers.
+
+    The log is scanned for lines like::
+
+        File "c:/dev/PyAgent/src/foo/bar.py", line 123
+
+    Paths are resolved against the project root so relative paths still work.
+    The returned dict maps absolute Path -> set of 1-based line numbers.
+    """
+    entries: dict[Path, set[int]] = {}
+    regex = re.compile(r'File "([^"]+)", line (\d+)')
+    try:
+        text = log_path.read_text(encoding="utf-8", errors="ignore")
+    except OSError:
+        return entries
+    for line in text.splitlines():
+        m = regex.search(line)
+        if not m:
+            continue
+        raw = m.group(1)
+        try:
+            p = Path(raw)
+            if not p.is_absolute():
+                p = project_root / p
+            p = p.resolve()
+        except Exception:
+            continue
+        lineno = int(m.group(2))
+        entries.setdefault(p, set()).add(lineno)
+    return entries
+
+
 def _context_indent(lines: list[str], idx: int, window: int = CONTEXT_WINDOW) -> int:
     """
     Infer the expected indentation for lines[idx] by looking at the
@@ -163,29 +196,28 @@ def _context_indent(lines: list[str], idx: int, window: int = CONTEXT_WINDOW) ->
     if not candidates:
         return 0
 
-    # If more than half the context is at some indented level, use the minimum
-    # positive indentation that appears multiple times (most conservative fix).
-        from collections import Counter
+    from collections import Counter
     freq = Counter(candidates)
-    total = len(candidates)
 
-    # If the majority of context lines are at indent > 0, the current line
-    # probably belongs there too, unless it's genuinely a module-level line.
-    indented_count = sum(v for k, v in freq.items() if k > 0)
-    
-    # We lower the bar a bit here: if there are ANY indented items and we are immediately inside a block, we should trust the block.
-    # This function doesn't know about blocks, but we can return the best guess.
-    
-    if indented_count < total * 0.3: # Relaxed from 0.5
-        # The surrounding context is mostly module level - don't change line.
-        return 0
+    # Prioritize indents that appear multiple times
+    multi_freq_indents = [k for k, v in freq.items() if v >= 2]
+    if multi_freq_indents:
+        # Return the smallest of the most frequent indents
+        return min(multi_freq_indents)
 
-    # Return the smallest indent that appears at least twice, or any indent
-    # that appears most often.  This avoids picking a deep-nesting level.
-    multi = [k for k, v in freq.items() if k > 0 and v >= 2]
-    if multi:
-        return min(multi)
-    return min(k for k in freq if k > 0)
+    # If no indent appears multiple times, return the most common single indent.
+    # This will be the only one if all appear once, or one of the equally most common.
+    # This makes _context_indent less conservative.
+    most_common_indent = freq.most_common(1)[0][0]
+    return most_common_indent
+
+
+def _prev_nonblank_index(lines: list[str], idx: int) -> int:
+    """Return index of previous non-blank, non-comment line before idx, or -1."""
+    for j in range(idx - 1, -1, -1):
+        if not _is_blank_or_comment(lines[j]):
+            return j
+    return -1
 
 
 def _preceding_block_indent(lines: list[str], idx: int) -> int:
@@ -218,10 +250,18 @@ def _is_import_or_simple_stmt(stripped: str) -> bool:
     return bool(_IMPORT_RE.match(stripped))
 
 
-def pass_fix_orphan_imports(lines: list[str], verbose: bool = False) -> tuple[list[str], int]:
+def pass_fix_orphan_imports(
+    lines: list[str],
+    verbose: bool = False,
+    focus_lines: set[int] | None = None,
+) -> tuple[list[str], int]:
     """
     Fix lines at column 0 (or unexpectedly low indent) that are preceded and
     followed by higher-indented code.  Changes are applied conservatively.
+
+    If ``focus_lines`` is provided the pass will only touch lines that are
+    within two lines of any number in the set.  This allows surgical fixes
+    based on an external error log.
 
     Returns (new_lines, number_of_changes).
     """
@@ -231,6 +271,12 @@ def pass_fix_orphan_imports(lines: list[str], verbose: bool = False) -> tuple[li
     for i, line in enumerate(result):
         if _is_blank_or_comment(line):
             continue
+
+        # skip lines not near any focus if we have one
+        if focus_lines is not None:
+            lineno = i + 1
+            if not any(abs(lineno - f) <= 2 for f in focus_lines):
+                continue
 
         stripped = line.lstrip()
         current_indent = _indent(line)
@@ -249,11 +295,31 @@ def pass_fix_orphan_imports(lines: list[str], verbose: bool = False) -> tuple[li
         if expected <= current_indent:
             # Context says the current indent is fine (or we can't tell).
             if verbose:
-                print(f"        line {i+1:5d}: SKIP (context_indent={expected}, current={current_indent})  {stripped[:70].rstrip()!a}")
+                msg = (
+                    f"        line {i+1:5d}: SKIP (context_indent={expected}, "
+                    f"current={current_indent})  {stripped[:70].rstrip()!a}"
+                )
+                print(msg)
+            continue
+
+        # Never move __future__ imports or dunder module-level assignments.
+        if stripped.startswith("from __future__") or stripped.startswith("__"):
+            if verbose:
+                print(f"        line {i+1:5d}: SKIP (future/dunder import)")
             continue
 
         # Double-check: look for the enclosing block opener.
         block_start = _preceding_block_indent(result, i)
+
+        # If there is no enclosing block opener preceding this line and there
+        # are no prior indented lines in the file, this is almost certainly a
+        # module-level import and should not be shifted.
+        has_prior_indented = any(_indent(l) > 0 for l in result[:i] if not _is_blank_or_comment(l))
+        if block_start == -1 and not has_prior_indented:
+            if verbose:
+                print(f"        line {i+1:5d}: SKIP (no enclosing block and no prior indents)")
+            continue
+
         if block_start > 0:
             # Use the block-determined indent unless context suggests something bigger.
             best = max(block_start, expected) if expected > 0 else block_start
@@ -262,7 +328,10 @@ def pass_fix_orphan_imports(lines: list[str], verbose: bool = False) -> tuple[li
 
         if best != current_indent:
             if verbose:
-                print(f"        line {i+1:5d}: indent {current_indent}->{best}  (block_start={block_start}, context={expected})")
+                print(
+                    f"        line {i+1:5d}: indent {current_indent}->{best}  "
+                    f"(block_start={block_start}, context={expected})"
+                )
                 print(f"               BEFORE: {line.rstrip()!a}")
                 print(f"               AFTER:  {(' ' * best + stripped.rstrip())!a}")
             result[i] = " " * best + stripped.rstrip("\n") + "\n"
@@ -274,10 +343,17 @@ def pass_fix_orphan_imports(lines: list[str], verbose: bool = False) -> tuple[li
 # ---------------------------------------------------------------------------
 # Pass 2: Fix streams of consecutive wrong-indent lines (not just imports)
 # ---------------------------------------------------------------------------
-def pass_fix_misindented_blocks(lines: list[str], verbose: bool = False) -> tuple[list[str], int]:
+def pass_fix_misindented_blocks(
+    lines: list[str],
+    verbose: bool = False,
+    focus_lines: set[int] | None = None,
+) -> tuple[list[str], int]:
     """
     Detects runs of consecutive lines at an unexpectedly low indent that are
     sandwiched between higher-indented code.  Shifts the whole run upward.
+
+    If ``focus_lines`` is provided the run will only be adjusted when it
+    intersects (±2 lines) with any of the focus line numbers.
 
     Handles patterns like::
 
@@ -328,20 +404,30 @@ def pass_fix_misindented_blocks(lines: list[str], verbose: bool = False) -> tupl
             i += 1
             continue
 
-        run_lines = result[run_start:run_end]
-        
-        has_import = any(_is_import_or_simple_stmt(l.strip()) for l in run_lines if not _is_blank_or_comment(l))
+        # If we are focusing, verify the run overlaps a focus line nearby.
+        if focus_lines is not None:
+            run_line_nums = set(range(run_start + 1, run_end + 1))
+            if not any(abs(r - f) <= 2 for r in run_line_nums for f in focus_lines):
+                i = run_end
+                continue
 
+        run_lines = result[run_start:run_end]
+        has_import = any(_is_import_or_simple_stmt(l.strip()) for l in run_lines if not _is_blank_or_comment(l))
         # Apply a context or block-based indent lookup if there's no import.
         if not has_import:
             # Check if this block should be indented because it follows a try/except/def/etc.
             block_start = _preceding_block_indent(result, run_start)
-            expected = max(block_start, _context_indent(result, run_start)) if block_start > 0 else _context_indent(result, run_start)
-            
+            context_indent = _context_indent(result, run_start)
+            expected = (
+                max(block_start, context_indent)
+                if block_start > 0
+                else context_indent
+            )
+
             # Additional heuristic: If it starts with 'except' or 'finally', it must match the try block level,
             # which is block_start - MIN_INDENT_STEP if block_start is valid.
             stripped_first = run_lines[0].lstrip() if run_lines else ""
-            if stripped_first.startswith("except ") or stripped_first.startswith("except:") or stripped_first.startswith("finally:"):
+            if stripped_first.startswith(("except ", "except:", "finally:")):
                 # Usually follows a try block, so indent should be same as the try.
                 # Just use context which is hopefully right, or look specifically for `try:`.
                 expected = max(MIN_INDENT_STEP, expected)
@@ -354,13 +440,18 @@ def pass_fix_misindented_blocks(lines: list[str], verbose: bool = False) -> tupl
         if expected <= current:
             if verbose:
                 real_run = [j for j in range(run_start, run_end) if not _is_blank_or_comment(result[j])]
-                print(f"        lines {run_start+1}-{run_end}: SKIP block (context_indent={expected} <= current={current}, {len(real_run)} line(s))")
+                print(
+                    f"        lines {run_start+1}-{run_end}: SKIP block "
+                    f"(context_indent={expected} <= current={current}, {len(real_run)} line(s))"
+                )
             i = run_end
             continue
 
         if verbose:
             real_run = [j for j in range(run_start, run_end) if not _is_blank_or_comment(result[j])]
-            print(f"        lines {run_start+1}-{run_end}: block of {len(real_run)} line(s), shift indent {current}->{expected}")
+            num_lines = len(real_run)
+            print(f"        lines {run_start+1}-{run_end}: block of {num_lines} line(s), "
+                  f"shift indent {current}->{expected}")
 
         # Apply the same indent to every non-blank non-comment line in the run.
         for j in range(run_start, run_end):
@@ -384,11 +475,19 @@ def pass_fix_misindented_blocks(lines: list[str], verbose: bool = False) -> tupl
 # ---------------------------------------------------------------------------
 # Pass 3: Fix method definitions that escaped their class body
 # ---------------------------------------------------------------------------
-def pass_fix_escaped_methods(lines: list[str], verbose: bool = False) -> tuple[list[str], int]:
+def pass_fix_escaped_methods(
+    lines: list[str],
+    verbose: bool = False,
+    focus_lines: set[int] | None = None,
+) -> tuple[list[str], int]:
     """
     Detects `def NAME(self, ...` and `async def NAME(self, ...` lines at column 0
     (or lower than expected) that follow a class body.  Shifts the entire
     method (def + body) by the missing indentation.
+
+    When ``focus_lines`` is given the repair will only trigger if the method
+    signature or some line in its body falls within two lines of a focus
+    line number.
 
     Only acts when a class definition appears earlier in the file and the
     adjacent methods in the class body are properly indented.
@@ -430,6 +529,18 @@ def pass_fix_escaped_methods(lines: list[str], verbose: bool = False) -> tuple[l
         if not is_method_def or ind >= MIN_INDENT_STEP:
             i += 1
             continue
+
+        # if we have focus rules, make sure this definition or nearby lines
+        # intersect them; otherwise skip quickly.
+        if focus_lines is not None:
+            lineno = i + 1
+            if not any(abs(lineno - f) <= 2 for f in focus_lines):
+                # check body extent before skipping entirely
+                block_end = _find_block_end(result, i, ind)
+                run_line_nums = set(range(i + 1, block_end + 1))
+                if not any(abs(r - f) <= 2 for r in run_line_nums for f in focus_lines):
+                    i += 1
+                    continue
 
         # Check if we are after a class definition
         if i <= last_class_idx:
@@ -520,8 +631,12 @@ def pass_dedup_method_aliases(lines: list[str]) -> tuple[list[str], int]:
 # ---------------------------------------------------------------------------
 # Core repair loop for a single file
 # ---------------------------------------------------------------------------
-def repair_file(path: Path, max_passes: int = MAX_PASSES,
-                verbose: bool = False) -> tuple[int, bool, list[str]]:
+def repair_file(
+    path: Path,
+    max_passes: int = MAX_PASSES,
+    verbose: bool = False,
+    focus_lines: set[int] | None = None,
+) -> tuple[int, bool, list[str]]:
     """
     Repair a single file.  Returns (total_changes, now_valid, new_lines).
     """
@@ -553,15 +668,21 @@ def repair_file(path: Path, max_passes: int = MAX_PASSES,
         # Apply all three passes in order
         if verbose:
             print(f"      [pass {pass_num}/A] orphan imports")
-        lines, c1 = pass_fix_orphan_imports(lines, verbose=verbose)
+        lines, c1 = pass_fix_orphan_imports(
+            lines, verbose=verbose, focus_lines=focus_lines
+        )
 
         if verbose:
             print(f"      [pass {pass_num}/B] misindented blocks")
-        lines, c2 = pass_fix_misindented_blocks(lines, verbose=verbose)
+        lines, c2 = pass_fix_misindented_blocks(
+            lines, verbose=verbose, focus_lines=focus_lines
+        )
 
         if verbose:
             print(f"      [pass {pass_num}/C] escaped methods")
-        lines, c3 = pass_fix_escaped_methods(lines, verbose=verbose)
+        lines, c3 = pass_fix_escaped_methods(
+            lines, verbose=verbose, focus_lines=focus_lines
+        )
 
         pass_stats.append((pass_num, c1, c2, c3))
         pass_total = c1 + c2 + c3
@@ -579,7 +700,7 @@ def repair_file(path: Path, max_passes: int = MAX_PASSES,
 
     if verbose and pass_stats:
         print(f"    total passes run: {len(pass_stats)}, total line changes: {total_changes}")
-        print(f"    per-pass summary: " +
+        print("    per-pass summary: " +
               ", ".join(f"pass{p}={c1+c2+c3}(A={c1},B={c2},C={c3})" for p, c1, c2, c3 in pass_stats))
 
     return total_changes, _compile_check_lines(lines) is None, lines
@@ -633,22 +754,81 @@ def main() -> int:
         default=None,
         help="Fix a single specific file instead of scanning a directory.",
     )
+    parser.add_argument(
+        "--error-log",
+        default=None,
+        help="Path to pytest error output; only files/lines mentioned will be repaired.",
+    )
     args = parser.parse_args()
 
     # Resolve root
     project_root = Path(__file__).resolve().parent.parent
+    # determine set of files to inspect
+    error_map: dict[Path, set[int]] | None = None
+    if args.error_log:
+        log_path = Path(args.error_log)
+        error_map = _parse_error_log(log_path, project_root)
+        # if the log contained our own survey output rather than pytest format,
+        # try a secondary pass that understands the "BROKEN line X" lines.
+        if not error_map:
+            # read and scan for the survey style "BROKEN" messages
+            try:
+                text = log_path.read_text(encoding="utf-8", errors="ignore")
+            except OSError:
+                text = ""
+            # pattern: BROKEN  line   20: ...\n *src\path\file.py
+            fallback: dict[Path, set[int]] = {}
+            pattern = re.compile(r"BROKEN\s+line\s+(\d+):")
+            lines = text.splitlines()
+            i = 0
+            while i < len(lines):
+                m = pattern.search(lines[i])
+                if m:
+                    lineno = int(m.group(1))
+                    # next nonblank line is path
+                    j = i + 1
+                    while j < len(lines) and not lines[j].strip():
+                        j += 1
+                    if j < len(lines):
+                        raw = lines[j].strip()
+                        try:
+                            p = Path(raw)
+                            if not p.is_absolute():
+                                p = project_root / p
+                            p = p.resolve()
+                        except (OSError, RuntimeError):
+                            i = j + 1
+                            continue
+                        fallback.setdefault(p, set()).add(lineno)
+                        i = j + 1
+                        continue
+                i += 1
+            if fallback:
+                error_map = fallback
+            else:
+                print(f"Warning: --error-log provided but no entries parsed from {log_path}")
+
     if args.file:
         target_files = [Path(args.file).resolve()]
     else:
-        scan_root = Path(args.path).resolve() if args.path else project_root / "src"
-        target_files = list(scan_root.rglob("*.py"))
+        if error_map is not None:
+            # restrict to files found in the log
+            target_files = list(error_map.keys())
+        else:
+            scan_root = Path(args.path).resolve() if args.path else project_root / "src"
+            target_files = list(scan_root.rglob("*.py"))
 
     wall_start = time.perf_counter()
 
     # -- Phase 1: Survey -----------------------------------------------------
     total_files = len(target_files)
     print(f"\n{'=' * 64}")
-    print(f"  Phase 1 - Survey: {total_files} Python file(s) in scope")
+    if error_map is not None:
+        logged_files = len(error_map)
+        logged_lines = sum(len(s) for s in error_map.values())
+        print(f"  Phase 1 - Survey: restricting to {logged_files} file(s) from error log ({logged_lines} lines) ")
+    else:
+        print(f"  Phase 1 - Survey: {total_files} Python file(s) in scope")
     print(f"{'=' * 64}")
 
     broken: list[tuple[Path, SyntaxError]] = []
@@ -686,16 +866,27 @@ def main() -> int:
     partial_count = 0
 
     for file_idx, (path, original_err) in enumerate(broken, 1):
+        focus_lines_for_file: set[int] | None = None
+        if error_map is not None:
+            focus_lines_for_file = error_map.get(path.resolve())
         rel = path.relative_to(project_root)
         file_start = time.perf_counter()
 
         print(f"\n  [{file_idx:3d}/{len(broken)}] {rel}")
         print(f"         original error: line {original_err.lineno} - {original_err.msg}")
+        if focus_lines_for_file:
+            fl = sorted(focus_lines_for_file)
+            print(f"         focus lines from log: {fl}")
 
         if args.verbose:
             print(f"         max passes: {args.max_passes}")
 
-        result = repair_file(path, max_passes=args.max_passes, verbose=args.verbose)
+        result = repair_file(
+            path,
+            max_passes=args.max_passes,
+            verbose=args.verbose,
+            focus_lines=focus_lines_for_file,
+        )
         changes, is_valid, new_lines = result
         file_elapsed = time.perf_counter() - file_start
 
@@ -732,7 +923,7 @@ def main() -> int:
     # -- Phase 3: Summary -----------------------------------------------------
     total_elapsed = time.perf_counter() - wall_start
     print(f"\n{'=' * 64}")
-    print(f"  Phase 3 - Summary")
+    print("  Phase 3 - Summary")
     print(f"{'=' * 64}")
     print(f"  Files scanned:       {total_files}")
     print(f"  Files with errors:   {len(broken)}")

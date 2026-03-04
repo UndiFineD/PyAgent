@@ -19,7 +19,7 @@
 import math
 from typing import Any
 
-import numpy as np
+ import numpy as np
 
 from .config import LoRAConfig
 from .model import LoRAModel

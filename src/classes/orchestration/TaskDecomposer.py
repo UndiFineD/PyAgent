@@ -8,7 +8,7 @@ import logging
 import json
 from typing import List, Dict, Any
 
-from .TaskDecomposerCore import TaskDecomposerCore
+ from .TaskDecomposerCore import TaskDecomposerCore
 
 class TaskDecomposer:
     """

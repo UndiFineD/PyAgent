@@ -35,7 +35,7 @@ Compliance agent.py module.
 
 
 
-from pathlib import Path
+ from pathlib import Path
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

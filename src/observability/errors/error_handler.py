@@ -23,7 +23,7 @@ from pathlib import Path
 from src.core.base.entrypoint import create_main_function
 from src.core.base.lifecycle.version import VERSION
 
-from .errors_agent import ErrorsAgent
+ from .errors_agent import ErrorsAgent
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]

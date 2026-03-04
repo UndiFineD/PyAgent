@@ -13,9 +13,9 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import TYPE_CHECKING
+ from typing import TYPE_CHECKING
 
-import numpy as np
+ import numpy as np
 
 from .base import Quantizer
 from .config import QuantStrategy
@@ -37,7 +37,7 @@ class LinearQuantizer(Quantizer):
         weight: NDArray[np.float32],
     ) -> QuantizedTensor:
         """Quantizes a float matrix into the configured bit-depth."""
-from .utils import pack_int4
+        from .utils import pack_int4
 
         original_shape = weight.shape
 
@@ -65,14 +65,14 @@ from .utils import pack_int4
     def dequantize(
         self,
         qtensor: QuantizedTensor,
-    ) -> NDArray[np.float32]:
+            ) -> NDArray[np.float32]:
         """Restores a float matrix from the quantized representation."""
         return qtensor.dequantize()
 
     def compute_tensor_params(
         self,
         weight: NDArray[np.float32],
-    ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
+                ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
         """Computes quantization parameters for the entire tensor."""
         if self.config.symmetric:
             max_val = np.max(np.abs(weight))
@@ -90,7 +90,7 @@ from .utils import pack_int4
     def compute_channel_params(
         self,
         weight: NDArray[np.float32],
-    ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
+            ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
         """Computes quantization parameters per output channel."""
         num_channels = weight.shape[0]
         weight_flat = weight.reshape(num_channels, -1)
@@ -111,7 +111,7 @@ from .utils import pack_int4
     def compute_group_params(
         self,
         weight: NDArray[np.float32],
-    ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
+            ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
         """Computes quantization parameters per group of weights."""
         out_features, in_features = weight.shape[:2] if weight.ndim >= 2 else (weight.shape[0], 1)
         flat = weight.reshape(out_features, -1)
@@ -150,7 +150,7 @@ from .utils import pack_int4
         weight: NDArray[np.float32],
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
-    ) -> NDArray[np.int8]:
+                ) -> NDArray[np.int8]:
         """Quantizes the entire tensor using a single scale/zero-point."""
         scaled = weight / scale[0]
         if zp is not None:
@@ -163,7 +163,7 @@ from .utils import pack_int4
         weight: NDArray[np.float32],
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
-    ) -> NDArray[np.int8]:
+            ) -> NDArray[np.int8]:
         """Quantizes the tensor per output channel."""
         num_channels = weight.shape[0]
         weight_flat = weight.reshape(num_channels, -1)
@@ -179,7 +179,7 @@ from .utils import pack_int4
         weight: NDArray[np.float32],
         scale: NDArray[np.float32],
         zp: NDArray[np.int32] | None,
-    ) -> NDArray[np.int8]:
+            ) -> NDArray[np.int8]:
         """Quantizes the tensor in grouped blocks."""
         original_shape = weight.shape
         out_features = weight.shape[0]

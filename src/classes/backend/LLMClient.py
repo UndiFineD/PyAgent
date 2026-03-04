@@ -3,7 +3,7 @@ from __future__ import annotations
 
 """Centralized LLM client for various backends."""
 
-from functools import lru_cache
+ from functools import lru_cache
 
 import json
 import logging
@@ -37,7 +37,7 @@ class LLMClient:
         self._max_cache_size = 1000
 
     def _get_cache_key(self, provider: str, model: str, prompt: str, system_prompt: str) -> str:
-import hashlib
+    import hashlib
         combined = f"{provider}:{model}:{system_prompt}:{prompt}"
         return hashlib.sha256(combined.encode()).hexdigest()
 

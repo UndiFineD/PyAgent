@@ -17,7 +17,7 @@
 ReasoningEngine: Wrapper for modular reasoning and tool call components.
 """
 
-from .data_classes import (ParseResult, ReasoningToken, ThinkingBlock,
+ from .data_classes import (ParseResult, ReasoningToken, ThinkingBlock,
                            ToolCall, ToolCallResult)
 from .engine import (ReasoningEngine, create_reasoning_engine,
                      create_tool_parser)

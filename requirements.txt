@@ -52,7 +52,8 @@ overrides==7.7.0
 psutil==7.2.1
 py-cpuinfo==9.0.0
 PyAutoGUI==0.9.54
-pydantic==2.12.5
+pydantic==2.13.0
+chromadb>=0.5.0
 pynput==1.8.1
 python-dotenv==1.2.1
 PyYAML==6.0.3

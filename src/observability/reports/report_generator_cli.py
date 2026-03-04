@@ -38,7 +38,7 @@ Report generator cli.py module.
 
 def _sha256_text(text: str) -> str:
     """Helper for legacy tests."""
-import hashlib
+    import hashlib
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 

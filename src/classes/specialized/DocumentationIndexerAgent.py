@@ -44,7 +44,7 @@ class DocumentationIndexerAgent(BaseAgent):
         """Returns documentation snippets or paths."""
         return self.get_semantic_pointers(input_text)
 
-if __name__ == "__main__":
-from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index")
-    main()
+    if __name__ == "__main__":
+        from src.classes.base_agent.utilities import create_main_function
+        main = create_main_function(DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index")
+        main()

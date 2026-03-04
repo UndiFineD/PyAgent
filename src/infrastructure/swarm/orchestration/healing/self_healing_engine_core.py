@@ -18,9 +18,9 @@ Self healing engine core.py module.
 
 
 
-from typing import Any
+ from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core as rc

@@ -19,14 +19,14 @@ Handles variable substitution, template registration, and versioning.
 """
 
 
-from typing import Any, Dict, List
+ from typing import Any, Dict, List
 
 try:
     import rust_core as rc
 except ImportError:
     rc = None
 
-from .base_core import BaseCore
+ from .base_core import BaseCore
 
 
 class TemplateCore(BaseCore):

@@ -19,7 +19,7 @@ Extension Registry Package - Phase 20
 Plugin system for managing extensible component registries.
 """
 
-from .extension_registry import (
+ from .extension_registry import (
     ExtensionInfo,
     ExtensionManager,  # noqa: F401
     GlobalRegistry,

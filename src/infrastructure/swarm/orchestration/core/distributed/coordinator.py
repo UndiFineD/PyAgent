@@ -24,9 +24,9 @@ import logging
 import threading
 from typing import Dict, Optional
 
-import numpy as np
+ import numpy as np
 
-from .config import (EngineIdentity, EngineState, LoadBalancingStrategy,
+ from .config import (EngineIdentity, EngineState, LoadBalancingStrategy,
                      ParallelConfig)
 from .messages import MetricsMessage
 

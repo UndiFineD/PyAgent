@@ -33,7 +33,7 @@ Beam search implementation regarding speculative decoding.
 from dataclasses import dataclass, field
 from typing import List, Optional, Tuple
 
-import numpy as np
+ import numpy as np
 
 from .base import HAS_RUST, Sampler, _log_softmax
 from .params import SamplingParams, SamplingState

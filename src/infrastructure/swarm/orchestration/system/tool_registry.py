@@ -25,7 +25,7 @@ from collections.abc import Callable
 from typing import TYPE_CHECKING, Any
 from collections import namedtuple
 
-from .tool_core import ToolCore
+ from .tool_core import ToolCore
 
 if TYPE_CHECKING:
     from ..fleet.FleetManager import FleetManager

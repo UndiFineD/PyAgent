@@ -37,7 +37,7 @@ class CopilotCliBackend(LLMBackend):
             return ""
 
         timeout_s = kwargs.get("timeout_s", 30)
-import time
+        import time
         start_t = time.time()
         try:
             # Phase 141 Fix: Windows command line length limit (WinError 206)

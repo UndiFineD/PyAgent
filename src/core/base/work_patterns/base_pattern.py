@@ -17,7 +17,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
-from src.core.base.common.models.communication_models import CascadeContext
+ from src.core.base.common.models.communication_models import CascadeContext
 
 
 class WorkPattern(ABC):

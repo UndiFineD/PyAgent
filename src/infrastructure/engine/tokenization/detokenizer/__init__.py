@@ -17,7 +17,7 @@
 Incremental detokenization for streaming text generation.
 """
 
-from typing import TYPE_CHECKING, Any
+ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .base import IncrementalDetokenizer
@@ -30,23 +30,23 @@ if TYPE_CHECKING:
 
 def __getattr__(name: str) -> Any:
     if name == "TokenizerLike":
-from .types import TokenizerLike
+        from .types import TokenizerLike
 
         return TokenizerLike
     if name == "DetokenizeResult":
-from .types import DetokenizeResult
+        from .types import DetokenizeResult
 
         return DetokenizeResult
     if name == "StopChecker":
-from .stop_checker import StopChecker
+        from .stop_checker import StopChecker
 
         return StopChecker
     if name == "IncrementalDetokenizer":
-from .base import IncrementalDetokenizer
+        from .base import IncrementalDetokenizer
 
         return IncrementalDetokenizer
     if name == "FastIncrementalDetokenizer":
-from .fast import FastIncrementalDetokenizer
+        from .fast import FastIncrementalDetokenizer
 
         return FastIncrementalDetokenizer
     if name == "SlowIncrementalDetokenizer":

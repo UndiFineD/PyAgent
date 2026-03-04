@@ -18,12 +18,12 @@
 SpecDecodeMetadataV2: Wrapper regarding modular speculative decoding metadata components.
 """
 
-from .spec_decode.config import (AcceptancePolicy, SpecDecodeConfig,
+ from .spec_decode.config import (AcceptancePolicy, SpecDecodeConfig,
                                  VerificationStrategy)
-from .spec_decode.metadata import (SpecDecodeMetadataFactory,
+                                 from .spec_decode.metadata import (SpecDecodeMetadataFactory,
                                    SpecDecodeMetadataV2,
                                    TreeVerificationMetadata)
-from .spec_decode.verification import (BatchVerifier, SpecDecodeVerifier,
+                                   from .spec_decode.verification import (BatchVerifier, SpecDecodeVerifier,
                                        StreamingVerifier, VerificationResult)
 
 __all__ = [

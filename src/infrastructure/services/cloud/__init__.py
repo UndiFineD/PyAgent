@@ -19,14 +19,14 @@ imports during pytest collection.
 """
 
 
-from typing import TYPE_CHECKING, Any
+ from typing import TYPE_CHECKING, Any
 
 __all__: list[str] = []
 
 
 def __getattr__(name: str) -> Any:
     if name in ("CloudProviderBase", "InferenceRequest", "InferenceResponse"):
-from .base import CloudProviderBase, InferenceRequest, InferenceResponse
+        from .base import CloudProviderBase, InferenceRequest, InferenceResponse
 
         return {"CloudProviderBase": CloudProviderBase, "InferenceRequest": InferenceRequest, "InferenceResponse": InferenceResponse}[name]
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

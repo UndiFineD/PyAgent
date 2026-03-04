@@ -22,7 +22,7 @@ Registry and factory for KV transfer connectors.
 import logging
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
-from src.infrastructure.storage.kv_transfer.connector.decode_bench import \
+ from src.infrastructure.storage.kv_transfer.connector.decode_bench import \
     DecodeBenchConnector
 
 if TYPE_CHECKING:

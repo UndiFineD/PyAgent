@@ -20,9 +20,9 @@ from __future__ import annotations
 import json
 import re
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .response_transformer_base import ResponseTransformerBase
+ from .response_transformer_base import ResponseTransformerBase
 
 __version__ = VERSION
 

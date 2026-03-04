@@ -17,7 +17,7 @@
 Mamba SSM Package - Implementation of State Space Models.
 """
 
-from typing import TYPE_CHECKING, Any
+ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from .config import MambaConfig, MambaOutput, MambaState
@@ -28,25 +28,25 @@ if TYPE_CHECKING:
 
 def __getattr__(name: str) -> Any:
     if name == "MambaConfig":
-from .config import MambaConfig
+        from .config import MambaConfig
         return MambaConfig
     if name == "MambaState":
-from .config import MambaState
+        from .config import MambaState
         return MambaState
     if name == "MambaOutput":
-from .config import MambaOutput
+        from .config import MambaOutput
         return MambaOutput
     if name == "MambaMixer":
-from .mixer import MambaMixer
+        from .mixer import MambaMixer
         return MambaMixer
     if name == "Mamba2Mixer":
-from .mixer import Mamba2Mixer
+        from .mixer import Mamba2Mixer
         return Mamba2Mixer
     if name == "HybridMambaMixer":
-from .hybrid import HybridMambaMixer
+        from .hybrid import HybridMambaMixer
         return HybridMambaMixer
     if name == "CausalConv1d":
-from .ops import CausalConv1d
+        from .ops import CausalConv1d
         return CausalConv1d
     if name == "SelectiveScan":
         from .ops import SelectiveScan

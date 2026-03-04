@@ -33,7 +33,12 @@ dependencies = [
     "openai>=1.60.0",
     "pandas>=2.2.0",
     "psutil>=6.1.1",
-    "pydantic>=2.10.0",
+    # projects using ChromaDB import pydantic.v1 which triggers a warning on Python 3.14+
+    # To eliminate that message upgrade to a release of chromadb that no longer
+    # relies on the pydantic v1 compatibility layer.  We pin a minimum version
+    # here and also bump our pydantic requirement to the latest 2.x series.
+    "pydantic>=2.13.0",
+    "chromadb>=0.5.0",
     "pyzmq>=26.2.0",
     "requests>=2.32.0",
     "rich>=13.9.4",
@@ -69,7 +74,7 @@ rust = [
 
 [tool.uv]
 # Optimization for 'uv' package manager
-cache-keys = [{ file = "requirements/base.txt" }]
+cache-keys = [{ file = "requirements.txt" }]
 
 [tool.ruff]
 line-length = 120
@@ -88,8 +93,6 @@ ignore = [
     "D100", # Missing docstring in public module
     "D104", # Missing docstring in public package
     "D105", # Missing docstring in magic method
-    "ANN101", # Missing type annotation for `self` in method
-    "ANN102", # Missing type annotation for `cls` in classmethod
 ]
 
 [tool.mypy]
@@ -115,7 +118,7 @@ exclude = ["generated/"]
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra -q --asyncio-mode=strict"
-testpaths = ["tests"]
-python_files = ["test_*.py"]
+testpaths = ["src"]
+python_files = ["*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]

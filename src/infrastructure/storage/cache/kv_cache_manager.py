@@ -30,7 +30,7 @@ from enum import Enum
 from typing import Callable, Optional
 from itertools import product, chain
 
-import numpy as np
+ import numpy as np
 
 try:
     import rust_core

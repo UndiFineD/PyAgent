@@ -16,7 +16,7 @@ from __future__ import annotations
 """Auto-generated module exports."""
 
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .agent_assertions import AgentAssertions  # noqa: F401
 from .assertion_helpers import AssertionHelpers  # noqa: F401

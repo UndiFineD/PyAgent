@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Advanced request scheduling sub-package."""
 
-from .config import (
+ from .config import (
     RequestPriority,
     RequestState,
     PreemptionReason,

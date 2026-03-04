@@ -27,7 +27,7 @@ from pathlib import Path
 from typing import Optional, Dict, Any, Union
 from abc import ABC, abstractmethod
 
-import numpy as np
+ import numpy as np
 
 
 class TTSEngine(ABC):

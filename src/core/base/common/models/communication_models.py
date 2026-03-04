@@ -56,6 +56,7 @@ class CascadeContext:
     tenant_id: str = ""
     security_scope: list[str] = field(default_factory=_empty_list_str)
     failure_history: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
+    agent_name: str = ""  # added so BaseAgent can attach its name without slot errors
 
     def __post_init__(self) -> None:
         """Validate and normalize failure history after initialization functionally."""

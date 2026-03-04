@@ -19,7 +19,7 @@ Temporal shard agent.py module.
 
 
 
-import logging
+ import logging
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent

@@ -23,7 +23,7 @@ import os
 import time
 from typing import Any, Dict, List
 
-from src.core.base.common.models.communication_models import SwarmAuditTrail
+ from src.core.base.common.models.communication_models import SwarmAuditTrail
 
 logger = logging.getLogger(__name__)
 

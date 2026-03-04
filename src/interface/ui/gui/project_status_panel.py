@@ -23,7 +23,7 @@ import tkinter as tk
 from pathlib import Path
 from tkinter import ttk
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

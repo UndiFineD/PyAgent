@@ -18,7 +18,7 @@ Morphology core.py module.
 """
 
 
-import json
+ import json
 
 try:
     import rust_core as rc

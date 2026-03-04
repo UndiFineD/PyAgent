@@ -24,7 +24,7 @@ try:
 except ImportError:
     pass
 
-from .compiled_grammar import CompiledGrammar
+ from .compiled_grammar import CompiledGrammar
 
 
 @dataclass

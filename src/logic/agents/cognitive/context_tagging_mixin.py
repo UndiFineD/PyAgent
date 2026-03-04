@@ -6,7 +6,7 @@ from __future__ import annotations
 
 """Mixin for context tagging capabilities."""
 
-from src.logic.agents.cognitive.context.models.context_tag import ContextTag
+ from src.logic.agents.cognitive.context.models.context_tag import ContextTag
 
 
 class ContextTaggingMixin:

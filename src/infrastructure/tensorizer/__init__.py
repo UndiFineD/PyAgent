@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from .core import (
+ from .core import (
     TensorizerConfig,
     CompressionType,
     TensorDtype,

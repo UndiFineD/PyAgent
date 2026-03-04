@@ -5,7 +5,7 @@ Facade for Grammar Engine.
 Delegates to modularized sub-packages in src/infrastructure/structured_output/.
 """
 
-from .models import (
+ from .models import (
     FSMState as FSMState,
     FSMTransitionTable as FSMTransitionTable,
     TokenMask as TokenMask,

@@ -22,9 +22,9 @@ import threading
 from abc import ABC, abstractmethod
 from typing import Any, Callable, List, Optional, Sequence
 
-import numpy as np
+ import numpy as np
 
-from .config import BackendStats, GrammarSpec, GrammarType
+ from .config import BackendStats, GrammarSpec, GrammarType
 
 
 class StructuredOutputGrammar(ABC):

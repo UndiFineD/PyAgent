@@ -25,9 +25,9 @@ import logging
 import re
 from typing import Callable, Dict, List, Optional
 
-import numpy as np
+ import numpy as np
 
-from .base import (StructuredOutputGrammar, StructuredOutputOptions,
+ from .base import (StructuredOutputGrammar, StructuredOutputOptions,
                    StructuredOutputsParams)
 from .ebnf_grammar import EBNFGrammar
 from .json_constraint import JSONSchemaGrammar

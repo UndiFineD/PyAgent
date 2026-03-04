@@ -17,7 +17,7 @@ from __future__ import annotations
 """Agent specializing in self-healing through telemetry analysis and error correction."""
 
 
-from typing import Any
+ from typing import Any
 
 from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -36,7 +36,7 @@ class SelfHealingAgent(BaseAgent):
         self.telemetry = ObservabilityEngine(str(self.workspace_root))
 
         # Phase 317: Dynamic prompt loading and coordinator integration
-from src.maintenance.self_improvement_coordinator import \
+        from src.maintenance.self_improvement_coordinator import \
             SelfImprovementCoordinator
 
         self.coordinator = SelfImprovementCoordinator(str(self.workspace_root))

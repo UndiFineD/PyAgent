@@ -19,7 +19,7 @@
 Tool parser registry for managing parser types and model mappings.
 """
 
-from .tool_registry import (StreamingToolParser, ToolParserRegistry,  # noqa: F401
+ from .tool_registry import (StreamingToolParser, ToolParserRegistry,  # noqa: F401
                             parse_tool_call)
 
 __all__ = [

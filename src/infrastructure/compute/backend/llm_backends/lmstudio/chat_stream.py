@@ -20,7 +20,7 @@ import json
 import logging
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Optional
 
-from .api import LMStudioAPIClient
+ from .api import LMStudioAPIClient
 
 if TYPE_CHECKING:
     import lmstudio

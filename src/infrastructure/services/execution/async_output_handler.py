@@ -31,7 +31,7 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any, Callable, Dict, List, Optional, TypeVar
 
-import numpy as np
+ import numpy as np
 
 logger = logging.getLogger(__name__)
 

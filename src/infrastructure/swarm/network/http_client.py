@@ -21,7 +21,7 @@ Decomposed into mixins for sync, async, and retry logic.
 """
 
 
-from typing import Any
+ from typing import Any
 
 from src.infrastructure.swarm.network.http.connection import HTTPConnection
 from src.infrastructure.swarm.network.http.retry_logic import RetryHTTPMixin

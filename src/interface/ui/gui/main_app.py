@@ -27,7 +27,7 @@ from collections.abc import Callable
 from tkinter import ttk
 from typing import Any, Self
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .agent_dashboard import AgentDashboard
 from .agent_manager import AgentManager

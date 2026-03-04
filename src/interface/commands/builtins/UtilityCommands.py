@@ -42,9 +42,9 @@ def register_utility_commands(registry: CommandRegistry) -> None:
         description="Get detailed memory usage",
         usage="/memory",
         aliases=["mem", "ram"],
-    )
+        )
     def cmd_memory(ctx: CommandContext) -> CommandResult:
-import psutil
+        import psutil
         
         memory = psutil.virtual_memory()
         process = psutil.Process()

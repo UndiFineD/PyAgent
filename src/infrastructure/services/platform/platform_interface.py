@@ -21,7 +21,7 @@ Delegates to modularized sub-packages in src/infrastructure/platform/.
 """
 
 
-from typing import Optional
+ from typing import Optional
 
 from .base import Platform
 from .cpu import CpuPlatform

@@ -4,7 +4,7 @@
 from .mixins.WorkspaceAuditorMixin import WorkspaceAuditorMixin
 from .mixins.StubDetectorMixin import StubDetectorMixin
 
-from src.core.rust_bridge import RustBridge
+ from src.core.rust_bridge import RustBridge
 
 class CodeHealthAuditor(WorkspaceAuditorMixin, StubDetectorMixin):
     """Phase 316: Performs static analysis to detect technical debt and quality issues."""

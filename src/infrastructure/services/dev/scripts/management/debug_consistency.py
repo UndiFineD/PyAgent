@@ -19,9 +19,9 @@ Debug script to check for consistency in _record calls across the workspace.
 """
 
 
-import os
+ import os
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

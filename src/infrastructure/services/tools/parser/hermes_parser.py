@@ -25,7 +25,7 @@ import json
 import re
 from typing import Optional, Tuple
 
-from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
+ from .base import (StreamingToolState, ToolCall, ToolParser, ToolParseResult,
                    ToolParserType)
 
 

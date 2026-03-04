@@ -6,7 +6,7 @@ from __future__ import annotations
 
 """Mixin for RAG-based context retrieval."""
 
-import logging
+ import logging
 
 
 class ContextRAGMixin:

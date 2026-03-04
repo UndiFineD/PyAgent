@@ -23,7 +23,7 @@ from dataclasses import dataclass, asdict
 from datetime import datetime, timedelta
 from urllib.parse import urlparse
 
-from src.core.base.logic.core.base_core import BaseCore
+ from src.core.base.logic.core.base_core import BaseCore
 
 
 @dataclass

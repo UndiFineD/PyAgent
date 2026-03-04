@@ -16,7 +16,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Compression and decompression utilities for tensorizer."""
 
-from .config import CompressionType
+ from .config import CompressionType
 
 
 def compress_data(
@@ -46,7 +46,7 @@ def compress_data(
             return data
 
     if compression == CompressionType.GZIP:
-import gzip
+        import gzip
 
         return gzip.compress(data, compresslevel=level)
 

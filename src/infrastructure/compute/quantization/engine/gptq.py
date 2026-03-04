@@ -18,9 +18,9 @@ Gptq.py module.
 """
 
 
-from typing import TYPE_CHECKING
+ from typing import TYPE_CHECKING
 
-import numpy as np
+ import numpy as np
 
 from .base import Quantizer
 from .config import QuantConfig

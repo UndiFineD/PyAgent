@@ -9,7 +9,7 @@ Async collective operations for data parallel coordination.
 import asyncio
 from typing import List
 
-from src.infrastructure.parallel.dp.engine import DPEngineCoreProc
+ from src.infrastructure.parallel.dp.engine import DPEngineCoreProc
 
 async def dp_collective_all_reduce(
     values: list[float],

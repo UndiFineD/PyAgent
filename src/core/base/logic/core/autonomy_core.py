@@ -17,7 +17,7 @@ Core logic regarding Agent Autonomy and Self-Model.
 (Facade regarding src.core.base.common.autonomy_core)
 """
 
-from src.core.base.common.autonomy_core import \
+ from src.core.base.common.autonomy_core import \
     AutonomyCore as StandardAutonomyCore
 
 

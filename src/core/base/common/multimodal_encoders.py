@@ -14,7 +14,7 @@
 
 """Multimodal encoders logic."""
 
-from typing import List, Optional, Tuple, Union
+ from typing import List, Optional, Tuple, Union
 
 try:
     import rust_core as rc

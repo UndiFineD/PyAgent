@@ -5,6 +5,8 @@ from __future__ import annotations
 
 from typing import Any, TYPE_CHECKING, TypeVar, Dict
 import logging
+from pathlib import Path
+import asyncio
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
@@ -25,16 +27,13 @@ class FleetDelegationMixin:
             return f"Error: Agent {agent_type} not found in Fleet."
 
         if agent_type in self.agents:
-            sub_agent = self.agents[agent_type]
-            if target_file:
-from pathlib import Path
-                sub_agent.file_path = Path(target_file)
+                sub_agent = self.agents[agent_type]
+                if target_file:
+                    sub_agent.file_path = Path(target_file)
 
-            # Execute via improve_content or similar primary entrypoint
-            res = sub_agent.improve_content(prompt)
-import asyncio
-            if asyncio.iscoroutine(res):
-                return await res
-            return res
-
+                # Execute via improve_content or similar primary entrypoint
+                res = sub_agent.improve_content(prompt)
+                if asyncio.iscoroutine(res):
+                    return await res
+                return res
         return f"Error: Agent {agent_type} not found in Fleet."

@@ -40,17 +40,17 @@ class ReportingAgent(BaseAgent):
         logging.info("ReportingAgent: Initiating dashboard generation workflow...")
         
         # Load required agents if not present
-from src.logic.agents.cognitive.MemoryConsolidationAgent import MemoryConsolidationAgent
-from src.observability.stats.TransparencyAgent import TransparencyAgent
-from src.logic.agents.development.SpecToolAgent import SpecToolAgent
-from src.logic.agents.system.KernelAgent import KernelAgent
-from src.logic.agents.development.PullRequestAgent import PRAgent
-from src.logic.agents.system.ConfigAgent import ConfigAgent
-from src.logic.agents.development.TestAgent import TestAgent
-from src.logic.agents.intelligence.BrowsingAgent import BrowsingAgent
-from src.logic.agents.system.MCPAgent import MCPAgent
-from src.logic.agents.development.ToolEvolutionAgent import ToolEvolutionAgent
-from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
+        from src.logic.agents.cognitive.MemoryConsolidationAgent import MemoryConsolidationAgent
+        from src.observability.stats.TransparencyAgent import TransparencyAgent
+        from src.logic.agents.development.SpecToolAgent import SpecToolAgent
+        from src.logic.agents.system.KernelAgent import KernelAgent
+        from src.logic.agents.development.PullRequestAgent import PRAgent
+        from src.logic.agents.system.ConfigAgent import ConfigAgent
+        from src.logic.agents.development.TestAgent import TestAgent
+        from src.logic.agents.intelligence.BrowsingAgent import BrowsingAgent
+        from src.logic.agents.system.MCPAgent import MCPAgent
+        from src.logic.agents.development.ToolEvolutionAgent import ToolEvolutionAgent
+        from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
         
         self.fleet.register_agent("Consolidator", MemoryConsolidationAgent, str(self.workspace_root / "src/logic/agents/cognitive/MemoryConsolidationAgent.py"))
         self.fleet.register_agent("Transparency", TransparencyAgent, str(self.workspace_root / "src/observability/stats/TransparencyAgent.py"))
@@ -108,8 +108,8 @@ from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
 
 if __name__ == "__main__":
     # Local test
-import asyncio
-from src.infrastructure.fleet.FleetManager import FleetManager
+    import asyncio
+    from src.infrastructure.fleet.FleetManager import FleetManager
     f = FleetManager()
     agent = ReportingAgent(f)
     print(asyncio.run(agent.generate_dashboard()))

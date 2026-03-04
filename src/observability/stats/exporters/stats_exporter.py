@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

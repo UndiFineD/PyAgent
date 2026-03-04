@@ -41,7 +41,7 @@ class FleetExecutionCore:
         if ethics_report["status"] == "rejected":
             logging.error(f"Ethics Review REJECTED: {ethics_report['violations']}")
             # Fire-and-forget signal (it's sync but emit is usually async-safe or handled)
-import asyncio
+            import asyncio
             try:
                 loop = asyncio.get_running_loop()
                 loop.create_task(self.fleet.signals.emit(

@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Facade for LoRA Manager modular implementation."""
 
-from .lora import (
+ from .lora import (
     LoRATarget,
     LoRAConfig,
     LoRAModelState,

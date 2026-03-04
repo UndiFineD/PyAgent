@@ -27,7 +27,7 @@ import os
 import subprocess
 from typing import Any, Optional, TypedDict
 
-from src.core.base.common.base_interfaces import ContextRecorderInterface
+ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class ShellCheckIssue(TypedDict):

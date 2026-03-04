@@ -19,9 +19,9 @@ Supports weighted voting and tie-breaking algorithms.
 """
 
 
-from typing import Dict, List, Optional
+ from typing import Dict, List, Optional
 
-from .base_core import BaseCore
+ from .base_core import BaseCore
 
 try:
     import rust_core as rc

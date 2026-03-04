@@ -12,7 +12,7 @@ import time
 from collections import deque
 from typing import Any, Dict, List, Optional
 
-from src.infrastructure.parallel.dp.types import (
+ from src.infrastructure.parallel.dp.types import (
     DPConfig,
     WorkerState,
     WorkerHealth,

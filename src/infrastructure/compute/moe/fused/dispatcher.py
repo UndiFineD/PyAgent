@@ -18,9 +18,9 @@ Dispatcher.py module.
 """
 
 
-from typing import Callable
+ from typing import Callable
 
-import numpy as np
+ import numpy as np
 
 
 class SparseDispatcher:

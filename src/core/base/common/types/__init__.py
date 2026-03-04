@@ -16,7 +16,7 @@ from __future__ import annotations
 """Domain types for the PyAgent core architecture."""
 
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .accessibility_issue import AccessibilityIssue  # noqa: F401
 from .accessibility_issue_type import AccessibilityIssueType  # noqa: F401

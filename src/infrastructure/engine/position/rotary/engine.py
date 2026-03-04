@@ -16,7 +16,7 @@
 Engine.py module.
 """
 
-from typing import Any, Dict, List, Optional, Tuple, Union
+ from typing import Any, Dict, List, Optional, Tuple, Union
 
 from .base import RotaryEmbeddingBase
 from .config import RoPEConfig, RoPEScalingType, RoPEVariant

@@ -18,7 +18,7 @@ Pooling core.py module.
 """
 
 
-import re
+ import re
 
 
 class PoolingCore:

@@ -21,7 +21,7 @@ Delegates to modularized sub-packages in src/infrastructure/engine/request_queue
 """
 
 
-from .request_queue import (DeadlineQueue, FairQueue, FCFSQueue, MLFQueue,
+ from .request_queue import (DeadlineQueue, FairQueue, FCFSQueue, MLFQueue,
                             PriorityQueue, QueuedRequest, RequestPriority,
                             RequestQueue, RequestQueueManager, RequestStatus,
                             SchedulingPolicy, create_request_queue)

@@ -20,7 +20,7 @@ Contains pure logic for tallying votes, handling ties, and selecting winners.
 """
 
 
-from src.core.base.common import ConsensusCore
+ from src.core.base.common import ConsensusCore
 
 
 class StandardConsensusCore(ConsensusCore):

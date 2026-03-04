@@ -6,9 +6,9 @@ Tool schema adapter for MCP and OpenAI formats.
 """
 
 
-from typing import Any, Dict, List
+ from typing import Any, Dict, List
 
-from .models import ToolSchema
+ from .models import ToolSchema
 
 
 class SchemaAdapter:

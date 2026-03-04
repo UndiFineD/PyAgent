@@ -7,7 +7,7 @@ Encapsulates ADB commands for UI testing.
 import subprocess
 from typing import List, Optional
 
-from src.core.base.interfaces import ContextRecorderInterface
+ from src.core.base.interfaces import ContextRecorderInterface
 
 class AndroidCore:
     @staticmethod

@@ -9,7 +9,7 @@ from src.version import VERSION
 import sys
 import tkinter as tk
 
-from pathlib import Path
+ from pathlib import Path
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent
@@ -18,7 +18,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.classes.gui.MainApp import PyAgentGUI
+ from src.classes.gui.MainApp import PyAgentGUI
 
 
 def main() -> None:

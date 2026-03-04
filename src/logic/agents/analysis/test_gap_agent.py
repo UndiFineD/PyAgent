@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_coder.py"""
 
 
-import ast
+ import ast
 
 from src.core.base.common.types.test_gap import TestGap
 from src.core.base.lifecycle.version import VERSION

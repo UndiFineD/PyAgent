@@ -46,9 +46,12 @@ class Executor(ABC):
     @classmethod
     def get_class(cls, backend: ExecutorBackend) -> type:
         """Get executor class for backend (factory pattern)."""
-from src.infrastructure.executor.multiproc.uniproc import UniprocExecutor
-from src.infrastructure.executor.multiproc.multiproc_logic import MultiprocExecutor
-from src.infrastructure.executor.multiproc.distributed import DistributedExecutor
+        # imports are here to avoid circular dependencies when module is
+        # imported; they are intentionally local so that importing the
+        # base class doesn't automatically pull in the concrete executors.
+        from src.infrastructure.executor.multiproc.uniproc import UniprocExecutor
+        from src.infrastructure.executor.multiproc.multiproc_logic import MultiprocExecutor
+        from src.infrastructure.executor.multiproc.distributed import DistributedExecutor
 
         if backend == ExecutorBackend.MULTIPROC:
             return MultiprocExecutor

@@ -25,7 +25,7 @@ from abc import ABC
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Union
 
-from .enums import (ContentPartType, ResponseStatus, ResponseType, RoleType,
+ from .enums import (ContentPartType, ResponseStatus, ResponseType, RoleType,
                     ToolType)
 
 

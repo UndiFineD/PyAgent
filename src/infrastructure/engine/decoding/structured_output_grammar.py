@@ -21,7 +21,7 @@ Inspired by vLLM's v1/structured_output/ backends (xgrammar, guidance, outlines)
 Provides JSON schema, regex, choice, and EBNF grammar constraints for LLM outputs.
 """
 
-from .grammar import (ChoiceGrammar, EBNFGrammar, GrammarCompiler, GrammarRule,
+ from .grammar import (ChoiceGrammar, EBNFGrammar, GrammarCompiler, GrammarRule,
                       JSONSchemaGrammar, RegexGrammar, StructuredOutputGrammar,
                       StructuredOutputManager, StructuredOutputOptions,
                       StructuredOutputsParams, compile_grammar,

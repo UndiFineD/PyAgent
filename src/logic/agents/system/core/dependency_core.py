@@ -20,7 +20,7 @@ Handles pip-audit execution and version pinning.
 import os
 import subprocess
 
-from src.core.base.common.base_interfaces import ContextRecorderInterface
+ from src.core.base.common.base_interfaces import ContextRecorderInterface
 
 
 class DependencyCore:

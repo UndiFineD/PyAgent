@@ -27,7 +27,7 @@ import logging
 import time
 from typing import TYPE_CHECKING, Any, Callable, Iterator, Sequence
 
-import httpx
+ import httpx
 
 from ..llm_backend import LLMBackend
 from .api import LMStudioAPIClient
@@ -140,7 +140,7 @@ class LMStudioBackend(LLMBackend):
                 models = client.llm.list_loaded_models()
             else:
                 import lmstudio
-                    models = lmstudio.list_loaded_models()
+                models = lmstudio.list_loaded_models()
 
             logger.debug(f"Listed {len(models)} models via LM Studio SDK")
             return [m.path for m in models]
@@ -167,7 +167,7 @@ class LMStudioBackend(LLMBackend):
                 models = client.llm.list_downloaded_models()
             else:
                 import lmstudio
-                    models = lmstudio.list_downloaded_models()
+                models = lmstudio.list_downloaded_models()
 
             logger.debug(f"Listed {len(models)} downloaded models via LM Studio SDK")
             return [m.path for m in models]

@@ -14,6 +14,6 @@
 
 """Facade for AuthCore to maintain backward compatibility with AuthManager."""
 
-from .auth_core import AuthCore as AuthManager
+ from .auth_core import AuthCore as AuthManager
 
 __all__ = ["AuthManager"]

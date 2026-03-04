@@ -20,9 +20,9 @@ This module provides data structures to store and manage context information
 derived from multiple repositories.
 """
 
-from dataclasses import dataclass, field
+ from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

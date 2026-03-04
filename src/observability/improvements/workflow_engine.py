@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_improvements.py"""
 
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .improvement import Improvement
 from .transition_result import TransitionResult

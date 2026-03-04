@@ -28,7 +28,7 @@ from src.core.base.common.models.communication_models import CascadeContext
 from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.compute.backend.core.pooling_core import PoolingCore
 
-from .local_context_recorder import LocalContextRecorder
+ from .local_context_recorder import LocalContextRecorder
 
 
 class LLMClient:

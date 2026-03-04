@@ -69,7 +69,7 @@ if TYPE_CHECKING:
     from .workflow_engine import WorkflowEngine
     from .schedule_store import _ScheduleStore
 
-    _LAZY_REGISTRY = {
+_LAZY_REGISTRY = {
     "AccessController": ("src.observability.improvements.access_controller", "AccessController"),
     "AnalysisToolType": ("src.observability.improvements.analysis_tool_type", "AnalysisToolType"),
     "AnalyticsEngine": ("src.observability.improvements.analytics_engine", "AnalyticsEngine"),

@@ -25,7 +25,7 @@ import time
 from pathlib import Path
 from typing import List, Optional, Set
 
-from .core_utils import load_codeignore
+ from .core_utils import load_codeignore
 
 logger = logging.getLogger("pyagent.file_manager")
 

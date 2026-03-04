@@ -25,7 +25,7 @@ This package provides:
 - VRAM estimation
 """
 
-from .model_registry import (  # Enums; Data classes; Core classes; Utilities  # noqa: F401
+ from .model_registry import (  # Enums; Data classes; Core classes; Utilities  # noqa: F401
     ArchitectureDetector, ArchitectureSpec, ModelArchitecture, ModelCapability,
     ModelConfig, ModelInfo, ModelRegistry, QuantizationType, VRAMEstimate,
     VRAMEstimator, detect_architecture, estimate_vram, get_model_info,

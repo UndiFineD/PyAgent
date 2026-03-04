@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 T = TypeVar("T")
 
-import time
+ import time
 
 
 class DispatchMode(Enum):

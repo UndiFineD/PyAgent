@@ -22,7 +22,7 @@ import hashlib
 import json
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .enums import TestSourceType
 from .models import (AggregatedResult, ContractTest, TestStatus,

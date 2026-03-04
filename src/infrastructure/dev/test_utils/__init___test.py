@@ -11,27 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Tests for __init__
-Auto-generated test template - expand with actual test cases
-"""
 
-import pytest
 import sys
 from pathlib import Path
+from typing import TYPE_CHECKING
+
+ import pytest
 
 # Add src to path for imports
-src_path = Path(__file__).parent.parent
+src_path = Path(__file__).parent.parent.parent
 if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
 
-try:
-    from infrastructure.dev.test_utils.__init__ import *
-except ImportError as e:
-    pytest.skip(f"Cannot import module: {e}", allow_module_level=True)
+if TYPE_CHECKING:
+    from infrastructure.dev import test_utils as test_utils_init
+else:
+    try:
+        from infrastructure.dev import test_utils
+    except ImportError as e:
+        pytest.skip(f"Cannot import module: {e}", allow_module_level=True)
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

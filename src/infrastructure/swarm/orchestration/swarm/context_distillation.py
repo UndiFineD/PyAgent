@@ -19,7 +19,7 @@ Context distillation.py module.
 import logging
 from typing import Any, Dict, Optional, Tuple
 
-import numpy as np
+ import numpy as np
 
 logger = logging.getLogger(__name__)
 

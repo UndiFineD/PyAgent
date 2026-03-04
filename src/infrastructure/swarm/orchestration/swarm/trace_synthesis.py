@@ -20,7 +20,7 @@ import logging
 from collections import defaultdict
 from typing import Any, Dict, List
 
-from src.infrastructure.swarm.orchestration.swarm.audit_logger import \
+ from src.infrastructure.swarm.orchestration.swarm.audit_logger import \
     SwarmAuditLogger
 
 logger = logging.getLogger(__name__)

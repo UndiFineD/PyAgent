@@ -17,7 +17,7 @@
 N-gram Proposer Package - Speculative decoding via pattern matching.
 """
 
-from src.infrastructure.engine.sampling.ngram.factory import (
+ from src.infrastructure.engine.sampling.ngram.factory import (
     create_ngram_proposer,
 )
 from src.infrastructure.engine.sampling.ngram.index import (

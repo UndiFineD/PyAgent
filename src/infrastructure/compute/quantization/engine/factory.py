@@ -18,11 +18,11 @@ Factory.py module for quantization orchestration.
 """
 
 
-from typing import TYPE_CHECKING
+ from typing import TYPE_CHECKING
 
-import numpy as np
+ import numpy as np
 
-from .config import QuantConfig, QuantScheme, QuantStrategy
+ from .config import QuantConfig, QuantScheme, QuantStrategy
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray
@@ -46,13 +46,13 @@ def quantize_tensor(
     )
 
     if scheme.lower() == "awq":
-from .awq import AWQQuantizer
+        from .awq import AWQQuantizer
         quantizer = AWQQuantizer(config)
     elif scheme.lower() == "gptq":
         from .gptq import GPTQQuantizer
         quantizer = GPTQQuantizer(config)
     else:
         from .linear import LinearQuantizer
-            quantizer = LinearQuantizer(config)
+        quantizer = LinearQuantizer(config)
 
     return quantizer.quantize(tensor)

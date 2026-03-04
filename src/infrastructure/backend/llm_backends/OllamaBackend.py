@@ -14,9 +14,12 @@ from __future__ import annotations
 # limitations under the License.
 
 
-from src.core.base.Version import VERSION
 import logging
-from .LLMBackend import LLMBackend
+import os
+import time
+
+from src.core.base.Version import VERSION  # type: ignore
+from .llm_backend import LLMBackend
 
 __version__ = VERSION
 
@@ -31,11 +34,21 @@ class OllamaBackend(LLMBackend):
         system_prompt: str = "You are a helpful assistant.",
         **kwargs,
     ) -> str:
+        """
+        Send a chat request to the Ollama LLM backend and return the response.
+
+        Args:
+            prompt: The user prompt to send to the model.
+            model: The model name to use for inference.
+            system_prompt: The system prompt to set the assistant's behavior.
+            **kwargs: Additional arguments including base_url and timeout_s.
+
+        Returns:
+            The model's response as a string, or an empty string on failure.
+        """
         if not self._is_working("ollama"):
             logging.debug("Ollama skipped due to connection cache.")
             return ""
-
-import os
 
         base_url = (
             kwargs.get("base_url")
@@ -51,7 +64,6 @@ import os
         }
 
         timeout_s = kwargs.get("timeout_s", 120)
-        import time
         start_t = time.time()
 
         try:
@@ -67,6 +79,11 @@ import os
             logging.debug(f"Ollama call failed: {e}")
             self._update_status("ollama", False)
             self._record(
-                "ollama", model, prompt, f"ERROR: {str(e)}", system_prompt=system_prompt, latency_s=time.time() - start_t
+                "ollama", 
+                model,
+                prompt,
+                f"ERROR: {str(e)}",
+                system_prompt=system_prompt,
+                latency_s=time.time() - start_t
             )
             return ""

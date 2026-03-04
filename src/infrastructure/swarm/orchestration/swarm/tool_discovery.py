@@ -19,7 +19,7 @@ Tool discovery.py module.
 import logging
 from typing import Any, Dict, Optional
 
-from src.infrastructure.engine.models.similarity import \
+ from src.infrastructure.engine.models.similarity import \
     EmbeddingSimilarityService
 
 logger = logging.getLogger(__name__)

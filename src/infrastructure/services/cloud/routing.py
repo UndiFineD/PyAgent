@@ -28,7 +28,7 @@ from datetime import datetime, timedelta
 from enum import Enum
 from typing import Any, Dict, List, Never, NoReturn, Optional
 
-from .base import CloudProviderBase, InferenceRequest
+ from .base import CloudProviderBase, InferenceRequest
 
 logger: logging.Logger = logging.getLogger(__name__)
 

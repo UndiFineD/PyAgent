@@ -23,9 +23,9 @@ Base class for incremental detokenization.
 from abc import ABC, abstractmethod
 from typing import List, Optional, Tuple, Union
 
-from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
+ from src.infrastructure.engine.tokenization.detokenizer.stop_checker import \
     StopChecker
-from src.infrastructure.engine.tokenization.detokenizer.types import (
+    from src.infrastructure.engine.tokenization.detokenizer.types import (
     DetokenizeResult,
     TokenizerLike,
 )

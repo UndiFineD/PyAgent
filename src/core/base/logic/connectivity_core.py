@@ -36,17 +36,17 @@ class BinaryTransport:
     @staticmethod
     def pack(data: Any, compress: bool = False) -> bytes:
         """Pack data into binary format."""
-import msgpack
+        import msgpack
         packed = msgpack.packb(data, use_bin_type=True)
         if compress:
-import zlib
+        import zlib
             packed = zlib.compress(packed)
         return packed
 
     @staticmethod
     def unpack(data: bytes, compressed: bool = False) -> Any:
         """Unpack data from binary format."""
-import msgpack
+        import msgpack
         if compressed:
             import zlib
             data = zlib.decompress(data)

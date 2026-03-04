@@ -39,5 +39,5 @@ def store_memory(category: str, name: str, data: str) -> str:
     return memory_agent.store_mirix_memory(category, name, data)
 
 if __name__ == "__main__":
-import uvicorn
+    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

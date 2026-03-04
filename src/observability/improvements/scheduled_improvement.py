@@ -17,11 +17,11 @@ from __future__ import annotations
 """Auto-extracted class from agent_improvements.py"""
 
 
-from dataclasses import dataclass, field
+ from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .schedule_status import ScheduleStatus
+ from .schedule_status import ScheduleStatus
 
 __version__ = VERSION
 

@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from __future__ import annotations
 """
 Cloud provider implementations.
@@ -7,7 +8,7 @@ for various cloud AI providers.
 """
 
 
-from typing import TYPE_CHECKING
+ from typing import TYPE_CHECKING
 
 __all__ = [
     "GeminiConnector",
@@ -20,34 +21,18 @@ __all__ = [
 def __getattr__(name: str):
     """Lazy load provider implementations."""
     if name == "GeminiConnector":
-from .gemini import GeminiConnector
+        from .gemini import GeminiConnector
         return GeminiConnector
     if name == "AWSBedrockConnector":
-from .bedrock import AWSBedrockConnector
+        from .bedrock import AWSBedrockConnector
         return AWSBedrockConnector
     if name == "GroqConnector":
-from .groq import GroqConnector
+        from .groq import GroqConnector
         return GroqConnector
     if name == "AzureAIConnector":
-from .azure import AzureAIConnector
+        from .azure import AzureAIConnector
         return AzureAIConnector
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
-    if name == "GeminiConnector":
-from .gemini import GeminiConnector
-        return GeminiConnector
-    
-    if name == "AWSBedrockConnector":
-from .bedrock import AWSBedrockConnector
-        return AWSBedrockConnector
-    
-    if name == "GroqConnector":
-from .groq import GroqConnector
-        return GroqConnector
-    
-    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
-
 
 if TYPE_CHECKING:
-    from .gemini import GeminiConnector
-    from .bedrock import AWSBedrockConnector
-    from .groq import GroqConnector
+    pass

@@ -18,7 +18,7 @@ PackKV: LLM-Aware Lossy Compression for KV Cache.
 Ref: arXiv:2512.24449
 """
 
-from typing import Any, Dict, List, Optional
+ from typing import Any, Dict, List, Optional
 
 from .data_classes import CacheGroupSpec
 from .managers import SingleTypeKVCacheManager
@@ -37,7 +37,7 @@ class PackKVManager(SingleTypeKVCacheManager):
         self.compression_metadata: Dict[int, Dict[str, Any]] = {}
 
     def get_num_blocks_needed(self, num_tokens: int) -> int:
-from math import ceil
+        from math import ceil
 
         # PackKV typically uses 4-bit quantization,
         # allowing 4x more tokens per physical block if stored densely.

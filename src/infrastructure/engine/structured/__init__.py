@@ -27,10 +27,10 @@ This module provides grammar-based token constraints for:
 - Function call validation
 """
 
-from src.infrastructure.engine.structured.grammar_engine import (
+ from src.infrastructure.engine.structured.grammar_engine import (
     ChoiceGrammar, EBNFGrammar, FSMState, GrammarEngine, JsonSchemaGrammar,
     RegexGrammar, TokenMask)
-from src.infrastructure.engine.structured.logit_processor import (
+    from src.infrastructure.engine.structured.logit_processor import (
     BitmaskLogitProcessor,
     CompositeLogitProcessor,
     ConstrainedLogitProcessor,

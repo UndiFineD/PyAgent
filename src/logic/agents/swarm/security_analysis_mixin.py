@@ -21,7 +21,7 @@ from typing import Dict, List, Any, Optional, Set
 from dataclasses import dataclass, field
 from datetime import datetime
 
-from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
+ from src.logic.agents.swarm.orchestrator_work_pattern_mixin import OrchestratorWorkPatternMixin
 
 logger = logging.getLogger(__name__)
 

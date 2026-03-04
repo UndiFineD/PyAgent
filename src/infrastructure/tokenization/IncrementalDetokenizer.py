@@ -4,7 +4,7 @@ Incremental detokenization for streaming text generation.
 Refactored to modular package structure for Phase 317.
 """
 
-from src.infrastructure.tokenization.detokenizer import (
+ from src.infrastructure.tokenization.detokenizer import (
     TokenizerLike,
     DetokenizeResult,
     StopChecker,

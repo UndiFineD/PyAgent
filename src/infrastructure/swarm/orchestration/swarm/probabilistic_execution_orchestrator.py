@@ -22,7 +22,7 @@ Probabilistic execution orchestrator.py module.
 import logging
 from typing import TYPE_CHECKING, Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -46,7 +46,7 @@ class ProbabilisticExecutionOrchestrator:
         logging.info(f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations.")
 
         results = []
-import asyncio
+        import asyncio
 
         loop = None
         try:

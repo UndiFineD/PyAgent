@@ -5,7 +5,7 @@ Tensorizer: High-performance model serialization and loading.
 (Facade for modular implementation)
 """
 
-from .core import (
+ from .core import (
     TensorizerConfig,
     CompressionType,
     TensorDtype,

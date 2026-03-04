@@ -21,7 +21,7 @@ Signal core.py module.
 from datetime import datetime
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -34,7 +34,7 @@ class SignalCore:
 
     def create_event(self, signal_name: str, data: Any, sender: str) -> dict[str, Any]:
         """Creates a standardized signal event object."""
-import time
+        import time
 
         return {
             "signal": signal_name,

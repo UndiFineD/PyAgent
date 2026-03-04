@@ -24,9 +24,9 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .knowledge_transfer_core import KnowledgeTransferCore
+ from .knowledge_transfer_core import KnowledgeTransferCore
 
 __version__ = VERSION
 

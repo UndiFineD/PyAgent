@@ -263,7 +263,7 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         # Plan token positions (ragged layout)
         def get_positions() -> Dict[str, Tuple[int, int]]:
             # Accumulate positions
-        from functools import reduce
+            from functools import reduce
             initial: Tuple[int, Dict[str, Tuple[int, int]]] = (0, {})
 
             def acc_pos(state: Tuple[int, Dict[str, Tuple[int, int]]], req: BatchRequest) -> Tuple[int, Dict[str, Tuple[int, int]]]:

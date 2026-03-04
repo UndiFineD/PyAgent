@@ -16,7 +16,7 @@
 Paged attention engine.py module.
 """
 
-from .paged_attention import (AttentionConfig, AttentionMetadata,
+ from .paged_attention import (AttentionConfig, AttentionMetadata,
                               AttentionType, BlockTable, KVCacheDtype,
                               PagedAttentionEngine, PagedAttentionOps,
                               PagedKVCache, SlotMapping,

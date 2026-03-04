@@ -6,7 +6,7 @@ Multimodal input processing infrastructure.
 Phase 26: Unified handling for image, video, audio, and text modalities.
 """
 
-from .MultiModalProcessor import (
+ from .MultiModalProcessor import (
     ModalityType,
     MultiModalConfig,
     MultiModalData,

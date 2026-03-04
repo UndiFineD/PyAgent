@@ -5,7 +5,7 @@ Network Utilities Package - Phase 20
 Network operation utilities including IP detection and port management.
 """
 
-from .NetworkUtils import (
+ from .NetworkUtils import (
     # IP Detection
     get_ip,
     get_loopback_ip,

@@ -22,9 +22,9 @@ Copilot cli backend.py module.
 import logging
 import subprocess
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .llm_backend import LLMBackend
+ from .llm_backend import LLMBackend
 
 __version__ = VERSION
 

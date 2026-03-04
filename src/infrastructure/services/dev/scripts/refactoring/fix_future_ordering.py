@@ -16,9 +16,9 @@ from __future__ import annotations
 """Script for ensuring __future__ imports appear before any logic category markers."""
 
 
-import os
+ import os
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

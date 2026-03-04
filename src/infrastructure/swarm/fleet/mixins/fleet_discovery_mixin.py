@@ -10,7 +10,7 @@ Fleet discovery mixin.py module.
 import os
 from typing import List
 
-from src.infrastructure.swarm.network.lan_discovery import (LANDiscovery,
+ from src.infrastructure.swarm.network.lan_discovery import (LANDiscovery,
                                                             PeerInfo)
 from src.observability.structured_logger import StructuredLogger
 

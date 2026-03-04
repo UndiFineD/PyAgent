@@ -35,7 +35,7 @@ from threading import Thread
 from typing import Any
 from uuid import uuid4
 
-from psutil import virtual_memory
+ from psutil import virtual_memory
 
 # ============================================================================
 # Constants and configuration

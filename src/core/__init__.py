@@ -16,7 +16,7 @@ from __future__ import annotations
 Core package.
 """
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

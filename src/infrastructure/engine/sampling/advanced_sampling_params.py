@@ -45,7 +45,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Set, Tuple, Union
 
-import numpy as np
+ import numpy as np
 
 # =============================================================================
 # Enums
