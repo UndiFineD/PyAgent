@@ -15,7 +15,7 @@ from typing import (
     Optional,
 )
 
-from src.core.rust_bridge import RustBridge
+ from src.core.rust_bridge import RustBridge
 
 logger = logging.getLogger(__name__)
 

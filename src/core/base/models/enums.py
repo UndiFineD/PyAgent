@@ -15,7 +15,7 @@ from __future__ import annotations
 
 """Enum definitions for PyAgent models."""
 
-from enum import Enum, auto
+ from enum import Enum, auto
 
 class AgentState(Enum):
     """Agent lifecycle states."""

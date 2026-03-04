@@ -23,7 +23,7 @@ import math
 import threading
 from typing import Any, List, Optional, Union
 
-import numpy as np
+ import numpy as np
 
 from .config import LogprobEntry, LogprobFormat, TopLogprob
 from .storage import FlatLogprobs

@@ -23,7 +23,7 @@ Modules:
     MoEConfig: Configuration for MoE layers
 """
 
-from src.infrastructure.compute.moe.expert_router import (AdaptiveRouter,
+ from src.infrastructure.compute.moe.expert_router import (AdaptiveRouter,
                                                           ExpertChoiceRouter,
                                                           RouterConfig,
                                                           RouterOutput,

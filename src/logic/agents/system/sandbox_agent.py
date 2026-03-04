@@ -19,7 +19,7 @@ Prevents side effects on the host system by using containerized or WASM environm
 """
 
 
-import logging
+ import logging
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent

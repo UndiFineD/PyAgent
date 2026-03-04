@@ -6,7 +6,7 @@ Tiktoken tokenizer implementation.
 """
 
 
-from typing import List, Optional, Sequence
+ from typing import List, Optional, Sequence
 
 from .models import TokenizerConfig
 from .base import BaseTokenizer

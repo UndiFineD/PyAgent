@@ -20,7 +20,7 @@ from __future__ import annotations
 import contextlib
 import logging
 
-import requests
+ import requests
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
@@ -43,7 +43,7 @@ def send_slack_notification(webhook_url: str, message: str) -> bool:
 
         # Intelligence: Record outgoing notification (Phase 108)
         with contextlib.suppress(Exception):
-from src.infrastructure.compute.backend.local_context_recorder import \
+            from src.infrastructure.compute.backend.local_context_recorder import \
                 LocalContextRecorder
 
             recorder = LocalContextRecorder()

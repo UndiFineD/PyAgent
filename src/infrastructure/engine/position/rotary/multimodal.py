@@ -16,13 +16,13 @@
 Multimodal.py module.
 """
 
-from typing import Any, Tuple
+ from typing import Any, Tuple
 
 from .base import HAS_TORCH, RotaryEmbeddingBase
 from .config import RoPEConfig
 
 if HAS_TORCH:
-import torch
+    import torch
 else:
     torch = None  # pylint: disable=invalid-name
 

@@ -16,7 +16,7 @@ from __future__ import annotations
 """Command and script auditing logic for SecurityCore."""
 
 
-import re
+ import re
 
 
 class SecurityAuditorMixin:

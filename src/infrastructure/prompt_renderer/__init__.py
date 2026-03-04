@@ -4,7 +4,7 @@
 Unified prompt preparation and rendering system.
 """
 
-from .models import (
+ from .models import (
     EmbeddingInput,
     InputType,
     MultimodalInput,

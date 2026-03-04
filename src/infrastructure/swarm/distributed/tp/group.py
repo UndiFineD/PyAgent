@@ -22,7 +22,7 @@ import logging
 from contextlib import contextmanager
 from typing import Any
 
-from .coordinator import GroupCoordinator
+ from .coordinator import GroupCoordinator
 
 logger = logging.getLogger(__name__)
 

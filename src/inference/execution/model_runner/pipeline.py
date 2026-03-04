@@ -19,7 +19,7 @@
 import asyncio
 from typing import Callable, Optional
 
-from .config import SchedulerOutput
+ from .config import SchedulerOutput
 
 
 class ExecutionPipeline:

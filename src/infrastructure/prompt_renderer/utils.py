@@ -9,7 +9,7 @@ Utility functions and loaders for prompt rendering.
 import base64
 from typing import Any, Dict, List, Optional, Tuple
 
-from .models import (
+ from .models import (
     EmbeddingInput,
     PromptConfig,
     RenderResult,
@@ -33,7 +33,7 @@ class EmbeddingLoader:
     @classmethod
     def load_base64(cls, data: str, encoding: str = "float32") -> EmbeddingInput:
         """Load embeddings from base64 encoded data."""
-import struct
+        import struct
 
         if encoding not in cls.ENCODINGS:
             raise ValueError(f"Unknown encoding: {encoding}")

@@ -19,7 +19,7 @@
 from pathlib import Path
 from typing import Dict, List, Optional, Union
 
-import numpy as np
+ import numpy as np
 
 from .config import TensorizerConfig
 from .reader import TensorizerReader

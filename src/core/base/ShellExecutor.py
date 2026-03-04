@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 
-from src.core.base.shell import ShellExecutor  # type: ignore
+ from src.core.base.shell import ShellExecutor  # type: ignore
 
 __all__ = ["ShellExecutor"]
 

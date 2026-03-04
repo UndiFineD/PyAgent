@@ -22,7 +22,7 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from src.infrastructure.swarm.orchestration.signals.signal_registry import \
+ from src.infrastructure.swarm.orchestration.signals.signal_registry import \
     SignalRegistry
 
 

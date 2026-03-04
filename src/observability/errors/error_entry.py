@@ -20,7 +20,7 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .error_category import ErrorCategory
 from .error_severity import ErrorSeverity

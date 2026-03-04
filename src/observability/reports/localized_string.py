@@ -17,9 +17,9 @@ from __future__ import annotations
 """Auto-extracted class from generate_agent_reports.py"""
 
 
-from dataclasses import dataclass, field
+ from dataclasses import dataclass, field
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

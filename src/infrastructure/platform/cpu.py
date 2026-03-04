@@ -9,7 +9,7 @@ CPU-only platform implementation.
 import platform
 from typing import List, Set
 
-from .models import (
+ from .models import (
     PlatformType,
     DeviceCapability,
     MemoryInfo,

@@ -106,8 +106,8 @@ class VllmNativeEngine:
         if self._llm:
             # vLLM doesn't have a simple 'off' but we can delete reference 
             # and try to trigger GC or rely on process exit.
-        import gc
-        import torch
+            import gc
+            import torch
             del self._llm
             self._llm = None
             gc.collect()

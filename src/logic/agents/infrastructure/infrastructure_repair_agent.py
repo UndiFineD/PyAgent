@@ -39,7 +39,7 @@ class InfrastructureRepairAgent(BaseAgent):
 
     def audit_environment(self) -> dict:
         """Checks for common environment issues."""
-import importlib.util
+        import importlib.util
 
         issues = []
 

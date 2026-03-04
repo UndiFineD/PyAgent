@@ -25,7 +25,7 @@ import threading
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Optional
 
-from src.core.rust_bridge import RustBridge
+ from src.core.rust_bridge import RustBridge
 
 logger = logging.getLogger(__name__)
 

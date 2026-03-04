@@ -20,7 +20,7 @@ Signal module.py module.
 from datetime import datetime
 from typing import Any
 
-from src.core.base.common.base_modules import BaseModule
+ from src.core.base.common.base_modules import BaseModule
 
 
 class SignalModule(BaseModule):

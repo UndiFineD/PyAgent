@@ -20,9 +20,9 @@ from __future__ import annotations
 import logging
 from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .report_type import ReportType
+ from .report_type import ReportType
 
 __version__ = VERSION
 

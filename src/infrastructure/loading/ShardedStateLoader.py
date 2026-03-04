@@ -311,7 +311,7 @@ class IncrementalShardLoader:
             shard_data = load_file(shard_file)
         except ImportError:
             import torch
-                shard_data = torch.load(shard_file, map_location="cpu", weights_only=True)
+            shard_data = torch.load(shard_file, map_location="cpu", weights_only=True)
         
         with self._lock:
             self._cache[shard_file] = shard_data
@@ -367,7 +367,7 @@ class AsyncShardLoader:
             return load_file(file_path)
         except ImportError:
             import torch
-                return torch.load(file_path, map_location="cpu", weights_only=True)
+            return torch.load(file_path, map_location="cpu", weights_only=True)
     
     def _start_prefetch(self, file_paths: List[str]) -> None:
         """Start prefetching files."""

@@ -20,11 +20,11 @@ import random
 import time
 from typing import Any, List, Optional
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-from .proposals import VerificationResult
+ from .proposals import VerificationResult
 
 
 class TokenVerifier:

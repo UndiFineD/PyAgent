@@ -22,7 +22,7 @@ Llm backend.py module.
 from abc import ABC, abstractmethod
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

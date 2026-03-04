@@ -9,7 +9,7 @@ AMD ROCm platform implementation.
 import logging
 from typing import List, Set, Optional
 
-from .models import (
+ from .models import (
     PlatformType,
     DeviceCapability,
     MemoryInfo,
@@ -41,7 +41,7 @@ class RocmPlatform(Platform):
 
     def _get_torch(self):
         if self._torch is None:
-import torch
+            import torch
             self._torch = torch
         return self._torch
 

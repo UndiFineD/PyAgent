@@ -4,7 +4,7 @@ Core logic for Swarm Economy (Phase 179).
 Handles bidding and GPU priority allocation logic.
 """
 
-from typing import Dict, List, Any
+ from typing import Dict, List, Any
 
 class EconomyCore:
     @staticmethod

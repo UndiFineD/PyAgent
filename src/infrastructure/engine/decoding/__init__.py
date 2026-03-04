@@ -20,7 +20,7 @@ Structured output grammar exports.
 Phase 26: Grammar-constrained decoding infrastructure.
 """
 
-from .structured_output_grammar import (ChoiceGrammar, EBNFGrammar,  # noqa: F401
+ from .structured_output_grammar import (ChoiceGrammar, EBNFGrammar,  # noqa: F401
                                         GrammarCompiler, JSONSchemaGrammar,
                                         RegexGrammar, StructuredOutputGrammar,
                                         StructuredOutputManager,

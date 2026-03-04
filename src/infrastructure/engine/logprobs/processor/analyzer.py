@@ -18,9 +18,9 @@ Analyzer.py module.
 """
 
 
-from typing import Any, Dict, List, Tuple, Union
+ from typing import Any, Dict, List, Tuple, Union
 
-import numpy as np
+ import numpy as np
 
 from .config import LogprobEntry
 from .storage import FlatLogprobs

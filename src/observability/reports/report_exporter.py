@@ -22,7 +22,7 @@ import logging
 import re
 from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .code_issue import CodeIssue
 from .export_format import ExportFormat

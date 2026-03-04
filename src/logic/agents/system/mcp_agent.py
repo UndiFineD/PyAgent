@@ -43,7 +43,7 @@ class MCPAgent:
     def __init__(self, file_path: str) -> None:
         global BaseAgent
         if BaseAgent is None:
-from src.core.base.lifecycle.base_agent import BaseAgent as _BaseAgent
+            from src.core.base.lifecycle.base_agent import BaseAgent as _BaseAgent
             BaseAgent = _BaseAgent
         self._base = BaseAgent(file_path)
 

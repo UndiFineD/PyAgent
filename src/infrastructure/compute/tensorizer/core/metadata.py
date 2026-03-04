@@ -20,7 +20,7 @@ import struct
 from dataclasses import dataclass
 from typing import Tuple
 
-from .config import CompressionType, TensorDtype
+ from .config import CompressionType, TensorDtype
 
 
 @dataclass

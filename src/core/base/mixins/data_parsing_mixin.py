@@ -24,7 +24,7 @@ import html
 import re
 from typing import Any, Optional
 
-from src.core.base.logic.processing.data_parsing_core import DataParsingCore
+ from src.core.base.logic.processing.data_parsing_core import DataParsingCore
 
 
 class DataParsingMixin:

@@ -18,7 +18,7 @@
 # limitations under the License.
 """Unified collection and data structure management core."""
 
-from typing import Any, Dict, Iterable, List, TypeVar
+ from typing import Any, Dict, Iterable, List, TypeVar
 
 T = TypeVar("T")
 

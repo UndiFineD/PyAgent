@@ -19,7 +19,7 @@ Provides backward compatibility for the moved SlashCommands implementation.
 Moved to src/interface/commands/
 """
 
-from .commands import (CommandContext, CommandDefinition, CommandParser,
+ from .commands import (CommandContext, CommandDefinition, CommandParser,
                        CommandRegistry, CommandResult, ParsedCommand,
                        ProcessedPrompt, SlashCommands, command,
                        execute_command, get_slash_commands, parse_commands,

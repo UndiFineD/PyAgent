@@ -25,7 +25,7 @@ import random
 import threading
 from typing import Optional
 
-from src.infrastructure.swarm.parallel.dp.types import (WorkerHealth,
+ from src.infrastructure.swarm.parallel.dp.types import (WorkerHealth,
                                                         WorkerState)
 
 

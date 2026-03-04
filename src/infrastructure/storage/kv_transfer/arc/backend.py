@@ -22,7 +22,7 @@ Backends for block storage in the ARC offloading system.
 import threading
 from abc import ABC, abstractmethod
 
-from src.infrastructure.storage.kv_transfer.arc.types import (BlockHash,
+ from src.infrastructure.storage.kv_transfer.arc.types import (BlockHash,
                                                               BlockState,
                                                               BlockStatus,
                                                               LoadStoreSpec,

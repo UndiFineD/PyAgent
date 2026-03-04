@@ -18,7 +18,7 @@ from __future__ import annotations
 # pylint: disable=too-many-ancestors
 
 
-from src.core.base.common.types.code_language import CodeLanguage
+ from src.core.base.common.types.code_language import CodeLanguage
 
 
 class AgentLanguageMixin:

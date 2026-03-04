@@ -25,7 +25,7 @@ Optimized for fast, context-aware retrieval and embedding management at the agen
 """
 from dataclasses import dataclass
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

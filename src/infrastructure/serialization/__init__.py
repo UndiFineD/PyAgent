@@ -23,7 +23,7 @@ from src.infrastructure.serialization.FastSerializer import (
     from_msgpack,
 )
 
-from src.infrastructure.serialization.MsgSpecSerializer import (
+ from src.infrastructure.serialization.MsgSpecSerializer import (
     # Availability
     is_msgspec_available,
     require_msgspec,

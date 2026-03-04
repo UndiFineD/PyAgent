@@ -26,7 +26,7 @@ Exports:
     - StreamingLogprobs: Streaming accumulator
 """
 
-from .logprobs_processor import (FlatLogprobs, LogprobEntry,  # Utilities  # noqa: F401
+ from .logprobs_processor import (FlatLogprobs, LogprobEntry,  # Utilities  # noqa: F401
                                  LogprobFormat, LogprobsAnalyzer,
                                  LogprobsProcessor, LogprobsResult,
                                  PromptLogprobs, SampleLogprobs,

@@ -38,7 +38,7 @@ from enum import Enum, auto
 from typing import Any
 
 with contextlib.suppress(ImportError):
-import rust_core
+    import rust_core
 
 HAS_RUST = "rust_core" in globals()
 

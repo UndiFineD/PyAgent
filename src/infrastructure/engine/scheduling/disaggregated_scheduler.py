@@ -19,7 +19,7 @@ Disaggregated Scheduler Facade.
 Redirects to the modular implementation in .disaggregated
 """
 
-from .disaggregated import (DCPConfig, DisaggregatedScheduler, HashSelector,
+ from .disaggregated import (DCPConfig, DisaggregatedScheduler, HashSelector,
                             InstanceInfo, InstanceRole, InstanceSelector,
                             KVTransferParams, LeastLoadedSelector,
                             ProxyOrchestrator, RandomSelector,

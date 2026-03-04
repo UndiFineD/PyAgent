@@ -45,7 +45,7 @@ try:
 except ImportError:
     HAS_RUST = False
 
-from .logits_processor_v2 import (BatchUpdate, LogitsProcessor,
+ from .logits_processor_v2 import (BatchUpdate, LogitsProcessor,
                                   MoveDirectionality)
 
 _SMALLEST_LOGIT = float("-inf")

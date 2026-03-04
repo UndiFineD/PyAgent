@@ -17,7 +17,7 @@
 Ensures that the LLM only verbalizes grounded results and never hallucinates new technical facts.
 """
 
-import logging
+ import logging
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.lifecycle.base_agent import BaseAgent

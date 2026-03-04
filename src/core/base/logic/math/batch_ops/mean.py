@@ -15,7 +15,7 @@
 Batch mean calculation operations using available backends.
 """
 
-from typing import Any
+ from typing import Any
 
 try:
     import torch

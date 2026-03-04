@@ -17,7 +17,7 @@ Manager regarding Authentication.
 (Facade regarding src.core.base.common.auth_manager)
 """
 
-from src.core.base.common.auth_manager import \
+ from src.core.base.common.auth_manager import \
     AuthManager as StandardAuthManager
 
 

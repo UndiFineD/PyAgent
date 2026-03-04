@@ -20,9 +20,9 @@ Fast incremental detokenization for HuggingFace fast tokenizers.
 """
 
 
-from typing import List, Optional, Set, Tuple
+ from typing import List, Optional, Set, Tuple
 
-from src.infrastructure.engine.tokenization.detokenizer.base import (
+ from src.infrastructure.engine.tokenization.detokenizer.base import (
     IncrementalDetokenizer,
 )
 from src.infrastructure.engine.tokenization.detokenizer.stop_checker import (

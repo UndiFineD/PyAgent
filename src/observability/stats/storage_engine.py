@@ -19,7 +19,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from .observability_core import StatsSnapshot
+ from .observability_core import StatsSnapshot
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -223,6 +223,6 @@ class StatsCompressor:
         try:
             return json.loads(payload.decode("utf-8"))
         except json.JSONDecodeError as e:  # pylint: disable=broad-exception-caught, unused-variable
-        import traceback
+            import traceback
             traceback.print_exc()
             return payload

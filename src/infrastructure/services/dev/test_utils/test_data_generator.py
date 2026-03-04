@@ -21,7 +21,7 @@ import json
 from datetime import datetime
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -44,7 +44,7 @@ class TestDataGenerator:
         """
         self.seed = seed
         if seed:
-import random
+            import random
 
             random.seed(seed)
 

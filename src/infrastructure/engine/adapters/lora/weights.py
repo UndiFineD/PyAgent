@@ -18,14 +18,14 @@ from __future__ import annotations
 """LoRA layer weight implementations."""
 
 
-from dataclasses import dataclass
+ from dataclasses import dataclass
 
-import numpy as np
+ import numpy as np
 
 try:
     from numpy.typing import NDArray
 except ImportError:
-from typing import Any
+    from typing import Any
 
     NDArray = Any
 

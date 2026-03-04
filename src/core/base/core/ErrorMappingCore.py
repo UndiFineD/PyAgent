@@ -13,7 +13,7 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Dict
+ from typing import Dict
 
 class ErrorMappingCore:
     """

@@ -20,9 +20,9 @@ Factory for incremental detokenizers.
 """
 
 
-from typing import List, Optional, Set, Tuple
+ from typing import List, Optional, Set, Tuple
 
-from src.infrastructure.engine.tokenization.detokenizer.base import (
+ from src.infrastructure.engine.tokenization.detokenizer.base import (
     IncrementalDetokenizer,
 )
 from src.infrastructure.engine.tokenization.detokenizer.fast import (

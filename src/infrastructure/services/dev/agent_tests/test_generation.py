@@ -21,9 +21,9 @@ import ast
 from collections.abc import Callable
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .models import GeneratedTest
+ from .models import GeneratedTest
 
 __version__ = VERSION
 

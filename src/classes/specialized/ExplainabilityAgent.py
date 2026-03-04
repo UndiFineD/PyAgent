@@ -43,7 +43,7 @@ class ExplainabilityAgent(BaseAgent):
         # Mock activations for decomposition
         mock_activations = [0.1] * 4096
         # Simulate some high activations
-import random
+        import random
         for i in range(10):
             mock_activations[random.randint(0, 4095)] = 0.9
             

@@ -4,7 +4,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_stats.py"""
 
 
-from .DerivedMetric import DerivedMetric
+ from .DerivedMetric import DerivedMetric
 
 from typing import Dict, List, Optional
 import ast

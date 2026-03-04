@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 
-from .graph_core import GraphCore  # type: ignore
+ from .graph_core import GraphCore  # type: ignore
 
 __all__ = ["GraphCore"]
 

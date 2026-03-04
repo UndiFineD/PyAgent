@@ -19,7 +19,7 @@ Semantic hashing.py module.
 import logging
 from typing import Dict, List, Set
 
-import numpy as np
+ import numpy as np
 
 logger = logging.getLogger(__name__)
 

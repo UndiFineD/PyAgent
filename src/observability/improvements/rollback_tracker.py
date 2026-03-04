@@ -20,7 +20,7 @@ from __future__ import annotations
 import json
 from datetime import datetime
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .improvement import Improvement
 from .rollback_record import RollbackRecord

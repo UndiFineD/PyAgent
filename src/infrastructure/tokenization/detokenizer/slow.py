@@ -6,7 +6,7 @@ Fallback incremental detokenization for non-fast tokenizers.
 """
 
 
-from typing import (
+ from typing import (
     List,
     Optional,
     Tuple,

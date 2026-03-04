@@ -15,7 +15,7 @@ class LinearQuantizer(Quantizer):
         self,
         weight: NDArray[np.float32],
     ) -> QuantizedTensor:
-from .utils import pack_int4
+        from .utils import pack_int4
         original_shape = weight.shape
         
         if self.config.strategy == QuantStrategy.TENSOR:

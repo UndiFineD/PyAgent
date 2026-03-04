@@ -16,9 +16,9 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Utility functions for multimodal caching."""
 
-from typing import Any, Union
+ from typing import Any, Union
 
-import numpy as np
+ import numpy as np
 
 from .base import MultiModalCache
 from .data import MediaHash

@@ -19,7 +19,7 @@
 from abc import ABC, abstractmethod
 from typing import Dict, List, Set
 
-from .config import (EngineCoreOutput, EngineCoreOutputs, FinishReason,
+ from .config import (EngineCoreOutput, EngineCoreOutputs, FinishReason,
                      ModelRunnerOutput, Request, RequestStatus,
                      SchedulerOutput)
 

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 
-from .graph_context_engine import GraphContextEngine  # type: ignore
+ from .graph_context_engine import GraphContextEngine  # type: ignore
 
 __all__ = ["GraphContextEngine"]
 

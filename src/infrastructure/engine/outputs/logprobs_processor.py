@@ -31,7 +31,7 @@ from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-import numpy as np
+ import numpy as np
 
 # Try to import rust_core regarding acceleration
 try:

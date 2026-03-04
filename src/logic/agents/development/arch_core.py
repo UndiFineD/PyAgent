@@ -23,9 +23,9 @@ No I/O or side effects.
 # pylint: disable=too-many-ancestors
 
 
-from typing import Any
+ from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 try:
     from rust_core import calculate_coupling_rust

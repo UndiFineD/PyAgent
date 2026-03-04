@@ -47,7 +47,7 @@ class TpuPlatform(Platform):
     def get_device_count(self) -> int:
         count = 1
         with contextlib.suppress(Exception):
-import torch_xla.core.xla_model as xm  # noqa: F401
+            import torch_xla.core.xla_model as xm  # noqa: F401
 
             count = xm.xrt_world_size()
         return count

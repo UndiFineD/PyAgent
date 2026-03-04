@@ -16,7 +16,7 @@
 Registry package.
 """
 
-from .config import (ArchitectureSpec, ModelArchitecture, ModelCapability,  # noqa: F401
+ from .config import (ArchitectureSpec, ModelArchitecture, ModelCapability,  # noqa: F401
                      ModelConfig, ModelFormat, ModelInfo, QuantizationType,
                      VRAMEstimate)
 from .detector import ArchitectureDetector  # noqa: F401

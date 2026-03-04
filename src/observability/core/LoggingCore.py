@@ -45,6 +45,6 @@ class LoggingCore:
     @staticmethod
     def format_rfc3339(timestamp_ms: int) -> str:
         """Logic for timestamp formatting (shell implementation)."""
-import datetime
+        import datetime
         dt = datetime.datetime.fromtimestamp(timestamp_ms / 1000.0, tz=datetime.UTC)
         return dt.isoformat(timespec='milliseconds').replace("+00:00", "Z")

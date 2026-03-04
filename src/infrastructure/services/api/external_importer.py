@@ -22,7 +22,7 @@ import os
 from pathlib import Path
 from typing import Any
 
-import requests
+ import requests
 
 from src.core.base.common.types.changelog_entry import ChangelogEntry
 from src.core.base.lifecycle.version import VERSION

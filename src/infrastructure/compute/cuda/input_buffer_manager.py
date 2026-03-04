@@ -40,7 +40,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, Dict, List, Optional, Set, Tuple, TypeVar
 
-from torch import Tensor
+ from torch import Tensor
 
 logger: logging.Logger = logging.getLogger(__name__)
 

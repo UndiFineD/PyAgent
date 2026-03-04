@@ -20,9 +20,9 @@ Documentation generation logic for CoderCore.
 # pylint: disable=too-many-ancestors
 
 
-import ast
+ import ast
 
-from src.core.base.common.types.code_language import CodeLanguage
+ from src.core.base.common.types.code_language import CodeLanguage
 
 
 class CoderDocMixin:

@@ -30,7 +30,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Any, List, Optional
 
-from .engine_core import (EngineCore, EngineCoreOutputs, EngineCoreProc,
+ from .engine_core import (EngineCore, EngineCoreOutputs, EngineCoreProc,
                           MockExecutor, Request, SimpleScheduler)
 from .output_processor import EngineCoreRequest
 

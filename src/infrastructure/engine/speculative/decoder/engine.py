@@ -18,9 +18,9 @@ from __future__ import annotations
 """Speculative decoding orchestrator regarding Phase 336."""
 
 
-from typing import Any, Callable, Dict, List, Optional, Tuple
+ from typing import Any, Callable, Dict, List, Optional, Tuple
 
-import numpy as np
+ import numpy as np
 
 from .config import AcceptanceMethod
 from .proposers import MedusaProposer, NgramProposer, SpeculativeProposer

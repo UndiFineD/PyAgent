@@ -18,11 +18,11 @@ Proposers.py module.
 """
 
 
-from typing import Protocol, Sequence
+ from typing import Protocol, Sequence
 
-import numpy as np
+ import numpy as np
 
-from .config import DraftProposal
+ from .config import DraftProposal
 
 
 class DraftProposer(Protocol):

@@ -21,11 +21,11 @@ import asyncio
 import logging
 from typing import Any, Coroutine, Dict, List, Optional
 
-import numpy as np
+ import numpy as np
 
-from src.core.base.common.models.communication_models import (
+ from src.core.base.common.models.communication_models import (
     ExpertProfile, MoERoutingDecision)
-from src.infrastructure.engine.models.similarity import \
+    from src.infrastructure.engine.models.similarity import \
     EmbeddingSimilarityService
 from src.infrastructure.swarm.orchestration.swarm.audit_logger import SwarmAuditLogger
 

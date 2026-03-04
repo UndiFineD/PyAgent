@@ -23,7 +23,7 @@ No I/O or side effects.
 import re
 import ast
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core

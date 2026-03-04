@@ -32,7 +32,7 @@ class MessagingAgent(BaseAgent):
         """Truncates and formats a long report for messaging platforms."""
         return report[:500] + "..." if len(report) > 500 else report
 
-if __name__ == "__main__":
-from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")
-    main()
+    if __name__ == "__main__":
+        from src.classes.base_agent.utilities import create_main_function
+        main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")
+        main()

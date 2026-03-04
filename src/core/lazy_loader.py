@@ -26,7 +26,7 @@ Example usage:
     # Using lazy_import decorator
     @lazy_import
     def get_heavy_class():
-from some.heavy.module import HeavyClass
+    from some.heavy.module import HeavyClass
         return HeavyClass
 
     # Using ModuleLazyLoader for __getattr__ pattern

@@ -16,7 +16,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Request lifecycle management sub-package."""
 
-from .enums import (FINISH_REASON_STRINGS, FinishReason, RequestEventType,  # noqa: F401
+ from .enums import (FINISH_REASON_STRINGS, FinishReason, RequestEventType,  # noqa: F401
                     RequestStatus, is_valid_transition)
 from .event import RequestEvent  # noqa: F401
 from .queue import RequestQueue  # noqa: F401

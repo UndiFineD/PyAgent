@@ -21,7 +21,7 @@ from __future__ import annotations
 """Configuration management for PyAgent GUI settings."""
 
 
-import os
+ import os
 
 from src.core.base.common.storage_core import StorageCore
 from src.core.base.lifecycle.version import VERSION

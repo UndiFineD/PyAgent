@@ -16,7 +16,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative decoding engine components."""
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

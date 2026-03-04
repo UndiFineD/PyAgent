@@ -29,7 +29,7 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from src.infrastructure.compute.backend.disk_cache import DiskCache
 from src.infrastructure.compute.backend.llm_client import LLMClient

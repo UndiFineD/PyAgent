@@ -10,7 +10,7 @@ import logging
 import threading
 from typing import Dict, Optional, Type, List
 
-from .models import (
+ from .models import (
     PlatformType,
     DeviceCapability,
     MemoryInfo,

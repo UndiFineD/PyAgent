@@ -3,7 +3,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative Decoding Engine - Facade pattern for backward compatibility."""
 
-from .engine import (
+ from .engine import (
     SpecMethod,
     SpeculativeConfig,
     DraftProposal,

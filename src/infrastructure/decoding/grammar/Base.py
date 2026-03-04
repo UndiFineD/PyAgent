@@ -19,7 +19,7 @@ from typing import (
     Union,
 )
 
-import numpy as np
+ import numpy as np
 
 
 class StructuredOutputOptions(Enum):

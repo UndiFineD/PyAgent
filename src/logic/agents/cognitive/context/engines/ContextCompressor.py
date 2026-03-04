@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 
-from .context_compressor import ContextCompressor  # type: ignore
+ from .context_compressor import ContextCompressor  # type: ignore
 
 __all__ = ["ContextCompressor"]
 

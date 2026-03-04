@@ -16,7 +16,7 @@
 Ops.py module.
 """
 
-import numpy as np
+ import numpy as np
 
 from .config import AttentionConfig
 from .storage import PagedKVCache

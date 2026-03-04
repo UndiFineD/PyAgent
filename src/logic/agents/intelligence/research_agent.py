@@ -19,7 +19,7 @@ Ingests SOTA research (simulated) and generates new agentic tools.
 """
 
 
-import logging
+ import logging
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
@@ -28,7 +28,7 @@ from src.core.base.lifecycle.version import VERSION
 try:
     from .research_core import ResearchCore
 except Exception:
-from src.logic.agents.intelligence.research_core import ResearchCore
+    from src.logic.agents.intelligence.research_core import ResearchCore
 
 __version__ = VERSION
 

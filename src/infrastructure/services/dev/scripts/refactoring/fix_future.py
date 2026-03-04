@@ -16,9 +16,9 @@ from __future__ import annotations
 """Script for standardizing the position of __future__ imports at the top of files."""
 
 
-import os
+ import os
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

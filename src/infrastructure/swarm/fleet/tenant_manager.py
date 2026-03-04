@@ -22,9 +22,9 @@ Simulates Docker-based environment isolation by managing restricted root paths.
 import logging
 import os
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .tenant_core import TenantCore
+ from .tenant_core import TenantCore
 
 __version__ = VERSION
 

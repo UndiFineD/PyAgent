@@ -17,9 +17,9 @@ from __future__ import annotations
 """Auto-extracted class from agent_errors.py"""
 
 
-from datetime import datetime
+ from datetime import datetime
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .trend_data import TrendData
 from .trend_direction import TrendDirection

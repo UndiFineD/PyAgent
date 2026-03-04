@@ -21,9 +21,9 @@ Schema validation for tool calls.
 """
 
 
-from typing import Any, Dict, List, Tuple
+ from typing import Any, Dict, List, Tuple
 
-from ..parser.base import ToolCall
+ from ..parser.base import ToolCall
 
 
 def validate_tool_call(

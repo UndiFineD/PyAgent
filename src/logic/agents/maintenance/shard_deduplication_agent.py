@@ -138,12 +138,12 @@ class ShardDeduplicationAgent(BaseAgent):
             if temp_file.exists():
                 os.remove(temp_file)
 
-if __name__ == "__main__":
+    if __name__ == "__main__":
     # Simple CLI for testing
-import sys
-    logging.basicConfig(level=logging.INFO)
+        import sys
+        logging.basicConfig(level=logging.INFO)
     
-    target_dir = sys.argv[1] if len(sys.argv) > 1 else "data/logs/external_ai_learning"
-    agent = ShardDeduplicationAgent(os.getcwd())
-    result = agent.deduplicate_shards(target_dir)
-    print(json.dumps(result, indent=2))
+        target_dir = sys.argv[1] if len(sys.argv) > 1 else "data/logs/external_ai_learning"
+        agent = ShardDeduplicationAgent(os.getcwd())
+        result = agent.deduplicate_shards(target_dir)
+        print(json.dumps(result, indent=2))

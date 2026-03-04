@@ -16,7 +16,7 @@
 Rotary embedding engine.py module.
 """
 
-from .rotary import (GptJRotaryEmbedding, MRotaryEmbedding,
+ from .rotary import (GptJRotaryEmbedding, MRotaryEmbedding,
                      NeoxRotaryEmbedding, RoPEConfig, RoPEScalingType,
                      RoPEVariant, RotaryEmbeddingBase, RotaryEmbeddingEngine,
                      XDRotaryEmbedding, create_rope_embedding)

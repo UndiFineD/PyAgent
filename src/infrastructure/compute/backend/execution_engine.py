@@ -24,7 +24,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import requests
+ import requests
 
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.compute.backend.subagent_runner import SubagentRunner

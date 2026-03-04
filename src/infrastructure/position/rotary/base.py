@@ -16,7 +16,7 @@ try:
 except ImportError:
     HAS_NUMPY = False
 
-from .config import RoPEConfig, RoPEVariant
+ from .config import RoPEConfig, RoPEVariant
 
 class RotaryEmbeddingBase(ABC):
     """Base class for all RoPE implementations."""

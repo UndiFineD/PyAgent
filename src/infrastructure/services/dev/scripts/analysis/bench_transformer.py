@@ -19,7 +19,7 @@ Bench Transformer: Performance benchmarking utility for transformer models in Py
 import statistics
 import time
 
-import rust_core
+ import rust_core
 
 
 def run_performance_test(duration_secs=60):

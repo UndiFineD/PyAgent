@@ -4,7 +4,7 @@
 Chat template registry package for Jinja2 and custom template management.
 """
 
-from .config import (
+ from .config import (
     TemplateType,
     TemplateConfig,
     TemplateInfo,

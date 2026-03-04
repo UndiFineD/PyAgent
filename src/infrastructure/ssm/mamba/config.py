@@ -9,7 +9,7 @@ import math
 from dataclasses import dataclass
 from typing import NamedTuple
 
-import numpy as np
+ import numpy as np
 
 
 @dataclass(frozen=True)

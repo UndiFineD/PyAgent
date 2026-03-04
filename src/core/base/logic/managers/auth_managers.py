@@ -29,7 +29,7 @@ class AuthManager:
 
     def __init__(self, name: str = "AuthManager") -> None:
         """Initialize the AuthManager with a core AuthCore instance."""
-from src.core.base.common.auth_core import AuthCore
+        from src.core.base.common.auth_core import AuthCore
         self._core = AuthCore(name=name)
         self._config: Optional[Any] = None
 

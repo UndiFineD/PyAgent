@@ -5,7 +5,7 @@ Refactored to modular package structure for Phase 317.
 Decomposed into types, base, and specific client implementation modules.
 """
 
-from src.infrastructure.engine.engine_client.types import (
+ from src.infrastructure.engine.engine_client.types import (
     ClientMode, WorkerState, EngineClientConfig, 
     SchedulerOutput, EngineOutput, WorkerInfo
 )

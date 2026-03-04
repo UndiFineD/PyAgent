@@ -18,7 +18,7 @@ Estimator.py module.
 """
 
 
-from .config import ModelInfo, QuantizationType, VRAMEstimate
+ from .config import ModelInfo, QuantizationType, VRAMEstimate
 
 
 class VRAMEstimator:

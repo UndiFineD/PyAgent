@@ -19,7 +19,7 @@ import logging
 import os
 from pathlib import Path
 
-import requests
+ import requests
 
 from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent

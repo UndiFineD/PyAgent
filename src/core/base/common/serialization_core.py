@@ -23,7 +23,7 @@ import json
 import pickle
 from typing import Any
 
-from .base_core import BaseCore
+ from .base_core import BaseCore
 
 
 class SerializationCore(BaseCore):

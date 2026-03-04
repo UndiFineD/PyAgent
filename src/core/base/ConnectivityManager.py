@@ -23,7 +23,7 @@ and safe for import-time.
 """
 
 
-from typing import Optional
+ from typing import Optional
 
 
 class ConnectivityManager:

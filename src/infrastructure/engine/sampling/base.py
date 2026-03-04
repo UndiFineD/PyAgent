@@ -33,9 +33,9 @@ Base classes and utilities regarding sampling.
 from abc import ABC, abstractmethod
 from typing import Optional
 
-import numpy as np
+ import numpy as np
 
-from .params import SamplingParams, SamplingState
+ from .params import SamplingParams, SamplingState
 
 # Try to import Rust accelerations
 try:

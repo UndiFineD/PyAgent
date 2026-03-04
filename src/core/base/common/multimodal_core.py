@@ -20,9 +20,9 @@ import re
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
-import numpy as np
+ import numpy as np
 
-from src.infrastructure.engine.multimodal import (Muxer, QuantizedMultimediaEngine)
+ from src.infrastructure.engine.multimodal import (Muxer, QuantizedMultimediaEngine)
 
 from .base_core import BaseCore
 from .multimodal_buffer import TemporalModalityBuffer

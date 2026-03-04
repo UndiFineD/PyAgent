@@ -26,7 +26,7 @@ from contextlib import contextmanager
 from pathlib import Path
 from types import ModuleType
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

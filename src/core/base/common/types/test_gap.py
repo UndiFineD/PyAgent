@@ -13,13 +13,9 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+ from dataclasses import dataclass, field
 
-"""Auto-extracted class from agent_coder.py"""
-
-
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

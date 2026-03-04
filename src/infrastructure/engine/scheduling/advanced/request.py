@@ -22,7 +22,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Optional
 
-from .config import PreemptionReason, RequestPriority, RequestState
+ from .config import PreemptionReason, RequestPriority, RequestState
 
 
 @dataclass

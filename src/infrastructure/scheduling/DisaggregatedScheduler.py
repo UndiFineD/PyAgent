@@ -5,7 +5,7 @@ Disaggregated Scheduler Facade.
 Redirects to the modular implementation in .disaggregated
 """
 
-from .disaggregated import (
+ from .disaggregated import (
     InstanceRole,
     SchedulingPolicy,
     InstanceInfo,

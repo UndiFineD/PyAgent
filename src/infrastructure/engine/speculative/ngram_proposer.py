@@ -31,9 +31,9 @@ from itertools import product
 from typing import Any
 
 with contextlib.suppress(ImportError):
-import rust_core
+    import rust_core
 
-from _thread import LockType
+    from _thread import LockType
 
 HAS_RUST: bool = "rust_core" in globals()
 

@@ -5,7 +5,7 @@ SecretCore logic for credential safety.
 Pure logic for secret masking, validation, and naming policy.
 """
 
-from typing import List, Optional
+ from typing import List, Optional
 
 class SecretCore:
     def __init__(self) -> None:

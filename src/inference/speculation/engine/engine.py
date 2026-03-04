@@ -19,15 +19,14 @@
 import logging
 from typing import Any, Dict, List, Optional, Tuple, Union
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 from .base import DrafterBase
 from .config import SpecMethod, SpeculativeConfig
 from .proposals import DraftProposal, SpecDecodingMetrics, VerificationResult
-from .proposers import (EagleProposer, HybridDrafter, NgramProposer,
-                        SuffixProposer)
+from .proposers import (EagleProposer, HybridDrafter, NgramProposer, SuffixProposer)
 from .verifier import TokenVerifier
 
 logger = logging.getLogger(__name__)

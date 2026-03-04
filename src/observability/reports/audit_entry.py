@@ -20,9 +20,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .audit_action import AuditAction
+ from .audit_action import AuditAction
 
 __version__ = VERSION
 

@@ -19,11 +19,11 @@
 from dataclasses import dataclass, field
 from typing import Any, List, Optional
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-from .config import SpecMethod
+ from .config import SpecMethod
 
 
 @dataclass

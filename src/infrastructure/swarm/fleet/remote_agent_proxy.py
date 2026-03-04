@@ -23,7 +23,7 @@ import logging
 import os
 from typing import Any
 
-import requests
+ import requests
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION

@@ -19,7 +19,7 @@ from __future__ import annotations
 # pylint: disable=too-many-ancestors
 
 
-import logging
+ import logging
 
 from src.core.base.common.base_utilities import create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent

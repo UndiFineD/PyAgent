@@ -18,7 +18,7 @@ Transmutation.py module.
 """
 
 
-from typing import Any
+ from typing import Any
 
 from src.core.base.common.utils.jsontree.path import _parse_path
 from src.core.base.common.utils.jsontree.types import _T, JSONTree

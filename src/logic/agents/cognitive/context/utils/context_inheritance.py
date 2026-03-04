@@ -20,7 +20,7 @@ This module provides functionality for child contexts to inherit and resolve
 content from parent contexts using various merge strategies.
 """
 
-import re
+ import re
 
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.inheritance_mode import InheritanceMode

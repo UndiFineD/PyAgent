@@ -19,7 +19,7 @@ Internal managers regarding prompt, conversation, auth, and batch processing.
 """
 
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .auth_manager import AuthenticationManager, AuthManager  # noqa: F401
 from .batch_managers import BatchRequest, RequestBatcher  # noqa: F401

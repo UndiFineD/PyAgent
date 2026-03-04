@@ -24,7 +24,7 @@ from __future__ import annotations
 from tkinter import messagebox
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -41,7 +41,7 @@ class WorkflowManager:
 
     def start_workflow(self, track_name: str, targets: list[str]) -> None:
         """Starts a predefined workflow based on the track."""
-from .constants import BMAD_TRACKS
+        from .constants import BMAD_TRACKS
 
         track = BMAD_TRACKS.get(track_name)
         if not track:

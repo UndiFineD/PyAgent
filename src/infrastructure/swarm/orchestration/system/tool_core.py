@@ -25,9 +25,9 @@ import random
 from collections.abc import Callable
 from typing import Any
 
-from pydantic import BaseModel
+ from pydantic import BaseModel
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core as rc

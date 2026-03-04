@@ -14,12 +14,12 @@ if str(root / "src") not in sys.path:
 # Modular imports from the new class hierarchy
 # import agent_backend
 
-from src.classes.base_agent import *
+ from src.classes.base_agent import *
 
 try:
     from src.core.base.utilities import create_main_function
 except Exception:
-from src.classes.base_agent.utilities import create_main_function
+    from src.classes.base_agent.utilities import create_main_function
 
 # Shared CLI helper instance
 main = create_main_function(

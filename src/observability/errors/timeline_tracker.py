@@ -20,9 +20,9 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .timeline_event import TimelineEvent
+ from .timeline_event import TimelineEvent
 
 __version__ = VERSION
 

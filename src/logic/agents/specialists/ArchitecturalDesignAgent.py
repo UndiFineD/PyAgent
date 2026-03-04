@@ -193,8 +193,8 @@ class ArchitecturalDesignAgent(BaseAgent):
         Calculates the DPO Constructability Score.
         """
         if self.current_phase != DesignPhase.DESIGN_DEVELOPMENT:
-             logging.warning("Advancing to Production phase without full development.")
-             
+            logging.warning("Advancing to Production phase without full development.")
+            
         prompt = f"Generate production specs/ urban context match for: {json.dumps(self.design_state)}"
         specs = await self.run_subagent("finalizing production specs", prompt)
         
@@ -204,7 +204,7 @@ class ArchitecturalDesignAgent(BaseAgent):
         try:
             # Attempt to extract a float from the response
             import re
-                match = re.search(r"(\d\.\d+)", score_str)
+            match = re.search(r"(\d\.\d+)", score_str)
             self.metrics["constructability_score"] = float(match.group(1)) if match else 0.85
         except:
             self.metrics["constructability_score"] = 0.85

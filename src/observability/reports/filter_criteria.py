@@ -20,7 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .issue_category import IssueCategory
 from .severity_level import SeverityLevel

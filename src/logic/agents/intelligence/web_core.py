@@ -21,9 +21,9 @@ No I/O or side effects.
 """
 
 
-from bs4 import BeautifulSoup
+ from bs4 import BeautifulSoup
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

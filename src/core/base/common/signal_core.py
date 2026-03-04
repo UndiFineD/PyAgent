@@ -23,7 +23,7 @@ import queue
 import threading
 from typing import Any, Callable, Dict, List
 
-from .base_core import BaseCore
+ from .base_core import BaseCore
 
 logger = logging.getLogger("pyagent.signal")
 

@@ -6,7 +6,7 @@ import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
-from src.classes.context.ContextCompressorCore import ContextCompressorCore
+ from src.classes.context.ContextCompressorCore import ContextCompressorCore
 
 class ContextCompressor:
     """Reduces the size of source files while preserving structural context.

@@ -23,7 +23,7 @@ features, leveraging Rust for high-throughput vectorized operations.
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 logger = logging.getLogger(__name__)
 

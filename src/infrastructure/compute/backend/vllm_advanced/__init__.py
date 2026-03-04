@@ -22,7 +22,7 @@ Phase 31: Extends PyAgent's vLLM integration with:
 - Guided decoding for structured output (JSON, regex)
 """
 
-from .async_vllm_engine import (AsyncEngineConfig, AsyncRequestHandle,  # noqa: F401
+ from .async_vllm_engine import (AsyncEngineConfig, AsyncRequestHandle,  # noqa: F401
                                 AsyncVllmEngine)
 from .guided_decoder import (ChoiceConstraint, GuidedConfig, GuidedDecoder,  # noqa: F401
                              JsonSchema, RegexPattern)

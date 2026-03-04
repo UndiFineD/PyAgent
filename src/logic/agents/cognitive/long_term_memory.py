@@ -29,9 +29,9 @@ For more information, visit:
 No commands will be executed.
 """
 
-import logging
+ import logging
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

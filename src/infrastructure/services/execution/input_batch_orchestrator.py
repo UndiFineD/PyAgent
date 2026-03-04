@@ -18,7 +18,7 @@
 Facade for InputBatchOrchestrator.
 """
 
-from .batch import (BatchUpdateBuilder, CachedRequestState, InputBatch,
+ from .batch import (BatchUpdateBuilder, CachedRequestState, InputBatch,
                     InputBatchOrchestrator, InputBuffers, MoveDirectionality,
                     SamplingMetadata)
 

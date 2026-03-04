@@ -18,9 +18,9 @@ Benchmark core.py module.
 """
 
 
-from typing import Any
+ from typing import Any
 
-from src.infrastructure.services.benchmarks.models import BenchmarkResult
+ from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 try:
     import rust_core as rc

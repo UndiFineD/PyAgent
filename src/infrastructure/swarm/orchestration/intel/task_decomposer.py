@@ -22,9 +22,9 @@ Breaks complex user requests into granular sub-tasks for the agent fleet.
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .task_decomposer_core import TaskDecomposerCore
+ from .task_decomposer_core import TaskDecomposerCore
 
 __version__ = VERSION
 

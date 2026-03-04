@@ -19,7 +19,7 @@ Core logic regarding Agent Identity.
 """
 
 
-from src.core.base.common.identity_core import (
+ from src.core.base.common.identity_core import (
     IdentityCore as StandardIdentityCore, AgentIdentity)
 
 __all__ = ["IdentityCore", "AgentIdentity"]

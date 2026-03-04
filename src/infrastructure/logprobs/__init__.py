@@ -12,7 +12,7 @@ Exports:
     - StreamingLogprobs: Streaming accumulator
 """
 
-from .LogprobsProcessor import (
+ from .LogprobsProcessor import (
     LogprobFormat,
     LogprobEntry,
     TopLogprob,

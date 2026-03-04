@@ -4,7 +4,7 @@
 Platform abstraction package.
 """
 
-from .models import (
+ from .models import (
     PlatformType,
     CpuArchitecture,
     QuantizationType,

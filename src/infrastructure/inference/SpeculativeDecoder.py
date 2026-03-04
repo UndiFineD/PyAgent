@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Speculative Decoding Framework - Facade pattern for backward compatibility."""
 
-from .decoder import (
+ from .decoder import (
     SpecMethod,
     SpeculativeConfig,
     DraftProposal,

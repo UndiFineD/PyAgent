@@ -21,9 +21,9 @@ import json
 from pathlib import Path
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .test_baseline import TestBaseline
+ from .test_baseline import TestBaseline
 
 __version__ = VERSION
 

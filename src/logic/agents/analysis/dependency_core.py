@@ -21,7 +21,7 @@ No I/O or side effects.
 """
 
 
-import ast
+ import ast
 
 from src.core.base.common.types.dependency_node import DependencyNode
 from src.core.base.common.types.dependency_type import DependencyType

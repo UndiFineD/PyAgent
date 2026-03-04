@@ -9,7 +9,7 @@ import base64
 import zlib
 from typing import Any, Dict
 
-import msgpack
+ import msgpack
 
 from src.core.base.lifecycle.version import VERSION
 from src.observability.structured_logger import StructuredLogger

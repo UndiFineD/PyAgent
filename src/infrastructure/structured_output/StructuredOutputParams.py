@@ -6,7 +6,7 @@ Enhanced structured output configuration and validation.
 Now modularized into the 'params' subpackage.
 """
 
-from .params import (
+ from .params import (
     StructuredOutputType,
     ConstraintType,
     SchemaFormat,

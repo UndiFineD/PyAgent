@@ -31,7 +31,7 @@ class SelfImprovementCoordinator:
         self._init_discovery()
 
         # Phase 50: Budget & Cloud integration
-from src.infrastructure.cloud.budget import BudgetManager
+        from src.infrastructure.cloud.budget import BudgetManager
         self.budget = BudgetManager(
             daily_limit=25.0, # Target from cloud_integration.md
             monthly_limit=250.0

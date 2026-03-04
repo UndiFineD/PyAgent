@@ -21,7 +21,7 @@ import threading
 from collections.abc import Callable
 from typing import TypeVar
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 T = TypeVar("T")
 

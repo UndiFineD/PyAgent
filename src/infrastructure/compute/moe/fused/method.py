@@ -16,7 +16,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any
 
-import numpy as np
+ import numpy as np
 
 from .config import FusedMoEConfig, FusedMoEParallelConfig
 from .utils import determine_expert_map

@@ -20,7 +20,7 @@ from __future__ import annotations
 import re
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .analysis_tool_type import AnalysisToolType
 from .improvement_category import ImprovementCategory

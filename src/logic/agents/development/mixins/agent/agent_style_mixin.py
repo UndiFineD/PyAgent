@@ -18,9 +18,9 @@ from __future__ import annotations
 # pylint: disable=too-many-ancestors
 
 
-from typing import Any
+ from typing import Any
 
-from src.core.base.common.types.style_rule import StyleRule
+ from src.core.base.common.types.style_rule import StyleRule
 
 
 class AgentStyleMixin:

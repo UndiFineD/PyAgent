@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 from __future__ import annotations
 """Apply conservative patch proposals generated from bandit findings.
 
@@ -10,10 +22,11 @@ risky imports, replace eval/exec with a RuntimeError), writes a backup
 This is intentionally conservative and deterministic so it can run
 automatically in CI or overnight runs.
 """
+
 import shutil
-import sys
 from pathlib import Path
-import json
+
+ from src.tools import prepare_refactor_patches as prep
 
 ROOT = Path(__file__).resolve().parents[2]
 PATCH_DIR = ROOT / '.external' / 'patches'
@@ -21,13 +34,7 @@ STATIC_DIR = ROOT / '.external' / 'static_checks'
 
 
 def main() -> int:
-    try:
-        from src.tools import prepare_refactor_patches as prep
-    except Exception:
-        # fallback: try to import by path
-        sys.path.insert(0, str(ROOT / 'src'))
-from tools import prepare_refactor_patches as prep
-
+    """Main entry point."""
     try:
         data = prep.load_bandit()
     except FileNotFoundError:
@@ -57,7 +64,9 @@ from tools import prepare_refactor_patches as prep
             orig = lines[ln - 1]
             s = orig.strip()
             # Skip risky/easily-broken contexts
-            if s.startswith(('def ', 'class ', 'assert', '@', 'return', 'yield', 'if ', 'for ', 'while ', 'with ', 'try:', 'except')):
+            skip_prefixes = ('def ', 'class ', 'assert', '@', 'return', 'yield', 'if ', 'for ',
+                             'while ', 'with ', 'try:', 'except')
+            if s.startswith(skip_prefixes):
                 continue
             # Conservative application rules:
             # - comment out imports
@@ -70,10 +79,10 @@ from tools import prepare_refactor_patches as prep
             elif any(k in s for k in ('eval', 'exec', 'compile')):
                 # Found potential dynamic execution usage — conservatively replace.
                 # Use of eval() is highly insecure — intentional detection here
-                lines[ln - 1] = "raise RuntimeError('Refactor required: remove dynamic execution; see .external/patches')"
+                lines[ln - 1] = "raise RuntimeError(\"Refactor required: remove dynamic execution; see .external/patches\")"
                 applied_here = True
             elif 'subprocess' in s or 'os.system' in s or 'Popen' in s:
-                lines[ln - 1] = "raise RuntimeError('Refactor required: avoid running subprocesses directly')"
+                lines[ln - 1] = "raise RuntimeError(\"Refactor required: avoid running subprocesses directly\")"
                 applied_here = True
 
             if applied_here:

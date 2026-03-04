@@ -18,7 +18,7 @@ Base data structures.
 Phase 18-19: Beyond vLLM - Advanced data structures and performance patterns.
 """
 
-from src.core.base.logic.structures.bloom_filter import (
+ from src.core.base.logic.structures.bloom_filter import (
     BloomFilter,
     CountingBloomFilter,
     ScalableBloomFilter,

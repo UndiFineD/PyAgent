@@ -24,7 +24,7 @@ import logging
 import re
 from typing import Any, Dict, List, Tuple
 
-from src.core.base.common.types.style_rule import StyleRule
+ from src.core.base.common.types.style_rule import StyleRule
 
 
 class CoderStyleMixin:

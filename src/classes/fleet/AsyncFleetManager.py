@@ -4,6 +4,7 @@
 
 import logging
 import concurrent.futures
+import time
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Type
 from src.classes.fleet.FleetManager import FleetManager
@@ -21,7 +22,7 @@ class AsyncFleetManager(FleetManager):
         logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")
         
         results = []
-        workflow_id = f"async_wf_{int(logging.time.time())}"
+        workflow_id = f"async_wf_{int(time.time())}"
         
         with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
             # Map steps to future objects
@@ -71,18 +72,18 @@ class AsyncFleetManager(FleetManager):
 
 if __name__ == "__main__":
     # Test script
-from src.classes.context.KnowledgeAgent import KnowledgeAgent
-from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
-    
+    from src.classes.context.KnowledgeAgent import KnowledgeAgent
+    from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
+
     root = "c:/DEV/PyAgent"
     afleet = AsyncFleetManager(root)
     afleet.register_agent("K1", KnowledgeAgent, root + "/src/classes/context/KnowledgeAgent.py")
     afleet.register_agent("S1", SecurityGuardAgent, root + "/src/classes/coder/SecurityGuardAgent.py")
-    
+
     wf = [
         {"agent": "K1", "action": "scan_workspace", "args": ["agent"]},
         {"agent": "S1", "action": "improve_content", "args": ["rm -rf /"]}
     ]
-    
+
     report = afleet.execute_workflow_async("Parallel Test", wf)
     print(report)

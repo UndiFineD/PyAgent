@@ -17,9 +17,9 @@ from __future__ import annotations
 """Auto-extracted class from agent_improvements.py"""
 
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .bulk_operation_result import BulkOperationResult
+ from .bulk_operation_result import BulkOperationResult
 
 __version__ = VERSION
 

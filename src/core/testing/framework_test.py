@@ -11,10 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-"""
-Tests for framework
-Auto-generated test template - expand with actual test cases
-"""
+
 
 import pytest
 import sys
@@ -26,7 +23,7 @@ if str(src_path) not in sys.path:
     sys.path.insert(0, str(src_path))
 
 try:
-    from core.testing.framework import *
+    from core.testing import framework
 except ImportError as e:
     pytest.skip(f"Cannot import module: {e}", allow_module_level=True)
 
@@ -34,4 +31,3 @@ except ImportError as e:
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

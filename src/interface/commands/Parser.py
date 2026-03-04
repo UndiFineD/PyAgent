@@ -23,10 +23,43 @@ import re
 import time
 from typing import Any, ClassVar
 
-from .base import CommandContext, CommandResult, ParsedCommand, ProcessedPrompt
-from .builtins.system_commands import register_system_commands
-from .builtins.utility_commands import register_utility_commands
-from .registry import CommandRegistry
+# Imports can fail when the package is referenced via the
+# `src.` prefix in sys.path.  We attempt a normal relative import first
+# then fall back to dynamically loading the module files by path.
+import importlib.util, os, sys
+_pkg_dir = os.path.dirname(__file__)
+
+def _load_local(name: str):
+    # name may contain path separators to refer to subpackages
+    relpath = name.replace(os.sep, "/")
+    path = os.path.join(_pkg_dir, *relpath.split("/")) + ".py"
+    # construct a valid module name by replacing separators with dots
+    mod_name = f"{__name__}.{relpath.replace('/', '.') }"
+    spec = importlib.util.spec_from_file_location(mod_name, path)
+    if spec is None or spec.loader is None:
+        raise ImportError(f"cannot load module {name} from {path}")
+    mod = importlib.util.module_from_spec(spec)  # type: ignore[arg-type]
+    sys.modules[spec.name] = mod
+    spec.loader.exec_module(mod)  # type: ignore[attr-defined]
+    return mod
+
+# Always load local modules via file path to avoid confusing the
+# import system when the package name contains ``src.``
+base_mod = _load_local("base")
+CommandContext = base_mod.CommandContext
+CommandResult = base_mod.CommandResult
+ParsedCommand = base_mod.ParsedCommand
+ProcessedPrompt = base_mod.ProcessedPrompt
+
+# builtins reside in subpackage; use _load_local with path segments
+_sc_mod = _load_local(os.path.join("builtins", "system_commands"))
+_uc_mod = _load_local(os.path.join("builtins", "utility_commands"))
+register_system_commands = _sc_mod.register_system_commands
+register_utility_commands = _uc_mod.register_utility_commands
+
+registry_mod = _load_local("registry")
+CommandRegistry = registry_mod.CommandRegistry
+
 
 logger = logging.getLogger(__name__)
 

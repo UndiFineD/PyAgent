@@ -28,7 +28,7 @@ from typing import Any, AsyncIterator, Dict, List, Optional
 try:
     from ..base import CloudProviderBase, InferenceRequest, InferenceResponse
 except Exception:
-from src.infrastructure.services.cloud.providers.base import (
+    from src.infrastructure.services.cloud.providers.base import (
         CloudProviderBase,
         InferenceRequest,
         InferenceResponse,

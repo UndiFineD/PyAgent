@@ -21,7 +21,7 @@ Apply basic types.py module.
 import os
 import re
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

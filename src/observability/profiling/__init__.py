@@ -17,7 +17,7 @@ Profiling utilities for PyAgent.
 Includes Rust acceleration profiling and performance tracking.
 """
 
-from src.observability.profiling.profile_decorators import (ProfileAccumulator,
+ from src.observability.profiling.profile_decorators import (ProfileAccumulator,
                                                             ProfileResult,
                                                             cprofile,
                                                             cprofile_context,

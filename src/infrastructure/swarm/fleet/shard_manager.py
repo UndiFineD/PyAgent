@@ -20,7 +20,7 @@ Sharding and partitioning logic.
 import logging
 from pathlib import Path
 
-from src.core.base.common.shard_core import ShardCore as StandardShardCore
+ from src.core.base.common.shard_core import ShardCore as StandardShardCore
 
 
 class ShardManager(StandardShardCore):

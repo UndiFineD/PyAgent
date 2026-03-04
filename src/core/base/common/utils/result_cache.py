@@ -22,7 +22,7 @@ Manager for result caching.
 from pathlib import Path
 from typing import Any
 
-from src.core.base.common.cache_core import CacheCore
+ from src.core.base.common.cache_core import CacheCore
 
 
 class ResultCache:

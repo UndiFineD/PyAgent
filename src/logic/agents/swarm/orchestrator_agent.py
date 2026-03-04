@@ -37,7 +37,7 @@ from src.core.base.execution.agent_command_handler import AgentCommandHandler
 BaseAgent = None  # Will be imported locally to avoid circular import
 from src.core.base.lifecycle.version import VERSION
 
-from .orchestrator_features import OrchestratorFeatures
+ from .orchestrator_features import OrchestratorFeatures
 
 __version__ = VERSION
 

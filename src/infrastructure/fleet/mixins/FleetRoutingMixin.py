@@ -5,6 +5,10 @@ from __future__ import annotations
 import logging
 from typing import Any, TYPE_CHECKING
 
+from src.core.base.Version import SDK_VERSION
+from src.infrastructure.fleet.VersionGate import VersionGate
+from src.infrastructure.fleet.RemoteAgentProxy import RemoteAgentProxy
+
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
@@ -18,10 +22,6 @@ class FleetRoutingMixin:
         Registers a remote node and its available agents.
         Uses VersionGate to ensure compatibility (Phase 104).
         """
-from src.core.base.Version import SDK_VERSION
-from src.infrastructure.fleet.VersionGate import VersionGate
-from src.infrastructure.fleet.RemoteAgentProxy import RemoteAgentProxy
-
         if not VersionGate.is_compatible(SDK_VERSION, remote_version):
             logging.warning(
                 f"Fleet: Rejecting remote node {node_url} (Incompatible version {remote_version})"

@@ -28,7 +28,7 @@ from datetime import datetime
 from enum import Enum
 import uuid
 
-from src.core.base.common.base_core import BaseCore
+ from src.core.base.common.base_core import BaseCore
 
 
 class ProcessType(str, Enum):

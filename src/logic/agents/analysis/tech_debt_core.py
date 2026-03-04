@@ -37,7 +37,7 @@ Tech debt core.py module.
 import ast
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core as rc

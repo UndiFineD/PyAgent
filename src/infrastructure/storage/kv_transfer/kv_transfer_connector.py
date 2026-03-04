@@ -19,7 +19,7 @@ Refactored to modular package structure for Phase 317.
 Decomposed into types, base, implementations, and factory modules.
 """
 
-from src.infrastructure.storage.kv_transfer.connector.base import (
+ from src.infrastructure.storage.kv_transfer.connector.base import (
     KVConnectorBase,
 )
 from src.infrastructure.storage.kv_transfer.connector.decode_bench import (

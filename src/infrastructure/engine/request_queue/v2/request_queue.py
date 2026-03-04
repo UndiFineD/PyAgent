@@ -22,7 +22,7 @@ import logging
 import time
 from typing import Any, Dict, List, Tuple
 
-from src.infrastructure.engine.scheduling.advanced.config import RequestPriority
+ from src.infrastructure.engine.scheduling.advanced.config import RequestPriority
 
 try:
     import rust_core as rc

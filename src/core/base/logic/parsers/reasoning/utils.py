@@ -18,7 +18,7 @@
 Utility functions regarding reasoning extraction and streaming parsing.
 """
 
-from typing import Any
+ from typing import Any
 
 from .models import ReasoningResult, StreamingReasoningState
 from .registry import ReasoningParserManager

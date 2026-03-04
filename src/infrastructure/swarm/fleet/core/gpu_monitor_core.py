@@ -18,7 +18,7 @@ Gpu monitor core.py module.
 """
 
 
-from dataclasses import dataclass
+ from dataclasses import dataclass
 
 
 @dataclass(frozen=True)

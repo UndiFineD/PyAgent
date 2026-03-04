@@ -23,34 +23,37 @@ import time
 from contextlib import suppress
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
+import numpy as np
+from numba import jit as _jit, njit as _njit, prange as _prange
+
+from .base import DrafterBase
+from .config import SpecMethod, SpeculativeConfig
+from .proposals import DraftProposal
+
 if TYPE_CHECKING:
-    import numpy as np
-
     from src.core.base.lifecycle.version import VERSION
-
     __version__ = VERSION
 
-    from .base import DrafterBase
-    from .config import SpecMethod, SpeculativeConfig
-    from .proposals import DraftProposal
+logger = logging.getLogger(__name__)
 
-    logger = logging.getLogger(__name__)
 
-    # Try to import numpy regarding efficient array operations
-    NUMPY_AVAILABLE = False
-    _np = None  # pylint: disable=invalid-name
+# Try to import numpy regarding efficient array operations
+NUMPY_AVAILABLE = False
+_np = None  # pylint: disable=invalid-name
 with suppress(ImportError):
-import numpy as _np  # pylint: disable=invalid-name, reimported
-
+    _np = np
     NUMPY_AVAILABLE = True
 
 # Try to import numba regarding JIT acceleration
 NUMBA_AVAILABLE = False
-_jit = _njit = _prange = None  # pylint: disable=invalid-name
-with suppress(ImportError):
-    from numba import jit as _jit, njit as _njit, prange as _prange  # pylint: disable=invalid-name, unused-import
-
+try:
+    # Verify imports are callable
+    callable(_jit)
+    callable(_njit)
+    callable(_prange)
     NUMBA_AVAILABLE = True
+except (NameError, TypeError):
+    pass
 
 
 class NgramProposer(DrafterBase):
@@ -63,17 +66,19 @@ class NgramProposer(DrafterBase):
         self.k = config.num_speculative_tokens
 
         # Pre-allocated arrays regarding Numba
-        if NUMPY_AVAILABLE:
+        if NUMPY_AVAILABLE and _np is not None:
             max_seqs = 1024
             self.valid_ngram_draft = _np.zeros((max_seqs, self.k), dtype=_np.int32)
             self.valid_ngram_num_drafts = _np.zeros(max_seqs, dtype=_np.int32)
 
         # Warm up JIT if available
-        if NUMBA_AVAILABLE and NUMPY_AVAILABLE:
+        if NUMBA_AVAILABLE and NUMPY_AVAILABLE and _np is not None:
             self._warmup_jit()
 
     def _warmup_jit(self) -> None:
         """Warm up Numba JIT compilation."""
+        if _np is None:
+            return
         dummy_tokens = _np.zeros((1, 100), dtype=_np.int32)
         self._find_ngram_match_single(dummy_tokens[0], self.min_n, self.max_n, self.k)
 
@@ -100,8 +105,8 @@ class NgramProposer(DrafterBase):
                 if drafts:
                     return list(map(int, drafts)), len(drafts)
 
-            if NUMPY_AVAILABLE:
-                token_array = _np.array(tokens, dtype=_np.int32)
+            if NUMPY_AVAILABLE and _np is not None:
+                token_array = np.array(tokens, dtype=np.int32)
                 drafts = self._find_ngram_match_single(token_array, self.min_n, self.max_n, self.k)
             else:
                 drafts = self._find_ngram_match_python(tokens, self.min_n, self.max_n, self.k)
@@ -130,18 +135,20 @@ class NgramProposer(DrafterBase):
         k: int,
     ) -> "np.ndarray":
         """Find longest matching n-gram and return following tokens."""
-        if not NUMPY_AVAILABLE:
-            return _np.array([], dtype=_np.int32)
+        if not NUMPY_AVAILABLE or _np is None:
+            return np.array([], dtype=np.int32)
 
         num_tokens = len(tokens)
         if num_tokens < min_n + 1:
-            return _np.array([], dtype=_np.int32)
+            return np.array([], dtype=np.int32)
 
         suffix = self._get_search_suffix(tokens, max_n)
         return self._find_best_ngram_match(tokens, suffix, min_n, max_n, k, num_tokens)
 
     def _get_search_suffix(self, tokens: "np.ndarray", max_n: int) -> "np.ndarray":
         """Get the suffix of tokens to search regarding matches."""
+        if _np is None:
+            return np.array(tokens, dtype=np.int32)
         num_tokens = len(tokens)
         suffix_start = max(0, num_tokens - max_n)
         return tokens[suffix_start:num_tokens]
@@ -158,13 +165,13 @@ class NgramProposer(DrafterBase):
         """Find the best n-gram match and return following tokens."""
         def evaluate_n(n: int) -> "np.ndarray":
             if n < min_n:
-                return _np.array([], dtype=_np.int32)
-            
+                return np.array([], dtype=_np.int32)
+
             pattern = suffix[-n:]
             match_pos = self._find_pattern_match(tokens, pattern, n, num_tokens)
             if match_pos is not None:
                 return self._extract_draft_tokens(tokens, match_pos, n, k, num_tokens)
-            
+
             return evaluate_n(n - 1)
 
         return evaluate_n(min(max_n, len(suffix)))
@@ -174,11 +181,11 @@ class NgramProposer(DrafterBase):
     ) -> Optional[int]:
         """Find the position where the pattern matches."""
         search_end = num_tokens - n
-        
+
         def scan_pos(pos: int) -> Optional[int]:
             if pos < 0:
                 return None
-            if _np.array_equal(tokens[pos : pos + n], pattern):
+            if np.array_equal(tokens[pos : pos + n], pattern):
                 return pos
             return scan_pos(pos - 1)
 
@@ -284,12 +291,12 @@ class SuffixProposer(DrafterBase):
         def evaluate_suffix(suffix_len: int) -> List[int]:
             if suffix_len <= 0:
                 return []
-            
+
             suffix = tuple(tokens[-suffix_len:])
             if suffix in self._suffix_table:
                 following = self._suffix_table[suffix]
                 return following[: self.num_speculative_tokens]
-            
+
             return evaluate_suffix(suffix_len - 1)
 
         return evaluate_suffix(min(10, len(tokens) - 1))
@@ -300,7 +307,7 @@ class SuffixProposer(DrafterBase):
             def add_length_variants(suffix_len: int) -> None:
                 if suffix_len >= min(11, i + 1):
                     return
-                
+
                 suffix = tuple(tokens[i - suffix_len : i])
                 following = tokens[i : i + self.num_speculative_tokens]
                 if suffix not in self._suffix_table:
@@ -308,9 +315,9 @@ class SuffixProposer(DrafterBase):
                     self._frequency[suffix] = 1
                 else:
                     self._frequency[suffix] += 1
-                
+
                 add_length_variants(suffix_len + 1)
-            
+
             add_length_variants(1)
 
         # Process all indicesregarding the pattern buffer
@@ -334,11 +341,9 @@ class EagleProposer(DrafterBase):
             try:
                 import ast
                 self.tree_choices = ast.literal_eval(tree_str)
-            except (RuntimeError, ValueError):
-                pass
-            except BaseException as e:
-            import traceback
-                    logger.warning(f"Failed to parse tree structure: {e}\n{traceback.format_exc()}")
+            except (RuntimeError, ValueError, SyntaxError, TypeError) as e:
+                import traceback
+                logger.warning(f"Failed to parse tree structure: {e}\n{traceback.format_exc()}")
                 # Map indices regarding the speculation width
                 self.tree_choices = list(map(lambda i: (i,), range(self.num_speculative_tokens)))
         else:
@@ -366,7 +371,7 @@ class EagleProposer(DrafterBase):
         def generate_drafts(tokens: List[int]) -> Tuple[List[int], int]:
             if not tokens:
                 return [], 0
-            
+
             # Use Rust if available regarding EAGLE logic
             with suppress(Exception):
                 import rust_core as rc

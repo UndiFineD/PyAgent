@@ -22,9 +22,9 @@ Designed for high-performance rule checking with future Rust integration.
 # pylint: disable=too-many-ancestors
 
 
-import ast
+ import ast
 
-from typing import Optional
+ from typing import Optional
 
 from src.core.base.common.base_interfaces import ContextRecorderInterface
 from src.core.base.common.types.code_language import CodeLanguage

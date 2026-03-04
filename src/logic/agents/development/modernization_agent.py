@@ -19,9 +19,9 @@ from __future__ import annotations
 # pylint: disable=too-many-ancestors
 
 
-import re
+ import re
 
-from src.core.base.common.types.modernization_suggestion import \
+ from src.core.base.common.types.modernization_suggestion import \
     ModernizationSuggestion
 from src.core.base.lifecycle.version import VERSION
 

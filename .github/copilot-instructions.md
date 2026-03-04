@@ -28,11 +28,6 @@ Every Python file should have the following header once:
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 ```
 
 - **Naming**:
@@ -40,7 +35,7 @@ Every Python file should have the following header once:
   - **Classes**: Always use `PascalCase` (e.g., `CoderAgent`).
   - **Specific Naming Rules**:
     - `QuantumScalingCoderAgent` must be in `quantum_scaling_coder_agent.py`.
-    - Tests for it must be in `tests/specialists/test_quantum_scaling_coder_agent.py`.
+    - Tests for it must be in `quantum_scaling_coder_agent_test.py`.
   - **Variables/Methods**: Use `snake_case`.
 - **Imports**: Modules should be imported using their `snake_case` filenames, even on Windows.
 - **Concurrency**: Use `asyncio` for all I/O, network requests, and subprocess execution.
@@ -48,7 +43,7 @@ Every Python file should have the following header once:
 - **Context Lineage**: Use `CascadeContext` from `src/core/base/models/communication_models.py` to prevent infinite recursion and ensure task attribution in the swarm.
 
 ## Workflows & Tools
-- **Testing**: Run comprehensive tests using `pytest tests/`. Use fixtures from `tests/conftest.py` for agent sandboxing.
+- **Testing**: Run comprehensive tests using `pytest src/`. Use fixtures from `tests/conftest.py` for agent sandboxing.
 - **CLI Interaction**: Entry point is `src/interface/ui/cli/pyagent_cli.py`.
 - **API/Web**: Entry point is `src/interface/ui/web/py_agent_web.py` (Fleet Load Balancer).
 - **Tool Discovery**: Discover external tools via the MCP protocol using `MCPAgent`.

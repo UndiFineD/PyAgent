@@ -13,16 +13,14 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Auto-extracted class from agent_backend.py"""
-
-
 import hashlib
 import os
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
+
+"""Auto-extracted class from agent_backend.py"""
 
 
 class RequestSigner:
@@ -43,8 +41,7 @@ class RequestSigner:
         Args:
             secret_key: Secret key for signing. If None, uses environment variable.
         """
-import hmac
-
+        import hmac
         self._hmac = hmac
         self.secret_key = (secret_key or os.environ.get("DV_AGENT_SIGNING_KEY", "")).encode()
         self._signatures: dict[str, str] = {}

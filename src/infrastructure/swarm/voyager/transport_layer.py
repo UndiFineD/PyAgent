@@ -13,7 +13,7 @@ import zmq
 import zmq.asyncio
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
-from src.observability.structured_logger import StructuredLogger
+ from src.observability.structured_logger import StructuredLogger
 
 logger = StructuredLogger(__name__)
 

@@ -35,7 +35,7 @@ class SelfHealingAgent(BaseAgent):
         self.telemetry = ObservabilityEngine(str(self.workspace_root))
         
         # Phase 317: Dynamic prompt loading and coordinator integration
-from src.maintenance.SelfImprovementCoordinator import SelfImprovementCoordinator
+        from src.maintenance.SelfImprovementCoordinator import SelfImprovementCoordinator
         self.coordinator = SelfImprovementCoordinator(str(self.workspace_root))
         self._load_dynamic_prompt()
 
@@ -61,7 +61,7 @@ from src.maintenance.SelfImprovementCoordinator import SelfImprovementCoordinato
             except Exception as e:
                 # Log but don't fail - dynamic prompt is optional enhancement
                 import logging
-                    logging.getLogger(__name__).debug("Failed to load dynamic prompt: %s", e)
+                logging.getLogger(__name__).debug("Failed to load dynamic prompt: %s", e)
     @as_tool
     async def discover_peers_and_budget(self) -> str:
         """Discovers available peers and current cloud budget status."""

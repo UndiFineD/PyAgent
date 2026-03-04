@@ -20,9 +20,9 @@ Video loader implementation.
 """
 
 
-from typing import BinaryIO, Tuple, Union
+ from typing import BinaryIO, Tuple, Union
 
-import numpy as np
+ import numpy as np
 
 try:
     import rust_core as rc

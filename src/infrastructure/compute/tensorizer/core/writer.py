@@ -21,7 +21,7 @@ import struct
 from pathlib import Path
 from typing import BinaryIO, Callable, Dict, List, Optional, Union
 
-import numpy as np
+ import numpy as np
 
 from .compression import compress_data
 from .config import (DTYPE_MAP, TENSORIZER_MAGIC, TENSORIZER_VERSION,

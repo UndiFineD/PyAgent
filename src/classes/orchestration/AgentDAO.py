@@ -43,7 +43,7 @@ class AgentDAO(BaseAgent):
     def improve_content(self, input_text: str) -> str:
         return "The DAO maintains the equilibrium of agent resource consumption."
 
-if __name__ == "__main__":
-from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(AgentDAO, "AgentDAO", "Fleet Resource Governance")
-    main()
+    if __name__ == "__main__":
+        from src.classes.base_agent.utilities import create_main_function
+        main = create_main_function(AgentDAO, "AgentDAO", "Fleet Resource Governance")
+        main()

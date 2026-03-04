@@ -21,7 +21,7 @@ Facade for the Pooling Engine (AI-specific).
 from .engine import PoolingEngine, create_pooling_engine
 from .models import (ClassificationOutput, EmbeddingOutput, PoolingConfig,
                      PoolingResult, PoolingStrategy, PoolingTask)
-from .strategies import (AttentionPooler, BasePooler, CLSPooler,
+                     from .strategies import (AttentionPooler, BasePooler, CLSPooler,
                          LastTokenPooler, MatryoshkaPooler, MaxPooler,
                          MeanPooler, MultiVectorPooler, StepPooler,
                          WeightedMeanPooler)

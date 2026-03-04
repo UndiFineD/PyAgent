@@ -22,9 +22,9 @@ import functools
 from dataclasses import dataclass
 from typing import List, Optional
 
-import numpy as np
+ import numpy as np
 
-from .config import AcceptanceMethod
+ from .config import AcceptanceMethod
 
 
 @dataclass

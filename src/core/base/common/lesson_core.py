@@ -23,7 +23,7 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import List, Optional, Set
 
-from .base_core import BaseCore
+ from .base_core import BaseCore
 
 try:
     import rust_core as rc

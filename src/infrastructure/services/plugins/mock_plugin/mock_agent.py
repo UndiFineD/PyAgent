@@ -20,12 +20,12 @@ Demonstrates how to wrap a Core and interact with the Fleet.
 """
 
 
-import logging
+ import logging
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 
-from .mock_core import MockCore
+ from .mock_core import MockCore
 
 __version__ = VERSION
 

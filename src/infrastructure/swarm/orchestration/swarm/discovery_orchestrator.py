@@ -26,10 +26,10 @@ import threading
 import time
 from typing import TYPE_CHECKING, Any
 
-from zeroconf import (IPVersion, ServiceBrowser, ServiceInfo, ServiceListener,
+ from zeroconf import (IPVersion, ServiceBrowser, ServiceInfo, ServiceListener,
                       Zeroconf)
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

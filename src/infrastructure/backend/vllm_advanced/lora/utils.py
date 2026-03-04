@@ -9,12 +9,14 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Union
 
-from .models import HAS_LORA
+ from .models import HAS_LORA
 
 if HAS_LORA:
-from vllm.lora.request import LoRARequest
-else:
-    LoRARequest = None
+    try:
+        from vllm.lora.request import LoRARequest
+    except ImportError:
+        LoRARequest = None
+
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +29,7 @@ def create_lora_request(
     """Create a LoRARequest directly."""
     if not HAS_LORA:
         return None
-    
+
     return LoRARequest(
         lora_name=name,
         lora_int_id=adapter_id,
@@ -44,12 +46,12 @@ def discover_adapters(
     """
     directory = Path(directory)
     adapters = []
-    
+
     for config_path in directory.rglob(pattern):
         try:
-            with open(config_path) as f:
+            with open(config_path, encoding="utf-8") as f:
                 config = json.load(f)
-            
+
             adapters.append({
                 "name": config_path.parent.name,
                 "path": str(config_path.parent),
@@ -58,7 +60,7 @@ def discover_adapters(
                 "alpha": config.get("lora_alpha"),
                 "target_modules": config.get("target_modules", []),
             })
-        except Exception as e:
+        except (OSError, json.JSONDecodeError, KeyError, ValueError) as e:
             logger.debug(f"Failed to parse adapter config {config_path}: {e}")
-    
+
     return adapters

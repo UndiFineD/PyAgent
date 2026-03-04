@@ -20,7 +20,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .error_entry import ErrorEntry
 from .external_reporter import ExternalReporter

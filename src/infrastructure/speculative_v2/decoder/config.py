@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration and enums for speculative v2 decoding."""
 
-from enum import Enum
+ from enum import Enum
 
 
 class ProposerType(Enum):

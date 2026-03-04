@@ -20,9 +20,9 @@ Truncation management for prompt rendering.
 """
 
 
-from typing import List, Tuple
+ from typing import List, Tuple
 
-from .models import TruncationResult, TruncationStrategy
+ from .models import TruncationResult, TruncationStrategy
 
 
 class TruncationManager:

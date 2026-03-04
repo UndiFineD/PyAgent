@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
-from enum import Enum, auto
+ from enum import Enum, auto
 
 class TaskPriority(Enum):
     """Task priority levels."""

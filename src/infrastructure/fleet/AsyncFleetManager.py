@@ -231,18 +231,18 @@ class AsyncFleetManager(FleetManager):
 
         return content
 
-if __name__ == "__main__":
+    if __name__ == "__main__":
     # Test script
-import asyncio
-from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
-from src.logic.agents.security.SecurityGuardAgent import SecurityGuardAgent
+        import asyncio
+        from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+        from src.logic.agents.security.SecurityGuardAgent import SecurityGuardAgent
 
-    root = "."
-    afleet = AsyncFleetManager(root)
-    afleet.register_agent("K1", KnowledgeAgent)
-    afleet.register_agent("S1", SecurityGuardAgent)
+        root = "."
+        afleet = AsyncFleetManager(root)
+        afleet.register_agent("K1", KnowledgeAgent)
+        afleet.register_agent("S1", SecurityGuardAgent)
 
-    wf = [
+        wf = [
         {"agent": "K1", "action": "improve_content", "args": ["agent"]},
         {"agent": "S1", "action": "improve_content", "args": ["clean code"]}
     ]

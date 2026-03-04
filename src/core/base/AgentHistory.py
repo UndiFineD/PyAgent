@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 
-from src.core.base.state.agent_history import AgentConversationHistory  # type: ignore
+ from src.core.base.state.agent_history import AgentConversationHistory  # type: ignore
 
 __all__ = ["AgentConversationHistory"]
 

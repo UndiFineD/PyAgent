@@ -15,7 +15,7 @@
 Restore Except As E module.
 """
 
-from pathlib import Path
+ from pathlib import Path
 
 def restore_except_as_e(root_dir):
     """

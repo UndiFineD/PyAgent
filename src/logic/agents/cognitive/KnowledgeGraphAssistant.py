@@ -1,7 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # Assistant for managing the knowledge graph and impact radius.
 
-from typing import Set
+ from typing import Set
 
 class KnowledgeGraphAssistant:
     """Handles backlinks, dependency tracking, and graph visualization."""
@@ -25,7 +25,7 @@ class KnowledgeGraphAssistant:
 
     def generate_mermaid(self, index: dict[str, list[str]]) -> str:
         """Exports the current knowledge graph as a Mermaid string."""
-from pathlib import Path
+        from pathlib import Path
         lines = ["graph TD"]
         # Track edge combinations to prevent duplicates
         edges = set()

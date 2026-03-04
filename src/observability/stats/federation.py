@@ -12,7 +12,7 @@ import logging
 from datetime import datetime
 from typing import Any
 
-from src.core.base.logic.connectivity_manager import ConnectivityManager
+ from src.core.base.logic.connectivity_manager import ConnectivityManager
 
 from .metrics import AggregationResult
 from .observability_core import (AggregationType, FederatedSource,

@@ -14,7 +14,7 @@
 
 """Multimodal buffer management."""
 
-from typing import List
+ from typing import List
 
 try:
     import rust_core as rc

@@ -19,7 +19,7 @@ Priority Scheduler Facade.
 Redirects to the modular implementation in .priority
 """
 
-from .priority import (AsyncPriorityScheduler, DeadlineScheduler,
+ from .priority import (AsyncPriorityScheduler, DeadlineScheduler,
                        PriorityScheduler, RateLimitedScheduler, ScheduledTask,
                        TaskPriority, TaskState, TaskStats)
 

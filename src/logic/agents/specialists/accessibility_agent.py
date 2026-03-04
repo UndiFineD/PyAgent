@@ -17,7 +17,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_coder.py"""
 
 
-import logging
+ import logging
 
 from src.core.base.common.types.accessibility_issue import AccessibilityIssue
 from src.core.base.common.types.accessibility_issue_type import \
@@ -27,15 +27,15 @@ from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.accessibility_report_mixin import \
     AccessibilityReportMixin
-from src.logic.agents.development.html_accessibility_mixin import \
+    from src.logic.agents.development.html_accessibility_mixin import \
     HtmlAccessibilityMixin
-from src.logic.agents.development.javascript_accessibility_mixin import \
+    from src.logic.agents.development.javascript_accessibility_mixin import \
     JavascriptAccessibilityMixin
-from src.logic.agents.development.python_accessibility_mixin import \
+    from src.logic.agents.development.python_accessibility_mixin import \
     PythonAccessibilityMixin
-from src.logic.agents.specialists.mixins.accessibility_core_mixin import \
+    from src.logic.agents.specialists.mixins.accessibility_core_mixin import \
     AccessibilityCoreMixin
-from src.logic.agents.specialists.mixins.accessibility_logic_mixin import \
+    from src.logic.agents.specialists.mixins.accessibility_logic_mixin import \
     AccessibilityLogicMixin
 
 __version__ = VERSION

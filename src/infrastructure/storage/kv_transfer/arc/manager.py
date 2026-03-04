@@ -28,7 +28,7 @@ from src.core.base.logic.connectivity_manager import ConnectivityManager
 from src.infrastructure.storage.kv_transfer.arc.base import OffloadingManager
 from src.infrastructure.storage.kv_transfer.arc.types import (
     BlockHash, BlockState, BlockStatus, OffloadingEvent, PrepareStoreOutput)
-from src.infrastructure.storage.kv_transfer.k_vzap import (KVzapConfig,
+    from src.infrastructure.storage.kv_transfer.k_vzap import (KVzapConfig,
                                                            KVzapPruner)
 
 if TYPE_CHECKING:

@@ -15,9 +15,9 @@ from typing import (
     Set,
 )
 
-import numpy as np
+ import numpy as np
 
-from .Base import StructuredOutputGrammar
+ from .Base import StructuredOutputGrammar
 
 
 @dataclass

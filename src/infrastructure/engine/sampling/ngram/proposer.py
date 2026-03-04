@@ -33,7 +33,7 @@ import contextlib
 import logging
 from typing import TYPE_CHECKING
 
-import numpy as np
+ import numpy as np
 
 from src.infrastructure.engine.sampling.ngram.accelerators import HAS_RUST
 from src.infrastructure.engine.sampling.ngram.index import SuffixIndex
@@ -43,7 +43,7 @@ from src.infrastructure.engine.sampling.ngram.types import (MatchingStrategy,
 
 # Try to import rust_core if available via accelerators module context
 with contextlib.suppress(ImportError):
-import rust_core
+    import rust_core
 
 if TYPE_CHECKING:
     from numpy.typing import NDArray

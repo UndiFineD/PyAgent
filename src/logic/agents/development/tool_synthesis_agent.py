@@ -33,13 +33,13 @@ No commands will be executed.
 # pylint: disable=too-many-ancestors
 
 
-import logging
+ import logging
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-from src.core.base.lifecycle.base_agent import BaseAgent
+ from src.core.base.lifecycle.base_agent import BaseAgent
 
 
 class ToolSynthesisAgent(BaseAgent):

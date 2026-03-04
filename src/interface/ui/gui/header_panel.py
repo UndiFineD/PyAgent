@@ -25,9 +25,9 @@ import tkinter as tk
 from tkinter import ttk
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .template_manager import TemplateManager
+ from .template_manager import TemplateManager
 
 __version__ = VERSION
 

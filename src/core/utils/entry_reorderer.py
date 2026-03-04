@@ -20,7 +20,7 @@ from __future__ import annotations
 from src.core.base.common.types.changelog_entry import ChangelogEntry
 from src.core.base.lifecycle.version import VERSION
 
-from .GroupingStrategy import GroupingStrategy
+ from .GroupingStrategy import GroupingStrategy
 
 __version__ = VERSION
 

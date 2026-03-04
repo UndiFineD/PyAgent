@@ -19,7 +19,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, List, Optional
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

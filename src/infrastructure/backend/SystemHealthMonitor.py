@@ -13,16 +13,13 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Auto-extracted class from agent_backend.py"""
-
-from src.core.base.version import VERSION
-from .SystemHealthStatus import SystemHealthStatus
-from .SystemState import SystemState
-from typing import Dict, List, Optional, Tuple
 import logging
 import threading
-from src.observability.stats.analysis import FleetMetrics
+
+ from src.core.base.version import VERSION
+
+from .system_health_status import SystemHealthStatus
+from .system_state import SystemState
 
 __version__ = VERSION
 # from src.observability.stats.core.StabilityCore import StabilityCore, FleetMetrics
@@ -37,7 +34,7 @@ class SystemHealthMonitor:
         health_threshold: float = 0.8,
         window_size: int = 100,
     ) -> None:
-from src.observability.stats.core.StabilityCore import StabilityCore
+        from src.observability.stats.core.StabilityCore import StabilityCore
         self.health_threshold = health_threshold
         self.window_size = window_size
         self.core = StabilityCore()
@@ -156,30 +153,24 @@ from src.observability.stats.core.StabilityCore import StabilityCore
     def calculate_global_stability(self, anomalies: int = 0) -> float:
         """Calculates aggregrate fleet stability score using Core logic."""
         with self._lock:
+            from src.observability.stats.core.StabilityCore import FleetMetrics
             total_success = 0
             total_requests = 0
             latencies = []
-            
-            for b in self._history:
-                hist = self._history[b]
+            for _, hist in self._history.items():
                 total_success += sum(1 for s, _ in hist if s)
                 total_requests += len(hist)
                 latencies.extend([lat for _, lat in hist])
-                
             error_rate = 1.0 - (total_success / total_requests if total_requests > 0 else 0)
             avg_latency = sum(latencies) / len(latencies) if latencies else 0
-            
             metrics = FleetMetrics(
                 avg_error_rate = error_rate,
                 total_token_out = 0, # simulated for now
                 active_agent_count = len(self._history),
                 latency_p95 = avg_latency # rough estimate
             )
-            
             score = self.core.calculate_stability_score(metrics, anomalies)
             self.stability_history.append(score)
-            
             if self.core.is_in_stasis(self.stability_history):
                 logging.warning("SystemHealth: Stable Stasis detected (Minimal change).")
-                
-            return score
+        return score

@@ -21,7 +21,7 @@ import io
 import struct
 from typing import Any, Tuple, Union
 
-import numpy as np
+ import numpy as np
 
 from .data import MediaHash
 from .enums import HashAlgorithm, MediaType

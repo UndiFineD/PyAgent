@@ -18,9 +18,9 @@ Detector.py module.
 """
 
 
-from typing import Any, Dict, Optional
+ from typing import Any, Dict, Optional
 
-from .config import ModelArchitecture, ModelCapability
+ from .config import ModelArchitecture, ModelCapability
 
 
 class ArchitectureDetector:

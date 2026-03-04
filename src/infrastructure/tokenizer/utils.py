@@ -6,7 +6,7 @@ Utility functions for tokenization.
 """
 
 
-from typing import Optional
+ from typing import Optional
 
 from .models import TokenizerConfig, TokenizerBackend
 from .base import BaseTokenizer

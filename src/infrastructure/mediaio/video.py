@@ -6,9 +6,9 @@ Video loader implementation.
 """
 
 
-from typing import BinaryIO, Tuple, Union
+ from typing import BinaryIO, Tuple, Union
 
-import numpy as np
+ import numpy as np
 
 from .base import MediaLoader
 from .models import (
@@ -45,7 +45,7 @@ class VideoLoader(MediaLoader):
             raise RuntimeError("OpenCV required for video loading")
         
         if isinstance(source, bytes):
-import tempfile
+            import tempfile
             with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as f:
                 f.write(source)
                 path = f.name

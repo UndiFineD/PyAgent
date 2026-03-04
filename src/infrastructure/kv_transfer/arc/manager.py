@@ -35,7 +35,7 @@ class ARCOffloadManager(OffloadingManager):
         adaptation_speed: float = 1.0,
         kvzap_config: Optional['KVzapConfig'] = None
     ):
-from src.infrastructure.kv_transfer.KVzap import KVzapPruner
+        from src.infrastructure.kv_transfer.KVzap import KVzapPruner
         
         self.backend = backend
         self.adaptation_speed = adaptation_speed

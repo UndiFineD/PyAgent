@@ -16,7 +16,7 @@
 Agent verifier.py module.
 """
 
-from typing import Any, Optional
+ from typing import Any, Optional
 
 try:
     import numpy as np

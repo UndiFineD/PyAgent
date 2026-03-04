@@ -22,9 +22,9 @@ Generates OpenAPI/Swagger specs and handles external tool integration.
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .api_core import APICore
+ from .api_core import APICore
 
 __version__ = VERSION
 

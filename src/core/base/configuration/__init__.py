@@ -16,6 +16,6 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Configuration management module for PyAgent."""
 
-from .config_manager import CoreConfigManager, config  # noqa: F401
+ from .config_manager import CoreConfigManager, config  # noqa: F401
 
 __all__ = ["CoreConfigManager", "config"]

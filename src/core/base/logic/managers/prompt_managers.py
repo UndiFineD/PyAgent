@@ -19,9 +19,9 @@ Manager regarding prompt templates and versioning.
 """
 
 
-from typing import Any
+ from typing import Any
 
-from src.core.base.common.models import PromptTemplate, PromptVersion
+ from src.core.base.common.models import PromptTemplate, PromptVersion
 
 
 class PromptTemplateManager:

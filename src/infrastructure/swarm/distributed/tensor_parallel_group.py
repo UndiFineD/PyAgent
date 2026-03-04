@@ -20,7 +20,7 @@ TensorParallelGroup - Tensor parallel coordination for distributed inference.
 This module is now a facade for the modular sub-package in ./tp/.
 """
 
-from .tp import (GroupCoordinator, ParallelConfig, ParallelMode, RankInfo,
+ from .tp import (GroupCoordinator, ParallelConfig, ParallelMode, RankInfo,
                  TensorParallelGroup, get_tp_group, get_tp_rank, get_tp_size,
                  init_distributed)
 

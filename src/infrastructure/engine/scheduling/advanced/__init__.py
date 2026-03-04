@@ -16,7 +16,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Advanced request scheduling sub-package."""
 
-from .config import (PreemptionReason, RequestPriority, RequestState,  # noqa: F401
+ from .config import (PreemptionReason, RequestPriority, RequestState,  # noqa: F401
                      SchedulerConfig)
 from .queue import PriorityRequestQueue  # noqa: F401
 from .request import RequestMetrics, ScheduledRequest  # noqa: F401

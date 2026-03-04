@@ -39,7 +39,7 @@ from typing import (
 try:
     import msgspec
     MSGSPEC_AVAILABLE = True
-from msgspec import Struct, json as msgspec_json, msgpack as msgspec_msgpack
+    from msgspec import Struct, json as msgspec_json, msgpack as msgspec_msgpack
 except ImportError:
     MSGSPEC_AVAILABLE = False
     msgspec = None  # type: ignore

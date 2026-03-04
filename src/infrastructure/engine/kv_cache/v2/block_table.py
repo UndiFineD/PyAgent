@@ -21,7 +21,7 @@ import logging
 from collections import deque
 from typing import Any, Dict, List, Optional
 
-import numpy as np
+ import numpy as np
 
 try:
     import rust_core as rc

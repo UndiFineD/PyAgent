@@ -26,7 +26,7 @@ import functools
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING
 
-from .config import SpecDecodeConfig, VerificationStrategy
+ from .config import SpecDecodeConfig, VerificationStrategy
 
 if TYPE_CHECKING:
     from .metadata import SpecDecodeMetadataV2, TreeVerificationMetadata

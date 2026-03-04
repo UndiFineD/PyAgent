@@ -6,7 +6,7 @@ LM Studio Backend - Integration using the official lmstudio SDK.
 This module is now a facade for the modular sub-package in ./lmstudio/.
 """
 
-from .lmstudio import (
+ from .lmstudio import (
     LMStudioConfig,
     CachedModel,
     ModelCache,

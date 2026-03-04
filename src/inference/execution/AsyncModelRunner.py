@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Facade for Async Model Runner modular implementation."""
 
-from .model_runner import (
+ from .model_runner import (
     RunnerState,
     ModelInput,
     ModelOutput,

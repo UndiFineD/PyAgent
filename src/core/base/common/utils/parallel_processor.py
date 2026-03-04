@@ -37,7 +37,7 @@ try:
 except ImportError:
     HAS_TQDM = False
 
-from src.core.base.common.execution_core import ExecutionCore
+ from src.core.base.common.execution_core import ExecutionCore
 
 
 class ParallelProcessor:

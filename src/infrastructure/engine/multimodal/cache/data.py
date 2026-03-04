@@ -20,7 +20,7 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict
 
-from .enums import HashAlgorithm, MediaType
+ from .enums import HashAlgorithm, MediaType
 
 
 @dataclass(frozen=True)

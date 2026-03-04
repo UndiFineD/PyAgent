@@ -16,7 +16,7 @@
 Assistant for indexing the workspace for vector search.
 """
 
-from typing import List, Dict, Any, Tuple
+ from typing import List, Dict, Any, Tuple
 
 
 class KnowledgeIndexingAssistant:

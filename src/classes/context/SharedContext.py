@@ -4,7 +4,7 @@ from __future__ import annotations
 """Auto-extracted class from agent_context.py"""
 
 
-from .SharingPermission import SharingPermission
+ from .SharingPermission import SharingPermission
 
 from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field

@@ -22,7 +22,7 @@ import io
 from pathlib import Path
 from typing import BinaryIO, Tuple, Union
 
-import numpy as np
+ import numpy as np
 
 from .base import MediaLoader
 from .models import (ImageData, ImageFormat, MediaLoadConfig, MediaMetadata,
@@ -104,7 +104,7 @@ class ImageLoader(MediaLoader):
                     return await resp.read()
         except ImportError:
             import urllib.request
-                with urllib.request.urlopen(url) as resp:
+            with urllib.request.urlopen(url) as resp:
                 return resp.read()
 
     def _detect_format(self, data: bytes) -> ImageFormat:

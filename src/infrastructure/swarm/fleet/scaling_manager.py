@@ -22,9 +22,9 @@ Monitors system load and spawns new agent instances as needed.
 import logging
 import time
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .scaling_core import ScalingCore
+ from .scaling_core import ScalingCore
 
 __version__ = VERSION
 

@@ -19,6 +19,6 @@ Manager regarding conversation history.
 """
 
 
-from src.core.base.common.models import ConversationHistory
+ from src.core.base.common.models import ConversationHistory
 
 __all__ = ["ConversationHistory"]

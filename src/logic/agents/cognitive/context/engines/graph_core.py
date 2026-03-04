@@ -21,7 +21,7 @@ Pure logic for AST-based code relationship analysis and graph management.
 import ast
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core

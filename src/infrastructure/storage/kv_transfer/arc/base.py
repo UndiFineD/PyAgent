@@ -22,7 +22,7 @@ Abstract base for offloading managers.
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from src.infrastructure.storage.kv_transfer.arc.types import (
+ from src.infrastructure.storage.kv_transfer.arc.types import (
     BlockHash, LoadStoreSpec, PrepareStoreOutput)
 
 if TYPE_CHECKING:

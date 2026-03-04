@@ -21,7 +21,7 @@ import logging
 import re
 import time
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 from .permission_level import PermissionLevel
 from .report_permission import ReportPermission

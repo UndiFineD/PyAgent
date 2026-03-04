@@ -22,9 +22,9 @@ Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cl
 import logging
 import time
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
-from .prometheus_exporter import PrometheusExporter
+ from .prometheus_exporter import PrometheusExporter
 
 __version__ = VERSION
 

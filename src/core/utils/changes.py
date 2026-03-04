@@ -20,7 +20,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
+ from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -31,7 +31,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.core.base.common.base_utilities import \
+ from src.core.base.common.base_utilities import \
     create_main_function  # noqa: E402
 from src.logic.agents.swarm.changes_agent import ChangesAgent  # noqa: E402
 

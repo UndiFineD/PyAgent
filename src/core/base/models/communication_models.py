@@ -46,6 +46,7 @@ class CascadeContext:
     parent_agent_id: str | None = None
     cascade_depth: int = 0
     max_depth: int = 10
+    agent_name: str = ""  # added to avoid AttributeError when base_agent sets it
     
     def next_level(self, agent_id: str) -> CascadeContext:
         """Create a child context for the next level of delegation."""
