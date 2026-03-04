@@ -21,7 +21,7 @@ from __future__ import annotations
 
 """Test agent functionality - extracted classes."""
 
- from src.core.base.Version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 
 # Attempt to import rich agent_tests implementations from infra; fall back silently
 try:
