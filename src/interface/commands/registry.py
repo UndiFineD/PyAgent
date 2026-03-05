@@ -16,11 +16,11 @@
 Command registry for slash commands.
 """
 
- from __future__ import annotations
+from __future__ import annotations
 
- from typing import Callable
+from typing import Callable
 
- from .base import CommandDefinition, CommandHandler
+from .base import CommandDefinition, CommandHandler
 
 
 class CommandRegistry:
