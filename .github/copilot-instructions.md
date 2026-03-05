@@ -46,12 +46,11 @@ Every Python file should have the following header once:
 - **Testing**: Run comprehensive tests using `pytest src/`. Use fixtures from `tests/conftest.py` for agent sandboxing.
 - **CLI Interaction**: Entry point is `src/interface/ui/cli/pyagent_cli.py`.
 - **API/Web**: Entry point is `src/interface/ui/web/py_agent_web.py` (Fleet Load Balancer).
-- **Tool Discovery**: Discover external tools via the MCP protocol using `MCPAgent`.
 
 ## Core Components for Reference
 - `src/core/base/base_agent.py`: Principal agent interface.
 - `src/core/base/agent_state_manager.py`: FS transaction integrity.
 - `src/core/base/models/communication_models.py`: Task lineage and priority.
 - `docs/ARCHITECTURE.md`: High-level system design.
-- `docs/AGENTS.md`: Full catalog of specialized agents.
+- `docs/AGENTS.md`: Full catalog of specialized PyAgents.
 - `rust_core/`: Performance-critical logic.
