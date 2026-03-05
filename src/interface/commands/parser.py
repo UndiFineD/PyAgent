@@ -16,7 +16,7 @@
 Slash command parser and executor.
 """
 
-from __future__ import annotations
+ from __future__ import annotations
 
 import logging
 import re

@@ -37,14 +37,11 @@ import logging
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from src.core.lazy_loader import LazyLoader
-from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
-    KVConnectorRole, KVTransferConfig)
+from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (KVConnectorRole, KVTransferConfig)
 
 if TYPE_CHECKING:
-    from src.infrastructure.storage.cache.kv_cache_manager import \
-        KVCacheManager
-        from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
-        KVConnectorBase
+    from src.infrastructure.storage.cache.kv_cache_manager import KVCacheManager
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import KVConnectorBase
 
 logger: logging.Logger = logging.getLogger(__name__)
 

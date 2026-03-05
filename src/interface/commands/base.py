@@ -16,7 +16,7 @@
 Base types and models for slash commands.
 """
 
-from __future__ import annotations
+ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Any, Callable, TypeAlias
