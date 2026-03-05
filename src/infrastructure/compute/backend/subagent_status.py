@@ -18,9 +18,11 @@ from __future__ import annotations
 
 
 import os
-from .subagent_runner import SubagentRunner
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .subagent_runner import SubagentRunner
 
 from src.core.base.lifecycle.version import VERSION
 

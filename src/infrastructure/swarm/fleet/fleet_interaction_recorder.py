@@ -21,6 +21,7 @@ import contextlib
 import time
 from typing import TYPE_CHECKING, Any
 
+if TYPE_CHECKING:
     from .fleet_manager import FleetManager
 
 

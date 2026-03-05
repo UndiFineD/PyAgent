@@ -20,14 +20,14 @@ from typing import Any, TYPE_CHECKING
 
 from src.core.base.Version import VERSION
 from src.observability.StructuredLogger import StructuredLogger
-from src.infrastructure.fleet.WorkflowState import WorkflowState
-from src.infrastructure.fleet.AgentRegistry import AgentRegistry
-from src.infrastructure.fleet.OrchestratorRegistry import OrchestratorRegistry
+from src.classes.fleet.WorkflowState import WorkflowState
+from src.classes.fleet.AgentRegistry import AgentRegistry
+from src.classes.fleet.OrchestratorRegistry import OrchestratorRegistry
 from src.infrastructure.fleet.FleetExecutionCore import FleetExecutionCore
-from src.infrastructure.fleet.FleetLifecycleManager import FleetLifecycleManager
-from src.infrastructure.fleet.FleetInteractionRecorder import FleetInteractionRecorder
+from src.infrastructure.swarm.fleet.fleet_lifecycle_manager import FleetLifecycleManager
+from src.infrastructure.swarm.fleet.fleet_interaction_recorder import FleetInteractionRecorder
 from src.infrastructure.fleet.FleetRoutingCore import FleetRoutingCore
-from src.infrastructure.fleet.FleetConsensusManager import FleetConsensusManager
+from src.infrastructure.swarm.fleet.fleet_consensus_manager import FleetConsensusManager
 from src.infrastructure.fleet.mixins.FleetTaskMixin import FleetTaskMixin
 from src.infrastructure.fleet.mixins.FleetRoutingMixin import FleetRoutingMixin
 from src.infrastructure.fleet.mixins.FleetLifecycleMixin import FleetLifecycleMixin

@@ -4,12 +4,10 @@ from __future__ import annotations
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import logging
-from src.infrastructure.fleet.FleetManager import FleetManager
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
 from src.observability.stats.MetricsEngine import MetricsEngine
 from typing import Any, TYPE_CHECKING
-
 
 from src.infrastructure.orchestration.system.ToolRegistry import ToolRegistry
 from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
@@ -22,6 +20,12 @@ from src.infrastructure.orchestration.intel.SelfImprovementOrchestrator import (
 from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
     GlobalContextEngine,
 )
+
+if TYPE_CHECKING:
+    from src.infrastructure.fleet.FleetManager import FleetManager
+    # These are used only as return types for properties
+    from src.observability.stats import ObservabilityEngine
+    from src.core.base.models import ModelFallbackEngine
 
 
 class FleetLookupMixin:

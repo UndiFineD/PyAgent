@@ -17,20 +17,18 @@ from src.classes.orchestration.ToolRegistry import ToolRegistry
 from src.classes.orchestration.SignalRegistry import SignalRegistry
 from src.classes.stats.ModelFallbackEngine import ModelFallbackEngine
 from src.classes.context.GlobalContextEngine import GlobalContextEngine
-from src.classes.orchestration.SelfHealingOrchestrator import (
-from src.classes.orchestration.SelfImprovementOrchestrator import (
-        SelfHealingOrchestrator,
-    )
-        SelfImprovementOrchestrator,
-    )
+from src.classes.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator
 
-    # Core Components
-    from src.classes.base_agent import BaseAgent
-    from src.classes.fleet.WorkflowState import WorkflowState
+if TYPE_CHECKING:
+    from src.classes.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator
 
-    # Registry and Orchestrators
-    from src.classes.fleet.AgentRegistry import AgentRegistry
-    from src.classes.fleet.OrchestratorRegistry import OrchestratorRegistry
+# Core Components
+from src.classes.base_agent import BaseAgent
+from src.classes.fleet.WorkflowState import WorkflowState
+
+# Registry and Orchestrators
+from src.classes.fleet.AgentRegistry import AgentRegistry
+from src.classes.fleet.OrchestratorRegistry import OrchestratorRegistry
 
 
 class FleetManager:
@@ -111,6 +109,8 @@ class FleetManager:
 
     @property
     def self_improvement(self) -> "SelfImprovementOrchestrator":
+        # Imported lazily here to avoid circular dependency with BaseAgent
+        from src.classes.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator  # type: ignore
         return self.orchestrators.self_improvement
 
     @property

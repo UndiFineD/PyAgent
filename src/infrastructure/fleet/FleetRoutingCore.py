@@ -21,7 +21,9 @@ import time
 import inspect
 from typing import Any, TYPE_CHECKING
 import asyncio
-from .FleetManager import FleetManager
+
+if TYPE_CHECKING:
+    from .FleetManager import FleetManager
 
 
 

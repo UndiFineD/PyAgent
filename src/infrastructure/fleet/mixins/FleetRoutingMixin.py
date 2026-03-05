@@ -4,12 +4,18 @@ from __future__ import annotations
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 import logging
-from src.infrastructure.fleet.FleetManager import FleetManager
 from typing import Any, TYPE_CHECKING
 
 from src.core.base.Version import SDK_VERSION
-from src.infrastructure.fleet.VersionGate import VersionGate
-from src.infrastructure.fleet.RemoteAgentProxy import RemoteAgentProxy
+# VersionGate and RemoteAgentProxy live under the classes package; infrastructure imports caused
+# ModuleNotFoundError during pytest collection. The mixin only needs them for logic, so correct
+# the paths accordingly.
+from src.classes.fleet.VersionGate import VersionGate
+from src.classes.fleet.RemoteAgentProxy import RemoteAgentProxy
+
+if TYPE_CHECKING:
+    # Avoid circular import at runtime; used only for type hints
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class FleetRoutingMixin:

@@ -13,29 +13,22 @@ from __future__ import annotations
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""Implementation of subagent running logic.
-
-Phase 15 Rust Optimizations:
-- estimate_tokens_rust: Fast BPE-approximated token counting
-- validate_response_rust: Vectorized content validation
-"""
-
-
 import hashlib
 import logging
 import os
 import subprocess
 from pathlib import Path
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
 from src.core.base.lifecycle.version import VERSION
 
 from src.infrastructure.compute.backend.disk_cache import DiskCache
 from src.infrastructure.compute.backend.llm_client import LLMClient
 from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
-from src.infrastructure.compute.backend.subagent_core import SubagentCore
 from src.infrastructure.compute.backend.subagent_status import SubagentStatus
+
+if TYPE_CHECKING:
+    from src.infrastructure.compute.backend.subagent_core import SubagentCore
 
 __version__ = VERSION
 
@@ -51,6 +44,13 @@ try:
     import requests
 except ImportError:
     requests = None  # type: ignore[assignment]
+
+"""Implementation of subagent running logic.
+
+Phase 15 Rust Optimizations:
+- estimate_tokens_rust: Fast BPE-approximated token counting
+- validate_response_rust: Vectorized content validation
+"""
 
 
 class SubagentRunner:
@@ -117,6 +117,7 @@ class SubagentRunner:
         }
         self._requests = requests
         self._llm_client = LLMClient(requests)
+        from src.infrastructure.compute.backend.subagent_core import SubagentCore
         self._core = SubagentCore(self)
         self._status_manager = SubagentStatus(self)
 

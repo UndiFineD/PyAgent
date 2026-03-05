@@ -20,10 +20,12 @@ import logging
 import time
 import inspect
 import asyncio
-from .FleetManager import FleetManager
 from typing import Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .FleetManager import FleetManager
 from src.core.base.models import AgentPriority
-from src.infrastructure.fleet.WorkflowState import WorkflowState
+from src.classes.fleet.WorkflowState import WorkflowState
 
 __version__ = VERSION
 
