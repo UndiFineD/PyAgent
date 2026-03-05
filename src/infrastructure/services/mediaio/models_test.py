@@ -23,4 +23,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "VideoData"), "VideoData missing"
     assert hasattr(mod, "AudioData"), "AudioData missing"
     assert hasattr(mod, "MediaLoadConfig"), "MediaLoadConfig missing"
-

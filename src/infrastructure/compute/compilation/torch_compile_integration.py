@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,6 +63,7 @@ class CompileBackend(Enum):
     INDUCTOR = "inductor"  # In-ductor backend (default)
     CUDAGRAPHS = "cudagraphs"  # CUDA Graphs backend
 
+
 @dataclass
 class CompileConfig:
     """Configuration for torch.compile integration."""
@@ -113,7 +115,9 @@ class CompilerInterface(ABC):
     """
 
     @abstractmethod
-    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
+    def compile(
+        self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None
+    ) -> Callable[..., Any]:
         """Compile a function."""
 
     @abstractmethod
@@ -136,7 +140,9 @@ class TorchCompiler(CompilerInterface):
         self._stats = CompileStats()
         self._lock = threading.Lock()
 
-    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
+    def compile(
+        self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None
+    ) -> Callable[..., Any]:
         """
         Compile a function using torch.compile.
 
@@ -178,7 +184,9 @@ class TorchCompiler(CompilerInterface):
         except (ImportError, RuntimeError) as e:
             logger.warning(f"torch.compile unavailable: {e}, using eager mode")
             compiled = fn
-            self._stats.backend_failures[str(e)] = self._stats.backend_failures.get(str(e), 0) + 1
+            self._stats.backend_failures[str(e)] = (
+                self._stats.backend_failures.get(str(e), 0) + 1
+            )
 
         elapsed = time.perf_counter() - start
 
@@ -279,13 +287,17 @@ class IncrementalCompiler(CompilerInterface):
     - Prioritizes frequently used code
     """
 
-    def __init__(self, base_compiler: Optional[TorchCompiler] = None, threshold: int = 5):
+    def __init__(
+        self, base_compiler: Optional[TorchCompiler] = None, threshold: int = 5
+    ):
         self._base = base_compiler or TorchCompiler()
         self._threshold = threshold
         self._call_counts: Dict[int, int] = {}
         self._lock = threading.Lock()
 
-    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
+    def compile(
+        self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None
+    ) -> Callable[..., Any]:
         """Compile after threshold calls."""
         fn_id = id(fn)
 
@@ -328,7 +340,9 @@ class ProfileGuidedCompiler(CompilerInterface):
         self._compiled: Dict[int, Callable] = {}
         self._lock = threading.Lock()
 
-    def profile_execution(self, fn: Callable[..., Any], args: Tuple[Any, ...], kwargs: Dict[str, Any]) -> float:
+    def profile_execution(
+        self, fn: Callable[..., Any], args: Tuple[Any, ...], kwargs: Dict[str, Any]
+    ) -> float:
         """Profile a function execution."""
         start = time.perf_counter()
         fn(*args, **kwargs)
@@ -342,7 +356,9 @@ class ProfileGuidedCompiler(CompilerInterface):
 
         return elapsed
 
-    def compile(self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None) -> Callable[..., Any]:
+    def compile(
+        self, fn: Callable[..., Any], example_inputs: Optional[Tuple[Any, ...]] = None
+    ) -> Callable[..., Any]:
         """Compile with best backend based on profile."""
         fn_id = id(fn)
 
@@ -406,7 +422,9 @@ def compile_fn(
     """
 
     def decorator(func: F) -> F:
-        config = CompileConfig(mode=mode, backend=backend, fullgraph=fullgraph, dynamic=dynamic)
+        config = CompileConfig(
+            mode=mode, backend=backend, fullgraph=fullgraph, dynamic=dynamic
+        )
         compiler = TorchCompiler(config)
         compiled = compiler.compile(func)
 

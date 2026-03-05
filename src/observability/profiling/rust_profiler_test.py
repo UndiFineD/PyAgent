@@ -17,5 +17,6 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RustProfiler"), "RustProfiler missing"
     assert hasattr(mod, "profile_rust_call"), "profile_rust_call missing"
     assert hasattr(mod, "RustUsageScanner"), "RustUsageScanner missing"
-    assert hasattr(mod, "create_profiled_rust_core"), "create_profiled_rust_core missing"
-
+    assert hasattr(
+        mod, "create_profiled_rust_core"
+    ), "create_profiled_rust_core missing"

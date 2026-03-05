@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_adaptivemoelayer_exists():
     """Test that AdaptiveMoELayer class exists and is importable."""
-    assert 'AdaptiveMoELayer' in dir()
+    assert "AdaptiveMoELayer" in dir()
 
 
 def test_hierarchicalmoelayer_exists():
     """Test that HierarchicalMoELayer class exists and is importable."""
-    assert 'HierarchicalMoELayer' in dir()
+    assert "HierarchicalMoELayer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

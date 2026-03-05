@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,6 +43,7 @@ __version__ = VERSION
 
 class EssayStyle(Enum):
     """Essay style options."""
+
     ACADEMIC = "academic"
     PROFESSIONAL = "professional"
     TECHNICAL = "technical"
@@ -52,6 +54,7 @@ class EssayStyle(Enum):
 
 class EssayLength(Enum):
     """Essay length options."""
+
     SHORT = "short"  # ~500 words
     MEDIUM = "medium"  # ~1000 words
     LONG = "long"  # ~2000 words
@@ -111,8 +114,16 @@ class WebSearchEssayAgent(SearchAgent):
         """Researches a subject and writes an essay."""
         logging.info(f"WebSearchEssayAgent: Researching subject: {subject}")
 
-        essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
-        essay_length = EssayLength(length) if length in [ell.value for ell in EssayLength] else EssayLength.MEDIUM
+        essay_style = (
+            EssayStyle(style)
+            if style in [s.value for s in EssayStyle]
+            else EssayStyle.ACADEMIC
+        )
+        essay_length = (
+            EssayLength(length)
+            if length in [ell.value for ell in EssayLength]
+            else EssayLength.MEDIUM
+        )
 
         word_targets = {
             EssayLength.SHORT: 500,
@@ -164,13 +175,19 @@ class WebSearchEssayAgent(SearchAgent):
         }
 
         self._essay_history.append(
-            {"subject": subject, "timestamp": time.time(), "word_count": result["estimated_words"]}
+            {
+                "subject": subject,
+                "timestamp": time.time(),
+                "word_count": result["estimated_words"],
+            }
         )
 
         return result
 
     @as_tool
-    async def research_topic(self, subject: str, depth: str = "standard") -> Dict[str, Any]:
+    async def research_topic(
+        self, subject: str, depth: str = "standard"
+    ) -> Dict[str, Any]:
         """Performs in-depth research on a topic without writing an essay."""
         sources = await self._research_topic(subject, depth)
 
@@ -201,17 +218,27 @@ class WebSearchEssayAgent(SearchAgent):
 
         return {
             "subject": subject,
-            "sources": [{"title": s.title, "url": s.url, "snippet": s.snippet} for s in sources],
+            "sources": [
+                {"title": s.title, "url": s.url, "snippet": s.snippet} for s in sources
+            ],
             "synthesis": synthesis,
         }
 
     @as_tool
-    async def generate_outline(self, subject: str, style: str = "academic", num_sections: int = 4) -> Dict[str, Any]:
+    async def generate_outline(
+        self, subject: str, style: str = "academic", num_sections: int = 4
+    ) -> Dict[str, Any]:
         """Generates an essay outline for a subject."""
         sources = await self._research_topic(subject, "light")
-        essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
+        essay_style = (
+            EssayStyle(style)
+            if style in [s.value for s in EssayStyle]
+            else EssayStyle.ACADEMIC
+        )
 
-        outline = await self._generate_outline(subject, sources, essay_style, num_sections)
+        outline = await self._generate_outline(
+            subject, sources, essay_style, num_sections
+        )
 
         return {"subject": subject, "style": essay_style.value, "outline": outline}
 
@@ -237,7 +264,9 @@ class WebSearchEssayAgent(SearchAgent):
 
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
+        with contextlib.suppress(
+            ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError
+        ):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
@@ -245,7 +274,9 @@ class WebSearchEssayAgent(SearchAgent):
         return {"raw": res}
 
     @as_tool
-    async def compare_perspectives(self, topic: str, perspectives: List[str]) -> Dict[str, Any]:
+    async def compare_perspectives(
+        self, topic: str, perspectives: List[str]
+    ) -> Dict[str, Any]:
         """Compares different perspectives on a topic."""
         # Research each perspective
         all_findings = []
@@ -257,7 +288,12 @@ class WebSearchEssayAgent(SearchAgent):
         prompt = (
             f"Topic: {topic}\n\n"
             f"Perspectives to compare:\n"
-            + "\n".join([f"**{p['perspective']}**:\n{p['findings'][:1000]}" for p in all_findings])
+            + "\n".join(
+                [
+                    f"**{p['perspective']}**:\n{p['findings'][:1000]}"
+                    for p in all_findings
+                ]
+            )
             + "\n\nProvide a balanced comparison:\n"
             "1. Key arguments for each perspective\n"
             "2. Strengths and weaknesses\n"
@@ -268,14 +304,18 @@ class WebSearchEssayAgent(SearchAgent):
 
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
+        with contextlib.suppress(
+            ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError
+        ):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
 
         return {"raw": res}
 
-    async def _research_topic(self, subject: str, depth: str = "standard") -> List[Source]:
+    async def _research_topic(
+        self, subject: str, depth: str = "standard"
+    ) -> List[Source]:
         """Performs multi-query research on a topic."""
         if subject in self._research_cache:
             return self._research_cache[subject]
@@ -301,7 +341,10 @@ class WebSearchEssayAgent(SearchAgent):
                 data = self._search_duckduckgo(query, max_results=5)
                 # Parse search results into sources
                 source = Source(
-                    title=f"Search: {query}", url="duckduckgo.com", snippet=data[:500] if data else "", relevance=0.8
+                    title=f"Search: {query}",
+                    url="duckduckgo.com",
+                    snippet=data[:500] if data else "",
+                    relevance=0.8,
                 )
                 sources.append(source)
             except (RuntimeError, ValueError, AttributeError) as e:
@@ -311,7 +354,11 @@ class WebSearchEssayAgent(SearchAgent):
         return sources
 
     async def _generate_outline(
-        self, subject: str, sources: List[Source], style: EssayStyle, num_sections: int = 4
+        self,
+        subject: str,
+        sources: List[Source],
+        style: EssayStyle,
+        num_sections: int = 4,
     ) -> Dict[str, Any]:
         """Generates an essay outline."""
         prompt = (
@@ -334,7 +381,9 @@ class WebSearchEssayAgent(SearchAgent):
 
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
+        with contextlib.suppress(
+            ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError
+        ):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
@@ -352,4 +401,6 @@ class WebSearchEssayAgent(SearchAgent):
 
     def _format_sources(self, sources: List[Source]) -> str:
         """Formats sources for prompts."""
-        return "\n\n".join([f"**{s.title}**\nURL: {s.url}\n{s.snippet}" for s in sources])
+        return "\n\n".join(
+            [f"**{s.title}**\nURL: {s.url}\n{s.snippet}" for s in sources]
+        )

@@ -3,4 +3,5 @@ class TestDataFactory:
     def make_sample():
         return {}
 
+
 __all__ = ["TestDataFactory"]

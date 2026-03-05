@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_fleetcore_exists():
     """Test that FleetCore class exists and is importable."""
-    assert 'FleetCore' in dir()
+    assert "FleetCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_imageloader_exists():
     """Test that ImageLoader class exists and is importable."""
-    assert 'ImageLoader' in dir()
+    assert "ImageLoader" in dir()
 
 
 def test_imageloader_instantiation():
@@ -45,4 +45,3 @@ def test_imageloader_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

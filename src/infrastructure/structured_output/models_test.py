@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_fsmstate_exists():
     """Test that FSMState class exists and is importable."""
-    assert 'FSMState' in dir()
+    assert "FSMState" in dir()
 
 
 def test_fsmtransitiontable_exists():
     """Test that FSMTransitionTable class exists and is importable."""
-    assert 'FSMTransitionTable' in dir()
+    assert "FSMTransitionTable" in dir()
 
 
 def test_tokenmask_exists():
     """Test that TokenMask class exists and is importable."""
-    assert 'TokenMask' in dir()
+    assert "TokenMask" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

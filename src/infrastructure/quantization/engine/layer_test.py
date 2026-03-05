@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_dequantizedlinear_exists():
     """Test that DequantizedLinear class exists and is importable."""
-    assert 'DequantizedLinear' in dir()
+    assert "DequantizedLinear" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

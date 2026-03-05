@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_selfimprovementcore_exists():
     """Test that SelfImprovementCore class exists and is importable."""
-    assert 'SelfImprovementCore' in dir()
+    assert "SelfImprovementCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -14,6 +15,7 @@ import numpy as np
 
 class TokenizerBackend(Enum):
     """Supported tokenizer backends."""
+
     HUGGINGFACE = auto()
     TIKTOKEN = auto()
     MISTRAL = auto()
@@ -23,6 +25,7 @@ class TokenizerBackend(Enum):
 
 class SpecialTokenHandling(Enum):
     """How to handle special tokens."""
+
     INCLUDE = auto()
     EXCLUDE = auto()
     BOS_ONLY = auto()
@@ -32,6 +35,7 @@ class SpecialTokenHandling(Enum):
 
 class TruncationStrategy(Enum):
     """Truncation strategies for long sequences."""
+
     NONE = auto()
     LEFT = auto()
     RIGHT = auto()
@@ -40,6 +44,7 @@ class TruncationStrategy(Enum):
 
 class PaddingStrategy(Enum):
     """Padding strategies for batched inputs."""
+
     NONE = auto()
     MAX_LENGTH = auto()
     LONGEST = auto()
@@ -48,6 +53,7 @@ class PaddingStrategy(Enum):
 @dataclass
 class TokenizerConfig:
     """Configuration for tokenizer initialization."""
+
     model_name: str
     backend: TokenizerBackend = TokenizerBackend.HUGGINGFACE
     revision: Optional[str] = None
@@ -60,21 +66,24 @@ class TokenizerConfig:
     add_bos_token: bool = True
     add_eos_token: bool = False
     extra_config: Dict[str, Any] = field(default_factory=dict)
-    
+
     def __hash__(self) -> int:
-        return hash((
-            self.model_name,
-            self.backend,
-            self.revision,
-            self.trust_remote_code,
-            self.use_fast,
-            self.max_length,
-        ))
+        return hash(
+            (
+                self.model_name,
+                self.backend,
+                self.revision,
+                self.trust_remote_code,
+                self.use_fast,
+                self.max_length,
+            )
+        )
 
 
 @dataclass
 class TokenizerInfo:
     """Information about a loaded tokenizer."""
+
     backend: TokenizerBackend
     vocab_size: int
     bos_token_id: Optional[int]
@@ -86,7 +95,7 @@ class TokenizerInfo:
     supports_chat_template: bool = False
     chat_template: Optional[str] = None
     special_tokens: Dict[str, int] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "backend": self.backend.name,
@@ -104,6 +113,7 @@ class TokenizerInfo:
 @dataclass
 class TokenizeResult:
     """Result of tokenization."""
+
     input_ids: List[int]
     attention_mask: Optional[List[int]] = None
     token_type_ids: Optional[List[int]] = None
@@ -111,10 +121,10 @@ class TokenizeResult:
     tokens: Optional[List[str]] = None
     num_tokens: int = 0
     truncated: bool = False
-    
+
     def __post_init__(self):
         self.num_tokens = len(self.input_ids)
-    
+
     def to_numpy(self) -> Dict[str, np.ndarray]:
         result = {"input_ids": np.array(self.input_ids, dtype=np.int64)}
         if self.attention_mask:
@@ -127,16 +137,17 @@ class TokenizeResult:
 @dataclass
 class BatchTokenizeResult:
     """Result of batch tokenization."""
+
     input_ids: List[List[int]]
     attention_mask: Optional[List[List[int]]] = None
     token_counts: List[int] = field(default_factory=list)
     max_length: int = 0
-    
+
     def __post_init__(self):
         self.token_counts = [len(ids) for ids in self.input_ids]
         self.max_length = max(self.token_counts) if self.token_counts else 0
-    
-    def pad_to_max(self, pad_token_id: int = 0) -> 'BatchTokenizeResult':
+
+    def pad_to_max(self, pad_token_id: int = 0) -> "BatchTokenizeResult":
         padded_ids = []
         padded_mask = []
         for ids in self.input_ids:

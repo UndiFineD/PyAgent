@@ -33,6 +33,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class MemoryNode:
     """Represents a memory node in the graph"""
+
     id: str
     content: str
     embedding: Optional[List[float]] = None
@@ -52,6 +53,7 @@ class MemoryNode:
 @dataclass
 class MemoryRelation:
     """Represents a relationship between memory nodes"""
+
     source_id: str
     target_id: str
     relation_type: str  # RELATES_TO, LEADS_TO, CONTRADICTS, etc.
@@ -88,14 +90,16 @@ class MemoryStore(ABC):
         pass
 
     @abstractmethod
-    async def search_similar(self, query_embedding: List[float], limit: int = 10,
-                           threshold: float = 0.7) -> List[Tuple[MemoryNode, float]]:
+    async def search_similar(
+        self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
+    ) -> List[Tuple[MemoryNode, float]]:
         """Search for similar memories using vector similarity"""
         pass
 
     @abstractmethod
-    async def search_by_tags(self, tags: List[str], mode: str = "any",
-                           match: str = "exact") -> List[MemoryNode]:
+    async def search_by_tags(
+        self, tags: List[str], mode: str = "any", match: str = "exact"
+    ) -> List[MemoryNode]:
         """Search memories by tags"""
         pass
 
@@ -145,15 +149,17 @@ class GraphMemoryStore(MemoryStore):
         # Remove relations involving this node
         for node_id, relations in self.relations.items():
             self.relations[node_id] = [
-                r for r in relations
+                r
+                for r in relations
                 if r.source_id != memory_id and r.target_id != memory_id
             ]
 
         del self.relations[memory_id]
         return True
 
-    async def search_similar(self, query_embedding: List[float], limit: int = 10,
-                           threshold: float = 0.7) -> List[Tuple[MemoryNode, float]]:
+    async def search_similar(
+        self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
+    ) -> List[Tuple[MemoryNode, float]]:
         """Graph-based similarity search (simplified)"""
         # In a real implementation, this would use graph algorithms
         # For now, return all nodes with dummy similarity scores
@@ -167,8 +173,9 @@ class GraphMemoryStore(MemoryStore):
 
         return sorted(results, key=lambda x: x[1], reverse=True)[:limit]
 
-    async def search_by_tags(self, tags: List[str], mode: str = "any",
-                           match: str = "exact") -> List[MemoryNode]:
+    async def search_by_tags(
+        self, tags: List[str], mode: str = "any", match: str = "exact"
+    ) -> List[MemoryNode]:
         """Search memories by tags"""
         results = []
 
@@ -181,7 +188,10 @@ class GraphMemoryStore(MemoryStore):
                     if any(tag.lower() in node_tags for tag in tags):
                         results.append(node)
                 else:  # prefix match
-                    if any(any(nt.startswith(tag.lower()) for nt in node_tags) for tag in tags):
+                    if any(
+                        any(nt.startswith(tag.lower()) for nt in node_tags)
+                        for tag in tags
+                    ):
                         results.append(node)
             else:  # mode == "all"
                 # Match if node has all of the requested tags
@@ -189,7 +199,10 @@ class GraphMemoryStore(MemoryStore):
                     if all(tag.lower() in node_tags for tag in tags):
                         results.append(node)
                 else:  # prefix match
-                    if all(any(nt.startswith(tag.lower()) for nt in node_tags) for tag in tags):
+                    if all(
+                        any(nt.startswith(tag.lower()) for nt in node_tags)
+                        for tag in tags
+                    ):
                         results.append(node)
 
         return results
@@ -200,15 +213,21 @@ class GraphMemoryStore(MemoryStore):
             self.relations[relation.source_id] = []
         self.relations[relation.source_id].append(relation)
 
-    async def get_relations(self, node_id: str, relation_type: Optional[str] = None) -> List[MemoryRelation]:
+    async def get_relations(
+        self, node_id: str, relation_type: Optional[str] = None
+    ) -> List[MemoryRelation]:
         """Get relations for a node"""
         relations = self.relations.get(node_id, [])
         if relation_type:
             relations = [r for r in relations if r.relation_type == relation_type]
         return relations
 
-    async def find_related_memories(self, memory_id: str, max_depth: int = 2,
-                                  relation_types: Optional[List[str]] = None) -> List[Tuple[MemoryNode, float]]:
+    async def find_related_memories(
+        self,
+        memory_id: str,
+        max_depth: int = 2,
+        relation_types: Optional[List[str]] = None,
+    ) -> List[Tuple[MemoryNode, float]]:
         """Find related memories through graph traversal (multi-hop)"""
         visited = set()
         results = []
@@ -225,11 +244,19 @@ class GraphMemoryStore(MemoryStore):
                 # Get relations
                 relations = await self.get_relations(node_id)
                 if relation_types:
-                    relations = [r for r in relations if r.relation_type in relation_types]
+                    relations = [
+                        r for r in relations if r.relation_type in relation_types
+                    ]
 
                 for relation in relations:
-                    target_id = relation.target_id if relation.source_id == node_id else relation.source_id
-                    await traverse(target_id, depth + 1, path_strength * relation.strength)
+                    target_id = (
+                        relation.target_id
+                        if relation.source_id == node_id
+                        else relation.source_id
+                    )
+                    await traverse(
+                        target_id, depth + 1, path_strength * relation.strength
+                    )
 
         await traverse(memory_id, 0, 1.0)
         return results[1:]  # Exclude the original node
@@ -270,8 +297,8 @@ class VectorMemoryStore(MemoryStore):
         node.updated_at = time.time()
 
         # Update embedding if provided
-        if 'embedding' in updates:
-            self.embeddings[memory_id] = updates['embedding']
+        if "embedding" in updates:
+            self.embeddings[memory_id] = updates["embedding"]
 
         return True
 
@@ -286,13 +313,15 @@ class VectorMemoryStore(MemoryStore):
     def _cosine_similarity(self, a: List[float], b: List[float]) -> float:
         """Calculate cosine similarity between two vectors"""
         import math
+
         dot_product = sum(x * y for x, y in zip(a, b))
         norm_a = math.sqrt(sum(x * x for x in a))
         norm_b = math.sqrt(sum(y * y for y in b))
         return dot_product / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
-    async def search_similar(self, query_embedding: List[float], limit: int = 10,
-                           threshold: float = 0.7) -> List[Tuple[MemoryNode, float]]:
+    async def search_similar(
+        self, query_embedding: List[float], limit: int = 10, threshold: float = 0.7
+    ) -> List[Tuple[MemoryNode, float]]:
         """Search for similar memories using vector similarity"""
         results = []
 
@@ -306,8 +335,9 @@ class VectorMemoryStore(MemoryStore):
         results.sort(key=lambda x: x[1], reverse=True)
         return results[:limit]
 
-    async def search_by_tags(self, tags: List[str], mode: str = "any",
-                           match: str = "exact") -> List[MemoryNode]:
+    async def search_by_tags(
+        self, tags: List[str], mode: str = "any", match: str = "exact"
+    ) -> List[MemoryNode]:
         """Search memories by tags (simplified - delegates to graph store in hybrid system)"""
         # In a real hybrid system, this would coordinate with graph store
         results = []
@@ -320,14 +350,20 @@ class VectorMemoryStore(MemoryStore):
                     if any(tag.lower() in node_tags for tag in tags):
                         results.append(node)
                 else:  # prefix match
-                    if any(any(nt.startswith(tag.lower()) for nt in node_tags) for tag in tags):
+                    if any(
+                        any(nt.startswith(tag.lower()) for nt in node_tags)
+                        for tag in tags
+                    ):
                         results.append(node)
             else:  # mode == "all"
                 if match == "exact":
                     if all(tag.lower() in node_tags for tag in tags):
                         results.append(node)
                 else:  # prefix match
-                    if all(any(nt.startswith(tag.lower()) for nt in node_tags) for tag in tags):
+                    if all(
+                        any(nt.startswith(tag.lower()) for nt in node_tags)
+                        for tag in tags
+                    ):
                         results.append(node)
 
         return results
@@ -339,24 +375,32 @@ class HybridMemoryCore:
     Based on AutoMem's dual storage architecture
     """
 
-    def __init__(self, graph_store: Optional[GraphMemoryStore] = None,
-                 vector_store: Optional[VectorMemoryStore] = None):
+    def __init__(
+        self,
+        graph_store: Optional[GraphMemoryStore] = None,
+        vector_store: Optional[VectorMemoryStore] = None,
+    ):
         self.graph_store = graph_store or GraphMemoryStore()
         self.vector_store = vector_store or VectorMemoryStore()
 
         # Configuration for hybrid scoring (based on AutoMem's 9-component system)
         self.scoring_weights = {
-            'vector_similarity': 0.25,
-            'keyword_match': 0.15,
-            'graph_relation': 0.25,
-            'content_overlap': 0.25,
-            'temporal_alignment': 0.05,
-            'tag_match': 0.05
+            "vector_similarity": 0.25,
+            "keyword_match": 0.15,
+            "graph_relation": 0.25,
+            "content_overlap": 0.25,
+            "temporal_alignment": 0.05,
+            "tag_match": 0.05,
         }
 
-    async def store_memory(self, content: str, embedding: Optional[List[float]] = None,
-                          tags: Optional[List[str]] = None, importance: float = 1.0,
-                          metadata: Optional[Dict[str, Any]] = None) -> str:
+    async def store_memory(
+        self,
+        content: str,
+        embedding: Optional[List[float]] = None,
+        tags: Optional[List[str]] = None,
+        importance: float = 1.0,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> str:
         """Store a new memory in both graph and vector stores"""
         memory_id = str(uuid.uuid4())
 
@@ -366,7 +410,7 @@ class HybridMemoryCore:
             embedding=embedding,
             importance=importance,
             tags=tags or [],
-            metadata=metadata or {}
+            metadata=metadata or {},
         )
 
         # Store in both backends
@@ -393,9 +437,14 @@ class HybridMemoryCore:
         vector_success = await self.vector_store.delete_memory(memory_id)
         return graph_success and vector_success
 
-    async def search_memories(self, query: str, query_embedding: Optional[List[float]] = None,
-                            tags: Optional[List[str]] = None, limit: int = 10,
-                            expand_paths: bool = True) -> List[Tuple[MemoryNode, float]]:
+    async def search_memories(
+        self,
+        query: str,
+        query_embedding: Optional[List[float]] = None,
+        tags: Optional[List[str]] = None,
+        limit: int = 10,
+        expand_paths: bool = True,
+    ) -> List[Tuple[MemoryNode, float]]:
         """
         Hybrid search combining vector similarity, graph relations, and metadata
         Based on AutoMem's 9-component hybrid scoring
@@ -404,7 +453,9 @@ class HybridMemoryCore:
 
         # Vector similarity search
         if query_embedding:
-            vector_results = await self.vector_store.search_similar(query_embedding, limit * 2)
+            vector_results = await self.vector_store.search_similar(
+                query_embedding, limit * 2
+            )
             for node, score in vector_results:
                 candidates.add(node.id)
 
@@ -429,7 +480,9 @@ class HybridMemoryCore:
             if not node:
                 continue
 
-            score = await self._calculate_hybrid_score(node, query, query_embedding, tags)
+            score = await self._calculate_hybrid_score(
+                node, query, query_embedding, tags
+            )
             scored_results.append((node, score))
 
         # Sort by score and limit
@@ -445,7 +498,9 @@ class HybridMemoryCore:
             # Add related memories with reduced scores
             for related_node, path_strength in related:
                 if related_node.id not in candidates:
-                    related_score = path_strength * 0.7  # Reduce score for bridge memories
+                    related_score = (
+                        path_strength * 0.7
+                    )  # Reduce score for bridge memories
                     scored_results.append((related_node, related_score))
 
             # Re-sort after adding related memories
@@ -453,82 +508,104 @@ class HybridMemoryCore:
 
         return scored_results[:limit]
 
-    async def _calculate_hybrid_score(self, node: MemoryNode, query: str,
-                                    query_embedding: Optional[List[float]],
-                                    tags: Optional[List[str]]) -> float:
+    async def _calculate_hybrid_score(
+        self,
+        node: MemoryNode,
+        query: str,
+        query_embedding: Optional[List[float]],
+        tags: Optional[List[str]],
+    ) -> float:
         """Calculate hybrid score using multiple signals"""
         scores = {}
 
         # Vector similarity (25%)
         if query_embedding and node.embedding:
-            scores['vector_similarity'] = self._cosine_similarity(query_embedding, node.embedding)
+            scores["vector_similarity"] = self._cosine_similarity(
+                query_embedding, node.embedding
+            )
         else:
-            scores['vector_similarity'] = 0.0
+            scores["vector_similarity"] = 0.0
 
         # Keyword match (15%)
         query_lower = query.lower()
         content_lower = node.content.lower()
         if query_lower in content_lower:
-            scores['keyword_match'] = 1.0
+            scores["keyword_match"] = 1.0
         else:
             # Partial matches
             query_words = set(query_lower.split())
             content_words = set(content_lower.split())
             overlap = len(query_words & content_words)
-            scores['keyword_match'] = overlap / len(query_words) if query_words else 0.0
+            scores["keyword_match"] = overlap / len(query_words) if query_words else 0.0
 
         # Graph relations (25%) - simplified
         relations = await self.graph_store.get_relations(node.id)
-        scores['graph_relation'] = min(len(relations) * 0.1, 1.0)
+        scores["graph_relation"] = min(len(relations) * 0.1, 1.0)
 
         # Content overlap (25%)
         query_tokens = set(query.lower().split())
         content_tokens = set(node.content.lower().split())
         overlap = len(query_tokens & content_tokens)
         total = len(query_tokens | content_tokens)
-        scores['content_overlap'] = overlap / total if total > 0 else 0.0
+        scores["content_overlap"] = overlap / total if total > 0 else 0.0
 
         # Temporal alignment (5%) - prefer recent memories
         age_hours = (time.time() - node.created_at) / 3600
-        scores['temporal_alignment'] = max(0, 1.0 - (age_hours / 24))  # Decay over 24 hours
+        scores["temporal_alignment"] = max(
+            0, 1.0 - (age_hours / 24)
+        )  # Decay over 24 hours
 
         # Tag match (5%)
         if tags and node.tags:
-            tag_matches = sum(1 for tag in tags if tag.lower() in [t.lower() for t in node.tags])
-            scores['tag_match'] = tag_matches / len(tags)
+            tag_matches = sum(
+                1 for tag in tags if tag.lower() in [t.lower() for t in node.tags]
+            )
+            scores["tag_match"] = tag_matches / len(tags)
         else:
-            scores['tag_match'] = 0.0
+            scores["tag_match"] = 0.0
 
         # Weighted sum
-        final_score = sum(scores[component] * weight
-                         for component, weight in self.scoring_weights.items())
+        final_score = sum(
+            scores[component] * weight
+            for component, weight in self.scoring_weights.items()
+        )
 
         return final_score
 
     def _cosine_similarity(self, a: List[float], b: List[float]) -> float:
         """Calculate cosine similarity"""
         import math
+
         dot_product = sum(x * y for x, y in zip(a, b))
         norm_a = math.sqrt(sum(x * x for x in a))
         norm_b = math.sqrt(sum(y * y for y in b))
         return dot_product / (norm_a * norm_b) if norm_a and norm_b else 0.0
 
-    async def associate_memories(self, source_id: str, target_id: str,
-                               relation_type: str, strength: float = 1.0,
-                               metadata: Optional[Dict[str, Any]] = None):
+    async def associate_memories(
+        self,
+        source_id: str,
+        target_id: str,
+        relation_type: str,
+        strength: float = 1.0,
+        metadata: Optional[Dict[str, Any]] = None,
+    ):
         """Create a relationship between two memories"""
         relation = MemoryRelation(
             source_id=source_id,
             target_id=target_id,
             relation_type=relation_type,
             strength=strength,
-            metadata=metadata or {}
+            metadata=metadata or {},
         )
 
         await self.graph_store.add_relation(relation)
-        logger.info(f"Associated memories: {source_id} --{relation_type}--> {target_id}")
+        logger.info(
+            f"Associated memories: {source_id} --{relation_type}--> {target_id}"
+        )
 
-    async def get_memory_graph(self, memory_id: str, max_depth: int = 2) -> Dict[str, Any]:
+    async def get_memory_graph(
+        self, memory_id: str, max_depth: int = 2
+    ) -> Dict[str, Any]:
         """Get the memory graph around a central node"""
         node = await self.graph_store.get_memory(memory_id)
         if not node:
@@ -537,19 +614,27 @@ class HybridMemoryCore:
         related = await self.graph_store.find_related_memories(memory_id, max_depth)
 
         return {
-            'central_node': {
-                'id': node.id,
-                'content': node.content[:100] + '...' if len(node.content) > 100 else node.content,
-                'tags': node.tags,
-                'importance': node.importance
+            "central_node": {
+                "id": node.id,
+                "content": (
+                    node.content[:100] + "..."
+                    if len(node.content) > 100
+                    else node.content
+                ),
+                "tags": node.tags,
+                "importance": node.importance,
             },
-            'related_nodes': [
+            "related_nodes": [
                 {
-                    'id': related_node.id,
-                    'content': related_node.content[:50] + '...' if len(related_node.content) > 50 else related_node.content,
-                    'tags': related_node.tags,
-                    'relation_strength': strength
+                    "id": related_node.id,
+                    "content": (
+                        related_node.content[:50] + "..."
+                        if len(related_node.content) > 50
+                        else related_node.content
+                    ),
+                    "tags": related_node.tags,
+                    "relation_strength": strength,
                 }
                 for related_node, strength in related
-            ]
+            ],
         }

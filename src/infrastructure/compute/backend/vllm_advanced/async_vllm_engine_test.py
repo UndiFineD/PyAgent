@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AsyncRequestHandle"), "AsyncRequestHandle missing"
     assert hasattr(mod, "AsyncVllmEngine"), "AsyncVllmEngine missing"
     assert hasattr(mod, "async_generate"), "async_generate missing"
-

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,12 +19,13 @@ from .core.VisionCore import VisionCore
 
 __version__ = VERSION
 
+
 class MultiModalReasoningAgent(BaseAgent):
     """
     Agent capable of analyzing visual inputs (screenshots, diagrams)
     to complement textual code analysis.
     """
-    
+
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
         self.vision_core = VisionCore()

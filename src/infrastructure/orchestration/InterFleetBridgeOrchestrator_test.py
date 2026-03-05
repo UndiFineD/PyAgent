@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_interfleetbridgeorchestrator_exists():
     """Test that InterFleetBridgeOrchestrator class exists and is importable."""
-    assert 'InterFleetBridgeOrchestrator' in dir()
+    assert "InterFleetBridgeOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

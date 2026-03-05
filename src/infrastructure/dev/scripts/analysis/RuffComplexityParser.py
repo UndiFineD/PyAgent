@@ -23,6 +23,7 @@ import re
 import argparse
 from pathlib import Path
 
+
 def parse_ruff_complexity(json_file: str, threshold: int = 25):
     """Reads ruff_output.json and prints ranked complexity issues."""
     if not os.path.exists(json_file):
@@ -43,19 +44,21 @@ def parse_ruff_complexity(json_file: str, threshold: int = 25):
         match = re.search(r"\((\d+) > \d+\)", message)
         if match:
             val = int(match.group(1))
-            findings.append({
-                "func_name": message.split("`")[1] if "`" in message else "unknown",
-                "complexity": val,
-                "file": item["filename"],
-                "line": item["location"]["row"]
-            })
+            findings.append(
+                {
+                    "func_name": message.split("`")[1] if "`" in message else "unknown",
+                    "complexity": val,
+                    "file": item["filename"],
+                    "line": item["location"]["row"],
+                }
+            )
 
     findings.sort(key=lambda x: x["complexity"], reverse=True)
 
     header = f"{'Comp':<5} {'Function':<40} {'Location'}"
     print(header)
     print("-" * 100)
-    
+
     for f in findings:
         comp_val = f["complexity"]
         name = f["func_name"]
@@ -63,10 +66,18 @@ def parse_ruff_complexity(json_file: str, threshold: int = 25):
         marker = "***" if comp_val >= threshold else "   "
         print(f"{marker} {comp_val:<2} {name: <40} {file_info}")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Parse Ruff complexity reports.")
-    parser.add_argument("--input", type=str, default="ruff_output.json", help="Path to ruff_output.json.")
-    parser.add_argument("--threshold", type=int, default=25, help="Highlight threshold.")
-    
+    parser.add_argument(
+        "--input",
+        type=str,
+        default="ruff_output.json",
+        help="Path to ruff_output.json.",
+    )
+    parser.add_argument(
+        "--threshold", type=int, default=25, help="Highlight threshold."
+    )
+
     args = parser.parse_args()
     parse_ruff_complexity(args.input, args.threshold)

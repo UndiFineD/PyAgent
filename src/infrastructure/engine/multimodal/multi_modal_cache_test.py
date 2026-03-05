@@ -28,4 +28,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "IPCMultiModalCache"), "IPCMultiModalCache missing"
     assert hasattr(mod, "compute_media_hash"), "compute_media_hash missing"
     assert hasattr(mod, "create_cache"), "create_cache missing"
-

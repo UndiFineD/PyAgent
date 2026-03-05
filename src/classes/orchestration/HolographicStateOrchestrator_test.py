@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_holographicstateorchestrator_exists():
     """Test that HolographicStateOrchestrator class exists and is importable."""
-    assert 'HolographicStateOrchestrator' in dir()
+    assert "HolographicStateOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

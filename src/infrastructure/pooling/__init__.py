@@ -1,4 +1,3 @@
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -11,7 +10,7 @@ from .models import (
     PoolingStrategy,
     PoolingConfig,
     PoolingResult,
-    EmbeddingOutput
+    EmbeddingOutput,
 )
 from .strategies import (
     BasePooler,
@@ -23,7 +22,7 @@ from .strategies import (
     WeightedMeanPooler,
     MatryoshkaPooler,
     MultiVectorPooler,
-    StepPooler
+    StepPooler,
 )
 from .engine import PoolingEngine, create_pooling_engine
 
@@ -57,7 +56,6 @@ __all__ = [
     "StepPooler",
     "PoolingEngine",
     "create_pooling_engine",
-    
     # Connection
     "ConnectionState",
     "PoolStats",
@@ -67,4 +65,3 @@ __all__ = [
     "PooledConnectionManager",
     "MultiHostPool",
 ]
-

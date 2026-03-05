@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_autodebuggerorchestrator_exists():
     """Test that AutoDebuggerOrchestrator class exists and is importable."""
-    assert 'AutoDebuggerOrchestrator' in dir()
+    assert "AutoDebuggerOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -18,15 +18,27 @@ Conversation package.
 
 # Conversation Context Management - Phase 42
 # Multi-turn conversation state management
-from .conversation_context import (AgenticContext, ContextConfig,  # noqa: F401
-                                   ContextManager, ContextOrchestrator,
-                                   ContextSnapshot, ContextState,
-                                   ConversationContext, ConversationTurn,
-                                   TokenMetrics, TokenTracker, ToolExecution,
-                                   ToolExecutionPolicy, ToolOrchestrator,
-                                   TurnTracker, TurnType, create_context,
-                                   get_context_manager, merge_contexts,
-                                   restore_context)
+from .conversation_context import (
+    AgenticContext,
+    ContextConfig,  # noqa: F401
+    ContextManager,
+    ContextOrchestrator,
+    ContextSnapshot,
+    ContextState,
+    ConversationContext,
+    ConversationTurn,
+    TokenMetrics,
+    TokenTracker,
+    ToolExecution,
+    ToolExecutionPolicy,
+    ToolOrchestrator,
+    TurnTracker,
+    TurnType,
+    create_context,
+    get_context_manager,
+    merge_contexts,
+    restore_context,
+)
 
 __all__ = [
     "AgenticContext",

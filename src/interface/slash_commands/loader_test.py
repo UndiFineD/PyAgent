@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "reload_commands"), "reload_commands missing"
     assert hasattr(mod, "is_loaded"), "is_loaded missing"
     assert hasattr(mod, "get_loaded_modules"), "get_loaded_modules missing"
-

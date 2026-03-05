@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ImpactAnalyzer"), "ImpactAnalyzer missing"
     assert hasattr(mod, "ContractValidator"), "ContractValidator missing"
     assert hasattr(mod, "TestDocGenerator"), "TestDocGenerator missing"
-

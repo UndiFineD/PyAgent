@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_memoryconsolidatorcore_exists():
     """Test that MemoryConsolidatorCore class exists and is importable."""
-    assert 'MemoryConsolidatorCore' in dir()
+    assert "MemoryConsolidatorCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

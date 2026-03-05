@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ logger = logging.getLogger(__name__)
 
 try:
     import rust_core as rc
+
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
@@ -38,7 +40,7 @@ except ImportError:
 
 class MetacognitiveCore:
     """Pure logic core for metacognitive evaluation and intention prediction.
-    
+
     Phase 14 Rust Optimizations:
     - count_hedge_words_rust: Fast multi-pattern matching for hedge word detection
     - predict_intent_rust: Optimized pattern-based intent classification
@@ -81,18 +83,22 @@ class MetacognitiveCore:
     @staticmethod
     def calculate_confidence(reasoning_chain: str) -> dict[str, Any]:
         """Analyzes a reasoning chain for hedge words and length patterns.
-        
+
         Uses Rust-accelerated multi-pattern matching when available.
         """
         hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
-        
+
         # Rust-accelerated hedge word counting
-        if RUST_AVAILABLE and hasattr(rc, 'count_hedge_words_rust'):
+        if RUST_AVAILABLE and hasattr(rc, "count_hedge_words_rust"):
             try:
                 count = rc.count_hedge_words_rust(reasoning_chain.lower(), hedge_words)
             except Exception as e:
-                logger.debug(f"Rust count_hedge_words failed: {e}, using Python fallback")
-                count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
+                logger.debug(
+                    f"Rust count_hedge_words failed: {e}, using Python fallback"
+                )
+                count = sum(
+                    1 for word in hedge_words if word in reasoning_chain.lower()
+                )
         else:
             count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
 

@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "GuidedConfig"), "GuidedConfig missing"
     assert hasattr(mod, "RegexPattern"), "RegexPattern missing"
     assert hasattr(mod, "ChoiceConstraint"), "ChoiceConstraint missing"
-

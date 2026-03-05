@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,6 +39,7 @@ __version__ = VERSION
 
 class RegressionType(Enum):
     """Supported regression model types."""
+
     LINEAR = "linear"
     POLYNOMIAL = "polynomial"
     EXPONENTIAL = "exponential"
@@ -82,7 +84,9 @@ class RegressionAgent(BaseAgent):
             return {"predictions": history, "error": "Need at least 2 data points"}
 
         regression_type = (
-            RegressionType(method) if method in [m.value for m in RegressionType] else RegressionType.LINEAR
+            RegressionType(method)
+            if method in [m.value for m in RegressionType]
+            else RegressionType.LINEAR
         )
 
         if regression_type == RegressionType.LINEAR:
@@ -109,7 +113,9 @@ class RegressionAgent(BaseAgent):
         return result
 
     @as_tool
-    async def analyze_correlation(self, var_a: List[float], var_b: List[float]) -> Dict[str, Any]:
+    async def analyze_correlation(
+        self, var_a: List[float], var_b: List[float]
+    ) -> Dict[str, Any]:
         """Calculates correlation and relationship metrics between two variables."""
         if len(var_a) != len(var_b):
             return {"error": "Variables must have same length"}
@@ -138,8 +144,14 @@ class RegressionAgent(BaseAgent):
         spearman = 1 - (6 * d_sq_sum) / (n * (n**2 - 1)) if n > 1 else 0
 
         # Interpretation
-        strength = "strong" if abs(correlation) > 0.7 else "moderate" if abs(correlation) > 0.4 else "weak"
-        direction = "positive" if correlation > 0 else "negative" if correlation < 0 else "none"
+        strength = (
+            "strong"
+            if abs(correlation) > 0.7
+            else "moderate" if abs(correlation) > 0.4 else "weak"
+        )
+        direction = (
+            "positive" if correlation > 0 else "negative" if correlation < 0 else "none"
+        )
 
         return {
             "pearson_correlation": round(correlation, 4),
@@ -150,7 +162,9 @@ class RegressionAgent(BaseAgent):
         }
 
     @as_tool
-    async def fit_model(self, x: List[float], y: List[float], model_type: str = "linear") -> Dict[str, Any]:
+    async def fit_model(
+        self, x: List[float], y: List[float], model_type: str = "linear"
+    ) -> Dict[str, Any]:
         """Fits a regression model to the data."""
         if len(x) != len(y):
             return {"error": "x and y must have same length"}
@@ -160,7 +174,9 @@ class RegressionAgent(BaseAgent):
             return {"error": "Need at least 2 data points"}
 
         regression_type = (
-            RegressionType(model_type) if model_type in [m.value for m in RegressionType] else RegressionType.LINEAR
+            RegressionType(model_type)
+            if model_type in [m.value for m in RegressionType]
+            else RegressionType.LINEAR
         )
 
         if regression_type == RegressionType.LINEAR:
@@ -247,7 +263,11 @@ class RegressionAgent(BaseAgent):
             "r_squared": fit.get("r_squared", 0),
             "first_value": data[0],
             "last_value": data[-1],
-            "change_pct": round((data[-1] - data[0]) / abs(data[0]) * 100, 2) if data[0] != 0 else None,
+            "change_pct": (
+                round((data[-1] - data[0]) / abs(data[0]) * 100, 2)
+                if data[0] != 0
+                else None
+            ),
         }
 
     @as_tool
@@ -285,7 +305,13 @@ class RegressionAgent(BaseAgent):
         forecast_details = []
         for step, point in enumerate(forecasts, 1):
             # Prediction interval widens with distance
-            interval_width = z * std_error * math.sqrt(1 + 1 / n + (step**2) / sum((i - n / 2) ** 2 for i in range(n)))
+            interval_width = (
+                z
+                * std_error
+                * math.sqrt(
+                    1 + 1 / n + (step**2) / sum((i - n / 2) ** 2 for i in range(n))
+                )
+            )
             forecast_details.append(
                 {
                     "step": step,
@@ -325,7 +351,9 @@ class RegressionAgent(BaseAgent):
             "method": "linear",
         }
 
-    def _polynomial_regression(self, history: List[float], steps: int, degree: int = 2) -> Dict[str, Any]:
+    def _polynomial_regression(
+        self, history: List[float], steps: int, degree: int = 2
+    ) -> Dict[str, Any]:
         """Polynomial regression (simplified quadratic)."""
         n = len(history)
 
@@ -343,9 +371,15 @@ class RegressionAgent(BaseAgent):
         else:
             return self._linear_regression(history, steps)
 
-        return {"predictions": [round(p, 4) for p in predictions], "method": "polynomial", "degree": degree}
+        return {
+            "predictions": [round(p, 4) for p in predictions],
+            "method": "polynomial",
+            "degree": degree,
+        }
 
-    def _exponential_regression(self, history: List[float], steps: int) -> Dict[str, Any]:
+    def _exponential_regression(
+        self, history: List[float], steps: int
+    ) -> Dict[str, Any]:
         """Exponential growth/decay prediction."""
         if any(h <= 0 for h in history):
             return self._linear_regression(history, steps)
@@ -364,14 +398,20 @@ class RegressionAgent(BaseAgent):
             "method": "exponential",
         }
 
-    def _moving_average(self, history: List[float], steps: int, window: int = 3) -> Dict[str, Any]:
+    def _moving_average(
+        self, history: List[float], steps: int, window: int = 3
+    ) -> Dict[str, Any]:
         """Moving average prediction."""
         window = min(window, len(history))
 
         last_avg = sum(history[-window:]) / window
         predictions = [last_avg] * steps
 
-        return {"predictions": [round(p, 4) for p in predictions], "window": window, "method": "moving_average"}
+        return {
+            "predictions": [round(p, 4) for p in predictions],
+            "window": window,
+            "method": "moving_average",
+        }
 
     def _rank(self, data: List[float]) -> List[int]:
         """Compute ranks for Spearman correlation."""

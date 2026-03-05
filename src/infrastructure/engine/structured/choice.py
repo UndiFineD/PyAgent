@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,13 +49,13 @@ class ChoiceGrammar(GrammarEngine):
             def traverse_and_insert(state: int, remaining: str) -> int:
                 if not remaining:
                     return state
-                
+
                 char = remaining[0]
                 if char not in trie[state]:
                     trie[state][char] = state_counter[0]
                     trie[state_counter[0]] = {}
                     state_counter[0] += 1
-                
+
                 return traverse_and_insert(trie[state][char], remaining[1:])
 
             final_state = traverse_and_insert(0, choice)
@@ -62,13 +63,19 @@ class ChoiceGrammar(GrammarEngine):
 
         list(map(insert_choice, choices))
 
-        fsm = FSMTransitionTable(num_states=state_counter[0], initial_state=0, accepting_states=frozenset(accepting))
-        
+        fsm = FSMTransitionTable(
+            num_states=state_counter[0],
+            initial_state=0,
+            accepting_states=frozenset(accepting),
+        )
+
         def register_trie_node(item: tuple[int, Dict[str, int]]) -> None:
             from_state, transitions = item
+
             def add_trie_transition(trans_item: tuple[str, int]) -> None:
                 char, to_state = trans_item
                 fsm.add_transition(from_state, char, to_state)
+
             list(map(add_trie_transition, transitions.items()))
 
         list(map(register_trie_node, trie.items()))

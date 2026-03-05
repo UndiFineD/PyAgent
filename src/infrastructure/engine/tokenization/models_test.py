@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TokenizerInfo"), "TokenizerInfo missing"
     assert hasattr(mod, "TokenizeResult"), "TokenizeResult missing"
     assert hasattr(mod, "BatchTokenizeResult"), "BatchTokenizeResult missing"
-

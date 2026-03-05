@@ -46,6 +46,7 @@ from src.core.base.common.models.communication_models import CascadeContext
 @dataclass
 class VoiceSession:
     """Represents an active voice conversation session."""
+
     session_id: str
     started_at: str
     last_activity: str
@@ -63,7 +64,7 @@ class VoiceSession:
                 "input_tokens": 0,
                 "output_tokens": 0,
                 "audio_duration": 0.0,
-                "cost_usd": 0.0
+                "cost_usd": 0.0,
             }
 
 
@@ -83,7 +84,7 @@ class VoiceAgentOrchestrator:
         self,
         orchestrator_core: MultiAgentOrchestratorCore,
         openai_api_key: Optional[str] = None,
-        model: str = "gpt-realtime-2025-08-28"
+        model: str = "gpt-realtime-2025-08-28",
     ):
         """Initialize the voice agent orchestrator."""
         self.orchestrator = orchestrator_core
@@ -108,7 +109,9 @@ class VoiceAgentOrchestrator:
         # Register voice agent type
         self.orchestrator.register_agent_type("voice", self._voice_agent_handler)
 
-    def start_voice_session(self, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    def start_voice_session(
+        self, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Start a new voice interaction session.
 
@@ -120,38 +123,34 @@ class VoiceAgentOrchestrator:
         """
         with self.session_lock:
             if self.current_session:
-                return {
-                    "ok": False,
-                    "error": "Voice session already active"
-                }
+                return {"ok": False, "error": "Voice session already active"}
 
             session_id = str(uuid.uuid4())
             self.current_session = VoiceSession(
                 session_id=session_id,
                 started_at=datetime.now(timezone.utc).isoformat(),
-                last_activity=datetime.now(timezone.utc).isoformat()
+                last_activity=datetime.now(timezone.utc).isoformat(),
             )
 
             self.running = True
 
             # Start audio processing thread (simplified)
-            self.audio_thread = threading.Thread(target=self._audio_processing_loop, daemon=True)
+            self.audio_thread = threading.Thread(
+                target=self._audio_processing_loop, daemon=True
+            )
             self.audio_thread.start()
 
             return {
                 "ok": True,
                 "session_id": session_id,
-                "message": "Voice session started. Ready for voice input."
+                "message": "Voice session started. Ready for voice input.",
             }
 
     def end_voice_session(self) -> Dict[str, Any]:
         """End the current voice session."""
         with self.session_lock:
             if not self.current_session:
-                return {
-                    "ok": False,
-                    "error": "No active voice session"
-                }
+                return {"ok": False, "error": "No active voice session"}
 
             session = self.current_session
             self.running = False
@@ -165,10 +164,12 @@ class VoiceAgentOrchestrator:
                 "ok": True,
                 "session_id": session.session_id,
                 "duration": self._calculate_session_duration(session),
-                "message": "Voice session ended"
+                "message": "Voice session ended",
             }
 
-    def process_voice_input(self, audio_data: bytes, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    def process_voice_input(
+        self, audio_data: bytes, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Process voice input and generate response.
 
@@ -180,10 +181,7 @@ class VoiceAgentOrchestrator:
             Dictionary with processing result
         """
         if not self.current_session:
-            return {
-                "ok": False,
-                "error": "No active voice session"
-            }
+            return {"ok": False, "error": "No active voice session"}
 
         try:
             # In a full implementation, this would:
@@ -197,29 +195,30 @@ class VoiceAgentOrchestrator:
 
             # Update session
             self.current_session.last_activity = datetime.now(timezone.utc).isoformat()
-            self.current_session.conversation_history.append({
-                "type": "user_input",
-                "content": transcription,
-                "timestamp": datetime.now(timezone.utc).isoformat()
-            })
+            self.current_session.conversation_history.append(
+                {
+                    "type": "user_input",
+                    "content": transcription,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+            )
 
             # Process the transcription (simplified)
             response = self._process_transcription(transcription, context)
 
             # Add response to history
-            self.current_session.conversation_history.append({
-                "type": "assistant_response",
-                "content": response.get("text", ""),
-                "timestamp": datetime.now(timezone.utc).isoformat()
-            })
+            self.current_session.conversation_history.append(
+                {
+                    "type": "assistant_response",
+                    "content": response.get("text", ""),
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }
+            )
 
             return response
 
         except Exception as e:
-            return {
-                "ok": False,
-                "error": f"Voice processing failed: {e}"
-            }
+            return {"ok": False, "error": f"Voice processing failed: {e}"}
 
     def get_session_status(self) -> Optional[Dict[str, Any]]:
         """Get current session status."""
@@ -232,10 +231,12 @@ class VoiceAgentOrchestrator:
             "last_activity": self.current_session.last_activity,
             "active_agents": self.current_session.active_agents.copy(),
             "conversation_turns": len(self.current_session.conversation_history),
-            "audio_stats": self.current_session.audio_stats.copy()
+            "audio_stats": self.current_session.audio_stats.copy(),
         }
 
-    def _process_transcription(self, transcription: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    def _process_transcription(
+        self, transcription: str, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """
         Process transcribed text and generate response.
 
@@ -254,10 +255,12 @@ class VoiceAgentOrchestrator:
             return {
                 "ok": True,
                 "text": f"I heard: '{transcription}'. How can I help you with the agents?",
-                "audio_data": None
+                "audio_data": None,
             }
 
-    def _handle_create_agent(self, transcription: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    def _handle_create_agent(
+        self, transcription: str, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Handle agent creation requests."""
         # Extract agent type from transcription
         agent_type = "coding"  # Default
@@ -277,16 +280,18 @@ class VoiceAgentOrchestrator:
                 "ok": True,
                 "text": f"Created {agent_type} agent '{result['agent_name']}' successfully.",
                 "audio_data": None,
-                "agent_created": result["agent_name"]
+                "agent_created": result["agent_name"],
             }
         else:
             return {
                 "ok": False,
                 "text": f"Failed to create agent: {result['error']}",
-                "audio_data": None
+                "audio_data": None,
             }
 
-    def _handle_list_agents(self, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    def _handle_list_agents(
+        self, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Handle agent listing requests."""
         agents = self.orchestrator.list_agents()
 
@@ -296,14 +301,11 @@ class VoiceAgentOrchestrator:
             agent_list = [f"{agent['name']} ({agent['type']})" for agent in agents]
             text = f"Registered agents: {', '.join(agent_list)}"
 
-        return {
-            "ok": True,
-            "text": text,
-            "audio_data": None,
-            "agents": agents
-        }
+        return {"ok": True, "text": text, "audio_data": None, "agents": agents}
 
-    def _handle_run_task(self, transcription: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    def _handle_run_task(
+        self, transcription: str, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Handle task execution requests."""
         # Simple parsing - in real implementation, LLM would extract agent name and task
         agents = self.orchestrator.list_agents()
@@ -311,33 +313,39 @@ class VoiceAgentOrchestrator:
             return {
                 "ok": False,
                 "text": "No agents available to run tasks. Create an agent first.",
-                "audio_data": None
+                "audio_data": None,
             }
 
         # Use first available agent
         agent_name = agents[0]["name"]
-        task_description = transcription.replace("run task", "").replace("execute", "").strip()
+        task_description = (
+            transcription.replace("run task", "").replace("execute", "").strip()
+        )
 
         if not task_description:
             task_description = "Perform a basic task"
 
-        result = self.orchestrator.dispatch_task(agent_name, task_description, context=context)
+        result = self.orchestrator.dispatch_task(
+            agent_name, task_description, context=context
+        )
 
         if result["ok"]:
             return {
                 "ok": True,
                 "text": f"Dispatched task '{task_description}' to agent '{agent_name}'. Task ID: {result['task_id']}",
                 "audio_data": None,
-                "task_id": result["task_id"]
+                "task_id": result["task_id"],
             }
         else:
             return {
                 "ok": False,
                 "text": f"Failed to dispatch task: {result['error']}",
-                "audio_data": None
+                "audio_data": None,
             }
 
-    def _handle_check_status(self, transcription: str, context: Optional[CascadeContext] = None) -> Dict[str, Any]:
+    def _handle_check_status(
+        self, transcription: str, context: Optional[CascadeContext] = None
+    ) -> Dict[str, Any]:
         """Handle status checking requests."""
         # Get all tasks from orchestrator (simplified)
         tasks = []
@@ -350,14 +358,11 @@ class VoiceAgentOrchestrator:
         else:
             text = f"Found {len(tasks)} active tasks."
 
-        return {
-            "ok": True,
-            "text": text,
-            "audio_data": None,
-            "tasks": tasks
-        }
+        return {"ok": True, "text": text, "audio_data": None, "tasks": tasks}
 
-    def _voice_agent_handler(self, action: str, agent_name: str, metadata: Any) -> Dict[str, Any]:
+    def _voice_agent_handler(
+        self, action: str, agent_name: str, metadata: Any
+    ) -> Dict[str, Any]:
         """Handler for voice agent operations."""
         if action == "create":
             return {"ok": True, "message": f"Voice agent '{agent_name}' initialized"}
@@ -384,21 +389,21 @@ class VoiceAgentOrchestrator:
                         "agent_type": {
                             "type": "string",
                             "enum": ["coding", "browser", "voice"],
-                            "description": "Type of agent to create"
+                            "description": "Type of agent to create",
                         },
                         "agent_name": {
                             "type": "string",
-                            "description": "Optional name for the agent"
-                        }
+                            "description": "Optional name for the agent",
+                        },
                     },
-                    "required": ["agent_type"]
-                }
+                    "required": ["agent_type"],
+                },
             },
             {
                 "type": "function",
                 "name": "list_agents",
                 "description": "List all registered agents with their status and capabilities",
-                "parameters": {"type": "object", "properties": {}, "required": []}
+                "parameters": {"type": "object", "properties": {}, "required": []},
             },
             {
                 "type": "function",
@@ -407,11 +412,17 @@ class VoiceAgentOrchestrator:
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "agent_name": {"type": "string", "description": "Name of the agent"},
-                        "task_description": {"type": "string", "description": "Description of the task"}
+                        "agent_name": {
+                            "type": "string",
+                            "description": "Name of the agent",
+                        },
+                        "task_description": {
+                            "type": "string",
+                            "description": "Description of the task",
+                        },
                     },
-                    "required": ["agent_name", "task_description"]
-                }
+                    "required": ["agent_name", "task_description"],
+                },
             },
             {
                 "type": "function",
@@ -420,11 +431,14 @@ class VoiceAgentOrchestrator:
                 "parameters": {
                     "type": "object",
                     "properties": {
-                        "task_id": {"type": "string", "description": "ID of the task to check"}
+                        "task_id": {
+                            "type": "string",
+                            "description": "ID of the task to check",
+                        }
                     },
-                    "required": ["task_id"]
-                }
-            }
+                    "required": ["task_id"],
+                },
+            },
         ]
 
     def _simulate_transcription(self, audio_data: bytes) -> str:

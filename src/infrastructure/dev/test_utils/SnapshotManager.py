@@ -17,6 +17,7 @@
 This placeholder offers a tiny API surface for snapshot registration/access.
 """
 
+
 class SnapshotManager:
     def __init__(self, *_, **__):
         self._snapshots = {}

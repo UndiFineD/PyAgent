@@ -18,24 +18,29 @@ class LocalContextRecorder:
     Optimized for trillion-parameter data harvesting (Phase 105).
     """
 
-
     def __init__(self, workspace_root: Path) -> None:
         self.log_dir = workspace_root / "logs" / "external_ai_learning"
         self.log_dir.mkdir(parents=True, exist_ok=True)
         # Phase 105: Monthly + Hash-based Sharding (Deeper distribution for trillion-param scale)
         self.shard_count = 256
-        self.current_month = datetime.now().strftime('%Y%m')
-        self.use_compression = True # Save 70-80% space for massive datasets
+        self.current_month = datetime.now().strftime("%Y%m")
+        self.use_compression = True  # Save 70-80% space for massive datasets
 
-
-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: Optional[Dict[str, Any]] = None) -> None:
+    def record_interaction(
+        self,
+        provider: str,
+        model: str,
+        prompt: str,
+        result: str,
+        meta: Optional[Dict[str, Any]] = None,
+    ) -> None:
         """
         Appends a new interaction record.
         Includes unique context hashing for future deduplication and sharded storage.
         Optimized for high-throughput and low-latency disk writes.
         """
-    # Stability: generate a stable hash for the prompt to allow O(1) deduplication
-        prompt_hash = hashlib.sha256(prompt.encode('utf-8')).hexdigest()
+        # Stability: generate a stable hash for the prompt to allow O(1) deduplication
+        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
 
         # Determine sub-shard for massively parallel access (256 virtual buckets)
         shard_id = zlib.adler32(prompt_hash.encode()) % self.shard_count
@@ -51,10 +56,10 @@ class LocalContextRecorder:
             "prompt_hash": prompt_hash,
             "prompt": prompt,
             "result": result,
-            "meta": meta or {}
+            "meta": meta or {},
         }
 
-        line = (json.dumps(record) + "\n").encode('utf-8')
+        line = (json.dumps(record) + "\n").encode("utf-8")
 
         try:
             if self.use_compression:
@@ -63,7 +68,7 @@ class LocalContextRecorder:
             else:
                 with open(log_file, "a", encoding="utf-8") as f:
                     f.write(json.dumps(record) + "\n")
-                    
+
             # Update a centralized index for fast semantic lookup in the future (Phase 106)
             self._update_index(prompt_hash, str(log_file.name))
 

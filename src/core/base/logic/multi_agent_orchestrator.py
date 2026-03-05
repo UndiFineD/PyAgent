@@ -46,6 +46,7 @@ from src.core.base.state.agent_state_manager import StateTransaction
 @dataclass
 class AgentMetadata:
     """Metadata for registered agents."""
+
     name: str
     agent_type: str
     session_id: str
@@ -60,6 +61,7 @@ class AgentMetadata:
 @dataclass
 class TaskResult:
     """Result of an agent task execution."""
+
     task_id: str
     agent_name: str
     status: str  # "pending", "running", "completed", "failed"
@@ -155,7 +157,7 @@ class MultiAgentOrchestratorCore:
         agent_type: str,
         agent_name: Optional[str] = None,
         capabilities: Optional[List[str]] = None,
-        context: Optional[CascadeContext] = None
+        context: Optional[CascadeContext] = None,
     ) -> Dict[str, Any]:
         """
         Create and register a new agent.
@@ -172,7 +174,7 @@ class MultiAgentOrchestratorCore:
         if agent_type not in self.agent_handlers:
             return {
                 "ok": False,
-                "error": f"Unsupported agent type: {agent_type}. Available: {list(self.agent_handlers.keys())}"
+                "error": f"Unsupported agent type: {agent_type}. Available: {list(self.agent_handlers.keys())}",
             }
 
         # Generate unique name if not provided
@@ -181,10 +183,7 @@ class MultiAgentOrchestratorCore:
 
         # Check for name conflicts
         if agent_name in self.agent_registry:
-            return {
-                "ok": False,
-                "error": f"Agent '{agent_name}' already exists"
-            }
+            return {"ok": False, "error": f"Agent '{agent_name}' already exists"}
 
         try:
             # Create agent working directory
@@ -229,17 +228,14 @@ class MultiAgentOrchestratorCore:
             }
 
         except Exception as e:
-            return {
-                "ok": False,
-                "error": f"Failed to create agent: {e}"
-            }
+            return {"ok": False, "error": f"Failed to create agent: {e}"}
 
     def dispatch_task(
         self,
         agent_name: str,
         task_description: str,
         parameters: Optional[Dict[str, Any]] = None,
-        context: Optional[CascadeContext] = None
+        context: Optional[CascadeContext] = None,
     ) -> Dict[str, Any]:
         """
         Dispatch a task to an agent for execution.
@@ -255,15 +251,12 @@ class MultiAgentOrchestratorCore:
         """
         agent = self.agent_registry.get(agent_name)
         if not agent:
-            return {
-                "ok": False,
-                "error": f"Agent '{agent_name}' not found"
-            }
+            return {"ok": False, "error": f"Agent '{agent_name}' not found"}
 
         if agent.status != "active":
             return {
                 "ok": False,
-                "error": f"Agent '{agent_name}' is not active (status: {agent.status})"
+                "error": f"Agent '{agent_name}' is not active (status: {agent.status})",
             }
 
         # Create task record
@@ -287,7 +280,7 @@ class MultiAgentOrchestratorCore:
         thread = threading.Thread(
             target=self._execute_task_background,
             args=(task_id, agent, task_description, parameters or {}),
-            daemon=True
+            daemon=True,
         )
         thread.start()
         self.background_threads.append(thread)
@@ -296,7 +289,7 @@ class MultiAgentOrchestratorCore:
             "ok": True,
             "task_id": task_id,
             "agent_name": agent_name,
-            "status": "dispatched"
+            "status": "dispatched",
         }
 
     def get_task_status(self, task_id: str) -> Optional[TaskResult]:
@@ -311,16 +304,18 @@ class MultiAgentOrchestratorCore:
             if agent_type and metadata.agent_type != agent_type:
                 continue
 
-            agents.append({
-                "name": metadata.name,
-                "type": metadata.agent_type,
-                "session_id": metadata.session_id,
-                "status": metadata.status,
-                "created_at": metadata.created_at,
-                "last_active": metadata.last_active,
-                "capabilities": metadata.capabilities,
-                "task_count": len(metadata.task_history),
-            })
+            agents.append(
+                {
+                    "name": metadata.name,
+                    "type": metadata.agent_type,
+                    "session_id": metadata.session_id,
+                    "status": metadata.status,
+                    "created_at": metadata.created_at,
+                    "last_active": metadata.last_active,
+                    "capabilities": metadata.capabilities,
+                    "task_count": len(metadata.task_history),
+                }
+            )
 
         return sorted(agents, key=lambda x: x["created_at"], reverse=True)
 
@@ -328,10 +323,7 @@ class MultiAgentOrchestratorCore:
         """Delete an agent and clean up its resources."""
         agent = self.agent_registry.get(agent_name)
         if not agent:
-            return {
-                "ok": False,
-                "error": f"Agent '{agent_name}' not found"
-            }
+            return {"ok": False, "error": f"Agent '{agent_name}' not found"}
 
         try:
             # Notify handler of deletion
@@ -348,15 +340,13 @@ class MultiAgentOrchestratorCore:
             agent_dir = Path(agent.working_dir)
             if agent_dir.exists():
                 import shutil
+
                 shutil.rmtree(agent_dir)
 
             return {"ok": True, "agent_name": agent_name}
 
         except Exception as e:
-            return {
-                "ok": False,
-                "error": f"Failed to delete agent: {e}"
-            }
+            return {"ok": False, "error": f"Failed to delete agent: {e}"}
 
     def get_agent_tools(self, agent_name: str) -> List[Dict[str, Any]]:
         """Get available tools for an agent."""
@@ -384,7 +374,7 @@ class MultiAgentOrchestratorCore:
         task_id: str,
         agent: AgentMetadata,
         task_description: str,
-        parameters: Dict[str, Any]
+        parameters: Dict[str, Any],
     ):
         """Execute a task in the background."""
         try:
@@ -399,11 +389,15 @@ class MultiAgentOrchestratorCore:
             handler = self.agent_handlers[agent.agent_type]
 
             # Execute task
-            result = handler("execute", agent.name, {
-                "task_description": task_description,
-                "parameters": parameters,
-                "agent_metadata": agent,
-            })
+            result = handler(
+                "execute",
+                agent.name,
+                {
+                    "task_description": task_description,
+                    "parameters": parameters,
+                    "agent_metadata": agent,
+                },
+            )
 
             # Update task result
             with self.task_lock:

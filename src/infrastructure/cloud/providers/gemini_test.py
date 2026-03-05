@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_geminiconnector_exists():
     """Test that GeminiConnector class exists and is importable."""
-    assert 'GeminiConnector' in dir()
+    assert "GeminiConnector" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

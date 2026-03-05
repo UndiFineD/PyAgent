@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_agentmetadata_exists():
     """Test that AgentMetadata class exists and is importable."""
-    assert 'AgentMetadata' in dir()
+    assert "AgentMetadata" in dir()
 
 
 def test_evolutioncore_exists():
     """Test that EvolutionCore class exists and is importable."""
-    assert 'EvolutionCore' in dir()
+    assert "EvolutionCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

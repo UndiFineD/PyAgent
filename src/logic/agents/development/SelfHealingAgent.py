@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,9 +34,12 @@ class SelfHealingAgent(BaseAgent):
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
         self.telemetry = ObservabilityEngine(str(self.workspace_root))
-        
+
         # Phase 317: Dynamic prompt loading and coordinator integration
-        from src.maintenance.SelfImprovementCoordinator import SelfImprovementCoordinator
+        from src.maintenance.SelfImprovementCoordinator import (
+            SelfImprovementCoordinator,
+        )
+
         self.coordinator = SelfImprovementCoordinator(str(self.workspace_root))
         self._load_dynamic_prompt()
 
@@ -48,7 +52,7 @@ class SelfHealingAgent(BaseAgent):
             "Suggest patches to the source code or configuration to prevent future failures. "
             "Check budget and available remote peers before proposing expensive cloud-based solutions."
         )
-        
+
         prompt_dir = self.workspace_root / "docs" / "prompt"
         context_file = prompt_dir / "context.txt"
         if context_file.exists():
@@ -56,12 +60,18 @@ class SelfHealingAgent(BaseAgent):
                 content = context_file.read_text(encoding="utf-8")
                 # Append high-level project goals to improve alignment
                 if "Project Overview" in content:
-                    overview = content.split("## Project Overview")[1].split("##")[0].strip()
+                    overview = (
+                        content.split("## Project Overview")[1].split("##")[0].strip()
+                    )
                     self._system_prompt += f"\n\nProject Context:\n{overview}"
             except Exception as e:
                 # Log but don't fail - dynamic prompt is optional enhancement
                 import logging
-                logging.getLogger(__name__).debug("Failed to load dynamic prompt: %s", e)
+
+                logging.getLogger(__name__).debug(
+                    "Failed to load dynamic prompt: %s", e
+                )
+
     @as_tool
     async def discover_peers_and_budget(self) -> str:
         """Discovers available peers and current cloud budget status."""
@@ -69,48 +79,66 @@ class SelfHealingAgent(BaseAgent):
             return "❌ Error: Self-healing coordinator is not initialized."
 
         import logging
+
         logger = logging.getLogger(__name__)
-        
+
         peers = []
         try:
             await self.coordinator.load_strategic_context()
             peers = await self.coordinator.discover_external_servers() or []
         except Exception as e:
-            logger.error("Failed to query peer network or context: %s", e, exc_info=True)
+            logger.error(
+                "Failed to query peer network or context: %s", e, exc_info=True
+            )
             return f"❌ Failure during network discovery: {str(e)}"
 
         # Defensive check for budget manager
-        budget_info = {"today_spend": 0.0, "daily_limit": 0.0, "remaining": 0.0, "known": False}
+        budget_info = {
+            "today_spend": 0.0,
+            "daily_limit": 0.0,
+            "remaining": 0.0,
+            "known": False,
+        }
         if hasattr(self.coordinator, "budget") and self.coordinator.budget:
             try:
-                budget_info["today_spend"] = float(getattr(self.coordinator.budget, "today_spend", 0.0))
-                budget_info["daily_limit"] = float(getattr(self.coordinator.budget, "daily_limit", 0.0))
-                budget_info["remaining"] = max(0.0, budget_info["daily_limit"] - budget_info["today_spend"])
+                budget_info["today_spend"] = float(
+                    getattr(self.coordinator.budget, "today_spend", 0.0)
+                )
+                budget_info["daily_limit"] = float(
+                    getattr(self.coordinator.budget, "daily_limit", 0.0)
+                )
+                budget_info["remaining"] = max(
+                    0.0, budget_info["daily_limit"] - budget_info["today_spend"]
+                )
                 budget_info["known"] = True
             except (AttributeError, TypeError, ValueError) as e:
                 logger.warning("Could not extract budget metrics: %s", e)
 
         report = ["## 🌐 Network & Budget Report\n"]
-        
+
         if budget_info["known"]:
-            report.append(f"**Budget**: ${budget_info['today_spend']:.2f} / ${budget_info['daily_limit']:.2f} (Remaining: ${budget_info['remaining']:.2f})")
+            report.append(
+                f"**Budget**: ${budget_info['today_spend']:.2f} / ${budget_info['daily_limit']:.2f} (Remaining: ${budget_info['remaining']:.2f})"
+            )
         else:
             report.append("**Budget**: [Unknown/Unavailable]")
-        
+
         if peers:
             report.append("\n**Available Peers**:")
             for p in peers:
-                p_id = p.get('id', 'unknown')
-                p_type = p.get('type', 'generic')
-                p_status = p.get('status', 'online')
+                p_id = p.get("id", "unknown")
+                p_type = p.get("type", "generic")
+                p_status = p.get("status", "online")
                 report.append(f"- {p_id} ({p_type}): {p_status}")
         else:
             report.append("\n❌ No external peers or servers discovered.")
-            
+
         return "\n".join(report)
 
     @as_tool
-    async def request_remote_healing(self, agent_name: str, error_msg: str, target_peer: str) -> str:
+    async def request_remote_healing(
+        self, agent_name: str, error_msg: str, target_peer: str
+    ) -> str:
         """Requests a remote peer to perform a healing analysis for a specific agent."""
         if self.coordinator is None:
             return "❌ Error: Coordinator not initialized."
@@ -118,21 +146,21 @@ class SelfHealingAgent(BaseAgent):
         task = {
             "title": f"Heal {agent_name}",
             "description": f"Perform deep analysis on: {error_msg}",
-            "agent_type": "SelfHealing"
+            "agent_type": "SelfHealing",
         }
-        
+
         try:
             res = await self.coordinator.execute_remote_task(task, target_peer)
         except Exception as e:
             return f"❌ Failed to dispatch to {target_peer}: {e}"
-        
+
         if not res or not isinstance(res, dict):
             return f"❌ Invalid response from {target_peer}"
-        
+
         if res.get("status") == "success":
             return f"✅ Remote healing task dispatched to {target_peer}. Task ID: {res.get('task_id', 'unknown')}"
         else:
-            error_msg = res.get('error', 'Unknown error')
+            error_msg = res.get("error", "Unknown error")
             return f"❌ Failed to dispatch to {target_peer}: {error_msg}"
 
     def _get_default_content(self) -> str:

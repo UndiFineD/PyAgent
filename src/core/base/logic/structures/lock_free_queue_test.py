@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "PriorityQueue"), "PriorityQueue missing"
     assert hasattr(mod, "WorkStealingDeque"), "WorkStealingDeque missing"
     assert hasattr(mod, "BatchingQueue"), "BatchingQueue missing"
-

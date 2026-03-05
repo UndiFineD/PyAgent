@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ from typing import List, Optional
 
 __version__ = VERSION
 
+
 class WebCore:
     """Pure logic core for Web navigation and extraction."""
 
@@ -39,31 +41,32 @@ class WebCore:
         """Removes script/style tags and simplifies text from HTML."""
         if not html_content:
             return ""
-            
-        soup = BeautifulSoup(html_content, 'html.parser')
-        
+
+        soup = BeautifulSoup(html_content, "html.parser")
+
         # Remove navigation, scripts, and styles
         for element in soup(["script", "style", "nav", "footer", "header"]):
             element.decompose()
-        
+
         text = soup.get_text()
-        
+
         # Clean up whitespace
         lines = (line.strip() for line in text.splitlines())
         chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-        return '\n'.join(chunk for chunk in chunks if chunk)
+        return "\n".join(chunk for chunk in chunks if chunk)
 
     @staticmethod
     def extract_links(html_content: str, base_url: str | None = None) -> list[str]:
         """Extracts all absolute links from HTML content."""
         import urllib.parse
+
         if not html_content:
             return []
-            
-        soup = BeautifulSoup(html_content, 'html.parser')
+
+        soup = BeautifulSoup(html_content, "html.parser")
         links = []
-        for a in soup.find_all('a', href=True):
-            href = a['href']
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
             if base_url:
                 href = urllib.parse.urljoin(base_url, href)
             links.append(href)

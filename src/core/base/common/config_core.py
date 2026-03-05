@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,16 +44,25 @@ class ConfigObject:  # pylint: disable=too-few-public-methods
             if isinstance(value, dict):
                 setattr(self, key, ConfigObject(value))
             elif isinstance(value, list):
-                setattr(self, key, list(map(lambda v: ConfigObject(v) if isinstance(v, dict) else v, value)))
+                setattr(
+                    self,
+                    key,
+                    list(
+                        map(
+                            lambda v: ConfigObject(v) if isinstance(v, dict) else v,
+                            value,
+                        )
+                    ),
+                )
             else:
                 setattr(self, key, value)
 
         list(map(_process_item, data.items()))
 
-
     def get(self, key: str, default: Any = None) -> Any:
         """Standard getter regarding dot-notation keys functionally."""
         from functools import reduce
+
         try:
             return reduce(getattr, key.split("."), self)
         except (AttributeError, TypeError):
@@ -64,6 +74,7 @@ class ConfigCore(BaseCore):
     Standard implementation for configuration management.
     Handles multi-format loading and hierarchical merging.
     """
+
     SUPPORTED_EXTENSIONS = {
         ".yaml": ConfigFormat.YAML,
         ".yml": ConfigFormat.YAML,
@@ -72,7 +83,6 @@ class ConfigCore(BaseCore):
         ".ini": ConfigFormat.INI,
     }
 
-
     def __init__(self, workspace_root: Path | str | None = None) -> None:
         super().__init__()
         # Use repo_root from BaseCore if available
@@ -80,7 +90,9 @@ class ConfigCore(BaseCore):
         if isinstance(root, str):
             root = Path(root)
 
-        if root.is_file() or (isinstance(root, Path) and root.suffix in self.SUPPORTED_EXTENSIONS):
+        if root.is_file() or (
+            isinstance(root, Path) and root.suffix in self.SUPPORTED_EXTENSIONS
+        ):
             self.config_path = root
             self.workspace_root = root.parent
             # Auto-detect format from path
@@ -121,13 +133,15 @@ class ConfigCore(BaseCore):
     def find_config_file(directory: Path) -> Path | None:
         """Find the primary config file regarding a directory functionally."""
         from itertools import product
+
         extensions = [".json", ".yaml", ".yml", ".toml"]
         names = ["config", "settings", "pyagent", "agent"]
 
         # Determine candidate paths regarding existing files
-        candidates = map(lambda x: directory / f"{x[1]}{x[0]}", product(extensions, names))
+        candidates = map(
+            lambda x: directory / f"{x[1]}{x[0]}", product(extensions, names)
+        )
         return next(filter(lambda p: p.exists(), candidates), None)
-
 
     def refresh(self) -> None:
         """Reload all configurations regarding disk functionally."""
@@ -138,11 +152,10 @@ class ConfigCore(BaseCore):
                     self.load_config,
                     filter(
                         lambda p: p.suffix.lower() in self.SUPPORTED_EXTENSIONS,
-                        self.config_dir.glob("*.*")
-                    )
+                        self.config_dir.glob("*.*"),
+                    ),
                 )
             )
-
 
     def get(self, key: str, default: Any = None) -> Any:
         """
@@ -150,6 +163,7 @@ class ConfigCore(BaseCore):
         Prefix: PYAGENT_ (e.g. models.coder.temperature -> PYAGENT_MODELS__CODER__TEMPERATURE)
         """
         import os
+
         # 1. Check environment variables (support double underscores for nesting)
         env_key = f"PYAGENT_{key.upper().replace('.', '__')}"
         if env_key in os.environ:
@@ -164,26 +178,27 @@ class ConfigCore(BaseCore):
         # 2. Check loaded configs functionally regarding first match
         return next(
             filter(
-                lambda x: x is not None, 
-                map(lambda cfg: cfg.get(key), self.configs.values())
-            ), 
-            default
+                lambda x: x is not None,
+                map(lambda cfg: cfg.get(key), self.configs.values()),
+            ),
+            default,
         )
-
 
     def _can_use_rust_loader(self, path: Path) -> bool:
         """Determine if Rust loader can be used for this file."""
-        return bool(rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"])
-
+        return bool(
+            rc and hasattr(rc, "load_config_rust") and path.suffix in [".ini", ".conf"]
+        )
 
     def _try_rust_load_config(self, path: Path) -> dict[str, Any] | None:
         """Attempt to load config using Rust implementation, with error handling."""
         try:
             return rc.load_config_rust(str(path))  # type: ignore
         except RuntimeError as e:
-            logging.error("ConfigCore: Rust load_config_rust failed for %s: %s", path, e)
+            logging.error(
+                "ConfigCore: Rust load_config_rust failed for %s: %s", path, e
+            )
             return None
-
 
     def _try_python_load_config(self, path: Path, fmt: ConfigFormat) -> ConfigObject:
         """Load config using Python parser with error handling."""
@@ -197,8 +212,9 @@ class ConfigCore(BaseCore):
             logging.error("ConfigCore: Failed to load %s: %s", path, e)
         return ConfigObject({})
 
-
-    def merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    def merge_configs(
+        self, base: Dict[str, Any], override: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Deep merge two config dicts. Rust-accelerated for large trees."""
         if self._can_use_rust_merge():
             merged = self._try_rust_merge_configs(base, override)
@@ -206,13 +222,13 @@ class ConfigCore(BaseCore):
                 return merged
         return self._python_merge_configs(base, override)
 
-
     def _can_use_rust_merge(self) -> bool:
         """Determine if Rust merge_configs can be used."""
         return bool(rc and hasattr(rc, "merge_configs_rust"))
 
-
-    def _try_rust_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any] | None:
+    def _try_rust_merge_configs(
+        self, base: Dict[str, Any], override: Dict[str, Any]
+    ) -> Dict[str, Any] | None:
         """Attempt to merge configs using Rust implementation, with error handling."""
         try:
             return rc.merge_configs_rust(base, override)  # type: ignore
@@ -220,11 +236,11 @@ class ConfigCore(BaseCore):
             logging.error("ConfigCore: Rust merge_configs_rust failed: %s", e)
             return None
 
-
-    def _python_merge_configs(self, base: Dict[str, Any], override: Dict[str, Any]) -> Dict[str, Any]:
+    def _python_merge_configs(
+        self, base: Dict[str, Any], override: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Deep merge two config dicts functionally regarding loop-free mandate."""
         from functools import reduce
-
 
         def _merge_item(acc: Dict[str, Any], item: tuple[str, Any]) -> Dict[str, Any]:
             """Merges a single key-value pair into the accumulated config."""
@@ -237,7 +253,6 @@ class ConfigCore(BaseCore):
 
         return reduce(_merge_item, override.items(), base.copy())
 
-
     def _parse(self, content: str, fmt: ConfigFormat) -> Dict[str, Any]:
         """Parses configuration content based on format."""
         data: Any = {}
@@ -249,7 +264,6 @@ class ConfigCore(BaseCore):
         if isinstance(data, list):
             return {"items": data}
         return data if isinstance(data, dict) else {}
-
 
     def _parse_by_format(self, content: str, fmt: ConfigFormat) -> Any:
         if fmt == ConfigFormat.JSON:

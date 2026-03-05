@@ -10,6 +10,7 @@ from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class RewardModelAgent(BaseAgent):
     """Evaluates and ranks multiple proposals to provide a scalar reward signal."""
 
@@ -24,13 +25,15 @@ class RewardModelAgent(BaseAgent):
     @as_tool
     def rank_proposals(self, task: str, proposals: Dict[str, str]) -> Dict[str, Any]:
         """Ranks a set of proposals from best to worst and provides reward scores.
-        
+
         Args:
             task: The original task given to the agents.
             proposals: Mapping of agent names to their generated content.
         """
-        logging.info(f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}...")
-        
+        logging.info(
+            f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}..."
+        )
+
         # In a real system, we'd use a dedicated Reward Model or a strong LLM to judge.
         # Here we use the base agent's reasoning to produce a ranking.
         ranking_prompt = (
@@ -40,31 +43,32 @@ class RewardModelAgent(BaseAgent):
         )
         for name, content in proposals.items():
             ranking_prompt += f"--- Agent: {name} ---\n{content}\n\n"
-            
+
         ranking_prompt += "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }"
-        
+
         try:
             res = self.improve_content(ranking_prompt)
             # Try to parse JSON from response
             import json
             import re
+
             match = re.search(r"(\{.*\})", res.replace("\n", " "), re.DOTALL)
             if match:
                 data = json.loads(match.group(1))
                 return data
         except Exception as e:
             logging.error(f"RewardModel: Failed to parse ranking: {e}")
-            
+
         # Fallback heuristic ranking
         scores = {}
         for name, content in proposals.items():
-            score = 7.0 # neutral
+            score = 7.0  # neutral
             if "TODO" in content or len(content) < 15:
                 score = 3.0
             elif len(content) > 20:
                 score = 9.0
             scores[name] = score
-            
+
         ranking = sorted(scores, key=scores.get, reverse=True)
         return {"ranking": ranking, "scores": scores}
 
@@ -72,7 +76,11 @@ class RewardModelAgent(BaseAgent):
         """Standard AI-powered evaluation."""
         return super().improve_content(input_text)
 
+
 if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")
+
+    main = create_main_function(
+        RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals"
+    )
     main()

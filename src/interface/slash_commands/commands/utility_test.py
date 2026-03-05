@@ -14,6 +14,7 @@ def _load_module():
     spec = importlib.util.spec_from_file_location(module_name, p)
     mod = importlib.util.module_from_spec(spec)
     import sys
+
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     return mod
@@ -32,4 +33,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "cmd_echo"), "cmd_echo missing"
     assert hasattr(mod, "cmd_upper"), "cmd_upper missing"
     assert hasattr(mod, "cmd_lower"), "cmd_lower missing"
-

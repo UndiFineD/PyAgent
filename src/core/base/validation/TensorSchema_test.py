@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_dynamicdim_exists():
     """Test that DynamicDim class exists and is importable."""
-    assert 'DynamicDim' in dir()
+    assert "DynamicDim" in dir()
 
 
 def test_tensorshape_exists():
     """Test that TensorShape class exists and is importable."""
-    assert 'TensorShape' in dir()
+    assert "TensorShape" in dir()
 
 
 def test_tensorshape_instantiation():
@@ -49,7 +49,7 @@ def test_tensorshape_instantiation():
 
 def test_tensorschema_exists():
     """Test that TensorSchema class exists and is importable."""
-    assert 'TensorSchema' in dir()
+    assert "TensorSchema" in dir()
 
 
 def test_validate_tensor_exists():
@@ -65,4 +65,3 @@ def test_validate_tensor_shape_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

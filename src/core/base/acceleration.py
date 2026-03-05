@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,12 +21,16 @@ Interfaces with rust_core via PyO3 or CFFI.
 
 class NeuralPruningEngine:
     """Core engine for pruning neural connections in the swarm."""
-    
-    def calculate_synaptic_weight_python(self, inputs: list[float], weights: list[float]) -> float:
+
+    def calculate_synaptic_weight_python(
+        self, inputs: list[float], weights: list[float]
+    ) -> float:
         """Native Python implementation of weight calculation."""
         return sum(i * w for i, w in zip(inputs, weights))
 
-    def calculate_synaptic_weight(self, inputs: list[float], weights: list[float]) -> float:
+    def calculate_synaptic_weight(
+        self, inputs: list[float], weights: list[float]
+    ) -> float:
         """
         Accelerated implementation using Rust core.
         Falls back to Python if Rust module is not compiled.

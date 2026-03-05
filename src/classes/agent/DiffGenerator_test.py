@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_diffgenerator_exists():
     """Test that DiffGenerator class exists and is importable."""
-    assert 'DiffGenerator' in dir()
+    assert "DiffGenerator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

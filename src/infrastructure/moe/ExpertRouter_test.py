@@ -33,55 +33,54 @@ except ImportError as e:
 
 def test_routingmethod_exists():
     """Test that RoutingMethod class exists and is importable."""
-    assert 'RoutingMethod' in dir()
+    assert "RoutingMethod" in dir()
 
 
 def test_routerconfig_exists():
     """Test that RouterConfig class exists and is importable."""
-    assert 'RouterConfig' in dir()
+    assert "RouterConfig" in dir()
 
 
 def test_routeroutput_exists():
     """Test that RouterOutput class exists and is importable."""
-    assert 'RouterOutput' in dir()
+    assert "RouterOutput" in dir()
 
 
 def test_routerbase_exists():
     """Test that RouterBase class exists and is importable."""
-    assert 'RouterBase' in dir()
+    assert "RouterBase" in dir()
 
 
 def test_topkrouter_exists():
     """Test that TopKRouter class exists and is importable."""
-    assert 'TopKRouter' in dir()
+    assert "TopKRouter" in dir()
 
 
 def test_groupedtopkrouter_exists():
     """Test that GroupedTopKRouter class exists and is importable."""
-    assert 'GroupedTopKRouter' in dir()
+    assert "GroupedTopKRouter" in dir()
 
 
 def test_expertchoicerouter_exists():
     """Test that ExpertChoiceRouter class exists and is importable."""
-    assert 'ExpertChoiceRouter' in dir()
+    assert "ExpertChoiceRouter" in dir()
 
 
 def test_softmoerouter_exists():
     """Test that SoftMoERouter class exists and is importable."""
-    assert 'SoftMoERouter' in dir()
+    assert "SoftMoERouter" in dir()
 
 
 def test_adaptiverouter_exists():
     """Test that AdaptiveRouter class exists and is importable."""
-    assert 'AdaptiveRouter' in dir()
+    assert "AdaptiveRouter" in dir()
 
 
 def test_routingsimulator_exists():
     """Test that RoutingSimulator class exists and is importable."""
-    assert 'RoutingSimulator' in dir()
+    assert "RoutingSimulator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

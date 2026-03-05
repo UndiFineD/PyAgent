@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,26 +14,25 @@ from __future__ import annotations
 # limitations under the License.
 
 
-
 import os
 import re
 
-root_dirs = ['src', '.', 'gui', 'tests'] # Scan these top-level dirs
-skip_files = ['version.py', 'cleanup_version.py']
-version_pattern = re.compile(r'VERSION\s*=\s*[\"\']2\.1\.2-stable[\"\']')
+root_dirs = ["src", ".", "gui", "tests"]  # Scan these top-level dirs
+skip_files = ["version.py", "cleanup_version.py"]
+version_pattern = re.compile(r"VERSION\s*=\s*[\"\']2\.1\.2-stable[\"\']")
 
 COUNT = 0
 for r_dir in root_dirs:
     for root, dirs, files in os.walk(r_dir):
         # Skip some common hidden/vendor dirs
-        if any(x in root for x in ['.git', '__pycache__', '.venv', 'node_modules']):
+        if any(x in root for x in [".git", "__pycache__", ".venv", "node_modules"]):
             continue
 
         for file in files:
-            if file.endswith('.py') and file not in skip_files:
+            if file.endswith(".py") and file not in skip_files:
                 file_path = os.path.join(root, file)
                 try:
-                    with open(file_path, encoding='utf-8') as f:
+                    with open(file_path, encoding="utf-8") as f:
                         lines = f.readlines()
 
                     new_lines = []
@@ -40,17 +40,19 @@ for r_dir in root_dirs:
                     for line in lines:
                         if version_pattern.search(line):
                             # Only remove if it's a direct assignment, not part of a larger string or import
-                            if line.strip().startswith('VERSION ='):
+                            if line.strip().startswith("VERSION ="):
                                 CHANGED = True
                                 continue
                         new_lines.append(line)
 
                     if CHANGED:
-                        with open(file_path, 'w', encoding='utf-8') as f:
+                        with open(file_path, "w", encoding="utf-8") as f:
                             f.writelines(new_lines)
-                        print(f'Cleaned up VERSION in {file_path}')
+                        print(f"Cleaned up VERSION in {file_path}")
                         COUNT += 1
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     print(f"Error processing {file_path}: {e}")
 
-print(f'Finished. Total files cleaned: {COUNT}')
+print(f"Finished. Total files cleaned: {COUNT}")

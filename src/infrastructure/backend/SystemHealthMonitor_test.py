@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_systemhealthmonitor_exists():
     """Test that SystemHealthMonitor class exists and is importable."""
-    assert 'SystemHealthMonitor' in dir()
+    assert "SystemHealthMonitor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

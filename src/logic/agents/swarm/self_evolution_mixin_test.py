@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_evolutionmetrics_exists():
     """Test that EvolutionMetrics class exists and is importable."""
-    assert 'EvolutionMetrics' in dir()
+    assert "EvolutionMetrics" in dir()
 
 
 def test_evolutionhistory_exists():
     """Test that EvolutionHistory class exists and is importable."""
-    assert 'EvolutionHistory' in dir()
+    assert "EvolutionHistory" in dir()
 
 
 def test_selfevolutionmixin_exists():
     """Test that SelfEvolutionMixin class exists and is importable."""
-    assert 'SelfEvolutionMixin' in dir()
+    assert "SelfEvolutionMixin" in dir()
 
 
 def test_selfevolutionmixin_instantiation():
@@ -55,4 +55,3 @@ def test_selfevolutionmixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -9,6 +9,7 @@ Ready for conversion to a Rust library with strong typing.
 import re
 from typing import List, Dict, Any, Optional
 
+
 class AgentCore:
     """Logic-only core for managing improvement tasks and state."""
 
@@ -22,12 +23,12 @@ class AgentCore:
         """
         if not content:
             return []
-            
+
         lines = content.splitlines()
         pending: List[str] = []
-        
+
         # Match "1. ", "1) ", "- [ ]", "- ", "* "
-        list_pattern = re.compile(r'^(\d+[\.\)]|\*|\-)\s+(\[ \]\s+)?(.*)')
+        list_pattern = re.compile(r"^(\d+[\.\)]|\*|\-)\s+(\[ \]\s+)?(.*)")
 
         for line in lines:
             stripped = line.strip()
@@ -35,18 +36,18 @@ class AgentCore:
                 continue
 
             # Skip explicitly checked or fixed items
-            if '[x]' in stripped or '[Fixed]' in stripped:
+            if "[x]" in stripped or "[Fixed]" in stripped:
                 continue
 
             match = list_pattern.match(stripped)
             if match:
                 item_text = match.group(3).strip()
                 # Filter out obvious headers or non-tasks
-                if item_text.lower().startswith('current strengths'):
+                if item_text.lower().startswith("current strengths"):
                     continue
                 if len(item_text) > 5:
                     pending.append(item_text)
-                    
+
         return pending
 
     def update_fixed_items(self, content: str, fixed_items: List[str]) -> str:
@@ -55,26 +56,26 @@ class AgentCore:
         """
         if not content or not fixed_items:
             return content
-            
+
         lines = content.splitlines()
         new_lines: List[str] = []
-        
+
         for line in lines:
             updated = False
             for item in fixed_items:
                 if item in line:
-                    if '- [ ]' in line:
-                        new_lines.append(line.replace('- [ ]', '- [x]'))
+                    if "- [ ]" in line:
+                        new_lines.append(line.replace("- [ ]", "- [x]"))
                         updated = True
                         break
-                    elif '[x]' not in line and '[Fixed]' not in line:
+                    elif "[x]" not in line and "[Fixed]" not in line:
                         new_lines.append(line + " [Fixed]")
                         updated = True
                         break
             if not updated:
                 new_lines.append(line)
-                
-        return '\n'.join(new_lines) + '\n'
+
+        return "\n".join(new_lines) + "\n"
 
     def generate_changelog_entries(self, fixed_items: List[str]) -> str:
         """
@@ -92,12 +93,15 @@ class AgentCore:
         # Example criteria: prioritize 'security', 'bug', 'crash'
         prioritized = []
         remaining = []
-        
+
         for item in items:
             it_low = item.lower()
-            if any(word in it_low for word in ['security', 'vulnerability', 'crash', 'critical']):
+            if any(
+                word in it_low
+                for word in ["security", "vulnerability", "crash", "critical"]
+            ):
                 prioritized.append(item)
             else:
                 remaining.append(item)
-                
+
         return prioritized + remaining

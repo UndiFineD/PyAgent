@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,10 +27,12 @@ from typing import TYPE_CHECKING, Optional
 from src.infrastructure.engine.engine_client.async_mp import AsyncMPClient
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.lb import P2CLoadBalancer
-from src.infrastructure.engine.engine_client.types import (ClientMode,
-                                                           EngineClientConfig,
-                                                           EngineOutput,
-                                                           WorkerInfo)
+from src.infrastructure.engine.engine_client.types import (
+    ClientMode,
+    EngineClientConfig,
+    EngineOutput,
+    WorkerInfo,
+)
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import SchedulerOutput
@@ -72,7 +75,9 @@ class DPAsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
             )
             self._worker_clients[i] = AsyncMPClient(worker_config)
 
-        self._load_balancer = P2CLoadBalancer(self._workers, self.config.p2c_sample_size)
+        self._load_balancer = P2CLoadBalancer(
+            self._workers, self.config.p2c_sample_size
+        )
 
     def send_request(self, request: SchedulerOutput) -> str:
         """Route request to best worker via P2C."""
@@ -97,7 +102,9 @@ class DPAsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
         return request_id
 
-    def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
+    def get_output(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[EngineOutput]:
         """Get output from appropriate worker."""
         worker_id = self._pending_worker_map.get(request_id)
         if worker_id is None:
@@ -113,13 +120,17 @@ class DPAsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
         # Update worker stats
         if self._load_balancer:
-            self._load_balancer.update_worker(worker_id, pending_delta=-1, latency_ms=latency_ms)
+            self._load_balancer.update_worker(
+                worker_id, pending_delta=-1, latency_ms=latency_ms
+            )
 
         del self._pending_worker_map[request_id]
 
         return output
 
-    async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
+    async def get_output_async(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[EngineOutput]:
         """Get output asynchronously."""
         worker_id = self._pending_worker_map.get(request_id)
         if worker_id is None:
@@ -135,7 +146,9 @@ class DPAsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
         # Update worker stats
         if self._load_balancer:
-            self._load_balancer.update_worker(worker_id, pending_delta=-1, latency_ms=latency_ms)
+            self._load_balancer.update_worker(
+                worker_id, pending_delta=-1, latency_ms=latency_ms
+            )
 
         if request_id in self._pending_worker_map:
             del self._pending_worker_map[request_id]

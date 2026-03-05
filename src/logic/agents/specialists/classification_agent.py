@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,6 +42,7 @@ __version__ = VERSION
 
 class ClassificationType(Enum):
     """Types of classification supported by the agent."""
+
     SINGLE_LABEL = "single_label"
     MULTI_LABEL = "multi_label"
     HIERARCHICAL = "hierarchical"
@@ -95,7 +97,10 @@ class ClassificationAgent(BaseAgent):
     ) -> Dict[str, Any]:
         """Registers a taxonomy for reuse."""
         taxonomy = Taxonomy(
-            name=name, categories=categories, hierarchy=hierarchy or {}, descriptions=descriptions or {}
+            name=name,
+            categories=categories,
+            hierarchy=hierarchy or {},
+            descriptions=descriptions or {},
         )
         self._taxonomies[name] = taxonomy
 
@@ -136,7 +141,9 @@ class ClassificationAgent(BaseAgent):
         elif cls_type == ClassificationType.MULTI_LABEL:
             prompt = self._build_multi_label_prompt(content, cats, descriptions, top_k)
         elif cls_type == ClassificationType.HIERARCHICAL:
-            prompt = self._build_hierarchical_prompt(content, cats, hierarchy, descriptions)
+            prompt = self._build_hierarchical_prompt(
+                content, cats, hierarchy, descriptions
+            )
         else:
             prompt = self._build_single_label_prompt(content, cats, descriptions)
 
@@ -149,13 +156,20 @@ class ClassificationAgent(BaseAgent):
 
                 # Validate confidence threshold
                 confidence = data.get("confidence", 0.0)
-                if isinstance(confidence, (int, float)) and confidence < self._confidence_threshold:
+                if (
+                    isinstance(confidence, (int, float))
+                    and confidence < self._confidence_threshold
+                ):
                     data["below_threshold"] = True
                     data["threshold"] = self._confidence_threshold
 
                 # Record classification
                 self._classification_history.append(
-                    {"content_preview": content[:100], "result": data, "type": classification_type}
+                    {
+                        "content_preview": content[:100],
+                        "result": data,
+                        "type": classification_type,
+                    }
                 )
 
                 return data
@@ -166,14 +180,19 @@ class ClassificationAgent(BaseAgent):
 
     @as_tool
     async def classify_batch(
-        self, contents: List[str], categories: List[str], classification_type: str = "single_label"
+        self,
+        contents: List[str],
+        categories: List[str],
+        classification_type: str = "single_label",
     ) -> Dict[str, Any]:
         """Classifies multiple items in batch."""
         results = []
 
         for idx, content in enumerate(contents):
             result = await self.classify(
-                content=content, categories=categories, classification_type=classification_type
+                content=content,
+                categories=categories,
+                classification_type=classification_type,
             )
             results.append({"index": idx, "content_preview": content[:50], **result})
 
@@ -187,11 +206,17 @@ class ClassificationAgent(BaseAgent):
             "results": results,
             "total": len(contents),
             "distribution": category_counts,
-            "avg_confidence": sum(r.get("confidence", 0) for r in results) / len(results) if results else 0,
+            "avg_confidence": (
+                sum(r.get("confidence", 0) for r in results) / len(results)
+                if results
+                else 0
+            ),
         }
 
     @as_tool
-    async def suggest_categories(self, sample_content: List[str], num_categories: int = 5) -> Dict[str, Any]:
+    async def suggest_categories(
+        self, sample_content: List[str], num_categories: int = 5
+    ) -> Dict[str, Any]:
         """Suggests categories based on sample content."""
         samples = "\n".join([f"- {c[:200]}" for c in sample_content[:10]])
 
@@ -269,8 +294,12 @@ class ClassificationAgent(BaseAgent):
             "registered_taxonomies": list(self._taxonomies.keys()),
         }
 
-    def _build_single_label_prompt(self, content: str, categories: List[str], descriptions: Dict[str, str]) -> str:
-        cat_desc = "\n".join([f"- {c}: {descriptions.get(c, 'No description')}" for c in categories])
+    def _build_single_label_prompt(
+        self, content: str, categories: List[str], descriptions: Dict[str, str]
+    ) -> str:
+        cat_desc = "\n".join(
+            [f"- {c}: {descriptions.get(c, 'No description')}" for c in categories]
+        )
         return (
             f"Classify this content into exactly ONE category:\n\n"
             f"Content: {content}\n\n"
@@ -279,9 +308,15 @@ class ClassificationAgent(BaseAgent):
         )
 
     def _build_multi_label_prompt(
-        self, content: str, categories: List[str], descriptions: Dict[str, str], top_k: int
+        self,
+        content: str,
+        categories: List[str],
+        descriptions: Dict[str, str],
+        top_k: int,
     ) -> str:
-        cat_desc = "\n".join([f"- {c}: {descriptions.get(c, 'No description')}" for c in categories])
+        cat_desc = "\n".join(
+            [f"- {c}: {descriptions.get(c, 'No description')}" for c in categories]
+        )
         return (
             f"Classify this content into UP TO {top_k} relevant categories:\n\n"
             f"Content: {content}\n\n"
@@ -290,9 +325,18 @@ class ClassificationAgent(BaseAgent):
         )
 
     def _build_hierarchical_prompt(
-        self, content: str, categories: List[str], hierarchy: Dict[str, List[str]], _descriptions: Dict[str, str]
+        self,
+        content: str,
+        categories: List[str],
+        hierarchy: Dict[str, List[str]],
+        _descriptions: Dict[str, str],
     ) -> str:
-        hier_str = "\n".join([f"- {parent} -> {', '.join(children)}" for parent, children in hierarchy.items()])
+        hier_str = "\n".join(
+            [
+                f"- {parent} -> {', '.join(children)}"
+                for parent, children in hierarchy.items()
+            ]
+        )
         return (
             f"Classify this content hierarchically:\n\n"
             f"Content: {content}\n\n"

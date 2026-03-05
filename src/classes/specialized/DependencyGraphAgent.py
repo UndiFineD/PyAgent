@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,14 +22,16 @@ from typing import Dict, List, Set, Any, Union
 
 __version__ = VERSION
 
+
 class DependencyGraphAgent:
     """
     Maps and analyzes dependencies between agent modules and classes.
     Helps in understanding the impact of changes and optimizing imports.
     """
+
     def __init__(self, workspace_path: str | Path) -> None:
         self.workspace_path = Path(workspace_path)
-        self.dependency_map: dict[str, list[str]] = {} # module -> list of imports
+        self.dependency_map: dict[str, list[str]] = {}  # module -> list of imports
 
     def scan_dependencies(self, start_dir: str = "src") -> dict[str, Any]:
         """
@@ -44,10 +47,12 @@ class DependencyGraphAgent:
                     full_path = Path(root) / file
                     try:
                         rel_path = full_path.relative_to(self.workspace_path)
-                        self.dependency_map[str(rel_path)] = self._extract_imports(full_path)
+                        self.dependency_map[str(rel_path)] = self._extract_imports(
+                            full_path
+                        )
                     except ValueError:
                         continue
-        
+
         return {"modules_scanned": len(self.dependency_map)}
 
     def _extract_imports(self, file_path: Path) -> list[str]:
@@ -55,7 +60,7 @@ class DependencyGraphAgent:
         try:
             with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read())
-            
+
             for node in ast.walk(tree):
                 if isinstance(node, ast.Import):
                     for alias in node.names:
@@ -86,5 +91,9 @@ class DependencyGraphAgent:
         return {
             "node_count": len(self.dependency_map),
             "edge_count": total_links,
-            "density": total_links / (len(self.dependency_map) ** 2) if len(self.dependency_map) > 0 else 0
+            "density": (
+                total_links / (len(self.dependency_map) ** 2)
+                if len(self.dependency_map) > 0
+                else 0
+            ),
         }

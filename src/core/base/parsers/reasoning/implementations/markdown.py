@@ -10,12 +10,12 @@ from ..models import ReasoningResult, StreamingReasoningState
 class MarkdownReasoningParser(ReasoningParser):
     """
     Parser for Markdown-style think blocks.
-    
+
     Extracts reasoning from ```thinking blocks or > prefixed lines.
     """
-    
+
     name: ClassVar[str] = "markdown"
-    
+
     def __init__(
         self,
         tokenizer: Any = None,
@@ -29,22 +29,22 @@ class MarkdownReasoningParser(ReasoningParser):
             rf"```{re.escape(block_type)}\n(.*?)```",
             re.DOTALL,
         )
-    
+
     def is_reasoning_end(self, input_ids: list[int]) -> bool:
         if self.model_tokenizer is None:
             return False
         text = self.model_tokenizer.decode(input_ids)
         # Check for complete thinking block
         return bool(self._pattern.search(text))
-    
+
     def extract_content_ids(self, input_ids: list[int]) -> list[int]:
         if self.model_tokenizer is None:
             return input_ids
-        
+
         text = self.model_tokenizer.decode(input_ids)
         content = self._pattern.sub("", text).strip()
         return self.model_tokenizer.encode(content, add_special_tokens=False)
-    
+
     def extract_reasoning(
         self,
         model_output: str,
@@ -53,12 +53,12 @@ class MarkdownReasoningParser(ReasoningParser):
         matches = self._pattern.findall(model_output)
         reasoning = "\n".join(matches) if matches else None
         content = self._pattern.sub("", model_output).strip()
-        
+
         return ReasoningResult(
             reasoning=reasoning,
             content=content if content else None,
         )
-    
+
     def extract_reasoning_streaming(
         self,
         previous_text: str,
@@ -71,14 +71,14 @@ class MarkdownReasoningParser(ReasoningParser):
     ) -> tuple[ReasoningResult, StreamingReasoningState]:
         if state is None:
             state = StreamingReasoningState()
-        
+
         state.accumulated_text = current_text
         result = self.extract_reasoning(current_text)
-        
+
         if result.reasoning:
             state.reasoning_buffer = result.reasoning
             state.reasoning_complete = True
         if result.content:
             state.content_buffer = result.content
-        
+
         return result, state

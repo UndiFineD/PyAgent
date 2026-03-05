@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,6 +20,7 @@ from datetime import datetime
 
 __version__ = VERSION
 
+
 class SignalCore:
     """
     Pure logic for the Signal Registry.
@@ -31,9 +33,11 @@ class SignalCore:
             "signal": signal_name,
             "data": data,
             "sender": sender,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
-    def prune_history(self, history: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    def prune_history(
+        self, history: list[dict[str, Any]], limit: int
+    ) -> list[dict[str, Any]]:
         """Returns the last N events from the signal history."""
         return history[-limit:]

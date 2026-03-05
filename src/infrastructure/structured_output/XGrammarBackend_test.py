@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_grammartype_exists():
     """Test that GrammarType class exists and is importable."""
-    assert 'GrammarType' in dir()
+    assert "GrammarType" in dir()
 
 
 def test_vocabtype_exists():
     """Test that VocabType class exists and is importable."""
-    assert 'VocabType' in dir()
+    assert "VocabType" in dir()
 
 
 def test_tokenizerinfo_exists():
     """Test that TokenizerInfo class exists and is importable."""
-    assert 'TokenizerInfo' in dir()
+    assert "TokenizerInfo" in dir()
 
 
 def test_compiledgrammar_exists():
     """Test that CompiledGrammar class exists and is importable."""
-    assert 'CompiledGrammar' in dir()
+    assert "CompiledGrammar" in dir()
 
 
 def test_grammarmatcher_exists():
     """Test that GrammarMatcher class exists and is importable."""
-    assert 'GrammarMatcher' in dir()
+    assert "GrammarMatcher" in dir()
 
 
 def test_grammarcompiler_exists():
     """Test that GrammarCompiler class exists and is importable."""
-    assert 'GrammarCompiler' in dir()
+    assert "GrammarCompiler" in dir()
 
 
 def test_xgrammargrammar_exists():
     """Test that XGrammarGrammar class exists and is importable."""
-    assert 'XGrammarGrammar' in dir()
+    assert "XGrammarGrammar" in dir()
 
 
 def test_xgrammarbackend_exists():
     """Test that XGrammarBackend class exists and is importable."""
-    assert 'XGrammarBackend' in dir()
+    assert "XGrammarBackend" in dir()
 
 
 def test_asyncxgrammarbackend_exists():
     """Test that AsyncXGrammarBackend class exists and is importable."""
-    assert 'AsyncXGrammarBackend' in dir()
+    assert "AsyncXGrammarBackend" in dir()
 
 
 def test_asyncxgrammarbackend_instantiation():
@@ -84,10 +84,9 @@ def test_asyncxgrammarbackend_instantiation():
 
 def test_compositegrammar_exists():
     """Test that CompositeGrammar class exists and is importable."""
-    assert 'CompositeGrammar' in dir()
+    assert "CompositeGrammar" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,7 +54,9 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         )
 
     @as_tool
-    def run_sgi_benchmark(self, agent_name: str, scientific_task: str) -> dict[str, Any]:
+    def run_sgi_benchmark(
+        self, agent_name: str, scientific_task: str
+    ) -> dict[str, Any]:
         """Runs an SGI-Bench scientific inquiry evaluation on an agent."""
         logging.info(f"BENCHMARK: Running SGI inquiry for {agent_name}")
 
@@ -94,7 +97,9 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         )
 
     @as_tool
-    def evaluate_model_on_benchmark(self, model_name: str, benchmark_suite: str) -> dict[str, Any]:
+    def evaluate_model_on_benchmark(
+        self, model_name: str, benchmark_suite: str
+    ) -> dict[str, Any]:
         """Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model."""
         logging.info(f"BENCHMARK: Evaluating {model_name} on {benchmark_suite}")
         # Standard score ranges
@@ -107,13 +112,20 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         }
 
     @as_tool
-    def run_benchmark(self, agent_name: str, task: str, expected_output: str | None = None) -> str:
+    def run_benchmark(
+        self, agent_name: str, task: str, expected_output: str | None = None
+    ) -> str:
         """Runs a task against an agent and measures performance."""
         # Note: In a real system, this would call the FleetManager
         start_time = time.time()
 
         # Simulated run (for the skeleton)
-        logging.info("BENCHMARK: Running task '%s' on agent '%s' (Expected: %s)", task, agent_name, expected_output)
+        logging.info(
+            "BENCHMARK: Running task '%s' on agent '%s' (Expected: %s)",
+            task,
+            agent_name,
+            expected_output,
+        )
 
         # We would actually trigger the agent here
         # captured_output = fleet.agents[agent_name].improve_content(task)
@@ -130,7 +142,12 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.results.append(res_dict)
 
         # Create unified benchmark result for regression analysis
-        bench_res = BenchmarkResult(name=f"Task: {task[:20]}", duration=duration, agent_id=agent_name, success=True)
+        bench_res = BenchmarkResult(
+            name=f"Task: {task[:20]}",
+            duration=duration,
+            agent_id=agent_name,
+            success=True,
+        )
         self.benchmark_results.append(bench_res)
 
         return f"Benchmark completed for {agent_name}. Latency: {duration:.2f}s"
@@ -144,7 +161,9 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return self.run_benchmark(agent_name, task)
 
     @as_tool
-    def check_for_performance_regression(self, agent_id: str, current_duration: float) -> str:
+    def check_for_performance_regression(
+        self, agent_id: str, current_duration: float
+    ) -> str:
         """Checks if an agent's current performance has regressed vs the fleet baseline."""
         baseline = self.core.calculate_baseline(self.benchmark_results)
         regression = self.core.check_regression(current_duration, baseline)
@@ -165,7 +184,9 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         report = ["## Benchmark Summary Report"]
 
         for r in self.results:
-            report.append(f"- **Agent**: {r['agent']} | **Task**: {r['task']} | **Latency**: {r['latency']:.2f}s")
+            report.append(
+                f"- **Agent**: {r['agent']} | **Task**: {r['task']} | **Latency**: {r['latency']:.2f}s"
+            )
 
         return "\n".join(report)
 
@@ -173,5 +194,7 @@ class BenchmarkAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(BenchmarkAgent, "Benchmark Agent", "Benchmark history path")
+    main = create_main_function(
+        BenchmarkAgent, "Benchmark Agent", "Benchmark history path"
+    )
     main()

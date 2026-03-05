@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_publicapiengine_exists():
     """Test that PublicAPIEngine class exists and is importable."""
-    assert 'PublicAPIEngine' in dir()
+    assert "PublicAPIEngine" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

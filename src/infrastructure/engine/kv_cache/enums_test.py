@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "CacheGroupType"), "CacheGroupType missing"
     assert hasattr(mod, "AllocationStrategy"), "AllocationStrategy missing"
     assert hasattr(mod, "EvictionPolicy"), "EvictionPolicy missing"
-

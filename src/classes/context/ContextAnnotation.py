@@ -16,9 +16,11 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class ContextAnnotation:
     """An annotation / comment on context."""
+
     id: str
     line_number: int
     content: str

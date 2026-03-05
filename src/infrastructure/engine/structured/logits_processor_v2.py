@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,12 +41,14 @@ from numpy._typing._nbit_base import _32Bit
 
 try:
     import numpy as np
+
     HAS_NUMPY = True
 except ImportError:
     HAS_NUMPY = False
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -192,7 +195,9 @@ class LogitsProcessor(ABC):
     """
 
     @classmethod
-    def validate_params(cls: type[LogitsProcessor], sampling_params: SamplingParams) -> None:
+    def validate_params(
+        cls: type[LogitsProcessor], sampling_params: SamplingParams
+    ) -> None:
         """
         Validate sampling params regarding this processor.
 
@@ -258,7 +263,9 @@ class MinPLogitsProcessor(LogitsProcessor):
         self.min_p_count = 0
 
         if HAS_NUMPY:
-            self.min_p_cpu: ndarray[tuple[int], dtype[floating[_32Bit]]] = np.zeros(max_num_reqs, dtype=np.float32)
+            self.min_p_cpu: ndarray[tuple[int], dtype[floating[_32Bit]]] = np.zeros(
+                max_num_reqs, dtype=np.float32
+            )
         else:
             self.min_p_cpu: list[float] = [0.0] * max_num_reqs
 
@@ -285,6 +292,7 @@ class MinPLogitsProcessor(LogitsProcessor):
 
     def _process_added(self, batch_update: BatchUpdate) -> None:
         """Process added requests regarding batch update."""
+
         def update_min_p(item: AddedRequest) -> None:
             index, params, _, _ = item
             min_p: float = params.min_p
@@ -300,6 +308,7 @@ class MinPLogitsProcessor(LogitsProcessor):
 
     def _process_removed(self, batch_update: BatchUpdate) -> None:
         """Process removed requests regarding batch update."""
+
         def remove_min_p(index: RemovedRequest) -> None:
             if self.min_p_cpu[index]:
                 self.min_p_cpu[index] = 0.0
@@ -309,6 +318,7 @@ class MinPLogitsProcessor(LogitsProcessor):
 
     def _process_moved(self, batch_update: BatchUpdate) -> None:
         """Process moved requests regarding batch update."""
+
         def move_min_p(item: MovedRequest) -> None:
             from_idx, to_idx, direction = item
             min_p_a: Any | float = self.min_p_cpu[from_idx]
@@ -348,7 +358,9 @@ class MinPLogitsProcessor(LogitsProcessor):
 
         # Compute thresholds
         batch_size = logits.shape[0]
-        min_p_vals: ndarray[tuple[int, int], dtype[Any]] = np.array(self.min_p_cpu[:batch_size]).reshape(-1, 1)
+        min_p_vals: ndarray[tuple[int, int], dtype[Any]] = np.array(
+            self.min_p_cpu[:batch_size]
+        ).reshape(-1, 1)
         thresholds = max_probs * min_p_vals
 
         # Mask tokens below threshold
@@ -416,6 +428,7 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
 
     def _process_added_biases(self, batch_update: BatchUpdate) -> bool:
         """Process added requests regarding batch update."""
+
         def update_bias(item: AddedRequest) -> bool:
             index, params, _, _ = item
             if params.logit_bias:
@@ -430,6 +443,7 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
 
     def _process_removed_biases(self, batch_update: BatchUpdate) -> bool:
         """Process removed requests regarding batch update."""
+
         def remove_bias(index: RemovedRequest) -> bool:
             if index in self.biases:
                 del self.biases[index]
@@ -440,6 +454,7 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
 
     def _process_moved_biases(self, batch_update: BatchUpdate) -> bool:
         """Process moved requests regarding batch update."""
+
         def move_bias(item: MovedRequest) -> bool:
             from_idx, to_idx, direction = item
             bias_a: dict[int, float] | None = self.biases.get(from_idx)
@@ -484,18 +499,23 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
             return rust_core.logit_bias_apply_rust(logits, self.biases)
         if HAS_NUMPY and isinstance(logits, np.ndarray):
             # Convert regarding list regarding Rust, or use buffer protocol if supported
-            return np.array(rust_core.logit_bias_apply_rust(logits.tolist(), self.biases))
+            return np.array(
+                rust_core.logit_bias_apply_rust(logits.tolist(), self.biases)
+            )
         return self._apply_generic(logits)
 
     def _apply_numpy(self, logits: "np.ndarray") -> "np.ndarray":
         """Apply biases regarding NumPy."""
+
         def apply_req(item: tuple[int, dict[int, float]]) -> None:
             req_idx, token_biases = item
             if req_idx < logits.shape[0]:
+
                 def apply_token(tb: tuple[int, float]) -> None:
                     t_id, val = tb
                     if t_id < logits.shape[1]:
                         logits[req_idx, t_id] += val
+
                 list(map(apply_token, token_biases.items()))
 
         list(map(apply_req, self.biases.items()))
@@ -505,10 +525,8 @@ class LogitBiasLogitsProcessor(LogitsProcessor):
         """Generic apply regarding torch tensors."""
         return logits
 
-
     def has_state(self) -> bool:
         return True
-
 
     def reset(self) -> None:
         self.biases.clear()
@@ -530,7 +548,9 @@ class CompositeLogitsProcessor(LogitsProcessor):
     def is_argmax_invariant(self) -> bool:
         """Check if all processors are argmax invariant."""
         if self._argmax_invariant is None:
-            self._argmax_invariant = all(map(lambda p: p.is_argmax_invariant(), self.processors))
+            self._argmax_invariant = all(
+                map(lambda p: p.is_argmax_invariant(), self.processors)
+            )
         return self._argmax_invariant
 
     def update_state(self, batch_update: Optional[BatchUpdate]) -> None:
@@ -540,6 +560,7 @@ class CompositeLogitsProcessor(LogitsProcessor):
     def apply(self, logits: Any) -> Any:
         """Apply all processors in sequence."""
         from functools import reduce
+
         return reduce(lambda l, p: p.apply(l), self.processors, logits)
 
     def has_state(self) -> bool:
@@ -576,7 +597,9 @@ class LogitsProcessorRegistry:
     _instance: LogitsProcessorRegistry | None = None
     _lock: threading.Lock = threading.Lock()
 
-    def __new__(cls: type[LogitsProcessorRegistry], *args: Any, **kwargs: Any) -> LogitsProcessorRegistry:
+    def __new__(
+        cls: type[LogitsProcessorRegistry], *args: Any, **kwargs: Any
+    ) -> LogitsProcessorRegistry:
         if cls._instance is None:
             with cls._lock:
                 if cls._instance is None:

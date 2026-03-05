@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -9,6 +10,7 @@ from src.core.base.BaseUtilities import as_tool
 
 if TYPE_CHECKING:
     from src.logic.agents.development.HandyAgent import HandyAgent
+
 
 class HandyFileSystemMixin:
     """Mixin for file system operations in HandyAgent."""
@@ -23,7 +25,9 @@ class HandyFileSystemMixin:
             elif shutil.which("git"):
                 # git ls-files | grep required shell or manual piping
                 # Added # nosec to suppress security warning for git/grep chain as it is manually piped
-                p1 = subprocess.Popen(["git", "ls-files"], stdout=subprocess.PIPE)  # nosec
+                p1 = subprocess.Popen(
+                    ["git", "ls-files"], stdout=subprocess.PIPE
+                )  # nosec
                 result = subprocess.check_output(
                     ["grep", query], stdin=p1.stdout, text=True
                 )  # nosec

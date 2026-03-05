@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_utilscore_exists():
     """Test that UtilsCore class exists and is importable."""
-    assert 'UtilsCore' in dir()
+    assert "UtilsCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_constantlist_exists():
     """Test that ConstantList class exists and is importable."""
-    assert 'ConstantList' in dir()
+    assert "ConstantList" in dir()
 
 
 def test_constantdict_exists():
     """Test that ConstantDict class exists and is importable."""
-    assert 'ConstantDict' in dir()
+    assert "ConstantDict" in dir()
 
 
 def test_frozendict_exists():
     """Test that FrozenDict class exists and is importable."""
-    assert 'FrozenDict' in dir()
+    assert "FrozenDict" in dir()
 
 
 def test_as_constant_exists():
@@ -54,4 +54,3 @@ def test_as_constant_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

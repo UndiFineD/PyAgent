@@ -20,9 +20,9 @@ from src.classes.changes import *
 # Create main function using the helper
 main = create_main_function(
     ChangesAgent,
-    'Changes Agent: Updates code file changelogs',
-    'Path to the changes file (e.g., file.changes.md)'
+    "Changes Agent: Updates code file changelogs",
+    "Path to the changes file (e.g., file.changes.md)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

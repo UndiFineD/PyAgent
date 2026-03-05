@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_infrastructurerepairagent_exists():
     """Test that InfrastructureRepairAgent class exists and is importable."""
-    assert 'InfrastructureRepairAgent' in dir()
+    assert "InfrastructureRepairAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

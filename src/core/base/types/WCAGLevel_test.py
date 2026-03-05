@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_wcaglevel_exists():
     """Test that WCAGLevel class exists and is importable."""
-    assert 'WCAGLevel' in dir()
+    assert "WCAGLevel" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

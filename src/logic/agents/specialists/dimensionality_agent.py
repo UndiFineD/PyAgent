@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -47,11 +48,14 @@ try:
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
-    logging.debug("rust_core not available, using Python fallback for DimensionalityAgent")
+    logging.debug(
+        "rust_core not available, using Python fallback for DimensionalityAgent"
+    )
 
 
 class ReductionMethod(Enum):
     """Supported dimensionality reduction methods."""
+
     PCA = "pca"
     TSNE = "tsne"
     UMAP = "umap"
@@ -105,7 +109,9 @@ class DimensionalityAgent(BaseAgent):
             }
 
         reduction_method = (
-            ReductionMethod(method) if method in [m.value for m in ReductionMethod] else ReductionMethod.PCA
+            ReductionMethod(method)
+            if method in [m.value for m in ReductionMethod]
+            else ReductionMethod.PCA
         )
 
         if reduction_method == ReductionMethod.TRUNCATION:
@@ -121,7 +127,9 @@ class DimensionalityAgent(BaseAgent):
         # Calculate reconstruction error estimate
         original_norm = math.sqrt(sum(x * x for x in embedding))
         reduced_norm = math.sqrt(sum(x * x for x in reduced))
-        variance_retained = (reduced_norm / original_norm) ** 2 if original_norm > 0 else 0
+        variance_retained = (
+            (reduced_norm / original_norm) ** 2 if original_norm > 0 else 0
+        )
 
         return {
             "reduced": reduced,
@@ -156,7 +164,9 @@ class DimensionalityAgent(BaseAgent):
         self, text_list: List[str], n_concepts: int = 5, _include_weights: bool = True
     ) -> Dict[str, Any]:
         """Identifies the 'principal components' (top concepts) of a text corpus."""
-        texts_preview = "\n".join([f"- {t[:200]}..." if len(t) > 200 else f"- {t}" for t in text_list[:20]])
+        texts_preview = "\n".join(
+            [f"- {t[:200]}..." if len(t) > 200 else f"- {t}" for t in text_list[:20]]
+        )
 
         prompt = (
             f"Analyze this corpus and identify the top {n_concepts} principal themes/concepts:\n\n"
@@ -178,7 +188,9 @@ class DimensionalityAgent(BaseAgent):
 
                 # Cache concepts
                 cache_key = f"concepts_{hash(tuple(text_list[:5]))}"
-                self._concept_cache[cache_key] = [c["label"] for c in data.get("concepts", [])]
+                self._concept_cache[cache_key] = [
+                    c["label"] for c in data.get("concepts", [])
+                ]
 
                 return data
 
@@ -224,15 +236,23 @@ class DimensionalityAgent(BaseAgent):
             "sparsity": round(sparsity, 4),
             "min": round(min(embedding), 6),
             "max": round(max(embedding), 6),
-            "percentiles": {"p25": round(p25, 6), "p50": round(p50, 6), "p75": round(p75, 6)},
+            "percentiles": {
+                "p25": round(p25, 6),
+                "p50": round(p50, 6),
+                "p75": round(p75, 6),
+            },
         }
 
     @as_tool
-    async def cluster_embeddings(self, embeddings: List[List[float]], n_clusters: int = 3) -> Dict[str, Any]:
+    async def cluster_embeddings(
+        self, embeddings: List[List[float]], n_clusters: int = 3
+    ) -> Dict[str, Any]:
         """Simple k-means clustering of embeddings."""
         n = len(embeddings)
         if n < n_clusters:
-            return {"error": f"Need at least {n_clusters} embeddings for {n_clusters} clusters"}
+            return {
+                "error": f"Need at least {n_clusters} embeddings for {n_clusters} clusters"
+            }
 
         # Phase 16: Try Rust-accelerated k-means clustering
         if _RUST_AVAILABLE and hasattr(rust_core, "kmeans_cluster_rust"):
@@ -262,9 +282,14 @@ class DimensionalityAgent(BaseAgent):
 
             # Update centroids
             for c_idx in range(n_clusters):
-                cluster_points = [embeddings[i] for i in range(n) if assignments[i] == c_idx]
+                cluster_points = [
+                    embeddings[i] for i in range(n) if assignments[i] == c_idx
+                ]
                 if cluster_points:
-                    centroids[c_idx] = [sum(p[d] for p in cluster_points) / len(cluster_points) for d in range(dim)]
+                    centroids[c_idx] = [
+                        sum(p[d] for p in cluster_points) / len(cluster_points)
+                        for d in range(dim)
+                    ]
 
         # Count cluster sizes
         cluster_sizes = {i: assignments.count(i) for i in range(n_clusters)}
@@ -273,11 +298,15 @@ class DimensionalityAgent(BaseAgent):
             "n_clusters": n_clusters,
             "assignments": assignments,
             "cluster_sizes": cluster_sizes,
-            "centroid_norms": [round(math.sqrt(sum(x * x for x in c)), 4) for c in centroids],
+            "centroid_norms": [
+                round(math.sqrt(sum(x * x for x in c)), 4) for c in centroids
+            ],
         }
 
     @as_tool
-    async def compute_similarity_matrix(self, embeddings: List[List[float]], top_k: int = 5) -> Dict[str, Any]:
+    async def compute_similarity_matrix(
+        self, embeddings: List[List[float]], top_k: int = 5
+    ) -> Dict[str, Any]:
         """Computes cosine similarity matrix for embeddings."""
         n = len(embeddings)
 
@@ -315,8 +344,12 @@ class DimensionalityAgent(BaseAgent):
 
         return {
             "matrix_shape": (n, n),
-            "top_similar_pairs": [{"i": p[0], "j": p[1], "similarity": p[2]} for p in pairs[:top_k]],
-            "avg_similarity": round(sum(p[2] for p in pairs) / len(pairs), 4) if pairs else 0,
+            "top_similar_pairs": [
+                {"i": p[0], "j": p[1], "similarity": p[2]} for p in pairs[:top_k]
+            ],
+            "avg_similarity": (
+                round(sum(p[2] for p in pairs) / len(pairs), 4) if pairs else 0
+            ),
         }
 
     def _pca_reduce(self, embedding: List[float], target_dim: int) -> List[float]:
@@ -338,7 +371,9 @@ class DimensionalityAgent(BaseAgent):
         top_indices = sorted([x[0] for x in indexed[:target_dim]])
         return [embedding[i] for i in top_indices]
 
-    def _random_projection(self, embedding: List[float], target_dim: int) -> List[float]:
+    def _random_projection(
+        self, embedding: List[float], target_dim: int
+    ) -> List[float]:
         """Random projection (simplified)."""
         # Phase 16: Try Rust-accelerated random projection
         if _RUST_AVAILABLE and hasattr(rust_core, "random_projection_rust"):

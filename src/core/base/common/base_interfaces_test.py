@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "Loadable"), "Loadable missing"
     assert hasattr(mod, "Saveable"), "Saveable missing"
     assert hasattr(mod, "Component"), "Component missing"
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_curationcore_exists():
     """Test that CurationCore class exists and is importable."""
-    assert 'CurationCore' in dir()
+    assert "CurationCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

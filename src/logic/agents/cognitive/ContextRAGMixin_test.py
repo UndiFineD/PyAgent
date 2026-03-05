@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextragmixin_exists():
     """Test that ContextRAGMixin class exists and is importable."""
-    assert 'ContextRAGMixin' in dir()
+    assert "ContextRAGMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

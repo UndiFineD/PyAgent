@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RequestStatus"), "RequestStatus missing"
     assert hasattr(mod, "is_valid_transition"), "is_valid_transition missing"
     assert hasattr(mod, "RequestEventType"), "RequestEventType missing"
-

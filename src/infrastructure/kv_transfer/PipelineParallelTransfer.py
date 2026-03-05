@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -41,7 +42,7 @@ if TYPE_CHECKING:
 class PipelineParallelTransfer:
     """
     Orchestrator for PP-aware KV transfer.
-    
+
     Coordinates multiple KV connectors across pipeline stages to ensure
     consistent transfer of a request's full KV context.
     """
@@ -55,14 +56,17 @@ class PipelineParallelTransfer:
         self.pp_rank = pp_rank
         self.pp_size = pp_size
         self.local_connector = local_connector
-        
+
         # Mapping of local layers to this stage
         self.local_layers: List[int] = []
-        
-        logger.info("PipelineParallelTransfer initialized for rank %d/%d", 
-                    pp_rank, pp_size)
 
-    def _calculate_pp_stage_mapping_rust(self, num_layers: int, pp_size: int) -> Dict[int, int]:
+        logger.info(
+            "PipelineParallelTransfer initialized for rank %d/%d", pp_rank, pp_size
+        )
+
+    def _calculate_pp_stage_mapping_rust(
+        self, num_layers: int, pp_size: int
+    ) -> Dict[int, int]:
         """Rust-accelerated calculation of layer-to-stage distribution."""
         # return RustBridge.calculate_pp_stage_mapping_rust(num_layers, pp_size)
         # Dummy fallback: evenly divide
@@ -78,7 +82,7 @@ class PipelineParallelTransfer:
 
     def sync_stage_transfer(self, layer_idx: int):
         """Barrier or sync point for a specific layer's transfer across stages."""
-        # Ensure that previous stages in the pipeline have flushed their data 
+        # Ensure that previous stages in the pipeline have flushed their data
         # if there are dependencies.
         pass
 
@@ -88,8 +92,16 @@ class PipelineParallelTransfer:
             "pp_rank": self.pp_rank,
             "pp_size": self.pp_size,
             "active_layers": len(self.local_layers),
-            "connector_status": self.local_connector.get_health_report() if hasattr(self.local_connector, "get_health_report") else "OK"
+            "connector_status": (
+                self.local_connector.get_health_report()
+                if hasattr(self.local_connector, "get_health_report")
+                else "OK"
+            ),
         }
 
+
 # Lazy loading registration
-_orchestrator = LazyLoader("src.infrastructure.kv_transfer.PipelineParallelTransfer", "PipelineParallelTransfer")
+_orchestrator = LazyLoader(
+    "src.infrastructure.kv_transfer.PipelineParallelTransfer",
+    "PipelineParallelTransfer",
+)

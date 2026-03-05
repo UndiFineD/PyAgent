@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,13 +32,26 @@ from src.maintenance.mixins.syntax_fixer_mixin import SyntaxFixerMixin
 
 logger: logging.Logger = logging.getLogger(__name__)
 
-class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin):
+
+class WorkspaceMaintenance(
+    PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixin, SyntaxFixerMixin
+):
     """Consolidation of file system auditing, naming convention enforcement, and cleanup."""
 
     DEFAULT_EXCLUSIONS: set[str] = {
-        ".git", ".venv", ".vscode", ".mypy_cache", ".pytest_cache", 
-        ".ruff_cache", ".agent_cache", "target", "node_modules", 
-        ".hypothesis", "__pycache__", "reports", "archive"
+        ".git",
+        ".venv",
+        ".vscode",
+        ".mypy_cache",
+        ".pytest_cache",
+        ".ruff_cache",
+        ".agent_cache",
+        "target",
+        "node_modules",
+        ".hypothesis",
+        "__pycache__",
+        "reports",
+        "archive",
     }
 
     STANDARD_HEADER = """#!/usr/bin/env python3
@@ -109,7 +123,11 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
             if self._is_excluded(root):
                 continue
             for name in files + dirs:
-                if name.startswith(".") or name.startswith("__") or name in ["README.md", "LICENSE"]:
+                if (
+                    name.startswith(".")
+                    or name.startswith("__")
+                    or name in ["README.md", "LICENSE"]
+                ):
                     continue
                 if not re.match(r"^[a-z0-9_]+(\.[a-z0-9_]+)*$", name):
                     violations.append(str(Path(root) / name))
@@ -224,7 +242,11 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
 
                 module_name: str = path.stem.replace("_", " ").title()
                 docstring: str = f'\n"""\n{module_name} module.\n"""\n'
-                new_content: str = "\n".join(lines[:header_end]) + docstring + "\n".join(lines[header_end:])
+                new_content: str = (
+                    "\n".join(lines[:header_end])
+                    + docstring
+                    + "\n".join(lines[header_end:])
+                )
                 path.write_text(new_content, encoding="utf-8")
         except (IOError, OSError, UnicodeEncodeError) as e:
             logger.error(f"Error applying docstring to {path}: {e}")
@@ -240,6 +262,7 @@ class WorkspaceMaintenance(PylintFixerMixin, ImportCleanupMixin, HeaderFixerMixi
                     self.fix_unspecified_encoding(path)
                     self.fix_no_else_return(path)
                     self.fix_broad_exception(path)
+
 
 if __name__ == "__main__":
     maint = WorkspaceMaintenance()

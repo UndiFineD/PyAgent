@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Apache 2.0 License
 
@@ -10,9 +11,11 @@ import logging
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
     __version__ = VERSION
+
 
 class ChainOfThoughtStrategy(AgentStrategy):
     """Chain-of-Thought strategy: Prompt -> Reasoning -> Response."""
@@ -23,7 +26,7 @@ class ChainOfThoughtStrategy(AgentStrategy):
         context: str,
         backend_call: BackendFunction,
         system_prompt: str | None = None,
-        history: list[dict[str, str]] | None = None
+        history: list[dict[str, str]] | None = None,
     ) -> str:
         # Step 1: Reasoning
         reasoning_prompt = (
@@ -40,9 +43,9 @@ class ChainOfThoughtStrategy(AgentStrategy):
             f"Based on the following reasoning:\n{reasoning}\n\n"
             "Please implement the changes. Output ONLY the final code/content."
         )
-        
+
         # We append the reasoning to the history for the second call if history exists
         new_history = list(history) if history else []
         new_history.append({"role": "assistant", "content": reasoning})
-        
+
         return await backend_call(execution_prompt, system_prompt, new_history)

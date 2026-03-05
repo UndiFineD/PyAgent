@@ -17,8 +17,9 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ModelInput"), "ModelInput missing"
     assert hasattr(mod, "ModelOutput"), "ModelOutput missing"
     assert hasattr(mod, "SchedulerOutput"), "SchedulerOutput missing"
-    assert hasattr(mod, "AsyncGPUPoolingModelRunnerOutput"), "AsyncGPUPoolingModelRunnerOutput missing"
+    assert hasattr(
+        mod, "AsyncGPUPoolingModelRunnerOutput"
+    ), "AsyncGPUPoolingModelRunnerOutput missing"
     assert hasattr(mod, "ExecutionPipeline"), "ExecutionPipeline missing"
     assert hasattr(mod, "AsyncModelRunner"), "AsyncModelRunner missing"
     assert hasattr(mod, "BatchedAsyncRunner"), "BatchedAsyncRunner missing"
-

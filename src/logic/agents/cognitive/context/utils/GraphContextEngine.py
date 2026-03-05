@@ -10,8 +10,10 @@ import ast
 from pathlib import Path
 from typing import Dict, List, Set, Any, Optional
 
+
 class CodeGraphVisitor(ast.NodeVisitor):
     """AST visitor to extract imports, classes, and function calls."""
+
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
         self.imports: Set[str] = set()
@@ -47,9 +49,10 @@ class CodeGraphVisitor(ast.NodeVisitor):
             self.calls.add(node.func.attr)
         self.generic_visit(node)
 
+
 class GraphContextEngine:
     """Manages an adjacency list of file and class dependencies."""
-    
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.graph: Dict[str, Set[str]] = {}
@@ -71,28 +74,28 @@ class GraphContextEngine:
         """Scans files using AST to build a detailed relationship graph."""
         target = start_path or self.workspace_root
         logging.info(f"Scanning project graph from {target}")
-        
+
         for py_file in target.rglob("*.py"):
             if any(p in str(py_file) for p in [".venv", "__pycache__", ".git"]):
                 continue
-            
+
             rel_path = str(py_file.relative_to(self.workspace_root))
             try:
                 tree = ast.parse(py_file.read_text(encoding="utf-8"))
                 visitor = CodeGraphVisitor(rel_path)
                 visitor.visit(tree)
-                
+
                 # Add file level dependencies
                 for imp in visitor.imports:
                     self.add_edge(rel_path, imp, "imports")
-                
+
                 # Store symbol info
                 self.symbols[rel_path] = {
                     "classes": visitor.classes,
                     "inherits": visitor.bases,
-                    "calls": list(visitor.calls)
+                    "calls": list(visitor.calls),
                 }
-                
+
                 # Add class level edges
                 for cls, bases in visitor.bases.items():
                     for base in bases:
@@ -106,25 +109,25 @@ class GraphContextEngine:
         affected = set()
         to_visit = [(node, 0)]
         visited = {node}
-        
+
         inverse_graph: Dict[str, Set[str]] = {}
         for src, targets in self.graph.items():
             for t in targets:
                 if t not in inverse_graph:
                     inverse_graph[t] = set()
                 inverse_graph[t].add(src)
-        
+
         while to_visit:
             curr, depth = to_visit.pop(0)
             if depth >= max_depth:
                 continue
-                
+
             for depender in inverse_graph.get(curr, set()):
                 if depender not in visited:
                     visited.add(depender)
                     affected.add(depender)
                     to_visit.append((depender, depth + 1))
-                    
+
         return affected
 
     def save(self):
@@ -132,7 +135,7 @@ class GraphContextEngine:
         data = {
             "graph": {k: list(v) for k, v in self.graph.items()},
             "metadata": self.metadata,
-            "symbols": self.symbols
+            "symbols": self.symbols,
         }
         with open(self.persist_file, "w") as f:
             json.dump(data, f, indent=2)

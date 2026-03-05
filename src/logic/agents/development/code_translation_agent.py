@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +32,6 @@ Supports automated code migration, refactoring, and cross-language interoperabil
 # pylint: disable=too-many-ancestors
 
 
-
 import logging
 from typing import Any
 
@@ -52,11 +52,15 @@ class CodeTranslationAgent(BaseAgent):
         self.workspace_path = workspace_path
         self.translation_history: list[Any] = []
 
-    async def translate_file(self, source_code: str, from_lang: str, to_lang: str) -> str:
+    async def translate_file(
+        self, source_code: str, from_lang: str, to_lang: str
+    ) -> str:
         """
         Translates source code from one language to another using LLM reasoning.
         """
-        logging.info(f"CodeTranslationAgent: Translating code from {from_lang} to {to_lang}.")
+        logging.info(
+            f"CodeTranslationAgent: Translating code from {from_lang} to {to_lang}."
+        )
 
         prompt = (
             f"Translate the following {from_lang} code into {to_lang}.\n"
@@ -76,7 +80,9 @@ class CodeTranslationAgent(BaseAgent):
                 lines = lines[:-1]
             translated_code = "\n".join(lines).strip()
 
-        self.translation_history.append({"from_lang": from_lang, "to_lang": to_lang, "timestamp": "2026-01-10"})
+        self.translation_history.append(
+            {"from_lang": from_lang, "to_lang": to_lang, "timestamp": "2026-01-10"}
+        )
 
         return translated_code
 
@@ -110,6 +116,10 @@ class CodeTranslationAgent(BaseAgent):
         """Returns statistics on translation activities."""
         return {
             "total_translations": len(self.translation_history),
-            "source_languages": list(set(t["from_lang"] for t in self.translation_history)),
-            "target_languages": list(set(t["to_lang"] for t in self.translation_history)),
+            "source_languages": list(
+                set(t["from_lang"] for t in self.translation_history)
+            ),
+            "target_languages": list(
+                set(t["to_lang"] for t in self.translation_history)
+            ),
         }

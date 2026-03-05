@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_agentidentity_exists():
     """Test that AgentIdentity class exists and is importable."""
-    assert 'AgentIdentity' in dir()
+    assert "AgentIdentity" in dir()
 
 
 def test_identitycore_exists():
     """Test that IdentityCore class exists and is importable."""
-    assert 'IdentityCore' in dir()
+    assert "IdentityCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

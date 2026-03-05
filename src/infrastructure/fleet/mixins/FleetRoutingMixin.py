@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -12,11 +13,15 @@ from src.infrastructure.fleet.RemoteAgentProxy import RemoteAgentProxy
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
 class FleetRoutingMixin:
     """Mixin for task routing and remote node registration in FleetManager."""
 
     def register_remote_node(
-        self: FleetManager, node_url: str, agent_names: list[str], remote_version: str = "1.0.0"
+        self: FleetManager,
+        node_url: str,
+        agent_names: list[str],
+        remote_version: str = "1.0.0",
     ) -> None:
         """
         Registers a remote node and its available agents.

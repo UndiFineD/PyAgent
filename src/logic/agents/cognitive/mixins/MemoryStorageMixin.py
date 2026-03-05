@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -9,14 +10,20 @@ from typing import TYPE_CHECKING
 from src.core.base.BaseUtilities import as_tool
 
 if TYPE_CHECKING:
-    from src.logic.agents.cognitive.HierarchicalMemoryAgent import HierarchicalMemoryAgent
+    from src.logic.agents.cognitive.HierarchicalMemoryAgent import (
+        HierarchicalMemoryAgent,
+    )
+
 
 class MemoryStorageMixin:
     """Mixin for memory storage and promotion in HierarchicalMemoryAgent."""
 
     @as_tool
     def store_memory(
-        self: HierarchicalMemoryAgent, content: str, importance: float = 0.5, tags: list[str] | None = None
+        self: HierarchicalMemoryAgent,
+        content: str,
+        importance: float = 0.5,
+        tags: list[str] | None = None,
     ) -> str:
         """Stores a new memory fragment into the ShortTerm tier."""
         timestamp = int(time.time())

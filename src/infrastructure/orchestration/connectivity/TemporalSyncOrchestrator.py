@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Recovered and standardized for Phase 317
 
@@ -18,11 +19,13 @@ import logging
 
 __version__ = VERSION
 
+
 class TemporalSyncOrchestrator:
     """
     TemporalSyncOrchestrator recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("TemporalSyncOrchestrator initialized (Placeholder).")
@@ -30,4 +33,3 @@ class TemporalSyncOrchestrator:
     def report_activity(self) -> None:
         """Stub for activity reporting."""
         pass
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_entropyguardagent_exists():
     """Test that EntropyGuardAgent class exists and is importable."""
-    assert 'EntropyGuardAgent' in dir()
+    assert "EntropyGuardAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

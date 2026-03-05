@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ from typing import List
 import logging
 
 __version__ = VERSION
+
 
 class NotificationManager:
     """Manages error notifications to various channels.
@@ -88,7 +90,7 @@ class NotificationManager:
             file=error.file_path,
             line=error.line_number,
             severity=error.severity.name,
-            category=error.category.value
+            category=error.category.value,
         )
 
     def _send(self, config: NotificationConfig, message: str) -> bool:

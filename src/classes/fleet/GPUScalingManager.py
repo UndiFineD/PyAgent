@@ -8,6 +8,7 @@ import logging
 import random
 from typing import Dict, Any
 
+
 class GPUScalingManager:
     """Monitors GPU resources and triggers scaling events."""
 
@@ -23,13 +24,15 @@ class GPUScalingManager:
             # Simulate random load
             usage = random.uniform(50.0, 95.0)
             self.gpu_state[gpu_id] = usage
-            
+
             if usage > self.threshold:
                 actions[gpu_id] = "SCALE_UP_POD"
-                logging.warning(f"GPU high pressure detected: {gpu_id} at {usage}%. Action: {actions[gpu_id]}")
+                logging.warning(
+                    f"GPU high pressure detected: {gpu_id} at {usage}%. Action: {actions[gpu_id]}"
+                )
             else:
                 actions[gpu_id] = "STABLE"
-        
+
         return actions
 
     def get_resource_summary(self) -> Dict[str, Any]:
@@ -37,5 +40,5 @@ class GPUScalingManager:
         return {
             "gpus": self.gpu_state,
             "threshold": self.threshold,
-            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values())
+            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values()),
         }

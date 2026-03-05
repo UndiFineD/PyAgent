@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ModelError"), "ModelError missing"
     assert hasattr(mod, "ConfigurationError"), "ConfigurationError missing"
     assert hasattr(mod, "CycleInterrupt"), "CycleInterrupt missing"
-

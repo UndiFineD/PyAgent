@@ -1,7 +1,11 @@
 from __future__ import annotations
 from typing import Callable
 from src.core.base.utils.jsontree.types import JSONTree, _T
-from src.core.base.utils.jsontree.iteration import json_iter_leaves, json_iter_leaves_with_path
+from src.core.base.utils.jsontree.iteration import (
+    json_iter_leaves,
+    json_iter_leaves_with_path,
+)
+
 
 def json_count_leaves(value: JSONTree[_T]) -> int:
     """Count the number of leaves in a nested JSON structure."""
@@ -75,7 +79,7 @@ def json_find_leaves(
 ) -> list[tuple[str, _T]]:
     """Find all leaves matching a predicate, with their paths."""
     return [
-        (path, leaf) 
-        for path, leaf in json_iter_leaves_with_path(value) 
+        (path, leaf)
+        for path, leaf in json_iter_leaves_with_path(value)
         if predicate(leaf)
     ]

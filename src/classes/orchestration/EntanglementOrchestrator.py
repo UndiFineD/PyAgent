@@ -6,17 +6,18 @@ import threading
 from typing import Dict, Any, List, Optional
 from src.classes.orchestration.SignalBusOrchestrator import SignalBusOrchestrator
 
+
 class EntanglementOrchestrator:
     """
     Manages instantaneous state synchronization across distributed agent nodes.
     Ensures that high-priority state changes in one node are mirrored to all entangled peers.
     """
-    
+
     def __init__(self, signal_bus: SignalBusOrchestrator) -> None:
         self.signal_bus = signal_bus
         self.shared_state: Dict[str, Any] = {}
         self._lock = threading.Lock()
-        
+
         # Subscribe to entanglement sync signals
         self.signal_bus.subscribe("entanglement_sync", self._handle_sync_signal)
 
@@ -25,9 +26,13 @@ class EntanglementOrchestrator:
         with self._lock:
             self.shared_state[key] = value
             logging.debug(f"Entanglement: Local state update {key}={value}")
-        
+
         if propagate:
-            self.signal_bus.publish("entanglement_sync", {"key": key, "value": value}, sender="EntanglementOrchestrator")
+            self.signal_bus.publish(
+                "entanglement_sync",
+                {"key": key, "value": value},
+                sender="EntanglementOrchestrator",
+            )
 
     def get_state(self, key: str) -> Any:
         """Retrieves an entangled state value."""
@@ -37,11 +42,11 @@ class EntanglementOrchestrator:
     def _handle_sync_signal(self, payload: Any, sender: str) -> None:
         """Internal handler for incoming state synchronization signals."""
         if sender == "EntanglementOrchestrator":
-            return # Ignore local propagation
-            
+            return  # Ignore local propagation
+
         key = payload.get("key")
         value = payload.get("value")
-        
+
         if key is not None:
             with self._lock:
                 self.shared_state[key] = value

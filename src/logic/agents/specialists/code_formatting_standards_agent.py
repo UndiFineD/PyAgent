@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,7 +34,10 @@ from typing import Any, Dict, List, Optional
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.mixins.identity_mixin import IdentityMixin
-from src.core.base.common.models.communication_models import CascadeContext, ConversationMessage
+from src.core.base.common.models.communication_models import (
+    CascadeContext,
+    ConversationMessage,
+)
 from src.core.base.common.models.core_enums import MessageRole
 
 
@@ -68,7 +72,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
             "bracket_and_quote_enforcement",
             "strong_typing_enforcement",
             "time_sleep_prevention",
-            "mistake_learning"
+            "mistake_learning",
         ]
 
         # Strict standards configuration
@@ -108,7 +112,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
             "missing_final_newline": 0,
             "bracket_violations": 0,
             "missing_type_hints": 0,
-            "time_sleep_usage": 0
+            "time_sleep_usage": 0,
         }
 
         # Load standards from documentation
@@ -117,7 +121,12 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
     def _load_standards(self) -> None:
         """Load formatting standards from documentation files."""
         # Try to load from standards file
-        standards_file = Path(__file__).parent.parent.parent.parent / "docs" / "standards" / "DOCSTRING_STANDARDS.md"
+        standards_file = (
+            Path(__file__).parent.parent.parent.parent
+            / "docs"
+            / "standards"
+            / "DOCSTRING_STANDARDS.md"
+        )
         if standards_file.exists():
             try:
                 content = standards_file.read_text()
@@ -127,7 +136,9 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
             except (OSError, IOError):
                 pass  # Use defaults
 
-    async def process_message(self, message: ConversationMessage, _context: CascadeContext) -> ConversationMessage:
+    async def process_message(
+        self, message: ConversationMessage, _context: CascadeContext
+    ) -> ConversationMessage:
         """
         Process incoming messages and provide strict formatting assistance.
 
@@ -157,7 +168,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
                 "I enforce strict PyAgent code formatting standards. I can help with: "
                 "strict formatting, docstring validation, comprehensive linting, standards compliance, "
                 "code validation, and bracket/quote enforcement. What specific assistance do you need?"
-            )
+            ),
         )
 
     async def _handle_strict_formatting_request(
@@ -174,7 +185,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
                 content=(
                     "Please specify a valid Python file path. I enforce strict PyAgent formatting standards "
                     "including indentation, line length, docstrings, and naming conventions."
-                )
+                ),
             )
 
         # Perform comprehensive validation first
@@ -184,23 +195,24 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
             result = await self.apply_strict_formatting(file_path)
             return ConversationMessage(
                 role=MessageRole.ASSISTANT,
-                content=f"✅ Strict formatting applied to {file_path}: {result}"
+                content=f"✅ Strict formatting applied to {file_path}: {result}",
             )
 
         # Report issues that need to be fixed first
         issues_list = [f"  - {issue}" for issue in validation_result["critical_issues"]]
-        issues_summary = "❌ Cannot format due to critical issues that must be resolved first:\n"
+        issues_summary = (
+            "❌ Cannot format due to critical issues that must be resolved first:\n"
+        )
         issues_summary += "\n".join(issues_list) + "\n"
 
         if validation_result["warnings"]:
-            warnings_list = [f"  - {warning}" for warning in validation_result["warnings"]]
+            warnings_list = [
+                f"  - {warning}" for warning in validation_result["warnings"]
+            ]
             issues_summary += "\nWarnings (will be auto-fixed):\n"
             issues_summary += "\n".join(warnings_list) + "\n"
 
-        return ConversationMessage(
-            role=MessageRole.ASSISTANT,
-            content=issues_summary
-        )
+        return ConversationMessage(role=MessageRole.ASSISTANT, content=issues_summary)
 
     async def _handle_docstring_request(
         self, message: ConversationMessage, _context: CascadeContext
@@ -213,7 +225,7 @@ class CodeFormattingStandardsAgent(BaseAgent, IdentityMixin):
             result = await self.validate_docstrings(file_path)
             return ConversationMessage(
                 role=MessageRole.ASSISTANT,
-                content=f"Docstring validation for {file_path}: {result}"
+                content=f"Docstring validation for {file_path}: {result}",
             )
 
         standards_summary = """
@@ -227,8 +239,7 @@ PyAgent Docstring Standards:
 Use the batch_docstring_formatter.py script for systematic fixes.
         """
         return ConversationMessage(
-            role=MessageRole.ASSISTANT,
-            content=standards_summary
+            role=MessageRole.ASSISTANT, content=standards_summary
         )
 
     async def _handle_strict_linting_request(
@@ -242,7 +253,7 @@ Use the batch_docstring_formatter.py script for systematic fixes.
             result = await self.perform_comprehensive_linting(file_path)
             return ConversationMessage(
                 role=MessageRole.ASSISTANT,
-                content=f"Comprehensive linting results for {file_path}:\n{result}"
+                content=f"Comprehensive linting results for {file_path}:\n{result}",
             )
 
         return ConversationMessage(
@@ -250,7 +261,7 @@ Use the batch_docstring_formatter.py script for systematic fixes.
             content=(
                 "Available strict linting: indentation, docstrings, line length, syntax, naming, "
                 "whitespace, final newlines, brackets & quotes. Specify a file path."
-            )
+            ),
         )
 
     async def _handle_validation_request(
@@ -263,7 +274,7 @@ Use the batch_docstring_formatter.py script for systematic fixes.
         if not file_path or not os.path.exists(file_path):
             return ConversationMessage(
                 role=MessageRole.ASSISTANT,
-                content="Please specify a valid Python file path for comprehensive validation."
+                content="Please specify a valid Python file path for comprehensive validation.",
             )
 
         result = await self.perform_comprehensive_validation(file_path)
@@ -287,10 +298,7 @@ Use the batch_docstring_formatter.py script for systematic fixes.
 
         response += f"\nLearned from {sum(self.common_mistakes.values())} total mistakes across all validations."
 
-        return ConversationMessage(
-            role=MessageRole.ASSISTANT,
-            content=response
-        )
+        return ConversationMessage(role=MessageRole.ASSISTANT, content=response)
 
     async def _handle_standards_request(
         self, _message: ConversationMessage, _context: CascadeContext
@@ -332,10 +340,7 @@ Use the batch_docstring_formatter.py script for systematic fixes.
 
 See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         """
-        return ConversationMessage(
-            role=MessageRole.ASSISTANT,
-            content=standards_info
-        )
+        return ConversationMessage(role=MessageRole.ASSISTANT, content=standards_info)
 
     def get_learning_insights(self) -> str:
         """Get insights learned from past mistakes."""
@@ -347,11 +352,13 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         insights = f"📚 Learned from {total_mistakes} total mistakes:\n"
 
         # Sort by frequency
-        sorted_mistakes = sorted(self.common_mistakes.items(), key=lambda x: x[1], reverse=True)
+        sorted_mistakes = sorted(
+            self.common_mistakes.items(), key=lambda x: x[1], reverse=True
+        )
 
         for mistake_type, count in sorted_mistakes:
             if count > 0:
-                mistake_name = mistake_type.replace('_', ' ').title()
+                mistake_name = mistake_type.replace("_", " ").title()
                 insights += f"  • {mistake_name}: {count} instances\n"
 
         insights += "\n💡 These patterns are now prevented in future validations."
@@ -363,7 +370,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         # Look for file extensions or path patterns
         path_patterns = [
             r'["\']([^"\']*\.py[^"\']*)["\']',  # Quoted paths
-            r'(\S+\.py)',  # Unquoted paths
+            r"(\S+\.py)",  # Unquoted paths
             r'(src/[^\'"\s]+)',  # Relative paths
         ]
 
@@ -392,15 +399,10 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         Returns:
             Dict containing validation results.
         """
-        results = {
-            "passed": True,
-            "critical_issues": [],
-            "warnings": [],
-            "details": {}
-        }
+        results = {"passed": True, "critical_issues": [], "warnings": [], "details": {}}
 
         try:
-            with open(file_path, 'r', encoding='utf-8', newline='') as f:
+            with open(file_path, "r", encoding="utf-8", newline="") as f:
                 content = f.read()
                 lines = content.splitlines()
 
@@ -418,7 +420,9 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 results["passed"] = False
             if indent_issues["warnings"]:
                 results["warnings"].extend(indent_issues["warnings"])
-            self.common_mistakes["mixed_indentation"] += len(indent_issues["critical"]) + len(indent_issues["warnings"])
+            self.common_mistakes["mixed_indentation"] += len(
+                indent_issues["critical"]
+            ) + len(indent_issues["warnings"])
 
             # 3. Line length enforcement
             length_issues = self._validate_line_length(lines)
@@ -446,7 +450,9 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 results["passed"] = False
             if naming_issues["warnings"]:
                 results["warnings"].extend(naming_issues["warnings"])
-            self.common_mistakes["naming_violations"] += len(naming_issues["critical"]) + len(naming_issues["warnings"])
+            self.common_mistakes["naming_violations"] += len(
+                naming_issues["critical"]
+            ) + len(naming_issues["warnings"])
 
             # 8. Bracket and quote validation
             bracket_issues = self._validate_brackets_and_quotes(content, lines)
@@ -456,9 +462,9 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
             if bracket_issues["warnings"]:
                 results["warnings"].extend(bracket_issues["warnings"])
             self.common_mistakes["bracket_violations"] = (
-                self.common_mistakes.get("bracket_violations", 0) +
-                len(bracket_issues["critical"]) +
-                len(bracket_issues["warnings"])
+                self.common_mistakes.get("bracket_violations", 0)
+                + len(bracket_issues["critical"])
+                + len(bracket_issues["warnings"])
             )
 
             # 9. Strong typing validation (critical for Rust port)
@@ -475,7 +481,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 results["passed"] = False
                 self.common_mistakes["time_sleep_usage"] += len(sleep_issues)
 
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             results["critical_issues"].append("Error during validation process")
             results["passed"] = False
 
@@ -496,7 +502,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
             ast.parse(content)
         except SyntaxError as e:
             issues.append(f"Syntax Error: {e.msg} at line {e.lineno}")
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             issues.append("Parse Error")
         return issues
 
@@ -507,13 +513,17 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         for i, line in enumerate(lines, 1):
             if line.strip():  # Skip empty lines
                 # Check for tabs
-                if '\t' in line:
-                    issues["critical"].append(f"Line {i}: Contains tabs - only spaces allowed")
+                if "\t" in line:
+                    issues["critical"].append(
+                        f"Line {i}: Contains tabs - only spaces allowed"
+                    )
 
                 # Check indentation is multiple of 4 spaces
-                leading_spaces = len(line) - len(line.lstrip(' '))
+                leading_spaces = len(line) - len(line.lstrip(" "))
                 if leading_spaces % 4 != 0:
-                    issues["critical"].append(f"Line {i}: Indentation {leading_spaces} spaces - must be multiple of 4")
+                    issues["critical"].append(
+                        f"Line {i}: Indentation {leading_spaces} spaces - must be multiple of 4"
+                    )
 
         return issues
 
@@ -542,7 +552,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         """Check for final newline."""
         issues = []
 
-        if not content.endswith('\n'):
+        if not content.endswith("\n"):
             issues.append("File must end with a newline")
 
         return issues
@@ -560,24 +570,32 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
                     # Check if this is a variable assignment
                     if isinstance(node.ctx, ast.Store):
-                        if not re.match(r'^[a-z][a-z0-9_]*$', name):
-                            issues["critical"].append(f"Variable '{name}' should be snake_case")
+                        if not re.match(r"^[a-z][a-z0-9_]*$", name):
+                            issues["critical"].append(
+                                f"Variable '{name}' should be snake_case"
+                            )
 
                     # Check if this is a function definition
                     elif isinstance(node, ast.FunctionDef):
-                        if not re.match(r'^[a-z][a-z0-9_]*$', name):
-                            issues["critical"].append(f"Function '{name}' should be snake_case")
+                        if not re.match(r"^[a-z][a-z0-9_]*$", name):
+                            issues["critical"].append(
+                                f"Function '{name}' should be snake_case"
+                            )
 
                 elif isinstance(node, ast.ClassDef):
-                    if not re.match(r'^[A-Z][a-zA-Z0-9]*$', node.name):
-                        issues["critical"].append(f"Class '{node.name}' should be PascalCase")
+                    if not re.match(r"^[A-Z][a-zA-Z0-9]*$", node.name):
+                        issues["critical"].append(
+                            f"Class '{node.name}' should be PascalCase"
+                        )
 
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             pass  # Skip if syntax errors prevent parsing
 
         return issues
 
-    def _validate_brackets_and_quotes(self, content: str, lines: List[str]) -> Dict[str, List[str]]:
+    def _validate_brackets_and_quotes(
+        self, content: str, lines: List[str]
+    ) -> Dict[str, List[str]]:
         """Strictly validate brackets, quotes, and related spacing."""
         issues = {"critical": [], "warnings": []}
 
@@ -591,7 +609,9 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
         # 3. Quote consistency
         quote_issues = self._validate_quote_consistency(lines)
-        issues["warnings"].extend(quote_issues)  # Quote style is a warning, not critical
+        issues["warnings"].extend(
+            quote_issues
+        )  # Quote style is a warning, not critical
 
         # 4. Comma and colon spacing
         comma_colon_issues = self._validate_comma_colon_spacing(lines)
@@ -603,26 +623,30 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         """Validate that all brackets are properly matched."""
         issues = []
         stack = []
-        bracket_pairs = {')': '(', ']': '[', '}': '{', '>': '<'}
-        opening_brackets = set('([{<')
-        closing_brackets = set(')]}>')
+        bracket_pairs = {")": "(", "]": "[", "}": "{", ">": "<"}
+        opening_brackets = set("([{<")
+        closing_brackets = set(")]}>")
 
         for i, char in enumerate(content):
             if char in opening_brackets:
                 stack.append((char, i))
             elif char in closing_brackets:
                 if not stack:
-                    line_num = content[:i].count('\n') + 1
-                    issues.append(f"Line {line_num}: Unmatched closing bracket '{char}'")
+                    line_num = content[:i].count("\n") + 1
+                    issues.append(
+                        f"Line {line_num}: Unmatched closing bracket '{char}'"
+                    )
                 else:
                     opening, _open_pos = stack.pop()
                     if bracket_pairs[char] != opening:
-                        line_num = content[:i].count('\n') + 1
-                        issues.append(f"Line {line_num}: Mismatched brackets '{opening}' and '{char}'")
+                        line_num = content[:i].count("\n") + 1
+                        issues.append(
+                            f"Line {line_num}: Mismatched brackets '{opening}' and '{char}'"
+                        )
 
         if stack:
             for opening, pos in stack:
-                line_num = content[:pos].count('\n') + 1
+                line_num = content[:pos].count("\n") + 1
                 issues.append(f"Line {line_num}: Unmatched opening bracket '{opening}'")
 
         return issues
@@ -634,7 +658,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         for i, line in enumerate(lines, 1):
             # Skip empty lines and comments
             stripped = line.strip()
-            if not stripped or stripped.startswith('#'):
+            if not stripped or stripped.startswith("#"):
                 continue
 
             # Check for spaces after opening brackets (except in strings)
@@ -645,7 +669,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 char = line[j]
 
                 # Handle string literals
-                if char in ('"', "'") and (j == 0 or line[j-1] != '\\'):
+                if char in ('"', "'") and (j == 0 or line[j - 1] != "\\"):
                     if not in_string:
                         in_string = True
                         string_char = char
@@ -660,24 +684,42 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                     continue
 
                 # Check bracket spacing
-                if char in '([{' and j + 1 < len(line):
+                if char in "([{" and j + 1 < len(line):
                     next_char = line[j + 1]
                     # Allow space after opening bracket only in specific cases
                     if next_char.isspace() and not (
                         # Allow space in list comprehensions: [x for x in ...
-                        (char == '[' and j + 2 < len(line) and line[j+2:].strip().startswith('for ')) or
+                        (
+                            char == "["
+                            and j + 2 < len(line)
+                            and line[j + 2 :].strip().startswith("for ")
+                        )
+                        or
                         # Allow space in lambda expressions: (lambda x: ...
-                        (char == '(' and j + 2 < len(line) and line[j+2:].strip().startswith('lambda ')) or
+                        (
+                            char == "("
+                            and j + 2 < len(line)
+                            and line[j + 2 :].strip().startswith("lambda ")
+                        )
+                        or
                         # Allow space in dict comprehensions: {k: v for ...
-                        (char == '{' and j + 2 < len(line) and line[j+2:].strip().startswith('for '))
+                        (
+                            char == "{"
+                            and j + 2 < len(line)
+                            and line[j + 2 :].strip().startswith("for ")
+                        )
                     ):
-                        issues.append(f"Line {i}: No space allowed after opening bracket '{char}'")
+                        issues.append(
+                            f"Line {i}: No space allowed after opening bracket '{char}'"
+                        )
 
                 # Check for spaces before closing brackets
-                elif char in ')]}' and j > 0:
+                elif char in ")]}" and j > 0:
                     prev_char = line[j - 1]
                     if prev_char.isspace():
-                        issues.append(f"Line {i}: No space allowed before closing bracket '{char}'")
+                        issues.append(
+                            f"Line {i}: No space allowed before closing bracket '{char}'"
+                        )
 
                 j += 1
 
@@ -690,7 +732,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         for i, line in enumerate(lines, 1):
             # Skip comments and docstrings
             stripped = line.strip()
-            if stripped.startswith('#'):
+            if stripped.startswith("#"):
                 continue
 
             # Find string literals
@@ -702,20 +744,26 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 char = line[j]
 
                 # Check for unescaped quote
-                if char in ('"', "'") and (j == 0 or line[j-1] != '\\'):
+                if char in ('"', "'") and (j == 0 or line[j - 1] != "\\"):
                     if not in_string:
                         in_string = True
                         string_start = j
                         string_char = char
                     elif char == string_char:
                         # End of string
-                        string_content = line[string_start:j+1]
+                        string_content = line[string_start : j + 1]
 
                         # Handle triple quotes skip
-                        if j + 2 < len(line) and line[j+1:j+3] == string_char * 2:
+                        if j + 2 < len(line) and line[j + 1 : j + 3] == string_char * 2:
                             j += 2
-                        elif string_char == "'" and len(string_content) > 3 and '"' not in string_content:
-                            issues.append(f"Line {i}: Prefer double quotes for string literals")
+                        elif (
+                            string_char == "'"
+                            and len(string_content) > 3
+                            and '"' not in string_content
+                        ):
+                            issues.append(
+                                f"Line {i}: Prefer double quotes for string literals"
+                            )
 
                         in_string = False
                 j += 1
@@ -729,7 +777,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         for i, line in enumerate(lines, 1):
             # Skip empty lines and comments
             stripped = line.strip()
-            if not stripped or stripped.startswith('#'):
+            if not stripped or stripped.startswith("#"):
                 continue
 
             # Check comma spacing
@@ -740,7 +788,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 char = line[j]
 
                 # Handle string literals
-                if char in ('"', "'") and (j == 0 or line[j-1] != '\\'):
+                if char in ('"', "'") and (j == 0 or line[j - 1] != "\\"):
                     if not in_string:
                         in_string = True
                         string_char = char
@@ -755,13 +803,13 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                     continue
 
                 # Check comma spacing
-                if char == ',' and j > 0:
+                if char == "," and j > 0:
                     prev_char = line[j - 1]
                     if prev_char.isspace():
                         issues.append(f"Line {i}: No space allowed before comma")
 
                 # Check colon spacing in dict literals and slices
-                elif char == ':' and j > 0 and j + 1 < len(line):
+                elif char == ":" and j > 0 and j + 1 < len(line):
                     prev_char = line[j - 1]
                     _next_char = line[j + 1]
 
@@ -769,9 +817,14 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                     if prev_char.isspace():
                         # Check if this is likely a dict/key-value context
                         before_colon = line[:j].strip()
-                        if ('{' in before_colon or '=' in before_colon or
-                            re.search(r'\b\w+\s*$', before_colon)):
-                            issues.append(f"Line {i}: No space allowed before colon in dict literals")
+                        if (
+                            "{" in before_colon
+                            or "=" in before_colon
+                            or re.search(r"\b\w+\s*$", before_colon)
+                        ):
+                            issues.append(
+                                f"Line {i}: No space allowed before colon in dict literals"
+                            )
 
                 j += 1
 
@@ -784,7 +837,10 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         try:
             # Import the batch formatter for comprehensive docstring analysis
             sys.path.insert(0, os.path.dirname(__file__))
-            from batch_docstring_formatter import DocstringAnalyzer, DocstringStandards  # pylint: disable=import-error
+            from batch_docstring_formatter import (
+                DocstringAnalyzer,
+                DocstringStandards,
+            )  # pylint: disable=import-error
 
             standards = DocstringStandards()
             analyzer = DocstringAnalyzer(standards)
@@ -796,7 +852,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 else:
                     issues["warnings"].append(f"Docstring: {issue['message']}")
 
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             issues["critical"].append("Docstring validation error")
 
         return issues
@@ -812,7 +868,7 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
             Formatting result message.
         """
         try:
-            with open(file_path, 'r', encoding='utf-8', newline='') as f:
+            with open(file_path, "r", encoding="utf-8", newline="") as f:
                 content = f.read()
 
             lines = content.splitlines()
@@ -825,28 +881,31 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                     modified = True
 
             # Auto-fix final newline
-            if content and not content.endswith('\n'):
-                lines.append('')
+            if content and not content.endswith("\n"):
+                lines.append("")
                 modified = True
 
             # Apply the fixes
             if modified:
-                new_content = '\n'.join(lines)
-                with open(file_path, 'w', encoding='utf-8', newline='') as f:
+                new_content = "\n".join(lines)
+                with open(file_path, "w", encoding="utf-8", newline="") as f:
                     f.write(new_content)
 
             # Run black for code formatting
             command = [
-                sys.executable, "-m", "black",
-                "--line-length", str(self.standards["max_line_length"]),
-                file_path
+                sys.executable,
+                "-m",
+                "black",
+                "--line-length",
+                str(self.standards["max_line_length"]),
+                file_path,
             ]
             result = subprocess.run(
                 command,
                 capture_output=True,
                 text=True,
                 check=False,
-                cwd=os.path.dirname(file_path)
+                cwd=os.path.dirname(file_path),
             )
 
             output = result.stdout or result.stderr
@@ -860,9 +919,11 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
             if result.returncode == 0:
                 return "Strict formatting applied successfully (auto-fixed warnings, applied black formatting)."
-            return f"Formatting partially successful, but black reported: {result.stderr}"
+            return (
+                f"Formatting partially successful, but black reported: {result.stderr}"
+            )
 
-        except (Exception,): # pylint: disable=broad-exception-caught
+        except (Exception,):  # pylint: disable=broad-exception-caught
             return "Error during strict formatting"
 
     def _validate_strong_typing(self, content: str) -> List[str]:
@@ -880,34 +941,50 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
                 if isinstance(node, ast.FunctionDef):
                     # Check function parameters have type hints
                     for arg in node.args.args:
-                        if arg.annotation is None and arg.arg != 'self':
-                            issues.append(f"Function '{node.name}': Parameter '{arg.arg}' missing type hint")
+                        if arg.annotation is None and arg.arg != "self":
+                            issues.append(
+                                f"Function '{node.name}': Parameter '{arg.arg}' missing type hint"
+                            )
 
                     # Check variadic args have type hints
                     if node.args.vararg and node.args.vararg.annotation is None:
-                        issues.append(f"Function '{node.name}': *{node.args.vararg.arg} missing type hint")
+                        issues.append(
+                            f"Function '{node.name}': *{node.args.vararg.arg} missing type hint"
+                        )
 
                     if node.args.kwarg and node.args.kwarg.annotation is None:
-                        issues.append(f"Function '{node.name}': **{node.args.kwarg.arg} missing type hint")
+                        issues.append(
+                            f"Function '{node.name}': **{node.args.kwarg.arg} missing type hint"
+                        )
 
                     # Check return type hint
                     if node.returns is None:
-                        issues.append(f"Function '{node.name}': Missing return type hint")
+                        issues.append(
+                            f"Function '{node.name}': Missing return type hint"
+                        )
 
                 elif isinstance(node, ast.AsyncFunctionDef):
                     # Same checks for async functions
                     for arg in node.args.args:
-                        if arg.annotation is None and arg.arg != 'self':
-                            issues.append(f"Async function '{node.name}': Parameter '{arg.arg}' missing type hint")
+                        if arg.annotation is None and arg.arg != "self":
+                            issues.append(
+                                f"Async function '{node.name}': Parameter '{arg.arg}' missing type hint"
+                            )
 
                     if node.args.vararg and node.args.vararg.annotation is None:
-                        issues.append(f"Async function '{node.name}': *{node.args.vararg.arg} missing type hint")
+                        issues.append(
+                            f"Async function '{node.name}': *{node.args.vararg.arg} missing type hint"
+                        )
 
                     if node.args.kwarg and node.args.kwarg.annotation is None:
-                        issues.append(f"Async function '{node.name}': **{node.args.kwarg.arg} missing type hint")
+                        issues.append(
+                            f"Async function '{node.name}': **{node.args.kwarg.arg} missing type hint"
+                        )
 
                     if node.returns is None:
-                        issues.append(f"Async function '{node.name}': Missing return type hint")
+                        issues.append(
+                            f"Async function '{node.name}': Missing return type hint"
+                        )
 
         except SyntaxError:
             # Skip type checking if there are syntax errors
@@ -924,13 +1001,13 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
         issues = []
 
         # Check for target pattern
-        sleep_pattern = r'\btime\.' + 'sleep' + r'\s*\('
+        sleep_pattern = r"\btime\." + "sleep" + r"\s*\("
         lines = content.splitlines()
 
         for i, line in enumerate(lines, 1):
             if re.search(sleep_pattern, line):
                 # Make sure it's not in a comment
-                if not line.strip().startswith('#'):
+                if not line.strip().startswith("#"):
                     issues.append(f"Line {i}: sleep usage forbidden")  # nosec
 
         return issues
@@ -969,10 +1046,14 @@ See docs/standards/DOCSTRING_STANDARDS.md for detailed guidelines.
 
         # Add learning summary
         result += "📚 LEARNING FROM MISTAKES:\n"
-        result += f"  • Total mistakes learned from: {sum(self.common_mistakes.values())}\n"
+        result += (
+            f"  • Total mistakes learned from: {sum(self.common_mistakes.values())}\n"
+        )
         for mistake_type, count in self.common_mistakes.items():
             if count > 0:
-                result += f"  • {mistake_type.replace('_', ' ').title()}: {count} instances\n"
+                result += (
+                    f"  • {mistake_type.replace('_', ' ').title()}: {count} instances\n"
+                )
 
         result += "\n💡 RECOMMENDATION: Fix critical issues before committing. Warnings can be auto-fixed."
 

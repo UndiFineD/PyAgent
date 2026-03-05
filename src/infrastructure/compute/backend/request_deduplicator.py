@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,9 @@ import threading
 import time
 
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import (
+    LocalContextRecorder,
+)
 
 # Infrastructure
 __version__ = VERSION
@@ -44,7 +46,9 @@ class RequestDeduplicator:
             dedup.store_result("prompt", result)
     """
 
-    def __init__(self, ttl_seconds: float = 60.0, recorder: LocalContextRecorder | None = None) -> None:
+    def __init__(
+        self, ttl_seconds: float = 60.0, recorder: LocalContextRecorder | None = None
+    ) -> None:
         """Initialize deduplicator.
 
         Args:
@@ -76,7 +80,9 @@ class RequestDeduplicator:
 
         with self._lock:
             # Clean expired entries
-            expired = [k for k, t in self._pending.items() if now - t > self.ttl_seconds]
+            expired = [
+                k for k, t in self._pending.items() if now - t > self.ttl_seconds
+            ]
             for k in expired:
                 self._pending.pop(k, None)
                 self._events.pop(k, None)

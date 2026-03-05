@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,7 @@ Shared types and configurations for KV transfer connectors.
 import logging
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import (Any, Dict, List, Optional, Protocol, Tuple,
-                    runtime_checkable)
+from typing import Any, Dict, List, Optional, Protocol, Tuple, runtime_checkable
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +81,9 @@ class KVTransferConfig:
 class KVConnectorMetadata:
     """Metadata for KV transfer operations."""
 
-    reqs_to_fill: Dict[str, Tuple[Tuple[List[int], ...], int]] = field(default_factory=dict)
+    reqs_to_fill: Dict[str, Tuple[Tuple[List[int], ...], int]] = field(
+        default_factory=dict
+    )
     reqs_to_send: Dict[str, List[int]] = field(default_factory=dict)
     reqs_to_recv: Dict[str, List[int]] = field(default_factory=dict)
     transfer_params: Dict[str, Dict[str, Any]] = field(default_factory=dict)

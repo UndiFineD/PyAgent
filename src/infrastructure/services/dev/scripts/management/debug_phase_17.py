@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +42,9 @@ def test_phase_17() -> None:
     fleet = FleetManager(workspace)
 
     print("\n--- Phase 17: WebAgent (Simulation) ---")
-    web_agent = WebAgent(str(Path(workspace) / "src\\logic\agents\\intelligence\\web_agent.py"))
+    web_agent = WebAgent(
+        str(Path(workspace) / "src\\logic\agents\\intelligence\\web_agent.py")
+    )
     search_results = web_agent.search_web("PyAgent GitHub")
     print(f"Search Results: {search_results}")
 

@@ -1,4 +1,3 @@
-
 """
 Core logic for Multi-Modal Context (Phase 178).
 Handles interactions with vision models for bug analysis.
@@ -7,6 +6,7 @@ Handles interactions with vision models for bug analysis.
 import base64
 from typing import Dict, Any
 
+
 class MultiModalCore:
     @staticmethod
     def encode_image(image_path: str) -> str:
@@ -14,10 +14,12 @@ class MultiModalCore:
         Encodes an image file to base64.
         """
         with open(image_path, "rb") as image_file:
-            return base64.b64encode(image_file.read()).decode('utf-8')
+            return base64.b64encode(image_file.read()).decode("utf-8")
 
     @staticmethod
-    def construct_vision_payload(model: str, prompt: str, base64_image: str) -> dict[str, Any]:
+    def construct_vision_payload(
+        model: str, prompt: str, base64_image: str
+    ) -> dict[str, Any]:
         """
         Constructs a payload for a vision model (OpenAI-style).
         """
@@ -32,12 +34,12 @@ class MultiModalCore:
                             "type": "image_url",
                             "image_url": {
                                 "url": f"data:image/jpeg;base64,{base64_image}"
-                            }
-                        }
-                    ]
+                            },
+                        },
+                    ],
                 }
             ],
-            "max_tokens": 500
+            "max_tokens": 500,
         }
 
     @staticmethod
@@ -50,5 +52,5 @@ class MultiModalCore:
         return {
             "potential_bug": is_bug,
             "description": vision_response,
-            "confidence": 0.85 if is_bug else 0.5
+            "confidence": 0.85 if is_bug else 0.5,
         }

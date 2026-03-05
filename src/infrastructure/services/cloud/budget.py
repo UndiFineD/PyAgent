@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -247,8 +248,13 @@ class BudgetManager:
     def _check_alerts(self) -> None:
         """Check and trigger budget alerts."""
         # Daily threshold alert
-        daily_ratio: float | int = self.today_spend / self.daily_limit if self.daily_limit > 0 else 0
-        if daily_ratio >= self.alert_threshold and "daily_threshold" not in self._alerts_sent:
+        daily_ratio: float | int = (
+            self.today_spend / self.daily_limit if self.daily_limit > 0 else 0
+        )
+        if (
+            daily_ratio >= self.alert_threshold
+            and "daily_threshold" not in self._alerts_sent
+        ):
             self._send_alert(
                 BudgetAlert(
                     alert_type="threshold",
@@ -260,8 +266,13 @@ class BudgetManager:
             self._alerts_sent.add("daily_threshold")
 
         # Monthly threshold alert
-        monthly_ratio: float | int = self.month_spend / self.monthly_limit if self.monthly_limit > 0 else 0
-        if monthly_ratio >= self.alert_threshold and "monthly_threshold" not in self._alerts_sent:
+        monthly_ratio: float | int = (
+            self.month_spend / self.monthly_limit if self.monthly_limit > 0 else 0
+        )
+        if (
+            monthly_ratio >= self.alert_threshold
+            and "monthly_threshold" not in self._alerts_sent
+        ):
             self._send_alert(
                 BudgetAlert(
                     alert_type="threshold",
@@ -278,5 +289,7 @@ class BudgetManager:
         if self._alert_callback:
             try:
                 self._alert_callback(alert)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Alert callback failed: {e}")

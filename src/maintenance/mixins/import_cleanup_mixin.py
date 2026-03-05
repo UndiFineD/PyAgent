@@ -23,10 +23,13 @@ from typing import Dict, List, Tuple
 
 logger: logging.Logger = logging.getLogger(__name__)
 
+
 class ImportCleanupMixin:
     """Provides utilities for resolving and fixing Python imports after refactors."""
 
-    def build_module_map(self, root_dir: Path, dirs: List[str]) -> Dict[Tuple[str, str], str]:
+    def build_module_map(
+        self, root_dir: Path, dirs: List[str]
+    ) -> Dict[Tuple[str, str], str]:
         """
         Builds a map from (parent_path_lower, name_lower) to actual_case_name.
         Useful for fixing imports after snake_case renaming.
@@ -52,7 +55,7 @@ class ImportCleanupMixin:
         current_file: Path,
         name_map: Dict[Tuple[str, str], str],
         root_dir: Path,
-        search_dirs: List[str]
+        search_dirs: List[str],
     ) -> str:
         """Resolves a module string to its correct casing and path."""
         parts: List[str] = mod_str.split(".")
@@ -60,7 +63,7 @@ class ImportCleanupMixin:
             # Relative import
             m: re.Match[str] | None = re.match(r"^(\.+)", mod_str)
             dots: int = len(m.group(1))
-            rel_parts: List[str] = parts[dots-1:]
+            rel_parts: List[str] = parts[dots - 1 :]
             if rel_parts and rel_parts[0].startswith("."):
                 rel_parts[0] = rel_parts[0].lstrip(".")
             if rel_parts and not rel_parts[0]:
@@ -109,24 +112,41 @@ class ImportCleanupMixin:
                     break
             return ".".join(res)
 
-    def fix_imports_in_file(self, file_path: Path, name_map: dict[tuple[str, str], str], root_dir: Path, search_dirs: list[str]) -> bool:
+    def fix_imports_in_file(
+        self,
+        file_path: Path,
+        name_map: dict[tuple[str, str], str],
+        root_dir: Path,
+        search_dirs: list[str],
+    ) -> bool:
         """Updates imports in a file to match the actual filesystem casing/naming."""
         try:
             content: str = file_path.read_text(encoding="utf-8")
 
             def replacer(match) -> str:
                 mod = match.group(2)
-                resolved: str = self.resolve_module_path(mod, file_path, name_map, root_dir, search_dirs)
+                resolved: str = self.resolve_module_path(
+                    mod, file_path, name_map, root_dir, search_dirs
+                )
                 return f"{match.group(1)}{resolved}"
 
             # Regex for 'import ...' and 'from ... import ...'
-            new_content: str = re.sub(r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE)
-            new_content: str = re.sub(r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)", replacer, new_content, flags=re.MULTILINE)
+            new_content: str = re.sub(
+                r"^(import\s+)([a-zA-Z0-9_\.]+)", replacer, content, flags=re.MULTILINE
+            )
+            new_content: str = re.sub(
+                r"^(from\s+)([a-zA-Z0-9_\.]+)(?=\s+import)",
+                replacer,
+                new_content,
+                flags=re.MULTILINE,
+            )
 
             if new_content != content:
                 file_path.write_text(new_content, encoding="utf-8")
                 return True
             return False
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Failed to fix imports in {file_path}: {e}")
             return False

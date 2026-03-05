@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_privilegeescalationmixin_exists():
     """Test that PrivilegeEscalationMixin class exists and is importable."""
-    assert 'PrivilegeEscalationMixin' in dir()
+    assert "PrivilegeEscalationMixin" in dir()
 
 
 def test_privilegeescalationmixin_instantiation():
@@ -45,4 +45,3 @@ def test_privilegeescalationmixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

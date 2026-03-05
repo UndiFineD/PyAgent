@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_profilestats_exists():
     """Test that ProfileStats class exists and is importable."""
-    assert 'ProfileStats' in dir()
+    assert "ProfileStats" in dir()
 
 
 def test_profilingcore_exists():
     """Test that ProfilingCore class exists and is importable."""
-    assert 'ProfilingCore' in dir()
+    assert "ProfilingCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

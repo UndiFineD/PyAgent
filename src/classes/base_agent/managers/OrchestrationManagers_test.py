@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_agentcomposer_exists():
     """Test that AgentComposer class exists and is importable."""
-    assert 'AgentComposer' in dir()
+    assert "AgentComposer" in dir()
 
 
 def test_agentcomposer_instantiation():
@@ -44,20 +44,19 @@ def test_agentcomposer_instantiation():
 
 def test_modelselector_exists():
     """Test that ModelSelector class exists and is importable."""
-    assert 'ModelSelector' in dir()
+    assert "ModelSelector" in dir()
 
 
 def test_qualityscorer_exists():
     """Test that QualityScorer class exists and is importable."""
-    assert 'QualityScorer' in dir()
+    assert "QualityScorer" in dir()
 
 
 def test_abtest_exists():
     """Test that ABTest class exists and is importable."""
-    assert 'ABTest' in dir()
+    assert "ABTest" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

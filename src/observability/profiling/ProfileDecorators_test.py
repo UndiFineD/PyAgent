@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_profileresult_exists():
     """Test that ProfileResult class exists and is importable."""
-    assert 'ProfileResult' in dir()
+    assert "ProfileResult" in dir()
 
 
 def test_profileaccumulator_exists():
     """Test that ProfileAccumulator class exists and is importable."""
-    assert 'ProfileAccumulator' in dir()
+    assert "ProfileAccumulator" in dir()
 
 
 def test_profileaccumulator_instantiation():
@@ -85,4 +85,3 @@ def test_reset_profile_data_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

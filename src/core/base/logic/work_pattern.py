@@ -33,7 +33,9 @@ class BaseWorkPattern(abc.ABC):
         self.description = description
 
     @abc.abstractmethod
-    async def execute(self, input_data: Any, context: CascadeContext, **kwargs: Any) -> Any:
+    async def execute(
+        self, input_data: Any, context: CascadeContext, **kwargs: Any
+    ) -> Any:
         """Execute the work pattern orchestration."""
         pass
 
@@ -46,10 +48,12 @@ class PeerReviewPattern(BaseWorkPattern):
     def __init__(self):
         super().__init__(
             name="peer_review",
-            description="A loop regarding structured task execution with iterative reviews."
+            description="A loop regarding structured task execution with iterative reviews.",
         )
 
-    async def execute(self, input_data: Any, context: CascadeContext, **kwargs: Any) -> Any:
+    async def execute(
+        self, input_data: Any, context: CascadeContext, **kwargs: Any
+    ) -> Any:
         """
         Executes the Peer-Review pattern.
         Expected kwargs: 'planner', 'executor', 'reviewer', 'eval_threshold', 'max_retries'.

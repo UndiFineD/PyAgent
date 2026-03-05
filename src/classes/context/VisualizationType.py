@@ -16,8 +16,10 @@ import logging
 import re
 import zlib
 
+
 class VisualizationType(Enum):
     """Types of context visualization."""
+
     DEPENDENCY_GRAPH = "dependency_graph"
     CALL_HIERARCHY = "call_hierarchy"
     FILE_TREE = "file_tree"

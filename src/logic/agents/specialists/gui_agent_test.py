@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "UIElement"), "UIElement missing"
     assert hasattr(mod, "UIAction"), "UIAction missing"
     assert hasattr(mod, "GUIAgent"), "GUIAgent missing"
-

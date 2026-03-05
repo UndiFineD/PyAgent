@@ -3,6 +3,7 @@
 from typing import Any
 from src.core.base.models import AgentPriority
 
+
 class IdentityMixin:
     """Handles agent identity, configuration, and capabilities."""
 
@@ -19,7 +20,9 @@ class IdentityMixin:
         """Emits a signal with agent capabilities for discovery."""
         try:
             import asyncio
-            from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+            from src.infrastructure.orchestration.signals.SignalRegistry import (
+                SignalRegistry,
+            )
 
             signals = SignalRegistry()
             # Note: We expect the class using this mixin to have agent_logic_core

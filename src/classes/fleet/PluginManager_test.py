@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_pluginmanager_exists():
     """Test that PluginManager class exists and is importable."""
-    assert 'PluginManager' in dir()
+    assert "PluginManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

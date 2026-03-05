@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,45 +28,48 @@ from typing import List
 
 __version__ = VERSION
 
+
 class ContextCompressorCore:
     """Pure logic core for code and document compression."""
-    
+
     @staticmethod
     def compress_python(content: str) -> str:
         """Removes function bodies and keeps only class/function signatures using AST."""
         try:
             tree = ast.parse(content)
             compressed_lines: list[str] = []
-            
-            # Use a visitor pattern for cleaner separation if needed, 
-            # but for simple signature extraction, a walk is acceptable 
+
+            # Use a visitor pattern for cleaner separation if needed,
+            # but for simple signature extraction, a walk is acceptable
             # as long as we maintain some structure.
-            
+
             for node in ast.walk(tree):
                 if isinstance(node, ast.ClassDef):
                     bases_str = ""
                     if node.bases:
                         try:
-                            bases_str = f"({', '.join([ast.unparse(b) for b in node.bases])})"
+                            bases_str = (
+                                f"({', '.join([ast.unparse(b) for b in node.bases])})"
+                            )
                         except Exception:
                             bases_str = "(...)"
                     compressed_lines.append(f"class {node.name}{bases_str}:")
-                        
+
                 elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     try:
                         args_str = ast.unparse(node.args)
                     except Exception:
                         args_str = "..."
-                    
+
                     prefix = "async " if isinstance(node, ast.AsyncFunctionDef) else ""
-                    # Note: Detecting indentation level in a walk is hard. 
+                    # Note: Detecting indentation level in a walk is hard.
                     # We'll just list them as signatures for now.
                     compressed_lines.append(f"{prefix}def {node.name}({args_str}): ...")
-            
+
             # Deduplicate and sort to provide a stable signature
             unique_signatures = sorted(list(set(compressed_lines)))
             return "\n".join(unique_signatures)
-            
+
         except Exception:
             # Fallback to simple regex if AST fails (e.g. invalid syntax)
             return ContextCompressorCore.regex_fallback_compress(content)
@@ -73,7 +77,11 @@ class ContextCompressorCore:
     @staticmethod
     def regex_fallback_compress(content: str) -> str:
         """Simple regex-based signature extraction for Python."""
-        signatures = re.findall(r"^\s*(?:async\s+)?(?:def|class)\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:", content, re.MULTILINE)
+        signatures = re.findall(
+            r"^\s*(?:async\s+)?(?:def|class)\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:",
+            content,
+            re.MULTILINE,
+        )
         return "\n".join([s.strip() for s in signatures])
 
     @staticmethod

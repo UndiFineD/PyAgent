@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -7,6 +8,7 @@ from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from src.logic.agents.security.ComplianceAgent import ComplianceAgent
+
 
 class PrivacyAssessmentMixin:
     """Mixin for conducting Privacy Impact Assessments in ComplianceAgent."""
@@ -50,11 +52,9 @@ class PrivacyAssessmentMixin:
 
         return {
             "pia_score": max(0, score),
-            "risk_assessment": "High"
-            if score < 50
-            else "Medium"
-            if score < 80
-            else "Low",
+            "risk_assessment": (
+                "High" if score < 50 else "Medium" if score < 80 else "Low"
+            ),
             "findings": risks,
             "recommendations": self._get_pia_recommendations(risks),
             "timestamp": time.time(),

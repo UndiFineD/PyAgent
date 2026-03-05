@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "FreeBlockQueue"), "FreeBlockQueue missing"
     assert hasattr(mod, "BlockHashCache"), "BlockHashCache missing"
     assert hasattr(mod, "BlockPool"), "BlockPool missing"
-

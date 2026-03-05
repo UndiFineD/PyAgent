@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,9 +31,10 @@ from src.logic.cognitive.MemoryConsolidatorCore import MemoryConsolidatorCore
 
 __version__ = VERSION
 
+
 class MemoryConsolidator:
     """Manages the 'Sleep & Consolidate' phase for agents.
-    
+
     Acts as the I/O Shell for MemoryConsolidatorCore.
     """
 
@@ -52,28 +54,28 @@ class MemoryConsolidator:
         """Processes daily buffer into distilled long-term insights."""
         if not self.daily_buffer:
             return "No interactions to consolidate."
-            
+
         logging.info("Entering sleep phase: Consolidating memories...")
-        
+
         # Pure logic distillation
         consolidated_insights = self.core.distill_buffer(self.daily_buffer)
-            
+
         # I/O: Append to long-term storage
         memory = self._load_memory()
         daily_record = self.core.format_daily_memory(consolidated_insights)
         memory.append(daily_record)
-        
+
         self._save_memory(memory)
-        
+
         total_interactions = len(self.daily_buffer)
-        self.daily_buffer = [] # Clear buffer
+        self.daily_buffer = []  # Clear buffer
         return f"Consolidated {total_interactions} interactions into {len(consolidated_insights)} insights."
 
     def _load_memory(self) -> list[dict[str, Any]]:
         """I/O: Load memory from disk."""
         if self.long_term_memory_file.exists():
             try:
-                with open(self.long_term_memory_file, encoding='utf-8') as f:
+                with open(self.long_term_memory_file, encoding="utf-8") as f:
                     return json.load(f)
             except Exception as e:
                 logging.error(f"Failed to load memory: {e}")
@@ -82,11 +84,11 @@ class MemoryConsolidator:
     def _save_memory(self, memory: list[dict[str, Any]]) -> None:
         """I/O: Save memory to disk."""
         try:
-            with open(self.long_term_memory_file, 'w', encoding='utf-8') as f:
+            with open(self.long_term_memory_file, "w", encoding="utf-8") as f:
                 json.dump(memory, f, indent=2)
         except Exception as e:
             logging.error(f"Failed to save memory: {e}")
-            
+
     def query_long_term_memory(self, query: str) -> list[str]:
         """I/O and Core combined search."""
         memory = self._load_memory()

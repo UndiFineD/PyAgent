@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_governancemixin_exists():
     """Test that GovernanceMixin class exists and is importable."""
-    assert 'GovernanceMixin' in dir()
+    assert "GovernanceMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,29 +29,37 @@ __version__ = VERSION
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
 class ModalTeleportationOrchestrator:
     """
     Implements Cross-Modal Teleportation (Phase 33).
     Converts task state between different modalities (e.g., GUI -> Code, Voice -> SQL).
     """
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    def teleport_state(self, source_modality: str, target_modality: str, source_data: Any) -> Any:
+    def teleport_state(
+        self, source_modality: str, target_modality: str, source_data: Any
+    ) -> Any:
         """
         Converts data from one modality to another.
         """
-        logging.info(f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}")
-        
+        logging.info(
+            f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}"
+        )
+
         # In a real system, this would use specialized agents (Linguistic, SQL, Android) to bridge the gap.
         # Example: GUI Actions -> Python Script
-        
-        
+
         # Use ReasoningAgent or LinguisticAgent to perform the translation
         try:
             # We use LinguisticAgent for cross-modal articulation/translation
-            result = self.fleet.call_by_capability("articulate_results", technical_report=str(source_data), user_query=f"Convert to {target_modality}")
+            result = self.fleet.call_by_capability(
+                "articulate_results",
+                technical_report=str(source_data),
+                user_query=f"Convert to {target_modality}",
+            )
             return result
         except Exception as e:
             logging.error(f"Teleportation failed: {e}")

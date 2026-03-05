@@ -14,6 +14,7 @@ def _load_module():
 def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "MultiModalRegistry"), "MultiModalRegistry missing"
-    assert hasattr(mod, "process_multimodal_inputs"), "process_multimodal_inputs missing"
+    assert hasattr(
+        mod, "process_multimodal_inputs"
+    ), "process_multimodal_inputs missing"
     assert hasattr(mod, "get_placeholder_tokens"), "get_placeholder_tokens missing"
-

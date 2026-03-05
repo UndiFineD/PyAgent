@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -64,7 +65,9 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             node_id: The ID of the node to fix.
             issue_type: The nature of the failure (e.g., 'crash', 'logical_loop', 'unauthorized_access').
         """
-        logging.info(f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})")
+        logging.info(
+            f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})"
+        )
 
         # simulated healing steps
         steps = [
@@ -74,7 +77,10 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "Step 4: Gradually restore node connections",
         ]
 
-        return f"Self-healing complete for {node_id}. Integrity Level: 100%. \n" + "\n".join(steps)
+        return (
+            f"Self-healing complete for {node_id}. Integrity Level: 100%. \n"
+            + "\n".join(steps)
+        )
 
     @as_tool
     def scan_for_injections(self, input_text: str) -> dict[str, Any]:
@@ -85,8 +91,7 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         findings = []
 
         try:
-            from rust_core import \
-                scan_injections_rust  # type: ignore[attr-defined]
+            from rust_core import scan_injections_rust  # type: ignore[attr-defined]
 
             rust_findings = scan_injections_rust(input_text)
             for idx, _ in rust_findings:
@@ -139,7 +144,9 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Disables an agent node suspected of being compromised or corrupted."""
         if agent_id not in self.quarantined_nodes:
             self.quarantined_nodes.append(agent_id)
-            logging.error(f"ImmuneSystem: Quarantining node '{agent_id}' due to safety breach.")
+            logging.error(
+                f"ImmuneSystem: Quarantining node '{agent_id}' due to safety breach."
+            )
             return f"Node {agent_id} has been quarantined."
         return f"Node {agent_id} is already in quarantine."
 
@@ -151,7 +158,9 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             sanitized = re.sub(pattern, "[CLEANSED]", sanitized)
         return sanitized
 
-    async def propose_autonomous_patch(self, vulnerability: str, insecure_code: str) -> str:
+    async def propose_autonomous_patch(
+        self, vulnerability: str, insecure_code: str
+    ) -> str:
         """
         Proposes a patch for a detected vulnerability using AI reasoning.
 
@@ -177,5 +186,7 @@ class ImmuneSystemAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation")
+    main = create_main_function(
+        ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation"
+    )
     main()

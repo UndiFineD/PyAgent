@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_coordinatormessage_exists():
     """Test that CoordinatorMessage class exists and is importable."""
-    assert 'CoordinatorMessage' in dir()
+    assert "CoordinatorMessage" in dir()
 
 
 def test_requestmessage_exists():
     """Test that RequestMessage class exists and is importable."""
-    assert 'RequestMessage' in dir()
+    assert "RequestMessage" in dir()
 
 
 def test_responsemessage_exists():
     """Test that ResponseMessage class exists and is importable."""
-    assert 'ResponseMessage' in dir()
+    assert "ResponseMessage" in dir()
 
 
 def test_controlmessage_exists():
     """Test that ControlMessage class exists and is importable."""
-    assert 'ControlMessage' in dir()
+    assert "ControlMessage" in dir()
 
 
 def test_metricsmessage_exists():
     """Test that MetricsMessage class exists and is importable."""
-    assert 'MetricsMessage' in dir()
+    assert "MetricsMessage" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

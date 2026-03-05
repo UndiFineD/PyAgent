@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_mapbuildermixin_exists():
     """Test that MapBuilderMixin class exists and is importable."""
-    assert 'MapBuilderMixin' in dir()
+    assert "MapBuilderMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

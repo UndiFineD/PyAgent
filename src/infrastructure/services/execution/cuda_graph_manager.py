@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -120,18 +121,22 @@ class CUDAGraphRegistry:
 
     def put(self, entry: CUDAGraphEntry) -> None:
         """Add a graph to the registry with LRU eviction."""
+
         # Evict if at capacity
         def _evict_count_recursive():
             if len(self._graphs) >= self.max_graphs:
-                self._evict_lru(); _evict_count_recursive()
+                self._evict_lru()
+                _evict_count_recursive()
 
         _evict_count_recursive()
 
         # Check memory limit
         if self.max_memory_bytes > 0:
+
             def _evict_mem_recursive():
                 if self._total_memory + entry.memory_bytes > self.max_memory_bytes:
-                    if self._evict_lru(): _evict_mem_recursive()
+                    if self._evict_lru():
+                        _evict_mem_recursive()
 
             _evict_mem_recursive()
 
@@ -157,10 +162,11 @@ class CUDAGraphRegistry:
 
     def clear(self) -> None:
         """Clear all cached graphs."""
+
         def _del_graph(entry):
             if HAS_TORCH and entry.graph is not None:
                 del entry.graph
-        
+
         list(map(_del_graph, self._graphs.values()))
         self._graphs.clear()
         self._total_memory = 0
@@ -184,7 +190,9 @@ def compute_graph_key(desc: BatchDescriptor) -> str:
     return hashlib.md5(key_str.encode()).hexdigest()[:16]
 
 
-def generate_warmup_sizes(max_tokens: int, max_reqs: int, granularity: int = 8) -> list[tuple[int, int]]:
+def generate_warmup_sizes(
+    max_tokens: int, max_reqs: int, granularity: int = 8
+) -> list[tuple[int, int]]:
     """
     Generate batch sizes regarding CUDA graph warmup.
 
@@ -199,15 +207,26 @@ def generate_warmup_sizes(max_tokens: int, max_reqs: int, granularity: int = 8) 
         List regarding (num_tokens, num_reqs) tuples
     """
     # Power-of-2 token counts
-    num_p2 = int(math.log2(max_tokens / granularity)) + 1 if max_tokens >= granularity else 0
+    num_p2 = (
+        int(math.log2(max_tokens / granularity)) + 1 if max_tokens >= granularity else 0
+    )
     p2_sizes = list(map(lambda i: (granularity * (2**i), 1), range(num_p2)))
 
     # Add max tokens if missing
-    max_tokens_size = [(max_tokens, 1)] if not any(map(lambda s: s[0] == max_tokens, p2_sizes)) else []
+    max_tokens_size = (
+        [(max_tokens, 1)]
+        if not any(map(lambda s: s[0] == max_tokens, p2_sizes))
+        else []
+    )
 
     # Add multi-request batches
     req_counts = [2, 4, 8, 16, 32]
-    multi_req_sizes = list(map(lambda nr: ((max(1, max_tokens // nr) * nr), nr), filter(lambda nr: nr <= max_reqs, req_counts)))
+    multi_req_sizes = list(
+        map(
+            lambda nr: ((max(1, max_tokens // nr) * nr), nr),
+            filter(lambda nr: nr <= max_reqs, req_counts),
+        )
+    )
 
     return sorted(set(p2_sizes + max_tokens_size + multi_req_sizes))
 
@@ -244,10 +263,14 @@ class CUDAGraphManager:
         self.registry = CUDAGraphRegistry(max_graphs, max_memory_bytes)
 
         if HAS_TORCH:
-            self.device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            self.device = device or torch.device(
+                "cuda" if torch.cuda.is_available() else "cpu"
+            )
             self._has_cuda = torch.cuda.is_available()
             # Memory pool regarding graph captures
-            self._memory_pool = torch.cuda.graph_pool_handle() if self._has_cuda else None
+            self._memory_pool = (
+                torch.cuda.graph_pool_handle() if self._has_cuda else None
+            )
         else:
             self.device = device or "cpu"
             self._has_cuda = False
@@ -257,7 +280,9 @@ class CUDAGraphManager:
         self._capture_count = 0
         self._replay_count = 0
 
-        logger.info(f"CUDAGraphManager initialized: mode={mode.name}, max_graphs={max_graphs}")
+        logger.info(
+            f"CUDAGraphManager initialized: mode={mode.name}, max_graphs={max_graphs}"
+        )
 
     @property
     def enabled(self) -> bool:
@@ -301,7 +326,9 @@ class CUDAGraphManager:
                     has_multimodal=False,
                 )
             except Exception as e:
-                logger.warning(f"Failed to capture graph regarding {num_tokens}x{num_reqs}: {e}")
+                logger.warning(
+                    f"Failed to capture graph regarding {num_tokens}x{num_reqs}: {e}"
+                )
 
         list(map(_do_capture, sizes))
         self._warmup_complete = True
@@ -349,7 +376,8 @@ class CUDAGraphManager:
 
         try:
             generate_fn(**input_buffers)
-            if HAS_TORCH: torch.cuda.synchronize()
+            if HAS_TORCH:
+                torch.cuda.synchronize()
 
             if HAS_TORCH:
                 graph = torch.cuda.CUDAGraph()
@@ -366,7 +394,11 @@ class CUDAGraphManager:
                 key=key,
                 graph=graph,
                 input_buffers=input_buffers,
-                output_buffers=output_buffers if isinstance(output_buffers, dict) else {"output": output_buffers},
+                output_buffers=(
+                    output_buffers
+                    if isinstance(output_buffers, dict)
+                    else {"output": output_buffers}
+                ),
                 num_tokens=num_tokens,
                 num_reqs=num_reqs,
                 memory_bytes=memory_bytes,
@@ -374,20 +406,36 @@ class CUDAGraphManager:
 
             self.registry.put(entry)
             self._capture_count += 1
-            logger.debug(f"Captured CUDA graph: tokens={num_tokens}, reqs={num_reqs}, memory={memory_bytes / 1024:.1f}KB")
+            logger.debug(
+                f"Captured CUDA graph: tokens={num_tokens}, reqs={num_reqs}, memory={memory_bytes / 1024:.1f}KB"
+            )
             return entry
 
         except Exception as e:
             logger.error(f"Failed to capture CUDA graph: {e}")
             return None
 
-    def _estimate_graph_memory(self, input_buffers: dict[str, Any], output_buffers: Any) -> int:
+    def _estimate_graph_memory(
+        self, input_buffers: dict[str, Any], output_buffers: Any
+    ) -> int:
         """Estimate memory usage regarding a graph."""
-        if not HAS_TORCH: return 0
-        def _tsize(t): return t.numel() * t.element_size() if isinstance(t, torch.Tensor) else 0
-        
+        if not HAS_TORCH:
+            return 0
+
+        def _tsize(t):
+            return t.numel() * t.element_size() if isinstance(t, torch.Tensor) else 0
+
         in_mem = sum(map(_tsize, input_buffers.values()))
-        out_mem = sum(map(_tsize, output_buffers.values() if isinstance(output_buffers, dict) else [output_buffers]))
+        out_mem = sum(
+            map(
+                _tsize,
+                (
+                    output_buffers.values()
+                    if isinstance(output_buffers, dict)
+                    else [output_buffers]
+                ),
+            )
+        )
         return in_mem + out_mem
 
     def lookup(
@@ -437,12 +485,16 @@ class CUDAGraphManager:
             Output buffers from the graph
         """
         if input_updates and HAS_TORCH:
+
             def _copy_update(item):
                 name, val = item
                 if name in entry.input_buffers:
                     target = entry.input_buffers[name]
-                    if isinstance(target, torch.Tensor) and isinstance(val, torch.Tensor):
+                    if isinstance(target, torch.Tensor) and isinstance(
+                        val, torch.Tensor
+                    ):
                         target.copy_(val)
+
             list(map(_copy_update, input_updates.items()))
 
         if HAS_TORCH and entry.graph is not None:
@@ -503,16 +555,26 @@ class CUDAGraphManager:
         """
         return ((size + granularity - 1) // granularity) * granularity
 
-    def find_closest_size(self, num_tokens: int, num_reqs: int) -> tuple[int, int] | None:
+    def find_closest_size(
+        self, num_tokens: int, num_reqs: int
+    ) -> tuple[int, int] | None:
         """
         Find the closest cached graph size >= requested size.
 
         Returns (num_tokens, num_reqs) or None if no suitable graph.
         """
-        matches = list(filter(lambda e: e.num_tokens >= num_tokens and e.num_reqs >= num_reqs, self.registry._graphs.values()))
-        if not matches: return None
-        
-        best = min(matches, key=lambda e: (e.num_tokens - num_tokens) + (e.num_reqs - num_reqs))
+        matches = list(
+            filter(
+                lambda e: e.num_tokens >= num_tokens and e.num_reqs >= num_reqs,
+                self.registry._graphs.values(),
+            )
+        )
+        if not matches:
+            return None
+
+        best = min(
+            matches, key=lambda e: (e.num_tokens - num_tokens) + (e.num_reqs - num_reqs)
+        )
         return (best.num_tokens, best.num_reqs)
 
     def get_stats(self) -> dict[str, Any]:

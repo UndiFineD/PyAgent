@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """

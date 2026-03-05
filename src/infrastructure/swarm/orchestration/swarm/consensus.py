@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class LogEntry:
     """Represents a log entry in the consensus protocol."""
+
     index: int
     term: int
     command: Dict[str, Any]
@@ -46,7 +47,9 @@ class SwarmConsensus:
             logger.debug(f"Node {self.node_id} proposing change as candidate leader.")
             self.is_leader = True
 
-        new_entry = LogEntry(index=len(self.log), term=self.term, command={"key": key, "val": value})
+        new_entry = LogEntry(
+            index=len(self.log), term=self.term, command={"key": key, "val": value}
+        )
         self.log.append(new_entry)
 
         # Simulate replication to peers

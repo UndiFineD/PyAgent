@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_sparsedispatcher_exists():
     """Test that SparseDispatcher class exists and is importable."""
-    assert 'SparseDispatcher' in dir()
+    assert "SparseDispatcher" in dir()
 
 
 def test_densedispatcher_exists():
     """Test that DenseDispatcher class exists and is importable."""
-    assert 'DenseDispatcher' in dir()
+    assert "DenseDispatcher" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -35,7 +35,9 @@ class ContextShard:
     start_token: int
     end_token: int
     rank_id: int  # The DP-rank (node) holding this shard
-    replica_ranks: List[int] = field(default_factory=list)  # Phase 75: Fault tolerance mirroring
+    replica_ranks: List[int] = field(
+        default_factory=list
+    )  # Phase 75: Fault tolerance mirroring
     overlap_size: int = 0  # Phase 78: Context overlap for sliding windows
     is_cached: bool = True
     last_access: float = field(default_factory=time.time)
@@ -92,7 +94,9 @@ class ContextShardManager:
             replicas = []
             if self.redundancy_factor > 1:
                 for r_idx in range(1, self.redundancy_factor):
-                    replicas.append(available_ranks[(rank_idx + r_idx) % len(available_ranks)])
+                    replicas.append(
+                        available_ranks[(rank_idx + r_idx) % len(available_ranks)]
+                    )
 
             shard = ContextShard(
                 shard_id=f"shard_{context_id}_{i}",
@@ -122,7 +126,9 @@ class ContextShardManager:
         shards = self.context_registry.get(context_id, [])
         for shard in shards:
             if shard.tenant_id != tenant_id:
-                logger.warning(f"Tenant mismatch for context access. Required: {tenant_id}, Found: {shard.tenant_id}")
+                logger.warning(
+                    f"Tenant mismatch for context access. Required: {tenant_id}, Found: {shard.tenant_id}"
+                )
                 continue
 
             if shard.start_token <= token_index < shard.end_token:
@@ -130,9 +136,13 @@ class ContextShardManager:
                 if shard.rank_id in self.dead_ranks:
                     for replica in shard.replica_ranks:
                         if replica not in self.dead_ranks:
-                            logger.info(f"Failover: Rank {shard.rank_id} is dead. Using replica on Rank {replica}.")
+                            logger.info(
+                                f"Failover: Rank {shard.rank_id} is dead. Using replica on Rank {replica}."
+                            )
                             return replica
-                    logger.error(f"Critical failure: All ranks for shard {shard.shard_id} are dead.")
+                    logger.error(
+                        f"Critical failure: All ranks for shard {shard.shard_id} are dead."
+                    )
                     return None
 
                 # Phase 65: Update access time
@@ -145,6 +155,8 @@ class ContextShardManager:
         if context_id in self.context_registry:
             num_shards = len(self.context_registry[context_id])
             del self.context_registry[context_id]
-            logger.info(f"FleetCleanup: Decommissioned context {context_id} ({num_shards} shards freed).")
+            logger.info(
+                f"FleetCleanup: Decommissioned context {context_id} ({num_shards} shards freed)."
+            )
             return True
         return False

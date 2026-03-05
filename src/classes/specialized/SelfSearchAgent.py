@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,9 +23,10 @@ import logging
 
 __version__ = VERSION
 
+
 class SelfSearchAgent(BaseAgent):
     """Provides internal knowledge retrieval using structural prompting (SSRL pattern)."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -65,7 +67,9 @@ Query: {query}
         """Returns the self-search results for a given query."""
         return self.perform_internal_search(query)
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
+
     main = create_main_function(SelfSearchAgent)
     main()

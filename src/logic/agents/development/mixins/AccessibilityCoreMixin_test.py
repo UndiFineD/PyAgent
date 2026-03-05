@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_accessibilitycoremixin_exists():
     """Test that AccessibilityCoreMixin class exists and is importable."""
-    assert 'AccessibilityCoreMixin' in dir()
+    assert "AccessibilityCoreMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SSEEvent"), "SSEEvent missing"
     assert hasattr(mod, "SSEStream"), "SSEStream missing"
     assert hasattr(mod, "StreamingHandler"), "StreamingHandler missing"
-

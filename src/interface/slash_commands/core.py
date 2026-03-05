@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -92,7 +93,9 @@ class CommandResult:
     """Whether output should be inserted inline."""
 
     @classmethod
-    def ok(cls, output: str, data: dict[str, Any] | None = None, inline: bool = True) -> CommandResult:
+    def ok(
+        cls, output: str, data: dict[str, Any] | None = None, inline: bool = True
+    ) -> CommandResult:
         """Create a successful result."""
         return cls(success=True, output=output, data=data or {}, inline=inline)
 
@@ -291,7 +294,9 @@ class CommandRegistry:
 # ============================================================================
 
 # Pattern: /command or /command arg1 arg2 (up to newline or next command)
-COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)", re.MULTILINE)
+COMMAND_PATTERN = re.compile(
+    r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)", re.MULTILINE
+)
 
 
 @dataclass
@@ -426,7 +431,9 @@ class SlashCommands:
         """Parse commands from prompt without executing."""
         return parse_commands(prompt)
 
-    def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
+    def execute(
+        self, command: str, args: list[str] | None = None, **metadata: Any
+    ) -> CommandResult:
         """
         Execute a single command.
 
@@ -443,7 +450,9 @@ class SlashCommands:
             return CommandResult.fail(f"Unknown command: {command}")
 
         if defn.requires_args and not args:
-            return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")
+            return CommandResult.fail(
+                f"Command /{command} requires arguments. Usage: {defn.usage}"
+            )
 
         ctx = CommandContext(
             command=command,
@@ -455,6 +464,7 @@ class SlashCommands:
             return defn.handler(ctx)
         except Exception as e:  # pylint: disable=broad-except
             import traceback
+
             print(f"Unexpected error in command handler: {e}\n{traceback.format_exc()}")
             return CommandResult.fail(str(e))
 
@@ -496,7 +506,10 @@ class SlashCommands:
                     result = defn.handler(ctx)
                 except Exception as e:  # pylint: disable=broad-except
                     import traceback
-                    print(f"Unexpected error in command handler: {e}\n{traceback.format_exc()}")
+
+                    print(
+                        f"Unexpected error in command handler: {e}\n{traceback.format_exc()}"
+                    )
                     result = CommandResult.fail(str(e))
             else:
                 result = CommandResult.fail(f"Unknown command: {cmd.command}")

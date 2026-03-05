@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_servicemesh_exists():
     """Test that ServiceMesh class exists and is importable."""
-    assert 'ServiceMesh' in dir()
+    assert "ServiceMesh" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

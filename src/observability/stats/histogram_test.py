@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ExponentialHistogram"), "ExponentialHistogram missing"
     assert hasattr(mod, "LatencyHistogram"), "LatencyHistogram missing"
     assert hasattr(mod, "SizeHistogram"), "SizeHistogram missing"
-

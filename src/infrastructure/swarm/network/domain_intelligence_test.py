@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_bugbountyprogram_exists():
     """Test that BugBountyProgram class exists and is importable."""
-    assert 'BugBountyProgram' in dir()
+    assert "BugBountyProgram" in dir()
 
 
 def test_domainintelligence_exists():
     """Test that DomainIntelligence class exists and is importable."""
-    assert 'DomainIntelligence' in dir()
+    assert "DomainIntelligence" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

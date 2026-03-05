@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "CausalConv1d"), "CausalConv1d missing"
     assert hasattr(mod, "SelectiveScan"), "SelectiveScan missing"
-

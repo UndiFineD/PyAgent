@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -265,7 +266,9 @@ class LazyAgentMap(dict):
             return instance
 
         except (ImportError, SyntaxError) as e:
-            logging.error(f"Critical load error for agent {key} from {module_path}: {e}")
+            logging.error(
+                f"Critical load error for agent {key} from {module_path}: {e}"
+            )
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
             return stub
@@ -287,9 +290,13 @@ class LazyAgentMap(dict):
 
     def _check_compatibility(self, key: str, module: Any) -> bool:
         """Checks if the agent module is compatible with current SDK version."""
-        min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
+        min_sdk = getattr(
+            module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0")
+        )
         if not self.core.is_compatible(min_sdk):
-            error_msg = f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
+            error_msg = (
+                f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
+            )
             logging.warning(error_msg)
             self._instances[key] = ResilientStub(key, error_msg)
             return False
@@ -301,7 +308,9 @@ class LazyAgentMap(dict):
             cls = getattr(module, name, None)
             if cls:
                 return cls
-        raise AttributeError(f"Module '{module.__name__}' has no attribute matching '{class_name}'.")
+        raise AttributeError(
+            f"Module '{module.__name__}' has no attribute matching '{class_name}'."
+        )
 
     def _get_agent_argument(self, arg_path_suffix: str | None) -> str:
         """Determines the workspace or specific path argument for agent initialization."""

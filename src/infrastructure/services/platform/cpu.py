@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,8 +25,15 @@ import platform
 from typing import List, Set
 
 from .base import Platform
-from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
-                     DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
+from .models import (
+    AttentionBackend,
+    DeviceCapability,
+    DeviceFeature,
+    DeviceInfo,
+    MemoryInfo,
+    PlatformType,
+    QuantizationType,
+)
 
 
 class CpuPlatform(Platform):
@@ -60,7 +68,9 @@ class CpuPlatform(Platform):
                 reserved_bytes=0,
             )
         except ImportError:
-            return MemoryInfo(total_bytes=0, free_bytes=0, used_bytes=0, reserved_bytes=0)
+            return MemoryInfo(
+                total_bytes=0, free_bytes=0, used_bytes=0, reserved_bytes=0
+            )
 
     def get_device_features(self, _device_id: int = 0) -> DeviceFeature:
         features = DeviceFeature.FP16
@@ -83,7 +93,11 @@ class CpuPlatform(Platform):
         }
 
     def get_attention_backends(self) -> List[AttentionBackend]:
-        return [AttentionBackend.CPU, AttentionBackend.TORCH_SDPA, AttentionBackend.DEFAULT]
+        return [
+            AttentionBackend.CPU,
+            AttentionBackend.TORCH_SDPA,
+            AttentionBackend.DEFAULT,
+        ]
 
     def get_device_info(self, device_id: int = 0) -> DeviceInfo:
         return DeviceInfo(
@@ -95,5 +109,7 @@ class CpuPlatform(Platform):
             features=self.get_device_features(device_id),
         )
 
-    def select_attention_backend(self, _capability: DeviceCapability) -> AttentionBackend:
+    def select_attention_backend(
+        self, _capability: DeviceCapability
+    ) -> AttentionBackend:
         return AttentionBackend.CPU

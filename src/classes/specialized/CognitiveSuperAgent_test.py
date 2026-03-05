@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_cognitivesuperagent_exists():
     """Test that CognitiveSuperAgent class exists and is importable."""
-    assert 'CognitiveSuperAgent' in dir()
+    assert "CognitiveSuperAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

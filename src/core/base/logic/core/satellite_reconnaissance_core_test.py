@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_satelliteasset_exists():
     """Test that SatelliteAsset class exists and is importable."""
-    assert 'SatelliteAsset' in dir()
+    assert "SatelliteAsset" in dir()
 
 
 def test_satellitereconresult_exists():
     """Test that SatelliteReconResult class exists and is importable."""
-    assert 'SatelliteReconResult' in dir()
+    assert "SatelliteReconResult" in dir()
 
 
 def test_satellitereconconfig_exists():
     """Test that SatelliteReconConfig class exists and is importable."""
-    assert 'SatelliteReconConfig' in dir()
+    assert "SatelliteReconConfig" in dir()
 
 
 def test_satellitereconnaissancecore_exists():
     """Test that SatelliteReconnaissanceCore class exists and is importable."""
-    assert 'SatelliteReconnaissanceCore' in dir()
+    assert "SatelliteReconnaissanceCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

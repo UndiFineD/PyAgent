@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LogitBiasLogitsProcessor"), "LogitBiasLogitsProcessor missing"
     assert hasattr(mod, "CompositeLogitsProcessor"), "CompositeLogitsProcessor missing"
     assert hasattr(mod, "LogitsProcessorRegistry"), "LogitsProcessorRegistry missing"
-

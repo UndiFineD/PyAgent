@@ -13,6 +13,7 @@ def _load_module():
 
 def test_imports_and_symbols():
     mod = _load_module()
-    assert hasattr(mod, "extract_graph_entities_regex"), "extract_graph_entities_regex missing"
+    assert hasattr(
+        mod, "extract_graph_entities_regex"
+    ), "extract_graph_entities_regex missing"
     assert hasattr(mod, "build_graph_edges_rust"), "build_graph_edges_rust missing"
-

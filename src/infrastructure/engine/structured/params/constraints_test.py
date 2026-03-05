@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ChoiceConstraint"), "ChoiceConstraint missing"
     assert hasattr(mod, "GrammarConstraint"), "GrammarConstraint missing"
     assert hasattr(mod, "TypeConstraint"), "TypeConstraint missing"
-

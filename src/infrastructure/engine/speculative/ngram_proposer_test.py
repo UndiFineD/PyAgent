@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "PromptLookupProposer"), "PromptLookupProposer missing"
     assert hasattr(mod, "HybridNgramProposer"), "HybridNgramProposer missing"
     assert hasattr(mod, "NgramProposerFactory"), "NgramProposerFactory missing"
-

@@ -68,7 +68,12 @@ class TransitionDynamics:
         return len(self._history)
 
     def record_transition(
-        self, state: Any, action: Any, next_state: Any, reward: float = 0.0, done: bool = False
+        self,
+        state: Any,
+        action: Any,
+        next_state: Any,
+        reward: float = 0.0,
+        done: bool = False,
     ) -> None:
         """Records a transition and updates statistics."""
         key = (state, action)
@@ -80,7 +85,9 @@ class TransitionDynamics:
         stats = self._stats[key]
         stats.visit_count += 1
         stats.total_reward += reward
-        stats.next_state_counts[next_state] = stats.next_state_counts.get(next_state, 0) + 1
+        stats.next_state_counts[next_state] = (
+            stats.next_state_counts.get(next_state, 0) + 1
+        )
 
         # Track states and actions
         self._states.add(state)
@@ -100,7 +107,9 @@ class TransitionDynamics:
             )
         )
 
-    def get_transition_probability(self, state: Any, action: Any, next_state: Any) -> float:
+    def get_transition_probability(
+        self, state: Any, action: Any, next_state: Any
+    ) -> float:
         """Returns P(s'|s, a) with Laplace smoothing."""
         key = (state, action)
 
@@ -128,7 +137,10 @@ class TransitionDynamics:
         stats = self._stats[key]
         total = stats.visit_count
 
-        return {next_state: count / total for next_state, count in stats.next_state_counts.items()}
+        return {
+            next_state: count / total
+            for next_state, count in stats.next_state_counts.items()
+        }
 
     def predict_next_state(self, state: Any, action: Any) -> Optional[Any]:
         """Stochastic prediction of the next state based on history."""
@@ -212,7 +224,11 @@ class TransitionDynamics:
         stats = self._stats[key]
         visit_uncertainty = 1.0 / (1.0 + stats.visit_count)
         entropy = self.compute_entropy(state, action)
-        max_entropy = math.log(len(stats.next_state_counts) + 1) if stats.next_state_counts else 1.0
+        max_entropy = (
+            math.log(len(stats.next_state_counts) + 1)
+            if stats.next_state_counts
+            else 1.0
+        )
         entropy_normalized = entropy / max_entropy if max_entropy > 0 else 0.0
 
         return (visit_uncertainty + entropy_normalized) / 2.0
@@ -231,7 +247,9 @@ class TransitionDynamics:
 
         return max(self._stats[key].next_state_counts.items(), key=lambda x: x[1])[0]
 
-    def get_transition_matrix(self, states: List[Any], action: Any) -> List[List[float]]:
+    def get_transition_matrix(
+        self, states: List[Any], action: Any
+    ) -> List[List[float]]:
         """Builds a transition probability matrix for a given action."""
         n = len(states)
         state_to_idx = {s: i for i, s in enumerate(states)}
@@ -246,7 +264,9 @@ class TransitionDynamics:
 
         return matrix
 
-    def sample_trajectory(self, start_state: Any, steps: int = 10) -> List[TransitionRecord]:
+    def sample_trajectory(
+        self, start_state: Any, steps: int = 10
+    ) -> List[TransitionRecord]:
         """Samples a trajectory from the learned dynamics."""
         trajectory = []
         state = start_state
@@ -261,7 +281,9 @@ class TransitionDynamics:
                 break
 
             reward = self.predict_expected_reward(state, action)
-            record = self._create_transition_record(state, action, next_state, reward, step)
+            record = self._create_transition_record(
+                state, action, next_state, reward, step
+            )
             trajectory.append(record)
 
             state = next_state
@@ -277,7 +299,12 @@ class TransitionDynamics:
     ) -> TransitionRecord:
         """Create a transition record for the trajectory."""
         return TransitionRecord(
-            state=state, action=action, next_state=next_state, reward=reward, done=False, timestamp=step
+            state=state,
+            action=action,
+            next_state=next_state,
+            reward=reward,
+            done=False,
+            timestamp=step,
         )
 
     def get_stats_summary(self) -> Dict[str, Any]:
@@ -287,7 +314,9 @@ class TransitionDynamics:
             "action_space_size": self.action_space_size,
             "total_transitions": self.transition_count,
             "unique_state_action_pairs": len(self._stats),
-            "avg_transitions_per_pair": (self.transition_count / len(self._stats) if self._stats else 0),
+            "avg_transitions_per_pair": (
+                self.transition_count / len(self._stats) if self._stats else 0
+            ),
         }
 
     def clear(self) -> None:

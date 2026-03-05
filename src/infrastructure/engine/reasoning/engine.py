@@ -23,9 +23,13 @@ from typing import Dict, Generator, Iterator, Optional, Tuple
 
 from .data_classes import ParseResult, ThinkingBlock, ToolCall
 from .enums import ParseState, ReasoningFormat, ToolCallFormat
-from .implementations import (DeepSeekReasoningParser, GenericReasoningParser,
-                              HermesToolParser, OpenAIToolParser,
-                              QwenReasoningParser)
+from .implementations import (
+    DeepSeekReasoningParser,
+    GenericReasoningParser,
+    HermesToolParser,
+    OpenAIToolParser,
+    QwenReasoningParser,
+)
 from .parsers import ReasoningParser, ToolParser
 
 
@@ -62,7 +66,9 @@ class ReasoningEngine:
         self._tool_parser: Optional[ToolParser] = None
 
         if reasoning_format != ReasoningFormat.NONE:
-            parser_cls = self._reasoning_parsers.get(reasoning_format, GenericReasoningParser)
+            parser_cls = self._reasoning_parsers.get(
+                reasoning_format, GenericReasoningParser
+            )
             self._reasoning_parser = parser_cls()
 
         if tool_format != ToolCallFormat.NONE:
@@ -155,8 +161,16 @@ class ReasoningEngine:
         if len(steps) >= 5:
             score += 0.1
         logical_markers = [
-            "therefore", "because", "thus", "hence", "so",
-            "first", "second", "finally", "step", "let's"
+            "therefore",
+            "because",
+            "thus",
+            "hence",
+            "so",
+            "first",
+            "second",
+            "finally",
+            "step",
+            "let's",
         ]
         for marker in logical_markers:
             if marker.lower() in content.lower():
@@ -197,7 +211,9 @@ class ReasoningEngine:
 
 
 def create_reasoning_engine(
-    model_name: str = "", enable_thinking: bool = True, tool_format: ToolCallFormat = ToolCallFormat.NONE
+    model_name: str = "",
+    enable_thinking: bool = True,
+    tool_format: ToolCallFormat = ToolCallFormat.NONE,
 ) -> ReasoningEngine:
     """Create a reasoning engine based on model name."""
     reasoning_format = ReasoningFormat.GENERIC
@@ -211,11 +227,20 @@ def create_reasoning_engine(
     elif "mistral" in model_lower:
         reasoning_format = ReasoningFormat.MISTRAL
 
-    return ReasoningEngine(reasoning_format=reasoning_format, tool_format=tool_format, enable_thinking=enable_thinking)
+    return ReasoningEngine(
+        reasoning_format=reasoning_format,
+        tool_format=tool_format,
+        enable_thinking=enable_thinking,
+    )
 
 
-def create_tool_parser(format_type: ToolCallFormat = ToolCallFormat.OPENAI, strict: bool = False) -> ToolParser:
+def create_tool_parser(
+    format_type: ToolCallFormat = ToolCallFormat.OPENAI, strict: bool = False
+) -> ToolParser:
     """Create a tool parser for specified format."""
-    parsers = {ToolCallFormat.OPENAI: OpenAIToolParser, ToolCallFormat.HERMES: HermesToolParser}
+    parsers = {
+        ToolCallFormat.OPENAI: OpenAIToolParser,
+        ToolCallFormat.HERMES: HermesToolParser,
+    }
     parser_cls = parsers.get(format_type, OpenAIToolParser)
     return parser_cls(strict=strict)

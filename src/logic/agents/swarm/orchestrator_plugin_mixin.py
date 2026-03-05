@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +40,9 @@ class OrchestratorPluginMixin:
 
         plugin.setup()
         self.plugins[plugin.name] = plugin
-        logging.info(f"Registered plugin: {plugin.name} (priority: {plugin.priority.name})")
+        logging.info(
+            f"Registered plugin: {plugin.name} (priority: {plugin.priority.name})"
+        )
 
     def unregister_plugin(self, plugin_name: str) -> bool:
         """Unregister a plugin by name."""
@@ -111,13 +114,17 @@ class OrchestratorPluginMixin:
                 continue
 
             try:
-                spec = importlib.util.spec_from_file_location(config.name, config.module_path)
+                spec = importlib.util.spec_from_file_location(
+                    config.name, config.module_path
+                )
                 if spec and spec.loader:
                     module = importlib.util.module_from_spec(spec)
                     spec.loader.exec_module(module)
                     plugin_class = getattr(module, config.entry_point, None)
                     if plugin_class and issubclass(plugin_class, AgentPluginBase):
-                        plugin = plugin_class(config.name, config.priority, config.config)
+                        plugin = plugin_class(
+                            config.name, config.priority, config.config
+                        )
                         self.register_plugin(plugin)
             except (ImportError, AttributeError, SyntaxError) as e:
                 logging.error(f"Failed to load plugin {config.name}: {e}")

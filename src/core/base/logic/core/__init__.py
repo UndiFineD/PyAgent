@@ -1,7 +1,7 @@
-
 """
 Core package.
 """
+
 # Copyright 2026 PyAgent Authors
 from .events import EventCore  # noqa: F401
 from .formatting import FormattingCore  # noqa: F401

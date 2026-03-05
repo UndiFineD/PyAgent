@@ -3,6 +3,7 @@
 Module: knowledge_mixin
 Provides knowledge and context management mixin for PyAgent agents.
 """
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,22 +39,34 @@ class KnowledgeMixin:
             # pylint: disable=import-outside-toplevel
             from src.core.knowledge.knowledge_engine import KnowledgeEngine
 
-            self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=workspace_root / "data/agents")
+            self.knowledge = KnowledgeEngine(
+                agent_id=agent_name, base_path=workspace_root / "data/agents"
+            )
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
 
-        self.sharded_knowledge: ShardedKnowledgeCore = ShardedKnowledgeCore(base_path=workspace_root / "data/agents")
+        self.sharded_knowledge: ShardedKnowledgeCore = ShardedKnowledgeCore(
+            base_path=workspace_root / "data/agents"
+        )
         self._local_global_context: Any = None
         self._workspace_root: Path = workspace_root
         self._notes: list[str] = []
         self._prompt_templates: dict[str, Any] = {}
 
     def store_episode(
-        self, task: str, content: str, success: bool, metadata: dict[str, Any] | None = None
+        self,
+        task: str,
+        content: str,
+        success: bool,
+        metadata: dict[str, Any] | None = None,
     ) -> dict[str, Any]:
         """Creates and stores an episodic memory via MemoryCore."""
         episode: Dict[str, Any] = self.memory_core.create_episode(
-            agent_id=self.agent_name, task=task, content=content, success=success, metadata=metadata
+            agent_id=self.agent_name,
+            task=task,
+            content=content,
+            success=success,
+            metadata=metadata,
         )
         self.memory_core.store_knowledge(
             agent_id=self.agent_name,
@@ -102,19 +115,29 @@ class KnowledgeMixin:
     def _build_prompt_with_history(self, prompt: str) -> str:
         """Build a prompt string including history."""
         history: list[Any] = self.get_history()
-        history_text: str = "\n".join([f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}" for m in history])
+        history_text: str = "\n".join(
+            [
+                f"{getattr(m, 'role', 'user')}: {getattr(m, 'content', m)}"
+                for m in history
+            ]
+        )
         return f"{history_text}\nUSER: {prompt}"
 
     @property
     def global_context(self) -> Any:
         """Access global context engine."""
-        if hasattr(self, "fleet") and getattr(self, "fleet") and hasattr(getattr(self, "fleet"), "global_context"):
+        if (
+            hasattr(self, "fleet")
+            and getattr(self, "fleet")
+            and hasattr(getattr(self, "fleet"), "global_context")
+        ):
             return getattr(getattr(self, "fleet"), "global_context")
         if self._local_global_context is None:
             try:
                 # pylint: disable=import-outside-toplevel
-                from src.logic.agents.cognitive.context.engines.global_context_engine import \
-                    GlobalContextEngine
+                from src.logic.agents.cognitive.context.engines.global_context_engine import (
+                    GlobalContextEngine,
+                )
 
                 self._local_global_context = GlobalContextEngine(self._workspace_root)
             except (ImportError, ValueError):

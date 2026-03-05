@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_temporalshardagent_exists():
     """Test that TemporalShardAgent class exists and is importable."""
-    assert 'TemporalShardAgent' in dir()
+    assert "TemporalShardAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

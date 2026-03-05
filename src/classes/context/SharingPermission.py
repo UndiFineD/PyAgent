@@ -16,8 +16,10 @@ import logging
 import re
 import zlib
 
+
 class SharingPermission(Enum):
     """Permission levels for context sharing."""
+
     READ_ONLY = "read_only"
     READ_WRITE = "read_write"
     ADMIN = "admin"

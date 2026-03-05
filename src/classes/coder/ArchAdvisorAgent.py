@@ -9,9 +9,10 @@ from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function
 from src.classes.context.GraphContextEngine import GraphContextEngine
 
+
 class ArchAdvisorAgent(BaseAgent):
     """Analyzes codebase coupling and suggests architectural refactors."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -29,37 +30,41 @@ class ArchAdvisorAgent(BaseAgent):
         """Identifies modules with too many outgoing or incoming dependencies."""
         self.graph_engine.scan_project()
         graph = self.graph_engine.graph
-        
+
         # Calculate In-degree and Out-degree
         out_degree = {k: len(v) for k, v in graph.items()}
         in_degree = {}
         for src, targets in graph.items():
             for t in targets:
                 in_degree[t] = in_degree.get(t, 0) + 1
-        
+
         report = ["## Architectural Coupling Analysis\n"]
-        
+
         # Hotspots (High Out-degree)
         top_out = sorted(out_degree.items(), key=lambda x: x[1], reverse=True)[:5]
         report.append("### 🚩 Dependency Hotspots (High Out-degree)")
-        report.append("These files depend on many other things and might be too complex:")
+        report.append(
+            "These files depend on many other things and might be too complex:"
+        )
         for node, degree in top_out:
             report.append(f"- **{node}**: {degree} dependencies")
-        
+
         # Central Hubs (High In-degree)
         top_in = sorted(in_degree.items(), key=lambda x: x[1], reverse=True)[:5]
         report.append("\n### 🏗️ Central Hubs (High In-degree)")
-        report.append("These files are used by many other modules. Changes here have high impact:")
+        report.append(
+            "These files are used by many other modules. Changes here have high impact:"
+        )
         for node, degree in top_in:
             report.append(f"- **{node}**: {degree} dependers")
-            
+
         return "\n".join(report)
 
     def improve_content(self, prompt: str) -> str:
         """Perform architectural review."""
         return self.analyze_coupling()
 
+
 if __name__ == "__main__":
     main = create_main_function(ArchAdvisorAgent, "ArchAdvisor Agent", "Task")
     main()
-

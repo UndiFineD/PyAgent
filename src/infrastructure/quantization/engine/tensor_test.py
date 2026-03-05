@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_quantizedtensor_exists():
     """Test that QuantizedTensor class exists and is importable."""
-    assert 'QuantizedTensor' in dir()
+    assert "QuantizedTensor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

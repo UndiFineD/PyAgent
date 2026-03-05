@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_fleettelemetryvisualizer_exists():
     """Test that FleetTelemetryVisualizer class exists and is importable."""
-    assert 'FleetTelemetryVisualizer' in dir()
+    assert "FleetTelemetryVisualizer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

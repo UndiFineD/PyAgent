@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,13 +15,13 @@ from __future__ import annotations
 # limitations under the License.
 
 
-
 import json
 import logging
 from typing import Any
 
 try:
     import chromadb
+
     HAS_CHROMA = True
 except Exception:
     HAS_CHROMA = False
@@ -49,14 +50,14 @@ class MemoryStorageMixin:
             logging.error(f"Memory DB init error: {e}")
             return None
 
-
     def save(self) -> None:
         """Persist memory to disk."""
         try:
-            self.memory_file.write_text(json.dumps(self.episodes, indent=2), encoding="utf-8")
+            self.memory_file.write_text(
+                json.dumps(self.episodes, indent=2), encoding="utf-8"
+            )
         except (IOError, OSError) as e:
             logging.error(f"Failed to save memory: {e}")
-
 
     def load(self) -> None:
         """Load memory from disk."""
@@ -66,7 +67,6 @@ class MemoryStorageMixin:
             except (json.JSONDecodeError, IOError, OSError) as e:
                 logging.error(f"Failed to load memory: {e}")
                 self.episodes = []
-
 
     def clear(self) -> None:
         """Wipe memory."""

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,8 +32,14 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from src.core.base.common.models.base_models import EnvironmentConfig, EnvironmentInstance
-from src.core.base.common.models.core_enums import EnvironmentStatus, EnvironmentIsolation
+from src.core.base.common.models.base_models import (
+    EnvironmentConfig,
+    EnvironmentInstance,
+)
+from src.core.base.common.models.core_enums import (
+    EnvironmentStatus,
+    EnvironmentIsolation,
+)
 from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
@@ -88,7 +95,8 @@ class EnvironmentManager:
         """Cleanup expired environment instances."""
         current_time = time.time()
         expired_instances = [
-            instance_id for instance_id, instance in self.instances.items()
+            instance_id
+            for instance_id, instance in self.instances.items()
             if instance.is_expired() and instance.status != EnvironmentStatus.TERMINATED
         ]
 
@@ -109,7 +117,9 @@ class EnvironmentManager:
             del self.environments[env_key]
             await self._save_environments()
 
-    async def get_environment(self, name: str, version: str) -> Optional[EnvironmentConfig]:
+    async def get_environment(
+        self, name: str, version: str
+    ) -> Optional[EnvironmentConfig]:
         """Get environment configuration."""
         env_key = f"{name}@{version}"
         return self.environments.get(env_key)
@@ -123,7 +133,7 @@ class EnvironmentManager:
         self,
         env_name: str,
         env_version: str = "1.0.0",
-        custom_config: Optional[Dict[str, Any]] = None
+        custom_config: Optional[Dict[str, Any]] = None,
     ):
         """Create and manage an environment instance with context manager."""
         instance = await self._create_instance(env_name, env_version, custom_config)
@@ -136,7 +146,7 @@ class EnvironmentManager:
         self,
         env_name: str,
         env_version: str,
-        custom_config: Optional[Dict[str, Any]] = None
+        custom_config: Optional[Dict[str, Any]] = None,
     ) -> EnvironmentInstance:
         """Create a new environment instance."""
         config = await self.get_environment(env_name, env_version)
@@ -156,7 +166,7 @@ class EnvironmentManager:
             environment_name=f"{env_name}@{env_version}",
             expires_at=expires_at,
             environment_variables=env_vars,
-            metadata=custom_config or {}
+            metadata=custom_config or {},
         )
 
         self.instances[instance_id] = instance
@@ -168,9 +178,7 @@ class EnvironmentManager:
         return instance
 
     async def _initialize_instance(
-        self,
-        instance: EnvironmentInstance,
-        config: EnvironmentConfig
+        self, instance: EnvironmentInstance, config: EnvironmentConfig
     ) -> None:
         """Initialize the environment instance based on isolation level."""
         try:
@@ -178,12 +186,16 @@ class EnvironmentManager:
 
             if config.isolation == EnvironmentIsolation.NONE:
                 # No isolation - just set up working directory
-                instance.working_directory = Path(tempfile.mkdtemp(prefix=f"env_{instance.id}_"))
+                instance.working_directory = Path(
+                    tempfile.mkdtemp(prefix=f"env_{instance.id}_")
+                )
                 instance.working_directory.mkdir(parents=True, exist_ok=True)
 
             elif config.isolation == EnvironmentIsolation.PROCESS:
                 # Process isolation - could spawn subprocess
-                instance.working_directory = Path(tempfile.mkdtemp(prefix=f"env_{instance.id}_"))
+                instance.working_directory = Path(
+                    tempfile.mkdtemp(prefix=f"env_{instance.id}_")
+                )
                 instance.working_directory.mkdir(parents=True, exist_ok=True)
                 # TODO: Implement process spawning
 
@@ -217,6 +229,7 @@ class EnvironmentManager:
             # Clean up working directory
             if instance.working_directory and instance.working_directory.exists():
                 import shutil
+
                 shutil.rmtree(instance.working_directory)
 
             # Clean up environment variables
@@ -255,8 +268,10 @@ class EnvironmentManager:
                 data = json.loads(env_file.read_text())
                 for env_data in data:
                     # Convert string back to enum
-                    if 'isolation' in env_data:
-                        env_data['isolation'] = EnvironmentIsolation(env_data['isolation'])
+                    if "isolation" in env_data:
+                        env_data["isolation"] = EnvironmentIsolation(
+                            env_data["isolation"]
+                        )
                     config = EnvironmentConfig(**env_data)
                     env_key = f"{config.name}@{config.version}"
                     self.environments[env_key] = config
@@ -268,12 +283,13 @@ class EnvironmentManager:
         env_file = self.base_dir / "environments.json"
         try:
             from dataclasses import asdict
+
             data = []
             for config in self.environments.values():
                 config_dict = asdict(config)
                 # Convert enum to string
-                if 'isolation' in config_dict:
-                    config_dict['isolation'] = config_dict['isolation'].value
+                if "isolation" in config_dict:
+                    config_dict["isolation"] = config_dict["isolation"].value
                 data.append(config_dict)
             env_file.write_text(json.dumps(data, indent=2))
         except Exception as e:
@@ -287,8 +303,10 @@ class EnvironmentManager:
                 data = json.loads(instances_file.read_text())
                 for instance_data in data:
                     # Convert string back to enum
-                    if 'status' in instance_data:
-                        instance_data['status'] = EnvironmentStatus(instance_data['status'])
+                    if "status" in instance_data:
+                        instance_data["status"] = EnvironmentStatus(
+                            instance_data["status"]
+                        )
                     instance = EnvironmentInstance(**instance_data)
                     self.instances[instance.id] = instance
             except Exception as e:
@@ -299,12 +317,13 @@ class EnvironmentManager:
         instances_file = self.base_dir / "instances.json"
         try:
             from dataclasses import asdict
+
             data = []
             for instance in self.instances.values():
                 instance_dict = asdict(instance)
                 # Convert enum to string
-                if 'status' in instance_dict:
-                    instance_dict['status'] = instance_dict['status'].value
+                if "status" in instance_dict:
+                    instance_dict["status"] = instance_dict["status"].value
                 data.append(instance_dict)
             instances_file.write_text(json.dumps(data, indent=2))
         except Exception as e:

@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_structuredoutputoptions_exists():
     """Test that StructuredOutputOptions class exists and is importable."""
-    assert 'StructuredOutputOptions' in dir()
+    assert "StructuredOutputOptions" in dir()
 
 
 def test_structuredoutputsparams_exists():
     """Test that StructuredOutputsParams class exists and is importable."""
-    assert 'StructuredOutputsParams' in dir()
+    assert "StructuredOutputsParams" in dir()
 
 
 def test_structuredoutputgrammar_exists():
     """Test that StructuredOutputGrammar class exists and is importable."""
-    assert 'StructuredOutputGrammar' in dir()
+    assert "StructuredOutputGrammar" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

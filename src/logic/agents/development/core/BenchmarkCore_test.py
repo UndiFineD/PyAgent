@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_benchmarkresult_exists():
     """Test that BenchmarkResult class exists and is importable."""
-    assert 'BenchmarkResult' in dir()
+    assert "BenchmarkResult" in dir()
 
 
 def test_benchmarkcore_exists():
     """Test that BenchmarkCore class exists and is importable."""
-    assert 'BenchmarkCore' in dir()
+    assert "BenchmarkCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

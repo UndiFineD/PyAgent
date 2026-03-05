@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_streamingtensorizerreader_exists():
     """Test that StreamingTensorizerReader class exists and is importable."""
-    assert 'StreamingTensorizerReader' in dir()
+    assert "StreamingTensorizerReader" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

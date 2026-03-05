@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -220,7 +221,9 @@ class CloudProviderError(Exception):
 class RateLimitError(CloudProviderError):
     """Raised when rate limits are exceeded."""
 
-    def __init__(self, message: str, provider: str, retry_after: Optional[float] = None) -> None:
+    def __init__(
+        self, message: str, provider: str, retry_after: Optional[float] = None
+    ) -> None:
         super().__init__(message, provider, retriable=True)
         self.retry_after: float | None = retry_after
 

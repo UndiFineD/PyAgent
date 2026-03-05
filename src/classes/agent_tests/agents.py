@@ -2,7 +2,9 @@
 try:
     from src.infrastructure.services.dev.agent_tests.agents import *  # type: ignore
 except Exception:
+
     class TestsAgent:
         pass
+
 
 __all__ = ["TestsAgent"]

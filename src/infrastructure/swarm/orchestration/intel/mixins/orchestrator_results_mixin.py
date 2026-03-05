@@ -1,7 +1,7 @@
-
 """
 Orchestrator results mixin.py module.
 """
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -19,18 +19,26 @@ class OrchestratorResultsMixin:
         """Performs intelligence review and database optimization after the cycle."""
         lessons = None
         try:
-            logging.info("Self-Improvement: Reviewing local interaction shards for AI lessons...")
+            logging.info(
+                "Self-Improvement: Reviewing local interaction shards for AI lessons..."
+            )
             lessons = self.analysis.review_ai_lessons(self.fleet, self.ai)
             if lessons:
                 results["lessons_learned"] = len(lessons)
                 logging.info(f"Self-Improvement: Extracted {len(lessons)} lessons.")
 
             if self.fleet and hasattr(self.fleet, "sql_metadata"):
-                results["intelligence_summary"] = self.fleet.sql_metadata.get_intelligence_summary()
+                results["intelligence_summary"] = (
+                    self.fleet.sql_metadata.get_intelligence_summary()
+                )
 
-                logging.info("Self-Improvement: Optimizing relational metadata indices...")
+                logging.info(
+                    "Self-Improvement: Optimizing relational metadata indices..."
+                )
                 self.fleet.sql_metadata.optimize_db()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"Post-cycle evaluation or optimization failed: {e}")
         return lessons
 

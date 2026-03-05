@@ -24,4 +24,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MultiprocExecutor"), "MultiprocExecutor missing"
     assert hasattr(mod, "DistributedExecutor"), "DistributedExecutor missing"
     assert hasattr(mod, "ExecutorFactory"), "ExecutorFactory missing"
-

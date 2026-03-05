@@ -2,10 +2,12 @@
 try:
     from src.infrastructure.services.dev.agent_tests.environment import *  # type: ignore
 except Exception:
+
     def EnvironmentProvisioner(*a, **k):
         raise RuntimeError("environment not available")
 
     def DataFactory(*a, **k):
         raise RuntimeError("environment not available")
+
 
 __all__ = ["EnvironmentProvisioner", "DataFactory"]

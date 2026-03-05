@@ -38,7 +38,9 @@ class ProxyOrchestrator:
     def __init__(self, scheduler: DisaggregatedScheduler) -> None:
         self.scheduler = scheduler
 
-    def create_request(self, prompt: str, max_tokens: int = 128, request_id: Optional[str] = None) -> ScheduledRequest:
+    def create_request(
+        self, prompt: str, max_tokens: int = 128, request_id: Optional[str] = None
+    ) -> ScheduledRequest:
         """Create a new request for scheduling."""
         if request_id is None:
             request_id = f"req-{uuid.uuid4().hex[:8]}"
@@ -63,10 +65,17 @@ class ProxyOrchestrator:
             # 1. Schedule Prefill
             prefill_instance, _ = self.scheduler.schedule_prefill(request)
             if not prefill_instance:
-                return {"error": "No prefill instance available", "request_id": request.request_id}
+                return {
+                    "error": "No prefill instance available",
+                    "request_id": request.request_id,
+                }
 
             # Simulate prefill execution (in real system this calls the instance API)
-            logger.info("ProxyOrchestrator: Prefilling %s on %s", request.request_id, prefill_instance.instance_id)
+            logger.info(
+                "ProxyOrchestrator: Prefilling %s on %s",
+                request.request_id,
+                prefill_instance.instance_id,
+            )
             # Mock prefill response
             prefill_response = {
                 "status": "success",
@@ -77,11 +86,20 @@ class ProxyOrchestrator:
             }
 
             # 2. Schedule Decode
-            decode_instance, _ = self.scheduler.schedule_decode(request, prefill_response)
+            decode_instance, _ = self.scheduler.schedule_decode(
+                request, prefill_response
+            )
             if not decode_instance:
-                return {"error": "No decode instance available", "request_id": request.request_id}
+                return {
+                    "error": "No decode instance available",
+                    "request_id": request.request_id,
+                }
 
-            logger.info("ProxyOrchestrator: Decoding %s on %s", request.request_id, decode_instance.instance_id)
+            logger.info(
+                "ProxyOrchestrator: Decoding %s on %s",
+                request.request_id,
+                decode_instance.instance_id,
+            )
 
             # 3. Cleanup
             self.scheduler.request_finished(request.request_id)

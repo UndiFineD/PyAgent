@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AdaptiveRateLimiter"), "AdaptiveRateLimiter missing"
     assert hasattr(mod, "PerKeyRateLimiter"), "PerKeyRateLimiter missing"
     assert hasattr(mod, "rate_limit"), "rate_limit missing"
-

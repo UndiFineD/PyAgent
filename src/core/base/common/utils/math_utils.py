@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,6 +33,8 @@ try:
     RUST_AVAILABLE = True
 except ImportError:
     RUST_AVAILABLE = False
+
+
 def cdiv(a: int, b: int) -> int:
     """Ceiling division without floating point.
 
@@ -171,7 +174,9 @@ def round_down(n: int, multiple: int) -> int:
     return (n // multiple) * multiple
 
 
-def clamp(value: Union[int, float], min_val: Union[int, float], max_val: Union[int, float]) -> Union[int, float]:
+def clamp(
+    value: Union[int, float], min_val: Union[int, float], max_val: Union[int, float]
+) -> Union[int, float]:
     """
     Clamp a value between min and max bounds.
 

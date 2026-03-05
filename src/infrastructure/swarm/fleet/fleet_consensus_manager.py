@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,9 +43,17 @@ class FleetConsensusManager:
 
         # Dynamic Committee Formation
         if not primary_agent or not secondary_agents:
-            available = list(set(list(self.fleet.agents.registry_configs.keys()) + list(self.fleet.agents.keys())))
+            available = list(
+                set(
+                    list(self.fleet.agents.registry_configs.keys())
+                    + list(self.fleet.agents.keys())
+                )
+            )
             available = [
-                a for a in available if a not in ["ByzantineConsensus", "ByzantineConsensusAgent", "FleetManager"]
+                a
+                for a in available
+                if a
+                not in ["ByzantineConsensus", "ByzantineConsensusAgent", "FleetManager"]
             ]
 
             judge = getattr(self.fleet, "ByzantineConsensus", None)
@@ -68,7 +77,9 @@ class FleetConsensusManager:
                 }
             primary_agent = committee[0]
             secondary_agents = committee[1:]
-            logging.info(f"Fleet: Formed dynamic committee: {primary_agent}, {secondary_agents}")
+            logging.info(
+                f"Fleet: Formed dynamic committee: {primary_agent}, {secondary_agents}"
+            )
 
         proposals: dict[str, str] = {}
         all_agents = [primary_agent] + secondary_agents
@@ -78,8 +89,12 @@ class FleetConsensusManager:
                 try:
                     res = self.fleet.agents[agent_name].improve_content(task)
                     proposals[agent_name] = res
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    logging.error(f"Fleet: Agent {agent_name} failed to provide consensus proposal: {e}")
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    logging.error(
+                        f"Fleet: Agent {agent_name} failed to provide consensus proposal: {e}"
+                    )
 
         if not proposals:
             return {
@@ -100,7 +115,9 @@ class FleetConsensusManager:
         result = judge.run_committee_vote(task, proposals)
 
         # Broadcast lesson via Federated Knowledge
-        if result["decision"] == "ACCEPTED" and getattr(self.fleet, "federated_knowledge", None):
+        if result["decision"] == "ACCEPTED" and getattr(
+            self.fleet, "federated_knowledge", None
+        ):
             try:
                 # Phase 319: Federated Knowledge is now async (Voyager)
                 asyncio.create_task(
@@ -114,7 +131,11 @@ class FleetConsensusManager:
                         },
                     )
                 )
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.warning(f"FleetConsensus: Failed to trigger federated broadcast: {e}")
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                logging.warning(
+                    f"FleetConsensus: Failed to trigger federated broadcast: {e}"
+                )
 
         return result

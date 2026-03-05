@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_luid_exists():
     """Test that LUID class exists and is importable."""
-    assert 'LUID' in dir()
+    assert "LUID" in dir()
 
 
 def test_luid_and_attributes_exists():
     """Test that LUID_AND_ATTRIBUTES class exists and is importable."""
-    assert 'LUID_AND_ATTRIBUTES' in dir()
+    assert "LUID_AND_ATTRIBUTES" in dir()
 
 
 def test_token_privileges_exists():
     """Test that TOKEN_PRIVILEGES class exists and is importable."""
-    assert 'TOKEN_PRIVILEGES' in dir()
+    assert "TOKEN_PRIVILEGES" in dir()
 
 
 def test_processentry32_exists():
     """Test that PROCESSENTRY32 class exists and is importable."""
-    assert 'PROCESSENTRY32' in dir()
+    assert "PROCESSENTRY32" in dir()
 
 
 def test_privilegeescalationcore_exists():
     """Test that PrivilegeEscalationCore class exists and is importable."""
-    assert 'PrivilegeEscalationCore' in dir()
+    assert "PrivilegeEscalationCore" in dir()
 
 
 def test_privilegeescalationcore_instantiation():
@@ -65,4 +65,3 @@ def test_privilegeescalationcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

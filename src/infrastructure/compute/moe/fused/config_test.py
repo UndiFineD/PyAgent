@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "FusedMoEConfig"), "FusedMoEConfig missing"
     assert hasattr(mod, "FusedMoEParallelConfig"), "FusedMoEParallelConfig missing"
     assert hasattr(mod, "FusedMoEQuantConfig"), "FusedMoEQuantConfig missing"
-

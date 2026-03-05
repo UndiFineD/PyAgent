@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,8 +27,7 @@ from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING, Generic, Optional, TypeVar
 
 if TYPE_CHECKING:
-    from src.infrastructure.engine.engine_client.types import \
-        EngineClientConfig
+    from src.infrastructure.engine.engine_client.types import EngineClientConfig
 
 logger = logging.getLogger(__name__)
 
@@ -50,12 +50,16 @@ class EngineCoreClientBase(ABC, Generic[T, R]):
         pass
 
     @abstractmethod
-    def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[R]:
+    def get_output(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[R]:
         """Get output for request (blocking)."""
         pass
 
     @abstractmethod
-    async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[R]:
+    async def get_output_async(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[R]:
         """Get output for request (async)."""
         pass
 

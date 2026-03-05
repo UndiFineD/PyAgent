@@ -17,26 +17,29 @@ import secrets
 from typing import Dict, Any, Optional
 from datetime import datetime
 
+
 class SessionLockCore:
     """Core for managing multi-tenant session locking and space isolation."""
-    
+
     def __init__(self, storage_path: str = "data/sessions"):
         self.storage_path = storage_path
         os.makedirs(storage_path, exist_ok=True)
         self.locks: Dict[str, Dict[str, Any]] = {}
 
-    async def acquire_lock(self, session_id: str, tenant_id: str, ttl: int = 3600) -> Optional[str]:
+    async def acquire_lock(
+        self, session_id: str, tenant_id: str, ttl: int = 3600
+    ) -> Optional[str]:
         """Acquire a lock for a session/space."""
         lock_key = f"{tenant_id}:{session_id}"
         if lock_key in self.locks:
             if datetime.now().timestamp() < self.locks[lock_key]["expires"]:
-                return None # Already locked
-        
+                return None  # Already locked
+
         token = secrets.token_hex(16)
         self.locks[lock_key] = {
             "token": token,
             "expires": datetime.now().timestamp() + ttl,
-            "tenant_id": tenant_id
+            "tenant_id": tenant_id,
         }
         return token
 

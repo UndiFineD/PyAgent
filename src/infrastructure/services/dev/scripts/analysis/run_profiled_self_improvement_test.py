@@ -15,6 +15,7 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "RustFunctionStats"), "RustFunctionStats missing"
     assert hasattr(mod, "RustProfiler"), "RustProfiler missing"
-    assert hasattr(mod, "ComprehensiveProfileAnalyzer"), "ComprehensiveProfileAnalyzer missing"
+    assert hasattr(
+        mod, "ComprehensiveProfileAnalyzer"
+    ), "ComprehensiveProfileAnalyzer missing"
     assert hasattr(mod, "save_profile_report"), "save_profile_report missing"
-

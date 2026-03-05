@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Reinforcement Learning Algorithms Implementation - Phase 319 Enhanced
 
@@ -11,22 +12,24 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class PolicyGradientBuffer:
     """Stores trajectory data for policy gradient methods."""
+
     states: List[Any] = field(default_factory=list)
     actions: List[Any] = field(default_factory=list)
     rewards: List[float] = field(default_factory=list)
     log_probs: List[float] = field(default_factory=list)
     values: List[float] = field(default_factory=list)
-    
+
     def clear(self):
         self.states.clear()
         self.actions.clear()
         self.rewards.clear()
         self.log_probs.clear()
         self.values.clear()
-    
+
     def compute_returns(self, gamma: float = 0.99) -> List[float]:
         """Computes discounted returns."""
         returns = []
@@ -35,7 +38,7 @@ class PolicyGradientBuffer:
             G = r + gamma * G
             returns.insert(0, G)
         return returns
-    
+
     def compute_advantages(self, gamma: float = 0.99, lam: float = 0.95) -> List[float]:
         """Computes GAE (Generalized Advantage Estimation)."""
         advantages = []
@@ -47,23 +50,26 @@ class PolicyGradientBuffer:
             advantages.insert(0, gae)
         return advantages
 
+
 class LearningAlgorithms:
     """Standard RL algorithms for agent policy improvement."""
 
     @staticmethod
     def q_learning_update(
-        q_table: Dict[Tuple[str, str], float], 
-        state: str, 
-        action: str, 
-        reward: float, 
-        next_state: str, 
+        q_table: Dict[Tuple[str, str], float],
+        state: str,
+        action: str,
+        reward: float,
+        next_state: str,
         actions: List[str],
-        alpha: float = 0.1, 
-        gamma: float = 0.99
+        alpha: float = 0.1,
+        gamma: float = 0.99,
     ) -> float:
         """Standard Q-Learning update: Q(s,a) <- Q(s,a) + α[r + γ max_a' Q(s',a') - Q(s,a)]"""
         old_val = q_table.get((state, action), 0.0)
-        next_max = max([q_table.get((next_state, a), 0.0) for a in actions], default=0.0)
+        next_max = max(
+            [q_table.get((next_state, a), 0.0) for a in actions], default=0.0
+        )
         new_val = old_val + alpha * (reward + gamma * next_max - old_val)
         q_table[(state, action)] = new_val
         return new_val
@@ -77,7 +83,7 @@ class LearningAlgorithms:
         next_state: str,
         next_action: str,
         alpha: float = 0.1,
-        gamma: float = 0.99
+        gamma: float = 0.99,
     ) -> float:
         """SARSA update: Q(s,a) <- Q(s,a) + α[r + γ Q(s',a') - Q(s,a)]"""
         old_val = q_table.get((state, action), 0.0)
@@ -96,7 +102,7 @@ class LearningAlgorithms:
         next_state: str,
         actions: List[str],
         alpha: float = 0.1,
-        gamma: float = 0.99
+        gamma: float = 0.99,
     ) -> Tuple[float, float]:
         """Double Q-Learning to reduce overestimation bias."""
         if random.random() < 0.5:
@@ -115,10 +121,10 @@ class LearningAlgorithms:
 
     @staticmethod
     def epsilon_greedy(
-        q_table: Dict[Tuple[str, str], float], 
-        state: str, 
-        actions: List[str], 
-        epsilon: float
+        q_table: Dict[Tuple[str, str], float],
+        state: str,
+        actions: List[str],
+        epsilon: float,
     ) -> str:
         """ε-greedy exploration strategy."""
         if random.random() < epsilon:
@@ -130,7 +136,7 @@ class LearningAlgorithms:
         q_table: Dict[Tuple[str, str], float],
         state: str,
         actions: List[str],
-        temperature: float = 1.0
+        temperature: float = 1.0,
     ) -> str:
         """Boltzmann/Softmax exploration."""
         q_values = np.array([q_table.get((state, a), 0.0) for a in actions])
@@ -145,7 +151,7 @@ class LearningAlgorithms:
         state: str,
         actions: List[str],
         total_visits: int,
-        c: float = 2.0
+        c: float = 2.0,
     ) -> str:
         """Upper Confidence Bound action selection."""
         ucb_values = []
@@ -168,15 +174,21 @@ class LearningAlgorithms:
         actions: List[str],
         alpha: float = 0.1,
         gamma: float = 0.99,
-        lam: float = 0.9
+        lam: float = 0.9,
     ) -> None:
         """TD(λ) with eligibility traces."""
         # Compute TD error
-        delta = reward + gamma * q_table.get((next_state, next_action), 0.0) - q_table.get((state, action), 0.0)
-        
+        delta = (
+            reward
+            + gamma * q_table.get((next_state, next_action), 0.0)
+            - q_table.get((state, action), 0.0)
+        )
+
         # Update eligibility trace
-        eligibility_traces[(state, action)] = eligibility_traces.get((state, action), 0.0) + 1
-        
+        eligibility_traces[(state, action)] = (
+            eligibility_traces.get((state, action), 0.0) + 1
+        )
+
         # Update all Q-values
         for (s, a), e in list(eligibility_traces.items()):
             q_table[(s, a)] = q_table.get((s, a), 0.0) + alpha * delta * e
@@ -184,20 +196,29 @@ class LearningAlgorithms:
             if eligibility_traces[(s, a)] < 1e-6:
                 del eligibility_traces[(s, a)]
 
+
 class PolicyOptimizer:
     """High-level policy optimization utilities."""
-    
+
     @staticmethod
-    def decay_epsilon(epsilon: float, min_epsilon: float = 0.01, decay_rate: float = 0.995) -> float:
+    def decay_epsilon(
+        epsilon: float, min_epsilon: float = 0.01, decay_rate: float = 0.995
+    ) -> float:
         """Exponential epsilon decay."""
         return max(min_epsilon, epsilon * decay_rate)
-    
+
     @staticmethod
-    def linear_epsilon_schedule(episode: int, total_episodes: int, start: float = 1.0, end: float = 0.01) -> float:
+    def linear_epsilon_schedule(
+        episode: int, total_episodes: int, start: float = 1.0, end: float = 0.01
+    ) -> float:
         """Linear epsilon schedule."""
         return start - (start - end) * min(1.0, episode / total_episodes)
-    
+
     @staticmethod
-    def cosine_annealing_lr(step: int, total_steps: int, lr_max: float, lr_min: float = 0.0) -> float:
+    def cosine_annealing_lr(
+        step: int, total_steps: int, lr_max: float, lr_min: float = 0.0
+    ) -> float:
         """Cosine annealing learning rate schedule."""
-        return lr_min + 0.5 * (lr_max - lr_min) * (1 + np.cos(np.pi * step / total_steps))
+        return lr_min + 0.5 * (lr_max - lr_min) * (
+            1 + np.cos(np.pi * step / total_steps)
+        )

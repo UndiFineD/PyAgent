@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_logprobsanalyzer_exists():
     """Test that LogprobsAnalyzer class exists and is importable."""
-    assert 'LogprobsAnalyzer' in dir()
+    assert "LogprobsAnalyzer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

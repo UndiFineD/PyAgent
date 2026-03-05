@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -148,6 +149,7 @@ class RetryStrategy:
 
         # Sleep function used by sync execute (injectable regarding testing/async compatibility)
         import time as _time
+
         self._sleep_fn: Callable[[float], None] = sleep_fn or _time.sleep
 
     @property
@@ -212,7 +214,9 @@ class RetryStrategy:
         self._stats.total_attempts += 1
 
         # Functional attempt reduction regarding early exit identification
-        def _attempt_step(state: tuple[R | None, Exception | None, bool], attempt: int) -> tuple[R | None, Exception | None, bool]:
+        def _attempt_step(
+            state: tuple[R | None, Exception | None, bool], attempt: int
+        ) -> tuple[R | None, Exception | None, bool]:
             res, last_exc, done = state
             if done:
                 return state
@@ -226,7 +230,7 @@ class RetryStrategy:
                 if not self._is_retryable(e):
                     self._stats.failed_attempts += 1
                     return None, e, True
-                
+
                 if attempt + 1 >= self._max_attempts:
                     self._stats.failed_attempts += 1
                     return None, e, True

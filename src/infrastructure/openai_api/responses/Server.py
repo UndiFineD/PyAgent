@@ -10,10 +10,12 @@ from .Streaming import SSEStream, StreamingHandler
 
 logger = logging.getLogger(__name__)
 
+
 class ResponsesAPIServer:
     """
     OpenAI Responses API server implementation.
     """
+
     def __init__(
         self,
         model_handler: Callable[[ResponseConfig], AsyncIterator[str]],
@@ -28,12 +30,22 @@ class ResponsesAPIServer:
     def _create_response_id(self) -> str:
         return f"resp_{uuid.uuid4().hex[:24]}"
 
-    async def create_response(self, config: ResponseConfig) -> Union[Response, SSEStream]:
-        response = Response(id=self._create_response_id(), model=config.model, status=ResponseStatus.IN_PROGRESS, metadata=config.metadata)
-        if config.stream: return await self._create_streaming_response(response, config)
+    async def create_response(
+        self, config: ResponseConfig
+    ) -> Union[Response, SSEStream]:
+        response = Response(
+            id=self._create_response_id(),
+            model=config.model,
+            status=ResponseStatus.IN_PROGRESS,
+            metadata=config.metadata,
+        )
+        if config.stream:
+            return await self._create_streaming_response(response, config)
         return await self._create_sync_response(response, config)
 
-    async def _create_sync_response(self, response: Response, config: ResponseConfig) -> Response:
+    async def _create_sync_response(
+        self, response: Response, config: ResponseConfig
+    ) -> Response:
         try:
             text_parts = []
             prompt_tokens = 0
@@ -45,17 +57,28 @@ class ResponsesAPIServer:
             response.add_text_output(full_text)
             if config.messages:
                 for msg in config.messages:
-                    if isinstance(msg.content, str): prompt_tokens += len(msg.content.split())
-            response.complete(ResponseUsage(prompt_tokens=prompt_tokens, completion_tokens=completion_tokens, total_tokens=prompt_tokens + completion_tokens))
-            if config.store and self.enable_store: await self.store.save(response)
+                    if isinstance(msg.content, str):
+                        prompt_tokens += len(msg.content.split())
+            response.complete(
+                ResponseUsage(
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    total_tokens=prompt_tokens + completion_tokens,
+                )
+            )
+            if config.store and self.enable_store:
+                await self.store.save(response)
         except Exception as e:
             logger.exception(f"Error creating response: {e}")
             response.fail(str(e))
         return response
 
-    async def _create_streaming_response(self, response: Response, config: ResponseConfig) -> SSEStream:
+    async def _create_streaming_response(
+        self, response: Response, config: ResponseConfig
+    ) -> SSEStream:
         stream = SSEStream(response.id)
         handler = StreamingHandler(response, stream)
+
         async def generate():
             try:
                 await handler.start()
@@ -63,15 +86,24 @@ class ResponsesAPIServer:
                 completion_tokens = 0
                 if config.messages:
                     for msg in config.messages:
-                        if isinstance(msg.content, str): prompt_tokens += len(msg.content.split())
+                        if isinstance(msg.content, str):
+                            prompt_tokens += len(msg.content.split())
                 async for chunk in self.model_handler(config):
                     await handler.add_content_delta(chunk)
                     completion_tokens += len(chunk.split())
-                await handler.complete(ResponseUsage(prompt_tokens=prompt_tokens, completion_tokens=completion_tokens, total_tokens=prompt_tokens + completion_tokens))
-                if config.store and self.enable_store: await self.store.save(response)
+                await handler.complete(
+                    ResponseUsage(
+                        prompt_tokens=prompt_tokens,
+                        completion_tokens=completion_tokens,
+                        total_tokens=prompt_tokens + completion_tokens,
+                    )
+                )
+                if config.store and self.enable_store:
+                    await self.store.save(response)
             except Exception as e:
                 logger.exception(f"Streaming error: {e}")
                 await handler.fail(str(e))
+
         task = asyncio.create_task(generate())
         self._background_tasks[response.id] = task
         return stream
@@ -85,7 +117,9 @@ class ResponsesAPIServer:
             task.cancel()
         return await self.store.delete(response_id)
 
-    async def list_responses(self, limit: int = 20, after: Optional[str] = None, before: Optional[str] = None) -> List[Response]:
+    async def list_responses(
+        self, limit: int = 20, after: Optional[str] = None, before: Optional[str] = None
+    ) -> List[Response]:
         return await self.store.list(limit=limit, after=after, before=before)
 
     async def cancel_response(self, response_id: str) -> Optional[Response]:

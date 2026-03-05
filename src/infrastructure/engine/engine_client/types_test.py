@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SchedulerOutput"), "SchedulerOutput missing"
     assert hasattr(mod, "EngineOutput"), "EngineOutput missing"
     assert hasattr(mod, "WorkerInfo"), "WorkerInfo missing"
-

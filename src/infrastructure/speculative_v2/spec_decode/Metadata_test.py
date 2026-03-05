@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_specdecodemetadatav2_exists():
     """Test that SpecDecodeMetadataV2 class exists and is importable."""
-    assert 'SpecDecodeMetadataV2' in dir()
+    assert "SpecDecodeMetadataV2" in dir()
 
 
 def test_treeverificationmetadata_exists():
     """Test that TreeVerificationMetadata class exists and is importable."""
-    assert 'TreeVerificationMetadata' in dir()
+    assert "TreeVerificationMetadata" in dir()
 
 
 def test_specdecodemetadatafactory_exists():
     """Test that SpecDecodeMetadataFactory class exists and is importable."""
-    assert 'SpecDecodeMetadataFactory' in dir()
+    assert "SpecDecodeMetadataFactory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

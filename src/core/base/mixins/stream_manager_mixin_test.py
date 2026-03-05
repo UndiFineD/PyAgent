@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_streamstate_exists():
     """Test that StreamState class exists and is importable."""
-    assert 'StreamState' in dir()
+    assert "StreamState" in dir()
 
 
 def test_streaminfo_exists():
     """Test that StreamInfo class exists and is importable."""
-    assert 'StreamInfo' in dir()
+    assert "StreamInfo" in dir()
 
 
 def test_streammanagermixin_exists():
     """Test that StreamManagerMixin class exists and is importable."""
-    assert 'StreamManagerMixin' in dir()
+    assert "StreamManagerMixin" in dir()
 
 
 def test_streammanagermixin_instantiation():
@@ -55,4 +55,3 @@ def test_streammanagermixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

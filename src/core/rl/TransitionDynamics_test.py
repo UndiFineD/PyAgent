@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_transitionrecord_exists():
     """Test that TransitionRecord class exists and is importable."""
-    assert 'TransitionRecord' in dir()
+    assert "TransitionRecord" in dir()
 
 
 def test_stateactionstats_exists():
     """Test that StateActionStats class exists and is importable."""
-    assert 'StateActionStats' in dir()
+    assert "StateActionStats" in dir()
 
 
 def test_transitiondynamics_exists():
     """Test that TransitionDynamics class exists and is importable."""
-    assert 'TransitionDynamics' in dir()
+    assert "TransitionDynamics" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

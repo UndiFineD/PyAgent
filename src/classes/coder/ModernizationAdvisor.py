@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ import re
 
 __version__ = VERSION
 
+
 class ModernizationAgent:
     """Advises on modernizing deprecated APIs.
 
@@ -42,17 +44,34 @@ class ModernizationAgent:
     """
 
     DEPRECATIONS: list[tuple[str, str, str, str | None, str]] = [
-        (r"import\s+urllib2", "urllib.request", "2.7", "3.0",
-         "https://docs.python.org/3/library/urllib.request.html"),
-        (r"from\s+collections\s+import\s+.*\bMapping\b",
-         "collections.abc.Mapping", "3.3", "3.10",
-         "Use collections.abc instead of collections for ABCs"),
-        (r'\.encode\s*\(\s*[\'"]hex[\'"]\s*\)',
-         "binascii.hexlify()", "3.0", None,
-         "Use binascii.hexlify() instead of .encode('hex')"),
-        (r"asyncio\.get_event_loop\(\)",
-         "asyncio.get_running_loop() or asyncio.new_event_loop()", "3.10", None,
-         "get_event_loop() deprecated in favor of more explicit alternatives"),
+        (
+            r"import\s+urllib2",
+            "urllib.request",
+            "2.7",
+            "3.0",
+            "https://docs.python.org/3/library/urllib.request.html",
+        ),
+        (
+            r"from\s+collections\s+import\s+.*\bMapping\b",
+            "collections.abc.Mapping",
+            "3.3",
+            "3.10",
+            "Use collections.abc instead of collections for ABCs",
+        ),
+        (
+            r'\.encode\s*\(\s*[\'"]hex[\'"]\s*\)',
+            "binascii.hexlify()",
+            "3.0",
+            None,
+            "Use binascii.hexlify() instead of .encode('hex')",
+        ),
+        (
+            r"asyncio\.get_event_loop\(\)",
+            "asyncio.get_running_loop() or asyncio.new_event_loop()",
+            "3.10",
+            None,
+            "get_event_loop() deprecated in favor of more explicit alternatives",
+        ),
     ]
 
     def __init__(self) -> None:
@@ -72,12 +91,14 @@ class ModernizationAgent:
 
         for pattern, new_api, dep_ver, rem_ver, guide in self.DEPRECATIONS:
             if re.search(pattern, content):
-                self.suggestions.append(ModernizationSuggestion(
-                    old_api=pattern,
-                    new_api=new_api,
-                    deprecation_version=dep_ver,
-                    removal_version=rem_ver,
-                    migration_guide=guide
-                ))
+                self.suggestions.append(
+                    ModernizationSuggestion(
+                        old_api=pattern,
+                        new_api=new_api,
+                        deprecation_version=dep_ver,
+                        removal_version=rem_ver,
+                        migration_guide=guide,
+                    )
+                )
 
         return self.suggestions

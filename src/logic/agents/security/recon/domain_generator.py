@@ -16,16 +16,19 @@ import asyncio
 from typing import List, Set, Protocol, Dict
 from dataclasses import dataclass
 
-DOMAIN_REGEX = r'(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}'
+DOMAIN_REGEX = r"(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}"
+
 
 class LLMInterface(Protocol):
     async def chat(self, prompt: str) -> str: ...
+
 
 @dataclass
 class DomainGenerationResult:
     seed_domain: str
     generated_domains: Set[str]
     model_used: str
+
 
 class DomainGenerator:
     """
@@ -37,7 +40,9 @@ class DomainGenerator:
         self.llm = llm_client
         self.domain_pattern = re.compile(DOMAIN_REGEX)
 
-    async def generate_permutations(self, seed_domain: str, count: int = 20) -> DomainGenerationResult:
+    async def generate_permutations(
+        self, seed_domain: str, count: int = 20
+    ) -> DomainGenerationResult:
         """
         Asks the LLM to generate potential phishing/typosquatting variations for a seed domain.
         """
@@ -50,7 +55,7 @@ class DomainGenerator:
         try:
             response_text = await self.llm.chat(prompt)
             found_domains = set()
-            
+
             for line in response_text.splitlines():
                 clean_line = line.strip()
                 # Basic validation
@@ -59,11 +64,11 @@ class DomainGenerator:
                     match = self.domain_pattern.search(clean_line)
                     if match:
                         found_domains.add(match.group(0))
-            
+
             return DomainGenerationResult(
                 seed_domain=seed_domain,
                 generated_domains=found_domains,
-                model_used=getattr(self.llm, "model_name", "unknown")
+                model_used=getattr(self.llm, "model_name", "unknown"),
             )
 
         except Exception as e:
@@ -71,16 +76,21 @@ class DomainGenerator:
             print(f"Error generating domains: {e}")
             return DomainGenerationResult(seed_domain, set(), "error")
 
+
 # Mock for testing
 class MockLLM:
     def __init__(self):
         self.model_name = "mock"
+
     async def chat(self, prompt):
         return "example-test.com\nexample-dev.com"
 
+
 if __name__ == "__main__":
+
     async def run():
         gen = DomainGenerator(MockLLM())
         res = await gen.generate_permutations("example.com")
         print(res)
+
     asyncio.run(run())

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,6 +40,7 @@ Report generator cli.py module.
 def _sha256_text(text: str) -> str:
     """Helper for legacy tests."""
     import hashlib
+
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
@@ -69,6 +71,7 @@ class ReportGeneratorCli:
 
 def main() -> None:
     import argparse
+
     parser = argparse.ArgumentParser(description="Generate Agent Reports")
     parser.add_argument("--dir", default=".", help="Directory to scan")
     parser.add_argument("--output", default="reports", help="Output directory")

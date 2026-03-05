@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -212,7 +213,9 @@ class ParentRequest:
             self.child_requests.remove(child_request_id)
             self.finished_children += 1
 
-        self.max_num_generation_tokens = max(self.max_num_generation_tokens, len(completion.token_ids))
+        self.max_num_generation_tokens = max(
+            self.max_num_generation_tokens, len(completion.token_ids)
+        )
 
         # 2. Determine which outputs to return based on output_kind
         outputs = self._collect_outputs_to_return(completion, already_finished)
@@ -470,7 +473,9 @@ class BeamSearchManager:
         n: int = 1,
     ) -> List[BeamState]:
         """Get best n sequences."""
-        all_beams = self.beams.get(request_id, []) + self.finished_beams.get(request_id, [])
+        all_beams = self.beams.get(request_id, []) + self.finished_beams.get(
+            request_id, []
+        )
 
         def beam_score(b: BeamState) -> float:
             length = len(b.token_ids) ** self.length_penalty
@@ -644,7 +649,9 @@ class IterationStats:
         n_param: int = parent.n if parent is not None else 1
 
         if parent is not None:
-            num_generation_tokens = max(num_generation_tokens, parent.max_num_generation_tokens)
+            num_generation_tokens = max(
+                num_generation_tokens, parent.max_num_generation_tokens
+            )
 
         if parent is None or parent.all_finished:
             self.max_num_generation_tokens_iter.append(num_generation_tokens)

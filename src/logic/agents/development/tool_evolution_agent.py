@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +31,9 @@ from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.core.tool_drafting_core import (
-    ToolDefinition, ToolDraftingCore)
+    ToolDefinition,
+    ToolDraftingCore,
+)
 
 __version__ = VERSION
 
@@ -102,7 +105,9 @@ class ToolEvolutionAgent(BaseAgent):
         )
 
     @as_tool
-    def implement_and_save_tool(self, tool_name: str, code_content: str, description: str) -> str:
+    def implement_and_save_tool(
+        self, tool_name: str, code_content: str, description: str
+    ) -> str:
         """Writes a new Python tool to the evolved tool directory.
         Args:
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
@@ -118,7 +123,9 @@ class ToolEvolutionAgent(BaseAgent):
                 f.write(code_content)
 
             return f"SUCCESS: Evolved tool '{tool_name}' saved to {filepath}. It is now available for import."
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"ERROR: Failed to save evolved tool: {e}"
 
     @as_tool
@@ -153,5 +160,7 @@ class ToolEvolutionAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator")
+    main = create_main_function(
+        ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator"
+    )
     main()

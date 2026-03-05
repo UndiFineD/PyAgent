@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_logscopeenum_exists():
     """Test that LogScopeEnum class exists and is importable."""
-    assert 'LogScopeEnum' in dir()
+    assert "LogScopeEnum" in dir()
 
 
 def test_enhancedloggeradapter_exists():
     """Test that EnhancedLoggerAdapter class exists and is importable."""
-    assert 'EnhancedLoggerAdapter' in dir()
+    assert "EnhancedLoggerAdapter" in dir()
 
 
 def test_enhancedlogger_exists():
     """Test that EnhancedLogger class exists and is importable."""
-    assert 'EnhancedLogger' in dir()
+    assert "EnhancedLogger" in dir()
 
 
 def test_debug_once_exists():
@@ -94,4 +94,3 @@ def test_get_dedup_cache_info_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_researchanalysismixin_exists():
     """Test that ResearchAnalysisMixin class exists and is importable."""
-    assert 'ResearchAnalysisMixin' in dir()
+    assert "ResearchAnalysisMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

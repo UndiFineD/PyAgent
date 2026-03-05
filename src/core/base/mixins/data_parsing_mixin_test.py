@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_dataparsingmixin_exists():
     """Test that DataParsingMixin class exists and is importable."""
-    assert 'DataParsingMixin' in dir()
+    assert "DataParsingMixin" in dir()
 
 
 def test_dataparsingmixin_instantiation():
@@ -45,4 +45,3 @@ def test_dataparsingmixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

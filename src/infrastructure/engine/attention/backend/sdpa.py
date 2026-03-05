@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ logger = logging.getLogger(__name__)
 # Try to import torch
 try:
     import torch  # pylint: disable=unused-import
+
     HAS_TORCH = True
 except ImportError:
     HAS_TORCH = False
@@ -32,6 +34,7 @@ except ImportError:
 """
 PyTorch Scaled Dot-Product Attention backend.
 """
+
 
 class TorchSDPABackend(AttentionBackend[None]):
     """

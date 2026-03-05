@@ -2,6 +2,7 @@
 # Orchestration Mixin for BaseAgent
 from typing import Any
 
+
 class OrchestrationMixin:
     """Handles registry, tools, strategies, and distributed logging."""
 
@@ -10,13 +11,19 @@ class OrchestrationMixin:
         self._strategy: Any = None
 
         try:
-            from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+            from src.infrastructure.orchestration.signals.SignalRegistry import (
+                SignalRegistry,
+            )
+
             self.registry = SignalRegistry()
         except (ImportError, ValueError):
             self.registry = None
 
         try:
-            from src.infrastructure.orchestration.system.ToolRegistry import ToolRegistry
+            from src.infrastructure.orchestration.system.ToolRegistry import (
+                ToolRegistry,
+            )
+
             self.tool_registry = ToolRegistry()
         except (ImportError, ValueError):
             self.tool_registry = None
@@ -26,6 +33,7 @@ class OrchestrationMixin:
         if not hasattr(self, "_strategy") or self._strategy is None:
             try:
                 from src.logic.strategies.DirectStrategy import DirectStrategy
+
                 self._strategy = DirectStrategy()
             except (ImportError, ModuleNotFoundError):
                 self._strategy = None
@@ -53,6 +61,7 @@ class OrchestrationMixin:
             logging_agent = self.fleet.agents.get("Logging")
             if logging_agent:
                 import asyncio
+
                 try:
                     loop = asyncio.get_running_loop()
                     loop.create_task(
@@ -74,6 +83,7 @@ class OrchestrationMixin:
             exceeded, reason = self.quotas.check_quotas()
             if exceeded:
                 from src.core.base.BaseExceptions import CycleInterrupt
+
                 raise CycleInterrupt(reason)
 
         try:
@@ -81,6 +91,7 @@ class OrchestrationMixin:
         except ImportError:
             import sys
             from pathlib import Path
+
             sys.path.append(str(Path(__file__).parent.parent.parent.parent))
             from src.infrastructure.backend import ExecutionEngine as ab
 
@@ -146,7 +157,9 @@ class OrchestrationMixin:
             return "Backends unavailable"
         return ab.describe_backends()
 
-    async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
+    async def delegate_to(
+        self, agent_type: str, prompt: str, target_file: str | None = None
+    ) -> str:
         """
         Synaptic Delegation: Hands off a sub-task to a specialized agent.
         Supports both fleet-managed agents and dynamic on-demand instantiation.
@@ -155,7 +168,9 @@ class OrchestrationMixin:
         from pathlib import Path
         import asyncio
 
-        logging.info(f"[{self.__class__.__name__}] Delegating task to {agent_type} (Target: {target_file})")
+        logging.info(
+            f"[{self.__class__.__name__}] Delegating task to {agent_type} (Target: {target_file})"
+        )
 
         # 1. Attempt delegation via Fleet Manager (if attached)
         if hasattr(self, "fleet") and self.fleet:
@@ -165,10 +180,14 @@ class OrchestrationMixin:
                     sub_agent = self.fleet.agents[agent_type]
                     if target_file:
                         sub_agent.file_path = Path(target_file)
-                    
+
                     # Log the delegation event
-                    self.log_distributed("INFO", f"Delegated to fleet agent: {agent_type}", target=target_file)
-                    
+                    self.log_distributed(
+                        "INFO",
+                        f"Delegated to fleet agent: {agent_type}",
+                        target=target_file,
+                    )
+
                     # Execute
                     res = sub_agent.improve_content(prompt)
                     if asyncio.iscoroutine(res):
@@ -182,18 +201,26 @@ class OrchestrationMixin:
             from src.infrastructure.fleet.AgentRegistry import AgentRegistry
             from src.core.base.AgentCore import BaseCore
 
-            ws_root = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
-            
+            ws_root = getattr(self, "_workspace_root", None) or Path(
+                BaseCore.detect_workspace_root(Path.cwd())
+            )
+
             # Use the registry to get the agent map
-            agent_map = AgentRegistry.get_agent_map(ws_root, fleet_instance=getattr(self, "fleet", None))
-            
+            agent_map = AgentRegistry.get_agent_map(
+                ws_root, fleet_instance=getattr(self, "fleet", None)
+            )
+
             if agent_type in agent_map:
                 sub_agent = agent_map[agent_type]
                 if target_file:
                     sub_agent.file_path = Path(target_file)
-                
-                self.log_distributed("INFO", f"Delegated to registry agent: {agent_type}", target=target_file)
-                
+
+                self.log_distributed(
+                    "INFO",
+                    f"Delegated to registry agent: {agent_type}",
+                    target=target_file,
+                )
+
                 # Execute
                 res = sub_agent.improve_content(prompt)
                 if asyncio.iscoroutine(res):

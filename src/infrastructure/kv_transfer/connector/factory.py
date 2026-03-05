@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 Phase 45: KV Transfer Connector Factory
 Registry and factory for KV transfer connectors.
@@ -38,14 +39,13 @@ def get_kv_connector(
 ) -> KVConnectorBase:
     """Get a KV connector instance by configuration."""
     connector_name = config.kv_connector
-    
+
     if connector_name not in _CONNECTOR_REGISTRY:
         available = list(_CONNECTOR_REGISTRY.keys())
         raise ValueError(
-            f"Unknown KV connector: {connector_name}. "
-            f"Available: {available}"
+            f"Unknown KV connector: {connector_name}. " f"Available: {available}"
         )
-    
+
     connector_cls = _CONNECTOR_REGISTRY[connector_name]
     return connector_cls(config, kv_cache_config)
 

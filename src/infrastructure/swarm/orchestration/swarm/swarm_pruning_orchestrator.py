@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,7 +49,9 @@ class SwarmPruningOrchestrator:
         Args:
             threshold: The synaptic weight threshold below which a node is pruned.
         """
-        logging.info("SwarmPruningOrchestrator: Initiating swarm-wide neural pruning cycle.")
+        logging.info(
+            "SwarmPruningOrchestrator: Initiating swarm-wide neural pruning cycle."
+        )
 
         # 1. Prune underutilized synapses/paths
         pruned_nodes = self.pruning_engine.prune_underutilized(threshold=threshold)

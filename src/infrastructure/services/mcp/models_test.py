@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ToolCall"), "ToolCall missing"
     assert hasattr(mod, "ToolResult"), "ToolResult missing"
     assert hasattr(mod, "MCPSession"), "MCPSession missing"
-

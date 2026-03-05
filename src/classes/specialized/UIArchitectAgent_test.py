@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_uiarchitectagent_exists():
     """Test that UIArchitectAgent class exists and is importable."""
-    assert 'UIArchitectAgent' in dir()
+    assert "UIArchitectAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

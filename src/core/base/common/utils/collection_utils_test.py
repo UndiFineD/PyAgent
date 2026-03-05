@@ -37,4 +37,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "unique_by"), "unique_by missing"
     assert hasattr(mod, "sliding_window"), "sliding_window missing"
     assert hasattr(mod, "pairwise"), "pairwise missing"
-

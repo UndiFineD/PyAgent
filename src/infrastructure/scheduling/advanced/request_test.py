@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_requestmetrics_exists():
     """Test that RequestMetrics class exists and is importable."""
-    assert 'RequestMetrics' in dir()
+    assert "RequestMetrics" in dir()
 
 
 def test_scheduledrequest_exists():
     """Test that ScheduledRequest class exists and is importable."""
-    assert 'ScheduledRequest' in dir()
+    assert "ScheduledRequest" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

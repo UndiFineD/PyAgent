@@ -9,12 +9,13 @@ from src.classes.base_agent.utilities import as_tool
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 from src.classes.base_agent.ConnectivityManager import ConnectivityManager
 
+
 class ResilienceManagerAgent(BaseAgent):
     """
     Agent responsible for autonomous compute resource management.
     Monitors swarm health, handles failovers, and optimizes resource allocation.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -23,7 +24,7 @@ class ResilienceManagerAgent(BaseAgent):
             "You monitor resource usage, detect hanging processes, and "
             "trigger autonomous failovers between nodes."
         )
-        
+
         # Phase 108: Intelligence and Resilience
         work_root = getattr(self, "_workspace_root", None)
         self.connectivity = ConnectivityManager(work_root)
@@ -34,7 +35,9 @@ class ResilienceManagerAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}
-                self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)
+                self.recorder.record_interaction(
+                    "resilience", "swarm_health", event_type, str(details), meta=meta
+                )
             except Exception as e:
                 logging.error(f"ResilienceManager: Recording failed: {e}")
 
@@ -43,9 +46,13 @@ class ResilienceManagerAgent(BaseAgent):
         """
         Migrates high-priority agent tasks from a failing node to a healthy one.
         """
-        logging.warning(f"ResilienceManager: Triggering failover from {source_node} to {target_node}")
+        logging.warning(
+            f"ResilienceManager: Triggering failover from {source_node} to {target_node}"
+        )
         # Simulated failover logic
-        self._record("failover", {"from": source_node, "to": target_node, "status": "success"})
+        self._record(
+            "failover", {"from": source_node, "to": target_node, "status": "success"}
+        )
         return True
 
     @as_tool
@@ -57,7 +64,7 @@ class ResilienceManagerAgent(BaseAgent):
         stats = {
             "rebalanced_agents": 3,
             "latency_reduction_est": "15ms",
-            "cpu_savings": "12%"
+            "cpu_savings": "12%",
         }
         self._record("optimization", stats)
         return stats

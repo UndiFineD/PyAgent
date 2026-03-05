@@ -20,6 +20,7 @@ from dataclasses import dataclass
 
 logger = logging.getLogger(__name__)
 
+
 @dataclass
 class ExecutionResult:
     stdout: str
@@ -27,16 +28,30 @@ class ExecutionResult:
     result: Any
     success: bool
 
+
 class SafeLocalInterpreter:
     """
     Safely executes Python code within the agent's context.
     Ported from 0xSojalSec-cai/cai/agents/meta/local_python_executor.py
     """
-    
+
     ALLOWED_MODULES = {
-        "collections", "datetime", "itertools", "math", "queue", 
-        "random", "re", "stat", "statistics", "time", "unicodedata", 
-        "json", "hashlib", "base64", "urllib.parse", "ipaddress"
+        "collections",
+        "datetime",
+        "itertools",
+        "math",
+        "queue",
+        "random",
+        "re",
+        "stat",
+        "statistics",
+        "time",
+        "unicodedata",
+        "json",
+        "hashlib",
+        "base64",
+        "urllib.parse",
+        "ipaddress",
     }
 
     def __init__(self, safe_globals: Optional[Dict[str, Any]] = None):
@@ -47,12 +62,12 @@ class SafeLocalInterpreter:
     def _get_safe_builtins(self):
         # Allow standard builtins but block dangerous ones like eval, exec, open (maybe?)
         # For now, we block 'eval', 'exec', 'compile', '__import__' (we handle import separately)
-        unsafe = {'eval', 'exec', 'compile', 'open', 'input', '__import__'}
+        unsafe = {"eval", "exec", "compile", "open", "input", "__import__"}
         safe = {}
         for name in dir(builtins):
-            if name not in unsafe and not name.startswith('_'):
+            if name not in unsafe and not name.startswith("_"):
                 safe[name] = getattr(builtins, name)
-        
+
         # Override print to capture output? Or we can just let it print to stdout which we capture
         return safe
 
@@ -75,35 +90,37 @@ class SafeLocalInterpreter:
     def _execute_sync(self, code: str) -> ExecutionResult:
         import io
         import sys
-        
+
         # Capture stdout/stderr
         capture_out = io.StringIO()
         capture_err = io.StringIO()
-        
+
         original_stdout = sys.stdout
         original_stderr = sys.stderr
-        
+
         sys.stdout = capture_out
         sys.stderr = capture_err
-        
+
         result_obj = None
         success = True
-        
+
         try:
             # Parse AST to check for forbidden nodes if strict mode?
             # For now, just rely on blocked builtins.
-            
+
             # Exec
             tree = ast.parse(code)
-            
+
             # If the last statement is an expression, we want to return it
             if tree.body and isinstance(tree.body[-1], ast.Expr):
                 last_expr = tree.body.pop()
                 exec_code = compile(tree, filename="<string>", mode="exec")
                 exec(exec_code, self.safe_globals)
-                
+
                 # Evaluate the last expression
-                eval_code = compile(ast.Expression(last_expr.value), filename="<string>", mode="eval")
+                eval_code = compile(
+                    ast.Expression(last_expr.value), filename="<string>", mode="eval"
+                )
                 result_obj = eval(eval_code, self.safe_globals)
             else:
                 exec(code, self.safe_globals)
@@ -111,23 +128,26 @@ class SafeLocalInterpreter:
         except Exception as e:
             success = False
             import traceback
+
             traceback.print_exc(file=capture_err)
         finally:
             sys.stdout = original_stdout
             sys.stderr = original_stderr
-            
+
         return ExecutionResult(
             stdout=capture_out.getvalue(),
             stderr=capture_err.getvalue(),
             result=result_obj,
-            success=success
+            success=success,
         )
+
 
 # Example usage
 if __name__ == "__main__":
+
     async def main():
         interpreter = SafeLocalInterpreter()
         res = await interpreter.execute("print('Hello from sandbox'); x = 10 + 5; x")
         print(f"Result: {res}")
-    
+
     asyncio.run(main())

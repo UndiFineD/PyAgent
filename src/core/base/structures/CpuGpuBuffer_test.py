@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_cpugpubuffer_exists():
     """Test that CpuGpuBuffer class exists and is importable."""
-    assert 'CpuGpuBuffer' in dir()
+    assert "CpuGpuBuffer" in dir()
 
 
 def test_cpugpubuffer_instantiation():
@@ -44,7 +44,7 @@ def test_cpugpubuffer_instantiation():
 
 def test_cpugpubufferpool_exists():
     """Test that CpuGpuBufferPool class exists and is importable."""
-    assert 'CpuGpuBufferPool' in dir()
+    assert "CpuGpuBufferPool" in dir()
 
 
 def test_is_pin_memory_available_exists():
@@ -60,4 +60,3 @@ def test_get_device_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

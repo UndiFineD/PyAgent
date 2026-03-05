@@ -17,8 +17,12 @@ Fused package.
 """
 
 from .adaptive import AdaptiveMoELayer, HierarchicalMoELayer  # noqa: F401
-from .config import (ExpertPlacementStrategy, FusedMoEConfig,  # noqa: F401
-                     FusedMoEParallelConfig, FusedMoEQuantConfig)
+from .config import (
+    ExpertPlacementStrategy,
+    FusedMoEConfig,  # noqa: F401
+    FusedMoEParallelConfig,
+    FusedMoEQuantConfig,
+)
 from .dispatcher import DenseDispatcher, SparseDispatcher  # noqa: F401
 from .layer import FusedMoELayer  # noqa: F401
 from .method import FusedMoEMethodBase, UnquantizedFusedMoEMethod  # noqa: F401

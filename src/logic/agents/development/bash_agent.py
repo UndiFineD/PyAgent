@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,7 +33,9 @@ class BashAgent(CoderAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.capabilities.extend(["bash", "shell-scripting", "posix-compliance"])  # Phase 241
+        self.capabilities.extend(
+            ["bash", "shell-scripting", "posix-compliance"]
+        )  # Phase 241
         self._language = "bash"
         self.core = BashCore()
         self._system_prompt = (
@@ -55,7 +58,9 @@ class BashAgent(CoderAgent):
         issues = results["issues"]
         report = [f"Found {len(issues)} issues:"]
         for issue in issues[:5]:  # Top 5
-            report.append(f" - Line {issue.get('line')}: {issue.get('message')} ({issue.get('code')})")
+            report.append(
+                f" - Line {issue.get('line')}: {issue.get('message')} ({issue.get('code')})"
+            )
 
         return "\n".join(report)
 

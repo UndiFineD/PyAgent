@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -116,7 +117,9 @@ class GraphEntityMixin:
         return {
             "query": query,
             "vector_results": ["Related code snippet from repository"],
-            "graph_context": self.query_relationships(query)
-            if query in self.entities
-            else "No direct graph matches.",
+            "graph_context": (
+                self.query_relationships(query)
+                if query in self.entities
+                else "No direct graph matches."
+            ),
         }

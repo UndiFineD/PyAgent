@@ -49,7 +49,9 @@ class ResponsesAPIServer:
     def _create_response_id(self) -> str:
         return f"resp_{uuid.uuid4().hex[:24]}"
 
-    async def create_response(self, config: ResponseConfig) -> Union[Response, SSEStream]:
+    async def create_response(
+        self, config: ResponseConfig
+    ) -> Union[Response, SSEStream]:
         response = Response(
             id=self._create_response_id(),
             model=config.model,
@@ -60,7 +62,9 @@ class ResponsesAPIServer:
             return await self._create_streaming_response(response, config)
         return await self._create_sync_response(response, config)
 
-    async def _create_sync_response(self, response: Response, config: ResponseConfig) -> Response:
+    async def _create_sync_response(
+        self, response: Response, config: ResponseConfig
+    ) -> Response:
         try:
             text_parts = []
             prompt_tokens = 0
@@ -83,12 +87,16 @@ class ResponsesAPIServer:
             )
             if config.store and self.enable_store:
                 await self.store.save(response)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.exception(f"Error creating response: {e}")
             response.fail(str(e))
         return response
 
-    async def _create_streaming_response(self, response: Response, config: ResponseConfig) -> SSEStream:
+    async def _create_streaming_response(
+        self, response: Response, config: ResponseConfig
+    ) -> SSEStream:
         stream = SSEStream(response.id)
         handler = StreamingHandler(response, stream)
 
@@ -113,7 +121,9 @@ class ResponsesAPIServer:
                 )
                 if config.store and self.enable_store:
                     await self.store.save(response)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.exception(f"Streaming error: {e}")
                 await handler.fail(str(e))
 

@@ -9,8 +9,10 @@ except Exception:
             ContextConsolidationMixin as _ContextConsolidationMixin,
         )
     except Exception:
+
         class _ContextConsolidationMixin:
             pass
+
 
 ContextConsolidationMixin = _ContextConsolidationMixin
 

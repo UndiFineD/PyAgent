@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_attentionconfig_exists():
     """Test that AttentionConfig class exists and is importable."""
-    assert 'AttentionConfig' in dir()
+    assert "AttentionConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

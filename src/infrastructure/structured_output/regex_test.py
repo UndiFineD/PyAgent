@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_regexgrammar_exists():
     """Test that RegexGrammar class exists and is importable."""
-    assert 'RegexGrammar' in dir()
+    assert "RegexGrammar" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

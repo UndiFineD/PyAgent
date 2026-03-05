@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_mpclient_exists():
     """Test that MPClient class exists and is importable."""
-    assert 'MPClient' in dir()
+    assert "MPClient" in dir()
 
 
 def test_asyncmpclient_exists():
     """Test that AsyncMPClient class exists and is importable."""
-    assert 'AsyncMPClient' in dir()
+    assert "AsyncMPClient" in dir()
 
 
 def test_dplbasyncmpclient_exists():
     """Test that DPLBAsyncMPClient class exists and is importable."""
-    assert 'DPLBAsyncMPClient' in dir()
+    assert "DPLBAsyncMPClient" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,7 +50,6 @@ T = TypeVar("T")
 F = TypeVar("F")
 
 logger = logging.getLogger(__name__)
-
 
 
 def identity(value: T, **_kwargs: Any) -> T:
@@ -145,7 +145,9 @@ def deprecate_args(
         ...     pass
         >>> foo(1, 2, 3, 4)  # Warns about c and d being passed positionally
     """
-    check_deprecated = is_deprecated if callable(is_deprecated) else lambda: is_deprecated
+    check_deprecated = (
+        is_deprecated if callable(is_deprecated) else lambda: is_deprecated
+    )
 
     def wrapper(fn: F) -> F:
         params = inspect.signature(fn).parameters
@@ -195,7 +197,9 @@ def deprecate_kwargs(
         >>> foo(old_param=1)  # Warns about old_param
     """
     deprecated_kws = set(kws)
-    check_deprecated = is_deprecated if callable(is_deprecated) else lambda: is_deprecated
+    check_deprecated = (
+        is_deprecated if callable(is_deprecated) else lambda: is_deprecated
+    )
 
     def wrapper(fn: F) -> F:
         @wraps(fn)
@@ -341,7 +345,9 @@ def get_allowed_kwargs(
 
     dropped = overrides.keys() - filtered.keys()
     if dropped:
-        logger.warning(f"The following kwargs are not supported and will be dropped: {dropped}")
+        logger.warning(
+            f"The following kwargs are not supported and will be dropped: {dropped}"
+        )
 
     return filtered
 
@@ -480,7 +486,6 @@ def debounce(wait: float) -> Callable[[F], F]:
 # ============================================================================
 
 
-
 def retry_on_exception(
     exceptions: type[Exception] | tuple[type[Exception], ...],
     max_retries: int = 3,
@@ -514,6 +519,7 @@ def retry_on_exception(
                 # Use provided sleep function or fallback to threading.Event().wait
                 actual_sleep = sleep_fn
                 if actual_sleep is None:
+
                     def _wait(t: float) -> None:
                         from threading import Event
 
@@ -523,7 +529,10 @@ def retry_on_exception(
                 try:
                     actual_sleep(current_delay)
                 except Exception as err:  # pylint: disable=broad-exception-caught
-                    logger.debug("retry_on_exception: sleep_fn raised, falling back to Event.wait: %s", err)
+                    logger.debug(
+                        "retry_on_exception: sleep_fn raised, falling back to Event.wait: %s",
+                        err,
+                    )
                     from threading import Event
 
                     Event().wait(current_delay)
@@ -546,14 +555,18 @@ def retry_on_exception(
 
     def wrapper(fn: F) -> F:
         if is_coroutine_function(fn):
+
             @wraps(fn)
             async def wrapped_async(*args: Any, **kwargs: Any) -> Any:
                 return await async_inner(fn, *args, **kwargs)
+
             return wrapped_async  # type: ignore
         else:
+
             @wraps(fn)
             def wrapped_sync(*args: Any, **kwargs: Any) -> Any:
                 return sync_inner(fn, *args, **kwargs)
+
             return wrapped_sync  # type: ignore
 
     return wrapper
@@ -586,7 +599,9 @@ def call_limit(max_calls: int, period: float = 1.0) -> Callable[[F], F]:
                     calls.pop(0)
 
                 if len(calls) >= max_calls:
-                    raise RuntimeError(f"Call limit exceeded: {max_calls} calls per {period}s")
+                    raise RuntimeError(
+                        f"Call limit exceeded: {max_calls} calls per {period}s"
+                    )
 
                 calls.append(current_time)
 

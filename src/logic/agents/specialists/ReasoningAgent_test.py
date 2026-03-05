@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_reasoningstrategy_exists():
     """Test that ReasoningStrategy class exists and is importable."""
-    assert 'ReasoningStrategy' in dir()
+    assert "ReasoningStrategy" in dir()
 
 
 def test_thoughtnode_exists():
     """Test that ThoughtNode class exists and is importable."""
-    assert 'ThoughtNode' in dir()
+    assert "ThoughtNode" in dir()
 
 
 def test_reasoningagent_exists():
     """Test that ReasoningAgent class exists and is importable."""
-    assert 'ReasoningAgent' in dir()
+    assert "ReasoningAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

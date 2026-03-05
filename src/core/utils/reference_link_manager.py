@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +42,9 @@ class ReferenceLinkManager:
         """Initialize the reference link manager."""
         self.references: dict[str, list[LinkedReference]] = {}
 
-    def add_commit_reference(self, entry_id: str, commit_sha: str, url: str = "", title: str = "") -> LinkedReference:
+    def add_commit_reference(
+        self, entry_id: str, commit_sha: str, url: str = "", title: str = ""
+    ) -> LinkedReference:
         """Add a commit reference to an entry.
 
         Args:
@@ -53,13 +56,17 @@ class ReferenceLinkManager:
         Returns:
             The created LinkedReference.
         """
-        ref = LinkedReference(ref_type="commit", ref_id=commit_sha[:7], url=url, title=title)
+        ref = LinkedReference(
+            ref_type="commit", ref_id=commit_sha[:7], url=url, title=title
+        )
         if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
         return ref
 
-    def add_issue_reference(self, entry_id: str, issue_number: str, url: str = "", title: str = "") -> LinkedReference:
+    def add_issue_reference(
+        self, entry_id: str, issue_number: str, url: str = "", title: str = ""
+    ) -> LinkedReference:
         """Add an issue reference to an entry.
 
         Args:
@@ -71,7 +78,9 @@ class ReferenceLinkManager:
         Returns:
             The created LinkedReference.
         """
-        ref = LinkedReference(ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title)
+        ref = LinkedReference(
+            ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title
+        )
         if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
@@ -89,4 +98,8 @@ class ReferenceLinkManager:
         refs = self.references.get(entry_id, [])
         if not refs:
             return ""
-        return " (" + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs) + ")"
+        return (
+            " ("
+            + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs)
+            + ")"
+        )

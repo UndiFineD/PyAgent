@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,12 +35,18 @@ def test_cognitive_features() -> None:
 
     print("--- Phase 12: Metacognitive Monitoring ---")
     reasoning = "I think perhaps this might work, but i am not sure if it is likely the best way."
-    eval_res = fleet.metacognition.evaluate_reasoning("TestAgent", "Risk Analysis", reasoning)
+    eval_res = fleet.metacognition.evaluate_reasoning(
+        "TestAgent", "Risk Analysis", reasoning
+    )
     print(f"Metacognitive Eval: {eval_res}")
 
     print("\n--- Phase 12: Theory of Mind ---")
-    fleet.tom.update_model("CoderAgent", {"domain": "Python", "strength": "refactoring"})
-    fleet.tom.update_model("DataAgent", {"domain": "SQL", "strength": "query_optimization"})
+    fleet.tom.update_model(
+        "CoderAgent", {"domain": "Python", "strength": "refactoring"}
+    )
+    fleet.tom.update_model(
+        "DataAgent", {"domain": "SQL", "strength": "query_optimization"}
+    )
 
     collaborators = fleet.tom.suggest_collaborator("I need help with a Python function")
     print(f"Suggested Collaborators for Python: {collaborators}")

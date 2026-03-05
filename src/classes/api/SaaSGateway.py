@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,36 +26,39 @@ from src.infrastructure.api.core.GatewayCore import GatewayCore
 
 __version__ = VERSION
 
+
 class SaaSGateway:
     """Provides usage control and authentication for the fleet as a service.
     Integrated with GatewayCore for external SaaS orchestration.
     """
-    
+
     def __init__(self) -> None:
-        self.api_keys: dict[str, dict[str, Any]] = {} # key -> {tenant, quota}
+        self.api_keys: dict[str, dict[str, Any]] = {}  # key -> {tenant, quota}
         self.usage_logs: list[dict[str, Any]] = []
-        self.rate_limits: dict[str, list[float]] = {} # key -> [timestamps]
+        self.rate_limits: dict[str, list[float]] = {}  # key -> [timestamps]
         self.core = GatewayCore()
 
-    def call_external_saas(self, api_key: str, service: str, action: str, params: dict[str, Any]) -> dict[str, Any]:
+    def call_external_saas(
+        self, api_key: str, service: str, action: str, params: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Proxies a request to an external SaaS service (Jira/Slack/Trello).
         """
         if not self.validate_request(api_key):
-             return {"error": "unauthorized"}
-             
+            return {"error": "unauthorized"}
+
         endpoint = self.core.get_service_endpoint(service)
         if not endpoint:
             return {"error": f"Service {service} not registered"}
-            
+
         self.core.format_saas_request(service, action, params)
         logging.info(f"SaaSGateway: Forwarding to {endpoint}{action}...")
-        
+
         # Simulated response
         return {
             "status": "success",
             "service": service,
-            "data": f"Simulated response from {service} for action {action}"
+            "data": f"Simulated response from {service} for action {action}",
         }
 
     def create_api_key(self, tenant_id: str, daily_quota: int = 1000) -> str:
@@ -64,7 +68,7 @@ class SaaSGateway:
             "tenant_id": tenant_id,
             "daily_quota": daily_quota,
             "used_today": 0,
-            "created_at": time.time()
+            "created_at": time.time(),
         }
         self.rate_limits[key] = []
         return key
@@ -74,27 +78,29 @@ class SaaSGateway:
         if api_key not in self.api_keys:
             logging.warning(f"SAAS: Unauthorized access attempt with key {api_key}")
             return False
-            
+
         # Rate Limiting (Simple Token Bucket: max 5 requests per second)
         now = time.time()
-        self.rate_limits[api_key] = [t for t in self.rate_limits[api_key] if now - t < 1.0]
+        self.rate_limits[api_key] = [
+            t for t in self.rate_limits[api_key] if now - t < 1.0
+        ]
         if len(self.rate_limits[api_key]) >= 5:
             logging.warning(f"SAAS: Rate limit exceeded for key {api_key}")
             return False
 
         tenant_info = self.api_keys[api_key]
         if tenant_info["used_today"] + cost > tenant_info["daily_quota"]:
-            logging.warning(f"SAAS: Quota exceeded for tenant {tenant_info['tenant_id']}")
+            logging.warning(
+                f"SAAS: Quota exceeded for tenant {tenant_info['tenant_id']}"
+            )
             return False
-            
+
         # Record successful request
         self.rate_limits[api_key].append(now)
         tenant_info["used_today"] += cost
-        self.usage_logs.append({
-            "key": api_key,
-            "timestamp": now,
-            "tenant": tenant_info["tenant_id"]
-        })
+        self.usage_logs.append(
+            {"key": api_key, "timestamp": now, "tenant": tenant_info["tenant_id"]}
+        )
         return True
 
     def get_quota_status(self, api_key: str) -> dict[str, Any]:

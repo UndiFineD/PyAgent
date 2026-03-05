@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_rotaryembeddingbase_exists():
     """Test that RotaryEmbeddingBase class exists and is importable."""
-    assert 'RotaryEmbeddingBase' in dir()
+    assert "RotaryEmbeddingBase" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

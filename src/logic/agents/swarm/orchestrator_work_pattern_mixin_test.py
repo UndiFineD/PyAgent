@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_orchestratorworkpatternmixin_exists():
     """Test that OrchestratorWorkPatternMixin class exists and is importable."""
-    assert 'OrchestratorWorkPatternMixin' in dir()
+    assert "OrchestratorWorkPatternMixin" in dir()
 
 
 def test_orchestratorworkpatternmixin_instantiation():
@@ -45,4 +45,3 @@ def test_orchestratorworkpatternmixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

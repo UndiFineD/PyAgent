@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +29,9 @@ from src.core.base.common.utils.diff_generator import DiffGenerator
 class OrchestratorDiffMixin:
     """Diff preview methods for OrchestratorAgent."""
 
-    def enable_diff_preview(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED) -> None:
+    def enable_diff_preview(
+        self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED
+    ) -> None:
         """Enable diff preview mode."""
         setattr(self, "diff_generator", DiffGenerator(output_format))
         logging.info(f"Diff preview enabled (format: {output_format.name})")

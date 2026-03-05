@@ -15,12 +15,14 @@
 from typing import Dict, Any, List, Optional
 import asyncio
 
+
 class ModelManagerCore:
     """
     Manages the lifecycle of local/remote models (Ollama/VLLM).
     Handles dynamic context-length adjustments and health monitoring.
     Harvested from awesome-ollama patterns.
     """
+
     def __init__(self, provider: str = "ollama"):
         self.provider = provider
         self.model_stats: Dict[str, Any] = {}

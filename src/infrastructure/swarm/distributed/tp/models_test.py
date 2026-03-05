@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ParallelMode"), "ParallelMode missing"
     assert hasattr(mod, "ParallelConfig"), "ParallelConfig missing"
     assert hasattr(mod, "RankInfo"), "RankInfo missing"
-

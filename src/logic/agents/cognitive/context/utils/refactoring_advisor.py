@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ from src.logic.agents.cognitive.context.models.refactoring_suggestion import (
 
 try:
     from rust_core import apply_patterns_rust
+
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
@@ -85,7 +87,9 @@ class RefactoringAdvisor:
         if _RUST_ACCEL and self.patterns:
             # Use Rust for pattern matching: Vec<(path, content)>, Vec<(name, pattern)>
             content_list = list(context_map.items())
-            pattern_list = [(name, spec["pattern"]) for name, spec in self.patterns.items()]
+            pattern_list = [
+                (name, spec["pattern"]) for name, spec in self.patterns.items()
+            ]
             matches = apply_patterns_rust(content_list, pattern_list)
             for path, name in matches:
                 spec = self.patterns[name]

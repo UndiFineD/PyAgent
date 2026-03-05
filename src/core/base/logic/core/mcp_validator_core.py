@@ -15,10 +15,11 @@
 import re
 from typing import List, Dict, Any, Tuple
 
+
 class McpValidatorCore:
     """
     Validates MCP (Model Context Protocol) servers and tools for security.
-    
+
     Harvested from .external/mcp-security:
     - Checks for prompt injection in descriptions.
     - Identifies high-risk tools.
@@ -33,7 +34,7 @@ class McpValidatorCore:
         r"delete all files",
         r"secret key",
         r"override",
-        r"hidden tag"
+        r"hidden tag",
     ]
 
     # High-impact tool patterns requiring user confirmation
@@ -46,7 +47,7 @@ class McpValidatorCore:
         r"bash",
         r"send_money",
         r"write_file",
-        r"edit_file"
+        r"edit_file",
     ]
 
     def validate_tool_definition(self, tool_def: Dict[str, Any]) -> List[str]:
@@ -61,12 +62,16 @@ class McpValidatorCore:
         # 1. Check for injection keywords in description
         for keyword in self.INJECTION_KEYWORDS:
             if re.search(keyword, description, re.IGNORECASE):
-                warnings.append(f"Potential injection trigger in tool '{name}' description: '{keyword}'")
+                warnings.append(
+                    f"Potential injection trigger in tool '{name}' description: '{keyword}'"
+                )
 
         # 2. Identify high-impact tools
         for pattern in self.HIGH_IMPACT_TOOLS:
             if re.search(pattern, name, re.IGNORECASE):
-                warnings.append(f"High-impact tool detected: '{name}'. Requires explicit confirmation.")
+                warnings.append(
+                    f"High-impact tool detected: '{name}'. Requires explicit confirmation."
+                )
 
         return warnings
 
@@ -74,6 +79,7 @@ class McpValidatorCore:
         """
         Ensures metadata (like API keys) is not exposed in the server schema.
         """
+
         # Search recursively for 'key', 'secret', 'token' in the config structure
         def find_secrets(obj):
             if isinstance(obj, str):
@@ -93,5 +99,7 @@ class McpValidatorCore:
         warnings = []
         for var in risky_vars:
             if var in env_vars:
-                warnings.append(f"MCP server attempting to override critical env var: {var}")
+                warnings.append(
+                    f"MCP server attempting to override critical env var: {var}"
+                )
         return warnings

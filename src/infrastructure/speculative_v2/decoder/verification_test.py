@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_verificationresult_exists():
     """Test that VerificationResult class exists and is importable."""
-    assert 'VerificationResult' in dir()
+    assert "VerificationResult" in dir()
 
 
 def test_speculativeverifier_exists():
     """Test that SpeculativeVerifier class exists and is importable."""
-    assert 'SpeculativeVerifier' in dir()
+    assert "SpeculativeVerifier" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_sopstep_exists():
     """Test that SopStep class exists and is importable."""
-    assert 'SopStep' in dir()
+    assert "SopStep" in dir()
 
 
 def test_sopmanifest_exists():
     """Test that SopManifest class exists and is importable."""
-    assert 'SopManifest' in dir()
+    assert "SopManifest" in dir()
 
 
 def test_sopcore_exists():
     """Test that SopCore class exists and is importable."""
-    assert 'SopCore' in dir()
+    assert "SopCore" in dir()
 
 
 def test_sopcore_instantiation():
@@ -55,4 +55,3 @@ def test_sopcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

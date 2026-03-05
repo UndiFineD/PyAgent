@@ -69,17 +69,20 @@ class CodeAnalyzerCore:
                 node.body = [ast.Pass()]
             elif isinstance(node, ast.ClassDef):
                 # Keep class docstring if it exists, otherwise pass
-                if (node.body and isinstance(node.body[0], ast.Expr) and 
-                    isinstance(node.body[0].value, ast.Constant) and 
-                    isinstance(node.body[0].value.value, str)):
+                if (
+                    node.body
+                    and isinstance(node.body[0], ast.Expr)
+                    and isinstance(node.body[0].value, ast.Constant)
+                    and isinstance(node.body[0].value.value, str)
+                ):
                     node.body = [node.body[0], ast.Pass()]
                 else:
                     node.body = [ast.Pass()]
 
         compact_code = ast.unparse(tree)
         # remove residual comments using regex if needed
-        compact_code = re.sub(r'(?m)^\s*#.*$', '', compact_code)
-        compact_code = re.sub(r'\n\s*\n', '\n', compact_code)
+        compact_code = re.sub(r"(?m)^\s*#.*$", "", compact_code)
+        compact_code = re.sub(r"\n\s*\n", "\n", compact_code)
 
         rel_path = os.path.relpath(file_path, self.workspace_root)
         return f"### API Guide regarding {rel_path}\n```python\n{compact_code}\n```"
@@ -89,7 +92,9 @@ class CodeAnalyzerCore:
         lines = source.splitlines()
         return {
             "total_lines": len(lines),
-            "code_lines": len([l for l in lines if l.strip() and not l.strip().startswith("#")]),
+            "code_lines": len(
+                [l for l in lines if l.strip() and not l.strip().startswith("#")]
+            ),
             "comment_lines": len([l for l in lines if l.strip().startswith("#")]),
             "functions": len(re.findall(r"(?m)^\s*def\s+", source)),
             "classes": len(re.findall(r"(?m)^class\s+", source)),

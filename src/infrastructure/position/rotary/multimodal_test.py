@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_mrotaryembedding_exists():
     """Test that MRotaryEmbedding class exists and is importable."""
-    assert 'MRotaryEmbedding' in dir()
+    assert "MRotaryEmbedding" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

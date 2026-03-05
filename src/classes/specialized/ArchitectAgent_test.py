@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_architectagent_exists():
     """Test that ArchitectAgent class exists and is importable."""
-    assert 'ArchitectAgent' in dir()
+    assert "ArchitectAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

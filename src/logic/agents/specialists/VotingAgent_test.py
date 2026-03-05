@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_votingmethod_exists():
     """Test that VotingMethod class exists and is importable."""
-    assert 'VotingMethod' in dir()
+    assert "VotingMethod" in dir()
 
 
 def test_votestatus_exists():
     """Test that VoteStatus class exists and is importable."""
-    assert 'VoteStatus' in dir()
+    assert "VoteStatus" in dir()
 
 
 def test_vote_exists():
     """Test that Vote class exists and is importable."""
-    assert 'Vote' in dir()
+    assert "Vote" in dir()
 
 
 def test_votingsession_exists():
     """Test that VotingSession class exists and is importable."""
-    assert 'VotingSession' in dir()
+    assert "VotingSession" in dir()
 
 
 def test_votingagent_exists():
     """Test that VotingAgent class exists and is importable."""
-    assert 'VotingAgent' in dir()
+    assert "VotingAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

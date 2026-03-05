@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +31,11 @@ from typing import Any, Callable, Dict, List, Optional
 from src.infrastructure.services.executor.multiproc.base import Executor
 from src.infrastructure.services.executor.multiproc.future import FutureWrapper
 from src.infrastructure.services.executor.multiproc.types import (
-    ResultMessage, TaskMessage, WorkerInfo, WorkerState)
+    ResultMessage,
+    TaskMessage,
+    WorkerInfo,
+    WorkerState,
+)
 
 
 class MultiprocExecutor(Executor):
@@ -115,7 +120,13 @@ class MultiprocExecutor(Executor):
 
         process = mp.Process(
             target=self._worker_loop,
-            args=(worker_id, self._task_queue, self._result_queue, control_queue, self._functions),
+            args=(
+                worker_id,
+                self._task_queue,
+                self._result_queue,
+                control_queue,
+                self._functions,
+            ),
             daemon=True,
         )
         process.start()
@@ -182,7 +193,9 @@ class MultiprocExecutor(Executor):
                             execution_time_ns=end_time - start_time,
                         )
                     )
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     end_time = time.time_ns()
                     result_queue.put(
                         ResultMessage(
@@ -195,7 +208,9 @@ class MultiprocExecutor(Executor):
                         )
                     )
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 with contextlib.suppress(Exception):
                     # Worker loop error - try to continue
                     pass
@@ -210,7 +225,9 @@ class MultiprocExecutor(Executor):
                     # Update heartbeat
                     with self._lock:
                         if result.worker_id in self._worker_info:
-                            self._worker_info[result.worker_id].last_heartbeat = time.time()
+                            self._worker_info[result.worker_id].last_heartbeat = (
+                                time.time()
+                            )
                     continue
 
                 # Find and complete the future
@@ -225,11 +242,15 @@ class MultiprocExecutor(Executor):
                     if result.success:
                         future.set_result(result.result)
                     else:
-                        future.set_exception(Exception(f"{result.error}\n{result.traceback}"))
+                        future.set_exception(
+                            Exception(f"{result.error}\n{result.traceback}")
+                        )
 
             except queue.Empty:
                 continue
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def _monitor_workers(self) -> None:
@@ -309,7 +330,9 @@ class MultiprocExecutor(Executor):
         self._task_queue.put(task)
         return future
 
-    def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
+    def broadcast(
+        self, func_name: str, *args: Any, **kwargs: Any
+    ) -> List[FutureWrapper[Any]]:
         """Broadcast to all workers."""
         futures = []
         for _ in range(self._num_workers):
@@ -345,6 +368,8 @@ class MultiprocExecutor(Executor):
 
         with self._lock:
             healthy_workers = sum(
-                1 for info in self._worker_info.values() if info.state in (WorkerState.READY, WorkerState.BUSY)
+                1
+                for info in self._worker_info.values()
+                if info.state in (WorkerState.READY, WorkerState.BUSY)
             )
             return healthy_workers >= self._num_workers // 2

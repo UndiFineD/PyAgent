@@ -16,6 +16,7 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class ContextRecommendation:
     """Recommendation for context improvement.
@@ -26,6 +27,7 @@ class ContextRecommendation:
         reason: Why this recommendation was made.
         confidence: Recommendation confidence.
     """
+
     source_file: str
     suggested_sections: List[str] = field(default_factory=lambda: [])
     reason: str = ""

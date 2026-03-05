@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LintIssue"), "LintIssue missing"
     assert hasattr(mod, "LintResult"), "LintResult missing"
     assert hasattr(mod, "LinterCore"), "LinterCore missing"
-

@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_dispatchmode_exists():
     """Test that DispatchMode class exists and is importable."""
-    assert 'DispatchMode' in dir()
+    assert "DispatchMode" in dir()
 
 
 def test_dispatchkey_exists():
     """Test that DispatchKey class exists and is importable."""
-    assert 'DispatchKey' in dir()
+    assert "DispatchKey" in dir()
 
 
 def test_dispatchstats_exists():
     """Test that DispatchStats class exists and is importable."""
-    assert 'DispatchStats' in dir()
+    assert "DispatchStats" in dir()
 
 
 def test_dispatchpolicy_exists():
     """Test that DispatchPolicy class exists and is importable."""
-    assert 'DispatchPolicy' in dir()
+    assert "DispatchPolicy" in dir()
 
 
 def test_defaultdispatchpolicy_exists():
     """Test that DefaultDispatchPolicy class exists and is importable."""
-    assert 'DefaultDispatchPolicy' in dir()
+    assert "DefaultDispatchPolicy" in dir()
 
 
 def test_adaptivedispatchpolicy_exists():
     """Test that AdaptiveDispatchPolicy class exists and is importable."""
-    assert 'AdaptiveDispatchPolicy' in dir()
+    assert "AdaptiveDispatchPolicy" in dir()
 
 
 def test_graphentry_exists():
     """Test that GraphEntry class exists and is importable."""
-    assert 'GraphEntry' in dir()
+    assert "GraphEntry" in dir()
 
 
 def test_cudagraphdispatcher_exists():
     """Test that CudagraphDispatcher class exists and is importable."""
-    assert 'CudagraphDispatcher' in dir()
+    assert "CudagraphDispatcher" in dir()
 
 
 def test_compositedispatcher_exists():
     """Test that CompositeDispatcher class exists and is importable."""
-    assert 'CompositeDispatcher' in dir()
+    assert "CompositeDispatcher" in dir()
 
 
 def test_compositedispatcher_instantiation():
@@ -84,7 +84,7 @@ def test_compositedispatcher_instantiation():
 
 def test_streamdispatcher_exists():
     """Test that StreamDispatcher class exists and is importable."""
-    assert 'StreamDispatcher' in dir()
+    assert "StreamDispatcher" in dir()
 
 
 def test_create_dispatch_key_exists():
@@ -100,4 +100,3 @@ def test_get_padded_key_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

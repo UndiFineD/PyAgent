@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,6 +52,7 @@ CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
     },
 }
 
+
 class CoderSmellMixin:
     """Mixin for detecting code smells."""
 
@@ -78,7 +80,9 @@ class CoderSmellMixin:
                 self._check_python_class_smells(node, smells)
         return smells
 
-    def _check_python_method_smells(self, node: ast.FunctionDef | ast.AsyncFunctionDef, smells: List[CodeSmell]) -> None:
+    def _check_python_method_smells(
+        self, node: ast.FunctionDef | ast.AsyncFunctionDef, smells: List[CodeSmell]
+    ) -> None:
         """Check for long methods and too many parameters."""
         # Long method detection
         if hasattr(node, "end_lineno") and node.end_lineno is not None:
@@ -111,7 +115,9 @@ class CoderSmellMixin:
                 )
             )
 
-    def _check_python_class_smells(self, node: ast.ClassDef, smells: List[CodeSmell]) -> None:
+    def _check_python_class_smells(
+        self, node: ast.ClassDef, smells: List[CodeSmell]
+    ) -> None:
         """Check for god classes."""
         method_count = sum(
             1

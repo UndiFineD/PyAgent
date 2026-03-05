@@ -33,52 +33,52 @@ except ImportError as e:
 
 def test_samlversion_exists():
     """Test that SAMLVersion class exists and is importable."""
-    assert 'SAMLVersion' in dir()
+    assert "SAMLVersion" in dir()
 
 
 def test_federationprovider_exists():
     """Test that FederationProvider class exists and is importable."""
-    assert 'FederationProvider' in dir()
+    assert "FederationProvider" in dir()
 
 
 def test_signaturealgorithm_exists():
     """Test that SignatureAlgorithm class exists and is importable."""
-    assert 'SignatureAlgorithm' in dir()
+    assert "SignatureAlgorithm" in dir()
 
 
 def test_digestalgorithm_exists():
     """Test that DigestAlgorithm class exists and is importable."""
-    assert 'DigestAlgorithm' in dir()
+    assert "DigestAlgorithm" in dir()
 
 
 def test_federationservice_exists():
     """Test that FederationService class exists and is importable."""
-    assert 'FederationService' in dir()
+    assert "FederationService" in dir()
 
 
 def test_samltoken_exists():
     """Test that SAMLToken class exists and is importable."""
-    assert 'SAMLToken' in dir()
+    assert "SAMLToken" in dir()
 
 
 def test_relyingparty_exists():
     """Test that RelyingParty class exists and is importable."""
-    assert 'RelyingParty' in dir()
+    assert "RelyingParty" in dir()
 
 
 def test_federationuser_exists():
     """Test that FederationUser class exists and is importable."""
-    assert 'FederationUser' in dir()
+    assert "FederationUser" in dir()
 
 
 def test_tokengenerationrequest_exists():
     """Test that TokenGenerationRequest class exists and is importable."""
-    assert 'TokenGenerationRequest' in dir()
+    assert "TokenGenerationRequest" in dir()
 
 
 def test_federationservicescore_exists():
     """Test that FederationServicesCore class exists and is importable."""
-    assert 'FederationServicesCore' in dir()
+    assert "FederationServicesCore" in dir()
 
 
 def test_federationservicescore_instantiation():
@@ -90,4 +90,3 @@ def test_federationservicescore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

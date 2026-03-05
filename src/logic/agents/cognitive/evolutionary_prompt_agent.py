@@ -158,7 +158,7 @@ class EvolutionaryPromptAgent(BaseAgent):
 
             try:
                 # Read current prompt
-                with open(prompt_file, 'r', encoding='utf-8') as f:
+                with open(prompt_file, "r", encoding="utf-8") as f:
                     current_prompt = f.read().strip()
 
                 if not current_prompt:
@@ -166,18 +166,22 @@ class EvolutionaryPromptAgent(BaseAgent):
                     continue
 
                 # Apply evolutionary optimization
-                optimized_prompt = self._optimize_agent_prompt(current_prompt, agent_name)
+                optimized_prompt = self._optimize_agent_prompt(
+                    current_prompt, agent_name
+                )
 
                 # Write back the optimized prompt
-                with open(prompt_file, 'w', encoding='utf-8') as f:
+                with open(prompt_file, "w", encoding="utf-8") as f:
                     f.write(optimized_prompt)
 
-                updated_agents.append({
-                    "agent": agent_name,
-                    "original_length": len(current_prompt),
-                    "optimized_length": len(optimized_prompt),
-                    "improvement": len(optimized_prompt) - len(current_prompt)
-                })
+                updated_agents.append(
+                    {
+                        "agent": agent_name,
+                        "original_length": len(current_prompt),
+                        "optimized_length": len(optimized_prompt),
+                        "improvement": len(optimized_prompt) - len(current_prompt),
+                    }
+                )
 
             except Exception as e:  # pylint: disable=broad-exception-caught
                 skipped_dirs.append(f"{agent_name} (error: {str(e)})")
@@ -188,7 +192,8 @@ class EvolutionaryPromptAgent(BaseAgent):
             "skipped_count": len(skipped_dirs),
             "skipped_dirs": skipped_dirs[:10],  # Limit for readability
             "total_agent_dirs": len(list(agents_dir.iterdir())),
-            "dirs_with_prompts": len(updated_agents) + len([s for s in skipped_dirs if "(error:" in s or "(empty" in s])
+            "dirs_with_prompts": len(updated_agents)
+            + len([s for s in skipped_dirs if "(error:" in s or "(empty" in s]),
         }
 
     def _optimize_agent_prompt(self, prompt: str, agent_name: str) -> str:
@@ -203,7 +208,9 @@ class EvolutionaryPromptAgent(BaseAgent):
             # Mock fitness scores (in real usage, this would be based on actual performance)
             for i, individual in enumerate(self.population):
                 # Simple heuristic: prefer prompts that are concise but comprehensive
-                fitness = self._calculate_prompt_fitness(individual["prompt"], agent_name)
+                fitness = self._calculate_prompt_fitness(
+                    individual["prompt"], agent_name
+                )
                 self.record_fitness(i, fitness)
 
             # Evolve to next generation
@@ -213,7 +220,10 @@ class EvolutionaryPromptAgent(BaseAgent):
         best_prompt = self.get_best_prompt()
 
         # If evolution didn't produce a better result, apply minimal improvements
-        if best_prompt == "No population initialized." or len(best_prompt) < len(prompt) * 0.8:
+        if (
+            best_prompt == "No population initialized."
+            or len(best_prompt) < len(prompt) * 0.8
+        ):
             best_prompt = self._apply_minimal_improvements(prompt, agent_name)
 
         return best_prompt
@@ -235,17 +245,26 @@ class EvolutionaryPromptAgent(BaseAgent):
         elif length < 50:
             score -= 10  # Too short
         elif length > 2000:
-            score -= 5   # Too long
+            score -= 5  # Too long
 
         # Prefer prompts with clear instructions
-        instruction_words = ['you are', 'your role', 'you must', 'always', 'focus on']
+        instruction_words = ["you are", "your role", "you must", "always", "focus on"]
         for word in instruction_words:
             if word in prompt.lower():
                 score += 2
 
         # Prefer prompts that mention specific capabilities
-        capability_indicators = ['code', 'analyze', 'generate', 'optimize', 'process', 'handle']
-        capability_count = sum(1 for cap in capability_indicators if cap in prompt.lower())
+        capability_indicators = [
+            "code",
+            "analyze",
+            "generate",
+            "optimize",
+            "process",
+            "handle",
+        ]
+        capability_count = sum(
+            1 for cap in capability_indicators if cap in prompt.lower()
+        )
         score += capability_count * 3
 
         return max(score, 0.1)  # Minimum score to avoid division by zero
@@ -257,15 +276,22 @@ class EvolutionaryPromptAgent(BaseAgent):
         improved = prompt
 
         # Ensure the prompt starts with agent identification
-        if not improved.lower().startswith('you are'):
-            improved = f"You are the {agent_name.replace('_', ' ').title()} Agent. {improved}"
+        if not improved.lower().startswith("you are"):
+            improved = (
+                f"You are the {agent_name.replace('_', ' ').title()} Agent. {improved}"
+            )
 
         # Add clarity markers if missing
-        if 'your role' not in improved.lower() and 'you must' not in improved.lower():
-            improved += "\n\nYour role is to assist with tasks effectively and efficiently."
+        if "your role" not in improved.lower() and "you must" not in improved.lower():
+            improved += (
+                "\n\nYour role is to assist with tasks effectively and efficiently."
+            )
 
         # Ensure the prompt ends with a call to action or capability statement
-        if not any(phrase in improved.lower() for phrase in ['always', 'focus on', 'specialize in']):
+        if not any(
+            phrase in improved.lower()
+            for phrase in ["always", "focus on", "specialize in"]
+        ):
             improved += "\n\nAlways provide high-quality, accurate responses."
 
         return improved

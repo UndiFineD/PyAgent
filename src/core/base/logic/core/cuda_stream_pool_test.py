@@ -25,4 +25,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "compute_stream"), "compute_stream missing"
     assert hasattr(mod, "comm_stream"), "comm_stream missing"
     assert hasattr(mod, "high_priority_stream"), "high_priority_stream missing"
-

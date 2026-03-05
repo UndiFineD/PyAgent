@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +30,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-if __name__ == '__main__':
-    # OrchestratorAgent does not have a main function. 
+if __name__ == "__main__":
+    # OrchestratorAgent does not have a main function.
     # This file is deprecated.
     pass

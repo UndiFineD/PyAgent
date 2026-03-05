@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_documentationindexeragent_exists():
     """Test that DocumentationIndexerAgent class exists and is importable."""
-    assert 'DocumentationIndexerAgent' in dir()
+    assert "DocumentationIndexerAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

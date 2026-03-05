@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_chainofthoughtstrategy_exists():
     """Test that ChainOfThoughtStrategy class exists and is importable."""
-    assert 'ChainOfThoughtStrategy' in dir()
+    assert "ChainOfThoughtStrategy" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

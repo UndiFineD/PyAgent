@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_fleetupdatemixin_exists():
     """Test that FleetUpdateMixin class exists and is importable."""
-    assert 'FleetUpdateMixin' in dir()
+    assert "FleetUpdateMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

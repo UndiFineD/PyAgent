@@ -68,7 +68,7 @@ class DataProcessingMixin:
             "DONT_REQ_PREAUTH",
             "PASSWORD_EXPIRED",
             "TRUSTED_TO_AUTH_FOR_DELEGATION",
-            "PARTIAL_SECRETS_ACCOUNT"
+            "PARTIAL_SECRETS_ACCOUNT",
         ]
 
         enabled_flags = []
@@ -78,7 +78,9 @@ class DataProcessingMixin:
 
         return " | ".join(enabled_flags) if enabled_flags else "NONE"
 
-    def convert_filetime_to_datetime(self, filetime_value: Union[int, str]) -> datetime.datetime:
+    def convert_filetime_to_datetime(
+        self, filetime_value: Union[int, str]
+    ) -> datetime.datetime:
         """
         Convert Windows FILETIME to Python datetime.
 
@@ -91,7 +93,9 @@ class DataProcessingMixin:
         try:
             filetime = int(filetime_value)
             # FILETIME is in 100-nanosecond intervals since 1601-01-01
-            return datetime.datetime(1601, 1, 1) + datetime.timedelta(microseconds=filetime // 10)
+            return datetime.datetime(1601, 1, 1) + datetime.timedelta(
+                microseconds=filetime // 10
+            )
         except (ValueError, TypeError):
             return datetime.datetime.min
 
@@ -126,28 +130,41 @@ class DataProcessingMixin:
             Enhanced record with explanation field
         """
         record = record.copy()
-        attr_name = record.get('attribute_name', '').lower()
-        attr_value = record.get('attribute_value')
+        attr_name = record.get("attribute_name", "").lower()
+        attr_value = record.get("attribute_value")
 
         explanation = None
 
-        if attr_name == 'useraccountcontrol':
-            explanation = self.convert_user_account_control(int(attr_value) if attr_value else 0)
-        elif attr_name in ['lastlogontimestamp', 'pwdlastset', 'lockouttime', 'ms-mcs-admpwdexpirationtime']:
-            explanation = self.convert_filetime_to_datetime(attr_value) if attr_value else None
-        elif attr_name == 'accountexpires':
-            explanation = self.convert_account_expires(attr_value) if attr_value else None
-        elif attr_name == 'member':
+        if attr_name == "useraccountcontrol":
+            explanation = self.convert_user_account_control(
+                int(attr_value) if attr_value else 0
+            )
+        elif attr_name in [
+            "lastlogontimestamp",
+            "pwdlastset",
+            "lockouttime",
+            "ms-mcs-admpwdexpirationtime",
+        ]:
+            explanation = (
+                self.convert_filetime_to_datetime(attr_value) if attr_value else None
+            )
+        elif attr_name == "accountexpires":
+            explanation = (
+                self.convert_account_expires(attr_value) if attr_value else None
+            )
+        elif attr_name == "member":
             # For group membership changes
-            version = record.get('version', 0)
+            version = record.get("version", 0)
             explanation = "Added to group" if version % 2 == 1 else "Removed from group"
 
         if explanation is not None:
-            record['explanation'] = explanation
+            record["explanation"] = explanation
 
         return record
 
-    def format_change_output(self, changes: List[Dict[str, Any]], format_type: str = 'table') -> str:
+    def format_change_output(
+        self, changes: List[Dict[str, Any]], format_type: str = "table"
+    ) -> str:
         """
         Format change records for output.
 
@@ -158,11 +175,12 @@ class DataProcessingMixin:
         Returns:
             Formatted output string
         """
-        if format_type == 'json':
+        if format_type == "json":
             import json
+
             return json.dumps(changes, indent=2, default=str)
 
-        if format_type == 'list':
+        if format_type == "list":
             lines = []
             for change in changes:
                 lines.append(f"Object: {change.get('object', 'N/A')}")
@@ -178,11 +196,11 @@ class DataProcessingMixin:
         lines = [header, "-" * len(header)]
 
         for change in changes:
-            obj = str(change.get('object', ''))[:29]
-            attr = str(change.get('attribute_name', ''))[:19]
-            val = str(change.get('attribute_value', ''))[:19]
-            time_str = str(change.get('last_orig_change_time', ''))[:19]
-            exp = str(change.get('explanation', ''))[:29]
+            obj = str(change.get("object", ""))[:29]
+            attr = str(change.get("attribute_name", ""))[:19]
+            val = str(change.get("attribute_value", ""))[:19]
+            time_str = str(change.get("last_orig_change_time", ""))[:19]
+            exp = str(change.get("explanation", ""))[:29]
 
             lines.append(f"{obj:<30} {attr:<20} {val:<20} {time_str:<20} {exp:<30}")
 

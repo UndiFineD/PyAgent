@@ -18,11 +18,12 @@ def test_imports_and_symbols():
     assert hasattr(mod, "FusedMoEQuantConfig"), "FusedMoEQuantConfig missing"
     assert hasattr(mod, "ExpertPlacementStrategy"), "ExpertPlacementStrategy missing"
     assert hasattr(mod, "FusedMoEMethodBase"), "FusedMoEMethodBase missing"
-    assert hasattr(mod, "UnquantizedFusedMoEMethod"), "UnquantizedFusedMoEMethod missing"
+    assert hasattr(
+        mod, "UnquantizedFusedMoEMethod"
+    ), "UnquantizedFusedMoEMethod missing"
     assert hasattr(mod, "SparseDispatcher"), "SparseDispatcher missing"
     assert hasattr(mod, "DenseDispatcher"), "DenseDispatcher missing"
     assert hasattr(mod, "determine_expert_map"), "determine_expert_map missing"
     assert hasattr(mod, "FusedMoELayer"), "FusedMoELayer missing"
     assert hasattr(mod, "AdaptiveMoELayer"), "AdaptiveMoELayer missing"
     assert hasattr(mod, "HierarchicalMoELayer"), "HierarchicalMoELayer missing"
-

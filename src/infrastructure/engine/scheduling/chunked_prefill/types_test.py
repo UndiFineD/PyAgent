@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "PrefillChunk"), "PrefillChunk missing"
     assert hasattr(mod, "ChunkedRequest"), "ChunkedRequest missing"
     assert hasattr(mod, "ChunkedPrefillConfig"), "ChunkedPrefillConfig missing"
-

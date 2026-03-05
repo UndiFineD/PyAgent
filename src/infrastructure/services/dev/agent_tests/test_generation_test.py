@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TestGenerator"), "TestGenerator missing"
     assert hasattr(mod, "TestCaseMinimizer"), "TestCaseMinimizer missing"
     assert hasattr(mod, "TestDocGenerator"), "TestDocGenerator missing"
-

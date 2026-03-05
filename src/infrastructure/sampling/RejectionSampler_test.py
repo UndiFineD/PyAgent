@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_rejectionstrategy_exists():
     """Test that RejectionStrategy class exists and is importable."""
-    assert 'RejectionStrategy' in dir()
+    assert "RejectionStrategy" in dir()
 
 
 def test_recoverymode_exists():
     """Test that RecoveryMode class exists and is importable."""
-    assert 'RecoveryMode' in dir()
+    assert "RecoveryMode" in dir()
 
 
 def test_rejectionconfig_exists():
     """Test that RejectionConfig class exists and is importable."""
-    assert 'RejectionConfig' in dir()
+    assert "RejectionConfig" in dir()
 
 
 def test_acceptancestats_exists():
     """Test that AcceptanceStats class exists and is importable."""
-    assert 'AcceptanceStats' in dir()
+    assert "AcceptanceStats" in dir()
 
 
 def test_rejectionoutput_exists():
     """Test that RejectionOutput class exists and is importable."""
-    assert 'RejectionOutput' in dir()
+    assert "RejectionOutput" in dir()
 
 
 def test_probabilityprovider_exists():
     """Test that ProbabilityProvider class exists and is importable."""
-    assert 'ProbabilityProvider' in dir()
+    assert "ProbabilityProvider" in dir()
 
 
 def test_rejectionsampler_exists():
     """Test that RejectionSampler class exists and is importable."""
-    assert 'RejectionSampler' in dir()
+    assert "RejectionSampler" in dir()
 
 
 def test_streamingrejectionsampler_exists():
     """Test that StreamingRejectionSampler class exists and is importable."""
-    assert 'StreamingRejectionSampler' in dir()
+    assert "StreamingRejectionSampler" in dir()
 
 
 def test_batchrejectionsampler_exists():
     """Test that BatchRejectionSampler class exists and is importable."""
-    assert 'BatchRejectionSampler' in dir()
+    assert "BatchRejectionSampler" in dir()
 
 
 def test_create_rejection_sampler_exists():
@@ -84,4 +84,3 @@ def test_create_rejection_sampler_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_apicore_exists():
     """Test that APICore class exists and is importable."""
-    assert 'APICore' in dir()
+    assert "APICore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

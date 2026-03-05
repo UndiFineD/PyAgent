@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "InputBuffers"), "InputBuffers missing"
     assert hasattr(mod, "MoveDirectionality"), "MoveDirectionality missing"
     assert hasattr(mod, "SamplingMetadata"), "SamplingMetadata missing"
-

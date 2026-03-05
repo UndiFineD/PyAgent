@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,13 +31,15 @@ __version__ = VERSION
 
 try:
     from pypdf import PdfReader
+
     HAS_PYPDF = True
 except ImportError:
     HAS_PYPDF = False
 
+
 class DocInferenceAgent(BaseAgent):
     """Manages high-accuracy OCR and document layout reconstruction."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -50,17 +53,17 @@ class DocInferenceAgent(BaseAgent):
     @as_tool
     def parse_pdf_text(self, pdf_path: str) -> str:
         """Reads text from a PDF file using pypdf.
-        
+
         Args:
             pdf_path: Path to the PDF file.
         """
         if not HAS_PYPDF:
             return "Error: pypdf library not installed. Please install it to use this tool."
-            
+
         path = Path(pdf_path)
         if not path.exists():
             return f"Error: File {pdf_path} not found."
-            
+
         try:
             reader = PdfReader(pdf_path)
             text = ""
@@ -71,35 +74,41 @@ class DocInferenceAgent(BaseAgent):
             return f"Error parsing PDF: {str(e)}"
 
     @as_tool
-    def ingest_document_to_knowledge(self, doc_path: str, tags: list[str] = None) -> dict[str, Any]:
+    def ingest_document_to_knowledge(
+        self, doc_path: str, tags: list[str] = None
+    ) -> dict[str, Any]:
         """Converts a document into context-aware Knowledge for the Fleet.
-        
+
         Args:
             doc_path: Path to the document (PDF, Image, Text).
             tags: Optional metadata tags.
         """
         logging.info(f"DocInference: Ingesting {doc_path} into Knowledge.")
-        content = self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."
-        
+        content = (
+            self.parse_pdf_text(doc_path)
+            if doc_path.lower().endswith(".pdf")
+            else "Non-PDF content raw placeholder."
+        )
+
         # Here we would typically interface with KnowledgeAgent or save to a known export path
         export_dir = Path("data/memory/knowledge_exports")
         export_dir.mkdir(exist_ok=True)
-        
+
         knowledge_file = export_dir / f"{Path(doc_path).stem}_knowledge.json"
         knowledge_data = {
             "source": doc_path,
             "content": content,
             "tags": tags or ["ingested", "doc_inference"],
-            "type": "unstructured_to_knowledge"
+            "type": "unstructured_to_knowledge",
         }
-        
-        with open(knowledge_file, 'w', encoding='utf-8') as f:
+
+        with open(knowledge_file, "w", encoding="utf-8") as f:
             json.dump(knowledge_data, f, indent=4)
-            
+
         return {
             "status": "success",
             "message": f"Successfully ingested {doc_path} into {knowledge_file}",
-            "char_count": len(content)
+            "char_count": len(content),
         }
 
     @as_tool
@@ -108,7 +117,7 @@ class DocInferenceAgent(BaseAgent):
         path = Path(doc_path)
         if not path.exists():
             return f"Error: Document {doc_path} not found."
-            
+
         logging.info(f"DocInference: Processing {doc_path} into {format}")
         # Mocking the layout conversion logic
         return f"Successfully reconstructed {doc_path} as {format}. Tables extracted: 2, Handwriting detected: Yes."
@@ -120,7 +129,7 @@ class DocInferenceAgent(BaseAgent):
         return {
             "fields": {"Full Name": "John Doe", "Date": "2025-10-14"},
             "checkboxes": {"Priority": True, "Reviewed": False},
-            "status": "Verified"
+            "status": "Verified",
         }
 
     @as_tool
@@ -132,6 +141,9 @@ class DocInferenceAgent(BaseAgent):
         """Generic processing helper."""
         return f"DocInference status: Layout engine active. Ready for {prompt}."
 
+
 if __name__ == "__main__":
-    main = create_main_function(DocInferenceAgent, "Document Inference Agent", "Path to document")
+    main = create_main_function(
+        DocInferenceAgent, "Document Inference Agent", "Path to document"
+    )
     main()

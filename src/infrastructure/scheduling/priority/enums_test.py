@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_taskpriority_exists():
     """Test that TaskPriority class exists and is importable."""
-    assert 'TaskPriority' in dir()
+    assert "TaskPriority" in dir()
 
 
 def test_taskstate_exists():
     """Test that TaskState class exists and is importable."""
-    assert 'TaskState' in dir()
+    assert "TaskState" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

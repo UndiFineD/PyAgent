@@ -42,7 +42,9 @@ class MultiNodeExecutor:
         self.hostname = socket.gethostname()
         self.ip = socket.gethostbyname(self.hostname)
 
-        logger.info(f"MultiNodeExecutor initialized on Node {node_id}/{total_nodes} ({self.ip})")
+        logger.info(
+            f"MultiNodeExecutor initialized on Node {node_id}/{total_nodes} ({self.ip})"
+        )
 
     def coordinate_tp_split(self, tensor_shape: tuple) -> Dict[int, tuple]:
         """
@@ -50,7 +52,9 @@ class MultiNodeExecutor:
         Uses Rust for topology-aware optimization.
         """
         if rc and hasattr(rc, "multi_node_coordinate_rust"):
-            return rc.multi_node_coordinate_rust(self.node_id, self.total_nodes, tensor_shape)
+            return rc.multi_node_coordinate_rust(
+                self.node_id, self.total_nodes, tensor_shape
+            )
 
         # Fallback: simple uniform split on final dimension
         last_dim = tensor_shape[-1]
@@ -68,6 +72,8 @@ class MultiNodeExecutor:
         """
         Synchronizes execution metadata across all nodes.
         """
-        logger.debug(f"Syncing metadata on Node {self.node_id} (Size: {len(metadata)} keys)")
+        logger.debug(
+            f"Syncing metadata on Node {self.node_id} (Size: {len(metadata)} keys)"
+        )
         # In practice, this would perform an all-gather or similar collective op.
         pass

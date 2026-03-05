@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 """
 Extension Registry Module - Phase 20: Production Infrastructure
 ================================================================
@@ -86,6 +87,7 @@ class ExtensionManager:
         Returns:
             Decorator function that registers and returns the class.
         """
+
         def wrap(cls_to_register: _T) -> _T:
             with self._lock:
                 if name in self._name2class:
@@ -94,6 +96,7 @@ class ExtensionManager:
                     )
                 self._name2class[name] = cls_to_register
             return cls_to_register
+
         return wrap
 
     def register_class(self, name: str, cls: type) -> None:
@@ -126,7 +129,7 @@ class ExtensionManager:
                 del self._name2class[name]
                 return True
             return False
-    
+
     def load(self, cls_name: str, *args: Any, **kwargs: Any) -> Any:
         """
         Instantiate and return a registered extension class by name.
@@ -225,6 +228,7 @@ class TypedExtensionManager(Generic[_Base]):
 
         Validates that the class inherits from the base class.
         """
+
         def wrap(cls_to_register: type[_Base]) -> type[_Base]:
             if not issubclass(cls_to_register, self.base_class):
                 raise TypeError(
@@ -238,6 +242,7 @@ class TypedExtensionManager(Generic[_Base]):
                     )
                 self._name2class[name] = cls_to_register
             return cls_to_register
+
         return wrap
 
     def load(self, cls_name: str, *args: Any, **kwargs: Any) -> _Base:
@@ -281,6 +286,7 @@ class TypedExtensionManager(Generic[_Base]):
 @dataclass
 class ExtensionInfo:
     """Metadata for a registered extension."""
+
     name: str
     cls: type
     priority: int = 0
@@ -312,10 +318,7 @@ class MultiExtensionManager:
         self._lock = threading.RLock()
 
     def register(
-        self,
-        name: str,
-        priority: int = 0,
-        **metadata: Any
+        self, name: str, priority: int = 0, **metadata: Any
     ) -> Callable[[_T], _T]:
         """
         Decorator to register a class with the given name and priority.
@@ -325,6 +328,7 @@ class MultiExtensionManager:
             priority: Higher priority extensions are loaded first.
             **metadata: Additional metadata to store with the extension.
         """
+
         def wrap(cls_to_register: _T) -> _T:
             info = ExtensionInfo(
                 name=name,
@@ -338,6 +342,7 @@ class MultiExtensionManager:
                 self._extensions[name].append(info)
                 self._extensions[name].sort()  # Sort by priority
             return cls_to_register
+
         return wrap
 
     def get_first(self, name: str, *args: Any, **kwargs: Any) -> Any:
@@ -535,7 +540,9 @@ def create_registry(name: str) -> ExtensionManager:
     return ExtensionManager(name)
 
 
-def create_typed_registry(name: str, base_class: type[_Base]) -> TypedExtensionManager[_Base]:
+def create_typed_registry(
+    name: str, base_class: type[_Base]
+) -> TypedExtensionManager[_Base]:
     """Create a new typed extension manager."""
     return TypedExtensionManager(name, base_class)
 
@@ -563,7 +570,7 @@ __all__ = [
     "GlobalRegistry",
     # Factory functions
     "create_registry",
-    "create_typed_registry", 
+    "create_typed_registry",
     "create_multi_registry",
     "create_lazy_registry",
     "get_global_registry",

@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TestSourceType"), "TestSourceType missing"
     assert hasattr(mod, "MutationOperator"), "MutationOperator missing"
     assert hasattr(mod, "ExecutionMode"), "ExecutionMode missing"
-

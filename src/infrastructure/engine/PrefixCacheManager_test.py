@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_hashalgorithm_exists():
     """Test that HashAlgorithm class exists and is importable."""
-    assert 'HashAlgorithm' in dir()
+    assert "HashAlgorithm" in dir()
 
 
 def test_blockhash_exists():
     """Test that BlockHash class exists and is importable."""
-    assert 'BlockHash' in dir()
+    assert "BlockHash" in dir()
 
 
 def test_cacheblock_exists():
     """Test that CacheBlock class exists and is importable."""
-    assert 'CacheBlock' in dir()
+    assert "CacheBlock" in dir()
 
 
 def test_prefixcachemanager_exists():
     """Test that PrefixCacheManager class exists and is importable."""
-    assert 'PrefixCacheManager' in dir()
+    assert "PrefixCacheManager" in dir()
 
 
 def test_get_hash_function_exists():
@@ -94,4 +94,3 @@ def test_compute_cache_keys_rust_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +44,9 @@ class IdentityAgent(BaseAgent):
         from src.infrastructure.swarm.fleet.secret_manager import SecretManager
 
         self.secret_manager = SecretManager(
-            vault_path=os.path.join(self._workspace_root, "data/memory/agent_store/vault.json")
+            vault_path=os.path.join(
+                self._workspace_root, "data/memory/agent_store/vault.json"
+            )
         )
 
     def create_agent_did(self, agent_name: str, fleet_id: str = "fleet-01") -> str:
@@ -107,7 +110,9 @@ class IdentityAgent(BaseAgent):
         vc_to_verify = json.loads(json.dumps(vc))
         signature = vc_to_verify.pop("proof")["jws"]
 
-        expected_signature = hashlib.sha256(json.dumps(vc_to_verify, sort_keys=True).encode()).hexdigest()
+        expected_signature = hashlib.sha256(
+            json.dumps(vc_to_verify, sort_keys=True).encode()
+        ).hexdigest()
 
         if signature == expected_signature:
             return {"status": "verified", "issuer": vc.get("issuer")}

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Phase 319: Multi-Cloud Teleportation (Inter-Fleet Bridge)
 
@@ -15,21 +16,29 @@ from src.observability.StructuredLogger import StructuredLogger
 __version__ = VERSION
 logger = StructuredLogger(__name__)
 
+
 class InterFleetBridgeOrchestrator:
     """
-    InterFleetBridgeOrchestrator: Manages peer connectivity and 
+    InterFleetBridgeOrchestrator: Manages peer connectivity and
     cross-machine discovery for the Voyager Constellation.
     """
+
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet_manager = fleet_manager
         self.version = VERSION
-        
+
         # Phase 319: Default Voyager Ports
         self.mDNS_port = 8000
         self.zmq_port = 5555
-        
-        self.discovery_node = DiscoveryNode(port=self.mDNS_port, transport_port=self.zmq_port)
-        self.synapse = RemoteNeuralSynapse(fleet_manager, transport_port=self.zmq_port, discovery_node=self.discovery_node)
+
+        self.discovery_node = DiscoveryNode(
+            port=self.mDNS_port, transport_port=self.zmq_port
+        )
+        self.synapse = RemoteNeuralSynapse(
+            fleet_manager,
+            transport_port=self.zmq_port,
+            discovery_node=self.discovery_node,
+        )
         self.is_active = False
         logger.info("InterFleetBridgeOrchestrator (Voyager) initialized.")
 
@@ -38,13 +47,15 @@ class InterFleetBridgeOrchestrator:
         try:
             # 1. Start ZMQ Transport Server
             await self.synapse.start()
-            
+
             # 2. Start mDNS Advertisement
             await self.discovery_node.start_advertising()
             await self.discovery_node.start_discovery()
-            
+
             self.is_active = True
-            logger.info("Voyager: Constellation synchronization and transport server active.")
+            logger.info(
+                "Voyager: Constellation synchronization and transport server active."
+            )
         except Exception as e:
             logger.error(f"Voyager: Failed to start constellation sync: {e}")
 
@@ -73,37 +84,42 @@ class InterFleetBridgeOrchestrator:
         if not target:
             logger.error(f"Voyager: Could not resolve peer '{peer_name}' for signal.")
             return {"status": "error", "message": "Peer not found"}
-            
+
         peer_ip, peer_port = target
         payload = {
             "type": signal_type,
             "data": data,
-            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown")
+            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
         }
         return await self.synapse.transport.send_to_peer(peer_ip, peer_port, payload)
 
-    async def broadcast_task(self, task_description: str, metadata: Optional[Dict[str, Any]] = None):
+    async def broadcast_task(
+        self, task_description: str, metadata: Optional[Dict[str, Any]] = None
+    ):
         """Broadcasts a task opportunity to all discovered peers."""
         peers = self.get_known_peers()
-        logger.info(f"Voyager: Broadcasting task to {len(peers)} peers: {task_description[:30]}...")
-        
+        logger.info(
+            f"Voyager: Broadcasting task to {len(peers)} peers: {task_description[:30]}..."
+        )
+
         payload = {
             "type": "task_broadcast",
             "task": task_description,
             "metadata": metadata or {},
-            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown")
+            "sender_id": getattr(self.fleet_manager, "fleet_id", "unknown"),
         }
-        
+
         tasks = []
         for peer in peers:
-            addrs = peer.get('addresses', [])
+            addrs = peer.get("addresses", [])
             if not addrs:
                 continue
             addr = addrs[0]
-            port = int(peer['properties'].get('transport_port', 5555))
+            port = int(peer["properties"].get("transport_port", 5555))
             tasks.append(self.synapse.transport.send_to_peer(addr, port, payload))
-        
+
         if tasks:
             results = await asyncio.gather(*tasks, return_exceptions=True)
-            logger.info(f"Voyager: Broadcast results: {len([r for r in results if not isinstance(r, Exception)])} successful.")
-
+            logger.info(
+                f"Voyager: Broadcast results: {len([r for r in results if not isinstance(r, Exception)])} successful."
+            )

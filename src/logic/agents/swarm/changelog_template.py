@@ -23,6 +23,7 @@ from typing import List
 @dataclass
 class ChangelogTemplate:
     """Template configuration for generating human-readable changelogs."""
+
     name: str
     project_type: str
     sections: List[str]

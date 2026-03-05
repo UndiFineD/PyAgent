@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_workspaceauditormixin_exists():
     """Test that WorkspaceAuditorMixin class exists and is importable."""
-    assert 'WorkspaceAuditorMixin' in dir()
+    assert "WorkspaceAuditorMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

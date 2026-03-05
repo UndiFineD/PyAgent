@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -128,7 +129,9 @@ class MemoryPressureEvent:
         self.available_bytes = available_bytes
         self.total_bytes = total_bytes
         self.timestamp = time.time()
-        self.pressure_ratio = 1.0 - (available_bytes / total_bytes) if total_bytes > 0 else 1.0
+        self.pressure_ratio = (
+            1.0 - (available_bytes / total_bytes) if total_bytes > 0 else 1.0
+        )
 
 
 class CuMemAllocator:
@@ -171,7 +174,9 @@ class CuMemAllocator:
 
         self._lock = threading.RLock()
 
-        logger.info(f"CuMemAllocator initialized: {self.config.pool_size_bytes / (1024**3):.1f}GB")
+        logger.info(
+            f"CuMemAllocator initialized: {self.config.pool_size_bytes / (1024**3):.1f}GB"
+        )
 
     def _init_pool(self) -> None:
         """Initialize memory pool with free regions."""
@@ -226,7 +231,9 @@ class CuMemAllocator:
 
     def _allocate_pool(self, size_bytes: int) -> Optional[int]:
         """Allocate from fixed-size pool."""
-        blocks_needed = (size_bytes + self.config.block_size_bytes - 1) // self.config.block_size_bytes
+        blocks_needed = (
+            size_bytes + self.config.block_size_bytes - 1
+        ) // self.config.block_size_bytes
 
         if len(self._free_regions) < blocks_needed:
             return None
@@ -246,7 +253,9 @@ class CuMemAllocator:
             # Use first region as the allocation handle
             primary_id = allocated_ids[0]
             region = self._regions[primary_id]
-            region.metadata["sub_regions"] = allocated_ids[1:] if len(allocated_ids) > 1 else []
+            region.metadata["sub_regions"] = (
+                allocated_ids[1:] if len(allocated_ids) > 1 else []
+            )
 
             self._allocated_bytes += blocks_needed * self.config.block_size_bytes
 
@@ -254,7 +263,9 @@ class CuMemAllocator:
             def _trigger_alloc_cb(cb: Callable[[int, int], None]) -> None:
                 try:
                     cb(primary_id, size_bytes)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.error(f"Allocation callback error: {e}")
 
             list(map(_trigger_alloc_cb, self._allocation_callbacks))
@@ -271,7 +282,12 @@ class CuMemAllocator:
 
     def _allocate_best_fit(self, size_bytes: int) -> Optional[int]:
         """Allocate using best-fit strategy."""
-        eligible = list(filter(lambda rid: self._regions[rid].size_bytes >= size_bytes, self._free_regions))
+        eligible = list(
+            filter(
+                lambda rid: self._regions[rid].size_bytes >= size_bytes,
+                self._free_regions,
+            )
+        )
 
         if not eligible:
             return None
@@ -308,7 +324,9 @@ class CuMemAllocator:
         def _trigger_best_cb(cb: Callable[[int, int], None]) -> None:
             try:
                 cb(best_region_id, size_bytes)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Allocation callback error: {e}")
 
         list(map(_trigger_best_cb, self._allocation_callbacks))
@@ -354,7 +372,9 @@ class CuMemAllocator:
             def _trigger_dealloc_cb(cb: Callable[[int, int], None]) -> None:
                 try:
                     cb(region_id, size_bytes)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.error(f"Deallocation callback error: {e}")
 
             list(map(_trigger_dealloc_cb, self._deallocation_callbacks))
@@ -376,7 +396,9 @@ class CuMemAllocator:
             self._state = MemoryState.SLEEPING
 
             # Release configurable ratio of free regions
-            release_count = int(len(self._free_regions) * self.config.sleep_release_ratio)
+            release_count = int(
+                len(self._free_regions) * self.config.sleep_release_ratio
+            )
 
             def _release_one(idx: int) -> int:
                 if self._free_regions:
@@ -440,9 +462,13 @@ class CuMemAllocator:
                 total_bytes=self.config.pool_size_bytes,
                 allocated_bytes=self._allocated_bytes,
                 free_bytes=self.config.pool_size_bytes - self._allocated_bytes,
-                num_allocations=sum(map(lambda r: 1 if not r.is_free else 0, self._regions.values())),
+                num_allocations=sum(
+                    map(lambda r: 1 if not r.is_free else 0, self._regions.values())
+                ),
                 fragmentation_ratio=self._calculate_fragmentation(),
-                region_states=dict(map(lambda item: (item[0], item[1].is_free), self._regions.items())),
+                region_states=dict(
+                    map(lambda item: (item[0], item[1].is_free), self._regions.items())
+                ),
             )
 
             self._snapshots[self._next_snapshot_id] = snapshot
@@ -468,10 +494,20 @@ class CuMemAllocator:
             list(map(_restore_one, snapshot.region_states.items()))
 
             # Rebuild free list regarding is_free property
-            self._free_regions = list(map(lambda item: item[0], filter(lambda x: x[1].is_free, self._regions.items())))
+            self._free_regions = list(
+                map(
+                    lambda item: item[0],
+                    filter(lambda x: x[1].is_free, self._regions.items()),
+                )
+            )
 
             # Update allocated bytes regarding non-free regions
-            self._allocated_bytes = sum(map(lambda r: r.size_bytes if not r.is_free else 0, self._regions.values()))
+            self._allocated_bytes = sum(
+                map(
+                    lambda r: r.size_bytes if not r.is_free else 0,
+                    self._regions.values(),
+                )
+            )
 
             logger.debug(f"Snapshot {snapshot_id} restored")
             return True
@@ -481,7 +517,9 @@ class CuMemAllocator:
         if not self._free_regions:
             return 0.0
 
-        free_sizes = list(map(lambda rid: self._regions[rid].size_bytes, self._free_regions))
+        free_sizes = list(
+            map(lambda rid: self._regions[rid].size_bytes, self._free_regions)
+        )
         total_free = sum(free_sizes)
         max_free = max(free_sizes)
 
@@ -493,7 +531,9 @@ class CuMemAllocator:
 
     def _check_memory_pressure(self) -> None:
         """Check and notify on memory pressure."""
-        free_ratio = (self.config.pool_size_bytes - self._allocated_bytes) / self.config.pool_size_bytes
+        free_ratio = (
+            self.config.pool_size_bytes - self._allocated_bytes
+        ) / self.config.pool_size_bytes
 
         if free_ratio < self.config.low_memory_threshold:
             event = MemoryPressureEvent(
@@ -505,7 +545,9 @@ class CuMemAllocator:
             def _trigger_pressure_cb(cb: Callable[[MemoryPressureEvent], None]) -> None:
                 try:
                     cb(event)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.error(f"Pressure callback error: {e}")
 
             list(map(_trigger_pressure_cb, self._pressure_callbacks))
@@ -526,9 +568,13 @@ class CuMemAllocator:
                 return 0  # Fixed-size pools don't fragment
 
             # Compact free regions (merge adjacent)
-            sorted_free = sorted(self._free_regions, key=lambda rid: self._regions[rid].offset)
+            sorted_free = sorted(
+                self._free_regions, key=lambda rid: self._regions[rid].offset
+            )
 
-            def _merge_adjacent_recursive(free_list: list[int], index: int, compacted_bytes: int) -> int:
+            def _merge_adjacent_recursive(
+                free_list: list[int], index: int, compacted_bytes: int
+            ) -> int:
                 if index >= len(free_list) - 1:
                     return compacted_bytes
 
@@ -542,9 +588,13 @@ class CuMemAllocator:
                     region1.size_bytes += add_size
                     del self._regions[free_list[index + 1]]
                     free_list.pop(index + 1)
-                    return _merge_adjacent_recursive(free_list, index, compacted_bytes + add_size)
+                    return _merge_adjacent_recursive(
+                        free_list, index, compacted_bytes + add_size
+                    )
                 else:
-                    return _merge_adjacent_recursive(free_list, index + 1, compacted_bytes)
+                    return _merge_adjacent_recursive(
+                        free_list, index + 1, compacted_bytes
+                    )
 
             compacted = _merge_adjacent_recursive(sorted_free, 0, 0)
             self._free_regions = sorted_free
@@ -562,7 +612,9 @@ class CuMemAllocator:
         """Add callback regarding deallocation events."""
         self._deallocation_callbacks.append(callback)
 
-    def add_pressure_callback(self, callback: Callable[[MemoryPressureEvent], None]) -> None:
+    def add_pressure_callback(
+        self, callback: Callable[[MemoryPressureEvent], None]
+    ) -> None:
         """Add callback regarding memory pressure events."""
         self._pressure_callbacks.append(callback)
 
@@ -606,7 +658,9 @@ class MultiGPUMemoryBalancer:
             config = MemoryPoolConfig(device_id=device_id)
             return (device_id, CuMemAllocator(config))
 
-        self._allocators: dict[int, CuMemAllocator] = dict(map(_create_allocator, range(num_devices)))
+        self._allocators: dict[int, CuMemAllocator] = dict(
+            map(_create_allocator, range(num_devices))
+        )
 
         self._lock = threading.Lock()
 
@@ -622,7 +676,10 @@ class MultiGPUMemoryBalancer:
         """
         with self._lock:
             # Find device with most free memory
-            best_device = max(self._allocators.keys(), key=lambda d: self._allocators[d].available_bytes)
+            best_device = max(
+                self._allocators.keys(),
+                key=lambda d: self._allocators[d].available_bytes,
+            )
 
             allocator = self._allocators[best_device]
             region_id = allocator.allocate(size_bytes)
@@ -640,12 +697,16 @@ class MultiGPUMemoryBalancer:
     def sleep_all(self) -> dict[int, int]:
         """Sleep all allocators. Returns bytes released per device."""
         with self._lock:
-            return dict(map(lambda item: (item[0], item[1].sleep()), self._allocators.items()))
+            return dict(
+                map(lambda item: (item[0], item[1].sleep()), self._allocators.items())
+            )
 
     def wake_up_all(self) -> dict[int, int]:
         """Wake up all allocators. Returns bytes reclaimed per device."""
         with self._lock:
-            return dict(map(lambda item: (item[0], item[1].wake_up()), self._allocators.items()))
+            return dict(
+                map(lambda item: (item[0], item[1].wake_up()), self._allocators.items())
+            )
 
     def get_total_stats(self) -> dict[str, Any]:
         """Get aggregated stats across all devices."""
@@ -659,7 +720,9 @@ class MultiGPUMemoryBalancer:
                 "total_bytes": total_bytes,
                 "allocated_bytes": allocated_bytes,
                 "free_bytes": total_bytes - allocated_bytes,
-                "utilization": allocated_bytes / total_bytes if total_bytes > 0 else 0.0,
+                "utilization": (
+                    allocated_bytes / total_bytes if total_bytes > 0 else 0.0
+                ),
             }
 
 

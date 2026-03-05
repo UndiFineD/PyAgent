@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -72,8 +73,9 @@ class ReportGenerator:
     def _record(self, action: str, result: str) -> None:
         """Record report generation activities."""
         if self.recorder:
-            self.recorder.record_interaction("Reporting", "ReportGenerator", action, result)
-
+            self.recorder.record_interaction(
+                "Reporting", "ReportGenerator", action, result
+            )
 
     def process_all_files(self) -> dict[str, Any]:
         """Process all .py files in agent_dir and generate reports."""
@@ -95,7 +97,9 @@ class ReportGenerator:
                 skipped += 1
             elif result == "error":
                 errors_count += 1
-        logging.info(f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors.")
+        logging.info(
+            f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors."
+        )
         return {"count": count, "skipped": skipped, "errors": errors_count}
 
     def _process_single_file(self, py_path: Path) -> str:
@@ -109,7 +113,9 @@ class ReportGenerator:
             logging.error(f"Error processing {py_path.name}: {e}")
             return "error"
 
-    def export_jsonl_report(self, items: list[dict[str, Any]], filename: str = "audit_log.jsonl") -> bool:
+    def export_jsonl_report(
+        self, items: list[dict[str, Any]], filename: str = "audit_log.jsonl"
+    ) -> bool:
         """Exports report items to JSONL format (Phase 183)."""
         output_path: Path = self.output_dir / filename
         # Deduplicate before export
@@ -182,7 +188,9 @@ class ReportGenerator:
             description: str = (
                 f"# Description: `{py_path.name}`\n\n## Module purpose\n\n(Unable to parse file: {parse_err})\n"
             )
-            errors: str = self.render_errors(py_path, source, CompileResult(ok=False, error=str(parse_err)))
+            errors: str = self.render_errors(
+                py_path, source, CompileResult(ok=False, error=str(parse_err))
+            )
             improvements: str = (
                 f"# Improvements: `{py_path.name}`\n\n"
                 "## Suggested improvements\n"
@@ -261,7 +269,9 @@ class ReportGenerator:
         )
         return "\n".join(lines)
 
-    def render_errors(self, py_path: Path, source: str, compile_result: CompileResult | str | None) -> str:
+    def render_errors(
+        self, py_path: Path, source: str, compile_result: CompileResult | str | None
+    ) -> str:
         """Generate errors report."""
         lines: list[str] = [
             f"# Errors: `{py_path.name}`",
@@ -296,11 +306,17 @@ class ReportGenerator:
 
         known: list[str] = []
         if 'subprocess.run(["git"' in source or "subprocess.run(['git'" in source:
-            known.append("Runs `git` via `subprocess`; will fail if git is not installed or repo has no remote.")
+            known.append(
+                "Runs `git` via `subprocess`; will fail if git is not installed or repo has no remote."
+            )
         if 'subprocess.run(["gh"' in source or "subprocess.run(['gh'" in source:
-            known.append("Runs GitHub CLI via `subprocess`; requires `gh` to be authenticated.")
+            known.append(
+                "Runs GitHub CLI via `subprocess`; requires `gh` to be authenticated."
+            )
         if "copilot" in source and "subprocess.run" in source:
-            known.append("Invokes `copilot` CLI; will be a no-op / fallback if Copilot CLI is not installed.")
+            known.append(
+                "Invokes `copilot` CLI; will be a no-op / fallback if Copilot CLI is not installed."
+            )
 
         # Detected by AST
         try:
@@ -336,11 +352,17 @@ class ReportGenerator:
 
         # Generic quality improvements
         if not ast.get_docstring(cast(ast.Module, tree)):
-            suggestions.append("Add a concise module docstring describing purpose / usage.")
+            suggestions.append(
+                "Add a concise module docstring describing purpose / usage."
+            )
         if classes and "__init__" not in source:
-            suggestions.append("Consider documenting class construction / expected invariants.")
+            suggestions.append(
+                "Consider documenting class construction / expected invariants."
+            )
         if "print(" in source and "logging" not in source:
-            suggestions.append("Consider using `logging` instead of `print` for controllable verbosity.")
+            suggestions.append(
+                "Consider using `logging` instead of `print` for controllable verbosity."
+            )
 
         suggestions = sorted(list(set(suggestions)))
         lines: list[str] = [
@@ -399,39 +421,64 @@ class ReportGenerator:
             if isinstance(node, ast.FunctionDef):
                 for default in node.args.defaults:
                     if isinstance(default, (ast.List, ast.Dict, ast.Set)):
-                        issues.append(f"Function `{node.name}` has a mutable default argument.")
+                        issues.append(
+                            f"Function `{node.name}` has a mutable default argument."
+                        )
                         break
         # 2. Broad exceptions
         if "except Exception:" in source:
             issues.append("Avoid broad `except Exception:`; catch specific errors.")
         # 3. Bare excepts
         for node in ast.walk(tree):
-            if isinstance(node, ast.ExceptHandler) and (node.type is None or
-                    (isinstance(node.type, ast.Name) and node.type.id == "Exception")):
+            if isinstance(node, ast.ExceptHandler) and (
+                node.type is None
+                or (isinstance(node.type, ast.Name) and node.type.id == "Exception")
+            ):
                 issues.append("Contains bare or broad `except` clause.")
             if isinstance(node, ast.FunctionDef):
-                missing_arg_type = any(arg.annotation is None for arg in node.args.args if arg.arg != "self")
+                missing_arg_type = any(
+                    arg.annotation is None
+                    for arg in node.args.args
+                    if arg.arg != "self"
+                )
                 missing_return_type = node.returns is None
                 if missing_arg_type or missing_return_type:
-                    issues.append(f"Function `{node.name}` is missing type annotations.")
+                    issues.append(
+                        f"Function `{node.name}` is missing type annotations."
+                    )
         if "TODO" in source or "FIXME" in source:
             issues.append("Contains TODO or FIXME comments.")
         if "sys.path.insert" in source:
-            issues.append("Avoid `sys.path.insert(...)` imports; prefer a proper package layout or relative imports.")
+            issues.append(
+                "Avoid `sys.path.insert(...)` imports; prefer a proper package layout or relative imports."
+            )
         if "subprocess.run" in source:
-            issues.append("Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting).")
+            issues.append(
+                "Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting)."
+            )
         if self._detect_cli_entry(source) and self._detect_argparse(source):
-            issues.append("Add `--help` examples and validate CLI args (paths, required files).")
+            issues.append(
+                "Add `--help` examples and validate CLI args (paths, required files)."
+            )
 
-        if self._is_pytest_test_file(py_path) and re.search(r"def\s+test_placeholder\s*\(", source):
-            issues.append("Replace placeholder tests with real assertions; target the most important behaviors first.")
+        if self._is_pytest_test_file(py_path) and re.search(
+            r"def\s+test_placeholder\s*\(", source
+        ):
+            issues.append(
+                "Replace placeholder tests with real assertions; target the most important behaviors first."
+            )
         if self._looks_like_pytest_import_problem(py_path):
-            issues.append("Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references.")
+            issues.append(
+                "Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references."
+            )
 
         return issues
 
     def _detect_cli_entry(self, source: str) -> bool:
-        return 'if __name__ == "__main__":' in source or "if __name__ == '__main__':" in source
+        return (
+            'if __name__ == "__main__":' in source
+            or "if __name__ == '__main__':" in source
+        )
 
     def _detect_argparse(self, source: str) -> bool:
         return "import argparse" in source or "from argparse import" in source
@@ -442,7 +489,9 @@ class ReportGenerator:
     def _looks_like_pytest_import_problem(self, path: Path) -> bool:
         return "-" in path.name or path.name.count(".") > 1
 
-    def _try_parse_python(self, source: str, filename: str) -> tuple[ast.AST | None, str | None]:
+    def _try_parse_python(
+        self, source: str, filename: str
+    ) -> tuple[ast.AST | None, str | None]:
         try:
             return ast.parse(source, filename), None
         except SyntaxError as e:
@@ -467,7 +516,9 @@ class ReportGenerator:
         if not desc_path.exists():
             return None
         content: str = self._read_text(desc_path)
-        match: re.Match[str] | None = re.search(r"- SHA256\(source\): `([a-f0-9]+)", content)
+        match: re.Match[str] | None = re.search(
+            r"- SHA256\(source\): `([a-f0-9]+)", content
+        )
         return match.group(1) if match else None
 
     def _sha256_text(self, text: str) -> str:
@@ -482,33 +533,48 @@ class ReportGenerator:
     def _rel(self, path: Path) -> str:
         try:
             # Show path relative to the workspace root if possible
-            return str(path.relative_to(self.agent_dir.parent if self.agent_dir.parent.parts else self.agent_dir))
+            return str(
+                path.relative_to(
+                    self.agent_dir.parent
+                    if self.agent_dir.parent.parts
+                    else self.agent_dir
+                )
+            )
         except ValueError:
             return str(path)
 
 
 if __name__ == "__main__":
+
     def main() -> None:
         """Main entry point."""
         # Internal CLI for repairing/refreshing autodocs
         import argparse
         from argparse import Namespace
 
-        parser = argparse.ArgumentParser(description="Repair or refresh autodocs for the workspace.")
-        parser.add_argument("--src", type=str, help="Source directory for agent files (default: src/)")
+        parser = argparse.ArgumentParser(
+            description="Repair or refresh autodocs for the workspace."
+        )
+        parser.add_argument(
+            "--src", type=str, help="Source directory for agent files (default: src/)"
+        )
         parser.add_argument(
             "--out",
             type=str,
             help="Output directory for markdown reports (default: docs/autodoc/)",
         )
-        parser.add_argument("--no-dashboard", action="store_true", help="Skip dashboard generation")
+        parser.add_argument(
+            "--no-dashboard", action="store_true", help="Skip dashboard generation"
+        )
 
         args: Namespace = parser.parse_args()
 
         # Resolve paths relative to workspace root if possible
         base_dir_main: Path = Path(__file__).resolve().parent.parent.parent.parent
         agent_dir_main: Path = Path(args.src) if args.src else (base_dir_main / "src")
-        output_dir_main: Path = Path(args.out) if args.out else (base_dir_main / "docs" / "autodoc")
+        output_dir_main: Path = (
+            Path(args.out) if args.out else (base_dir_main / "docs" / "autodoc")
+        )
 
         print("Starting autodoc generation...")
         print(f"Source: {agent_dir_main}")
@@ -516,9 +582,12 @@ if __name__ == "__main__":
 
         output_dir_main.mkdir(parents=True, exist_ok=True)
 
-        generator = ReportGenerator(agent_dir=agent_dir_main, output_dir=output_dir_main)
+        generator = ReportGenerator(
+            agent_dir=agent_dir_main, output_dir=output_dir_main
+        )
         results: dict[str, Any] = generator.process_all_files()
         print("Autodoc generation finished.")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

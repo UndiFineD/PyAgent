@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,6 +31,7 @@ from src.infrastructure.fleet.core.AttributionCore import AttributionCore
 
 __version__ = VERSION
 
+
 class AttributionEngine:
     """Records the 'who, when, and how' for all system outputs (Phase 185)."""
 
@@ -51,18 +53,20 @@ class AttributionEngine:
         path = Path(file_path)
         if not path.exists():
             return
-            
+
         with open(path, encoding="utf-8") as f:
             content = f.read()
-            
+
         new_content = self.core.ensure_license_header(content)
-        
+
         if new_content != content:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(new_content)
             logging.info(f"AttributionEngine: Applied license header to {file_path}")
 
-    def record_attribution(self, agent_id: str, content: str, task_context: str) -> None:
+    def record_attribution(
+        self, agent_id: str, content: str, task_context: str
+    ) -> None:
         """Creates a record of content generation."""
         content_hash = hashlib.sha256(content.encode()).hexdigest()
         record = {
@@ -70,10 +74,7 @@ class AttributionEngine:
             "agent": agent_id,
             "hash": content_hash,
             "task": task_context,
-            "metadata": {
-                "chars": len(content),
-                "words": len(content.split())
-            }
+            "metadata": {"chars": len(content), "words": len(content.split())},
         }
         self.records.append(record)
         self._save()

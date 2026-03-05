@@ -29,11 +29,13 @@ class MultiModalCore:
         """
         Encodes an image file to base64.
         """
-        with open(image_path, 'rb') as image_file:
+        with open(image_path, "rb") as image_file:
             return base64.b64encode(image_file.read()).decode("utf-8")
 
     @staticmethod
-    def construct_vision_payload(model: str, prompt: str, base64_image: str) -> dict[str, Any]:
+    def construct_vision_payload(
+        model: str, prompt: str, base64_image: str
+    ) -> dict[str, Any]:
         """
         Constructs a payload for a vision model (OpenAI-style).
         """
@@ -46,7 +48,9 @@ class MultiModalCore:
                         {"type": "text", "text": prompt},
                         {
                             "type": "image_url",
-                            "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"},
+                            "image_url": {
+                                "url": f"data:image/jpeg;base64,{base64_image}"
+                            },
                         },
                     ],
                 }

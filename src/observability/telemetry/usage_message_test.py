@@ -27,4 +27,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "UsageMessage"), "UsageMessage missing"
     assert hasattr(mod, "report_usage"), "report_usage missing"
     assert hasattr(mod, "get_platform_summary"), "get_platform_summary missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -118,9 +119,11 @@ class ReasoningAgent(BaseAgent):
             "target_language": language,
             "is_consistent": is_consistent,
             "confidence_score": confidence,
-            "recommendation": "English-centered reasoning is strong."
-            if is_consistent
-            else "Perform explicit COT in English before translating.",
+            "recommendation": (
+                "English-centered reasoning is strong."
+                if is_consistent
+                else "Perform explicit COT in English before translating."
+            ),
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:

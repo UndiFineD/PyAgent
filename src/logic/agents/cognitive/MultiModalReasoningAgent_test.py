@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_multimodalreasoningagent_exists():
     """Test that MultiModalReasoningAgent class exists and is importable."""
-    assert 'MultiModalReasoningAgent' in dir()
+    assert "MultiModalReasoningAgent" in dir()
 
 
 def test_multimodalreasoningagent_instantiation():
@@ -45,4 +45,3 @@ def test_multimodalreasoningagent_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -19,7 +19,10 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MicroBatchInfo"), "MicroBatchInfo missing"
     assert hasattr(mod, "StreamManager"), "StreamManager missing"
     assert hasattr(mod, "MicroBatchContext"), "MicroBatchContext missing"
-    assert hasattr(mod, "AdaptiveMicroBatchContext"), "AdaptiveMicroBatchContext missing"
-    assert hasattr(mod, "create_micro_batch_context"), "create_micro_batch_context missing"
+    assert hasattr(
+        mod, "AdaptiveMicroBatchContext"
+    ), "AdaptiveMicroBatchContext missing"
+    assert hasattr(
+        mod, "create_micro_batch_context"
+    ), "create_micro_batch_context missing"
     assert hasattr(mod, "micro_batch_scope"), "micro_batch_scope missing"
-

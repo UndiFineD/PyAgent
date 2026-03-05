@@ -33,45 +33,44 @@ except ImportError as e:
 
 def test_guidancetemplatetype_exists():
     """Test that GuidanceTemplateType class exists and is importable."""
-    assert 'GuidanceTemplateType' in dir()
+    assert "GuidanceTemplateType" in dir()
 
 
 def test_guidancevariable_exists():
     """Test that GuidanceVariable class exists and is importable."""
-    assert 'GuidanceVariable' in dir()
+    assert "GuidanceVariable" in dir()
 
 
 def test_guidancetemplate_exists():
     """Test that GuidanceTemplate class exists and is importable."""
-    assert 'GuidanceTemplate' in dir()
+    assert "GuidanceTemplate" in dir()
 
 
 def test_guidancestate_exists():
     """Test that GuidanceState class exists and is importable."""
-    assert 'GuidanceState' in dir()
+    assert "GuidanceState" in dir()
 
 
 def test_compiledguidanceprogram_exists():
     """Test that CompiledGuidanceProgram class exists and is importable."""
-    assert 'CompiledGuidanceProgram' in dir()
+    assert "CompiledGuidanceProgram" in dir()
 
 
 def test_guidancegrammar_exists():
     """Test that GuidanceGrammar class exists and is importable."""
-    assert 'GuidanceGrammar' in dir()
+    assert "GuidanceGrammar" in dir()
 
 
 def test_guidancebackend_exists():
     """Test that GuidanceBackend class exists and is importable."""
-    assert 'GuidanceBackend' in dir()
+    assert "GuidanceBackend" in dir()
 
 
 def test_asyncguidancebackend_exists():
     """Test that AsyncGuidanceBackend class exists and is importable."""
-    assert 'AsyncGuidanceBackend' in dir()
+    assert "AsyncGuidanceBackend" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

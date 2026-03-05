@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_requeststate_exists():
     """Test that RequestState class exists and is importable."""
-    assert 'RequestState' in dir()
+    assert "RequestState" in dir()
 
 
 def test_asyncengineconfig_exists():
     """Test that AsyncEngineConfig class exists and is importable."""
-    assert 'AsyncEngineConfig' in dir()
+    assert "AsyncEngineConfig" in dir()
 
 
 def test_asyncrequesthandle_exists():
     """Test that AsyncRequestHandle class exists and is importable."""
-    assert 'AsyncRequestHandle' in dir()
+    assert "AsyncRequestHandle" in dir()
 
 
 def test_asyncvllmengine_exists():
     """Test that AsyncVllmEngine class exists and is importable."""
-    assert 'AsyncVllmEngine' in dir()
+    assert "AsyncVllmEngine" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

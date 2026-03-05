@@ -28,6 +28,7 @@ __version__ = VERSION
 
 try:
     import rust_core as rc
+
     RUST_AVAILABLE = True
 except ImportError:
     rc = None
@@ -83,7 +84,11 @@ class AttentionBufferAgent(BaseAgent):
         Uses Rust-accelerated sorting when available.
         """
         # Rust-accelerated priority-timestamp sorting
-        if RUST_AVAILABLE and hasattr(rc, 'sort_buffer_by_priority_rust') and self.buffer:
+        if (
+            RUST_AVAILABLE
+            and hasattr(rc, "sort_buffer_by_priority_rust")
+            and self.buffer
+        ):
             try:
                 priorities = [x["priority"] for x in self.buffer]
                 timestamps = [x["timestamp"] for x in self.buffer]
@@ -91,7 +96,9 @@ class AttentionBufferAgent(BaseAgent):
                 sorted_buffer = [self.buffer[i] for i in sorted_indices]
             except RuntimeError:
                 sorted_buffer = sorted(
-                    self.buffer, key=lambda x: (x["priority"], x["timestamp"]), reverse=True
+                    self.buffer,
+                    key=lambda x: (x["priority"], x["timestamp"]),
+                    reverse=True,
                 )
         else:
             sorted_buffer = sorted(
@@ -113,13 +120,17 @@ class AttentionBufferAgent(BaseAgent):
         initial_count = len(self.buffer)
 
         # Rust-accelerated stale entry filtering
-        if RUST_AVAILABLE and hasattr(rc, 'filter_stale_entries_rust') and self.buffer:
+        if RUST_AVAILABLE and hasattr(rc, "filter_stale_entries_rust") and self.buffer:
             try:
                 timestamps = [p["timestamp"] for p in self.buffer]
-                valid_indices = rc.filter_stale_entries_rust(timestamps, now, age_seconds)
+                valid_indices = rc.filter_stale_entries_rust(
+                    timestamps, now, age_seconds
+                )
                 self.buffer = [self.buffer[i] for i in valid_indices]
             except RuntimeError:
-                self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
+                self.buffer = [
+                    p for p in self.buffer if now - p["timestamp"] < age_seconds
+                ]
         else:
             self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
 

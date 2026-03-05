@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_eagleproposer_exists():
     """Test that EagleProposer class exists and is importable."""
-    assert 'EagleProposer' in dir()
+    assert "EagleProposer" in dir()
 
 
 def test_eagleproposerfactory_exists():
     """Test that EagleProposerFactory class exists and is importable."""
-    assert 'EagleProposerFactory' in dir()
+    assert "EagleProposerFactory" in dir()
 
 
 def test_asynceagleproposer_exists():
     """Test that AsyncEagleProposer class exists and is importable."""
-    assert 'AsyncEagleProposer' in dir()
+    assert "AsyncEagleProposer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

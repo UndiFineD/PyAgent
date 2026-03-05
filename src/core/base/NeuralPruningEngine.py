@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,12 +50,12 @@ class NeuralPruningEngine:
         self.weights: dict[str, SynapticWeight] = {}  # path_id -> weight dataclass
         self.usage_statistics: dict[str, int] = {}  # path_id -> hits
         self.cost_statistics: dict[str, float] = {}  # path_id -> total_tokens
-        self.performance_statistics: dict[
-            str, list[bool]
-        ] = {}  # path_id -> success/fail history
-        self.interaction_history: list[
-            tuple[str, str, float]
-        ] = []  # (agent_a, agent_b, timestamp)
+        self.performance_statistics: dict[str, list[bool]] = (
+            {}
+        )  # path_id -> success/fail history
+        self.interaction_history: list[tuple[str, str, float]] = (
+            []
+        )  # (agent_a, agent_b, timestamp)
         self.current_cycle: int = 0
 
     @property
@@ -82,13 +83,15 @@ class NeuralPruningEngine:
                 now = time.time()
                 interactions = []
                 for a, b, t in self.interaction_history:
-                    age = (now - t) / 3600 # hours
+                    age = (now - t) / 3600  # hours
                     weight = np.exp(-age)
                     interactions.append((a, b, float(weight)))
 
                 # Call Rust
                 clusters = rc.cluster_interactions_rust(interactions, 0.5, 2)
-                logging.info(f"NeuralPruningEngine: Identified {len(clusters)} active agent clusters (Rust).")
+                logging.info(
+                    f"NeuralPruningEngine: Identified {len(clusters)} active agent clusters (Rust)."
+                )
                 return clusters
             except Exception as e:
                 logging.error(f"NeuralPruningEngine: Rust clustering failed: {e}")

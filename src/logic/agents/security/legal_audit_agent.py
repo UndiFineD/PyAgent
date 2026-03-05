@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +35,6 @@ Legal audit agent.py module.
 """
 
 
-
 import re
 import time
 from typing import Any, Optional, TypedDict
@@ -47,6 +47,7 @@ __version__ = VERSION
 
 class LicenseReport(TypedDict, total=False):
     """Structured report for license auditing."""
+
     detected_licenses: list[str]
     risk_level: str
     summary: str
@@ -75,7 +76,9 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "AGPL",
         ]  # Blacklist for non-copyleft projects (Phase 238)
 
-    def _record(self, prompt: str, result: str, provider: str = "LegalAudit", model: str = "v1") -> None:
+    def _record(
+        self, prompt: str, result: str, provider: str = "LegalAudit", model: str = "v1"
+    ) -> None:
         """Internal helper to record interactions to the swarm context."""
         if hasattr(self, "recorder") and self.recorder:
             try:
@@ -84,12 +87,14 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                     model=model,
                     prompt=prompt,
                     result=result,
-                    meta={"timestamp": time.time(), "agent": "LegalAuditAgent"}
+                    meta={"timestamp": time.time(), "agent": "LegalAuditAgent"},
                 )
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
 
-    def check_license_compliance(self, content: str, project_license: str = "MIT") -> LicenseReport:
+    def check_license_compliance(
+        self, content: str, project_license: str = "MIT"
+    ) -> LicenseReport:
         """
         Phase 238: Check generated code against a license blacklist to prevent
         GPL/AGPL contamination in permissive projects.
@@ -97,7 +102,9 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         _ = project_license
         scan = self.scan_licensing(content)
         violations = [
-            license_name for license_name in scan.get("detected_licenses", []) if license_name in self.license_blacklist
+            license_name
+            for license_name in scan.get("detected_licenses", [])
+            if license_name in self.license_blacklist
         ]
 
         is_compliant = not violations
@@ -119,11 +126,17 @@ class LegalAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         res: LicenseReport = {
             "detected_licenses": detected,
-            "risk_level": "high" if any(license_name in ["GPL", "AGPL"] for license_name in detected) else "low",
+            "risk_level": (
+                "high"
+                if any(license_name in ["GPL", "AGPL"] for license_name in detected)
+                else "low"
+            ),
             "summary": f"Detected: {', '.join(detected) if detected else 'None'}",
         }
         # Phase 108: Intelligence Recording
-        self._record(content[:1000], str(res), provider="LegalAudit", model="LicenseScanner")
+        self._record(
+            content[:1000], str(res), provider="LegalAudit", model="LicenseScanner"
+        )
         return res
 
     def verify_smart_contract(self, logic: str) -> dict[str, Any]:

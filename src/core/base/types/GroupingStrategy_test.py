@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_groupingstrategy_exists():
     """Test that GroupingStrategy class exists and is importable."""
-    assert 'GroupingStrategy' in dir()
+    assert "GroupingStrategy" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

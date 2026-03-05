@@ -45,7 +45,7 @@ class JobQueue:
         max_queue_size: int = 100,
         job_ttl_seconds: int = 3600,  # 1 hour
         cleanup_interval_seconds: int = 300,  # 5 minutes
-        num_workers: int = 1
+        num_workers: int = 1,
     ):
         self.max_queue_size = max_queue_size
         self.job_ttl_seconds = job_ttl_seconds
@@ -79,18 +79,14 @@ class JobQueue:
         # Start worker threads
         for i in range(self.num_workers):
             worker = threading.Thread(
-                target=self._worker_loop,
-                name=f"JobQueue-Worker-{i+1}",
-                daemon=True
+                target=self._worker_loop, name=f"JobQueue-Worker-{i+1}", daemon=True
             )
             worker.start()
             self.workers.append(worker)
 
         # Start cleanup worker
         self.cleanup_worker = threading.Thread(
-            target=self._cleanup_loop,
-            name="JobQueue-Cleanup",
-            daemon=True
+            target=self._cleanup_loop, name="JobQueue-Cleanup", daemon=True
         )
         self.cleanup_worker.start()
 
@@ -131,7 +127,7 @@ class JobQueue:
                 "status": "queued",
                 "data": job_data,
                 "submit_time": datetime.now(),
-                "queue_position": len(self.job_queue)
+                "queue_position": len(self.job_queue),
             }
 
             self.job_queue.append(job_id)
@@ -191,20 +187,24 @@ class JobQueue:
 
                     with self.queue_lock:
                         if job_id in self.job_results:
-                            self.job_results[job_id].update({
-                                "status": "completed",
-                                "result": result,
-                                "completion_time": datetime.now()
-                            })
+                            self.job_results[job_id].update(
+                                {
+                                    "status": "completed",
+                                    "result": result,
+                                    "completion_time": datetime.now(),
+                                }
+                            )
 
                 except Exception as e:
                     with self.queue_lock:
                         if job_id in self.job_results:
-                            self.job_results[job_id].update({
-                                "status": "failed",
-                                "error": str(e),
-                                "completion_time": datetime.now()
-                            })
+                            self.job_results[job_id].update(
+                                {
+                                    "status": "failed",
+                                    "error": str(e),
+                                    "completion_time": datetime.now(),
+                                }
+                            )
 
             else:
                 # No jobs available, sleep briefly
@@ -223,7 +223,9 @@ class JobQueue:
                     if job["status"] in ["completed", "failed", "cancelled"]:
                         completion_time = job.get("completion_time")
                         if completion_time and isinstance(completion_time, datetime):
-                            if (current_time - completion_time).total_seconds() > self.job_ttl_seconds:
+                            if (
+                                current_time - completion_time
+                            ).total_seconds() > self.job_ttl_seconds:
                                 expired_jobs.append(job_id)
 
                 for job_id in expired_jobs:
@@ -233,10 +235,18 @@ class JobQueue:
         """Get queue statistics."""
         with self.queue_lock:
             total_jobs = len(self.job_results)
-            queued_jobs = sum(1 for job in self.job_results.values() if job["status"] == "queued")
-            processing_jobs = sum(1 for job in self.job_results.values() if job["status"] == "processing")
-            completed_jobs = sum(1 for job in self.job_results.values() if job["status"] == "completed")
-            failed_jobs = sum(1 for job in self.job_results.values() if job["status"] == "failed")
+            queued_jobs = sum(
+                1 for job in self.job_results.values() if job["status"] == "queued"
+            )
+            processing_jobs = sum(
+                1 for job in self.job_results.values() if job["status"] == "processing"
+            )
+            completed_jobs = sum(
+                1 for job in self.job_results.values() if job["status"] == "completed"
+            )
+            failed_jobs = sum(
+                1 for job in self.job_results.values() if job["status"] == "failed"
+            )
 
             return {
                 "total_jobs": total_jobs,
@@ -247,5 +257,5 @@ class JobQueue:
                 "queue_size": len(self.job_queue),
                 "max_queue_size": self.max_queue_size,
                 "workers_active": len(self.workers),
-                "running": self.running
+                "running": self.running,
             }

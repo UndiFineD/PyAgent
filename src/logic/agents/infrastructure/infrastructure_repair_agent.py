@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,7 +64,9 @@ class InfrastructureRepairAgent(BaseAgent):
                 self._record(cmd_str, "Success", provider="Shell", model="pip")
                 return f"Successfully installed {package}."
             except (subprocess.CalledProcessError, OSError) as e:
-                self._record(cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip")
+                self._record(
+                    cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip"
+                )
                 return f"Failed to install {package}: {e}"
 
         return "Unknown issue type."

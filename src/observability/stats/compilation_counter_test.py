@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TrendAnalyzer"), "TrendAnalyzer missing"
     assert hasattr(mod, "get_global_counter"), "get_global_counter missing"
     assert hasattr(mod, "reset_global_counter"), "reset_global_counter missing"
-

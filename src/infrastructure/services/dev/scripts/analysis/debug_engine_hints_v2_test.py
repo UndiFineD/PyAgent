@@ -13,6 +13,7 @@ def _load_module():
 
 def test_imports_and_symbols():
     mod = _load_module()
-    assert hasattr(mod, "check_file_for_missing_hints"), "check_file_for_missing_hints missing"
+    assert hasattr(
+        mod, "check_file_for_missing_hints"
+    ), "check_file_for_missing_hints missing"
     assert hasattr(mod, "scan_directory"), "scan_directory missing"
-

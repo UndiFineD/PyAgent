@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextexporter_exists():
     """Test that ContextExporter class exists and is importable."""
-    assert 'ContextExporter' in dir()
+    assert "ContextExporter" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

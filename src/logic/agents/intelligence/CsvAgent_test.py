@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_csvagent_exists():
     """Test that CsvAgent class exists and is importable."""
-    assert 'CsvAgent' in dir()
+    assert "CsvAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

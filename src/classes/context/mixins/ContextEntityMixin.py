@@ -9,8 +9,10 @@ except Exception:
             ContextEntityMixin as _ContextEntityMixin,
         )
     except Exception:
+
         class _ContextEntityMixin:
             pass
+
 
 ContextEntityMixin = _ContextEntityMixin
 

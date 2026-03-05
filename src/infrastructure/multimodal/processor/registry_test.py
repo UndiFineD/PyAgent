@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_multimodalregistry_exists():
     """Test that MultiModalRegistry class exists and is importable."""
-    assert 'MultiModalRegistry' in dir()
+    assert "MultiModalRegistry" in dir()
 
 
 def test_multimodalregistry_instantiation():
@@ -55,4 +55,3 @@ def test_get_placeholder_tokens_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -55,7 +55,9 @@ class LearningObjective:
         elif self.objective_type == ObjectiveType.MINIMIZE:
             if self.current_value <= self.target_value:
                 return 1.0
-            return max(0.0, 1.0 - (self.current_value - self.target_value) / self.target_value)
+            return max(
+                0.0, 1.0 - (self.current_value - self.target_value) / self.target_value
+            )
         else:  # TARGET or THRESHOLD
             diff = abs(self.current_value - self.target_value)
             return max(0.0, 1.0 - diff / max(abs(self.target_value), 0.001))
@@ -70,11 +72,15 @@ class LearningObjective:
         elif self.objective_type == ObjectiveType.THRESHOLD:
             return self.current_value >= self.target_value
         else:  # TARGET
-            return abs(self.current_value - self.target_value) <= self.tolerance * abs(self.target_value)
+            return abs(self.current_value - self.target_value) <= self.tolerance * abs(
+                self.target_value
+            )
 
     def update(self, new_value: float) -> None:
         """Updates the current value and records history."""
-        self.history.append({"value": new_value, "timestamp": time.time(), "progress": self.progress})
+        self.history.append(
+            {"value": new_value, "timestamp": time.time(), "progress": self.progress}
+        )
         self.current_value = new_value
 
         if self.status == ObjectiveStatus.NOT_STARTED:
@@ -146,7 +152,11 @@ class ObjectiveTracker:
         """Recalculates normalized weights for objectives."""
         total_priority = sum(obj.priority for obj in self.objectives)
         self._objective_weights = {
-            obj.name: obj.priority / total_priority if total_priority > 0 else 1.0 / len(self.objectives)
+            obj.name: (
+                obj.priority / total_priority
+                if total_priority > 0
+                else 1.0 / len(self.objectives)
+            )
             for obj in self.objectives
         }
 
@@ -164,7 +174,9 @@ class ObjectiveTracker:
                 return True
         return False
 
-    def update_objective(self, name: str, new_value: float) -> Optional[LearningObjective]:
+    def update_objective(
+        self, name: str, new_value: float
+    ) -> Optional[LearningObjective]:
         """Updates an objective's current value."""
         for obj in self.objectives:
             if obj.name == name:
@@ -234,13 +246,17 @@ class ObjectiveTracker:
 
         for obj in self.objectives:
             if obj.target_metric in metrics:
-                improvement = self._calculate_single_objective_improvement(obj, metrics[obj.target_metric])
+                improvement = self._calculate_single_objective_improvement(
+                    obj, metrics[obj.target_metric]
+                )
                 weight = self._objective_weights.get(obj.name, 0.0)
                 total_reward += weight * improvement * 10.0  # Scale factor
 
         return total_reward
 
-    def _calculate_single_objective_improvement(self, obj: LearningObjective, new_value: float) -> float:
+    def _calculate_single_objective_improvement(
+        self, obj: LearningObjective, new_value: float
+    ) -> float:
         """Calculate improvement for a single objective."""
         old_progress = obj.progress
         # Simulate update
@@ -268,10 +284,20 @@ class ObjectiveTracker:
                 for obj in self.objectives
             ],
             "constraints": [
-                {"name": c.name, "metric": c.metric, "min": c.min_value, "max": c.max_value} for c in self.constraints
+                {
+                    "name": c.name,
+                    "metric": c.metric,
+                    "min": c.min_value,
+                    "max": c.max_value,
+                }
+                for c in self.constraints
             ],
             "bottleneck": self.get_bottleneck().name if self.get_bottleneck() else None,
-            "next_priority": self.get_priority_objective().name if self.get_priority_objective() else None,
+            "next_priority": (
+                self.get_priority_objective().name
+                if self.get_priority_objective()
+                else None
+            ),
         }
 
     def get_objective_by_name(self, name: str) -> Optional[LearningObjective]:

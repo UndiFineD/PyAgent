@@ -3,6 +3,7 @@
 Module: identity_mixin
 Provides identity and metadata mixin for PyAgent agents.
 """
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +31,9 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
     """Handles agent identity, configuration, and capabilities."""
 
     def __init__(self, **kwargs: Any) -> None:
-        self.identity = IdentityCore(agent_type=self.__class__.__name__.lower().replace("agent", "") or "base")
+        self.identity = IdentityCore(
+            agent_type=self.__class__.__name__.lower().replace("agent", "") or "base"
+        )
         self.agent_name: str = self.identity.agent_type
         self.capabilities: list[str] = ["base"]
         self.priority: AgentPriority = kwargs.get("priority", AgentPriority.NORMAL)
@@ -47,8 +50,9 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
         try:
             # pylint: disable=import-outside-toplevel
             import asyncio
-            from src.infrastructure.swarm.orchestration.signals.signal_registry import \
-                SignalRegistry
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import (
+                SignalRegistry,
+            )
 
             signals = SignalRegistry()
             # Note: We expect the class using this mixin to have agent_logic_core
@@ -65,12 +69,20 @@ class IdentityMixin:  # pylint: disable=too-few-public-methods
                         asyncio.set_event_loop(loop)
 
                     if loop.is_running():
-                        asyncio.create_task(signals.emit("agent_capability_registration", payload))
+                        asyncio.create_task(
+                            signals.emit("agent_capability_registration", payload)
+                        )
                     else:
-                        loop.run_until_complete(signals.emit("agent_capability_registration", payload))
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                        loop.run_until_complete(
+                            signals.emit("agent_capability_registration", payload)
+                        )
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     # pylint: disable=broad-exception-caught
                     pass
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             # pylint: disable=broad-exception-caught
             pass

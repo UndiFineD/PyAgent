@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -127,6 +128,7 @@ class PrefixTree:
     def insert(self, tokens: tuple[int, ...], entry: PrefixEntry) -> None:
         """Insert prefix into tree."""
         with self._lock:
+
             def _insert_recursive(node: RadixTreeNode, pos: int) -> None:
                 if pos >= len(tokens):
                     node.entry = entry
@@ -148,9 +150,11 @@ class PrefixTree:
 
                 # Find common prefix length
                 def _common_len_recursive(cl: int) -> int:
-                    if (cl < len(child.prefix)
+                    if (
+                        cl < len(child.prefix)
                         and pos + cl < len(tokens)
-                        and child.prefix[cl] == tokens[pos + cl]):
+                        and child.prefix[cl] == tokens[pos + cl]
+                    ):
                         return _common_len_recursive(cl + 1)
                     return cl
 
@@ -183,14 +187,21 @@ class PrefixTree:
 
             _insert_recursive(self._root, 0)
 
-    def find_longest_prefix(self, tokens: tuple[int, ...]) -> Optional[tuple[int, PrefixEntry]]:
+    def find_longest_prefix(
+        self, tokens: tuple[int, ...]
+    ) -> Optional[tuple[int, PrefixEntry]]:
         """
         Find longest matching prefix.
 
         Returns (matched_length, entry) or None.
         """
         with self._lock:
-            def _find_recursive(node: RadixTreeNode, pos: int, last_match: Optional[tuple[int, PrefixEntry]]) -> Optional[tuple[int, PrefixEntry]]:
+
+            def _find_recursive(
+                node: RadixTreeNode,
+                pos: int,
+                last_match: Optional[tuple[int, PrefixEntry]],
+            ) -> Optional[tuple[int, PrefixEntry]]:
                 if pos >= len(tokens):
                     return last_match
 
@@ -205,18 +216,29 @@ class PrefixTree:
                 prefix_len = len(child.prefix)
                 if pos + prefix_len > len(tokens):
                     # Partial match at end
-                    matches = all(map(lambda i: child.prefix[i] == tokens[pos + i], range(len(tokens) - pos)))
+                    matches = all(
+                        map(
+                            lambda i: child.prefix[i] == tokens[pos + i],
+                            range(len(tokens) - pos),
+                        )
+                    )
                     if matches and child.is_leaf:
                         return (pos + len(tokens) - pos, child.entry)
                     return last_match
 
-                matches = all(map(lambda i: child.prefix[i] == tokens[pos + i], range(prefix_len)))
+                matches = all(
+                    map(lambda i: child.prefix[i] == tokens[pos + i], range(prefix_len))
+                )
 
                 if not matches:
                     return last_match
 
                 new_pos = pos + prefix_len
-                new_match = (new_pos, child.entry) if (child.is_leaf and child.entry is not None) else last_match
+                new_match = (
+                    (new_pos, child.entry)
+                    if (child.is_leaf and child.entry is not None)
+                    else last_match
+                )
 
                 return _find_recursive(child, new_pos, new_match)
 
@@ -225,7 +247,10 @@ class PrefixTree:
     def remove(self, tokens: tuple[int, ...]) -> bool:
         """Remove prefix from tree."""
         with self._lock:
-            def _find_path(node: RadixTreeNode, pos: int, path: list[tuple[RadixTreeNode, int]]) -> Optional[RadixTreeNode]:
+
+            def _find_path(
+                node: RadixTreeNode, pos: int, path: list[tuple[RadixTreeNode, int]]
+            ) -> Optional[RadixTreeNode]:
                 if pos >= len(tokens):
                     return node
 
@@ -241,7 +266,9 @@ class PrefixTree:
                 if pos + prefix_len > len(tokens):
                     return None
 
-                matches = all(map(lambda i: child.prefix[i] == tokens[pos + i], range(prefix_len)))
+                matches = all(
+                    map(lambda i: child.prefix[i] == tokens[pos + i], range(prefix_len))
+                )
 
                 if not matches:
                     return None
@@ -261,7 +288,10 @@ class PrefixTree:
 
             # Cleanup empty nodes
             if not target.children:
-                def _cleanup_recursive(path_list: list[tuple[RadixTreeNode, int]]) -> None:
+
+                def _cleanup_recursive(
+                    path_list: list[tuple[RadixTreeNode, int]],
+                ) -> None:
                     if not path_list:
                         return
                     parent, key = path_list.pop()
@@ -316,7 +346,10 @@ class PrefixCacheOptimizer:
         logger.info("PrefixCacheOptimizer initialized")
 
     def cache_prefix(
-        self, token_ids: Sequence[int], block_ids: list[int], metadata: Optional[dict[str, Any]] = None
+        self,
+        token_ids: Sequence[int],
+        block_ids: list[int],
+        metadata: Optional[dict[str, Any]] = None,
     ) -> int:
         """
         Cache a prefix with its block IDs.
@@ -372,7 +405,9 @@ class PrefixCacheOptimizer:
 
             if result is None:
                 self._total_misses += 1
-                return CacheHitResult(hit=False, remaining_tokens=tokens, lookup_time_us=lookup_time)
+                return CacheHitResult(
+                    hit=False, remaining_tokens=tokens, lookup_time_us=lookup_time
+                )
 
             matched_len, entry = result
             entry.touch()
@@ -413,10 +448,16 @@ class PrefixCacheOptimizer:
         Returns number regarding entries removed.
         """
         with self._lock:
+
             def _has_skipped_block(entry: PrefixEntry) -> bool:
                 return any(map(lambda bid: bid in block_ids, entry.block_ids))
 
-            to_remove = list(filter(lambda h: _has_skipped_block(self._hash_to_entry[h]), self._hash_to_entry))
+            to_remove = list(
+                filter(
+                    lambda h: _has_skipped_block(self._hash_to_entry[h]),
+                    self._hash_to_entry,
+                )
+            )
 
             list(map(self._remove_entry, to_remove))
 
@@ -476,7 +517,13 @@ class PrefixCacheOptimizer:
         now = time.time()
 
         # Move stale warm entries to cold
-        stale_hashes = list(filter(lambda h: now - self._warm_cache[h].last_access > self.config.cold_timeout_s, self._warm_cache))
+        stale_hashes = list(
+            filter(
+                lambda h: now - self._warm_cache[h].last_access
+                > self.config.cold_timeout_s,
+                self._warm_cache,
+            )
+        )
 
         def _move_to_cold(h: int) -> None:
             entry = self._warm_cache.pop(h)
@@ -486,7 +533,13 @@ class PrefixCacheOptimizer:
         list(map(_move_to_cold, stale_hashes))
 
         # Evict from cold
-        cold_entries = sorted(self._cold_cache.keys(), key=lambda h: (self._cold_cache[h].hit_count, self._cold_cache[h].last_access))
+        cold_entries = sorted(
+            self._cold_cache.keys(),
+            key=lambda h: (
+                self._cold_cache[h].hit_count,
+                self._cold_cache[h].last_access,
+            ),
+        )
         evict_hashes = cold_entries[: self.config.eviction_batch_size]
 
         list(map(self._remove_entry, evict_hashes))
@@ -523,9 +576,23 @@ class PrefixCacheOptimizer:
         Beyond vLLM: Speculative prefix pre-warming.
         """
         with self._lock:
-            sorted_hashes = list(map(lambda x: x[0], sorted(self._prewarm_candidates.items(), key=lambda x: x[1], reverse=True)[:limit]))
+            sorted_hashes = list(
+                map(
+                    lambda x: x[0],
+                    sorted(
+                        self._prewarm_candidates.items(),
+                        key=lambda x: x[1],
+                        reverse=True,
+                    )[:limit],
+                )
+            )
 
-            return list(map(lambda h: self._hash_to_entry[h].token_ids, filter(lambda h: h in self._hash_to_entry, sorted_hashes)))
+            return list(
+                map(
+                    lambda h: self._hash_to_entry[h].token_ids,
+                    filter(lambda h: h in self._hash_to_entry, sorted_hashes),
+                )
+            )
 
     def get_metrics(self) -> dict[str, Any]:
         """Get cache metrics."""

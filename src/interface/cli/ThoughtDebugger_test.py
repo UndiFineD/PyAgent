@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_thoughtdebugger_exists():
     """Test that ThoughtDebugger class exists and is importable."""
-    assert 'ThoughtDebugger' in dir()
+    assert "ThoughtDebugger" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

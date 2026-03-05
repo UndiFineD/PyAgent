@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "agent_dir_on_path"), "agent_dir_on_path missing"
     assert hasattr(mod, "agent_sys_path"), "agent_sys_path missing"
-

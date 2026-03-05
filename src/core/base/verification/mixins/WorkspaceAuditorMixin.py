@@ -9,9 +9,11 @@ from typing import Any, Dict, List
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
+
 
 class WorkspaceAuditorMixin:
     """Methods for auditing the workspace for tech debt with Rust acceleration."""
@@ -22,13 +24,13 @@ class WorkspaceAuditorMixin:
         Offloads regex-heavy scanning to Rust if available.
         """
         results = {
-            "bare_excepts": [],           # (file, line)
-            "hardcoded_paths": [],        # (file, line, path)
-            "todos": [],                  # (file, task)
-            "print_statements": [],       # [files]
-            "undocumented_classes": [],   # (file, class_name, line)
-            "stubs": [],                   # [files]
-            "large_files": [],            # (file, size)
+            "bare_excepts": [],  # (file, line)
+            "hardcoded_paths": [],  # (file, line, path)
+            "todos": [],  # (file, task)
+            "print_statements": [],  # [files]
+            "undocumented_classes": [],  # (file, class_name, line)
+            "stubs": [],  # [files]
+            "large_files": [],  # (file, size)
         }
 
         root_path = Path(root_dir)
@@ -40,14 +42,14 @@ class WorkspaceAuditorMixin:
             try:
                 # Patterns to detect via Rust regex engine
                 dangerous = [
-                    (r"['""]C:\\[a-zA-Z0-9]", "Hardcoded Windows path"),
-                    (r"['""]/home/|['""]/Users/", "Hardcoded Nix path"),
+                    (r"['" "]C:\\[a-zA-Z0-9]", "Hardcoded Windows path"),
+                    (r"['" "]/home/|['" "]/Users/", "Hardcoded Nix path"),
                     (r"^\s*print\(", "Print statement"),
                 ]
                 rust_findings = rust_core.scan_workspace_quality_rust(
                     str(root_dir),
                     [".git", "__pycache__", "rust_core", "venv", ".venv", "target"],
-                    dangerous
+                    dangerous,
                 )
 
                 for file_path, findings in rust_findings.items():
@@ -62,19 +64,27 @@ class WorkspaceAuditorMixin:
                             try:
                                 size_val = int(msg.split("(")[1].split(" ")[0])
                                 results["large_files"].append((file_path, size_val))
-                            except: pass
+                            except:
+                                pass
                         elif "Print statement" in msg:
                             if file_path not in results["print_statements"]:
                                 results["print_statements"].append(file_path)
-                
-                logging.info(f"WorkspaceAuditor: Rust-native scan completed for {len(rust_findings)} files.")
+
+                logging.info(
+                    f"WorkspaceAuditor: Rust-native scan completed for {len(rust_findings)} files."
+                )
             except Exception as e:
-                logging.error(f"WorkspaceAuditor: Rust acceleration failed: {e}. Falling back.")
+                logging.error(
+                    f"WorkspaceAuditor: Rust acceleration failed: {e}. Falling back."
+                )
 
         # 2. Python-side Supplemental Loop
         py_files = list(root_path.rglob("*.py"))
         for file_path in py_files:
-            if any(part.startswith(".") or part in ["__pycache__", "rust_core", "venv"] for part in file_path.parts):
+            if any(
+                part.startswith(".") or part in ["__pycache__", "rust_core", "venv"]
+                for part in file_path.parts
+            ):
                 continue
 
             try:
@@ -82,10 +92,14 @@ class WorkspaceAuditorMixin:
                 if not HAS_RUST:
                     if len(content) > 25000:
                         results["large_files"].append((str(file_path), len(content)))
-                    
-                    todo_matches = re.finditer(r"#\s*TODO:?\s*(.*)", content, re.IGNORECASE)
+
+                    todo_matches = re.finditer(
+                        r"#\s*TODO:?\s*(.*)", content, re.IGNORECASE
+                    )
                     for match in todo_matches:
-                        results["todos"].append((str(file_path), match.group(1).strip()))
+                        results["todos"].append(
+                            (str(file_path), match.group(1).strip())
+                        )
 
                     if re.search(r"^\s*print\(", content, re.MULTILINE):
                         results["print_statements"].append(str(file_path))
@@ -104,12 +118,12 @@ class WorkspaceAuditorMixin:
                                 results["undocumented_classes"].append(
                                     (str(file_path), node.name, node.lineno)
                                 )
-                    
+
                     if file_path.name != "__init__.py" and self._check_is_stub(tree):
                         results["stubs"].append(str(file_path))
 
                 except SyntaxError:
-                    continue 
+                    continue
 
             except Exception as e:
                 logging.debug(f"CodeHealthAuditor: Error scanning {file_path}: {e}")
@@ -118,6 +132,7 @@ class WorkspaceAuditorMixin:
 
     def _check_is_stub(self, tree: ast.AST) -> bool:
         from .StubDetectorMixin import StubDetectorMixin
+
         has_defs = False
         is_stub = True
         for node in tree.body:
@@ -127,8 +142,12 @@ class WorkspaceAuditorMixin:
                 if res is False or res == "IS_ABC":
                     is_stub = False
                     break
-            elif not isinstance(node, (ast.Import, ast.ImportFrom, ast.Assign, ast.AnnAssign)):
-                if not (isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant)):
+            elif not isinstance(
+                node, (ast.Import, ast.ImportFrom, ast.Assign, ast.AnnAssign)
+            ):
+                if not (
+                    isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant)
+                ):
                     is_stub = False
                     break
         return has_defs and is_stub

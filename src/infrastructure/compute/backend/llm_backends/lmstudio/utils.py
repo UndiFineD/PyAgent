@@ -32,6 +32,7 @@ def lmstudio_chat(
     """Convenience function for quick LM Studio chat."""
     try:
         import lmstudio  # type: ignore[import-not-found]
+
         llm = lmstudio.llm(model) if model else lmstudio.llm()
         chat = lmstudio.Chat(system_prompt)  # type: ignore[attr-defined]
         chat.add_user_message(prompt)
@@ -51,6 +52,7 @@ def lmstudio_stream(
     """Convenience function for streaming LM Studio chat."""
     try:
         import lmstudio  # type: ignore[import-not-found]
+
         llm = lmstudio.llm(model) if model else lmstudio.llm()
         chat = lmstudio.Chat(system_prompt)  # type: ignore[attr-defined]
         chat.add_user_message(prompt)
@@ -75,6 +77,7 @@ async def lmstudio_chat_async(
         import lmstudio  # type: ignore[import-not-found]
         import inspect
         from typing import Any
+
         async with lmstudio.AsyncClient(host) as client:
             llm_accessor = client.llm
             llm: Any
@@ -92,7 +95,9 @@ async def lmstudio_chat_async(
                     if hasattr(lmstudio, "llm"):
                         llm = lmstudio.llm(model) if model else lmstudio.llm()
                     else:
-                        raise AttributeError("lmstudio.llm not available on this SDK version")
+                        raise AttributeError(
+                            "lmstudio.llm not available on this SDK version"
+                        )
 
             chat = lmstudio.Chat(system_prompt)  # type: ignore[attr-defined]
             chat.add_user_message(prompt)

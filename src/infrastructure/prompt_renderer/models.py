@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
@@ -14,6 +15,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 
 class TruncationStrategy(Enum):
     """Prompt truncation strategies."""
+
     NONE = "none"
     AUTO = "auto"
     LEFT = "left"
@@ -24,6 +26,7 @@ class TruncationStrategy(Enum):
 
 class InputType(Enum):
     """Input types for prompt rendering."""
+
     TEXT = "text"
     TOKENS = "tokens"
     EMBEDDING = "embedding"
@@ -32,6 +35,7 @@ class InputType(Enum):
 
 class RenderMode(Enum):
     """Rendering modes."""
+
     COMPLETION = "completion"
     CHAT = "chat"
     EMBEDDING = "embedding"
@@ -41,6 +45,7 @@ class RenderMode(Enum):
 @dataclass
 class PromptConfig:
     """Configuration for prompt rendering."""
+
     prompt: Optional[str] = None
     messages: Optional[List[Dict[str, Any]]] = None
     token_ids: Optional[List[int]] = None
@@ -71,6 +76,7 @@ class PromptConfig:
 @dataclass
 class TruncationResult:
     """Result of prompt truncation."""
+
     original_tokens: int
     truncated_tokens: int
     removed_tokens: int
@@ -88,6 +94,7 @@ class TruncationResult:
 @dataclass
 class RenderResult:
     """Result of prompt rendering."""
+
     text: Optional[str] = None
     token_ids: Optional[List[int]] = None
     embeddings: Optional[List[List[float]]] = None
@@ -108,6 +115,7 @@ class RenderResult:
 @dataclass
 class EmbeddingInput:
     """Embedding input for direct embedding injection."""
+
     embeddings: List[List[float]]
     positions: Optional[List[int]] = None
     encoding: str = "float32"
@@ -116,6 +124,7 @@ class EmbeddingInput:
 @dataclass
 class MultimodalInput:
     """Multimodal input container."""
+
     images: List[Dict[str, Any]] = field(default_factory=list)
     audio: List[Dict[str, Any]] = field(default_factory=list)
     video: List[Dict[str, Any]] = field(default_factory=list)

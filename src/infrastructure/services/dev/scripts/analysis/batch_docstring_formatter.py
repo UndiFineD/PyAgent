@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,23 +34,25 @@ class DocstringStandards:
 
     # Standard format patterns
     MODULE_DOCSTRING_PATTERN = re.compile(
-        r'"""[\s\S]*?"""\s*$',  # Module docstring at top of file
-        re.MULTILINE
+        r'"""[\s\S]*?"""\s*$', re.MULTILINE  # Module docstring at top of file
     )
 
     FUNCTION_DOCSTRING_PATTERN = re.compile(
         r'^\s*def\s+\w+\s*\([^)]*\)\s*->?\s*[^:]*:\s*\n\s*"""[\s\S]*?"""\s*$',
-        re.MULTILINE
+        re.MULTILINE,
     )
 
     CLASS_DOCSTRING_PATTERN = re.compile(
-        r'^\s*class\s+\w+.*?:\s*\n\s*"""[\s\S]*?"""\s*$',
-        re.MULTILINE
+        r'^\s*class\s+\w+.*?:\s*\n\s*"""[\s\S]*?"""\s*$', re.MULTILINE
     )
 
     # Required sections for different docstring types
     MODULE_REQUIRED_SECTIONS = []
-    FUNCTION_REQUIRED_SECTIONS = ["Args:", "Returns:", "Raises:"]  # For complex functions
+    FUNCTION_REQUIRED_SECTIONS = [
+        "Args:",
+        "Returns:",
+        "Raises:",
+    ]  # For complex functions
     CLASS_REQUIRED_SECTIONS = ["Attributes:"]  # For complex classes
 
     @staticmethod
@@ -74,19 +77,23 @@ class DocstringStandards:
             return {"valid": False, "issues": ["Empty docstring"], "sections": []}
 
         # Extract sections (Args:, Returns:, Raises:, etc.)
-        section_pattern = re.compile(r'^(\w+):', re.MULTILINE)
+        section_pattern = re.compile(r"^(\w+):", re.MULTILINE)
         found_sections = section_pattern.findall(content)
 
         # Check for proper indentation
-        lines = content.split('\n')
+        lines = content.split("\n")
         if len(lines) > 1:
             # First line should not be indented
-            if lines[0].startswith(' ') or lines[0].startswith('\t'):
+            if lines[0].startswith(" ") or lines[0].startswith("\t"):
                 issues.append("First line of docstring should not be indented")
 
             # Subsequent lines should be indented consistently
-            indent_pattern = re.compile(r'^(\s*)')
-            indents = [indent_pattern.match(line).group(1) for line in lines[1:] if line.strip()]
+            indent_pattern = re.compile(r"^(\s*)")
+            indents = [
+                indent_pattern.match(line).group(1)
+                for line in lines[1:]
+                if line.strip()
+            ]
             if indents and not all(indent == indents[0] for indent in indents):
                 issues.append("Inconsistent indentation in docstring")
 
@@ -94,11 +101,7 @@ class DocstringStandards:
         if content.count('"""') < 2:
             issues.append("Docstring not properly closed")
 
-        return {
-            "valid": len(issues) == 0,
-            "issues": issues,
-            "sections": found_sections
-        }
+        return {"valid": len(issues) == 0, "issues": issues, "sections": found_sections}
 
     @staticmethod
     def format_docstring(content: str, style: str = "google") -> str:
@@ -122,7 +125,7 @@ class DocstringStandards:
     @staticmethod
     def _format_google_style(content: str) -> str:
         """Formats content into Google-style docstring."""
-        lines = content.strip().split('\n')
+        lines = content.strip().split("\n")
         formatted_lines = []
 
         for i, line in enumerate(lines):
@@ -137,7 +140,7 @@ class DocstringStandards:
                 else:
                     formatted_lines.append("")
 
-        return '\n'.join(formatted_lines)
+        return "\n".join(formatted_lines)
 
     @staticmethod
     def _format_numpy_style(content: str) -> str:
@@ -163,13 +166,13 @@ class DocstringAnalyzer:
             Dict containing analysis results.
         """
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
         except Exception as e:
             return {
                 "file": file_path,
                 "error": f"Failed to read file: {e}",
-                "issues": []
+                "issues": [],
             }
 
         issues = []
@@ -178,35 +181,39 @@ class DocstringAnalyzer:
         try:
             tree = ast.parse(content)
         except SyntaxError:
-            issues.append({
-                "type": "Syntax Error",
-                "message": "File contains syntax errors, cannot analyze docstrings",
-                "line": 0
-            })
-            return {
-                "file": file_path,
-                "issues": issues,
-                "tree": None
-            }
+            issues.append(
+                {
+                    "type": "Syntax Error",
+                    "message": "File contains syntax errors, cannot analyze docstrings",
+                    "line": 0,
+                }
+            )
+            return {"file": file_path, "issues": issues, "tree": None}
 
         # Check module docstring
         module_docstring = ast.get_docstring(tree)
         if not module_docstring:
-            issues.append({
-                "type": "Missing Module Docstring",
-                "message": "Module-level docstring is missing",
-                "line": 1,
-                "severity": "high"
-            })
-        else:
-            validation = self.standards.validate_google_style_docstring(module_docstring)
-            if not validation["valid"]:
-                issues.append({
-                    "type": "Malformed Module Docstring",
-                    "message": f"Module docstring formatting issues: {', '.join(validation['issues'])}",
+            issues.append(
+                {
+                    "type": "Missing Module Docstring",
+                    "message": "Module-level docstring is missing",
                     "line": 1,
-                    "severity": "medium"
-                })
+                    "severity": "high",
+                }
+            )
+        else:
+            validation = self.standards.validate_google_style_docstring(
+                module_docstring
+            )
+            if not validation["valid"]:
+                issues.append(
+                    {
+                        "type": "Malformed Module Docstring",
+                        "message": f"Module docstring formatting issues: {', '.join(validation['issues'])}",
+                        "line": 1,
+                        "severity": "medium",
+                    }
+                )
 
         # Check function and method docstrings
         for node in ast.walk(tree):
@@ -215,62 +222,74 @@ class DocstringAnalyzer:
             elif isinstance(node, ast.ClassDef):
                 self._analyze_class_docstring(node, issues)
 
-        return {
-            "file": file_path,
-            "issues": issues,
-            "tree": tree
-        }
+        return {"file": file_path, "issues": issues, "tree": tree}
 
-    def _analyze_function_docstring(self, node: ast.FunctionDef, issues: List[Dict[str, Any]]) -> None:
+    def _analyze_function_docstring(
+        self, node: ast.FunctionDef, issues: List[Dict[str, Any]]
+    ) -> None:
         """Analyzes a function's docstring."""
         docstring = ast.get_docstring(node)
         if not docstring:
             # Only flag missing docstrings for non-trivial functions
             if len(node.body) > 1 or self._is_complex_function(node):
-                issues.append({
-                    "type": "Missing Function Docstring",
-                    "message": f"Function '{node.name}' is missing docstring",
-                    "line": node.lineno,
-                    "severity": "medium"
-                })
+                issues.append(
+                    {
+                        "type": "Missing Function Docstring",
+                        "message": f"Function '{node.name}' is missing docstring",
+                        "line": node.lineno,
+                        "severity": "medium",
+                    }
+                )
         else:
             validation = self.standards.validate_google_style_docstring(docstring)
             if not validation["valid"]:
-                issues.append({
-                    "type": "Malformed Function Docstring",
-                    "message": f"Function '{node.name}' docstring formatting issues: {', '.join(validation['issues'])}",
-                    "line": node.lineno,
-                    "severity": "low"
-                })
+                issues.append(
+                    {
+                        "type": "Malformed Function Docstring",
+                        "message": f"Function '{node.name}' docstring formatting issues: {', '.join(validation['issues'])}",
+                        "line": node.lineno,
+                        "severity": "low",
+                    }
+                )
 
-    def _analyze_class_docstring(self, node: ast.ClassDef, issues: List[Dict[str, Any]]) -> None:
+    def _analyze_class_docstring(
+        self, node: ast.ClassDef, issues: List[Dict[str, Any]]
+    ) -> None:
         """Analyzes a class's docstring."""
         docstring = ast.get_docstring(node)
         if not docstring:
             # Only flag missing docstrings for non-trivial classes
-            if len(node.body) > 1 or any(isinstance(n, ast.FunctionDef) for n in node.body):
-                issues.append({
-                    "type": "Missing Class Docstring",
-                    "message": f"Class '{node.name}' is missing docstring",
-                    "line": node.lineno,
-                    "severity": "medium"
-                })
+            if len(node.body) > 1 or any(
+                isinstance(n, ast.FunctionDef) for n in node.body
+            ):
+                issues.append(
+                    {
+                        "type": "Missing Class Docstring",
+                        "message": f"Class '{node.name}' is missing docstring",
+                        "line": node.lineno,
+                        "severity": "medium",
+                    }
+                )
         else:
             validation = self.standards.validate_google_style_docstring(docstring)
             if not validation["valid"]:
-                issues.append({
-                    "type": "Malformed Class Docstring",
-                    "message": f"Class '{node.name}' docstring formatting issues: {', '.join(validation['issues'])}",
-                    "line": node.lineno,
-                    "severity": "low"
-                })
+                issues.append(
+                    {
+                        "type": "Malformed Class Docstring",
+                        "message": f"Class '{node.name}' docstring formatting issues: {', '.join(validation['issues'])}",
+                        "line": node.lineno,
+                        "severity": "low",
+                    }
+                )
 
     def _is_complex_function(self, node: ast.FunctionDef) -> bool:
         """Determines if a function is complex enough to require a docstring."""
         # Consider functions complex if they have parameters, are longer than 5 lines, or contain loops/control flow
         has_params = len(node.args.args) > 1  # More than just 'self'
         is_long = len(node.body) > 5
-        has_control_flow = any(isinstance(n, (ast.If, ast.For, ast.While, ast.Try)) for n in ast.walk(node))
+        has_control_flow = any(
+            isinstance(n, (ast.If, ast.For, ast.While, ast.Try)) for n in ast.walk(node)
+        )
 
         return has_params or is_long or has_control_flow
 
@@ -281,7 +300,9 @@ class DocstringFixer:
     def __init__(self, standards: DocstringStandards):
         self.standards = standards
 
-    def fix_file(self, file_path: str, issues: List[Dict[str, Any]], dry_run: bool = True) -> Dict[str, Any]:
+    def fix_file(
+        self, file_path: str, issues: List[Dict[str, Any]], dry_run: bool = True
+    ) -> Dict[str, Any]:
         """
         Attempts to fix docstring issues in a file.
 
@@ -297,14 +318,14 @@ class DocstringFixer:
         fixes_failed = []
 
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
         except Exception as e:
             return {
                 "file": file_path,
                 "error": f"Failed to read file: {e}",
                 "fixes_applied": [],
-                "fixes_failed": []
+                "fixes_failed": [],
             }
 
         modified_content = content
@@ -316,19 +337,29 @@ class DocstringFixer:
                     modified_content = fix_result["content"]
                     fixes_applied.append(f"Added module docstring to {file_path}")
                 else:
-                    fixes_failed.append(f"Failed to add module docstring: {fix_result['error']}")
-            elif issue["type"] in ["Malformed Module Docstring", "Malformed Function Docstring", "Malformed Class Docstring"]:
+                    fixes_failed.append(
+                        f"Failed to add module docstring: {fix_result['error']}"
+                    )
+            elif issue["type"] in [
+                "Malformed Module Docstring",
+                "Malformed Function Docstring",
+                "Malformed Class Docstring",
+            ]:
                 fix_result = self._fix_malformed_docstring(modified_content, issue)
                 if fix_result["success"]:
                     modified_content = fix_result["content"]
-                    fixes_applied.append(f"Fixed {issue['type'].lower()} in {file_path}")
+                    fixes_applied.append(
+                        f"Fixed {issue['type'].lower()} in {file_path}"
+                    )
                 else:
-                    fixes_failed.append(f"Failed to fix {issue['type'].lower()}: {fix_result['error']}")
+                    fixes_failed.append(
+                        f"Failed to fix {issue['type'].lower()}: {fix_result['error']}"
+                    )
 
         # Write back if not dry run and content changed
         if not dry_run and modified_content != content:
             try:
-                with open(file_path, 'w', encoding='utf-8') as f:
+                with open(file_path, "w", encoding="utf-8") as f:
                     f.write(modified_content)
             except Exception as e:
                 fixes_failed.append(f"Failed to write file: {e}")
@@ -337,41 +368,35 @@ class DocstringFixer:
             "file": file_path,
             "fixes_applied": fixes_applied,
             "fixes_failed": fixes_failed,
-            "content_changed": modified_content != content
+            "content_changed": modified_content != content,
         }
 
     def _add_module_docstring(self, content: str, file_path: str) -> Dict[str, Any]:
         """Adds a module docstring to a file."""
-        lines = content.split('\n')
+        lines = content.split("\n")
 
         # Find the first non-comment, non-empty line
         insert_index = 0
         for i, line in enumerate(lines):
             stripped = line.strip()
-            if stripped and not stripped.startswith('#'):
+            if stripped and not stripped.startswith("#"):
                 insert_index = i
                 break
 
         # Generate module name from file path
-        module_name = Path(file_path).stem.replace('_', ' ').title()
+        module_name = Path(file_path).stem.replace("_", " ").title()
 
         # Create docstring
-        docstring_lines = [
-            '"""',
-            f'{module_name} module.',
-            '"""',
-            ''
-        ]
+        docstring_lines = ['"""', f"{module_name} module.", '"""', ""]
 
         # Insert docstring
         new_lines = lines[:insert_index] + docstring_lines + lines[insert_index:]
 
-        return {
-            "success": True,
-            "content": '\n'.join(new_lines)
-        }
+        return {"success": True, "content": "\n".join(new_lines)}
 
-    def _fix_malformed_docstring(self, content: str, issue: Dict[str, Any]) -> Dict[str, Any]:
+    def _fix_malformed_docstring(
+        self, content: str, issue: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """
         Attempts to fix a malformed docstring by adding missing closing quotes.
 
@@ -382,7 +407,7 @@ class DocstringFixer:
         Returns:
             Dict with success status and modified content.
         """
-        lines = content.split('\n')
+        lines = content.split("\n")
         line_num = issue.get("line", 1) - 1  # Convert to 0-based indexing
 
         # Find the docstring start
@@ -400,10 +425,7 @@ class DocstringFixer:
                 break
 
         if docstring_start == -1:
-            return {
-                "success": False,
-                "error": "Could not find docstring start"
-            }
+            return {"success": False, "error": "Could not find docstring start"}
 
         # Find the docstring end
         docstring_end = -1
@@ -417,42 +439,60 @@ class DocstringFixer:
             # Docstring is not properly closed, add closing quotes
             # Find a good place to close it (next function/class or end of current block)
             insert_pos = docstring_start + 1
-            base_indent = len(lines[docstring_start]) - len(lines[docstring_start].lstrip())
+            base_indent = len(lines[docstring_start]) - len(
+                lines[docstring_start].lstrip()
+            )
 
             for i in range(docstring_start + 1, len(lines)):
                 line = lines[i].strip()
-                if line.startswith('def ') or line.startswith('class ') or line.startswith('@'):
+                if (
+                    line.startswith("def ")
+                    or line.startswith("class ")
+                    or line.startswith("@")
+                ):
                     insert_pos = i
                     break
-                elif line and not line.startswith(' ') and not line.startswith('\t') and not line.startswith('#'):
+                elif (
+                    line
+                    and not line.startswith(" ")
+                    and not line.startswith("\t")
+                    and not line.startswith("#")
+                ):
                     # Non-indented non-empty line, probably end of block
                     insert_pos = i
                     break
 
             # Insert closing quotes with proper indentation
-            indent_str = ' ' * base_indent
+            indent_str = " " * base_indent
             lines.insert(insert_pos, f"{indent_str}{quote_type}")
-            return {
-                "success": True,
-                "content": '\n'.join(lines)
-            }
+            return {"success": True, "content": "\n".join(lines)}
 
         # For other issues (like indentation), don't try to fix automatically as it's too risky
         return {
             "success": False,
-            "error": "Only unclosed docstrings can be fixed automatically"
+            "error": "Only unclosed docstrings can be fixed automatically",
         }
 
 
 def main():
     """Main entry point for the docstring batch processor."""
-    parser = argparse.ArgumentParser(description="Batch docstring formatter for PyAgent")
+    parser = argparse.ArgumentParser(
+        description="Batch docstring formatter for PyAgent"
+    )
     parser.add_argument("path", help="Path to file or directory to process")
-    parser.add_argument("--fix", action="store_true", help="Apply fixes (default is dry run)")
-    parser.add_argument("--recursive", "-r", action="store_true", help="Process directories recursively")
+    parser.add_argument(
+        "--fix", action="store_true", help="Apply fixes (default is dry run)"
+    )
+    parser.add_argument(
+        "--recursive", "-r", action="store_true", help="Process directories recursively"
+    )
     parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
-    parser.add_argument("--style", choices=["google", "numpy", "sphinx"], default="google",
-                       help="Docstring style to enforce (default: google)")
+    parser.add_argument(
+        "--style",
+        choices=["google", "numpy", "sphinx"],
+        default="google",
+        help="Docstring style to enforce (default: google)",
+    )
 
     args = parser.parse_args()
 

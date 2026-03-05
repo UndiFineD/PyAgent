@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,10 +22,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
 class SLALevel(Enum):
     """SLA priority levels."""
-    P0 = 1   # 24 hours
-    P1 = 2   # 3 days
-    P2 = 3   # 1 week
-    P3 = 4   # 2 weeks
-    P4 = 5   # 1 month
+
+    P0 = 1  # 24 hours
+    P1 = 2  # 3 days
+    P2 = 3  # 1 week
+    P3 = 4  # 2 weeks
+    P4 = 5  # 1 month

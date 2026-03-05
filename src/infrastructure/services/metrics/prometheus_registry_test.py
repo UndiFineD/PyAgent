@@ -28,4 +28,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RateLimitedGauge"), "RateLimitedGauge missing"
     assert hasattr(mod, "VLLMMetrics"), "VLLMMetrics missing"
     assert hasattr(mod, "get_metrics"), "get_metrics missing"
-

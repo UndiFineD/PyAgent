@@ -29,6 +29,7 @@ from datetime import datetime
 
 class AgentRole(Enum):
     """Agent roles in the crew orchestration"""
+
     LEAD = "lead"
     SPECIALIST = "specialist"
     REVIEWER = "reviewer"
@@ -37,6 +38,7 @@ class AgentRole(Enum):
 
 class TaskStatus(Enum):
     """Task execution status"""
+
     PENDING = "pending"
     RUNNING = "running"
     COMPLETED = "completed"
@@ -47,6 +49,7 @@ class TaskStatus(Enum):
 @dataclass
 class AgentConfig:
     """Configuration for a crew agent"""
+
     name: str
     role: AgentRole
     goal: str
@@ -60,6 +63,7 @@ class AgentConfig:
 @dataclass
 class TaskConfig:
     """Configuration for a crew task"""
+
     name: str
     description: str
     expected_output: str
@@ -72,6 +76,7 @@ class TaskConfig:
 @dataclass
 class TaskResult:
     """Result of a task execution"""
+
     task_name: str
     status: TaskStatus
     output: Any
@@ -94,7 +99,9 @@ class CrewAgent:
         self.logger = logging.getLogger(f"{__name__}.{config.name}")
         self.task_history: List[TaskResult] = []
 
-    async def execute_task(self, task: TaskConfig, context: Dict[str, Any]) -> TaskResult:
+    async def execute_task(
+        self, task: TaskConfig, context: Dict[str, Any]
+    ) -> TaskResult:
         """
         Execute a task with given context.
 
@@ -110,7 +117,7 @@ class CrewAgent:
             task_name=task.name,
             status=TaskStatus.RUNNING,
             output=None,
-            started_at=start_time
+            started_at=start_time,
         )
 
         try:
@@ -167,7 +174,7 @@ class CrewAgent:
     async def _save_output_to_file(self, file_path: str, content: str):
         """Save task output to file."""
         try:
-            with open(file_path, 'w', encoding='utf-8') as f:
+            with open(file_path, "w", encoding="utf-8") as f:
                 f.write(content)
             self.logger.info(f"Output saved to {file_path}")
         except Exception as e:
@@ -197,7 +204,9 @@ class CrewOrchestrator:
         self.tasks[task.name] = task
         self.logger.info(f"Added task: {task.name}")
 
-    async def execute_crew(self, initial_context: Optional[Dict[str, Any]] = None) -> Dict[str, TaskResult]:
+    async def execute_crew(
+        self, initial_context: Optional[Dict[str, Any]] = None
+    ) -> Dict[str, TaskResult]:
         """
         Execute all tasks in the crew with proper dependency resolution.
 
@@ -212,11 +221,15 @@ class CrewOrchestrator:
         pending_tasks = set(self.tasks.keys())
 
         while pending_tasks:
-            executable_tasks = self._get_executable_tasks(pending_tasks, completed_tasks)
+            executable_tasks = self._get_executable_tasks(
+                pending_tasks, completed_tasks
+            )
 
             if not executable_tasks:
                 # Check for circular dependencies or blocked tasks
-                self.logger.error("No executable tasks found. Possible circular dependency or blocked tasks.")
+                self.logger.error(
+                    "No executable tasks found. Possible circular dependency or blocked tasks."
+                )
                 break
 
             # Execute tasks (can be parallel if async_execution is enabled)
@@ -226,7 +239,9 @@ class CrewOrchestrator:
                 agent = self.agents.get(task.agent_name)
 
                 if not agent:
-                    self.logger.error(f"Agent {task.agent_name} not found for task {task_name}")
+                    self.logger.error(
+                        f"Agent {task.agent_name} not found for task {task_name}"
+                    )
                     continue
 
                 # Build task context from completed dependencies
@@ -238,7 +253,9 @@ class CrewOrchestrator:
                 # Merge with global context
                 task_context.update(context)
 
-                execution_tasks.append(self._execute_single_task(agent, task, task_context))
+                execution_tasks.append(
+                    self._execute_single_task(agent, task, task_context)
+                )
 
             # Wait for all executable tasks to complete
             results = await asyncio.gather(*execution_tasks, return_exceptions=True)
@@ -259,20 +276,26 @@ class CrewOrchestrator:
 
         return self.task_results
 
-    def _get_executable_tasks(self, pending_tasks: Set[str], completed_tasks: Set[str]) -> List[str]:
+    def _get_executable_tasks(
+        self, pending_tasks: Set[str], completed_tasks: Set[str]
+    ) -> List[str]:
         """Get tasks that can be executed (all dependencies satisfied)."""
         executable = []
 
         for task_name in pending_tasks:
             task = self.tasks[task_name]
-            dependencies_satisfied = all(dep in completed_tasks for dep in task.context_tasks)
+            dependencies_satisfied = all(
+                dep in completed_tasks for dep in task.context_tasks
+            )
 
             if dependencies_satisfied:
                 executable.append(task_name)
 
         return executable
 
-    async def _execute_single_task(self, agent: CrewAgent, task: TaskConfig, context: Dict[str, Any]) -> TaskResult:
+    async def _execute_single_task(
+        self, agent: CrewAgent, task: TaskConfig, context: Dict[str, Any]
+    ) -> TaskResult:
         """Execute a single task."""
         return await agent.execute_task(task, context)
 
@@ -281,14 +304,25 @@ class CrewOrchestrator:
         return {
             "total_agents": len(self.agents),
             "total_tasks": len(self.tasks),
-            "completed_tasks": len([r for r in self.task_results.values() if r.status == TaskStatus.COMPLETED]),
-            "failed_tasks": len([r for r in self.task_results.values() if r.status == TaskStatus.FAILED]),
+            "completed_tasks": len(
+                [
+                    r
+                    for r in self.task_results.values()
+                    if r.status == TaskStatus.COMPLETED
+                ]
+            ),
+            "failed_tasks": len(
+                [r for r in self.task_results.values() if r.status == TaskStatus.FAILED]
+            ),
             "pending_tasks": len(self.tasks) - len(self.task_results),
-            "task_results": {name: {
-                "status": result.status.value,
-                "execution_time": result.execution_time,
-                "error": result.error
-            } for name, result in self.task_results.items()}
+            "task_results": {
+                name: {
+                    "status": result.status.value,
+                    "execution_time": result.execution_time,
+                    "error": result.error,
+                }
+                for name, result in self.task_results.items()
+            },
         }
 
 
@@ -303,37 +337,45 @@ async def create_engineering_crew() -> CrewOrchestrator:
     crew = CrewOrchestrator()
 
     # Create agents
-    engineering_lead = CrewAgent(AgentConfig(
-        name="engineering_lead",
-        role=AgentRole.LEAD,
-        goal="Direct engineering work and create detailed designs",
-        backstory="Seasoned engineering lead with expertise in system design",
-        skills=["system_design", "architecture", "planning"]
-    ))
+    engineering_lead = CrewAgent(
+        AgentConfig(
+            name="engineering_lead",
+            role=AgentRole.LEAD,
+            goal="Direct engineering work and create detailed designs",
+            backstory="Seasoned engineering lead with expertise in system design",
+            skills=["system_design", "architecture", "planning"],
+        )
+    )
 
-    backend_engineer = CrewAgent(AgentConfig(
-        name="backend_engineer",
-        role=AgentRole.SPECIALIST,
-        goal="Write clean, efficient Python code",
-        backstory="Experienced Python engineer who follows design specifications",
-        skills=["python", "backend", "api_design"]
-    ))
+    backend_engineer = CrewAgent(
+        AgentConfig(
+            name="backend_engineer",
+            role=AgentRole.SPECIALIST,
+            goal="Write clean, efficient Python code",
+            backstory="Experienced Python engineer who follows design specifications",
+            skills=["python", "backend", "api_design"],
+        )
+    )
 
-    frontend_engineer = CrewAgent(AgentConfig(
-        name="frontend_engineer",
-        role=AgentRole.SPECIALIST,
-        goal="Create simple, effective UIs",
-        backstory="UI/UX expert skilled in Gradio interfaces",
-        skills=["ui_design", "gradio", "user_experience"]
-    ))
+    frontend_engineer = CrewAgent(
+        AgentConfig(
+            name="frontend_engineer",
+            role=AgentRole.SPECIALIST,
+            goal="Create simple, effective UIs",
+            backstory="UI/UX expert skilled in Gradio interfaces",
+            skills=["ui_design", "gradio", "user_experience"],
+        )
+    )
 
-    test_engineer = CrewAgent(AgentConfig(
-        name="test_engineer",
-        role=AgentRole.REVIEWER,
-        goal="Write comprehensive unit tests",
-        backstory="QA expert who creates thorough test suites",
-        skills=["testing", "pytest", "quality_assurance"]
-    ))
+    test_engineer = CrewAgent(
+        AgentConfig(
+            name="test_engineer",
+            role=AgentRole.REVIEWER,
+            goal="Write comprehensive unit tests",
+            backstory="QA expert who creates thorough test suites",
+            skills=["testing", "pytest", "quality_assurance"],
+        )
+    )
 
     # Add agents to crew
     crew.add_agent(engineering_lead)
@@ -347,7 +389,7 @@ async def create_engineering_crew() -> CrewOrchestrator:
         description="Create detailed design for a Python module",
         expected_output="Detailed design document with classes and methods",
         agent_name="engineering_lead",
-        output_file="output/design.md"
+        output_file="output/design.md",
     )
 
     code_task = TaskConfig(
@@ -356,7 +398,7 @@ async def create_engineering_crew() -> CrewOrchestrator:
         expected_output="Working Python module",
         agent_name="backend_engineer",
         context_tasks=["design_task"],
-        output_file="output/module.py"
+        output_file="output/module.py",
     )
 
     frontend_task = TaskConfig(
@@ -365,7 +407,7 @@ async def create_engineering_crew() -> CrewOrchestrator:
         expected_output="Gradio application file",
         agent_name="frontend_engineer",
         context_tasks=["code_task"],
-        output_file="output/app.py"
+        output_file="output/app.py",
     )
 
     test_task = TaskConfig(
@@ -374,7 +416,7 @@ async def create_engineering_crew() -> CrewOrchestrator:
         expected_output="Test file with comprehensive coverage",
         agent_name="test_engineer",
         context_tasks=["code_task"],
-        output_file="output/test_module.py"
+        output_file="output/test_module.py",
     )
 
     # Add tasks to crew

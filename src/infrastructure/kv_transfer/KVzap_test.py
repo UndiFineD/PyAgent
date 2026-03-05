@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_kvzapconfig_exists():
     """Test that KVzapConfig class exists and is importable."""
-    assert 'KVzapConfig' in dir()
+    assert "KVzapConfig" in dir()
 
 
 def test_kvzapsurrogate_exists():
     """Test that KVzapSurrogate class exists and is importable."""
-    assert 'KVzapSurrogate' in dir()
+    assert "KVzapSurrogate" in dir()
 
 
 def test_kvzappruner_exists():
     """Test that KVzapPruner class exists and is importable."""
-    assert 'KVzapPruner' in dir()
+    assert "KVzapPruner" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

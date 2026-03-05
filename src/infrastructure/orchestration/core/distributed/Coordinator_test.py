@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_dpcoordinator_exists():
     """Test that DPCoordinator class exists and is importable."""
-    assert 'DPCoordinator' in dir()
+    assert "DPCoordinator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

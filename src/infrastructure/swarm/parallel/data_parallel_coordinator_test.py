@@ -22,6 +22,7 @@ def test_imports_and_symbols():
     assert hasattr(mod, "WaveState"), "WaveState missing"
     assert hasattr(mod, "P2CLoadBalancer"), "P2CLoadBalancer missing"
     assert hasattr(mod, "DPEngineCoreProc"), "DPEngineCoreProc missing"
-    assert hasattr(mod, "HierarchicalDPCoordinator"), "HierarchicalDPCoordinator missing"
+    assert hasattr(
+        mod, "HierarchicalDPCoordinator"
+    ), "HierarchicalDPCoordinator missing"
     assert hasattr(mod, "dp_collective_all_reduce"), "dp_collective_all_reduce missing"
-

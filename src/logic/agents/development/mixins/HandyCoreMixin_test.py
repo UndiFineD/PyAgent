@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_handycoremixin_exists():
     """Test that HandyCoreMixin class exists and is importable."""
-    assert 'HandyCoreMixin' in dir()
+    assert "HandyCoreMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

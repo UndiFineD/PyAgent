@@ -21,8 +21,12 @@ Attention backend module.
 from .base import AttentionBackend  # noqa: F401
 from .flash import FlashAttentionBackend  # noqa: F401
 from .flashinfer import FlashInferBackend  # noqa: F401
-from .models import (AttentionBackendEnum, AttentionCapabilities,  # noqa: F401
-                     AttentionMetadata, AttentionType)
+from .models import (
+    AttentionBackendEnum,
+    AttentionCapabilities,  # noqa: F401
+    AttentionMetadata,
+    AttentionType,
+)
 from .naive import NaiveAttentionBackend  # noqa: F401
 from .packkv import PackKVAttentionBackend  # noqa: F401
 from .registry import AttentionBackendRegistry, get_attention_registry  # noqa: F401

@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_workerclaimerror_exists():
     """Test that WorkerClaimError class exists and is importable."""
-    assert 'WorkerClaimError' in dir()
+    assert "WorkerClaimError" in dir()
 
 
 def test_worker_exists():
     """Test that Worker class exists and is importable."""
-    assert 'Worker' in dir()
+    assert "Worker" in dir()
 
 
 def test_coordinator_exists():
     """Test that Coordinator class exists and is importable."""
-    assert 'Coordinator' in dir()
+    assert "Coordinator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

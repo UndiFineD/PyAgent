@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_architecturemapper_exists():
     """Test that ArchitectureMapper class exists and is importable."""
-    assert 'ArchitectureMapper' in dir()
+    assert "ArchitectureMapper" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

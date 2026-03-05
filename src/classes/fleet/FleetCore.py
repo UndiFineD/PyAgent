@@ -8,6 +8,7 @@ Contains pure logic for tool scoring, capability mapping, and state transition v
 from typing import Dict, List, Any, Optional, Tuple
 from functools import lru_cache
 
+
 class FleetCore:
     """Pure logic core for the FleetManager."""
 
@@ -21,16 +22,25 @@ class FleetCore:
         g_low = goal.lower()
         n_low = tool_name.lower()
         o_low = tool_owner.lower()
-        
-        if g_low == n_low: score += 100.0
-        elif g_low in n_low: score += 50.0
 
-        if g_low == o_low: score += 100.0
-        elif g_low in o_low: score += 50.0
-        
+        if g_low == n_low:
+            score += 100.0
+        elif g_low in n_low:
+            score += 50.0
+
+        if g_low == o_low:
+            score += 100.0
+        elif g_low in o_low:
+            score += 50.0
+
         return score
 
-    def score_tool_candidates(self, goal: str, tools_metadata: List[Dict[str, Any]], provided_kwargs: Dict[str, Any]) -> List[Tuple[float, str]]:
+    def score_tool_candidates(
+        self,
+        goal: str,
+        tools_metadata: List[Dict[str, Any]],
+        provided_kwargs: Dict[str, Any],
+    ) -> List[Tuple[float, str]]:
         """
         Calculates match scores for tools based on a goal/capability.
         Returns a sorted list of (score, tool_name).
@@ -39,13 +49,13 @@ class FleetCore:
         scored_candidates: List[Tuple[float, str]] = []
 
         for t in tools_metadata:
-            name = t.get('name', '')
-            owner = t.get('owner', '')
-            
+            name = t.get("name", "")
+            owner = t.get("owner", "")
+
             # Use cached core logic for speed (Phase 107 optimization)
             score = self.cached_logic_match(goal, name, owner)
-            
-            params: Dict[str, Any] = t.get('parameters', {})
+
+            params: Dict[str, Any] = t.get("parameters", {})
 
             # Bonus for parameter intersection
             for param_name in provided_kwargs:
@@ -69,6 +79,6 @@ class FleetCore:
             "PLANNING": ["EXECUTING", "ERROR"],
             "EXECUTING": ["REVIEWING", "ERROR"],
             "REVIEWING": ["IDLE", "PLANNING", "ERROR"],
-            "ERROR": ["PLANNING", "IDLE"]
+            "ERROR": ["PLANNING", "IDLE"],
         }
         return next_state in allowed.get(current_state, [])

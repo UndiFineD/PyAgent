@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright (c) 2025 PyAgent contributors
 
 from typing import Any, List
 from ..models import MessageRole, ConversationMessage
+
 
 class ConversationHistory:
     """Manages a conversation history with message storage and retrieval."""
@@ -16,12 +18,10 @@ class ConversationHistory:
         msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
-            self.messages = self.messages[-self.max_messages:]
+            self.messages = self.messages[-self.max_messages :]
 
     def get_context(self) -> List[ConversationMessage]:
         return self.messages.copy()
 
     def clear(self) -> None:
         self.messages.clear()
-
-

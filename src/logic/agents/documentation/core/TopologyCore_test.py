@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_topologycore_exists():
     """Test that TopologyCore class exists and is importable."""
-    assert 'TopologyCore' in dir()
+    assert "TopologyCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

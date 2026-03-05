@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,17 +31,20 @@ from typing import Dict, Any, List, Set, Tuple
 
 __version__ = VERSION
 
+
 class TheoryOfMindCore:
     """Pure logic core for Theory of Mind modeling."""
 
     @staticmethod
-    def update_profile_logic(profile: dict[str, Any], observations: dict[str, Any]) -> dict[str, Any]:
+    def update_profile_logic(
+        profile: dict[str, Any], observations: dict[str, Any]
+    ) -> dict[str, Any]:
         """Core logic to update an agent profile based on observations."""
         # Ensure sets exist
         domains: set[str] = set(profile.get("knowledge_domains", []))
         strengths: set[str] = set(profile.get("strengths", []))
         limitations: set[str] = set(profile.get("limitations", []))
-        
+
         if "domain" in observations:
             domains.add(observations["domain"])
         if "strength" in observations:
@@ -48,12 +52,14 @@ class TheoryOfMindCore:
         if "success" in observations:
             if not observations["success"]:
                 limitations.add(observations.get("task", "unknown"))
-                
+
         return {
             "knowledge_domains": list(domains),
             "strengths": list(strengths),
             "limitations": list(limitations),
-            "last_active": observations.get("timestamp", profile.get("last_active", 0.0))
+            "last_active": observations.get(
+                "timestamp", profile.get("last_active", 0.0)
+            ),
         }
 
     @staticmethod
@@ -72,5 +78,9 @@ class TheoryOfMindCore:
         for agent, profile in profiles.items():
             score = TheoryOfMindCore.estimate_knowledge_score(profile, task)
             rankings.append((agent, score))
-            
-        return [name for name, score in sorted(rankings, key=lambda x: x[1], reverse=True) if score > 0.5]
+
+        return [
+            name
+            for name, score in sorted(rankings, key=lambda x: x[1], reverse=True)
+            if score > 0.5
+        ]

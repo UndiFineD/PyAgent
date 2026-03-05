@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "is_pin_memory_available"), "is_pin_memory_available missing"
     assert hasattr(mod, "get_device"), "get_device missing"
     assert hasattr(mod, "CpuGpuBufferPool"), "CpuGpuBufferPool missing"
-

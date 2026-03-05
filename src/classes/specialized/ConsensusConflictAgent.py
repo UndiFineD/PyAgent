@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,16 +24,16 @@ __version__ = VERSION
 
 class ConsensusConflictAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements 
+    Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements
     and resolves conflicts between agents in the swarm using voting systems.
     """
 
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.active_disputes: dict[
-            Any, Any
-        ] = {}  # dispute_id -> {options, votes, status}
+        self.active_disputes: dict[Any, Any] = (
+            {}
+        )  # dispute_id -> {options, votes, status}
 
     def initiate_dispute(
         self, dispute_id: str, context: str, options: list[str]

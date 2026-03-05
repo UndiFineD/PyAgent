@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_blockhash_exists():
     """Test that BlockHash class exists and is importable."""
-    assert 'BlockHash' in dir()
+    assert "BlockHash" in dir()
 
 
 def test_blockhashwithgroupid_exists():
     """Test that BlockHashWithGroupId class exists and is importable."""
-    assert 'BlockHashWithGroupId' in dir()
+    assert "BlockHashWithGroupId" in dir()
 
 
 def test_kvcacheblock_exists():
     """Test that KVCacheBlock class exists and is importable."""
-    assert 'KVCacheBlock' in dir()
+    assert "KVCacheBlock" in dir()
 
 
 def test_kvcacheblocks_exists():
     """Test that KVCacheBlocks class exists and is importable."""
-    assert 'KVCacheBlocks' in dir()
+    assert "KVCacheBlocks" in dir()
 
 
 def test_cachegroupspec_exists():
     """Test that CacheGroupSpec class exists and is importable."""
-    assert 'CacheGroupSpec' in dir()
+    assert "CacheGroupSpec" in dir()
 
 
 def test_cacheconfig_exists():
     """Test that CacheConfig class exists and is importable."""
-    assert 'CacheConfig' in dir()
+    assert "CacheConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

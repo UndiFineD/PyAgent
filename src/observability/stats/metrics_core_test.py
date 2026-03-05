@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StatsRollupCore"), "StatsRollupCore missing"
     assert hasattr(mod, "CorrelationCore"), "CorrelationCore missing"
     assert hasattr(mod, "ABTestCore"), "ABTestCore missing"
-

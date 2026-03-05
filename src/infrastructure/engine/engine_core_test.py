@@ -27,4 +27,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "EngineCore"), "EngineCore missing"
     assert hasattr(mod, "EngineCoreProc"), "EngineCoreProc missing"
     assert hasattr(mod, "create_engine_core"), "create_engine_core missing"
-

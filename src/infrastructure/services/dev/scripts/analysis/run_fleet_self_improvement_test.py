@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "run_cycle"), "run_cycle missing"
     assert hasattr(mod, "consult_external_models"), "consult_external_models missing"
     assert hasattr(mod, "main"), "main missing"
-

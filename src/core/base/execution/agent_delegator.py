@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,14 +57,21 @@ class AgentDelegator:
             context.parent_id = context.task_id
 
         if context.cascade_depth > 5:
-            logging.warning("Delegation to %s blocked: depth limit (%s).", agent_type, context.cascade_depth)
+            logging.warning(
+                "Delegation to %s blocked: depth limit (%s).",
+                agent_type,
+                context.cascade_depth,
+            )
             return "Error: Delegation depth limit reached."
 
         current_file_path = Path(self.parent_agent.file_path)
         target_path: Path = Path(target_file) if target_file else current_file_path
 
         logging.info(
-            "Delegating task to %s [Priority: %s] for %s", agent_type, priority.name, target_path
+            "Delegating task to %s [Priority: %s] for %s",
+            agent_type,
+            priority.name,
+            target_path,
         )
 
         try:
@@ -85,9 +93,15 @@ class AgentDelegator:
                 result = await sub_agent.improve_content(prompt)
                 sub_agent.update_file()
 
-                logging.info("Delegation to %s completed (Task: %s).", agent_type, context.task_id)
+                logging.info(
+                    "Delegation to %s completed (Task: %s).",
+                    agent_type,
+                    context.task_id,
+                )
                 return result
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Delegation to %s failed: %s", agent_type, e)
             return f"Error: Delegation failed - {str(e)}"

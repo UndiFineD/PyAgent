@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_logprobsprocessor_exists():
     """Test that LogprobsProcessor class exists and is importable."""
-    assert 'LogprobsProcessor' in dir()
+    assert "LogprobsProcessor" in dir()
 
 
 def test_streaminglogprobs_exists():
     """Test that StreamingLogprobs class exists and is importable."""
-    assert 'StreamingLogprobs' in dir()
+    assert "StreamingLogprobs" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

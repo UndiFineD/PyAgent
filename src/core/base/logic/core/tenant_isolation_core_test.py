@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_tenantcontext_exists():
     """Test that TenantContext class exists and is importable."""
-    assert 'TenantContext' in dir()
+    assert "TenantContext" in dir()
 
 
 def test_tenantisolationcore_exists():
     """Test that TenantIsolationCore class exists and is importable."""
-    assert 'TenantIsolationCore' in dir()
+    assert "TenantIsolationCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,10 +29,13 @@ from collections import deque
 from typing import Any, Optional
 
 from src.infrastructure.swarm.parallel.dp.balancer import P2CLoadBalancer
-from src.infrastructure.swarm.parallel.dp.types import (DPConfig, StepState,
-                                                        WaveState,
-                                                        WorkerHealth,
-                                                        WorkerState)
+from src.infrastructure.swarm.parallel.dp.types import (
+    DPConfig,
+    StepState,
+    WaveState,
+    WorkerHealth,
+    WorkerState,
+)
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -60,7 +64,9 @@ class DPEngineCoreProc:
 
         # Load balancer
         self._load_balancer = P2CLoadBalancer(
-            list(self._workers.values()), self.config.p2c_sample_size, self.config.enable_locality
+            list(self._workers.values()),
+            self.config.p2c_sample_size,
+            self.config.enable_locality,
         )
 
         # Barriers for synchronization
@@ -73,7 +79,9 @@ class DPEngineCoreProc:
 
         self._lock: RLock = threading.RLock()
 
-        logger.info(f"DPEngineCoreProc initialized: rank={config.dp_rank}, size={config.dp_size}")
+        logger.info(
+            f"DPEngineCoreProc initialized: rank={config.dp_rank}, size={config.dp_size}"
+        )
 
     def _init_workers(self) -> None:
         """Initialize worker states."""
@@ -84,7 +92,11 @@ class DPEngineCoreProc:
                     locality_group: int = group_idx
                     break
 
-            self._workers[i] = WorkerState(worker_id=i, dp_rank=i % self.config.dp_size, locality_group=locality_group)
+            self._workers[i] = WorkerState(
+                worker_id=i,
+                dp_rank=i % self.config.dp_size,
+                locality_group=locality_group,
+            )
 
     def begin_step(self, num_requests: int = 0) -> StepState:
         """Begin a new step."""
@@ -92,7 +104,11 @@ class DPEngineCoreProc:
             self._step_counter += 1
             self._step_request_count: int = num_requests
 
-            step = StepState(step_id=self._step_counter, wave_id=self._wave_id, request_count=num_requests)
+            step = StepState(
+                step_id=self._step_counter,
+                wave_id=self._wave_id,
+                request_count=num_requests,
+            )
             self._current_step = step
             return step
 
@@ -156,7 +172,9 @@ class DPEngineCoreProc:
         worker.pending_requests += 1
         return worker.worker_id
 
-    def complete_request(self, worker_id: int, latency_ms: float, success: bool = True) -> None:
+    def complete_request(
+        self, worker_id: int, latency_ms: float, success: bool = True
+    ) -> None:
         """Mark request as complete on worker."""
         with self._lock:
             if worker_id not in self._workers:
@@ -202,13 +220,19 @@ class DPEngineCoreProc:
     def get_healthy_workers(self) -> list[WorkerState]:
         """Get only healthy workers."""
         with self._lock:
-            return [w for w in self._workers.values() if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)]
+            return [
+                w
+                for w in self._workers.values()
+                if w.health in (WorkerHealth.HEALTHY, WorkerHealth.DEGRADED)
+            ]
 
     def get_metrics(self) -> dict[str, Any]:
         """Get coordinator metrics."""
         with self._lock:
             total_pending: int = sum(w.pending_requests for w in self._workers.values())
-            total_processed: int = sum(w.total_processed for w in self._workers.values())
+            total_processed: int = sum(
+                w.total_processed for w in self._workers.values()
+            )
             healthy_count: int = len(self.get_healthy_workers())
 
             return {

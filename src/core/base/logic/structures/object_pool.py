@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,8 +27,17 @@ import time
 from collections import deque
 from contextlib import contextmanager
 from dataclasses import dataclass
-from typing import (Any, Callable, Dict, Generic, List, Optional, Protocol,
-                    TypeVar, runtime_checkable)
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    List,
+    Optional,
+    Protocol,
+    TypeVar,
+    runtime_checkable,
+)
 
 T = TypeVar("T")
 
@@ -136,13 +146,14 @@ class ObjectPool(Generic[T]):
 
     def _warm_pool(self) -> None:
         """Pre-populate pool to minimum size."""
+
         def _add_one(_):
             obj = self._factory()
             self._pool.append((obj, time.monotonic()))
             self._stats.created += 1
             self._stats.current_size += 1
             self._stats.peak_size = max(self._stats.peak_size, self._stats.current_size)
-        
+
         list(map(_add_one, range(self._min_size)))
 
     def acquire(self) -> T:
@@ -158,7 +169,7 @@ class ObjectPool(Generic[T]):
             def _try_get_from_pool():
                 if not self._pool:
                     return None
-                
+
                 obj, timestamp = self._pool.popleft()
                 self._stats.current_size -= 1
 
@@ -254,7 +265,7 @@ class ObjectPool(Generic[T]):
             self._pool = deque(filter(lambda x: now - x[1] <= max_age, self._pool))
             new_count = len(self._pool)
             pruned = old_count - new_count
-            
+
             self._stats.current_size = new_count
             self._stats.discarded += pruned
 
@@ -395,16 +406,24 @@ class TieredBufferPool:
             max_buffers_per_tier: Max buffers per size tier
         """
         self._sizes = sorted(sizes or self.DEFAULT_SIZES)
-        self._pools: Dict[int, BufferPool] = dict(map(lambda size: (size, BufferPool(size, max_buffers_per_tier)), self._sizes))
+        self._pools: Dict[int, BufferPool] = dict(
+            map(
+                lambda size: (size, BufferPool(size, max_buffers_per_tier)), self._sizes
+            )
+        )
         self._lock = threading.Lock()
         self._oversized_allocations = 0
 
     def _find_tier(self, size: int) -> Optional[int]:
         """Find the smallest tier that fits the requested size."""
+
         def check(idx):
-            if idx >= len(self._sizes): return None
-            if self._sizes[idx] >= size: return self._sizes[idx]
+            if idx >= len(self._sizes):
+                return None
+            if self._sizes[idx] >= size:
+                return self._sizes[idx]
             return check(idx + 1)
+
         return check(0)
 
     def acquire(self, size: int) -> bytearray:
@@ -457,7 +476,11 @@ class TieredBufferPool:
     def get_stats(self) -> Dict[str, Any]:
         """Get statistics regarding all tiers."""
         return {
-            "tiers": dict(map(lambda item: (item[0], item[1].stats.to_dict()), self._pools.items())),
+            "tiers": dict(
+                map(
+                    lambda item: (item[0], item[1].stats.to_dict()), self._pools.items()
+                )
+            ),
             "oversized_allocations": self._oversized_allocations,
         }
 

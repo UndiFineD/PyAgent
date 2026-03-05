@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,15 +31,25 @@ from typing import List, Dict, Any, Optional
 
 __version__ = VERSION
 
+
 class SqlMetadataHandler:
     """Relational metadata overlay for compressed interaction shards."""
 
-    def __init__(self, db_path: str = "data/memory/agent_store/metadata.db", shards_dir: str = "data/memory/agent_store/memory_shards", fleet: Any | None = None) -> None:
-        if fleet and hasattr(fleet, "recorder") and shards_dir == "data/memory/agent_store/memory_shards":
+    def __init__(
+        self,
+        db_path: str = "data/memory/agent_store/metadata.db",
+        shards_dir: str = "data/memory/agent_store/memory_shards",
+        fleet: Any | None = None,
+    ) -> None:
+        if (
+            fleet
+            and hasattr(fleet, "recorder")
+            and shards_dir == "data/memory/agent_store/memory_shards"
+        ):
             self.shards_dir = str(fleet.recorder.log_dir)
         else:
             self.shards_dir = shards_dir
-        
+
         self.db_path = db_path
         self._init_db()
 
@@ -51,7 +62,7 @@ class SqlMetadataHandler:
             conn.execute("PRAGMA synchronous = NORMAL")
             conn.execute("PRAGMA cache_size = -64000")  # 64MB cache
             conn.execute("PRAGMA temp_store = MEMORY")
-            
+
             cursor = conn.cursor()
             # Table for interactions
             cursor.execute("""
@@ -83,7 +94,7 @@ class SqlMetadataHandler:
                     PRIMARY KEY (id, tag)
                 )
             """)
-            
+
             # Table for AI Lessons / Extracted Intelligence (Phase 108)
             cursor.execute("""
                 CREATE TABLE IF NOT EXISTS intelligence_lessons (
@@ -112,15 +123,25 @@ class SqlMetadataHandler:
                     END
                 """)
             except sqlite3.OperationalError:
-                logging.warning("FTS5 not supported in this SQLite build. Logic falling back to standard LIKE.")
-            
+                logging.warning(
+                    "FTS5 not supported in this SQLite build. Logic falling back to standard LIKE."
+                )
+
             # Phase 107/108 Optimized Indexes for Meta-Scale Data
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_agent_name ON interactions (agent_name)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_task_type ON interactions (task_type)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON interactions (timestamp)")
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_agent_name ON interactions (agent_name)"
+            )
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_task_type ON interactions (task_type)"
+            )
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_timestamp ON interactions (timestamp)"
+            )
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_tags ON metadata_tags (tag)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_lessons_cat ON intelligence_lessons (category)")
-            
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_lessons_cat ON intelligence_lessons (category)"
+            )
+
             conn.commit()
 
     def optimize_db(self) -> None:
@@ -132,24 +153,33 @@ class SqlMetadataHandler:
             conn.execute("ANALYZE")
             # Phase 108: Reindex for massive FTS5 performance
             conn.execute("REINDEX")
-            logging.info(f"SQL Metadata DB optimized (Size: {db_size_mb:.1f}MB, WAL/VACUUM/ANALYZE/REINDEX).")
-        
+            logging.info(
+                f"SQL Metadata DB optimized (Size: {db_size_mb:.1f}MB, WAL/VACUUM/ANALYZE/REINDEX)."
+            )
+
         # Phase 108: Scalability Gatekeeping (Prep for trillion-parameter community data)
         if db_size_mb > 1024:
             # 1GB threshold for relational sharding
-             logging.warning("SQL Metadata DB exceeds scale thresholds. Partitioning registry recommended.")
+            logging.warning(
+                "SQL Metadata DB exceeds scale thresholds. Partitioning registry recommended."
+            )
 
     def _rotate_metadata_shard(self) -> None:
         """Logic for metadata sharding/rotation."""
         pass
 
-    def record_lesson(self, interaction_id: str, text: str, category: str = "General") -> None:
+    def record_lesson(
+        self, interaction_id: str, text: str, category: str = "General"
+    ) -> None:
         """Persists an extracted AI lesson to the intelligence table."""
         with sqlite3.connect(self.db_path) as conn:
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT INTO intelligence_lessons (source_interaction_id, lesson_text, category, timestamp)
                 VALUES (?, ?, ?, ?)
-            """, (interaction_id, text, category, time.time()))
+            """,
+                (interaction_id, text, category, time.time()),
+            )
             conn.commit()
 
     def get_intelligence_summary(self) -> list[dict[str, Any]]:
@@ -176,8 +206,10 @@ class SqlMetadataHandler:
     def index_shards(self) -> int:
         """Scans shards and populates the metadata DB."""
         indexed_count = 0
-        shard_files = [f for f in os.listdir(self.shards_dir) if f.endswith(".jsonl.gz")]
-        
+        shard_files = [
+            f for f in os.listdir(self.shards_dir) if f.endswith(".jsonl.gz")
+        ]
+
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
             for shard_file in shard_files:
@@ -187,32 +219,38 @@ class SqlMetadataHandler:
                 except Exception:
                     shard_num = 0
                 shard_path = os.path.join(self.shards_dir, shard_file)
-                
+
                 try:
                     with gzip.open(shard_path, "rt", encoding="utf-8") as f:
                         for line in f:
                             data = json.loads(line)
                             meta = data.get("meta", {})
                             i_id = meta.get("id", f"{shard_num}_{indexed_count}")
-                            
+
                             # Insert interaction metadata
-                            cursor.execute("""
+                            cursor.execute(
+                                """
                                 INSERT OR REPLACE INTO interactions (id, shard_id, timestamp, agent_name, task_type, success)
                                 VALUES (?, ?, ?, ?, ?, ?)
-                            """, (
-                                i_id,
-                                shard_num,
-                                data.get("timestamp", 0),
-                                meta.get("agent", "unknown"),
-                                meta.get("type", "generic"),
-                                1 if meta.get("status") == "success" else 0
-                            ))
-                            
+                            """,
+                                (
+                                    i_id,
+                                    shard_num,
+                                    data.get("timestamp", 0),
+                                    meta.get("agent", "unknown"),
+                                    meta.get("type", "generic"),
+                                    1 if meta.get("status") == "success" else 0,
+                                ),
+                            )
+
                             # Insert tags if present
                             if "tags" in meta:
                                 for tag in meta["tags"]:
-                                    cursor.execute("INSERT OR IGNORE INTO metadata_tags VALUES (?, ?)", (i_id, tag))
-                            
+                                    cursor.execute(
+                                        "INSERT OR IGNORE INTO metadata_tags VALUES (?, ?)",
+                                        (i_id, tag),
+                                    )
+
                             indexed_count += 1
                 except Exception as e:
                     logging.error(f"Failed to index shard {shard_file}: {e}")
@@ -231,13 +269,18 @@ class SqlMetadataHandler:
                 results.append(dict(row))
         return results
 
-    def record_debt(self, file_path: str, issue_type: str, message: str, fixed: bool) -> None:
+    def record_debt(
+        self, file_path: str, issue_type: str, message: str, fixed: bool
+    ) -> None:
         """Persists identified technical debt to the relational DB."""
         with sqlite3.connect(self.db_path) as conn:
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
-            """, (file_path, issue_type, message, 1 if fixed else 0, time.time()))
+            """,
+                (file_path, issue_type, message, 1 if fixed else 0, time.time()),
+            )
             conn.commit()
 
     def bulk_record_interactions(self, interaction_data: list[tuple]) -> int:
@@ -248,10 +291,13 @@ class SqlMetadataHandler:
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("PRAGMA journal_mode = WAL")
             cursor = conn.cursor()
-            cursor.executemany("""
+            cursor.executemany(
+                """
                 INSERT OR REPLACE INTO interactions (id, shard_id, timestamp, agent_name, task_type, success)
                 VALUES (?, ?, ?, ?, ?, ?)
-            """, interaction_data)
+            """,
+                interaction_data,
+            )
             conn.commit()
             return cursor.rowcount
 

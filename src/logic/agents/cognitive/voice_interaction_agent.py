@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -92,16 +93,18 @@ class VoiceInteractionAgent(BaseAgent):
         # 1. Speech to Text
         transcription = self.transcribe_audio(audio_input_path)
         if transcription.startswith("###"):
-             return {"error": transcription}
-        
+            return {"error": transcription}
+
         # 2. Cognitive Processing (LLM)
-        response_text = await self.think(f"User said: '{transcription}'. Respond naturally.")
-        
+        response_text = await self.think(
+            f"User said: '{transcription}'. Respond naturally."
+        )
+
         # 3. Text to Speech (CosyVoice/gTTS)
         output_audio = self.synthesize_speech(response_text)
-        
+
         return {
             "transcription": transcription,
             "response_text": response_text,
-            "output_audio": output_audio
+            "output_audio": output_audio,
         }

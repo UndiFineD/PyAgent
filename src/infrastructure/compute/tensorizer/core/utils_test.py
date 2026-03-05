@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "save_model"), "save_model missing"
     assert hasattr(mod, "load_model"), "load_model missing"
     assert hasattr(mod, "get_model_info"), "get_model_info missing"
-

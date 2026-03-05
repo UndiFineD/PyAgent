@@ -21,8 +21,7 @@ from typing import Any, Dict, List, Optional
 
 from .config import StructuredOutputConfig
 from .constraints import OutputConstraint
-from .enums import (GuidedDecodingBackend, StructuredOutputType,
-                    WhitespacePattern)
+from .enums import GuidedDecodingBackend, StructuredOutputType, WhitespacePattern
 
 
 class ConstraintBuilder:

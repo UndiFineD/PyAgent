@@ -21,7 +21,8 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RegexMatchState"), "RegexMatchState missing"
     assert hasattr(mod, "CompiledEnforcer"), "CompiledEnforcer missing"
     assert hasattr(mod, "LMFormatEnforcerBackend"), "LMFormatEnforcerBackend missing"
-    assert hasattr(mod, "AsyncLMFormatEnforcerBackend"), "AsyncLMFormatEnforcerBackend missing"
+    assert hasattr(
+        mod, "AsyncLMFormatEnforcerBackend"
+    ), "AsyncLMFormatEnforcerBackend missing"
     assert hasattr(mod, "FormatEnforcerGrammar"), "FormatEnforcerGrammar missing"
     assert hasattr(mod, "CompositeEnforcer"), "CompositeEnforcer missing"
-

@@ -11,10 +11,12 @@ from typing import List, Dict, Any, Callable, Optional
 # Optional dependency
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
     requests = None
+
 
 class NotificationManager:
     """Manages event notifications via webhooks and internal callbacks."""
@@ -24,8 +26,12 @@ class NotificationManager:
         self.callbacks: List[Callable[[str, Dict[str, Any]], None]] = []
         # Phase 108: Resilience Cache for Webhooks
         self.workspace_root = workspace_root
-        self._status_file = Path(workspace_root) / "logs" / "webhook_status.json" if workspace_root else None
-        self._cache_ttl = 900 # 15 minutes
+        self._status_file = (
+            Path(workspace_root) / "logs" / "webhook_status.json"
+            if workspace_root
+            else None
+        )
+        self._cache_ttl = 900  # 15 minutes
         self._status_cache: Dict[str, Dict[str, Any]] = self._load_status()
 
     def _load_status(self) -> Dict[str, Any]:
@@ -62,9 +68,11 @@ class NotificationManager:
         self.webhooks.append(url)
         logging.info(f"Registered webhook: {url}")
 
-    def register_callback(self, callback: Callable[[str, Dict[str, Any]], None]) -> None:
+    def register_callback(
+        self, callback: Callable[[str, Dict[str, Any]], None]
+    ) -> None:
         self.callbacks.append(callback)
-        name = getattr(callback, '__name__', repr(callback))
+        name = getattr(callback, "__name__", repr(callback))
         logging.info(f"Registered callback: {name}")
 
     def notify(self, event_name: str, event_data: Dict[str, Any]) -> None:
@@ -83,11 +91,7 @@ class NotificationManager:
         if not HAS_REQUESTS or requests is None or not self.webhooks:
             return
 
-        payload = {
-            'event': event_name,
-            'timestamp': time.time(),
-            'data': event_data
-        }
+        payload = {"event": event_name, "timestamp": time.time(), "data": event_data}
 
         for url in self.webhooks:
             if not self._is_webhook_working(url):

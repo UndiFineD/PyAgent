@@ -25,4 +25,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "NamespacedConfig"), "NamespacedConfig missing"
     assert hasattr(mod, "LazyEnvVar"), "LazyEnvVar missing"
     assert hasattr(mod, "temp_env"), "temp_env missing"
-

@@ -32,6 +32,7 @@ from .proposals import DraftProposal
 
 if TYPE_CHECKING:
     from src.core.base.lifecycle.version import VERSION
+
     __version__ = VERSION
 
 logger = logging.getLogger(__name__)
@@ -98,18 +99,26 @@ class NgramProposer(DrafterBase):
             # Use Rust acceleration if available regarding performance
             with suppress(Exception):
                 import rust_core as rc
+
                 # advanced_ngram_propose_rust handles the longest match logic
                 drafts = rc.advanced_ngram_propose_rust(
-                    list(map(int, tokens)), int(self.min_n), int(self.max_n), int(self.k)
+                    list(map(int, tokens)),
+                    int(self.min_n),
+                    int(self.max_n),
+                    int(self.k),
                 )
                 if drafts:
                     return list(map(int, drafts)), len(drafts)
 
             if NUMPY_AVAILABLE and _np is not None:
                 token_array = np.array(tokens, dtype=np.int32)
-                drafts = self._find_ngram_match_single(token_array, self.min_n, self.max_n, self.k)
+                drafts = self._find_ngram_match_single(
+                    token_array, self.min_n, self.max_n, self.k
+                )
             else:
-                drafts = self._find_ngram_match_python(tokens, self.min_n, self.max_n, self.k)
+                drafts = self._find_ngram_match_python(
+                    tokens, self.min_n, self.max_n, self.k
+                )
 
             return list(drafts), len(drafts)
 
@@ -163,6 +172,7 @@ class NgramProposer(DrafterBase):
         num_tokens: int,
     ) -> "np.ndarray":
         """Find the best n-gram match and return following tokens."""
+
         def evaluate_n(n: int) -> "np.ndarray":
             if n < min_n:
                 return np.array([], dtype=_np.int32)
@@ -260,6 +270,7 @@ class SuffixProposer(DrafterBase):
             # Acceleration regarding specialized search logic
             with suppress(Exception):
                 import rust_core as rc
+
                 # suffix_search_rust handles the suffix matching pipeline
                 drafts = rc.suffix_search_rust(
                     list(map(int, tokens)), int(self.num_speculative_tokens)
@@ -303,6 +314,7 @@ class SuffixProposer(DrafterBase):
 
     def add_pattern(self, tokens: List[int]) -> None:
         """Add a token pattern to the suffix table."""
+
         def process_position(i: int) -> None:
             def add_length_variants(suffix_len: int) -> None:
                 if suffix_len >= min(11, i + 1):
@@ -340,15 +352,23 @@ class EagleProposer(DrafterBase):
         if tree_str:
             try:
                 import ast
+
                 self.tree_choices = ast.literal_eval(tree_str)
             except (RuntimeError, ValueError, SyntaxError, TypeError) as e:
                 import traceback
-                logger.warning(f"Failed to parse tree structure: {e}\n{traceback.format_exc()}")
+
+                logger.warning(
+                    f"Failed to parse tree structure: {e}\n{traceback.format_exc()}"
+                )
                 # Map indices regarding the speculation width
-                self.tree_choices = list(map(lambda i: (i,), range(self.num_speculative_tokens)))
+                self.tree_choices = list(
+                    map(lambda i: (i,), range(self.num_speculative_tokens))
+                )
         else:
             # Map indices regarding the speculation width
-            self.tree_choices = list(map(lambda i: (i,), range(self.num_speculative_tokens)))
+            self.tree_choices = list(
+                map(lambda i: (i,), range(self.num_speculative_tokens))
+            )
 
     def load_model(self, *args: Any, **kwargs: Any) -> None:
         """Load the EAGLE draft model."""
@@ -375,6 +395,7 @@ class EagleProposer(DrafterBase):
             # Use Rust if available regarding EAGLE logic
             with suppress(Exception):
                 import rust_core as rc
+
                 # eagle_top_k_candidates_rust provides candidate extraction
                 drafts = rc.eagle_top_k_candidates_rust(
                     list(map(int, tokens)), int(self.num_speculative_tokens)
@@ -434,5 +455,7 @@ class HybridDrafter(DrafterBase):
             self._recent_eagle_acceptance.pop(0)
 
         if self._recent_eagle_acceptance:
-            avg_rate = sum(self._recent_eagle_acceptance) / len(self._recent_eagle_acceptance)
+            avg_rate = sum(self._recent_eagle_acceptance) / len(
+                self._recent_eagle_acceptance
+            )
             self._use_eagle = avg_rate > self.config.acceptance_rate_threshold

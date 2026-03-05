@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "EngineState"), "EngineState missing"
     assert hasattr(mod, "EngineConfig"), "EngineConfig missing"
     assert hasattr(mod, "EngineLifecycleManager"), "EngineLifecycleManager missing"
-

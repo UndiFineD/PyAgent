@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -79,7 +80,9 @@ class AuthCore(BaseCore):
                 logger.debug("rust_core proof generation failed: %s", e)
         return hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
 
-    def verify_proof(self, challenge: str, proof: str, expected_secret_hash: str) -> bool:
+    def verify_proof(
+        self, challenge: str, proof: str, expected_secret_hash: str
+    ) -> bool:
         """Verifies proof against the expected secret hash."""
         if rc and hasattr(rc, "verify_auth_proof"):  # pylint: disable=no-member
             try:
@@ -88,7 +91,12 @@ class AuthCore(BaseCore):
             except (AttributeError, RuntimeError, TypeError) as e:
                 logger.debug("rust_core proof verification failed: %s", e)
 
-        return proof == hashlib.sha512(f"{challenge}:{expected_secret_hash}".encode()).hexdigest()
+        return (
+            proof
+            == hashlib.sha512(
+                f"{challenge}:{expected_secret_hash}".encode()
+            ).hexdigest()
+        )
 
     def is_proof_expired(self, proof_time: float, ttl: float) -> bool:
         """Checks if an authentication proof has expired based on TTL."""

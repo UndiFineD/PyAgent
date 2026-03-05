@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "FormulaValidation"), "FormulaValidation missing"
     assert hasattr(mod, "FormulaEngineCore"), "FormulaEngineCore missing"
     assert hasattr(mod, "FormulaEngine"), "FormulaEngine missing"
-

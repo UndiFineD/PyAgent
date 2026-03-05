@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,15 +42,21 @@ def _analyze_python(content: str) -> Tuple[List[str], List[Tuple[str, str]], Lis
             self.classes: List[Tuple[str, List[str]]] = []
             self.calls: set[str] = set()
 
-        def visit_Import(self, node: ast.Import) -> None:  # pragma: no cover - tiny helper
+        def visit_Import(
+            self, node: ast.Import
+        ) -> None:  # pragma: no cover - tiny helper
             for alias in node.names:
                 self.imports.add(alias.name)
 
-        def visit_ImportFrom(self, node: ast.ImportFrom) -> None:  # pragma: no cover - tiny helper
+        def visit_ImportFrom(
+            self, node: ast.ImportFrom
+        ) -> None:  # pragma: no cover - tiny helper
             if node.module:
                 self.imports.add(node.module)
 
-        def visit_ClassDef(self, node: ast.ClassDef) -> None:  # pragma: no cover - tiny helper
+        def visit_ClassDef(
+            self, node: ast.ClassDef
+        ) -> None:  # pragma: no cover - tiny helper
             bases: List[str] = []
             for base in node.bases:
                 if isinstance(base, ast.Name):
@@ -92,7 +99,9 @@ def extract_graph_entities_regex(content: str) -> Dict[str, Any]:
     return {"imports": imports, "classes": classes, "calls": calls}
 
 
-def build_graph_edges_rust(rel_path: str, imports: Iterable[str], inherits_list: Iterable[Tuple[str, Any]]) -> List[Tuple[str, str, str]]:
+def build_graph_edges_rust(
+    rel_path: str, imports: Iterable[str], inherits_list: Iterable[Tuple[str, Any]]
+) -> List[Tuple[str, str, str]]:
     """Build edges in the same format the Rust helper would return.
 
     `inherits_list` is expected as an iterable of (class_name, bases) where

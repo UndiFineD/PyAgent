@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextannotation_exists():
     """Test that ContextAnnotation class exists and is importable."""
-    assert 'ContextAnnotation' in dir()
+    assert "ContextAnnotation" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

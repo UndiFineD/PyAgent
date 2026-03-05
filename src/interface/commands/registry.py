@@ -66,7 +66,9 @@ class CommandRegistry:
 
     def list_commands(self, include_hidden: bool = False) -> list[CommandDefinition]:
         """List all registered commands."""
-        return [cmd for cmd in self._commands.values() if include_hidden or not cmd.hidden]
+        return [
+            cmd for cmd in self._commands.values() if include_hidden or not cmd.hidden
+        ]
 
     def command(
         self,

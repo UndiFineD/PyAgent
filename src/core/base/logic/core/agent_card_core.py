@@ -15,30 +15,37 @@
 from typing import List, Dict, Any, Optional
 from pydantic import BaseModel, Field
 
+
 class AgentCapability(BaseModel):
     name: str
     description: str
     parameters: Dict[str, Any] = Field(default_factory=dict)
     returns: str = "Any"
 
+
 class AgentCard(BaseModel):
     """
     Standardized manifest for cross-agent discovery.
     Pattern harvested from agentic_design_patterns.
     """
+
     agent_id: str
     name: str
     version: str = "1.0.0"
     role: str
     description: str
     capabilities: List[AgentCapability] = Field(default_factory=list)
-    contact_info: Dict[str, str] = Field(default_factory=dict) # e.g., {"protocol": "voyager_p2p", "address": "peer_id"}
+    contact_info: Dict[str, str] = Field(
+        default_factory=dict
+    )  # e.g., {"protocol": "voyager_p2p", "address": "peer_id"}
     metadata: Dict[str, Any] = Field(default_factory=dict)
+
 
 class AgentCardCore:
     """
     Manages a registry of AgentCards for inter-agent communication (A2A).
     """
+
     def __init__(self):
         self.registry: Dict[str, AgentCard] = {}
 
@@ -50,7 +57,10 @@ class AgentCardCore:
         matches = []
         for card in self.registry.values():
             for cap in card.capabilities:
-                if capability_query.lower() in cap.name.lower() or capability_query.lower() in cap.description.lower():
+                if (
+                    capability_query.lower() in cap.name.lower()
+                    or capability_query.lower() in cap.description.lower()
+                ):
                     matches.append(card)
                     break
         return matches

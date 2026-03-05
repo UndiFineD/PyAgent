@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_ollamabackend_exists():
     """Test that OllamaBackend class exists and is importable."""
-    assert 'OllamaBackend' in dir()
+    assert "OllamaBackend" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

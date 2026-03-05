@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +42,9 @@ class MessagingAgent(BaseAgent):
         )
 
     @as_tool
-    async def send_notification(self, platform: str, recipient: str, message: str) -> str:
+    async def send_notification(
+        self, platform: str, recipient: str, message: str
+    ) -> str:
         """Sends a message to a specific platform/recipient. (SKELETON)"""
         logging.info(f"Sending {platform} message to {recipient}: {message}")
 
@@ -72,5 +75,7 @@ class MessagingAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")
+    main = create_main_function(
+        MessagingAgent, "Messaging Agent", "Messaging history path"
+    )
     main()

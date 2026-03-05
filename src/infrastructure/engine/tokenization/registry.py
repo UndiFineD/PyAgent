@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -87,10 +88,14 @@ class TokenizerRegistry:
         """Auto-detect and create appropriate tokenizer."""
         model_name = config.model_name.lower()
         if any(name in model_name for name in ["gpt-4", "gpt-3.5", "text-embedding"]):
-            config = TokenizerConfig(model_name=config.model_name, backend=TokenizerBackend.TIKTOKEN)
+            config = TokenizerConfig(
+                model_name=config.model_name, backend=TokenizerBackend.TIKTOKEN
+            )
             return TiktokenTokenizer(config)
         if "mistral" in model_name:
-            config = TokenizerConfig(model_name=config.model_name, backend=TokenizerBackend.MISTRAL)
+            config = TokenizerConfig(
+                model_name=config.model_name, backend=TokenizerBackend.MISTRAL
+            )
             return MistralTokenizer(config)
         return HuggingFaceTokenizer(config)
 
@@ -102,4 +107,8 @@ class TokenizerRegistry:
     def get_stats(self) -> Dict[str, int]:
         """Get cache performance statistics."""
         with self._cache_lock:
-            return {**self._stats, "cached": len(self._cache), "max_cached": self._max_cached}
+            return {
+                **self._stats,
+                "cached": len(self._cache),
+                "max_cached": self._max_cached,
+            }

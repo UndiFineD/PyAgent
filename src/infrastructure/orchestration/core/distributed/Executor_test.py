@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_distributedexecutor_exists():
     """Test that DistributedExecutor class exists and is importable."""
-    assert 'DistributedExecutor' in dir()
+    assert "DistributedExecutor" in dir()
 
 
 def test_multiprocessexecutor_exists():
     """Test that MultiProcessExecutor class exists and is importable."""
-    assert 'MultiProcessExecutor' in dir()
+    assert "MultiProcessExecutor" in dir()
 
 
 def test_create_distributed_executor_exists():
@@ -69,4 +69,3 @@ def test_get_tp_size_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

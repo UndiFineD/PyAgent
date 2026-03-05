@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_toolcall_exists():
     """Test that ToolCall class exists and is importable."""
-    assert 'ToolCall' in dir()
+    assert "ToolCall" in dir()
 
 
 def test_toolresult_exists():
     """Test that ToolResult class exists and is importable."""
-    assert 'ToolResult' in dir()
+    assert "ToolResult" in dir()
 
 
 def test_trajectory_exists():
     """Test that Trajectory class exists and is importable."""
-    assert 'Trajectory' in dir()
+    assert "Trajectory" in dir()
 
 
 def test_asynchronousagentpipelinecore_exists():
     """Test that AsynchronousAgentPipelineCore class exists and is importable."""
-    assert 'AsynchronousAgentPipelineCore' in dir()
+    assert "AsynchronousAgentPipelineCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

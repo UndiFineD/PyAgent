@@ -2,11 +2,13 @@ import os
 from typing import Dict, List, Any
 from src.classes.base_agent import BaseAgent
 
+
 class CodeTranslationAgent(BaseAgent):
     """
     Handles translation of codebases between different programming languages.
     Supports mapping logic, syntax transformations, and multi-file translation.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -18,10 +20,10 @@ class CodeTranslationAgent(BaseAgent):
         In a real scenario, this would interface with an LLM specialized in code.
         """
         print(f"Translating code from {from_lang} to {to_lang}...")
-        
+
         # Placeholder for translation logic
         translated_code = f"// Translated from {from_lang} to {to_lang}\n"
-        
+
         if from_lang.lower() == "python" and to_lang.lower() == "rust":
             translated_code += self._mock_python_to_rust(source_code)
         elif from_lang.lower() == "python" and to_lang.lower() == "javascript":
@@ -29,13 +31,15 @@ class CodeTranslationAgent(BaseAgent):
         else:
             translated_code += "/* Generic Translation Logic Applied */\n"
             translated_code += source_code
-            
-        self.translation_history.append({
-            "from_lang": from_lang,
-            "to_lang": to_lang,
-            "timestamp": "2026-01-08" # Simulated timestamp
-        })
-        
+
+        self.translation_history.append(
+            {
+                "from_lang": from_lang,
+                "to_lang": to_lang,
+                "timestamp": "2026-01-08",  # Simulated timestamp
+            }
+        )
+
         return translated_code
 
     def _mock_python_to_rust(self, code: str) -> str:
@@ -68,6 +72,10 @@ class CodeTranslationAgent(BaseAgent):
         """Returns statistics on translation activities."""
         return {
             "total_translations": len(self.translation_history),
-            "source_languages": list(set(t['from_lang'] for t in self.translation_history)),
-            "target_languages": list(set(t['to_lang'] for t in self.translation_history))
+            "source_languages": list(
+                set(t["from_lang"] for t in self.translation_history)
+            ),
+            "target_languages": list(
+                set(t["to_lang"] for t in self.translation_history)
+            ),
         }

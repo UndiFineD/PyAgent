@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +31,9 @@ from .slot import LoRASlotManager
 class LoRAManager:
     """High-level LoRA management."""
 
-    def __init__(self, max_loras: int = 16, max_gpu_slots: int = 8, max_rank: int = 64) -> None:
+    def __init__(
+        self, max_loras: int = 16, max_gpu_slots: int = 8, max_rank: int = 64
+    ) -> None:
         self.max_loras: int = max_loras
         self.max_rank: int = max_rank
         self._registry = LoRARegistry(max_cached=max_loras)
@@ -70,7 +73,10 @@ class LoRAManager:
         with self._lock:
             if rid in self._active_requests:
                 req: LoRARequest = self._active_requests.pop(rid)
-                if not any(r.adapter_name == req.adapter_name for r in self._active_requests.values()):
+                if not any(
+                    r.adapter_name == req.adapter_name
+                    for r in self._active_requests.values()
+                ):
                     self._slot_manager.release(req.adapter_name)
 
     def get_adapter(self, name: str) -> Optional[LoRAAdapter]:

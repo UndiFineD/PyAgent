@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -330,7 +331,12 @@ class TimeSeriesBuffer(Generic[T]):
         current_time = now if now is not None else time.time()
         cutoff = current_time - window_seconds
 
-        return list(map(lambda item: item.value, filter(lambda item: item.timestamp >= cutoff, self._buffer.to_list())))
+        return list(
+            map(
+                lambda item: item.value,
+                filter(lambda item: item.timestamp >= cutoff, self._buffer.to_list()),
+            )
+        )
 
     def get_window_stats(
         self,
@@ -357,7 +363,9 @@ class TimeSeriesBuffer(Generic[T]):
                 "sum": sum(numeric_values),
                 "mean": statistics.mean(numeric_values),
                 "median": statistics.median(numeric_values),
-                "stdev": statistics.stdev(numeric_values) if len(numeric_values) > 1 else 0.0,
+                "stdev": (
+                    statistics.stdev(numeric_values) if len(numeric_values) > 1 else 0.0
+                ),
             }
         except (TypeError, ValueError):
             return {
@@ -408,7 +416,9 @@ class SlidingWindowAggregator:
         self._num_buckets = int(window_seconds / bucket_seconds) + 1
 
         # Buckets: (sum, count, min, max, values)
-        self._buckets: list[dict] = list(map(lambda _: self._empty_bucket(), range(self._num_buckets)))
+        self._buckets: list[dict] = list(
+            map(lambda _: self._empty_bucket(), range(self._num_buckets))
+        )
         self._current_bucket_idx = 0
         self._current_bucket_start = time.time()
         self._lock = threading.Lock()
@@ -436,8 +446,11 @@ class SlidingWindowAggregator:
         buckets_to_rotate = int(elapsed / self._bucket_seconds)
 
         def _rotate(count):
-            if count <= 0: return
-            self._current_bucket_idx = (self._current_bucket_idx + 1) % self._num_buckets
+            if count <= 0:
+                return
+            self._current_bucket_idx = (
+                self._current_bucket_idx + 1
+            ) % self._num_buckets
             self._buckets[self._current_bucket_idx] = self._empty_bucket()
             _rotate(count - 1)
 
@@ -490,14 +503,18 @@ class SlidingWindowAggregator:
         """Get minimum value."""
         with self._lock:
             self._rotate_buckets()
-            mins = list(map(lambda b: b["min"], filter(lambda b: b["count"] > 0, self._buckets)))
+            mins = list(
+                map(lambda b: b["min"], filter(lambda b: b["count"] > 0, self._buckets))
+            )
             return min(mins) if mins else 0.0
 
     def max(self) -> float:
         """Get maximum value."""
         with self._lock:
             self._rotate_buckets()
-            maxs = list(map(lambda b: b["max"], filter(lambda b: b["count"] > 0, self._buckets)))
+            maxs = list(
+                map(lambda b: b["max"], filter(lambda b: b["count"] > 0, self._buckets))
+            )
             return max(maxs) if maxs else 0.0
 
     def percentile(self, p: float) -> float:
@@ -573,7 +590,9 @@ class SlidingWindowAggregator:
     def reset(self) -> None:
         """Reset all buckets."""
         with self._lock:
-            self._buckets = list(map(lambda _: self._empty_bucket(), range(self._num_buckets)))
+            self._buckets = list(
+                map(lambda _: self._empty_bucket(), range(self._num_buckets))
+            )
             self._current_bucket_start = time.time()
 
 

@@ -81,9 +81,13 @@ class VoiceAgentOrchestrator(BaseAgent):
         # Token and cost tracking
         self.response_count = 0
         self.cumulative_tokens = {
-            "total": 0, "input": 0, "output": 0,
-            "input_text": 0, "input_audio": 0,
-            "output_text": 0, "output_audio": 0
+            "total": 0,
+            "input": 0,
+            "output": 0,
+            "input_text": 0,
+            "input_audio": 0,
+            "output_text": 0,
+            "output_audio": 0,
         }
         self.cumulative_cost_usd = 0.0
 
@@ -107,47 +111,71 @@ class VoiceAgentOrchestrator(BaseAgent):
         tools = []
 
         # Code generation tool
-        tools.append({
-            "name": "generate_code",
-            "description": "Generate or modify code using AI assistance",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "task": {"type": "string", "description": "Coding task description"},
-                    "language": {"type": "string", "description": "Programming language"},
-                    "context": {"type": "string", "description": "Additional context"}
+        tools.append(
+            {
+                "name": "generate_code",
+                "description": "Generate or modify code using AI assistance",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "task": {
+                            "type": "string",
+                            "description": "Coding task description",
+                        },
+                        "language": {
+                            "type": "string",
+                            "description": "Programming language",
+                        },
+                        "context": {
+                            "type": "string",
+                            "description": "Additional context",
+                        },
+                    },
+                    "required": ["task"],
                 },
-                "required": ["task"]
             }
-        })
+        )
 
         # Web browsing tool
-        tools.append({
-            "name": "browse_web",
-            "description": "Browse websites and extract information",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "url": {"type": "string", "description": "Website URL to visit"},
-                    "task": {"type": "string", "description": "What to do on the website"}
+        tools.append(
+            {
+                "name": "browse_web",
+                "description": "Browse websites and extract information",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "url": {
+                            "type": "string",
+                            "description": "Website URL to visit",
+                        },
+                        "task": {
+                            "type": "string",
+                            "description": "What to do on the website",
+                        },
+                    },
+                    "required": ["url", "task"],
                 },
-                "required": ["url", "task"]
             }
-        })
+        )
 
         # Analysis tool
-        tools.append({
-            "name": "analyze_data",
-            "description": "Analyze data or documents",
-            "parameters": {
-                "type": "object",
-                "properties": {
-                    "data": {"type": "string", "description": "Data to analyze"},
-                    "analysis_type": {"type": "string", "description": "Type of analysis needed"}
+        tools.append(
+            {
+                "name": "analyze_data",
+                "description": "Analyze data or documents",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "data": {"type": "string", "description": "Data to analyze"},
+                        "analysis_type": {
+                            "type": "string",
+                            "description": "Type of analysis needed",
+                        },
+                    },
+                    "required": ["data"],
                 },
-                "required": ["data"]
             }
-        })
+        )
 
         return tools
 
@@ -186,7 +214,9 @@ class VoiceAgentOrchestrator(BaseAgent):
         """Decode base64 audio to bytes."""
         return base64.b64decode(base64_str)
 
-    async def execute_tool(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
+    async def execute_tool(
+        self, tool_name: str, arguments: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Execute a tool call by delegating to appropriate agent."""
         self.logger.info(f"Executing tool: {tool_name} with args: {arguments}")
 
@@ -300,12 +330,18 @@ class VoiceAgentOrchestrator(BaseAgent):
 
         else:
             # Interactive mode
-            self._log_panel("Starting voice agent orchestrator", "Initialization", "green")
+            self._log_panel(
+                "Starting voice agent orchestrator", "Initialization", "green"
+            )
 
             # Display registered agents
             if self.registered_agents:
-                agent_list = "\n".join(f"- {name}" for name in self.registered_agents.keys())
-                self._log_panel(f"Registered agents:\n{agent_list}", "Agent Roster", "cyan")
+                agent_list = "\n".join(
+                    f"- {name}" for name in self.registered_agents.keys()
+                )
+                self._log_panel(
+                    f"Registered agents:\n{agent_list}", "Agent Roster", "cyan"
+                )
 
             return "Voice agent orchestrator ready"
 
@@ -317,5 +353,5 @@ class VoiceAgentOrchestrator(BaseAgent):
             "response_count": self.response_count,
             "total_tokens": self.cumulative_tokens["total"],
             "total_cost_usd": self.cumulative_cost_usd,
-            "audio_active": self.audio_stream is not None
+            "audio_active": self.audio_stream is not None,
         }

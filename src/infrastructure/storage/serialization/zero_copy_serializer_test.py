@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "encode_with_buffers"), "encode_with_buffers missing"
     assert hasattr(mod, "decode_with_buffers"), "decode_with_buffers missing"
     assert hasattr(mod, "MSGSPEC_AVAILABLE"), "MSGSPEC_AVAILABLE missing"
-

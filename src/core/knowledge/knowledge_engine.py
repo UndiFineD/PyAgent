@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,6 @@ from __future__ import annotations
 """
 Knowledge engine.py module.
 """
-
 
 
 from pathlib import Path
@@ -56,10 +56,11 @@ class KnowledgeEngine:
         """Lazy loading of CompressionAgent to avoid circular imports."""
         if self._compressor is None:
             try:
-                from src.logic.agents.system.compression_agent import \
-                    CompressionAgent
+                from src.logic.agents.system.compression_agent import CompressionAgent
 
-                self._compressor = CompressionAgent(str(self.base_path / "compression_config.json"))
+                self._compressor = CompressionAgent(
+                    str(self.base_path / "compression_config.json")
+                )
             except ImportError as e:
                 import logging
 
@@ -105,7 +106,9 @@ class KnowledgeEngine:
         if mode == "btree":
             return self.btree.store(key, content, kwargs.get("metadata"))
         if mode == "graph":
-            return self.graph.store(key, content, {"relationship": kwargs.get("relationship", "related_to")})
+            return self.graph.store(
+                key, content, {"relationship": kwargs.get("relationship", "related_to")}
+            )
 
         # General store via MemoryCore if mode is generic
         return self._memory_core.store_knowledge(self.agent_id, key, content, mode)
@@ -122,7 +125,9 @@ class KnowledgeEngine:
             return self.graph.retrieve(query, limit)
 
         # Fallback to general MemoryCore retrieval
-        return self._memory_core.retrieve_knowledge(self.agent_id, str(query), mode, limit)
+        return self._memory_core.retrieve_knowledge(
+            self.agent_id, str(query), mode, limit
+        )
 
     def delete(self, key: str, mode: str = "vector") -> bool:
         """Standardized deletion across modes."""

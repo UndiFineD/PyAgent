@@ -8,13 +8,13 @@ from .Config import VerificationStrategy, AcceptancePolicy, SpecDecodeConfig
 from .Metadata import (
     SpecDecodeMetadataV2,
     TreeVerificationMetadata,
-    SpecDecodeMetadataFactory
+    SpecDecodeMetadataFactory,
 )
 from .Verification import (
     VerificationResult,
     SpecDecodeVerifier,
     BatchVerifier,
-    StreamingVerifier
+    StreamingVerifier,
 )
 
 __all__ = [
@@ -27,5 +27,5 @@ __all__ = [
     "VerificationResult",
     "SpecDecodeVerifier",
     "BatchVerifier",
-    "StreamingVerifier"
+    "StreamingVerifier",
 ]

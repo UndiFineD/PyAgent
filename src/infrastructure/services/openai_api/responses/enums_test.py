@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ContentPartType"), "ContentPartType missing"
     assert hasattr(mod, "ToolType"), "ToolType missing"
     assert hasattr(mod, "RoleType"), "RoleType missing"
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_personalitycoreagent_exists():
     """Test that PersonalityCoreAgent class exists and is importable."""
-    assert 'PersonalityCoreAgent' in dir()
+    assert "PersonalityCoreAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

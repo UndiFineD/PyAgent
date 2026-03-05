@@ -21,6 +21,7 @@ from time import mktime
 
 logger = logging.getLogger(__name__)
 
+
 class RssCollector:
     """
     RSS feed collector for OSINT agents.
@@ -41,7 +42,9 @@ class RssCollector:
             return []
 
         if feed.get("bozo", 0):
-            logger.warning(f"Feed parser reported non-critical error (bozo) for {feed_url}")
+            logger.warning(
+                f"Feed parser reported non-critical error (bozo) for {feed_url}"
+            )
 
         entries = []
         for entry in feed.entries[:limit]:
@@ -51,19 +54,23 @@ class RssCollector:
             elif hasattr(entry, "updated_parsed") and entry.updated_parsed:
                 published_dt = datetime.fromtimestamp(mktime(entry.updated_parsed))
 
-            entries.append({
-                "title": entry.get("title", ""),
-                "link": entry.get("link", ""),
-                "summary": entry.get("summary", ""),
-                "published": published_dt.isoformat() if published_dt else None,
-                "author": entry.get("author", "Unknown"),
-                "source_feed": feed_url
-            })
-            
+            entries.append(
+                {
+                    "title": entry.get("title", ""),
+                    "link": entry.get("link", ""),
+                    "summary": entry.get("summary", ""),
+                    "published": published_dt.isoformat() if published_dt else None,
+                    "author": entry.get("author", "Unknown"),
+                    "source_feed": feed_url,
+                }
+            )
+
         return entries
 
     @classmethod
-    async def fetch_multiple(cls, feed_urls: List[str], limit_per_feed: int = 5) -> List[Dict]:
+    async def fetch_multiple(
+        cls, feed_urls: List[str], limit_per_feed: int = 5
+    ) -> List[Dict]:
         """
         Parallel fetch multiple feeds.
         """

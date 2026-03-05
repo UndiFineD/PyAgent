@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_backend_exists():
     """Test that Backend class exists and is importable."""
-    assert 'Backend' in dir()
+    assert "Backend" in dir()
 
 
 def test_simplebackend_exists():
     """Test that SimpleBackend class exists and is importable."""
-    assert 'SimpleBackend' in dir()
+    assert "SimpleBackend" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_semanticsearchresult_exists():
     """Test that SemanticSearchResult class exists and is importable."""
-    assert 'SemanticSearchResult' in dir()
+    assert "SemanticSearchResult" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_schedulerfactory_exists():
     """Test that SchedulerFactory class exists and is importable."""
-    assert 'SchedulerFactory' in dir()
+    assert "SchedulerFactory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

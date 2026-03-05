@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -49,11 +50,13 @@ class ComplianceCore:
     def audit_content(self, content: str, file_path: str) -> list[ComplianceIssue]:
         """Scans content for common compliance and security violations."""
         try:
-            from rust_core import \
-                audit_content_rust  # type: ignore[attr-defined]
+            from rust_core import audit_content_rust  # type: ignore[attr-defined]
 
             raw_issues = audit_content_rust(content, file_path)
-            return [ComplianceIssue(severity=s, category=c, message=m, file_path=f) for s, c, m, f in raw_issues]
+            return [
+                ComplianceIssue(severity=s, category=c, message=m, file_path=f)
+                for s, c, m, f in raw_issues
+            ]
         except (ImportError, AttributeError):
             issues = []
 
@@ -91,8 +94,7 @@ class ComplianceCore:
     def aggregate_score(self, issues: list[ComplianceIssue]) -> float:
         """Calculates a compliance score from 0.0 to 1.0."""
         try:
-            from rust_core import \
-                aggregate_score_rust  # type: ignore[attr-defined]
+            from rust_core import aggregate_score_rust  # type: ignore[attr-defined]
 
             return aggregate_score_rust([issue.severity for issue in issues])
         except (ImportError, AttributeError):

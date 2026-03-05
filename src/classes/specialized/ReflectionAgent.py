@@ -6,9 +6,10 @@ import logging
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class ReflectionAgent(BaseAgent):
     """Critique and refinement engine."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (

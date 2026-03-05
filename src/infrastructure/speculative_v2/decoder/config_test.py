@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_proposertype_exists():
     """Test that ProposerType class exists and is importable."""
-    assert 'ProposerType' in dir()
+    assert "ProposerType" in dir()
 
 
 def test_acceptancemethod_exists():
     """Test that AcceptanceMethod class exists and is importable."""
-    assert 'AcceptanceMethod' in dir()
+    assert "AcceptanceMethod" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_enginestate_exists():
     """Test that EngineState class exists and is importable."""
-    assert 'EngineState' in dir()
+    assert "EngineState" in dir()
 
 
 def test_workerstate_exists():
     """Test that WorkerState class exists and is importable."""
-    assert 'WorkerState' in dir()
+    assert "WorkerState" in dir()
 
 
 def test_loadbalancingstrategy_exists():
     """Test that LoadBalancingStrategy class exists and is importable."""
-    assert 'LoadBalancingStrategy' in dir()
+    assert "LoadBalancingStrategy" in dir()
 
 
 def test_parallelconfig_exists():
     """Test that ParallelConfig class exists and is importable."""
-    assert 'ParallelConfig' in dir()
+    assert "ParallelConfig" in dir()
 
 
 def test_engineidentity_exists():
     """Test that EngineIdentity class exists and is importable."""
-    assert 'EngineIdentity' in dir()
+    assert "EngineIdentity" in dir()
 
 
 def test_workeridentity_exists():
     """Test that WorkerIdentity class exists and is importable."""
-    assert 'WorkerIdentity' in dir()
+    assert "WorkerIdentity" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

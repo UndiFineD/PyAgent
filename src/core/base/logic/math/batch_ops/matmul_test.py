@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "mm_batch_invariant"), "mm_batch_invariant missing"
     assert hasattr(mod, "bmm_batch_invariant"), "bmm_batch_invariant missing"
-

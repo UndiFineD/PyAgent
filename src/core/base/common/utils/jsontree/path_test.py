@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "json_get_path"), "json_get_path missing"
     assert hasattr(mod, "json_set_path"), "json_set_path missing"
-

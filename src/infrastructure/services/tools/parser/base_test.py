@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StreamingToolState"), "StreamingToolState missing"
     assert hasattr(mod, "ToolParser"), "ToolParser missing"
     assert hasattr(mod, "extract_json_from_text"), "extract_json_from_text missing"
-

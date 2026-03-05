@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_toolmetadata_exists():
     """Test that ToolMetadata class exists and is importable."""
-    assert 'ToolMetadata' in dir()
+    assert "ToolMetadata" in dir()
 
 
 def test_toolcore_exists():
     """Test that ToolCore class exists and is importable."""
-    assert 'ToolCore' in dir()
+    assert "ToolCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

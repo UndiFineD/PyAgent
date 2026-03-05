@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 """
 Genetic hardening agent.py module.
 """
-
 
 
 import logging
@@ -74,11 +74,15 @@ class GeneticHardeningAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return vulnerabilities
 
     @as_tool
-    async def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:
+    async def apply_genetic_refactor(
+        self, code: str, hardening_rules: list[str]
+    ) -> str:
         """
         Applies hardening rules to the code to 'evolve' it into a more resilient version.
         """
-        logging.info(f"GeneticHardeningAgent: Applying {len(hardening_rules)} hardening rules.")
+        logging.info(
+            f"GeneticHardeningAgent: Applying {len(hardening_rules)} hardening rules."
+        )
 
         prompt = (
             f"Code:\n{code}\n\n"

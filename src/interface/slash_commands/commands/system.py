@@ -128,7 +128,11 @@ def cmd_health(_ctx: CommandContext) -> CommandResult:
     elif mem > 80:
         health_score -= 10
 
-    status = "healthy" if health_score >= 80 else "degraded" if health_score >= 50 else "unhealthy"
+    status = (
+        "healthy"
+        if health_score >= 80
+        else "degraded" if health_score >= 50 else "unhealthy"
+    )
 
     return CommandResult.ok(
         output=f"[Health: {status} ({health_score}/100)]",
@@ -278,7 +282,9 @@ def cmd_processes(ctx: CommandContext) -> CommandResult:
             pass
 
     # Sort by CPU and get top N
-    top = sorted(procs, key=lambda p: p.get("cpu_percent", 0) or 0, reverse=True)[:count]
+    top = sorted(procs, key=lambda p: p.get("cpu_percent", 0) or 0, reverse=True)[
+        :count
+    ]
 
     output_parts = []
     for p in top:

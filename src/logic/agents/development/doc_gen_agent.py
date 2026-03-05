@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -72,7 +73,9 @@ class DocGenAgent(BaseAgent):
             self.doc_registry[file_path] = md_content
             return md_content
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error extracting docs: {str(e)}"
 
     def _format_class_docs(self, node: ast.ClassDef) -> str:
@@ -106,7 +109,9 @@ class DocGenAgent(BaseAgent):
         for file_path, content in self.doc_registry.items():
             rel_path = os.path.relpath(file_path, self.workspace_path)
             doc_filename = rel_path.replace(os.sep, "_").replace(".py", ".md")
-            with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:
+            with open(
+                os.path.join(output_dir, doc_filename), "w", encoding="utf-8"
+            ) as f:
                 f.write(content)
 
         return len(self.doc_registry)

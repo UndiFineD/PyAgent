@@ -60,7 +60,9 @@ class QuantConfig:
         if self.bits not in (4, 8):
             raise ValueError(f"bits must be 4 or 8, got {self.bits}")
         if self.group_size < -1 or self.group_size == 0:
-            raise ValueError(f"group_size must be -1 or positive, got {self.group_size}")
+            raise ValueError(
+                f"group_size must be -1 or positive, got {self.group_size}"
+            )
         if self.symmetric and self.zero_point:
             raise ValueError("symmetric quantization cannot have zero_point")
 

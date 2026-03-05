@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ArchitectureSpec"), "ArchitectureSpec missing"
     assert hasattr(mod, "ModelInfo"), "ModelInfo missing"
     assert hasattr(mod, "VRAMEstimate"), "VRAMEstimate missing"
-

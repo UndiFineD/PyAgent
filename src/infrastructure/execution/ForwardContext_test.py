@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_batchdescriptor_exists():
     """Test that BatchDescriptor class exists and is importable."""
-    assert 'BatchDescriptor' in dir()
+    assert "BatchDescriptor" in dir()
 
 
 def test_dpmetadata_exists():
     """Test that DPMetadata class exists and is importable."""
-    assert 'DPMetadata' in dir()
+    assert "DPMetadata" in dir()
 
 
 def test_forwardcontext_exists():
     """Test that ForwardContext class exists and is importable."""
-    assert 'ForwardContext' in dir()
+    assert "ForwardContext" in dir()
 
 
 def test_forwardtimingtracker_exists():
     """Test that ForwardTimingTracker class exists and is importable."""
-    assert 'ForwardTimingTracker' in dir()
+    assert "ForwardTimingTracker" in dir()
 
 
 def test_get_forward_context_exists():
@@ -79,4 +79,3 @@ def test_get_timing_tracker_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

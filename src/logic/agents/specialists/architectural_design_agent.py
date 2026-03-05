@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,6 +42,7 @@ __version__ = VERSION
 
 class DesignPhase(Enum):
     """Phases of the architectural design process."""
+
     PRE_DESIGN_ANALYSIS = "Pre-design Analysis"
     ENVIRONMENTAL_SIMULATION = "Environmental Simulation"
     CONCEPT_GENERATION = "Concept Generation"
@@ -52,6 +54,7 @@ class DesignPhase(Enum):
 
 class DesignExpertise(Enum):
     """Levels of expertise for the architectural agent."""
+
     NOVICE = "novice"
     EXPERT = "expert"
 
@@ -65,7 +68,9 @@ class ArchitecturalDesignAgent(BaseAgent):
     reduction and performance enhancement in AI-aided design.
     """
 
-    def __init__(self, file_path: str, expertise: DesignExpertise = DesignExpertise.EXPERT) -> None:
+    def __init__(
+        self, file_path: str, expertise: DesignExpertise = DesignExpertise.EXPERT
+    ) -> None:
         super().__init__(file_path)
         self.expertise = expertise
         self.current_phase = DesignPhase.PRE_DESIGN_ANALYSIS
@@ -140,7 +145,9 @@ class ArchitecturalDesignAgent(BaseAgent):
         return mapping
 
     @as_tool
-    async def generate_spatial_concept(self, refinement: Optional[str] = None) -> Dict[str, Any]:
+    async def generate_spatial_concept(
+        self, refinement: Optional[str] = None
+    ) -> Dict[str, Any]:
         """
         Phase 2: Concept Generation. Generates spatial logic and massing options.
         Leverages hierarchical reasoning to maintain global design coherence.
@@ -156,7 +163,9 @@ class ArchitecturalDesignAgent(BaseAgent):
         )
 
         # GAAD Loop (Generator-Critic)
-        concept = await self.run_subagent("generator: producing spatial concept", initial_prompt)
+        concept = await self.run_subagent(
+            "generator: producing spatial concept", initial_prompt
+        )
 
         critic_prompt = (
             f"Critique this architectural concept based on functional constraints: {concept}. "
@@ -172,14 +181,16 @@ class ArchitecturalDesignAgent(BaseAgent):
             f"Expert Critique: {critique}\n"
             "Produce the final refined spatial concept mapping."
         )
-        final_concept = await self.run_subagent("generator: final refinement", final_prompt)
+        final_concept = await self.run_subagent(
+            "generator: final refinement", final_prompt
+        )
         self.design_state["concepts"].append(final_concept)
         self.design_state["spatial_concept"] = final_concept
         self.current_phase = DesignPhase.CONCEPT_GENERATION
         return {
             "phase": self.current_phase.value,
             "final_optimized_concept": final_concept,
-            "internal_critique": critique
+            "internal_critique": critique,
         }
 
     @as_tool
@@ -212,13 +223,18 @@ class ArchitecturalDesignAgent(BaseAgent):
         self.design_state["feedback_history"].append(critique)
         if "approved" in critique.lower() or "proceed" in critique.lower():
             self.design_state["critique_passed"] = True
-            return {"status": "Critique Accepted", "next_step": "Proceed to Design Development"}
+            return {
+                "status": "Critique Accepted",
+                "next_step": "Proceed to Design Development",
+            }
 
         self.design_state["critique_passed"] = False
         return {"status": "Critique Pending", "action": "Refine Concept"}
 
     @as_tool
-    async def coordinate_visual_verification(self, concept_index: int) -> Dict[str, Any]:
+    async def coordinate_visual_verification(
+        self, concept_index: int
+    ) -> Dict[str, Any]:
         """
         Phase 3: Design Development. Simulates agent coordination for visual output.
         Translates qualitative concepts into quantitative parameters.
@@ -231,8 +247,12 @@ class ArchitecturalDesignAgent(BaseAgent):
             f"Transform conceptual logic '{concept}' into geometric parameters. "
             f"Verify against functional requirements: {self.design_state['requirements']}."
         )
-        strategy = await self.run_subagent("coordinating visual verification", verification_prompt)
-        self.design_state["visualizations"].append({"concept": concept, "strategy": strategy})
+        strategy = await self.run_subagent(
+            "coordinating visual verification", verification_prompt
+        )
+        self.design_state["visualizations"].append(
+            {"concept": concept, "strategy": strategy}
+        )
         self.current_phase = DesignPhase.DESIGN_DEVELOPMENT
         return {"phase": self.current_phase.value, "verification_strategy": strategy}
 
@@ -249,7 +269,9 @@ class ArchitecturalDesignAgent(BaseAgent):
         specs = await self.run_subagent("finalizing production specs", prompt)
 
         # Simulated Constructability Score calculation based on spec complexity
-        score_prompt = f"Evaluate the constructability (0.0 to 1.0) of these specs: {specs}"
+        score_prompt = (
+            f"Evaluate the constructability (0.0 to 1.0) of these specs: {specs}"
+        )
         score_str = await self.run_subagent("evaluating constructability", score_prompt)
 
         self.metrics["constructability_score"] = 0.85
@@ -283,7 +305,9 @@ class ArchitecturalDesignAgent(BaseAgent):
         Specialized tool for Phase 51 Research Synthesis.
         Parses Arxiv paper content and extracts architectural requirements for system evolution.
         """
-        logging.info("ArchitecturalDesignAgent: Processing research brief for system evolution.")
+        logging.info(
+            "ArchitecturalDesignAgent: Processing research brief for system evolution."
+        )
         prompt = (
             "You are acting as the Chief Architect. "
             "Examine this research content and identify:\n"
@@ -297,7 +321,9 @@ class ArchitecturalDesignAgent(BaseAgent):
 
     def get_dpo_metrics(self) -> Dict[str, float]:
         """Returns the Design Performance Optimization metrics."""
-        self.metrics["cognitive_load_index"] = round(self.metrics["cognitive_load_index"], 2)
+        self.metrics["cognitive_load_index"] = round(
+            self.metrics["cognitive_load_index"], 2
+        )
         return self.metrics
 
     def get_acceleration_metrics(self) -> Dict[str, Any]:

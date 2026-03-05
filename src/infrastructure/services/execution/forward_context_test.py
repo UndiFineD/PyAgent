@@ -17,9 +17,10 @@ def test_imports_and_symbols():
     assert hasattr(mod, "DPMetadata"), "DPMetadata missing"
     assert hasattr(mod, "ForwardContext"), "ForwardContext missing"
     assert hasattr(mod, "get_forward_context"), "get_forward_context missing"
-    assert hasattr(mod, "is_forward_context_available"), "is_forward_context_available missing"
+    assert hasattr(
+        mod, "is_forward_context_available"
+    ), "is_forward_context_available missing"
     assert hasattr(mod, "create_forward_context"), "create_forward_context missing"
     assert hasattr(mod, "set_forward_context"), "set_forward_context missing"
     assert hasattr(mod, "ForwardTimingTracker"), "ForwardTimingTracker missing"
     assert hasattr(mod, "get_timing_tracker"), "get_timing_tracker missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +29,9 @@ from src.infrastructure.engine.engine_client.types import EngineOutput
 
 if TYPE_CHECKING:
     from src.infrastructure.engine.engine_client.types import (
-        EngineClientConfig, SchedulerOutput)
+        EngineClientConfig,
+        SchedulerOutput,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -42,7 +45,9 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
     def __init__(self, config: EngineClientConfig) -> None:
         super().__init__(config)
-        self._request_queue: asyncio.Queue[tuple[str, SchedulerOutput]] = asyncio.Queue()
+        self._request_queue: asyncio.Queue[tuple[str, SchedulerOutput]] = (
+            asyncio.Queue()
+        )
         self._output_queue: asyncio.Queue[EngineOutput] = asyncio.Queue()
         self._pending_futures: dict[str, asyncio.Future[EngineOutput]] = {}
         self._worker_task: Optional[asyncio.Task] = None
@@ -58,7 +63,9 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
             try:
                 # Get next request with timeout
                 try:
-                    request_id, request = await asyncio.wait_for(self._request_queue.get(), timeout=0.1)
+                    request_id, request = await asyncio.wait_for(
+                        self._request_queue.get(), timeout=0.1
+                    )
                 except asyncio.TimeoutError:
                     continue
 
@@ -76,7 +83,9 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
             except asyncio.CancelledError:
                 break
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Busy loop error: {e}")
 
     async def _output_handler(self) -> None:
@@ -94,7 +103,9 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                 continue
             except asyncio.CancelledError:
                 break
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Output handler error: {e}")
 
     def send_request(self, request: SchedulerOutput) -> str:
@@ -115,7 +126,9 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
         return request_id
 
-    def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
+    def get_output(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[EngineOutput]:
         """Blocking get (runs event loop)."""
         if request_id not in self._pending_futures:
             return None
@@ -128,11 +141,15 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         timeout = (timeout_ms or self.config.request_timeout_ms) / 1000.0
 
         try:
-            return loop.run_until_complete(asyncio.wait_for(self._pending_futures[request_id], timeout=timeout))
+            return loop.run_until_complete(
+                asyncio.wait_for(self._pending_futures[request_id], timeout=timeout)
+            )
         except asyncio.TimeoutError:
             return None
 
-    async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
+    async def get_output_async(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[EngineOutput]:
         """Non-blocking async get."""
         if request_id not in self._pending_futures:
             return None
@@ -140,7 +157,9 @@ class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
         timeout = (timeout_ms or self.config.request_timeout_ms) / 1000.0
 
         try:
-            return await asyncio.wait_for(self._pending_futures[request_id], timeout=timeout)
+            return await asyncio.wait_for(
+                self._pending_futures[request_id], timeout=timeout
+            )
         except asyncio.TimeoutError:
             return None
 

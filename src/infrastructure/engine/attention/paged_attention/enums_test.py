@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "AttentionType"), "AttentionType missing"
     assert hasattr(mod, "KVCacheDtype"), "KVCacheDtype missing"
-

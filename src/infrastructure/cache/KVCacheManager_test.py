@@ -33,47 +33,47 @@ except ImportError as e:
 
 def test_devicetype_exists():
     """Test that DeviceType class exists and is importable."""
-    assert 'DeviceType' in dir()
+    assert "DeviceType" in dir()
 
 
 def test_dtype_exists():
     """Test that DType class exists and is importable."""
-    assert 'DType' in dir()
+    assert "DType" in dir()
 
 
 def test_kvcacheconfig_exists():
     """Test that KVCacheConfig class exists and is importable."""
-    assert 'KVCacheConfig' in dir()
+    assert "KVCacheConfig" in dir()
 
 
 def test_kvcacheblock_exists():
     """Test that KVCacheBlock class exists and is importable."""
-    assert 'KVCacheBlock' in dir()
+    assert "KVCacheBlock" in dir()
 
 
 def test_kvcacheblocks_exists():
     """Test that KVCacheBlocks class exists and is importable."""
-    assert 'KVCacheBlocks' in dir()
+    assert "KVCacheBlocks" in dir()
 
 
 def test_kvcacheallocator_exists():
     """Test that KVCacheAllocator class exists and is importable."""
-    assert 'KVCacheAllocator' in dir()
+    assert "KVCacheAllocator" in dir()
 
 
 def test_pagedkvcache_exists():
     """Test that PagedKVCache class exists and is importable."""
-    assert 'PagedKVCache' in dir()
+    assert "PagedKVCache" in dir()
 
 
 def test_kvcachetransfer_exists():
     """Test that KVCacheTransfer class exists and is importable."""
-    assert 'KVCacheTransfer' in dir()
+    assert "KVCacheTransfer" in dir()
 
 
 def test_kvcachemanager_exists():
     """Test that KVCacheManager class exists and is importable."""
-    assert 'KVCacheManager' in dir()
+    assert "KVCacheManager" in dir()
 
 
 def test_create_kv_cache_manager_exists():
@@ -84,4 +84,3 @@ def test_create_kv_cache_manager_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

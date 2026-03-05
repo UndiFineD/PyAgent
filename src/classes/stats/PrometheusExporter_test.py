@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_prometheusexporter_exists():
     """Test that PrometheusExporter class exists and is importable."""
-    assert 'PrometheusExporter' in dir()
+    assert "PrometheusExporter" in dir()
 
 
 def test_prometheusexporter_instantiation():
@@ -45,4 +45,3 @@ def test_prometheusexporter_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

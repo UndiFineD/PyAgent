@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_lazyagentmap_exists():
     """Test that LazyAgentMap class exists and is importable."""
-    assert 'LazyAgentMap' in dir()
+    assert "LazyAgentMap" in dir()
 
 
 def test_agentregistry_exists():
     """Test that AgentRegistry class exists and is importable."""
-    assert 'AgentRegistry' in dir()
+    assert "AgentRegistry" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

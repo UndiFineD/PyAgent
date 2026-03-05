@@ -19,13 +19,25 @@ Unified pooling infrastructure (AI and Connections).
 """
 
 # Connection Pooling
-from .connection_pool import (AsyncConnectionPool, ConnectionPool,  # noqa: F401
-                              ConnectionState, MultiHostPool, PooledConnection,
-                              PooledConnectionManager, PoolStats)
+from .connection_pool import (
+    AsyncConnectionPool,
+    ConnectionPool,  # noqa: F401
+    ConnectionState,
+    MultiHostPool,
+    PooledConnection,
+    PooledConnectionManager,
+    PoolStats,
+)
 from .engine import PoolingEngine, create_pooling_engine  # noqa: F401
+
 # AI Pooling
-from .models import (EmbeddingOutput, PoolingConfig, PoolingResult,  # noqa: F401
-                     PoolingStrategy, PoolingTask)
+from .models import (
+    EmbeddingOutput,
+    PoolingConfig,
+    PoolingResult,  # noqa: F401
+    PoolingStrategy,
+    PoolingTask,
+)
 from .strategies import (
     AttentionPooler,
     BasePooler,

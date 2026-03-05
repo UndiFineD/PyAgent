@@ -4,8 +4,7 @@ import pathlib
 
 
 def _load_module():
-    """Load the module under test from the same directory as this test file.
-    """
+    """Load the module under test from the same directory as this test file."""
     p = pathlib.Path(__file__).parent / "tool_parser_framework.py"
     spec = importlib.util.spec_from_file_location("_mod_under_test", p)
     if spec is None:
@@ -18,8 +17,7 @@ def _load_module():
 
 
 def test_imports_and_symbols():
-    """Basic smoke test to ensure the module and expected symbols can be imported.
-    """
+    """Basic smoke test to ensure the module and expected symbols can be imported."""
     mod = _load_module()
     assert hasattr(mod, "ToolCall"), "ToolCall missing"
     assert hasattr(mod, "ToolParseResult"), "ToolParseResult missing"

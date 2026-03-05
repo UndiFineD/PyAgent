@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_mistraltoolparser_exists():
     """Test that MistralToolParser class exists and is importable."""
-    assert 'MistralToolParser' in dir()
+    assert "MistralToolParser" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

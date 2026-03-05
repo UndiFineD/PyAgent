@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,8 +31,12 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.capabilities.extend(["security-audit", "secret-scanning", "vulnerability-detection"])  # Phase 241
-        self.security_core = SecurityCore(workspace_root=str(self.file_path.parent.parent.parent))
+        self.capabilities.extend(
+            ["security-audit", "secret-scanning", "vulnerability-detection"]
+        )  # Phase 241
+        self.security_core = SecurityCore(
+            workspace_root=str(self.file_path.parent.parent.parent)
+        )
         self._system_prompt = (
             "You are the Security Guard Agent. Your role is to inspect proposed changes "
             "and commands for security risks. Look for: Hardcoded secrets, destructive "
@@ -59,7 +64,9 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Scans for indirect prompt injection via the security core."""
         return self.security_core.scan_for_injection(content)
 
-    def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:
+    def generate_safety_report(
+        self, task: str, code_changes: str, commands: list[str]
+    ) -> str:
         """Generates a comprehensive safety audit report."""
         vulnerabilities = self.security_core.scan_content(code_changes)
 
@@ -82,11 +89,17 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             report.append("- No high-risk patterns detected in code changes.")
         else:
             for v in vulnerabilities:
-                report.append(f"- [{v.severity.upper()}] Line {v.line_number}: {v.description}")
+                report.append(
+                    f"- [{v.severity.upper()}] Line {v.line_number}: {v.description}"
+                )
                 report.append(f"  * Fix: {v.fix_suggestion}")
 
         report.append("\n## Command Audit")
-        report.extend(command_reports if command_reports else ["- No commands provided for audit."])
+        report.extend(
+            command_reports
+            if command_reports
+            else ["- No commands provided for audit."]
+        )
 
         return "\n".join(report)
 
@@ -142,5 +155,7 @@ class SecurityGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 if __name__ == "__main__":
-    main = create_main_function(SecurityGuardAgent, "SecurityGuard Agent", "Content or Command to audit")
+    main = create_main_function(
+        SecurityGuardAgent, "SecurityGuard Agent", "Content or Command to audit"
+    )
     main()

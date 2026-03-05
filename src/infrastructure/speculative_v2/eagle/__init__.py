@@ -8,18 +8,24 @@ from .Config import EagleConfig, EagleMethod, AttentionBackend
 from .Models import DraftOutput, DraftModelWrapper, SimpleDraftModel
 from .Tree import TreeNode, SpeculativeTree
 from .Stats import AcceptanceStats
-from .Base import (
-    InputBuffer, CpuGpuBuffer, AttentionMetadata, TreeAttentionMetadata
-)
-from .Proposer import (
-    EagleProposer, EagleProposerFactory, AsyncEagleProposer
-)
+from .Base import InputBuffer, CpuGpuBuffer, AttentionMetadata, TreeAttentionMetadata
+from .Proposer import EagleProposer, EagleProposerFactory, AsyncEagleProposer
 
 __all__ = [
-    "EagleConfig", "EagleMethod", "AttentionBackend",
-    "DraftOutput", "DraftModelWrapper", "SimpleDraftModel",
-    "TreeNode", "SpeculativeTree",
+    "EagleConfig",
+    "EagleMethod",
+    "AttentionBackend",
+    "DraftOutput",
+    "DraftModelWrapper",
+    "SimpleDraftModel",
+    "TreeNode",
+    "SpeculativeTree",
     "AcceptanceStats",
-    "InputBuffer", "CpuGpuBuffer", "AttentionMetadata", "TreeAttentionMetadata",
-    "EagleProposer", "EagleProposerFactory", "AsyncEagleProposer"
+    "InputBuffer",
+    "CpuGpuBuffer",
+    "AttentionMetadata",
+    "TreeAttentionMetadata",
+    "EagleProposer",
+    "EagleProposerFactory",
+    "AsyncEagleProposer",
 ]

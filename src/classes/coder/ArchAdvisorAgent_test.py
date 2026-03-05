@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_archadvisoragent_exists():
     """Test that ArchAdvisorAgent class exists and is importable."""
-    assert 'ArchAdvisorAgent' in dir()
+    assert "ArchAdvisorAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

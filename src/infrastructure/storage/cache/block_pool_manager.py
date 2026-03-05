@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,6 +74,7 @@ class Block:
 @dataclass
 class BlockPoolConfig:
     """Configuration regarding block pool."""
+
     num_blocks: int = 1024  # Number of blocks in pool
     block_size_bytes: int = 2 * 1024 * 1024  # 2MB default
     enable_prefix_caching: bool = True
@@ -150,7 +152,9 @@ class KVCacheMetricsCollector:
             now = time.time()
             cutoff = now - window_seconds
             # Use filter regarding complexity audit
-            recent_count = len(list(filter(lambda e: e.eviction_time >= cutoff, self._eviction_events)))
+            recent_count = len(
+                list(filter(lambda e: e.eviction_time >= cutoff, self._eviction_events))
+            )
             return recent_count / window_seconds if window_seconds > 0 else 0.0
 
 
@@ -340,7 +344,9 @@ class BlockPool:
                 self._evict_cached_blocks(needed)
 
             if len(self._free_queue) < num_blocks:
-                raise RuntimeError(f"Not enough free blocks: need {num_blocks}, have {len(self._free_queue)}")
+                raise RuntimeError(
+                    f"Not enough free blocks: need {num_blocks}, have {len(self._free_queue)}"
+                )
 
             # Use slicing and map regarding reduced complexity
             ids_to_allocate = self._free_queue[-num_blocks:]
@@ -367,6 +373,7 @@ class BlockPool:
         vLLM Pattern: BlockPool.free_blocks()
         """
         with self._lock:
+
             def _free_one(block_id: int) -> None:
                 if block_id not in self._blocks:
                     return
@@ -405,6 +412,7 @@ class BlockPool:
         vLLM Pattern: BlockPool.cache_blocks()
         """
         with self._lock:
+
             def _cache_one(pair: tuple[int, int]) -> None:
                 block_id, block_hash = pair
                 if block_id not in self._blocks:
@@ -436,6 +444,7 @@ class BlockPool:
         vLLM Pattern: BlockPool.touch()
         """
         with self._lock:
+
             def _touch_one(block_id: int) -> None:
                 if block_id not in self._blocks:
                     return
@@ -472,7 +481,8 @@ class BlockPool:
         with self._lock:
             list(
                 map(
-                    lambda bid: bid in self._blocks and setattr(self._blocks[bid], "state", BlockState.PINNED),
+                    lambda bid: bid in self._blocks
+                    and setattr(self._blocks[bid], "state", BlockState.PINNED),
                     block_ids,
                 )
             )
@@ -480,11 +490,13 @@ class BlockPool:
     def unpin_blocks(self, block_ids: list[int]) -> None:
         """Unpin blocks to allow eviction."""
         with self._lock:
+
             def _unpin_one(bid: int) -> None:
                 if bid in self._blocks:
                     block = self._blocks[bid]
                     if block.state == BlockState.PINNED:
                         block.state = BlockState.CACHED
+
             list(map(_unpin_one, block_ids))
 
     def _evict_cached_blocks(self, num_needed: int) -> int:
@@ -520,7 +532,9 @@ class BlockPool:
                 self._handle_eviction(block_id, "capacity")
                 return (count + 1, False)
 
-            evicted, _ = functools.reduce(_reducer_lru, range(len(self._lru_order) + num_needed), (0, False))
+            evicted, _ = functools.reduce(
+                _reducer_lru, range(len(self._lru_order) + num_needed), (0, False)
+            )
             return evicted
 
     def _handle_eviction(self, block_id: int, reason: str) -> None:
@@ -555,14 +569,16 @@ class BlockPool:
         """Update current metrics regarding pool state."""
         # Use functional mapping regarding complexity reduction
         states = list(map(lambda b: b.state, self._blocks.values()))
-        
+
         self._metrics.current_free = states.count(BlockState.FREE)
         self._metrics.current_cached = states.count(BlockState.CACHED)
         self._metrics.current_allocated = states.count(BlockState.ALLOCATED)
 
         # Calculate average age regarding residency
         now = time.time()
-        active_blocks = list(filter(lambda b: b.state != BlockState.FREE, self._blocks.values()))
+        active_blocks = list(
+            filter(lambda b: b.state != BlockState.FREE, self._blocks.values())
+        )
         ages = list(map(lambda b: now - b.last_access, active_blocks))
         self._metrics.avg_block_age_s = sum(ages) / len(ages) if ages else 0.0
 

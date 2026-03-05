@@ -35,9 +35,9 @@ class ConsensusConflictAgent(BaseAgent):
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.active_disputes: dict[
-            Any, Any
-        ] = {}  # dispute_id -> {options, votes, status}
+        self.active_disputes: dict[Any, Any] = (
+            {}
+        )  # dispute_id -> {options, votes, status}
 
     def initiate_dispute(
         self, dispute_id: str, context: str, options: list[str]

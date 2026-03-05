@@ -11,16 +11,32 @@ import logging
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
-    from src.infrastructure.compute.backend.sql_metadata_handler import SqlMetadataHandler
+    from src.infrastructure.compute.backend.local_context_recorder import (
+        LocalContextRecorder,
+    )
+    from src.infrastructure.compute.backend.sql_metadata_handler import (
+        SqlMetadataHandler,
+    )
     from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+
     # Note: runtime imports avoided to prevent circular imports; type-only imports above
-    from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import SelfHealingOrchestrator
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import SelfImprovementOrchestrator
-    from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+    from src.infrastructure.swarm.orchestration.healing.self_healing_orchestrator import (
+        SelfHealingOrchestrator,
+    )
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_orchestrator import (
+        SelfImprovementOrchestrator,
+    )
+    from src.infrastructure.swarm.orchestration.signals.signal_registry import (
+        SignalRegistry,
+    )
     from src.infrastructure.swarm.orchestration.system.tool_registry import ToolRegistry
-    from src.logic.agents.cognitive.context.engines.global_context_engine import GlobalContextEngine
-    from src.observability.stats.metrics_engine import ModelFallbackEngine, ObservabilityEngine
+    from src.logic.agents.cognitive.context.engines.global_context_engine import (
+        GlobalContextEngine,
+    )
+    from src.observability.stats.metrics_engine import (
+        ModelFallbackEngine,
+        ObservabilityEngine,
+    )
 
 
 class FleetLookupMixin:
@@ -71,7 +87,9 @@ class FleetLookupMixin:
                     except AttributeError:
                         pass
             except (TypeError, KeyError, RuntimeError) as exc:
-                logging.debug(f"Fleet: Lazy-load error for orchestrator '{name}': {exc}")
+                logging.debug(
+                    f"Fleet: Lazy-load error for orchestrator '{name}': {exc}"
+                )
 
         # 3. Try Agents
         if "agents" in current_dict:
@@ -141,4 +159,6 @@ class FleetLookupMixin:
     @property
     def rl_selector(self: FleetManager) -> Any:
         """Returns the reinforcement learning selector."""
-        return getattr(self.orchestrators, "r_l_selector", None) or getattr(self.orchestrators, "rl_selector", None)
+        return getattr(self.orchestrators, "r_l_selector", None) or getattr(
+            self.orchestrators, "rl_selector", None
+        )

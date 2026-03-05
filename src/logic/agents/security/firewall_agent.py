@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,8 +42,9 @@ from pathlib import Path
 from typing import Any
 
 from src.core.base.lifecycle.base_agent import BaseAgent
-from src.infrastructure.swarm.orchestration.signals.signal_registry import \
-    SignalRegistry
+from src.infrastructure.swarm.orchestration.signals.signal_registry import (
+    SignalRegistry,
+)
 
 try:
     import rust_core
@@ -50,7 +52,9 @@ except ImportError:
     rust_core = None
 
 
-class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-return-statements
+class FirewallAgent(
+    BaseAgent
+):  # pylint: disable=too-many-ancestors,too-many-return-statements
     """
     Firewall Agent: Gatekeeper for agent actions.
     Ensures 'thought_stream' signals are analyzed and clearance is granted
@@ -83,7 +87,9 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
             logging.error(f"[FirewallAgent] Failed to load whitelist: {e}")
         return []
 
-    async def _analyze_thought(self, event: dict[str, Any]) -> None:  # pylint: disable=too-many-return-statements
+    async def _analyze_thought(
+        self, event: dict[str, Any]
+    ) -> None:  # pylint: disable=too-many-return-statements
         """Inform the fleet and perform security analysis on the thought."""
         data = event.get("data", {})
         agent_name = data.get("agent", "Unknown")
@@ -93,12 +99,16 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
             return
 
         # 1. Broadly inform the fleet (logging/signals)
-        logging.info(f"[FirewallAgent] INTERCEPTED thought from {agent_name}: '{thought[:100]}...'")
+        logging.info(
+            f"[FirewallAgent] INTERCEPTED thought from {agent_name}: '{thought[:100]}...'"
+        )
 
         # 2. Rust-Accelerated Core Analysis (If available)
         if rust_core:
             try:
-                allowed, reason = rust_core.analyze_thought_rust(thought, self.whitelisted_domains)
+                allowed, reason = rust_core.analyze_thought_rust(
+                    thought, self.whitelisted_domains
+                )
                 if not allowed:
                     logging.warning(f"[FirewallAgent] DENIED (Rust): {reason}")
                     self._deny(agent_name, thought)
@@ -108,7 +118,9 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
                 self._grant(agent_name, thought)
                 return
             except (AttributeError, RuntimeError) as e:
-                logging.error(f"[FirewallAgent] Rust analysis failed, falling back to Python: {e}")
+                logging.error(
+                    f"[FirewallAgent] Rust analysis failed, falling back to Python: {e}"
+                )
 
         # 2. Destructive Operations Check (Python Fallback)
         # Block any mentions of destructive file/disk operations
@@ -141,15 +153,21 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
         # 3. Internet Access Check (Whitelist enforced)
         # Detect URLs or network-related keywords
         urls = re.findall(r"https?://([a-zA-Z0-9.-]+)", thought)
-        if not urls and any(kw in thought.upper() for kw in ["CURL", "WGET", "REQUESTS.GET", "URLLIB"]):
+        if not urls and any(
+            kw in thought.upper() for kw in ["CURL", "WGET", "REQUESTS.GET", "URLLIB"]
+        ):
             # Generic network intent without specific URL? Potential bypass or discovery.
-            logging.warning("[FirewallAgent] DENIED: Undisclosed internet access intent detected.")
+            logging.warning(
+                "[FirewallAgent] DENIED: Undisclosed internet access intent detected."
+            )
             self._deny(agent_name, thought)
             return
 
         for domain in urls:
             if domain not in self.whitelisted_domains:
-                logging.warning(f"[FirewallAgent] DENIED: Internet access to non-whitelisted domain '{domain}'.")
+                logging.warning(
+                    f"[FirewallAgent] DENIED: Internet access to non-whitelisted domain '{domain}'."
+                )
                 self._deny(agent_name, thought)
                 return
 
@@ -166,7 +184,9 @@ class FirewallAgent(BaseAgent):  # pylint: disable=too-many-ancestors,too-many-r
     def _grant(self, agent_name: str, thought: str) -> None:
         cid = self._generate_cid(agent_name, thought)
         self.clearance_registry[cid] = True
-        logging.info(f"[FirewallAgent] CLEARANCE GRANTED for {agent_name}: {cid[:30]}...")
+        logging.info(
+            f"[FirewallAgent] CLEARANCE GRANTED for {agent_name}: {cid[:30]}..."
+        )
 
     def _deny(self, agent_name: str, thought: str) -> None:
         cid = self._generate_cid(agent_name, thought)

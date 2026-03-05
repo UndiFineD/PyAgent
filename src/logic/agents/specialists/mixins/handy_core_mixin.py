@@ -22,8 +22,15 @@ class HandyCoreMixin:
         """Archiving shell interaction for fleet intelligence."""
         if self.recorder:
             try:
-                meta = {"phase": 108, "type": "shell", "timestamp": time.time(), "tool": tool_name}
-                self.recorder.record_interaction("handy", "bash", str(input_data), output, meta=meta)
+                meta = {
+                    "phase": 108,
+                    "type": "shell",
+                    "timestamp": time.time(),
+                    "tool": tool_name,
+                }
+                self.recorder.record_interaction(
+                    "handy", "bash", str(input_data), output, meta=meta
+                )
             except (AttributeError, RuntimeError, TypeError):
                 pass
 

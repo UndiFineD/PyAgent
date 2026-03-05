@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_securityscanner_exists():
     """Test that SecurityScanner class exists and is importable."""
-    assert 'SecurityScanner' in dir()
+    assert "SecurityScanner" in dir()
 
 
 def test_securityscanner_instantiation():
@@ -45,4 +45,3 @@ def test_securityscanner_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

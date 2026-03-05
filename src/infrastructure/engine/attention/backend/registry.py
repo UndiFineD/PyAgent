@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -193,7 +194,10 @@ class AttentionBackendRegistry:
         if capabilities is not None:
             caps: AttentionCapabilities = backend.get_capabilities()
             # Check key capabilities
-            if capabilities.supports_sliding_window and not caps.supports_sliding_window:
+            if (
+                capabilities.supports_sliding_window
+                and not caps.supports_sliding_window
+            ):
                 return False
             if capabilities.supports_fp8 and not caps.supports_fp8:
                 return False

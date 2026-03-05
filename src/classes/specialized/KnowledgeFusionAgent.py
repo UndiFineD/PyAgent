@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class KnowledgeFusionAgent(BaseAgent):
     """Fuses distributed memory shards and resolves conflicts in the collective knowledge base."""
 
@@ -36,7 +38,7 @@ class KnowledgeFusionAgent(BaseAgent):
         self.fusion_dir = Path("data/logs/knowledge_fusion")
         self.fusion_dir.mkdir(parents=True, exist_ok=True)
         self.global_graph_path = self.fusion_dir / "global_knowledge_graph.json"
-        
+
         self._system_prompt = (
             "You are the Knowledge Fusion Agent. "
             "Your role is to aggregate experiences and insights from all swarm members. "
@@ -62,19 +64,23 @@ class KnowledgeFusionAgent(BaseAgent):
         """
         graph = self._load_global_graph()
         added_nodes = 0
-        
+
         for path_str in shard_paths:
             path = Path(path_str)
             if not path.exists():
                 continue
-            
+
             try:
                 with open(path, encoding="utf-8") as f:
                     shard_data = json.load(f)
-                
+
                 # Simple fusion logic: Deduplicate by content/id
                 # In a real scenario, this would involve semantic embedding comparison
-                items = shard_data if isinstance(shard_data, list) else shard_data.get("nodes", [])
+                items = (
+                    shard_data
+                    if isinstance(shard_data, list)
+                    else shard_data.get("nodes", [])
+                )
                 for item in items:
                     content = item.get("content") or item.get("text") or str(item)
                     if not any(n.get("content") == content for n in graph["nodes"]):
@@ -95,7 +101,13 @@ class KnowledgeFusionAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         return "Global knowledge fusion is optimized. Swarm shards are synchronized."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(KnowledgeFusionAgent, "Knowledge Fusion Agent", "Collective intelligence consolidator")
+
+    main = create_main_function(
+        KnowledgeFusionAgent,
+        "Knowledge Fusion Agent",
+        "Collective intelligence consolidator",
+    )
     main()

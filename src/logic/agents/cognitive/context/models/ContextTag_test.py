@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contexttag_exists():
     """Test that ContextTag class exists and is importable."""
-    assert 'ContextTag' in dir()
+    assert "ContextTag" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

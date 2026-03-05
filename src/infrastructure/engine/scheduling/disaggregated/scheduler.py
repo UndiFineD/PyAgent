@@ -26,8 +26,13 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from .config import DCPConfig, InstanceInfo, KVTransferParams, ScheduledRequest
 from .enums import InstanceRole, SchedulingPolicy
-from .selectors import (HashSelector, InstanceSelector, LeastLoadedSelector,
-                        RandomSelector, RoundRobinSelector)
+from .selectors import (
+    HashSelector,
+    InstanceSelector,
+    LeastLoadedSelector,
+    RandomSelector,
+    RoundRobinSelector,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -141,7 +146,9 @@ class DisaggregatedScheduler:
         request: ScheduledRequest,
     ) -> Tuple[Optional[InstanceInfo], KVTransferParams]:
         """Schedule a request for prefill phase."""
-        prefill_instance = self._prefill_selector.select(self._prefill_instances, request)
+        prefill_instance = self._prefill_selector.select(
+            self._prefill_instances, request
+        )
 
         if prefill_instance is None:
             logger.warning("No healthy prefill instance available")
@@ -154,7 +161,9 @@ class DisaggregatedScheduler:
             do_remote_prefill=False,
             remote_host=decode_instance.host if decode_instance else None,
             remote_port=decode_instance.kv_port if decode_instance else None,
-            remote_handshake_port=decode_instance.handshake_port if decode_instance else None,
+            remote_handshake_port=(
+                decode_instance.handshake_port if decode_instance else None
+            ),
             remote_notify_port=decode_instance.notify_port if decode_instance else None,
             remote_tp_size=decode_instance.tp_size if decode_instance else 1,
             remote_dp_size=decode_instance.dp_size if decode_instance else 1,
@@ -180,7 +189,9 @@ class DisaggregatedScheduler:
         """Schedule a request for decode phase."""
         decode_instance = request.decode_instance
         if decode_instance is None or not decode_instance.is_healthy:
-            decode_instance = self._decode_selector.select(self._decode_instances, request)
+            decode_instance = self._decode_selector.select(
+                self._decode_instances, request
+            )
 
         if decode_instance is None:
             logger.warning("No healthy decode instance available")
@@ -196,8 +207,12 @@ class DisaggregatedScheduler:
             remote_block_ids=kv_params_dict.get("remote_block_ids"),
             remote_host=prefill_instance.host if prefill_instance else None,
             remote_port=prefill_instance.kv_port if prefill_instance else None,
-            remote_handshake_port=prefill_instance.handshake_port if prefill_instance else None,
-            remote_notify_port=prefill_instance.notify_port if prefill_instance else None,
+            remote_handshake_port=(
+                prefill_instance.handshake_port if prefill_instance else None
+            ),
+            remote_notify_port=(
+                prefill_instance.notify_port if prefill_instance else None
+            ),
             remote_tp_size=prefill_instance.tp_size if prefill_instance else 1,
             remote_dp_size=prefill_instance.dp_size if prefill_instance else 1,
         )

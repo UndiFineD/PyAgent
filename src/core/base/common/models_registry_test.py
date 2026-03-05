@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "ModelSpec"), "ModelSpec missing"
     assert hasattr(mod, "ProviderRegistry"), "ProviderRegistry missing"
-

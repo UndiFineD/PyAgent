@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_metaorchestratoragent_exists():
     """Test that MetaOrchestratorAgent class exists and is importable."""
-    assert 'MetaOrchestratorAgent' in dir()
+    assert "MetaOrchestratorAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -30,7 +31,9 @@ class FleetInteractionRecorder:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    async def record_success(self, res_or_prompt: Any, *args: Any, **_kwargs: Any) -> None:
+    async def record_success(
+        self, res_or_prompt: Any, *args: Any, **_kwargs: Any
+    ) -> None:
         """Records the success of a workflow step including Explainability and Telemetry."""
         # Detect calling convention (New: 8 parameters total, Legacy: 3)
         if len(args) == 7:
@@ -76,7 +79,9 @@ class FleetInteractionRecorder:
         with contextlib.suppress(Exception):
             explainability = getattr(self.fleet, "explainability", None)
             if explainability:
-                justification = explainability.justify_action(agent_name, action_name, res)
+                justification = explainability.justify_action(
+                    agent_name, action_name, res
+                )
                 explainability.log_reasoning_step(
                     workflow_id=workflow_id,
                     agent_name=agent_name,

@@ -41,18 +41,24 @@ def fix_escapes(target_dirs: list[str]):
                         content = path.read_text(encoding="utf-8")
 
                         # Fix escaped quotes
-                        new_content = content.replace(r"\"\"\"", '"""').replace(r"\"", '"')
+                        new_content = content.replace(r"\"\"\"", '"""').replace(
+                            r"\"", '"'
+                        )
 
                         if new_content != content:
                             path.write_text(new_content, encoding="utf-8")
                             print(f"Fixed: {path.relative_to(workspace_root)}")
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except (
+                        Exception
+                    ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                         print(f"Failed to process {file}: {e}")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fix escaped quotes in docstrings.")
-    parser.add_argument("--dirs", nargs="+", default=["src"], help="Directories to scan.")
+    parser.add_argument(
+        "--dirs", nargs="+", default=["src"], help="Directories to scan."
+    )
 
     args = parser.parse_args()
     fix_escapes(args.dirs)

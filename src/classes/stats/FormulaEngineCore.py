@@ -12,6 +12,7 @@ import operator
 import re
 from typing import Any, Dict, List, Optional, Type
 
+
 class FormulaEngineCore:
     """Pure logic core for formula calculations."""
 
@@ -24,7 +25,7 @@ class FormulaEngineCore:
             ast.Pow: operator.pow,
             ast.BitXor: operator.xor,
             ast.USub: operator.neg,
-            ast.UAdd: operator.pos
+            ast.UAdd: operator.pos,
         }
 
     def _eval_node(self, node: ast.AST) -> float:
@@ -33,10 +34,12 @@ class FormulaEngineCore:
             if isinstance(node.value, (int, float)):
                 return float(node.value)
             raise TypeError(f"Constant of type {type(node.value)} is not a number")
-        elif hasattr(ast, "Num") and isinstance(node, ast.Num): # type: ignore
-             return float(node.n) # type: ignore
+        elif hasattr(ast, "Num") and isinstance(node, ast.Num):  # type: ignore
+            return float(node.n)  # type: ignore
         elif isinstance(node, ast.BinOp):
-            return self.operators[type(node.op)](self._eval_node(node.left), self._eval_node(node.right))
+            return self.operators[type(node.op)](
+                self._eval_node(node.left), self._eval_node(node.right)
+            )
         elif isinstance(node, ast.UnaryOp):
             return self.operators[type(node.op)](self._eval_node(node.operand))
         else:
@@ -46,7 +49,7 @@ class FormulaEngineCore:
         """Core logic for calculating a formula result."""
         # Handle special functions like AVG
         if "AVG(" in formula:
-            match = re.search(r'AVG\(\{(\w+)\}\)', formula)
+            match = re.search(r"AVG\(\{(\w+)\}\)", formula)
             if match:
                 var_name = match.group(1)
                 if var_name in variables:
@@ -60,9 +63,9 @@ class FormulaEngineCore:
             eval_formula = formula
             for var_name, var_value in variables.items():
                 eval_formula = eval_formula.replace(f"{{{var_name}}}", str(var_value))
-            
+
             # Use safe AST evaluation
-            tree = ast.parse(eval_formula, mode='eval')
+            tree = ast.parse(eval_formula, mode="eval")
             return self._eval_node(tree.body)
         except Exception:
             # Core returns a default value, Shell handles logging
@@ -75,12 +78,12 @@ class FormulaEngineCore:
                 return {"is_valid": False, "error": "Invalid operator sequence"}
 
             test_formula = formula
-            vars_found: List[str] = re.findall(r'\{(\w+)\}', formula)
+            vars_found: List[str] = re.findall(r"\{(\w+)\}", formula)
             for var in vars_found:
                 test_formula = test_formula.replace(f"{{{var}}}", "1")
-            
+
             # Final AST parse check
-            ast.parse(test_formula, mode='eval')
+            ast.parse(test_formula, mode="eval")
             return {"is_valid": True, "error": None}
         except Exception as e:
             return {"is_valid": False, "error": str(e)}

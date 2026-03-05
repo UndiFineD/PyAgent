@@ -4,22 +4,24 @@ import re
 from typing import List
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class AttackVector:
     pattern: str
     target_guardrail: str
     success_rate: float
 
+
 class RedQueenCore:
     """Pure logic for the 'Digital Red Queen' adversarial evolution.
     Generates and mutates prompts to test security guardrails.
     """
-    
+
     MUTATION_STRATEGIES = [
         "prefix_injection",
         "role_play",
         "distraction_task",
-        "encoding_bypass"
+        "encoding_bypass",
     ]
 
     def mutate_prompt(self, base_prompt: str, strategy: str) -> str:
@@ -39,10 +41,12 @@ class RedQueenCore:
         for pattern in forbidden_patterns:
             if re.search(pattern, response, re.IGNORECASE):
                 matches += 1
-        
+
         return matches / len(forbidden_patterns) if forbidden_patterns else 0.0
 
-    def select_parent_attacks(self, archive: list[AttackVector], count: int = 5) -> list[AttackVector]:
+    def select_parent_attacks(
+        self, archive: list[AttackVector], count: int = 5
+    ) -> list[AttackVector]:
         """Selects the most successful attack vectors for the next generation."""
         sorted_archive = sorted(archive, key=lambda x: x.success_rate, reverse=True)
         return sorted_archive[:count]

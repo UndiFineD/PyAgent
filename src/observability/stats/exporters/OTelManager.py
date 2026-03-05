@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,9 +63,9 @@ class OTelManager:
     """
 
     def __init__(self) -> None:
-        self.active_spans: dict[
-            str, Any
-        ] = {}  # Now stores real OTel spans if available
+        self.active_spans: dict[str, Any] = (
+            {}
+        )  # Now stores real OTel spans if available
         self.completed_spans: list[Span] = []
         self.core = TracingCore()
         if HAS_OTEL:

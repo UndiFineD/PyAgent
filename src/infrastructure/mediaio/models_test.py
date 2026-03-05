@@ -33,55 +33,54 @@ except ImportError as e:
 
 def test_mediatype_exists():
     """Test that MediaType class exists and is importable."""
-    assert 'MediaType' in dir()
+    assert "MediaType" in dir()
 
 
 def test_imageformat_exists():
     """Test that ImageFormat class exists and is importable."""
-    assert 'ImageFormat' in dir()
+    assert "ImageFormat" in dir()
 
 
 def test_videoformat_exists():
     """Test that VideoFormat class exists and is importable."""
-    assert 'VideoFormat' in dir()
+    assert "VideoFormat" in dir()
 
 
 def test_audioformat_exists():
     """Test that AudioFormat class exists and is importable."""
-    assert 'AudioFormat' in dir()
+    assert "AudioFormat" in dir()
 
 
 def test_resizemode_exists():
     """Test that ResizeMode class exists and is importable."""
-    assert 'ResizeMode' in dir()
+    assert "ResizeMode" in dir()
 
 
 def test_mediametadata_exists():
     """Test that MediaMetadata class exists and is importable."""
-    assert 'MediaMetadata' in dir()
+    assert "MediaMetadata" in dir()
 
 
 def test_imagedata_exists():
     """Test that ImageData class exists and is importable."""
-    assert 'ImageData' in dir()
+    assert "ImageData" in dir()
 
 
 def test_videodata_exists():
     """Test that VideoData class exists and is importable."""
-    assert 'VideoData' in dir()
+    assert "VideoData" in dir()
 
 
 def test_audiodata_exists():
     """Test that AudioData class exists and is importable."""
-    assert 'AudioData' in dir()
+    assert "AudioData" in dir()
 
 
 def test_medialoadconfig_exists():
     """Test that MediaLoadConfig class exists and is importable."""
-    assert 'MediaLoadConfig' in dir()
+    assert "MediaLoadConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

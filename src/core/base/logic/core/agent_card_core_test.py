@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_agentcapability_exists():
     """Test that AgentCapability class exists and is importable."""
-    assert 'AgentCapability' in dir()
+    assert "AgentCapability" in dir()
 
 
 def test_agentcard_exists():
     """Test that AgentCard class exists and is importable."""
-    assert 'AgentCard' in dir()
+    assert "AgentCard" in dir()
 
 
 def test_agentcardcore_exists():
     """Test that AgentCardCore class exists and is importable."""
-    assert 'AgentCardCore' in dir()
+    assert "AgentCardCore" in dir()
 
 
 def test_agentcardcore_instantiation():
@@ -55,4 +55,3 @@ def test_agentcardcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

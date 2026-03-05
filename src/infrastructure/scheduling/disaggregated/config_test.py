@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_instanceinfo_exists():
     """Test that InstanceInfo class exists and is importable."""
-    assert 'InstanceInfo' in dir()
+    assert "InstanceInfo" in dir()
 
 
 def test_dcpconfig_exists():
     """Test that DCPConfig class exists and is importable."""
-    assert 'DCPConfig' in dir()
+    assert "DCPConfig" in dir()
 
 
 def test_kvtransferparams_exists():
     """Test that KVTransferParams class exists and is importable."""
-    assert 'KVTransferParams' in dir()
+    assert "KVTransferParams" in dir()
 
 
 def test_scheduledrequest_exists():
     """Test that ScheduledRequest class exists and is importable."""
-    assert 'ScheduledRequest' in dir()
+    assert "ScheduledRequest" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

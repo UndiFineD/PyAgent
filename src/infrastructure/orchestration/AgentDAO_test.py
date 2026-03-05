@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_agentdao_exists():
     """Test that AgentDAO class exists and is importable."""
-    assert 'AgentDAO' in dir()
+    assert "AgentDAO" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

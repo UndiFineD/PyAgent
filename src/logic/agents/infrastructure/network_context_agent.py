@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,8 +24,9 @@ import re
 
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.engines.graph_context_engine import \
-    GraphContextEngine
+from src.logic.agents.cognitive.context.engines.graph_context_engine import (
+    GraphContextEngine,
+)
 
 __version__ = VERSION
 
@@ -54,7 +56,10 @@ class NetworkContextAgent(BaseAgent):
         # 1. Discover all python files as nodes
         py_files = []
         for p in root.rglob("*.py"):
-            if any(part in str(p) for part in ["__pycache__", "venv", ".git", ".agent_cache"]):
+            if any(
+                part in str(p)
+                for part in ["__pycache__", "venv", ".git", ".agent_cache"]
+            ):
                 continue
             rel_path = str(p.relative_to(root))
             self.engine.add_node(rel_path, "file")
@@ -68,7 +73,9 @@ class NetworkContextAgent(BaseAgent):
 
                 # Find imports (from ... import ... or import ...)
                 # Simple regex for module names
-                imports = re.findall(r"^(?:from|import)\s+([\w\.]+)", content, re.MULTILINE)
+                imports = re.findall(
+                    r"^(?:from|import)\s+([\w\.]+)", content, re.MULTILINE
+                )
                 for imp in imports:
                     # Clean up dots to find potential local files
                     # e.g. from .classes.agent import Agent -> classes.agent
@@ -77,7 +84,10 @@ class NetworkContextAgent(BaseAgent):
 
                     # Search for this module in our known files
                     for other_rel in self.engine.graph.keys():
-                        if potential_path in other_rel or other_rel.replace("\\", "/") in potential_path:
+                        if (
+                            potential_path in other_rel
+                            or other_rel.replace("\\", "/") in potential_path
+                        ):
                             self.engine.add_edge(rel_path, other_rel, "imports")
 
                 # Find Class hierarchy
@@ -111,7 +121,9 @@ class NetworkContextAgent(BaseAgent):
         if not impacted_nodes:
             report.append("No direct downstream dependencies found in the graph.")
         else:
-            report.append(f"Found {len(impacted_nodes)} potentially impacted entities within 3 hops:")
+            report.append(
+                f"Found {len(impacted_nodes)} potentially impacted entities within 3 hops:"
+            )
             for node in sorted(list(impacted_nodes)):
                 meta = self.engine.metadata.get(node, {})
                 node_type = meta.get("type", "unknown")

@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 
 import re
 from typing import Any, TYPE_CHECKING
+
 if TYPE_CHECKING:
     from .ChangelogEntry import ChangelogEntry
+
 
 class ChangelogValidationMixin:
     """Mixin for validating changelog entries and content."""
@@ -18,20 +21,44 @@ class ChangelogValidationMixin:
 
         # Validate version format
         if entry.version:
-            v_rule = next((r for r in self._validation_rules if r.name == "version_format"), None)
+            v_rule = next(
+                (r for r in self._validation_rules if r.name == "version_format"), None
+            )
             if v_rule and not re.match(v_rule.pattern, entry.version):
-                issues.append({"rule": v_rule.name, "message": v_rule.message, "severity": v_rule.severity})
+                issues.append(
+                    {
+                        "rule": v_rule.name,
+                        "message": v_rule.message,
+                        "severity": v_rule.severity,
+                    }
+                )
 
         # Validate date format
         if entry.date:
-            d_rule = next((r for r in self._validation_rules if r.name == "date_format"), None)
+            d_rule = next(
+                (r for r in self._validation_rules if r.name == "date_format"), None
+            )
             if d_rule and not re.match(d_rule.pattern, entry.date):
-                issues.append({"rule": d_rule.name, "message": d_rule.message, "severity": d_rule.severity})
+                issues.append(
+                    {
+                        "rule": d_rule.name,
+                        "message": d_rule.message,
+                        "severity": d_rule.severity,
+                    }
+                )
 
         # Validate entry description
-        e_rule = next((r for r in self._validation_rules if r.name == "entry_not_empty"), None)
+        e_rule = next(
+            (r for r in self._validation_rules if r.name == "entry_not_empty"), None
+        )
         if e_rule and not re.match(e_rule.pattern, entry.description):
-            issues.append({"rule": e_rule.name, "message": e_rule.message, "severity": e_rule.severity})
+            issues.append(
+                {
+                    "rule": e_rule.name,
+                    "message": e_rule.message,
+                    "severity": e_rule.severity,
+                }
+            )
 
         return issues
 
@@ -41,21 +68,25 @@ class ChangelogValidationMixin:
         # Check for merge conflicts
         conflicts = self.detect_merge_conflicts(content)
         if conflicts:
-            all_issues.append({
-                "type": "merge_conflict",
-                "count": len(conflicts),
-                "severity": "error",
-                "message": f"Found {len(conflicts)} unresolved merge conflict(s)",
-            })
+            all_issues.append(
+                {
+                    "type": "merge_conflict",
+                    "count": len(conflicts),
+                    "severity": "error",
+                    "message": f"Found {len(conflicts)} unresolved merge conflict(s)",
+                }
+            )
 
         # Check for required sections
         if hasattr(self, "_template") and self._template:
             for section in self._template.sections:
                 if f"### {section}" not in content and f"## {section}" not in content:
-                    all_issues.append({
-                        "type": "missing_section",
-                        "section": section,
-                        "severity": "warning",
-                        "message": f"Missing recommended section: {section}",
-                    })
+                    all_issues.append(
+                        {
+                            "type": "missing_section",
+                            "section": section,
+                            "severity": "warning",
+                            "message": f"Missing recommended section: {section}",
+                        }
+                    )
         return all_issues

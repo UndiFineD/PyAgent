@@ -4,6 +4,7 @@
 import logging
 from typing import Any
 
+
 class MemorySearchMixin:
     """Methods for searching memories."""
 
@@ -88,9 +89,9 @@ class MemorySearchMixin:
                     {
                         "content": results["documents"][0][i],
                         "metadata": results["metadatas"][0][i],
-                        "score": results["distances"][0][i]
-                        if "distances" in results
-                        else 0,
+                        "score": (
+                            results["distances"][0][i] if "distances" in results else 0
+                        ),
                     }
                 )
             return matches

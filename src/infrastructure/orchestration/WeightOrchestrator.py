@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,14 +30,17 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class WeightOrchestrator(BaseAgent):
     """Orchestrates the distribution and activation of model weights across the fleet."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = Path(file_path).parent
-        self.weights_registry_path = self.workspace_root / "data/memory/agent_store/weights_registry.json"
-        self.active_adapters: dict[str, str] = {} # agent_name -> adapter_name
+        self.weights_registry_path = (
+            self.workspace_root / "data/memory/agent_store/weights_registry.json"
+        )
+        self.active_adapters: dict[str, str] = {}  # agent_name -> adapter_name
         self._load_registry()
         self._system_prompt = "You are the Weight Orchestrator. You manage model adapters and neural weights across the fleet."
 
@@ -60,7 +64,9 @@ class WeightOrchestrator(BaseAgent):
     @as_tool
     def activate_adapter(self, agent_name: str, adapter_name: str) -> bool:
         """Assigns an adapter to an agent and triggers a 'weights_updated' signal."""
-        logging.info(f"WeightOrchestrator: Activating adapter '{adapter_name}' for agent '{agent_name}'")
+        logging.info(
+            f"WeightOrchestrator: Activating adapter '{adapter_name}' for agent '{agent_name}'"
+        )
         self.active_adapters[agent_name] = adapter_name
         self._save_registry()
         # In a real system, this would trigger a signal that the agent's Proxy or Backend listens to
@@ -87,6 +93,7 @@ class WeightOrchestrator(BaseAgent):
 
     def improve_content(self, input_text: str) -> str:
         return f"Current fleet weight distribution: {len(self.active_adapters)} active adapters."
+
 
 if __name__ == "__main__":
     # Internal test

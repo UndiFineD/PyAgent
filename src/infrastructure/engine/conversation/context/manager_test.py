@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "create_context"), "create_context missing"
     assert hasattr(mod, "merge_contexts"), "merge_contexts missing"
     assert hasattr(mod, "restore_context"), "restore_context missing"
-

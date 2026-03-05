@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_ncclcommunicator_exists():
     """Test that NCCLCommunicator class exists and is importable."""
-    assert 'NCCLCommunicator' in dir()
+    assert "NCCLCommunicator" in dir()
 
 
 def test_customallreduce_exists():
     """Test that CustomAllReduce class exists and is importable."""
-    assert 'CustomAllReduce' in dir()
+    assert "CustomAllReduce" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

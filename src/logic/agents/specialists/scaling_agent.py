@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,6 +41,7 @@ __version__ = VERSION
 
 class ProviderType(Enum):
     """Types of compute providers available."""
+
     LOCAL = "local"
     GITHUB = "github"
     AZURE = "azure"
@@ -50,6 +52,7 @@ class ProviderType(Enum):
 
 class ScalingStrategy(Enum):
     """Strategies for dynamic fleet scaling."""
+
     ROUND_ROBIN = "round_robin"
     LEAST_LOADED = "least_loaded"
     LATENCY_WEIGHTED = "latency_weighted"
@@ -92,15 +95,23 @@ class ScalingAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._providers: Dict[ProviderType, ProviderMetrics] = {
-            ProviderType.LOCAL: ProviderMetrics(ProviderType.LOCAL, capacity=5, cost_per_token=0.0),
-            ProviderType.GITHUB: ProviderMetrics(ProviderType.GITHUB, capacity=50, cost_per_token=0.0),
-            ProviderType.AZURE: ProviderMetrics(ProviderType.AZURE, capacity=100, cost_per_token=0.002),
-            ProviderType.OLLAMA: ProviderMetrics(
-                ProviderType.OLLAMA, 
-                capacity=self._detect_ollama_capacity(), 
-                cost_per_token=0.0
+            ProviderType.LOCAL: ProviderMetrics(
+                ProviderType.LOCAL, capacity=5, cost_per_token=0.0
             ),
-            ProviderType.FASTFLOWLM: ProviderMetrics(ProviderType.FASTFLOWLM, capacity=10, cost_per_token=0.0),
+            ProviderType.GITHUB: ProviderMetrics(
+                ProviderType.GITHUB, capacity=50, cost_per_token=0.0
+            ),
+            ProviderType.AZURE: ProviderMetrics(
+                ProviderType.AZURE, capacity=100, cost_per_token=0.002
+            ),
+            ProviderType.OLLAMA: ProviderMetrics(
+                ProviderType.OLLAMA,
+                capacity=self._detect_ollama_capacity(),
+                cost_per_token=0.0,
+            ),
+            ProviderType.FASTFLOWLM: ProviderMetrics(
+                ProviderType.FASTFLOWLM, capacity=10, cost_per_token=0.0
+            ),
         }
         self._scaling_history: List[ScalingDecision] = []
         self._current_strategy = ScalingStrategy.LATENCY_WEIGHTED
@@ -112,10 +123,11 @@ class ScalingAgent(BaseAgent):
         """
         try:
             import psutil
+
             # Simplified heuristic using system RAM if GPU info unavailable
             # Assuming 4GB per concurrent 7B quant stream
             total_ram_gb = psutil.virtual_memory().total / (1024**3)
-            estimated_slots = int(total_ram_gb // 8) 
+            estimated_slots = int(total_ram_gb // 8)
             return max(1, estimated_slots)
         except ImportError:
             return 3  # Safe default
@@ -152,7 +164,9 @@ class ScalingAgent(BaseAgent):
         elif priority == "cost":
             target = max(3, task_backlog // 4)  # Minimize agents
         else:
-            target = max(5, int(task_backlog / 2) if avg_latency < 1.0 else task_backlog)
+            target = max(
+                5, int(task_backlog / 2) if avg_latency < 1.0 else task_backlog
+            )
 
         # Distribute across providers based on strategy
         distribution = self._calculate_distribution(target, priority)
@@ -190,7 +204,12 @@ class ScalingAgent(BaseAgent):
             "recommended_total": target,
             "provider_distribution": {k.value: v for k, v in distribution.items()},
             "decisions": [
-                {"action": d.action, "provider": d.provider.value, "target": d.target_count, "reason": d.reason}
+                {
+                    "action": d.action,
+                    "provider": d.provider.value,
+                    "target": d.target_count,
+                    "reason": d.reason,
+                }
                 for d in decisions
             ],
             "current_utilization": f"{self.utilization:.1%}",
@@ -207,7 +226,9 @@ class ScalingAgent(BaseAgent):
         # Select target provider based on strategy
         target = self._select_provider(strat)
 
-        logging.info(f"ScalingAgent: Routing swarm {swarm_id} to {target.value} via {strat.value}")
+        logging.info(
+            f"ScalingAgent: Routing swarm {swarm_id} to {target.value} via {strat.value}"
+        )
 
         # Simulate async handoff
         await asyncio.sleep(0.05)
@@ -240,7 +261,11 @@ class ScalingAgent(BaseAgent):
                 "healthy": metrics.is_healthy,
                 "active_agents": metrics.active_agents,
                 "capacity": metrics.capacity,
-                "utilization": f"{metrics.active_agents / metrics.capacity:.1%}" if metrics.capacity > 0 else "N/A",
+                "utilization": (
+                    f"{metrics.active_agents / metrics.capacity:.1%}"
+                    if metrics.capacity > 0
+                    else "N/A"
+                ),
                 "avg_latency_ms": metrics.avg_latency_ms,
                 "error_rate": f"{metrics.error_rate:.1%}",
             }
@@ -287,7 +312,9 @@ class ScalingAgent(BaseAgent):
             ],
         }
 
-    def _calculate_distribution(self, target: int, priority: str) -> Dict[ProviderType, int]:
+    def _calculate_distribution(
+        self, target: int, priority: str
+    ) -> Dict[ProviderType, int]:
         """Distributes agent count across providers based on priority."""
         healthy = {pt: m for pt, m in self._providers.items() if m.is_healthy}
 
@@ -295,7 +322,12 @@ class ScalingAgent(BaseAgent):
             # Prefer free providers
             result = {}
             remaining = target
-            for pt in [ProviderType.LOCAL, ProviderType.OLLAMA, ProviderType.GITHUB, ProviderType.AZURE]:
+            for pt in [
+                ProviderType.LOCAL,
+                ProviderType.OLLAMA,
+                ProviderType.GITHUB,
+                ProviderType.AZURE,
+            ]:
                 if pt in healthy and remaining > 0:
                     alloc = min(remaining, healthy[pt].capacity)
                     result[pt] = alloc
@@ -304,7 +336,9 @@ class ScalingAgent(BaseAgent):
 
         if priority == "speed":
             # Prefer low-latency providers
-            sorted_providers = sorted(healthy.items(), key=lambda x: x[1].avg_latency_ms)
+            sorted_providers = sorted(
+                healthy.items(), key=lambda x: x[1].avg_latency_ms
+            )
             result = {}
             remaining = target
             for pt, m in sorted_providers:
@@ -317,7 +351,10 @@ class ScalingAgent(BaseAgent):
         # balanced
         total_cap = sum(m.capacity for m in healthy.values())
         return (
-            {pt: max(1, int(target * (m.capacity / total_cap))) for pt, m in healthy.items()}
+            {
+                pt: max(1, int(target * (m.capacity / total_cap)))
+                for pt, m in healthy.items()
+            }
             if total_cap > 0
             else {}
         )
@@ -337,7 +374,8 @@ class ScalingAgent(BaseAgent):
         if strategy == ScalingStrategy.LEAST_LOADED:
             return min(
                 healthy,
-                key=lambda pt: self._providers[pt].active_agents / max(1, self._providers[pt].capacity)
+                key=lambda pt: self._providers[pt].active_agents
+                / max(1, self._providers[pt].capacity),
             )
 
         if strategy == ScalingStrategy.LATENCY_WEIGHTED:

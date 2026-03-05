@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_grammarrule_exists():
     """Test that GrammarRule class exists and is importable."""
-    assert 'GrammarRule' in dir()
+    assert "GrammarRule" in dir()
 
 
 def test_ebnfgrammar_exists():
     """Test that EBNFGrammar class exists and is importable."""
-    assert 'EBNFGrammar' in dir()
+    assert "EBNFGrammar" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

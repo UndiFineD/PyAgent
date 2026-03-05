@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "unpack_int4"), "unpack_int4 missing"
     assert hasattr(mod, "compute_scales_minmax"), "compute_scales_minmax missing"
     assert hasattr(mod, "get_quantization_error"), "get_quantization_error missing"
-

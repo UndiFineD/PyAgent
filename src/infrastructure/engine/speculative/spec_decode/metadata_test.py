@@ -15,5 +15,6 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "SpecDecodeMetadataV2"), "SpecDecodeMetadataV2 missing"
     assert hasattr(mod, "TreeVerificationMetadata"), "TreeVerificationMetadata missing"
-    assert hasattr(mod, "SpecDecodeMetadataFactory"), "SpecDecodeMetadataFactory missing"
-
+    assert hasattr(
+        mod, "SpecDecodeMetadataFactory"
+    ), "SpecDecodeMetadataFactory missing"

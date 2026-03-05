@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_azureaiconnector_exists():
     """Test that AzureAIConnector class exists and is importable."""
-    assert 'AzureAIConnector' in dir()
+    assert "AzureAIConnector" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

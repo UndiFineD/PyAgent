@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ChannelType"), "ChannelType missing"
     assert hasattr(mod, "ModalityChannel"), "ModalityChannel missing"
     assert hasattr(mod, "Muxer"), "Muxer missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,14 +24,17 @@ from contextlib import contextmanager, asynccontextmanager
 
 try:
     import portalocker
+
     HAS_PORTALOCKER = True
 except ImportError:
     HAS_PORTALOCKER = False
+
 
 class LockManager:
     """Phase 242/152: Distributed & Async-Ready Lock Manager.
     Supports memory-based (threading.Lock/asyncio.Lock) and file-based (portalocker) locking.
     """
+
     _instance = None
     _mem_locks: dict[str, threading.Lock] = {}
     _async_mem_locks: dict[str, asyncio.Lock] = {}
@@ -60,16 +64,22 @@ class LockManager:
         return self._async_mem_locks[resource_id]
 
     @asynccontextmanager
-    async def acquire_async(self, resource_id: str, lock_type: str = "memory", timeout: float = 10.0) -> AsyncGenerator[None, None]:
+    async def acquire_async(
+        self, resource_id: str, lock_type: str = "memory", timeout: float = 10.0
+    ) -> AsyncGenerator[None, None]:
         """Phase 152: Async-native lock acquisition."""
         if lock_type == "file":
             # File locks are blocking, offload to executor
             loop = asyncio.get_running_loop()
             try:
-                await loop.run_in_executor(None, lambda: self._sync_file_lock_acquire(resource_id, timeout))
+                await loop.run_in_executor(
+                    None, lambda: self._sync_file_lock_acquire(resource_id, timeout)
+                )
                 yield
             finally:
-                await loop.run_in_executor(None, lambda: self._sync_file_lock_release(resource_id))
+                await loop.run_in_executor(
+                    None, lambda: self._sync_file_lock_release(resource_id)
+                )
         else:
             lock = self.get_async_memory_lock(resource_id)
             try:
@@ -83,16 +93,16 @@ class LockManager:
         if HAS_PORTALOCKER:
             lock_obj = portalocker.Lock(str(lock_file), timeout=timeout)
             lock_obj.acquire()
-            # Store lock object for release - this is simplistic, 
+            # Store lock object for release - this is simplistic,
             # in a real system we'd need a better way to track these per-task
-            if not hasattr(self, '_active_file_locks'):
+            if not hasattr(self, "_active_file_locks"):
                 self._active_file_locks = {}
             self._active_file_locks[resource_path] = lock_obj
         else:
             self.get_memory_lock(resource_path).acquire()
 
     def _sync_file_lock_release(self, resource_path: str) -> None:
-        if HAS_PORTALOCKER and hasattr(self, '_active_file_locks'):
+        if HAS_PORTALOCKER and hasattr(self, "_active_file_locks"):
             lock_obj = self._active_file_locks.get(resource_path)
             if lock_obj:
                 lock_obj.release()
@@ -101,12 +111,16 @@ class LockManager:
             self.get_memory_lock(resource_path).release()
 
     @contextmanager
-    def file_lock(self, resource_path: str, timeout: float = 10.0) -> ContextManager[None]:
+    def file_lock(
+        self, resource_path: str, timeout: float = 10.0
+    ) -> ContextManager[None]:
         """A cross-process file lock using portalocker."""
         lock_file = self.lock_dir / f"{os.path.basename(resource_path)}.lock"
-        
+
         if not HAS_PORTALOCKER:
-            logging.warning("portalocker not installed. Falling back to memory-only lock for file.")
+            logging.warning(
+                "portalocker not installed. Falling back to memory-only lock for file."
+            )
             with self.get_memory_lock(resource_path):
                 yield
             return
@@ -115,7 +129,9 @@ class LockManager:
             with portalocker.Lock(str(lock_file), timeout=timeout):
                 yield
         except portalocker.exceptions.LockException:
-            logging.error(f"Could not acquire lock for {resource_path} within {timeout}s")
+            logging.error(
+                f"Could not acquire lock for {resource_path} within {timeout}s"
+            )
             raise TimeoutError(f"Lock acquisition timeout for {resource_path}")
         finally:
             if lock_file.exists():
@@ -127,7 +143,9 @@ class LockManager:
                     pass
 
     @contextmanager
-    def acquire(self, resource_id: str, lock_type: str = "memory", timeout: float = 10.0) -> Generator[None, None, None]:
+    def acquire(
+        self, resource_id: str, lock_type: str = "memory", timeout: float = 10.0
+    ) -> Generator[None, None, None]:
         """Generic lock acquisition helper."""
         if lock_type == "file":
             with self.file_lock(resource_id, timeout):

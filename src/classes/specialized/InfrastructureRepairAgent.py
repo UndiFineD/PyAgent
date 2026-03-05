@@ -9,6 +9,7 @@ import logging
 import sys
 from src.classes.base_agent import BaseAgent
 
+
 class InfrastructureRepairAgent(BaseAgent):
     """Monitors and repairs the agent's execution environment."""
 
@@ -19,13 +20,13 @@ class InfrastructureRepairAgent(BaseAgent):
     def audit_environment(self) -> dict:
         """Checks for common environment issues."""
         issues = []
-        
+
         # Check for common packages
         try:
             import pandas
         except ImportError:
             issues.append({"type": "missing_package", "package": "pandas"})
-            
+
         try:
             import yaml
         except ImportError:
@@ -44,9 +45,11 @@ class InfrastructureRepairAgent(BaseAgent):
                 self._record(cmd_str, "Success", provider="Shell", model="pip")
                 return f"Successfully installed {package}."
             except Exception as e:
-                self._record(cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip")
+                self._record(
+                    cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip"
+                )
                 return f"Failed to install {package}: {e}"
-        
+
         return "Unknown issue type."
 
     def auto_repair(self) -> str:
@@ -54,10 +57,10 @@ class InfrastructureRepairAgent(BaseAgent):
         report = self.audit_environment()
         if report["status"] == "clean":
             return "Environment is healthy."
-            
+
         results = []
         for issue in report["issues"]:
             res = self.repair_issue(issue)
             results.append(res)
-            
+
         return "\n".join(results)

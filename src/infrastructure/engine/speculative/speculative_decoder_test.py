@@ -26,4 +26,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SpeculativeDecoder"), "SpeculativeDecoder missing"
     assert hasattr(mod, "create_ngram_decoder"), "create_ngram_decoder missing"
     assert hasattr(mod, "create_medusa_decoder"), "create_medusa_decoder missing"
-

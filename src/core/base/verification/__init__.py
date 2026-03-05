@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """Verification package initializer.
 
 Re-export commonly used verifier classes so imports like

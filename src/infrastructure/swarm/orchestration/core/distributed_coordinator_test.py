@@ -33,9 +33,10 @@ def test_imports_and_symbols():
     assert hasattr(mod, "WorkerIdentity"), "WorkerIdentity missing"
     assert hasattr(mod, "WorkerProcess"), "WorkerProcess missing"
     assert hasattr(mod, "WorkerState"), "WorkerState missing"
-    assert hasattr(mod, "create_distributed_executor"), "create_distributed_executor missing"
+    assert hasattr(
+        mod, "create_distributed_executor"
+    ), "create_distributed_executor missing"
     assert hasattr(mod, "get_dp_rank"), "get_dp_rank missing"
     assert hasattr(mod, "get_dp_size"), "get_dp_size missing"
     assert hasattr(mod, "get_tp_rank"), "get_tp_rank missing"
     assert hasattr(mod, "get_tp_size"), "get_tp_size missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,7 +57,9 @@ class ToolDraftingCore:
                 "post": {
                     "summary": tool.description,
                     "operationId": tool.name,
-                    "requestBody": {"content": {"application/json": {"schema": tool.parameters}}},
+                    "requestBody": {
+                        "content": {"application/json": {"schema": tool.parameters}}
+                    },
                     "responses": {"200": {"description": "Successful execution"}},
                 }
             }
@@ -73,8 +76,10 @@ class ToolDraftingCore:
         if self._rust_core:
             try:
                 return self._rust_core.validate_tool_name(name)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
         return name.isidentifier() and len(name) > 3
 

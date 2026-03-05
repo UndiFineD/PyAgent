@@ -50,7 +50,10 @@ class FileSystemCore:
         self._ignore_patterns: Set[str] = set()
 
     def discover_files(
-        self, root: Path, patterns: Optional[List[str]] = None, ignore: Optional[List[str]] = None
+        self,
+        root: Path,
+        patterns: Optional[List[str]] = None,
+        ignore: Optional[List[str]] = None,
     ) -> List[Path]:
         """Discovers files matching patterns, respecting ignore list."""
         if patterns is None:
@@ -64,7 +67,9 @@ class FileSystemCore:
     def _can_use_rust_discover(self) -> bool:
         return rc and hasattr(rc, "discover_files_rust")
 
-    def _try_rust_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> Optional[List[Path]]:
+    def _try_rust_discover_files(
+        self, root: Path, patterns: List[str], ignore: Optional[List[str]]
+    ) -> Optional[List[Path]]:
         """Attempt to use the Rust-backed directory walker.
 
         Returns None on any failure so callers fall back to the Python implementation.
@@ -77,10 +82,14 @@ class FileSystemCore:
             # Certain runtime errors (from the extension) should simply fall back
             # to the Python walker. AttributeError can occur when the extension
             # is present but doesn't expose the expected symbol.
-            self.logger.warning("Rust directory walking failed (%s): %s", type(e).__name__, e)
+            self.logger.warning(
+                "Rust directory walking failed (%s): %s", type(e).__name__, e
+            )
             return None
 
-    def _python_discover_files(self, root: Path, patterns: List[str], ignore: Optional[List[str]]) -> List[Path]:
+    def _python_discover_files(
+        self, root: Path, patterns: List[str], ignore: Optional[List[str]]
+    ) -> List[Path]:
         """Fallback Python implementation for finding files.
 
         This is deterministic and intentionally simple so behavior is consistent
@@ -110,7 +119,11 @@ class FileSystemCore:
         return found
 
     def atomic_write(
-        self, path: Union[str, Path], content: str, encoding: str = "utf-8", use_lock: bool = True
+        self,
+        path: Union[str, Path],
+        content: str,
+        encoding: str = "utf-8",
+        use_lock: bool = True,
     ) -> bool:
         """
         Write content to a file atomically by using a temporary file.
@@ -119,7 +132,9 @@ class FileSystemCore:
         p = Path(path)
         return self._atomic_write_with_lock(p, content, encoding, use_lock)
 
-    def _atomic_write_with_lock(self, p: Path, content: str, encoding: str, use_lock: bool) -> bool:
+    def _atomic_write_with_lock(
+        self, p: Path, content: str, encoding: str, use_lock: bool
+    ) -> bool:
         """Write to a temporary file and atomically replace the target.
 
         Uses an advisory lock when requested. Exceptions from OS operations are
@@ -221,18 +236,18 @@ class FileSystemCore:
         p = Path(path)
         if not p.exists():
             return None
-            
+
         # Try Rust for speed
         if rc and hasattr(rc, "generate_hash"):
             try:
-                return rc.generate_hash(p.read_text(encoding="utf-8")) # type: ignore
+                return rc.generate_hash(p.read_text(encoding="utf-8"))  # type: ignore
             except Exception:
                 pass
 
         try:
             sha256_hash = hashlib.sha256()
             # Open in binary mode for correct behavior across platforms.
-            with open(p, 'rb') as f:
+            with open(p, "rb") as f:
                 for byte_block in iter(lambda: f.read(4096), b""):
                     sha256_hash.update(byte_block)
             return sha256_hash.hexdigest()
@@ -247,11 +262,10 @@ class FileSystemCore:
         if rc and hasattr(rc, "bulk_hash_files_rust"):
             try:
                 str_paths = [str(p) for p in paths if p.exists()]
-                results = rc.bulk_hash_files_rust(str_paths) # type: ignore
+                results = rc.bulk_hash_files_rust(str_paths)  # type: ignore
                 return {Path(k): v for k, v in results.items()}
             except Exception:
                 pass
-        
+
         # Fallback
         return {p: self.get_file_hash(p) or "" for p in paths if p.exists()}
-

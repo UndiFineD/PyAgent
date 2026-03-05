@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,8 +23,10 @@ import json
 
 __version__ = VERSION
 
+
 class StatsExporter:
     """Exports stats in various formats."""
+
     def __init__(self, format: str = "json") -> None:
         self.format = format
 

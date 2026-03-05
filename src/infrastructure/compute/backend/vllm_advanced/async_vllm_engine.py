@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -147,10 +148,12 @@ class AsyncRequestHandle:
             return self.generated_tokens / (latency / 1000)
         return None
 
+
 class AsyncVllmEngine:
     """
     AsyncVllmEngine provides high-throughput async inference for PyAgent using vLLM.
     """
+
     _instance: Optional["AsyncVllmEngine"] = None
 
     def __init__(self, config: Optional[AsyncEngineConfig] = None) -> None:
@@ -168,11 +171,14 @@ class AsyncVllmEngine:
         }
 
     @classmethod
-    def get_instance(cls: type["AsyncVllmEngine"], config: Optional[AsyncEngineConfig] = None) -> "AsyncVllmEngine":
+    def get_instance(
+        cls: type["AsyncVllmEngine"], config: Optional[AsyncEngineConfig] = None
+    ) -> "AsyncVllmEngine":
         """Get the singleton instance of the async engine."""
         if cls._instance is None:
             cls._instance = AsyncVllmEngine(config or AsyncEngineConfig())
         return cls._instance
+
     @property
     def _requests(self):
         """Alias for test compatibility (legacy)."""
@@ -222,13 +228,17 @@ class AsyncVllmEngine:
         """Generate unique request ID."""
         return f"req-{uuid.uuid4().hex[:12]}"
 
-    def _format_prompt_with_system(self, prompt: str, system_prompt: Optional[str]) -> str:
+    def _format_prompt_with_system(
+        self, prompt: str, system_prompt: Optional[str]
+    ) -> str:
         """Format prompt with system prompt if provided."""
         if system_prompt:
             return f"{system_prompt}\n\nUser: {prompt}\n\nAssistant:"
         return prompt
 
-    def _create_request_handle(self, request_id: str, full_prompt: str) -> AsyncRequestHandle:
+    def _create_request_handle(
+        self, request_id: str, full_prompt: str
+    ) -> AsyncRequestHandle:
         """Create and register a new request handle."""
         handle = AsyncRequestHandle(
             request_id=request_id,
@@ -241,16 +251,22 @@ class AsyncVllmEngine:
         self._req_tracker[handle.request_id] = handle
         self._stats["total_requests"] += 1
 
-    def _update_request_output(self, handle: AsyncRequestHandle, final_output: Any) -> None:
+    def _update_request_output(
+        self, handle: AsyncRequestHandle, final_output: Any
+    ) -> None:
         """Update request handle with generation output."""
         if final_output and final_output.outputs:
             output = final_output.outputs[0]
             handle.output_text = output.text
-            handle.output_tokens = list(output.token_ids) if hasattr(output, "token_ids") else []
+            handle.output_tokens = (
+                list(output.token_ids) if hasattr(output, "token_ids") else []
+            )
             handle.finish_reason = output.finish_reason
             handle.generated_tokens = len(handle.output_tokens)
             handle.prompt_tokens = (
-                len(final_output.prompt_token_ids) if hasattr(final_output, "prompt_token_ids") else 0
+                len(final_output.prompt_token_ids)
+                if hasattr(final_output, "prompt_token_ids")
+                else 0
             )
 
     def _finalize_request_success(self, handle: AsyncRequestHandle) -> None:
@@ -476,7 +492,9 @@ class AsyncVllmEngine:
         """Get engine statistics."""
         return {
             **self._stats,
-            "active_requests": len([r for r in self._req_tracker.values() if not r.is_finished]),
+            "active_requests": len(
+                [r for r in self._req_tracker.values() if not r.is_finished]
+            ),
             "is_running": self.is_running,
         }
 

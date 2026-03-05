@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_multimodalchunk_exists():
     """Test that MultimodalChunk class exists and is importable."""
-    assert 'MultimodalChunk' in dir()
+    assert "MultimodalChunk" in dir()
 
 
 def test_multimodalcore_exists():
     """Test that MultimodalCore class exists and is importable."""
-    assert 'MultimodalCore' in dir()
+    assert "MultimodalCore" in dir()
 
 
 def test_multimodalcore_instantiation():
@@ -50,4 +50,3 @@ def test_multimodalcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

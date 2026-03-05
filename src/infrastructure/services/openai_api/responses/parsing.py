@@ -20,8 +20,7 @@ Parsing.py module.
 from typing import Any, Dict, List, Optional
 
 from .enums import ResponseType, RoleType, ToolType
-from .models import (Message, Response, ResponseConfig, ToolCallContent,
-                     ToolDefinition)
+from .models import Message, Response, ResponseConfig, ToolCallContent, ToolDefinition
 
 
 class ConversationBuilder:
@@ -29,7 +28,9 @@ class ConversationBuilder:
 
     @staticmethod
     def from_input(
-        input_text: Optional[str], instructions: Optional[str], messages: Optional[List[Message]]
+        input_text: Optional[str],
+        instructions: Optional[str],
+        messages: Optional[List[Message]],
     ) -> List[Message]:
         result = []
         if instructions:
@@ -47,8 +48,12 @@ class ConversationBuilder:
             if output.type == ResponseType.MESSAGE:
                 result.append(Message(role=RoleType.ASSISTANT, content=output.content))
             elif output.type == ResponseType.TOOL_CALL:
-                tool_calls = [part for part in output.content if isinstance(part, ToolCallContent)]
-                result.append(Message(role=RoleType.ASSISTANT, content=[], tool_calls=tool_calls))
+                tool_calls = [
+                    part for part in output.content if isinstance(part, ToolCallContent)
+                ]
+                result.append(
+                    Message(role=RoleType.ASSISTANT, content=[], tool_calls=tool_calls)
+                )
         return result
 
 
@@ -71,7 +76,11 @@ def parse_response_request(data: Dict[str, Any]) -> ResponseConfig:
             )
         else:
             tools.append(
-                ToolDefinition(type=tool_type, name=tool_type.value, description=f"Built-in {tool_type.value} tool")
+                ToolDefinition(
+                    type=tool_type,
+                    name=tool_type.value,
+                    description=f"Built-in {tool_type.value} tool",
+                )
             )
     return ResponseConfig(
         model=data.get("model", ""),

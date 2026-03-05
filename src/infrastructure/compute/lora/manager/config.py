@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -71,7 +72,9 @@ class LoRAConfig:  # pylint: disable=too-many-instance-attributes
     alpha: float = 16.0
     dropout: float = 0.0
     method: LoRAMethod = LoRAMethod.LORA
-    target_modules: List[str] = field(default_factory=lambda: ["q_proj", "k_proj", "v_proj", "o_proj"])
+    target_modules: List[str] = field(
+        default_factory=lambda: ["q_proj", "k_proj", "v_proj", "o_proj"]
+    )
     modules_to_save: List[str] = field(default_factory=list)
     use_rslora: bool = False
     use_dora: bool = False

@@ -33,45 +33,44 @@ except ImportError as e:
 
 def test_memorystate_exists():
     """Test that MemoryState class exists and is importable."""
-    assert 'MemoryState' in dir()
+    assert "MemoryState" in dir()
 
 
 def test_allocationstrategy_exists():
     """Test that AllocationStrategy class exists and is importable."""
-    assert 'AllocationStrategy' in dir()
+    assert "AllocationStrategy" in dir()
 
 
 def test_memoryregion_exists():
     """Test that MemoryRegion class exists and is importable."""
-    assert 'MemoryRegion' in dir()
+    assert "MemoryRegion" in dir()
 
 
 def test_memorysnapshot_exists():
     """Test that MemorySnapshot class exists and is importable."""
-    assert 'MemorySnapshot' in dir()
+    assert "MemorySnapshot" in dir()
 
 
 def test_memorypoolconfig_exists():
     """Test that MemoryPoolConfig class exists and is importable."""
-    assert 'MemoryPoolConfig' in dir()
+    assert "MemoryPoolConfig" in dir()
 
 
 def test_memorypressureevent_exists():
     """Test that MemoryPressureEvent class exists and is importable."""
-    assert 'MemoryPressureEvent' in dir()
+    assert "MemoryPressureEvent" in dir()
 
 
 def test_cumemallocator_exists():
     """Test that CuMemAllocator class exists and is importable."""
-    assert 'CuMemAllocator' in dir()
+    assert "CuMemAllocator" in dir()
 
 
 def test_multigpumemorybalancer_exists():
     """Test that MultiGPUMemoryBalancer class exists and is importable."""
-    assert 'MultiGPUMemoryBalancer' in dir()
+    assert "MultiGPUMemoryBalancer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

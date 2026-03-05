@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,7 +43,9 @@ class RewardModelAgent(BaseAgent):
         )
 
     @as_tool
-    async def rank_proposals(self, task: str, proposals: dict[str, str]) -> dict[str, Any]:
+    async def rank_proposals(
+        self, task: str, proposals: dict[str, str]
+    ) -> dict[str, Any]:
         """Ranks a set of proposals from best to worst and provides reward scores.
 
         Args:
@@ -55,7 +58,9 @@ class RewardModelAgent(BaseAgent):
                 {"task": task[:100], "agent_count": len(proposals)},
             )
 
-        logging.info(f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}...")
+        logging.info(
+            f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}..."
+        )
 
         # In a real system, we'd use a dedicated Reward Model or a strong LLM to judge.
         # Here we use the base agent's reasoning to produce a ranking.
@@ -67,9 +72,7 @@ class RewardModelAgent(BaseAgent):
         for name, content in proposals.items():
             ranking_prompt += f"--- Agent: {name} ---\n{content}\n\n"
 
-        ranking_prompt += (
-            "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }"
-        )
+        ranking_prompt += "Output format: JSON { 'ranking': ['AgentA', 'AgentB'], 'scores': {'AgentA': 9.5, 'AgentB': 7.0} }"
 
         try:
             res = await self.improve_content(ranking_prompt)
@@ -81,7 +84,9 @@ class RewardModelAgent(BaseAgent):
             if match:
                 data = json.loads(match.group(1))
                 return data
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"RewardModel: Failed to parse ranking: {e}")
 
         # Fallback heuristic ranking
@@ -106,5 +111,7 @@ class RewardModelAgent(BaseAgent):
 if __name__ == "__main__":
     from src.core.base.common.base_utilities import create_main_function
 
-    main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")
+    main = create_main_function(
+        RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals"
+    )
     main()

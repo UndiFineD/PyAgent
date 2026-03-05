@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_modelregistrycore_exists():
     """Test that ModelRegistryCore class exists and is importable."""
-    assert 'ModelRegistryCore' in dir()
+    assert "ModelRegistryCore" in dir()
 
 
 def test_modelregistrycore_instantiation():
@@ -45,4 +45,3 @@ def test_modelregistrycore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -115,20 +115,31 @@ class MemoryCore:
         # Python Fallback
         filtered = [m for m in memories if m.get("utility_score", 0.0) >= min_utility]
         # Sort by utility (desc) then timestamp (desc)
-        sorted_m = sorted(filtered, key=lambda x: (x.get("utility_score", 0.0), x.get("timestamp", "")), reverse=True)
+        sorted_m = sorted(
+            filtered,
+            key=lambda x: (x.get("utility_score", 0.0), x.get("timestamp", "")),
+            reverse=True,
+        )
         return sorted_m[:limit]
 
-    def retrieve_memory_graph(self, root_id: str, depth: int = 2) -> list[dict[str, str]]:
+    def retrieve_memory_graph(
+        self, root_id: str, depth: int = 2
+    ) -> list[dict[str, str]]:
         """Rust-accelerated graph traversal for complex memory retrieval."""
         if rc and hasattr(rc, "retrieve_memory_graph_rust"):
             try:
                 # pylint: disable=no-member
                 return rc.retrieve_memory_graph_rust(root_id, depth)  # type: ignore
-            except (RuntimeError, AttributeError) as e:  # pragma: no cover - rust-side failures
+            except (
+                RuntimeError,
+                AttributeError,
+            ) as e:  # pragma: no cover - rust-side failures
                 logger.debug("Rust retrieve_memory_graph_rust failed: %s", e)
 
         # Simple Python fallback (stub)
-        return [{"source": root_id, "target": "related_concept", "relation": "associated"}]
+        return [
+            {"source": root_id, "target": "related_concept", "relation": "associated"}
+        ]
 
     def store_knowledge(
         self,
@@ -136,7 +147,7 @@ class MemoryCore:
         key: str,
         content: Any,
         mode: str = "structured",
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> bool:
         """
         Store knowledge in the agent's partitioned space.
@@ -156,19 +167,29 @@ class MemoryCore:
             logger.error("Failed to store %s knowledge for %s: %s", mode, agent_id, e)
             return False
 
-    def _store_semantic(self, agent_id: str, key: str, content: Any, metadata: Optional[Dict[str, Any]]) -> bool:
+    def _store_semantic(
+        self, agent_id: str, key: str, content: Any, metadata: Optional[Dict[str, Any]]
+    ) -> bool:
         """Internal helper for semantic (vector) storage."""
         try:
             import chromadb  # pylint: disable=import-outside-toplevel
 
             client = chromadb.PersistentClient(path=str(self.base_path / "vector_db"))
             collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
-            collection.add(documents=[str(content)], metadatas=[metadata] if metadata else [{}], ids=[key])
+            collection.add(
+                documents=[str(content)],
+                metadatas=[metadata] if metadata else [{}],
+                ids=[key],
+            )
             return True
         except ImportError as e:
             logger.warning("ChromaDB not available for semantic storage: %s", e)
             return False
-        except (RuntimeError, OSError, ValueError) as e:  # pragma: no cover - external db errors
+        except (
+            RuntimeError,
+            OSError,
+            ValueError,
+        ) as e:  # pragma: no cover - external db errors
             logger.warning("ChromaDB storage failed for %s: %s", agent_id, e)
             return False
 
@@ -195,7 +216,9 @@ class MemoryCore:
 
         return []
 
-    def _retrieve_semantic(self, agent_id: str, query: str, limit: int) -> List[Dict[str, Any]]:
+    def _retrieve_semantic(
+        self, agent_id: str, query: str, limit: int
+    ) -> List[Dict[str, Any]]:
         """Internal helper for semantic retrieval."""
         if rc and hasattr(rc, "semantic_search"):
             try:
@@ -222,22 +245,34 @@ class MemoryCore:
         except ImportError as e:
             logger.warning("ChromaDB not installed for semantic retrieval: %s", e)
             return []
-        except (RuntimeError, OSError, ValueError) as e:  # pragma: no cover - external db errors
+        except (
+            RuntimeError,
+            OSError,
+            ValueError,
+        ) as e:  # pragma: no cover - external db errors
             logger.warning("ChromaDB retrieval failed for %s: %s", agent_id, e)
             return []
 
-    def delete_knowledge(self, agent_id: str, key: str, mode: str = "structured") -> bool:
+    def delete_knowledge(
+        self, agent_id: str, key: str, mode: str = "structured"
+    ) -> bool:
         """Standardized deletion of knowledge."""
         if mode == "semantic":
             try:
                 import chromadb  # pylint: disable=import-outside-toplevel
 
-                client = chromadb.PersistentClient(path=str(self.base_path / "vector_db"))
-                collection = client.get_or_create_collection(name=f"{agent_id}_knowledge")
+                client = chromadb.PersistentClient(
+                    path=str(self.base_path / "vector_db")
+                )
+                collection = client.get_or_create_collection(
+                    name=f"{agent_id}_knowledge"
+                )
                 collection.delete(ids=[key])
                 return True
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 return False
 
         agent_dir = self._get_agent_path(agent_id, mode)

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_speciationorchestrator_exists():
     """Test that SpeciationOrchestrator class exists and is importable."""
-    assert 'SpeciationOrchestrator' in dir()
+    assert "SpeciationOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -17,6 +17,7 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TrieNode"), "TrieNode missing"
     assert hasattr(mod, "BadWordsProcessorV2"), "BadWordsProcessorV2 missing"
     assert hasattr(mod, "apply_bad_words"), "apply_bad_words missing"
-    assert hasattr(mod, "apply_bad_words_with_drafts"), "apply_bad_words_with_drafts missing"
+    assert hasattr(
+        mod, "apply_bad_words_with_drafts"
+    ), "apply_bad_words_with_drafts missing"
     assert hasattr(mod, "BadPhrasesProcessor"), "BadPhrasesProcessor missing"
-

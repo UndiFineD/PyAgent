@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_envvar_exists():
     """Test that EnvVar class exists and is importable."""
-    assert 'EnvVar' in dir()
+    assert "EnvVar" in dir()
 
 
 def test_envconfigmeta_exists():
     """Test that EnvConfigMeta class exists and is importable."""
-    assert 'EnvConfigMeta' in dir()
+    assert "EnvConfigMeta" in dir()
 
 
 def test_envconfig_exists():
     """Test that EnvConfig class exists and is importable."""
-    assert 'EnvConfig' in dir()
+    assert "EnvConfig" in dir()
 
 
 def test_namespacedconfig_exists():
     """Test that NamespacedConfig class exists and is importable."""
-    assert 'NamespacedConfig' in dir()
+    assert "NamespacedConfig" in dir()
 
 
 def test_lazyenvvar_exists():
     """Test that LazyEnvVar class exists and is importable."""
-    assert 'LazyEnvVar' in dir()
+    assert "LazyEnvVar" in dir()
 
 
 def test_temp_env_exists():
     """Test that temp_env class exists and is importable."""
-    assert 'temp_env' in dir()
+    assert "temp_env" in dir()
 
 
 def test_temp_env_instantiation():
@@ -100,4 +100,3 @@ def test_get_env_json_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

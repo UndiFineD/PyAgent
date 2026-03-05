@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_localizationcore_exists():
     """Test that LocalizationCore class exists and is importable."""
-    assert 'LocalizationCore' in globals()
+    assert "LocalizationCore" in globals()
 
 
 def test_localizationcore_instantiation():
@@ -45,4 +45,3 @@ def test_localizationcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

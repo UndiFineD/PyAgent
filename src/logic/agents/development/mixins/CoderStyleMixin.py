@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import logging
 from typing import Any, List, Dict, Tuple
 from src.core.base.types.StyleRule import StyleRule
 
+
 class CoderStyleMixin:
     """Mixin for style checking and auto-fixing."""
 
@@ -43,13 +45,13 @@ class CoderStyleMixin:
                 violations.extend(self._check_line_rule(lines, rule))
         return violations
 
-    def _check_style_rust(self, content: str, rules: List[StyleRule]) -> List[Dict[str, Any]]:
+    def _check_style_rust(
+        self, content: str, rules: List[StyleRule]
+    ) -> List[Dict[str, Any]]:
         """Internal helper for Rust-accelerated style checking."""
         patterns = []
         for rule in rules:
-            if rule.enabled and (
-                not rule.language or rule.language == self.language
-            ):
+            if rule.enabled and (not rule.language or rule.language == self.language):
                 patterns.append((rule.name, rule.pattern))
 
         try:
@@ -64,9 +66,11 @@ class CoderStyleMixin:
                         {
                             "rule": rule.name,
                             "message": rule.message,
-                            "severity": rule.severity.value
-                            if hasattr(rule.severity, "value")
-                            else str(rule.severity),
+                            "severity": (
+                                rule.severity.value
+                                if hasattr(rule.severity, "value")
+                                else str(rule.severity)
+                            ),
                             "line": line,
                             "content": match_content,
                         }
@@ -76,7 +80,9 @@ class CoderStyleMixin:
             logging.warning(f"Rust optimization failed for check_style: {e}")
             return []
 
-    def _check_multiline_rule(self, content: str, rule: StyleRule) -> List[Dict[str, Any]]:
+    def _check_multiline_rule(
+        self, content: str, rule: StyleRule
+    ) -> List[Dict[str, Any]]:
         """Check a rule that spans multiple lines or requires multiline mode."""
         violations = []
         for match in re.finditer(rule.pattern, content, re.MULTILINE):
@@ -85,16 +91,20 @@ class CoderStyleMixin:
                 {
                     "rule": rule.name,
                     "message": rule.message,
-                    "severity": rule.severity.value
-                    if hasattr(rule.severity, "value")
-                    else str(rule.severity),
+                    "severity": (
+                        rule.severity.value
+                        if hasattr(rule.severity, "value")
+                        else str(rule.severity)
+                    ),
                     "line": line_no,
                     "content": match.group(0).split("\n")[0][:80],
                 }
             )
         return violations
 
-    def _check_line_rule(self, lines: List[str], rule: StyleRule) -> List[Dict[str, Any]]:
+    def _check_line_rule(
+        self, lines: List[str], rule: StyleRule
+    ) -> List[Dict[str, Any]]:
         """Check a rule against individual lines."""
         violations = []
         for i, line in enumerate(lines, 1):
@@ -103,9 +113,11 @@ class CoderStyleMixin:
                     {
                         "rule": rule.name,
                         "message": rule.message,
-                        "severity": rule.severity.value
-                        if hasattr(rule.severity, "value")
-                        else str(rule.severity),
+                        "severity": (
+                            rule.severity.value
+                            if hasattr(rule.severity, "value")
+                            else str(rule.severity)
+                        ),
                         "line": i,
                         "content": line[:80],
                     }

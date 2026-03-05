@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_tokenizerlike_exists():
     """Test that TokenizerLike class exists and is importable."""
-    assert 'TokenizerLike' in dir()
+    assert "TokenizerLike" in dir()
 
 
 def test_detokenizeresult_exists():
     """Test that DetokenizeResult class exists and is importable."""
-    assert 'DetokenizeResult' in dir()
+    assert "DetokenizeResult" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

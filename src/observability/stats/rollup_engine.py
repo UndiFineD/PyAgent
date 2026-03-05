@@ -76,7 +76,9 @@ class StatsRollupCalculator:
         self.rollups[metric] = results
         return results
 
-    def calculate_rollup(self, metrics: list[float], aggregation_type: AggregationType) -> float:
+    def calculate_rollup(
+        self, metrics: list[float], aggregation_type: AggregationType
+    ) -> float:
         if not metrics:
             return 0.0
         if aggregation_type == AggregationType.SUM:
@@ -120,7 +122,9 @@ class StatsRollup:
         self.rollups[name] = []
         return config
 
-    def add_value(self, metric_name: str, value: float, timestamp: datetime | None = None) -> None:
+    def add_value(
+        self, metric_name: str, value: float, timestamp: datetime | None = None
+    ) -> None:
         ts: datetime = timestamp or datetime.now()
         if metric_name not in self._raw_data:
             self._raw_data[metric_name] = []
@@ -152,27 +156,45 @@ class StatsRollup:
             self._clear_raw_data(config)
         return self.rollups[name]
 
-    def _try_rust_aggregation(self, config: RollupConfig, all_values: list[float]) -> float | None:
+    def _try_rust_aggregation(
+        self, config: RollupConfig, all_values: list[float]
+    ) -> float | None:
         if not _RUST_AVAILABLE:
             return None
         with contextlib.suppress(Exception):
-            if config.aggregation == AggregationType.SUM and hasattr(rust_core, "calculate_sum_rust"):
+            if config.aggregation == AggregationType.SUM and hasattr(
+                rust_core, "calculate_sum_rust"
+            ):
                 return rust_core.calculate_sum_rust(all_values)
-            elif config.aggregation == AggregationType.AVG and hasattr(rust_core, "calculate_avg_rust"):
+            elif config.aggregation == AggregationType.AVG and hasattr(
+                rust_core, "calculate_avg_rust"
+            ):
                 return rust_core.calculate_avg_rust(all_values)
-            elif config.aggregation == AggregationType.MIN and hasattr(rust_core, "calculate_min_rust"):
+            elif config.aggregation == AggregationType.MIN and hasattr(
+                rust_core, "calculate_min_rust"
+            ):
                 return rust_core.calculate_min_rust(all_values)
-            elif config.aggregation == AggregationType.MAX and hasattr(rust_core, "calculate_max_rust"):
+            elif config.aggregation == AggregationType.MAX and hasattr(
+                rust_core, "calculate_max_rust"
+            ):
                 return rust_core.calculate_max_rust(all_values)
-            elif config.aggregation == AggregationType.P50 and hasattr(rust_core, "calculate_median_rust"):
+            elif config.aggregation == AggregationType.P50 and hasattr(
+                rust_core, "calculate_median_rust"
+            ):
                 return rust_core.calculate_median_rust(all_values)
-            elif config.aggregation == AggregationType.P95 and hasattr(rust_core, "calculate_p95_rust"):
+            elif config.aggregation == AggregationType.P95 and hasattr(
+                rust_core, "calculate_p95_rust"
+            ):
                 return rust_core.calculate_p95_rust(all_values)
-            elif config.aggregation == AggregationType.P99 and hasattr(rust_core, "calculate_p99_rust"):
+            elif config.aggregation == AggregationType.P99 and hasattr(
+                rust_core, "calculate_p99_rust"
+            ):
                 return rust_core.calculate_p99_rust(all_values)
         return None
 
-    def _python_aggregation(self, config: RollupConfig, all_values: list[float]) -> float:
+    def _python_aggregation(
+        self, config: RollupConfig, all_values: list[float]
+    ) -> float:
         agg = config.aggregation
         if agg == AggregationType.SUM:
             return sum(all_values)
@@ -189,7 +211,9 @@ class StatsRollup:
         else:
             return sum(all_values) / len(all_values)
 
-    def _percentile_aggregation(self, agg: AggregationType, all_values: list[float]) -> float:
+    def _percentile_aggregation(
+        self, agg: AggregationType, all_values: list[float]
+    ) -> float:
         sorted_vals = sorted(all_values)
         if agg == AggregationType.P50:
             return sorted_vals[len(sorted_vals) // 2]
@@ -233,7 +257,11 @@ class StatsQueryEngine:
             if start is not None or end is not None:
                 start_v: float = float(start) if start is not None else float("-inf")
                 end_v: float = float(end) if end is not None else float("inf")
-                rows = [r for r in rows if start_v <= float(r.get("timestamp", 0.0)) <= end_v]
+                rows = [
+                    r
+                    for r in rows
+                    if start_v <= float(r.get("timestamp", 0.0)) <= end_v
+                ]
 
             if aggregation:
                 values: list[float] = []
@@ -275,7 +303,9 @@ class CorrelationAnalyzer:
     """Analyze correlations between metrics."""
 
     def __init__(self) -> None:
-        self.correlations: list[Any] = []  # Use Any for MetricCorrelation to avoid circular import if needed
+        self.correlations: list[Any] = (
+            []
+        )  # Use Any for MetricCorrelation to avoid circular import if needed
         self._metric_history: dict[str, list[float]] = {}
         self.core = CorrelationCore()
 
@@ -302,7 +332,9 @@ class CorrelationAnalyzer:
             # Pearson correlation fallback
             mean_a: float = sum(values_a) / n
             mean_b: float = sum(values_b) / n
-            numerator: float | int = sum((values_a[i] - mean_a) * (values_b[i] - mean_b) for i in range(n))
+            numerator: float | int = sum(
+                (values_a[i] - mean_a) * (values_b[i] - mean_b) for i in range(n)
+            )
             denom_a: float = math.sqrt(sum((x - mean_a) ** 2 for x in values_a))
             denom_b: float = math.sqrt(sum((x - mean_b) ** 2 for x in values_b))
             if denom_a == 0 or denom_b == 0:
@@ -328,8 +360,9 @@ class CorrelationAnalyzer:
 
         # Rust-accelerated O(N²) pairwise correlation
         with contextlib.suppress(ImportError, Exception):
-            from rust_core import \
-                find_strong_correlations_rust  # pylint: disable=no-name-in-module
+            from rust_core import (
+                find_strong_correlations_rust,
+            )  # pylint: disable=no-name-in-module
 
             metric_values: list[list[float]] = [self._metric_history[k] for k in keys]
             rust_results = find_strong_correlations_rust(metric_values, threshold)

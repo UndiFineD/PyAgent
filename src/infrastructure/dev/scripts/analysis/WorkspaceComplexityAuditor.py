@@ -27,6 +27,7 @@ try:
 except ImportError:
     rc = None
 
+
 def run_audit(target_dir: str, threshold: int = 25, limit: int = 20):
     """Scans the target directory for Python files exceeding the complexity threshold."""
     if rc is None:
@@ -35,7 +36,7 @@ def run_audit(target_dir: str, threshold: int = 25, limit: int = 20):
 
     workspace_root = Path(__file__).resolve().parents[5]
     scan_path = (workspace_root / target_dir).resolve()
-    
+
     if not scan_path.exists():
         print(f"Error: Path {scan_path} does not exist.")
         return
@@ -52,25 +53,29 @@ def run_audit(target_dir: str, threshold: int = 25, limit: int = 20):
                     content = full_path.read_text(encoding="utf-8", errors="ignore")
                     comp = rc.calculate_cyclomatic_complexity(content)
                     if comp > threshold:
-                        targets.append({
-                            "file": str(rel_path),
-                            "complexity": comp
-                        })
+                        targets.append({"file": str(rel_path), "complexity": comp})
                 except Exception as e:
                     logging.debug(f"Failed to analyze {rel_path}: {e}")
 
     targets.sort(key=lambda x: x["complexity"], reverse=True)
-    
+
     print(f"\nFound {len(targets)} files with complexity > {threshold}:")
     for t in targets[:limit]:
         marker = "***" if t["complexity"] >= threshold else "   "
         print(f"{marker} {t['complexity']:<2} : {t['file']}")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Audit workspace code complexity.")
-    parser.add_argument("--dir", type=str, default="src", help="Directory to scan (relative to root).")
-    parser.add_argument("--threshold", type=int, default=25, help="Complexity threshold.")
-    parser.add_argument("--limit", type=int, default=20, help="Number of results to display.")
-    
+    parser.add_argument(
+        "--dir", type=str, default="src", help="Directory to scan (relative to root)."
+    )
+    parser.add_argument(
+        "--threshold", type=int, default=25, help="Complexity threshold."
+    )
+    parser.add_argument(
+        "--limit", type=int, default=20, help="Number of results to display."
+    )
+
     args = parser.parse_args()
     run_audit(args.dir, args.threshold, args.limit)

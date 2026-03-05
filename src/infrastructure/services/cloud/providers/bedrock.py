@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -194,7 +195,9 @@ class AWSBedrockConnector(CloudProviderBase):
             elif error_code == "AccessDeniedException":
                 raise AuthenticationError(str(e), provider=self.name)
             raise CloudProviderError(f"Bedrock error: {str(e)}", provider=self.name)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             raise CloudProviderError(f"Unexpected error: {str(e)}", provider=self.name)
 
     async def stream(self, request: InferenceRequest) -> AsyncIterator[str]:
@@ -223,7 +226,9 @@ class AWSBedrockConnector(CloudProviderBase):
                     text: str = self._extract_text_from_chunk(chunk, request.model)
                     if text:
                         yield text
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Bedrock streaming error: {str(e)}")
             raise CloudProviderError(f"Streaming failed: {str(e)}", provider=self.name)
 
@@ -275,7 +280,9 @@ class AWSBedrockConnector(CloudProviderBase):
                 await client.list_foundation_models(byOutputModality="TEXT")
                 self._is_healthy = True
                 return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"Bedrock health check failed: {str(e)}")
             self._is_healthy = False
             self._last_error = str(e)
@@ -292,10 +299,14 @@ class AWSBedrockConnector(CloudProviderBase):
             Estimated cost in USD.
         """
         model: str = request.model
-        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 1.0, "output": 3.0})
+        pricing: Dict[str, float] = self.PRICING.get(
+            model, {"input": 1.0, "output": 3.0}
+        )
 
         # Rough estimate: assume 4 chars per token
-        input_tokens: int = sum(len(m.get("content", "")) for m in request.messages) // 4
+        input_tokens: int = (
+            sum(len(m.get("content", "")) for m in request.messages) // 4
+        )
         output_tokens: int = request.max_tokens
 
         input_cost: float = (input_tokens / 1_000_000) * pricing["input"]
@@ -407,7 +418,9 @@ class AWSBedrockConnector(CloudProviderBase):
         for msg in messages:
             role: str = msg.get("role", "user")
             content: str = msg.get("content", "")
-            prompt += f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>"
+            prompt += (
+                f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>"
+            )
         prompt += "<|start_header_id|>assistant<|end_header_id|>\n\n"
         return prompt
 

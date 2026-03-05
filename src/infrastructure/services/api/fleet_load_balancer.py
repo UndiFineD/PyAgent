@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,14 +19,15 @@ Fleet load balancer.py module.
 """
 
 
-
 import logging
 from typing import Any
 
 from src.core.base.lifecycle.version import VERSION
 from src.infrastructure.services.api.core.gateway_core import GatewayCore
 from src.infrastructure.swarm.fleet.core.load_balancer_core import (
-    AgentMetrics, LoadBalancerCore)
+    AgentMetrics,
+    LoadBalancerCore,
+)
 
 __version__: str = VERSION
 
@@ -48,7 +50,9 @@ class FleetLoadBalancer:
         Routes the request to the most available resource or queues it.
         Assigns model based on Interface Affinity.
         """
-        logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
+        logging.info(
+            f"LoadBalancer: Incoming request from {interface}: {command[:30]}..."
+        )
 
         assigned_model: str = self.gateway_core.resolve_model_by_affinity(interface)
 
@@ -56,7 +60,9 @@ class FleetLoadBalancer:
         if len(self.request_queue) > 100:
             return {"status": "REJECTED", "reason": "High Traffic Load"}
 
-        self.request_queue.append({"interface": interface, "command": command, "model": assigned_model})
+        self.request_queue.append(
+            {"interface": interface, "command": command, "model": assigned_model}
+        )
 
         return {
             "status": "ACCEPTED",
@@ -69,5 +75,7 @@ class FleetLoadBalancer:
         """Get current load balancer statistics."""
         return {
             "queue_depth": len(self.request_queue),
-            "interface_diversity": list(set(r["interface"] for r in self.request_queue)),
+            "interface_diversity": list(
+                set(r["interface"] for r in self.request_queue)
+            ),
         }

@@ -5,7 +5,13 @@
 import threading
 import logging
 from typing import Any, Callable, Dict, List, Optional
-from .config import TemplateType, TemplateConfig, TemplateInfo, BUILTIN_TEMPLATES, MODEL_TEMPLATE_MAP
+from .config import (
+    TemplateType,
+    TemplateConfig,
+    TemplateInfo,
+    BUILTIN_TEMPLATES,
+    MODEL_TEMPLATE_MAP,
+)
 from .base import ChatTemplate
 from .jinja import JinjaTemplate
 

@@ -10,17 +10,20 @@ import time
 import urllib.parse
 from typing import Dict, Any, Optional
 
+
 class NotificationCore:
     """Pure logic core for notification management."""
 
     @staticmethod
-    def construct_payload(event_name: str, event_data: Dict[str, Any]) -> Dict[str, Any]:
+    def construct_payload(
+        event_name: str, event_data: Dict[str, Any]
+    ) -> Dict[str, Any]:
         """Formats the JSON payload for webhook delivery."""
         return {
-            'event': event_name,
-            'timestamp': time.time(),
-            'data': event_data,
-            'version': '1.1.0'
+            "event": event_name,
+            "timestamp": time.time(),
+            "data": event_data,
+            "version": "1.1.0",
         }
 
     @staticmethod

@@ -17,12 +17,15 @@ import json
 from pathlib import Path
 from typing import Optional, Dict
 
+
 class SessionSignal(enum.Enum):
     """Signals for agent session lifecycle control."""
+
     RUNNING = "running"
     PAUSE = "pause"
     STOP = "stop"
     RESUME = "resume"
+
 
 class SessionControlCore:
     """
@@ -42,7 +45,7 @@ class SessionControlCore:
         """Sets a control signal for a specific session."""
         file_path = self._get_signal_file(session_id)
         data = {"signal": signal.value, "session_id": session_id}
-        
+
         # In a real system, this would be an atomic write or a Redis call.
         with open(file_path, "w", encoding="utf-8") as f:
             json.dump(data, f)
@@ -52,7 +55,7 @@ class SessionControlCore:
         file_path = self._get_signal_file(session_id)
         if not file_path.exists():
             return SessionSignal.RUNNING
-        
+
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 data = json.load(f)

@@ -7,6 +7,7 @@ try:
 except ImportError:
     rc = None
 
+
 class ValidationCore:
     def validate_config(self, config: AgentConfig) -> Tuple[bool, str]:
         """Validate agent configuration."""
@@ -22,7 +23,9 @@ class ValidationCore:
             return False, "timeout must be > 0"
         return True, ""
 
-    def is_response_valid(self, response: str, min_length: int = 10) -> Tuple[bool, str]:
+    def is_response_valid(
+        self, response: str, min_length: int = 10
+    ) -> Tuple[bool, str]:
         """Validate response meets minimum criteria."""
         if rc:
             try:

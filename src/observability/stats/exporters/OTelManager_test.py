@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_span_exists():
     """Test that Span class exists and is importable."""
-    assert 'Span' in dir()
+    assert "Span" in dir()
 
 
 def test_otelmanager_exists():
     """Test that OTelManager class exists and is importable."""
-    assert 'OTelManager' in dir()
+    assert "OTelManager" in dir()
 
 
 def test_otelmanager_instantiation():
@@ -50,4 +50,3 @@ def test_otelmanager_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

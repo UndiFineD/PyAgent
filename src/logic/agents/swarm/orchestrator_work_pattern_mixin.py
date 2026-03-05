@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -74,10 +75,7 @@ class OrchestratorWorkPatternMixin:
         return list(self._work_patterns.keys())
 
     async def execute_with_pattern(
-        self,
-        context: CascadeContext,
-        pattern_name: Optional[str] = None,
-        **kwargs: Any
+        self, context: CascadeContext, pattern_name: Optional[str] = None, **kwargs: Any
     ) -> Dict[str, Any]:
         """Execute a task using a specific work pattern.
 
@@ -115,7 +113,9 @@ class OrchestratorWorkPatternMixin:
             return False
 
         if not pattern.validate_agents():
-            logger.warning(f"Work pattern '{pattern_name}' has invalid agent configuration")
+            logger.warning(
+                f"Work pattern '{pattern_name}' has invalid agent configuration"
+            )
             return False
 
         return True

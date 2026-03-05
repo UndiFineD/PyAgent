@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """Run only generated `test_auto_*.py` tests under `tests/unit/`.
 This script collects matching test files and invokes pytest on them directly to avoid
 collecting unrelated tests.
@@ -12,7 +13,7 @@ import subprocess
 import os
 
 ROOT = Path(__file__).resolve().parents[2]
-TESTS_DIR = ROOT / 'tests' / 'unit'
+TESTS_DIR = ROOT / "tests" / "unit"
 
 
 def _run_file(path_str: str) -> tuple[str, int]:
@@ -22,13 +23,20 @@ def _run_file(path_str: str) -> tuple[str, int]:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--workers', '-w', type=int, default=0, help='Number of parallel workers (0=auto)')
+    parser.add_argument(
+        "--workers",
+        "-w",
+        type=int,
+        default=0,
+        help="Number of parallel workers (0=auto)",
+    )
     args = parser.parse_args()
 
-    files = sorted(TESTS_DIR.glob('test_auto_*.py'))
+    files = sorted(TESTS_DIR.glob("test_auto_*.py"))
     if not files:
-        print('No generated tests found (test_auto_*.py)')
+        print("No generated tests found (test_auto_*.py)")
         return 0
+
     # Many generated tests use top-level asserts; run each test file as a separate
     # Python process so top-level asserts execute and tests run in parallel.
     def os_cpu_count() -> int | None:
@@ -48,17 +56,17 @@ def main():
                 _, code = fut.result()
             except Exception as e:
                 failures += 1
-                print('FAILED:', path, '-', e)
+                print("FAILED:", path, "-", e)
                 continue
             if code != 0:
                 failures += 1
-                print('FAILED:', path, f'exit {code}')
+                print("FAILED:", path, f"exit {code}")
     if failures:
-        print(f'{failures} test files failed')
+        print(f"{failures} test files failed")
     else:
-        print('All generated tests passed')
+        print("All generated tests passed")
     return 0 if failures == 0 else 2
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(main())

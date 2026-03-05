@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_subswarm_exists():
     """Test that SubSwarm class exists and is importable."""
-    assert 'SubSwarm' in dir()
+    assert "SubSwarm" in dir()
 
 
 def test_subswarmspawner_exists():
     """Test that SubSwarmSpawner class exists and is importable."""
-    assert 'SubSwarmSpawner' in dir()
+    assert "SubSwarmSpawner" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

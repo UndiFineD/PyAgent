@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_resourceallocation_exists():
     """Test that ResourceAllocation class exists and is importable."""
-    assert 'ResourceAllocation' in dir()
+    assert "ResourceAllocation" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

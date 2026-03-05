@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "Vote"), "Vote missing"
     assert hasattr(mod, "VotingSession"), "VotingSession missing"
     assert hasattr(mod, "VotingAgent"), "VotingAgent missing"
-

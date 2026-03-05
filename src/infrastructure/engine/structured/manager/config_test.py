@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "CompilationResult"), "CompilationResult missing"
     assert hasattr(mod, "ValidationResult"), "ValidationResult missing"
     assert hasattr(mod, "BackendStats"), "BackendStats missing"
-

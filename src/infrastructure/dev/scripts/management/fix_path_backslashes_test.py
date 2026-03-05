@@ -39,4 +39,3 @@ def test_fix_path_backslashes_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

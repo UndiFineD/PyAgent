@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_tensormetadata_exists():
     """Test that TensorMetadata class exists and is importable."""
-    assert 'TensorMetadata' in dir()
+    assert "TensorMetadata" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_videoloader_exists():
     """Test that VideoLoader class exists and is importable."""
-    assert 'VideoLoader' in dir()
+    assert "VideoLoader" in dir()
 
 
 def test_videoloader_instantiation():
@@ -45,4 +45,3 @@ def test_videoloader_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

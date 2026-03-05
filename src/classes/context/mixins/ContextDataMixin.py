@@ -9,8 +9,10 @@ except Exception:
             ContextDataMixin as _ContextDataMixin,
         )
     except Exception:
+
         class _ContextDataMixin:
             pass
+
 
 ContextDataMixin = _ContextDataMixin
 

@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_modalitytype_exists():
     """Test that ModalityType class exists and is importable."""
-    assert 'ModalityType' in dir()
+    assert "ModalityType" in dir()
 
 
 def test_multimodalconfig_exists():
     """Test that MultiModalConfig class exists and is importable."""
-    assert 'MultiModalConfig' in dir()
+    assert "MultiModalConfig" in dir()
 
 
 def test_placeholderinfo_exists():
     """Test that PlaceholderInfo class exists and is importable."""
-    assert 'PlaceholderInfo' in dir()
+    assert "PlaceholderInfo" in dir()
 
 
 def test_multimodaldata_exists():
     """Test that MultiModalData class exists and is importable."""
-    assert 'MultiModalData' in dir()
+    assert "MultiModalData" in dir()
 
 
 def test_multimodalinputs_exists():
     """Test that MultiModalInputs class exists and is importable."""
-    assert 'MultiModalInputs' in dir()
+    assert "MultiModalInputs" in dir()
 
 
 def test_basemultimodalprocessor_exists():
     """Test that BaseMultiModalProcessor class exists and is importable."""
-    assert 'BaseMultiModalProcessor' in dir()
+    assert "BaseMultiModalProcessor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

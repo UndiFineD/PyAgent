@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RegressionType"), "RegressionType missing"
     assert hasattr(mod, "RegressionResult"), "RegressionResult missing"
     assert hasattr(mod, "RegressionAgent"), "RegressionAgent missing"
-

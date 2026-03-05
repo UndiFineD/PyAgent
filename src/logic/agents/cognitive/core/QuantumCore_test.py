@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_quantumcore_exists():
     """Test that QuantumCore class exists and is importable."""
-    assert 'QuantumCore' in dir()
+    assert "QuantumCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

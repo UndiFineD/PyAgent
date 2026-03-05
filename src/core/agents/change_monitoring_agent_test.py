@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_changedatasource_exists():
     """Test that ChangeDataSource class exists and is importable."""
-    assert 'ChangeDataSource' in dir()
+    assert "ChangeDataSource" in dir()
 
 
 def test_filesystemdatasource_exists():
     """Test that FileSystemDataSource class exists and is importable."""
-    assert 'FileSystemDataSource' in dir()
+    assert "FileSystemDataSource" in dir()
 
 
 def test_historymanager_exists():
     """Test that HistoryManager class exists and is importable."""
-    assert 'HistoryManager' in dir()
+    assert "HistoryManager" in dir()
 
 
 def test_changemonitoringagent_exists():
     """Test that ChangeMonitoringAgent class exists and is importable."""
-    assert 'ChangeMonitoringAgent' in dir()
+    assert "ChangeMonitoringAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

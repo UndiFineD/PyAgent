@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_medialoader_exists():
     """Test that MediaLoader class exists and is importable."""
-    assert 'MediaLoader' in dir()
+    assert "MediaLoader" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

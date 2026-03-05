@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -298,7 +299,9 @@ class GuidedDecoder:
         )
 
         # Add choice instruction
-        choice_prompt = f"{prompt}\n\nRespond with exactly one of: {', '.join(choice_list)}"
+        choice_prompt = (
+            f"{prompt}\n\nRespond with exactly one of: {', '.join(choice_list)}"
+        )
 
         result = self.generate(
             choice_prompt,

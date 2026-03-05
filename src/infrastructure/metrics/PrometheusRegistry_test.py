@@ -33,72 +33,72 @@ except ImportError as e:
 
 def test_metrictype_exists():
     """Test that MetricType class exists and is importable."""
-    assert 'MetricType' in dir()
+    assert "MetricType" in dir()
 
 
 def test_metricsbackend_exists():
     """Test that MetricsBackend class exists and is importable."""
-    assert 'MetricsBackend' in dir()
+    assert "MetricsBackend" in dir()
 
 
 def test_metricspec_exists():
     """Test that MetricSpec class exists and is importable."""
-    assert 'MetricSpec' in dir()
+    assert "MetricSpec" in dir()
 
 
 def test_metricvalue_exists():
     """Test that MetricValue class exists and is importable."""
-    assert 'MetricValue' in dir()
+    assert "MetricValue" in dir()
 
 
 def test_metriccollector_exists():
     """Test that MetricCollector class exists and is importable."""
-    assert 'MetricCollector' in dir()
+    assert "MetricCollector" in dir()
 
 
 def test_counter_exists():
     """Test that Counter class exists and is importable."""
-    assert 'Counter' in dir()
+    assert "Counter" in dir()
 
 
 def test_gauge_exists():
     """Test that Gauge class exists and is importable."""
-    assert 'Gauge' in dir()
+    assert "Gauge" in dir()
 
 
 def test_histogrambucket_exists():
     """Test that HistogramBucket class exists and is importable."""
-    assert 'HistogramBucket' in dir()
+    assert "HistogramBucket" in dir()
 
 
 def test_histogram_exists():
     """Test that Histogram class exists and is importable."""
-    assert 'Histogram' in dir()
+    assert "Histogram" in dir()
 
 
 def test_summary_exists():
     """Test that Summary class exists and is importable."""
-    assert 'Summary' in dir()
+    assert "Summary" in dir()
 
 
 def test_metricsregistry_exists():
     """Test that MetricsRegistry class exists and is importable."""
-    assert 'MetricsRegistry' in dir()
+    assert "MetricsRegistry" in dir()
 
 
 def test_sampledcounter_exists():
     """Test that SampledCounter class exists and is importable."""
-    assert 'SampledCounter' in dir()
+    assert "SampledCounter" in dir()
 
 
 def test_ratelimitedgauge_exists():
     """Test that RateLimitedGauge class exists and is importable."""
-    assert 'RateLimitedGauge' in dir()
+    assert "RateLimitedGauge" in dir()
 
 
 def test_vllmmetrics_exists():
     """Test that VLLMMetrics class exists and is importable."""
-    assert 'VLLMMetrics' in dir()
+    assert "VLLMMetrics" in dir()
 
 
 def test_get_metrics_exists():
@@ -109,4 +109,3 @@ def test_get_metrics_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 
 import asyncio
@@ -100,7 +100,9 @@ class ContextManager:
                 await self.purge_expired_contexts()
             except asyncio.CancelledError:
                 break
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Error in context cleanup: {e}")
 
     async def purge_expired_contexts(self) -> int:
@@ -166,7 +168,9 @@ def create_context(
 
 
 def merge_contexts(
-    primary: ConversationContext, secondary: ConversationContext, deduplicate: bool = True
+    primary: ConversationContext,
+    secondary: ConversationContext,
+    deduplicate: bool = True,
 ) -> ConversationContext:
     """Merge turns from secondary into primary context."""
     primary.import_turns(secondary.turns, deduplicate=deduplicate)

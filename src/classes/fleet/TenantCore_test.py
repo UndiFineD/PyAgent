@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_tenantcore_exists():
     """Test that TenantCore class exists and is importable."""
-    assert 'TenantCore' in dir()
+    assert "TenantCore" in dir()
 
 
 def test_tenantcore_instantiation():
@@ -45,4 +45,3 @@ def test_tenantcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

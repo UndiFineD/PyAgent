@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_resourcepredictororchestrator_exists():
     """Test that ResourcePredictorOrchestrator class exists and is importable."""
-    assert 'ResourcePredictorOrchestrator' in dir()
+    assert "ResourcePredictorOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

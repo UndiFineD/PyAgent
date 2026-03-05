@@ -33,60 +33,59 @@ except ImportError as e:
 
 def test_samplingstrategy_exists():
     """Test that SamplingStrategy class exists and is importable."""
-    assert 'SamplingStrategy' in dir()
+    assert "SamplingStrategy" in dir()
 
 
 def test_outputkind_exists():
     """Test that OutputKind class exists and is importable."""
-    assert 'OutputKind' in dir()
+    assert "OutputKind" in dir()
 
 
 def test_samplingparams_exists():
     """Test that SamplingParams class exists and is importable."""
-    assert 'SamplingParams' in dir()
+    assert "SamplingParams" in dir()
 
 
 def test_completionoutput_exists():
     """Test that CompletionOutput class exists and is importable."""
-    assert 'CompletionOutput' in dir()
+    assert "CompletionOutput" in dir()
 
 
 def test_parentrequest_exists():
     """Test that ParentRequest class exists and is importable."""
-    assert 'ParentRequest' in dir()
+    assert "ParentRequest" in dir()
 
 
 def test_parallelsamplingmanager_exists():
     """Test that ParallelSamplingManager class exists and is importable."""
-    assert 'ParallelSamplingManager' in dir()
+    assert "ParallelSamplingManager" in dir()
 
 
 def test_beamstate_exists():
     """Test that BeamState class exists and is importable."""
-    assert 'BeamState' in dir()
+    assert "BeamState" in dir()
 
 
 def test_beamsearchmanager_exists():
     """Test that BeamSearchManager class exists and is importable."""
-    assert 'BeamSearchManager' in dir()
+    assert "BeamSearchManager" in dir()
 
 
 def test_diversesamplingmanager_exists():
     """Test that DiverseSamplingManager class exists and is importable."""
-    assert 'DiverseSamplingManager' in dir()
+    assert "DiverseSamplingManager" in dir()
 
 
 def test_bestofnfilter_exists():
     """Test that BestOfNFilter class exists and is importable."""
-    assert 'BestOfNFilter' in dir()
+    assert "BestOfNFilter" in dir()
 
 
 def test_iterationstats_exists():
     """Test that IterationStats class exists and is importable."""
-    assert 'IterationStats' in dir()
+    assert "IterationStats" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

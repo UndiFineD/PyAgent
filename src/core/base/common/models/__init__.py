@@ -14,29 +14,35 @@ from types import ModuleType
 # Start with minimal placeholders to avoid AttributeError during early imports
 _export_names: dict[str, Any] = {}
 
+
 def _try_import_module(submod: str) -> ModuleType | None:
-	try:
-		return importlib.import_module(f"{__package__}.{submod}")
-	except Exception:
-		return None
+    try:
+        return importlib.import_module(f"{__package__}.{submod}")
+    except Exception:
+        return None
+
 
 # Try to import submodules and copy public names into this package namespace
 _submodules = (
-	"base_models", "communication_models", "core_enums", "fleet_models",
-	"agent_models", "_factories"
+    "base_models",
+    "communication_models",
+    "core_enums",
+    "fleet_models",
+    "agent_models",
+    "_factories",
 )
 for _sub in _submodules:
-	_m = _try_import_module(_sub)
-	if _m is None:
-		continue
-	for _name in dir(_m):
-		if _name.startswith("_"):
-			continue
-		try:
-			_export_names[_name] = getattr(_m, _name)
-		except Exception:
-			# Skip names that raise on access
-			continue
+    _m = _try_import_module(_sub)
+    if _m is None:
+        continue
+    for _name in dir(_m):
+        if _name.startswith("_"):
+            continue
+        try:
+            _export_names[_name] = getattr(_m, _name)
+        except Exception:
+            # Skip names that raise on access
+            continue
 
 globals().update(_export_names)
 
@@ -45,12 +51,19 @@ __all__ = [name for name in _export_names.keys()]
 # Provide lightweight placeholders for key names if the real implementations
 # could not be imported (prevents ImportError during pytest collection).
 _placeholder_names = (
-	"AgentConfig", "CacheEntry", "EventType", "PromptTemplate",
-	"FailureClassification", "AgentState", "ResponseQuality"
+    "AgentConfig",
+    "CacheEntry",
+    "EventType",
+    "PromptTemplate",
+    "FailureClassification",
+    "AgentState",
+    "ResponseQuality",
 )
 for _name in _placeholder_names:
-	if _name not in globals():
-		class _Placeholder:
-			pass
-		globals()[_name] = _Placeholder
-		__all__.append(_name)
+    if _name not in globals():
+
+        class _Placeholder:
+            pass
+
+        globals()[_name] = _Placeholder
+        __all__.append(_name)

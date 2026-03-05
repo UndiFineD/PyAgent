@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +29,9 @@ from typing import Any, Dict, List
 class CoderDuplicationMixin:
     """Mixin for identifying duplicate code."""
 
-    def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:
+    def find_duplicate_code(
+        self, content: str, min_lines: int = 4
+    ) -> List[Dict[str, Any]]:
         """Find duplicate code blocks using hashing."""
         # Rust-accelerated sliding window hash
         try:
@@ -46,17 +49,23 @@ class CoderDuplicationMixin:
                             "hash": hash_val,
                             "occurrences": len(line_nums),
                             "lines": line_nums,
-                            "preview": "\n".join(lines[preview_start : preview_start + min_lines])[:100],
+                            "preview": "\n".join(
+                                lines[preview_start : preview_start + min_lines]
+                            )[:100],
                         }
                     )
             return duplicates
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            # pylint: disable=broad-exception-caught
             pass
 
         return self._find_duplicate_code_fallback(content, min_lines)
 
-    def _find_duplicate_code_fallback(self, content: str, min_lines: int) -> List[Dict[str, Any]]:
+    def _find_duplicate_code_fallback(
+        self, content: str, min_lines: int
+    ) -> List[Dict[str, Any]]:
         """Non-Rust fallback for duplicate detection."""
         lines = content.split("\n")
         duplicates = []
@@ -80,7 +89,9 @@ class CoderDuplicationMixin:
                         "hash": block_hash,
                         "occurrences": len(line_numbers),
                         "lines": line_numbers,
-                        "preview": "\n".join(lines[line_numbers[0] - 1 : line_numbers[0] - 1 + min_lines])[:100],
+                        "preview": "\n".join(
+                            lines[line_numbers[0] - 1 : line_numbers[0] - 1 + min_lines]
+                        )[:100],
                     }
                 )
         return duplicates

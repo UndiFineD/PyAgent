@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -239,7 +240,9 @@ class StreamingVllmEngine:
         }
 
     @classmethod
-    def get_instance(cls: type["StreamingVllmEngine"], config: Optional[StreamingConfig] = None) -> "StreamingVllmEngine":
+    def get_instance(
+        cls: type["StreamingVllmEngine"], config: Optional[StreamingConfig] = None
+    ) -> "StreamingVllmEngine":
         """Get singleton instance."""
         if cls._instance is None:
             cls._instance = StreamingVllmEngine(config)
@@ -429,7 +432,9 @@ class StreamingVllmEngine:
             loop = asyncio.get_event_loop()
             outputs = await loop.run_in_executor(
                 None,
-                lambda: self._llm.generate([full_prompt], sampling_params, use_tqdm=False),
+                lambda: self._llm.generate(
+                    [full_prompt], sampling_params, use_tqdm=False
+                ),
             )
 
             if outputs and outputs[0].outputs:

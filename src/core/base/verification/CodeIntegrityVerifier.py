@@ -4,6 +4,7 @@
 import ast
 from pathlib import Path
 
+
 class CodeIntegrityVerifier:
     """Phase 316: Scans codebase for structural integrity issues, specifically import paths."""
 
@@ -49,8 +50,8 @@ class CodeIntegrityVerifier:
                         target_path = Path(".").joinpath(*parts)
 
                         exists = (
-                            target_path.with_suffix(".py").exists() or
-                            target_path.joinpath("__init__.py").exists()
+                            target_path.with_suffix(".py").exists()
+                            or target_path.joinpath("__init__.py").exists()
                         )
 
                         if not exists:

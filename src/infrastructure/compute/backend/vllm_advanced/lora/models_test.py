@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AdapterState"), "AdapterState missing"
     assert hasattr(mod, "LoraConfig"), "LoraConfig missing"
     assert hasattr(mod, "LoraAdapter"), "LoraAdapter missing"
-

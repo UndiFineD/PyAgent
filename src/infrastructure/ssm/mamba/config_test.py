@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_mambaconfig_exists():
     """Test that MambaConfig class exists and is importable."""
-    assert 'MambaConfig' in dir()
+    assert "MambaConfig" in dir()
 
 
 def test_mambastate_exists():
     """Test that MambaState class exists and is importable."""
-    assert 'MambaState' in dir()
+    assert "MambaState" in dir()
 
 
 def test_mambaoutput_exists():
     """Test that MambaOutput class exists and is importable."""
-    assert 'MambaOutput' in dir()
+    assert "MambaOutput" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

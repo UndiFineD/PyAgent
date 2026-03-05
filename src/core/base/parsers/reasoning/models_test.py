@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_reasoningresult_exists():
     """Test that ReasoningResult class exists and is importable."""
-    assert 'ReasoningResult' in dir()
+    assert "ReasoningResult" in dir()
 
 
 def test_streamingreasoningstate_exists():
     """Test that StreamingReasoningState class exists and is importable."""
-    assert 'StreamingReasoningState' in dir()
+    assert "StreamingReasoningState" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

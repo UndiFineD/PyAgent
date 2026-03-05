@@ -20,8 +20,14 @@ import logging
 from typing import Any, Dict, List, Optional
 
 from .audio import AudioProcessor
-from .base import (BaseMultiModalProcessor, ModalityType, MultiModalConfig,
-                   MultiModalData, MultiModalInputs, PlaceholderInfo)
+from .base import (
+    BaseMultiModalProcessor,
+    ModalityType,
+    MultiModalConfig,
+    MultiModalData,
+    MultiModalInputs,
+    PlaceholderInfo,
+)
 from .embed import TextEmbedProcessor
 from .image import ImageProcessor
 from .video import VideoProcessor
@@ -45,7 +51,9 @@ class MultiModalRegistry:
         self._processors[modality] = processor
         logger.debug("Registered processor for %s", modality.name)
 
-    def get_processor(self, modality: ModalityType) -> Optional[BaseMultiModalProcessor]:
+    def get_processor(
+        self, modality: ModalityType
+    ) -> Optional[BaseMultiModalProcessor]:
         """Get the registered processor for a modality, if any."""
         return self._processors.get(modality)
 
@@ -119,7 +127,9 @@ class MultiModalRegistry:
                     break
 
                 emb, meta = processor.process(video, **kwargs)
-                num_tokens = meta.get("total_tokens", processor.get_placeholder_count(video, **kwargs))
+                num_tokens = meta.get(
+                    "total_tokens", processor.get_placeholder_count(video, **kwargs)
+                )
 
                 embeddings.append(emb)
                 placeholders.append(
@@ -148,7 +158,9 @@ class MultiModalRegistry:
                     break
 
                 emb, meta = processor.process(audio, **kwargs)
-                num_tokens = meta.get("num_frames", processor.get_placeholder_count(audio, **kwargs))
+                num_tokens = meta.get(
+                    "num_frames", processor.get_placeholder_count(audio, **kwargs)
+                )
 
                 embeddings.append(emb)
                 placeholders.append(

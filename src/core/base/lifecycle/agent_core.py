@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -101,7 +102,9 @@ class LogicCore:
         data = f"{prompt}:{content}:{model}"
         return hashlib.sha256(data.encode()).hexdigest()
 
-    def calculate_diff(self, old_content: str, new_content: str, filename: str = "file") -> str:
+    def calculate_diff(
+        self, old_content: str, new_content: str, filename: str = "file"
+    ) -> str:
         """Generates a unified diff between strings.
 
         Phase 15: Native Rust acceleration for Myers diff.
@@ -111,7 +114,9 @@ class LogicCore:
 
         if RUST_AVAILABLE and hasattr(rc, "generate_unified_diff_rust"):
             try:
-                diff_text, _, _ = rc.generate_unified_diff_rust(old_content, new_content, filename, 3)
+                diff_text, _, _ = rc.generate_unified_diff_rust(
+                    old_content, new_content, filename, 3
+                )
                 return diff_text
             except (AttributeError, RuntimeError) as e:
                 logger.debug("Rust diff failed: %s", e)
@@ -150,7 +155,9 @@ class LogicCore:
 
         return max(1, min(5, score))
 
-    def build_prompt_with_history(self, prompt: str, history: list[dict[str, str]], max_history: int = 5) -> str:
+    def build_prompt_with_history(
+        self, prompt: str, history: list[dict[str, str]], max_history: int = 5
+    ) -> str:
         """Logic for constructing a prompt string from history."""
         context = ""
         for msg in history[-max_history:]:
@@ -174,15 +181,22 @@ class BaseCore(LogicCore):
         return str(WorkspaceCore(root_dir=file_path.parent).root_dir)
 
     def is_path_ignored(
-        self, path: Path, _repo_root: Path | None = None, _ignored_patterns: set[str] | None = None
+        self,
+        path: Path,
+        _repo_root: Path | None = None,
+        _ignored_patterns: set[str] | None = None,
     ) -> bool:
         """Check if a path should be ignored based on patterns."""
         return self.workspace.is_ignored(path)
 
-    def _matches_ignored_patterns(self, relative_path: str, ignored_patterns: set[str]) -> bool:
+    def _matches_ignored_patterns(
+        self, relative_path: str, ignored_patterns: set[str]
+    ) -> bool:
         """Internal helper to check against custom ignore patterns."""
         for pattern in ignored_patterns:
-            if fnmatch.fnmatch(relative_path, pattern) or fnmatch.fnmatch(relative_path.split("/")[0], pattern):
+            if fnmatch.fnmatch(relative_path, pattern) or fnmatch.fnmatch(
+                relative_path.split("/")[0], pattern
+            ):
                 return True
         return False
 
@@ -225,14 +239,17 @@ class BaseCore(LogicCore):
         return [
             f
             for f in files
-            if f.suffix in supported_extensions and not self.is_path_ignored(f, repo_root, ignored_patterns)
+            if f.suffix in supported_extensions
+            and not self.is_path_ignored(f, repo_root, ignored_patterns)
         ]
 
 
 class AgentCore(BaseCore):
     """Logic-only core for managing agent-specific data transformations."""
 
-    def __init__(self, workspace_root: str | None = None, settings: dict[str, Any] | None = None) -> None:
+    def __init__(
+        self, workspace_root: str | None = None, settings: dict[str, Any] | None = None
+    ) -> None:
         super().__init__(workspace_root=workspace_root)
         self.settings = settings or {}
 
@@ -298,7 +315,10 @@ class AgentCore(BaseCore):
 
         for item in items:
             it_low = item.lower()
-            if any(word in it_low for word in ["security", "vulnerability", "crash", "critical"]):
+            if any(
+                word in it_low
+                for word in ["security", "vulnerability", "crash", "critical"]
+            ):
                 prioritized.append(item)
             else:
                 remaining.append(item)

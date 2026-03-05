@@ -16,6 +16,7 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class RefactoringSuggestion:
     """Context-based refactoring suggestion.
@@ -26,6 +27,7 @@ class RefactoringSuggestion:
         affected_files: Files affected by refactoring.
         estimated_impact: Impact assessment.
     """
+
     suggestion_type: str
     description: str
     affected_files: List[str] = field(default_factory=lambda: [])

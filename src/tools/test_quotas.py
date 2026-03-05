@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 import sys
 from pathlib import Path
-from src.core.base.managers.ResourceQuotaManager import ResourceQuotaManager, QuotaConfig
+from src.core.base.managers.ResourceQuotaManager import (
+    ResourceQuotaManager,
+    QuotaConfig,
+)
 
 # Add workspace to path
 workspace_root = Path("c:/DEV/PyAgent")
@@ -26,6 +29,7 @@ def test_quotas():
     config = QuotaConfig(max_time_seconds=1)
     mgr = ResourceQuotaManager(config)
     import time
+
     time.sleep(1.1)
     exceeded, reason = mgr.check_quotas()
     print(f"Time exceeded: exceeded={exceeded}, reason={reason}")

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ from src.logic.agents.cognitive.context.models.NLQueryResult import NLQueryResul
 from typing import Dict, List, Optional
 
 __version__ = VERSION
+
 
 class NLQueryEngine:
     """Searches context with natural language queries.
@@ -44,7 +46,9 @@ class NLQueryEngine:
         """Extract keywords from query."""
         return query.lower().split()
 
-    def query(self, question: str, contexts: dict[str, str] | None = None) -> NLQueryResult:
+    def query(
+        self, question: str, contexts: dict[str, str] | None = None
+    ) -> NLQueryResult:
         """Query contexts with natural language.
 
         Args:
@@ -67,5 +71,5 @@ class NLQueryEngine:
             query=question,
             answer=f"Found {len(relevant)} relevant context files",
             relevant_contexts=relevant,
-            confidence=0.7 if relevant else 0.2
+            confidence=0.7 if relevant else 0.2,
         )

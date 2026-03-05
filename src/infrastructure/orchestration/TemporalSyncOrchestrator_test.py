@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_temporalsyncorchestrator_exists():
     """Test that TemporalSyncOrchestrator class exists and is importable."""
-    assert 'TemporalSyncOrchestrator' in dir()
+    assert "TemporalSyncOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

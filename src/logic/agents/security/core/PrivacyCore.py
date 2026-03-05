@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Recovered and standardized for Phase 317
 
@@ -20,11 +21,13 @@ from typing import Any
 
 __version__ = VERSION
 
+
 class PrivacyCore:
     """
     PrivacyCore recovered after Copilot CLI deprecation event.
     Provides high-speed text redaction and log scanning for PII.
     """
+
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("PrivacyCore initialized.")
@@ -34,13 +37,13 @@ class PrivacyCore:
         """Redacts PII from text using regex patterns."""
         if not text:
             return text
-            
+
         patterns = {
             r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+": "[EMAIL_REDACTED]",
             r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b": "[IP_REDACTED]",
-            r"(api_key|secret_key|secret|token)\s*[:=]\s*[']?[a-zA-Z0-9_.~-]{16,}[']?": r"\1=[REDACTED]"
+            r"(api_key|secret_key|secret|token)\s*[:=]\s*[']?[a-zA-Z0-9_.~-]{16,}[']?": r"\1=[REDACTED]",
         }
-        
+
         result = text
         for pattern, replacement in patterns.items():
             result = re.sub(pattern, replacement, result)
@@ -56,4 +59,3 @@ class PrivacyCore:
         elif isinstance(data, dict):
             return {k: PrivacyCore.scan_log_entry(v) for k, v in data.items()}
         return data
-

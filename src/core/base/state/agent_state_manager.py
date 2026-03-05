@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +42,9 @@ __version__: str = VERSION
 class EmergencyEventLog:
     """Phase 278: Ring buffer recording the last 10 filesystem actions for recovery."""
 
-    def __init__(self, log_path: Path = Path("data/logs/emergency_recovery.log")) -> None:
+    def __init__(
+        self, log_path: Path = Path("data/logs/emergency_recovery.log")
+    ) -> None:
         self.log_path: Path = log_path
         self.buffer = collections.deque(maxlen=10)
         self._fs = FileSystemCore()
@@ -54,7 +57,9 @@ class EmergencyEventLog:
                 content: str = self.log_path.read_text(encoding="utf-8")
                 self.buffer.extend(content.splitlines())
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
     def record_action(self, action: str, details: str) -> None:
@@ -64,7 +69,9 @@ class EmergencyEventLog:
         self.buffer.append(event)
         try:
             self._fs.atomic_write(self.log_path, "\n".join(self.buffer))
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error(f"StructuredLogger: Failed to write emergency log: {e}")
 
 
@@ -73,13 +80,16 @@ class EmergencyEventLog:
 
 EMERGENCY_LOG = EmergencyEventLog()
 
+
 class AgentCircuitBreaker:
     """
     Phase 336: Circuit breaker for autonomous agents to prevent cascading failures.
     Tracks failure rates and halts operations if threshold is exceeded.
     """
 
-    def __init__(self, agent_id: str, failure_threshold: float = 0.5, window_size: int = 10) -> None:
+    def __init__(
+        self, agent_id: str, failure_threshold: float = 0.5, window_size: int = 10
+    ) -> None:
         self.agent_id: str = agent_id
         self.threshold: float = failure_threshold
         self.window = collections.deque(maxlen=window_size)
@@ -92,7 +102,7 @@ class AgentCircuitBreaker:
             try:
                 data = json.loads(self._state_file.read_text(encoding="utf-8"))
                 self.window.extend(data.get("history", []))
-            except Exception: # pylint: disable=broad-except
+            except Exception:  # pylint: disable=broad-except
                 pass
 
     def _save(self) -> None:
@@ -100,10 +110,12 @@ class AgentCircuitBreaker:
         try:
             self._state_file.parent.mkdir(parents=True, exist_ok=True)
             FileSystemCore().atomic_write(
-                self._state_file, 
-                json.dumps({"history": list(self.window)})
+                self._state_file, json.dumps({"history": list(self.window)})
             )
-        except (OSError, TypeError) as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            OSError,
+            TypeError,
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             pass
 
     def record_result(self, success: bool) -> None:
@@ -144,7 +156,9 @@ class AgentCheckpointManager:
         self.checkpoint_dir.mkdir(parents=True, exist_ok=True)
         self._fs = FileSystemCore()
 
-    def create_checkpoint(self, state_data: dict[str, Any], associated_files: list[Path] | None = None) -> str:
+    def create_checkpoint(
+        self, state_data: dict[str, Any], associated_files: list[Path] | None = None
+    ) -> str:
         """
         Creates a snapshot of agent state and optionally backups associated files.
         Returns: Checkpoint ID
@@ -164,7 +178,7 @@ class AgentCheckpointManager:
                     backup_name: str = f"{file_path.name}.bak"
                     self._fs.safe_copy(file_path, cp_path / backup_name)
                     file_manifest[str(file_path)] = backup_name
-            
+
             self._fs.atomic_write(cp_path / "files.json", json.dumps(file_manifest))
 
         return checkpoint_id
@@ -186,19 +200,23 @@ class AgentCheckpointManager:
                 backup_file = cp_path / backup_name
                 if backup_file.exists():
                     self._fs.safe_copy(backup_file, original_path)
-                    logging.info(f"Restored file {original_path} from checkpoint {checkpoint_id}")
+                    logging.info(
+                        f"Restored file {original_path} from checkpoint {checkpoint_id}"
+                    )
 
         # Restore State
         state_path: Path = cp_path / "state.json"
         if state_path.exists():
             return json.loads(state_path.read_text(encoding="utf-8"))
-        
+
         return {}
+
 
 class StateDriftDetector:
     """
     Phase 336: Validates pre/post execution state to detect corruption.
     """
+
     def __init__(self, target_files: list[Path]) -> None:
         self.snapshots: dict[Path, str] = {}
         self.target_files: list[Path] = target_files
@@ -240,17 +258,16 @@ class StructuredErrorValidator:
         self.logger: logging.Logger = logging.getLogger("StructuredErrorValidator")
 
     def capture_failure(
-        self,
-        context_id: str,
-        error: BaseException,
-        traceback_obj: Any
+        self, context_id: str, error: BaseException, traceback_obj: Any
     ) -> dict[str, Any]:
         """
         Classify error and return structured metadata.
         """
 
         error_type: str = type(error).__name__
-        stack_trace: str = "".join(traceback.format_tb(traceback_obj)) if traceback_obj else str(error)
+        stack_trace: str = (
+            "".join(traceback.format_tb(traceback_obj)) if traceback_obj else str(error)
+        )
 
         classification: str = self._classify_error(error)
 
@@ -261,10 +278,12 @@ class StructuredErrorValidator:
             "context_id": context_id,
             "timestamp": time.time(),
             "stack_trace_snippet": stack_trace[-1000:] if stack_trace else "",
-            "full_stack_trace": stack_trace
+            "full_stack_trace": stack_trace,
         }
 
-        self.logger.error(f"Swarm Failure Captured [{classification}]: {error_type} in {context_id}")
+        self.logger.error(
+            f"Swarm Failure Captured [{classification}]: {error_type} in {context_id}"
+        )
         return report
 
     def _classify_error(self, error: BaseException) -> str:
@@ -292,7 +311,7 @@ class StateTransaction:
     temp_dir: Path
     _fs: FileSystemCore
     id: str
-    drift_detector: 'StateDriftDetector'
+    drift_detector: "StateDriftDetector"
 
     def __init__(self, target_files: list[Path], run_tests: bool = False) -> None:
         self.target_files = target_files
@@ -304,14 +323,16 @@ class StateTransaction:
         self.id = f"tx_{int(time.time() * 1000)}"
         self.drift_detector = StateDriftDetector(target_files)
 
-    def __enter__(self) -> 'StateTransaction':
+    def __enter__(self) -> "StateTransaction":
         self.drift_detector.snapshot()
         for file in self.target_files:
             if file.exists():
                 backup_path: Path = self.temp_dir / f"{file.name}_{self.id}.bak"
                 self._fs.safe_copy(file, backup_path)
                 self.backups[file] = backup_path
-        logging.info(f"Transaction {self.id} started. {len(self.backups)} files backed up.")
+        logging.info(
+            f"Transaction {self.id} started. {len(self.backups)} files backed up."
+        )
         return self
 
     def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
@@ -366,8 +387,10 @@ class StateTransaction:
                         orig_content: bytes = self.backups[file].read_bytes()
                         new_content: bytes = file.read_bytes()
                         if orig_content != new_content:
-                            msg: str = ("Security Violation: Attempted modification of "
-                                   f"immutable test infrastructure: {file}")
+                            msg: str = (
+                                "Security Violation: Attempted modification of "
+                                f"immutable test infrastructure: {file}"
+                            )
                             logging.critical(msg)
                             raise PermissionError(msg)
 
@@ -382,16 +405,22 @@ class StateTransaction:
         if self.run_tests:
             # Prefer the centralized test runner for focused test execution
             try:
-                from src.core.base.common.utils.test_runner import run_focused_tests_for_files
+                from src.core.base.common.utils.test_runner import (
+                    run_focused_tests_for_files,
+                )
 
                 file_paths = [str(p) for p in self.target_files]
                 success, output = run_focused_tests_for_files(file_paths, timeout=120)
                 if not success:
                     logging.error("Associated tests failed: %s", output)
-                    raise ValueError(f"Verification tests failed for transaction {self.id}: {output}")
+                    raise ValueError(
+                        f"Verification tests failed for transaction {self.id}: {output}"
+                    )
             except (ImportError, FileNotFoundError) as e:
                 # Fallback to legacy per-file pytest invocation if test_runner is unavailable
-                logging.debug("Test runner not available; falling back to legacy runner: %s", e)
+                logging.debug(
+                    "Test runner not available; falling back to legacy runner: %s", e
+                )
                 self._run_associated_tests()
 
     def _run_associated_tests(self) -> None:
@@ -423,7 +452,7 @@ class StateTransaction:
                 ["python", "-m", "pytest", str(test_path), "--tb=short"],
                 check=True,
                 capture_output=True,
-                timeout=30
+                timeout=30,
             )
         except subprocess.CalledProcessError as e:
             err_msg: str = e.stderr.decode() if e.stderr else "Unknown error"
@@ -483,6 +512,8 @@ class AgentStateManager:
 
         try:
             return json.loads(state_path.read_text(encoding="utf-8"))
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning(f"Failed to load state: {e}")
             return None

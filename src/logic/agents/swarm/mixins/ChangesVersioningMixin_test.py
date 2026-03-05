@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_changesversioningmixin_exists():
     """Test that ChangesVersioningMixin class exists and is importable."""
-    assert 'ChangesVersioningMixin' in dir()
+    assert "ChangesVersioningMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

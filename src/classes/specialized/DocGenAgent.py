@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,27 +21,29 @@ from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
+
 class DocGenAgent(BaseAgent):
     """
-    Autonomous Documentation Generator: Extracts docstrings from Python modules 
+    Autonomous Documentation Generator: Extracts docstrings from Python modules
     and generates Markdown files compatible with Sphinx/Jekyll.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.doc_registry = {} # module_path -> extracted_docs
+        self.doc_registry = {}  # module_path -> extracted_docs
 
     def extract_docs(self, file_path: str) -> str:
         """Extracts docstrings from a Python file and returns Markdown content."""
-        if not file_path.endswith('.py'):
+        if not file_path.endswith(".py"):
             return ""
 
         try:
             with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read())
-            
+
             md_content = f"# Documentation for {os.path.basename(file_path)}\n\n"
-            
+
             # Module docstring
             module_doc = ast.get_docstring(tree)
             if module_doc:
@@ -52,7 +55,7 @@ class DocGenAgent(BaseAgent):
                     class_doc = ast.get_docstring(node)
                     if class_doc:
                         md_content += f"{class_doc}\n\n"
-                    
+
                     for item in node.body:
                         if isinstance(item, ast.FunctionDef):
                             md_content += f"### Method: `{item.name}`\n"
@@ -79,8 +82,10 @@ class DocGenAgent(BaseAgent):
 
         for file_path, content in self.doc_registry.items():
             rel_path = os.path.relpath(file_path, self.workspace_path)
-            doc_filename = rel_path.replace(os.sep, '_').replace('.py', '.md')
-            with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:
+            doc_filename = rel_path.replace(os.sep, "_").replace(".py", ".md")
+            with open(
+                os.path.join(output_dir, doc_filename), "w", encoding="utf-8"
+            ) as f:
                 f.write(content)
-        
+
         return len(self.doc_registry)

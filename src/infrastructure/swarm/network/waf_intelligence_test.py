@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_wafsignature_exists():
     """Test that WAFSignature class exists and is importable."""
-    assert 'WAFSignature' in dir()
+    assert "WAFSignature" in dir()
 
 
 def test_wafintelligence_exists():
     """Test that WAFIntelligence class exists and is importable."""
-    assert 'WAFIntelligence' in dir()
+    assert "WAFIntelligence" in dir()
 
 
 def test_wafintelligence_instantiation():
@@ -50,4 +50,3 @@ def test_wafintelligence_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

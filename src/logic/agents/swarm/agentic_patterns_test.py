@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_sequentialagentconfig_exists():
     """Test that SequentialAgentConfig class exists and is importable."""
-    assert 'SequentialAgentConfig' in dir()
+    assert "SequentialAgentConfig" in dir()
 
 
 def test_sequentialagentpattern_exists():
     """Test that SequentialAgentPattern class exists and is importable."""
-    assert 'SequentialAgentPattern' in dir()
+    assert "SequentialAgentPattern" in dir()
 
 
 def test_parallelagentpattern_exists():
     """Test that ParallelAgentPattern class exists and is importable."""
-    assert 'ParallelAgentPattern' in dir()
+    assert "ParallelAgentPattern" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

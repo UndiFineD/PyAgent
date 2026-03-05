@@ -15,9 +15,10 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "DistributedExecutor"), "DistributedExecutor missing"
     assert hasattr(mod, "MultiProcessExecutor"), "MultiProcessExecutor missing"
-    assert hasattr(mod, "create_distributed_executor"), "create_distributed_executor missing"
+    assert hasattr(
+        mod, "create_distributed_executor"
+    ), "create_distributed_executor missing"
     assert hasattr(mod, "get_dp_rank"), "get_dp_rank missing"
     assert hasattr(mod, "get_dp_size"), "get_dp_size missing"
     assert hasattr(mod, "get_tp_rank"), "get_tp_rank missing"
     assert hasattr(mod, "get_tp_size"), "get_tp_size missing"
-

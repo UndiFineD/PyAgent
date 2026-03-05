@@ -13,5 +13,6 @@ def _load_module():
 
 def test_imports_and_symbols():
     mod = _load_module()
-    assert hasattr(mod, "PerformanceProfilingAgent"), "PerformanceProfilingAgent missing"
-
+    assert hasattr(
+        mod, "PerformanceProfilingAgent"
+    ), "PerformanceProfilingAgent missing"

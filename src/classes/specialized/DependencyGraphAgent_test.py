@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_dependencygraphagent_exists():
     """Test that DependencyGraphAgent class exists and is importable."""
-    assert 'DependencyGraphAgent' in dir()
+    assert "DependencyGraphAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

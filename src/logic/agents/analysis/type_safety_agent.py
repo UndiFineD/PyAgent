@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -121,7 +122,9 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             report.append(f"### {filename}")
             for issue in issues:
                 icon = "🚨" if issue["severity"] == "HIGH" else "⚠️"
-                report.append(f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})")
+                report.append(
+                    f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})"
+                )
 
         return "\n".join(report)
 
@@ -132,5 +135,7 @@ class TypeSafetyAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
 
 if __name__ == "__main__":
-    main = create_main_function(TypeSafetyAgent, "TypeSafety Agent", "Path to audit (e.g. 'src/classes')")
+    main = create_main_function(
+        TypeSafetyAgent, "TypeSafety Agent", "Path to audit (e.g. 'src/classes')"
+    )
     main()

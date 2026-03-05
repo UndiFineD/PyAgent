@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_quantscheme_exists():
     """Test that QuantScheme class exists and is importable."""
-    assert 'QuantScheme' in dir()
+    assert "QuantScheme" in dir()
 
 
 def test_quantstrategy_exists():
     """Test that QuantStrategy class exists and is importable."""
-    assert 'QuantStrategy' in dir()
+    assert "QuantStrategy" in dir()
 
 
 def test_quantconfig_exists():
     """Test that QuantConfig class exists and is importable."""
-    assert 'QuantConfig' in dir()
+    assert "QuantConfig" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

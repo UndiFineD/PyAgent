@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_tpuplatform_exists():
     """Test that TpuPlatform class exists and is importable."""
-    assert 'TpuPlatform' in dir()
+    assert "TpuPlatform" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

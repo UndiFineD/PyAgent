@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_lruoffloadingmanager_exists():
     """Test that LRUOffloadingManager class exists and is importable."""
-    assert 'LRUOffloadingManager' in dir()
+    assert "LRUOffloadingManager" in dir()
 
 
 def test_arcoffloadingmanager_exists():
     """Test that ARCOffloadingManager class exists and is importable."""
-    assert 'ARCOffloadingManager' in dir()
+    assert "ARCOffloadingManager" in dir()
 
 
 def test_tieredoffloadmanager_exists():
     """Test that TieredOffloadManager class exists and is importable."""
-    assert 'TieredOffloadManager' in dir()
+    assert "TieredOffloadManager" in dir()
 
 
 def test_compute_lru_eviction_rust_exists():
@@ -59,4 +59,3 @@ def test_compute_arc_target_rust_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

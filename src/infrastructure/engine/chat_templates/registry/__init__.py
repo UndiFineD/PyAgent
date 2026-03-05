@@ -19,13 +19,24 @@ Chat template registry package for Jinja2 and custom template management.
 """
 
 from .base import ChatTemplate  # noqa: F401
-from .config import (DEFAULT_CONFIG, MODEL_TEMPLATE_MAP, ModelType,  # noqa: F401
-                     RenderOptions, TemplateConfig, TemplateInfo, TemplateType)
+from .config import (
+    DEFAULT_CONFIG,
+    MODEL_TEMPLATE_MAP,
+    ModelType,  # noqa: F401
+    RenderOptions,
+    TemplateConfig,
+    TemplateInfo,
+    TemplateType,
+)
 from .jinja import JinjaTemplate  # noqa: F401
 from .registry import ChatTemplateRegistry  # noqa: F401
 from .resolver import TemplateResolver  # noqa: F401
-from .utils import (detect_template_type, get_template, register_template,  # noqa: F401
-                    render_template)
+from .utils import (
+    detect_template_type,
+    get_template,
+    register_template,  # noqa: F401
+    render_template,
+)
 
 __all__ = [
     "TemplateType",

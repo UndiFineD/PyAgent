@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_reasoningtoken_exists():
     """Test that ReasoningToken class exists and is importable."""
-    assert 'ReasoningToken' in dir()
+    assert "ReasoningToken" in dir()
 
 
 def test_thinkingblock_exists():
     """Test that ThinkingBlock class exists and is importable."""
-    assert 'ThinkingBlock' in dir()
+    assert "ThinkingBlock" in dir()
 
 
 def test_toolcall_exists():
     """Test that ToolCall class exists and is importable."""
-    assert 'ToolCall' in dir()
+    assert "ToolCall" in dir()
 
 
 def test_toolcallresult_exists():
     """Test that ToolCallResult class exists and is importable."""
-    assert 'ToolCallResult' in dir()
+    assert "ToolCallResult" in dir()
 
 
 def test_parseresult_exists():
     """Test that ParseResult class exists and is importable."""
-    assert 'ParseResult' in dir()
+    assert "ParseResult" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

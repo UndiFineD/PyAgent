@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,8 +35,7 @@ def test_swarm_features() -> None:
 
     print("--- Phase 13: Swarm Consensus ---")
     # Register agents that have 'improve_content'
-    from src.logic.agents.security.security_guard_agent import \
-        SecurityGuardAgent
+    from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
     fleet.register_agent("Voter1", SecurityGuardAgent)
 
@@ -45,7 +45,9 @@ def test_swarm_features() -> None:
 
     print("\n--- Phase 13: Task Decomposition ---")
 
-    plan = fleet.decomposer.decompose("I want to research agents and then write some code to analyze data.")
+    plan = fleet.decomposer.decompose(
+        "I want to research agents and then write some code to analyze data."
+    )
     print(f"Generated Plan: {fleet.decomposer.get_plan_summary(plan)}")
 
     print("\n--- Phase 13: Self-Referential Optimization ---")
@@ -55,7 +57,9 @@ def test_swarm_features() -> None:
     from src.observability.stats.metrics import AgentMetric
 
     fleet.telemetry.metrics.append(
-        AgentMetric(agent_name="Bot", operation="Compute", duration_ms=6000, status="success")
+        AgentMetric(
+            agent_name="Bot", operation="Compute", duration_ms=6000, status="success"
+        )
     )
 
     suggestions = fleet.optimizer.monitor_efficiency()

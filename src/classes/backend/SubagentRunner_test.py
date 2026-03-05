@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_subagentrunner_exists():
     """Test that SubagentRunner class exists and is importable."""
-    assert 'SubagentRunner' in dir()
+    assert "SubagentRunner" in dir()
 
 
 def test_subagentrunner_instantiation():
@@ -45,4 +45,3 @@ def test_subagentrunner_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

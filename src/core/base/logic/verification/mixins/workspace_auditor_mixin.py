@@ -1,7 +1,7 @@
-
 """
 Workspace auditor mixin.py module.
 """
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -65,19 +65,30 @@ class WorkspaceAuditorMixin:
                 (r"^\s*print\(", "Print statement"),
             ]
             rust_findings = rust_core.scan_workspace_quality_rust(
-                root_dir, [".git", "__pycache__", "rust_core", "venv", ".venv", "target"], dangerous
+                root_dir,
+                [".git", "__pycache__", "rust_core", "venv", ".venv", "target"],
+                dangerous,
             )
 
             self._process_rust_findings(rust_findings, results)
-            logging.info(f"WorkspaceAuditor: Rust-native scan completed regarding {len(rust_findings)} files.")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"WorkspaceAuditor: Rust acceleration failed: {e}. Falling back.")
+            logging.info(
+                f"WorkspaceAuditor: Rust-native scan completed regarding {len(rust_findings)} files."
+            )
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            logging.error(
+                f"WorkspaceAuditor: Rust acceleration failed: {e}. Falling back."
+            )
 
-    def _process_rust_findings(self, rust_findings: Dict, results: Dict[str, List]) -> None:
+    def _process_rust_findings(
+        self, rust_findings: Dict, results: Dict[str, List]
+    ) -> None:
         """Process findings regarding the Rust scan functionally."""
+
         def process_file_entry(item: tuple[str, list]) -> None:
             file_path, findings = item
-            
+
             def handle_finding(finding: tuple) -> None:
                 issue_type, msg, line = finding
                 if issue_type == "Robustness Issue":
@@ -96,7 +107,9 @@ class WorkspaceAuditorMixin:
 
         list(map(process_file_entry, rust_findings.items()))
 
-    def _process_large_file_finding(self, file_path: str, msg: str, results: Dict[str, List]) -> None:
+    def _process_large_file_finding(
+        self, file_path: str, msg: str, results: Dict[str, List]
+    ) -> None:
         """Process large file finding from Rust scan."""
         try:
             size_val = int(msg.split("(")[1].split(" ")[0])
@@ -107,7 +120,7 @@ class WorkspaceAuditorMixin:
     def _perform_python_scan(self, root_path: Path, results: Dict[str, List]) -> None:
         """Perform Python-side supplemental scanning regarding files functionally."""
         py_files = list(root_path.rglob("*.py"))
-        
+
         def scan_file(file_path: Path) -> None:
             """Evaluates regarding skip policies and invokes analysis."""
             if not self._should_skip_file(file_path):
@@ -118,10 +131,13 @@ class WorkspaceAuditorMixin:
     def _should_skip_file(self, file_path: Path) -> bool:
         """Check if file should be skipped regarding the analysis functionally."""
         # Check all path components regarding forbidden keywords
-        return any(map(
-            lambda part: part.startswith(".") or part in ["__pycache__", "rust_core", "venv"],
-            file_path.parts
-        ))
+        return any(
+            map(
+                lambda part: part.startswith(".")
+                or part in ["__pycache__", "rust_core", "venv"],
+                file_path.parts,
+            )
+        )
 
     def _analyze_python_file(self, file_path: Path, results: Dict[str, List]) -> None:
         """Analyze a single Python file."""
@@ -134,21 +150,32 @@ class WorkspaceAuditorMixin:
             # AST Analysis
             self._perform_ast_analysis(file_path, content, results)
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug(f"CodeHealthAuditor: Error scanning {file_path}: {e}")
 
-    def _perform_fallback_scans(self, file_path: Path, content: str, results: Dict[str, List]) -> None:
+    def _perform_fallback_scans(
+        self, file_path: Path, content: str, results: Dict[str, List]
+    ) -> None:
         """Perform fallback scans regarding Rust unavailability functionally."""
         if len(content) > 25000:
             results["large_files"].append((str(file_path), len(content)))
 
         todo_matches = list(re.finditer(r"#\s*TODO:?\s*(.*)", content, re.IGNORECASE))
-        list(map(lambda m: results["todos"].append((str(file_path), m.group(1).strip())), todo_matches))
+        list(
+            map(
+                lambda m: results["todos"].append((str(file_path), m.group(1).strip())),
+                todo_matches,
+            )
+        )
 
         if re.search(r"^\s*print\(", content, re.MULTILINE):
             results["print_statements"].append(str(file_path))
 
-    def _perform_ast_analysis(self, file_path: Path, content: str, results: Dict[str, List]) -> None:
+    def _perform_ast_analysis(
+        self, file_path: Path, content: str, results: Dict[str, List]
+    ) -> None:
         """Perform AST-based analysis regarding the file content."""
         try:
             tree = ast.parse(content)
@@ -160,8 +187,11 @@ class WorkspaceAuditorMixin:
         except SyntaxError:
             pass  # Skip files with syntax errors regarding AST parsing
 
-    def _analyze_ast_nodes(self, file_path: Path, tree: ast.AST, results: Dict[str, List]) -> None:
+    def _analyze_ast_nodes(
+        self, file_path: Path, tree: ast.AST, results: Dict[str, List]
+    ) -> None:
         """Analyze AST nodes regarding quality issues functionally."""
+
         def evaluate_node(node: ast.AST) -> None:
             """Checks regarding bare excepts and undocumented classes."""
             if isinstance(node, ast.ExceptHandler) and node.type is None:
@@ -171,31 +201,41 @@ class WorkspaceAuditorMixin:
 
             if isinstance(node, ast.ClassDef):
                 if not ast.get_docstring(node):
-                    results["undocumented_classes"].append((str(file_path), node.name, node.lineno))
+                    results["undocumented_classes"].append(
+                        (str(file_path), node.name, node.lineno)
+                    )
 
         list(map(evaluate_node, ast.walk(tree)))
 
     def _check_is_stub(self, tree: ast.AST) -> bool:
         """Evaluates regarding the stub status of the file functionally."""
-        from src.core.base.logic.verification.mixins.stub_detector_mixin import StubDetectorMixin
+        from src.core.base.logic.verification.mixins.stub_detector_mixin import (
+            StubDetectorMixin,
+        )
 
-        def evaluate_structural_node(acc: tuple[bool, bool], node: ast.AST) -> tuple[bool, bool]:
+        def evaluate_structural_node(
+            acc: tuple[bool, bool], node: ast.AST
+        ) -> tuple[bool, bool]:
             """Reduces regarding definition presence and stub validity."""
             has_defs, is_definitely_not_stub = acc
             if is_definitely_not_stub:
                 return acc
-            
+
             # Check node regarding stub patterns
             if isinstance(node, (ast.ClassDef, ast.FunctionDef, ast.AsyncFunctionDef)):
                 res = StubDetectorMixin._is_stub_node(node)
                 if res is False or res == "IS_ABC":
                     return True, True
-                return True, False # found def, still can be stub
-            
-            if not isinstance(node, (ast.Import, ast.ImportFrom, ast.Assign, ast.AnnAssign)):
-                if not (isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant)):
-                    return has_defs, True # non-stub node found
-            
+                return True, False  # found def, still can be stub
+
+            if not isinstance(
+                node, (ast.Import, ast.ImportFrom, ast.Assign, ast.AnnAssign)
+            ):
+                if not (
+                    isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant)
+                ):
+                    return has_defs, True  # non-stub node found
+
             return has_defs, False
 
         from functools import reduce

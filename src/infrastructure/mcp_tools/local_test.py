@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_localmcpserver_exists():
     """Test that LocalMCPServer class exists and is importable."""
-    assert 'LocalMCPServer' in dir()
+    assert "LocalMCPServer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

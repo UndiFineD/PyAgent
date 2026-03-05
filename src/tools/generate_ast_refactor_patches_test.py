@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_subprocesstransformer_exists():
     """Test that SubprocessTransformer class exists and is importable."""
-    assert 'SubprocessTransformer' in dir()
+    assert "SubprocessTransformer" in dir()
 
 
 def test_load_bandit_results_exists():
@@ -59,4 +59,3 @@ def test_main_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

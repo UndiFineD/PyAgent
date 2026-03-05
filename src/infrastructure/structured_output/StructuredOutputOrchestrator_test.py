@@ -33,60 +33,59 @@ except ImportError as e:
 
 def test_structuredoutputbackendtype_exists():
     """Test that StructuredOutputBackendType class exists and is importable."""
-    assert 'StructuredOutputBackendType' in dir()
+    assert "StructuredOutputBackendType" in dir()
 
 
 def test_constrainttype_exists():
     """Test that ConstraintType class exists and is importable."""
-    assert 'ConstraintType' in dir()
+    assert "ConstraintType" in dir()
 
 
 def test_grammarprotocol_exists():
     """Test that GrammarProtocol class exists and is importable."""
-    assert 'GrammarProtocol' in dir()
+    assert "GrammarProtocol" in dir()
 
 
 def test_backendprotocol_exists():
     """Test that BackendProtocol class exists and is importable."""
-    assert 'BackendProtocol' in dir()
+    assert "BackendProtocol" in dir()
 
 
 def test_constraintspec_exists():
     """Test that ConstraintSpec class exists and is importable."""
-    assert 'ConstraintSpec' in dir()
+    assert "ConstraintSpec" in dir()
 
 
 def test_orchestratorconfig_exists():
     """Test that OrchestratorConfig class exists and is importable."""
-    assert 'OrchestratorConfig' in dir()
+    assert "OrchestratorConfig" in dir()
 
 
 def test_backendwrapper_exists():
     """Test that BackendWrapper class exists and is importable."""
-    assert 'BackendWrapper' in dir()
+    assert "BackendWrapper" in dir()
 
 
 def test_compiledgrammarhandle_exists():
     """Test that CompiledGrammarHandle class exists and is importable."""
-    assert 'CompiledGrammarHandle' in dir()
+    assert "CompiledGrammarHandle" in dir()
 
 
 def test_structuredoutputorchestrator_exists():
     """Test that StructuredOutputOrchestrator class exists and is importable."""
-    assert 'StructuredOutputOrchestrator' in dir()
+    assert "StructuredOutputOrchestrator" in dir()
 
 
 def test_asyncstructuredoutputorchestrator_exists():
     """Test that AsyncStructuredOutputOrchestrator class exists and is importable."""
-    assert 'AsyncStructuredOutputOrchestrator' in dir()
+    assert "AsyncStructuredOutputOrchestrator" in dir()
 
 
 def test_batchprocessor_exists():
     """Test that BatchProcessor class exists and is importable."""
-    assert 'BatchProcessor' in dir()
+    assert "BatchProcessor" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

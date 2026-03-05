@@ -41,7 +41,10 @@ def _parse_dv_base_url() -> tuple[str, int]:
             parsed = urlparse(base)
             netloc = parsed.netloc
             if not netloc:
-                return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))
+                return (
+                    os.environ.get("LMSTUDIO_HOST", "localhost"),
+                    int(os.environ.get("LMSTUDIO_PORT", "1234")),
+                )
             if ":" in netloc:
                 host, port = netloc.split(":", 1)
                 return (host, int(port))
@@ -49,7 +52,10 @@ def _parse_dv_base_url() -> tuple[str, int]:
         except (ValueError, IndexError):
             # Parsing failed; fall back to older env vars
             pass
-    return (os.environ.get("LMSTUDIO_HOST", "localhost"), int(os.environ.get("LMSTUDIO_PORT", "1234")))
+    return (
+        os.environ.get("LMSTUDIO_HOST", "localhost"),
+        int(os.environ.get("LMSTUDIO_PORT", "1234")),
+    )
 
 
 @dataclass
@@ -73,7 +79,9 @@ class LMStudioConfig:
 
     # Model settings - prefer DV_LMSTUDIO_MODEL
     default_model: str = field(
-        default_factory=lambda: os.environ.get("DV_LMSTUDIO_MODEL", os.environ.get("LMSTUDIO_MODEL", "lfm2.5-1.2b"))
+        default_factory=lambda: os.environ.get(
+            "DV_LMSTUDIO_MODEL", os.environ.get("LMSTUDIO_MODEL", "lfm2.5-1.2b")
+        )
     )
     auto_load: bool = True  # Auto-load model if not loaded
 

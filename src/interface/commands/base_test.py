@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "CommandDefinition"), "CommandDefinition missing"
     assert hasattr(mod, "ParsedCommand"), "ParsedCommand missing"
     assert hasattr(mod, "ProcessedPrompt"), "ProcessedPrompt missing"
-

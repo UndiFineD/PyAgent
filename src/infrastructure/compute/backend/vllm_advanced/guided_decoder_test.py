@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "GuidedMode"), "GuidedMode missing"
     assert hasattr(mod, "JsonSchema"), "JsonSchema missing"
     assert hasattr(mod, "RegexPattern"), "RegexPattern missing"
-

@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "JsonSchemaGrammar"), "JsonSchemaGrammar missing"
     assert hasattr(mod, "ChoiceGrammar"), "ChoiceGrammar missing"
     assert hasattr(mod, "EBNFGrammar"), "EBNFGrammar missing"
-

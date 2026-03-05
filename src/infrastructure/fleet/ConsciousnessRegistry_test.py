@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_consciousnessregistry_exists():
     """Test that ConsciousnessRegistry class exists and is importable."""
-    assert 'ConsciousnessRegistry' in dir()
+    assert "ConsciousnessRegistry" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

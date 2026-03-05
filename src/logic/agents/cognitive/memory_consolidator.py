@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -81,7 +82,9 @@ class MemoryConsolidator(BaseAgent):
             try:
                 with open(self.long_term_memory_file, encoding="utf-8") as f:
                     return json.load(f)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"Failed to load memory: {e}")
         return []
 
@@ -92,12 +95,16 @@ class MemoryConsolidator(BaseAgent):
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(memory, f, indent=2)
             temp_path.replace(self.long_term_memory_file)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             if temp_path.exists():
                 try:
                     temp_path.unlink()
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    # pylint: disable=broad-exception-caught
                     pass
             logging.error(f"Failed to save memory atomically: {e}")
             raise

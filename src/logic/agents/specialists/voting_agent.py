@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,6 +43,7 @@ __version__ = VERSION
 
 class VotingMethod(Enum):
     """Supported consensus and voting methodologies."""
+
     MAJORITY = "majority"
     WEIGHTED = "weighted"
     RANKED_CHOICE = "ranked_choice"
@@ -53,6 +55,7 @@ class VotingMethod(Enum):
 
 class VoteStatus(Enum):
     """Current state of a voting session."""
+
     PENDING = "pending"
     ACTIVE = "active"
     COMPLETED = "completed"
@@ -106,15 +109,25 @@ class VotingAgent(BaseAgent):
         )
 
     @as_tool
-    async def create_session(self, question: str, options: List[str], method: str = "majority") -> Dict[str, Any]:
+    async def create_session(
+        self, question: str, options: List[str], method: str = "majority"
+    ) -> Dict[str, Any]:
         """Creates a new voting session."""
         self._session_counter += 1
         session_id = f"vote_{self._session_counter}"
 
-        voting_method = VotingMethod(method) if method in [m.value for m in VotingMethod] else VotingMethod.MAJORITY
+        voting_method = (
+            VotingMethod(method)
+            if method in [m.value for m in VotingMethod]
+            else VotingMethod.MAJORITY
+        )
 
         session = VotingSession(
-            session_id=session_id, question=question, options=options, method=voting_method, status=VoteStatus.ACTIVE
+            session_id=session_id,
+            question=question,
+            options=options,
+            method=voting_method,
+            status=VoteStatus.ACTIVE,
         )
         self._sessions[session_id] = session
 
@@ -155,13 +168,26 @@ class VotingAgent(BaseAgent):
             if choice not in session.options:
                 return {"success": False, "error": f"Invalid option: {choice}"}
 
-        vote = Vote(voter_id=voter_id, choice=choice, weight=weight, rankings=rankings, reasoning=reasoning)
+        vote = Vote(
+            voter_id=voter_id,
+            choice=choice,
+            weight=weight,
+            rankings=rankings,
+            reasoning=reasoning,
+        )
         session.votes.append(vote)
 
-        return {"success": True, "session_id": session_id, "voter_id": voter_id, "vote_count": len(session.votes)}
+        return {
+            "success": True,
+            "session_id": session_id,
+            "voter_id": voter_id,
+            "vote_count": len(session.votes),
+        }
 
     @as_tool
-    async def cast_weighted_vote(self, options: List[str], weights: Dict[str, float]) -> Dict[str, Any]:
+    async def cast_weighted_vote(
+        self, options: List[str], weights: Dict[str, float]
+    ) -> Dict[str, Any]:
         """Determines the winner among options using provided weights (legacy method)."""
         logging.info("VotingAgent: Aggregating weighted votes...")
 
@@ -183,7 +209,9 @@ class VotingAgent(BaseAgent):
         analysis = await self.improve_content(prompt)
 
         llm_analysis = {"raw": analysis}
-        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
+        with contextlib.suppress(
+            ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError
+        ):
             match = re.search(r"(\{[\s\S]*\})", analysis)
             if match:
                 llm_analysis = json.loads(match.group(1))
@@ -224,7 +252,9 @@ class VotingAgent(BaseAgent):
 
         session.results = results
         session.winner = results.get("winner")
-        session.status = VoteStatus.COMPLETED if results.get("winner") else VoteStatus.TIED
+        session.status = (
+            VoteStatus.COMPLETED if results.get("winner") else VoteStatus.TIED
+        )
 
         return {
             "session_id": session_id,
@@ -254,10 +284,15 @@ class VotingAgent(BaseAgent):
         }
 
     @as_tool
-    async def deliberate(self, question: str, perspectives: List[Dict[str, str]]) -> Dict[str, Any]:
+    async def deliberate(
+        self, question: str, perspectives: List[Dict[str, str]]
+    ) -> Dict[str, Any]:
         """Facilitates deliberation among multiple perspectives."""
         perspectives_text = "\n\n".join(
-            [f"**{p.get('agent', 'Agent')}**: {p.get('position', 'No position')}" for p in perspectives]
+            [
+                f"**{p.get('agent', 'Agent')}**: {p.get('position', 'No position')}"
+                for p in perspectives
+            ]
         )
 
         prompt = (
@@ -274,7 +309,9 @@ class VotingAgent(BaseAgent):
 
         res = await self.improve_content(prompt)
 
-        with contextlib.suppress(ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError):
+        with contextlib.suppress(
+            ValueError, TypeError, KeyError, json.JSONDecodeError, AttributeError
+        ):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
@@ -309,7 +346,11 @@ class VotingAgent(BaseAgent):
         max_score = max(scores.values()) if scores else 0
         winner = max(scores, key=scores.get) if max_score > 0 else None
 
-        return {"scores": scores, "winner": winner, "total_weight": sum(v.weight for v in session.votes)}
+        return {
+            "scores": scores,
+            "winner": winner,
+            "total_weight": sum(v.weight for v in session.votes),
+        }
 
     def _tally_ranked_choice(self, session: VotingSession) -> Dict[str, Any]:
         """Instant-runoff ranked choice voting."""
@@ -332,14 +373,22 @@ class VotingAgent(BaseAgent):
             # Check for majority
             for opt, count in counts.items():
                 if count > total / 2:
-                    return {"winner": opt, "rounds": rounds, "method": "majority_reached"}
+                    return {
+                        "winner": opt,
+                        "rounds": rounds,
+                        "method": "majority_reached",
+                    }
 
             # Eliminate lowest
             if counts:
                 lowest = min(counts, key=counts.get)
                 remaining.remove(lowest)
 
-        return {"winner": list(remaining)[0] if remaining else None, "rounds": rounds, "method": "elimination"}
+        return {
+            "winner": list(remaining)[0] if remaining else None,
+            "rounds": rounds,
+            "method": "elimination",
+        }
 
     def _tally_borda(self, session: VotingSession) -> Dict[str, Any]:
         """Borda count voting."""
@@ -354,7 +403,11 @@ class VotingAgent(BaseAgent):
 
         winner = max(scores, key=scores.get) if scores else None
 
-        return {"scores": scores, "winner": winner, "max_possible": n * len(session.votes)}
+        return {
+            "scores": scores,
+            "winner": winner,
+            "max_possible": n * len(session.votes),
+        }
 
     def _tally_approval(self, session: VotingSession) -> Dict[str, Any]:
         """Approval voting (rankings treated as approvals)."""

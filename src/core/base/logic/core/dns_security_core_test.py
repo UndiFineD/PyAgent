@@ -33,37 +33,37 @@ except ImportError as e:
 
 def test_dnsrecordtype_exists():
     """Test that DnsRecordType class exists and is importable."""
-    assert 'DnsRecordType' in dir()
+    assert "DnsRecordType" in dir()
 
 
 def test_filteraction_exists():
     """Test that FilterAction class exists and is importable."""
-    assert 'FilterAction' in dir()
+    assert "FilterAction" in dir()
 
 
 def test_queryresult_exists():
     """Test that QueryResult class exists and is importable."""
-    assert 'QueryResult' in dir()
+    assert "QueryResult" in dir()
 
 
 def test_dnsquery_exists():
     """Test that DnsQuery class exists and is importable."""
-    assert 'DnsQuery' in dir()
+    assert "DnsQuery" in dir()
 
 
 def test_filterrule_exists():
     """Test that FilterRule class exists and is importable."""
-    assert 'FilterRule' in dir()
+    assert "FilterRule" in dir()
 
 
 def test_dnsstatistics_exists():
     """Test that DnsStatistics class exists and is importable."""
-    assert 'DnsStatistics' in dir()
+    assert "DnsStatistics" in dir()
 
 
 def test_dnssecuritycore_exists():
     """Test that DnsSecurityCore class exists and is importable."""
-    assert 'DnsSecurityCore' in dir()
+    assert "DnsSecurityCore" in dir()
 
 
 def test_dnssecuritycore_instantiation():
@@ -75,4 +75,3 @@ def test_dnssecuritycore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -21,6 +21,7 @@ from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
+
 class ArtifactCleanupCore:
     """
     Background worker for disk maintenance of modality artifacts (images/test logs).
@@ -28,15 +29,15 @@ class ArtifactCleanupCore:
     """
 
     def __init__(
-        self, 
-        base_dir: str, 
-        interval: int = 300, 
+        self,
+        base_dir: str,
+        interval: int = 300,
         ttl: int = 3600,
-        patterns: Optional[List[str]] = None
+        patterns: Optional[List[str]] = None,
     ):
         self.base_dir = Path(base_dir)
         self.interval = interval  # seconds
-        self.ttl = ttl           # seconds
+        self.ttl = ttl  # seconds
         self.patterns = patterns or ["*.mp3", "*.mp4", "*.png", "*.log"]
         self.is_running = False
         self._task: Optional[asyncio.Task] = None
@@ -47,7 +48,9 @@ class ArtifactCleanupCore:
             return
         self.is_running = True
         self._task = asyncio.create_task(self._cleanup_loop())
-        logger.info(f"ArtifactCleanupCore started for {self.base_dir} (TTL: {self.ttl}s)")
+        logger.info(
+            f"ArtifactCleanupCore started for {self.base_dir} (TTL: {self.ttl}s)"
+        )
 
     async def stop(self):
         """Stops the background cleanup loop."""
@@ -93,7 +96,7 @@ class ArtifactCleanupCore:
 
         if deleted_count > 0:
             logger.info(f"Cleanup complete. Removed {deleted_count} expired artifacts.")
-            
+
         return deleted_count
 
     def force_purge(self):

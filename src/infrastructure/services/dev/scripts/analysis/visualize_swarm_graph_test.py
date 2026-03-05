@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "generate_swarm_graph"), "generate_swarm_graph missing"
     assert hasattr(mod, "main"), "main missing"
-

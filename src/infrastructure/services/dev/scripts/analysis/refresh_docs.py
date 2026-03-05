@@ -30,7 +30,9 @@ from src.observability.reports.report_generator import ReportGenerator
 os.environ["PYTHONPATH"] = "."
 __version__ = VERSION
 
-logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s")
+logging.basicConfig(
+    level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s"
+)
 
 
 def main() -> None:

@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_goalstatus_exists():
     """Test that GoalStatus class exists and is importable."""
-    assert 'GoalStatus' in dir()
+    assert "GoalStatus" in dir()
 
 
 def test_goalpriority_exists():
     """Test that GoalPriority class exists and is importable."""
-    assert 'GoalPriority' in dir()
+    assert "GoalPriority" in dir()
 
 
 def test_goal_exists():
     """Test that Goal class exists and is importable."""
-    assert 'Goal' in dir()
+    assert "Goal" in dir()
 
 
 def test_iterationresult_exists():
     """Test that IterationResult class exists and is importable."""
-    assert 'IterationResult' in dir()
+    assert "IterationResult" in dir()
 
 
 def test_goalsettingcore_exists():
     """Test that GoalSettingCore class exists and is importable."""
-    assert 'GoalSettingCore' in dir()
+    assert "GoalSettingCore" in dir()
 
 
 def test_goalsettingcore_instantiation():
@@ -65,4 +65,3 @@ def test_goalsettingcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

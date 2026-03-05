@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_egresslockdowncore_exists():
     """Test that EgressLockdownCore class exists and is importable."""
-    assert 'EgressLockdownCore' in dir()
+    assert "EgressLockdownCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

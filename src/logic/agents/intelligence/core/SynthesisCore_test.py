@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_synthesiscore_exists():
     """Test that SynthesisCore class exists and is importable."""
-    assert 'SynthesisCore' in globals()
+    assert "SynthesisCore" in globals()
 
 
 def test_synthesiscore_instantiation():
@@ -45,4 +45,3 @@ def test_synthesiscore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

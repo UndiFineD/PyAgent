@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,7 +63,9 @@ class ProfileResult:
     def print_stats(self, limit: int = 20) -> None:
         """Print profiling statistics."""
         if self.stats:
-            print(f"\n=== Profile: {self.name} ({self.elapsed_seconds * 1000:.2f}ms) ===")
+            print(
+                f"\n=== Profile: {self.name} ({self.elapsed_seconds * 1000:.2f}ms) ==="
+            )
             self.stats.sort_stats("cumulative")
             self.stats.print_stats(limit)
 
@@ -122,7 +125,9 @@ def cprofile_context(
 
         # Extract top functions by cumulative time
         stats.sort_stats("cumulative")
-        for (filename, line, name), (cc, nc, tt, ct, callers) in list(stats.stats.items())[:limit]:
+        for (filename, line, name), (cc, nc, tt, ct, callers) in list(
+            stats.stats.items()
+        )[:limit]:
             func_name = f"{name} ({Path(filename).name}:{line})"
             result.top_functions.append((func_name, ct))
 
@@ -191,7 +196,13 @@ def timer_context(name: str = "operation") -> Iterator[dict]:
         ...     data = load_data()
         >>> print(f"Took {timing['elapsed_ms']:.2f}ms")
     """
-    timing = {"name": name, "start": 0.0, "end": 0.0, "elapsed_seconds": 0.0, "elapsed_ms": 0.0}
+    timing = {
+        "name": name,
+        "start": 0.0,
+        "end": 0.0,
+        "elapsed_seconds": 0.0,
+        "elapsed_ms": 0.0,
+    }
     timing["start"] = time.perf_counter()
     try:
         yield timing

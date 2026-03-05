@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_reporttype_exists():
     """Test that ReportType class exists and is importable."""
-    assert 'ReportType' in dir()
+    assert "ReportType" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

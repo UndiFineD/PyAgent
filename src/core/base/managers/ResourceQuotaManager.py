@@ -1,18 +1,21 @@
-
 import time
 from typing import Dict, Any, Optional
 from dataclasses import dataclass, field
 
+
 @dataclass
 class QuotaConfig:
     """Configuration for agent resource quotas."""
+
     max_tokens: int | None = None
     max_time_seconds: int | None = None
     max_cycles: int | None = None
 
+
 @dataclass
 class ResourceUsage:
     """Current resource usage for an agent session."""
+
     tokens_input: int = 0
     tokens_output: int = 0
     start_time: float = field(default_factory=time.time)
@@ -26,19 +29,22 @@ class ResourceUsage:
     def elapsed_time(self) -> float:
         return time.time() - self.start_time
 
+
 class ResourceQuotaManager:
     """Manages resource quotas and budget enforcement for agent sessions.
-    
+
     Phase 245: RESOURCE QUOTAS & BUDGETS
     """
-    
+
     def __init__(self, config: QuotaConfig | None = None) -> None:
         self.config = config or QuotaConfig()
         self.usage = ResourceUsage()
         self._is_interrupted = False
         self._interrupt_reason: str | None = None
 
-    def update_usage(self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0) -> bool:
+    def update_usage(
+        self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0
+    ) -> bool:
         """Update current usage metrics."""
         self.usage.tokens_input += tokens_input
         self.usage.tokens_output += tokens_output
@@ -46,7 +52,7 @@ class ResourceQuotaManager:
 
     def check_quotas(self) -> tuple[bool, str | None]:
         """Check if any quotas have been exceeded.
-        
+
         Returns:
             (is_exceeded, reason)
         """
@@ -55,7 +61,10 @@ class ResourceQuotaManager:
             self._interrupt_reason = f"Token quota exceeded ({self.usage.total_tokens} >= {self.config.max_tokens})"
             return True, self._interrupt_reason
 
-        if self.config.max_time_seconds and self.usage.elapsed_time >= self.config.max_time_seconds:
+        if (
+            self.config.max_time_seconds
+            and self.usage.elapsed_time >= self.config.max_time_seconds
+        ):
             self._is_interrupted = True
             self._interrupt_reason = f"Time quota exceeded ({self.usage.elapsed_time:.2f}s >= {self.config.max_time_seconds}s)"
             return True, self._interrupt_reason
@@ -84,5 +93,5 @@ class ResourceQuotaManager:
             "elapsed_time": self.usage.elapsed_time,
             "cycles": self.usage.cycles,
             "interrupted": self._is_interrupted,
-            "reason": self._interrupt_reason
+            "reason": self._interrupt_reason,
         }

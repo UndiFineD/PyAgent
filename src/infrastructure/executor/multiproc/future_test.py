@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_futurewrapper_exists():
     """Test that FutureWrapper class exists and is importable."""
-    assert 'FutureWrapper' in dir()
+    assert "FutureWrapper" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

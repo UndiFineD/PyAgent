@@ -14,5 +14,6 @@ def _load_module():
 def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "FusedMoEMethodBase"), "FusedMoEMethodBase missing"
-    assert hasattr(mod, "UnquantizedFusedMoEMethod"), "UnquantizedFusedMoEMethod missing"
-
+    assert hasattr(
+        mod, "UnquantizedFusedMoEMethod"
+    ), "UnquantizedFusedMoEMethod missing"

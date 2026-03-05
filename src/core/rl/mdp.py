@@ -1,7 +1,7 @@
-
 """
 Mdp.py module.
 """
+
 # Copyright 2026 PyAgent Authors
 # Markov Decision Process (MDP) Implementation - Phase 319 Enhanced
 
@@ -49,12 +49,16 @@ class ExperienceReplayBuffer:
         """Randomly samples a batch of transitions."""
         return random.sample(self.buffer, min(batch_size, len(self.buffer)))
 
-    def prioritized_sample(self, batch_size: int, alpha: float = 0.6) -> List[Transition]:
+    def prioritized_sample(
+        self, batch_size: int, alpha: float = 0.6
+    ) -> List[Transition]:
         """Samples with priority weighting."""
         priorities = [t.priority**alpha for t in self.buffer]
         total = sum(priorities)
         probs = [p / total for p in priorities]
-        indices = random.choices(range(len(self.buffer)), weights=probs, k=min(batch_size, len(self.buffer)))
+        indices = random.choices(
+            range(len(self.buffer)), weights=probs, k=min(batch_size, len(self.buffer))
+        )
         return [self.buffer[i] for i in indices]
 
 
@@ -72,17 +76,27 @@ class MDP:
         self.gamma = gamma  # Discount factor
         self.value_function: Dict[Any, float] = defaultdict(float)
         self.policy: Dict[Any, Any] = {}
-        self.transition_model: Dict[Tuple[Any, Any], Dict[Any, int]] = defaultdict(lambda: defaultdict(int))
+        self.transition_model: Dict[Tuple[Any, Any], Dict[Any, int]] = defaultdict(
+            lambda: defaultdict(int)
+        )
         self.reward_model: Dict[Tuple[Any, Any], List[float]] = defaultdict(list)
         self.replay_buffer = ExperienceReplayBuffer()
 
     def add_transition(
-        self, state: Any, action: Any, next_state: Any, reward: float, done: bool, timestamp: float = 0.0
+        self,
+        state: Any,
+        action: Any,
+        next_state: Any,
+        reward: float,
+        done: bool,
+        timestamp: float = 0.0,
     ) -> None:
         """Records a transition and updates internal models."""
         import time
 
-        t = Transition(state, action, next_state, reward, done, timestamp or time.time())
+        t = Transition(
+            state, action, next_state, reward, done, timestamp or time.time()
+        )
         self.transitions.append(t)
         self.replay_buffer.push(t)
 
@@ -98,7 +112,9 @@ class MDP:
         # Update reward model R(s,a)
         self.reward_model[(state, action)].append(reward)
 
-    def get_transition_probability(self, state: Any, action: Any, next_state: Any) -> float:
+    def get_transition_probability(
+        self, state: Any, action: Any, next_state: Any
+    ) -> float:
         """Returns P(s'|s,a) based on observed transitions."""
         transitions = self.transition_model[(state, action)]
         total = sum(transitions.values())
@@ -124,17 +140,25 @@ class MDP:
                     for next_state in self.states:
                         p = self.get_transition_probability(state, action, next_state)
                         r = self.get_expected_reward(state, action)
-                        expected_value += p * (r + self.gamma * self.value_function[next_state])
+                        expected_value += p * (
+                            r + self.gamma * self.value_function[next_state]
+                        )
                     action_values.append(expected_value)
 
-                self.value_function[state] = max(action_values) if action_values else 0.0
+                self.value_function[state] = (
+                    max(action_values) if action_values else 0.0
+                )
                 delta = max(delta, abs(v - self.value_function[state]))
 
             if delta < theta:
-                logger.info(f"MDP: Value iteration converged in {iteration + 1} iterations.")
+                logger.info(
+                    f"MDP: Value iteration converged in {iteration + 1} iterations."
+                )
                 return iteration + 1
 
-        logger.warning(f"MDP: Value iteration did not converge within {max_iterations} iterations.")
+        logger.warning(
+            f"MDP: Value iteration did not converge within {max_iterations} iterations."
+        )
         return max_iterations
 
     def extract_policy(self) -> Dict[Any, Any]:
@@ -147,7 +171,9 @@ class MDP:
                 for next_state in self.states:
                     p = self.get_transition_probability(state, action, next_state)
                     r = self.get_expected_reward(state, action)
-                    expected_value += p * (r + self.gamma * self.value_function[next_state])
+                    expected_value += p * (
+                        r + self.gamma * self.value_function[next_state]
+                    )
                 if expected_value > best_value:
                     best_value = expected_value
                     best_action = action

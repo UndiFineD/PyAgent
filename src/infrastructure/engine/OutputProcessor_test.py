@@ -33,57 +33,57 @@ except ImportError as e:
 
 def test_eventtype_exists():
     """Test that EventType class exists and is importable."""
-    assert 'EventType' in dir()
+    assert "EventType" in dir()
 
 
 def test_requestevent_exists():
     """Test that RequestEvent class exists and is importable."""
-    assert 'RequestEvent' in dir()
+    assert "RequestEvent" in dir()
 
 
 def test_lorarequest_exists():
     """Test that LoRARequest class exists and is importable."""
-    assert 'LoRARequest' in dir()
+    assert "LoRARequest" in dir()
 
 
 def test_parentrequest_exists():
     """Test that ParentRequest class exists and is importable."""
-    assert 'ParentRequest' in dir()
+    assert "ParentRequest" in dir()
 
 
 def test_samplingparams_exists():
     """Test that SamplingParams class exists and is importable."""
-    assert 'SamplingParams' in dir()
+    assert "SamplingParams" in dir()
 
 
 def test_enginecorerequest_exists():
     """Test that EngineCoreRequest class exists and is importable."""
-    assert 'EngineCoreRequest' in dir()
+    assert "EngineCoreRequest" in dir()
 
 
 def test_enginecoreoutput_exists():
     """Test that EngineCoreOutput class exists and is importable."""
-    assert 'EngineCoreOutput' in dir()
+    assert "EngineCoreOutput" in dir()
 
 
 def test_enginecoreoutputs_exists():
     """Test that EngineCoreOutputs class exists and is importable."""
-    assert 'EngineCoreOutputs' in dir()
+    assert "EngineCoreOutputs" in dir()
 
 
 def test_requestoutput_exists():
     """Test that RequestOutput class exists and is importable."""
-    assert 'RequestOutput' in dir()
+    assert "RequestOutput" in dir()
 
 
 def test_outputprocessoroutput_exists():
     """Test that OutputProcessorOutput class exists and is importable."""
-    assert 'OutputProcessorOutput' in dir()
+    assert "OutputProcessorOutput" in dir()
 
 
 def test_requestoutputcollector_exists():
     """Test that RequestOutputCollector class exists and is importable."""
-    assert 'RequestOutputCollector' in dir()
+    assert "RequestOutputCollector" in dir()
 
 
 def test_requestoutputcollector_instantiation():
@@ -94,22 +94,22 @@ def test_requestoutputcollector_instantiation():
 
 def test_requeststate_exists():
     """Test that RequestState class exists and is importable."""
-    assert 'RequestState' in dir()
+    assert "RequestState" in dir()
 
 
 def test_lorarequeststates_exists():
     """Test that LoRARequestStates class exists and is importable."""
-    assert 'LoRARequestStates' in dir()
+    assert "LoRARequestStates" in dir()
 
 
 def test_outputprocessor_exists():
     """Test that OutputProcessor class exists and is importable."""
-    assert 'OutputProcessor' in dir()
+    assert "OutputProcessor" in dir()
 
 
 def test_iterationstats_exists():
     """Test that IterationStats class exists and is importable."""
-    assert 'IterationStats' in dir()
+    assert "IterationStats" in dir()
 
 
 def test_iterationstats_instantiation():
@@ -121,4 +121,3 @@ def test_iterationstats_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

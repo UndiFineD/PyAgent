@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,20 +23,26 @@ from src.logic.agents.cognitive.core.InterpretableCore import InterpretableCore
 
 __version__ = VERSION
 
+
 class ExplainabilityAgent(BaseAgent):
     """
-    Explainability Agent: Provides autonomous tracing and justification of multi-agent 
+    Explainability Agent: Provides autonomous tracing and justification of multi-agent
     reasoning chains. Enhanced with SAE (Sparse Autoencoder) neural interpretability.
     """
+
     def __init__(self, workspace_path: str, errors_only: bool = False) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.log_path = os.path.join(workspace_path, "data/logs", "reasoning_chains.jsonl")
+        self.log_path = os.path.join(
+            workspace_path, "data/logs", "reasoning_chains.jsonl"
+        )
         self.errors_only = errors_only
         self.interpret_core = InterpretableCore()
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
 
-    def generate_neural_trace(self, agent_name: str, decision_context: str) -> dict[str, Any]:
+    def generate_neural_trace(
+        self, agent_name: str, decision_context: str
+    ) -> dict[str, Any]:
         """
         Generates a synthetic neural trace for a decision using SAE logic.
         """
@@ -44,36 +51,42 @@ class ExplainabilityAgent(BaseAgent):
         mock_activations = [0.1] * 4096
         # Simulate some high activations
         import random
+
         for i in range(10):
             mock_activations[random.randint(0, 4095)] = 0.9
-            
-        sae_details = self.interpret_core.decompose_activations(mock_activations)
-        
-        return {
-            "trace": trace,
-            "sae_analysis": sae_details
-        }
 
-    def log_reasoning_step(self, workflow_id: str, agent_name: str, action: str, 
-                           justification: str, context: dict[str, Any]) -> str:
+        sae_details = self.interpret_core.decompose_activations(mock_activations)
+
+        return {"trace": trace, "sae_analysis": sae_details}
+
+    def log_reasoning_step(
+        self,
+        workflow_id: str,
+        agent_name: str,
+        action: str,
+        justification: str,
+        context: dict[str, Any],
+    ) -> str:
         """Logs a single reasoning step in the chain."""
-        
+
         # Pruning logic: Only record if verbose is ON or if it's a failure/error
-        is_failure = any(word in (justification + action).lower() 
-                         for word in ["error", "fail", "mistake", "exception", "retry", "violation"])
-        
+        is_failure = any(
+            word in (justification + action).lower()
+            for word in ["error", "fail", "mistake", "exception", "retry", "violation"]
+        )
+
         if self.errors_only and not is_failure:
             return  # Skip routine success logs
 
         entry = {
-            "timestamp": "2026-01-08", # Simulated
+            "timestamp": "2026-01-08",  # Simulated
             "workflow_id": workflow_id,
             "agent": agent_name,
             "action": action,
             "justification": justification,
-            "context_summary": {k: str(v)[:100] for k, v in context.items()}
+            "context_summary": {k: str(v)[:100] for k, v in context.items()},
         }
-        
+
         with open(self.log_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(entry) + "\n")
 
@@ -96,8 +109,10 @@ class ExplainabilityAgent(BaseAgent):
         for i, step in enumerate(steps, 1):
             explanation += f"## Step {i}: {step['agent']}.{step['action']}\n"
             explanation += f"**Justification**: {step['justification']}\n"
-            explanation += "**Context**: " + json.dumps(step['context_summary'], indent=2) + "\n\n"
-        
+            explanation += (
+                "**Context**: " + json.dumps(step["context_summary"], indent=2) + "\n\n"
+            )
+
         return explanation
 
     def justify_action(self, agent_name: str, action: str, result: Any) -> str:
@@ -108,6 +123,9 @@ class ExplainabilityAgent(BaseAgent):
             "SecurityAudit": "Scanning for secrets prevents catastrophic leaks in public repositories.",
             "CodeQuality": "Formatting consistency reduces merge conflicts and improves cognitive load for maintainers.",
             "StrategicPlanner": "Aligning current tasks with long-term milestones ensures swarm convergence on core goals.",
-            "MultiCloudBridge": "State synchronization ensures high availability across provider-specific failure domains."
+            "MultiCloudBridge": "State synchronization ensures high availability across provider-specific failure domains.",
         }
-        return justifications.get(agent_name, f"Standard operational procedure for {agent_name} performing {action}.")
+        return justifications.get(
+            agent_name,
+            f"Standard operational procedure for {agent_name} performing {action}.",
+        )

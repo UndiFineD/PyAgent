@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MarketPricingEngine"), "MarketPricingEngine missing"
     assert hasattr(mod, "AgentEconomy"), "AgentEconomy missing"
     assert hasattr(mod, "AuctionOrchestrator"), "AuctionOrchestrator missing"
-

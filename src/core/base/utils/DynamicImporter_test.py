@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_placeholdermodule_exists():
     """Test that PlaceholderModule class exists and is importable."""
-    assert 'PlaceholderModule' in dir()
+    assert "PlaceholderModule" in dir()
 
 
 def test_lazymoduleregistry_exists():
     """Test that LazyModuleRegistry class exists and is importable."""
-    assert 'LazyModuleRegistry' in dir()
+    assert "LazyModuleRegistry" in dir()
 
 
 def test_lazymoduleregistry_instantiation():
@@ -49,7 +49,7 @@ def test_lazymoduleregistry_instantiation():
 
 def test_lazyattribute_exists():
     """Test that LazyAttribute class exists and is importable."""
-    assert 'LazyAttribute' in dir()
+    assert "LazyAttribute" in dir()
 
 
 def test_import_from_path_exists():
@@ -115,4 +115,3 @@ def test_require_module_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,6 +41,7 @@ __version__ = VERSION
 
 class ReasoningStrategy(Enum):
     """Strategies for deep reasoning and logical deduction."""
+
     CHAIN_OF_THOUGHT = "cot"
     TREE_OF_THOUGHT = "tot"
     SELF_CONSISTENCY = "sc"
@@ -77,7 +79,9 @@ class ReasoningAgent(BaseAgent):
         self._reasoning_history: List[Dict[str, Any]] = []
 
     @as_tool
-    async def think_deeply(self, prompt: str, depth: int = 3, strategy: str = "cot") -> Dict[str, Any]:
+    async def think_deeply(
+        self, prompt: str, depth: int = 3, strategy: str = "cot"
+    ) -> Dict[str, Any]:
         """Performs recursive reasoning on a given prompt with multiple strategies."""
         start_time = time.time()
 
@@ -94,7 +98,12 @@ class ReasoningAgent(BaseAgent):
 
         elapsed = time.time() - start_time
         self._reasoning_history.append(
-            {"prompt": prompt[:100], "strategy": strategy, "depth": depth, "elapsed_s": elapsed}
+            {
+                "prompt": prompt[:100],
+                "strategy": strategy,
+                "depth": depth,
+                "elapsed_s": elapsed,
+            }
         )
 
         return result
@@ -110,18 +119,14 @@ class ReasoningAgent(BaseAgent):
             if i == 0:
                 step_prompt = f"Problem: {current_context}\n\nLet me think through this step-by-step:"
             else:
-                step_prompt = (
-                    f"Building on my previous analysis:\n{current_context}\n\nLet me refine and extend this reasoning:"
-                )
+                step_prompt = f"Building on my previous analysis:\n{current_context}\n\nLet me refine and extend this reasoning:"
 
             response = await self.improve_content(step_prompt)
             thought_chain.append({"depth": i + 1, "thought": response})
             current_context = response
 
         # Final synthesis
-        synthesis_prompt = (
-            f"Based on my chain of reasoning:\n{current_context}\n\nProvide a clear, concise final answer:"
-        )
+        synthesis_prompt = f"Based on my chain of reasoning:\n{current_context}\n\nProvide a clear, concise final answer:"
         final_answer = await self.improve_content(synthesis_prompt)
 
         return {
@@ -141,7 +146,9 @@ class ReasoningAgent(BaseAgent):
             "solve this problem. Format each as a separate paragraph."
         )
         branches_response = await self.improve_content(branch_prompt)
-        branches = [b.strip() for b in branches_response.split("\n\n") if b.strip()][:breadth]
+        branches = [b.strip() for b in branches_response.split("\n\n") if b.strip()][
+            :breadth
+        ]
 
         for branch in branches:
             child = ThoughtNode(content=branch, depth=1, parent=root)
@@ -160,7 +167,9 @@ class ReasoningAgent(BaseAgent):
             child.metadata["evaluation"] = eval_response
 
         # Select best branch
-        best_child = max(root.children, key=lambda c: c.score) if root.children else None
+        best_child = (
+            max(root.children, key=lambda c: c.score) if root.children else None
+        )
 
         if best_child:
             # Develop best branch further
@@ -173,12 +182,18 @@ class ReasoningAgent(BaseAgent):
 
         return {
             "strategy": "tree_of_thought",
-            "branches": [{"content": c.content, "score": c.score} for c in root.children],
+            "branches": [
+                {"content": c.content, "score": c.score} for c in root.children
+            ],
             "best_path": best_child.content if best_child else "",
-            "final_answer": best_child.metadata.get("developed", "") if best_child else "",
+            "final_answer": (
+                best_child.metadata.get("developed", "") if best_child else ""
+            ),
         }
 
-    async def _self_consistency(self, prompt: str, num_samples: int = 5) -> Dict[str, Any]:
+    async def _self_consistency(
+        self, prompt: str, num_samples: int = 5
+    ) -> Dict[str, Any]:
         """Self-Consistency: generate multiple solutions and vote."""
         solutions = []
 
@@ -198,7 +213,9 @@ class ReasoningAgent(BaseAgent):
         # Voting/consensus
         vote_prompt = (
             f"Given these {num_samples} solutions to the same problem:\n\n"
-            + "\n---\n".join([f"Solution {i + 1}: {s[:500]}" for i, s in enumerate(solutions)])
+            + "\n---\n".join(
+                [f"Solution {i + 1}: {s[:500]}" for i, s in enumerate(solutions)]
+            )
             + "\n\nDetermine the most common/correct answer by majority consensus."
         )
         consensus = await self.improve_content(vote_prompt)
@@ -210,7 +227,9 @@ class ReasoningAgent(BaseAgent):
             "consensus_answer": consensus,
         }
 
-    async def _reflective_reasoning(self, prompt: str, iterations: int = 3) -> Dict[str, Any]:
+    async def _reflective_reasoning(
+        self, prompt: str, iterations: int = 3
+    ) -> Dict[str, Any]:
         """Reflection: generate, critique, and refine."""
         current_solution = ""
         reflections = []
@@ -249,14 +268,19 @@ class ReasoningAgent(BaseAgent):
         for r in range(rounds):
             con_prompt = f"Counter this argument:\n{debate_log[-1]['argument']}\n\nProvide a strong rebuttal."
             rebuttal = await self.improve_content(con_prompt)
-            debate_log.append({"side": "con" if r % 2 == 0 else "pro", "argument": rebuttal})
+            debate_log.append(
+                {"side": "con" if r % 2 == 0 else "pro", "argument": rebuttal}
+            )
 
-        synthesis_prompt = (
-            f"Given this debate:\n{debate_log}\n\nSynthesize the best conclusion considering all arguments."
-        )
+        synthesis_prompt = f"Given this debate:\n{debate_log}\n\nSynthesize the best conclusion considering all arguments."
         synthesis = await self.improve_content(synthesis_prompt)
 
-        return {"strategy": "debate", "rounds": rounds, "debate_log": debate_log, "synthesis": synthesis}
+        return {
+            "strategy": "debate",
+            "rounds": rounds,
+            "debate_log": debate_log,
+            "synthesis": synthesis,
+        }
 
     @as_tool
     async def verify_reasoning(self, claim: str, reasoning: str) -> Dict[str, Any]:

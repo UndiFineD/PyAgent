@@ -17,20 +17,21 @@ import aiohttp
 from typing import List, Dict, Set
 import re
 
+
 class ReconIntelligence:
     """
     Refactored Reconnaissance logic from Argus.
     Focuses on OSINT and infrastructure detection.
     """
-    
+
     FIREWALL_SIGNATURES = {
-        'cloudflare': 'Cloudflare Firewall',
-        'akamai': 'Akamai Firewall',
-        'sucuri': 'Sucuri Firewall',
-        'imperva': 'Imperva Firewall',
-        'incapsula': 'Incapsula Firewall',
-        'f5 big-ip': 'F5 BIG-IP',
-        'bunnycdn': 'BunnyCDN'
+        "cloudflare": "Cloudflare Firewall",
+        "akamai": "Akamai Firewall",
+        "sucuri": "Sucuri Firewall",
+        "imperva": "Imperva Firewall",
+        "incapsula": "Incapsula Firewall",
+        "f5 big-ip": "F5 BIG-IP",
+        "bunnycdn": "BunnyCDN",
     }
 
     @classmethod
@@ -40,18 +41,18 @@ class ReconIntelligence:
             try:
                 async with session.get(url, timeout=10) as response:
                     headers = response.headers
-                    server = headers.get('Server', '').lower()
-                    
+                    server = headers.get("Server", "").lower()
+
                     for sig, name in cls.FIREWALL_SIGNATURES.items():
                         if sig in server:
                             results.add(name)
-                    
-                    if 'X-Akamai' in headers:
-                        results.add('Akamai Firewall')
-                    if 'x-sucuri-id' in headers:
-                        results.add('Sucuri Firewall')
-                    if 'x-amz-cf-id' in headers:
-                        results.add('AWS CloudFront/Shield')
+
+                    if "X-Akamai" in headers:
+                        results.add("Akamai Firewall")
+                    if "x-sucuri-id" in headers:
+                        results.add("Sucuri Firewall")
+                    if "x-amz-cf-id" in headers:
+                        results.add("AWS CloudFront/Shield")
             except Exception:
                 pass
         return results
@@ -78,7 +79,7 @@ class ReconIntelligence:
                 async with session.get(paste_url, timeout=15) as resp:
                     if resp.status == 200:
                         data = await resp.json()
-                        out["pastebin"] = data.get('data', [])
+                        out["pastebin"] = data.get("data", [])
             except Exception:
                 pass
         return out

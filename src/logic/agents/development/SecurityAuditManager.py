@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,9 +27,10 @@ from typing import Dict, List, Any
 
 __version__ = VERSION
 
+
 class SecurityAuditManager:
     """Manages fleet security including certificates and access control."""
-    
+
     def __init__(self) -> None:
         self.certificates: dict[str, dict[str, Any]] = {}
 
@@ -38,8 +40,8 @@ class SecurityAuditManager:
         self.certificates[fleet_id] = {
             "cert_id": new_cert_id,
             "issued_at": time.time(),
-            "expires_at": time.time() + (3600 * 24 * 90), # 90 days
-            "status": "valid"
+            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days
+            "status": "valid",
         }
         return f"Rotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}"
 

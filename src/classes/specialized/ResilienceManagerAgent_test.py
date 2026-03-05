@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_resiliencemanageragent_exists():
     """Test that ResilienceManagerAgent class exists and is importable."""
-    assert 'ResilienceManagerAgent' in dir()
+    assert "ResilienceManagerAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

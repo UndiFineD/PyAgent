@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "lmstudio_chat"), "lmstudio_chat missing"
     assert hasattr(mod, "lmstudio_stream"), "lmstudio_stream missing"
     assert hasattr(mod, "lmstudio_chat_async"), "lmstudio_chat_async missing"
-

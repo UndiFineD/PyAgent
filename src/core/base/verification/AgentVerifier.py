@@ -9,6 +9,7 @@ try:
 except ImportError:
     rc = None
 
+
 class AgentVerifier:
     """Handles quality and anchoring verification of agent responses."""
 
@@ -20,6 +21,7 @@ class AgentVerifier:
         if cls._embedding_model is None:
             try:
                 from sentence_transformers import SentenceTransformer
+
                 cls._embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
             except ImportError:
                 return None

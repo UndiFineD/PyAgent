@@ -20,8 +20,7 @@ import logging
 from typing import Any, Dict, List, Optional
 
 from .base import ChatTemplate
-from .config import (BUILTIN_TEMPLATES, RenderOptions, TemplateConfig,
-                     TemplateType)
+from .config import BUILTIN_TEMPLATES, RenderOptions, TemplateConfig, TemplateType
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +108,9 @@ class JinjaTemplate(ChatTemplate):
 
                 return result
 
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Template rendering error: {e}")
                 return self._fallback_render(filtered, options)
 

@@ -17,11 +17,12 @@ import ast
 from pathlib import Path
 from typing import Any
 
+
 class EcosystemDiagnosticsAgent:
     """Agent to run various diagnostics across the codebase and environment."""
+
     def __init__(self, root_path: str = ".") -> None:
-        """Initializes the diagnostics agent with the root path of the codebase.
-        """
+        """Initializes the diagnostics agent with the root path of the codebase."""
         self.root_path = Path(root_path)
         self.results: dict[str, Any] = {}
 
@@ -39,13 +40,13 @@ class EcosystemDiagnosticsAgent:
         errors = []
         for py_file in (self.root_path / "src").rglob("*.py"):
             try:
-                with open(py_file, 'r', encoding='utf-8') as f:
+                with open(py_file, "r", encoding="utf-8") as f:
                     ast.parse(f.read())
             except (SyntaxError, UnicodeDecodeError) as e:
                 errors.append(f"{py_file}: {e}")
             except (OSError, PermissionError, ValueError) as e:
                 errors.append(f"{py_file}: Failed to read file - {e}")
-        self.results['syntax_errors'] = errors
+        self.results["syntax_errors"] = errors
         if not errors:
             print("  - Success: No syntax errors found.")
         else:
@@ -56,7 +57,7 @@ class EcosystemDiagnosticsAgent:
         print("[CHECK] Checking Circular Imports and Missing References...")
         # Placeholder for complex import analysis
         # In a real scenario, this would use 'pylint' or custom graph analysis
-        self.results['import_health'] = "Nominal"
+        self.results["import_health"] = "Nominal"
 
     def check_system_resources(self) -> None:
         """Checks system resources like disk space, memory, and CPU load."""
@@ -64,12 +65,13 @@ class EcosystemDiagnosticsAgent:
         try:
             # Check disk space using shutil.disk_usage (cross-platform, safe)
             import shutil
+
             usage = shutil.disk_usage(".")
             total_gb = usage.total / (1024**3)
             free_gb = usage.free / (1024**3)
-            self.results['disk_space'] = f"Free: {free_gb:.1f} GB / {total_gb:.1f} GB"
+            self.results["disk_space"] = f"Free: {free_gb:.1f} GB / {total_gb:.1f} GB"
         except (OSError, PermissionError, ValueError):
-            self.results['disk_space'] = "Unknown (Error reading disk info)"
+            self.results["disk_space"] = "Unknown (Error reading disk info)"
 
     def summarize(self) -> None:
         """Prints a summary of all diagnostics results."""
@@ -79,9 +81,12 @@ class EcosystemDiagnosticsAgent:
                 print(f"{key}: {len(val)} issues")
                 for item in val[:5]:
                     # Indent and limit length for readability
-                    print(f"  - {str(item)[:100]}{'...' if len(str(item)) > 100 else ''}")
+                    print(
+                        f"  - {str(item)[:100]}{'...' if len(str(item)) > 100 else ''}"
+                    )
             else:
                 print(f"{key}: {val}")
+
 
 if __name__ == "__main__":
     agent = EcosystemDiagnosticsAgent()

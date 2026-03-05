@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_profilinganalysismixin_exists():
     """Test that ProfilingAnalysisMixin class exists and is importable."""
-    assert 'ProfilingAnalysisMixin' in dir()
+    assert "ProfilingAnalysisMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

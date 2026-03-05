@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,7 +33,9 @@ from .mixins.map_builder_mixin import MapBuilderMixin
 __version__ = VERSION
 
 
-class TopologicalNavigator(BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin):
+class TopologicalNavigator(
+    BaseAgent, MapBuilderMixin, GraphAnalysisMixin, FederationMixin
+):
     """
     Tier 2 (Cognitive Logic) - Topological Navigator: Maps code relationships
     and determines the impact of changes using graph-based dependency analysis.

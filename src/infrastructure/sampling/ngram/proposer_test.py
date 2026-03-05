@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_ngramproposer_exists():
     """Test that NgramProposer class exists and is importable."""
-    assert 'NgramProposer' in dir()
+    assert "NgramProposer" in dir()
 
 
 def test_adaptivengramproposer_exists():
     """Test that AdaptiveNgramProposer class exists and is importable."""
-    assert 'AdaptiveNgramProposer' in dir()
+    assert "AdaptiveNgramProposer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

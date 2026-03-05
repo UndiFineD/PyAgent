@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MemoryInfo"), "MemoryInfo missing"
     assert hasattr(mod, "DeviceInfo"), "DeviceInfo missing"
     assert hasattr(mod, "PlatformConfig"), "PlatformConfig missing"
-

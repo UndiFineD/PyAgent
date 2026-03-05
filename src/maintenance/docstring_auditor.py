@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0
 
@@ -56,7 +57,9 @@ def file_path_to_module_name(path: str) -> str:
     return ".".join(p.with_suffix("").parts)
 
 
-def generate_next_batch(prompt_path: str | Path, out_path: str | Path, max_entries: int = 20) -> List[str]:
+def generate_next_batch(
+    prompt_path: str | Path, out_path: str | Path, max_entries: int = 20
+) -> List[str]:
     """Generate the next small batch of modules to fix.
 
     Writes a newline-separated list of module names to `out_path` and returns

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +32,6 @@ Provides actionable insights and automated suggestions for debt reduction and co
 """
 Tech debt agent.py module.
 """
-
 
 
 import ast
@@ -101,7 +101,10 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         for root, dirs, files in os.walk(self.workspace_path):
             dirs[:] = [
-                d for d in dirs if not d.startswith(".") and d not in ["node_modules", "__pycache__", ".venv", "venv"]
+                d
+                for d in dirs
+                if not d.startswith(".")
+                and d not in ["node_modules", "__pycache__", ".venv", "venv"]
             ]
             for file in files:
                 if file.endswith(".py"):
@@ -113,7 +116,9 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         return {
             "total_issues": total_issues,
-            "hotspots": sorted(file_reports, key=lambda x: x["issue_count"], reverse=True)[:5],
+            "hotspots": sorted(
+                file_reports, key=lambda x: x["issue_count"], reverse=True
+            )[:5],
         }
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
@@ -129,7 +134,9 @@ class TechDebtAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         report_lines.append(f"**Total Issues**: {workspace_report['total_issues']}")
         report_lines.append("\n### Hotspots")
         for hotspot in workspace_report["hotspots"]:
-            report_lines.append(f"- `{hotspot['file']}`: {hotspot['issue_count']} issues")
+            report_lines.append(
+                f"- `{hotspot['file']}`: {hotspot['issue_count']} issues"
+            )
 
         return "\n".join(report_lines)
 

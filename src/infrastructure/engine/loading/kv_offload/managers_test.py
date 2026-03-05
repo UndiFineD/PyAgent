@@ -16,6 +16,7 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LRUOffloadingManager"), "LRUOffloadingManager missing"
     assert hasattr(mod, "ARCOffloadingManager"), "ARCOffloadingManager missing"
     assert hasattr(mod, "TieredOffloadManager"), "TieredOffloadManager missing"
-    assert hasattr(mod, "compute_lru_eviction_rust"), "compute_lru_eviction_rust missing"
+    assert hasattr(
+        mod, "compute_lru_eviction_rust"
+    ), "compute_lru_eviction_rust missing"
     assert hasattr(mod, "compute_arc_target_rust"), "compute_arc_target_rust missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,8 +28,9 @@ from typing import Any
 from src.core.base.common.utils.notification_core import NotificationCore
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import (
+    LocalContextRecorder,
+)
 
 __version__ = VERSION
 
@@ -71,7 +73,9 @@ class NotificationManager:
         self.webhooks.append(url)
         logging.info(f"Registered webhook: {url}")
 
-    def register_callback(self, callback: Callable[[str, dict[str, Any]], None]) -> None:
+    def register_callback(
+        self, callback: Callable[[str, dict[str, Any]], None]
+    ) -> None:
         """Register a new callback function."""
         self.callbacks.append(callback)
         name = getattr(callback, "__name__", repr(callback))
@@ -95,7 +99,9 @@ class NotificationManager:
         for callback in self.callbacks:
             try:
                 callback(event_name, event_data)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Callback failed: {e}")
 
     def _send_webhooks(self, event_name: str, event_data: dict[str, Any]) -> None:
@@ -116,8 +122,12 @@ class NotificationManager:
                     response = session.post(url, json=payload, timeout=5)
                     response.raise_for_status()
                     self._update_status(url, True)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.warning(f"Webhook failed for {url}: {e}")
                 self._update_status(url, False)
                 if self.recorder:
-                    self.recorder.record_lesson("webhook_failure", {"url": url, "error": str(e)})
+                    self.recorder.record_lesson(
+                        "webhook_failure", {"url": url, "error": str(e)}
+                    )

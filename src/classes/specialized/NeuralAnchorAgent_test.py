@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_neuralanchoragent_exists():
     """Test that NeuralAnchorAgent class exists and is importable."""
-    assert 'NeuralAnchorAgent' in dir()
+    assert "NeuralAnchorAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

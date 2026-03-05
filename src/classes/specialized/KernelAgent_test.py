@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_kernelagent_exists():
     """Test that KernelAgent class exists and is importable."""
-    assert 'KernelAgent' in dir()
+    assert "KernelAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

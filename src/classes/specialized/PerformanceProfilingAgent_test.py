@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_performanceprofilingagent_exists():
     """Test that PerformanceProfilingAgent class exists and is importable."""
-    assert 'PerformanceProfilingAgent' in dir()
+    assert "PerformanceProfilingAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -69,7 +70,9 @@ class EthicsGuardrailAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Enforces hierarchical safety protocols before execution."""
         for protocol, rule in self.safety_protocols.items():
             if protocol in action_context.lower():
-                logging.warning(f"Ethics Enforcement: Protocol '{protocol}' triggered. Rule: {rule}")
+                logging.warning(
+                    f"Ethics Enforcement: Protocol '{protocol}' triggered. Rule: {rule}"
+                )
                 return False
         return True
 
@@ -96,6 +99,8 @@ class EthicsGuardrailAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         _ = action
         # In a real system, this would use an LLM or cross-evaluation
         if "sensitive_data" in result.lower():
-            logging.warning(f"Ethics Alert: {agent_name} output contains potentially sensitive data.")
+            logging.warning(
+                f"Ethics Alert: {agent_name} output contains potentially sensitive data."
+            )
             return False
         return True

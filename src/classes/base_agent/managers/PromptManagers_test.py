@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_prompttemplatemanager_exists():
     """Test that PromptTemplateManager class exists and is importable."""
-    assert 'PromptTemplateManager' in dir()
+    assert "PromptTemplateManager" in dir()
 
 
 def test_prompttemplatemanager_instantiation():
@@ -44,12 +44,12 @@ def test_prompttemplatemanager_instantiation():
 
 def test_promptversion_exists():
     """Test that PromptVersion class exists and is importable."""
-    assert 'PromptVersion' in dir()
+    assert "PromptVersion" in dir()
 
 
 def test_promptversionmanager_exists():
     """Test that PromptVersionManager class exists and is importable."""
-    assert 'PromptVersionManager' in dir()
+    assert "PromptVersionManager" in dir()
 
 
 def test_promptversionmanager_instantiation():
@@ -61,4 +61,3 @@ def test_promptversionmanager_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

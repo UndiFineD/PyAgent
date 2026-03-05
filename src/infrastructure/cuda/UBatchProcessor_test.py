@@ -33,42 +33,42 @@ except ImportError as e:
 
 def test_ubatchstate_exists():
     """Test that UBatchState class exists and is importable."""
-    assert 'UBatchState' in dir()
+    assert "UBatchState" in dir()
 
 
 def test_ubatchslice_exists():
     """Test that UBatchSlice class exists and is importable."""
-    assert 'UBatchSlice' in dir()
+    assert "UBatchSlice" in dir()
 
 
 def test_ubatchcontext_exists():
     """Test that UBatchContext class exists and is importable."""
-    assert 'UBatchContext' in dir()
+    assert "UBatchContext" in dir()
 
 
 def test_ubatchmetadata_exists():
     """Test that UbatchMetadata class exists and is importable."""
-    assert 'UbatchMetadata' in dir()
+    assert "UbatchMetadata" in dir()
 
 
 def test_ubatchconfig_exists():
     """Test that UBatchConfig class exists and is importable."""
-    assert 'UBatchConfig' in dir()
+    assert "UBatchConfig" in dir()
 
 
 def test_ubatchbarrier_exists():
     """Test that UBatchBarrier class exists and is importable."""
-    assert 'UBatchBarrier' in dir()
+    assert "UBatchBarrier" in dir()
 
 
 def test_ubatchwrapper_exists():
     """Test that UBatchWrapper class exists and is importable."""
-    assert 'UBatchWrapper' in dir()
+    assert "UBatchWrapper" in dir()
 
 
 def test_dynamicubatchwrapper_exists():
     """Test that DynamicUBatchWrapper class exists and is importable."""
-    assert 'DynamicUBatchWrapper' in dir()
+    assert "DynamicUBatchWrapper" in dir()
 
 
 def test_make_ubatch_contexts_exists():
@@ -79,4 +79,3 @@ def test_make_ubatch_contexts_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_httpconnection_exists():
     """Test that HTTPConnection class exists and is importable."""
-    assert 'HTTPConnection' in dir()
+    assert "HTTPConnection" in dir()
 
 
 def test_httpconnection_instantiation():
@@ -45,4 +45,3 @@ def test_httpconnection_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

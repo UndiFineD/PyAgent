@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TemplateConfig"), "TemplateConfig missing"
     assert hasattr(mod, "TemplateInfo"), "TemplateInfo missing"
     assert hasattr(mod, "RenderOptions"), "RenderOptions missing"
-

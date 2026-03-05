@@ -16,9 +16,13 @@
 ResourceManager: Unified interface for vLLM, Ollama, and NPU resources.
 """
 
-from src.infrastructure.compute.backend.llm_backends.vllm_native_backend import VllmNativeBackend
+from src.infrastructure.compute.backend.llm_backends.vllm_native_backend import (
+    VllmNativeBackend,
+)
 from src.infrastructure.compute.backend.llm_backends.ollama_backend import OllamaBackend
+
 # TODO: Add NPU backend import when available
+
 
 class ResourceManager:
     def __init__(self):
@@ -26,11 +30,17 @@ class ResourceManager:
         self.ollama = OllamaBackend()
         # self.npu = NPUBackend()  # Placeholder
 
-    def infer_vllm(self, prompt, model="meta-llama/Llama-3-8B-Instruct", system_prompt=None):
-        return self.vllm.chat(prompt, model, system_prompt or "You are a helpful assistant.")
+    def infer_vllm(
+        self, prompt, model="meta-llama/Llama-3-8B-Instruct", system_prompt=None
+    ):
+        return self.vllm.chat(
+            prompt, model, system_prompt or "You are a helpful assistant."
+        )
 
     def infer_ollama(self, prompt, model="llama3", system_prompt=None):
-        return self.ollama.chat(prompt, model, system_prompt or "You are a helpful assistant.")
+        return self.ollama.chat(
+            prompt, model, system_prompt or "You are a helpful assistant."
+        )
 
     def run_npu_task(self, task):
         # TODO: Implement NPU logic

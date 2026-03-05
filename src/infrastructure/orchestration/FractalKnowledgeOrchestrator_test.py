@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_fractalknowledgeorchestrator_exists():
     """Test that FractalKnowledgeOrchestrator class exists and is importable."""
-    assert 'FractalKnowledgeOrchestrator' in dir()
+    assert "FractalKnowledgeOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

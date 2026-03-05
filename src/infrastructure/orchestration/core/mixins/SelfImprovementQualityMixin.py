@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,10 +22,13 @@ import re
 import ast
 from typing import List, Dict, Any
 
+
 class SelfImprovementQualityMixin:
     """Mixin for quality, complexity, and robustness analysis."""
 
-    def _analyze_complexity(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_complexity(
+        self, content: str, file_path_rel: str
+    ) -> List[Dict[str, Any]]:
         """Checks for high cyclomatic complexity."""
         _RUST_ACCEL = getattr(self, "_RUST_ACCEL", False)
         rc = getattr(self, "rc", None)
@@ -44,7 +48,9 @@ class SelfImprovementQualityMixin:
                 pass
         return []
 
-    def _analyze_documentation(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_documentation(
+        self, content: str, file_path_rel: str
+    ) -> List[Dict[str, Any]]:
         """Checks for missing or insufficient docstrings."""
         findings = []
         if not re.search(r'"""[\s\S]*?"""|\'\'\'[\s\S]*?\'\'\'', content[:1000]):
@@ -97,7 +103,9 @@ class SelfImprovementQualityMixin:
                 )
         return findings
 
-    def _analyze_robustness_and_perf(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_robustness_and_perf(
+        self, content: str, file_path_rel: str
+    ) -> List[Dict[str, Any]]:
         """General quality and performance checks."""
         findings = []
         # Robustness: Bare except
@@ -126,8 +134,12 @@ class SelfImprovementQualityMixin:
 
         # Intelligence Gap
         io_pattern = getattr(self, "io_pattern", "")
-        if io_pattern and re.search(io_pattern, content) and not any(
-            x in content for x in ["_record", "record_lesson", "record_interaction"]
+        if (
+            io_pattern
+            and re.search(io_pattern, content)
+            and not any(
+                x in content for x in ["_record", "record_lesson", "record_interaction"]
+            )
         ):
             findings.append(
                 {

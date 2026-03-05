@@ -35,9 +35,9 @@ class IntentionPredictionAgent:
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.agent_histories: dict[
-            str, list[dict[str, Any]]
-        ] = {}  # agent_id -> [action_logs]
+        self.agent_histories: dict[str, list[dict[str, Any]]] = (
+            {}
+        )  # agent_id -> [action_logs]
         self.core = MetacognitiveCore()
 
     def predict_and_prewarm(self, agent_id: str) -> dict[str, Any]:

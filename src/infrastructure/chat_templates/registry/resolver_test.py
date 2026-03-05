@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_templateresolver_exists():
     """Test that TemplateResolver class exists and is importable."""
-    assert 'TemplateResolver' in dir()
+    assert "TemplateResolver" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

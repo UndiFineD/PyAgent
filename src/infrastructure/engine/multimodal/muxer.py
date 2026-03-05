@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -35,6 +36,7 @@ logger = logging.getLogger("pyagent.multimodal.muxer")
 
 class ChannelType(Enum):
     """Enumeration of supported modality channel types."""
+
     TEXT = 0x01
     AUDIO = 0x02
     VIDEO = 0x03
@@ -44,6 +46,7 @@ class ChannelType(Enum):
 @dataclass
 class ModalityChannel:
     """Configuration for a specific modality streaming channel."""
+
     name: str
     modality_type: str
     fps: float = 120.0
@@ -75,8 +78,12 @@ class Muxer:
 
     def add_channel(self, name: str, m_type: str, fps: Optional[float] = None) -> None:
         """Register a new modality channel."""
-        self.channels[name] = ModalityChannel(name=name, modality_type=m_type, fps=fps or self.target_fps)
-        logger.info(f"Registered channel: {name} ({m_type}) at {fps or self.target_fps} fps")
+        self.channels[name] = ModalityChannel(
+            name=name, modality_type=m_type, fps=fps or self.target_fps
+        )
+        logger.info(
+            f"Registered channel: {name} ({m_type}) at {fps or self.target_fps} fps"
+        )
 
     def mux(self, raw_packets: List[Dict[str, Any]]) -> bytes:
         """
@@ -87,7 +94,10 @@ class Muxer:
             for p in raw_packets:
                 packets.append(
                     rc.ModalityPacket(
-                        p["channel_id"], p["modality_type"], p.get("timestamp", time.time()), p["payload"]
+                        p["channel_id"],
+                        p["modality_type"],
+                        p.get("timestamp", time.time()),
+                        p["payload"],
                     )
                 )
             return bytes(rc.mux_channels_rust(packets))
@@ -115,16 +125,27 @@ class Muxer:
 
         return []
 
-    def synchronize(self, packets: List[Dict[str, Any]], jitter_ms: float = 8.33) -> Dict[int, List[Dict[str, Any]]]:
+    def synchronize(
+        self, packets: List[Dict[str, Any]], jitter_ms: float = 8.33
+    ) -> Dict[int, List[Dict[str, Any]]]:
         """
         Synchronize packets across channels using a jitter window.
         8.33ms = 1 frame at 120fps.
         """
-        if rc and hasattr(rc, "synchronize_channels_rust") and hasattr(rc, "ModalityPacket"):
+        if (
+            rc
+            and hasattr(rc, "synchronize_channels_rust")
+            and hasattr(rc, "ModalityPacket")
+        ):
             rust_packets = []
             for p in packets:
                 rust_packets.append(
-                    rc.ModalityPacket(p["channel_id"], p["modality_type"], p["timestamp"], p["payload"])
+                    rc.ModalityPacket(
+                        p["channel_id"],
+                        p["modality_type"],
+                        p["timestamp"],
+                        p["payload"],
+                    )
                 )
 
             result = rc.synchronize_channels_rust(rust_packets, jitter_ms)

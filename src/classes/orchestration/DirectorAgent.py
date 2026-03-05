@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,12 +66,12 @@ class DirectorAgent(BaseAgent):
         # Target the core agent source directories
         ws_root = getattr(self, "_workspace_root", None) or Path.cwd()
         src_path = Path(ws_root) / "src"
-        
+
         # Scan src/data/agents, src/logic/agents, and orchestration folders
         for p in src_path.rglob("*Agent.py"):
             if p.name not in ["BaseAgent.py", "DirectorAgent.py"]:
                 agents.append(p.stem)
-        
+
         # Ensure we unique and sort
         return sorted(list(set(agents)))
 
@@ -100,7 +101,7 @@ class DirectorAgent(BaseAgent):
                 return await self.execute_project_plan(prompt)
             finally:
                 self._is_planning = False
-        
+
         # Otherwise, fall back to standard thinking/planning
         return await super().think(prompt)
 
@@ -193,18 +194,22 @@ class DirectorAgent(BaseAgent):
             # Format: **Title**\n   - Status: OLD_STATUS
             pattern = re.compile(
                 rf"\*\*{re.escape(title)}\*\*\n\s+-\s+Status:\s+([A-Z/ ()\w]+)",
-                re.MULTILINE
+                re.MULTILINE,
             )
-            
+
             match = pattern.search(content)
             if match:
                 old_status_line = match.group(0)
                 new_status_line = old_status_line.replace(match.group(1), status)
                 new_content = content.replace(old_status_line, new_status_line)
                 self.file_path.write_text(new_content, encoding="utf-8")
-                logging.info(f"Updated status for '{title}' to {status} in {self.file_path.name}")
+                logging.info(
+                    f"Updated status for '{title}' to {status} in {self.file_path.name}"
+                )
             else:
-                logging.warning(f"Could not find improvement '{title}' in {self.file_path.name}")
+                logging.warning(
+                    f"Could not find improvement '{title}' in {self.file_path.name}"
+                )
         except Exception as e:
             logging.error(f"Failed to update improvement status: {e}")
 

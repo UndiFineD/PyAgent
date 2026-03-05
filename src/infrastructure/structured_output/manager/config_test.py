@@ -33,35 +33,34 @@ except ImportError as e:
 
 def test_grammartype_exists():
     """Test that GrammarType class exists and is importable."""
-    assert 'GrammarType' in dir()
+    assert "GrammarType" in dir()
 
 
 def test_compilationstatus_exists():
     """Test that CompilationStatus class exists and is importable."""
-    assert 'CompilationStatus' in dir()
+    assert "CompilationStatus" in dir()
 
 
 def test_grammarspec_exists():
     """Test that GrammarSpec class exists and is importable."""
-    assert 'GrammarSpec' in dir()
+    assert "GrammarSpec" in dir()
 
 
 def test_compilationresult_exists():
     """Test that CompilationResult class exists and is importable."""
-    assert 'CompilationResult' in dir()
+    assert "CompilationResult" in dir()
 
 
 def test_validationresult_exists():
     """Test that ValidationResult class exists and is importable."""
-    assert 'ValidationResult' in dir()
+    assert "ValidationResult" in dir()
 
 
 def test_backendstats_exists():
     """Test that BackendStats class exists and is importable."""
-    assert 'BackendStats' in dir()
+    assert "BackendStats" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

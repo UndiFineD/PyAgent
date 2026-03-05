@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +18,13 @@ import base64
 import contextlib
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
 
-from .models import (EmbeddingInput, PromptConfig, RenderResult, TruncationResult, TruncationStrategy)
+from .models import (
+    EmbeddingInput,
+    PromptConfig,
+    RenderResult,
+    TruncationResult,
+    TruncationStrategy,
+)
 from .salt import CacheSaltGenerator
 from .truncation import TruncationManager
 
@@ -65,7 +72,7 @@ class EmbeddingLoader:
     @classmethod
     def load_file(cls, path: str, encoding: str = "float32") -> EmbeddingInput:
         """Load embeddings from file."""
-        with open(path, 'rb') as f:
+        with open(path, "rb") as f:
             data: str = base64.b64encode(f.read()).decode()
         return cls.load_base64(data, encoding)
 

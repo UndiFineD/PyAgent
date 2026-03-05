@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,19 +20,18 @@ import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 from collections.abc import Callable
-from .enums import (
-    HealthStatus, 
-    AgentPriority
-)
+from .enums import HealthStatus, AgentPriority
 from .base_models import (
     _empty_dict_str_any,
     _empty_list_str,
-    _empty_dict_str_callable_any_any
+    _empty_dict_str_callable_any_any,
 )
+
 
 @dataclass(slots=True)
 class AgentConfig:
     """Agent configuration from environment or file."""
+
     backend: str = "auto"
     model: str = ""
     max_tokens: int = 4096
@@ -42,17 +42,21 @@ class AgentConfig:
     token_budget: int = 100000
     dry_run: bool = False
 
+
 @dataclass(slots=True)
 class ComposedAgent:
     """Configuration for agent composition."""
+
     agent_type: str
     config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     order: int = 0
     depends_on: list[str] = field(default_factory=_empty_list_str)
 
+
 @dataclass(slots=True)
 class AgentHealthCheck:
     """Health check result for an agent."""
+
     agent_name: str
     status: HealthStatus
     response_time_ms: float = 0.0
@@ -60,9 +64,11 @@ class AgentHealthCheck:
     error_message: str | None = None
     details: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
+
 @dataclass(slots=True)
 class AgentPluginConfig:
     """Configuration for an agent plugin."""
+
     name: str
     module_path: str
     entry_point: str = "run"
@@ -70,9 +76,11 @@ class AgentPluginConfig:
     enabled: bool = True
     config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
+
 @dataclass(slots=True)
 class ExecutionProfile:
     """A profile for agent execution settings."""
+
     name: str
     max_files: int | None = None
     timeout: int = 120
@@ -80,10 +88,14 @@ class ExecutionProfile:
     workers: int = 4
     dry_run: bool = False
 
+
 @dataclass(slots=True)
 class AgentPipeline:
     """Chains agent steps sequentially."""
-    steps: dict[str, Callable[[Any], Any]] = field(default_factory=_empty_dict_str_callable_any_any)
+
+    steps: dict[str, Callable[[Any], Any]] = field(
+        default_factory=_empty_dict_str_callable_any_any
+    )
     step_order: list[str] = field(default_factory=_empty_list_str)
 
     def add_step(self, name: str, func: Callable[[Any], Any]) -> None:
@@ -96,23 +108,34 @@ class AgentPipeline:
             result = self.steps[step_name](result)
         return result
 
+
 @dataclass(slots=True)
 class AgentParallel:
     """Executes agent branches in parallel conceptually."""
-    branches: dict[str, Callable[[Any], Any]] = field(default_factory=_empty_dict_str_callable_any_any)                                                                                 
+
+    branches: dict[str, Callable[[Any], Any]] = field(
+        default_factory=_empty_dict_str_callable_any_any
+    )
+
     def add_branch(self, name: str, func: Callable[[Any], Any]) -> None:
         self.branches[name] = func
 
     def execute(self, data: Any) -> dict[str, Any]:
         return {name: func(data) for name, func in self.branches.items()}
 
+
 @dataclass(slots=True)
 class AgentRouter:
     """Routes input based on conditions."""
-    default_handler: Callable[[Any], Any] | None = None
-    routes: list[tuple[Callable[[Any], bool], Callable[[Any], Any]]] = field(default_factory=list)
 
-    def add_route(self, condition: Callable[[Any], bool], handler: Callable[[Any], Any]) -> None:
+    default_handler: Callable[[Any], Any] | None = None
+    routes: list[tuple[Callable[[Any], bool], Callable[[Any], Any]]] = field(
+        default_factory=list
+    )
+
+    def add_route(
+        self, condition: Callable[[Any], bool], handler: Callable[[Any], Any]
+    ) -> None:
         self.routes.append((condition, handler))
 
     def set_default(self, handler: Callable[[Any], Any]) -> None:

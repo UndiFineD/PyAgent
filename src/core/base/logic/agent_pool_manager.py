@@ -35,6 +35,7 @@ logger = logging.getLogger(__name__)
 
 class AgentStatus(Enum):
     """Agent lifecycle status"""
+
     ACTIVE = "active"
     ELITE = "elite"
     DEPRECATED = "deprecated"
@@ -44,6 +45,7 @@ class AgentStatus(Enum):
 @dataclass
 class AgentManifest:
     """Metadata and metrics for an agent"""
+
     agent_name: str
     capabilities: Set[str]
     creation_time: float
@@ -53,7 +55,9 @@ class AgentManifest:
     synergy_hints: List[Dict[str, Any]] = field(default_factory=list)
     constraints: List[str] = field(default_factory=list)
     status: AgentStatus = AgentStatus.ACTIVE
-    lineage: List[str] = field(default_factory=list)  # Parent agents for integrated agents
+    lineage: List[str] = field(
+        default_factory=list
+    )  # Parent agents for integrated agents
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -66,11 +70,11 @@ class AgentManifest:
             "synergy_hints": self.synergy_hints,
             "constraints": self.constraints,
             "status": self.status.value,
-            "lineage": self.lineage
+            "lineage": self.lineage,
         }
 
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'AgentManifest':
+    def from_dict(cls, data: Dict[str, Any]) -> "AgentManifest":
         return cls(
             agent_name=data["agent_name"],
             capabilities=set(data["capabilities"]),
@@ -81,13 +85,14 @@ class AgentManifest:
             synergy_hints=data.get("synergy_hints", []),
             constraints=data.get("constraints", []),
             status=AgentStatus(data.get("status", "active")),
-            lineage=data.get("lineage", [])
+            lineage=data.get("lineage", []),
         )
 
 
 @dataclass
 class TaskRequirements:
     """Requirements analysis for a task"""
+
     required_capabilities: Set[str]
     complexity_score: float  # 0.0 to 1.0
     estimated_duration: float  # seconds
@@ -110,21 +115,22 @@ class AgentPoolManager:
     def _ensure_manifest_dir(self):
         """Ensure manifest directory exists"""
         import os
+
         os.makedirs(self.manifest_dir, exist_ok=True)
 
     def register_agent(self, agent: BaseAgent, capabilities: Set[str]):
         """Register a new agent in the pool"""
         manifest = AgentManifest(
-            agent_name=agent.name,
-            capabilities=capabilities,
-            creation_time=time.time()
+            agent_name=agent.name, capabilities=capabilities, creation_time=time.time()
         )
 
         self.agent_pool[agent.name] = manifest
         self._save_manifest(manifest)
         logger.info(f"Registered agent: {agent.name} with capabilities: {capabilities}")
 
-    def update_agent_metrics(self, agent_name: str, success: bool, execution_time: float):
+    def update_agent_metrics(
+        self, agent_name: str, success: bool, execution_time: float
+    ):
         """Update performance metrics for an agent"""
         if agent_name in self.agent_pool:
             manifest = self.agent_pool[agent_name]
@@ -141,7 +147,8 @@ class AgentPoolManager:
                 manifest.avg_execution_time = execution_time
             else:
                 manifest.avg_execution_time = (
-                    (manifest.avg_execution_time * (manifest.usage_count - 1)) + execution_time
+                    (manifest.avg_execution_time * (manifest.usage_count - 1))
+                    + execution_time
                 ) / manifest.usage_count
 
             self._save_manifest(manifest)
@@ -149,7 +156,9 @@ class AgentPoolManager:
             # Check for elite promotion
             self._check_elite_promotion(manifest)
 
-    def analyze_task_requirements(self, task_description: str, context: CascadeContext) -> TaskRequirements:
+    def analyze_task_requirements(
+        self, task_description: str, context: CascadeContext
+    ) -> TaskRequirements:
         """Analyze task requirements and extract needed capabilities"""
         # This is a simplified implementation - in practice, this would use LLM analysis
         capabilities = set()
@@ -166,7 +175,7 @@ class AgentPoolManager:
             "database": ["database", "query", "sql", "data"],
             "api": ["api", "rest", "endpoint", "integration"],
             "frontend": ["frontend", "ui", "interface", "component"],
-            "backend": ["backend", "server", "infrastructure", "deployment"]
+            "backend": ["backend", "server", "infrastructure", "deployment"],
         }
 
         for capability, keywords in capability_keywords.items():
@@ -174,7 +183,9 @@ class AgentPoolManager:
                 capabilities.add(capability)
 
         # Estimate complexity (simplified)
-        complexity_score = min(1.0, len(capabilities) * 0.2 + len(task_description.split()) * 0.001)
+        complexity_score = min(
+            1.0, len(capabilities) * 0.2 + len(task_description.split()) * 0.001
+        )
 
         # Estimate duration (simplified)
         estimated_duration = 60 + (complexity_score * 240)  # 1-5 minutes
@@ -182,10 +193,12 @@ class AgentPoolManager:
         return TaskRequirements(
             required_capabilities=capabilities,
             complexity_score=complexity_score,
-            estimated_duration=estimated_duration
+            estimated_duration=estimated_duration,
         )
 
-    def find_optimal_agent(self, requirements: TaskRequirements) -> Tuple[Optional[str], float]:
+    def find_optimal_agent(
+        self, requirements: TaskRequirements
+    ) -> Tuple[Optional[str], float]:
         """
         Find the optimal agent for a task based on coverage rate
         Returns (agent_name, coverage_rate)
@@ -199,8 +212,9 @@ class AgentPoolManager:
             coverage = self._calculate_coverage(requirements, manifest)
             capability_count = len(manifest.capabilities)
 
-            if (coverage > best_coverage or
-                (coverage == best_coverage and capability_count > best_capability_count)):
+            if coverage > best_coverage or (
+                coverage == best_coverage and capability_count > best_capability_count
+            ):
                 best_coverage = coverage
                 best_agent = agent_name
                 best_capability_count = capability_count
@@ -213,15 +227,18 @@ class AgentPoolManager:
             coverage = self._calculate_coverage(requirements, manifest)
             capability_count = len(manifest.capabilities)
 
-            if (coverage > best_coverage or
-                (coverage == best_coverage and capability_count > best_capability_count)):
+            if coverage > best_coverage or (
+                coverage == best_coverage and capability_count > best_capability_count
+            ):
                 best_coverage = coverage
                 best_agent = agent_name
                 best_capability_count = capability_count
 
         return best_agent, best_coverage
 
-    def decide_agent_action(self, coverage_rate: float, requirements: TaskRequirements) -> str:
+    def decide_agent_action(
+        self, coverage_rate: float, requirements: TaskRequirements
+    ) -> str:
         """
         Decide what action to take based on coverage rate
         Based on the decision matrix from the autonomous orchestration ecosystem
@@ -233,7 +250,9 @@ class AgentPoolManager:
         else:
             return "create_new"
 
-    def create_integrated_agent(self, requirements: TaskRequirements, candidate_agents: List[str]) -> str:
+    def create_integrated_agent(
+        self, requirements: TaskRequirements, candidate_agents: List[str]
+    ) -> str:
         """Create an integrated agent from multiple candidates"""
         # Find best combination of agents
         best_combination = self._find_best_integration(requirements, candidate_agents)
@@ -242,7 +261,9 @@ class AgentPoolManager:
             return self.create_specialized_agent(requirements)
 
         # Create integrated agent name
-        integrated_name = f"integrated_{'_'.join(sorted(best_combination))}_{int(time.time())}"
+        integrated_name = (
+            f"integrated_{'_'.join(sorted(best_combination))}_{int(time.time())}"
+        )
 
         # Combine capabilities
         combined_capabilities = set()
@@ -260,13 +281,15 @@ class AgentPoolManager:
             capabilities=combined_capabilities,
             creation_time=time.time(),
             lineage=lineage,
-            status=AgentStatus.INTEGRATED
+            status=AgentStatus.INTEGRATED,
         )
 
         self.integrated_agents[integrated_name] = manifest
         self._save_manifest(manifest)
 
-        logger.info(f"Created integrated agent: {integrated_name} from {best_combination}")
+        logger.info(
+            f"Created integrated agent: {integrated_name} from {best_combination}"
+        )
         return integrated_name
 
     def create_specialized_agent(self, requirements: TaskRequirements) -> str:
@@ -276,21 +299,27 @@ class AgentPoolManager:
         manifest = AgentManifest(
             agent_name=agent_name,
             capabilities=requirements.required_capabilities.copy(),
-            creation_time=time.time()
+            creation_time=time.time(),
         )
 
         self.agent_pool[agent_name] = manifest
         self._save_manifest(manifest)
 
-        logger.info(f"Created specialized agent: {agent_name} for capabilities: {requirements.required_capabilities}")
+        logger.info(
+            f"Created specialized agent: {agent_name} for capabilities: {requirements.required_capabilities}"
+        )
         return agent_name
 
-    def _calculate_coverage(self, requirements: TaskRequirements, manifest: AgentManifest) -> float:
+    def _calculate_coverage(
+        self, requirements: TaskRequirements, manifest: AgentManifest
+    ) -> float:
         """Calculate how well an agent covers the task requirements"""
         if not requirements.required_capabilities:
             return 1.0
 
-        matching_capabilities = requirements.required_capabilities.intersection(manifest.capabilities)
+        matching_capabilities = requirements.required_capabilities.intersection(
+            manifest.capabilities
+        )
         coverage = len(matching_capabilities) / len(requirements.required_capabilities)
 
         # Boost score for elite agents
@@ -299,7 +328,9 @@ class AgentPoolManager:
 
         return min(1.0, coverage)
 
-    def _find_best_integration(self, requirements: TaskRequirements, candidates: List[str]) -> Optional[List[str]]:
+    def _find_best_integration(
+        self, requirements: TaskRequirements, candidates: List[str]
+    ) -> Optional[List[str]]:
         """Find the best combination of agents for integration"""
         # Simplified: just return top 2 candidates if they together provide good coverage
         if len(candidates) < 2:
@@ -323,9 +354,15 @@ class AgentPoolManager:
 
                 for agent_name in combo:
                     if agent_name in self.agent_pool:
-                        combined_capabilities.update(self.agent_pool[agent_name].capabilities)
+                        combined_capabilities.update(
+                            self.agent_pool[agent_name].capabilities
+                        )
 
-                combo_coverage = len(requirements.required_capabilities.intersection(combined_capabilities)) / len(requirements.required_capabilities)
+                combo_coverage = len(
+                    requirements.required_capabilities.intersection(
+                        combined_capabilities
+                    )
+                ) / len(requirements.required_capabilities)
 
                 if combo_coverage >= 0.8:  # Good combined coverage
                     return combo
@@ -334,9 +371,11 @@ class AgentPoolManager:
 
     def _check_elite_promotion(self, manifest: AgentManifest):
         """Check if an agent should be promoted to elite status"""
-        if (manifest.usage_count >= 10 and
-            manifest.success_rate >= 0.8 and
-            manifest.status == AgentStatus.ACTIVE):
+        if (
+            manifest.usage_count >= 10
+            and manifest.success_rate >= 0.8
+            and manifest.status == AgentStatus.ACTIVE
+        ):
 
             manifest.status = AgentStatus.ELITE
             self.elite_agents[manifest.agent_name] = manifest
@@ -346,10 +385,11 @@ class AgentPoolManager:
     def _save_manifest(self, manifest: AgentManifest):
         """Save agent manifest to disk"""
         import os
+
         filepath = os.path.join(self.manifest_dir, f"{manifest.agent_name}.json")
 
         try:
-            with open(filepath, 'w') as f:
+            with open(filepath, "w") as f:
                 json.dump(manifest.to_dict(), f, indent=2)
         except Exception as e:
             logger.error(f"Failed to save manifest for {manifest.agent_name}: {e}")
@@ -362,7 +402,7 @@ class AgentPoolManager:
         pattern = os.path.join(self.manifest_dir, "*.json")
         for filepath in glob.glob(pattern):
             try:
-                with open(filepath, 'r') as f:
+                with open(filepath, "r") as f:
                     data = json.load(f)
                     manifest = AgentManifest.from_dict(data)
 
@@ -382,6 +422,10 @@ class AgentPoolManager:
             "total_agents": len(self.agent_pool),
             "elite_agents": len(self.elite_agents),
             "integrated_agents": len(self.integrated_agents),
-            "avg_success_rate": statistics.mean([m.success_rate for m in self.agent_pool.values()]) if self.agent_pool else 0.0,
-            "total_usage": sum(m.usage_count for m in self.agent_pool.values())
+            "avg_success_rate": (
+                statistics.mean([m.success_rate for m in self.agent_pool.values()])
+                if self.agent_pool
+                else 0.0
+            ),
+            "total_usage": sum(m.usage_count for m in self.agent_pool.values()),
         }

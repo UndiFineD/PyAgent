@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_speculativedecoder_exists():
     """Test that SpeculativeDecoder class exists and is importable."""
-    assert 'SpeculativeDecoder' in dir()
+    assert "SpeculativeDecoder" in dir()
 
 
 def test_create_speculative_decoder_exists():
@@ -44,4 +44,3 @@ def test_create_speculative_decoder_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

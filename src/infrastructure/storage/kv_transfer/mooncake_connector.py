@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -51,11 +52,15 @@ except ImportError:
     from src.core.lazy_loader import LazyLoader
     from src.core.rust_bridge import RustBridge
     from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
-    KVConnectorBase, KVTransferConfig)
+        KVConnectorBase,
+        KVTransferConfig,
+    )
 
 if TYPE_CHECKING:
-    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import \
-        ForwardContext
+    from src.infrastructure.storage.kv_transfer.kv_transfer_connector import (
+        ForwardContext,
+    )
+
     """Status of a Mooncake KV transfer operation."""
 
     PENDING = auto()
@@ -169,7 +174,11 @@ class MooncakeConnector(KVConnectorBase):
                     self._pending_loads[request_id].add(str(block_id))
                     self._initiate_async_pull(request_id, block_id, target_node)
                 else:
-                    logger.warning("Block %d requested by %s but not found in Mooncake registry", block_id, request_id)
+                    logger.warning(
+                        "Block %d requested by %s but not found in Mooncake registry",
+                        block_id,
+                        request_id,
+                    )
 
     def wait_for_layer_load(self, layer_name: str) -> None:
         """
@@ -181,13 +190,18 @@ class MooncakeConnector(KVConnectorBase):
         active_transfers = True
         while active_transfers:
             with self._lock:
-                active_transfers = any(s == MooncakeTransferStatus.IN_PROGRESS for s in self._transfer_futures.values())
+                active_transfers = any(
+                    s == MooncakeTransferStatus.IN_PROGRESS
+                    for s in self._transfer_futures.values()
+                )
 
             if not active_transfers:
                 break
 
             if time.time() - start_time > timeout:
-                logger.error("Timeout waiting for Mooncake KV load for layer %s", layer_name)
+                logger.error(
+                    "Timeout waiting for Mooncake KV load for layer %s", layer_name
+                )
                 break
             time.sleep(0.001)  # nosec
 
@@ -244,7 +258,9 @@ class MooncakeConnector(KVConnectorBase):
                         needed.append(block_id)
         return needed
 
-    def _initiate_async_pull(self, request_id: str, block_id: int, node_id: str) -> None:
+    def _initiate_async_pull(
+        self, request_id: str, block_id: int, node_id: str
+    ) -> None:
         """Fire off an asynchronous pull request."""
 
         def pull_task():
@@ -262,13 +278,21 @@ class MooncakeConnector(KVConnectorBase):
 
                 with self._lock:
                     if success:
-                        self._transfer_futures[transfer_id] = MooncakeTransferStatus.COMPLETED
-                        self.bytes_transferred += 1024 * 64  # Simulated block size (64KB)
+                        self._transfer_futures[transfer_id] = (
+                            MooncakeTransferStatus.COMPLETED
+                        )
+                        self.bytes_transferred += (
+                            1024 * 64
+                        )  # Simulated block size (64KB)
                         self.transfer_count += 1
                     else:
-                        self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
+                        self._transfer_futures[transfer_id] = (
+                            MooncakeTransferStatus.FAILED
+                        )
                         self.failed_transferred += 1
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Mooncake pull failed: %s", e)
                 with self._lock:
                     self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
@@ -282,7 +306,9 @@ class MooncakeConnector(KVConnectorBase):
 
         threading.Thread(target=pull_task, daemon=True).start()
 
-    def _initiate_async_push(self, request_id: str, layer_name: str, kv_layer: Any, attn_metadata: Any) -> None:
+    def _initiate_async_push(
+        self, request_id: str, layer_name: str, kv_layer: Any, attn_metadata: Any
+    ) -> None:
         """Fire off an asynchronous push request to the Mooncake pool."""
 
         def push_task():
@@ -294,7 +320,9 @@ class MooncakeConnector(KVConnectorBase):
                     pass
 
                 # Push logic
-                success = self._mooncake_transfer_rust(kv_layer, "MOONCAKE_POOL", "PUSH")
+                success = self._mooncake_transfer_rust(
+                    kv_layer, "MOONCAKE_POOL", "PUSH"
+                )
                 if success:
                     with self._lock:
                         self.transfer_count += 1
@@ -302,7 +330,9 @@ class MooncakeConnector(KVConnectorBase):
                         # Update registry that we (this node) have these blocks
                         # Or if we pushed to a specific buffer node, update accordingly.
                         # self._block_registry[block_id] = self.node_id
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error("Mooncake push failed for layer %s: %s", layer_name, e)
                 with self._lock:
                     self.failed_transferred += 1
@@ -326,7 +356,12 @@ class MooncakeConnector(KVConnectorBase):
         """Register a remote Mooncake node in the pool."""
         with self._lock:
             self._remote_nodes[node.node_id] = node
-            logger.info("Registered Mooncake node: %s at %s:%d", node.node_id, node.host, node.port)
+            logger.info(
+                "Registered Mooncake node: %s at %s:%d",
+                node.node_id,
+                node.host,
+                node.port,
+            )
 
     def get_health_report(self) -> Dict[str, Any]:
         """Beyond vLLM: Returns health metrics for this connector."""
@@ -349,4 +384,6 @@ class MooncakeConnector(KVConnectorBase):
 
 
 # Lazy loading registration
-_connector = LazyLoader("src.infrastructure.storage.kv_transfer.mooncake_connector", "MooncakeConnector")
+_connector = LazyLoader(
+    "src.infrastructure.storage.kv_transfer.mooncake_connector", "MooncakeConnector"
+)

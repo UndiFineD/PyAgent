@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_contextinheritance_exists():
     """Test that ContextInheritance class exists and is importable."""
-    assert 'ContextInheritance' in dir()
+    assert "ContextInheritance" in dir()
 
 
 def test_contextinheritance_instantiation():
@@ -45,4 +45,3 @@ def test_contextinheritance_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

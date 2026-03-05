@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_ringbuffer_exists():
     """Test that RingBuffer class exists and is importable."""
-    assert 'RingBuffer' in dir()
+    assert "RingBuffer" in dir()
 
 
 def test_threadsaferingbuffer_exists():
     """Test that ThreadSafeRingBuffer class exists and is importable."""
-    assert 'ThreadSafeRingBuffer' in dir()
+    assert "ThreadSafeRingBuffer" in dir()
 
 
 def test_timestampedvalue_exists():
     """Test that TimestampedValue class exists and is importable."""
-    assert 'TimestampedValue' in dir()
+    assert "TimestampedValue" in dir()
 
 
 def test_timeseriesbuffer_exists():
     """Test that TimeSeriesBuffer class exists and is importable."""
-    assert 'TimeSeriesBuffer' in dir()
+    assert "TimeSeriesBuffer" in dir()
 
 
 def test_slidingwindowaggregator_exists():
     """Test that SlidingWindowAggregator class exists and is importable."""
-    assert 'SlidingWindowAggregator' in dir()
+    assert "SlidingWindowAggregator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

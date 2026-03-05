@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +19,6 @@ Resilience agent.py module.
 """
 
 
-
 import logging
 import time
 from pathlib import Path
@@ -28,8 +28,9 @@ from src.core.base.common.base_utilities import as_tool
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import (
+    LocalContextRecorder,
+)
 
 __version__ = VERSION
 
@@ -59,8 +60,12 @@ class ResilienceAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "resilience", "timestamp": time.time()}
-                self.recorder.record_interaction("resilience", "swarm_health", event_type, str(details), meta=meta)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                self.recorder.record_interaction(
+                    "resilience", "swarm_health", event_type, str(details), meta=meta
+                )
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.error(f"ResilienceManager: Recording failed: {e}")
 
     @as_tool
@@ -68,9 +73,13 @@ class ResilienceAgent(BaseAgent):
         """
         Migrates high-priority agent tasks from a failing node to a healthy one.
         """
-        logging.warning(f"ResilienceManager: Triggering failover from {source_node} to {target_node}")
+        logging.warning(
+            f"ResilienceManager: Triggering failover from {source_node} to {target_node}"
+        )
         # Simulated failover logic
-        self._archive_resilience_event("failover", {"from": source_node, "to": target_node, "status": "success"})
+        self._archive_resilience_event(
+            "failover", {"from": source_node, "to": target_node, "status": "success"}
+        )
         return True
 
     @as_tool

@@ -49,7 +49,11 @@ class CodeIntegrityVerifier:
                     """Extracts import targets from AST nodes."""
                     if isinstance(node, ast.Import):
                         return list(map(lambda n: n.name, node.names))
-                    if isinstance(node, ast.ImportFrom) and node.module and node.level == 0:
+                    if (
+                        isinstance(node, ast.ImportFrom)
+                        and node.module
+                        and node.level == 0
+                    ):
                         return [node.module]
                     return []
 
@@ -62,8 +66,10 @@ class CodeIntegrityVerifier:
                     if target.startswith("src.") or target == "src":
                         parts = target.split(".")
                         target_path = Path(".").joinpath(*parts)
-                        if not (target_path.with_suffix(".py").exists() or 
-                                target_path.joinpath("__init__.py").exists()):
+                        if not (
+                            target_path.with_suffix(".py").exists()
+                            or target_path.joinpath("__init__.py").exists()
+                        ):
                             return f"{file_path}: Broken import '{target}'"
                     return None
 
@@ -80,7 +86,9 @@ class CodeIntegrityVerifier:
             acc["syntax_errors"].extend(res["syntax"])
             return acc
 
-        return reduce(combine_reports, results, {"broken_imports": [], "syntax_errors": []})
+        return reduce(
+            combine_reports, results, {"broken_imports": [], "syntax_errors": []}
+        )
 
     def get_symbol_map(self, root_dir: Path) -> dict[str, str]:
         """
@@ -93,12 +101,16 @@ class CodeIntegrityVerifier:
             try:
                 tree = ast.parse(py_file.read_text(encoding="utf-8"))
                 rel_path = str(py_file.relative_to(root_dir.parent)).replace("\\", "/")
-                
+
                 def is_class_node(node: ast.AST) -> bool:
                     """Checks if the AST node is a class definition."""
                     return isinstance(node, ast.ClassDef)
 
-                classes = [cast(ast.ClassDef, n).name for n in ast.walk(tree) if is_class_node(n)]
+                classes = [
+                    cast(ast.ClassDef, n).name
+                    for n in ast.walk(tree)
+                    if is_class_node(n)
+                ]
                 return dict(map(lambda cls_name: (cls_name, rel_path), classes))
             except (SyntaxError, UnicodeDecodeError, OSError):
                 return {}

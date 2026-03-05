@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -70,9 +71,14 @@ class SelfOptimizerAgent(BaseAgent):
                     continue
 
                 low_line = line.lower()
-                if any(k in low_line for k in ["fix", "bug", "error", "crash", "stable"]):
+                if any(
+                    k in low_line for k in ["fix", "bug", "error", "crash", "stable"]
+                ):
                     categories["High Priority (Stability)"].append(line)
-                elif any(k in low_line for k in ["add", "new", "feature", "capability", "expand"]):
+                elif any(
+                    k in low_line
+                    for k in ["add", "new", "feature", "capability", "expand"]
+                ):
                     categories["Medium Priority (Features)"].append(line)
                 else:
                     categories["Low Priority (Maintenance)"].append(line)
@@ -86,7 +92,9 @@ class SelfOptimizerAgent(BaseAgent):
                     report.append("")
 
             return "\n".join(report)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error analyzing roadmap: {e}"
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
@@ -106,9 +114,13 @@ class SelfOptimizerAgent(BaseAgent):
             f"- **Success Rate**: {telemetry.get('success_rate', 'N/A')}%",
         ]
 
-        return f"Self-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(system_report)
+        return f"Self-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(
+            system_report
+        )
 
 
 if __name__ == "__main__":
-    main = create_main_function(SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize")
+    main = create_main_function(
+        SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize"
+    )
     main()

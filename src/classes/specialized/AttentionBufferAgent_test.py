@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_attentionbufferagent_exists():
     """Test that AttentionBufferAgent class exists and is importable."""
-    assert 'AttentionBufferAgent' in dir()
+    assert "AttentionBufferAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

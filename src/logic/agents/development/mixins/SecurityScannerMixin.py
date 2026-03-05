@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,9 +23,11 @@ from src.core.base.types.SecurityVulnerability import SecurityVulnerability
 # Rust acceleration imports
 try:
     from rust_core import scan_lines_multi_pattern_rust
+
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
+
 
 class SecurityScannerMixin:
     """Mixin for content and injection scanning."""
@@ -107,5 +110,7 @@ class SecurityScannerMixin:
                 )
             )
             if hasattr(self, "_record_finding"):
-                self._record_finding(SecurityIssueType.INJECTION_ATTEMPT.value, "high", inf)
+                self._record_finding(
+                    SecurityIssueType.INJECTION_ATTEMPT.value, "high", inf
+                )
         return vulnerabilities

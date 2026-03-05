@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_connectionpool_exists():
     """Test that ConnectionPool class exists and is importable."""
-    assert 'ConnectionPool' in dir()
+    assert "ConnectionPool" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

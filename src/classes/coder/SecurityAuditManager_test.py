@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_securityauditmanager_exists():
     """Test that SecurityAuditManager class exists and is importable."""
-    assert 'SecurityAuditManager' in dir()
+    assert "SecurityAuditManager" in dir()
 
 
 def test_securityauditmanager_instantiation():
@@ -45,4 +45,3 @@ def test_securityauditmanager_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "QuantScheme"), "QuantScheme missing"
     assert hasattr(mod, "QuantStrategy"), "QuantStrategy missing"
     assert hasattr(mod, "QuantConfig"), "QuantConfig missing"
-

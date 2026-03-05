@@ -33,50 +33,49 @@ except ImportError as e:
 
 def test_ngramconfig_exists():
     """Test that NgramConfig class exists and is importable."""
-    assert 'NgramConfig' in dir()
+    assert "NgramConfig" in dir()
 
 
 def test_ngrammatch_exists():
     """Test that NgramMatch class exists and is importable."""
-    assert 'NgramMatch' in dir()
+    assert "NgramMatch" in dir()
 
 
 def test_ngramproposalresult_exists():
     """Test that NgramProposalResult class exists and is importable."""
-    assert 'NgramProposalResult' in dir()
+    assert "NgramProposalResult" in dir()
 
 
 def test_ngramcache_exists():
     """Test that NgramCache class exists and is importable."""
-    assert 'NgramCache' in dir()
+    assert "NgramCache" in dir()
 
 
 def test_ngramproposer_exists():
     """Test that NgramProposer class exists and is importable."""
-    assert 'NgramProposer' in dir()
+    assert "NgramProposer" in dir()
 
 
 def test_weightedngramproposer_exists():
     """Test that WeightedNgramProposer class exists and is importable."""
-    assert 'WeightedNgramProposer' in dir()
+    assert "WeightedNgramProposer" in dir()
 
 
 def test_promptlookupproposer_exists():
     """Test that PromptLookupProposer class exists and is importable."""
-    assert 'PromptLookupProposer' in dir()
+    assert "PromptLookupProposer" in dir()
 
 
 def test_hybridngramproposer_exists():
     """Test that HybridNgramProposer class exists and is importable."""
-    assert 'HybridNgramProposer' in dir()
+    assert "HybridNgramProposer" in dir()
 
 
 def test_ngramproposerfactory_exists():
     """Test that NgramProposerFactory class exists and is importable."""
-    assert 'NgramProposerFactory' in dir()
+    assert "NgramProposerFactory" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

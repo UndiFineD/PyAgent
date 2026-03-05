@@ -17,10 +17,12 @@ from typing import Any, Dict, List, Optional, Literal
 from enum import Enum
 from dataclasses import dataclass, field
 
+
 class DelegationMode(str, Enum):
-    ROUTE = "route"            # Single best agent chosen to handle task
+    ROUTE = "route"  # Single best agent chosen to handle task
     COORDINATE = "coordinate"  # Lead agent breaks task into sub-tasks for others
-    COLLABORATE = "collaborate" # Agents work concurrently on shared state
+    COLLABORATE = "collaborate"  # Agents work concurrently on shared state
+
 
 @dataclass
 class SwarmMember:
@@ -29,6 +31,7 @@ class SwarmMember:
     capabilities: List[str] = field(default_factory=list)
     status: str = "idle"
     metadata: Dict[str, Any] = field(default_factory=dict)
+
 
 class SwarmOrchestratorCore:
     """
@@ -46,9 +49,7 @@ class SwarmOrchestratorCore:
         self.members[member.agent_id] = member
 
     async def delegate_task(
-        self, 
-        task: Dict[str, Any], 
-        mode: DelegationMode = DelegationMode.COORDINATE
+        self, task: Dict[str, Any], mode: DelegationMode = DelegationMode.COORDINATE
     ) -> Dict[str, Any]:
         """
         Delegates a complex task using the specified mode.
@@ -81,12 +82,12 @@ class SwarmOrchestratorCore:
         """Finds the agent with the closest capability match."""
         if not self.members:
             return "system_default"
-        
+
         scores = {}
         for aid, member in self.members.items():
             match_count = len(set(member.capabilities) & set(requirements))
             scores[aid] = match_count
-            
+
         return max(scores, key=scores.get) if scores else list(self.members.keys())[0]
 
     def get_swarm_status(self) -> Dict[str, Any]:
@@ -94,5 +95,5 @@ class SwarmOrchestratorCore:
         return {
             "swarm_id": self.swarm_id,
             "member_count": len(self.members),
-            "members": {aid: m.status for aid, m in self.members.items()}
+            "members": {aid: m.status for aid, m in self.members.items()},
         }

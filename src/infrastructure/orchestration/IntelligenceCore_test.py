@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_swarminsight_exists():
     """Test that SwarmInsight class exists and is importable."""
-    assert 'SwarmInsight' in dir()
+    assert "SwarmInsight" in dir()
 
 
 def test_intelligencecore_exists():
     """Test that IntelligenceCore class exists and is importable."""
-    assert 'IntelligenceCore' in dir()
+    assert "IntelligenceCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

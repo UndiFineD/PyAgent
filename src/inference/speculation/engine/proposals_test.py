@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "DraftProposal"), "DraftProposal missing"
     assert hasattr(mod, "VerificationResult"), "VerificationResult missing"
     assert hasattr(mod, "SpecDecodingMetrics"), "SpecDecodingMetrics missing"
-

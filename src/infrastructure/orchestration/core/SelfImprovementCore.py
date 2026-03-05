@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ from .mixins.SelfImprovementQualityMixin import SelfImprovementQualityMixin
 
 try:
     import rust_core as rc
+
     _RUST_ACCEL = True
 except ImportError:
     rc = None  # type: ignore[assignment]
@@ -49,12 +51,18 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
                 "shell=True in subprocess can lead to command injection.",
             ),  # nosec
             (r"os\.system\(", "os.system() is deprecated and insecure."),  # nosec
-            (r"yaml\.load\(", "Unsafe YAML loading detected. Use yaml.safe_load()."),  # nosec
+            (
+                r"yaml\.load\(",
+                "Unsafe YAML loading detected. Use yaml.safe_load().",
+            ),  # nosec
             (
                 r"pickle\.load\(",
                 "Pickle can execute arbitrary code. Use JSON if possible.",
             ),  # nosec
-            (r"requests\.get\(.*verify=False", "SSL verification is disabled."),  # nosec
+            (
+                r"requests\.get\(.*verify=False",
+                "SSL verification is disabled.",
+            ),  # nosec
         ]
 
         # IO patterns for intelligence gap detection
@@ -78,7 +86,9 @@ class SelfImprovementCore(SelfImprovementSecurityMixin, SelfImprovementQualityMi
         findings.extend(self._analyze_robustness_and_perf(content, file_path_rel))
         return findings
 
-    def _analyze_via_rust(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+    def _analyze_via_rust(
+        self, content: str, file_path_rel: str
+    ) -> List[Dict[str, Any]]:
         """Uses Rust accelerator for high-performance analysis."""
         try:
             rust_findings = rc.analyze_code_quality_rust(

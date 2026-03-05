@@ -1,4 +1,3 @@
-
 """
 Core logic for Config Hygiene (Phase 174).
 Handles JSON Schema validation for configuration files.
@@ -7,6 +6,7 @@ Handles JSON Schema validation for configuration files.
 import json
 import os
 from typing import Dict, Any
+
 
 class ConfigHygieneCore:
     @staticmethod
@@ -19,25 +19,27 @@ class ConfigHygieneCore:
         """
         if not os.path.exists(data_path) or not os.path.exists(schema_path):
             return False, "File or schema missing."
-            
+
         try:
             with open(data_path, encoding="utf-8") as f:
                 data = json.load(f)
             with open(schema_path, encoding="utf-8") as f:
                 schema = json.load(f)
-                
+
             # Basic structural validation (check keys)
             if "required" in schema:
                 for req in schema["required"]:
                     if req not in data:
                         return False, f"Missing required field: {req}"
-            
+
             return True, "Validation successful."
         except Exception as e:
             return False, str(e)
 
     @staticmethod
-    def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
+    def extract_env_vars(
+        config_data: dict[str, Any], prefix: str = "PYAGENT_"
+    ) -> dict[str, str]:
         """
         Helper to flatten nested config into env-style key-value pairs.
         """

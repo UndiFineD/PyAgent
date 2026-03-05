@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,7 +49,9 @@ class ExperimentOrchestrator(BaseAgent):
         )
 
     @as_tool
-    def run_benchmark_experiment(self, suite_name: str, agents_to_test: list[str]) -> dict[str, Any]:
+    def run_benchmark_experiment(
+        self, suite_name: str, agents_to_test: list[str]
+    ) -> dict[str, Any]:
         """Runs a suite of benchmarks across specified agents."""
         experiment_id: str = str(uuid.uuid4())[:8]
         start_time: float = time.time()

@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "create_prompt_logprobs"), "create_prompt_logprobs missing"
     assert hasattr(mod, "create_sample_logprobs"), "create_sample_logprobs missing"
     assert hasattr(mod, "LogprobsAccumulator"), "LogprobsAccumulator missing"
-

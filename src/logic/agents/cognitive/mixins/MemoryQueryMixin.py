@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -7,13 +8,18 @@ from typing import TYPE_CHECKING
 from src.core.base.BaseUtilities import as_tool
 
 if TYPE_CHECKING:
-    from src.logic.agents.cognitive.HierarchicalMemoryAgent import HierarchicalMemoryAgent
+    from src.logic.agents.cognitive.HierarchicalMemoryAgent import (
+        HierarchicalMemoryAgent,
+    )
+
 
 class MemoryQueryMixin:
     """Mixin for hierarchical memory querying in HierarchicalMemoryAgent."""
 
     @as_tool
-    def hierarchical_query(self: HierarchicalMemoryAgent, query: str, deep_search: bool = False) -> str:
+    def hierarchical_query(
+        self: HierarchicalMemoryAgent, query: str, deep_search: bool = False
+    ) -> str:
         """Searches across memory tiers starting from short-term."""
         search_tiers = ["short", "mid"]
         if deep_search:
@@ -27,7 +33,9 @@ class MemoryQueryMixin:
                 try:
                     with open(mem_file) as f:
                         data = json.load(f)
-                    all_data.append((tier, data.get("content", ""), data.get("tags", [])))
+                    all_data.append(
+                        (tier, data.get("content", ""), data.get("tags", []))
+                    )
                 except Exception:
                     continue
 
@@ -37,6 +45,7 @@ class MemoryQueryMixin:
         # Rust-accelerated search
         try:
             from rust_core import search_with_tags_rust
+
             contents = [d[1] for d in all_data]
             tags_list = [d[2] for d in all_data]
             matches = search_with_tags_rust(query, contents, tags_list)

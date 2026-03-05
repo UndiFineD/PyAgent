@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_framework_exists():
     """Test that Framework class exists and is importable."""
-    assert 'Framework' in dir()
+    assert "Framework" in dir()
 
 
 def test_elementtype_exists():
     """Test that ElementType class exists and is importable."""
-    assert 'ElementType' in dir()
+    assert "ElementType" in dir()
 
 
 def test_uielement_exists():
     """Test that UIElement class exists and is importable."""
-    assert 'UIElement' in dir()
+    assert "UIElement" in dir()
 
 
 def test_uiaction_exists():
     """Test that UIAction class exists and is importable."""
-    assert 'UIAction' in dir()
+    assert "UIAction" in dir()
 
 
 def test_guiagent_exists():
     """Test that GUIAgent class exists and is importable."""
-    assert 'GUIAgent' in dir()
+    assert "GUIAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

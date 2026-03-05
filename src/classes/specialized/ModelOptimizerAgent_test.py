@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_modeloptimizeragent_exists():
     """Test that ModelOptimizerAgent class exists and is importable."""
-    assert 'ModelOptimizerAgent' in dir()
+    assert "ModelOptimizerAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

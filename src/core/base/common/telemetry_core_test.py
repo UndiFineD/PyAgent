@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MetricType"), "MetricType missing"
     assert hasattr(mod, "Metric"), "Metric missing"
     assert hasattr(mod, "TelemetryCore"), "TelemetryCore missing"
-

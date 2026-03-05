@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_sqlqueryagent_exists():
     """Test that SQLQueryAgent class exists and is importable."""
-    assert 'SQLQueryAgent' in dir()
+    assert "SQLQueryAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

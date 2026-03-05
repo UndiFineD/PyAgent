@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_metric_exists():
     """Test that Metric class exists and is importable."""
-    assert 'Metric' in dir()
+    assert "Metric" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

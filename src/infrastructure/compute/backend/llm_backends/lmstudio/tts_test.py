@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "MyLMPlugin"), "MyLMPlugin missing"
     assert hasattr(mod, "speak"), "speak missing"
-

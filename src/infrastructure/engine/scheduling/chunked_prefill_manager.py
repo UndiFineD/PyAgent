@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,8 +43,12 @@ from typing import Any, Callable, Iterator, Optional, TypeVar
 
 from src.core.rust_bridge import RustBridge
 from src.infrastructure.engine.scheduling.chunked_prefill.types import (
-    ChunkedPrefillConfig, ChunkedRequest, ChunkPriority, ChunkState,
-    PrefillChunk)
+    ChunkedPrefillConfig,
+    ChunkedRequest,
+    ChunkPriority,
+    ChunkState,
+    PrefillChunk,
+)
 
 # Try to import Rust accelerations
 # pylint: disable=invalid-name
@@ -357,7 +362,9 @@ class ChunkedPrefillManager:
             self._total_tokens_processed += chunk.size
 
             # Check if request is complete
-            request: ChunkedRequest | None = self._active_chunk_reqs.get(chunk.request_id)
+            request: ChunkedRequest | None = self._active_chunk_reqs.get(
+                chunk.request_id
+            )
             if request is not None and request.is_complete:
                 request.completed_at = time.time()
 
@@ -434,7 +441,9 @@ class ChunkedPrefillManager:
             if request is None or not request.is_complete:
                 return None
 
-            outputs: list[Any] = [c.output for c in request.chunks if c.output is not None]
+            outputs: list[Any] = [
+                c.output for c in request.chunks if c.output is not None
+            ]
 
         if not outputs:
             return None
@@ -499,7 +508,9 @@ class ChunkedPrefillManager:
             True if cleaned up
         """
         with self._lock:
-            request: ChunkedRequest | None = self._active_chunk_reqs.pop(request_id, None)
+            request: ChunkedRequest | None = self._active_chunk_reqs.pop(
+                request_id, None
+            )
             if request is None:
                 return False
 

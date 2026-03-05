@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_tokencostresult_exists():
     """Test that TokenCostResult class exists and is importable."""
-    assert 'TokenCostResult' in dir()
+    assert "TokenCostResult" in dir()
 
 
 def test_tokencostcore_exists():
     """Test that TokenCostCore class exists and is importable."""
-    assert 'TokenCostCore' in dir()
+    assert "TokenCostCore" in dir()
 
 
 def test_tokencostcore_instantiation():
@@ -49,7 +49,7 @@ def test_tokencostcore_instantiation():
 
 def test_modelfallbackcore_exists():
     """Test that ModelFallbackCore class exists and is importable."""
-    assert 'ModelFallbackCore' in dir()
+    assert "ModelFallbackCore" in dir()
 
 
 def test_modelfallbackcore_instantiation():
@@ -60,7 +60,7 @@ def test_modelfallbackcore_instantiation():
 
 def test_derivedmetriccalculator_exists():
     """Test that DerivedMetricCalculator class exists and is importable."""
-    assert 'DerivedMetricCalculator' in dir()
+    assert "DerivedMetricCalculator" in dir()
 
 
 def test_derivedmetriccalculator_instantiation():
@@ -71,7 +71,7 @@ def test_derivedmetriccalculator_instantiation():
 
 def test_statsrollupcore_exists():
     """Test that StatsRollupCore class exists and is importable."""
-    assert 'StatsRollupCore' in dir()
+    assert "StatsRollupCore" in dir()
 
 
 def test_statsrollupcore_instantiation():
@@ -82,15 +82,14 @@ def test_statsrollupcore_instantiation():
 
 def test_correlationcore_exists():
     """Test that CorrelationCore class exists and is importable."""
-    assert 'CorrelationCore' in dir()
+    assert "CorrelationCore" in dir()
 
 
 def test_abtestcore_exists():
     """Test that ABTestCore class exists and is importable."""
-    assert 'ABTestCore' in dir()
+    assert "ABTestCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

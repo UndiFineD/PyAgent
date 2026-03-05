@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_inputbatchorchestrator_exists():
     """Test that InputBatchOrchestrator class exists and is importable."""
-    assert 'InputBatchOrchestrator' in dir()
+    assert "InputBatchOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_stopmatch_exists():
     """Test that StopMatch class exists and is importable."""
-    assert 'StopMatch' in dir()
+    assert "StopMatch" in dir()
 
 
 def test_incrementaldetokenizer_exists():
     """Test that IncrementalDetokenizer class exists and is importable."""
-    assert 'IncrementalDetokenizer' in dir()
+    assert "IncrementalDetokenizer" in dir()
 
 
 def test_incrementaldetokenizer_instantiation():
@@ -49,22 +49,22 @@ def test_incrementaldetokenizer_instantiation():
 
 def test_noopdetokenizer_exists():
     """Test that NoOpDetokenizer class exists and is importable."""
-    assert 'NoOpDetokenizer' in dir()
+    assert "NoOpDetokenizer" in dir()
 
 
 def test_baseincrementaldetokenizer_exists():
     """Test that BaseIncrementalDetokenizer class exists and is importable."""
-    assert 'BaseIncrementalDetokenizer' in dir()
+    assert "BaseIncrementalDetokenizer" in dir()
 
 
 def test_fastincrementaldetokenizer_exists():
     """Test that FastIncrementalDetokenizer class exists and is importable."""
-    assert 'FastIncrementalDetokenizer' in dir()
+    assert "FastIncrementalDetokenizer" in dir()
 
 
 def test_slowincrementaldetokenizer_exists():
     """Test that SlowIncrementalDetokenizer class exists and is importable."""
-    assert 'SlowIncrementalDetokenizer' in dir()
+    assert "SlowIncrementalDetokenizer" in dir()
 
 
 def test_check_stop_strings_exists():
@@ -90,4 +90,3 @@ def test_validate_utf8_rust_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

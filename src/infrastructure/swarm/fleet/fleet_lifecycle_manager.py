@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 """
 Fleet lifecycle manager.py module.
 """
-
 
 
 import logging
@@ -75,10 +75,14 @@ class FleetLifecycleManager:
 
         del self.fleet.agents[agent_name]
         logging.info(f"Apoptosis: {agent_name} has been recycled.")
-        self.fleet.signals.emit("CELL_APOPTOSIS", {"agent": agent_name}, sender="FleetManager")
+        self.fleet.signals.emit(
+            "CELL_APOPTOSIS", {"agent": agent_name}, sender="FleetManager"
+        )
         return f"Agent {agent_name} successfully removed from the fleet."
 
-    def register_agent(self, name: str, agent_class: type[BaseAgent], file_path: str | None = None) -> str:
+    def register_agent(
+        self, name: str, agent_class: type[BaseAgent], file_path: str | None = None
+    ) -> str:
         """Adds an agent to the fleet."""
         path = file_path or str(self.fleet.workspace_root / f"agent_{name.lower()}.py")
         agent = agent_class(path)
@@ -87,12 +91,20 @@ class FleetLifecycleManager:
             agent.fleet = self.fleet
 
         # Register tools with the fleet registry (Phase 123 Integration)
-        if hasattr(agent, "register_tools") and hasattr(self.fleet, "registry") and self.fleet.registry:
+        if (
+            hasattr(agent, "register_tools")
+            and hasattr(self.fleet, "registry")
+            and self.fleet.registry
+        ):
             try:
                 agent.register_tools(self.fleet.registry)
                 logging.debug(f"Fleet: Registered tools for agent '{name}'")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.error(f"Fleet: Failed to register tools for agent '{name}': {e}")
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                logging.error(
+                    f"Fleet: Failed to register tools for agent '{name}': {e}"
+                )
 
         self.fleet.agents[name] = agent
         logging.info(f"Registered agent: {name}")

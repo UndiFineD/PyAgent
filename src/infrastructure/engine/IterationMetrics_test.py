@@ -33,72 +33,72 @@ except ImportError as e:
 
 def test_metrictype_exists():
     """Test that MetricType class exists and is importable."""
-    assert 'MetricType' in dir()
+    assert "MetricType" in dir()
 
 
 def test_basecachestats_exists():
     """Test that BaseCacheStats class exists and is importable."""
-    assert 'BaseCacheStats' in dir()
+    assert "BaseCacheStats" in dir()
 
 
 def test_prefixcachestats_exists():
     """Test that PrefixCacheStats class exists and is importable."""
-    assert 'PrefixCacheStats' in dir()
+    assert "PrefixCacheStats" in dir()
 
 
 def test_multimodalcachestats_exists():
     """Test that MultiModalCacheStats class exists and is importable."""
-    assert 'MultiModalCacheStats' in dir()
+    assert "MultiModalCacheStats" in dir()
 
 
 def test_kvcacheevictionevent_exists():
     """Test that KVCacheEvictionEvent class exists and is importable."""
-    assert 'KVCacheEvictionEvent' in dir()
+    assert "KVCacheEvictionEvent" in dir()
 
 
 def test_cachingmetrics_exists():
     """Test that CachingMetrics class exists and is importable."""
-    assert 'CachingMetrics' in dir()
+    assert "CachingMetrics" in dir()
 
 
 def test_requeststatestats_exists():
     """Test that RequestStateStats class exists and is importable."""
-    assert 'RequestStateStats' in dir()
+    assert "RequestStateStats" in dir()
 
 
 def test_finishedrequeststats_exists():
     """Test that FinishedRequestStats class exists and is importable."""
-    assert 'FinishedRequestStats' in dir()
+    assert "FinishedRequestStats" in dir()
 
 
 def test_schedulerstats_exists():
     """Test that SchedulerStats class exists and is importable."""
-    assert 'SchedulerStats' in dir()
+    assert "SchedulerStats" in dir()
 
 
 def test_iterationstats_exists():
     """Test that IterationStats class exists and is importable."""
-    assert 'IterationStats' in dir()
+    assert "IterationStats" in dir()
 
 
 def test_percentiletracker_exists():
     """Test that PercentileTracker class exists and is importable."""
-    assert 'PercentileTracker' in dir()
+    assert "PercentileTracker" in dir()
 
 
 def test_trendanalyzer_exists():
     """Test that TrendAnalyzer class exists and is importable."""
-    assert 'TrendAnalyzer' in dir()
+    assert "TrendAnalyzer" in dir()
 
 
 def test_anomalydetector_exists():
     """Test that AnomalyDetector class exists and is importable."""
-    assert 'AnomalyDetector' in dir()
+    assert "AnomalyDetector" in dir()
 
 
 def test_metricscollector_exists():
     """Test that MetricsCollector class exists and is importable."""
-    assert 'MetricsCollector' in dir()
+    assert "MetricsCollector" in dir()
 
 
 def test_metricscollector_instantiation():
@@ -110,4 +110,3 @@ def test_metricscollector_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

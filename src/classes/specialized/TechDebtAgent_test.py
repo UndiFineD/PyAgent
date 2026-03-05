@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_techdebtagent_exists():
     """Test that TechDebtAgent class exists and is importable."""
-    assert 'TechDebtAgent' in dir()
+    assert "TechDebtAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

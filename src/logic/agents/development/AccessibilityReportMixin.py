@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 
 from src.core.base.types.AccessibilityReport import AccessibilityReport
 from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
+
 
 class AccessibilityReportMixin:
     """Mixin for generating accessibility reports."""
@@ -43,7 +45,9 @@ class AccessibilityReportMixin:
             recommendations=recommendations,
         )
 
-    def _get_recommendations(self, critical_count: int, serious_count: int) -> list[str]:
+    def _get_recommendations(
+        self, critical_count: int, serious_count: int
+    ) -> list[str]:
         """Helper to generate recommendations."""
         recommendations: list[str] = []
         if critical_count > 0:

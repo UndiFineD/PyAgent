@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_taskdecomposer_exists():
     """Test that TaskDecomposer class exists and is importable."""
-    assert 'TaskDecomposer' in dir()
+    assert "TaskDecomposer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

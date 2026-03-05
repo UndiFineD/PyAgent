@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,7 +13,6 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 
 
 import logging
@@ -35,7 +35,8 @@ class MemorySearchMixin:
         if not query:
             # Return recent high utility episodes
             candidates = [
-                ep for ep in self.episodes
+                ep
+                for ep in self.episodes
                 if ep.get("utility_score", 0.5) >= min_utility
             ]
             return candidates[-limit:]
@@ -83,7 +84,6 @@ class MemorySearchMixin:
                 break
         return relevant
 
-
     def search_memories(self, query: str, limit: int = 5) -> list[dict[str, Any]]:
         """Public interface for semantic search across episodic memories."""
         collection: Any | None = self._init_db()
@@ -109,9 +109,9 @@ class MemorySearchMixin:
                     {
                         "content": results["documents"][0][i],
                         "metadata": results["metadatas"][0][i],
-                        "score": results["distances"][0][i]
-                        if "distances" in results
-                        else 0,
+                        "score": (
+                            results["distances"][0][i] if "distances" in results else 0
+                        ),
                     }
                 )
             return matches

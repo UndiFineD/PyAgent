@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 """Generate conservative AST-based refactor patch proposals for top-priority files.
 
 This script:
@@ -21,26 +22,26 @@ import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-BANDIT_JSON = ROOT / '.external' / 'static_checks' / 'bandit.json'
-PATCH_DIR = ROOT / '.external' / 'patches_ast'
-TARGET_PREFIX = ROOT / 'src' / 'external_candidates' / 'auto'
+BANDIT_JSON = ROOT / ".external" / "static_checks" / "bandit.json"
+PATCH_DIR = ROOT / ".external" / "patches_ast"
+TARGET_PREFIX = ROOT / "src" / "external_candidates" / "auto"
 
 
 def load_bandit_results():
     if not BANDIT_JSON.exists():
         return {}
     try:
-        return json.loads(BANDIT_JSON.read_text(encoding='utf-8'))
+        return json.loads(BANDIT_JSON.read_text(encoding="utf-8"))
     except Exception:
         return {}
 
 
 def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
     files = {}
-    for r in results.get('results', []):
-        fn = r.get('filename')
-        sev = r.get('issue_severity', 'LOW').upper()
-        weight = {'LOW': 1, 'MEDIUM': 5, 'HIGH': 10}.get(sev, 1)
+    for r in results.get("results", []):
+        fn = r.get("filename")
+        sev = r.get("issue_severity", "LOW").upper()
+        weight = {"LOW": 1, "MEDIUM": 5, "HIGH": 10}.get(sev, 1)
         files.setdefault(fn, 0)
         files[fn] += weight
     items = sorted(files.items(), key=lambda kv: kv[1], reverse=True)
@@ -48,18 +49,32 @@ def top_files_from_bandit(results: dict, top_n: int = 30) -> list[str]:
 
 
 class SubprocessTransformer(ast.NodeTransformer):
-    DANGEROUS_ATTRS = {'Popen', 'call', 'run', 'check_output'}
+    DANGEROUS_ATTRS = {"Popen", "call", "run", "check_output"}
 
     def visit_Call(self, node):
         # transform subprocess.<attr>(...) -> safe_subprocess_run(...)
         func = node.func
         if isinstance(func, ast.Attribute) and isinstance(func.value, ast.Name):
-            if func.value.id == 'subprocess' and func.attr in self.DANGEROUS_ATTRS:
-                new = ast.copy_location(ast.Call(func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()), args=node.args, keywords=node.keywords), node)
+            if func.value.id == "subprocess" and func.attr in self.DANGEROUS_ATTRS:
+                new = ast.copy_location(
+                    ast.Call(
+                        func=ast.Name(id="safe_subprocess_run", ctx=ast.Load()),
+                        args=node.args,
+                        keywords=node.keywords,
+                    ),
+                    node,
+                )
                 return ast.fix_missing_locations(new)
         # direct Popen(...) or run(...) when imported directly
         if isinstance(func, ast.Name) and func.id in self.DANGEROUS_ATTRS:
-            new = ast.copy_location(ast.Call(func=ast.Name(id='safe_subprocess_run', ctx=ast.Load()), args=node.args, keywords=node.keywords), node)
+            new = ast.copy_location(
+                ast.Call(
+                    func=ast.Name(id="safe_subprocess_run", ctx=ast.Load()),
+                    args=node.args,
+                    keywords=node.keywords,
+                ),
+                node,
+            )
             return ast.fix_missing_locations(new)
         return self.generic_visit(node)
 
@@ -75,7 +90,7 @@ SAFE_WRAPPER_SRC = '''def safe_subprocess_run(*args, **kwargs):
 
 def create_patch_for_file(path: Path) -> Path | None:
     try:
-        src = path.read_text(encoding='utf-8', errors='ignore')
+        src = path.read_text(encoding="utf-8", errors="ignore")
         tree = ast.parse(src)
     except Exception:
         return None
@@ -88,17 +103,22 @@ def create_patch_for_file(path: Path) -> Path | None:
         # fallback: do not produce patch
         return None
     # ensure wrapper exists at top-level
-    if 'safe_subprocess_run' not in new_src:
-        new_src = SAFE_WRAPPER_SRC + '\n' + new_src
+    if "safe_subprocess_run" not in new_src:
+        new_src = SAFE_WRAPPER_SRC + "\n" + new_src
 
     if src == new_src:
         return None
 
     PATCH_DIR.mkdir(parents=True, exist_ok=True)
     rel = path.relative_to(ROOT)
-    patch_path = PATCH_DIR / (re.sub(r'[^0-9A-Za-z_.-]', '_', str(rel)) + '.patch')
-    diff = difflib.unified_diff(src.splitlines(keepends=True), new_src.splitlines(keepends=True), fromfile=f'a/{rel}', tofile=f'b/{rel}')
-    patch_path.write_text(''.join(diff), encoding='utf-8')
+    patch_path = PATCH_DIR / (re.sub(r"[^0-9A-Za-z_.-]", "_", str(rel)) + ".patch")
+    diff = difflib.unified_diff(
+        src.splitlines(keepends=True),
+        new_src.splitlines(keepends=True),
+        fromfile=f"a/{rel}",
+        tofile=f"b/{rel}",
+    )
+    patch_path.write_text("".join(diff), encoding="utf-8")
     return patch_path
 
 
@@ -119,10 +139,10 @@ def main() -> int:
         patch = create_patch_for_file(p)
         if patch:
             created += 1
-            print('Created AST patch:', patch)
-    print('AST patch generation complete. patches created:', created)
+            print("Created AST patch:", patch)
+    print("AST patch generation complete. patches created:", created)
     return 0
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     raise SystemExit(main())

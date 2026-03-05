@@ -37,7 +37,6 @@ class RequestQueue:
         finished: Set of finished request IDs (recent)
     """
 
-
     def __init__(self, max_finished_history: int = 1000) -> None:
         """
         Initialize the request queue.
@@ -51,7 +50,6 @@ class RequestQueue:
         self._request_map: Dict[str, Request] = {}
         self._finished: deque = deque(maxlen=max_finished_history)
 
-
     def add_request(self, request: Request) -> None:
         """Add a new request to the waiting queue."""
         with self._lock:
@@ -61,12 +59,10 @@ class RequestQueue:
             self._waiting.append(request.request_id)
             request.record_event(RequestEventType.QUEUED)
 
-
     def get_request(self, request_id: str) -> Optional[Request]:
         """Get a request by ID."""
         with self._lock:
             return self._request_map.get(request_id)
-
 
     def schedule_next(self, n: int = 1) -> List[Request]:
         """
@@ -86,7 +82,6 @@ class RequestQueue:
                     scheduled.append(request)
         return scheduled
 
-
     def finish_request(
         self,
         request_id: str,
@@ -104,7 +99,6 @@ class RequestQueue:
             self._finished.append(request_id)
             return request
 
-
     def abort_request(self, request_id: str) -> Optional[Request]:
         """Abort a request."""
         with self._lock:
@@ -117,7 +111,6 @@ class RequestQueue:
             self._running.discard(request_id)
             self._finished.append(request_id)
             return request
-
 
     def abort_requests(
         self,
@@ -134,7 +127,6 @@ class RequestQueue:
                 aborted.append(request)
         return aborted
 
-
     def preempt_request(self, request_id: str) -> Optional[Request]:
         """Preempt a running request back to waiting."""
         with self._lock:
@@ -147,40 +139,41 @@ class RequestQueue:
             self._waiting.appendleft(request_id)  # Add to front
             return request
 
-
     def get_num_waiting(self) -> int:
         """Get the number of waiting requests."""
         with self._lock:
             return len(self._waiting)
-
 
     def get_num_running(self) -> int:
         """Get the number of running requests."""
         with self._lock:
             return len(self._running)
 
-
     def get_num_unfinished(self) -> int:
         """Get total number of unfinished requests."""
         return self.get_num_waiting() + self.get_num_running()
-
 
     def has_unfinished_requests(self) -> bool:
         """Check if there are any unfinished requests."""
         return self.get_num_unfinished() > 0
 
-
     def get_waiting_requests(self) -> List[Request]:
         """Get all waiting requests (ordered)."""
         with self._lock:
-            return [self._request_map[rid] for rid in self._waiting if rid in self._request_map]
-
+            return [
+                self._request_map[rid]
+                for rid in self._waiting
+                if rid in self._request_map
+            ]
 
     def get_running_requests(self) -> List[Request]:
         """Get all running requests."""
         with self._lock:
-            return [self._request_map[rid] for rid in self._running if rid in self._request_map]
-
+            return [
+                self._request_map[rid]
+                for rid in self._running
+                if rid in self._request_map
+            ]
 
     def cleanup_finished(self, older_than_seconds: float = 3600.0) -> int:
         """

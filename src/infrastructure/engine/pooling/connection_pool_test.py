@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AsyncConnectionPool"), "AsyncConnectionPool missing"
     assert hasattr(mod, "PooledConnectionManager"), "PooledConnectionManager missing"
     assert hasattr(mod, "MultiHostPool"), "MultiHostPool missing"
-

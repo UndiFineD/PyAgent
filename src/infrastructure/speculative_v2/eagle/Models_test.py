@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_draftoutput_exists():
     """Test that DraftOutput class exists and is importable."""
-    assert 'DraftOutput' in dir()
+    assert "DraftOutput" in dir()
 
 
 def test_draftmodelwrapper_exists():
     """Test that DraftModelWrapper class exists and is importable."""
-    assert 'DraftModelWrapper' in dir()
+    assert "DraftModelWrapper" in dir()
 
 
 def test_simpledraftmodel_exists():
     """Test that SimpleDraftModel class exists and is importable."""
-    assert 'SimpleDraftModel' in dir()
+    assert "SimpleDraftModel" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

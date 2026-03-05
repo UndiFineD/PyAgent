@@ -33,45 +33,44 @@ except ImportError as e:
 
 def test_mcpservertype_exists():
     """Test that MCPServerType class exists and is importable."""
-    assert 'MCPServerType' in dir()
+    assert "MCPServerType" in dir()
 
 
 def test_toolstatus_exists():
     """Test that ToolStatus class exists and is importable."""
-    assert 'ToolStatus' in dir()
+    assert "ToolStatus" in dir()
 
 
 def test_sessionstate_exists():
     """Test that SessionState class exists and is importable."""
-    assert 'SessionState' in dir()
+    assert "SessionState" in dir()
 
 
 def test_mcpserverconfig_exists():
     """Test that MCPServerConfig class exists and is importable."""
-    assert 'MCPServerConfig' in dir()
+    assert "MCPServerConfig" in dir()
 
 
 def test_toolschema_exists():
     """Test that ToolSchema class exists and is importable."""
-    assert 'ToolSchema' in dir()
+    assert "ToolSchema" in dir()
 
 
 def test_toolcall_exists():
     """Test that ToolCall class exists and is importable."""
-    assert 'ToolCall' in dir()
+    assert "ToolCall" in dir()
 
 
 def test_toolresult_exists():
     """Test that ToolResult class exists and is importable."""
-    assert 'ToolResult' in dir()
+    assert "ToolResult" in dir()
 
 
 def test_mcpsession_exists():
     """Test that MCPSession class exists and is importable."""
-    assert 'MCPSession' in dir()
+    assert "MCPSession" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

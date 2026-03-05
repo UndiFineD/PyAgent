@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_goagent_exists():
     """Test that GoAgent class exists and is importable."""
-    assert 'GoAgent' in dir()
+    assert "GoAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

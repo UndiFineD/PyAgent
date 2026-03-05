@@ -7,9 +7,10 @@ from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import create_main_function, as_tool
 import logging
 
+
 class FinancialAgent(BaseAgent):
     """Agent for autonomous financial research and analysis (Dexter Pattern)."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.research_plan: List[Dict[str, Any]] = []
@@ -28,9 +29,11 @@ class FinancialAgent(BaseAgent):
         self.research_plan = [
             {"task": "Fetch income statement", "status": "pending"},
             {"task": "Calculate operating margin", "status": "pending"},
-            {"task": "Compare with sector average", "status": "pending"}
+            {"task": "Compare with sector average", "status": "pending"},
         ]
-        return f"Research plan created with {len(self.research_plan)} tasks for: {query}"
+        return (
+            f"Research plan created with {len(self.research_plan)} tasks for: {query}"
+        )
 
     @as_tool
     def validate_sufficiency(self, data: Dict[str, Any]) -> str:
@@ -49,6 +52,9 @@ class FinancialAgent(BaseAgent):
     def _get_default_content(self) -> str:
         return "# Financial Analysis Report\n\n## Overview\nPending autonomous research...\n"
 
+
 if __name__ == "__main__":
-    main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial data or topic")
+    main = create_main_function(
+        FinancialAgent, "Financial Agent", "File containing financial data or topic"
+    )
     main()

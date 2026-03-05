@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "compute_graph_key"), "compute_graph_key missing"
     assert hasattr(mod, "generate_warmup_sizes"), "generate_warmup_sizes missing"
     assert hasattr(mod, "CUDAGraphManager"), "CUDAGraphManager missing"
-

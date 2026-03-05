@@ -66,16 +66,15 @@ class SelfEvolutionMixin:
         """Enable or disable self-evolution."""
         self._evolution_enabled = enabled
 
-    def set_evolution_params(self, max_iterations: int = 3, improvement_threshold: float = 0.1) -> None:
+    def set_evolution_params(
+        self, max_iterations: int = 3, improvement_threshold: float = 0.1
+    ) -> None:
         """Set evolution parameters."""
         self._max_evolution_iterations = max_iterations
         self._improvement_threshold = improvement_threshold
 
     async def execute_with_evolution(
-        self,
-        context: CascadeContext,
-        pattern_name: Optional[str] = None,
-        **kwargs: Any
+        self, context: CascadeContext, pattern_name: Optional[str] = None, **kwargs: Any
     ) -> Dict[str, Any]:
         """
         Execute a workflow with self-evolution capabilities.
@@ -90,7 +89,9 @@ class SelfEvolutionMixin:
         workflow_id = context.task_id
 
         # Execute initial workflow
-        initial_result = await self.execute_with_pattern(context, pattern_name, **kwargs)
+        initial_result = await self.execute_with_pattern(
+            context, pattern_name, **kwargs
+        )
 
         # Track initial performance
         initial_metrics = self._calculate_metrics(initial_result)
@@ -119,7 +120,9 @@ class SelfEvolutionMixin:
                 evolved_metrics = self._calculate_metrics(evolved_result)
 
                 # Record evolution step
-                self._record_evolution_step(workflow_id, evolved_result, evolved_metrics)
+                self._record_evolution_step(
+                    workflow_id, evolved_result, evolved_metrics
+                )
 
                 # Check if this is better
                 if self._is_improved(best_metrics, evolved_metrics):
@@ -141,15 +144,21 @@ class SelfEvolutionMixin:
 
         if "results" in result and isinstance(result["results"], list):
             total_attempts = len(result["results"])
-            successful_attempts = sum(1 for r in result["results"] if r.get("completed", False))
-            metrics.success_rate = successful_attempts / total_attempts if total_attempts > 0 else 0.0
+            successful_attempts = sum(
+                1 for r in result["results"] if r.get("completed", False)
+            )
+            metrics.success_rate = (
+                successful_attempts / total_attempts if total_attempts > 0 else 0.0
+            )
 
         # Calculate execution time (simplified - would need actual timing)
         metrics.execution_time = result.get("execution_time", 0.0)
 
         # Count errors
         if "results" in result and isinstance(result["results"], list):
-            metrics.error_count = sum(1 for r in result["results"] if not r.get("completed", False))
+            metrics.error_count = sum(
+                1 for r in result["results"] if not r.get("completed", False)
+            )
 
         return metrics
 
@@ -163,7 +172,7 @@ class SelfEvolutionMixin:
         workflow_id: str,
         current_result: Dict[str, Any],
         current_metrics: EvolutionMetrics,
-        iteration: int
+        iteration: int,
     ) -> Optional[Dict[str, Any]]:
         """
         Generate an evolved version of the workflow.
@@ -171,7 +180,9 @@ class SelfEvolutionMixin:
         This method analyzes the current workflow performance and suggests
         improvements based on common evolution patterns.
         """
-        evolution_suggestions = self._analyze_workflow_issues(current_result, current_metrics)
+        evolution_suggestions = self._analyze_workflow_issues(
+            current_result, current_metrics
+        )
 
         if not evolution_suggestions:
             return None
@@ -184,9 +195,7 @@ class SelfEvolutionMixin:
         return evolved_config
 
     def _analyze_workflow_issues(
-        self,
-        result: Dict[str, Any],
-        metrics: EvolutionMetrics
+        self, result: Dict[str, Any], metrics: EvolutionMetrics
     ) -> List[str]:
         """Analyze workflow execution to identify improvement opportunities."""
         suggestions = []
@@ -214,10 +223,7 @@ class SelfEvolutionMixin:
         return suggestions
 
     def _apply_evolution_suggestions(
-        self,
-        current_result: Dict[str, Any],
-        suggestions: List[str],
-        iteration: int
+        self, current_result: Dict[str, Any], suggestions: List[str], iteration: int
     ) -> Dict[str, Any]:
         """Apply evolution suggestions to create improved workflow."""
         evolved_config = current_result.copy()
@@ -225,7 +231,9 @@ class SelfEvolutionMixin:
         for suggestion in suggestions:
             if suggestion == "improve_agent_selection":
                 # Suggest better agent combinations
-                evolved_config["agent_improvements"] = evolved_config.get("agent_improvements", [])
+                evolved_config["agent_improvements"] = evolved_config.get(
+                    "agent_improvements", []
+                )
                 evolved_config["agent_improvements"].append("use_specialized_agents")
 
             elif suggestion == "add_retry_logic":
@@ -235,7 +243,9 @@ class SelfEvolutionMixin:
 
             elif suggestion == "enhance_prompt_quality":
                 # Improve prompt engineering
-                evolved_config["prompt_enhancements"] = evolved_config.get("prompt_enhancements", [])
+                evolved_config["prompt_enhancements"] = evolved_config.get(
+                    "prompt_enhancements", []
+                )
                 evolved_config["prompt_enhancements"].append("add_context_examples")
 
             elif suggestion == "add_validation_steps":
@@ -258,7 +268,7 @@ class SelfEvolutionMixin:
         evolved_config: Dict[str, Any],
         context: CascadeContext,
         pattern_name: Optional[str],
-        **kwargs: Any
+        **kwargs: Any,
     ) -> Dict[str, Any]:
         """Execute an evolved workflow configuration."""
         # Apply evolved configuration to execution context
@@ -270,7 +280,9 @@ class SelfEvolutionMixin:
 
         # Execute with evolved configuration (pass work_state in kwargs if needed)
         kwargs["work_state"] = work_state
-        result = await self.execute_with_pattern(evolved_context, pattern_name, **kwargs)
+        result = await self.execute_with_pattern(
+            evolved_context, pattern_name, **kwargs
+        )
 
         # Mark as evolved result
         result["evolved"] = True
@@ -278,25 +290,28 @@ class SelfEvolutionMixin:
 
         return result
 
-    def _is_improved(self, old_metrics: EvolutionMetrics, new_metrics: EvolutionMetrics) -> bool:
+    def _is_improved(
+        self, old_metrics: EvolutionMetrics, new_metrics: EvolutionMetrics
+    ) -> bool:
         """Check if new metrics represent an improvement."""
         # Calculate composite improvement score
-        old_score = (old_metrics.success_rate * 0.4 +
-                    old_metrics.quality_score * 0.4 +
-                    (1.0 - min(old_metrics.execution_time / 300.0, 1.0)) * 0.2)
+        old_score = (
+            old_metrics.success_rate * 0.4
+            + old_metrics.quality_score * 0.4
+            + (1.0 - min(old_metrics.execution_time / 300.0, 1.0)) * 0.2
+        )
 
-        new_score = (new_metrics.success_rate * 0.4 +
-                    new_metrics.quality_score * 0.4 +
-                    (1.0 - min(new_metrics.execution_time / 300.0, 1.0)) * 0.2)
+        new_score = (
+            new_metrics.success_rate * 0.4
+            + new_metrics.quality_score * 0.4
+            + (1.0 - min(new_metrics.execution_time / 300.0, 1.0)) * 0.2
+        )
 
         improvement = (new_score - old_score) / old_score if old_score > 0 else 0
         return improvement >= self._improvement_threshold
 
     def _record_evolution_step(
-        self,
-        workflow_id: str,
-        result: Dict[str, Any],
-        metrics: EvolutionMetrics
+        self, workflow_id: str, result: Dict[str, Any], metrics: EvolutionMetrics
     ) -> None:
         """Record an evolution step in history."""
         if workflow_id not in self._evolution_history:
@@ -312,7 +327,9 @@ class SelfEvolutionMixin:
         lessons = self._extract_lessons(result, metrics)
         history.lessons_learned.extend(lessons)
 
-    def _extract_lessons(self, result: Dict[str, Any], metrics: EvolutionMetrics) -> List[str]:
+    def _extract_lessons(
+        self, result: Dict[str, Any], metrics: EvolutionMetrics
+    ) -> List[str]:
         """Extract lessons learned from workflow execution."""
         lessons = []
 
@@ -320,7 +337,9 @@ class SelfEvolutionMixin:
             lessons.append("High success rate indicates good agent selection")
 
         if metrics.quality_score > 0.8:
-            lessons.append("Strong quality score suggests effective collaboration patterns")
+            lessons.append(
+                "Strong quality score suggests effective collaboration patterns"
+            )
 
         if metrics.error_count == 0:
             lessons.append("Zero errors indicate robust error handling")
@@ -342,15 +361,22 @@ class SelfEvolutionMixin:
 
         insights = {
             "total_evolutions": len(history.evolved_workflows),
-            "best_performance": max(history.performance_history,
-                                  key=lambda m: m.quality_score) if history.performance_history else None,
+            "best_performance": (
+                max(history.performance_history, key=lambda m: m.quality_score)
+                if history.performance_history
+                else None
+            ),
             "lessons_learned": history.lessons_learned,
-            "improvement_trend": self._calculate_improvement_trend(history.performance_history)
+            "improvement_trend": self._calculate_improvement_trend(
+                history.performance_history
+            ),
         }
 
         return insights
 
-    def _calculate_improvement_trend(self, metrics_history: List[EvolutionMetrics]) -> str:
+    def _calculate_improvement_trend(
+        self, metrics_history: List[EvolutionMetrics]
+    ) -> str:
         """Calculate the trend of performance improvement."""
         if len(metrics_history) < 2:
             return "insufficient_data"

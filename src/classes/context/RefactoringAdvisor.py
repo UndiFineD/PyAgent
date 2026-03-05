@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,11 +23,14 @@ from __future__ import annotations
 """Auto-extracted class from agent_context.py"""
 
 from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.RefactoringSuggestion import RefactoringSuggestion
+from src.logic.agents.cognitive.context.models.RefactoringSuggestion import (
+    RefactoringSuggestion,
+)
 from typing import Any, Dict, List
 import re
 
 __version__ = VERSION
+
 
 class RefactoringAdvisor:
     """Suggests refactoring based on context analysis.
@@ -76,12 +80,14 @@ class RefactoringAdvisor:
             for name, spec in self.patterns.items():
                 try:
                     if re.search(spec["pattern"], content):
-                        suggestions.append(RefactoringSuggestion(
-                            suggestion_type=name,
-                            description=spec.get("description", ""),
-                            affected_files=[path],
-                            estimated_impact="low",
-                        ))
+                        suggestions.append(
+                            RefactoringSuggestion(
+                                suggestion_type=name,
+                                description=spec.get("description", ""),
+                                affected_files=[path],
+                                estimated_impact="low",
+                            )
+                        )
                 except re.error:
                     # Invalid user-provided regex; ignore for robustness.
                     continue
@@ -97,15 +103,19 @@ class RefactoringAdvisor:
                 descriptions[desc].append(path)
         for desc, files in descriptions.items():
             if len(files) > 1:
-                suggestions.append(RefactoringSuggestion(
-                    suggestion_type="extract_common",
-                    description=f"Similar purpose found in {len(files)} files",
-                    affected_files=files,
-                    estimated_impact="medium"
-                ))
+                suggestions.append(
+                    RefactoringSuggestion(
+                        suggestion_type="extract_common",
+                        description=f"Similar purpose found in {len(files)} files",
+                        affected_files=files,
+                        estimated_impact="medium",
+                    )
+                )
         return suggestions
 
-    def prioritize(self, suggestions: list[RefactoringSuggestion]) -> list[RefactoringSuggestion]:
+    def prioritize(
+        self, suggestions: list[RefactoringSuggestion]
+    ) -> list[RefactoringSuggestion]:
         """Prioritize refactoring suggestions.
 
         Args:

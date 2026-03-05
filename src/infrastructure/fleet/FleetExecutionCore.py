@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -42,13 +43,16 @@ class FleetExecutionCore:
             logging.error(f"Ethics Review REJECTED: {ethics_report['violations']}")
             # Fire-and-forget signal (it's sync but emit is usually async-safe or handled)
             import asyncio
+
             try:
                 loop = asyncio.get_running_loop()
-                loop.create_task(self.fleet.signals.emit(
-                    "WORKFLOW_REJECTED",
-                    {"task": task, "violations": ethics_report["violations"]},
-                    sender="FleetManager",
-                ))
+                loop.create_task(
+                    self.fleet.signals.emit(
+                        "WORKFLOW_REJECTED",
+                        {"task": task, "violations": ethics_report["violations"]},
+                        sender="FleetManager",
+                    )
+                )
             except RuntimeError:
                 pass
         return ethics_report
@@ -164,9 +168,11 @@ class FleetExecutionCore:
 
         # Process variables (e.g., $last_result)
         processed_args = [
-            self.fleet.state.get(arg[1:], arg)
-            if isinstance(arg, str) and arg.startswith("$")
-            else arg
+            (
+                self.fleet.state.get(arg[1:], arg)
+                if isinstance(arg, str) and arg.startswith("$")
+                else arg
+            )
             for arg in args
         ]
 
@@ -175,11 +181,16 @@ class FleetExecutionCore:
             err = f"Error: Agent '{agent_name}' not found."
             # Fire-and-forget signal emmission
             import asyncio
+
             try:
                 loop = asyncio.get_running_loop()
-                loop.create_task(self.fleet.signals.emit(
-                    "AGENT_NOT_FOUND", {"agent": agent_name, "step": step}, sender="FleetManager"
-                ))
+                loop.create_task(
+                    self.fleet.signals.emit(
+                        "AGENT_NOT_FOUND",
+                        {"agent": agent_name, "step": step},
+                        sender="FleetManager",
+                    )
+                )
             except RuntimeError:
                 pass
             return f"### Error\n{err}\n"
@@ -192,7 +203,9 @@ class FleetExecutionCore:
 
         action_fn = getattr(agent, action_name, None)
         if not action_fn:
-            return f"### Error from {agent_name}\nAction '{action_name}' not supported.\n"
+            return (
+                f"### Error from {agent_name}\nAction '{action_name}' not supported.\n"
+            )
 
         trace_id = f"{workflow_id}_{agent_name}_{action_name}"
         start_time = time.time()
@@ -201,18 +214,31 @@ class FleetExecutionCore:
         # Signal start
         # Signal start
         import asyncio
+
         try:
             loop = asyncio.get_running_loop()
-            loop.create_task(self.fleet.signals.emit(
-                "STEP_STARTED",
-                {"agent": agent_name, "action": action_name, "args": processed_args},
-                sender="FleetManager",
-            ))
+            loop.create_task(
+                self.fleet.signals.emit(
+                    "STEP_STARTED",
+                    {
+                        "agent": agent_name,
+                        "action": action_name,
+                        "args": processed_args,
+                    },
+                    sender="FleetManager",
+                )
+            )
         except RuntimeError:
             pass
 
         success, res, error_msg = await self._execute_with_retry(
-            agent, action_fn, processed_args, workflow_id, priority, trace_id, start_time
+            agent,
+            action_fn,
+            processed_args,
+            workflow_id,
+            priority,
+            trace_id,
+            start_time,
         )
 
         if success:
@@ -242,9 +268,16 @@ class FleetExecutionCore:
             if self.fleet.action_history.count(action_signature) >= 3:
                 msg = f"LOOP DETECTED: {action_signature} repeated 3 times."
                 import asyncio
+
                 try:
                     loop = asyncio.get_running_loop()
-                    loop.create_task(self.fleet.signals.emit("LOOP_DETECTED", {"action": action_signature}, sender="FleetManager"))
+                    loop.create_task(
+                        self.fleet.signals.emit(
+                            "LOOP_DETECTED",
+                            {"action": action_signature},
+                            sender="FleetManager",
+                        )
+                    )
                 except RuntimeError:
                     pass
                 return False, "", msg
@@ -253,7 +286,9 @@ class FleetExecutionCore:
 
             try:
                 current_model = getattr(agent, "get_model", lambda: "default")()
-                logging.info(f"Fleet (Attempt {attempts}): {action_signature} [{priority.name}]")
+                logging.info(
+                    f"Fleet (Attempt {attempts}): {action_signature} [{priority.name}]"
+                )
 
                 if inspect.iscoroutinefunction(action_fn):
                     res = await action_fn(*args)
@@ -265,23 +300,50 @@ class FleetExecutionCore:
                 duration = time.time() - start_time
                 self.fleet.scaling.record_metric(agent_name, duration)
                 if self.fleet.rl_selector:
-                    self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=True)
+                    self.fleet.rl_selector.update_stats(
+                        f"{agent_name}.{action_name}", success=True
+                    )
 
-                token_info = getattr(agent, "_last_token_usage", {"input": 0, "output": 0, "model": current_model})
-                await self.fleet._record_success(res, workflow_id, agent_name, action_name, args, token_info, trace_id, start_time)
-                self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
+                token_info = getattr(
+                    agent,
+                    "_last_token_usage",
+                    {"input": 0, "output": 0, "model": current_model},
+                )
+                await self.fleet._record_success(
+                    res,
+                    workflow_id,
+                    agent_name,
+                    action_name,
+                    args,
+                    token_info,
+                    trace_id,
+                    start_time,
+                )
+                self.fleet.telemetry.end_trace(
+                    trace_id, agent_name, action_name, status="success"
+                )
                 success = True
             except Exception as e:
                 error_msg = str(e)
                 if self.fleet.rl_selector:
-                    self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=False)
+                    self.fleet.rl_selector.update_stats(
+                        f"{agent_name}.{action_name}", success=False
+                    )
 
                 if attempts <= max_retries:
-                    await self.fleet._record_failure(f"{agent_name}.{action_name}", error_msg, "unknown")
+                    await self.fleet._record_failure(
+                        f"{agent_name}.{action_name}", error_msg, "unknown"
+                    )
                     await asyncio.sleep(1.0)
                     continue
 
-                self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="error", metadata={"error": error_msg})
+                self.fleet.telemetry.end_trace(
+                    trace_id,
+                    agent_name,
+                    action_name,
+                    status="error",
+                    metadata={"error": error_msg},
+                )
                 break
 
         return success, res, error_msg

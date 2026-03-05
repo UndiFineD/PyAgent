@@ -19,4 +19,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MultiModalData"), "MultiModalData missing"
     assert hasattr(mod, "MultiModalInputs"), "MultiModalInputs missing"
     assert hasattr(mod, "BaseMultiModalProcessor"), "BaseMultiModalProcessor missing"
-

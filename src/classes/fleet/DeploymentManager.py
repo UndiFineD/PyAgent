@@ -7,9 +7,10 @@ import os
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
+
 class DeploymentManager:
     """Automates the generation of infrastructure-as-code and container manifests for the fleet."""
-    
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.deployment_dir = self.workspace_root / "deploy"

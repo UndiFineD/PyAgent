@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_hashalgorithm_exists():
     """Test that HashAlgorithm class exists and is importable."""
-    assert 'HashAlgorithm' in dir()
+    assert "HashAlgorithm" in dir()
 
 
 def test_contenthasher_exists():
     """Test that ContentHasher class exists and is importable."""
-    assert 'ContentHasher' in dir()
+    assert "ContentHasher" in dir()
 
 
 def test_is_fips_mode_exists():
@@ -99,4 +99,3 @@ def test_hash_with_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

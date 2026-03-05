@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,7 +30,9 @@ if TYPE_CHECKING:
     import zmq
 
     from src.infrastructure.engine.engine_client.types import (
-        EngineClientConfig, SchedulerOutput)
+        EngineClientConfig,
+        SchedulerOutput,
+    )
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +69,9 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
 
         if self._socket is None:
             # Mock mode
-            self._pending[request_id] = EngineOutput(request_id=request_id, outputs=[{"mock": True}], finished=True)
+            self._pending[request_id] = EngineOutput(
+                request_id=request_id, outputs=[{"mock": True}], finished=True
+            )
             return request_id
 
         try:
@@ -93,17 +98,25 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                 finished=data.get("finished", True),
                 metrics=data.get("metrics", {}),
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error(f"ZMQ error: {e}")
-            self._pending[request_id] = EngineOutput(request_id=request_id, error=str(e))
+            self._pending[request_id] = EngineOutput(
+                request_id=request_id, error=str(e)
+            )
 
         return request_id
 
-    def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
+    def get_output(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[EngineOutput]:
         """Get output synchronously."""
         return self._pending.pop(request_id, None)
 
-    async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
+    async def get_output_async(
+        self, request_id: str, timeout_ms: Optional[int] = None
+    ) -> Optional[EngineOutput]:
         """Get output (sync wrapper for async interface)."""
         return self.get_output(request_id, timeout_ms)
 

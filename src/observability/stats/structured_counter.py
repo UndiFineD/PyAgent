@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,6 +63,7 @@ class StructuredCounter:
 
     def reset(self) -> None:
         """Reset all counter fields to their default values."""
+
         def reset_field(f: Any) -> None:
             if f.default is not f.default_factory:
                 setattr(self, f.name, f.default if f.default is not dataclass else 0)
@@ -69,7 +71,7 @@ class StructuredCounter:
                 setattr(self, f.name, f.default_factory())
             else:
                 setattr(self, f.name, 0)
-        
+
         list(map(reset_field, fields(self)))
 
     def diff(self: T, other: T) -> dict[str, int]:
@@ -82,6 +84,7 @@ class StructuredCounter:
         Returns:
             Dictionary of field names to their differences (self - other)
         """
+
         def calculate_diff(acc: dict[str, int], f: Any) -> dict[str, int]:
             current = getattr(self, f.name)
             baseline = getattr(other, f.name)
@@ -114,7 +117,7 @@ class StructuredCounter:
         """
         old = self.clone()
         yield
-        
+
         def check_expected(item: tuple[str, int]) -> None:
             name, expected_diff = item
             actual_diff = getattr(self, name) - getattr(old, name)
@@ -123,7 +126,7 @@ class StructuredCounter:
                 f"after={getattr(self, name)}, expected_diff={expected_diff}, "
                 f"actual_diff={actual_diff}"
             )
-            
+
         list(map(check_expected, kwargs.items()))
 
     def increment(self, field_name: str, amount: int = 1) -> None:

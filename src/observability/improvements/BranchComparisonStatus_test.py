@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_branchcomparisonstatus_exists():
     """Test that BranchComparisonStatus class exists and is importable."""
-    assert 'BranchComparisonStatus' in dir()
+    assert "BranchComparisonStatus" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_baseworker_exists():
     """Test that BaseWorker class exists and is importable."""
-    assert 'BaseWorker' in dir()
+    assert "BaseWorker" in dir()
 
 
 def test_workerprocess_exists():
     """Test that WorkerProcess class exists and is importable."""
-    assert 'WorkerProcess' in dir()
+    assert "WorkerProcess" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

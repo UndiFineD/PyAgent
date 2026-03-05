@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,8 +21,9 @@ from __future__ import annotations
 from src.core.base.common.base_utilities import as_tool, create_main_function
 from src.core.base.lifecycle.base_agent import BaseAgent
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.orchestration.signals.signal_registry import \
-    SignalRegistry
+from src.infrastructure.swarm.orchestration.signals.signal_registry import (
+    SignalRegistry,
+)
 
 __version__ = VERSION
 
@@ -47,7 +49,10 @@ class TransparencyAgent(BaseAgent):
         if workflow_id:
             # Filter by workflow_id if it's in the data
             history = [
-                e for e in history if e.get("data", {}).get("workflow_id") == workflow_id or workflow_id in str(e)
+                e
+                for e in history
+                if e.get("data", {}).get("workflow_id") == workflow_id
+                or workflow_id in str(e)
             ]
 
         report = ["# fleet Transparency Audit Trail"]
@@ -81,5 +86,7 @@ class TransparencyAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(TransparencyAgent, "Transparency Agent", "Workflow ID (optional)")
+    main = create_main_function(
+        TransparencyAgent, "Transparency Agent", "Workflow ID (optional)"
+    )
     main()

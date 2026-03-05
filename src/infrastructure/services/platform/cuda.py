@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,8 +25,15 @@ import logging
 from typing import Set
 
 from .base import Platform
-from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
-                     DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
+from .models import (
+    AttentionBackend,
+    DeviceCapability,
+    DeviceFeature,
+    DeviceInfo,
+    MemoryInfo,
+    PlatformType,
+    QuantizationType,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -117,7 +125,11 @@ class CudaPlatform(Platform):
         quants = {QuantizationType.NONE, QuantizationType.INT8}
 
         if cap >= DeviceCapability(7, 5):
-            quants |= {QuantizationType.GPTQ, QuantizationType.AWQ, QuantizationType.INT4}
+            quants |= {
+                QuantizationType.GPTQ,
+                QuantizationType.AWQ,
+                QuantizationType.INT4,
+            }
         if cap >= DeviceCapability(8, 0):
             quants |= {
                 QuantizationType.MARLIN,
@@ -146,7 +158,9 @@ class CudaPlatform(Platform):
             driver_version=self.get_driver_version(),
         )
 
-    def select_attention_backend(self, _capability: DeviceCapability) -> AttentionBackend:
+    def select_attention_backend(
+        self, _capability: DeviceCapability
+    ) -> AttentionBackend:
         backends = self.get_attention_backends()
         return backends[0] if backends else AttentionBackend.DEFAULT
 

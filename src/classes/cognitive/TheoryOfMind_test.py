@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_theoryofmind_exists():
     """Test that TheoryOfMind class exists and is importable."""
-    assert 'TheoryOfMind' in dir()
+    assert "TheoryOfMind" in dir()
 
 
 def test_theoryofmind_instantiation():
@@ -45,4 +45,3 @@ def test_theoryofmind_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

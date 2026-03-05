@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,6 +16,7 @@ from __future__ import annotations
 from typing import Any, Dict, List, Optional
 from src.core.base.modules import BaseModule
 
+
 class ConsensusModule(BaseModule):
     """
     Consolidated core module for consensus protocols.
@@ -26,8 +28,9 @@ class ConsensusModule(BaseModule):
         self.mode = self.config.get("mode", "plurality")
         return super().initialize()
 
-    def execute(self, proposals:
-        list[str], weights: list[float] | None = None) -> dict[str, Any]:
+    def execute(
+        self, proposals: list[str], weights: list[float] | None = None
+    ) -> dict[str, Any]:
         """
         Executes the consensus protocol to find a winner.
         """
@@ -36,19 +39,20 @@ class ConsensusModule(BaseModule):
 
         winner = self.calculate_winner(proposals, weights)
         score = self.get_agreement_score(proposals, winner)
-        
+
         return {
             "winner": winner,
             "agreement_score": score,
-            "quorum_reached": score >= 0.667 # BFT 2/3 requirement
+            "quorum_reached": score >= 0.667,  # BFT 2/3 requirement
         }
 
-    def calculate_winner(self, proposals:
-        list[str], weights: list[float] | None = None) -> str:
+    def calculate_winner(
+        self, proposals: list[str], weights: list[float] | None = None
+    ) -> str:
         """Determines the winning proposal based on voting rules."""
         if not proposals:
             return ""
-            
+
         if weights and len(weights) != len(proposals):
             weights = None
 
@@ -56,17 +60,14 @@ class ConsensusModule(BaseModule):
         for idx, p in enumerate(proposals):
             weight = weights[idx] if weights else 1.0
             counts[p] = counts.get(p, 0) + weight
-            
-        winner = sorted(
-            counts.keys(), 
-            key=lambda x: (counts[x], len(x)), 
-            reverse=True
-        )[0]
-        
+
+        winner = sorted(counts.keys(), key=lambda x: (counts[x], len(x)), reverse=True)[
+            0
+        ]
+
         return winner
 
-    def get_agreement_score(self, proposals:
-        list[str], winner: str) -> float:
+    def get_agreement_score(self, proposals: list[str], winner: str) -> float:
         """Calculates the percentage of agents that agreed with the winner."""
         if not proposals:
             return 0.0

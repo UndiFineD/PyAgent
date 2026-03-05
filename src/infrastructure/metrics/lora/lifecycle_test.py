@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_requestlifecycle_exists():
     """Test that RequestLifecycle class exists and is importable."""
-    assert 'RequestLifecycle' in dir()
+    assert "RequestLifecycle" in dir()
 
 
 def test_requestlifecyclemanager_exists():
     """Test that RequestLifecycleManager class exists and is importable."""
-    assert 'RequestLifecycleManager' in dir()
+    assert "RequestLifecycleManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

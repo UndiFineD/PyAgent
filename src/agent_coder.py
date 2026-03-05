@@ -19,10 +19,8 @@ if str(root / "src") not in sys.path:
 
 # Create main function using the helper
 main = create_main_function(
-    CoderAgent,
-    'Coder Agent: Updates code files',
-    'Path to the code file'
+    CoderAgent, "Coder Agent: Updates code files", "Path to the code file"
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

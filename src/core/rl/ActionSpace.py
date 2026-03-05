@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Reinforcement Learning Action Space Definition - Phase 319 Enhanced
 
@@ -8,19 +9,26 @@ from typing import Any, List, Union, Dict, Optional, Tuple
 from dataclasses import dataclass, field
 import numpy as np
 
+
 @dataclass
 class ActionMetadata:
     """Rich metadata for actions."""
+
     name: str
     description: str = ""
     cost: float = 0.0  # Resource cost of taking this action
     cooldown: float = 0.0  # Time before action can be repeated
     prerequisites: List[str] = field(default_factory=list)
 
+
 class ActionSpace:
     """Defines the set of possible actions an agent can take."""
 
-    def __init__(self, actions: Optional[List[str]] = None, metadata: Optional[Dict[str, ActionMetadata]] = None):
+    def __init__(
+        self,
+        actions: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, ActionMetadata]] = None,
+    ):
         self.actions = actions or []
         self.metadata = metadata or {}
         self._action_history: List[Tuple[str, float]] = []
@@ -38,12 +46,14 @@ class ActionSpace:
     def get_available_actions(self, current_time: Optional[float] = None) -> List[str]:
         """Returns actions not on cooldown."""
         import time
+
         now = current_time or time.time()
         return [a for a in self.actions if self._cooldowns.get(a, 0) <= now]
 
     def record_action(self, action: str, timestamp: Optional[float] = None) -> None:
         """Records an action and applies cooldown."""
         import time
+
         now = timestamp or time.time()
         self._action_history.append((action, now))
         if action in self.metadata:
@@ -61,8 +71,10 @@ class ActionSpace:
         """Returns subset of actions based on boolean mask."""
         return [a for a, m in zip(self.actions, mask) if m]
 
+
 class DiscreteActionSpace(ActionSpace):
     """Discrete action space (fixed set of choices)."""
+
     def __init__(self, n: int, action_names: Optional[List[str]] = None):
         names = action_names or [str(i) for i in range(n)]
         super().__init__(names)
@@ -80,12 +92,28 @@ class DiscreteActionSpace(ActionSpace):
         """Returns action name for given index."""
         return self.actions[index] if 0 <= index < len(self.actions) else ""
 
+
 class BoxActionSpace:
     """Continuous action space within bounds."""
-    def __init__(self, low: Union[float, np.ndarray], high: Union[float, np.ndarray], shape: tuple, dtype=np.float32):
+
+    def __init__(
+        self,
+        low: Union[float, np.ndarray],
+        high: Union[float, np.ndarray],
+        shape: tuple,
+        dtype=np.float32,
+    ):
         """Defines a continuous action space with given bounds."""
-        self.low = np.full(shape, low, dtype=dtype) if np.isscalar(low) else np.array(low, dtype=dtype)
-        self.high = np.full(shape, high, dtype=dtype) if np.isscalar(high) else np.array(high, dtype=dtype)
+        self.low = (
+            np.full(shape, low, dtype=dtype)
+            if np.isscalar(low)
+            else np.array(low, dtype=dtype)
+        )
+        self.high = (
+            np.full(shape, high, dtype=dtype)
+            if np.isscalar(high)
+            else np.array(high, dtype=dtype)
+        )
         self.shape = shape
         self.dtype = dtype
 
@@ -101,8 +129,10 @@ class BoxActionSpace:
         """Clips action to valid bounds."""
         return np.clip(action, self.low, self.high)
 
+
 class MultiDiscreteActionSpace:
     """Multiple discrete action spaces (e.g., for multi-headed agents)."""
+
     def __init__(self, nvec: List[int]):
         """nvec specifies the number of discrete actions for each dimension."""
         self.nvec = np.array(nvec)
@@ -116,8 +146,10 @@ class MultiDiscreteActionSpace:
         """Checks if action is within bounds."""
         return all(0 <= a < n for a, n in zip(action, self.nvec))
 
+
 class DictActionSpace:
     """Hierarchical action space with named sub-spaces."""
+
     def __init__(self, spaces: Dict[str, ActionSpace]):
         self.spaces = spaces
 
@@ -127,4 +159,6 @@ class DictActionSpace:
 
     def contains(self, action: Dict[str, Any]) -> bool:
         """Checks if action is valid within each sub-space."""
-        return all(self.spaces[k].contains(v) for k, v in action.items() if k in self.spaces)
+        return all(
+            self.spaces[k].contains(v) for k, v in action.items() if k in self.spaces
+        )

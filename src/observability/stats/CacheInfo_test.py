@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_cachestats_exists():
     """Test that CacheStats class exists and is importable."""
-    assert 'CacheStats' in dir()
+    assert "CacheStats" in dir()
 
 
 def test_cacheentry_exists():
     """Test that CacheEntry class exists and is importable."""
-    assert 'CacheEntry' in dir()
+    assert "CacheEntry" in dir()
 
 
 def test_lrucache_exists():
     """Test that LRUCache class exists and is importable."""
-    assert 'LRUCache' in dir()
+    assert "LRUCache" in dir()
 
 
 def test_ttllrucache_exists():
     """Test that TTLLRUCache class exists and is importable."""
-    assert 'TTLLRUCache' in dir()
+    assert "TTLLRUCache" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

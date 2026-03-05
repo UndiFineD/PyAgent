@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -50,7 +51,9 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
         workflow_id: str | None = None,
     ) -> str:
         """Runs multiple agent steps in parallel with dependency-aware batching (Phase 232)."""
-        logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")
+        logging.info(
+            f"Starting parallel workflow: {task} with {len(workflow_steps)} steps."
+        )
 
         if not workflow_id:
             workflow_id = f"async_wf_{int(time.time())}"
@@ -58,7 +61,9 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
         # Phase 239: Initialize or retrieve workflow state
         if workflow_id in self.active_workflows:
             state = self.active_workflows[workflow_id]
-            logging.info(f"Resuming workflow {workflow_id} from step index {state.get('next_batch_idx', 0)}")
+            logging.info(
+                f"Resuming workflow {workflow_id} from step index {state.get('next_batch_idx', 0)}"
+            )
         else:
             state = WorkflowState(task_id=workflow_id, original_request=task)
             state.set("next_batch_idx", 0)
@@ -85,7 +90,9 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
             logging.error(f"Workflow dependency resolution failed: {e}")
             return f"Error: Invalid workflow graph - {e}"
 
-        logging.info(f"Resolved workflow into {len(batches)} parallel execution batches.")
+        logging.info(
+            f"Resolved workflow into {len(batches)} parallel execution batches."
+        )
 
         all_results = state.get("all_results")
         start_idx = state.get("next_batch_idx")
@@ -96,14 +103,19 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
 
             # Phase 239: Check for migration signal
             if state.get("migration_pending"):
-                logging.info(f"Migration signal received for {workflow_id}. Suspending at batch {batch_idx}.")
+                logging.info(
+                    f"Migration signal received for {workflow_id}. Suspending at batch {batch_idx}."
+                )
                 state.set("next_batch_idx", batch_idx)
                 if workflow_id in self._migration_events:
                     self._migration_events[workflow_id].set()
                 return f"WORKFLOW_SUSPENDED: {workflow_id} at batch {batch_idx}"
 
             logging.info(f"Executing batch {batch_idx + 1}/{len(batches)}: {batch}")
-            tasks = [self._run_single_step(step_map[step_id], workflow_id) for step_id in batch]
+            tasks = [
+                self._run_single_step(step_map[step_id], workflow_id)
+                for step_id in batch
+            ]
 
             responses = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -112,10 +124,16 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
                 agent_name = step_map[step_id].get("agent")
 
                 if isinstance(res, Exception):
-                    logging.error(f"Async failure in batch {batch_idx + 1} for {agent_name}: {res}")
-                    all_results.append(f"### Error from {agent_name} ({step_id})\n{str(res)}\n")
+                    logging.error(
+                        f"Async failure in batch {batch_idx + 1} for {agent_name}: {res}"
+                    )
+                    all_results.append(
+                        f"### Error from {agent_name} ({step_id})\n{str(res)}\n"
+                    )
                 else:
-                    all_results.append(f"### Results from {agent_name} ({step_id})\n{res}\n")
+                    all_results.append(
+                        f"### Results from {agent_name} ({step_id})\n{res}\n"
+                    )
 
         # Cleanup on completion
         if workflow_id in self.active_workflows:
@@ -123,7 +141,9 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
 
         return f"# Parallel Workflow Summary: {task}\n\n" + "\n".join(all_results)
 
-    async def migrate_workflow(self, workflow_id: str, remote_manager: AsyncFleetManager) -> bool:
+    async def migrate_workflow(
+        self, workflow_id: str, remote_manager: AsyncFleetManager
+    ) -> bool:
         """Phase 239: Migrates an active workflow to another manager without downtime."""
         if workflow_id not in self.active_workflows:
             logging.error(f"Cannot migrate {workflow_id}: Not found.")
@@ -179,8 +199,9 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
         self.telemetry.start_trace(trace_id)
 
         try:
-            from src.infrastructure.swarm.orchestration.system.lock_manager import \
-                LockManager
+            from src.infrastructure.swarm.orchestration.system.lock_manager import (
+                LockManager,
+            )
 
             locker = LockManager()
 
@@ -200,13 +221,17 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
                     return await run_with_async_locks(res_list[1:])
 
             res = await run_with_async_locks(resources)
-            self.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
+            self.telemetry.end_trace(
+                trace_id, agent_name, action_name, status="success"
+            )
 
             if isinstance(res, str):
                 res = await self._pre_commit_audit(res, agent_name)
 
             return res
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             self.telemetry.end_trace(
                 trace_id,
                 agent_name,
@@ -243,9 +268,7 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
             liability = audit_agent.generate_liability_report(content)
 
             if "WARNING" in liability:
-                logging.warning(
-                    f"Liability Risk in {agent_name} output: {liability}"
-                )
+                logging.warning(f"Liability Risk in {agent_name} output: {liability}")
                 # Append disclaimer instead of blocking
                 return (
                     content
@@ -253,7 +276,9 @@ class AsyncFleetManager(FleetManager):  # pylint: disable=too-many-ancestors
                     "and has not been verified for legal accuracy.*"
                 )
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.debug(f"Audit failed (Agent likely not found or errored): {e}")
 
         return content

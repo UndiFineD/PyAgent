@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,12 +23,13 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class PersonalityCoreAgent(BaseAgent):
     """
     Manages the 'emotional intelligence' and 'vibes' of the fleet.
     Adjusts communication style and task priorities based on user context.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -43,36 +45,36 @@ class PersonalityCoreAgent(BaseAgent):
         Analyzes user input and sets the fleet-wide emotional/operational vibe.
         """
         logging.info(f"PersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")
-        
+
         # In a real implementation, we'd use LLM to classify sentiment/urgency
         # prompt = f"Analyze setiment/urgency of: {user_input}"
         # analysis = self.think(prompt)
-        
+
         # Simulated analysis logic
         vibe = "professional"
         urgency = "low"
-        
-        if any(word in user_input.lower() for word in ["urgent", "asap", "emergency", "broken"]):
+
+        if any(
+            word in user_input.lower()
+            for word in ["urgent", "asap", "emergency", "broken"]
+        ):
             urgency = "high"
             vibe = "rapid_response"
-        elif any(word in user_input.lower() for word in ["thanks", "great", "awesome", "fun"]):
+        elif any(
+            word in user_input.lower() for word in ["thanks", "great", "awesome", "fun"]
+        ):
             vibe = "friendly"
-        
+
         self.current_vibe = vibe
-        
+
         # Emit signal to the fleet
-        if hasattr(self, 'registry') and self.registry:
-            self.registry.emit("FLEET_VIBE_CHANGED", {
-                "vibe": vibe,
-                "urgency": urgency,
-                "context": user_input[:100]
-            })
-            
-        return {
-            "status": "success",
-            "detected_vibe": vibe,
-            "urgency": urgency
-        }
+        if hasattr(self, "registry") and self.registry:
+            self.registry.emit(
+                "FLEET_VIBE_CHANGED",
+                {"vibe": vibe, "urgency": urgency, "context": user_input[:100]},
+            )
+
+        return {"status": "success", "detected_vibe": vibe, "urgency": urgency}
 
     @as_tool
     def get_track_guidance(self) -> str:
@@ -82,6 +84,8 @@ class PersonalityCoreAgent(BaseAgent):
         guidance = {
             "professional": "Direct, technical, and concise.",
             "friendly": "Encouraging, helpful, and personable.",
-            "rapid_response": "Extremely concise, focusing on immediate fixes and safety."
+            "rapid_response": "Extremely concise, focusing on immediate fixes and safety.",
         }
-        return guidance.get(self.current_vibe, "Maintain standard operational parameters.")
+        return guidance.get(
+            self.current_vibe, "Maintain standard operational parameters."
+        )

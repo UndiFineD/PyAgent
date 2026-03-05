@@ -39,14 +39,18 @@ class PeerWorkPattern(WorkPattern):
     - Reviewing: Evaluates quality and suggests improvements
     """
 
-    def __init__(self,
-                 planning_agent: Optional[Any] = None,
-                 executing_agent: Optional[Any] = None,
-                 expressing_agent: Optional[Any] = None,
-                 reviewing_agent: Optional[Any] = None,
-                 max_retries: int = 3,
-                 quality_threshold: float = 0.8):
-        super().__init__("PEER", "Planning, Executing, Expressing, Reviewing collaborative pattern")
+    def __init__(
+        self,
+        planning_agent: Optional[Any] = None,
+        executing_agent: Optional[Any] = None,
+        expressing_agent: Optional[Any] = None,
+        reviewing_agent: Optional[Any] = None,
+        max_retries: int = 3,
+        quality_threshold: float = 0.8,
+    ):
+        super().__init__(
+            "PEER", "Planning, Executing, Expressing, Reviewing collaborative pattern"
+        )
         self.planning_agent = planning_agent
         self.executing_agent = executing_agent
         self.expressing_agent = expressing_agent
@@ -60,12 +64,14 @@ class PeerWorkPattern(WorkPattern):
 
     def validate_agents(self) -> bool:
         """Validate that all PEER agents are available."""
-        return all([
-            self.planning_agent is not None,
-            self.executing_agent is not None,
-            self.expressing_agent is not None,
-            self.reviewing_agent is not None
-        ])
+        return all(
+            [
+                self.planning_agent is not None,
+                self.executing_agent is not None,
+                self.expressing_agent is not None,
+                self.reviewing_agent is not None,
+            ]
+        )
 
     async def execute(self, context: CascadeContext, **kwargs) -> Dict[str, Any]:
         """Execute the PEER work pattern.
@@ -78,11 +84,13 @@ class PeerWorkPattern(WorkPattern):
             Dict with execution results
         """
         if not self.validate_agents():
-            raise ValueError("PEER pattern requires all four agent types to be configured")
+            raise ValueError(
+                "PEER pattern requires all four agent types to be configured"
+            )
 
-        retry_count = kwargs.get('retry_count', self.max_retries)
-        jump_step = kwargs.get('jump_step')  # Allow jumping to specific step
-        eval_threshold = kwargs.get('eval_threshold', self.quality_threshold)
+        retry_count = kwargs.get("retry_count", self.max_retries)
+        jump_step = kwargs.get("jump_step")  # Allow jumping to specific step
+        eval_threshold = kwargs.get("eval_threshold", self.quality_threshold)
 
         results = []
         planning_result = None
@@ -96,29 +104,51 @@ class PeerWorkPattern(WorkPattern):
             try:
                 # Planning phase
                 if planning_result is None or jump_step == "planning":
-                    planning_result = await self._execute_planning(context, round_results)
+                    planning_result = await self._execute_planning(
+                        context, round_results
+                    )
                     round_results["planning"] = planning_result
 
                 # Executing phase
                 if executing_result is None or jump_step in ["planning", "executing"]:
-                    executing_result = await self._execute_executing(context, planning_result, round_results)
+                    executing_result = await self._execute_executing(
+                        context, planning_result, round_results
+                    )
                     round_results["executing"] = executing_result
 
                 # Expressing phase
-                if expressing_result is None or jump_step in ["planning", "executing", "expressing"]:
-                    expressing_result = await self._execute_expressing(context, executing_result, round_results)
+                if expressing_result is None or jump_step in [
+                    "planning",
+                    "executing",
+                    "expressing",
+                ]:
+                    expressing_result = await self._execute_expressing(
+                        context, executing_result, round_results
+                    )
                     round_results["expressing"] = expressing_result
 
                 # Reviewing phase
-                if reviewing_result is None or jump_step in ["planning", "executing", "expressing", "reviewing"]:
-                    reviewing_result = await self._execute_reviewing(context, expressing_result, round_results)
+                if reviewing_result is None or jump_step in [
+                    "planning",
+                    "executing",
+                    "expressing",
+                    "reviewing",
+                ]:
+                    reviewing_result = await self._execute_reviewing(
+                        context, expressing_result, round_results
+                    )
                     round_results["reviewing"] = reviewing_result
 
                 results.append(round_results)
 
                 # Check if quality threshold is met
-                if reviewing_result and reviewing_result.get('score', 0) >= eval_threshold:
-                    logger.info(f"PEER pattern completed successfully on attempt {attempt + 1}")
+                if (
+                    reviewing_result
+                    and reviewing_result.get("score", 0) >= eval_threshold
+                ):
+                    logger.info(
+                        f"PEER pattern completed successfully on attempt {attempt + 1}"
+                    )
                     break
                 else:
                     # Reset results for retry
@@ -141,11 +171,13 @@ class PeerWorkPattern(WorkPattern):
         return {
             "pattern": "PEER",
             "results": results,
-            "final_score": reviewing_result.get('score', 0) if reviewing_result else 0,
-            "completed": len(results) > 0 and not results[-1].get("error")
+            "final_score": reviewing_result.get("score", 0) if reviewing_result else 0,
+            "completed": len(results) > 0 and not results[-1].get("error"),
         }
 
-    async def _execute_planning(self, context: CascadeContext, round_results: Dict) -> Dict[str, Any]:
+    async def _execute_planning(
+        self, context: CascadeContext, round_results: Dict
+    ) -> Dict[str, Any]:
         """Execute the planning phase."""
         if self.planning_agent:
             # Create planning context
@@ -154,14 +186,16 @@ class PeerWorkPattern(WorkPattern):
                 cascade_depth=context.cascade_depth + 1,
                 depth_limit=context.depth_limit,
                 tenant_id=context.tenant_id,
-                security_scope=context.security_scope.copy()
+                security_scope=context.security_scope.copy(),
             )
 
             result = await self.planning_agent.execute_task(planning_context)
             return result
         return {"plan": "Default planning - break down task into steps"}
 
-    async def _execute_executing(self, context: CascadeContext, planning_result: Dict, round_results: Dict) -> Dict[str, Any]:
+    async def _execute_executing(
+        self, context: CascadeContext, planning_result: Dict, round_results: Dict
+    ) -> Dict[str, Any]:
         """Execute the executing phase."""
         if self.executing_agent:
             executing_context = CascadeContext(
@@ -169,14 +203,16 @@ class PeerWorkPattern(WorkPattern):
                 cascade_depth=context.cascade_depth + 1,
                 depth_limit=context.depth_limit,
                 tenant_id=context.tenant_id,
-                security_scope=context.security_scope.copy()
+                security_scope=context.security_scope.copy(),
             )
 
             result = await self.executing_agent.execute_task(executing_context)
             return result
         return {"execution": "Default execution - perform the planned tasks"}
 
-    async def _execute_expressing(self, context: CascadeContext, executing_result: Dict, round_results: Dict) -> Dict[str, Any]:
+    async def _execute_expressing(
+        self, context: CascadeContext, executing_result: Dict, round_results: Dict
+    ) -> Dict[str, Any]:
         """Execute the expressing phase."""
         if self.expressing_agent:
             expressing_context = CascadeContext(
@@ -184,14 +220,16 @@ class PeerWorkPattern(WorkPattern):
                 cascade_depth=context.cascade_depth + 1,
                 depth_limit=context.depth_limit,
                 tenant_id=context.tenant_id,
-                security_scope=context.security_scope.copy()
+                security_scope=context.security_scope.copy(),
             )
 
             result = await self.expressing_agent.execute_task(expressing_context)
             return result
         return {"expression": "Default expression - format results"}
 
-    async def _execute_reviewing(self, context: CascadeContext, expressing_result: Dict, round_results: Dict) -> Dict[str, Any]:
+    async def _execute_reviewing(
+        self, context: CascadeContext, expressing_result: Dict, round_results: Dict
+    ) -> Dict[str, Any]:
         """Execute the reviewing phase."""
         if self.reviewing_agent:
             reviewing_context = CascadeContext(
@@ -199,7 +237,7 @@ class PeerWorkPattern(WorkPattern):
                 cascade_depth=context.cascade_depth + 1,
                 depth_limit=context.depth_limit,
                 tenant_id=context.tenant_id,
-                security_scope=context.security_scope.copy()
+                security_scope=context.security_scope.copy(),
             )
 
             result = await self.reviewing_agent.execute_task(reviewing_context)

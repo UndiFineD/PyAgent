@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_batchrequest_exists():
     """Test that BatchRequest class exists and is importable."""
-    assert 'BatchRequest' in dir()
+    assert "BatchRequest" in dir()
 
 
 def test_requestbatcher_exists():
     """Test that RequestBatcher class exists and is importable."""
-    assert 'RequestBatcher' in dir()
+    assert "RequestBatcher" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

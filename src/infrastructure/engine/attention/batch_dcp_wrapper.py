@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -264,9 +265,12 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         def get_positions() -> Dict[str, Tuple[int, int]]:
             # Accumulate positions
             from functools import reduce
+
             initial: Tuple[int, Dict[str, Tuple[int, int]]] = (0, {})
 
-            def acc_pos(state: Tuple[int, Dict[str, Tuple[int, int]]], req: BatchRequest) -> Tuple[int, Dict[str, Tuple[int, int]]]:
+            def acc_pos(
+                state: Tuple[int, Dict[str, Tuple[int, int]]], req: BatchRequest
+            ) -> Tuple[int, Dict[str, Tuple[int, int]]]:
                 curr, d = state
                 end = curr + req.seq_len
                 d[req.request_id] = (curr, end)
@@ -281,9 +285,12 @@ class BatchDCPPrefillWrapper(BatchExecutor):
 
         def get_allocations() -> Tuple[Dict[str, List[int]], int]:
             from functools import reduce
+
             initial: Tuple[int, Dict[str, List[int]]] = (0, {})
 
-            def acc_alloc(state: Tuple[int, Dict[str, List[int]]], req: BatchRequest) -> Tuple[int, Dict[str, List[int]]]:
+            def acc_alloc(
+                state: Tuple[int, Dict[str, List[int]]], req: BatchRequest
+            ) -> Tuple[int, Dict[str, List[int]]]:
                 used, d = state
                 num_blocks = (req.seq_len + block_size - 1) // block_size
                 block_ids = list(range(used, used + num_blocks))
@@ -304,7 +311,9 @@ class BatchDCPPrefillWrapper(BatchExecutor):
                 "block_ids": block_allocation[req.request_id],
             }
 
-        remote_transfers = list(filter(None, map(create_transfer_if_remote, sorted_requests)))
+        remote_transfers = list(
+            filter(None, map(create_transfer_if_remote, sorted_requests))
+        )
 
         plan = ExecutionPlan(
             batch_id=batch_id,
@@ -331,7 +340,12 @@ class BatchDCPPrefillWrapper(BatchExecutor):
         position_ids = input_tensors.get("position_ids")
 
         # Build attention mask
-        total_tokens = sum(map(lambda end_start: end_start[1] - end_start[0], plan.token_positions.values()))
+        total_tokens = sum(
+            map(
+                lambda end_start: end_start[1] - end_start[0],
+                plan.token_positions.values(),
+            )
+        )
 
         # Run attention (mock if no function provided)
         if self._attention_fn:
@@ -348,14 +362,16 @@ class BatchDCPPrefillWrapper(BatchExecutor):
             }
 
         # Prepare transfer metadata
-        def create_transfer_entry(transfer: Dict[str, Any]) -> Tuple[str, Dict[str, Any]]:
+        def create_transfer_entry(
+            transfer: Dict[str, Any],
+        ) -> Tuple[str, Dict[str, Any]]:
             return (
                 transfer["request_id"],
                 {
                     "remote_engine_id": transfer["remote_engine_id"],
                     "block_ids": transfer["block_ids"],
                     "ready": True,
-                }
+                },
             )
 
         transfer_info = dict(map(create_transfer_entry, plan.remote_transfers))
@@ -421,16 +437,26 @@ class BatchDCPDecodeWrapper(BatchExecutor):
         request_order = list(map(lambda r: r.request_id, requests))
 
         # Single token per request regarding decode
-        token_positions = dict(map(lambda item: (item[1].request_id, (item[0], item[0] + 1)), enumerate(requests)))
+        token_positions = dict(
+            map(
+                lambda item: (item[1].request_id, (item[0], item[0] + 1)),
+                enumerate(requests),
+            )
+        )
 
         # Use remote blocks if available, else local
         def get_block_ids(req: BatchRequest) -> Tuple[str, List[int]]:
-            return (req.request_id, req.remote_block_ids if req.remote_block_ids else req.block_ids)
+            return (
+                req.request_id,
+                req.remote_block_ids if req.remote_block_ids else req.block_ids,
+            )
 
         block_allocation = dict(map(get_block_ids, requests))
 
         # Plan LSE all-gather if distributed
-        lse_gather_plan = self._plan_lse_gather(requests) if self.config.world_size > 1 else None
+        lse_gather_plan = (
+            self._plan_lse_gather(requests) if self.config.world_size > 1 else None
+        )
 
         plan = ExecutionPlan(
             batch_id=batch_id,
@@ -515,7 +541,9 @@ class BatchDCPDecodeWrapper(BatchExecutor):
 
         # All-gather across ranks
         world_size = gather_plan["world_size"]
-        gathered_lse = list(map(lambda _: torch.empty_like(local_lse), range(world_size)))
+        gathered_lse = list(
+            map(lambda _: torch.empty_like(local_lse), range(world_size))
+        )
         dist.all_gather(gathered_lse, local_lse)
 
         # Combine with log-sum-exp

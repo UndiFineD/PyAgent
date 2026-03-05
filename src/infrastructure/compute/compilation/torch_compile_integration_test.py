@@ -26,4 +26,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "set_compile_enabled"), "set_compile_enabled missing"
     assert hasattr(mod, "get_compile_config"), "get_compile_config missing"
     assert hasattr(mod, "with_compiler_context"), "with_compiler_context missing"
-

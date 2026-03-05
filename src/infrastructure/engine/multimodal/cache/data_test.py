@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "CacheEntry"), "CacheEntry missing"
     assert hasattr(mod, "CacheStats"), "CacheStats missing"
     assert hasattr(mod, "PlaceholderRange"), "PlaceholderRange missing"
-

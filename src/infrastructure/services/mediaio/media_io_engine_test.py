@@ -32,4 +32,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "load_image"), "load_image missing"
     assert hasattr(mod, "load_video"), "load_video missing"
     assert hasattr(mod, "load_audio"), "load_audio missing"
-

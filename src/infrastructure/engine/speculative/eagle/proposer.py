@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ from .tree import SpeculativeTree, TreeNode
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -34,14 +36,19 @@ except ImportError:
 Proposer logic regarding EAGLE speculative decoding.
 """
 
+
 class EagleProposer:
     """
     EAGLE-style speculative decoding proposer.
     """
 
-    def __init__(self, config: EagleConfig, draft_model: DraftModelWrapper | None = None) -> None:
+    def __init__(
+        self, config: EagleConfig, draft_model: DraftModelWrapper | None = None
+    ) -> None:
         self.config = config
-        self.draft_model = draft_model or SimpleDraftModel(hidden_size=config.hidden_size)
+        self.draft_model = draft_model or SimpleDraftModel(
+            hidden_size=config.hidden_size
+        )
         self.method = config.method
         self.num_speculative_tokens = config.num_speculative_tokens
         self.max_num_tokens = config.max_num_tokens
@@ -83,7 +90,11 @@ class EagleProposer:
         return self._propose_sequential(input_ids, positions, hidden_states, depth)
 
     def _propose_sequential(
-        self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None, num_proposals: int
+        self,
+        input_ids: list[int],
+        positions: list[int],
+        hidden_states: list[list[float]] | None,
+        num_proposals: int,
     ) -> list[DraftOutput]:
         """Sequential draft proposal."""
         current_ids = list(input_ids)
@@ -92,7 +103,9 @@ class EagleProposer:
         acc: list[DraftOutput] = []
 
         for _ in range(num_proposals):
-            output = self.draft_model.forward(current_ids[-1:], current_positions[-1:], current_hidden)
+            output = self.draft_model.forward(
+                current_ids[-1:], current_positions[-1:], current_hidden
+            )
             acc.append(output)
             if not output.token_ids:
                 break
@@ -104,16 +117,28 @@ class EagleProposer:
         return acc
 
     def _propose_tree(
-        self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None, num_proposals: int
+        self,
+        input_ids: list[int],
+        positions: list[int],
+        hidden_states: list[list[float]] | None,
+        num_proposals: int,
     ) -> list[DraftOutput]:
         """Tree-based draft proposal."""
-        tree = SpeculativeTree.create(root_token_id=input_ids[-1] if input_ids else 0, max_depth=num_proposals)
+        tree = SpeculativeTree.create(
+            root_token_id=input_ids[-1] if input_ids else 0, max_depth=num_proposals
+        )
 
-        def step(nodes_to_expand: list[TreeNode], count: int, acc: list[DraftOutput]) -> list[DraftOutput]:
+        def step(
+            nodes_to_expand: list[TreeNode], count: int, acc: list[DraftOutput]
+        ) -> list[DraftOutput]:
             if count <= 0 or not nodes_to_expand:
                 return acc
-            output = self._expand_tree_step(nodes_to_expand, positions, hidden_states, tree)
-            new_nodes: list[TreeNode] = [child for node in nodes_to_expand for child in node.children]
+            output = self._expand_tree_step(
+                nodes_to_expand, positions, hidden_states, tree
+            )
+            new_nodes: list[TreeNode] = [
+                child for node in nodes_to_expand for child in node.children
+            ]
             return step(new_nodes, count - 1, acc + [output])
 
         return step([tree.root], num_proposals, [])
@@ -123,11 +148,13 @@ class EagleProposer:
         nodes_to_expand: list[TreeNode],
         positions: list[int],
         hidden_states: list[list[float]] | None,
-        tree: SpeculativeTree
+        tree: SpeculativeTree,
     ) -> DraftOutput:
         """Helper to expand one level regarding the speculative tree."""
         batch_ids = list(map(lambda node: node.token_id, nodes_to_expand))
-        batch_positions = list(map(lambda node: positions[-1] + node.depth, nodes_to_expand))
+        batch_positions = list(
+            map(lambda node: positions[-1] + node.depth, nodes_to_expand)
+        )
 
         output = self.draft_model.forward(batch_ids, batch_positions, hidden_states)
 
@@ -137,11 +164,18 @@ class EagleProposer:
             tree.expand(node, top_k)
 
         # Zip nodes with logits up to available length
-        list(map(process_output, zip(range(len(output.logits)), nodes_to_expand, output.logits)))
+        list(
+            map(
+                process_output,
+                zip(range(len(output.logits)), nodes_to_expand, output.logits),
+            )
+        )
 
         return output
 
-    def _get_top_k_candidates(self, logits: list[float], k: int = 4) -> list[tuple[int, float]]:
+    def _get_top_k_candidates(
+        self, logits: list[float], k: int = 4
+    ) -> list[tuple[int, float]]:
         """Get top-k token candidates."""
         if HAS_RUST and hasattr(rust_core, "eagle_top_k_candidates_rust"):
             return getattr(rust_core, "eagle_top_k_candidates_rust")(logits, k)
@@ -157,13 +191,20 @@ class EagleProposer:
     def record_acceptance(self, num_proposed: int, num_accepted: int) -> None:
         """Record acceptance statistics."""
         self._stats.record(num_proposed, num_accepted)
-        list(map(lambda i: self._stats.record_position(i, i < num_accepted), range(num_proposed)))
+        list(
+            map(
+                lambda i: self._stats.record_position(i, i < num_accepted),
+                range(num_proposed),
+            )
+        )
 
     def get_acceptance_rate(self) -> float:
         """Get current acceptance rate."""
         return self._stats.get_acceptance_rate()
 
-    def build_tree_attention_metadata(self, tree: SpeculativeTree, base_seq_len: int) -> TreeAttentionMetadata:
+    def build_tree_attention_metadata(
+        self, tree: SpeculativeTree, base_seq_len: int
+    ) -> TreeAttentionMetadata:
         """Build attention metadata."""
         paths = tree.get_all_paths()
         num_tokens = functools.reduce(lambda acc, path: acc + len(path), paths, 0)
@@ -177,7 +218,7 @@ class EagleProposer:
                 path, base_seq_len, acc_idx, tree_mask, tree_positions, parent_indices
             ),
             paths,
-            0
+            0,
         )
 
         return TreeAttentionMetadata(
@@ -197,7 +238,7 @@ class EagleProposer:
         start_token_idx: int,
         tree_mask: list[list[bool]],
         tree_positions: list[int],
-        parent_indices: list[int]
+        parent_indices: list[int],
     ) -> int:
         """Fill metadata regarding a single path in the tree."""
         path_len = len(path)
@@ -209,7 +250,14 @@ class EagleProposer:
             parent_indices.append(curr_idx - 1 if i > 0 else -1)
 
             # Inner causal mask regarding path tokens
-            list(map(lambda j: tree_mask[curr_idx].__setitem__(start_token_idx + j, True), range(i + 1)))
+            list(
+                map(
+                    lambda j: tree_mask[curr_idx].__setitem__(
+                        start_token_idx + j, True
+                    ),
+                    range(i + 1),
+                )
+            )
 
         list(map(fill_step, range(path_len)))
         return start_token_idx + path_len
@@ -228,7 +276,9 @@ class EagleProposer:
             )
             return accepted, len(accepted)
 
-        def step(acc: tuple[list[int], bool], item: tuple[int, float, float]) -> tuple[list[int], bool]:
+        def step(
+            acc: tuple[list[int], bool], item: tuple[int, float, float]
+        ) -> tuple[list[int], bool]:
             """Helper for verification step."""
             accepted, done = acc
             if done:
@@ -246,24 +296,32 @@ class EagleProposer:
         )
         return final_accepted, len(final_accepted)
 
-    def extrapolate_hidden_states(self, hidden_states: list[list[float]], num_steps: int = 1) -> list[list[float]]:
+    def extrapolate_hidden_states(
+        self, hidden_states: list[list[float]], num_steps: int = 1
+    ) -> list[list[float]]:
         """Extrapolate hidden states."""
         if len(hidden_states) < 2:
             return hidden_states
 
         if HAS_RUST and hasattr(rust_core, "eagle_extrapolate_hidden_rust"):
-            return getattr(rust_core, "eagle_extrapolate_hidden_rust")(hidden_states, num_steps)
+            return getattr(rust_core, "eagle_extrapolate_hidden_rust")(
+                hidden_states, num_steps
+            )
 
         last = hidden_states[-1]
         prev = hidden_states[-2]
 
-        return list(map(
-            lambda step: list(map(
-                lambda i: last[i] + (last[i] - prev[i]) * (step + 1),
-                range(len(last))
-            )),
-            range(num_steps)
-        ))
+        return list(
+            map(
+                lambda step: list(
+                    map(
+                        lambda i: last[i] + (last[i] - prev[i]) * (step + 1),
+                        range(len(last)),
+                    )
+                ),
+                range(num_steps),
+            )
+        )
 
     def prepare_inputs_padded(
         self,
@@ -273,30 +331,40 @@ class EagleProposer:
     ) -> tuple[list[int], list[int], list[list[float]] | None]:
         """Prepare padded inputs."""
         if HAS_RUST and hasattr(rust_core, "eagle_prepare_inputs_padded_rust"):
-            return getattr(rust_core, "eagle_prepare_inputs_padded_rust")(token_ids, positions, hidden_states)
+            return getattr(rust_core, "eagle_prepare_inputs_padded_rust")(
+                token_ids, positions, hidden_states
+            )
         max_len = max(map(len, token_ids))
 
         def pad_list(lst: list, length: int, pad_val: any) -> list:
             """Pad a list to a given length."""
             return lst + [pad_val] * (length - len(lst))
 
-        padded_ids: list[int] = list(functools.reduce(
-            lambda acc, ids: acc + pad_list(ids, max_len, 0),
-            token_ids, []
-        ))
+        padded_ids: list[int] = list(
+            functools.reduce(
+                lambda acc, ids: acc + pad_list(ids, max_len, 0), token_ids, []
+            )
+        )
 
-        padded_positions: list[int] = list(functools.reduce(
-            lambda acc, pos: acc + pad_list(pos, max_len, 0),
-            positions, []
-        ))
+        padded_positions: list[int] = list(
+            functools.reduce(
+                lambda acc, pos: acc + pad_list(pos, max_len, 0), positions, []
+            )
+        )
 
         padded_hidden: list[list[float]] | None = None
         if hidden_states is not None:
-            hidden_size = len(hidden_states[0][0]) if hidden_states and hidden_states[0] else 4096
-            padded_hidden = list(functools.reduce(
-                lambda acc, states: acc + pad_list(states, max_len, [0.0] * hidden_size),
-                hidden_states, []
-            ))
+            hidden_size = (
+                len(hidden_states[0][0]) if hidden_states and hidden_states[0] else 4096
+            )
+            padded_hidden = list(
+                functools.reduce(
+                    lambda acc, states: acc
+                    + pad_list(states, max_len, [0.0] * hidden_size),
+                    hidden_states,
+                    [],
+                )
+            )
 
         return padded_ids, padded_positions, padded_hidden
 
@@ -324,7 +392,10 @@ class EagleProposerFactory:
 
     @staticmethod
     def create_eagle3(
-        num_speculative_tokens: int = 5, hidden_size: int = 4096, use_aux_hidden_state: bool = True, **kwargs
+        num_speculative_tokens: int = 5,
+        hidden_size: int = 4096,
+        use_aux_hidden_state: bool = True,
+        **kwargs,
     ) -> EagleProposer:
         """Create EAGLE-3 proposer."""
         config = EagleConfig(
@@ -345,21 +416,32 @@ class AsyncEagleProposer:
         self._lock = threading.Lock()
 
     async def propose_async(
-        self, input_ids: list[int], positions: list[int], hidden_states: list[list[float]] | None = None
+        self,
+        input_ids: list[int],
+        positions: list[int],
+        hidden_states: list[list[float]] | None = None,
     ) -> list[DraftOutput]:
         """Async draft proposal."""
         import asyncio
 
         loop = asyncio.get_event_loop()
-        return await loop.run_in_executor(None, lambda: self.proposer.propose(input_ids, positions, hidden_states))
+        return await loop.run_in_executor(
+            None, lambda: self.proposer.propose(input_ids, positions, hidden_states)
+        )
 
     async def verify_async(
-        self, draft_tokens: list[int], draft_logprobs: list[float], target_logprobs: list[float]
+        self,
+        draft_tokens: list[int],
+        draft_logprobs: list[float],
+        target_logprobs: list[float],
     ) -> tuple[list[int], int]:
         """Async verification."""
         import asyncio
 
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
-            None, lambda: self.proposer.verify_and_accept(draft_tokens, draft_logprobs, target_logprobs)
+            None,
+            lambda: self.proposer.verify_and_accept(
+                draft_tokens, draft_logprobs, target_logprobs
+            ),
         )

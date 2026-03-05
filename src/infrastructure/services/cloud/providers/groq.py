@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -213,10 +214,14 @@ class GroqConnector(CloudProviderBase):
             Estimated cost in USD.
         """
         model: str = request.model
-        pricing: Dict[str, float] = self.PRICING.get(model, {"input": 0.5, "output": 0.5})
+        pricing: Dict[str, float] = self.PRICING.get(
+            model, {"input": 0.5, "output": 0.5}
+        )
 
         # Rough estimate: assume 4 chars per token
-        input_tokens: int = sum(len(m.get("content", "")) for m in request.messages) // 4
+        input_tokens: int = (
+            sum(len(m.get("content", "")) for m in request.messages) // 4
+        )
         output_tokens: int = request.max_tokens
 
         input_cost: float = (input_tokens / 1_000_000) * pricing["input"]

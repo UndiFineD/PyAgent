@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_responsestatus_exists():
     """Test that ResponseStatus class exists and is importable."""
-    assert 'ResponseStatus' in dir()
+    assert "ResponseStatus" in dir()
 
 
 def test_responsetype_exists():
     """Test that ResponseType class exists and is importable."""
-    assert 'ResponseType' in dir()
+    assert "ResponseType" in dir()
 
 
 def test_contentparttype_exists():
     """Test that ContentPartType class exists and is importable."""
-    assert 'ContentPartType' in dir()
+    assert "ContentPartType" in dir()
 
 
 def test_tooltype_exists():
     """Test that ToolType class exists and is importable."""
-    assert 'ToolType' in dir()
+    assert "ToolType" in dir()
 
 
 def test_roletype_exists():
     """Test that RoleType class exists and is importable."""
-    assert 'RoleType' in dir()
+    assert "RoleType" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

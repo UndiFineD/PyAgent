@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -10,13 +11,17 @@ import numpy as np
 from .Params import SamplingParams, SamplingState
 from .Base import Sampler, _softmax, _sample_from_probs
 from .Kernels import (
-    TemperatureSampler, TopKTopPSampler, GumbelSampler,
-    RepetitionPenaltySampler, PenaltySampler
+    TemperatureSampler,
+    TopKTopPSampler,
+    GumbelSampler,
+    RepetitionPenaltySampler,
+    PenaltySampler,
 )
 
 
 class SamplingPipeline:
     """Composable pipeline of samplers."""
+
     def __init__(self, samplers: Optional[List[Sampler]] = None):
         self.samplers = samplers or []
 
@@ -57,7 +62,7 @@ def sample_logits(
     """Convenience function to sample from logits."""
     params = params or SamplingParams()
     samplers: List[Sampler] = []
-    
+
     if params.repetition_penalty != 1.0:
         samplers.append(RepetitionPenaltySampler())
     if params.presence_penalty != 0 or params.frequency_penalty != 0:
@@ -67,6 +72,6 @@ def sample_logits(
     if params.use_top_k or params.use_top_p or params.use_min_p:
         samplers.append(TopKTopPSampler())
     samplers.append(GumbelSampler())
-    
+
     pipeline = SamplingPipeline(samplers)
     return pipeline.sample(logits, params, state)

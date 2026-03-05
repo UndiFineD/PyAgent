@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RadixTreeNode"), "RadixTreeNode missing"
     assert hasattr(mod, "PrefixTree"), "PrefixTree missing"
     assert hasattr(mod, "PrefixCacheOptimizer"), "PrefixCacheOptimizer missing"
-

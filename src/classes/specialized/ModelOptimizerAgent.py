@@ -8,9 +8,10 @@ import json
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
+
 class ModelOptimizerAgent(BaseAgent):
     """Optimizes LLM deployment and inference using patterns like AirLLM."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -19,7 +20,12 @@ class ModelOptimizerAgent(BaseAgent):
             "Suggest the best 'Virtualization' strategy for large models (e.g., layered loading, 4-bit quantization)."
         )
 
-    def select_optimization_strategy(self, model_size_gb: float, available_vram_gb: float, hardware_features: List[str] = []) -> Dict[str, Any]:
+    def select_optimization_strategy(
+        self,
+        model_size_gb: float,
+        available_vram_gb: float,
+        hardware_features: List[str] = [],
+    ) -> Dict[str, Any]:
         """Calculates the best optimization strategy based on hardware constraints."""
         strategy = {
             "method": "Standard",
@@ -27,31 +33,33 @@ class ModelOptimizerAgent(BaseAgent):
             "layered_inference": False,
             "offload_to_cpu": False,
             "acceleration": "None",
-            "estimated_speed": "Normal"
+            "estimated_speed": "Normal",
         }
-        
+
         # Check for NPU (FastFlowLM / Ryzen AI Pattern)
         if "npu_dna2" in hardware_features:
             strategy["acceleration"] = "FastFlowLM (NPU Optimized)"
             strategy["estimated_speed"] = "Fast (PPA Efficient)"
             return strategy
-            
+
         if model_size_gb > available_vram_gb:
             strategy["layered_inference"] = True
             strategy["method"] = "Layer-by-Layer (AirLLM Pattern)"
-            
+
             if model_size_gb > available_vram_gb * 2:
                 strategy["quantization"] = "4-bit"
                 strategy["estimated_speed"] = "Slow (Disk IO Bound)"
             else:
                 strategy["quantization"] = "8-bit"
                 strategy["estimated_speed"] = "Moderate"
-                
+
             strategy["offload_to_cpu"] = True
-            
+
         return strategy
 
-    def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> Dict[str, Any]:
+    def run_tinyml_benchmark(
+        self, model_id: str, hardware_target: str
+    ) -> Dict[str, Any]:
         """
         Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
@@ -62,7 +70,7 @@ class ModelOptimizerAgent(BaseAgent):
             "energy_uj": 450,
             "memory_kb": 256,
             "suitability_score": 0.92,
-            "bottlenecks": ["Bus contention during INT8 quantization"]
+            "bottlenecks": ["Bus contention during INT8 quantization"],
         }
 
     def get_fastflow_command(self, model_tag: str) -> str:
@@ -94,13 +102,22 @@ print(model.tokenizer.decode(output.sequences[0]))
         """Suggests an optimization plan for a specific model deployment task."""
         # Simple parser for "model size" and "vram" in text if provided
         # For now, return a generic recommendation
-        return json.dumps({
-            "recommendation": "Use 4-bit quantization and Layered Inference for models > 30B parameters on consumer hardware.",
-            "pattern": "AirLLM (Layered Loading)",
-            "benefits": ["Run 70B on 4GB VRAM", "Avoid OOM errors", "Simplified deployment"]
-        }, indent=2)
+        return json.dumps(
+            {
+                "recommendation": "Use 4-bit quantization and Layered Inference for models > 30B parameters on consumer hardware.",
+                "pattern": "AirLLM (Layered Loading)",
+                "benefits": [
+                    "Run 70B on 4GB VRAM",
+                    "Avoid OOM errors",
+                    "Simplified deployment",
+                ],
+            },
+            indent=2,
+        )
+
 
 if __name__ == "__main__":
     from src.classes.base_agent.utilities import create_main_function
+
     main = create_main_function(ModelOptimizerAgent)
     main()

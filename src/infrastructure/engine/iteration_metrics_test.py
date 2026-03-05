@@ -27,4 +27,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TrendAnalyzer"), "TrendAnalyzer missing"
     assert hasattr(mod, "AnomalyDetector"), "AnomalyDetector missing"
     assert hasattr(mod, "MetricsCollector"), "MetricsCollector missing"
-

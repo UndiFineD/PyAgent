@@ -24,9 +24,7 @@ class ChatTemplate(ABC):
         """Get hash of template for caching."""
         if self._cached_hash is None:
             template_str = self.get_template_string()
-            self._cached_hash = hashlib.md5(
-                template_str.encode()
-            ).hexdigest()[:12]
+            self._cached_hash = hashlib.md5(template_str.encode()).hexdigest()[:12]
         return self._cached_hash
 
     @abstractmethod

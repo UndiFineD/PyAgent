@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_cryptomixin_exists():
     """Test that CryptoMixin class exists and is importable."""
-    assert 'CryptoMixin' in dir()
+    assert "CryptoMixin" in dir()
 
 
 def test_cryptomixin_instantiation():
@@ -45,4 +45,3 @@ def test_cryptomixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

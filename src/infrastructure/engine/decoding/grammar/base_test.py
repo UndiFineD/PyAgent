@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StructuredOutputOptions"), "StructuredOutputOptions missing"
     assert hasattr(mod, "StructuredOutputsParams"), "StructuredOutputsParams missing"
     assert hasattr(mod, "StructuredOutputGrammar"), "StructuredOutputGrammar missing"
-

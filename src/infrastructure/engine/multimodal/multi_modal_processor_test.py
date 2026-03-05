@@ -25,6 +25,7 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TextEmbedProcessor"), "TextEmbedProcessor missing"
     assert hasattr(mod, "MultiModalRegistry"), "MultiModalRegistry missing"
     assert hasattr(mod, "MULTIMODAL_REGISTRY"), "MULTIMODAL_REGISTRY missing"
-    assert hasattr(mod, "process_multimodal_inputs"), "process_multimodal_inputs missing"
+    assert hasattr(
+        mod, "process_multimodal_inputs"
+    ), "process_multimodal_inputs missing"
     assert hasattr(mod, "get_placeholder_tokens"), "get_placeholder_tokens missing"
-

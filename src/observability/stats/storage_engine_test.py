@@ -24,4 +24,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StatsBackupManager"), "StatsBackupManager missing"
     assert hasattr(mod, "StatsSnapshotManager"), "StatsSnapshotManager missing"
     assert hasattr(mod, "StatsCompressor"), "StatsCompressor missing"
-

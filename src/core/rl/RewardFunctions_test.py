@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_rewardtype_exists():
     """Test that RewardType class exists and is importable."""
-    assert 'RewardType' in dir()
+    assert "RewardType" in dir()
 
 
 def test_rewardsignal_exists():
     """Test that RewardSignal class exists and is importable."""
-    assert 'RewardSignal' in dir()
+    assert "RewardSignal" in dir()
 
 
 def test_rewardfunctions_exists():
     """Test that RewardFunctions class exists and is importable."""
-    assert 'RewardFunctions' in dir()
+    assert "RewardFunctions" in dir()
 
 
 def test_compositerewardfunction_exists():
     """Test that CompositeRewardFunction class exists and is importable."""
-    assert 'CompositeRewardFunction' in dir()
+    assert "CompositeRewardFunction" in dir()
 
 
 def test_compositerewardfunction_instantiation():
@@ -59,10 +59,9 @@ def test_compositerewardfunction_instantiation():
 
 def test_rewardshaper_exists():
     """Test that RewardShaper class exists and is importable."""
-    assert 'RewardShaper' in dir()
+    assert "RewardShaper" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

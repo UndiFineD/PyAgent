@@ -8,9 +8,10 @@ from .CoderAgent import CoderAgent
 from src.classes.base_agent.utilities import create_main_function
 import logging
 
+
 class SqlAgent(CoderAgent):
     """Agent for auditing and improving SQL scripts."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._language = "sql"
@@ -24,7 +25,7 @@ class SqlAgent(CoderAgent):
     def _get_default_content(self) -> str:
         return "-- SQL Script\nSELECT 1;\n"
 
+
 if __name__ == "__main__":
     main = create_main_function(SqlAgent, "SQL Agent", "Path to SQL file")
     main()
-

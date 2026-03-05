@@ -14,5 +14,6 @@ def _load_module():
 def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "json_iter_leaves"), "json_iter_leaves missing"
-    assert hasattr(mod, "json_iter_leaves_with_path"), "json_iter_leaves_with_path missing"
-
+    assert hasattr(
+        mod, "json_iter_leaves_with_path"
+    ), "json_iter_leaves_with_path missing"

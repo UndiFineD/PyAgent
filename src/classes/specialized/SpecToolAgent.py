@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,9 +27,10 @@ from src.core.base.utilities import create_main_function, as_tool
 
 __version__ = VERSION
 
+
 class SpecToolAgent(BaseAgent):
     """Generates Python tool wrappers from specifications and manages OpenSpec SDD workflows."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._pending_spec: str | None = None
@@ -59,18 +61,18 @@ class SpecToolAgent(BaseAgent):
         """Verifies the proceed command and unlocks implementation."""
         if not self._pending_spec:
             return "Error: No pending specification found. Use generate_sdd_spec first."
-            
+
         if "COMMAND: PROCEED" in confirmation.upper():
             spec_path = Path("SPECIFICATION.md")
             if spec_path.exists():
                 text = spec_path.read_text(encoding="utf-8")
                 updated = text.replace("**AWAITING APPROVAL**", "**APPROVED**")
                 spec_path.write_text(updated, encoding="utf-8")
-            
+
             feature = self._pending_spec
             self._pending_spec = None
             return f"Implementation UNLOCKED for '{feature}'. You may now proceed with code generation."
-        
+
         return "Confirmation failed. Please provide exactly: `COMMAND: PROCEED`"
 
     @as_tool
@@ -79,7 +81,10 @@ class SpecToolAgent(BaseAgent):
         root = Path("openspec")
         for sub in ["specs", "changes", "archive"]:
             (root / sub).mkdir(parents=True, exist_ok=True)
-        (root / "project.md").write_text("# Project Context\nDefine tech stack and conventions here.", encoding="utf-8")
+        (root / "project.md").write_text(
+            "# Project Context\nDefine tech stack and conventions here.",
+            encoding="utf-8",
+        )
         return "OpenSpec structure initialized. Populated openspec/project.md."
 
     @as_tool
@@ -87,14 +92,22 @@ class SpecToolAgent(BaseAgent):
         """Drafts a new OpenSpec change proposal (proposal.md, tasks.md, spec delta)."""
         change_dir = Path("openspec/changes") / name.replace(" ", "-").lower()
         change_dir.mkdir(parents=True, exist_ok=True)
-        
-        (change_dir / "proposal.md").write_text(f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8")
-        (change_dir / "tasks.md").write_text("## Tasks\n- [ ] 1.1 Implement core logic\n- [ ] 1.2 Add tests", encoding="utf-8")
-        
+
+        (change_dir / "proposal.md").write_text(
+            f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8"
+        )
+        (change_dir / "tasks.md").write_text(
+            "## Tasks\n- [ ] 1.1 Implement core logic\n- [ ] 1.2 Add tests",
+            encoding="utf-8",
+        )
+
         specs_dir = change_dir / "specs"
         specs_dir.mkdir(exist_ok=True)
-        (specs_dir / "delta.md").write_text("## ADDED Requirements\n- The system SHALL support the new intent.", encoding="utf-8")
-        
+        (specs_dir / "delta.md").write_text(
+            "## ADDED Requirements\n- The system SHALL support the new intent.",
+            encoding="utf-8",
+        )
+
         return f"Change proposal '{name}' scaffolded at {change_dir}."
 
     @as_tool
@@ -103,7 +116,7 @@ class SpecToolAgent(BaseAgent):
         change_dir = Path("openspec/changes") / name
         if not change_dir.exists():
             return f"Error: Change '{name}' not found."
-            
+
         # Mock merging logic for now
         archive_dir = Path("openspec/archive") / name
         change_dir.rename(archive_dir)
@@ -115,16 +128,16 @@ class SpecToolAgent(BaseAgent):
         path = Path(spec_path)
         if not path.exists():
             return f"Error: Spec file {spec_path} not found."
-            
+
         try:
             spec = json.loads(path.read_text(encoding="utf-8"))
             info = spec.get("info", {})
             title = info.get("title", "GeneratedTool").replace(" ", "_")
             paths = spec.get("paths", {})
-            
+
             tool_filename = f"{title.lower()}_tool.py"
             output_path = Path("src/plugins/tools") / tool_filename
-            
+
             code = [
                 "import logging",
                 "from src.core.base.utilities import as_tool",
@@ -134,24 +147,33 @@ class SpecToolAgent(BaseAgent):
                 "",
                 "    def __init__(self) -> None:",
                 "        self.name = '" + title + "'",
-                ""
+                "",
             ]
-            
+
             for path_val, methods in paths.items():
                 for method, details in methods.items():
-                    details.get("operationId", f"{method}_{path_val.strip('/').replace('/', '_')}")
+                    details.get(
+                        "operationId",
+                        f"{method}_{path_val.strip('/').replace('/', '_')}",
+                    )
                     summary = details.get("summary", "No summary")
-                    
-                    code.extend([
-                        "    @as_tool",
-                        f"        '''{summary}'''",
-                        "        return {'path': '" + path_val + "', 'method': '" + method.upper() + "', 'result': 'Mocked'}",
-                        ""
-                    ])
-            
+
+                    code.extend(
+                        [
+                            "    @as_tool",
+                            f"        '''{summary}'''",
+                            "        return {'path': '"
+                            + path_val
+                            + "', 'method': '"
+                            + method.upper()
+                            + "', 'result': 'Mocked'}",
+                            "",
+                        ]
+                    )
+
             full_code = "\n".join(code)
             output_path.write_text(full_code, encoding="utf-8")
-            
+
             return f"Successfully generated tool: {output_path}. Methods: {len(paths)}"
         except Exception as e:
             logging.error(f"Spec generation failed: {e}")
@@ -162,6 +184,7 @@ class SpecToolAgent(BaseAgent):
         if ".json" in prompt:
             return self.generate_tool_from_spec(prompt)
         return "Please provide a path to a JSON specification file."
+
 
 if __name__ == "__main__":
     main = create_main_function(SpecToolAgent, "SpecTool Agent", "Path to spec file")

@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_securityfuzzingmixin_exists():
     """Test that SecurityFuzzingMixin class exists and is importable."""
-    assert 'SecurityFuzzingMixin' in dir()
+    assert "SecurityFuzzingMixin" in dir()
 
 
 def test_securityfuzzingmixin_instantiation():
@@ -44,10 +44,9 @@ def test_securityfuzzingmixin_instantiation():
 
 def test_securityfuzzingagent_exists():
     """Test that SecurityFuzzingAgent class exists and is importable."""
-    assert 'SecurityFuzzingAgent' in dir()
+    assert "SecurityFuzzingAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

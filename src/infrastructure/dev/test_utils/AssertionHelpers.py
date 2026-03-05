@@ -1,5 +1,6 @@
 """Minimal AssertionHelpers shim for dev test utilities."""
 
+
 class AssertionHelpers:
     @staticmethod
     def expect_exception(exc_type, callable_obj, *args, **kwargs):

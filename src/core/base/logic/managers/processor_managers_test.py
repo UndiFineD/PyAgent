@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MultimodalProcessor"), "MultimodalProcessor missing"
     assert hasattr(mod, "ResponsePostProcessor"), "ResponsePostProcessor missing"
     assert hasattr(mod, "SerializationManager"), "SerializationManager missing"
-

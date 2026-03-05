@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -110,12 +111,16 @@ class AgentRunner:
 
                 # Update history with a mock response
                 mock_response: str = f"Simulated response from {agent_type}."
-                self.history[agent_id].append({"role": "assistant", "content": mock_response})
+                self.history[agent_id].append(
+                    {"role": "assistant", "content": mock_response}
+                )
 
                 logger.info("Agent execution completed successfully.")
                 if "set_status" in self.callbacks:
                     self.callbacks["set_status"](f"{agent_type} agent finished.")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Agent Failure: {str(e)}")
             finally:
                 column.on_finish()
@@ -158,7 +163,9 @@ class AgentRunner:
             msg_user = current_history[i]
             msg_assist = current_history[i + 1]
 
-            if msg_user.get("metadata", {}).get("keep") or msg_assist.get("metadata", {}).get("keep"):
+            if msg_user.get("metadata", {}).get("keep") or msg_assist.get(
+                "metadata", {}
+            ).get("keep"):
                 i += 2
                 continue
 
@@ -166,5 +173,7 @@ class AgentRunner:
             removed_user = current_history.pop(i)
             removed_assist = current_history.pop(i)
             total_chars -= len(removed_user["content"]) + len(removed_assist["content"])
-            logging.info(f"Optimized memory for agent {agent_id}: dropped exchange at index {i}.")
+            logging.info(
+                f"Optimized memory for agent {agent_id}: dropped exchange at index {i}."
+            )
             # i stays same as we popped

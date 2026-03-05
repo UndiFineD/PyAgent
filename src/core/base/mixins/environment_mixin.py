@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,7 +25,10 @@ import os
 from contextlib import asynccontextmanager
 from typing import Any, Dict, Optional
 
-from src.core.base.common.models.base_models import EnvironmentConfig, EnvironmentInstance
+from src.core.base.common.models.base_models import (
+    EnvironmentConfig,
+    EnvironmentInstance,
+)
 from src.core.base.common.models.core_enums import EnvironmentIsolation
 from src.core.base.environment import get_environment_manager
 from src.core.base.lifecycle.version import VERSION
@@ -61,7 +65,7 @@ class EnvironmentMixin:
         memory_limit: int = 1024,
         disk_limit: int = 10240,
         ttl_seconds: int = 1800,
-        **kwargs
+        **kwargs,
     ) -> EnvironmentConfig:
         """Create a new environment configuration."""
         config = EnvironmentConfig(
@@ -73,7 +77,7 @@ class EnvironmentMixin:
             memory_limit=memory_limit,
             disk_limit=disk_limit,
             ttl_seconds=ttl_seconds,
-            **kwargs
+            **kwargs,
         )
 
         manager = await self._get_env_manager()
@@ -87,12 +91,14 @@ class EnvironmentMixin:
         self,
         env_name: str,
         env_version: str = "1.0.0",
-        custom_config: Optional[Dict[str, Any]] = None
+        custom_config: Optional[Dict[str, Any]] = None,
     ):
         """Context manager for using an environment instance."""
         manager = await self._get_env_manager()
 
-        async with manager.create_instance(env_name, env_version, custom_config) as instance:
+        async with manager.create_instance(
+            env_name, env_version, custom_config
+        ) as instance:
             self._active_environments[instance.id] = instance
             try:
                 yield instance
@@ -104,7 +110,9 @@ class EnvironmentMixin:
         manager = await self._get_env_manager()
         return await manager.list_environments()
 
-    async def get_environment_status(self, instance_id: str) -> Optional[EnvironmentInstance]:
+    async def get_environment_status(
+        self, instance_id: str
+    ) -> Optional[EnvironmentInstance]:
         """Get the status of an environment instance."""
         manager = await self._get_env_manager()
         return await manager.get_instance(instance_id)
@@ -121,9 +129,7 @@ class EnvironmentMixin:
         self._active_environments.clear()
 
     async def switch_environment_context(
-        self,
-        instance_id: str,
-        operation: callable
+        self, instance_id: str, operation: callable
     ) -> Any:
         """Switch to a specific environment context for an operation."""
         instance = self._active_environments.get(instance_id)

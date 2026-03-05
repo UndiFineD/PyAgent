@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -66,8 +67,12 @@ class SynthesisCore:
 
                 SynthesisCore._transformer_cache = rust_core.NeuralTransformer(config)
                 logging.info("SynthesisCore: Initialized Rust transformer.")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.warning(f"SynthesisCore: Failed to initialize Rust transformer: {e}")
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                logging.warning(
+                    f"SynthesisCore: Failed to initialize Rust transformer: {e}"
+                )
                 SynthesisCore._rust_failed = True
 
         return SynthesisCore._transformer_cache
@@ -81,12 +86,15 @@ class SynthesisCore:
                     f"[SynthesisCore] Generated {stats.token_count} tokens in "
                     f"{stats.duration_ms:.2f}ms ({stats.tps:.2f} tokens/s)"
                 )
-                print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f} (@ 0.0005 cent/token)")
+                print(
+                    f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f} (@ 0.0005 cent/token)"
+                )
 
                 # Optional: persistent tracking via FleetEconomy
                 try:
-                    from src.logic.agents.swarm.fleet_economy_agent import \
-                        FleetEconomyAgent
+                    from src.logic.agents.swarm.fleet_economy_agent import (
+                        FleetEconomyAgent,
+                    )
 
                     fea = FleetEconomyAgent()
                     fea.log_hardware_savings(
@@ -99,7 +107,9 @@ class SynthesisCore:
                     pass
 
                 return res
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug(f"SynthesisCore: Rust generation failed: {e}")
 
         results = []
@@ -119,22 +129,30 @@ class SynthesisCore:
                 vec, stats = transformer.vectorize_with_stats(insight)
                 # We typically only log if it's a large insight or for performance tracking
                 if len(insight) > 100:
-                    print(f"[SynthesisCore] Vectorized {stats.token_count} tokens at {stats.tps:.2f} t/s")
+                    print(
+                        f"[SynthesisCore] Vectorized {stats.token_count} tokens at {stats.tps:.2f} t/s"
+                    )
                     print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f}")
 
                     try:
-                        from src.logic.agents.swarm.fleet_economy_agent import \
-                            FleetEconomyAgent
+                        from src.logic.agents.swarm.fleet_economy_agent import (
+                            FleetEconomyAgent,
+                        )
 
                         fea = FleetEconomyAgent()
                         fea.log_hardware_savings(
-                            "SynthesisCore/Vectorization", stats.token_count, stats.tps, stats.cost_usd
+                            "SynthesisCore/Vectorization",
+                            stats.token_count,
+                            stats.tps,
+                            stats.cost_usd,
                         )
                     except ImportError:
                         pass
 
                 return vec
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logging.debug(f"SynthesisCore: Rust vectorization failed: {e}")
 
         # In a real scenario, this would call a local embedding model
@@ -148,7 +166,9 @@ class SynthesisCore:
         if HAS_RUST:
             try:
                 return rust_core.average_feature_vectors(vectors)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         if not vectors:

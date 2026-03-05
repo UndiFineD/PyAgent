@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_retryhelper_exists():
     """Test that RetryHelper class exists and is importable."""
-    assert 'RetryHelper' in dir()
+    assert "RetryHelper" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

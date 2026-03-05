@@ -17,8 +17,11 @@
 """Speculative decoding v2 components."""
 
 from .config import AcceptanceMethod, ProposerType  # noqa: F401
-from .engine import (SpeculativeDecoder, create_medusa_decoder,  # noqa: F401
-                     create_ngram_decoder)
+from .engine import (
+    SpeculativeDecoder,
+    create_medusa_decoder,  # noqa: F401
+    create_ngram_decoder,
+)
 from .proposers import (
     MedusaProposer,
     NgramProposer,

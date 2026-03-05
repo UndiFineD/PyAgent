@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "DesignPhase"), "DesignPhase missing"
     assert hasattr(mod, "DesignExpertise"), "DesignExpertise missing"
     assert hasattr(mod, "ArchitecturalDesignAgent"), "ArchitecturalDesignAgent missing"
-

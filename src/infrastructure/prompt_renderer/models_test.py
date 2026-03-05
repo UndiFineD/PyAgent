@@ -33,45 +33,44 @@ except ImportError as e:
 
 def test_truncationstrategy_exists():
     """Test that TruncationStrategy class exists and is importable."""
-    assert 'TruncationStrategy' in dir()
+    assert "TruncationStrategy" in dir()
 
 
 def test_inputtype_exists():
     """Test that InputType class exists and is importable."""
-    assert 'InputType' in dir()
+    assert "InputType" in dir()
 
 
 def test_rendermode_exists():
     """Test that RenderMode class exists and is importable."""
-    assert 'RenderMode' in dir()
+    assert "RenderMode" in dir()
 
 
 def test_promptconfig_exists():
     """Test that PromptConfig class exists and is importable."""
-    assert 'PromptConfig' in dir()
+    assert "PromptConfig" in dir()
 
 
 def test_truncationresult_exists():
     """Test that TruncationResult class exists and is importable."""
-    assert 'TruncationResult' in dir()
+    assert "TruncationResult" in dir()
 
 
 def test_renderresult_exists():
     """Test that RenderResult class exists and is importable."""
-    assert 'RenderResult' in dir()
+    assert "RenderResult" in dir()
 
 
 def test_embeddinginput_exists():
     """Test that EmbeddingInput class exists and is importable."""
-    assert 'EmbeddingInput' in dir()
+    assert "EmbeddingInput" in dir()
 
 
 def test_multimodalinput_exists():
     """Test that MultimodalInput class exists and is importable."""
-    assert 'MultimodalInput' in dir()
+    assert "MultimodalInput" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

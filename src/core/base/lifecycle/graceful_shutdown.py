@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +42,9 @@ class GracefulShutdown:
         state_file: Path to state persistence file.
     """
 
-    def __init__(self, repo_root: Path | str, state_file: str = ".agent_shutdown.json") -> None:
+    def __init__(
+        self, repo_root: Path | str, state_file: str = ".agent_shutdown.json"
+    ) -> None:
         """Initialize graceful shutdown handler.
 
         Args:
@@ -121,7 +124,9 @@ class GracefulShutdown:
                 "start_time": self.state.start_time,
             }
             self.state_file.write_text(json.dumps(data, indent=2))
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.error("Failed to save shutdown state: %s", e)
 
     def load_resume_state(self) -> ShutdownState | None:
@@ -135,7 +140,9 @@ class GracefulShutdown:
 
         try:
             raw = json.loads(self.state_file.read_text())
-            data: dict[str, Any] = cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
+            data: dict[str, Any] = (
+                cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
+            )
             state = ShutdownState(
                 shutdown_requested=False,  # Reset for resume
                 current_file=data.get("current_file"),
@@ -144,10 +151,14 @@ class GracefulShutdown:
                 start_time=data.get("start_time", time.time()),
             )
             logging.info(
-                "Loaded resume state: %s completed, %s pending", len(state.completed_files), len(state.pending_files)
+                "Loaded resume state: %s completed, %s pending",
+                len(state.completed_files),
+                len(state.pending_files),
             )
             return state
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logging.warning("Failed to load resume state: %s", e)
             return None
 

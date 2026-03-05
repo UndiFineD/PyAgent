@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,6 +42,7 @@ __version__ = VERSION
 
 class Framework(Enum):
     """Supported GUI frameworks."""
+
     REACT = "react"
     VUE = "vue"
     SVELTE = "svelte"
@@ -54,6 +56,7 @@ class Framework(Enum):
 
 class ElementType(Enum):
     """Common UI element types."""
+
     BUTTON = "button"
     INPUT = "input"
     TEXT = "text"
@@ -116,7 +119,9 @@ class GUIAgent(BaseAgent):
     ) -> Dict[str, Any]:
         """Generates GUI layout code based on description."""
         framework_enum = (
-            Framework(framework.lower()) if framework.lower() in [f.value for f in Framework] else Framework.REACT
+            Framework(framework.lower())
+            if framework.lower() in [f.value for f in Framework]
+            else Framework.REACT
         )
 
         prompt = (
@@ -140,11 +145,17 @@ class GUIAgent(BaseAgent):
         return {
             "framework": framework_enum.value,
             "code": code,
-            "features": {"responsive": responsive, "accessibility": accessibility, "dark_mode": dark_mode},
+            "features": {
+                "responsive": responsive,
+                "accessibility": accessibility,
+                "dark_mode": dark_mode,
+            },
         }
 
     @as_tool
-    async def interpret_ui_structure(self, ui_dump: str, _format: str = "auto") -> Dict[str, Any]:
+    async def interpret_ui_structure(
+        self, ui_dump: str, _format: str = "auto"
+    ) -> Dict[str, Any]:
         """Analyzes a UI hierarchy (e.g., XML/JSON from Android or Web)."""
         prompt = (
             "Analyze this UI hierarchy and identify interactive elements:\n\n"
@@ -172,14 +183,24 @@ class GUIAgent(BaseAgent):
                     ui_elem = UIElement(
                         element_type=ElementType(elem.get("type", "container")),
                         id=elem.get("id", "unknown"),
-                        bounds=tuple(elem.get("bounds", [])) if elem.get("bounds") else None,
+                        bounds=(
+                            tuple(elem.get("bounds", []))
+                            if elem.get("bounds")
+                            else None
+                        ),
                         text=elem.get("text"),
                         clickable=elem.get("clickable", False),
                     )
                     self._element_cache[ui_elem.id] = ui_elem
 
                 return data
-        except (json.JSONDecodeError, AttributeError, TypeError, ValueError, KeyError) as e:
+        except (
+            json.JSONDecodeError,
+            AttributeError,
+            TypeError,
+            ValueError,
+            KeyError,
+        ) as e:
             logging.debug(f"GUIAgent: Parse error: {e}")
 
         return {"raw": res}
@@ -209,7 +230,10 @@ class GUIAgent(BaseAgent):
                         UIAction(
                             action_type=action.get("action", "click"),
                             target_id=action.get("target", ""),
-                            parameters={"value": action.get("value"), "reason": action.get("reason")},
+                            parameters={
+                                "value": action.get("value"),
+                                "reason": action.get("reason"),
+                            },
                         )
                     )
 
@@ -238,7 +262,12 @@ class GUIAgent(BaseAgent):
 
         code = await self.improve_content(prompt)
 
-        return {"component_type": component_type, "framework": framework, "code": code, "props": props}
+        return {
+            "component_type": component_type,
+            "framework": framework,
+            "code": code,
+            "props": props,
+        }
 
     @as_tool
     async def audit_accessibility(self, ui_code: str) -> Dict[str, Any]:
@@ -288,7 +317,7 @@ class GUIAgent(BaseAgent):
         return {
             "source_framework": source_framework,
             "target_framework": target_framework,
-            "converted_code": converted
+            "converted_code": converted,
         }
 
     def get_cached_elements(self) -> Dict[str, Dict[str, Any]]:
@@ -298,11 +327,14 @@ class GUIAgent(BaseAgent):
                 "type": elem.element_type.value,
                 "text": elem.text,
                 "clickable": elem.clickable,
-                "bounds": elem.bounds
+                "bounds": elem.bounds,
             }
             for id, elem in self._element_cache.items()
         }
 
     def get_action_history(self) -> List[Dict[str, Any]]:
         """Returns the action history."""
-        return [{"action": a.action_type, "target": a.target_id, "params": a.parameters} for a in self._action_history]
+        return [
+            {"action": a.action_type, "target": a.target_id, "params": a.parameters}
+            for a in self._action_history
+        ]

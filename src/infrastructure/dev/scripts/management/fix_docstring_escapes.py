@@ -21,36 +21,42 @@ import os
 import argparse
 from pathlib import Path
 
+
 def fix_escapes(target_dirs: list[str]):
     """Recursively fixes \"\"\" and \" in Python files."""
     workspace_root = Path(__file__).resolve().parents[5]
-    
+
     for folder_rel in target_dirs:
         folder = workspace_root / folder_rel
         if not folder.exists():
             print(f"Skipping non-existent folder: {folder_rel}")
             continue
-            
+
         print(f"Checking {folder_rel} for escaped quotes...")
         for root, _, files in os.walk(folder):
             for file in files:
-                if file.endswith('.py'):
+                if file.endswith(".py"):
                     path = Path(root) / file
                     try:
-                        content = path.read_text(encoding='utf-8')
-                        
+                        content = path.read_text(encoding="utf-8")
+
                         # Fix escaped quotes
-                        new_content = content.replace(r'\"\"\"', '"""').replace(r'\"', '"')
-                        
+                        new_content = content.replace(r"\"\"\"", '"""').replace(
+                            r"\"", '"'
+                        )
+
                         if new_content != content:
-                            path.write_text(new_content, encoding='utf-8')
+                            path.write_text(new_content, encoding="utf-8")
                             print(f"Fixed: {path.relative_to(workspace_root)}")
                     except Exception as e:
                         print(f"Failed to process {file}: {e}")
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Fix escaped quotes in docstrings.")
-    parser.add_argument("--dirs", nargs="+", default=["src"], help="Directories to scan.")
-    
+    parser.add_argument(
+        "--dirs", nargs="+", default=["src"], help="Directories to scan."
+    )
+
     args = parser.parse_args()
     fix_escapes(args.dirs)

@@ -16,13 +16,14 @@ import os
 import ast
 from pathlib import Path
 
+
 def generate_catalog() -> None:
     """Phase 244: Scans src/logic/agents and generates detailed documentation."""
     agents_dir = Path("src/logic/agents")
     output_file = Path("docs/AGENTS.md")
-    
+
     agent_data = []
-    
+
     for root, _, files in os.walk(agents_dir):
         for file in files:
             if file.endswith(".py") and file != "__init__.py":
@@ -30,43 +31,47 @@ def generate_catalog() -> None:
                 try:
                     with open(file_path, encoding="utf-8") as f:
                         node = ast.parse(f.read())
-                    
+
                     version = "0.0.0"
                     classes = []
-                    
+
                     for item in node.body:
                         # Version extraction
                         if isinstance(item, ast.Assign):
                             for target in item.targets:
-                                if isinstance(target, ast.Name) and target.id == "__version__":
+                                if (
+                                    isinstance(target, ast.Name)
+                                    and target.id == "__version__"
+                                ):
                                     if isinstance(item.value, ast.Constant):
                                         version = str(item.value.value)
                                     elif isinstance(item.value, ast.Name):
                                         # Likely 'VERSION' import
                                         version = "CORE-LINKED"
-                        
+
                         # Class extraction
                         if isinstance(item, ast.ClassDef):
                             # Check if it looks like an Agent class (usually inherits from BaseAgent or CoderAgent)
-                            docstring = ast.get_docstring(item) or "No description provided."
+                            docstring = (
+                                ast.get_docstring(item) or "No description provided."
+                            )
                             # Just take the first line of docstring for the table
-                            summary = docstring.strip().split('\n')[0]
-                            classes.append({
-                                "name": item.name,
-                                "description": summary
-                            })
-                    
+                            summary = docstring.strip().split("\n")[0]
+                            classes.append({"name": item.name, "description": summary})
+
                     rel_path = str(file_path).replace("\\", "/")
                     category = file_path.parent.name.capitalize()
-                    
+
                     for cls in classes:
-                        agent_data.append({
-                            "Category": category,
-                            "Class": cls["name"],
-                            "Version": version,
-                            "Description": cls["description"],
-                            "File": f"[{file_path.name}](../{rel_path})"
-                        })
+                        agent_data.append(
+                            {
+                                "Category": category,
+                                "Class": cls["name"],
+                                "Version": version,
+                                "Description": cls["description"],
+                                "File": f"[{file_path.name}](../{rel_path})",
+                            }
+                        )
                 except Exception as e:
                     print(f"Warning: Failed to parse {file_path}: {e}")
 
@@ -80,11 +85,11 @@ def generate_catalog() -> None:
     md += "## 📊 Statistics\n"
     md += f"- **Total Agents Found**: {len(agent_data)}\n"
     md += f"- **Categories**: {len(set(a['Category'] for a in agent_data))}\n\n"
-    
+
     md += "## 📋 Agent Manifest\n\n"
     md += "| Category | Agent | Version | Description | Source |\n"
     md += "| :--- | :--- | :--- | :--- | :--- |\n"
-    
+
     for a in agent_data:
         md += f"| {a['Category']} | `{a['Class']}` | {a['Version']} | {a['Description']} | {a['File']} |\n"
 
@@ -92,6 +97,7 @@ def generate_catalog() -> None:
     output_file.parent.mkdir(parents=True, exist_ok=True)
     output_file.write_text(md, encoding="utf-8")
     print(f"Catalog successfully generated: {output_file}")
+
 
 if __name__ == "__main__":
     generate_catalog()

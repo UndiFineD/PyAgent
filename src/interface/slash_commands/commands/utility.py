@@ -198,7 +198,11 @@ def cmd_help(ctx: CommandContext) -> CommandResult:
         if not defn:
             return CommandResult.ok(output=f"[Unknown command: {ctx.first_arg}]")
 
-        aliases_str = f" (aliases: {', '.join('/' + a for a in defn.aliases)})" if defn.aliases else ""
+        aliases_str = (
+            f" (aliases: {', '.join('/' + a for a in defn.aliases)})"
+            if defn.aliases
+            else ""
+        )
         output = f"[/{defn.name}{aliases_str}: {defn.description}]"
         if defn.usage:
             output = f"[Usage: {defn.usage}]"

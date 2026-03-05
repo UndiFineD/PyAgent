@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_conflictresolution_exists():
     """Test that ConflictResolution class exists and is importable."""
-    assert 'ConflictResolution' in dir()
+    assert "ConflictResolution" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

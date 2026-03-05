@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_loraloadstate_exists():
     """Test that LoRALoadState class exists and is importable."""
-    assert 'LoRALoadState' in dir()
+    assert "LoRALoadState" in dir()
 
 
 def test_requeststatus_exists():
     """Test that RequestStatus class exists and is importable."""
-    assert 'RequestStatus' in dir()
+    assert "RequestStatus" in dir()
 
 
 def test_loraadapterinfo_exists():
     """Test that LoRAAdapterInfo class exists and is importable."""
-    assert 'LoRAAdapterInfo' in dir()
+    assert "LoRAAdapterInfo" in dir()
 
 
 def test_lorarequeststate_exists():
     """Test that LoRARequestState class exists and is importable."""
-    assert 'LoRARequestState' in dir()
+    assert "LoRARequestState" in dir()
 
 
 def test_lorastats_exists():
     """Test that LoRAStats class exists and is importable."""
-    assert 'LoRAStats' in dir()
+    assert "LoRAStats" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

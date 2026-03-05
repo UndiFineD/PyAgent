@@ -13,5 +13,6 @@ def _load_module():
 
 def test_imports_and_symbols():
     mod = _load_module()
-    assert hasattr(mod, "create_kv_cache_coordinator"), "create_kv_cache_coordinator missing"
-
+    assert hasattr(
+        mod, "create_kv_cache_coordinator"
+    ), "create_kv_cache_coordinator missing"

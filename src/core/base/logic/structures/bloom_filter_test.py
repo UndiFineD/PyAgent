@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "BloomFilter"), "BloomFilter missing"
     assert hasattr(mod, "CountingBloomFilter"), "CountingBloomFilter missing"
     assert hasattr(mod, "ScalableBloomFilter"), "ScalableBloomFilter missing"
-

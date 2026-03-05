@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,11 +17,12 @@ from __future__ import annotations
 """Domain types for the PyAgent core architecture."""
 
 from src.core.base.version import VERSION as VERSION
+
 try:
-	# Prefer canonical common types package when available
+    # Prefer canonical common types package when available
     from src.core.base.common.types import *  # noqa: F401,F403
 except Exception:
-    # Fallback to local types if common package is not available  
+    # Fallback to local types if common package is not available
     from .AccessibilityIssue import AccessibilityIssue as AccessibilityIssue
     from .AccessibilityIssueType import AccessibilityIssueType as AccessibilityIssueType
     from .AccessibilityReport import AccessibilityReport as AccessibilityReport
@@ -46,7 +48,9 @@ except Exception:
     from .LocalizedEntry import LocalizedEntry as LocalizedEntry
     from .MigrationRule import MigrationRule as MigrationRule
     from .MigrationStatus import MigrationStatus as MigrationStatus
-    from .ModernizationSuggestion import ModernizationSuggestion as ModernizationSuggestion
+    from .ModernizationSuggestion import (
+        ModernizationSuggestion as ModernizationSuggestion,
+    )
     from .MonorepoEntry import MonorepoEntry as MonorepoEntry
     from .OptimizationSuggestion import OptimizationSuggestion as OptimizationSuggestion
     from .OptimizationType import OptimizationType as OptimizationType

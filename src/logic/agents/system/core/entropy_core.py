@@ -51,7 +51,9 @@ class EntropyCore:
 
         complexity = 1
         for node in ast.walk(tree):
-            if isinstance(node, (ast.If, ast.While, ast.For, ast.And, ast.Or, ast.ExceptHandler)):
+            if isinstance(
+                node, (ast.If, ast.While, ast.For, ast.And, ast.Or, ast.ExceptHandler)
+            ):
                 complexity += 1
         return complexity
 
@@ -93,8 +95,8 @@ class EntropyCore:
             try:
                 metrics_tuples = [(m["lines"], m["complexity"]) for m in all_metrics]
                 # type: ignore[attr-defined]
-                avg_size, avg_complexity, max_complexity, count = rc.aggregate_file_metrics_rust(
-                    metrics_tuples
+                avg_size, avg_complexity, max_complexity, count = (
+                    rc.aggregate_file_metrics_rust(metrics_tuples)
                 )
                 return {
                     "avg_size": avg_size,
@@ -102,7 +104,9 @@ class EntropyCore:
                     "max_complexity": max_complexity,
                     "file_count": count,
                 }
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 pass
 
         count = len(all_metrics)

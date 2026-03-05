@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_progressdashboard_exists():
     """Test that ProgressDashboard class exists and is importable."""
-    assert 'ProgressDashboard' in dir()
+    assert "ProgressDashboard" in dir()
 
 
 def test_progressdashboard_instantiation():
@@ -45,4 +45,3 @@ def test_progressdashboard_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

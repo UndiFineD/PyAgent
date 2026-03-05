@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_audioloader_exists():
     """Test that AudioLoader class exists and is importable."""
-    assert 'AudioLoader' in dir()
+    assert "AudioLoader" in dir()
 
 
 def test_audioloader_instantiation():
@@ -45,4 +45,3 @@ def test_audioloader_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

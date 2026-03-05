@@ -33,62 +33,62 @@ except ImportError as e:
 
 def test_poolingstrategy_exists():
     """Test that PoolingStrategy class exists and is importable."""
-    assert 'PoolingStrategy' in dir()
+    assert "PoolingStrategy" in dir()
 
 
 def test_poolingcursor_exists():
     """Test that PoolingCursor class exists and is importable."""
-    assert 'PoolingCursor' in dir()
+    assert "PoolingCursor" in dir()
 
 
 def test_poolingstates_exists():
     """Test that PoolingStates class exists and is importable."""
-    assert 'PoolingStates' in dir()
+    assert "PoolingStates" in dir()
 
 
 def test_poolingmetadata_exists():
     """Test that PoolingMetadata class exists and is importable."""
-    assert 'PoolingMetadata' in dir()
+    assert "PoolingMetadata" in dir()
 
 
 def test_pooler_exists():
     """Test that Pooler class exists and is importable."""
-    assert 'Pooler' in dir()
+    assert "Pooler" in dir()
 
 
 def test_meanpooler_exists():
     """Test that MeanPooler class exists and is importable."""
-    assert 'MeanPooler' in dir()
+    assert "MeanPooler" in dir()
 
 
 def test_maxpooler_exists():
     """Test that MaxPooler class exists and is importable."""
-    assert 'MaxPooler' in dir()
+    assert "MaxPooler" in dir()
 
 
 def test_lasttokenpooler_exists():
     """Test that LastTokenPooler class exists and is importable."""
-    assert 'LastTokenPooler' in dir()
+    assert "LastTokenPooler" in dir()
 
 
 def test_attentionweightedpooler_exists():
     """Test that AttentionWeightedPooler class exists and is importable."""
-    assert 'AttentionWeightedPooler' in dir()
+    assert "AttentionWeightedPooler" in dir()
 
 
 def test_poolerfactory_exists():
     """Test that PoolerFactory class exists and is importable."""
-    assert 'PoolerFactory' in dir()
+    assert "PoolerFactory" in dir()
 
 
 def test_pooleroutput_exists():
     """Test that PoolerOutput class exists and is importable."""
-    assert 'PoolerOutput' in dir()
+    assert "PoolerOutput" in dir()
 
 
 def test_chunkedpoolingmanager_exists():
     """Test that ChunkedPoolingManager class exists and is importable."""
-    assert 'ChunkedPoolingManager' in dir()
+    assert "ChunkedPoolingManager" in dir()
 
 
 def test_pool_with_rust_exists():
@@ -99,4 +99,3 @@ def test_pool_with_rust_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

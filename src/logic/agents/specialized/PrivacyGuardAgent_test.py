@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_privacyguardagent_exists():
     """Test that PrivacyGuardAgent class exists and is importable."""
-    assert 'PrivacyGuardAgent' in dir()
+    assert "PrivacyGuardAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

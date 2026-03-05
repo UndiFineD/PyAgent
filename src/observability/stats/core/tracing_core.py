@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -38,18 +39,20 @@ class TracingCore:
         if rc:
             try:
                 return rc.create_span_context(trace_id, span_id)  # type: ignore[attr-defined]
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         return {"trace_id": trace_id, "span_id": span_id, "version": "OTel-1.1"}
 
-    def calculate_latency_breakdown(self, total_time: float, network_time: float) -> dict[str, float]:
+    def calculate_latency_breakdown(
+        self, total_time: float, network_time: float
+    ) -> dict[str, float]:
         """
         Calculates agent thinking time vs network latency.
         """
         if rc:
             try:
                 return rc.calculate_latency_breakdown(total_time, network_time)  # type: ignore[attr-defined]
-            except Exception: # pylint: disable=broad-exception-caught
+            except Exception:  # pylint: disable=broad-exception-caught
                 pass
         thinking_time = total_time - network_time
         return {

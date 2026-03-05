@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -56,7 +57,7 @@ try:
     _BRIDGE = get_bridge()
     HAS_RUST = hasattr(_BRIDGE, "stream_sync_rust")
 except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+    # pylint: disable=broad-exception-caught
     HAS_RUST = False
     _BRIDGE = None
 
@@ -193,7 +194,9 @@ class StreamManager:
             )
 
         # Create compute and communication streams
-        self._compute_streams = list(map(create_compute_stream, range(self.num_compute_streams)))
+        self._compute_streams = list(
+            map(create_compute_stream, range(self.num_compute_streams))
+        )
         self._comm_streams = list(map(create_comm_stream, range(self.num_comm_streams)))
 
     def get_compute_stream(self) -> Optional[StreamHandle]:
@@ -318,6 +321,7 @@ class MicroBatchContext(Generic[T]):
 
     def _init_micro_batches(self) -> None:
         """Initialize micro-batch information."""
+
         def create_mb(i):
             start = i * self.micro_batch_size
             end = min(start + self.micro_batch_size, self.batch_size)
@@ -346,6 +350,7 @@ class MicroBatchContext(Generic[T]):
 
     def iterate(self) -> Iterator[MicroBatchInfo]:
         """Iterate over micro-batches."""
+
         def _recursive_gen(idx):
             if idx >= len(self._micro_batches):
                 return
@@ -359,6 +364,7 @@ class MicroBatchContext(Generic[T]):
             mb.state = MicroBatchState.COMPLETED
             self._total_compute_time += mb.duration_ms
             yield from _recursive_gen(idx + 1)
+
         return _recursive_gen(0)
 
     def iterate_with_data(
@@ -397,6 +403,7 @@ class MicroBatchContext(Generic[T]):
         # Try list concatenation
         if isinstance(outputs[0], list):
             from itertools import chain
+
             return list(chain.from_iterable(outputs))  # type: ignore
 
         return outputs  # type: ignore
@@ -413,17 +420,30 @@ class MicroBatchContext(Generic[T]):
     @property
     def stats(self) -> dict[str, Any]:
         """Get context statistics."""
-        completed = len(list(filter(lambda mb: mb.state == MicroBatchState.COMPLETED, self._micro_batches)))
+        completed = len(
+            list(
+                filter(
+                    lambda mb: mb.state == MicroBatchState.COMPLETED,
+                    self._micro_batches,
+                )
+            )
+        )
 
         return {
             "batch_size": self.batch_size,
             "micro_batch_size": self.micro_batch_size,
             "num_micro_batches": self.num_micro_batches,
             "completed_micro_batches": completed,
-            "total_time_ms": (self._end_time - self._start_time) * 1000 if self._end_time > 0 else 0,
+            "total_time_ms": (
+                (self._end_time - self._start_time) * 1000 if self._end_time > 0 else 0
+            ),
             "total_compute_time_ms": self._total_compute_time,
-            "avg_micro_batch_time_ms": self._total_compute_time / completed if completed > 0 else 0,
-            "outputs_recorded": len(list(filter(lambda o: o is not None, self._outputs))),
+            "avg_micro_batch_time_ms": (
+                self._total_compute_time / completed if completed > 0 else 0
+            ),
+            "outputs_recorded": len(
+                list(filter(lambda o: o is not None, self._outputs))
+            ),
         }
 
 
@@ -476,6 +496,7 @@ class AdaptiveMicroBatchContext(MicroBatchContext[T]):
 
     def iterate(self) -> Iterator[MicroBatchInfo]:
         """Iterate with adaptive sizing."""
+
         def _gen(it):
             try:
                 mb = next(it)
@@ -488,6 +509,7 @@ class AdaptiveMicroBatchContext(MicroBatchContext[T]):
                 yield from _gen(it)
             except StopIteration:
                 pass
+
         return _gen(super().iterate())
 
 

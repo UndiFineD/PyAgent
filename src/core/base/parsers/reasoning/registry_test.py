@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_reasoningparsermanager_exists():
     """Test that ReasoningParserManager class exists and is importable."""
-    assert 'ReasoningParserManager' in dir()
+    assert "ReasoningParserManager" in dir()
 
 
 def test_reasoning_parser_exists():
@@ -44,4 +44,3 @@ def test_reasoning_parser_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

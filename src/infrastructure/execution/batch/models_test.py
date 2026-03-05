@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_movedirectionality_exists():
     """Test that MoveDirectionality class exists and is importable."""
-    assert 'MoveDirectionality' in dir()
+    assert "MoveDirectionality" in dir()
 
 
 def test_cachedrequeststate_exists():
     """Test that CachedRequestState class exists and is importable."""
-    assert 'CachedRequestState' in dir()
+    assert "CachedRequestState" in dir()
 
 
 def test_batchupdatebuilder_exists():
     """Test that BatchUpdateBuilder class exists and is importable."""
-    assert 'BatchUpdateBuilder' in dir()
+    assert "BatchUpdateBuilder" in dir()
 
 
 def test_samplingmetadata_exists():
     """Test that SamplingMetadata class exists and is importable."""
-    assert 'SamplingMetadata' in dir()
+    assert "SamplingMetadata" in dir()
 
 
 def test_inputbatch_exists():
     """Test that InputBatch class exists and is importable."""
-    assert 'InputBatch' in dir()
+    assert "InputBatch" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

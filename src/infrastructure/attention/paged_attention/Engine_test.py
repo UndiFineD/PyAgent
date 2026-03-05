@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_pagedattentionengine_exists():
     """Test that PagedAttentionEngine class exists and is importable."""
-    assert 'PagedAttentionEngine' in dir()
+    assert "PagedAttentionEngine" in dir()
 
 
 def test_create_attention_engine_exists():
@@ -44,4 +44,3 @@ def test_create_attention_engine_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

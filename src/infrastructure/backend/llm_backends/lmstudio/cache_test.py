@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_modelcache_exists():
     """Test that ModelCache class exists and is importable."""
-    assert 'ModelCache' in dir()
+    assert "ModelCache" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

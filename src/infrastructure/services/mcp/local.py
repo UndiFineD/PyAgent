@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,8 +26,15 @@ import time
 from typing import Any, Callable, Dict, List, Optional
 
 from .base import MCPToolServer
-from .models import (MCPServerConfig, MCPSession, SessionState, ToolCall,
-                     ToolResult, ToolSchema, ToolStatus)
+from .models import (
+    MCPServerConfig,
+    MCPSession,
+    SessionState,
+    ToolCall,
+    ToolResult,
+    ToolSchema,
+    ToolStatus,
+)
 
 
 class LocalMCPServer(MCPToolServer):
@@ -95,7 +103,9 @@ class LocalMCPServer(MCPToolServer):
                 result=result,
                 duration_ms=(time.time() - start_time) * 1000,
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return ToolResult(
                 call_id=call.id,
                 name=call.name,

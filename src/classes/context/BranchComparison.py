@@ -5,6 +5,7 @@ from __future__ import annotations
 
 
 from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+
 if TYPE_CHECKING:
     from src.classes.base_agent import BaseAgent
     from dataclasses import dataclass, field
@@ -17,6 +18,7 @@ if TYPE_CHECKING:
     import re
     import zlib
 
+
 @dataclass
 class BranchComparison:
     """Comparison of context across branches.
@@ -28,6 +30,7 @@ class BranchComparison:
         files_only_in_b: Files only in branch B.
         modified_files: Files modified between branches.
     """
+
     branch_a: str
     branch_b: str
     files_only_in_a: List[str] = field(default_factory=lambda: [])

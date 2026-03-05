@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +44,9 @@ class CodeGeneratorAgent(CoderAgent):
 # Create main function using the helper
 
 
-main = create_main_function(CodeGeneratorAgent, "Coder Agent: Updates code files", "Path to the code file")
+main = create_main_function(
+    CodeGeneratorAgent, "Coder Agent: Updates code files", "Path to the code file"
+)
 
 if __name__ == "__main__":
     main()

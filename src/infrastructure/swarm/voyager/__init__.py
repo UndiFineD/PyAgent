@@ -1,7 +1,7 @@
-
 """
 Voyager package.
 """
+
 # Copyright 2026 PyAgent Authors
 from .discovery_node import DiscoveryNode  # noqa: F401
 from .remote_neural_synapse import RemoteNeuralSynapse  # noqa: F401

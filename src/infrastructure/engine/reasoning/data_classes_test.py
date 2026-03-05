@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ToolCall"), "ToolCall missing"
     assert hasattr(mod, "ToolCallResult"), "ToolCallResult missing"
     assert hasattr(mod, "ParseResult"), "ParseResult missing"
-

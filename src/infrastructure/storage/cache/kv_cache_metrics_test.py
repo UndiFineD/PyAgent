@@ -23,4 +23,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "KVCacheMetricsCollector"), "KVCacheMetricsCollector missing"
     assert hasattr(mod, "BatchMetricsCollector"), "BatchMetricsCollector missing"
     assert hasattr(mod, "create_metrics_collector"), "create_metrics_collector missing"
-

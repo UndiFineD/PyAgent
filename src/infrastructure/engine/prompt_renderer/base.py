@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -67,7 +68,9 @@ class PromptRenderer(ABC):
         max_tokens = config.max_tokens or self.max_model_tokens
         if len(tokens) <= max_tokens:
             return tokens, None
-        return TruncationManager.truncate(tokens, max_tokens, config.truncation, config.reserve_tokens)
+        return TruncationManager.truncate(
+            tokens, max_tokens, config.truncation, config.reserve_tokens
+        )
 
     def _generate_cache_salt(self, config: PromptConfig) -> str:
         """Generate cache salt."""

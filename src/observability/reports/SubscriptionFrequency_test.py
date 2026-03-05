@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_subscriptionfrequency_exists():
     """Test that SubscriptionFrequency class exists and is importable."""
-    assert 'SubscriptionFrequency' in dir()
+    assert "SubscriptionFrequency" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

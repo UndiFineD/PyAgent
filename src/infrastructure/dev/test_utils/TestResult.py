@@ -1,5 +1,5 @@
 class TestResult:
-	pass
+    pass
 
 
 __all__ = ["TestResult"]

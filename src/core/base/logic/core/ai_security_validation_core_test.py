@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_securityissue_exists():
     """Test that SecurityIssue class exists and is importable."""
-    assert 'SecurityIssue' in dir()
+    assert "SecurityIssue" in dir()
 
 
 def test_securityscanresult_exists():
     """Test that SecurityScanResult class exists and is importable."""
-    assert 'SecurityScanResult' in dir()
+    assert "SecurityScanResult" in dir()
 
 
 def test_jailbreakattempt_exists():
     """Test that JailbreakAttempt class exists and is importable."""
-    assert 'JailbreakAttempt' in dir()
+    assert "JailbreakAttempt" in dir()
 
 
 def test_aisecurityvalidationcore_exists():
     """Test that AISecurityValidationCore class exists and is importable."""
-    assert 'AISecurityValidationCore' in dir()
+    assert "AISecurityValidationCore" in dir()
 
 
 def test_aisecurityvalidationcore_instantiation():
@@ -60,4 +60,3 @@ def test_aisecurityvalidationcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

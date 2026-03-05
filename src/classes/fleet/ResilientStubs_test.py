@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_resilientstub_exists():
     """Test that ResilientStub class exists and is importable."""
-    assert 'ResilientStub' in dir()
+    assert "ResilientStub" in dir()
 
 
 def test_resilient_import_exists():
@@ -44,4 +44,3 @@ def test_resilient_import_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

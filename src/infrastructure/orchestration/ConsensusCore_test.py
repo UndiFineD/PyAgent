@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_consensuscore_exists():
     """Test that ConsensusCore class exists and is importable."""
-    assert 'ConsensusCore' in dir()
+    assert "ConsensusCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

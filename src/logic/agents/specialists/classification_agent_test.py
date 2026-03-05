@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ClassificationResult"), "ClassificationResult missing"
     assert hasattr(mod, "Taxonomy"), "Taxonomy missing"
     assert hasattr(mod, "ClassificationAgent"), "ClassificationAgent missing"
-

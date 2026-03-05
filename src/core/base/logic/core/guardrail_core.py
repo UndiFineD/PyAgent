@@ -18,13 +18,17 @@ import re
 from typing import Tuple, Any, Optional, Type, Callable
 from pydantic import BaseModel, ValidationError
 
+
 class GuardrailCore:
     """
     Implements output validation and logical checks for agent tasks.
     Harvested from agentic-design-patterns.
     """
+
     @staticmethod
-    def validate_pydantic(output: str, model: Type[BaseModel]) -> Tuple[bool, Any, Optional[str]]:
+    def validate_pydantic(
+        output: str, model: Type[BaseModel]
+    ) -> Tuple[bool, Any, Optional[str]]:
         """Validates that output matches a Pydantic model."""
         try:
             # Attempt to parse json
@@ -35,7 +39,9 @@ class GuardrailCore:
             return False, None, str(e)
 
     @staticmethod
-    def apply_logical_check(data: Any, check_func: Callable[[Any], Tuple[bool, str]]) -> Tuple[bool, str]:
+    def apply_logical_check(
+        data: Any, check_func: Callable[[Any], Tuple[bool, str]]
+    ) -> Tuple[bool, str]:
         """Applies a custom logical check function to validated data."""
         return check_func(data)
 

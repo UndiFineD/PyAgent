@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,7 +17,6 @@ from __future__ import annotations
 """
 Synthetic data agent.py module.
 """
-
 
 
 import json
@@ -55,7 +55,12 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")
         with open(filepath, "w", encoding="utf-8") as f:
             for s in snippets:
-                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\n")
+                f.write(
+                    json.dumps(
+                        {"instruction": "Complete or explain this code", "output": s}
+                    )
+                    + "\n"
+                )
 
         return f"Generated {count} edge cases in {filepath}"
 
@@ -65,7 +70,9 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Generates synthetic training pairs (instruction, input, output) for a given topic.
         Saves them to a .jsonl file in the logs directory.
         """
-        logging.info(f"SyntheticDataAgent: Generating {count} training pairs for topic: {topic}")
+        logging.info(
+            f"SyntheticDataAgent: Generating {count} training pairs for topic: {topic}"
+        )
 
         dataset = []
         for i in range(count):

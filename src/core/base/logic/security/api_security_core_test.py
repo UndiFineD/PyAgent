@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_agentcredentials_exists():
     """Test that AgentCredentials class exists and is importable."""
-    assert 'AgentCredentials' in dir()
+    assert "AgentCredentials" in dir()
 
 
 def test_ratelimitconfig_exists():
     """Test that RateLimitConfig class exists and is importable."""
-    assert 'RateLimitConfig' in dir()
+    assert "RateLimitConfig" in dir()
 
 
 def test_securityevent_exists():
     """Test that SecurityEvent class exists and is importable."""
-    assert 'SecurityEvent' in dir()
+    assert "SecurityEvent" in dir()
 
 
 def test_inputvalidator_exists():
     """Test that InputValidator class exists and is importable."""
-    assert 'InputValidator' in dir()
+    assert "InputValidator" in dir()
 
 
 def test_ratelimiter_exists():
     """Test that RateLimiter class exists and is importable."""
-    assert 'RateLimiter' in dir()
+    assert "RateLimiter" in dir()
 
 
 def test_authenticator_exists():
     """Test that Authenticator class exists and is importable."""
-    assert 'Authenticator' in dir()
+    assert "Authenticator" in dir()
 
 
 def test_authenticator_instantiation():
@@ -69,12 +69,12 @@ def test_authenticator_instantiation():
 
 def test_errorhandler_exists():
     """Test that ErrorHandler class exists and is importable."""
-    assert 'ErrorHandler' in dir()
+    assert "ErrorHandler" in dir()
 
 
 def test_apisecuritycore_exists():
     """Test that APISecurityCore class exists and is importable."""
-    assert 'APISecurityCore' in dir()
+    assert "APISecurityCore" in dir()
 
 
 def test_apisecuritycore_instantiation():
@@ -86,4 +86,3 @@ def test_apisecuritycore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

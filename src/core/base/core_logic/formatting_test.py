@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_formattingcore_exists():
     """Test that FormattingCore class exists and is importable."""
-    assert 'FormattingCore' in dir()
+    assert "FormattingCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_graphstoragemixin_exists():
     """Test that GraphStorageMixin class exists and is importable."""
-    assert 'GraphStorageMixin' in dir()
+    assert "GraphStorageMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

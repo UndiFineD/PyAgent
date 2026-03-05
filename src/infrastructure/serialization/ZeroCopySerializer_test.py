@@ -33,12 +33,12 @@ except ImportError as e:
 
 def test_zerocopyencoder_exists():
     """Test that ZeroCopyEncoder class exists and is importable."""
-    assert 'ZeroCopyEncoder' in dir()
+    assert "ZeroCopyEncoder" in dir()
 
 
 def test_zerocopydecoder_exists():
     """Test that ZeroCopyDecoder class exists and is importable."""
-    assert 'ZeroCopyDecoder' in dir()
+    assert "ZeroCopyDecoder" in dir()
 
 
 def test_encode_with_buffers_exists():
@@ -54,4 +54,3 @@ def test_decode_with_buffers_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -23,5 +23,6 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SuffixProposer"), "SuffixProposer missing"
     assert hasattr(mod, "TreeSpeculator"), "TreeSpeculator missing"
     assert hasattr(mod, "SpeculativeDecoder"), "SpeculativeDecoder missing"
-    assert hasattr(mod, "create_speculative_decoder"), "create_speculative_decoder missing"
-
+    assert hasattr(
+        mod, "create_speculative_decoder"
+    ), "create_speculative_decoder missing"

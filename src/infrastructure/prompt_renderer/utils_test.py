@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_embeddingloader_exists():
     """Test that EmbeddingLoader class exists and is importable."""
-    assert 'EmbeddingLoader' in dir()
+    assert "EmbeddingLoader" in dir()
 
 
 def test_render_prompt_exists():
@@ -59,4 +59,3 @@ def test_generate_cache_salt_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

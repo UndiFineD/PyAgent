@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -24,7 +25,9 @@ class ContextCategorizationMixin:
     def calculate_priority_score(self) -> float:
         """Calculate a priority score based on various factors."""
         score = 0.0
-        content = getattr(self, "current_content", None) or getattr(self, "previous_content", "")
+        content = getattr(self, "current_content", None) or getattr(
+            self, "previous_content", ""
+        )
 
         # Base score from priority level
         priority = getattr(self, "_priority", ContextPriority.MEDIUM)

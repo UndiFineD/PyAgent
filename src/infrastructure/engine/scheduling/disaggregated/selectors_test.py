@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LeastLoadedSelector"), "LeastLoadedSelector missing"
     assert hasattr(mod, "RandomSelector"), "RandomSelector missing"
     assert hasattr(mod, "HashSelector"), "HashSelector missing"
-

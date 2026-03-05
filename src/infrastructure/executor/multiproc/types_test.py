@@ -33,30 +33,29 @@ except ImportError as e:
 
 def test_executorbackend_exists():
     """Test that ExecutorBackend class exists and is importable."""
-    assert 'ExecutorBackend' in dir()
+    assert "ExecutorBackend" in dir()
 
 
 def test_workerstate_exists():
     """Test that WorkerState class exists and is importable."""
-    assert 'WorkerState' in dir()
+    assert "WorkerState" in dir()
 
 
 def test_workerinfo_exists():
     """Test that WorkerInfo class exists and is importable."""
-    assert 'WorkerInfo' in dir()
+    assert "WorkerInfo" in dir()
 
 
 def test_taskmessage_exists():
     """Test that TaskMessage class exists and is importable."""
-    assert 'TaskMessage' in dir()
+    assert "TaskMessage" in dir()
 
 
 def test_resultmessage_exists():
     """Test that ResultMessage class exists and is importable."""
-    assert 'ResultMessage' in dir()
+    assert "ResultMessage" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

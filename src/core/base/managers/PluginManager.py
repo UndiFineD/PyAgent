@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -89,12 +90,12 @@ class PluginManager:
                                 meta = PluginMetadata(
                                     module_path=raw_meta[0],
                                     class_name=raw_meta[1],
-                                    needs_fleet=raw_meta[2]
-                                    if len(raw_meta) > 2
-                                    else True,
-                                    min_sdk_version=raw_meta[3]
-                                    if len(raw_meta) > 3
-                                    else "1.0.0",
+                                    needs_fleet=(
+                                        raw_meta[2] if len(raw_meta) > 2 else True
+                                    ),
+                                    min_sdk_version=(
+                                        raw_meta[3] if len(raw_meta) > 3 else "1.0.0"
+                                    ),
                                 )
                             else:
                                 meta = PluginMetadata(**raw_meta)
@@ -146,9 +147,11 @@ class PluginManager:
                 discovered.append(plugin_name)
                 self.loaded_meta[plugin_name] = PluginMetadata(
                     module_path=f"plugins.{plugin_name}",
-                    class_name=plugin_name
-                    if "_" not in plugin_name
-                    else plugin_name.replace("_", ""),
+                    class_name=(
+                        plugin_name
+                        if "_" not in plugin_name
+                        else plugin_name.replace("_", "")
+                    ),
                     permissions=permissions,
                     restricted_mode=restricted,
                 )

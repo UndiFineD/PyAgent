@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Dict, List
 import json
 
+
 class MorphologyCore:
     """
     MorphologyCore handles agent splitting, merging, and DNA encoding.
@@ -21,7 +22,9 @@ class MorphologyCore:
         union = len(set_a.union(set_b))
         return intersection / union
 
-    def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
+    def encode_agent_dna(
+        self, name: str, tools: list[str], prompt: str, model: str
+    ) -> str:
         """
         Encodes the agent's DNA into a JSON string.
         """
@@ -30,9 +33,9 @@ class MorphologyCore:
             "genome": {
                 "tools": sorted(tools),
                 "system_prompt_hash": hash(prompt),
-                "preferred_model": model
+                "preferred_model": model,
             },
-            "version": "1.0.DNA"
+            "version": "1.0.DNA",
         }
         return json.dumps(dna)
 

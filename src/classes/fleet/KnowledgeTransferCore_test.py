@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_knowledgetransfercore_exists():
     """Test that KnowledgeTransferCore class exists and is importable."""
-    assert 'KnowledgeTransferCore' in dir()
+    assert "KnowledgeTransferCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

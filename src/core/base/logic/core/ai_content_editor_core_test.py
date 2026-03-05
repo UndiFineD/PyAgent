@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_contenteditrequest_exists():
     """Test that ContentEditRequest class exists and is importable."""
-    assert 'ContentEditRequest' in dir()
+    assert "ContentEditRequest" in dir()
 
 
 def test_contenteditresult_exists():
     """Test that ContentEditResult class exists and is importable."""
-    assert 'ContentEditResult' in dir()
+    assert "ContentEditResult" in dir()
 
 
 def test_contenttemplate_exists():
     """Test that ContentTemplate class exists and is importable."""
-    assert 'ContentTemplate' in dir()
+    assert "ContentTemplate" in dir()
 
 
 def test_aicontenteditorcore_exists():
     """Test that AIContentEditorCore class exists and is importable."""
-    assert 'AIContentEditorCore' in dir()
+    assert "AIContentEditorCore" in dir()
 
 
 def test_aicontenteditorcore_instantiation():
@@ -60,4 +60,3 @@ def test_aicontenteditorcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

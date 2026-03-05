@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_signalcore_exists():
     """Test that SignalCore class exists and is importable."""
-    assert 'SignalCore' in dir()
+    assert "SignalCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

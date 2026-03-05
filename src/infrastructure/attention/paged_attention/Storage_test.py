@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_blocktable_exists():
     """Test that BlockTable class exists and is importable."""
-    assert 'BlockTable' in dir()
+    assert "BlockTable" in dir()
 
 
 def test_slotmapping_exists():
     """Test that SlotMapping class exists and is importable."""
-    assert 'SlotMapping' in dir()
+    assert "SlotMapping" in dir()
 
 
 def test_pagedkvcache_exists():
     """Test that PagedKVCache class exists and is importable."""
-    assert 'PagedKVCache' in dir()
+    assert "PagedKVCache" in dir()
 
 
 def test_attentionmetadata_exists():
     """Test that AttentionMetadata class exists and is importable."""
-    assert 'AttentionMetadata' in dir()
+    assert "AttentionMetadata" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

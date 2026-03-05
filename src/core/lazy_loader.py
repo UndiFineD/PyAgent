@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -125,7 +126,11 @@ class LazyLoader:
 
     def __repr__(self) -> str:
         status = "loaded" if self._loaded else "not loaded"
-        target = f"{self.module_path}.{self.attr_name}" if self.attr_name else self.module_path
+        target = (
+            f"{self.module_path}.{self.attr_name}"
+            if self.attr_name
+            else self.module_path
+        )
         return f"<LazyLoader({target!r}) [{status}]>"
 
 
@@ -239,16 +244,22 @@ class ModuleLazyLoader:
         module_path = self._resolve_module_path(module_path)
         return self._load_with_error_handling(name, module_path, attr_name)
 
-    def _load_with_error_handling(self, name: str, module_path: str, attr_name: str) -> Any:
+    def _load_with_error_handling(
+        self, name: str, module_path: str, attr_name: str
+    ) -> Any:
         try:
             module = importlib.import_module(module_path)
             attr = getattr(module, attr_name)
             self._cache[name] = attr
             return attr
         except ImportError as e:
-            raise ImportError(f"Failed to lazy import {name!r} from {module_path}: {e}") from e
+            raise ImportError(
+                f"Failed to lazy import {name!r} from {module_path}: {e}"
+            ) from e
         except AttributeError as e:
-            raise AttributeError(f"Module {module_path!r} has no attribute {attr_name!r}: {e}") from e
+            raise AttributeError(
+                f"Module {module_path!r} has no attribute {attr_name!r}: {e}"
+            ) from e
 
     def available_names(self) -> list[str]:
         """

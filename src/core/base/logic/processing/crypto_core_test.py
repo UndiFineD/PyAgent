@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_data_blob_exists():
     """Test that DATA_BLOB class exists and is importable."""
-    assert 'DATA_BLOB' in dir()
+    assert "DATA_BLOB" in dir()
 
 
 def test_credentialw_exists():
     """Test that CREDENTIALW class exists and is importable."""
-    assert 'CREDENTIALW' in dir()
+    assert "CREDENTIALW" in dir()
 
 
 def test_cryptocore_exists():
     """Test that CryptoCore class exists and is importable."""
-    assert 'CryptoCore' in dir()
+    assert "CryptoCore" in dir()
 
 
 def test_cryptocore_instantiation():
@@ -55,4 +55,3 @@ def test_cryptocore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

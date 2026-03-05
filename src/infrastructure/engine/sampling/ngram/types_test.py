@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MatchingStrategy"), "MatchingStrategy missing"
     assert hasattr(mod, "NgramConfig"), "NgramConfig missing"
     assert hasattr(mod, "ProposalStats"), "ProposalStats missing"
-

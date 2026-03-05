@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,11 +23,12 @@ import os
 import re
 from pathlib import Path
 
+
 def curate_dependencies() -> None:
     workspace_root = Path(".")
     src_dir = workspace_root / "src"
     requirements_file = workspace_root / "requirements.txt"
-    
+
     if not src_dir.exists() or not requirements_file.exists():
         print("Error: src/ or requirements.txt not found.")
         return
@@ -47,16 +49,19 @@ def curate_dependencies() -> None:
     # 1. extract all unique imports from src/
     imported_modules = set()
     import_regex = re.compile(r"^(?:from|import)\s+([a-zA-Z0-9_]+)")
-    
+
     for py_file in src_dir.rglob("*.py"):
         try:
-            with open(py_file, 'r', encoding='utf-8') as f:
+            with open(py_file, "r", encoding="utf-8") as f:
                 for line in f:
                     match = import_regex.match(line.strip())
                     if match:
                         module = match.group(1).lower()
                         # Ignore internal imports
-                        if not (src_dir / module).exists() and not (src_dir / (module + ".py")).exists():
+                        if (
+                            not (src_dir / module).exists()
+                            and not (src_dir / (module + ".py")).exists()
+                        ):
                             imported_modules.add(module)
         except Exception as e:
             print(f"Error reading {py_file}: {e}")
@@ -66,7 +71,7 @@ def curate_dependencies() -> None:
     req_path = workspace_root / "requirements"
     if req_path.exists():
         for req_file in req_path.glob("*.txt"):
-            with open(req_file, 'r') as f:
+            with open(req_file, "r") as f:
                 for line in f:
                     match = re.match(r"^([a-zA-Z0-9_\-]+)", line.strip())
                     if match:
@@ -76,21 +81,140 @@ def curate_dependencies() -> None:
     req_modules = set()
     for rm in req_modules_raw:
         normalized = rm.replace("-", "_")
-        mapped = PACKAGE_TO_IMPORT_MAP.get(rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)).lower()
+        mapped = PACKAGE_TO_IMPORT_MAP.get(
+            rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)
+        ).lower()
         req_modules.add(mapped)
 
     # 3. Intersection and delta
     unused_normalized = req_modules - imported_modules
-    
+
     # Map back to raw for report
     unused_raw = []
     for rm in req_modules_raw:
         normalized = rm.replace("-", "_")
-        mapped = PACKAGE_TO_IMPORT_MAP.get(rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)).lower()
+        mapped = PACKAGE_TO_IMPORT_MAP.get(
+            rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)
+        ).lower()
         if mapped in unused_normalized:
             unused_raw.append(rm)
 
-    missing = imported_modules - req_modules - set(["src", "os", "sys", "time", "json", "logging", "pathlib", "collections", "abc", "typing", "datetime", "re", "hashlib", "uuid", "asyncio", "subprocess", "threading", "types", "math", "random", "inspect", "functools", "dataclasses", "enum", "pstats", "csv", "shlex", "tempfile", "shutil", "traceback", "itertools", "base64", "operator", "contextlib", "glob", "signal", "mmap", "pickle", "copy", "socket", "urllib", "gc", "pkg_resources", "importlib", "fnmatch", "difflib", "ast", "argparse", "unittest", "tempfile", "shutil", "posixpath", "ntpath", "configparser", "bisect", "array", "struct", "heapq", "weakref", "threading", "queue", "zipfile", "tarfile", "zlib", "gzip", "bz2", "lzma", "hashlib", "hmac", "secrets", "platform", "errno", "ctypes", "select", "selectors", "asyncore", "asynchat", "smtplib", "smtpd", "telnetlib", "nntplib", "ftplib", "http", "ftplib", "xml", "html", "cgi", "cgitb", "wsgiref", "urllib", "xmlrpc", "runpy", "py_compile", "compileall", "dis", "pickletools", "inspect", "pstats", "cProfile", "profile", "timeit", "trace", "tracemalloc", "graphlib", "tomllib", "winreg", "msvcrt", "__future__"])
+    missing = (
+        imported_modules
+        - req_modules
+        - set(
+            [
+                "src",
+                "os",
+                "sys",
+                "time",
+                "json",
+                "logging",
+                "pathlib",
+                "collections",
+                "abc",
+                "typing",
+                "datetime",
+                "re",
+                "hashlib",
+                "uuid",
+                "asyncio",
+                "subprocess",
+                "threading",
+                "types",
+                "math",
+                "random",
+                "inspect",
+                "functools",
+                "dataclasses",
+                "enum",
+                "pstats",
+                "csv",
+                "shlex",
+                "tempfile",
+                "shutil",
+                "traceback",
+                "itertools",
+                "base64",
+                "operator",
+                "contextlib",
+                "glob",
+                "signal",
+                "mmap",
+                "pickle",
+                "copy",
+                "socket",
+                "urllib",
+                "gc",
+                "pkg_resources",
+                "importlib",
+                "fnmatch",
+                "difflib",
+                "ast",
+                "argparse",
+                "unittest",
+                "tempfile",
+                "shutil",
+                "posixpath",
+                "ntpath",
+                "configparser",
+                "bisect",
+                "array",
+                "struct",
+                "heapq",
+                "weakref",
+                "threading",
+                "queue",
+                "zipfile",
+                "tarfile",
+                "zlib",
+                "gzip",
+                "bz2",
+                "lzma",
+                "hashlib",
+                "hmac",
+                "secrets",
+                "platform",
+                "errno",
+                "ctypes",
+                "select",
+                "selectors",
+                "asyncore",
+                "asynchat",
+                "smtplib",
+                "smtpd",
+                "telnetlib",
+                "nntplib",
+                "ftplib",
+                "http",
+                "ftplib",
+                "xml",
+                "html",
+                "cgi",
+                "cgitb",
+                "wsgiref",
+                "urllib",
+                "xmlrpc",
+                "runpy",
+                "py_compile",
+                "compileall",
+                "dis",
+                "pickletools",
+                "inspect",
+                "pstats",
+                "cProfile",
+                "profile",
+                "timeit",
+                "trace",
+                "tracemalloc",
+                "graphlib",
+                "tomllib",
+                "winreg",
+                "msvcrt",
+                "__future__",
+            ]
+        )
+    )
 
     print("--- Dependency Curation Report (Phase 312) ---")
     print(f"Total Unique External Modules Imported: {len(imported_modules)}")
@@ -98,12 +222,27 @@ def curate_dependencies() -> None:
     print("\n[UNUSED] (In requirements but not imported in src/):")
     for m in sorted(unused_raw):
         # Filter out common false positives
-        if m.lower() not in ['pytest', 'ruff', 'mypy', 'pytest-cov', 'black', 'flake8', 'isort', 'pip-tools', 'tox', 'build', 'setuptools', 'wheel', 'twine']:
+        if m.lower() not in [
+            "pytest",
+            "ruff",
+            "mypy",
+            "pytest-cov",
+            "black",
+            "flake8",
+            "isort",
+            "pip-tools",
+            "tox",
+            "build",
+            "setuptools",
+            "wheel",
+            "twine",
+        ]:
             print(f"  - {m}")
 
     print("\n[MISSING?] (Imported in src/ but not listed in requirements/*.txt):")
     for m in sorted(missing):
         print(f"  - {m}")
+
 
 if __name__ == "__main__":
     curate_dependencies()

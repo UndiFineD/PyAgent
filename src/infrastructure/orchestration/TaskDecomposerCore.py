@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,12 +25,14 @@ from dataclasses import dataclass, field
 
 __version__ = VERSION
 
+
 @dataclass
 class PlanStep:
     agent: str
     action: str
     args: list[Any] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
+
 
 class TaskDecomposerCore:
     """
@@ -44,52 +47,66 @@ class TaskDecomposerCore:
         """
         request_lower = request.lower()
         steps: list[PlanStep] = []
-        
+
         # 1. Research & Analysis Phase
         if any(w in request_lower for w in ["research", "search", "analyze", "find"]):
-            steps.append(PlanStep(
-                agent="ResearchAgent", 
-                action="search_and_summarize", 
-                args=[request],
-                metadata={"priority": 1}
-            ))
-            
+            steps.append(
+                PlanStep(
+                    agent="ResearchAgent",
+                    action="search_and_summarize",
+                    args=[request],
+                    metadata={"priority": 1},
+                )
+            )
+
         # 2. Implementation Phase
         if any(w in request_lower for w in ["code", "refactor", "fix", "implement"]):
-            steps.append(PlanStep(
-                agent="CoderAgent", 
-                action="improve_content", 
-                args=["# Implement request: " + request],
-                metadata={"priority": 2, "depends_on": "ResearchAgent"}
-            ))
-            
+            steps.append(
+                PlanStep(
+                    agent="CoderAgent",
+                    action="improve_content",
+                    args=["# Implement request: " + request],
+                    metadata={"priority": 2, "depends_on": "ResearchAgent"},
+                )
+            )
+
         # 3. Data/SQL Phase
         if any(w in request_lower for w in ["data", "sql", "db", "database"]):
-            steps.append(PlanStep(
-                agent="SQLAgent", 
-                action="query_database", 
-                args=["SELECT * FROM relevant_tables WHERE context LIKE '%" + request[:20] + "%'"],
-                metadata={"priority": 2}
-            ))
-            
+            steps.append(
+                PlanStep(
+                    agent="SQLAgent",
+                    action="query_database",
+                    args=[
+                        "SELECT * FROM relevant_tables WHERE context LIKE '%"
+                        + request[:20]
+                        + "%'"
+                    ],
+                    metadata={"priority": 2},
+                )
+            )
+
         # 4. Final Review
         if steps:
-            steps.append(PlanStep(
-                agent="LinguisticAgent", 
-                action="articulate", 
-                args=["Summarize the results of the task: " + request],
-                metadata={"priority": 10, "is_final": True}
-            ))
-            
+            steps.append(
+                PlanStep(
+                    agent="LinguisticAgent",
+                    action="articulate",
+                    args=["Summarize the results of the task: " + request],
+                    metadata={"priority": 10, "is_final": True},
+                )
+            )
+
         # Default fallback
         if not steps:
-            steps.append(PlanStep(
-                agent="KnowledgeAgent", 
-                action="scan_workspace", 
-                args=["/"],
-                metadata={"reason": "unrecognized request structure"}
-            ))
-            
+            steps.append(
+                PlanStep(
+                    agent="KnowledgeAgent",
+                    action="scan_workspace",
+                    args=["/"],
+                    metadata={"reason": "unrecognized request structure"},
+                )
+            )
+
         # Convert dataclasses to dicts for shell compatibility
         return [self._to_dict(s) for s in steps]
 
@@ -98,14 +115,16 @@ class TaskDecomposerCore:
             "agent": step.agent,
             "action": step.action,
             "args": step.args,
-            "metadata": step.metadata
+            "metadata": step.metadata,
         }
 
     def summarize_plan(self, steps: list[dict[str, Any]]) -> str:
         """Core summary logic."""
         summary_lines = ["# 📋 Task Execution Plan"]
         for i, step in enumerate(steps):
-            meta = step.get('metadata', {})
-            pri = meta.get('priority', 5)
-            summary_lines.append(f"{i+1}. **{step.get('agent')}** :: `{step.get('action')}` (P{pri})")
+            meta = step.get("metadata", {})
+            pri = meta.get("priority", 5)
+            summary_lines.append(
+                f"{i+1}. **{step.get('agent')}** :: `{step.get('action')}` (P{pri})"
+            )
         return "\n".join(summary_lines)

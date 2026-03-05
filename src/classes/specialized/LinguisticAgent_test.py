@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_linguisticagent_exists():
     """Test that LinguisticAgent class exists and is importable."""
-    assert 'LinguisticAgent' in dir()
+    assert "LinguisticAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

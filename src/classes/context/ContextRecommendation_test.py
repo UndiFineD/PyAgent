@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contextrecommendation_exists():
     """Test that ContextRecommendation class exists and is importable."""
-    assert 'ContextRecommendation' in dir()
+    assert "ContextRecommendation" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

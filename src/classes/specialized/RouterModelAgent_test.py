@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_routermodelagent_exists():
     """Test that RouterModelAgent class exists and is importable."""
-    assert 'RouterModelAgent' in dir()
+    assert "RouterModelAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

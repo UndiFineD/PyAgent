@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_nixlmemoryregionstatus_exists():
     """Test that NixlMemoryRegionStatus class exists and is importable."""
-    assert 'NixlMemoryRegionStatus' in dir()
+    assert "NixlMemoryRegionStatus" in dir()
 
 
 def test_nixlmemoryregion_exists():
     """Test that NixlMemoryRegion class exists and is importable."""
-    assert 'NixlMemoryRegion' in dir()
+    assert "NixlMemoryRegion" in dir()
 
 
 def test_nixlconnector_exists():
     """Test that NixlConnector class exists and is importable."""
-    assert 'NixlConnector' in dir()
+    assert "NixlConnector" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

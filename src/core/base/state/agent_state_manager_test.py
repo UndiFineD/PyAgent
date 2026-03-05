@@ -20,4 +20,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StructuredErrorValidator"), "StructuredErrorValidator missing"
     assert hasattr(mod, "StateTransaction"), "StateTransaction missing"
     assert hasattr(mod, "AgentStateManager"), "AgentStateManager missing"
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ if TYPE_CHECKING:
 
     __version__ = VERSION
 
+
 class DreamStateOrchestrator:
     """
     Implements Recursive Skill Synthesis (Phase 237).
@@ -41,23 +43,31 @@ class DreamStateOrchestrator:
         """
         Starts an async simulation cycle to evolve skills in a specific area.
         """
-        logging.info(f"DreamStateOrchestrator: Initiating dream cycle focal point: {focus_area}")
+        logging.info(
+            f"DreamStateOrchestrator: Initiating dream cycle focal point: {focus_area}"
+        )
 
         # 1. Generate Synthetic Scenarios
-        scenarios = await self.fleet.call_by_capability("generate_training_data", context=focus_area)
+        scenarios = await self.fleet.call_by_capability(
+            "generate_training_data", context=focus_area
+        )
 
         # 2. Simulate outcomes across variations
         tasks = [
-            self.fleet.call_by_capability("predict_action_outcome", 
-                                        action=f"Optimize {focus_area}", 
-                                        environment=scenarios)
+            self.fleet.call_by_capability(
+                "predict_action_outcome",
+                action=f"Optimize {focus_area}",
+                environment=scenarios,
+            )
             for i in range(2)
         ]
         simulation_results = await asyncio.gather(*tasks)
 
         # 3. Analyze patterns and synthesize a new 'skill' spec
-        dream_synthesis = await self.fleet.call_by_capability("analyze", 
-            input_text=f"Simulation results for {focus_area}: {simulation_results}")
+        dream_synthesis = await self.fleet.call_by_capability(
+            "analyze",
+            input_text=f"Simulation results for {focus_area}: {simulation_results}",
+        )
 
         dream_id = f"dream_{int(asyncio.get_event_loop().time())}"
         result = {
@@ -65,7 +75,7 @@ class DreamStateOrchestrator:
             "status": "success",
             "focus": focus_area,
             "simulations_run": len(simulation_results),
-            "synthesized_intelligence": dream_synthesis
+            "synthesized_intelligence": dream_synthesis,
         }
 
         with open(os.path.join(self.dream_log_path, f"{dream_id}.json"), "w") as f:

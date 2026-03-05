@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ Preview management logic for ChangesAgent.
 import logging
 from typing import Any, Dict
 
+
 class ChangesPreviewMixin:
     """Mixin for managing preview mode and changes."""
 
@@ -35,7 +37,11 @@ class ChangesPreviewMixin:
 
     def get_preview(self) -> str:
         """Get the preview of changes without applying them."""
-        return self._preview_content if getattr(self, "_preview_content", "") else getattr(self, "current_content", "")
+        return (
+            self._preview_content
+            if getattr(self, "_preview_content", "")
+            else getattr(self, "current_content", "")
+        )
 
     def preview_changes(self, content: str) -> Dict[str, Any]:
         """Preview changes and return a summary."""

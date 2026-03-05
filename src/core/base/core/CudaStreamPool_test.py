@@ -33,37 +33,37 @@ except ImportError as e:
 
 def test_streampriority_exists():
     """Test that StreamPriority class exists and is importable."""
-    assert 'StreamPriority' in dir()
+    assert "StreamPriority" in dir()
 
 
 def test_streamstate_exists():
     """Test that StreamState class exists and is importable."""
-    assert 'StreamState' in dir()
+    assert "StreamState" in dir()
 
 
 def test_streamstats_exists():
     """Test that StreamStats class exists and is importable."""
-    assert 'StreamStats' in dir()
+    assert "StreamStats" in dir()
 
 
 def test_pooledstream_exists():
     """Test that PooledStream class exists and is importable."""
-    assert 'PooledStream' in dir()
+    assert "PooledStream" in dir()
 
 
 def test_pooledevent_exists():
     """Test that PooledEvent class exists and is importable."""
-    assert 'PooledEvent' in dir()
+    assert "PooledEvent" in dir()
 
 
 def test_eventpool_exists():
     """Test that EventPool class exists and is importable."""
-    assert 'EventPool' in dir()
+    assert "EventPool" in dir()
 
 
 def test_cudastreampool_exists():
     """Test that CudaStreamPool class exists and is importable."""
-    assert 'CudaStreamPool' in dir()
+    assert "CudaStreamPool" in dir()
 
 
 def test_get_global_stream_pool_exists():
@@ -94,4 +94,3 @@ def test_high_priority_stream_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_exportformat_exists():
     """Test that ExportFormat class exists and is importable."""
-    assert 'ExportFormat' in dir()
+    assert "ExportFormat" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

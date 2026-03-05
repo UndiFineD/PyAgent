@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AttentionType"), "AttentionType missing"
     assert hasattr(mod, "AttentionCapabilities"), "AttentionCapabilities missing"
     assert hasattr(mod, "AttentionMetadata"), "AttentionMetadata missing"
-

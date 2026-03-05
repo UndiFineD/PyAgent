@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_agentmetrics_exists():
     """Test that AgentMetrics class exists and is importable."""
-    assert 'AgentMetrics' in dir()
+    assert "AgentMetrics" in dir()
 
 
 def test_loadbalancercore_exists():
     """Test that LoadBalancerCore class exists and is importable."""
-    assert 'LoadBalancerCore' in dir()
+    assert "LoadBalancerCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

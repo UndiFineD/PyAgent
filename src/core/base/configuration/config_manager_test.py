@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "CoreConfigManager"), "CoreConfigManager missing"
     assert hasattr(mod, "ConfigObject"), "ConfigObject missing"
     assert hasattr(mod, "config"), "config missing"
-

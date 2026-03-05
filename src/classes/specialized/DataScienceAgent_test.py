@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_datascienceagent_exists():
     """Test that DataScienceAgent class exists and is importable."""
-    assert 'DataScienceAgent' in dir()
+    assert "DataScienceAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AtomicFlag"), "AtomicFlag missing"
     assert hasattr(mod, "AtomicGauge"), "AtomicGauge missing"
     assert hasattr(mod, "RUST_AVAILABLE"), "RUST_AVAILABLE missing"
-

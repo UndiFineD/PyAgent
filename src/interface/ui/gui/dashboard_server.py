@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -106,7 +107,9 @@ async def get_health() -> dict[str, Any]:
     try:
         return health_checker.check()
     except (RuntimeError, ValueError, ConnectionError) as e:
-        raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}") from e
+        raise HTTPException(
+            status_code=500, detail=f"Health check failed: {str(e)}"
+        ) from e
 
 
 @app.get("/api/status")
@@ -135,7 +138,9 @@ async def get_logs(limit: int = 100) -> list[str]:
             lines = f.readlines()
             return [line.strip() for line in lines[-limit:]]
     except (IOError, OSError, UnicodeDecodeError) as e:
-        raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}") from e
+        raise HTTPException(
+            status_code=500, detail=f"Error reading logs: {str(e)}"
+        ) from e
 
 
 @app.get("/api/thoughts")
@@ -153,7 +158,9 @@ async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
                 if line.strip():
                     thoughts.append(json.loads(line))
     except (IOError, OSError, UnicodeDecodeError, json.JSONDecodeError) as e:
-        raise HTTPException(status_code=500, detail=f"Error parsing thoughts: {str(e)}") from e
+        raise HTTPException(
+            status_code=500, detail=f"Error parsing thoughts: {str(e)}"
+        ) from e
 
     return thoughts[::-1]  # Newest first
 
@@ -191,7 +198,9 @@ async def websocket_telemetry(websocket: WebSocket) -> None:
     await manager.connect(websocket)
     try:
         # Send initial connection success message
-        await websocket.send_json({"event": "connected", "msg": "PyAgent Telemetry Bridge Active"})
+        await websocket.send_json(
+            {"event": "connected", "msg": "PyAgent Telemetry Bridge Active"}
+        )
         while True:
             # Wait for any messages from client (keeping connection open)
             data = await websocket.receive_text()

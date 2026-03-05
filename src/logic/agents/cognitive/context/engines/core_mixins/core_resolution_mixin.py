@@ -19,6 +19,7 @@ Core resolution mixin for conflict management.
 from typing import Any
 from datetime import datetime
 
+
 class CoreResolutionMixin:
     """Methods for conflict resolution and fact preparation."""
 
@@ -82,8 +83,6 @@ class CoreResolutionMixin:
 
     def _resolve_accumulate(self, existing: Any, incoming: Any) -> Any:
         """Helper for accumulate strategy."""
-        if isinstance(existing, (int, float)) and isinstance(
-            incoming, (int, float)
-        ):
+        if isinstance(existing, (int, float)) and isinstance(incoming, (int, float)):
             return existing + incoming
         return incoming

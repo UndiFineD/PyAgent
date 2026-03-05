@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -19,6 +20,7 @@ try:
         beam_score_rust,
         compute_penalties_rust,
     )
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
@@ -62,13 +64,13 @@ class Sampler(ABC):
         probs = _softmax(logits)
         batch_size = probs.shape[0]
         samples = np.zeros(batch_size, dtype=np.int64)
-        
+
         for i in range(batch_size):
             if state and state.rng:
                 samples[i] = state.rng.choice(len(probs[i]), p=probs[i])
             else:
                 samples[i] = np.random.choice(len(probs[i]), p=probs[i])
-        
+
         return samples
 
 
@@ -92,11 +94,11 @@ def _sample_from_probs(
     """Sample token IDs from probability distribution."""
     batch_size = probs.shape[0]
     samples = np.zeros(batch_size, dtype=np.int64)
-    
+
     for i in range(batch_size):
         if state and state.rng:
             samples[i] = state.rng.choice(len(probs[i]), p=probs[i])
         else:
             samples[i] = np.random.choice(len(probs[i]), p=probs[i])
-    
+
     return samples

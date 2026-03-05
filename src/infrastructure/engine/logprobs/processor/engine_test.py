@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "LogprobsProcessor"), "LogprobsProcessor missing"
     assert hasattr(mod, "StreamingLogprobs"), "StreamingLogprobs missing"
-

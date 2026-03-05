@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "BatchUpdateBuilder"), "BatchUpdateBuilder missing"
     assert hasattr(mod, "SamplingMetadata"), "SamplingMetadata missing"
     assert hasattr(mod, "InputBatch"), "InputBatch missing"
-

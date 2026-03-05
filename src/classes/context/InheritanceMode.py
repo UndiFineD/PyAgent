@@ -16,8 +16,10 @@ import logging
 import re
 import zlib
 
+
 class InheritanceMode(Enum):
     """Modes for context inheritance."""
+
     OVERRIDE = "override"
     MERGE = "merge"
     APPEND = "append"

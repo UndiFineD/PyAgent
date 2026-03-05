@@ -14,6 +14,7 @@ def _load_module():
     spec = importlib.util.spec_from_file_location(module_name, p)
     mod = importlib.util.module_from_spec(spec)
     import sys
+
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     return mod
@@ -30,4 +31,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "enable_command"), "enable_command missing"
     assert hasattr(mod, "disable_command"), "disable_command missing"
     assert hasattr(mod, "list_commands"), "list_commands missing"
-

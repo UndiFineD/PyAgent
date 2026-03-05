@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 
 """
@@ -12,8 +13,10 @@ from pathlib import Path
 from src.core.base.common.validation_core import ValidationCore
 from src.core.base.common.models import ValidationRule
 
+
 class ValidationRuleManager:
     """Manages validation rules for agent content."""
+
     def __init__(self, core: ValidationCore | None = None) -> None:
         self._core = core or ValidationCore()
         self._rules: dict[str, Any] = {}
@@ -25,7 +28,7 @@ class ValidationRuleManager:
         pattern: str = "",
         message: str = "Validation failed",
         severity: str = "error",
-        **kwargs
+        **kwargs,
     ) -> None:
         """Add a validation rule. Supports both legacy signature and ValidationRule object."""
         if hasattr(name_or_rule, "name"):
@@ -41,7 +44,7 @@ class ValidationRuleManager:
             "pattern": pattern,
             "message": message,
             "severity": severity,
-            **kwargs
+            **kwargs,
         }
         self._rules[name_or_rule] = rule_obj
         self._core.register_rule(name_or_rule, rule_obj)

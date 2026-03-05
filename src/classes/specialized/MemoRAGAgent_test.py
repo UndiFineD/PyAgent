@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_memoragagent_exists():
     """Test that MemoRAGAgent class exists and is importable."""
-    assert 'MemoRAGAgent' in dir()
+    assert "MemoRAGAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

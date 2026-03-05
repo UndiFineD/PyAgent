@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -67,7 +68,9 @@ class MCPServerRegistry:
                 session = await server.connect()
                 sessions[name] = session
                 self._sessions[name] = session
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.error(f"Failed to connect to {name}: {e}")
         return sessions
 
@@ -76,7 +79,9 @@ class MCPServerRegistry:
         for server in self._servers.values():
             try:
                 await server.disconnect()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                 logger.warning(f"Error disconnecting {server.name}: {e}")
         self._sessions.clear()
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ import time
 
 __version__ = VERSION
 
+
 class FileLockManager:
     """Manages file locks to prevent concurrent modifications.
 
@@ -51,9 +53,12 @@ class FileLockManager:
         self._condition = threading.Condition(self._lock)
         self._owner_id = f"{os.getpid()}_{threading.current_thread().ident}"
 
-    def acquire_lock(self, file_path: Path,
-                     lock_type: LockType = LockType.EXCLUSIVE,
-                     timeout: float | None = None) -> FileLock | None:
+    def acquire_lock(
+        self,
+        file_path: Path,
+        lock_type: LockType = LockType.EXCLUSIVE,
+        timeout: float | None = None,
+    ) -> FileLock | None:
         """Acquire a lock on a file.
 
         Args:
@@ -82,13 +87,15 @@ class FileLockManager:
                         lock_type=lock_type,
                         owner=self._owner_id,
                         acquired_at=time.time(),
-                        expires_at=time.time() + self.lock_timeout
+                        expires_at=time.time() + self.lock_timeout,
                     )
                     self.locks[path_str] = lock
                     logging.debug(f"Acquired {lock_type.name} lock on {file_path}")
                     return lock
-                elif (existing_lock.lock_type == LockType.SHARED and
-                      lock_type == LockType.SHARED):
+                elif (
+                    existing_lock.lock_type == LockType.SHARED
+                    and lock_type == LockType.SHARED
+                ):
                     # Shared locks can coexist
                     return existing_lock
 
@@ -125,7 +132,8 @@ class FileLockManager:
         """Remove expired locks."""
         now = time.time()
         expired = [
-            path for path, lock in self.locks.items()
+            path
+            for path, lock in self.locks.items()
             if lock.expires_at and lock.expires_at < now
         ]
         for path in expired:

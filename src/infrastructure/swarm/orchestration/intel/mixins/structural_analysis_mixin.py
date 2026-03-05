@@ -12,8 +12,9 @@ import re
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import \
-        SelfImprovementAnalysis
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import (
+        SelfImprovementAnalysis,
+    )
 
 
 class StructuralAnalysisMixin:
@@ -21,7 +22,9 @@ class StructuralAnalysisMixin:
 
     def check_versioning(self: SelfImprovementAnalysis) -> dict[str, str] | None:
         """Checks if the mandatory Version.py gatekeeper exists."""
-        version_file = os.path.join(self.workspace_root, "src/core/base/lifecycle/version.py")
+        version_file = os.path.join(
+            self.workspace_root, "src/core/base/lifecycle/version.py"
+        )
         if not os.path.exists(version_file):
             return {
                 "type": "Versioning Issue",
@@ -30,7 +33,11 @@ class StructuralAnalysisMixin:
         return None
 
     def add_structural_findings(
-        self: SelfImprovementAnalysis, findings: list[dict[str, Any]], file_path: str, rel_path: str, content: str
+        self: SelfImprovementAnalysis,
+        findings: list[dict[str, Any]],
+        file_path: str,
+        rel_path: str,
+        content: str,
     ) -> None:
         """Adds size and resilience findings based on file content and metadata."""
         # Size check
@@ -45,8 +52,15 @@ class StructuralAnalysisMixin:
             )
 
         # Resilience check (HTTP pooling)
-        if re.search(r"requests\.(get|post|put|delete|patch|request)\(", content) or "http.client" in content:
-            if "TTL" not in content and "status_cache" not in content.lower() and "ConnectivityManager" not in content:
+        if (
+            re.search(r"requests\.(get|post|put|delete|patch|request)\(", content)
+            or "http.client" in content
+        ):
+            if (
+                "TTL" not in content
+                and "status_cache" not in content.lower()
+                and "ConnectivityManager" not in content
+            ):
                 findings.append(
                     {
                         "type": "Resilience Issue",
@@ -68,7 +82,10 @@ class StructuralAnalysisMixin:
         """Integrates findings from the collective intelligence task pool."""
         if active_tasks:
             for task in active_tasks:
-                if os.path.basename(file_path).lower() in task.get("description", "").lower():
+                if (
+                    os.path.basename(file_path).lower()
+                    in task.get("description", "").lower()
+                ):
                     findings.append(
                         {
                             "type": "Swarm Intelligence Fix",

@@ -34,6 +34,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class SubdomainResult:
     """Result of subdomain enumeration"""
+
     subdomain: str
     source: str
     ip_addresses: List[str] = None
@@ -48,6 +49,7 @@ class SubdomainResult:
 @dataclass
 class ReconConfig:
     """Configuration for reconnaissance operations"""
+
     domain: str
     wordlist: List[str] = None
     max_concurrent: int = 10
@@ -59,14 +61,16 @@ class ReconConfig:
         if self.wordlist is None:
             self.wordlist = []
         if self.sources is None:
-            self.sources = ['dns', 'crtsh', 'threatcrowd']
+            self.sources = ["dns", "crtsh", "threatcrowd"]
 
 
 class IntelligenceSource(ABC):
     """Abstract base class for intelligence sources"""
 
     @abstractmethod
-    async def enumerate_subdomains(self, domain: str, config: ReconConfig) -> List[SubdomainResult]:
+    async def enumerate_subdomains(
+        self, domain: str, config: ReconConfig
+    ) -> List[SubdomainResult]:
         """Enumerate subdomains from this source"""
         pass
 
@@ -89,7 +93,9 @@ class DNSSource(IntelligenceSource):
     def name(self) -> str:
         return "dns"
 
-    async def enumerate_subdomains(self, domain: str, config: ReconConfig) -> List[SubdomainResult]:
+    async def enumerate_subdomains(
+        self, domain: str, config: ReconConfig
+    ) -> List[SubdomainResult]:
         """Brute force subdomains using DNS resolution"""
         results = []
 
@@ -98,7 +104,7 @@ class DNSSource(IntelligenceSource):
             try:
                 # Try A record
                 answers = await asyncio.get_event_loop().run_in_executor(
-                    None, self.resolver.resolve, subdomain, 'A'
+                    None, self.resolver.resolve, subdomain, "A"
                 )
                 ips = [str(rdata) for rdata in answers]
 
@@ -106,7 +112,7 @@ class DNSSource(IntelligenceSource):
                 cname = None
                 try:
                     cname_answers = await asyncio.get_event_loop().run_in_executor(
-                        None, self.resolver.resolve, subdomain, 'CNAME'
+                        None, self.resolver.resolve, subdomain, "CNAME"
                     )
                     cname = str(cname_answers[0])
                 except:
@@ -117,9 +123,13 @@ class DNSSource(IntelligenceSource):
                     source=self.name,
                     ip_addresses=ips,
                     cname=cname,
-                    verified=True
+                    verified=True,
                 )
-            except (dns.resolver.NXDOMAIN, dns.resolver.Timeout, dns.exception.DNSException):
+            except (
+                dns.resolver.NXDOMAIN,
+                dns.resolver.Timeout,
+                dns.exception.DNSException,
+            ):
                 return None
 
         # Process wordlist in batches
@@ -128,17 +138,26 @@ class DNSSource(IntelligenceSource):
         async def process_batch(batch: List[str]):
             tasks = []
             for word in batch:
+
                 async def check_with_semaphore(word: str):
                     async with semaphore:
                         return await check_subdomain(word)
+
                 tasks.append(check_with_semaphore(word))
 
             batch_results = await asyncio.gather(*tasks, return_exceptions=True)
-            return [r for r in batch_results if r is not None and not isinstance(r, Exception)]
+            return [
+                r
+                for r in batch_results
+                if r is not None and not isinstance(r, Exception)
+            ]
 
         # Split wordlist into batches
         batch_size = config.max_concurrent
-        batches = [config.wordlist[i:i + batch_size] for i in range(0, len(config.wordlist), batch_size)]
+        batches = [
+            config.wordlist[i : i + batch_size]
+            for i in range(0, len(config.wordlist), batch_size)
+        ]
 
         for batch in batches:
             batch_results = await process_batch(batch)
@@ -154,33 +173,39 @@ class CertificateTransparencySource(IntelligenceSource):
     def name(self) -> str:
         return "crtsh"
 
-    async def enumerate_subdomains(self, domain: str, config: ReconConfig) -> List[SubdomainResult]:
+    async def enumerate_subdomains(
+        self, domain: str, config: ReconConfig
+    ) -> List[SubdomainResult]:
         """Query crt.sh for certificate transparency logs"""
         results = []
 
         url = f"https://crt.sh/?q=%.{domain}&output=json"
 
         try:
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=config.timeout)) as session:
+            async with aiohttp.ClientSession(
+                timeout=aiohttp.ClientTimeout(total=config.timeout)
+            ) as session:
                 async with session.get(url) as response:
                     if response.status == 200:
                         data = await response.json()
 
                         seen = set()
                         for cert in data:
-                            name_value = cert.get('name_value', '')
+                            name_value = cert.get("name_value", "")
                             if name_value and domain in name_value:
                                 # Handle wildcard certificates
-                                if name_value.startswith('*.'):
+                                if name_value.startswith("*."):
                                     name_value = name_value[2:]
 
                                 if name_value not in seen:
                                     seen.add(name_value)
-                                    results.append(SubdomainResult(
-                                        subdomain=name_value,
-                                        source=self.name,
-                                        verified=False  # CT logs don't guarantee the subdomain exists
-                                    ))
+                                    results.append(
+                                        SubdomainResult(
+                                            subdomain=name_value,
+                                            source=self.name,
+                                            verified=False,  # CT logs don't guarantee the subdomain exists
+                                        )
+                                    )
 
         except Exception as e:
             logger.warning(f"Error querying crt.sh: {e}")
@@ -195,26 +220,32 @@ class ThreatCrowdSource(IntelligenceSource):
     def name(self) -> str:
         return "threatcrowd"
 
-    async def enumerate_subdomains(self, domain: str, config: ReconConfig) -> List[SubdomainResult]:
+    async def enumerate_subdomains(
+        self, domain: str, config: ReconConfig
+    ) -> List[SubdomainResult]:
         """Query ThreatCrowd API for subdomains"""
         results = []
 
         url = f"https://www.threatcrowd.org/searchApi/v2/domain/report/?domain={domain}"
 
         try:
-            async with aiohttp.ClientSession(timeout=aiohttp.ClientTimeout(total=config.timeout)) as session:
+            async with aiohttp.ClientSession(
+                timeout=aiohttp.ClientTimeout(total=config.timeout)
+            ) as session:
                 async with session.get(url) as response:
                     if response.status == 200:
                         data = await response.json()
 
-                        if data.get('response_code') == '1':
-                            subdomains = data.get('subdomains', [])
+                        if data.get("response_code") == "1":
+                            subdomains = data.get("subdomains", [])
                             for subdomain in subdomains:
-                                results.append(SubdomainResult(
-                                    subdomain=subdomain,
-                                    source=self.name,
-                                    verified=False
-                                ))
+                                results.append(
+                                    SubdomainResult(
+                                        subdomain=subdomain,
+                                        source=self.name,
+                                        verified=False,
+                                    )
+                                )
 
         except Exception as e:
             logger.warning(f"Error querying ThreatCrowd: {e}")
@@ -235,9 +266,9 @@ class ReconnaissanceCore:
 
     def _register_sources(self):
         """Register available intelligence sources"""
-        self.sources['dns'] = DNSSource()
-        self.sources['crtsh'] = CertificateTransparencySource()
-        self.sources['threatcrowd'] = ThreatCrowdSource()
+        self.sources["dns"] = DNSSource()
+        self.sources["crtsh"] = CertificateTransparencySource()
+        self.sources["threatcrowd"] = ThreatCrowdSource()
 
     async def enumerate_subdomains(self, config: ReconConfig) -> List[SubdomainResult]:
         """
@@ -287,7 +318,7 @@ class ReconnaissanceCore:
                 # Try to resolve the subdomain
                 try:
                     answers = await asyncio.get_event_loop().run_in_executor(
-                        None, dns.resolver.resolve, result.subdomain, 'A'
+                        None, dns.resolver.resolve, result.subdomain, "A"
                     )
                     result.ip_addresses = [str(rdata) for rdata in answers]
                     result.verified = True
@@ -299,6 +330,7 @@ class ReconnaissanceCore:
         tasks = []
 
         for result in results:
+
             async def verify_with_semaphore(result: SubdomainResult):
                 async with semaphore:
                     await verify_result(result)
@@ -307,7 +339,9 @@ class ReconnaissanceCore:
 
         await asyncio.gather(*tasks)
 
-    def generate_wordlist(self, patterns: List[str], payloads: Dict[str, List[str]]) -> List[str]:
+    def generate_wordlist(
+        self, patterns: List[str], payloads: Dict[str, List[str]]
+    ) -> List[str]:
         """
         Generate subdomain wordlist using DSL patterns
         Based on alterx pattern generation
@@ -315,11 +349,20 @@ class ReconnaissanceCore:
         wordlist = set()
 
         # Default payloads if not provided
-        if 'word' not in payloads:
-            payloads['word'] = ['api', 'dev', 'test', 'staging', 'admin', 'www', 'mail', 'ftp']
+        if "word" not in payloads:
+            payloads["word"] = [
+                "api",
+                "dev",
+                "test",
+                "staging",
+                "admin",
+                "www",
+                "mail",
+                "ftp",
+            ]
 
-        if 'number' not in payloads:
-            payloads['number'] = [str(i) for i in range(1, 10)]
+        if "number" not in payloads:
+            payloads["number"] = [str(i) for i in range(1, 10)]
 
         # Process each pattern
         for pattern in patterns:
@@ -329,7 +372,9 @@ class ReconnaissanceCore:
 
         return list(wordlist)
 
-    def _expand_pattern(self, pattern: str, payloads: Dict[str, List[str]]) -> List[str]:
+    def _expand_pattern(
+        self, pattern: str, payloads: Dict[str, List[str]]
+    ) -> List[str]:
         """Expand a single pattern with payloads"""
         # Simple implementation - replace {{variable}} with payload values
         results = [pattern]

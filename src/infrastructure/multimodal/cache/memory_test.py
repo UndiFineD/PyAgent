@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_memorymultimodalcache_exists():
     """Test that MemoryMultiModalCache class exists and is importable."""
-    assert 'MemoryMultiModalCache' in dir()
+    assert "MemoryMultiModalCache" in dir()
 
 
 def test_perceptualcache_exists():
     """Test that PerceptualCache class exists and is importable."""
-    assert 'PerceptualCache' in dir()
+    assert "PerceptualCache" in dir()
 
 
 def test_prefetchmultimodalcache_exists():
     """Test that PrefetchMultiModalCache class exists and is importable."""
-    assert 'PrefetchMultiModalCache' in dir()
+    assert "PrefetchMultiModalCache" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

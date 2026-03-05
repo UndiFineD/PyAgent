@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "create_regex_constraint"), "create_regex_constraint missing"
     assert hasattr(mod, "create_choice_constraint"), "create_choice_constraint missing"
     assert hasattr(mod, "combine_constraints"), "combine_constraints missing"
-

@@ -16,8 +16,10 @@ import logging
 import re
 import zlib
 
+
 class ExportFormat(Enum):
     """Formats for context export."""
+
     MARKDOWN = "markdown"
     HTML = "html"
     PDF = "pdf"

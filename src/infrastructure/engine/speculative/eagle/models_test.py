@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "DraftOutput"), "DraftOutput missing"
     assert hasattr(mod, "DraftModelWrapper"), "DraftModelWrapper missing"
     assert hasattr(mod, "SimpleDraftModel"), "SimpleDraftModel missing"
-

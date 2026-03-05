@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_codequalitymodule_exists():
     """Test that CodeQualityModule class exists and is importable."""
-    assert 'CodeQualityModule' in dir()
+    assert "CodeQualityModule" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

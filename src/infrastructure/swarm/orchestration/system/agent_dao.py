@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,7 +64,9 @@ class AgentDAO(BaseAgent):
         # Simulated prioritization logic
         logging.info(f"AgentDAO: Prioritizing {len(task_queue)} tasks.")
 
-        return sorted(task_queue)  # Default to alpha for mock, in real it would use consensus weight
+        return sorted(
+            task_queue
+        )  # Default to alpha for mock, in real it would use consensus weight
 
     async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """DAO content optimization (stub)."""

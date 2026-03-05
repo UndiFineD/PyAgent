@@ -21,12 +21,13 @@ from dataclasses import dataclass
 # Logic ported:
 # - Basic subdomain resolution (resolve_host)
 # - Brute force orchestration (brute_force_subdomains)
-# 
+#
 # Missing/TODO:
 # - Custom resolvers (requires dnspython or aiodns)
 # - Recursive spidering
 # - "ANY" query type support
 # - Wildcard detection
+
 
 @dataclass
 class DNSScanResult:
@@ -37,14 +38,16 @@ class DNSScanResult:
     def __repr__(self):
         return f"<DNSScanResult {self.hostname} -> {self.ip}>"
 
+
 class DNSIntelligence:
     """
     Async DNS scanning and intelligence gathering.
     Refactored from subbrute logic.
     """
+
     def __init__(self, resolvers: List[str] = None):
         self.resolvers = resolvers or ["8.8.8.8", "1.1.1.1"]
-    
+
     async def resolve_host(self, hostname: str) -> Optional[DNSScanResult]:
         """
         Resolve a single hostname to IP asynchronously.
@@ -67,7 +70,9 @@ class DNSIntelligence:
             return None
         return None
 
-    async def brute_force_subdomains(self, domain: str, wordlist: List[str], concurrency: int = 50) -> List[DNSScanResult]:
+    async def brute_force_subdomains(
+        self, domain: str, wordlist: List[str], concurrency: int = 50
+    ) -> List[DNSScanResult]:
         """
         Brute force subdomains using a wordlist with controlled concurrency.
         """
@@ -81,7 +86,7 @@ class DNSIntelligence:
 
         tasks = [worker(word) for word in wordlist]
         scan_results = await asyncio.gather(*tasks)
-        
+
         for res in scan_results:
             if res:
                 results.append(res)
@@ -93,6 +98,7 @@ class DNSIntelligence:
         """
         # Generate a random non-existent subdomain
         import uuid
+
         random_sub = f"{uuid.uuid4().hex[:8]}.{domain}"
         result = await self.resolve_host(random_sub)
         return result is not None

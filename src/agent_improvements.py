@@ -22,9 +22,9 @@ from src.classes.improvements import *
 # Create main function using the helper
 main = create_main_function(
     ImprovementsAgent,
-    'Improvements Agent: Maintains and improves improvement suggestions',
-    'Path to the improvements file (e.g., file.improvements.md)'
+    "Improvements Agent: Maintains and improves improvement suggestions",
+    "Path to the improvements file (e.g., file.improvements.md)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

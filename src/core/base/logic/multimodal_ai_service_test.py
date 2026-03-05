@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_aiserviceconfig_exists():
     """Test that AIServiceConfig class exists and is importable."""
-    assert 'AIServiceConfig' in dir()
+    assert "AIServiceConfig" in dir()
 
 
 def test_aiserviceprovider_exists():
     """Test that AIServiceProvider class exists and is importable."""
-    assert 'AIServiceProvider' in dir()
+    assert "AIServiceProvider" in dir()
 
 
 def test_openaiprovider_exists():
     """Test that OpenAIProvider class exists and is importable."""
-    assert 'OpenAIProvider' in dir()
+    assert "OpenAIProvider" in dir()
 
 
 def test_cloudflareprovider_exists():
     """Test that CloudflareProvider class exists and is importable."""
-    assert 'CloudflareProvider' in dir()
+    assert "CloudflareProvider" in dir()
 
 
 def test_multimodalaiservice_exists():
     """Test that MultimodalAIService class exists and is importable."""
-    assert 'MultimodalAIService' in dir()
+    assert "MultimodalAIService" in dir()
 
 
 def test_multimodalaiservice_instantiation():
@@ -65,4 +65,3 @@ def test_multimodalaiservice_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

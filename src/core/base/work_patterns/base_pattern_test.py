@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_workpattern_exists():
     """Test that WorkPattern class exists and is importable."""
-    assert 'WorkPattern' in dir()
+    assert "WorkPattern" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -21,6 +21,7 @@ from dataclasses import dataclass
 # - WAF Signatures (JSON to Python List)
 # - Header/Content matching logic
 
+
 @dataclass
 class WAFSignature:
     waf_name: str
@@ -37,22 +38,23 @@ class WAFSignature:
         for key, value in headers.items():
             if self.header_only:
                 if self.keyword in key or self.keyword in value:
-                     # Refine with regex if needed, but keyword is fast check
+                    # Refine with regex if needed, but keyword is fast check
                     if re.search(self.regex, f"{key}: {value}", re.IGNORECASE):
                         return True
-        
+
         # Check content if not header only (though most in list are header only)
         if not self.header_only and content:
             if re.search(self.regex, content, re.IGNORECASE):
                 return True
-                
+
         return False
+
 
 class WAFIntelligence:
     """
     WAF Detection Logic ported from external sources.
     """
-    
+
     # Partial list ported from 0xSojalSec-dnsresolver
     SIGNATURES_DATA = [
         {
@@ -60,50 +62,50 @@ class WAFIntelligence:
             "KEYWORD": "X-Powered-By-360WZB",
             "REGEX": r"^X-Powered-By-360WZB",
             "HEADER_ONLY": True,
-            "DESCRIPTION": "360WangZhanBao"
+            "DESCRIPTION": "360WangZhanBao",
         },
         {
             "WAF_NAME": "Akamai",
             "KEYWORD": "ak_bmsc",
             "REGEX": r"^Set-Cookie: ak_bmsc=",
             "HEADER_ONLY": True,
-            "DESCRIPTION": "Akamai Global Host"
+            "DESCRIPTION": "Akamai Global Host",
         },
         {
-           "WAF_NAME": "Akamai",
-           "KEYWORD": "AkamaiGHost",
-           "REGEX": r"^Server: AkamaiGHost",
-           "HEADER_ONLY": True,
-           "DESCRIPTION": "Akamai Global Host"
+            "WAF_NAME": "Akamai",
+            "KEYWORD": "AkamaiGHost",
+            "REGEX": r"^Server: AkamaiGHost",
+            "HEADER_ONLY": True,
+            "DESCRIPTION": "Akamai Global Host",
         },
         {
             "WAF_NAME": "Cloudflare",
             "KEYWORD": "cloudflare",
             "REGEX": r"^Server: cloudflare",
             "HEADER_ONLY": True,
-            "DESCRIPTION": "Cloudflare"
+            "DESCRIPTION": "Cloudflare",
         },
         {
             "WAF_NAME": "F5 Big-IP",
             "KEYWORD": "BIG-IP",
             "REGEX": r"^Server: BIG-IP",
             "HEADER_ONLY": True,
-            "DESCRIPTION": "F5 BIG-IP APM"
+            "DESCRIPTION": "F5 BIG-IP APM",
         },
         {
             "WAF_NAME": "Incapsula",
             "KEYWORD": "incap_ses",
             "REGEX": r"^Set-Cookie: incap_ses",
             "HEADER_ONLY": True,
-            "DESCRIPTION": "Incapsula WAF"
+            "DESCRIPTION": "Incapsula WAF",
         },
         {
             "WAF_NAME": "ModSecurity",
             "KEYWORD": "mod_security",
             "REGEX": r"^Server: mod_security",
             "HEADER_ONLY": True,
-            "DESCRIPTION": "Trustwave ModSecurity"
-        }
+            "DESCRIPTION": "Trustwave ModSecurity",
+        },
         # ... Add more signature loading logic here or load from external JSON
     ]
 
@@ -114,7 +116,7 @@ class WAFIntelligence:
                 keyword=s["KEYWORD"],
                 regex=s["REGEX"],
                 header_only=s["HEADER_ONLY"],
-                description=s["DESCRIPTION"]
+                description=s["DESCRIPTION"],
             )
             for s in self.SIGNATURES_DATA
         ]

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -236,7 +237,9 @@ class RequestState:
             stream_interval=stream_interval,
         )
 
-    def add_event(self, event_type: EventType, details: Optional[Dict[str, Any]] = None) -> None:
+    def add_event(
+        self, event_type: EventType, details: Optional[Dict[str, Any]] = None
+    ) -> None:
         """Add an event to the request."""
         self.events.append(RequestEvent(event_type=event_type, details=details))
 
@@ -322,7 +325,9 @@ class LoRARequestStates:
         if lora_request:
             self.active_loras[lora_request.lora_id].add(request_id)
 
-    def remove_request(self, request_id: str, lora_request: Optional[LoRARequest]) -> None:
+    def remove_request(
+        self, request_id: str, lora_request: Optional[LoRARequest]
+    ) -> None:
         """Remove request from LoRA tracking."""
         if lora_request and lora_request.lora_id in self.active_loras:
             self.active_loras[lora_request.lora_id].discard(request_id)

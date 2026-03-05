@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "MemoryMultiModalCache"), "MemoryMultiModalCache missing"
     assert hasattr(mod, "PerceptualCache"), "PerceptualCache missing"
     assert hasattr(mod, "PrefetchMultiModalCache"), "PrefetchMultiModalCache missing"
-

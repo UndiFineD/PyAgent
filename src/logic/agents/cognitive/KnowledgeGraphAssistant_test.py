@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_knowledgegraphassistant_exists():
     """Test that KnowledgeGraphAssistant class exists and is importable."""
-    assert 'KnowledgeGraphAssistant' in dir()
+    assert "KnowledgeGraphAssistant" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

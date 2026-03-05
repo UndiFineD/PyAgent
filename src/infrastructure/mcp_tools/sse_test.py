@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_ssemcpserver_exists():
     """Test that SSEMCPServer class exists and is importable."""
-    assert 'SSEMCPServer' in dir()
+    assert "SSEMCPServer" in dir()
 
 
 def test_mocksseclient_exists():
     """Test that MockSSEClient class exists and is importable."""
-    assert 'MockSSEClient' in dir()
+    assert "MockSSEClient" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

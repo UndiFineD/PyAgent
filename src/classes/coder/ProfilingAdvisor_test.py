@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_profilingagent_exists():
     """Test that ProfilingAgent class exists and is importable."""
-    assert 'ProfilingAgent' in dir()
+    assert "ProfilingAgent" in dir()
 
 
 def test_profilingagent_instantiation():
@@ -45,4 +45,3 @@ def test_profilingagent_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

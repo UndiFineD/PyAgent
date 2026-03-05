@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,7 +28,19 @@ from collections import deque
 from contextlib import contextmanager
 from dataclasses import dataclass
 from enum import Enum, auto
-from typing import (Any, Callable, Dict, Generic, Iterator, List, Optional, Protocol, Set, TypeVar, runtime_checkable)
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Generic,
+    Iterator,
+    List,
+    Optional,
+    Protocol,
+    Set,
+    TypeVar,
+    runtime_checkable,
+)
 
 T = TypeVar("T")
 
@@ -205,8 +218,10 @@ class ConnectionPool(Generic[T]):
                 if conn:
                     self._idle.append(conn)
                     self._stats.current_idle += 1
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 self._stats.failed_creates += 1
 
     def _create_connection(self) -> Optional[PooledConnection[T]]:
@@ -222,8 +237,10 @@ class ConnectionPool(Generic[T]):
                 last_used_at=now,
                 state=ConnectionState.IDLE,
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+            # pylint: disable=broad-exception-caught
             self._stats.failed_creates += 1
             raise
 
@@ -244,8 +261,10 @@ class ConnectionPool(Generic[T]):
                 if not conn.ping():
                     self._stats.failed_health_checks += 1
                     return False
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 self._stats.failed_health_checks += 1
                 return False
 
@@ -259,8 +278,10 @@ class ConnectionPool(Generic[T]):
         if isinstance(conn, Closeable):
             try:
                 conn.close()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except (
+                Exception
+            ) as e:  # pylint: disable=broad-exception-caught, unused-variable
+                # pylint: disable=broad-exception-caught
                 pass
 
         self._stats.closed += 1
@@ -295,7 +316,9 @@ class ConnectionPool(Generic[T]):
                     self._stats.current_idle -= 1
 
                     # Validate if required
-                    if self._validate_on_acquire and not self._validate_connection(pooled):
+                    if self._validate_on_acquire and not self._validate_connection(
+                        pooled
+                    ):
                         self._close_connection(pooled)
                         continue
 
@@ -321,7 +344,9 @@ class ConnectionPool(Generic[T]):
                 total = self._stats.current_idle + self._stats.current_in_use
                 if total < self._max_size:
                     with contextlib.suppress(Exception):
-                        new_pooled: Optional[PooledConnection[T]] = self._create_connection()
+                        new_pooled: Optional[PooledConnection[T]] = (
+                            self._create_connection()
+                        )
                         if new_pooled:
                             new_pooled.state = ConnectionState.IN_USE
                             new_pooled.use_count = 1

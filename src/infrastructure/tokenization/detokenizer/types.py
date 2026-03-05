@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """
@@ -15,6 +16,7 @@ from typing import (
     Union,
     runtime_checkable,
 )
+
 
 @runtime_checkable
 class TokenizerLike(Protocol):
@@ -59,11 +61,13 @@ class TokenizerLike(Protocol):
         """Get the end-of-sequence token ID."""
         ...
 
+
 @dataclass
 class DetokenizeResult:
     """
     Result of incremental detokenization.
     """
+
     new_text: str
     full_text: str
     prefix_offset: int = 0

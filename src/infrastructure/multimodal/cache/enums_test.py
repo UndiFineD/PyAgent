@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_mediatype_exists():
     """Test that MediaType class exists and is importable."""
-    assert 'MediaType' in dir()
+    assert "MediaType" in dir()
 
 
 def test_cachebackend_exists():
     """Test that CacheBackend class exists and is importable."""
-    assert 'CacheBackend' in dir()
+    assert "CacheBackend" in dir()
 
 
 def test_hashalgorithm_exists():
     """Test that HashAlgorithm class exists and is importable."""
-    assert 'HashAlgorithm' in dir()
+    assert "HashAlgorithm" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

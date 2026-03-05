@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,8 +26,9 @@ from collections.abc import Callable
 from queue import PriorityQueue
 
 from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import (
+    LocalContextRecorder,
+)
 
 from .queued_request import QueuedRequest
 from .request_priority import RequestPriority
@@ -47,7 +49,9 @@ class RequestQueue:
         request=queue.dequeue()
     """
 
-    def __init__(self, max_size: int = 1000, recorder: LocalContextRecorder | None = None) -> None:
+    def __init__(
+        self, max_size: int = 1000, recorder: LocalContextRecorder | None = None
+    ) -> None:
         """Initialize request queue.
 
         Args:
@@ -89,7 +93,9 @@ class RequestQueue:
             self._pending[request_id] = request
 
         if self.recorder:
-            self.recorder.record_lesson("request_queued", {"id": request_id, "priority": priority.name})
+            self.recorder.record_lesson(
+                "request_queued", {"id": request_id, "priority": priority.name}
+            )
 
         logging.debug(f"Queued request {request_id} with priority {priority.name}")
         return request_id
@@ -108,7 +114,9 @@ class RequestQueue:
             with self._lock:
                 self._pending.pop(request.request_id, None)
             return request
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return None
 
     def size(self) -> int:

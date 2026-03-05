@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_lazymodule_exists():
     """Test that LazyModule class exists and is importable."""
-    assert 'LazyModule' in dir()
+    assert "LazyModule" in dir()
 
 
 def test_lazyimport_exists():
     """Test that LazyImport class exists and is importable."""
-    assert 'LazyImport' in dir()
+    assert "LazyImport" in dir()
 
 
 def test_deferredimport_exists():
     """Test that DeferredImport class exists and is importable."""
-    assert 'DeferredImport' in dir()
+    assert "DeferredImport" in dir()
 
 
 def test_lazy_import_exists():
@@ -64,4 +64,3 @@ def test_require_import_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

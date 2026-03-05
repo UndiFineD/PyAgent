@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Shim for agent_tests.models expected under src.classes.agent_tests."""
+
 try:
     from importlib import import_module
 

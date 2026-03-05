@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_secretcore_exists():
     """Test that SecretCore class exists and is importable."""
-    assert 'SecretCore' in dir()
+    assert "SecretCore" in dir()
 
 
 def test_secretcore_instantiation():
@@ -45,4 +45,3 @@ def test_secretcore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

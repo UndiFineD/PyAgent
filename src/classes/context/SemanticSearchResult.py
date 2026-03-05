@@ -16,6 +16,7 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class SemanticSearchResult:
     """Result from semantic code search.
@@ -27,6 +28,7 @@ class SemanticSearchResult:
         context_type: Type of context matched.
         line_range: Tuple of start and end line numbers.
     """
+
     file_path: str
     content_snippet: str
     similarity_score: float

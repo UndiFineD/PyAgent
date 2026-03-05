@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,7 +49,9 @@ class ExternalAIRecorderAgent(BaseAgent):
         )
 
     @as_tool
-    def record_external_interaction(self, external_ai_name: str, prompt: str, context: str, response: str) -> str:
+    def record_external_interaction(
+        self, external_ai_name: str, prompt: str, context: str, response: str
+    ) -> str:
         """Saves a session with an external AI to the local learning archive.
         Args:
             external_ai_name: Name of the external system (e.g., 'Claude-3.5', 'GPT-4o').
@@ -79,7 +82,9 @@ class ExternalAIRecorderAgent(BaseAgent):
             with open(self.archive_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry) + "\n")
             return f"Successfully recorded interaction from {external_ai_name}. Local knowledge enriched."
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error recording interaction: {e}"
 
     @as_tool

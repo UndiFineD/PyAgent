@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_agentcore_exists():
     """Test that AgentCore class exists and is importable."""
-    assert 'AgentCore' in dir()
+    assert "AgentCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

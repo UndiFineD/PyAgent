@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_chunkedprefillmanager_exists():
     """Test that ChunkedPrefillManager class exists and is importable."""
-    assert 'ChunkedPrefillManager' in dir()
+    assert "ChunkedPrefillManager" in dir()
 
 
 def test_create_prefill_manager_exists():
@@ -49,4 +49,3 @@ def test_chunk_prompt_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

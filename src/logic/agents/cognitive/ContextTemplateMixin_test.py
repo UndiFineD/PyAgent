@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_contexttemplatemixin_exists():
     """Test that ContextTemplateMixin class exists and is importable."""
-    assert 'ContextTemplateMixin' in dir()
+    assert "ContextTemplateMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,52 +33,52 @@ except ImportError as e:
 
 def test_attentionbackend_exists():
     """Test that AttentionBackend class exists and is importable."""
-    assert 'AttentionBackend' in dir()
+    assert "AttentionBackend" in dir()
 
 
 def test_precisionmode_exists():
     """Test that PrecisionMode class exists and is importable."""
-    assert 'PrecisionMode' in dir()
+    assert "PrecisionMode" in dir()
 
 
 def test_attentionconfig_exists():
     """Test that AttentionConfig class exists and is importable."""
-    assert 'AttentionConfig' in dir()
+    assert "AttentionConfig" in dir()
 
 
 def test_attentionmetadata_exists():
     """Test that AttentionMetadata class exists and is importable."""
-    assert 'AttentionMetadata' in dir()
+    assert "AttentionMetadata" in dir()
 
 
 def test_attentionkernel_exists():
     """Test that AttentionKernel class exists and is importable."""
-    assert 'AttentionKernel' in dir()
+    assert "AttentionKernel" in dir()
 
 
 def test_tritonpagedattention_exists():
     """Test that TritonPagedAttention class exists and is importable."""
-    assert 'TritonPagedAttention' in dir()
+    assert "TritonPagedAttention" in dir()
 
 
 def test_naiveattention_exists():
     """Test that NaiveAttention class exists and is importable."""
-    assert 'NaiveAttention' in dir()
+    assert "NaiveAttention" in dir()
 
 
 def test_slidingwindowattention_exists():
     """Test that SlidingWindowAttention class exists and is importable."""
-    assert 'SlidingWindowAttention' in dir()
+    assert "SlidingWindowAttention" in dir()
 
 
 def test_kvsplitconfig_exists():
     """Test that KVSplitConfig class exists and is importable."""
-    assert 'KVSplitConfig' in dir()
+    assert "KVSplitConfig" in dir()
 
 
 def test_tritonattentionops_exists():
     """Test that TritonAttentionOps class exists and is importable."""
-    assert 'TritonAttentionOps' in dir()
+    assert "TritonAttentionOps" in dir()
 
 
 def test_create_attention_ops_exists():
@@ -89,4 +89,3 @@ def test_create_attention_ops_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

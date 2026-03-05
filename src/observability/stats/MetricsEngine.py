@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
 
@@ -238,7 +239,7 @@ class ObservabilityEngine:
             summary["agents"][name] = {
                 "calls": data["calls"],
                 "avg_latency": round(data["latency"] / data["calls"], 2),
-                "total_cost": round(data["cost"], 6)
+                "total_cost": round(data["cost"], 6),
             }
 
         return summary
@@ -263,18 +264,19 @@ class ObservabilityEngine:
                 self.metrics = []
 
 
-
-
 class TokenCostEngine:
     def __init__(self):
         self.core = TokenCostCore()
+
     def calculate_cost(self, model, input_tokens=0, output_tokens=0):
         res = self.core.calculate_cost(input_tokens, output_tokens, model)
         return res.total_cost
+
 
 class ModelFallbackEngine:
     def __init__(self, cost_engine=None):
         self.cost_engine = cost_engine
         self.core = ModelFallbackCore()
+
     def get_fallback_model(self, current_model):
         return self.core.determine_next_model(current_model)

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +35,9 @@ class ReleaseNotesGenerator:
         >>> notes=generator.generate("1.0.0", entries)
     """
 
-    def generate(self, version: str, entries: list[ChangelogEntry], title: str | None = None) -> ReleaseNote:
+    def generate(
+        self, version: str, entries: list[ChangelogEntry], title: str | None = None
+    ) -> ReleaseNote:
         """Generate release notes from entries.
 
         Args:
@@ -46,10 +49,18 @@ class ReleaseNotesGenerator:
             Generated ReleaseNote.
         """
         # Extract highlights (high priority or high severity)
-        highlights = [e.description for e in entries if e.priority >= 2 or e.severity in ("high", "critical")]
+        highlights = [
+            e.description
+            for e in entries
+            if e.priority >= 2 or e.severity in ("high", "critical")
+        ]
 
         # Extract breaking changes
-        breaking = [e.description for e in entries if "breaking" in e.description.lower() or "breaking" in e.tags]
+        breaking = [
+            e.description
+            for e in entries
+            if "breaking" in e.description.lower() or "breaking" in e.tags
+        ]
 
         # Generate summary
         summary = f"Release {version} includes {len(entries)} changes"

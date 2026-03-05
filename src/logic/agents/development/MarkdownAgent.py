@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Recovered and standardized for Phase 317
 
@@ -19,10 +20,12 @@ import logging
 
 __version__ = VERSION
 
+
 class MarkdownAgent(BaseAgent):
     """
     MarkdownAgent specializing in technical documentation and markdown optimization.
     """
+
     def __init__(self, file_path: str, **kwargs) -> None:
         super().__init__(file_path, **kwargs)
         self._system_prompt = (
@@ -32,4 +35,3 @@ class MarkdownAgent(BaseAgent):
 
     def _get_default_content(self) -> str:
         return "# New Documentation\n\nContent pending..."
-

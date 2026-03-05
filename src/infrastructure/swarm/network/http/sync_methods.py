@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -59,7 +60,9 @@ class SyncHTTPMixin:
         allow_redirects: bool = True,
     ) -> bytes:
         """GET request returning response body as bytes."""
-        with self.get_response(url, timeout=timeout, allow_redirects=allow_redirects) as r:
+        with self.get_response(
+            url, timeout=timeout, allow_redirects=allow_redirects
+        ) as r:
             r.raise_for_status()
             return r.content
 
@@ -130,7 +133,7 @@ class SyncHTTPMixin:
             total_size = int(r.headers.get("content-length", 0)) or None
             downloaded = 0
 
-            with save_path.open("wb", encoding='utf-8') as f:
+            with save_path.open("wb", encoding="utf-8") as f:
                 for chunk in r.iter_content(chunk_size=chunk_size):
                     f.write(chunk)
                     downloaded += len(chunk)

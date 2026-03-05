@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,6 +33,7 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class DynamicDecomposerAgent(BaseAgent):
     """Orchestrates complex task splitting and routes sub-tasks to specialized agents based on load."""
 
@@ -52,20 +54,36 @@ class DynamicDecomposerAgent(BaseAgent):
             available_agents: List of agent names currently active.
         """
         logging.info(f"DynamicDecomposer: Decomposing task: {complex_task[:50]}...")
-        
+
         # In a real implementation, this would involve LLM reasoning to split the task
         # and assign them to the best suited agents.
-        
+
         decomposition = {
             "root_task": complex_task,
             "sub_tasks": [
-                {"id": 1, "task": "Initial research and context collection", "assigned_to": "ResearchAgent"},
-                {"id": 2, "task": "Data analysis and synthesis", "assigned_to": "ReasoningAgent"},
-                {"id": 3, "task": "Execution and implementation", "assigned_to": "CoderAgent"},
-                {"id": 4, "task": "Final validation and reporting", "assigned_to": "LinguisticAgent"}
-            ]
+                {
+                    "id": 1,
+                    "task": "Initial research and context collection",
+                    "assigned_to": "ResearchAgent",
+                },
+                {
+                    "id": 2,
+                    "task": "Data analysis and synthesis",
+                    "assigned_to": "ReasoningAgent",
+                },
+                {
+                    "id": 3,
+                    "task": "Execution and implementation",
+                    "assigned_to": "CoderAgent",
+                },
+                {
+                    "id": 4,
+                    "task": "Final validation and reporting",
+                    "assigned_to": "LinguisticAgent",
+                },
+            ],
         }
-        
+
         return f"### Optimized Task Decomposition\n\n```json\n{json.dumps(decomposition, indent=2)}\n```"
 
     @as_tool
@@ -76,7 +94,13 @@ class DynamicDecomposerAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         return "Task decomposition workflows are optimized for maximum parallelization."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(DynamicDecomposerAgent, "Dynamic Decomposer Agent", "Task splitting and routing optimizer")
+
+    main = create_main_function(
+        DynamicDecomposerAgent,
+        "Dynamic Decomposer Agent",
+        "Task splitting and routing optimizer",
+    )
     main()

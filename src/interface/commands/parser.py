@@ -27,7 +27,9 @@ from typing import Any, ClassVar
 # `src.` prefix in sys.path.  We attempt a normal relative import first
 # then fall back to dynamically loading the module files by path.
 import importlib.util, os, sys
+
 _pkg_dir = os.path.dirname(__file__)
+
 
 def _load_local(name: str):
     # name may contain path separators to refer to subpackages
@@ -42,6 +44,7 @@ def _load_local(name: str):
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)  # type: ignore[attr-defined]
     return mod
+
 
 # Always load local modules via file path to avoid confusing the
 # import system when the package name contains ``src.``
@@ -65,7 +68,9 @@ logger = logging.getLogger(__name__)
 
 
 # Pattern: /command or /command arg1 arg2 (up to newline or next command)
-COMMAND_PATTERN = re.compile(r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)", re.MULTILINE)
+COMMAND_PATTERN = re.compile(
+    r"/([a-zA-Z_][a-zA-Z0-9_]*)(?:\s+([^/\n]+?))?(?=\s*/[a-zA-Z]|\s*$|\n)", re.MULTILINE
+)
 
 
 def parse_commands(prompt: str) -> list[ParsedCommand]:
@@ -126,7 +131,9 @@ class CommandParser:
             prefix: Command prefix (default: "/")
             include_builtins: Whether to include built-in commands
         """
-        self.registry = registry or (self._global_registry if include_builtins else CommandRegistry())
+        self.registry = registry or (
+            self._global_registry if include_builtins else CommandRegistry()
+        )
         self.prefix = prefix
 
         # Ensure builtins are registered
@@ -139,7 +146,9 @@ class CommandParser:
         """Parse commands from prompt without executing."""
         return parse_commands(prompt)
 
-    def execute(self, command: str, args: list[str] | None = None, **metadata: Any) -> CommandResult:
+    def execute(
+        self, command: str, args: list[str] | None = None, **metadata: Any
+    ) -> CommandResult:
         """
         Execute a single command.
 
@@ -156,7 +165,9 @@ class CommandParser:
             return CommandResult.fail(f"Unknown command: {command}")
 
         if defn.requires_args and not args:
-            return CommandResult.fail(f"Command /{command} requires arguments. Usage: {defn.usage}")
+            return CommandResult.fail(
+                f"Command /{command} requires arguments. Usage: {defn.usage}"
+            )
 
         ctx = CommandContext(
             command=command,
@@ -166,7 +177,9 @@ class CommandParser:
 
         try:
             return defn.handler(ctx)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.exception("Failed to execute command /%s", command)
             return CommandResult.fail(str(e))
 
@@ -197,7 +210,9 @@ class CommandParser:
             if defn:
                 try:
                     result = defn.handler(ctx)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except (
+                    Exception
+                ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                     logger.exception("Error in command handler for /%s", cmd.command)
                     result = CommandResult.fail(str(e))
             else:

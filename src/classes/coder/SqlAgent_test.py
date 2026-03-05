@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_sqlagent_exists():
     """Test that SqlAgent class exists and is importable."""
-    assert 'SqlAgent' in dir()
+    assert "SqlAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

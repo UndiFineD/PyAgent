@@ -33,27 +33,27 @@ except ImportError as e:
 
 def test_cudagraphmode_exists():
     """Test that CUDAGraphMode class exists and is importable."""
-    assert 'CUDAGraphMode' in dir()
+    assert "CUDAGraphMode" in dir()
 
 
 def test_batchdescriptor_exists():
     """Test that BatchDescriptor class exists and is importable."""
-    assert 'BatchDescriptor' in dir()
+    assert "BatchDescriptor" in dir()
 
 
 def test_cudagraphentry_exists():
     """Test that CUDAGraphEntry class exists and is importable."""
-    assert 'CUDAGraphEntry' in dir()
+    assert "CUDAGraphEntry" in dir()
 
 
 def test_cudagraphregistry_exists():
     """Test that CUDAGraphRegistry class exists and is importable."""
-    assert 'CUDAGraphRegistry' in dir()
+    assert "CUDAGraphRegistry" in dir()
 
 
 def test_cudagraphmanager_exists():
     """Test that CUDAGraphManager class exists and is importable."""
-    assert 'CUDAGraphManager' in dir()
+    assert "CUDAGraphManager" in dir()
 
 
 def test_compute_graph_key_exists():
@@ -69,4 +69,3 @@ def test_generate_warmup_sizes_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

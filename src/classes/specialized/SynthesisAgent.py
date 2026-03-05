@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,15 +24,18 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class SynthesisAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis, 
+    Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
     merging specialized agent capabilities into optimized super-agent architectures.
     """
-    
+
     def __init__(self, workspace_root: str) -> None:
         # Initialize with a dummy path as base_agent needs a file path
-        dummy_path = os.path.join(workspace_root, "src/logic/agents/cognitive/SynthesisAgent.py")
+        dummy_path = os.path.join(
+            workspace_root, "src/logic/agents/cognitive/SynthesisAgent.py"
+        )
         super().__init__(dummy_path)
         self.workspace_root = workspace_root
         self._system_prompt = (
@@ -42,19 +46,21 @@ class SynthesisAgent(BaseAgent):
         )
 
     @as_tool
-    def fuse_agents(self, agent_names: list[str], new_agent_name: str) -> dict[str, Any]:
+    def fuse_agents(
+        self, agent_names: list[str], new_agent_name: str
+    ) -> dict[str, Any]:
         """
         Creates a new agent that combines functionalities of multiple source agents.
-        
+
         Args:
             agent_names: List of existing agent class names to fuse.
             new_agent_name: The name of the new fused agent class.
         """
         logging.info(f"SynthesisAgent: Fusing {agent_names} into {new_agent_name}")
-        
+
         # Step 1: Analyze the source agents (simulated)
         # We would normally read their files and extract tools.
-        
+
         # Step 2: Use LLM to generate fused agent code
         prompt = (
             f"I want to create a new agent named {new_agent_name} that combines the features "
@@ -63,9 +69,9 @@ class SynthesisAgent(BaseAgent):
             "Generate the full Python code for this new agent class. include all necessary imports.\n"
             "Make sure the class name is exactly " + new_agent_name + "."
         )
-        
+
         agent_code = self.think(prompt)
-        
+
         # Clean up code markup if present
         if "```python" in agent_code:
             agent_code = agent_code.split("```python")[1].split("```")[0].strip()
@@ -76,28 +82,27 @@ class SynthesisAgent(BaseAgent):
         target_dir = os.path.join(self.workspace_root, "src/agents")
         os.makedirs(target_dir, exist_ok=True)
         file_path = os.path.join(target_dir, f"{new_agent_name}.py")
-        
+
         try:
             with open(file_path, "w") as f:
                 f.write(agent_code)
-            
+
             logging.info(f"SynthesisAgent: Successfully created {file_path}")
-            
+
             return {
                 "status": "success",
                 "new_agent": new_agent_name,
                 "file_path": file_path,
-                "components_fused": agent_names
+                "components_fused": agent_names,
             }
         except Exception as e:
             logging.error(f"SynthesisAgent: Failed to save fused agent: {e}")
-            return {
-                "status": "error",
-                "message": str(e)
-            }
+            return {"status": "error", "message": str(e)}
 
     @as_tool
-    def analyze_fusion_candidates(self, fleet_agents: list[str]) -> list[dict[str, Any]]:
+    def analyze_fusion_candidates(
+        self, fleet_agents: list[str]
+    ) -> list[dict[str, Any]]:
         """
         Analyzes the fleet to suggest which agents should be fused based on usage patterns.
         """
@@ -108,6 +113,6 @@ class SynthesisAgent(BaseAgent):
             {
                 "agents": ["ReasoningAgent", "ReflectionAgent"],
                 "target": "CognitiveSuperAgent",
-                "reason": "High frequency of sequential calling in reasoning loops"
+                "reason": "High frequency of sequential calling in reasoning loops",
             }
         ]

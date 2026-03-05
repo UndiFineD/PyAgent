@@ -13,7 +13,9 @@ def _load_module():
 
 def test_imports_and_symbols():
     mod = _load_module()
-    assert hasattr(mod, "StructuredOutputBackendType"), "StructuredOutputBackendType missing"
+    assert hasattr(
+        mod, "StructuredOutputBackendType"
+    ), "StructuredOutputBackendType missing"
     assert hasattr(mod, "ConstraintType"), "ConstraintType missing"
     assert hasattr(mod, "GrammarProtocol"), "GrammarProtocol missing"
     assert hasattr(mod, "BackendProtocol"), "BackendProtocol missing"
@@ -21,7 +23,10 @@ def test_imports_and_symbols():
     assert hasattr(mod, "OrchestratorConfig"), "OrchestratorConfig missing"
     assert hasattr(mod, "BackendWrapper"), "BackendWrapper missing"
     assert hasattr(mod, "CompiledGrammarHandle"), "CompiledGrammarHandle missing"
-    assert hasattr(mod, "StructuredOutputOrchestrator"), "StructuredOutputOrchestrator missing"
-    assert hasattr(mod, "AsyncStructuredOutputOrchestrator"), "AsyncStructuredOutputOrchestrator missing"
+    assert hasattr(
+        mod, "StructuredOutputOrchestrator"
+    ), "StructuredOutputOrchestrator missing"
+    assert hasattr(
+        mod, "AsyncStructuredOutputOrchestrator"
+    ), "AsyncStructuredOutputOrchestrator missing"
     assert hasattr(mod, "BatchProcessor"), "BatchProcessor missing"
-

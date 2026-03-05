@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_ratelimitexceedederror_exists():
     """Test that RateLimitExceededError class exists and is importable."""
-    assert 'RateLimitExceededError' in dir()
+    assert "RateLimitExceededError" in dir()
 
 
 def test_ratelimiterstats_exists():
     """Test that RateLimiterStats class exists and is importable."""
-    assert 'RateLimiterStats' in dir()
+    assert "RateLimiterStats" in dir()
 
 
 def test_tokenbucket_exists():
     """Test that TokenBucket class exists and is importable."""
-    assert 'TokenBucket' in dir()
+    assert "TokenBucket" in dir()
 
 
 def test_slidingwindowcounter_exists():
     """Test that SlidingWindowCounter class exists and is importable."""
-    assert 'SlidingWindowCounter' in dir()
+    assert "SlidingWindowCounter" in dir()
 
 
 def test_adaptiveratelimiter_exists():
     """Test that AdaptiveRateLimiter class exists and is importable."""
-    assert 'AdaptiveRateLimiter' in dir()
+    assert "AdaptiveRateLimiter" in dir()
 
 
 def test_perkeyratelimiter_exists():
     """Test that PerKeyRateLimiter class exists and is importable."""
-    assert 'PerKeyRateLimiter' in dir()
+    assert "PerKeyRateLimiter" in dir()
 
 
 def test_rate_limit_exists():
@@ -69,4 +69,3 @@ def test_rate_limit_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

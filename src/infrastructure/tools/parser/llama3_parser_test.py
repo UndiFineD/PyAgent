@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_llama3toolparser_exists():
     """Test that Llama3ToolParser class exists and is importable."""
-    assert 'Llama3ToolParser' in dir()
+    assert "Llama3ToolParser" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

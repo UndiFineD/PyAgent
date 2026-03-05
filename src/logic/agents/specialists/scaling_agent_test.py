@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ProviderMetrics"), "ProviderMetrics missing"
     assert hasattr(mod, "ScalingDecision"), "ScalingDecision missing"
     assert hasattr(mod, "ScalingAgent"), "ScalingAgent missing"
-

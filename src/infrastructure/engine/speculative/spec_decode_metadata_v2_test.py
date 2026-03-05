@@ -18,9 +18,10 @@ def test_imports_and_symbols():
     assert hasattr(mod, "AcceptancePolicy"), "AcceptancePolicy missing"
     assert hasattr(mod, "SpecDecodeMetadataV2"), "SpecDecodeMetadataV2 missing"
     assert hasattr(mod, "TreeVerificationMetadata"), "TreeVerificationMetadata missing"
-    assert hasattr(mod, "SpecDecodeMetadataFactory"), "SpecDecodeMetadataFactory missing"
+    assert hasattr(
+        mod, "SpecDecodeMetadataFactory"
+    ), "SpecDecodeMetadataFactory missing"
     assert hasattr(mod, "VerificationResult"), "VerificationResult missing"
     assert hasattr(mod, "SpecDecodeVerifier"), "SpecDecodeVerifier missing"
     assert hasattr(mod, "BatchVerifier"), "BatchVerifier missing"
     assert hasattr(mod, "StreamingVerifier"), "StreamingVerifier missing"
-

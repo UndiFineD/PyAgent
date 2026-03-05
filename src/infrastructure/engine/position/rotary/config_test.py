@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RoPEVariant"), "RoPEVariant missing"
     assert hasattr(mod, "RoPEScalingType"), "RoPEScalingType missing"
     assert hasattr(mod, "RoPEConfig"), "RoPEConfig missing"
-

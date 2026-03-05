@@ -18,4 +18,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "LearningObjective"), "LearningObjective missing"
     assert hasattr(mod, "ObjectiveConstraint"), "ObjectiveConstraint missing"
     assert hasattr(mod, "ObjectiveTracker"), "ObjectiveTracker missing"
-

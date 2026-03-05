@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -93,7 +94,9 @@ class ChangesEntryMixin:
 
     def get_entries_by_priority(self, min_priority: int = 0) -> List[ChangelogEntry]:
         """Get entries with priority >= min_priority, sorted by priority."""
-        filtered = [e for e in getattr(self, "_entries", []) if e.priority >= min_priority]
+        filtered = [
+            e for e in getattr(self, "_entries", []) if e.priority >= min_priority
+        ]
         return sorted(filtered, key=lambda e: e.priority, reverse=True)
 
     def deduplicate_entries(self) -> int:

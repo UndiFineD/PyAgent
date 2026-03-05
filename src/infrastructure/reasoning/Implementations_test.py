@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_deepseekreasoningparser_exists():
     """Test that DeepSeekReasoningParser class exists and is importable."""
-    assert 'DeepSeekReasoningParser' in dir()
+    assert "DeepSeekReasoningParser" in dir()
 
 
 def test_deepseekreasoningparser_instantiation():
@@ -44,25 +44,24 @@ def test_deepseekreasoningparser_instantiation():
 
 def test_qwenreasoningparser_exists():
     """Test that QwenReasoningParser class exists and is importable."""
-    assert 'QwenReasoningParser' in dir()
+    assert "QwenReasoningParser" in dir()
 
 
 def test_genericreasoningparser_exists():
     """Test that GenericReasoningParser class exists and is importable."""
-    assert 'GenericReasoningParser' in dir()
+    assert "GenericReasoningParser" in dir()
 
 
 def test_openaitoolparser_exists():
     """Test that OpenAIToolParser class exists and is importable."""
-    assert 'OpenAIToolParser' in dir()
+    assert "OpenAIToolParser" in dir()
 
 
 def test_hermestoolparser_exists():
     """Test that HermesToolParser class exists and is importable."""
-    assert 'HermesToolParser' in dir()
+    assert "HermesToolParser" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

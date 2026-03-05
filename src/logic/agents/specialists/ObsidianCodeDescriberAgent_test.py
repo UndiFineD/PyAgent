@@ -33,25 +33,24 @@ except ImportError as e:
 
 def test_notetype_exists():
     """Test that NoteType class exists and is importable."""
-    assert 'NoteType' in dir()
+    assert "NoteType" in dir()
 
 
 def test_codeentity_exists():
     """Test that CodeEntity class exists and is importable."""
-    assert 'CodeEntity' in dir()
+    assert "CodeEntity" in dir()
 
 
 def test_vaultnote_exists():
     """Test that VaultNote class exists and is importable."""
-    assert 'VaultNote' in dir()
+    assert "VaultNote" in dir()
 
 
 def test_obsidiancodedescriberagent_exists():
     """Test that ObsidianCodeDescriberAgent class exists and is importable."""
-    assert 'ObsidianCodeDescriberAgent' in dir()
+    assert "ObsidianCodeDescriberAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

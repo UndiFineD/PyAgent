@@ -25,5 +25,6 @@ def test_imports_and_symbols():
     assert hasattr(mod, "HybridDrafter"), "HybridDrafter missing"
     assert hasattr(mod, "TokenVerifier"), "TokenVerifier missing"
     assert hasattr(mod, "SpeculativeEngine"), "SpeculativeEngine missing"
-    assert hasattr(mod, "create_speculative_decoder"), "create_speculative_decoder missing"
-
+    assert hasattr(
+        mod, "create_speculative_decoder"
+    ), "create_speculative_decoder missing"

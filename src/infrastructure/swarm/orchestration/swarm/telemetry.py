@@ -19,7 +19,9 @@ class SwarmTelemetryService:
     Collects real-time statistics from swarm orchestration layers.
     """
 
-    def __init__(self, gatekeeper: Any, shard_manager: Any, topology_manager: Any) -> None:
+    def __init__(
+        self, gatekeeper: Any, shard_manager: Any, topology_manager: Any
+    ) -> None:
         self.gatekeeper = gatekeeper
         self.shard_manager = shard_manager
         self.topology_manager = topology_manager
@@ -57,7 +59,9 @@ class SwarmTelemetryService:
             "routing": routing_stats,
             "topology": topology_stats,
             "context": context_stats,
-            "swarm_health": "degraded" if context_stats["dead_ranks"] > 0 else "optimal",
+            "swarm_health": (
+                "degraded" if context_stats["dead_ranks"] > 0 else "optimal"
+            ),
         }
 
     def export_prometheus(self) -> str:

@@ -53,6 +53,7 @@ from src.core.base.state.agent_state_manager import StateTransaction
 
 class AgentTier(Enum):
     """Agent evolution tiers."""
+
     SPECIALIZED = "specialized"
     INTEGRATED = "integrated"
     ELITE = "elite"
@@ -61,6 +62,7 @@ class AgentTier(Enum):
 @dataclass
 class AgentSkillSheet:
     """Skill sheet metadata for dynamic agents."""
+
     name: str
     version: str = "1.0"
     created: str = field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
@@ -84,6 +86,7 @@ class AgentSkillSheet:
 @dataclass
 class TaskAnalysis:
     """Analysis of task requirements."""
+
     capabilities: Set[str]
     domain: str
     complexity: str  # "simple", "moderate", "complex"
@@ -111,7 +114,12 @@ class DynamicAgentEvolutionOrchestrator:
         self.skill_sheets_dir = self.base_dir / "skill_sheets"
 
         # Create directories
-        for dir_path in [self.specialized_dir, self.integrated_dir, self.elite_dir, self.skill_sheets_dir]:
+        for dir_path in [
+            self.specialized_dir,
+            self.integrated_dir,
+            self.elite_dir,
+            self.skill_sheets_dir,
+        ]:
             dir_path.mkdir(parents=True, exist_ok=True)
 
         # Agent registry
@@ -122,11 +130,11 @@ class DynamicAgentEvolutionOrchestrator:
         """Load all skill sheets from disk."""
         for yaml_file in self.skill_sheets_dir.glob("*.yaml"):
             try:
-                with open(yaml_file, 'r', encoding='utf-8') as f:
+                with open(yaml_file, "r", encoding="utf-8") as f:
                     data = yaml.safe_load(f)
                     if data:
                         # Convert tier string back to enum
-                        data['tier'] = AgentTier(data['tier'])
+                        data["tier"] = AgentTier(data["tier"])
                         sheet = AgentSkillSheet(**data)
                         self.skill_sheets[sheet.name] = sheet
             except Exception as e:
@@ -138,24 +146,24 @@ class DynamicAgentEvolutionOrchestrator:
 
         # Convert to dict for YAML serialization
         data = {
-            'name': sheet.name,
-            'version': sheet.version,
-            'created': sheet.created,
-            'tier': sheet.tier.value,  # Convert enum to string
-            'domain': sheet.domain,
-            'capabilities': sheet.capabilities,
-            'constraints': sheet.constraints,
-            'parent_agents': sheet.parent_agents,
-            'synergy_hints': sheet.synergy_hints,
-            'usage_count': sheet.usage_count,
-            'success_rate': sheet.success_rate,
-            'last_used': sheet.last_used,
-            'promotion_candidate': sheet.promotion_candidate,
-            'task_history': sheet.task_history,
+            "name": sheet.name,
+            "version": sheet.version,
+            "created": sheet.created,
+            "tier": sheet.tier.value,  # Convert enum to string
+            "domain": sheet.domain,
+            "capabilities": sheet.capabilities,
+            "constraints": sheet.constraints,
+            "parent_agents": sheet.parent_agents,
+            "synergy_hints": sheet.synergy_hints,
+            "usage_count": sheet.usage_count,
+            "success_rate": sheet.success_rate,
+            "last_used": sheet.last_used,
+            "promotion_candidate": sheet.promotion_candidate,
+            "task_history": sheet.task_history,
         }
 
         with StateTransaction([sheet_file]) as tx:
-            with open(sheet_file, 'w', encoding='utf-8') as f:
+            with open(sheet_file, "w", encoding="utf-8") as f:
                 yaml.dump(data, f, default_flow_style=False, sort_keys=False)
 
     def analyze_task(self, task_description: str) -> TaskAnalysis:
@@ -170,43 +178,53 @@ class DynamicAgentEvolutionOrchestrator:
         capabilities = set()
 
         # Programming capabilities
-        if any(word in task_lower for word in ['code', 'implement', 'function', 'class', 'api', 'database']):
-            capabilities.update(['coding', 'software_development', 'api_design'])
+        if any(
+            word in task_lower
+            for word in ["code", "implement", "function", "class", "api", "database"]
+        ):
+            capabilities.update(["coding", "software_development", "api_design"])
 
         # Analysis capabilities
-        if any(word in task_lower for word in ['analyze', 'review', 'assess', 'evaluate', 'test']):
-            capabilities.update(['code_analysis', 'quality_assessment', 'testing'])
+        if any(
+            word in task_lower
+            for word in ["analyze", "review", "assess", "evaluate", "test"]
+        ):
+            capabilities.update(["code_analysis", "quality_assessment", "testing"])
 
         # Documentation capabilities
-        if any(word in task_lower for word in ['document', 'readme', 'comment', 'explain']):
-            capabilities.update(['documentation', 'technical_writing'])
+        if any(
+            word in task_lower for word in ["document", "readme", "comment", "explain"]
+        ):
+            capabilities.update(["documentation", "technical_writing"])
 
         # Determine domain
         domain = "general"
-        if 'web' in task_lower or 'api' in task_lower:
+        if "web" in task_lower or "api" in task_lower:
             domain = "web_development"
-        elif 'data' in task_lower or 'database' in task_lower:
+        elif "data" in task_lower or "database" in task_lower:
             domain = "data_engineering"
-        elif 'security' in task_lower or 'auth' in task_lower:
+        elif "security" in task_lower or "auth" in task_lower:
             domain = "security"
-        elif 'ai' in task_lower or 'ml' in task_lower:
+        elif "ai" in task_lower or "ml" in task_lower:
             domain = "ai_ml"
 
         # Estimate complexity
         complexity = "simple"
         if len(capabilities) > 2:
             complexity = "moderate"
-        if len(task_description.split()) > 50 or 'complex' in task_lower:
+        if len(task_description.split()) > 50 or "complex" in task_lower:
             complexity = "complex"
 
         return TaskAnalysis(
             capabilities=capabilities,
             domain=domain,
             complexity=complexity,
-            estimated_effort=min(len(capabilities) * 2, 10)
+            estimated_effort=min(len(capabilities) * 2, 10),
         )
 
-    def calculate_coverage(self, task_analysis: TaskAnalysis, agent_sheet: AgentSkillSheet) -> float:
+    def calculate_coverage(
+        self, task_analysis: TaskAnalysis, agent_sheet: AgentSkillSheet
+    ) -> float:
         """
         Calculate how well an agent covers the task requirements.
 
@@ -234,7 +252,9 @@ class DynamicAgentEvolutionOrchestrator:
 
         return min(coverage, 1.0)
 
-    def scan_agent_pool(self, task_analysis: TaskAnalysis) -> List[Tuple[AgentSkillSheet, float]]:
+    def scan_agent_pool(
+        self, task_analysis: TaskAnalysis
+    ) -> List[Tuple[AgentSkillSheet, float]]:
         """
         Scan all agents and calculate their coverage for the task.
 
@@ -251,7 +271,9 @@ class DynamicAgentEvolutionOrchestrator:
         candidates.sort(key=lambda x: x[1], reverse=True)
         return candidates
 
-    def select_or_create_agent(self, task_analysis: TaskAnalysis, context: Optional[CascadeContext] = None) -> AgentSkillSheet:
+    def select_or_create_agent(
+        self, task_analysis: TaskAnalysis, context: Optional[CascadeContext] = None
+    ) -> AgentSkillSheet:
         """
         Select existing agent or create new one based on coverage analysis.
 
@@ -273,7 +295,9 @@ class DynamicAgentEvolutionOrchestrator:
             return best_agent
         elif best_coverage >= 0.6:
             # Create integrated agent from top candidates
-            top_candidates = [sheet for sheet, coverage in candidates[:3] if coverage >= 0.3]
+            top_candidates = [
+                sheet for sheet, coverage in candidates[:3] if coverage >= 0.3
+            ]
             if len(top_candidates) >= 2:
                 return self._create_integrated_agent(task_analysis, top_candidates)
             else:
@@ -292,7 +316,7 @@ class DynamicAgentEvolutionOrchestrator:
             domain=task_analysis.domain,
             capabilities=list(task_analysis.capabilities),
             constraints=self._generate_constraints(task_analysis),
-            tier=AgentTier.SPECIALIZED
+            tier=AgentTier.SPECIALIZED,
         )
 
         # Save skill sheet
@@ -304,7 +328,9 @@ class DynamicAgentEvolutionOrchestrator:
 
         return sheet
 
-    def _create_integrated_agent(self, task_analysis: TaskAnalysis, parent_sheets: List[AgentSkillSheet]) -> AgentSkillSheet:
+    def _create_integrated_agent(
+        self, task_analysis: TaskAnalysis, parent_sheets: List[AgentSkillSheet]
+    ) -> AgentSkillSheet:
         """Create an integrated agent by merging multiple parent agents."""
         parent_names = [s.name for s in parent_sheets]
         agent_name = f"integrated_{'_'.join(parent_names[:2])}_{uuid.uuid4().hex[:8]}"
@@ -328,7 +354,7 @@ class DynamicAgentEvolutionOrchestrator:
             constraints=self._generate_constraints(task_analysis),
             parent_agents=parent_names,
             synergy_hints=synergy_hints,
-            tier=AgentTier.INTEGRATED
+            tier=AgentTier.INTEGRATED,
         )
 
         # Save skill sheet
@@ -356,8 +382,12 @@ class DynamicAgentEvolutionOrchestrator:
 
         return constraints
 
-    def _create_agent_definition_file(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis,
-                                    parent_sheets: Optional[List[AgentSkillSheet]] = None):
+    def _create_agent_definition_file(
+        self,
+        sheet: AgentSkillSheet,
+        task_analysis: TaskAnalysis,
+        parent_sheets: Optional[List[AgentSkillSheet]] = None,
+    ):
         """Create the agent definition markdown file."""
         if sheet.tier == AgentTier.SPECIALIZED:
             dir_path = self.specialized_dir
@@ -408,17 +438,23 @@ This agent works well with:
 """
 
         with StateTransaction([file_path]) as tx:
-            file_path.write_text(content, encoding='utf-8')
+            file_path.write_text(content, encoding="utf-8")
 
-    def _generate_description(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis) -> str:
+    def _generate_description(
+        self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis
+    ) -> str:
         """Generate a one-line description for the agent."""
         if sheet.tier == AgentTier.SPECIALIZED:
             return f"Specialized agent for {task_analysis.domain} tasks with {', '.join(sheet.capabilities)} capabilities"
         else:
             return f"Integrated agent combining expertise from {', '.join(sheet.parent_agents)} for {task_analysis.domain} tasks"
 
-    def _generate_detailed_description(self, sheet: AgentSkillSheet, task_analysis: TaskAnalysis,
-                                     parent_sheets: Optional[List[AgentSkillSheet]] = None) -> str:
+    def _generate_detailed_description(
+        self,
+        sheet: AgentSkillSheet,
+        task_analysis: TaskAnalysis,
+        parent_sheets: Optional[List[AgentSkillSheet]] = None,
+    ) -> str:
         """Generate detailed description for the agent."""
         if sheet.tier == AgentTier.SPECIALIZED:
             return f"""This specialized agent was created to handle {task_analysis.domain} tasks requiring {', '.join(sheet.capabilities)} capabilities.
@@ -430,7 +466,9 @@ It was born from the need to address {task_analysis.complexity} complexity tasks
 
 Created through agent integration to achieve synergy between specialized capabilities."""
 
-    def update_agent_metrics(self, agent_name: str, success: bool, task_description: str):
+    def update_agent_metrics(
+        self, agent_name: str, success: bool, task_description: str
+    ):
         """Update agent performance metrics after task completion."""
         if agent_name not in self.skill_sheets:
             return
@@ -442,7 +480,9 @@ Created through agent integration to achieve synergy between specialized capabil
 
         # Update success rate
         total_tasks = len(sheet.task_history) + 1
-        current_success_rate = (sheet.success_rate * (total_tasks - 1) + (1.0 if success else 0.0)) / total_tasks
+        current_success_rate = (
+            sheet.success_rate * (total_tasks - 1) + (1.0 if success else 0.0)
+        ) / total_tasks
         sheet.success_rate = current_success_rate
 
         # Update last used
@@ -450,9 +490,13 @@ Created through agent integration to achieve synergy between specialized capabil
 
         # Add to task history
         task_record = {
-            'date': sheet.last_used,
-            'task': task_description[:100] + '...' if len(task_description) > 100 else task_description,
-            'outcome': 'success' if success else 'failure'
+            "date": sheet.last_used,
+            "task": (
+                task_description[:100] + "..."
+                if len(task_description) > 100
+                else task_description
+            ),
+            "outcome": "success" if success else "failure",
         }
         sheet.task_history.append(task_record)
 
@@ -461,8 +505,11 @@ Created through agent integration to achieve synergy between specialized capabil
             sheet.task_history = sheet.task_history[-20:]
 
         # Check for promotion
-        if (sheet.usage_count >= 5 and sheet.success_rate >= 0.8 and
-            sheet.tier != AgentTier.ELITE):
+        if (
+            sheet.usage_count >= 5
+            and sheet.success_rate >= 0.8
+            and sheet.tier != AgentTier.ELITE
+        ):
             sheet.promotion_candidate = True
 
         # Save updated sheet
@@ -475,7 +522,7 @@ Created through agent integration to achieve synergy between specialized capabil
 
         sheet = self.skill_sheets[agent_name]
 
-        if (sheet.promotion_candidate and sheet.tier != AgentTier.ELITE):
+        if sheet.promotion_candidate and sheet.tier != AgentTier.ELITE:
             # Move agent file to elite directory
             old_path = self._get_agent_file_path(sheet)
             sheet.tier = AgentTier.ELITE
@@ -484,6 +531,7 @@ Created through agent integration to achieve synergy between specialized capabil
             if old_path.exists():
                 with StateTransaction([old_path, new_path]) as tx:
                     import shutil
+
                     shutil.move(str(old_path), str(new_path))
 
             # Update and save skill sheet
@@ -508,33 +556,29 @@ Created through agent integration to achieve synergy between specialized capabil
     def get_agent_pool_stats(self) -> Dict[str, Any]:
         """Get statistics about the agent pool."""
         stats = {
-            'total_agents': len(self.skill_sheets),
-            'by_tier': {
-                'specialized': 0,
-                'integrated': 0,
-                'elite': 0
-            },
-            'by_domain': {},
-            'promotion_candidates': 0,
-            'avg_success_rate': 0.0
+            "total_agents": len(self.skill_sheets),
+            "by_tier": {"specialized": 0, "integrated": 0, "elite": 0},
+            "by_domain": {},
+            "promotion_candidates": 0,
+            "avg_success_rate": 0.0,
         }
 
         total_success_rate = 0.0
 
         for sheet in self.skill_sheets.values():
-            stats['by_tier'][sheet.tier.value] += 1
+            stats["by_tier"][sheet.tier.value] += 1
 
-            if sheet.domain not in stats['by_domain']:
-                stats['by_domain'][sheet.domain] = 0
-            stats['by_domain'][sheet.domain] += 1
+            if sheet.domain not in stats["by_domain"]:
+                stats["by_domain"][sheet.domain] = 0
+            stats["by_domain"][sheet.domain] += 1
 
             if sheet.promotion_candidate:
-                stats['promotion_candidates'] += 1
+                stats["promotion_candidates"] += 1
 
             total_success_rate += sheet.success_rate
 
-        if stats['total_agents'] > 0:
-            stats['avg_success_rate'] = total_success_rate / stats['total_agents']
+        if stats["total_agents"] > 0:
+            stats["avg_success_rate"] = total_success_rate / stats["total_agents"]
 
         return stats
 
@@ -551,7 +595,9 @@ if __name__ == "__main__":
 
         # Create or select an agent
         agent_sheet = orchestrator.select_or_create_agent(analysis)
-        print(f"Selected/Created Agent: {agent_sheet.name} (Tier: {agent_sheet.tier.value})")
+        print(
+            f"Selected/Created Agent: {agent_sheet.name} (Tier: {agent_sheet.tier.value})"
+        )
 
         # Update metrics
         orchestrator.update_agent_metrics(agent_sheet.name, True, task)

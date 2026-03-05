@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -48,7 +49,9 @@ class FleetDeployerAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         )
 
     @as_tool
-    async def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:
+    async def generate_dockerfile(
+        self, agent_type: str, python_version: str = "3.10-slim"
+    ) -> str:
         """Generates a specialized Dockerfile for an agent type.
 
 
@@ -106,7 +109,9 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
         """
-        logging.info(f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")
+        logging.info(
+            f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'"
+        )
 
         spawn_log = {
             "node_id": agent_name,
@@ -158,6 +163,8 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
     @as_tool
     async def consensus_driven_deploy(self, agent_type: str, node_name: str) -> str:
         """Deploys an agent, but only after reaching consensus (Mock)."""
-        logging.info(f"FleetDeployer: Requesting consensus for deployment of {node_name}...")
+        logging.info(
+            f"FleetDeployer: Requesting consensus for deployment of {node_name}..."
+        )
         # Mock approval
         return await self.spawn_node(node_name, agent_type)

@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -12,10 +13,13 @@ from src.core.base.BaseUtilities import as_tool
 if TYPE_CHECKING:
     from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
 
+
 class MapBuilderMixin:
     """Mixin for mapping and parsing code entities in TopologicalNavigator."""
 
-    def _get_entity_id(self: TopologicalNavigator, file_path: Path, entity_name: str = "") -> str:
+    def _get_entity_id(
+        self: TopologicalNavigator, file_path: Path, entity_name: str = ""
+    ) -> str:
         """Generates a unique ID for a code entity."""
         rel_path = file_path.relative_to(self.root_dir)
         module_path = str(rel_path).replace(os.path.sep, ".").replace(".py", "")
@@ -24,7 +28,9 @@ class MapBuilderMixin:
         return module_path
 
     @as_tool
-    def build_dependency_map(self: TopologicalNavigator, target_dir: str = "src") -> str:
+    def build_dependency_map(
+        self: TopologicalNavigator, target_dir: str = "src"
+    ) -> str:
         """Scans the specified directory to build a full dependency graph."""
         target_path = self.root_dir / target_dir
         if not target_path.exists():

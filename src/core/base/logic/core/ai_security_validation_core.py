@@ -32,6 +32,7 @@ import hashlib
 @dataclass
 class SecurityIssue:
     """Security issue found in AI interaction"""
+
     issue_type: str
     severity: str
     description: str
@@ -44,6 +45,7 @@ class SecurityIssue:
 @dataclass
 class SecurityScanResult:
     """Result from AI security scan"""
+
     input_text: str
     issues_found: List[SecurityIssue]
     overall_risk: str
@@ -55,6 +57,7 @@ class SecurityScanResult:
 @dataclass
 class JailbreakAttempt:
     """Detected jailbreak attempt"""
+
     technique: str
     pattern: str
     confidence: float
@@ -85,48 +88,43 @@ class AISecurityValidationCore:
                 technique="DAN",
                 pattern=r"DAN.*mode|Do Anything Now|uncensored.*persona",
                 confidence=0.9,
-                description="DAN jailbreak attempt - tries to override safety instructions"
+                description="DAN jailbreak attempt - tries to override safety instructions",
             ),
-
             # Developer mode patterns
             JailbreakAttempt(
                 technique="developer_mode",
                 pattern=r"developer.*mode|dev.*mode|unrestricted.*mode",
                 confidence=0.8,
-                description="Developer mode jailbreak - attempts to enter unrestricted mode"
+                description="Developer mode jailbreak - attempts to enter unrestricted mode",
             ),
-
             # Override patterns
             JailbreakAttempt(
                 technique="instruction_override",
                 pattern=r"ignore.*previous.*instructions|override.*safety|forget.*restrictions",
                 confidence=0.85,
-                description="Instruction override - attempts to override system instructions"
+                description="Instruction override - attempts to override system instructions",
             ),
-
             # Role-playing patterns
             JailbreakAttempt(
                 technique="role_play",
                 pattern=r"you are now|act as.*uncensored|role.*play.*as.*unrestricted",
                 confidence=0.7,
-                description="Role-playing jailbreak - tries to make AI role-play as unrestricted version"
+                description="Role-playing jailbreak - tries to make AI role-play as unrestricted version",
             ),
-
             # Encoding patterns
             JailbreakAttempt(
                 technique="encoding_tricks",
                 pattern=r"base64.*decode|rot13|encoded.*message|hidden.*message",
                 confidence=0.6,
-                description="Encoding tricks - attempts to hide malicious instructions"
+                description="Encoding tricks - attempts to hide malicious instructions",
             ),
-
             # System prompt extraction
             JailbreakAttempt(
                 technique="prompt_extraction",
                 pattern=r"system.*prompt|your.*instructions|how.*you.*trained|reveal.*prompt",
                 confidence=0.8,
-                description="Prompt extraction - attempts to extract system instructions"
-            )
+                description="Prompt extraction - attempts to extract system instructions",
+            ),
         ]
 
     def _init_injection_patterns(self):
@@ -137,32 +135,29 @@ class AISecurityValidationCore:
                 "name": "direct_injection",
                 "pattern": r"ignore.*and.*do|forget.*instructions.*and",
                 "severity": "high",
-                "description": "Direct prompt injection attempting to override instructions"
+                "description": "Direct prompt injection attempting to override instructions",
             },
-
             # Context poisoning
             {
                 "name": "context_poisoning",
                 "pattern": r"## End of Context|## Start of Response|system.*message",
                 "severity": "high",
-                "description": "Context poisoning attempting to inject new system messages"
+                "description": "Context poisoning attempting to inject new system messages",
             },
-
             # Delimiter injection
             {
                 "name": "delimiter_injection",
                 "pattern": r"\\n\\n---\\n\\n|###.*END.*###|STOP.*HERE",
                 "severity": "medium",
-                "description": "Delimiter injection attempting to break response boundaries"
+                "description": "Delimiter injection attempting to break response boundaries",
             },
-
             # Instruction injection
             {
                 "name": "instruction_injection",
                 "pattern": r"respond.*as.*if|answer.*like.*you.*were|pretend.*to.*be",
                 "severity": "medium",
-                "description": "Instruction injection attempting to change AI behavior"
-            }
+                "description": "Instruction injection attempting to change AI behavior",
+            },
         ]
 
     def _init_toxic_patterns(self):
@@ -173,28 +168,27 @@ class AISecurityValidationCore:
                 "name": "harmful_instructions",
                 "pattern": r"how to.*(bomb|weapon|hack|exploit|poison)",
                 "severity": "critical",
-                "description": "Requests for harmful or illegal instructions"
+                "description": "Requests for harmful or illegal instructions",
             },
-
             # Personal information
             {
                 "name": "pii_extraction",
                 "pattern": r"extract.*(password|credit.*card|social.*security|personal.*info)",
                 "severity": "high",
-                "description": "Attempts to extract personal identifiable information"
+                "description": "Attempts to extract personal identifiable information",
             },
-
             # Malware generation
             {
                 "name": "malware_generation",
                 "pattern": r"write.*(virus|malware|ransomware|trojan)",
                 "severity": "critical",
-                "description": "Requests to generate malicious software"
-            }
+                "description": "Requests to generate malicious software",
+            },
         ]
 
-    async def scan_input_security(self, input_text: str,
-                                context: Optional[Dict[str, Any]] = None) -> SecurityScanResult:
+    async def scan_input_security(
+        self, input_text: str, context: Optional[Dict[str, Any]] = None
+    ) -> SecurityScanResult:
         """
         Perform comprehensive security scan on input text.
 
@@ -239,7 +233,7 @@ class AISecurityValidationCore:
             overall_risk=overall_risk,
             scan_timestamp=datetime.now(),
             scan_duration=scan_duration,
-            recommendations=recommendations
+            recommendations=recommendations,
         )
 
     def _scan_jailbreaks(self, text: str) -> List[SecurityIssue]:
@@ -260,7 +254,7 @@ class AISecurityValidationCore:
                     evidence=evidence,
                     confidence=jailbreak.confidence,
                     category="jailbreak",
-                    mitigation="Block this input and log the attempt"
+                    mitigation="Block this input and log the attempt",
                 )
                 issues.append(issue)
 
@@ -283,7 +277,7 @@ class AISecurityValidationCore:
                     evidence=evidence,
                     confidence=0.8,
                     category="injection",
-                    mitigation="Sanitize input and validate against injection patterns"
+                    mitigation="Sanitize input and validate against injection patterns",
                 )
                 issues.append(issue)
 
@@ -306,40 +300,45 @@ class AISecurityValidationCore:
                     evidence=evidence,
                     confidence=0.9,
                     category="content_safety",
-                    mitigation="Block this request and flag for human review"
+                    mitigation="Block this request and flag for human review",
                 )
                 issues.append(issue)
 
         return issues
 
-    async def _scan_additional_risks(self, text: str,
-                                   context: Optional[Dict[str, Any]]) -> List[SecurityIssue]:
+    async def _scan_additional_risks(
+        self, text: str, context: Optional[Dict[str, Any]]
+    ) -> List[SecurityIssue]:
         """Scan for additional security risks"""
         issues = []
 
         # Check for data exfiltration attempts
         if self._contains_data_exfiltration(text):
-            issues.append(SecurityIssue(
-                issue_type="data_exfiltration",
-                severity="high",
-                description="Potential data exfiltration attempt detected",
-                evidence="Contains patterns suggesting data extraction",
-                confidence=0.7,
-                category="data_protection",
-                mitigation="Monitor for unusual data access patterns"
-            ))
+            issues.append(
+                SecurityIssue(
+                    issue_type="data_exfiltration",
+                    severity="high",
+                    description="Potential data exfiltration attempt detected",
+                    evidence="Contains patterns suggesting data extraction",
+                    confidence=0.7,
+                    category="data_protection",
+                    mitigation="Monitor for unusual data access patterns",
+                )
+            )
 
         # Check for API abuse patterns
         if self._contains_api_abuse(text):
-            issues.append(SecurityIssue(
-                issue_type="api_abuse",
-                severity="medium",
-                description="Potential API abuse pattern detected",
-                evidence="Contains patterns suggesting API manipulation",
-                confidence=0.6,
-                category="api_security",
-                mitigation="Rate limit and monitor API usage"
-            ))
+            issues.append(
+                SecurityIssue(
+                    issue_type="api_abuse",
+                    severity="medium",
+                    description="Potential API abuse pattern detected",
+                    evidence="Contains patterns suggesting API manipulation",
+                    confidence=0.6,
+                    category="api_security",
+                    mitigation="Rate limit and monitor API usage",
+                )
+            )
 
         # Context-aware checks
         if context:
@@ -353,7 +352,7 @@ class AISecurityValidationCore:
         patterns = [
             r"dump.*database|export.*data|extract.*information",
             r"send.*to.*server|upload.*data|transmit.*information",
-            r"leak.*data|expose.*secrets|reveal.*credentials"
+            r"leak.*data|expose.*secrets|reveal.*credentials",
         ]
 
         text_lower = text.lower()
@@ -364,40 +363,48 @@ class AISecurityValidationCore:
         patterns = [
             r"bypass.*rate.*limit|circumvent.*restrictions",
             r"brute.*force|dictionary.*attack|credential.*stuffing",
-            r"exploit.*vulnerability|take.*advantage.*of.*bug"
+            r"exploit.*vulnerability|take.*advantage.*of.*bug",
         ]
 
         text_lower = text.lower()
         return any(re.search(pattern, text_lower) for pattern in patterns)
 
-    def _scan_context_risks(self, text: str, context: Dict[str, Any]) -> List[SecurityIssue]:
+    def _scan_context_risks(
+        self, text: str, context: Dict[str, Any]
+    ) -> List[SecurityIssue]:
         """Scan for context-aware security risks"""
         issues = []
 
         # Check for session hijacking attempts
         if context.get("session_id") and "session" in text.lower():
-            issues.append(SecurityIssue(
-                issue_type="session_manipulation",
-                severity="high",
-                description="Potential session manipulation attempt",
-                evidence="References session in potentially malicious context",
-                confidence=0.7,
-                category="session_security",
-                mitigation="Invalidate session and require re-authentication"
-            ))
+            issues.append(
+                SecurityIssue(
+                    issue_type="session_manipulation",
+                    severity="high",
+                    description="Potential session manipulation attempt",
+                    evidence="References session in potentially malicious context",
+                    confidence=0.7,
+                    category="session_security",
+                    mitigation="Invalidate session and require re-authentication",
+                )
+            )
 
         # Check for privilege escalation
         user_role = context.get("user_role", "user")
-        if user_role == "user" and any(word in text.lower() for word in ["admin", "root", "sudo"]):
-            issues.append(SecurityIssue(
-                issue_type="privilege_escalation",
-                severity="medium",
-                description="Potential privilege escalation attempt",
-                evidence="Non-admin user attempting admin-level operations",
-                confidence=0.6,
-                category="access_control",
-                mitigation="Verify user permissions before proceeding"
-            ))
+        if user_role == "user" and any(
+            word in text.lower() for word in ["admin", "root", "sudo"]
+        ):
+            issues.append(
+                SecurityIssue(
+                    issue_type="privilege_escalation",
+                    severity="medium",
+                    description="Potential privilege escalation attempt",
+                    evidence="Non-admin user attempting admin-level operations",
+                    confidence=0.6,
+                    category="access_control",
+                    mitigation="Verify user permissions before proceeding",
+                )
+            )
 
         return issues
 
@@ -423,23 +430,33 @@ class AISecurityValidationCore:
         # Determine overall risk
         if severity_counts["critical"] > 0:
             return "critical"
-        elif severity_counts["high"] > 2 or (severity_counts["high"] > 0 and severity_counts["medium"] > 2):
+        elif severity_counts["high"] > 2 or (
+            severity_counts["high"] > 0 and severity_counts["medium"] > 2
+        ):
             return "high"
         elif severity_counts["high"] > 0 or severity_counts["medium"] > 1:
             return "medium"
         else:
             return "low"
 
-    def _generate_recommendations(self, issues: List[SecurityIssue], overall_risk: str) -> List[str]:
+    def _generate_recommendations(
+        self, issues: List[SecurityIssue], overall_risk: str
+    ) -> List[str]:
         """Generate security recommendations based on findings"""
         recommendations = []
 
         if overall_risk == "critical":
-            recommendations.append("🚨 CRITICAL: Block this request immediately and alert security team")
+            recommendations.append(
+                "🚨 CRITICAL: Block this request immediately and alert security team"
+            )
         elif overall_risk == "high":
-            recommendations.append("⚠️ HIGH RISK: Require manual review before processing")
+            recommendations.append(
+                "⚠️ HIGH RISK: Require manual review before processing"
+            )
         elif overall_risk == "medium":
-            recommendations.append("⚡ MEDIUM RISK: Log this interaction and monitor closely")
+            recommendations.append(
+                "⚡ MEDIUM RISK: Log this interaction and monitor closely"
+            )
 
         # Category-specific recommendations
         categories = set(issue.category for issue in issues)
@@ -457,12 +474,15 @@ class AISecurityValidationCore:
             recommendations.append("Implement usage policies and restrictions")
 
         if not recommendations:
-            recommendations.append("✅ No specific recommendations - input appears safe")
+            recommendations.append(
+                "✅ No specific recommendations - input appears safe"
+            )
 
         return recommendations
 
-    async def validate_output_safety(self, output_text: str,
-                                   input_context: Optional[Dict[str, Any]] = None) -> SecurityScanResult:
+    async def validate_output_safety(
+        self, output_text: str, input_context: Optional[Dict[str, Any]] = None
+    ) -> SecurityScanResult:
         """
         Validate safety of AI-generated output.
 
@@ -482,5 +502,11 @@ class AISecurityValidationCore:
             "jailbreak_patterns": len(self.jailbreak_patterns),
             "injection_patterns": len(self.injection_patterns),
             "toxic_patterns": len(self.toxic_patterns),
-            "supported_categories": ["jailbreak", "injection", "content_safety", "data_protection", "api_security"]
+            "supported_categories": [
+                "jailbreak",
+                "injection",
+                "content_safety",
+                "data_protection",
+                "api_security",
+            ],
         }

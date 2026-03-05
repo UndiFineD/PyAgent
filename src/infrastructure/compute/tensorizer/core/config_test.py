@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TensorDtype"), "TensorDtype missing"
     assert hasattr(mod, "CompressionType"), "CompressionType missing"
     assert hasattr(mod, "TensorizerConfig"), "TensorizerConfig missing"
-

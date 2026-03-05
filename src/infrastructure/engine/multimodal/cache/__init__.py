@@ -21,8 +21,11 @@ from .data import CacheEntry, CacheStats, MediaHash, PlaceholderRange  # noqa: F
 from .enums import CacheBackend, HashAlgorithm, MediaType  # noqa: F401
 from .hasher import MultiModalHasher  # noqa: F401
 from .ipc import IPCMultiModalCache  # noqa: F401
-from .memory import (MemoryMultiModalCache, PerceptualCache,  # noqa: F401
-                     PrefetchMultiModalCache)
+from .memory import (
+    MemoryMultiModalCache,
+    PerceptualCache,  # noqa: F401
+    PrefetchMultiModalCache,
+)
 from .utils import compute_media_hash, create_cache  # noqa: F401
 
 __all__ = [

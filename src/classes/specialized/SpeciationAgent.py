@@ -7,12 +7,13 @@ from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 from pathlib import Path
 
+
 class SpeciationAgent(BaseAgent):
     """
     Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
     It analyzes task success and generates new agent classes with optimized system prompts.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -27,11 +28,13 @@ class SpeciationAgent(BaseAgent):
         Creates a new agent class file that specializes in a specific niche.
         e.g., 'CoderAgent' -> 'ReactSpecialistAgent'
         """
-        logging.info(f"SpeciationAgent: Evolving specialization for {base_agent_name} in {niche_domain}")
-        
+        logging.info(
+            f"SpeciationAgent: Evolving specialization for {base_agent_name} in {niche_domain}"
+        )
+
         new_agent_name = f"{niche_domain.replace(' ', '')}{base_agent_name}"
         output_path = f"src/classes/specialized/{new_agent_name}.py"
-        
+
         # Generation Logic
         prompt = (
             f"Create a Python class definition for '{new_agent_name}' that inherits from '{base_agent_name}'. "
@@ -39,12 +42,12 @@ class SpeciationAgent(BaseAgent):
             "Include an optimized __init__ with a specialized _system_prompt.\n"
             "Return ONLY the Python code."
         )
-        
+
         specialized_code = self.think(prompt)
-        
+
         # In a real scenario, we'd save this to a file and register it.
         # For now, we simulate the 'speciation' by logging the creation.
-        with open(output_path, 'w', encoding='utf-8') as f:
+        with open(output_path, "w", encoding="utf-8") as f:
             f.write(specialized_code)
-            
+
         return f"Successfully speciated {new_agent_name} at {output_path}"

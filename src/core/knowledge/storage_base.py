@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,7 +16,6 @@ from __future__ import annotations
 """
 Storage base.py module.
 """
-
 
 
 from abc import ABC, abstractmethod
@@ -39,7 +39,9 @@ class KnowledgeStore(ABC):
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod
-    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
+    def store(
+        self, key: str, value: Any, metadata: dict[str, Any] | None = None
+    ) -> bool:
         """Store a piece of knowledge."""
         raise NotImplementedError()
 

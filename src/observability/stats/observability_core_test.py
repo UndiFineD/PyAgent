@@ -38,4 +38,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "StatsSubscription"), "StatsSubscription missing"
     assert hasattr(mod, "ThresholdAlert"), "ThresholdAlert missing"
     assert hasattr(mod, "DerivedMetric"), "DerivedMetric missing"
-

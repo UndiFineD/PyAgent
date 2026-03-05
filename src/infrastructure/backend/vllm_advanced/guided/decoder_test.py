@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_guideddecoder_exists():
     """Test that GuidedDecoder class exists and is importable."""
-    assert 'GuidedDecoder' in dir()
+    assert "GuidedDecoder" in dir()
 
 
 def test_generate_json_exists():
@@ -49,4 +49,3 @@ def test_generate_choice_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

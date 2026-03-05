@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -126,7 +127,7 @@ class MPMCQueue(Generic[T]):
                     return False
                 if len(self._buffer) < self._capacity:
                     return True
-                
+
                 if deadline:
                     remaining = deadline - time.monotonic()
                     if remaining <= 0:
@@ -135,7 +136,7 @@ class MPMCQueue(Generic[T]):
                     self._not_full.wait(remaining)
                 else:
                     self._not_full.wait()
-                
+
                 return _wait_for_space()
 
             if not _wait_for_space():
@@ -199,7 +200,7 @@ class MPMCQueue(Generic[T]):
                         self._not_empty.wait(remaining)
                     else:
                         self._not_empty.wait()
-                    
+
                     return _wait_for_items()
                 return True
 
@@ -458,7 +459,7 @@ class PriorityQueue(Generic[T]):
                         self._not_empty.wait(remaining)
                     else:
                         self._not_empty.wait()
-                    
+
                     return _wait_for_heap()
                 return True
 

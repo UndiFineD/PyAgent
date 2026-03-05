@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -43,7 +44,7 @@ class SvgAgent(CoderAgent):
         return (
             '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">\n'
             '  <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />\n'
-            '</svg>\n'
+            "</svg>\n"
         )
 
 

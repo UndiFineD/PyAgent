@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -9,11 +10,14 @@ from src.core.base.BaseUtilities import as_tool
 if TYPE_CHECKING:
     from src.logic.agents.system.TopologicalNavigator import TopologicalNavigator
 
+
 class FederationMixin:
     """Mixin for multi-project federation in TopologicalNavigator."""
 
     @as_tool
-    def federate_with_external_project(self: TopologicalNavigator, external_root: str) -> str:
+    def federate_with_external_project(
+        self: TopologicalNavigator, external_root: str
+    ) -> str:
         """Indexes an external project and merges its graph into the current map.
         This enables 'Federated Project Intelligence' for multi-repo ecosystems.
         """

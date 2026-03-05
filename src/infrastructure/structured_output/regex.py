@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 
@@ -51,7 +52,9 @@ class RegexGrammar(GrammarEngine):
         state_counter = [1]
         accepting: Set[int] = set()
 
-        def process_pattern(pattern: List[Tuple[int, Any]], start_state: int) -> Set[int]:
+        def process_pattern(
+            pattern: List[Tuple[int, Any]], start_state: int
+        ) -> Set[int]:
             """Recursively process regex pattern to build NFA."""
             end_states = {start_state}
             for op, av in pattern:
@@ -72,7 +75,9 @@ class RegexGrammar(GrammarEngine):
                     elif op == _sre_parse.ANY:
                         new_state = state_counter[0]
                         state_counter[0] += 1
-                        for c in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ":
+                        for (
+                            c
+                        ) in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789 ":
                             if c not in nfa[state]:
                                 nfa[state][c] = set()
                             nfa[state][c].add(new_state)
@@ -163,7 +168,11 @@ class RegexGrammar(GrammarEngine):
                     worklist.append(next_frozen)
                     state_counter += 1
                 dfa_transitions[current_dfa][char] = dfa_states[next_frozen]
-        fsm = FSMTransitionTable(num_states=state_counter, initial_state=0, accepting_states=frozenset(dfa_accepting))
+        fsm = FSMTransitionTable(
+            num_states=state_counter,
+            initial_state=0,
+            accepting_states=frozenset(dfa_accepting),
+        )
         for from_state, transitions in dfa_transitions.items():
             for char, to_state in transitions.items():
                 fsm.add_transition(from_state, char, to_state)
@@ -171,7 +180,11 @@ class RegexGrammar(GrammarEngine):
 
     def _build_simple_fsm(self, spec: str) -> FSMTransitionTable:
         """Build simple FSM for literal pattern matching."""
-        fsm = FSMTransitionTable(num_states=len(spec) + 1, initial_state=0, accepting_states=frozenset({len(spec)}))
+        fsm = FSMTransitionTable(
+            num_states=len(spec) + 1,
+            initial_state=0,
+            accepting_states=frozenset({len(spec)}),
+        )
         for i, char in enumerate(spec):
             fsm.add_transition(i, char, i + 1)
         return fsm

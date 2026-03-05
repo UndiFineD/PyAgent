@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_structuredoutputconfig_exists():
     """Test that StructuredOutputConfig class exists and is importable."""
-    assert 'StructuredOutputConfig' in dir()
+    assert "StructuredOutputConfig" in dir()
 
 
 def test_validationresult_exists():
     """Test that ValidationResult class exists and is importable."""
-    assert 'ValidationResult' in dir()
+    assert "ValidationResult" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

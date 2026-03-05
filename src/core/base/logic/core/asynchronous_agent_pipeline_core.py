@@ -35,6 +35,7 @@ import uuid
 @dataclass
 class ToolCall:
     """Represents a tool call request"""
+
     id: str
     tool_name: str
     parameters: Dict[str, Any]
@@ -45,6 +46,7 @@ class ToolCall:
 @dataclass
 class ToolResult:
     """Result from tool execution"""
+
     call_id: str
     tool_name: str
     success: bool
@@ -57,6 +59,7 @@ class ToolResult:
 @dataclass
 class Trajectory:
     """Complete trajectory from state to reward"""
+
     trajectory_id: str
     state: Dict[str, Any]
     action: ToolCall
@@ -97,7 +100,7 @@ class AsynchronousAgentPipelineCore:
             "tool_calls_processed": 0,
             "trajectories_processed": 0,
             "average_execution_time": 0.0,
-            "queue_sizes": {}
+            "queue_sizes": {},
         }
 
         # Control flags
@@ -127,7 +130,9 @@ class AsynchronousAgentPipelineCore:
         # Start learner
         self.learner_task = asyncio.create_task(self._learner_worker())
 
-        self.logger.info(f"Pipeline started with {self.max_workers} tool executors and 2 reward modelers")
+        self.logger.info(
+            f"Pipeline started with {self.max_workers} tool executors and 2 reward modelers"
+        )
 
     async def stop_pipeline(self):
         """Stop the asynchronous pipeline"""
@@ -176,7 +181,9 @@ class AsynchronousAgentPipelineCore:
 
                 # Put result in result queue
                 await asyncio.get_event_loop().run_in_executor(
-                    None, self.tool_result_queue.put, (state, tool_call, result, execution_time)
+                    None,
+                    self.tool_result_queue.put,
+                    (state, tool_call, result, execution_time),
                 )
 
                 self.tool_call_queue.task_done()
@@ -199,7 +206,7 @@ class AsynchronousAgentPipelineCore:
                     result=None,
                     error=f"Tool not registered: {tool_call.tool_name}",
                     execution_time=0.0,
-                    timestamp=datetime.now()
+                    timestamp=datetime.now(),
                 )
 
             tool_func = self.tool_registry[tool_call.tool_name]
@@ -212,7 +219,7 @@ class AsynchronousAgentPipelineCore:
                 result=result,
                 error=None,
                 execution_time=0.0,  # Will be set by caller
-                timestamp=datetime.now()
+                timestamp=datetime.now(),
             )
 
         except Exception as e:
@@ -223,7 +230,7 @@ class AsynchronousAgentPipelineCore:
                 result=None,
                 error=str(e),
                 execution_time=0.0,
-                timestamp=datetime.now()
+                timestamp=datetime.now(),
             )
 
     async def _reward_modeler_worker(self, worker_id: str):
@@ -233,12 +240,19 @@ class AsynchronousAgentPipelineCore:
         while self.running:
             try:
                 # Get completed trajectory from result queue
-                state, tool_call, tool_result, execution_time = await asyncio.get_event_loop().run_in_executor(
+                (
+                    state,
+                    tool_call,
+                    tool_result,
+                    execution_time,
+                ) = await asyncio.get_event_loop().run_in_executor(
                     None, self.tool_result_queue.get, True, 1.0
                 )
 
                 # Compute reward
-                reward = self._compute_reward(state, tool_call, tool_result, execution_time)
+                reward = self._compute_reward(
+                    state, tool_call, tool_result, execution_time
+                )
 
                 # Create trajectory
                 trajectory = Trajectory(
@@ -247,7 +261,7 @@ class AsynchronousAgentPipelineCore:
                     action=tool_call,
                     tool_result=tool_result,
                     reward=reward,
-                    timestamp=datetime.now()
+                    timestamp=datetime.now(),
                 )
 
                 # Put trajectory in learner queue
@@ -263,8 +277,13 @@ class AsynchronousAgentPipelineCore:
 
         self.logger.info(f"Reward modeler {worker_id} stopped")
 
-    def _compute_reward(self, state: Dict[str, Any], tool_call: ToolCall,
-                       tool_result: ToolResult, execution_time: float) -> float:
+    def _compute_reward(
+        self,
+        state: Dict[str, Any],
+        tool_call: ToolCall,
+        tool_result: ToolResult,
+        execution_time: float,
+    ) -> float:
         """
         Compute reward for a trajectory.
 
@@ -331,29 +350,34 @@ class AsynchronousAgentPipelineCore:
         total_reward = sum(t.reward for t in trajectories)
         avg_reward = total_reward / len(trajectories) if trajectories else 0
 
-        self.logger.info(f"Policy update: {len(trajectories)} trajectories, avg reward: {avg_reward:.3f}")
+        self.logger.info(
+            f"Policy update: {len(trajectories)} trajectories, avg reward: {avg_reward:.3f}"
+        )
 
         # Update statistics
-        self.stats["average_execution_time"] = sum(
-            t.tool_result.execution_time for t in trajectories
-        ) / len(trajectories) if trajectories else 0
+        self.stats["average_execution_time"] = (
+            sum(t.tool_result.execution_time for t in trajectories) / len(trajectories)
+            if trajectories
+            else 0
+        )
 
     def get_statistics(self) -> Dict[str, Any]:
         """Get pipeline statistics"""
         self.stats["queue_sizes"] = {
             "tool_calls": self.tool_call_queue.qsize(),
             "tool_results": self.tool_result_queue.qsize(),
-            "trajectories": self.trajectory_queue.qsize()
+            "trajectories": self.trajectory_queue.qsize(),
         }
         return self.stats.copy()
 
-    async def create_tool_call(self, tool_name: str, parameters: Dict[str, Any],
-                              priority: int = 1) -> ToolCall:
+    async def create_tool_call(
+        self, tool_name: str, parameters: Dict[str, Any], priority: int = 1
+    ) -> ToolCall:
         """Create a tool call for submission to the pipeline"""
         return ToolCall(
             id=str(uuid.uuid4()),
             tool_name=tool_name,
             parameters=parameters,
             timestamp=datetime.now(),
-            priority=priority
+            priority=priority,
         )

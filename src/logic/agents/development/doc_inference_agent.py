@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -73,11 +74,15 @@ class DocInferenceAgent(BaseAgent):
             for page in reader.pages:
                 text += page.extract_text() + "\n"
             return text
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             return f"Error parsing PDF: {str(e)}"
 
     @as_tool
-    def ingest_document_to_knowledge(self, doc_path: str, tags: list[str] | None = None) -> dict[str, Any]:
+    def ingest_document_to_knowledge(
+        self, doc_path: str, tags: list[str] | None = None
+    ) -> dict[str, Any]:
         """Converts a document into context-aware Knowledge for the Fleet.
 
         Args:
@@ -86,7 +91,9 @@ class DocInferenceAgent(BaseAgent):
         """
         logging.info(f"DocInference: Ingesting {doc_path} into Knowledge.")
         content = (
-            self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."
+            self.parse_pdf_text(doc_path)
+            if doc_path.lower().endswith(".pdf")
+            else "Non-PDF content raw placeholder."
         )
 
         # Here we would typically interface with KnowledgeAgent or save to a known export path
@@ -119,8 +126,10 @@ class DocInferenceAgent(BaseAgent):
 
         logging.info(f"DocInference: Processing {doc_path} into {output_format}")
         # Mocking the layout conversion logic
-        return (f"Successfully reconstructed {doc_path} as {output_format}. "
-                "Tables extracted: 2, Handwriting detected: Yes.")
+        return (
+            f"Successfully reconstructed {doc_path} as {output_format}. "
+            "Tables extracted: 2, Handwriting detected: Yes."
+        )
 
     @as_tool
     def extract_form_data(self, image_path: str) -> dict[str, Any]:
@@ -151,5 +160,7 @@ class DocInferenceAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(DocInferenceAgent, "Document Inference Agent", "Path to document")
+    main = create_main_function(
+        DocInferenceAgent, "Document Inference Agent", "Path to document"
+    )
     main()

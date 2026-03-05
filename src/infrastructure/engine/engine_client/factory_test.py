@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "auto_select_client_mode"), "auto_select_client_mode missing"
     assert hasattr(mod, "create_engine_client"), "create_engine_client missing"
-

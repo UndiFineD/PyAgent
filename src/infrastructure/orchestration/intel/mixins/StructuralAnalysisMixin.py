@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -7,7 +8,10 @@ import re
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.orchestration.intel.SelfImprovementAnalysis import SelfImprovementAnalysis
+    from src.infrastructure.orchestration.intel.SelfImprovementAnalysis import (
+        SelfImprovementAnalysis,
+    )
+
 
 class StructuralAnalysisMixin:
     """Mixin for structural health and versioning checks in SelfImprovementAnalysis."""
@@ -23,7 +27,11 @@ class StructuralAnalysisMixin:
         return None
 
     def add_structural_findings(
-        self: SelfImprovementAnalysis, findings: list[dict[str, Any]], file_path: str, rel_path: str, content: str
+        self: SelfImprovementAnalysis,
+        findings: list[dict[str, Any]],
+        file_path: str,
+        rel_path: str,
+        content: str,
     ) -> None:
         """Adds size and resilience findings based on file content and metadata."""
         # Size check

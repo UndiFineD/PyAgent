@@ -33,32 +33,32 @@ except ImportError as e:
 
 def test_outputkind_exists():
     """Test that OutputKind class exists and is importable."""
-    assert 'OutputKind' in dir()
+    assert "OutputKind" in dir()
 
 
 def test_stopcondition_exists():
     """Test that StopCondition class exists and is importable."""
-    assert 'StopCondition' in dir()
+    assert "StopCondition" in dir()
 
 
 def test_temperatureschedule_exists():
     """Test that TemperatureSchedule class exists and is importable."""
-    assert 'TemperatureSchedule' in dir()
+    assert "TemperatureSchedule" in dir()
 
 
 def test_samplingparams_exists():
     """Test that SamplingParams class exists and is importable."""
-    assert 'SamplingParams' in dir()
+    assert "SamplingParams" in dir()
 
 
 def test_advancedsamplingparams_exists():
     """Test that AdvancedSamplingParams class exists and is importable."""
-    assert 'AdvancedSamplingParams' in dir()
+    assert "AdvancedSamplingParams" in dir()
 
 
 def test_logitbiasbuilder_exists():
     """Test that LogitBiasBuilder class exists and is importable."""
-    assert 'LogitBiasBuilder' in dir()
+    assert "LogitBiasBuilder" in dir()
 
 
 def test_logitbiasbuilder_instantiation():
@@ -69,22 +69,22 @@ def test_logitbiasbuilder_instantiation():
 
 def test_badwordsprocessor_exists():
     """Test that BadWordsProcessor class exists and is importable."""
-    assert 'BadWordsProcessor' in dir()
+    assert "BadWordsProcessor" in dir()
 
 
 def test_tokenwhitelistprocessor_exists():
     """Test that TokenWhitelistProcessor class exists and is importable."""
-    assert 'TokenWhitelistProcessor' in dir()
+    assert "TokenWhitelistProcessor" in dir()
 
 
 def test_mirostatsampler_exists():
     """Test that MirostatSampler class exists and is importable."""
-    assert 'MirostatSampler' in dir()
+    assert "MirostatSampler" in dir()
 
 
 def test_samplingengine_exists():
     """Test that SamplingEngine class exists and is importable."""
-    assert 'SamplingEngine' in dir()
+    assert "SamplingEngine" in dir()
 
 
 def test_create_sampling_params_exists():
@@ -100,4 +100,3 @@ def test_create_advanced_sampling_params_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

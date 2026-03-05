@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_llminterface_exists():
     """Test that LLMInterface class exists and is importable."""
-    assert 'LLMInterface' in dir()
+    assert "LLMInterface" in dir()
 
 
 def test_domaingenerationresult_exists():
     """Test that DomainGenerationResult class exists and is importable."""
-    assert 'DomainGenerationResult' in dir()
+    assert "DomainGenerationResult" in dir()
 
 
 def test_domaingenerator_exists():
     """Test that DomainGenerator class exists and is importable."""
-    assert 'DomainGenerator' in dir()
+    assert "DomainGenerator" in dir()
 
 
 def test_mockllm_exists():
     """Test that MockLLM class exists and is importable."""
-    assert 'MockLLM' in dir()
+    assert "MockLLM" in dir()
 
 
 def test_mockllm_instantiation():
@@ -60,4 +60,3 @@ def test_mockllm_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

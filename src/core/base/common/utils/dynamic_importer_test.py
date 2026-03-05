@@ -15,7 +15,9 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "import_from_path"), "import_from_path missing"
     assert hasattr(mod, "resolve_obj_by_qualname"), "resolve_obj_by_qualname missing"
-    assert hasattr(mod, "resolve_obj_by_qualname_parts"), "resolve_obj_by_qualname_parts missing"
+    assert hasattr(
+        mod, "resolve_obj_by_qualname_parts"
+    ), "resolve_obj_by_qualname_parts missing"
     assert hasattr(mod, "PlaceholderModule"), "PlaceholderModule missing"
     assert hasattr(mod, "lazy_import"), "lazy_import missing"
     assert hasattr(mod, "safe_import"), "safe_import missing"
@@ -28,4 +30,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "is_module_available"), "is_module_available missing"
     assert hasattr(mod, "get_module_version"), "get_module_version missing"
     assert hasattr(mod, "require_module"), "require_module missing"
-

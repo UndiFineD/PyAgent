@@ -1,5 +1,5 @@
 class TestSnapshot:
-	pass
+    pass
 
 
 __all__ = ["TestSnapshot"]

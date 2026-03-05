@@ -20,8 +20,7 @@ import logging
 from typing import Any, Dict, List, Optional
 
 from .base import ChatTemplate
-from .config import (MODEL_TEMPLATE_MAP, RenderOptions, TemplateConfig,
-                     TemplateType)
+from .config import MODEL_TEMPLATE_MAP, RenderOptions, TemplateConfig, TemplateType
 from .jinja import JinjaTemplate
 from .registry import ChatTemplateRegistry
 from .resolver import TemplateResolver

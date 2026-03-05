@@ -21,7 +21,9 @@ from src.core.base.logic.incremental_processor import IncrementalProcessor
 class OrchestratorResourceMixin:
     """Resource management methods (rate limiting, locking, incremental processing) for OrchestratorAgent."""
 
-    def enable_rate_limiting(self, config: RateLimitConfig | dict[str, Any] | None = None) -> None:
+    def enable_rate_limiting(
+        self, config: RateLimitConfig | dict[str, Any] | None = None
+    ) -> None:
         """Enable rate limiting for API calls."""
         if isinstance(config, dict):
             config = RateLimitConfig(**config)

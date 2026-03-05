@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_kubernetesmanager_exists():
     """Test that KubernetesManager class exists and is importable."""
-    assert 'KubernetesManager' in dir()
+    assert "KubernetesManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

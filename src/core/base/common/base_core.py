@@ -32,7 +32,9 @@ class BaseCore(Loadable, Saveable, Component):
     Handles standard I/O, naming, and versioning.
     """
 
-    def __init__(self, name: Optional[str] = None, repo_root: Optional[Union[str, Path]] = None) -> None:
+    def __init__(
+        self, name: Optional[str] = None, repo_root: Optional[Union[str, Path]] = None
+    ) -> None:
         self.name = name or self.__class__.__name__
         self.version = VERSION
         self.workspace = WorkspaceCore(root_dir=repo_root)
@@ -68,7 +70,9 @@ class BaseCore(Loadable, Saveable, Component):
             else:
                 self._storage.save_json(save_path, self._state)
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             logger.error("[%s] Failed to save state to %s: %s", self.name, save_path, e)
             return False
 

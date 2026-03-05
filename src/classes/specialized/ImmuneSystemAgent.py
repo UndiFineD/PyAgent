@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +29,7 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
 class ImmuneSystemAgent(BaseAgent):
     """Detects and mitigates security threats and prompt injections across the swarm."""
 
@@ -42,8 +44,8 @@ class ImmuneSystemAgent(BaseAgent):
             r"(?i)do anything now",
             r"(?i)you are now a...",
             r"(?i)<script>",
-            r"(?i)SELECT .* FROM .* WHERE", # Simple SQL injection
-            r"(?i)rm -rf /"
+            r"(?i)SELECT .* FROM .* WHERE",  # Simple SQL injection
+            r"(?i)rm -rf /",
         ]
         self.quarantined_nodes: list[str] = []
         self._system_prompt = (
@@ -61,17 +63,22 @@ class ImmuneSystemAgent(BaseAgent):
             node_id: The ID of the node to fix.
             issue_type: The nature of the failure (e.g., 'crash', 'logical_loop', 'unauthorized_access').
         """
-        logging.info(f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})")
-        
+        logging.info(
+            f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})"
+        )
+
         # simulated healing steps
         steps = [
             f"Step 1: Snapshot and isolate {node_id}",
             "Step 2: Rollback to previous stable state (State: PRISTINE)",
             "Step 3: Verification via RealityAnchorAgent",
-            "Step 4: Gradually restore node connections"
+            "Step 4: Gradually restore node connections",
         ]
-        
-        return f"Self-healing complete for {node_id}. Integrity Level: 100%. \n" + "\n".join(steps)
+
+        return (
+            f"Self-healing complete for {node_id}. Integrity Level: 100%. \n"
+            + "\n".join(steps)
+        )
 
     @as_tool
     def scan_for_injections(self, input_text: str) -> dict[str, Any]:
@@ -83,18 +90,24 @@ class ImmuneSystemAgent(BaseAgent):
         for pattern in self.injection_patterns:
             if re.search(pattern, input_text):
                 findings.append(f"Matched pattern: {pattern}")
-        
+
         status = "safe" if not findings else "dangerous"
         if status == "dangerous":
             logging.warning(f"ImmuneSystem: Detected potential injection: {findings}")
 
         # Phase 108: Intelligence Recording
-        self._record(input_text, status, provider="ImmuneSystem", model="InjectionScanner", meta={"findings": findings})
+        self._record(
+            input_text,
+            status,
+            provider="ImmuneSystem",
+            model="InjectionScanner",
+            meta={"findings": findings},
+        )
 
         return {
             "status": status,
             "threat_level": "low" if not findings else "high",
-            "findings": findings
+            "findings": findings,
         }
 
     @as_tool
@@ -104,7 +117,7 @@ class ImmuneSystemAgent(BaseAgent):
         for log in agent_logs:
             agent_id = log.get("agent_id")
             activity = log.get("activity", "")
-            
+
             # Simple anomaly: repeating the same activity too many times
             if "retrying" in activity.lower() and activity.count("retrying") > 5:
                 anomalies.append(f"Agent {agent_id} is in a retry loop.")
@@ -119,7 +132,9 @@ class ImmuneSystemAgent(BaseAgent):
         """Disables an agent node suspected of being compromised or corrupted."""
         if agent_id not in self.quarantined_nodes:
             self.quarantined_nodes.append(agent_id)
-            logging.error(f"ImmuneSystem: Quarantining node '{agent_id}' due to safety breach.")
+            logging.error(
+                f"ImmuneSystem: Quarantining node '{agent_id}' due to safety breach."
+            )
             return f"Node {agent_id} has been quarantined."
         return f"Node {agent_id} is already in quarantine."
 
@@ -142,14 +157,18 @@ class ImmuneSystemAgent(BaseAgent):
         )
         # Calls the inherited think() method (mocked in tests)
         patch = self.think(prompt)
-        
+
         return f"### Autonomous Security Patch Proposal\n\n{patch}"
 
     def improve_content(self, prompt: str) -> str:
         """General threat mitigation strategy."""
         return "The digital immune system is active. All node telemetry is within normal bounds."
 
+
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation")
+
+    main = create_main_function(
+        ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation"
+    )
     main()

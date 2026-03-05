@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -100,7 +101,7 @@ class TensorShape:
         def detect_dynamic(dim):
             if isinstance(dim, DynamicDim):
                 self.dynamic_dims.add(dim.name)
-        
+
         list(map(detect_dynamic, dims))
 
     def resolve(self, **bindings: int) -> tuple[int | str, ...]:
@@ -113,6 +114,7 @@ class TensorShape:
         Returns:
             Tuple of resolved dimensions (unresolved symbols remain as strings)
         """
+
         def _resolve(dim):
             if isinstance(dim, str) and dim in bindings:
                 return bindings[dim]
@@ -165,7 +167,7 @@ class TensorShape:
                     return f"{dim}*"
                 return dim
             return str(dim)
-        
+
         dim_strs = list(map(_fmt, self.dims))
         return f"TensorShape({', '.join(dim_strs)})"
 
@@ -237,9 +239,10 @@ class TensorSchema:
         self,
         tensors: dict[str, Any],
         results: dict[str, tuple[int, ...]],
-        collected_bindings: dict[str, int]
+        collected_bindings: dict[str, int],
     ) -> None:
         """Collect dimension bindings from tensors."""
+
         def _collect(item):
             name, tensor = item
             if name in self.fields:
@@ -255,9 +258,10 @@ class TensorSchema:
         self,
         shape: tuple[int, ...],
         expected: TensorShape,
-        collected_bindings: dict[str, int]
+        collected_bindings: dict[str, int],
     ) -> None:
         """Extract dimension bindings from shape comparison."""
+
         def _extract(pair):
             actual, exp = pair
             if isinstance(exp, str) and exp not in collected_bindings:
@@ -271,9 +275,10 @@ class TensorSchema:
         self,
         tensors: dict[str, Any],
         results: dict[str, tuple[int, ...]],
-        collected_bindings: dict[str, int]
+        collected_bindings: dict[str, int],
     ) -> None:
         """Validate all tensor shapes against schema."""
+
         def _validate(item):
             name, tensor = item
             if name in self.fields:
@@ -281,7 +286,9 @@ class TensorSchema:
                 expected = self.fields[name]
                 if not expected.matches(shape, **collected_bindings):
                     resolved = expected.resolve(**collected_bindings)
-                    raise ValueError(f"Shape mismatch regarding '{name}': expected {resolved}, got {shape}")
+                    raise ValueError(
+                        f"Shape mismatch regarding '{name}': expected {resolved}, got {shape}"
+                    )
 
         list(map(_validate, tensors.items()))
 
@@ -297,7 +304,9 @@ class TensorSchema:
             return ()
         raise TypeError(f"Cannot get shape of {type(tensor)}")
 
-    def _get_nested_shape(self, nested: list | tuple, depth: int = 0) -> tuple[int, ...]:
+    def _get_nested_shape(
+        self, nested: list | tuple, depth: int = 0
+    ) -> tuple[int, ...]:
         """Get shape of nested list/tuple structure."""
         if not nested:
             return (0,)
@@ -314,7 +323,9 @@ class TensorSchema:
             return (len(nested),)
 
     def __repr__(self) -> str:
-        fields_str = ", ".join(map(lambda item: f"{item[0]}={item[1]}", self.fields.items()))
+        fields_str = ", ".join(
+            map(lambda item: f"{item[0]}={item[1]}", self.fields.items())
+        )
         return f"TensorSchema({fields_str})"
 
 

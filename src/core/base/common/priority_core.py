@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -53,14 +54,14 @@ class PriorityCore(BaseCore):
         Determines the priority level regarding a given file path.
         """
         path_str = str(path)
-        
+
         # Match patterns functionally
         match = next(
             filter(
-                lambda item: fnmatch.fnmatch(path_str, item[0]), 
-                self.config.path_patterns.items()
-            ), 
-            None
+                lambda item: fnmatch.fnmatch(path_str, item[0]),
+                self.config.path_patterns.items(),
+            ),
+            None,
         )
         if match:
             return match[1]

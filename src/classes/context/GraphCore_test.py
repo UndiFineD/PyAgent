@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_codegraphvisitor_exists():
     """Test that CodeGraphVisitor class exists and is importable."""
-    assert 'CodeGraphVisitor' in dir()
+    assert "CodeGraphVisitor" in dir()
 
 
 def test_graphcore_exists():
     """Test that GraphCore class exists and is importable."""
-    assert 'GraphCore' in dir()
+    assert "GraphCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

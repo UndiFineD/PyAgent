@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_batchinvariantops_exists():
     """Test that BatchInvariantOps class exists and is importable."""
-    assert 'BatchInvariantOps' in dir()
+    assert "BatchInvariantOps" in dir()
 
 
 def test_matmul_persistent_exists():
@@ -99,4 +99,3 @@ def test_attention_output_batch_invariant_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

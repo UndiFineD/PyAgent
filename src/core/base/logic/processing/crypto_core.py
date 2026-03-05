@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,10 +41,7 @@ CALG_AES_256 = 0x00006610
 
 
 class DATA_BLOB(ctypes.Structure):
-    _fields_ = [
-        ("cbData", wintypes.DWORD),
-        ("pbData", ctypes.POINTER(ctypes.c_byte))
-    ]
+    _fields_ = [("cbData", wintypes.DWORD), ("pbData", ctypes.POINTER(ctypes.c_byte))]
 
 
 class CREDENTIALW(ctypes.Structure):
@@ -59,7 +57,7 @@ class CREDENTIALW(ctypes.Structure):
         ("AttributeCount", wintypes.DWORD),
         ("Attributes", ctypes.c_void_p),
         ("TargetAlias", wintypes.LPWSTR),
-        ("UserName", wintypes.LPWSTR)
+        ("UserName", wintypes.LPWSTR),
     ]
 
 
@@ -73,7 +71,9 @@ class CryptoCore:
         except Exception as e:
             raise RuntimeError(f"Crypto libraries not available: {e}")
 
-    def decrypt_dpapi_blob(self, encrypted_data: bytes, entropy: Optional[bytes] = None) -> Optional[bytes]:
+    def decrypt_dpapi_blob(
+        self, encrypted_data: bytes, entropy: Optional[bytes] = None
+    ) -> Optional[bytes]:
         """Decrypt data using Windows DPAPI."""
         try:
             # Prepare input blob
@@ -96,11 +96,17 @@ class CryptoCore:
                 ctypes.byref(in_blob),
                 None,
                 ctypes.byref(entropy_blob) if entropy else None,
-                None, None, flags,
-                ctypes.byref(out_blob)
+                None,
+                None,
+                flags,
+                ctypes.byref(out_blob),
             ):
                 # Extract decrypted data
-                decrypted = bytes((ctypes.c_byte * out_blob.cbData).from_address(ctypes.addressof(out_blob.pbData.contents)))
+                decrypted = bytes(
+                    (ctypes.c_byte * out_blob.cbData).from_address(
+                        ctypes.addressof(out_blob.pbData.contents)
+                    )
+                )
                 # Free the output blob
                 ctypes.windll.kernel32.LocalFree(out_blob.pbData)
                 return decrypted
@@ -110,7 +116,9 @@ class CryptoCore:
         except Exception:
             return None
 
-    def decrypt_aes_cbc(self, key: bytes, iv: bytes, encrypted_data: bytes) -> Optional[bytes]:
+    def decrypt_aes_cbc(
+        self, key: bytes, iv: bytes, encrypted_data: bytes
+    ) -> Optional[bytes]:
         """Decrypt data using AES-CBC."""
         try:
             # Acquire crypto context
@@ -123,7 +131,7 @@ class CryptoCore:
             # Import key
             hKey = wintypes.HANDLE()
             key_blob = (ctypes.c_byte * (len(key) + 8))()
-            key_blob[0:8] = b'\x08\x00\x00\x00\x01\x00\x00\x00'  # BLOBHEADER for AES
+            key_blob[0:8] = b"\x08\x00\x00\x00\x01\x00\x00\x00"  # BLOBHEADER for AES
             key_blob[8:] = key
 
             if not self.advapi32.CryptImportKey(
@@ -148,13 +156,13 @@ class CryptoCore:
             # Decrypt
             data = bytearray(encrypted_data)
             data_len = ctypes.c_void_p(len(data))
-            if self.advapi32.CryptDecrypt(hKey, None, True, 0, 
-                                         (ctypes.c_byte * len(data))(*data), 
-                                         data_len):
+            if self.advapi32.CryptDecrypt(
+                hKey, None, True, 0, (ctypes.c_byte * len(data))(*data), data_len
+            ):
                 # Clean up
                 self.advapi32.CryptDestroyKey(hKey)
                 self.advapi32.CryptReleaseContext(hProv, 0)
-                return bytes(data[:data_len.value])
+                return bytes(data[: data_len.value])
             else:
                 self.advapi32.CryptDestroyKey(hKey)
                 self.advapi32.CryptReleaseContext(hProv, 0)
@@ -175,14 +183,16 @@ class CryptoCore:
         try:
             cred = CREDENTIALW()
             cred_ptr = ctypes.POINTER(CREDENTIALW)()
-            
+
             if self.advapi32.CredReadW(
-                target_name.encode('utf-16le'), 1, 0, ctypes.byref(cred_ptr)
+                target_name.encode("utf-16le"), 1, 0, ctypes.byref(cred_ptr)
             ):
                 cred = cred_ptr.contents
-                blob_data = bytes((ctypes.c_byte * cred.CredentialBlobSize).from_address(
-                    ctypes.addressof(cred.CredentialBlob.contents)
-                ))
+                blob_data = bytes(
+                    (ctypes.c_byte * cred.CredentialBlobSize).from_address(
+                        ctypes.addressof(cred.CredentialBlob.contents)
+                    )
+                )
                 self.advapi32.CredFree(cred_ptr)
                 return blob_data
             else:

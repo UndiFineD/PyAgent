@@ -13,15 +13,18 @@ import time
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import \
-        SelfImprovementAnalysis
+    from src.infrastructure.swarm.orchestration.intel.self_improvement_analysis import (
+        SelfImprovementAnalysis,
+    )
 
 
 class ResearchAnalysisMixin:
     """Mixin for research report updates and lesson harvesting in SelfImprovementAnalysis."""
 
     def update_research_report(
-        self: SelfImprovementAnalysis, results: dict[str, Any], lessons: list[str] | None = None
+        self: SelfImprovementAnalysis,
+        results: dict[str, Any],
+        lessons: list[str] | None = None,
     ) -> None:
         """Updates the IMPROVEMENT_RESEARCH.md based on latest scan findings."""
         if not os.path.exists(os.path.dirname(self.research_doc)):
@@ -42,7 +45,9 @@ class ResearchAnalysisMixin:
             with open(self.research_doc, "a", encoding="utf-8") as f:
                 f.write(summary)
 
-    def review_ai_lessons(self: SelfImprovementAnalysis, fleet: Any, ai: Any) -> list[str]:
+    def review_ai_lessons(
+        self: SelfImprovementAnalysis, fleet: Any, ai: Any
+    ) -> list[str]:
         """Reviews local interaction shards for patterns of success/failure."""
         lessons: list[str] = []
         shard_path = os.path.join(self.workspace_root, "data/memory/shards")
@@ -55,16 +60,29 @@ class ResearchAnalysisMixin:
                         try:
                             # In Phase 317, we specifically check for Copilot CLI deprecation patterns
                             # mentioned in Shard 220.
-                            with open(os.path.join(root, file), "r", encoding="utf-8", errors="ignore") as f:
+                            with open(
+                                os.path.join(root, file),
+                                "r",
+                                encoding="utf-8",
+                                errors="ignore",
+                            ) as f:
                                 content = f.read()
                                 if "Copilot CLI" in content and "deprecated" in content:
-                                    lessons.append("Identified GitHub Copilot CLI deprecation pattern in Shard 220.")
-                        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                                    lessons.append(
+                                        "Identified GitHub Copilot CLI deprecation pattern in Shard 220."
+                                    )
+                        except (
+                            Exception
+                        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
                             continue
 
         # If no shards found, simulate ingestion of Shard 220 manually for Phase 317 parity
         if not lessons:
-            lessons.append("Ingested Shard 220 patterns: GitHub Copilot CLI extension is deprecated.")
-            lessons.append("Action: Standardized connectivity orchestrators to replace legacy extension logic.")
+            lessons.append(
+                "Ingested Shard 220 patterns: GitHub Copilot CLI extension is deprecated."
+            )
+            lessons.append(
+                "Action: Standardized connectivity orchestrators to replace legacy extension logic."
+            )
 
         return list(set(lessons))

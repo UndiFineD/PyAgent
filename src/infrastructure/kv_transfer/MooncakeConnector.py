@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 
@@ -62,6 +63,7 @@ if TYPE_CHECKING:
 
 class MooncakeTransferStatus(Enum):
     """Status of a Mooncake KV transfer operation."""
+
     PENDING = auto()
     IN_PROGRESS = auto()
     COMPLETED = auto()
@@ -72,6 +74,7 @@ class MooncakeTransferStatus(Enum):
 @dataclass
 class MooncakeRemoteTarget:
     """Represents a remote Mooncake node for KV storage or retrieval."""
+
     node_id: str
     host: str
     port: int
@@ -84,10 +87,10 @@ class MooncakeRemoteTarget:
 class MooncakeConnector(KVConnectorBase):
     """
     Mooncake-style KV transfer connector.
-    
+
     Implements a distributed KV cache pool where prefill workers (producers)
     push computed KV blocks, and decode workers (consumers) pull them.
-    
+
     This connector uses Rust acceleration for:
     - Block serialization/deserialization
     - Checksum validation
@@ -101,25 +104,25 @@ class MooncakeConnector(KVConnectorBase):
     ):
         super().__init__(config, kv_cache_config)
         self.node_id = config.extra_config.get("node_id", f"mooncake-{config.kv_rank}")
-        
+
         # Mooncake-specific state
         self._remote_nodes: Dict[str, MooncakeRemoteTarget] = {}
         self._transfer_futures: Dict[str, MooncakeTransferStatus] = {}
         self._block_registry: Dict[int, str] = {}  # block_id -> node_id
-        
+
         # Active transfers tracking
         self._pending_loads: Dict[str, Set[str]] = collections.defaultdict(set)
         self._pending_saves: Dict[str, Set[str]] = collections.defaultdict(set)
-        
+
         # Buffer pool for asynchronous operations
         self._buffer_pool: Dict[str, Any] = {}
         self._buffer_lock = threading.Lock()
-        
+
         # Metrics
         self.bytes_transferred = 0
         self.transfer_count = 0
         self.failed_transferred = 0
-        
+
         logger.info("Initialized MooncakeConnector as %s", self.config.kv_role.name)
 
     def _mooncake_transfer_rust(self, data: Any, target: str, mode: str) -> bool:
@@ -148,7 +151,7 @@ class MooncakeConnector(KVConnectorBase):
     ) -> None:
         """
         Start asynchronous KV cache loading from Mooncake pool.
-        
+
         On the consumer side, this looks at the attention metadata to identify
         which blocks are needed and initiates the remote FETCH operations.
         """
@@ -157,13 +160,13 @@ class MooncakeConnector(KVConnectorBase):
 
         request_id = getattr(forward_context, "request_id", "unknown")
         attn_metadata = forward_context.attn_metadata
-        
+
         if not attn_metadata:
             return
 
         # Identify missing blocks that need to be pulled from Mooncake
         needed_blocks = self._identify_remote_blocks(attn_metadata)
-        
+
         with self._lock:
             for block_id in needed_blocks:
                 # Find which node has this block
@@ -172,8 +175,11 @@ class MooncakeConnector(KVConnectorBase):
                     self._pending_loads[request_id].add(str(block_id))
                     self._initiate_async_pull(request_id, block_id, target_node)
                 else:
-                    logger.warning("Block %d requested by %s but not found in Mooncake registry", 
-                                 block_id, request_id)
+                    logger.warning(
+                        "Block %d requested by %s but not found in Mooncake registry",
+                        block_id,
+                        request_id,
+                    )
 
     def wait_for_layer_load(self, layer_name: str) -> None:
         """
@@ -181,20 +187,22 @@ class MooncakeConnector(KVConnectorBase):
         """
         start_time = time.time()
         timeout = self.config.connection_timeout
-        
+
         active_transfers = True
         while active_transfers:
             with self._lock:
                 active_transfers = any(
-                    s == MooncakeTransferStatus.IN_PROGRESS 
+                    s == MooncakeTransferStatus.IN_PROGRESS
                     for s in self._transfer_futures.values()
                 )
-            
+
             if not active_transfers:
                 break
-                
+
             if time.time() - start_time > timeout:
-                logger.error("Timeout waiting for Mooncake KV load for layer %s", layer_name)
+                logger.error(
+                    "Timeout waiting for Mooncake KV load for layer %s", layer_name
+                )
                 break
             time.sleep(0.001)
 
@@ -212,7 +220,7 @@ class MooncakeConnector(KVConnectorBase):
             return
 
         request_id = getattr(attn_metadata, "request_id", "unknown")
-        
+
         # In Mooncake, we don't necessarily push whole layers, but blocks.
         # But the connector interface works per layer for coordination.
         self._initiate_async_push(request_id, layer_name, kv_layer, attn_metadata)
@@ -244,35 +252,44 @@ class MooncakeConnector(KVConnectorBase):
             for req_blocks in block_tables:
                 for block_id in req_blocks:
                     if block_id not in self._block_registry:
-                        # If it's not in registry, we can't pull it, 
+                        # If it's not in registry, we can't pull it,
                         # but in real Mooncake we might query a global catalog here
                         pass
                     else:
                         needed.append(block_id)
         return needed
 
-    def _initiate_async_pull(self, request_id: str, block_id: int, node_id: str) -> None:
+    def _initiate_async_pull(
+        self, request_id: str, block_id: int, node_id: str
+    ) -> None:
         """Fire off an asynchronous pull request."""
+
         def pull_task():
             transfer_id = f"pull-{request_id}-{block_id}"
             with self._lock:
                 self._transfer_futures[transfer_id] = MooncakeTransferStatus.IN_PROGRESS
-            
+
             try:
                 # Simulate network latency
                 target = self._remote_nodes.get(node_id)
                 if target:
                     time.sleep(target.latency_ms / 1000.0)
-                
+
                 success = self._mooncake_transfer_rust(block_id, node_id, "PULL")
-                
+
                 with self._lock:
                     if success:
-                        self._transfer_futures[transfer_id] = MooncakeTransferStatus.COMPLETED
-                        self.bytes_transferred += 1024 * 64 # Simulated block size (64KB)
+                        self._transfer_futures[transfer_id] = (
+                            MooncakeTransferStatus.COMPLETED
+                        )
+                        self.bytes_transferred += (
+                            1024 * 64
+                        )  # Simulated block size (64KB)
                         self.transfer_count += 1
                     else:
-                        self._transfer_futures[transfer_id] = MooncakeTransferStatus.FAILED
+                        self._transfer_futures[transfer_id] = (
+                            MooncakeTransferStatus.FAILED
+                        )
                         self.failed_transferred += 1
             except Exception as e:
                 logger.error("Mooncake pull failed: %s", e)
@@ -288,8 +305,11 @@ class MooncakeConnector(KVConnectorBase):
 
         threading.Thread(target=pull_task, daemon=True).start()
 
-    def _initiate_async_push(self, request_id: str, layer_name: str, kv_layer: Any, attn_metadata: Any) -> None:
+    def _initiate_async_push(
+        self, request_id: str, layer_name: str, kv_layer: Any, attn_metadata: Any
+    ) -> None:
         """Fire off an asynchronous push request to the Mooncake pool."""
+
         def push_task():
             transfer_id = f"push-{request_id}-{layer_name}"
             try:
@@ -299,13 +319,15 @@ class MooncakeConnector(KVConnectorBase):
                     # Finding which blocks correspond to this layer
                     # This is complex in vLLM; simplified here
                     pass
-                
+
                 # Push logic
-                success = self._mooncake_transfer_rust(kv_layer, "MOONCAKE_POOL", "PUSH")
+                success = self._mooncake_transfer_rust(
+                    kv_layer, "MOONCAKE_POOL", "PUSH"
+                )
                 if success:
                     with self._lock:
                         self.transfer_count += 1
-                        self.bytes_transferred += 1024 * 1024 # Dummy 1MB push
+                        self.bytes_transferred += 1024 * 1024  # Dummy 1MB push
                         # Update registry that we (this node) have these blocks
                         # Or if we pushed to a specific buffer node, update accordingly.
                         # self._block_registry[block_id] = self.node_id
@@ -322,7 +344,7 @@ class MooncakeConnector(KVConnectorBase):
 
         with self._lock:
             self._pending_saves[request_id].add(layer_name)
-        
+
         threading.Thread(target=push_task, daemon=True).start()
 
     # ==============================
@@ -333,7 +355,12 @@ class MooncakeConnector(KVConnectorBase):
         """Register a remote Mooncake node in the pool."""
         with self._lock:
             self._remote_nodes[node.node_id] = node
-            logger.info("Registered Mooncake node: %s at %s:%d", node.node_id, node.host, node.port)
+            logger.info(
+                "Registered Mooncake node: %s at %s:%d",
+                node.node_id,
+                node.host,
+                node.port,
+            )
 
     def get_health_report(self) -> Dict[str, Any]:
         """Beyond vLLM: Returns health metrics for this connector."""
@@ -354,5 +381,8 @@ class MooncakeConnector(KVConnectorBase):
             self._buffer_pool.clear()
             logger.info("MooncakeConnector closed.")
 
+
 # Lazy loading registration
-_connector = LazyLoader("src.infrastructure.kv_transfer.MooncakeConnector", "MooncakeConnector")
+_connector = LazyLoader(
+    "src.infrastructure.kv_transfer.MooncakeConnector", "MooncakeConnector"
+)

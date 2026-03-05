@@ -33,45 +33,44 @@ except ImportError as e:
 
 def test_agentconfig_exists():
     """Test that AgentConfig class exists and is importable."""
-    assert 'AgentConfig' in dir()
+    assert "AgentConfig" in dir()
 
 
 def test_composedagent_exists():
     """Test that ComposedAgent class exists and is importable."""
-    assert 'ComposedAgent' in dir()
+    assert "ComposedAgent" in dir()
 
 
 def test_agenthealthcheck_exists():
     """Test that AgentHealthCheck class exists and is importable."""
-    assert 'AgentHealthCheck' in dir()
+    assert "AgentHealthCheck" in dir()
 
 
 def test_agentpluginconfig_exists():
     """Test that AgentPluginConfig class exists and is importable."""
-    assert 'AgentPluginConfig' in dir()
+    assert "AgentPluginConfig" in dir()
 
 
 def test_executionprofile_exists():
     """Test that ExecutionProfile class exists and is importable."""
-    assert 'ExecutionProfile' in dir()
+    assert "ExecutionProfile" in dir()
 
 
 def test_agentpipeline_exists():
     """Test that AgentPipeline class exists and is importable."""
-    assert 'AgentPipeline' in dir()
+    assert "AgentPipeline" in dir()
 
 
 def test_agentparallel_exists():
     """Test that AgentParallel class exists and is importable."""
-    assert 'AgentParallel' in dir()
+    assert "AgentParallel" in dir()
 
 
 def test_agentrouter_exists():
     """Test that AgentRouter class exists and is importable."""
-    assert 'AgentRouter' in dir()
+    assert "AgentRouter" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

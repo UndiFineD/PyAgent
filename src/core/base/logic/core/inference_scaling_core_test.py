@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_scalingstrategy_exists():
     """Test that ScalingStrategy class exists and is importable."""
-    assert 'ScalingStrategy' in dir()
+    assert "ScalingStrategy" in dir()
 
 
 def test_inferencescalingcore_exists():
     """Test that InferenceScalingCore class exists and is importable."""
-    assert 'InferenceScalingCore' in dir()
+    assert "InferenceScalingCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

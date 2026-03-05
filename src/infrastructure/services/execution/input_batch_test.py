@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "InputBuffers"), "InputBuffers missing"
     assert hasattr(mod, "InputBatch"), "InputBatch missing"
     assert hasattr(mod, "BatchBuilder"), "BatchBuilder missing"
-

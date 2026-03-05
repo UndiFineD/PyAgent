@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -74,6 +75,7 @@ class LocalContextRecorder(ContextRecorderInterface):
 
         # Phase 318: Audited Rust MD5 Sharding
         from src.core.rust_bridge import RustBridge
+
         shard_id = RustBridge.calculate_shard_id(prompt_hash, self.shard_count)
 
         # Use .jsonl.gz if compression is enabled
@@ -102,7 +104,9 @@ class LocalContextRecorder(ContextRecorderInterface):
 
         try:
             if self.use_compression:
-                line = (json.dumps(record, default=_safe_serialize) + "\n").encode("utf-8")
+                line = (json.dumps(record, default=_safe_serialize) + "\n").encode(
+                    "utf-8"
+                )
                 with gzip.open(log_file, "ab") as f:
                     f.write(line)
             else:

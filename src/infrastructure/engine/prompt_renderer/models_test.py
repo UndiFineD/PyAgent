@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "RenderResult"), "RenderResult missing"
     assert hasattr(mod, "EmbeddingInput"), "EmbeddingInput missing"
     assert hasattr(mod, "MultimodalInput"), "MultimodalInput missing"
-

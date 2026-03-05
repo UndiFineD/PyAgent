@@ -31,4 +31,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "SchemaAdapter"), "SchemaAdapter missing"
     assert hasattr(mod, "MCPServerRegistry"), "MCPServerRegistry missing"
     assert hasattr(mod, "SessionManager"), "SessionManager missing"
-

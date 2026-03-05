@@ -16,6 +16,7 @@ import logging
 import re
 import zlib
 
+
 @dataclass
 class CrossRepoContext:
     """Context from cross-repository analysis.
@@ -27,6 +28,7 @@ class CrossRepoContext:
         similarity_score: Overall similarity score.
         common_patterns: Patterns shared between repos.
     """
+
     repo_name: str
     repo_url: str
     related_files: List[str] = field(default_factory=lambda: [])

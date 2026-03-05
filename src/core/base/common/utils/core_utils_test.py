@@ -15,4 +15,3 @@ def test_imports_and_symbols():
     mod = _load_module()
     assert hasattr(mod, "load_codeignore"), "load_codeignore missing"
     assert hasattr(mod, "setup_logging"), "setup_logging missing"
-

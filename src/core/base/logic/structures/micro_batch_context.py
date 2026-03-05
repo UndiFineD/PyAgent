@@ -20,25 +20,28 @@ Provides a robust interface for managing micro-batch execution, supporting conte
 batch state, and nested batch scopes. Useful for distributed and pipelined GPU workloads.
 """
 
-
 import threading
 from contextlib import contextmanager
 from typing import Any, Dict, Optional
+
 
 class MicroBatchContext:
     """
     Context manager for micro-batch execution state.
     Supports context variables, batch id, and nested batch scopes.
     """
+
     _local = threading.local()
 
-    def __init__(self, batch_id: Optional[int] = None, variables: Optional[Dict[str, Any]] = None):
+    def __init__(
+        self, batch_id: Optional[int] = None, variables: Optional[Dict[str, Any]] = None
+    ):
         self.batch_id = batch_id
         self.variables = variables or {}
         self._prev_context = None
 
     def __enter__(self):
-        self._prev_context = getattr(self._local, 'current', None)
+        self._prev_context = getattr(self._local, "current", None)
         self._local.current = self
         return self
 
@@ -48,12 +51,13 @@ class MicroBatchContext:
     @classmethod
     def current(cls) -> Optional["MicroBatchContext"]:
         """Get the current active micro-batch context, if any."""
-        return getattr(cls._local, 'current', None)
+        return getattr(cls._local, "current", None)
 
     def get(self, key: str, default: Any = None) -> Any:
         return self.variables.get(key, default)
 
     def set(self, key: str, value: Any) -> None:
         self.variables[key] = value
+
 
 __all__ = ["MicroBatchContext"]

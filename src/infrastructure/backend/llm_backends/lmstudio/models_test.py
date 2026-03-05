@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_lmstudioconfig_exists():
     """Test that LMStudioConfig class exists and is importable."""
-    assert 'LMStudioConfig' in dir()
+    assert "LMStudioConfig" in dir()
 
 
 def test_cachedmodel_exists():
     """Test that CachedModel class exists and is importable."""
-    assert 'CachedModel' in dir()
+    assert "CachedModel" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

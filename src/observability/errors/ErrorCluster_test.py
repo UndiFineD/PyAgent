@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_errorcluster_exists():
     """Test that ErrorCluster class exists and is importable."""
-    assert 'ErrorCluster' in dir()
+    assert "ErrorCluster" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

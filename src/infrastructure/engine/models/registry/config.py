@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -180,7 +181,10 @@ class ModelInfo:  # pylint: disable=too-many-instance-attributes
     @property
     def has_gqa(self) -> bool:
         """Check if the model uses Grouped-Query Attention."""
-        return self.num_kv_heads is not None and self.num_kv_heads < self.num_attention_heads
+        return (
+            self.num_kv_heads is not None
+            and self.num_kv_heads < self.num_attention_heads
+        )
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert model info to a serializable dictionary."""

@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_responsemodificationrule_exists():
     """Test that ResponseModificationRule class exists and is importable."""
-    assert 'ResponseModificationRule' in dir()
+    assert "ResponseModificationRule" in dir()
 
 
 def test_modifiedresponse_exists():
     """Test that ModifiedResponse class exists and is importable."""
-    assert 'ModifiedResponse' in dir()
+    assert "ModifiedResponse" in dir()
 
 
 def test_responsemodifiercore_exists():
     """Test that ResponseModifierCore class exists and is importable."""
-    assert 'ResponseModifierCore' in dir()
+    assert "ResponseModifierCore" in dir()
 
 
 def test_responsemodifiercore_instantiation():
@@ -55,4 +55,3 @@ def test_responsemodifiercore_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,9 +26,10 @@ from src.core.base.utilities import create_main_function, as_tool
 
 __version__ = VERSION
 
+
 class TaskPlannerAgent(BaseAgent):
     """Orchestrator that plans multi-agent workflows."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -61,36 +63,40 @@ class TaskPlannerAgent(BaseAgent):
         """Generates a structured plan for the FleetManager following the scientific method."""
         plan = []
         req = user_request.lower()
-        
+
         # 0. Generate Contract (Shared Dependencies) - Pattern from smol-ai
-        plan.append({
-            "agent": "TaskPlanner",
-            "action": "generate_shared_dependencies",
-            "args": [user_request]
-        })
+        plan.append(
+            {
+                "agent": "TaskPlanner",
+                "action": "generate_shared_dependencies",
+                "args": [user_request],
+            }
+        )
 
         # 1. Verification of state (OBSERVE)
-        plan.append({
-            "agent": "Knowledge",
-            "action": "query_knowledge",
-            "args": [user_request]
-        })
-        
+        plan.append(
+            {"agent": "Knowledge", "action": "query_knowledge", "args": [user_request]}
+        )
+
         # 2. Logic Step (THINK)
         # 3. Work Step (EXECUTE)
         if any(w in req for w in ["fix", "bug", "error", "refactor"]):
-            plan.append({
-                "agent": "Coder",
-                "action": "improve_content",
-                "args": [f"Follow scientific iteration to fix: {user_request}"]
-            })
-        
+            plan.append(
+                {
+                    "agent": "Coder",
+                    "action": "improve_content",
+                    "args": [f"Follow scientific iteration to fix: {user_request}"],
+                }
+            )
+
         # 4. Critical Gate (VERIFY)
-        plan.append({
-            "agent": "Security",
-            "action": "improve_content",
-            "args": ["Verify the code changes for hallucinations or injections."]
-        })
+        plan.append(
+            {
+                "agent": "Security",
+                "action": "improve_content",
+                "args": ["Verify the code changes for hallucinations or injections."],
+            }
+        )
 
         return plan
 
@@ -102,17 +108,20 @@ class TaskPlannerAgent(BaseAgent):
             "",
             "## Assigned Agents and Actions",
             "| Step | Agent | Action |",
-            "| :--- | :--- | :--- |"
+            "| :--- | :--- | :--- |",
         ]
-        
+
         for i, step in enumerate(plan, 1):
             report.append(f"| {i} | {step['agent']} | {step['action']} |")
-            
+
         report.append("\n## JSON Payload (for FleetManager)")
         report.append(f"```json\n{json.dumps(plan, indent=2)}\n```")
-        
+
         return "\n".join(report)
 
+
 if __name__ == "__main__":
-    main = create_main_function(TaskPlannerAgent, "TaskPlanner Agent", "User request to plan for")
+    main = create_main_function(
+        TaskPlannerAgent, "TaskPlanner Agent", "User request to plan for"
+    )
     main()

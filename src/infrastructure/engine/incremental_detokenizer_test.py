@@ -18,10 +18,17 @@ def test_imports_and_symbols():
     assert hasattr(mod, "check_stop_strings_rust"), "check_stop_strings_rust missing"
     assert hasattr(mod, "IncrementalDetokenizer"), "IncrementalDetokenizer missing"
     assert hasattr(mod, "NoOpDetokenizer"), "NoOpDetokenizer missing"
-    assert hasattr(mod, "BaseIncrementalDetokenizer"), "BaseIncrementalDetokenizer missing"
-    assert hasattr(mod, "FastIncrementalDetokenizer"), "FastIncrementalDetokenizer missing"
-    assert hasattr(mod, "SlowIncrementalDetokenizer"), "SlowIncrementalDetokenizer missing"
+    assert hasattr(
+        mod, "BaseIncrementalDetokenizer"
+    ), "BaseIncrementalDetokenizer missing"
+    assert hasattr(
+        mod, "FastIncrementalDetokenizer"
+    ), "FastIncrementalDetokenizer missing"
+    assert hasattr(
+        mod, "SlowIncrementalDetokenizer"
+    ), "SlowIncrementalDetokenizer missing"
     assert hasattr(mod, "validate_utf8"), "validate_utf8 missing"
     assert hasattr(mod, "validate_utf8_rust"), "validate_utf8_rust missing"
-    assert hasattr(mod, "INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET"), "INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET missing"
-
+    assert hasattr(
+        mod, "INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET"
+    ), "INITIAL_INCREMENTAL_DETOKENIZATION_OFFSET missing"

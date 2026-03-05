@@ -25,4 +25,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ResponseUsage"), "ResponseUsage missing"
     assert hasattr(mod, "ResponseOutput"), "ResponseOutput missing"
     assert hasattr(mod, "Response"), "Response missing"
-

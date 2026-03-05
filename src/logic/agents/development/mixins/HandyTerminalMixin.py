@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
@@ -8,6 +9,7 @@ from src.core.base.BaseUtilities import as_tool
 
 if TYPE_CHECKING:
     from src.logic.agents.development.HandyAgent import HandyAgent
+
 
 class HandyTerminalMixin:
     """Mixin for terminal execution and slash command handling in HandyAgent."""

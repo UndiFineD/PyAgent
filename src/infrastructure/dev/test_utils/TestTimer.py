@@ -1,8 +1,10 @@
 import time
 
+
 class TestTimer:
     """A simple timer utility for measuring elapsed time in tests."""
-    #def __init__(self):
+
+    # def __init__(self):
     #    self._start = None
 
     def start(self):
@@ -12,5 +14,6 @@ class TestTimer:
     def elapsed(self):
         """Return the elapsed time in seconds since start() was called."""
         return (time.time() - self._start) if self._start else 0
+
 
 __all__ = ["TestTimer"]

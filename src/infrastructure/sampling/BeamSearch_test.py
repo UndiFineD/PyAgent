@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_beamsearchconfig_exists():
     """Test that BeamSearchConfig class exists and is importable."""
-    assert 'BeamSearchConfig' in dir()
+    assert "BeamSearchConfig" in dir()
 
 
 def test_beamhypothesis_exists():
     """Test that BeamHypothesis class exists and is importable."""
-    assert 'BeamHypothesis' in dir()
+    assert "BeamHypothesis" in dir()
 
 
 def test_beamsearchsampler_exists():
     """Test that BeamSearchSampler class exists and is importable."""
-    assert 'BeamSearchSampler' in dir()
+    assert "BeamSearchSampler" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

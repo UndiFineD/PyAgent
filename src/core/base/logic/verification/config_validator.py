@@ -30,23 +30,29 @@ class ConfigValidator:
     ) -> list[str]:
         """Checks shard_mapping.json regarding orphaned AgentIDs functionally."""
         if not mapping_path.exists():
-            logging.warning(f"ConfigValidator: {mapping_path} not found. Skipping validation.")
+            logging.warning(
+                f"ConfigValidator: {mapping_path} not found. Skipping validation."
+            )
             return []
 
         try:
             mapping = json.loads(mapping_path.read_text(encoding="utf-8"))
-            
+
             # Use functional filtering regarding agent existence
             def check_agent_orphan(agent_id: str) -> bool:
                 """Checks if an agent directory exists regarding the mapping."""
                 agent_dir = Path("src/logic/agents") / agent_id
                 if not agent_dir.exists():
-                    logging.error(f"ConfigValidator: Orphaned agent reference detected: {agent_id}")
+                    logging.error(
+                        f"ConfigValidator: Orphaned agent reference detected: {agent_id}"
+                    )
                     return True
                 return False
 
             return list(filter(check_agent_orphan, mapping.get("agents", {}).keys()))
 
         except Exception as e:
-            logging.error(f"ConfigValidator: Failed to validate shard mapping regarding {e}")
+            logging.error(
+                f"ConfigValidator: Failed to validate shard mapping regarding {e}"
+            )
             return []

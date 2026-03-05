@@ -16,4 +16,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "ShellCheckIssue"), "ShellCheckIssue missing"
     assert hasattr(mod, "BashLintResult"), "BashLintResult missing"
     assert hasattr(mod, "BashCore"), "BashCore missing"
-

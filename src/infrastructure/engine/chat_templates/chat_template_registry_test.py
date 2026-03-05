@@ -28,4 +28,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "get_template"), "get_template missing"
     assert hasattr(mod, "render_template"), "render_template missing"
     assert hasattr(mod, "detect_template_type"), "detect_template_type missing"
-

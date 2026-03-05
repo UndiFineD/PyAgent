@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_mooncaketransferstatus_exists():
     """Test that MooncakeTransferStatus class exists and is importable."""
-    assert 'MooncakeTransferStatus' in dir()
+    assert "MooncakeTransferStatus" in dir()
 
 
 def test_mooncakeremotetarget_exists():
     """Test that MooncakeRemoteTarget class exists and is importable."""
-    assert 'MooncakeRemoteTarget' in dir()
+    assert "MooncakeRemoteTarget" in dir()
 
 
 def test_mooncakeconnector_exists():
     """Test that MooncakeConnector class exists and is importable."""
-    assert 'MooncakeConnector' in dir()
+    assert "MooncakeConnector" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

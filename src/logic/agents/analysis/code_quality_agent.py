@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,7 +32,6 @@ Provides linting, scoring, and automated code improvement for maintainability an
 """
 Code quality agent.py module.
 """
-
 
 
 import json
@@ -78,7 +78,9 @@ class CodeQualityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
         report = {
             "file": file_path,
-            "timestamp": os.path.getmtime(file_path) if os.path.exists(file_path) else 0,
+            "timestamp": (
+                os.path.getmtime(file_path) if os.path.exists(file_path) else 0
+            ),
             "issues": issues,
             "score": max(0, 100 - (len(issues) * 5)),
         }
@@ -121,7 +123,9 @@ class CodeQualityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
             # Intelligence: Record shell interaction (Phase 108)
             if hasattr(self, "recorder") and self.recorder:
-                self.recorder.record_interaction("Shell", "Flake8", f"Linting {path}", str(result.stdout)[:500])
+                self.recorder.record_interaction(
+                    "Shell", "Flake8", f"Linting {path}", str(result.stdout)[:500]
+                )
 
             if result.stdout:
                 # Flake8 doesn't natively support JSON without plugins,
@@ -183,8 +187,12 @@ class CodeQualityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                         if msg.get("level") in ["warning", "error"]:
                             issues.append(
                                 {
-                                    "line": msg.get("spans", [{}])[0].get("line_start", 0),
-                                    "column": msg.get("spans", [{}])[0].get("column_start", 0),
+                                    "line": msg.get("spans", [{}])[0].get(
+                                        "line_start", 0
+                                    ),
+                                    "column": msg.get("spans", [{}])[0].get(
+                                        "column_start", 0
+                                    ),
                                     "message": msg.get("message", "") + " (Clippy)",
                                     "type": "Suggestion",
                                 }
@@ -200,10 +208,16 @@ class CodeQualityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
     def _check_js_quality(self, path: str) -> list[dict[str, Any]]:
         """Run eslint for JavaScript/TypeScript quality analysis."""
         try:
-            subprocess.run(["npx", "eslint", path, "--format", "json"], capture_output=True, check=False)
+            subprocess.run(
+                ["npx", "eslint", path, "--format", "json"],
+                capture_output=True,
+                check=False,
+            )
             return []
         except FileNotFoundError:
-            return [{"type": "Info", "message": "NPM/Eslint not found, skipping JS check."}]
+            return [
+                {"type": "Info", "message": "NPM/Eslint not found, skipping JS check."}
+            ]
 
     def get_aggregate_score(self) -> float:
         """Returns the average quality score across all analyzed files."""

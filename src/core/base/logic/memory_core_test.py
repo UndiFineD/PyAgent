@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_memorynode_exists():
     """Test that MemoryNode class exists and is importable."""
-    assert 'MemoryNode' in dir()
+    assert "MemoryNode" in dir()
 
 
 def test_memoryrelation_exists():
     """Test that MemoryRelation class exists and is importable."""
-    assert 'MemoryRelation' in dir()
+    assert "MemoryRelation" in dir()
 
 
 def test_memorystore_exists():
     """Test that MemoryStore class exists and is importable."""
-    assert 'MemoryStore' in dir()
+    assert "MemoryStore" in dir()
 
 
 def test_graphmemorystore_exists():
     """Test that GraphMemoryStore class exists and is importable."""
-    assert 'GraphMemoryStore' in dir()
+    assert "GraphMemoryStore" in dir()
 
 
 def test_graphmemorystore_instantiation():
@@ -59,7 +59,7 @@ def test_graphmemorystore_instantiation():
 
 def test_vectormemorystore_exists():
     """Test that VectorMemoryStore class exists and is importable."""
-    assert 'VectorMemoryStore' in dir()
+    assert "VectorMemoryStore" in dir()
 
 
 def test_vectormemorystore_instantiation():
@@ -70,10 +70,9 @@ def test_vectormemorystore_instantiation():
 
 def test_hybridmemorycore_exists():
     """Test that HybridMemoryCore class exists and is importable."""
-    assert 'HybridMemoryCore' in dir()
+    assert "HybridMemoryCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

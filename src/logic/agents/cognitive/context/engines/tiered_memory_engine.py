@@ -22,11 +22,13 @@
 TieredMemoryEngine: Implements a MIRIX 6-tier memory engine utilizing ChromaDB for scalable, multi-level memory management in PyAgent.
 Supports hierarchical storage, retrieval, and promotion of agent memory fragments across short, mid, long, and archival tiers.
 """
+
 import logging
 from typing import Any, List, Dict, Optional
 
+
 class TieredMemoryEngine:
-    """Manages the 6 memory tiers: Core, Episodic, Semantic, 
+    """Manages the 6 memory tiers: Core, Episodic, Semantic,
     Procedural, Resource, and Knowledge."""
 
     def __init__(self, db_path: str) -> None:
@@ -38,8 +40,10 @@ class TieredMemoryEngine:
         self.db_path = db_path
         # Initialization logic for ChromaDB would be here
         """
-        
-    def record_memory(self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> None:
+
+    def record_memory(
+        self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None
+    ) -> None:
         """Persists a memory fragment into the specified tier.
 
         Args:
@@ -65,7 +69,9 @@ class TieredMemoryEngine:
         _ = limit  # Mark as used
         return f"Simulated context from {tier} tier for query: {query}"
 
-    def upsert_documents(self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]) -> None:
+    def upsert_documents(
+        self, documents: List[str], metadatas: List[Dict[str, Any]], ids: List[str]
+    ) -> None:
         """
         Bulk updates the vector database.
 

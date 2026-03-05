@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_metacognitivecore_exists():
     """Test that MetacognitiveCore class exists and is importable."""
-    assert 'MetacognitiveCore' in dir()
+    assert "MetacognitiveCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

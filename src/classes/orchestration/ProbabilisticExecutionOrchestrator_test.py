@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_probabilisticexecutionorchestrator_exists():
     """Test that ProbabilisticExecutionOrchestrator class exists and is importable."""
-    assert 'ProbabilisticExecutionOrchestrator' in dir()
+    assert "ProbabilisticExecutionOrchestrator" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

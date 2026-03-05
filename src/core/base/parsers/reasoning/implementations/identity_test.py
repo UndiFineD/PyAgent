@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_identityreasoningparser_exists():
     """Test that IdentityReasoningParser class exists and is importable."""
-    assert 'IdentityReasoningParser' in dir()
+    assert "IdentityReasoningParser" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

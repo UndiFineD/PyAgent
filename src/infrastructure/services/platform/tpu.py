@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,8 +25,15 @@ import contextlib
 from typing import List, Set
 
 from .base import Platform
-from .models import (AttentionBackend, DeviceCapability, DeviceFeature,
-                     DeviceInfo, MemoryInfo, PlatformType, QuantizationType)
+from .models import (
+    AttentionBackend,
+    DeviceCapability,
+    DeviceFeature,
+    DeviceInfo,
+    MemoryInfo,
+    PlatformType,
+    QuantizationType,
+)
 
 
 class TpuPlatform(Platform):
@@ -60,7 +68,9 @@ class TpuPlatform(Platform):
 
     def get_memory_info(self, device_id: int = 0) -> MemoryInfo:
         total = 32 * (1024**3)
-        return MemoryInfo(total_bytes=total, free_bytes=total, used_bytes=0, reserved_bytes=0)
+        return MemoryInfo(
+            total_bytes=total, free_bytes=total, used_bytes=0, reserved_bytes=0
+        )
 
     def get_device_features(self, device_id: int = 0) -> DeviceFeature:
         return DeviceFeature.BF16 | DeviceFeature.TENSOR_CORES | DeviceFeature.MULTI_GPU
@@ -81,7 +91,9 @@ class TpuPlatform(Platform):
             features=self.get_device_features(device_id),
         )
 
-    def select_attention_backend(self, capability: DeviceCapability) -> AttentionBackend:
+    def select_attention_backend(
+        self, capability: DeviceCapability
+    ) -> AttentionBackend:
         return AttentionBackend.TPU
 
     def is_quantization_supported(self, quant_type: str) -> bool:

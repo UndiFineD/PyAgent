@@ -10,6 +10,7 @@ from typing import Dict, List, Any
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 
+
 class AgentDAO(BaseAgent):
     """Orchestrates resource and task governance across the fleet."""
 
@@ -25,7 +26,7 @@ class AgentDAO(BaseAgent):
     @as_tool
     def execute_resource_allocation(self, allocation_plan: Dict[str, float]) -> str:
         """Applies a resource allocation plan to the fleet.
-        
+
         Args:
             allocation_plan: Mapping of agent/sub-swarm names to percentage of total resources.
         """
@@ -38,12 +39,15 @@ class AgentDAO(BaseAgent):
         """Re-orders a global task queue based on current DAO priorities."""
         # Simulated prioritization logic
         logging.info(f"AgentDAO: Prioritizing {len(task_queue)} tasks.")
-        return sorted(task_queue) # Default to alpha for mock, in real it would use consensus weight
+        return sorted(
+            task_queue
+        )  # Default to alpha for mock, in real it would use consensus weight
 
     def improve_content(self, input_text: str) -> str:
         return "The DAO maintains the equilibrium of agent resource consumption."
 
     if __name__ == "__main__":
         from src.classes.base_agent.utilities import create_main_function
+
         main = create_main_function(AgentDAO, "AgentDAO", "Fleet Resource Governance")
         main()

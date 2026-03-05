@@ -18,6 +18,7 @@ Deduplicate Excepts module.
 #!/usr/bin/env python3
 from pathlib import Path
 
+
 def deduplicate_excepts(root_dir):
     """
     Scans the directory to deduplicate except blocks handling generic exceptions.
@@ -51,13 +52,14 @@ def deduplicate_excepts(root_dir):
         except (IOError, OSError, UnicodeDecodeError) as e:
             print(f"Error deduplicating {p}: {e}")
 
+
 if __name__ == "__main__":
     # Robustly find the repository root
     current_path = Path(__file__).resolve()
     project_root = current_path
-    while project_root.name != 'src' and project_root.parent != project_root:
+    while project_root.name != "src" and project_root.parent != project_root:
         project_root = project_root.parent
-    if project_root.name == 'src':
+    if project_root.name == "src":
         project_root = project_root.parent
 
     deduplicate_excepts(project_root / "src")

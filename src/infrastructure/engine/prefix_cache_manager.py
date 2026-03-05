@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -161,8 +162,15 @@ def hash_block_tokens_rust(
         return _rust_impl(parent_hash, token_ids, extra_keys)
     except ImportError:
         hash_fn = get_hash_function(HashAlgorithm.XXHASH)
-        parent_block_hash = BlockHash(hash_value=parent_hash, token_ids=()) if parent_hash else None
-        result = hash_block_tokens(hash_fn, parent_block_hash, token_ids, tuple(extra_keys) if extra_keys else None)
+        parent_block_hash = (
+            BlockHash(hash_value=parent_hash, token_ids=()) if parent_hash else None
+        )
+        result = hash_block_tokens(
+            hash_fn,
+            parent_block_hash,
+            token_ids,
+            tuple(extra_keys) if extra_keys else None,
+        )
         return result.hash_value
 
 
@@ -338,6 +346,7 @@ class PrefixCacheManager:
         Args:
             block_ids: List of block IDs to free
         """
+
         def _free_one(bid: int) -> None:
             if bid in self._block_id_to_hash:
                 hv = self._block_id_to_hash[bid]
@@ -354,6 +363,7 @@ class PrefixCacheManager:
         Returns:
             True if eviction succeeded, False otherwise
         """
+
         def _is_evictable(pair: Tuple[bytes, CacheBlock]) -> bool:
             _, block = pair
             return not block.is_pinned and block.ref_count == 0

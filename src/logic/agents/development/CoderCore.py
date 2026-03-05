@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,10 +29,14 @@ from src.core.base.AgentCore import LogicCore
 from src.logic.agents.development.mixins.CoderMetricsMixin import CoderMetricsMixin
 from src.logic.agents.development.mixins.CoderStyleMixin import CoderStyleMixin
 from src.logic.agents.development.mixins.CoderSmellMixin import CoderSmellMixin
-from src.logic.agents.development.mixins.CoderDuplicationMixin import CoderDuplicationMixin
+from src.logic.agents.development.mixins.CoderDuplicationMixin import (
+    CoderDuplicationMixin,
+)
 from src.logic.agents.development.mixins.CoderQualityMixin import CoderQualityMixin
 from src.logic.agents.development.mixins.CoderDocMixin import CoderDocMixin
-from src.logic.agents.development.mixins.CoderValidationMixin import CoderValidationMixin
+from src.logic.agents.development.mixins.CoderValidationMixin import (
+    CoderValidationMixin,
+)
 import ast
 
 __version__ = VERSION
@@ -71,6 +76,7 @@ DEFAULT_PYTHON_STYLE_RULES: list[StyleRule] = [
     ),
 ]
 
+
 class CoderCore(
     LogicCore,
     CoderMetricsMixin,
@@ -99,6 +105,7 @@ class CoderCore(
     def calculate_metrics(self, content: str) -> CodeMetrics:
         """Analyze code structure and compute metrics."""
         from src.core.rust_bridge import RustBridge
+
         raw_metrics = RustBridge.calculate_metrics(content)
         if raw_metrics:
             metrics = CodeMetrics()
@@ -146,9 +153,7 @@ class CoderCore(
         """Calculate cyclomatic complexity for a function node."""
         cc = 1
         for child in ast.walk(node):
-            if isinstance(
-                child, (ast.If, ast.While, ast.For, ast.ExceptHandler)
-            ):
+            if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
                 cc += 1
             elif isinstance(child, ast.BoolOp):
                 cc += len(child.values) - 1

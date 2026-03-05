@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_archiveintelligence_exists():
     """Test that ArchiveIntelligence class exists and is importable."""
-    assert 'ArchiveIntelligence' in dir()
+    assert "ArchiveIntelligence" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

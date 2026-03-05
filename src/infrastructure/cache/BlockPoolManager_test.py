@@ -33,42 +33,42 @@ except ImportError as e:
 
 def test_blockstate_exists():
     """Test that BlockState class exists and is importable."""
-    assert 'BlockState' in dir()
+    assert "BlockState" in dir()
 
 
 def test_block_exists():
     """Test that Block class exists and is importable."""
-    assert 'Block' in dir()
+    assert "Block" in dir()
 
 
 def test_blockpoolconfig_exists():
     """Test that BlockPoolConfig class exists and is importable."""
-    assert 'BlockPoolConfig' in dir()
+    assert "BlockPoolConfig" in dir()
 
 
 def test_evictionevent_exists():
     """Test that EvictionEvent class exists and is importable."""
-    assert 'EvictionEvent' in dir()
+    assert "EvictionEvent" in dir()
 
 
 def test_cachemetrics_exists():
     """Test that CacheMetrics class exists and is importable."""
-    assert 'CacheMetrics' in dir()
+    assert "CacheMetrics" in dir()
 
 
 def test_kvcachemetricscollector_exists():
     """Test that KVCacheMetricsCollector class exists and is importable."""
-    assert 'KVCacheMetricsCollector' in dir()
+    assert "KVCacheMetricsCollector" in dir()
 
 
 def test_arcpolicy_exists():
     """Test that ARCPolicy class exists and is importable."""
-    assert 'ARCPolicy' in dir()
+    assert "ARCPolicy" in dir()
 
 
 def test_blockpool_exists():
     """Test that BlockPool class exists and is importable."""
-    assert 'BlockPool' in dir()
+    assert "BlockPool" in dir()
 
 
 def test_compute_block_hash_exists():
@@ -79,4 +79,3 @@ def test_compute_block_hash_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,11 +20,11 @@ from src.core.base.version import VERSION
 
 __version__ = VERSION
 
+
 class BaseManager(ABC):
     """Base class for all infrastructure manager services."""
-    
-    def __init__(self, workspace_root:
-        str = None) -> None:
+
+    def __init__(self, workspace_root: str = None) -> None:
         self.workspace_root = workspace_root
         logging.debug(f"{self.__class__.__name__} initialized.")
 

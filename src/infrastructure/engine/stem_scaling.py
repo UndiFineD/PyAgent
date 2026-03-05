@@ -44,7 +44,10 @@ class STEMScalingLayer(nn.Module):
         """
         # Context-aware scaling factor
         # STEM suggests scaling increases logarithmically with context length
-        scale = torch.log2(torch.tensor(context_length, dtype=x.dtype, device=x.device)) / 20.0
+        scale = (
+            torch.log2(torch.tensor(context_length, dtype=x.dtype, device=x.device))
+            / 20.0
+        )
         scale = torch.clamp(scale, min=1.0)
 
         # Apply scaling
@@ -66,6 +69,8 @@ class STEMManager:
     def __init__(self, hidden_dim: int) -> None:
         self.layer = STEMScalingLayer(hidden_dim)
 
-    def process_hidden_states(self, hidden_states: torch.Tensor, current_context_len: int) -> torch.Tensor:
+    def process_hidden_states(
+        self, hidden_states: torch.Tensor, current_context_len: int
+    ) -> torch.Tensor:
         """Apply STEM processing to hidden states."""
         return self.layer(hidden_states, current_context_len)

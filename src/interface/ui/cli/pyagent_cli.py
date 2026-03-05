@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -32,14 +33,20 @@ import requests
 from rich.columns import Columns
 from rich.console import Console
 from rich.panel import Panel
-from rich.progress import (BarColumn, Progress, SpinnerColumn,
-                           TaskProgressColumn, TextColumn)
+from rich.progress import (
+    BarColumn,
+    Progress,
+    SpinnerColumn,
+    TaskProgressColumn,
+    TextColumn,
+)
 from rich.table import Table
 
 from src.core.base.lifecycle.version import VERSION
 from src.core.base.logic.connectivity_manager import ConnectivityManager
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import (
+    LocalContextRecorder,
+)
 
 # from functools import lru_cache
 
@@ -75,6 +82,7 @@ def check_server() -> bool:
     except BaseException as e:
         pass
         import traceback
+
         print(f"Error checking API server availability: {e}\n{traceback.format_exc()}")
         conn_manager.update_status("AgentAPIServer", False)
         return False
@@ -90,15 +98,23 @@ def list_agents() -> None:
             shards = data.get("shards", {})  # Phase 234 capability
 
             # Agent Table
-            agent_table = Table(title="PyAgent Fleet: Active Agents", border_style="cyan")
+            agent_table = Table(
+                title="PyAgent Fleet: Active Agents", border_style="cyan"
+            )
             agent_table.add_column("Agent ID", style="bold cyan")
             agent_table.add_column("Type", style="magenta")
             agent_table.add_column("Shard", style="green")
             agent_table.add_column("Status", style="yellow")
 
             for agent in agents:
-                status = "[green]● Ready[/green]" if agent.get("status") == "idle" else "[yellow]● Busy[/yellow]"
-                agent_table.add_row(agent["id"], agent["type"], agent.get("shard_id", "default"), status)
+                status = (
+                    "[green]● Ready[/green]"
+                    if agent.get("status") == "idle"
+                    else "[yellow]● Busy[/yellow]"
+                )
+                agent_table.add_row(
+                    agent["id"], agent["type"], agent.get("shard_id", "default"), status
+                )
 
             # Shard Health Panel
             shard_table = Table(title="Logical Shard Health", box=None)
@@ -173,13 +189,21 @@ def run_task(agent_id: str, task: str) -> None:
                 )
                 recorder.record_lesson("cli_task_success", {"result": data["result"]})
             elif data.get("code") == 429:
-                console.print(f"[bold red]Load Balancer Rejected Request: {data.get('message')}[/bold red]")
-                recorder.record_lesson("cli_task_rejected", {"reason": data.get("message")})
+                console.print(
+                    f"[bold red]Load Balancer Rejected Request: {data.get('message')}[/bold red]"
+                )
+                recorder.record_lesson(
+                    "cli_task_rejected", {"reason": data.get("message")}
+                )
             else:
-                console.print(f"[red]Error: {data.get('message', 'Unknown error')}[/red]")
+                console.print(
+                    f"[red]Error: {data.get('message', 'Unknown error')}[/red]"
+                )
                 recorder.record_lesson("cli_task_error", {"error": data.get("message")})
 
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             console.print(f"[red]Connection failed: {e}[/red]")
             recorder.record_lesson("cli_task_network_failure", {"exception": str(e)})
 
@@ -224,8 +248,12 @@ def main() -> None:
             status_text += f"LB Queue Depth: {lb_stats.get('queue_depth', 0)}\n"
             status_text += f"LB Interface Diversity: {', '.join(lb_stats.get('interface_diversity', []))}"
 
-            console.print(Panel(status_text, title="System Status", border_style="blue"))
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            console.print(
+                Panel(status_text, title="System Status", border_style="blue")
+            )
+        except (
+            Exception
+        ) as e:  # pylint: disable=broad-exception-caught, unused-variable
             console.print(f"[red]Could not retrieve status: {e}[/red]")
     else:
         parser.print_help()

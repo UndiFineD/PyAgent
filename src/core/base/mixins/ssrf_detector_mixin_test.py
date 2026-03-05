@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_ssrfdetectormixin_exists():
     """Test that SSRFDetectorMixin class exists and is importable."""
-    assert 'SSRFDetectorMixin' in dir()
+    assert "SSRFDetectorMixin" in dir()
 
 
 def test_ssrfdetectormixin_instantiation():
@@ -44,10 +44,9 @@ def test_ssrfdetectormixin_instantiation():
 
 def test__detectorhandler_exists():
     """Test that _DetectorHandler class exists and is importable."""
-    assert '_DetectorHandler' in dir()
+    assert "_DetectorHandler" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

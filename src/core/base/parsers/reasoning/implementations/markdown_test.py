@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_markdownreasoningparser_exists():
     """Test that MarkdownReasoningParser class exists and is importable."""
-    assert 'MarkdownReasoningParser' in dir()
+    assert "MarkdownReasoningParser" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

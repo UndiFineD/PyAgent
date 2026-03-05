@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,12 +28,13 @@ from typing import Dict
 
 __version__ = VERSION
 
+
 class HeartbeatOrchestrator:
     """
     Ensures the swarm processes remain alive via a distributed watchdog system.
     Monitors agent health and attempts to respawn or alert on failure.
     """
-    
+
     def __init__(self, fleet) -> None:
         self.fleet = fleet
         self.last_seen: dict[str, float] = {}
@@ -53,7 +55,9 @@ class HeartbeatOrchestrator:
             for agent_name, last_time in list(self.last_seen.items()):
                 if now - last_time > 300:
                     # 5 minutes threshold
-                    logging.warning(f"Heartbeat: Agent {agent_name} seems dead (Last seen {now - last_time:.1f}s ago)")
+                    logging.warning(
+                        f"Heartbeat: Agent {agent_name} seems dead (Last seen {now - last_time:.1f}s ago)"
+                    )
                     # In a real system, we'd trigger a respawn here
             self._stop_event.wait(timeout=60)
 

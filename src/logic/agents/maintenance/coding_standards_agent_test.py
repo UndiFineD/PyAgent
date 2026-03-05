@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_codingstandardsagent_exists():
     """Test that CodingStandardsAgent class exists and is importable."""
-    assert 'CodingStandardsAgent' in dir()
+    assert "CodingStandardsAgent" in dir()
 
 
 def test_codingstandardsagent_instantiation():
@@ -45,4 +45,3 @@ def test_codingstandardsagent_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

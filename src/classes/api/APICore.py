@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ from src.core.base.version import SDK_VERSION
 
 __version__ = VERSION
 
+
 class APICore:
     def __init__(self, version: str = SDK_VERSION) -> None:
         self.version = version
@@ -39,7 +41,7 @@ class APICore:
         """Constructs an OpenAPI 3.0 string from tool metadata."""
         paths = {}
         for tool in tool_definitions:
-            tool_name = tool.get('name', 'unknown')
+            tool_name = tool.get("name", "unknown")
             paths[f"/tools/{tool_name}"] = {
                 "post": {
                     "summary": f"Execute {tool_name}",
@@ -49,24 +51,21 @@ class APICore:
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "properties": tool.get('parameters', {"input": {"type": "string"}})
+                                    "properties": tool.get(
+                                        "parameters", {"input": {"type": "string"}}
+                                    ),
                                 }
                             }
                         }
                     },
-                    "responses": {
-                        "200": {"description": "OK"}
-                    }
+                    "responses": {"200": {"description": "OK"}},
                 }
             }
-            
+
         spec = {
             "openapi": "3.0.0",
-            "info": {
-                "title": "PyAgent Fleet API",
-                "version": self.version
-            },
-            "paths": paths
+            "info": {"title": "PyAgent Fleet API", "version": self.version},
+            "paths": paths,
         }
         return json.dumps(spec, indent=2)
 

@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_localcontextrecorder_exists():
     """Test that LocalContextRecorder class exists and is importable."""
-    assert 'LocalContextRecorder' in dir()
+    assert "LocalContextRecorder" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -33,60 +33,59 @@ except ImportError as e:
 
 def test_dfastatetype_exists():
     """Test that DFAStateType class exists and is importable."""
-    assert 'DFAStateType' in dir()
+    assert "DFAStateType" in dir()
 
 
 def test_dfastate_exists():
     """Test that DFAState class exists and is importable."""
-    assert 'DFAState' in dir()
+    assert "DFAState" in dir()
 
 
 def test_dfatransition_exists():
     """Test that DFATransition class exists and is importable."""
-    assert 'DFATransition' in dir()
+    assert "DFATransition" in dir()
 
 
 def test_compileddfa_exists():
     """Test that CompiledDFA class exists and is importable."""
-    assert 'CompiledDFA' in dir()
+    assert "CompiledDFA" in dir()
 
 
 def test_tokenvocabulary_exists():
     """Test that TokenVocabulary class exists and is importable."""
-    assert 'TokenVocabulary' in dir()
+    assert "TokenVocabulary" in dir()
 
 
 def test_regexmatchstate_exists():
     """Test that RegexMatchState class exists and is importable."""
-    assert 'RegexMatchState' in dir()
+    assert "RegexMatchState" in dir()
 
 
 def test_compiledenforcer_exists():
     """Test that CompiledEnforcer class exists and is importable."""
-    assert 'CompiledEnforcer' in dir()
+    assert "CompiledEnforcer" in dir()
 
 
 def test_lmformatenforcerbackend_exists():
     """Test that LMFormatEnforcerBackend class exists and is importable."""
-    assert 'LMFormatEnforcerBackend' in dir()
+    assert "LMFormatEnforcerBackend" in dir()
 
 
 def test_asynclmformatenforcerbackend_exists():
     """Test that AsyncLMFormatEnforcerBackend class exists and is importable."""
-    assert 'AsyncLMFormatEnforcerBackend' in dir()
+    assert "AsyncLMFormatEnforcerBackend" in dir()
 
 
 def test_formatenforcergrammar_exists():
     """Test that FormatEnforcerGrammar class exists and is importable."""
-    assert 'FormatEnforcerGrammar' in dir()
+    assert "FormatEnforcerGrammar" in dir()
 
 
 def test_compositeenforcer_exists():
     """Test that CompositeEnforcer class exists and is importable."""
-    assert 'CompositeEnforcer' in dir()
+    assert "CompositeEnforcer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

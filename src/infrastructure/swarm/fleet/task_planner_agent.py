@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -75,7 +76,9 @@ class TaskPlannerAgent(BaseAgent):
         )
 
         # 1. Verification of state (OBSERVE)
-        plan.append({"agent": "Knowledge", "action": "query_knowledge", "args": [user_request]})
+        plan.append(
+            {"agent": "Knowledge", "action": "query_knowledge", "args": [user_request]}
+        )
 
         # 2. Logic Step (THINK)
         # 3. Work Step (EXECUTE)
@@ -121,5 +124,7 @@ class TaskPlannerAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    main = create_main_function(TaskPlannerAgent, "TaskPlanner Agent", "User request to plan for")
+    main = create_main_function(
+        TaskPlannerAgent, "TaskPlanner Agent", "User request to plan for"
+    )
     main()

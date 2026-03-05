@@ -33,7 +33,7 @@ except ImportError as e:
 
 def test_taskqueuemixin_exists():
     """Test that TaskQueueMixin class exists and is importable."""
-    assert 'TaskQueueMixin' in dir()
+    assert "TaskQueueMixin" in dir()
 
 
 def test_taskqueuemixin_instantiation():
@@ -45,4 +45,3 @@ def test_taskqueuemixin_instantiation():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

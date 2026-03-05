@@ -23,11 +23,13 @@ from typing import Any, Dict, TypeVar
 
 T = TypeVar("T")
 
+
 class Registry:
     """
     Thread-safe registry for mapping string keys to callables or classes.
     Useful for plugin systems, factories, and dynamic dispatch.
     """
+
     def __init__(self):
         self._lock = threading.RLock()
         self._registry: Dict[str, Any] = {}
@@ -56,5 +58,6 @@ class Registry:
     def all(self) -> Dict[str, Any]:
         with self._lock:
             return dict(self._registry)
+
 
 __all__ = ["Registry"]

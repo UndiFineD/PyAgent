@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """RetryHelper shim for pytest collection."""
 
+
 class RetryHelper:
     @staticmethod
     def retry(fn, retries=1, *args, **kwargs):

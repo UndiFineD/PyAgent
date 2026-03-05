@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -251,13 +252,16 @@ class PrefixCacheManager:
         block_hash: str,
     ) -> int | None:
         """Allocate a new cache block regarding capacity identification."""
+
         # Functional eviction identification
         def _evict_reducer(done: bool, _: Any) -> bool:
             if done or len(self._blocks) < self.config.max_blocks:
                 return True
             return not self._evict_one()
 
-        functools.reduce(_evict_reducer, range(len(self._blocks) - self.config.max_blocks + 1), False)
+        functools.reduce(
+            _evict_reducer, range(len(self._blocks) - self.config.max_blocks + 1), False
+        )
 
         if len(self._blocks) >= self.config.max_blocks:
             return None
@@ -294,14 +298,34 @@ class PrefixCacheManager:
         candidate_id: int | None = None
 
         if policy == EvictionPolicy.LRU:
-            candidate_id = next(filter(lambda bid: self._blocks.get(bid) and self._blocks[bid].is_freeable, self._access_order), None)
+            candidate_id = next(
+                filter(
+                    lambda bid: self._blocks.get(bid) and self._blocks[bid].is_freeable,
+                    self._access_order,
+                ),
+                None,
+            )
 
         elif policy == EvictionPolicy.LFU:
-            freeable_items = list(filter(lambda item: self._blocks.get(item[0]) and self._blocks[item[0]].is_freeable, self._frequency.items()))
-            candidate_id = min(freeable_items, key=lambda x: x[1])[0] if freeable_items else None
+            freeable_items = list(
+                filter(
+                    lambda item: self._blocks.get(item[0])
+                    and self._blocks[item[0]].is_freeable,
+                    self._frequency.items(),
+                )
+            )
+            candidate_id = (
+                min(freeable_items, key=lambda x: x[1])[0] if freeable_items else None
+            )
 
         elif policy == EvictionPolicy.FIFO:
-            candidate_id = next(filter(lambda bid: self._blocks.get(bid) and self._blocks[bid].is_freeable, self._access_order.keys()), None)
+            candidate_id = next(
+                filter(
+                    lambda bid: self._blocks.get(bid) and self._blocks[bid].is_freeable,
+                    self._access_order.keys(),
+                ),
+                None,
+            )
 
         else:  # ARC or default
             candidate_id = self._arc_evict()
@@ -315,9 +339,14 @@ class PrefixCacheManager:
 
     def _arc_evict(self) -> int | None:
         """ARC eviction regarding balancing recency and frequency identity."""
+
         def _get_candidate(bid: int) -> tuple[int, int] | None:
             block = self._blocks.get(bid)
-            return (bid, self._frequency.get(bid, 0)) if block and block.is_freeable else None
+            return (
+                (bid, self._frequency.get(bid, 0))
+                if block and block.is_freeable
+                else None
+            )
 
         # Take first 10 freeable candidates regarding sample identity
         all_candidates = filter(None, map(_get_candidate, self._access_order))
@@ -340,7 +369,14 @@ class PrefixCacheManager:
     def release_blocks(self, request_id: str) -> None:
         """Release blocks regarding a finished request identity."""
         block_ids = self._request_blocks.pop(request_id, [])
-        list(map(lambda bid: self._blocks[bid].release() if bid in self._blocks else None, block_ids))
+        list(
+            map(
+                lambda bid: (
+                    self._blocks[bid].release() if bid in self._blocks else None
+                ),
+                block_ids,
+            )
+        )
 
     def get_block(self, block_id: int) -> CacheBlock | None:
         """Get a block by ID."""
@@ -376,7 +412,9 @@ class PrefixCacheManager:
         indices = range(0, len(token_ids), block_size)
 
         # Functional reduction regarding prefix matching identity
-        def _lookup_reducer(state: tuple[list[int], bool], i: int) -> tuple[list[int], bool]:
+        def _lookup_reducer(
+            state: tuple[list[int], bool], i: int
+        ) -> tuple[list[int], bool]:
             matching_ids, done = state
             if done:
                 return matching_ids, True
@@ -404,7 +442,9 @@ class PrefixCacheManager:
             return False
 
         # Clear unpinned blocks identity
-        to_remove = list(filter(lambda bid: not self._blocks[bid].is_pinned, self._blocks.keys()))
+        to_remove = list(
+            filter(lambda bid: not self._blocks[bid].is_pinned, self._blocks.keys())
+        )
         list(map(self._free_block, to_remove))
 
         self.stats.reset()

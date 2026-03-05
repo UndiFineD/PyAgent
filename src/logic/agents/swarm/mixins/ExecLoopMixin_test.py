@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_execloopmixin_exists():
     """Test that ExecLoopMixin class exists and is importable."""
-    assert 'ExecLoopMixin' in dir()
+    assert "ExecLoopMixin" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

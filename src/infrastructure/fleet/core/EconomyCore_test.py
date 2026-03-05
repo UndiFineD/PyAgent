@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_economycore_exists():
     """Test that EconomyCore class exists and is importable."""
-    assert 'EconomyCore' in dir()
+    assert "EconomyCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

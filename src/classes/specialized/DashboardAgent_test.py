@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_dashboardagent_exists():
     """Test that DashboardAgent class exists and is importable."""
-    assert 'DashboardAgent' in dir()
+    assert "DashboardAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

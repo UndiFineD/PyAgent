@@ -16,12 +16,14 @@ import re
 from typing import List, Dict, Optional, Any
 from dataclasses import dataclass
 
+
 @dataclass
 class BrowserElement:
     id: str  # e.g., "l1", "b2"
-    tag: str # e.g., "button", "link", "input"
+    tag: str  # e.g., "button", "link", "input"
     text: str
     attributes: Dict[str, str]
+
 
 class BrowserOutlineCore:
     """
@@ -40,37 +42,44 @@ class BrowserOutlineCore:
         """
         self.elements.clear()
         self._id_counter = 0
-        
+
         lines = []
         for el in raw_elements:
             tag = el.get("tag", "element")
-            text = el.get("text", "").strip() or el.get("aria-label", "") or el.get("placeholder", "")
-            
+            text = (
+                el.get("text", "").strip()
+                or el.get("aria-label", "")
+                or el.get("placeholder", "")
+            )
+
             # Identify the prefix based on tag
-            prefix = "e" # default
+            prefix = "e"  # default
             if tag == "button" or el.get("role") == "button":
                 prefix = "b"
             elif tag == "a" or el.get("role") == "link":
                 prefix = "l"
             elif tag == "input" or tag == "textarea":
                 prefix = "i"
-                
+
             self._id_counter += 1
             el_id = f"{prefix}{self._id_counter}"
-            
+
             # Store element for later lookup
             self.elements[el_id] = BrowserElement(
-                id=el_id,
-                tag=tag,
-                text=text,
-                attributes=el.get("attributes", {})
+                id=el_id, tag=tag, text=text, attributes=el.get("attributes", {})
             )
-            
+
             # Build the outline line
-            attr_str = " ".join([f"[{k}={v}]" for k, v in el.get("attributes", {}).items() if k in ["href", "type", "placeholder", "name"]])
-            line = f"[{el_id}] {tag} \"{text}\" {attr_str}".strip()
+            attr_str = " ".join(
+                [
+                    f"[{k}={v}]"
+                    for k, v in el.get("attributes", {}).items()
+                    if k in ["href", "type", "placeholder", "name"]
+                ]
+            )
+            line = f'[{el_id}] {tag} "{text}" {attr_str}'.strip()
             lines.append(line)
-            
+
         return "\n".join(lines)
 
     def resolve_label(self, label: str) -> Optional[BrowserElement]:

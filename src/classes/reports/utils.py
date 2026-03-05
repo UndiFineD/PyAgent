@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,13 +28,16 @@ __version__ = VERSION
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent
 REPO_ROOT = AGENT_DIR.parent
 
+
 def _read_text(path: Path) -> str:
     """Read text file with UTF-8 and replacement errors."""
     return path.read_text(encoding="utf-8", errors="replace")
 
+
 def _is_pytest_test_file(path: Path) -> bool:
     """Check if file is a pytest test file."""
     return path.name.startswith("test_") and path.name.endswith(".py")
+
 
 def _looks_like_pytest_import_problem(path: Path) -> str | None:
     """Check if filename has characters that cause pytest import issues."""
@@ -46,6 +50,7 @@ def _looks_like_pytest_import_problem(path: Path) -> str | None:
             "and may fail test discovery / import."
         )
     return None
+
 
 def _find_imports(tree: ast.AST) -> list[str]:
     """Find all top-level imports in an AST."""
@@ -66,9 +71,11 @@ def _find_imports(tree: ast.AST) -> list[str]:
             out.append(item)
     return out
 
+
 def _detect_argparse(source: str) -> bool:
     """Check if source uses argparse."""
     return "argparse" in source
+
 
 def _placeholder_test_note(path: Path, source: str) -> str | None:
     """Check if it's a placeholder test file."""
@@ -78,12 +85,14 @@ def _placeholder_test_note(path: Path, source: str) -> str | None:
         return "Test file only contains a placeholder test (no real assertions / coverage)."
     return None
 
+
 def _rel(path: Path) -> str:
     """Get relative path string for display."""
     try:
         return str(path.relative_to(REPO_ROOT)).replace("\\", "/")
     except ValueError:
         return str(path).replace("\\", "/")
+
 
 def _find_issues(tree: ast.AST, source: str) -> list[str]:
     """Find potential issues via lightweight static analysis."""
@@ -110,7 +119,8 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
         if isinstance(node, ast.FunctionDef):
             # Check args
             missing_arg_type = any(
-                arg.annotation is None for arg in node.args.args if arg.arg != 'self')
+                arg.annotation is None for arg in node.args.args if arg.arg != "self"
+            )
             # Check return
             missing_return_type = node.returns is None
             if missing_arg_type or missing_return_type:

@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_sseevent_exists():
     """Test that SSEEvent class exists and is importable."""
-    assert 'SSEEvent' in dir()
+    assert "SSEEvent" in dir()
 
 
 def test_ssestream_exists():
     """Test that SSEStream class exists and is importable."""
-    assert 'SSEStream' in dir()
+    assert "SSEStream" in dir()
 
 
 def test_streaminghandler_exists():
     """Test that StreamingHandler class exists and is importable."""
-    assert 'StreamingHandler' in dir()
+    assert "StreamingHandler" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

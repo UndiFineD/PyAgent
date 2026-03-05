@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_visualizationdata_exists():
     """Test that VisualizationData class exists and is importable."""
-    assert 'VisualizationData' in dir()
+    assert "VisualizationData" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

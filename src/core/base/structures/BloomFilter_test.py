@@ -33,20 +33,19 @@ except ImportError as e:
 
 def test_bloomfilter_exists():
     """Test that BloomFilter class exists and is importable."""
-    assert 'BloomFilter' in dir()
+    assert "BloomFilter" in dir()
 
 
 def test_countingbloomfilter_exists():
     """Test that CountingBloomFilter class exists and is importable."""
-    assert 'CountingBloomFilter' in dir()
+    assert "CountingBloomFilter" in dir()
 
 
 def test_scalablebloomfilter_exists():
     """Test that ScalableBloomFilter class exists and is importable."""
-    assert 'ScalableBloomFilter' in dir()
+    assert "ScalableBloomFilter" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

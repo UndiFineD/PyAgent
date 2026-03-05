@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -19,12 +20,17 @@ import json
 import logging
 from typing import Any
 
+
 class GraphStorageMixin:
     """Mixin for graph storage and bead persistence."""
 
     def _load_graph(self) -> None:
         """Loads entities and relationships from persistent storage."""
-        if not hasattr(self, "graph_store_path") or not hasattr(self, "entities") or not hasattr(self, "relationships"):
+        if (
+            not hasattr(self, "graph_store_path")
+            or not hasattr(self, "entities")
+            or not hasattr(self, "relationships")
+        ):
             return
 
         if self.graph_store_path.exists():
@@ -52,7 +58,11 @@ class GraphStorageMixin:
 
     def _save_graph(self) -> None:
         """Persists entities and relationships to disk."""
-        if not hasattr(self, "graph_store_path") or not hasattr(self, "entities") or not hasattr(self, "relationships"):
+        if (
+            not hasattr(self, "graph_store_path")
+            or not hasattr(self, "entities")
+            or not hasattr(self, "relationships")
+        ):
             return
 
         try:

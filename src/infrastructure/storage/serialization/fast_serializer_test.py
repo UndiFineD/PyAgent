@@ -29,4 +29,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "from_json"), "from_json missing"
     assert hasattr(mod, "to_msgpack"), "to_msgpack missing"
     assert hasattr(mod, "from_msgpack"), "from_msgpack missing"
-

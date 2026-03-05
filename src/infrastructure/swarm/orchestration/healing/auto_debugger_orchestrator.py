@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,8 +42,12 @@ class AutoDebuggerOrchestrator:
         self.workspace_root = workspace_root or os.getcwd()
         # Initialize specialized agents
         # Note: We use the actual source paths if we can find them, otherwise relative
-        immune_path = os.path.join(self.workspace_root, "src/logic/agents/security/immune_system_agent.py")
-        coder_path = os.path.join(self.workspace_root, "src/logic/agents/development/coder_agent.py")
+        immune_path = os.path.join(
+            self.workspace_root, "src/logic/agents/security/immune_system_agent.py"
+        )
+        coder_path = os.path.join(
+            self.workspace_root, "src/logic/agents/development/coder_agent.py"
+        )
 
         self.immune_system = ImmuneSystemAgent(immune_path)
         self.coder = CoderAgent(coder_path)
@@ -71,7 +76,9 @@ class AutoDebuggerOrchestrator:
             return {"status": "success", "message": f"{file_path} passed syntax check."}
         except subprocess.CalledProcessError as e:
             error_msg = e.stderr or e.stdout
-            logging.warning(f"AutoDebugger: Syntax error detected in {file_path}: {error_msg}")
+            logging.warning(
+                f"AutoDebugger: Syntax error detected in {file_path}: {error_msg}"
+            )
 
             # 2. Safety Scan with ImmuneSystemAgent
             threat_scan = self.immune_system.scan_for_injections(error_msg)
@@ -83,7 +90,9 @@ class AutoDebuggerOrchestrator:
                 if not threat_scan.get("findings", []) and (
                     "SyntaxError" in error_msg or "IndentationError" in error_msg
                 ):
-                    logging.warning(f"AutoDebugger: Ignoring potential false positive in safety scan for {file_path}")
+                    logging.warning(
+                        f"AutoDebugger: Ignoring potential false positive in safety scan for {file_path}"
+                    )
                 else:
                     logging.error(
                         f"AutoDebugger: Safety breach detected in error logs for {file_path}. Aborting repair."
@@ -107,7 +116,9 @@ class AutoDebuggerOrchestrator:
             # coder.improve_content(prompt) handles the actual update and self-validation
             from pathlib import Path
 
-            self.coder.file_path = Path(file_path)  # Target the coder to the broken file
+            self.coder.file_path = Path(
+                file_path
+            )  # Target the coder to the broken file
             await self.coder.improve_content(repair_prompt)
 
             repair_record = {

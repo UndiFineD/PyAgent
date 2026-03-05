@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_redditcollector_exists():
     """Test that RedditCollector class exists and is importable."""
-    assert 'RedditCollector' in dir()
+    assert "RedditCollector" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

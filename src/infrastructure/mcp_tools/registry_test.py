@@ -33,15 +33,14 @@ except ImportError as e:
 
 def test_mcpserverregistry_exists():
     """Test that MCPServerRegistry class exists and is importable."""
-    assert 'MCPServerRegistry' in dir()
+    assert "MCPServerRegistry" in dir()
 
 
 def test_sessionmanager_exists():
     """Test that SessionManager class exists and is importable."""
-    assert 'SessionManager' in dir()
+    assert "SessionManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

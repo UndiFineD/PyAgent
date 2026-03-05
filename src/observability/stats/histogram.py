@@ -23,6 +23,7 @@ Goes beyond vLLM with production-grade metrics:
 
 Phase 18: Beyond vLLM - Advanced Metrics
 """
+
 # pylint: disable=protected-access
 
 from __future__ import annotations
@@ -129,7 +130,11 @@ class Histogram:
 
             idx = int((log_val - log_min) / (log_max - log_min) * self._num_buckets)
         else:
-            idx = int((value - self._min_value) / (self._max_value - self._min_value) * self._num_buckets)
+            idx = int(
+                (value - self._min_value)
+                / (self._max_value - self._min_value)
+                * self._num_buckets
+            )
 
         return max(0, min(idx, self._num_buckets - 1))
 

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -58,7 +59,9 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
 
                 self._sync_client = requests.Session()
             except ImportError:
-                raise ImportError("requests is required for sync HTTP. Install with: pip install requests")
+                raise ImportError(
+                    "requests is required for sync HTTP. Install with: pip install requests"
+                )
         return self._sync_client
 
     async def get_async_client(self) -> Any:
@@ -72,7 +75,9 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
                     timeout=aiohttp.ClientTimeout(total=self.default_timeout),
                 )
             except ImportError:
-                raise ImportError("aiohttp is required for async HTTP. Install with: pip install aiohttp")
+                raise ImportError(
+                    "aiohttp is required for async HTTP. Install with: pip install aiohttp"
+                )
         return self._async_client
 
     def close(self) -> None:
@@ -103,7 +108,9 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
         """Validate that URL uses http or https scheme."""
         parsed = urlparse(url)
         if parsed.scheme not in ("http", "https"):
-            raise ValueError(f"Invalid HTTP URL: expected 'http' or 'https' scheme, got '{parsed.scheme}'")
+            raise ValueError(
+                f"Invalid HTTP URL: expected 'http' or 'https' scheme, got '{parsed.scheme}'"
+            )
 
     def _headers(self, **extras: str) -> MutableMapping[str, str]:
         """Build request headers with User-Agent."""

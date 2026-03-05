@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +37,9 @@ def test_market_features() -> None:
     alice_bal = fleet.economy.get_balance("AliceAgent")
     print(f"Alice Starting Balance: {alice_bal}")
 
-    success = fleet.economy.transfer_credits("AliceAgent", "BobAgent", 50.0, "Subcontracting research")
+    success = fleet.economy.transfer_credits(
+        "AliceAgent", "BobAgent", 50.0, "Subcontracting research"
+    )
     print(f"Transfer Alice -> Bob (50.0): {'Success' if success else 'Failed'}")
     print(f"Alice New Balance: {fleet.economy.get_balance('AliceAgent')}")
 

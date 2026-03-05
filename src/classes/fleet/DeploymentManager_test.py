@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_deploymentmanager_exists():
     """Test that DeploymentManager class exists and is importable."""
-    assert 'DeploymentManager' in dir()
+    assert "DeploymentManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

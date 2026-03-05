@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_bashcore_exists():
     """Test that BashCore class exists and is importable."""
-    assert 'BashCore' in dir()
+    assert "BashCore" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

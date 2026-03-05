@@ -33,22 +33,22 @@ except ImportError as e:
 
 def test_memoryplacement_exists():
     """Test that MemoryPlacement class exists and is importable."""
-    assert 'MemoryPlacement' in dir()
+    assert "MemoryPlacement" in dir()
 
 
 def test_cpugpubuffer_exists():
     """Test that CpuGpuBuffer class exists and is importable."""
-    assert 'CpuGpuBuffer' in dir()
+    assert "CpuGpuBuffer" in dir()
 
 
 def test_uvabufferpool_exists():
     """Test that UvaBufferPool class exists and is importable."""
-    assert 'UvaBufferPool' in dir()
+    assert "UvaBufferPool" in dir()
 
 
 def test_pinnedmemorymanager_exists():
     """Test that PinnedMemoryManager class exists and is importable."""
-    assert 'PinnedMemoryManager' in dir()
+    assert "PinnedMemoryManager" in dir()
 
 
 def test_copy_with_indices_exists():
@@ -84,4 +84,3 @@ def test_split_by_offsets_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

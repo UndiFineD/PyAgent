@@ -32,8 +32,8 @@ def print_results_summary(results: List[DownloadResult]):
 
     successful = [r for r in results if r.success]
     failed = [r for r in results if not r.success]
-    skipped = [r for r in results if r.metadata and r.metadata.get('skipped')]
-    dry_run = [r for r in results if r.metadata and r.metadata.get('dry_run')]
+    skipped = [r for r in results if r.metadata and r.metadata.get("skipped")]
+    dry_run = [r for r in results if r.metadata and r.metadata.get("dry_run")]
 
     print("\n📊 Download Summary")
     print("=" * 50)
@@ -83,64 +83,52 @@ Supported URL types:
   • Datasets: download to data/datasets/
   • Documentation: download to docs/external/
   • Web pages: download HTML to data/webpages/
-        """
+        """,
     )
 
     parser.add_argument(
-        '--urls-file',
-        default='docs/download/urls.txt',
-        help='Path to URLs file (default: docs/download/urls.txt)'
+        "--urls-file",
+        default="docs/download/urls.txt",
+        help="Path to URLs file (default: docs/download/urls.txt)",
     )
 
     parser.add_argument(
-        '--base-dir',
-        default='.',
-        help='Base directory for relative paths (default: .)'
+        "--base-dir", default=".", help="Base directory for relative paths (default: .)"
     )
 
     parser.add_argument(
-        '--max-retries',
-        type=int,
-        default=3,
-        help='Maximum retry attempts (default: 3)'
+        "--max-retries", type=int, default=3, help="Maximum retry attempts (default: 3)"
     )
 
     parser.add_argument(
-        '--timeout',
+        "--timeout",
         type=int,
         default=30,
-        help='Download timeout in seconds (default: 30)'
+        help="Download timeout in seconds (default: 30)",
     )
 
     parser.add_argument(
-        '--delay',
+        "--delay",
         type=float,
         default=1.0,
-        help='Delay between downloads in seconds (default: 1.0)'
+        help="Delay between downloads in seconds (default: 1.0)",
+    )
+
+    parser.add_argument("--output", help="Save results to JSON file")
+
+    parser.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="Show what would be downloaded without actually downloading",
     )
 
     parser.add_argument(
-        '--output',
-        help='Save results to JSON file'
+        "--no-skip-existing",
+        action="store_true",
+        help="Download even if file/directory already exists",
     )
 
-    parser.add_argument(
-        '--dry-run',
-        action='store_true',
-        help='Show what would be downloaded without actually downloading'
-    )
-
-    parser.add_argument(
-        '--no-skip-existing',
-        action='store_true',
-        help='Download even if file/directory already exists'
-    )
-
-    parser.add_argument(
-        '--verbose', '-v',
-        action='store_true',
-        help='Verbose output'
-    )
+    parser.add_argument("--verbose", "-v", action="store_true", help="Verbose output")
 
     args = parser.parse_args()
 
@@ -152,7 +140,7 @@ Supported URL types:
         delay_between_downloads=args.delay,
         skip_existing=not args.no_skip_existing,
         dry_run=args.dry_run,
-        verbose=args.verbose
+        verbose=args.verbose,
     )
 
     agent = DownloadAgent(config)

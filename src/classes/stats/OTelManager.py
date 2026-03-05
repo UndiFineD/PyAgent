@@ -10,6 +10,7 @@ import uuid
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 
+
 @dataclass
 class Span:
     name: str
@@ -21,41 +22,54 @@ class Span:
     attributes: Dict[str, Any] = field(default_factory=dict)
     status: str = "unset"
 
+
 class OTelManager:
     """Manages OTel-compatible spans and traces for cross-fleet observability."""
-    
+
     def __init__(self) -> None:
         self.active_spans: Dict[str, Span] = {}
         self.completed_spans: List[Span] = []
 
-    def start_span(self, name: str, parent_id: Optional[str] = None, attributes: Optional[Dict[str, Any]] = None) -> str:
+    def start_span(
+        self,
+        name: str,
+        parent_id: Optional[str] = None,
+        attributes: Optional[Dict[str, Any]] = None,
+    ) -> str:
         """Starts a new tracing span and returns its ID."""
         span_id = str(uuid.uuid4())
-        trace_id = parent_id if parent_id else str(uuid.uuid4()) # Simplifying trace_id propagation
-        
+        trace_id = (
+            parent_id if parent_id else str(uuid.uuid4())
+        )  # Simplifying trace_id propagation
+
         span = Span(
             name=name,
             trace_id=trace_id,
             span_id=span_id,
             parent_id=parent_id,
-            attributes=attributes or {}
+            attributes=attributes or {},
         )
         self.active_spans[span_id] = span
         logging.info(f"OTel: Started span {name} ({span_id})")
         return span_id
 
-    def end_span(self, span_id: str, status: str = "ok", attributes: Optional[Dict[str, Any]] = None) -> None:
+    def end_span(
+        self,
+        span_id: str,
+        status: str = "ok",
+        attributes: Optional[Dict[str, Any]] = None,
+    ) -> None:
         """Ends a span and records its duration."""
         if span_id not in self.active_spans:
             logging.warning(f"OTel: Attempted to end non-existent span {span_id}")
             return
-            
+
         span = self.active_spans.pop(span_id)
         span.end_time = time.time()
         span.status = status
         if attributes:
             span.attributes.update(attributes)
-            
+
         self.completed_spans.append(span)
         duration = (span.end_time - span.start_time) * 1000
         logging.info(f"OTel: Ended span {span.name} in {duration:.2f}ms")
@@ -70,16 +84,16 @@ class OTelManager:
         """Generates headers for propagation across HTTP/RPC calls."""
         if span_id in self.active_spans:
             span = self.active_spans[span_id]
-            return {
-                "traceparent": f"00-{span.trace_id}-{span.span_id}-01"
-            }
+            return {"traceparent": f"00-{span.trace_id}-{span.span_id}-01"}
         return {}
+
 
 if __name__ == "__main__":
     otel = OTelManager()
     root = otel.start_span("Workflow: Fix Code")
     child = otel.start_span("Agent: SecurityGuard", parent_id=root)
     import threading
+
     threading.Event().wait(timeout=0.1)
     otel.end_span(child, status="ok")
     otel.end_span(root, status="ok")

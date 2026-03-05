@@ -17,8 +17,7 @@ Auction core.py module.
 """
 
 # Facade for AuctionCore
-from src.core.base.common.auction_core import \
-    AuctionCore as StandardAuctionCore
+from src.core.base.common.auction_core import AuctionCore as StandardAuctionCore
 
 
 class AuctionCore(StandardAuctionCore):

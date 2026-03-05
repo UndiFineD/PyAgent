@@ -21,4 +21,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "get_thread_arena"), "get_thread_arena missing"
     assert hasattr(mod, "temp_arena"), "temp_arena missing"
     assert hasattr(mod, "thread_temp_alloc"), "thread_temp_alloc missing"
-

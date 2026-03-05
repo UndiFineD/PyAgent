@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_loramanager_exists():
     """Test that LoraManager class exists and is importable."""
-    assert 'LoraManager' in dir()
+    assert "LoraManager" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

@@ -18,6 +18,7 @@ This file provides a tiny placeholder to satisfy import-time references
 while the test-shim repair loop proceeds.
 """
 
+
 class BaselineManager:
     """Lightweight placeholder BaselineManager.
 

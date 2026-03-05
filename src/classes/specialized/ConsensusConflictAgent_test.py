@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_consensusconflictagent_exists():
     """Test that ConsensusConflictAgent class exists and is importable."""
-    assert 'ConsensusConflictAgent' in dir()
+    assert "ConsensusConflictAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

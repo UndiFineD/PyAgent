@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_memorypruningagent_exists():
     """Test that MemoryPruningAgent class exists and is importable."""
-    assert 'MemoryPruningAgent' in dir()
+    assert "MemoryPruningAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

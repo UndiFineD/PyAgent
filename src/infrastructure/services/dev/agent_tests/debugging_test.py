@@ -17,4 +17,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "TestProfiler"), "TestProfiler missing"
     assert hasattr(mod, "TestRecorder"), "TestRecorder missing"
     assert hasattr(mod, "TestReplayer"), "TestReplayer missing"
-

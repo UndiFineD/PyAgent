@@ -33,17 +33,17 @@ except ImportError as e:
 
 def test_directiveparser_exists():
     """Test that DirectiveParser class exists and is importable."""
-    assert 'DirectiveParser' in dir()
+    assert "DirectiveParser" in dir()
 
 
 def test_intelligenceharvester_exists():
     """Test that IntelligenceHarvester class exists and is importable."""
-    assert 'IntelligenceHarvester' in dir()
+    assert "IntelligenceHarvester" in dir()
 
 
 def test_cycleorchestrator_exists():
     """Test that CycleOrchestrator class exists and is importable."""
-    assert 'CycleOrchestrator' in dir()
+    assert "CycleOrchestrator" in dir()
 
 
 def test_run_cycle_exists():
@@ -64,4 +64,3 @@ def test_main_exists():
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

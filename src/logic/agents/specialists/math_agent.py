@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -107,14 +108,24 @@ class MathAgent(BaseAgent):
                 if hasattr(rust_core, "evaluate_formula"):
                     result = rust_core.evaluate_formula(sanitized)
                     self._record_calculation(expression, result, "rust")
-                    return {"expression": expression, "result": result, "status": "success", "engine": "rust"}
+                    return {
+                        "expression": expression,
+                        "result": result,
+                        "status": "success",
+                        "engine": "rust",
+                    }
             except (ImportError, AttributeError):
                 pass
 
             # Python safe eval fallback: use empty builtins and whitelist of math functions
             result = eval(sanitized, {"__builtins__": {}}, SAFE_MATH_NAMESPACE)  # nosec
             self._record_calculation(expression, result, "python")
-            return {"expression": expression, "result": result, "status": "success", "engine": "python"}
+            return {
+                "expression": expression,
+                "result": result,
+                "status": "success",
+                "engine": "python",
+            }
 
         except (ArithmeticError, ValueError, SyntaxError, TypeError, RuntimeError) as e:
             logging.debug(f"MathAgent: Direct evaluation failed: {e}")
@@ -122,7 +133,9 @@ class MathAgent(BaseAgent):
             return await self._llm_solve(expression)
 
     @as_tool
-    async def solve_equation(self, equation: str, variable: str = "x") -> Dict[str, Any]:
+    async def solve_equation(
+        self, equation: str, variable: str = "x"
+    ) -> Dict[str, Any]:
         """Solves algebraic equations for a variable."""
         prompt = (
             f"Solve the equation: {equation}\n"
@@ -144,7 +157,9 @@ class MathAgent(BaseAgent):
         }
 
     @as_tool
-    async def compute_derivative(self, expression: str, variable: str = "x") -> Dict[str, Any]:
+    async def compute_derivative(
+        self, expression: str, variable: str = "x"
+    ) -> Dict[str, Any]:
         """Computes the derivative of an expression."""
         prompt = f"Compute the derivative of f({variable}) = {expression} with respect to {variable}. Show your work."
         result = await self.improve_content(prompt)
@@ -160,10 +175,17 @@ class MathAgent(BaseAgent):
         else:
             prompt = f"Compute the indefinite integral of {expression} d{variable}."
         result = await self.improve_content(prompt)
-        return {"expression": expression, "variable": variable, "bounds": bounds, "integral": result}
+        return {
+            "expression": expression,
+            "variable": variable,
+            "bounds": bounds,
+            "integral": result,
+        }
 
     @as_tool
-    async def prove_statement(self, statement: str, method: str = "direct") -> Dict[str, Any]:
+    async def prove_statement(
+        self, statement: str, method: str = "direct"
+    ) -> Dict[str, Any]:
         """Attempts to prove a mathematical statement."""
         prompt = (
             f"Prove the following statement using {method} proof:\n"
@@ -174,7 +196,9 @@ class MathAgent(BaseAgent):
         return {"statement": statement, "method": method, "proof": proof}
 
     @as_tool
-    async def matrix_operation(self, operation: str, matrices: List[List[List[float]]]) -> Dict[str, Any]:
+    async def matrix_operation(
+        self, operation: str, matrices: List[List[List[float]]]
+    ) -> Dict[str, Any]:
         """Performs matrix operations (multiply, add, determinant, inverse, etc.)."""
         try:
             import numpy as np
@@ -183,7 +207,11 @@ class MathAgent(BaseAgent):
                 result = np.array(matrices[0])
                 for m in matrices[1:]:
                     result = np.dot(result, np.array(m))
-                return {"operation": operation, "result": result.tolist(), "status": "success"}
+                return {
+                    "operation": operation,
+                    "result": result.tolist(),
+                    "status": "success",
+                }
 
             if operation == "determinant" and matrices:
                 det = np.linalg.det(np.array(matrices[0]))
@@ -191,11 +219,19 @@ class MathAgent(BaseAgent):
 
             if operation == "inverse" and matrices:
                 inv = np.linalg.inv(np.array(matrices[0]))
-                return {"operation": operation, "result": inv.tolist(), "status": "success"}
+                return {
+                    "operation": operation,
+                    "result": inv.tolist(),
+                    "status": "success",
+                }
 
             if operation == "eigenvalues" and matrices:
                 eigenvalues = np.linalg.eigvals(np.array(matrices[0]))
-                return {"operation": operation, "result": eigenvalues.tolist(), "status": "success"}
+                return {
+                    "operation": operation,
+                    "result": eigenvalues.tolist(),
+                    "status": "success",
+                }
         except (ImportError, ValueError, TypeError, AttributeError, RuntimeError) as e:
             return {"operation": operation, "error": str(e), "status": "failed"}
 
@@ -211,7 +247,12 @@ class MathAgent(BaseAgent):
         import time
 
         self._calculation_history.append(
-            {"expression": expression, "result": result, "engine": engine, "timestamp": time.time()}
+            {
+                "expression": expression,
+                "result": result,
+                "engine": engine,
+                "timestamp": time.time(),
+            }
         )
 
     async def _llm_solve(self, expression: str) -> Dict[str, Any]:

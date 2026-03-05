@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,12 +26,14 @@ from src.logic.agents.swarm.core.LessonCore import LessonCore, Lesson
 
 __version__ = VERSION
 
+
 class SwarmDistillationAgent:
     """
-    Compresses and distills knowledge from multiple specialized agents 
+    Compresses and distills knowledge from multiple specialized agents
     into a unified "Master" context for more efficient retrieval.
     Integrated with LessonCore for failure mode propagation.
     """
+
     def __init__(self, workspace_path) -> None:
         self.workspace_path = Path(workspace_path)
         self.master_context = {}
@@ -46,9 +49,9 @@ class SwarmDistillationAgent:
             "agent": agent_id,
             "core_capability": knowledge_data.get("specialty", "general"),
             "key_patterns": list(knowledge_data.get("patterns", {}).keys())[:10],
-            "metrics": knowledge_data.get("metrics", {})
+            "metrics": knowledge_data.get("metrics", {}),
         }
-        
+
         self.master_context[agent_id] = distilled
         return distilled
 
@@ -62,7 +65,9 @@ class SwarmDistillationAgent:
     def check_for_prior_art(self, error_msg: str) -> list[dict[str, Any]]:
         """Checks if any other agent has already solved this error."""
         related = self.lesson_core.get_related_lessons(error_msg, self.lessons)
-        return [{"cause": lesson.cause, "solution": lesson.solution} for lesson in related]
+        return [
+            {"cause": lesson.cause, "solution": lesson.solution} for lesson in related
+        ]
 
     def get_unified_context(self) -> dict[str, Any]:
         """
@@ -71,7 +76,7 @@ class SwarmDistillationAgent:
         return {
             "swarm_intelligence_level": len(self.master_context) * 0.1,
             "distilled_indices": list(self.master_context.keys()),
-            "master_map": self.master_context
+            "master_map": self.master_context,
         }
 
     def prune_master_context(self, threshold=0.5) -> dict[str, Any]:

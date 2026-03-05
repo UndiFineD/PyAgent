@@ -15,6 +15,7 @@ def _load_module():
     spec = importlib.util.spec_from_file_location(module_name, p)
     mod = importlib.util.module_from_spec(spec)
     import sys
+
     sys.modules[spec.name] = mod
     spec.loader.exec_module(mod)
     return mod
@@ -27,4 +28,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "process_prompt"), "process_prompt missing"
     assert hasattr(mod, "execute_command"), "execute_command missing"
     assert hasattr(mod, "get_help"), "get_help missing"
-

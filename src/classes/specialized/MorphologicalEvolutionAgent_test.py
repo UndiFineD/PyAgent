@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_morphologicalevolutionagent_exists():
     """Test that MorphologicalEvolutionAgent class exists and is importable."""
-    assert 'MorphologicalEvolutionAgent' in dir()
+    assert "MorphologicalEvolutionAgent" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-

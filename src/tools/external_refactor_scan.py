@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
+
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,10 +35,31 @@ ROW_RE = re.compile(r"^\|\s*(?P<name>[^|]+)\s*\|\s*(?P<status>[^|]+)\s*\|(?P<res
 DEF_RE = re.compile(r"^\s*(?:def|class)\s+(?P<name>[A-Za-z_][A-Za-z0-9_]+)")
 
 # Only inspect these textual extensions (whitelist)
-WHITELIST_EXTENSIONS = (".py", ".md", ".json", ".yaml", ".yml", ".toml", ".ini", ".cfg", ".txt")
+WHITELIST_EXTENSIONS = (
+    ".py",
+    ".md",
+    ".json",
+    ".yaml",
+    ".yml",
+    ".toml",
+    ".ini",
+    ".cfg",
+    ".txt",
+)
 
 # Top-level directory names or path fragments to skip entirely (case-insensitive)
-EXCLUDE_DIRS = ("system", "system/library", "node_modules", "__pycache__", "target", "build", "dist", ".git", "vendor", "bin")
+EXCLUDE_DIRS = (
+    "system",
+    "system/library",
+    "node_modules",
+    "__pycache__",
+    "target",
+    "build",
+    "dist",
+    ".git",
+    "vendor",
+    "bin",
+)
 
 
 def extract_completed_from_tracking(tracking_path: Path) -> List[str]:
@@ -108,8 +130,16 @@ def scan_directory_for_candidates(dirpath: Path) -> Dict:
             defs = DEF_RE.findall(text)
             if defs:
                 if VERBOSE:
-                    print(f"  Found definitions in: {p.relative_to(EXTERNAL)} -> {defs[:5]}")
-                report["files"].append({"path": str(p.relative_to(EXTERNAL)), "suffix": suffix, "definitions": defs[:20]})
+                    print(
+                        f"  Found definitions in: {p.relative_to(EXTERNAL)} -> {defs[:5]}"
+                    )
+                report["files"].append(
+                    {
+                        "path": str(p.relative_to(EXTERNAL)),
+                        "suffix": suffix,
+                        "definitions": defs[:20],
+                    }
+                )
     return report
 
 
@@ -145,13 +175,18 @@ def build_reuse_report(external_root: Path, src_root: Path) -> Dict:
 
 def write_reports(report: Dict, md_path: Path, json_path: Path):
     json_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
-    lines: List[str] = ["# External Refactor Report\n", "This report is auto-generated. Do not run any code found here without manual review.\n\n"]
+    lines: List[str] = [
+        "# External Refactor Report\n",
+        "This report is auto-generated. Do not run any code found here without manual review.\n\n",
+    ]
     for d in report.get("directories", []):
         lines.append(f"## {d['path']}\n")
         for f in d.get("files", []):
             defs = f.get("definitions", [])
             missing = f.get("missing_in_src", [])
-            lines.append(f"- {f['path']} ({f['suffix']}) — defs: {', '.join(defs[:5]) or 'none'}; missing in src: {len(missing)}\n")
+            lines.append(
+                f"- {f['path']} ({f['suffix']}) — defs: {', '.join(defs[:5]) or 'none'}; missing in src: {len(missing)}\n"
+            )
         lines.append("\n")
     md_path.write_text("\n".join(lines), encoding="utf-8")
 
@@ -165,7 +200,9 @@ def main() -> int:
             f.write("\n".join(completed_rows) + "\n")
     # Build reuse report
     report = build_reuse_report(EXTERNAL, SRC)
-    write_reports(report, EXTERNAL / "refactor_report.md", EXTERNAL / "refactor_report.json")
+    write_reports(
+        report, EXTERNAL / "refactor_report.md", EXTERNAL / "refactor_report.json"
+    )
     print(f"Wrote report: {EXTERNAL / 'refactor_report.md'} and refactor_report.json")
     print(f"Appended {len(completed_rows)} completed rows to {completed}")
     return 0

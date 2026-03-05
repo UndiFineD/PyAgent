@@ -22,4 +22,3 @@ def test_imports_and_symbols():
     assert hasattr(mod, "get_tp_group"), "get_tp_group missing"
     assert hasattr(mod, "get_tp_size"), "get_tp_size missing"
     assert hasattr(mod, "get_tp_rank"), "get_tp_rank missing"
-

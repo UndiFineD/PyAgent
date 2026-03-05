@@ -33,10 +33,9 @@ except ImportError as e:
 
 def test_promptrenderer_exists():
     """Test that PromptRenderer class exists and is importable."""
-    assert 'PromptRenderer' in dir()
+    assert "PromptRenderer" in dir()
 
 
 def test_module_imports():
     """Test that the module imports without errors."""
     assert True  # If we got here, imports worked
-
